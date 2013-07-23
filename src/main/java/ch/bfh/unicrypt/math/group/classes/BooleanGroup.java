@@ -39,7 +39,7 @@ public class BooleanGroup extends ZPlusMod {
 
   /**
    * Returns the Boolean value that corresponds to a given Boolean group element.
-   * @param element The given Boolean group element
+   * @param element The given Boolean group element 
    * @return The corresponding Boolean value
    * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
    */
