@@ -10,9 +10,9 @@ import java.util.Random;
  * It takes an input element from one group (the domain X) and maps it into an
  * output element from another group (the co-domain Y). Although such functions
  * always operate with single input and output elements, it is possible that
- * these values are tuple elements of corresponding product groups. In such cases,
- * the respective arities of these groups define thus the input and output
- * arities of the function. Most functions will be proper deterministic
+ * these values are tuple elements of corresponding product groups. In such
+ * cases, the respective arities of these groups define thus the input and
+ * output arities of the function. Most functions will be proper deterministic
  * mathematical functions, but some functions may be randomized and thus output
  * different values when called multiple times.
  *
@@ -75,10 +75,10 @@ public interface Function {
   public Element apply(Element element, Random random);
 
   /**
-   * This method provides a shortcut for applying a function with multiple
-   * input values. The specified elements are used to create a
-   * corresponding tuple element first, which is then used to call the ordinary
-   * method {@code apply(Element element)}.
+   * This method provides a shortcut for applying a function with multiple input
+   * values. The specified elements are used to create a corresponding tuple
+   * element first, which is then used to call the ordinary method
+   * {@code apply(Element element)}.
    *
    * @param elements The given input elements
    * @return The resulting output element
@@ -91,12 +91,12 @@ public interface Function {
   public Element apply(Element... elements);
 
   /**
-   * This method provides a shortcut for applying a function with multiple
-   * input values. The specified elements are used to create a
-   * corresponding tuple element first, which is then used to call the ordinary
-   * method {@code apply(Element element, Random random)}. In case of a randomized
-   * function, a random generator can be given as an additional parameter. If no random
-   * generator is specified, i.e., if {@code random} is null, then the
+   * This method provides a shortcut for applying a function with multiple input
+   * values. The specified elements are used to create a corresponding tuple
+   * element first, which is then used to call the ordinary method
+   * {@code apply(Element element, Random random)}. In case of a randomized
+   * function, a random generator can be given as an additional parameter. If no
+   * random generator is specified, i.e., if {@code random} is null, then the
    * system-wide random generator is taken. If the function is deterministic,
    * then {@code random} is ignored.
    *
@@ -111,6 +111,13 @@ public interface Function {
    */
   public Element apply(Element[] elements, Random random);
 
+  /**
+   * The arity of a function is the number of functions applied in parallel when
+   * calling the function. For arity<>1, the arity corresponds to the arity of
+   * both the domain and the co-domain of the funciton.
+   *
+   * @return The function's arity
+   */
   public int getArity();
 
   /**
@@ -143,6 +150,7 @@ public interface Function {
 
   /**
    * Returns the function at index 0.
+   *
    * @return The function at index 0
    * @throws UnsupportedOperationException for functions of arity 0
    */
@@ -153,7 +161,8 @@ public interface Function {
    *
    * @param index The given index
    * @return The corresponding function
-   * @throws IndexOutOfBoundsException if {@ode index} is an invalid index
+   * @throws IndexOutOfBoundsException if {
+   * @ode index} is an invalid index
    */
   public Function getFunctionAt(int index);
 
@@ -165,8 +174,10 @@ public interface Function {
    *
    * @param indices The given sequence of indices
    * @return The corresponding function
-   * @throws IllegalArgumentException if {@ode indices} is null or if its length exceeds the hierarchy's depth
-   * @throws IndexOutOfBoundsException if {@ode indices} contains an out-of-bounds index
+   * @throws IllegalArgumentException if {
+   * @ode indices} is null or if its length exceeds the hierarchy's depth
+   * @throws IndexOutOfBoundsException if {
+   * @ode indices} contains an out-of-bounds index
    */
   public Function getFunctionAt(int... indices);
 
@@ -181,30 +192,26 @@ public interface Function {
   /**
    * An empty function is a very special non-atomic function consisting of zero
    * internal functions. This implies that both the domain and the co-domain are
-   * empty groups, and that the function simply maps the empty element into the empty
-   * element.
+   * empty groups, and that the function simply maps the empty element into the
+   * empty element.
+   *
    * @return {@code true} if the function is empty, {@code false} otherwise
    */
   public boolean isEmptyFunction();
 
   /**
-   * Checks if function is composed of multiple copies of the same function. Such
-   * a function is called power function. All functions of arity 1 or less are
-   * power funcitons.
-   * @return {@code true}, if the function is a power function, {@code false} otherwise
+   * Checks if function is composed of multiple copies of the same function.
+   * Such a function is called power function. All functions of arity 1 or less
+   * are power funcitons.
+   *
+   * @return {@code true}, if the function is a power function, {@code false}
+   * otherwise
    */
   public boolean isPowerFunction();
 
   /**
-   * The arity of a function is the number of functions applied in parallel when
-   * calling the function. For arity<>1, the arity corresponds to the arity of
-   * both the domain and the co-domain of the funciton.
-   *
-   * @return The function's arity
-   */
-  /**
-   * This method applies a single input value to a given function. The result
-   * is a new function with an input arity decreased by 1.
+   * This method applies a single input value to a given function. The result is
+   * a new function with an input arity decreased by 1.
    *
    * @param element The given input value
    * @param index The index of the corresponding group in the product (or power
@@ -215,5 +222,4 @@ public interface Function {
    * @throws IndexOutOfBoundsException if {@code index} is an invalid index
    */
   public Function partiallyApply(Element element, int index);
-
 }

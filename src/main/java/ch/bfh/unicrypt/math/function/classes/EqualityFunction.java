@@ -8,23 +8,21 @@ import ch.bfh.unicrypt.math.group.interfaces.Group;
 import java.util.Random;
 
 /**
- * This interface represents the concept of a function, which tests the given input elements
- * for equality. For this to work, its domain is a power group and its co-domain the Boolean
- * group. If all all input elements are equal, the function outputs 1, and 0 otherwise.
+ * This class represents the concept of a function, which tests the given
+ * input elements for equality. For this to work, its domain is a power group
+ * and its co-domain the Boolean group. If all all input elements are equal,
+ * the function outputs {@link BooleanGroup#TRUE}, and {@link BooleanGroup#FALSE}
+ * otherwise.
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class EqualityFunction extends AbstractFunction {
 
   private EqualityFunction(final Group domain, final Group coDomain) {
     super(domain, coDomain);
   }
-
-  //
-  // The following protected method implements the abstract method from {@code AbstractFunction}
-  //
 
   @Override
   public Element abstractApply(final Element element, final Random random) {
@@ -39,13 +37,12 @@ public class EqualityFunction extends AbstractFunction {
     return BooleanGroup.TRUE;
   }
 
-  //
-  // STATIC FACTORY METHODS
-  //
-
   /**
-   * This is a special constructor for this class for the particular case of two input elements.
+   * This is a special factory method for this class for the particular case of
+   * two input elements.
+   *
    * @param group The group on which this function operates
+   * @return The resulting equality function
    * @throws IllegalArgumentException if {@code group} is null
    */
   public static EqualityFunction getInstance(final Group group) {
@@ -53,10 +50,12 @@ public class EqualityFunction extends AbstractFunction {
   }
 
   /**
-   * This is the general constructor of this class. The first parameter is the group on which it operates,
-   * and the second parameter is the number of input elements to compare.
+   * This is the general factory method of this class. The first parameter is
+   * the group on which it operates, and the second parameter is the number of
+   * input elements to compare.
    * @param group The group on which this function operates
    * @param arity The number of input elements to compare
+   * @return The resulting equality function
    * @throws IllegalArgumentException if {@code group} is null
    * @throws IllegalArgumentException if {@code arity} is negative
    */

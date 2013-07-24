@@ -7,12 +7,12 @@ import ch.bfh.unicrypt.math.group.interfaces.Group;
 import java.util.Random;
 
 /**
- * This class represents the concept of a constant function with no input. When the
- * function is called, it returns always the same element as output value.
+ * This class represents the concept of a constant function with no input. When
+ * the function is called, it returns always the same element as output value.
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class ConstantFunction extends AbstractFunction {
 
@@ -21,6 +21,7 @@ public class ConstantFunction extends AbstractFunction {
   /**
    * This is the general constructor of this class. It creates a function that
    * returns always the same element when called.
+   *
    * @param element The constant output value of the function
    * @throws IllegalArgumentException if {@code element} is null
    */
@@ -29,27 +30,25 @@ public class ConstantFunction extends AbstractFunction {
     this.element = element;
   }
 
-  public Element getElement() {
-    return this.element;
-  }
-
-  //
-  // The following protected method implements the abstract method from {@code AbstractFunction}
-  //
-
   @Override
   protected Element abstractApply(Element element, Random random) {
     return this.element;
   }
 
-  //
-  // STATIC FACTORY METHODS
-  //
+  /**
+   * Returns the constant element returned by this function.
+   * @return The constant element
+   */
+  public Element getElement() {
+    return this.element;
+  }
 
   /**
-   * This is the general constructor of this class. It creates a function that generates random elements
-   * from a given group.
+   * This is the general factory method of this class. It creates a function that
+   * always returns the same element when called.
+   *
    * @param element The given element
+   * @return The constant function
    * @throws IllegalArgumentException if {@code group} is null
    */
   public static ConstantFunction getInstance(final Element element) {
@@ -59,6 +58,12 @@ public class ConstantFunction extends AbstractFunction {
     return new ConstantFunction(element.getGroup(), element);
   }
 
+  /**
+   * This is a special factory method of this class, which creates a function
+   * that always returns the identity element of the given group.
+   * @param group The given group
+   * @return The resulting function
+   */
   public static ConstantFunction getInstance(final Group group) {
     if (group == null) {
       throw new IllegalArgumentException();

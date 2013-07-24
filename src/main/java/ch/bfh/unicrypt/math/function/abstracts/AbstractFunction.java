@@ -6,6 +6,16 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import java.util.Random;
 
+/**
+ * This abstract class contains standard implementations for most methods of
+ * type {@link Function}. For most classes implementing {@link Function}, it is
+ * sufficient to inherit from {@link AbstractFunction} and to implement the
+ * single abstract method {@link abstractApply(Element element, Random random)}.
+ *
+ * @author R. Haenni
+ * @author R. E. Koenig
+ * @version 2.0
+ */
 public abstract class AbstractFunction implements Function {
 
   private final Group domain;
@@ -34,7 +44,9 @@ public abstract class AbstractFunction implements Function {
   @Override
   public final Element apply(final Element element, final Random random) {
     if (!this.getDomain().contains(element)) {
-      return this.apply(new Element[]{element}); // this is for increased convenience
+      return this.apply(new Element[]{element});
+      // This is for increased convenience when applying a composed function of
+      // arity 1.
     }
     return this.abstractApply(element, random);
   }
@@ -77,7 +89,7 @@ public abstract class AbstractFunction implements Function {
   @Override
   public final Function getFunction() {
     if (this.isEmptyFunction()) {
-      throw new IllegalArgumentException();
+      throw new UnsupportedOperationException();
     }
     return this.getFunctionAt(0);
   }
@@ -90,17 +102,6 @@ public abstract class AbstractFunction implements Function {
     return this.standardGetFunctionAt(index);
   }
 
-  /**
-   * Select and returns in a hierarchy of compound function the function that
-   * corresponds to a given sequence of indices. (e.g., 0,3,2 for the third
-   * function in the fourth compound function of the first compound function).
-   * Returns {@code this} function if {@code indices} is empty.
-   *
-   * @param indices The given sequence of indices
-   * @return The corresponding function
-   * @throws IllegalArgumentException if {@ode indices} is null or if its length exceeds the hierarchy's depth
-   * @throws IndexOutOfBoundsException if {@ode indices} contains an out-of-bounds index
-   */
   @Override
   public final Function getFunctionAt(int... indices) {
     if (indices == null) {
@@ -137,10 +138,10 @@ public abstract class AbstractFunction implements Function {
   }
 
   //
-  // The following protected methods are standard implementations for most functions of
-  // arity 1. The standard implementation may change in sub-classes for functions of higher arity.
+  // The following protected methods are standard implementations for most atomic
+  // functions of arity 1. The standard implementation may change in sub-classes
+  // for non-atomic functions.
   //
-
   @SuppressWarnings("static-method")
   protected int standardGetArity() {
     return 1;
@@ -165,7 +166,18 @@ public abstract class AbstractFunction implements Function {
   // The following protected abstract method must be implemented in every direct
   // sub-class
   //
-
+  /**
+   * This abstract method is the main method to implement in each sub-class of
+   * {@link AbstractFunction}. The validity of the two parameters has already
+   * been tested.
+   *
+   * @see apply(Element, Random)
+   * @see Group#apply(Element[])
+   * @see Element#apply(Element)
+   *
+   * @param element The given input element
+   * @param random Either {@code null} or a given random generator
+   * @return The resulting output element
+   */
   protected abstract Element abstractApply(Element element, Random random);
-
 }

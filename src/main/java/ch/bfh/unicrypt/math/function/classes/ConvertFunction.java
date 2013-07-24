@@ -6,12 +6,12 @@ import ch.bfh.unicrypt.math.group.interfaces.Group;
 import java.util.Random;
 
 /**
- * This interface represents the the concept of a function f:X->Y, which outputs the element
- * of Y that corresponds to the integer value of the input element..
+ * This class represents the the concept of a function f:X->Y, which outputs the
+ * element of Y that corresponds to the integer value of the input element.
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class ConvertFunction extends AbstractFunction {
 
@@ -19,23 +19,17 @@ public class ConvertFunction extends AbstractFunction {
     super(domain, coDomain);
   }
 
-  //
-  // The following protected method implements the abstract method from {@code AbstractFunction}
-  //
-
   @Override
   protected Element abstractApply(final Element element, final Random random) {
     return this.getCoDomain().getElement(element);
   }
 
-  //
-  // STATIC FACTORY METHODS
-  //
-
   /**
-   * This is the standard constructor for this class. It creates an invert function for a given group.
+   * This is the general factory method for this class. It creates an function
+   * that converts values from the domain into values from the co-domain.
    * @param domain The given domain
    * @param coDomain The given co-domain
+   * @return The resulting function
    * @throws IllegalArgumentException if the domain or coDomain is null
    */
   public static ConvertFunction getInstance(final Group domain, final Group coDomain) {

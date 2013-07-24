@@ -4,19 +4,29 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 /**
- * This class represents the concept of a hash function, which maps an arbitrarily long input
- * elements of a given group into an output element of a fixed length (an element of type
- * {@link ZPlusMod}).
+ * This class represents the concept of a hash function, which maps an
+ * arbitrarily long input element into an element of a given co-domain. The
+ * mapping itself is defined by some cryptographic hash function such as
+ * SHA-256. For complex input elements, there are two options: one in which
+ * the individual elements are first recursively paired with
+ * {@link MathUtil#elegantPair(java.math.BigInteger[])}, and one in which the
+ * hashing itself is done recursively. The co-domain is always an instance of
+ * {@link ZPlusMod}. Its order corresponds to the size of the cryptographic
+ * hash function's output space (a power of 2).
  *
+ * @see Element#hashValue()
+ * @see Element#recursiveHashValue()
+ * 
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class HashFunction extends AbstractFunction {
 
@@ -29,18 +39,6 @@ public class HashFunction extends AbstractFunction {
     this.recursiveHash = recursiveHash;
   }
 
-  public MessageDigest getMessageDigest() {
-    return this.messageDigest;
-  }
-
-  public boolean isRecursive() {
-    return this.recursiveHash;
-  }
-
-  //
-  // The following protected method implements the abstract method from {@code AbstractFunction}
-  //
-
   @Override
   protected Element abstractApply(final Element element, final Random random) {
     BigInteger value;
@@ -52,9 +50,13 @@ public class HashFunction extends AbstractFunction {
     return this.getCoDomain().getElement(value);
   }
 
-  //
-  // STATIC FACTORY METHODS
-  //
+  public MessageDigest getMessageDigest() {
+    return this.messageDigest;
+  }
+
+  public boolean isRecursive() {
+    return this.recursiveHash;
+  }
 
   /**
    * This constructor generates a standard SHA-256 hash function. The order of the co-domain is 2^256.
@@ -94,6 +96,13 @@ public class HashFunction extends AbstractFunction {
     return HashFunction.getInstance(domain, messageDigest, false);
   }
 
+  /**
+   * This is the general constructor of this class.
+   * @param domain
+   * @param messageDigest
+   * @param recursiveHash
+   * @return
+   */
   public static HashFunction getInstance(Group domain, final MessageDigest messageDigest, boolean recursiveHash) {
     if (domain == null || messageDigest == null) {
       throw new IllegalArgumentException();
