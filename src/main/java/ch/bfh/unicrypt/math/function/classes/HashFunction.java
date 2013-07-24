@@ -23,7 +23,7 @@ import java.util.Random;
  *
  * @see Element#hashValue()
  * @see Element#recursiveHashValue()
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
@@ -62,7 +62,7 @@ public class HashFunction extends AbstractFunction {
    * This constructor generates a standard SHA-256 hash function. The order of the co-domain is 2^256.
    */
   public static HashFunction getInstance(Group domain) {
-    return HashFunction.getInstance(domain, false);
+    return HashFunction.getInstance(domain, Element.STANDARD_HASH_ALGORITHM, false);
   }
 
   public static HashFunction getInstance(Group domain, boolean recursiveHash) {
