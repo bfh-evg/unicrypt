@@ -13,14 +13,14 @@ import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
  * commutative) binary operation. Applying the operation to group elements yields another
  * group element. Every group element has an inverse element, and the group
  * itself has a unique identity element. The number of elements in the group is
- * called group order (it may be infinite or unknown). 
+ * called group order (it may be infinite or unknown).
  * We assume that each element of a group corresponds to a unique integer value. Therefore,
- * this interface provides methods for converting group 
- * elements into corresponding integer values and back. 
+ * this interface provides methods for converting group
+ * elements into corresponding integer values and back.
 
- * 
+ *
  * @see "Handbook of Applied Cryptography, Definition 2.162"
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -44,8 +44,8 @@ public interface Group extends Serializable {
   public boolean isSubGroup();
 
   /**
-   * Returns the group of maximal order which contains {@code this} group as a sub-group. The 
-   * resulting super-group can be {@code this} group itself. 
+   * Returns the group of maximal order which contains {@code this} group as a sub-group. The
+   * resulting super-group can be {@code this} group itself.
    * @return The super-group of maximal order
    */
   public Group getSuperGroup();
@@ -89,14 +89,14 @@ public interface Group extends Serializable {
    * each of the given elements must be exactly one of the corresponding involved group.
    * @param elements The given array of elements
    * @return The resulting tuple element
-   * @throws IllegalArgumentException if {@code elements} is null or contains null, or if its size does not correspond to the group's arity 
-   * @throws IllegalArgumentException if an element is not in the corresponding group 
+   * @throws IllegalArgumentException if {@code elements} is null or contains null, or if its size does not correspond to the group's arity
+   * @throws IllegalArgumentException if an element is not in the corresponding group
    */
   public Element getElement(final Element... elements);
 
   /**
-   * Selects and returns a random group element using the default random generator. For finite order group, it is 
-   * selected uniformly at random. For groups of infinite or unknown order, the underlying probability distribution 
+   * Selects and returns a random group element using the default random generator. For finite order group, it is
+   * selected uniformly at random. For groups of infinite or unknown order, the underlying probability distribution
    * is not further specified.
    * @return A random group element
    */
@@ -104,7 +104,7 @@ public interface Group extends Serializable {
 
   /**
    * Selects and returns a random group element using a given random generator. If no random generator is specified, i.e., if
-   * {@code random} is null, then the system-wide random generator is taken. For finite order group, it is selected uniformly 
+   * {@code random} is null, then the system-wide random generator is taken. For finite order group, it is selected uniformly
    * at random. For groups of infinite or unknown order, the underlying probability distribution is not generally specified.
    * @param random Either {@code null} or a given random generator
    * @return A random group element
@@ -122,7 +122,7 @@ public interface Group extends Serializable {
    * @param element1 The first group element
    * @param element2 The second group element
    * @return The result of applying the group operation to the two input elements
-   * @throws IllegalArgumentException if {@code element1} or {@code element2} is null 
+   * @throws IllegalArgumentException if {@code element1} or {@code element2} is null
    * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
    **/
   public Element apply(Element element1, Element element2);
@@ -132,25 +132,25 @@ public interface Group extends Serializable {
    * @param element1 The first group element
    * @param element2 The second group element
    * @return The result of applying the group operation to the two input elements
-   * @throws IllegalArgumentException if {@code element1} or {@code element2} is null 
+   * @throws IllegalArgumentException if {@code element1} or {@code element2} is null
    * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
    **/
   public Element applyInverse(Element element1, Element element2);
 
   /**
-   * Applies the binary group operation pair-wise sequentially to multiple group elements (in the given order). 
+   * Applies the binary group operation pair-wise sequentially to multiple group elements (in the given order).
    * Returns the identity element, if the given list of group elements is empty.
    * @param elements A given array of group elements
    * @return The result of applying the group operation to the input elements
-   * @throws IllegalArgumentException if {@code elements} or one of its elements is null 
+   * @throws IllegalArgumentException if {@code elements} or one of its elements is null
    * @throws IllegalArgumentException if one of the elements in {@code elements} does not belong to the group
    */
   public Element apply(Element... elements);
 
   /**
-   * Applies the binary group operation repeatedly to {@code amount} many instances of a given group element. 
-   * If {@code amount} equals 0, then the identity element is returned. If {@code amount} is negative, then 
-   * the corresponding positive value is applied to the inverse of the given element. If the group is finite 
+   * Applies the binary group operation repeatedly to {@code amount} many instances of a given group element.
+   * If {@code amount} equals 0, then the identity element is returned. If {@code amount} is negative, then
+   * the corresponding positive value is applied to the inverse of the given element. If the group is finite
    * and if its order is known to be {@code q}, then {@amount} can be replaced by {@code amount mod q}.
    * @param element A given group element
    * @param amount The number of instances of the input element
@@ -161,7 +161,7 @@ public interface Group extends Serializable {
   public Element selfApply(Element element, BigInteger amount);
 
   /**
-   * Same as {@link #Group.selfApply(Element, BigInteger)}, except that the amount is given as an {@link Element} 
+   * Same as {@link #Group.selfApply(Element, BigInteger)}, except that the amount is given as an {@link Element}
    * object, which can always be converted into a BigInteger value.
    * @param element A given group element
    * @param amount The number of instances of the input element given as an {@link Element} object
@@ -189,16 +189,16 @@ public interface Group extends Serializable {
   public Element selfApply(Element element);
 
   /**
-   * Applies the group binary operation pair-wise sequentially to the results of computing {@link #selfApply(Element, BigInteger)} 
-   * multiple times. In an additive group, this operation is sometimes called 'weighed sum', and 'product-of-powers' in 
+   * Applies the group binary operation pair-wise sequentially to the results of computing {@link #selfApply(Element, BigInteger)}
+   * multiple times. In an additive group, this operation is sometimes called 'weighed sum', and 'product-of-powers' in
    * a multiplicative group.
    * @param elements A given array of group elements
    * @param amounts Corresponding amounts
    * @return The result of this operation
-   * @throws IllegalArgumentException if {@code elements} or one of its elements is null 
-   * @throws IllegalArgumentException if {@code amounts} or one of its values is null 
-   * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group 
-   * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths 
+   * @throws IllegalArgumentException if {@code elements} or one of its elements is null
+   * @throws IllegalArgumentException if {@code amounts} or one of its values is null
+   * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
+   * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
    */
   public Element multiSelfApply(Element[] elements, BigInteger[] amounts);
 
@@ -212,21 +212,21 @@ public interface Group extends Serializable {
 
   /**
    * Returns the group order. If the group order is unknown, {@link #UNKNOWN_ORDER} is returned.
-   * If the group order is infinite, {@link #INFINITE_ORDER} is returned. 
+   * If the group order is infinite, {@link #INFINITE_ORDER} is returned.
    * @see "Handbook of Applied Cryptography, Definition 2.163"
    * @return The group order.
    */
   public BigInteger getOrder();
 
   /**
-   * Returns a lower bound for the group order in case the exact group order is unknown. The least return value is 1. 
-   * Otherwise, if the exact group order is known (or infinite), the exact group order is returned.  
+   * Returns a lower bound for the group order in case the exact group order is unknown. The least return value is 1.
+   * Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
    * @return A lower bound for the group order.
    */
   public BigInteger getMinOrder();
 
   /**
-   * Checks if {@code this} group has the same order as another given group. Returns {@code false} if the order of both groups 
+   * Checks if {@code this} group has the same order as another given group. Returns {@code false} if the order of both groups
    * is unknown.
    * @param group The other group
    * @return {@code true} if the order is the same, {@code false} otherwise
@@ -296,7 +296,7 @@ public interface Group extends Serializable {
   /**
    * Returns the group's arity. The default arity of a non-composed non-singleton group is 1. The
    * arity of a singleton group is 0. In case of a product group,
-   * the arity is the number of groups it is composed of. 
+   * the arity is the number of groups it is composed of.
    * @return The group's arity
    */
   public int getArity();
@@ -319,7 +319,7 @@ public interface Group extends Serializable {
    * Returns the group for the given index. The indices are numbered from 0 to the group's arity minus one.
    * @param index The given index
    * @return The corresponding group
-   * @throws IndexOutOfBoundsException if {@code index<0} or {@code index>arity-1}  
+   * @throws IndexOutOfBoundsException if {@code index<0} or {@code index>arity-1}
    */
   public Group getGroupAt(final int index);
 
@@ -329,23 +329,24 @@ public interface Group extends Serializable {
    * is empty.
    * @param indices The given sequence of indices
    * @return The corresponding group
-   * @throws IllegalArgumentException if {@code indices} is null or if its length exceeds the hierarchy's depth  
-   * @throws IndexOutOfBoundsException if {@code indices} contains an out-of-bounds index   
-   */  
+   * @throws IllegalArgumentException if {@code indices} is null or if its length exceeds the hierarchy's depth
+   * @throws IndexOutOfBoundsException if {@code indices} contains an out-of-bounds index
+   */
   public Group getGroupAt(int... indices);
 
   /**
    * Returns the group at index 0.
-   * @return The group at index;
+   * @return The group at index 0
+   * @throws UnsupportedOperationException for groups of arity 0
    */
   public Group getGroup();
 
   /**
-   * Creates a new product group which contains one group less than the given product group. If the given product group has 
+   * Creates a new product group which contains one group less than the given product group. If the given product group has
    * arity 1, then a singleton group is returned.
    * @param index The index of the group to remove
    * @return The resulting product group.
-   * @throws IndexOutOfBoundsException if {@code index<0} or {@code index>arity-1}  
+   * @throws IndexOutOfBoundsException if {@code index<0} or {@code index>arity-1}
    */
   public Group removeGroupAt(final int index);
 
