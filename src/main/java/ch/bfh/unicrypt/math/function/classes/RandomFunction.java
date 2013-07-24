@@ -1,17 +1,16 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import java.util.Random;
 
 /**
- * This classrepresents the concept of a randomized function with no input. When the 
+ * This classrepresents the concept of a randomized function with no input. When the
  * function is called, it selects an element from the co-domain at random and returns it as
  * output value.
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -47,5 +46,5 @@ public class RandomFunction extends AbstractFunction {
     }
     return new RandomFunction(ProductGroup.getInstance(), group);
   }
-  
+
 }

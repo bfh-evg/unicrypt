@@ -1,19 +1,18 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.util.Arrays;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
- * This class represents the concept of a generalized identity function f:X->X^n 
+ * This class represents the concept of a generalized identity function f:X->X^n
  * with f(x)=(x,...,x) for all elements x in X.
- * This class represents the concept of an identity function f:X->X with f(x)=x for 
+ * This class represents the concept of an identity function f:X->X with f(x)=x for
  * all elements x in X.
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -38,13 +37,13 @@ public class IdentityFunction extends AbstractFunction {
   //
   // STATIC FACTORY METHODS
   //
-  
+
   public static IdentityFunction getInstance(final Group group) {
     return IdentityFunction.getInstance(group, 1);
   }
-  
+
   /**
-   * This is the standard constructor for this class. It creates a generalized identity function for a given group, 
+   * This is the standard constructor for this class. It creates a generalized identity function for a given group,
    * which reproduces the input value multiple time.
    * @param group The given Group
    * @param arity The arity of the output element

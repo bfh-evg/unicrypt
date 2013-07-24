@@ -1,18 +1,17 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import java.util.Random;
 
 /**
- * This interface represents the the concept of a function f:X->X, which computes the 
+ * This interface represents the the concept of a function f:X->X, which computes the
  * inverse of the given input element.
- * 
+ *
  * @see Group#invert(Element)
  * @see Element#invert()
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0

@@ -1,20 +1,19 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.group.interfaces.Group;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
-
 /**
  * This class represents the concept of a hash function, which maps an arbitrarily long input
- * elements of a given group into an output element of a fixed length (an element of type 
- * {@link ZPlusMod}).  
- * 
+ * elements of a given group into an output element of a fixed length (an element of type
+ * {@link ZPlusMod}).
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -29,11 +28,11 @@ public class HashFunction extends AbstractFunction {
     this.messageDigest = messageDigest;
     this.recursiveHash = recursiveHash;
   }
-  
+
   public MessageDigest getMessageDigest() {
     return this.messageDigest;
   }
-    
+
   public boolean isRecursive() {
     return this.recursiveHash;
   }
@@ -48,7 +47,7 @@ public class HashFunction extends AbstractFunction {
     if (this.recursiveHash) {
       value = new BigInteger(element.recursiveHashValue(this.messageDigest));
     } else {
-      value = new BigInteger(element.hashValue(this.messageDigest));      
+      value = new BigInteger(element.hashValue(this.messageDigest));
     }
     return this.getCoDomain().getElement(value);
   }
@@ -69,7 +68,7 @@ public class HashFunction extends AbstractFunction {
   }
 
   /**
-   * This constructor generates a standard hash function for a given hash algorithm name. The co-domain 
+   * This constructor generates a standard hash function for a given hash algorithm name. The co-domain
    * is chosen accordingly.
    * @param hashAlgorithm The name of the hash algorithm
    * @throws IllegalArgumentException if {@code algorithmName} is null or an unknown hash algorithm name
@@ -90,11 +89,11 @@ public class HashFunction extends AbstractFunction {
     }
     return HashFunction.getInstance(domain, messageDigest, recursiveHash);
   }
-  
+
   public static HashFunction getInstance(Group domain, final MessageDigest messageDigest) {
     return HashFunction.getInstance(domain, messageDigest, false);
   }
-  
+
   public static HashFunction getInstance(Group domain, final MessageDigest messageDigest, boolean recursiveHash) {
     if (domain == null || messageDigest == null) {
       throw new IllegalArgumentException();
@@ -102,5 +101,5 @@ public class HashFunction extends AbstractFunction {
     BigInteger modulus = BigInteger.valueOf(2).pow(8*messageDigest.getDigestLength());
     return new HashFunction(domain, ZPlusMod.getInstance(modulus), messageDigest, recursiveHash);
   }
-  
+
 }

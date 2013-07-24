@@ -11,9 +11,9 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  * This abstract class provides a basis implementation for objects of type {@link Group}.
- * 
+ *
  * @see Element
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
@@ -52,7 +52,7 @@ public abstract class AbstractGroup implements Group {
       }
       return this.abstractGetElement(value);
     }
-    return this.getElement(MathUtil.elegantUnpair(value, getArity()));
+    return this.getElement(MathUtil.elegantUnpair(value, this.getArity()));
   }
 
   @Override
@@ -393,7 +393,7 @@ public abstract class AbstractGroup implements Group {
   protected Group standardGetSuperGroup() {
     return this;
   }
-  
+
   @SuppressWarnings("static-method")
   protected int standardGetArity() {
     return 1;
@@ -423,7 +423,7 @@ public abstract class AbstractGroup implements Group {
   protected BigInteger standardGetMinOrder() {
     return BigInteger.ONE;
   }
-  
+
   //
   // The following protected abstract method must be implemented in every direct sub-class.
   //

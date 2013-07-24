@@ -1,18 +1,17 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.BooleanGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import java.util.Random;
 
 /**
  * This interface represents the concept of a function, which tests the given input elements
  * for equality. For this to work, its domain is a power group and its co-domain the Boolean
  * group. If all all input elements are equal, the function outputs 1, and 0 otherwise.
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -54,7 +53,7 @@ public class EqualityFunction extends AbstractFunction {
   }
 
   /**
-   * This is the general constructor of this class. The first parameter is the group on which it operates, 
+   * This is the general constructor of this class. The first parameter is the group on which it operates,
    * and the second parameter is the number of input elements to compare.
    * @param group The group on which this function operates
    * @param arity The number of input elements to compare

@@ -1,20 +1,19 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import java.util.Random;
 
 /**
- * This class represents the concept of a function, which is derived from another function with 
- * a product (or power) group domain by applying a single input element and thus by fixing the 
- * corresponding parameter to a constant value. Therefore, the input arity of such a function of is 
- * the input arity of the parent function minus 1. Functions of that type are usually constructed by 
- * calling the method {@link Function#partiallyApply(Element, int)} for a given function with a product 
+ * This class represents the concept of a function, which is derived from another function with
+ * a product (or power) group domain by applying a single input element and thus by fixing the
+ * corresponding parameter to a constant value. Therefore, the input arity of such a function of is
+ * the input arity of the parent function minus 1. Functions of that type are usually constructed by
+ * calling the method {@link Function#partiallyApply(Element, int)} for a given function with a product
  * (or power) group domain.
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -26,8 +25,8 @@ public class PartiallyAppliedFunction extends AbstractFunction {
   private final int index;
 
   /**
-   * This is the standard constructor of this class. It derives from a given function a new function, in which one input 
-   * element is fixed to a given element and thus expects one input element less. 
+   * This is the standard constructor of this class. It derives from a given function a new function, in which one input
+   * element is fixed to a given element and thus expects one input element less.
    * @param parentFunction The given function
    * @param parameter The given parameter to fix
    * @param index The index of the parameter to fix
@@ -89,8 +88,8 @@ public class PartiallyAppliedFunction extends AbstractFunction {
   //
 
   /**
-   * This is the standard constructor of this class. It derives from a given function a new function, in which one input 
-   * element is fixed to a given element and thus expects one input element less. 
+   * This is the standard constructor of this class. It derives from a given function a new function, in which one input
+   * element is fixed to a given element and thus expects one input element less.
    * @param parentfunction The given function
    * @param element The given parameter to fix
    * @param index The index of the parameter to fix
@@ -98,18 +97,14 @@ public class PartiallyAppliedFunction extends AbstractFunction {
    * @throws IndexOutOfBoundsException if the {@code index} is negative or > the arity of the function's domain
    * @throws IllegalArgumentException if the {@code element} is not an element of the corresponding group
    */
-  public static Function getInstance(final Function parentfunction, final Element element, final int index) {
+  public static PartiallyAppliedFunction getInstance(final Function parentfunction, final Element element, final int index) {
     if (parentfunction == null) {
       throw new IllegalArgumentException();
     }
     if (!parentfunction.getDomain().getGroupAt(index).contains(element)) {
       throw new IllegalArgumentException();
     }
-    Function result = new PartiallyAppliedFunction(parentfunction.getDomain().removeGroupAt(index), parentfunction.getCoDomain(), parentfunction, element, index);
-    if (!result.getDomain().isAtomicGroup() && result.getDomain().getArity() == 1) {
-      return CompositeFunction.getInstance(IdentityFunction.getInstance(result.getDomain().getGroupAt(1)), result);
-    }
-    return result;
+    return new PartiallyAppliedFunction(parentfunction.getDomain().removeGroupAt(index), parentfunction.getCoDomain(), parentfunction, element, index);
   }
 
 }

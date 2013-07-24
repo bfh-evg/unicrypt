@@ -1,20 +1,19 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import java.util.Random;
 
 /**
- * This class represents the concept of a product function f:(X_1x...xX_n)->(Y_1x...xY_n). It consists 
- * of multiple individual functions f_i:X_i->Y_i, which are applied in parallel to respective input 
+ * This class represents the concept of a product function f:(X_1x...xX_n)->(Y_1x...xY_n). It consists
+ * of multiple individual functions f_i:X_i->Y_i, which are applied in parallel to respective input
  * elements. To be compatible with {@link Function}, these input elements must be given as a tuple element
  * of the product domain X_1x...xX_n. In the same way, the output elements are returned as a tuple element
  * of the product domain Y_1x...xY_n.
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -26,7 +25,7 @@ public final class ProductFunction extends AbstractFunction {
 
   /**
    * This is the general constructor of this class. It takes a list of functions as input and produces
-   * the corresponding product function. 
+   * the corresponding product function.
    * @param functions
    * @throws IllegalArgumentException if {@code functions} is null or contains null
    */
@@ -39,8 +38,8 @@ public final class ProductFunction extends AbstractFunction {
   /**
    * This is the general constructor of this class. The first parameter specifies the function to be
    * applied multiple times in parallel, and the second parameter defines the number of times it
-   * is applied in parallel. 
-   * @param function The given function 
+   * is applied in parallel.
+   * @param function The given function
    * @param arity The number of times the function is applied in parallel
    * @throws IllegalArgumentException if {@code function} is null
    * @throws IllegalArgumentException if {@code arity} is negative
@@ -98,7 +97,7 @@ public final class ProductFunction extends AbstractFunction {
 
   /**
    * This is the general constructor of this class. It takes a list of functions as input and produces
-   * the corresponding product function. 
+   * the corresponding product function.
    * @param functions
    * @throws IllegalArgumentException if {@code functions} is null or contains null
    */
@@ -121,8 +120,8 @@ public final class ProductFunction extends AbstractFunction {
   /**
    * This is the general constructor of this class. The first parameter specifies the function to be
    * applied multiple times in parallel, and the second parameter defines the number of times it
-   * is applied in parallel. 
-   * @param function The given function 
+   * is applied in parallel.
+   * @param function The given function
    * @param arity The number of times the function is applied in parallel
    * @throws IllegalArgumentException if {@code function} is null
    * @throws IllegalArgumentException if {@code arity} is negative

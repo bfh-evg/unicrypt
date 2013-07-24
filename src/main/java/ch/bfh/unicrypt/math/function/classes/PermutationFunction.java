@@ -1,21 +1,20 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.helper.Permutation;
+import java.util.Random;
 
 /**
  * This interface represents the concept of a function f:X^n x Z->X^n, where Z is a permutation group of
- * size n. Calling the function permutes the given input tuple element of X^n according to the permutation 
+ * size n. Calling the function permutes the given input tuple element of X^n according to the permutation
  * element given as a second argument. The output of the function is the permuted tuple element.
- * 
+ *
  * @see PermutationGroup
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0

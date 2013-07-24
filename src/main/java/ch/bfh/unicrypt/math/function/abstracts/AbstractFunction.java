@@ -1,11 +1,10 @@
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import java.util.Random;
 
 public abstract class AbstractFunction implements Function {
 
@@ -26,7 +25,7 @@ public abstract class AbstractFunction implements Function {
   public Element apply(Random random) {
     return this.apply(this.getDomain().getIdentityElement(), random);
   }
-  
+
   @Override
   public final Element apply(final Element element) {
     return this.apply(element, (Random) null);
@@ -44,7 +43,7 @@ public abstract class AbstractFunction implements Function {
   public final Element apply(final Element... elements) {
     return this.apply(elements, (Random) null);
   }
-  
+
   @Override
   public final Element apply(final Element[] elements, final Random random) {
     return this.apply(this.getDomain().getElement(elements), random);
@@ -69,7 +68,7 @@ public abstract class AbstractFunction implements Function {
   public final Group getDomain() {
     return this.domain;
   }
-  
+
   @Override
   public final Group getCoDomain() {
     return this.coDomain;
@@ -96,7 +95,7 @@ public abstract class AbstractFunction implements Function {
    * corresponds to a given sequence of indices. (e.g., 0,3,2 for the third
    * function in the fourth compound function of the first compound function).
    * Returns {@code this} function if {@code indices} is empty.
-   * 
+   *
    * @param indices The given sequence of indices
    * @return The corresponding function
    * @throws IllegalArgumentException if {@ode indices} is null or if its length exceeds the hierarchy's depth
@@ -138,7 +137,7 @@ public abstract class AbstractFunction implements Function {
   }
 
   //
-  // The following protected methods are standard implementations for most functions of 
+  // The following protected methods are standard implementations for most functions of
   // arity 1. The standard implementation may change in sub-classes for functions of higher arity.
   //
 
@@ -166,7 +165,7 @@ public abstract class AbstractFunction implements Function {
   // The following protected abstract method must be implemented in every direct
   // sub-class
   //
-  
+
   protected abstract Element abstractApply(Element element, Random random);
 
 }
