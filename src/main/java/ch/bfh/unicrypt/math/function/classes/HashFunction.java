@@ -97,11 +97,15 @@ public class HashFunction extends AbstractFunction {
   }
 
   /**
-   * This is the general constructor of this class.
-   * @param domain
-   * @param messageDigest
-   * @param recursiveHash
-   * @return
+   * This is the general factory method of this class. If generates a new hash
+   * function for a given domain. The cryptographic hash function is defined by
+   * a given instance of type {@link MessageDigest}. A boolean value
+   * {@code recursiveHash} defines which of the two hashing methods is used.
+   * @param domain The given domain
+   * @param messageDigest The given cryptographic hash function
+   * @param recursiveHash The boolean value
+   * @return The resulting hash function
+   * @throws IllegalArgumentException if {@code domain} or {@code messageDigest} is null
    */
   public static HashFunction getInstance(Group domain, final MessageDigest messageDigest, boolean recursiveHash) {
     if (domain == null || messageDigest == null) {
