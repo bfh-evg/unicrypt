@@ -4,6 +4,8 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Monoid;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -25,7 +27,7 @@ public class ConstantFunction extends AbstractFunction {
    * @param element The constant output value of the function
    * @throws IllegalArgumentException if {@code element} is null
    */
-  private ConstantFunction(Group coDomain, Element element) {
+  private ConstantFunction(Set coDomain, Element element) {
     super(ProductGroup.getInstance(), coDomain);
     this.element = element;
   }
@@ -55,20 +57,20 @@ public class ConstantFunction extends AbstractFunction {
     if (element == null) {
       throw new IllegalArgumentException();
     }
-    return new ConstantFunction(element.getGroup(), element);
+    return new ConstantFunction(element.getSet(), element);
   }
 
   /**
    * This is a special factory method of this class, which creates a function
    * that always returns the identity element of the given group.
-   * @param group The given group
+   * @param monoid The given group
    * @return The resulting function
    */
-  public static ConstantFunction getInstance(final Group group) {
-    if (group == null) {
+  public static ConstantFunction getInstance(final Monoid monoid) {
+    if (monoid == null) {
       throw new IllegalArgumentException();
     }
-    return new ConstantFunction(group, group.getIdentityElement());
+    return new ConstantFunction(monoid, monoid.getIdentityElement());
   }
 
 }

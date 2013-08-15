@@ -77,11 +77,11 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
   public AdditiveElement createChallenge(final Element commitment, final Element publicInput, final Element otherInput) {
     AdditiveElement hashInput;
     if (otherInput == null) {
-      final ProductGroup pg = new ProductGroup(publicInput.getGroup(), commitment.getGroup());
+      final ProductGroup pg = new ProductGroup(publicInput.getSet(), commitment.getSet());
       final ConcatenateFunction concatFunction = new ConcatenateFunction(pg, this.concatParameter, this.mapper);
       hashInput = concatFunction.apply(publicInput, commitment);
     } else {
-      final ProductGroup pg = new ProductGroup(publicInput.getGroup(), commitment.getGroup(), otherInput.getGroup());
+      final ProductGroup pg = new ProductGroup(publicInput.getSet(), commitment.getSet(), otherInput.getSet());
       final ConcatenateFunction concatFunction = new ConcatenateFunction(pg, this.concatParameter, this.mapper);
       hashInput = concatFunction.apply(publicInput, commitment, otherInput);
     }
@@ -104,11 +104,11 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
     }
     AdditiveElement hashInput;
     if (otherInput == null) {
-      final ProductGroup pg = new ProductGroup(publicInput.getGroup(), this.getCommitment(proof).getGroup());
+      final ProductGroup pg = new ProductGroup(publicInput.getSet(), this.getCommitment(proof).getGroup());
       final ConcatenateFunction concatFunction = new ConcatenateFunction(pg, this.concatParameter, this.mapper);
       hashInput = concatFunction.apply(publicInput, this.getCommitment(proof));
     } else {
-      final ProductGroup pg = new ProductGroup(publicInput.getGroup(), this.getCommitment(proof).getGroup(), otherInput.getGroup());
+      final ProductGroup pg = new ProductGroup(publicInput.getSet(), this.getCommitment(proof).getGroup(), otherInput.getSet());
       final ConcatenateFunction concatFunction = new ConcatenateFunction(pg, this.concatParameter, this.mapper);
       hashInput = concatFunction.apply(publicInput, this.getCommitment(proof), otherInput);
     }

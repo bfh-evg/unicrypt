@@ -27,9 +27,9 @@ public class EqualityFunction extends AbstractFunction {
   @Override
   public Element abstractApply(final Element element, final Random random) {
     if (element.getArity() > 1) {
-      final Element firstElement = element.getElementAt(0);
+      final Element firstElement = element.getAt(0);
       for (int i = 1; i < element.getArity(); i++) {
-        if (!firstElement.equals(element.getElementAt(i))) {
+        if (!firstElement.equals(element.getAt(i))) {
           return BooleanGroup.FALSE;
         }
       }

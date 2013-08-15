@@ -12,22 +12,22 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  * This class represents the concept of a direct product of groups ("product group" for short).
- * The elements are tuples of respective elements of the involved groups, i.e., the set of elements of 
- * the product group is the Cartesian product of the respective sets of elements. The involved groups 
- * themselves can be product groups, i.e., arbitrary hierarchies of product groups are possible. The binary operation 
+ * The elements are tuples of respective elements of the involved groups, i.e., the set of elements of
+ * the product group is the Cartesian product of the respective sets of elements. The involved groups
+ * themselves can be product groups, i.e., arbitrary hierarchies of product groups are possible. The binary operation
  * is defined component-wise. Applying the operation to tuple elements yields another
  * tuple element. The group's unique identity element is the tuple of respective identity elements.
- * The inverse element is computed component-wise. The order of the product group is the product of 
- * the individual group orders (it may be infinite or unknown). The special case of a product group of arity 0 is 
+ * The inverse element is computed component-wise. The order of the product group is the product of
+ * the individual group orders (it may be infinite or unknown). The special case of a product group of arity 0 is
  * isomorphic to the group consisting of a single element (see {@code SingletonGroup}).
- * 
+ *
  * @see <a href="http://en.wikipedia.org/wiki/Direct_product_of_groups">http://en.wikipedia.org/wiki/Direct_product_of_groups</a>
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
-public class ProductGroup extends AbstractGroup {
+public class ProductGroup extends ProductMonoid implements Group {
 
   private static final long serialVersionUID = 1L;
   private final Group[] groups;
@@ -67,7 +67,7 @@ public class ProductGroup extends AbstractGroup {
   protected Element abstractGetRandomElement(final Random random) {
     final Element[] randomElements = new Element[this.getArity()];
     for (int i = 0; i < randomElements.length; i++) {
-      randomElements[i] = this.getGroupAt(i).getRandomElement(random);
+      randomElements[i] = this.getAt(i).getRandomElement(random);
     }
     return abstractGetElement(randomElements);
   }
@@ -76,7 +76,7 @@ public class ProductGroup extends AbstractGroup {
   protected boolean abstractContains(BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getArity());
     for (int i=0; i<this.getArity(); i++) {
-      if (!this.getGroupAt(i).contains(values[i])) {
+      if (!this.getAt(i).contains(values[i])) {
         return false;
       }
     }
@@ -87,7 +87,7 @@ public class ProductGroup extends AbstractGroup {
   protected Element abstractIdentityElement() {
     final Element[] identityElements = new Element[this.getArity()];
     for (int i = 0; i < identityElements.length; i++) {
-      identityElements[i] = this.getGroupAt(i).getIdentityElement();
+      identityElements[i] = this.getAt(i).getIdentityElement();
     }
     return abstractGetElement(identityElements);
   }
@@ -96,7 +96,7 @@ public class ProductGroup extends AbstractGroup {
   protected Element abstractApply(final Element element1, final Element element2) {
     final Element[] results = new Element[this.getArity()];
     for (int i = 0; i < this.getArity(); i++) {
-      results[i] = element1.getElementAt(i).apply(element2.getElementAt(i));
+      results[i] = element1.getAt(i).apply(element2.getAt(i));
     }
     return abstractGetElement(results);
   }
@@ -105,7 +105,7 @@ public class ProductGroup extends AbstractGroup {
   protected Element abstractSelfApply(final Element element, final BigInteger amount) {
     final Element[] results = new Element[this.getArity()];
     for (int i = 0; i < this.getArity(); i++) {
-      results[i] = element.getElementAt(i).selfApply(amount);
+      results[i] = element.getAt(i).selfApply(amount);
     }
     return abstractGetElement(results);
   }
@@ -114,7 +114,7 @@ public class ProductGroup extends AbstractGroup {
   protected Element abstractInvert(final Element element) {
     final Element[] results = new Element[this.getArity()];
     for (int i = 0; i < this.getArity(); i++) {
-      results[i] = element.getElementAt(i).invert();
+      results[i] = element.getAt(i).invert();
     }
     return abstractGetElement(results);
   }
@@ -129,11 +129,11 @@ public class ProductGroup extends AbstractGroup {
 
   @Override
   protected BigInteger abstractGetOrder() {
-    if (this.isEmptyGroup()) {
+    if (this.isEmpty()) {
       return BigInteger.ONE;
     }
-    if (this.isPowerGroup()) {
-      BigInteger order = this.getGroup().getOrder();
+    if (this.isPower()) {
+      BigInteger order = this.getFirst().getOrder();
       if (order.equals(Group.INFINITE_ORDER) || order.equals(Group.UNKNOWN_ORDER)) {
         return order;
       }
@@ -141,7 +141,7 @@ public class ProductGroup extends AbstractGroup {
     }
     BigInteger result = BigInteger.ONE;
     for (int i = 0; i < this.getArity(); i++) {
-      final BigInteger order = this.getGroupAt(i).getOrder();
+      final BigInteger order = this.getAt(i).getOrder();
       if (order.equals(Group.INFINITE_ORDER)) {
         return Group.INFINITE_ORDER;
       }
@@ -170,10 +170,10 @@ public class ProductGroup extends AbstractGroup {
 
   @Override
   protected Group standardGetSuperGroup() {
-    if (isPowerGroup()) {
-      if (this.getGroup().isSubGroup()) {
+    if (isPower()) {
+      if (this.getFirst().isSubGroup()) {
         return ProductGroup.getInstance(this.getSuperGroup(),this.getArity());
-      } 
+      }
       return this;
     }
     Group[] superGroups = new Group[this.getArity()];
@@ -190,8 +190,8 @@ public class ProductGroup extends AbstractGroup {
 
   @Override
   protected BigInteger standardGetMinOrder() {
-    if (isPowerGroup()) {
-      BigInteger minOrder = this.getGroup().getMinOrder();
+    if (isPower()) {
+      BigInteger minOrder = this.getFirst().getMinOrder();
       if (minOrder.equals(Group.INFINITE_ORDER)) {
         return minOrder;
       }
@@ -199,7 +199,7 @@ public class ProductGroup extends AbstractGroup {
     }
     BigInteger result = BigInteger.ONE;
     for (int i = 0; i < this.getArity(); i++) {
-      final BigInteger minOrder = this.getGroupAt(i).getMinOrder();
+      final BigInteger minOrder = this.getAt(i).getMinOrder();
       if (minOrder.equals(Group.INFINITE_ORDER)) {
         return Group.INFINITE_ORDER;
       }
@@ -212,10 +212,10 @@ public class ProductGroup extends AbstractGroup {
   protected int standardGetArity() {
     return this.arity;
   }
-  
+
   @Override
   protected Group standardGetGroupAt(final int index) {
-    if (this.isPowerGroup()) {
+    if (this.isPower()) {
       return this.groups[0];
     }
     return this.groups[index];
@@ -227,15 +227,15 @@ public class ProductGroup extends AbstractGroup {
     if (arity == 0) {
       throw new UnsupportedOperationException();
     }
-    if (this.isPowerGroup()) {
-      return ProductGroup.getInstance(this.getGroupAt(0), arity-1);
+    if (this.isPower()) {
+      return ProductGroup.getInstance(this.getAt(0), arity-1);
     }
     final Group[] remainingGroups = new Group[arity-1];
     for (int i = 0; i < arity-1; i++) {
       if (i < index) {
-        remainingGroups[i] = this.getGroupAt(i);
+        remainingGroups[i] = this.getAt(i);
       } else {
-        remainingGroups[i] = this.getGroupAt(i+1);
+        remainingGroups[i] = this.getAt(i+1);
       }
     }
     return ProductGroup.getInstance(remainingGroups);
@@ -257,7 +257,7 @@ public class ProductGroup extends AbstractGroup {
       return false;
     }
     for (int i = 0; i < this.getArity(); i++) {
-      if (!this.getGroupAt(i).equals(other.getGroupAt(i))) {
+      if (!this.getAt(i).equals(other.getAt(i))) {
         return false;
       }
     }
@@ -270,7 +270,7 @@ public class ProductGroup extends AbstractGroup {
     int result = 1;
     result = prime * result + this.getArity();
     for (int i = 0; i < this.getArity(); i++) {
-      result = prime * result + this.getGroupAt(i).hashCode();
+      result = prime * result + this.getAt(i).hashCode();
     }
     return result;
   }
@@ -287,10 +287,10 @@ public class ProductGroup extends AbstractGroup {
     protected ProductGroupElement(final Group group, final Element[] elements) {
       super(group);
       this.elements = elements;
-    } 
+    }
 
     @Override
-    protected BigInteger computeValue() {
+    protected BigInteger standardGetValue() {
       BigInteger[] values = new BigInteger[this.getArity()];
       for (int i=0; i<this.getArity(); i++) {
         values[i] = this.elements[i].getValue();
@@ -299,7 +299,7 @@ public class ProductGroup extends AbstractGroup {
     }
 
     @Override
-    protected Element computeElementAt(final int index) {
+    protected Element standardGetAt(final int index) {
       return this.elements[index];
     }
 

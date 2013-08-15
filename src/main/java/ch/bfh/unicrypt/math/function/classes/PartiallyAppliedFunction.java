@@ -74,9 +74,9 @@ public class PartiallyAppliedFunction extends AbstractFunction {
     final Element[] allElements = new Element[element.getArity() + 1];
     for (int i = 0; i < element.getArity(); i++) {
       if (i < this.getIndex()) {
-        allElements[i] = element.getElementAt(i);
+        allElements[i] = element.getAt(i);
       } else {
-        allElements[i + 1] = element.getElementAt(i);
+        allElements[i + 1] = element.getAt(i);
       }
       allElements[this.getIndex()] = this.getParameter();
     }
@@ -101,10 +101,10 @@ public class PartiallyAppliedFunction extends AbstractFunction {
     if (parentfunction == null) {
       throw new IllegalArgumentException();
     }
-    if (!parentfunction.getDomain().getGroupAt(index).contains(element)) {
+    if (!parentfunction.getDomain().getAt(index).contains(element)) {
       throw new IllegalArgumentException();
     }
-    return new PartiallyAppliedFunction(parentfunction.getDomain().removeGroupAt(index), parentfunction.getCoDomain(), parentfunction, element, index);
+    return new PartiallyAppliedFunction(parentfunction.getDomain().removeAt(index), parentfunction.getCoDomain(), parentfunction, element, index);
   }
 
 }

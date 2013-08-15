@@ -79,8 +79,8 @@ public class PasswordDerivedKeyGeneratorClass extends KeyGeneratorAbstract imple
     public Element apply(Element element, Random random) {
       if (!this.getDomain().contains(element))
         throw new IllegalArgumentException();
-      char[] password = new String(element.getElementAt(0).getValue().toByteArray()).toCharArray();
-      byte[] salt = element.getElementAt(1).getValue().toByteArray();
+      char[] password = new String(element.getAt(0).getValue().toByteArray()).toCharArray();
+      byte[] salt = element.getAt(1).getValue().toByteArray();
       Key key = null;
       try {
         int keySizeInBits = ((int) Math.ceil((this.getCoDomain().getOrderGroup().getModulus().bitLength() + 1) / 8)) * 8;       

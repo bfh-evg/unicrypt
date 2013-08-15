@@ -32,7 +32,7 @@ public class SelfApplyFunction extends AbstractFunction {
 
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    return element.getElementAt(0).selfApply(element.getElementAt(1));
+    return element.getAt(0).selfApply(element.getAt(1));
   }
 
   //

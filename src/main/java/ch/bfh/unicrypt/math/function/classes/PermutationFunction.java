@@ -34,11 +34,11 @@ public class PermutationFunction extends AbstractFunction {
     if (!this.getDomain().contains(element)) {
       throw new IllegalArgumentException();
     }
-    final Element tuple = element.getElementAt(0);
-    final Permutation permutation = ((PermutationGroup) this.getDomain().getGroupAt(1)).getPermutation(element.getElementAt(1));
+    final Element tuple = element.getAt(0);
+    final Permutation permutation = ((PermutationGroup) this.getDomain().getAt(1)).getPermutation(element.getAt(1));
     final Element[] result = new Element[tuple.getArity()];
     for (int i = 0; i < tuple.getArity(); i++) {
-      result[i] = tuple.getElementAt(permutation.permute(i));
+      result[i] = tuple.getAt(permutation.permute(i));
     }
     return this.getCoDomain().getElement(result);
   }
@@ -48,7 +48,7 @@ public class PermutationFunction extends AbstractFunction {
    * @return The permutation group
    */
   public PermutationGroup getPermutationGroup() {
-    return (PermutationGroup) this.getDomain().getGroupAt(1);
+    return (PermutationGroup) this.getDomain().getAt(1);
   }
 
   //
@@ -77,7 +77,7 @@ public class PermutationFunction extends AbstractFunction {
    * @throws IllegalArgumentException if {@code group} is null
    */
   public static PermutationFunction getInstance(final Group group) {
-    if (group == null || !group.isPowerGroup()) {
+    if (group == null || !group.isPower()) {
       throw new IllegalArgumentException();
     }
     return new PermutationFunction(ProductGroup.getInstance(group, PermutationGroup.getInstance(group.getArity())), group);

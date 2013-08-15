@@ -93,13 +93,13 @@ public class ElGamalEncryptionScheme extends AbstractEncryptionScheme {
     // @Override
     @Override
     public Element partialDecrypt(final Element privateKey, final Element ciphertext) {
-        return (Element) this.getPartialDecryptionFunction().apply(privateKey, ((Element) ciphertext).getElementAt(0));
+        return (Element) this.getPartialDecryptionFunction().apply(privateKey, ((Element) ciphertext).getAt(0));
     }
 
     // @Override
     @Override
     public Element combinePartialDecryptions(final Element ciphertext, final Element... partialDecryptions) {
-        final Element element = ((Element) ciphertext).getElementAt(1);
+        final Element element = ((Element) ciphertext).getAt(1);
         return this.ddhGroup.apply(partialDecryptions).apply(element);
     }
 
@@ -214,8 +214,8 @@ public class ElGamalEncryptionScheme extends AbstractEncryptionScheme {
             throw new IllegalArgumentException("proof must have an arity of 3 !");
         }
         
-        Element a = ((Element) ciphertext).getElementAt(0);
-        Element b = ((Element) ciphertext).getElementAt(1);
+        Element a = ((Element) ciphertext).getAt(0);
+        Element b = ((Element) ciphertext).getAt(1);
 
 
         // perform the precomputation steps
@@ -231,8 +231,8 @@ public class ElGamalEncryptionScheme extends AbstractEncryptionScheme {
                 publicKey, 0);
         
         // the function for each relation in the proof is always the same, so we need to create a list of functions
-        Function[] functions = new Function[validityProof.getElementAt(2).getArity()];
-        for (int j = 0; j < validityProof.getElementAt(2).getArity(); j++) {
+        Function[] functions = new Function[validityProof.getAt(2).getArity()];
+        for (int j = 0; j < validityProof.getAt(2).getArity(); j++) {
             functions[j] = f;
         }
 

@@ -86,7 +86,7 @@ public final class ProductFunction extends AbstractFunction {
   protected Element abstractApply(final Element element, final Random random) {
     final Element[] elements = new Element[this.getArity()];
     for (int i = 0; i < this.getArity(); i++) {
-      elements[i] = this.getFunctionAt(i).apply(element.getElementAt(i), random);
+      elements[i] = this.getFunctionAt(i).apply(element.getAt(i), random);
     }
     return this.getCoDomain().getElement(elements);
   }

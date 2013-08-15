@@ -102,11 +102,11 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
 
     @Override
     public Element abstractApply(Element element, Random random) {
-      BigInteger plainText = element.getElementAt(1).getValue();
-      Element keyElement = element.getElementAt(0);     
+      BigInteger plainText = element.getAt(1).getValue();
+      Element keyElement = element.getAt(0);     
       BigInteger key = keyElement.getValue();
       // HACK: This hack is required in order to re-insert lost 0-bits.
-      int requiredKeySizeInBytes = ((int) Math.ceil((keyElement.getGroup().getOrderGroup().getModulus().bitLength() + 1) / 8));       
+      int requiredKeySizeInBytes = ((int) Math.ceil((keyElement.getSet().getOrderGroup().getModulus().bitLength() + 1) / 8));       
       byte[] keyBytes = key.toByteArray(); //
       byte[] nKey = new byte[requiredKeySizeInBytes]; //
       System.arraycopy(keyBytes, 0, nKey, requiredKeySizeInBytes-keyBytes.length, keyBytes.length); //
@@ -139,14 +139,14 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
 
     @Override
     public Element abstractApply(Element element, Random random) {
-      Element ciphertextElement = element.getElementAt(1);
+      Element ciphertextElement = element.getAt(1);
       //HACK: The ciphertext must be unwrapped from the byte-Representation of a Base64-String
       byte[] cipherText = DatatypeConverter.parseBase64Binary(new String(ciphertextElement.getValue().toByteArray()));      
       //HACK: The ciphertext must be unwrapped from the byte-Representation of a Base64-String      
-      Element keyElement = element.getElementAt(0);     
+      Element keyElement = element.getAt(0);     
       BigInteger key = keyElement.getValue();
       // HACK: This hack is required in order to re-insert lost 0-bits.
-      int requiredKeySizeInBytes = ((int) Math.ceil((keyElement.getGroup().getOrderGroup().getModulus().bitLength() + 1) / 8));       
+      int requiredKeySizeInBytes = ((int) Math.ceil((keyElement.getSet().getOrderGroup().getModulus().bitLength() + 1) / 8));       
       byte[] keyBytes = key.toByteArray(); //
       byte[] nKey = new byte[requiredKeySizeInBytes]; //
       System.arraycopy(keyBytes, 0, nKey, requiredKeySizeInBytes-keyBytes.length, keyBytes.length); //

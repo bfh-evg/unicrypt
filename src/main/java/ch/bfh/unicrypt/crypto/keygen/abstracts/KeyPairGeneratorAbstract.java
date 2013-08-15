@@ -38,12 +38,12 @@ public abstract class KeyPairGeneratorAbstract extends RandomizedKeyGeneratorAbs
 
   @Override
   public Element getPrivateKey(final Element keyPair) {
-    return keyPair.getElementAt(0);
+    return keyPair.getAt(0);
   }
 
   @Override
   public Element getPublicKey(final Element keyPair) {
-    return keyPair.getElementAt(1);
+    return keyPair.getAt(1);
   }
 
 }

@@ -5,15 +5,15 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.element.Element;
 
 /**
- * This interface represents the concept a cyclic atomic group. Every element of a cyclic group can be written 
- * as a power of some particular element in multiplicative notation, or as a multiple of the element in 
- * additive notation. Such an element is called generator of the group. For every positive integer there is exactly 
- * one cyclic group (up to isomorphism) with that order, and there is exactly one infinite cyclic group. 
+ * This interface represents the concept a cyclic atomic group. Every element of a cyclic group can be written
+ * as a power of some particular element in multiplicative notation, or as a multiple of the element in
+ * additive notation. Such an element is called generator of the group. For every positive integer there is exactly
+ * one cyclic group (up to isomorphism) with that order, and there is exactly one infinite cyclic group.
  * This interface extends extends {@link Group} with additional methods for dealing with generators. Each implementing
  * class must provide a default generator.
- * 
+ *
  * @see "Handbook of Applied Cryptography, Definition 2.167"
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -46,5 +46,21 @@ public interface CyclicGroup extends Group {
    * @throws IllegalArgumentException if {@code} is null
    */
   public boolean isGenerator(Element element);
+
+  //
+  // The following inherited methods are overridden to return cyclic groups
+  //
+
+  @Override
+  public CyclicGroup getAt(final int index);
+
+  @Override
+  public CyclicGroup getAt(int... indices);
+
+  @Override
+  public CyclicGroup getFirst();
+
+  @Override
+  public CyclicGroup removeAt(final int index);
 
 }

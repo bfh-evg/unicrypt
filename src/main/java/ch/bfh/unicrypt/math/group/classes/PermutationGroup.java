@@ -171,7 +171,7 @@ public class PermutationGroup extends AbstractGroup {
     }
 
     @Override
-    protected BigInteger computeValue() {
+    protected BigInteger standardGetValue() {
       int size = this.getPermutation().getSize();
       BigInteger[] indices = new BigInteger[size];
       for (int i=0; i<size; i++) {
@@ -182,7 +182,7 @@ public class PermutationGroup extends AbstractGroup {
 
     @Override
     public String toString() {
-      return this.getClass().getSimpleName() + "[" + this.getPermutation().toString() + ", " + this.getGroup() + "]";
+      return this.getClass().getSimpleName() + "[" + this.getPermutation().toString() + ", " + this.getSet() + "]";
     }
 
   }

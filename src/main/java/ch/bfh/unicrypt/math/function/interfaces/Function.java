@@ -3,6 +3,7 @@ package ch.bfh.unicrypt.math.function.interfaces;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -26,25 +27,6 @@ import java.util.Random;
  * @version 2.0
  */
 public interface Function {
-
-  /**
-   * Returns the result of applying the function to the identity element.
-   *
-   * @return The resulting output element
-   */
-  public Element apply();
-
-  /**
-   * Returns the result of applying the function to the identity element. In
-   * case of a randomized function, a random generator can be given as a second
-   * parameter. If no random generator is specified, i.e., if {@code random} is
-   * null, then the system-wide random generator is taken. If the function is
-   * deterministic, then {@code random} is ignored.
-   *
-   * @param random Either {@code null} or a given random generator
-   * @return The resulting output element
-   */
-  public Element apply(Random random);
 
   /**
    * Applies the function to an input element from the domain and returns the
@@ -139,14 +121,14 @@ public interface Function {
    *
    * @return The domain
    */
-  public Group getDomain();
+  public Set getDomain();
 
   /**
    * Returns the co-domain of this function.
    *
    * @return The co-domain
    */
-  public Group getCoDomain();
+  public Set getCoDomain();
 
   /**
    * Returns the function at index 0.

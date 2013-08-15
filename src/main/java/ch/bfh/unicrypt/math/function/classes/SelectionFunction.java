@@ -32,7 +32,7 @@ public class SelectionFunction extends AbstractFunction {
 
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    return element.getElementAt(this.indices);
+    return element.getAt(this.indices);
   }
 
   //
@@ -53,7 +53,7 @@ public class SelectionFunction extends AbstractFunction {
     if (group == null) {
       throw new IllegalArgumentException();
     }
-    return new SelectionFunction(group, group.getGroupAt(indices), indices);
+    return new SelectionFunction(group, group.getAt(indices), indices);
   }
 
 }

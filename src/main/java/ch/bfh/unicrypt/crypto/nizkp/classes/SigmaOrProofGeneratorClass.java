@@ -157,7 +157,7 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
 		// applying function on all response values and check if correct
 		for (int j = 0; j < response.getArity(); j++){
 			sApplied = functions[j].apply(response.getElementAt(j));
-			if (!sApplied.getGroup().areEqual(sApplied, commitment.getElementAt(j).apply(((TupleElement)publicInput).getElementAt(j).selfApply((AtomicElement)challenge.getElementAt(j))))){
+			if (!sApplied.getSet().areEqual(sApplied, commitment.getElementAt(j).apply(((TupleElement)publicInput).getElementAt(j).selfApply((AtomicElement)challenge.getElementAt(j))))){
 				return false;
 			}
 		}

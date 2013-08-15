@@ -46,7 +46,7 @@ public abstract class AbstractGroup implements Group {
     if (value == null) {
       throw new IllegalArgumentException();
     }
-    if (this.isAtomicGroup()) {
+    if (this.isAtomic()) {
       if (!this.contains(value)) {
         throw new IllegalArgumentException();
       }
@@ -60,12 +60,12 @@ public abstract class AbstractGroup implements Group {
     if (values == null || values.length != this.getArity()) {
       throw new IllegalArgumentException();
     }
-    if (this.isAtomicGroup()) {
+    if (this.isAtomic()) {
       return this.getElement(values[0]);
     }
     Element[] elements = new Element[this.getArity()];
     for (int i=0; i<this.getArity(); i++) {
-      elements[i] = this.getGroupAt(i).getElement(values[i]);
+      elements[i] = this.getAt(i).getElement(values[i]);
     }
     return this.abstractGetElement(null, elements);
   }
@@ -86,12 +86,12 @@ public abstract class AbstractGroup implements Group {
     if (elements == null || elements.length != this.getArity()) {
       throw new IllegalArgumentException();
     }
-    if (this.isAtomicGroup()) {
+    if (this.isAtomic()) {
       return this.getElement(elements[0]);
     }
     Element[] newElements = new Element[this.getArity()];
     for (int i=0; i<this.getArity(); i++) {
-      newElements[i] = this.getGroupAt(i).getElement(elements[i]);
+      newElements[i] = this.getAt(i).getElement(elements[i]);
     }
     return abstractGetElement(null, newElements);
   }
@@ -110,17 +110,17 @@ public abstract class AbstractGroup implements Group {
   }
 
   @Override
-  public final boolean isAtomicGroup() {
+  public final boolean isAtomic() {
     return this.standardIsAtomicGroup();
   }
 
   @Override
-  public final boolean isEmptyGroup() {
+  public final boolean isEmpty() {
     return this.getArity() == 0;
   }
 
   @Override
-  public final boolean isPowerGroup() {
+  public final boolean isPower() {
     if (this.getArity() <= 1) {
       return true;
     }
@@ -128,25 +128,17 @@ public abstract class AbstractGroup implements Group {
   }
 
   @Override
-  public final boolean isSingletonGroup() {
+  public final boolean isSingleton() {
     return this.getOrder().equals(BigInteger.ONE);
   }
 
   @Override
-  public final boolean hasSameOrder(final Group group) {
-    if (group == null) {
-      throw new IllegalArgumentException();
-    }
-    return this.getOrder().equals(group.getOrder()) && (!this.getOrder().equals(Group.UNKNOWN_ORDER) || this.equals(group));
+  public final Group getFirst() {
+    return this.getAt(0);
   }
 
   @Override
-  public final Group getGroup() {
-    return this.getGroupAt(0);
-  }
-
-  @Override
-  public final Group getGroupAt(final int index) {
+  public final Group getAt(final int index) {
     if (index < 0 || index >= this.getArity()) {
       throw new IndexOutOfBoundsException();
     }
@@ -154,19 +146,19 @@ public abstract class AbstractGroup implements Group {
   }
 
   @Override
-  public final Group getGroupAt(final int... indices) {
+  public final Group getAt(final int... indices) {
     if (indices == null) {
       throw new IllegalArgumentException();
     }
     Group group = this;
     for (final int index : indices) {
-      group = group.getGroupAt(index);
+      group = group.getAt(index);
     }
     return group;
   }
 
   @Override
-  public final Group removeGroupAt(int index) {
+  public final Group removeAt(int index) {
     if (this.getArity() == 0) {
       throw new UnsupportedOperationException();
     }
@@ -328,7 +320,7 @@ public abstract class AbstractGroup implements Group {
   }
 
   @Override
-  public final boolean isIdentity(final Element element) {
+  public final boolean isIdentityElement(final Element element) {
     if (element == null) {
       throw new IllegalArgumentException();
     }
@@ -357,7 +349,7 @@ public abstract class AbstractGroup implements Group {
       throw new IllegalArgumentException();
     }
     for (int i=0; i<this.getArity(); i++) {
-      if (!this.getGroupAt(i).contains(values[i])) {
+      if (!this.getAt(i).contains(values[i])) {
         return false;
       }
     }
@@ -369,7 +361,7 @@ public abstract class AbstractGroup implements Group {
     if (element == null) {
       throw new IllegalArgumentException();
     }
-    return this.equals(element.getGroup());
+    return this.equals(element.getSet());
   }
 
   @Override
@@ -378,7 +370,7 @@ public abstract class AbstractGroup implements Group {
       throw new IllegalArgumentException();
     }
     for (int i=0; i<this.getArity(); i++) {
-      if (!this.getGroupAt(i).contains(elements[i])) {
+      if (!this.getAt(i).contains(elements[i])) {
         return false;
       }
     }

@@ -3,9 +3,9 @@ package ch.bfh.unicrypt.math.group.abstracts;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
+import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeSemiGroup;
 
-public abstract class AbstractMultiplicativeGroup extends AbstractGroup implements MultiplicativeGroup {
+public abstract class AbstractMultiplicativeGroup extends AbstractGroup implements MultiplicativeSemiGroup {
 
   private static final long serialVersionUID = 1L;
   

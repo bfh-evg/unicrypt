@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -18,22 +19,12 @@ import java.util.Random;
  */
 public abstract class AbstractFunction implements Function {
 
-  private final Group domain;
-  private final Group coDomain;
+  private final Set domain;
+  private final Set coDomain;
 
-  protected AbstractFunction(final Group domain, final Group coDomain) {
+  protected AbstractFunction(final Set domain, final Set coDomain) {
     this.coDomain = coDomain;
     this.domain = domain;
-  }
-
-  @Override
-  public Element apply() {
-    return this.apply((Random) null);
-  }
-
-  @Override
-  public Element apply(Random random) {
-    return this.apply(this.getDomain().getIdentityElement(), random);
   }
 
   @Override
@@ -77,12 +68,12 @@ public abstract class AbstractFunction implements Function {
   }
 
   @Override
-  public final Group getDomain() {
+  public final Set getDomain() {
     return this.domain;
   }
 
   @Override
-  public final Group getCoDomain() {
+  public final Set getCoDomain() {
     return this.coDomain;
   }
 
