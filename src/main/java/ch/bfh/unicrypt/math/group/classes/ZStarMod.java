@@ -6,21 +6,22 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Factorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
- * This class implements the group of integers Z*_n with the operation of multiplication modulo n. Its 
+ * This class implements the group of integers Z*_n with the operation of multiplication modulo n. Its
  * identity element is 1. Every integer in Z*_n is relatively prime to n. The smallest such group
  * is Z*_2 = {1}.
- * 
+ *
  * @see "Handbook of Applied Cryptography,  Definition 2.124"
  * @see <a href="http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n">http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n</a>
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class ZStarMod extends AbstractMultiplicativeGroup {
 
@@ -77,37 +78,41 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
     return this.moduloFactorization;
   }
 
+  //
+  // The following protected methods override the standard implementation from
+  // various super-classes
+  //
+
   @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = prime;
-    result = (prime * result) + ((this.getModulus() == null) ? 0 : this.getModulus().hashCode());
-    return result;
+  protected Element standardSelfApply(final Element element, final BigInteger amount) {
+    BigInteger newAmount = amount;
+    final BigInteger order = this.getOrder();
+    if (!order.equals(Group.UNKNOWN_ORDER)) {
+      newAmount = amount.mod(order);
+    }
+    return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
   }
 
   @Override
-  public boolean equals(final Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (this.getClass() != obj.getClass()) {
-      return false;
-    }
-    final ZStarMod other = (ZStarMod) obj;
-    return this.getModulus().equals(other.getModulus());
+  public int standardHashCode() {
+    return this.getModulus().hashCode();
   }
 
   @Override
-  public String toString() {
-    return "" + this.getClass().getSimpleName() + "[modulo=" + this.getModulus() + "]";
+  public String standardToString() {
+    return this.getModulus().toString();
   }
 
   //
-  // The following protected methods override the standard implementation from {@code AbstractGroup}
+  // The following protected methods implement the abstract methods from
+  // various super-classes
   //
+
+  @Override
+  public boolean abstractEquals(final Set set) {
+    final ZStarMod zStarMod = (ZStarMod) set;
+    return this.getModulus().equals(zStarMod.getModulus());
+  }
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {
@@ -129,13 +134,13 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   @Override
   protected BigInteger abstractGetOrder() {
     if (!this.getModuloFactorization().getValue().equals(this.getModulus())) {
-      return Group.UNKNOWN_ORDER;      
+      return Group.UNKNOWN_ORDER;
     }
     return MathUtil.eulerFunction(this.getModulus(), this.getModuloFactorization().getPrimeFactors());
   }
 
   @Override
-  protected Element abstractIdentityElement() {
+  protected Element abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -145,22 +150,12 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   }
 
   @Override
-  protected Element abstractSelfApply(final Element element, final BigInteger amount) {
-    BigInteger newAmount = amount;
-    final BigInteger order = this.getOrder();
-    if (!order.equals(Group.UNKNOWN_ORDER)) {
-      newAmount = amount.mod(order);
-    }
-    return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
-  }
-
-  @Override
   public Element abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 
   @Override
-  protected Element abstractGetElement(final BigInteger value, final Element... elements) {
+  protected Element abstractGetElement(final BigInteger value) {
     return new ZStarModElement(this, value);
   }
 
@@ -183,7 +178,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   //
 
   /**
-   * This is a static factory method to construct a new instance of this class for a given 
+   * This is a static factory method to construct a new instance of this class for a given
    * {@code modulus >= 2}. If {@code modulus} is not prime, then a group of unknown order is returned.
    * @param modulus The modulus
    * @throws IllegalArgumentException if {@code modulus} is null or smaller than 2
@@ -199,8 +194,8 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   }
 
   /**
-   * This is a static factory method to construct a new instance of this class, where the 
-   * group's modulus is the product of given list of prime factors. This always leads to a 
+   * This is a static factory method to construct a new instance of this class, where the
+   * group's modulus is the product of given list of prime factors. This always leads to a
    * group of known order.
    * @param primeFactors The given prime factors
    * @throws IllegalArgumentException if {@code primeFactors} is null or empty
@@ -212,8 +207,8 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   }
 
   /**
-   * This is a static factory method to construct a new instance of this class, where the 
-   * group's modulus is the product-of-powers of the given lists of prime factors and exponents. 
+   * This is a static factory method to construct a new instance of this class, where the
+   * group's modulus is the product-of-powers of the given lists of prime factors and exponents.
    * This always leads to a group of known order.
    * @param primeFactors The given prime factors
    * @param exponents The given exponents
@@ -228,7 +223,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   }
 
   /**
-   * This is a static factory method to construct a new instance of this class, where the 
+   * This is a static factory method to construct a new instance of this class, where the
    * group's modulus is value of the given prime factorization. This always leads to a group of known order.
    * @param factorization The given prime factorization
    * @throws IllegalArgumentException if {@code primeFactorization} is null
@@ -237,7 +232,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   public static ZStarMod getInstance(final Factorization factorization) {
     if (factorization == null || factorization.getValue().compareTo(BigInteger.ONE) <= 0) {
       throw new IllegalArgumentException();
-    }  
+    }
     return new ZStarMod(factorization);
   }
 

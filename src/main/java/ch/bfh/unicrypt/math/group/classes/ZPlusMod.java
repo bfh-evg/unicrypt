@@ -8,15 +8,16 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
- * This class implements the cyclic group Z_n = {0,...,n-1} with the 
- * operation of addition modulo n. Its identity element is 0. Every integer in Z_n 
+ * This class implements the cyclic group Z_n = {0,...,n-1} with the
+ * operation of addition modulo n. Its identity element is 0. Every integer in Z_n
  * that is relatively prime to n is a generator of Z_n. The smallest such group is Z_1 = {0}.
- * 
+ *
  * @see "Handbook of Applied Cryptography, Definition 2.113"
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -42,46 +43,40 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   }
 
   //
-  // The following protected methods override the standard implementation from super-classes
+  // The following protected methods override the standard implementation from
+  // various super-classes
   //
+
+  @Override
+  protected Element standardSelfApply(Element element, BigInteger amount) {
+    return this.getElement(element.getValue().multiply(amount).mod(this.getModulus()));
+  }
+
+  @Override
+  public int standardHashCode() {
+    return this.getModulus().hashCode();
+  }
+
+  @Override
+  public String standardToString() {
+    return this.getModulus().toString();
+  }
+
+  //
+  // The following protected methods implement the abstract methods from
+  // various super-classes
+  //
+
+  @Override
+  public boolean abstractEquals(final Set set) {
+    final ZPlusMod zPlusMod = (ZPlusMod) set;
+    return this.getModulus().equals(zPlusMod.getModulus());
+  }
 
   @Override
   protected BigInteger abstractGetOrder() {
     return this.getModulus();
   }
-
-  @Override
-  public String toString() {
-    return this.getClass().getSimpleName() + "[modulo " + this.getModulus() + "]";
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = prime;
-    result = (prime * result) + ((this.getModulus() == null) ? 0 : this.getModulus().hashCode());
-    return result;
-  }
-
-  @Override
-  public boolean equals(final Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (this.getClass() != obj.getClass()) {
-      return false;
-    }
-    final ZPlusMod other = (ZPlusMod) obj;
-    return this.getModulus().equals(other.getModulus());
-  }
-
-  //
-  // The following protected methods implement the abstract methods from {@code AbstractGroup}
-  // and {@code AbstractAdditiveCyclicGroup}
-  //
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {
@@ -107,7 +102,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractIdentityElement() {
+  protected Element abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
@@ -117,7 +112,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractSelfApply(final Element element, final BigInteger amount) {
+  protected Element standardSelfApply(final Element element, final BigInteger amount) {
     final BigInteger a = amount.mod(this.getOrder());
     return this.abstractGetElement(element.getValue().multiply(a).mod(this.getModulus()));
   }
@@ -136,12 +131,8 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
     return element;
   }
 
-  //
-  // The following protected methods override the standard implementation from {@code AbstractGroup}
-  //
-
   @Override
-  protected Element abstractGetElement(final BigInteger value, final Element... values) {
+  protected Element abstractGetElement(final BigInteger value) {
     return new ZPlusModElement(this, value);
   }
 
@@ -166,7 +157,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   private static final Map<BigInteger,ZPlusMod> instances = new HashMap<BigInteger,ZPlusMod>();
 
   /**
-   * Returns a the unique instance of this class for a given positive modulus. 
+   * Returns a the unique instance of this class for a given positive modulus.
    * @param modulus The modulus
    * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
    */
@@ -178,12 +169,12 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
     if (instance == null) {
       instance = new ZPlusMod(modulus);
       ZPlusMod.instances.put(modulus, instance);
-    }    
+    }
     return instance;
   }
 
   public static ZPlusMod getInstance() {
     return getInstance(BigInteger.ONE);
   }
-  
+
 }

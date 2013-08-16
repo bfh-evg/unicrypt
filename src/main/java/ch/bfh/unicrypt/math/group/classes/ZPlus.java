@@ -21,7 +21,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class ZPlus extends AbstractAdditiveCyclicGroup {
 
@@ -33,6 +33,16 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
    * of the static nested class Factory.
    */
   protected ZPlus() {
+  }
+
+  //
+  // The following protected methods override the standard implementation from
+  // various super-classes
+  //
+
+  @Override
+  protected Element standardSelfApply(Element element, BigInteger amount) {
+    return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
   //

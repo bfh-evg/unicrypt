@@ -5,18 +5,18 @@ import java.math.BigInteger;
 import ch.bfh.unicrypt.math.element.Element;
 
 /**
- * This interface represents the group that consists of two elements only, for example TRUE and
- * FALSE. This group is isomorphic to the additive group of integers modulo 2. It is therefore possible to 
- * consider and implement it as a specialization of {@link ZPlusMod}. 
- * 
+ * This interface represents the group that consists of two elements only, for
+ * example TRUE and FALSE. This group is isomorphic to the additive group of
+ * integers modulo 2. It is therefore possible to consider and implement it as a
+ * specialization of {@link ZPlusMod}.
+ *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class BooleanGroup extends ZPlusMod {
 
   private static final long serialVersionUID = 1L;
-
   public static final Element TRUE = BooleanGroup.getInstance().getElement(BigInteger.ONE);
   public static final Element FALSE = BooleanGroup.getInstance().getElement(BigInteger.ZERO);
 
@@ -25,11 +25,12 @@ public class BooleanGroup extends ZPlusMod {
   }
 
   /**
-   * Creates and returns the group element that corresponds to a given Boolean value.
+   * Creates and returns the group element that corresponds to a given Boolean
+   * value.
+   *
    * @param value The given Boolean value
    * @return The corresponding group element
    */
-  @SuppressWarnings("static-method")
   public Element getElement(final boolean value) {
     if (value) {
       return BooleanGroup.TRUE;
@@ -38,10 +39,13 @@ public class BooleanGroup extends ZPlusMod {
   }
 
   /**
-   * Returns the Boolean value that corresponds to a given Boolean group element.
-   * @param element The given Boolean group element 
+   * Returns the Boolean value that corresponds to a given Boolean group
+   * element.
+   *
+   * @param element The given Boolean group element
    * @return The corresponding Boolean value
-   * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
+   * @throws IllegalArgumentException if {@code element} is null or does not
+   * belong to the group
    */
   public boolean getBoolean(final Element element) {
     if (!contains(element)) {
@@ -50,9 +54,14 @@ public class BooleanGroup extends ZPlusMod {
     return element.getValue().equals(BigInteger.ONE);
   }
 
+  //
+  // The following protected methods override the standard implementation from
+  // various super-classes
+  //
+
   @Override
-  public String toString() {
-    return this.getClass().getSimpleName();
+  public String standardToString() {
+    return "";
   }
 
   //
@@ -63,6 +72,7 @@ public class BooleanGroup extends ZPlusMod {
 
   /**
    * Returns the singleton object of this class.
+   *
    * @return The singleton object of this class
    */
   public final static BooleanGroup getInstance() {
