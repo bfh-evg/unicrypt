@@ -96,20 +96,4 @@ public interface SemiGroup extends Set {
    */
   public Element multiSelfApply(Element[] elements, BigInteger[] amounts);
 
-  //
-  // The following inherited methods are overridden to return semigroups
-  //
-
-  @Override
-  public SemiGroup getAt(final int index);
-
-  @Override
-  public SemiGroup getAt(int... indices);
-
-  @Override
-  public SemiGroup getFirst();
-
-  @Override
-  public SemiGroup removeAt(final int index);
-
 }

@@ -3,10 +3,10 @@ package ch.bfh.unicrypt.math.group.abstracts;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
+import ch.bfh.unicrypt.math.group.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.AdditiveSemiGroup;
 
-public abstract class AbstractAdditiveGroup extends AbstractGroup implements AdditiveGroup {
+public abstract class AbstractAdditiveSemiGroup extends AbstractSemiGroup implements AdditiveSemiGroup {
 
   private static final long serialVersionUID = 1L;
 
@@ -43,11 +43,6 @@ public abstract class AbstractAdditiveGroup extends AbstractGroup implements Add
   @Override
   public Element sumOfProducts(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
-  }
-
-  @Override
-  public final Element subtract(final Element element1, final Element element2) {
-    return this.applyInverse(element1, element2);
   }
 
 }

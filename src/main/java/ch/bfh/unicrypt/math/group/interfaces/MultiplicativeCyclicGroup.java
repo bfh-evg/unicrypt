@@ -8,6 +8,6 @@ package ch.bfh.unicrypt.math.group.interfaces;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface MultiplicativeCyclicGroup extends MultiplicativeSemiGroup, CyclicGroup {
+public interface MultiplicativeCyclicGroup extends CyclicGroup, MultiplicativeGroup {
 
 }

@@ -7,10 +7,12 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Monoid;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link Group}.
+ * This abstract class provides a basis implementation for objects of type
+ * {@link Monoid}.
  *
  * @see Element
  *
@@ -18,27 +20,32 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractGroup extends AbstractMonoid implements Group {
+public abstract class AbstractMonoid extends AbstractSemiGroup implements Monoid {
 
   private static final long serialVersionUID = 1L;
 
+  private Element identityElement;
+
   @Override
-  public final Element invert(final Element element) {
-    if (!this.contains(element)) {
-      throw new IllegalArgumentException();
+  public final Element getIdentityElement() {
+    if (this.identityElement == null) {
+      this.identityElement = this.abstractGetIdentityElement();
     }
-    return abstractInvert(element);
+    return this.identityElement;
   }
 
   @Override
-  public final Element applyInverse(Element element1, Element element2) {
-    return this.apply(element1, this.invert(element2));
+  public final boolean isIdentityElement(final Element element) {
+    if (element == null) {
+      throw new IllegalArgumentException();
+    }
+    return this.areEqual(element, getIdentityElement());
   }
 
   @Override
   protected Element standardSelfApply(Element element, BigInteger amount) {
-    if (amount.signum() < 0) {
-      return super.selfApply(element, amount.abs()).invert();
+    if (amount.signum() == 0) {
+      return this.getIdentityElement();
     }
     return super.standardSelfApply(element, amount);
   }
@@ -47,6 +54,6 @@ public abstract class AbstractGroup extends AbstractMonoid implements Group {
   // The following protected abstract method must be implemented in every direct sub-class.
   //
 
-  protected abstract Element abstractInvert(Element element);
+  protected abstract Element abstractGetIdentityElement();
 
 }

@@ -15,11 +15,6 @@ public abstract class AbstractAdditiveCyclicGroup extends AbstractCyclicGroup im
   }
 
   @Override
-  public final Element subtract(final Element element1, final Element element2) {
-    return this.applyInverse(element1, element2);
-  }
-
-  @Override
   public final Element add(final Element... elements) {
     return this.apply(elements);
   }
@@ -37,6 +32,21 @@ public abstract class AbstractAdditiveCyclicGroup extends AbstractCyclicGroup im
   @Override
   public final Element times(final Element element, final int amount) {
     return this.selfApply(element, amount);
+  }
+
+  @Override
+  public Element timesTwo(Element element) {
+    return this.selfApply(element);
+  }
+
+  @Override
+  public Element sumOfProducts(Element[] elements, BigInteger[] amounts) {
+    return this.multiSelfApply(elements, amounts);
+  }
+
+  @Override
+  public final Element subtract(final Element element1, final Element element2) {
+    return this.applyInverse(element1, element2);
   }
 
 }

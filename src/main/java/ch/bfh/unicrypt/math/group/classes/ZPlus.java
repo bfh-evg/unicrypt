@@ -6,18 +6,19 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
 /**
- * This class implements the additive cyclic group of (positive and negative) integers with infinite order. 
+ * This class implements the additive cyclic group of (positive and negative) integers with infinite order.
  * Its identity element is 0, and there are exactly two generators, namely 1 and -1. To invert an element,
  * it is multiplied with -1. The methods {@link #getRandomElement()} and {@link #getRandomElement(Random)}
- * return random elements of a certain bit length. 
- * 
+ * return random elements of a certain bit length.
+ *
  * @see "Handbook of Applied Cryptography, Example 2.164"
  * @see <a href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -32,20 +33,6 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
    * of the static nested class Factory.
    */
   protected ZPlus() {
-  }
-
-  //
-  // The following protected methods override the standard implementation from super-classes 
-  //
-
-  @Override
-  public boolean equals(final Object obj) {
-    return (this == obj); // this works because this is a singleton class
-  }
-
-  @Override
-  public String toString() {
-    return this.getClass().getSimpleName();
   }
 
   //
@@ -80,18 +67,13 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractIdentityElement() {
+  protected Element abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
-  }
-
-  @Override
-  protected Element abstractSelfApply(final Element element, final BigInteger amount) {
-    return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
   @Override
@@ -107,18 +89,19 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
     return this.getDefaultGenerator().invert();
   }
 
-  //
-  // The following protected methods override the standard implementation from {@code AbstractGroup}
-  //
+  @Override
+  protected Element abstractGetElement(BigInteger value) {
+    return new ZPlusElement(this, value);
+  }
 
   @Override
-  protected Element abstractGetElement(final BigInteger value, final Element... values) {
-    return new ZPlusElement(this, value);
+  protected boolean abstractEquals(Set set) {
+    return true;
   }
 
   //
   // LOCAL ELEMENT CLASS
-  //  
+  //
 
   final private class ZPlusElement extends Element {
 

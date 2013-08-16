@@ -29,7 +29,7 @@ public class ApplyFunction extends AbstractFunction {
 
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    return this.getCoDomain().apply(element.getElements());
+    return this.getCoDomain().apply(element.getAll());
   }
 
   /**

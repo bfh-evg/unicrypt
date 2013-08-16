@@ -3,10 +3,10 @@ package ch.bfh.unicrypt.math.group.abstracts;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
+import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeSemiGroup;
 
-public abstract class AbstractMultiplicativeGroup extends AbstractGroup implements MultiplicativeGroup {
+public abstract class AbstractMultiplicativeSemiGroup extends AbstractSemiGroup implements MultiplicativeSemiGroup {
 
   private static final long serialVersionUID = 1L;
 
@@ -43,11 +43,6 @@ public abstract class AbstractMultiplicativeGroup extends AbstractGroup implemen
   @Override
   public Element productOfPowers(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
-  }
-
-  @Override
-  public final Element divide(final Element element1, final Element element2) {
-    return this.applyInverse(element1, element2);
   }
 
 }

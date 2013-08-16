@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ch.bfh.unicrypt.math.group.classes;
 
@@ -9,21 +9,32 @@ import java.util.Map;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 
 /**
  * @author rolfhaenni
  *
  */
-public class SingletonGroup extends AbstractGroup {
+public class SingletonGroup extends AbstractCyclicGroup {
 
   private static final long serialVersionUID = 1L;
 
   private final Element element;
-  
+
   private SingletonGroup(BigInteger value) {
     this.element = abstractGetElement(value);
+  }
+
+  //
+  // The following protected methods override the standard implementation from {@code AbstractGroup}
+  //
+
+  @Override
+  protected Element standardSelfApply(Element element, BigInteger amount) {
+    return this.element;
   }
 
   @Override
@@ -35,14 +46,14 @@ public class SingletonGroup extends AbstractGroup {
   protected BigInteger abstractGetOrder() {
     return BigInteger.ONE;
   }
-    
+
   @Override
   protected boolean abstractContains(BigInteger value) {
     return this.element.getValue().equals(value);
   }
 
   @Override
-  protected Element abstractIdentityElement() {
+  protected Element abstractGetIdentityElement() {
     return this.element;
   }
 
@@ -52,27 +63,38 @@ public class SingletonGroup extends AbstractGroup {
   }
 
   @Override
-  protected Element abstractSelfApply(Element element, BigInteger amount) {
-    return this.element;
-  }
-
-  @Override
   protected Element abstractInvert(Element element) {
     return this.element;
   }
-  
-  //
-  // The following protected methods override the standard implementation from {@code AbstractGroup}
-  //
 
   @Override
-  protected Element abstractGetElement(final BigInteger value, final Element... values) {
-    return new SingletonElement(this, value);
+  protected Element abstractGetElement(final BigInteger value) {
+    return this.element;
+  }
+
+  @Override
+  protected Element abstractGetDefaultGenerator() {
+    return this.element;
+  }
+
+  @Override
+  protected Element abstractGetRandomGenerator(Random random) {
+    return this.element;
+  }
+
+  @Override
+  protected boolean abstractIsGenerator(Element element) {
+    return true;
+  }
+
+  @Override
+  protected boolean abstractEquals(Set set) {
+    return true;
   }
 
   //
   // LOCAL ELEMENT CLASS
-  //  
+  //
 
   final private class SingletonElement extends Element {
 
@@ -98,7 +120,7 @@ public class SingletonGroup extends AbstractGroup {
     if (instance == null) {
       instance = new SingletonGroup(value);
       SingletonGroup.instances.put(value, instance);
-    }    
+    }
     return instance;
   }
 

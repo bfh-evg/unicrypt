@@ -22,7 +22,7 @@ import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public interface Monoid extends SemiGroup {
 
@@ -39,21 +39,5 @@ public interface Monoid extends SemiGroup {
    * @throws IllegalArgumentException if {@code element} is null
    */
   public boolean isIdentityElement(Element element);
-
-  //
-  // The following inherited methods are overridden to return monoids
-  //
-
-  @Override
-  public Monoid getAt(final int index);
-
-  @Override
-  public Monoid getAt(int... indices);
-
-  @Override
-  public Monoid getFirst();
-
-  @Override
-  public Monoid removeAt(final int index);
 
 }

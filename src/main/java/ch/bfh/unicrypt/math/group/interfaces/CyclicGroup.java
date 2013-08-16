@@ -16,7 +16,7 @@ import ch.bfh.unicrypt.math.element.Element;
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public interface CyclicGroup extends Group {
 
@@ -46,21 +46,5 @@ public interface CyclicGroup extends Group {
    * @throws IllegalArgumentException if {@code} is null
    */
   public boolean isGenerator(Element element);
-
-  //
-  // The following inherited methods are overridden to return cyclic groups
-  //
-
-  @Override
-  public CyclicGroup getAt(final int index);
-
-  @Override
-  public CyclicGroup getAt(int... indices);
-
-  @Override
-  public CyclicGroup getFirst();
-
-  @Override
-  public CyclicGroup removeAt(final int index);
 
 }

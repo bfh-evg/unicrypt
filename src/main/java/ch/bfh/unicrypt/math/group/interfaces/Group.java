@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.group.interfaces;
 
-
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
 
@@ -20,7 +19,7 @@ import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public interface Group extends Monoid {
 
@@ -41,21 +40,5 @@ public interface Group extends Monoid {
    * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
    **/
   public Element applyInverse(Element element1, Element element2);
-
-  //
-  // The following inherited methods are overridden to return groups
-  //
-
-  @Override
-  public Group getAt(final int index);
-
-  @Override
-  public Group getAt(int... indices);
-
-  @Override
-  public Group getFirst();
-
-  @Override
-  public Group removeAt(final int index);
 
 }

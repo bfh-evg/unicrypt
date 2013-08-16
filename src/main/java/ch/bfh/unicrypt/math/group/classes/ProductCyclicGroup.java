@@ -10,4 +10,16 @@ import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
  */
 public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
+  @Override
+  public CyclicGroup getAt(final int index);
+
+  @Override
+  public CyclicGroup getAt(int... indices);
+
+  @Override
+  public CyclicGroup getFirst();
+
+  @Override
+  public CyclicGroup removeAt(final int index);
+
 }

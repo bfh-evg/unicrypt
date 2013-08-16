@@ -20,13 +20,13 @@ public abstract class AbstractCyclicGroup extends AbstractGroup implements Cycli
   }
 
   @Override
-  public final Element getRandomGenerator(Random random) {
-    return this.abstractGetRandomGenerator(random);
+  public final Element getRandomGenerator() {
+    return this.getRandomGenerator(null);
   }
 
   @Override
-  public final Element getRandomGenerator() {
-    return this.getRandomGenerator(null);
+  public final Element getRandomGenerator(Random random) {
+    return this.abstractGetRandomGenerator(random);
   }
 
   @Override

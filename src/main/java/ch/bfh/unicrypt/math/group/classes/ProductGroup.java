@@ -33,6 +33,18 @@ public class ProductGroup extends ProductMonoid implements Group {
   private final Group[] groups;
   private int arity;
 
+//  @Override
+//  public Group getAt(final int index);
+//
+//  @Override
+//  public Group getAt(int... indices);
+//
+//  @Override
+//  public Group getFirst();
+//
+//  @Override
+//  public Group removeAt(final int index);
+//
   /**
    * This is the general constructor of this class. The resulting product group is the
    * product of the given groups.

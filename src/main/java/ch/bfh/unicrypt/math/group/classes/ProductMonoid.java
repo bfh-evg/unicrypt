@@ -9,4 +9,16 @@ import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
  */
 public class ProductMonoid extends ProductSemiGroup implements Monoid {
 
+  @Override
+  public Monoid getAt(final int index);
+
+  @Override
+  public Monoid getAt(int... indices);
+
+  @Override
+  public Monoid getFirst();
+
+  @Override
+  public Monoid removeAt(final int index);
+
 }

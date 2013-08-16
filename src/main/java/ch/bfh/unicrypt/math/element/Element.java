@@ -1,5 +1,8 @@
 package ch.bfh.unicrypt.math.element;
 
+import ch.bfh.unicrypt.math.group.classes.ProductGroup;
+import ch.bfh.unicrypt.math.group.classes.ProductMonoid;
+import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.AdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
@@ -21,10 +24,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
- * This abstract class represents the concept an element in a mathematical group.
- * It allows applying the group operation and other methods from a {@link Group}
- * in a convenient way. Most methods provided by {@link Element} have an equivalent
- * method in {@link Group}.
+ * This abstract class represents the concept an element in a mathematical
+ * group. It allows applying the group operation and other methods from a
+ * {@link Group} in a convenient way. Most methods provided by {@link Element}
+ * have an equivalent method in {@link Group}.
  *
  * @see Group
  *
@@ -35,8 +38,8 @@ import java.util.List;
 public abstract class Element implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String STANDARD_HASH_ALGORITHM = "SHA-256";
 
+  public static final String STANDARD_HASH_ALGORITHM = "SHA-256";
   private final Set set;
   private BigInteger value;
 
@@ -57,6 +60,7 @@ public abstract class Element implements Serializable {
 
   /**
    * Returns the unique {@link Set} to which this element belongs
+   *
    * @return The element's set
    */
   public final Set getSet() {
@@ -196,7 +200,52 @@ public abstract class Element implements Serializable {
   }
 
   /**
+   *
+   * @return
+   */
+  public final ProductSet getProductSet() {
+    if (this.set instanceof ProductSet) {
+      return (ProductSet) this.set;
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   *
+   * @return
+   */
+  public final ProductSemiGroup getProductSemiGroup() {
+    if (this.set instanceof ProductSemiGroup) {
+      return (ProductSemiGroup) this.set;
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   *
+   * @return
+   */
+  public final ProductMonoid getProductMonoid() {
+    if (this.set instanceof ProductMonoid) {
+      return (ProductMonoid) this.set;
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   *
+   * @return
+   */
+  public final ProductGroup getProductGroup() {
+    if (this.set instanceof ProductGroup) {
+      return (ProductGroup) this.set;
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  /**
    * Returns the positive BigInteger value that corresponds the element.
+   *
    * @return The corresponding BigInteger value
    */
   public final BigInteger getValue() {
@@ -207,10 +256,13 @@ public abstract class Element implements Serializable {
   }
 
   /**
-   * Returns the element with the given index. The indices are numbered from 0 to the element's arity minus one.
+   * Returns the element with the given index. The indices are numbered from 0
+   * to the element's arity minus one.
+   *
    * @param index The given index
    * @return The corresponding element
-   * @throws IndexOutOfBoundsException if {@code index<0} or {@code index>arity-1}
+   * @throws IndexOutOfBoundsException if
+   * {@code index<0} or {@code index>arity-1}
    */
   public final Element getAt(final int index) {
     if (index < 0 || index >= this.getArity()) {
@@ -220,13 +272,17 @@ public abstract class Element implements Serializable {
   }
 
   /**
-   * Selects and returns in a hierarchy of elements the element that corresponds to a given array of indices
-   * (e.g., 0,3,2 for the third element in the fourth element of the first element). Returns {@code this} element if
+   * Selects and returns in a hierarchy of elements the element that corresponds
+   * to a given array of indices (e.g., 0,3,2 for the third element in the
+   * fourth element of the first element). Returns {@code this} element if
    * {@code indices} is empty.
+   *
    * @param indices The given array of indices
    * @return The corresponding element
-   * @throws IllegalArgumentException if {@code indices} is null or if its length does exceed the hierarchy's depth
-   * @throws IndexOutOfBoundsException if {@code indices} contains an out-of-bounds index
+   * @throws IllegalArgumentException if {@code indices} is null or if its
+   * length does exceed the hierarchy's depth
+   * @throws IndexOutOfBoundsException if {@code indices} contains an
+   * out-of-bounds index
    */
   public final Element getAt(final int... indices) {
     if (indices == null) {
@@ -240,33 +296,96 @@ public abstract class Element implements Serializable {
   }
 
   /**
-   * Returns an array of length {@code this.getArity()} containing all the elements of which
-   * {@code this} element is composed of. If the arity is 1, the array contains only {@code this}.
+   * Returns an array of length {@code this.getArity()} containing all the
+   * elements of which {@code this} element is composed of. If the arity is 1,
+   * the array contains only {@code this}.
    */
-  public final Element[] getElements() {
+  public final Element[] getAll() {
     Element[] result = new Element[this.getArity()];
-    for (int index=0; index<this.getArity(); index++) {
+    for (int index = 0; index < this.getArity(); index++) {
       result[index] = this.getAt(index);
     }
     return result;
   }
 
+  public final byte[] hashValue() {
+    return this.hashValue(Element.STANDARD_HASH_ALGORITHM);
+  }
+
+  public final byte[] hashValue(String hashAlgorithm) {
+    if (hashAlgorithm == null) {
+      throw new IllegalArgumentException();
+    }
+    MessageDigest messageDigest;
+    try {
+      messageDigest = MessageDigest.getInstance(hashAlgorithm);
+    } catch (final NoSuchAlgorithmException e) {
+      throw new IllegalArgumentException();
+    }
+    return this.hashValue(messageDigest);
+  }
+
+  public byte[] hashValue(MessageDigest messageDigest) {
+    if (messageDigest == null) {
+      throw new IllegalArgumentException();
+    }
+    messageDigest.reset();
+    return messageDigest.digest(this.getValue().toByteArray());
+  }
+
+  public byte[] recursiveHashValue() {
+    return this.recursiveHashValue(Element.STANDARD_HASH_ALGORITHM);
+  }
+
+  public byte[] recursiveHashValue(String hashAlgorithm) {
+    if (hashAlgorithm == null) {
+      throw new IllegalArgumentException();
+    }
+    MessageDigest messageDigest;
+    try {
+      messageDigest = MessageDigest.getInstance(hashAlgorithm);
+    } catch (final NoSuchAlgorithmException e) {
+      throw new IllegalArgumentException();
+    }
+    return this.recursiveHashValue(messageDigest);
+  }
+
+  public byte[] recursiveHashValue(MessageDigest messageDigest) {
+    if (messageDigest == null) {
+      throw new IllegalArgumentException();
+    }
+    messageDigest.reset();
+    if (this.getArity() == 1) {
+      return messageDigest.digest(this.getValue().toByteArray());
+    }
+    byte[][] hashValues = new byte[this.getArity()][];
+    for (int i = 0; i < this.getArity(); i++) {
+      hashValues[i] = this.getAt(i).recursiveHashValue(messageDigest);
+    }
+    for (int i = 0; i < this.getArity(); i++) {
+      messageDigest.update(hashValues[i]);
+    }
+    return messageDigest.digest();
+  }
+
   //
-  // The following methods are equivalent to corresponding Group methods
+  // The following methods are equivalent to corresponding Set methods
   //
 
   /**
    * @see Group#getArity()
    */
   public final int getArity() {
-    return this.set.getArity();
+    ProductSet productSet = this.getProductSet();
+    return productSet.getArity();
   }
 
   /**
    * @see Group#isNull()
    */
   public final boolean isNull() {
-    return this.set.isNull();
+    ProductSet productSet = this.getProductSet();
+    return productSet.isNull();
   }
 
   /**
@@ -444,109 +563,64 @@ public abstract class Element implements Serializable {
     return cyclicGroup.isGenerator(this);
   }
 
-  public final byte[] hashValue() {
-    return this.hashValue(Element.STANDARD_HASH_ALGORITHM);
-  }
-
-  public final byte[] hashValue(String hashAlgorithm) {
-    if (hashAlgorithm == null) {
-      throw new IllegalArgumentException();
-    }
-    MessageDigest messageDigest;
-    try {
-      messageDigest = MessageDigest.getInstance(hashAlgorithm);
-    } catch (final NoSuchAlgorithmException e) {
-      throw new IllegalArgumentException();
-    }
-    return this.hashValue(messageDigest);
-  }
-
-  public byte[] hashValue(MessageDigest messageDigest) {
-    if (messageDigest == null) {
-      throw new IllegalArgumentException();
-    }
-    messageDigest.reset();
-    return messageDigest.digest(this.getValue().toByteArray());
-  }
-
-  public byte[] recursiveHashValue() {
-    return this.recursiveHashValue(Element.STANDARD_HASH_ALGORITHM);
-  }
-
-  public byte[] recursiveHashValue(String hashAlgorithm) {
-    if (hashAlgorithm == null) {
-      throw new IllegalArgumentException();
-    }
-    MessageDigest messageDigest;
-    try {
-      messageDigest = MessageDigest.getInstance(hashAlgorithm);
-    } catch (final NoSuchAlgorithmException e) {
-      throw new IllegalArgumentException();
-    }
-    return this.recursiveHashValue(messageDigest);
-  }
-
-  public byte[] recursiveHashValue(MessageDigest messageDigest) {
-    if (messageDigest == null) {
-      throw new IllegalArgumentException();
-    }
-    messageDigest.reset();
-    if (this.getArity() == 1) {
-      return messageDigest.digest(this.getValue().toByteArray());
-    }
-    byte[][] hashValues = new byte[this.getArity()][];
-    for (int i=0; i<this.getArity(); i++) {
-      hashValues[i] = this.getAt(i).recursiveHashValue(messageDigest);
-    }
-    for (int i=0; i<this.getArity(); i++) {
-      messageDigest.update(hashValues[i]);
-    }
-    return messageDigest.digest();
-  }
-
   //
   // The standard implementations of the following three methods are
   // insufficient for elements.
   //
 
   @Override
-  public String toString() {
-    return this.getClass().getSimpleName() + "[value=" + this.getValue() + ", " + this.getSet() + "]";
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    return (prime * this.getSet().hashCode()) + this.getValue().hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
+  public final boolean equals(final Object object) {
+    if (this == object) {
       return true;
     }
-    if (obj == null) {
+    if (object == null) {
       return false;
     }
-    if (obj instanceof Element) {
-      Element other = (Element) obj;
-      return this.getSet().equals(other.getSet()) && this.getValue().equals(other.getValue());
+    if (this.getClass() != object.getClass()) {
+      return false;
     }
-    return false;
+    return this.standardEquals((Element) object);
+  }
+
+  @Override
+  public final int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + this.standardHashCode();
+    return result;
+  }
+
+  @Override
+  public final String toString() {
+    String str = this.standardToString();
+    if (str.length() == 0) {
+      return this.getSet().getClass().getSimpleName() + "Element";
+    }
+    return this.getSet().getClass().getSimpleName() + "Element[" + str + "]";
   }
 
   //
   // The following protected methods are standard implementations, which may change in sub-classes
   //
 
-  @SuppressWarnings("static-method")
   protected BigInteger standardGetValue() {
     throw new UnsupportedOperationException();
   }
 
-  @SuppressWarnings("unused")
   protected Element standardGetAt(final int index) {
-    return this;
+    throw new UnsupportedOperationException();
+  }
+
+  protected boolean standardEquals(Element element) {
+    return this.getValue().equals(element.getValue());
+  }
+
+  protected int standardHashCode() {
+    return this.getValue().hashCode();
+  }
+
+  protected String standardToString() {
+    return "";
   }
 
   //
@@ -554,11 +628,14 @@ public abstract class Element implements Serializable {
   //
 
   /**
-   * This is a static factory method to construct a composed element without the need of constructing the
-   * corresponding product or power group beforehand. The input elements are given as an array.
+   * This is a static factory method to construct a composed element without the
+   * need of constructing the corresponding product or power group beforehand.
+   * The input elements are given as an array.
+   *
    * @param elements The array of input elements
    * @return The corresponding tuple element
-   * @throws IllegalArgumentException if {@code elements} is null or contains null
+   * @throws IllegalArgumentException if {@code elements} is null or contains
+   * null
    */
   public static Element getInstance(Element... elements) {
     if (elements == null) {
@@ -570,26 +647,29 @@ public abstract class Element implements Serializable {
     }
     final Set[] sets = new Set[arity];
     int i = 0;
-    for (final Element element: elements) {
+    for (final Element element : elements) {
       if (element == null) {
         throw new IllegalArgumentException();
       }
       sets[i] = element.getSet();
       i++;
     }
-    Set productSet = ProductSet.getInstance(sets);
+    ProductSet productSet = ProductSet.getInstance(sets);
     return productSet.getElement(elements);
   }
 
   /**
-   * This is a static factory method to construct a composed element without the need of constructing the
-   * corresponding product or power group beforehand. The input elements are given as a list.
+   * This is a static factory method to construct a composed element without the
+   * need of constructing the corresponding product or power group beforehand.
+   * The input elements are given as a list.
+   *
    * @param elements The list of input elements
    * @return The corresponding tuple element
-   * @throws IllegalArgumentException if {@code elements} is null or contains null
+   * @throws IllegalArgumentException if {@code elements} is null or contains
+   * null
    */
-  public static Element getInstance(List<Element> elements){
-    if(elements == null){
+  public static Element getInstance(List<Element> elements) {
+    if (elements == null) {
       throw new IllegalArgumentException();
     }
     return Element.getInstance(elements.toArray(new Element[0]));
