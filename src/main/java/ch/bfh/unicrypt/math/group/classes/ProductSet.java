@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  *
@@ -193,6 +194,58 @@ public class ProductSet implements Set {
       }
     }
     return true;
+  }
+
+  //
+  // STATIC FACTORY METHODS
+  //
+
+  /**
+   * This is a static factory method to construct a composed element without the
+   * need of constructing the corresponding product or power group beforehand.
+   * The input elements are given as an array.
+   *
+   * @param elements The array of input elements
+   * @return The corresponding tuple element
+   * @throws IllegalArgumentException if {@code elements} is null or contains
+   * null
+   */
+  public static Element getInstance(Element... elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException();
+    }
+    int arity = elements.length;
+    if (arity == 1) {
+      return elements[0];
+    }
+    final Set[] sets = new Set[arity];
+    int i = 0;
+    for (final Element element : elements) {
+      if (element == null) {
+        throw new IllegalArgumentException();
+      }
+      sets[i] = element.getSet();
+      i++;
+    }
+    ProductSet productSet = ProductSet.getInstance(sets);
+    return productSet.getElement(elements);
+  }
+
+  /**
+   * This is a static factory method to construct a composed element without the
+   * need of constructing the corresponding product or power group beforehand.
+   * The input elements are given as a list.
+   *
+   * @param elements The list of input elements
+   * @return The corresponding tuple element
+   * @throws IllegalArgumentException if {@code elements} is null or contains
+   * null
+   */
+  public static Element getInstance(List<Element> elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException();
+    }
+    return Element.getInstance(elements.toArray(new Element[0]));
   }
 
 }

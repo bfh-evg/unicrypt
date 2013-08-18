@@ -20,15 +20,13 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class ZPlusMod extends AbstractAdditiveCyclicGroup {
 
   private static final long serialVersionUID = 1L;
 
   private BigInteger modulus;
-
-  // We make constructor protected to realize the multiton pattern
 
   protected ZPlusMod(final BigInteger modulus) {
     this.modulus = modulus;
@@ -49,7 +47,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected Element standardSelfApply(Element element, BigInteger amount) {
-    return this.getElement(element.getValue().multiply(amount).mod(this.getModulus()));
+    return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
   }
 
   @Override
@@ -109,12 +107,6 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
-  }
-
-  @Override
-  protected Element standardSelfApply(final Element element, final BigInteger amount) {
-    final BigInteger a = amount.mod(this.getOrder());
-    return this.abstractGetElement(element.getValue().multiply(a).mod(this.getModulus()));
   }
 
   @Override

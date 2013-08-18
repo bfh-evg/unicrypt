@@ -7,21 +7,22 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractGroup;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  * An instance of this class represents the group of permutations for a given size. The elements of the group
  * are permutations, which contain the values from 0 to size-1 in a permuted order. Applying
- * the group operation to two permutation elements means to construct the combined permutation element. 
- * Note that this operation is not commutative. The identity element is the permutation 
+ * the group operation to two permutation elements means to construct the combined permutation element.
+ * Note that this operation is not commutative. The identity element is the permutation
  * [0, ..., size-1]. To invert an element, the inverse permutation is computed. Permutation elements
  * are considered to be atomic. This means that they can be converted into a unique integer value and
  * back. The group order is the factorial of its size.
- * 
+ *
  * @see "Handbook of Applied Cryptography, Example 2.164"
  * @see <a href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -29,10 +30,11 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 public class PermutationGroup extends AbstractGroup {
 
   private static final long serialVersionUID = 1L;
+
   private final int size;
 
   /**
-   * Returns a new instance of this class for a given {@code size >= 0}. 
+   * Returns a new instance of this class for a given {@code size >= 0}.
    * @param size The size
    * @throws IllegalArgumentException if {@code size} is negative
    */
@@ -41,7 +43,7 @@ public class PermutationGroup extends AbstractGroup {
   }
 
   /**
-   * Returns the size of the permutation elements in this group. The smallest possible size is 0, 
+   * Returns the size of the permutation elements in this group. The smallest possible size is 0,
    * which represents the trivial case of an empty permutation.
    * @return The permutation size
    */
@@ -69,32 +71,30 @@ public class PermutationGroup extends AbstractGroup {
     return this.abstractGetElement(permutation);
   }
 
+  //
+  // The following protected methods override the standard implementation from
+  // various super-classes
+  //
+
   @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = (prime * result) + this.size;
-    return result;
+  public int standardHashCode() {
+    return this.size;
   }
 
   @Override
-  public boolean equals(final Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (this.getClass() != obj.getClass()) {
-      return false;
-    }
-    final PermutationGroup other = (PermutationGroup) obj;
+  public String standardToString() {
+    return "" + this.getSize();
+  }
+
+  //
+  // The following protected methods implement the abstract methods from
+  // various super-classes
+  //
+
+  @Override
+  public boolean abstractEquals(final Set set) {
+    final PermutationGroup other = (PermutationGroup) set;
     return this.getSize() == other.getSize();
-  }
-
-  @Override
-  public String toString() {
-    return "" + this.getClass().getSimpleName() + "[size=" + this.getSize() + "]";
   }
 
   @Override
@@ -114,15 +114,6 @@ public class PermutationGroup extends AbstractGroup {
   }
 
   @Override
-  protected Element abstractSelfApply(final Element element, final BigInteger amount) {
-    Element result = this.getIdentityElement();
-    for (int i = 1; i <= amount.intValue(); i++) { // this can be done faster with "square-and-multiply"
-      result = this.abstractApply(result, element);
-    }
-    return result;
-  }
-  
-  @Override
   protected Element abstractInvert(final Element element) {
     return this.abstractGetElement(this.getPermutation(element).invert());
   }
@@ -133,21 +124,21 @@ public class PermutationGroup extends AbstractGroup {
   }
 
   @Override
-  protected Element abstractIdentityElement() {
+  protected Element abstractGetIdentityElement() {
     return this.abstractGetElement(new Permutation(this.getSize()));
   }
 
-  // LOCAL CLASS: PERMUTATION_ELEMENT
-
   @Override
-  protected Element abstractGetElement(final BigInteger value, Element... elements) {
+  protected Element abstractGetElement(final BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getSize());
     return abstractGetElement(new Permutation(MathUtil.bigIntegerToIntArray(values)));
   }
 
   protected Element abstractGetElement(Permutation permutation) {
-    return new PermutationElement(this, permutation);    
+    return new PermutationElement(this, permutation);
   }
+
+  // LOCAL CLASS: PERMUTATION_ELEMENT
 
   final private class PermutationElement extends Element {
 
@@ -164,7 +155,7 @@ public class PermutationGroup extends AbstractGroup {
 
     /**
      * Returns the corresponding permutation
-     * @return The permutation 
+     * @return The permutation
      */
     public Permutation getPermutation() {
       return this.permutation;
@@ -172,17 +163,22 @@ public class PermutationGroup extends AbstractGroup {
 
     @Override
     protected BigInteger standardGetValue() {
-      int size = this.getPermutation().getSize();
-      BigInteger[] indices = new BigInteger[size];
-      for (int i=0; i<size; i++) {
-        indices[i] = BigInteger.valueOf(this.getPermutation().permute(i));
-      }
-      return MathUtil.elegantPair(indices);
+      return MathUtil.elegantPair(MathUtil.intToBigIntegerArray(this.getPermutation().getPermutationVector()));
     }
 
     @Override
-    public String toString() {
-      return this.getClass().getSimpleName() + "[" + this.getPermutation().toString() + ", " + this.getSet() + "]";
+    protected boolean standardEquals(Element element) {
+      return this.getPermutation().equals(((PermutationElement) element).getPermutation());
+    }
+
+    @Override
+    protected int standardHashCode() {
+      return this.getPermutation().hashCode();
+    }
+
+    @Override
+    public String standardToString() {
+      return this.getPermutation().toString();
     }
 
   }
@@ -193,7 +189,7 @@ public class PermutationGroup extends AbstractGroup {
   private static final Map<Integer,PermutationGroup> instances = new HashMap<Integer,PermutationGroup>();
 
   /**
-   * Returns a the unique instance of this class for a given non-negative permutation size. 
+   * Returns a the unique instance of this class for a given non-negative permutation size.
    * @param size The size of the permutation
    * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
    */
@@ -205,7 +201,7 @@ public class PermutationGroup extends AbstractGroup {
     if (instance == null) {
       instance = new PermutationGroup(size);
       PermutationGroup.instances.put(Integer.valueOf(size),instance);
-    }    
+    }
     return instance;
   }
 

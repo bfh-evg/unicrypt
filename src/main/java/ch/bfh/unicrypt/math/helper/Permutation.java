@@ -8,7 +8,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
 public class Permutation {
 
   private int[] permutationVector;
-  
+
   public Permutation(int size) {
     if (size < 0) {
       throw new IllegalArgumentException();
@@ -29,9 +29,9 @@ public class Permutation {
       randomIndex = RandomUtil.createRandomInt(i, random);
       this.permutationVector[i] = this.permutationVector[randomIndex];
       this.permutationVector[randomIndex] = i;
-    }    
+    }
   }
-  
+
   public Permutation(int[] permutationVector) {
     if (!isPermutationVector(permutationVector)) {
       throw new IllegalArgumentException();
@@ -40,7 +40,7 @@ public class Permutation {
   }
 
   /**
-   * Returns the size of the permutation element, which is the length of the corresponding permutation vector. 
+   * Returns the size of the permutation element, which is the length of the corresponding permutation vector.
    * The size of a permutation element is the same as the size of the corresponding group.
    * @return The size of the permutation element
    */
@@ -60,7 +60,7 @@ public class Permutation {
     }
     return this.permutationVector[index];
   }
-  
+
   public Permutation compose(Permutation other) {
     if (other == null) {
       throw new IllegalArgumentException();
@@ -72,7 +72,7 @@ public class Permutation {
     }
     return new Permutation(vector);
   }
-   
+
   public Permutation invert() {
     int size = this.getSize();
     final int[] vector = new int[size];
@@ -80,6 +80,10 @@ public class Permutation {
       vector[this.permute(i)] = i;
     }
     return new Permutation(vector);
+  }
+
+  public int[] getPermutationVector() {
+    return this.permutationVector.clone();
   }
 
   /**
