@@ -77,6 +77,31 @@ public interface Set extends Serializable {
   public ZPlusMod getMinOrderGroup();
 
   /**
+   * Checks if {@code this} set contains an element that corresponds to a given
+   * integer value.
+   * @param value The given integer value
+   * @return {@code true} if such an element exists, {@code false} otherwise
+   */
+  public boolean contains(int value);
+
+  /**
+   * Checks if {@code this} set contains an element that corresponds to a given
+   * BigInteger value.
+   * @param value The given BigInteger value
+   * @return {@code true} if such an element exists, {@code false} otherwise
+   * @throws IllegalArgumentException if {@code value} is null
+   */
+  public boolean contains(BigInteger value);
+
+  /**
+   * Checks if a given element belongs to the group.
+   * @param element The given element
+   * @return {@code true} if {@code element} belongs to the group, {@code false} otherwise
+   * @throws IllegalArgumentException if {@code element} is null
+   */
+  public boolean contains(Element element);
+
+  /**
    * Creates and returns the element that corresponds to a given integer (if
    * one exists).
    * @param value The given integer
@@ -117,22 +142,6 @@ public interface Set extends Serializable {
    * @return A random group element
    */
   public Element getRandomElement(Random random);
-
-  /**
-   * Checks if {@code this} group contains an element that corresponds to a given integer value.
-   * @param value The given integer value
-   * @return {@code true} if such an element exists, {@code false} otherwise
-   * @throws IllegalArgumentException if {@code value} is null
-   */
-  public boolean contains(BigInteger value);
-
-  /**
-   * Checks if a given element belongs to the group.
-   * @param element The given element
-   * @return {@code true} if {@code element} belongs to the group, {@code false} otherwise
-   * @throws IllegalArgumentException if {@code element} is null
-   */
-  public boolean contains(Element element);
 
   /**
    * Checks if two given elements of this group are equal.

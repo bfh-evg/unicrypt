@@ -46,8 +46,8 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   }
 
   //
-  // The following protected methods implement the abstract methods from {@code AbstractGroup}
-  // and {@code AbstractAdditiveCyclicGroup}
+  // The following protected methods implement the abstract methods from
+  // various super-classes
   //
 
   @Override

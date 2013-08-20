@@ -42,6 +42,15 @@ public abstract class AbstractMonoid extends AbstractSemiGroup implements Monoid
     return this.areEqual(element, getIdentityElement());
   }
 
+  //
+  // The following protected methods override the standard implementation from
+  // various super-classes
+  //
+
+  protected BigInteger standardGetMinOrder() {
+    return BigInteger.ONE;
+  }
+
   @Override
   protected Element standardSelfApply(Element element, BigInteger amount) {
     if (amount.signum() == 0) {

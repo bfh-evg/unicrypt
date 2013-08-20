@@ -82,6 +82,27 @@ public abstract class AbstractSet implements Set {
   }
 
   @Override
+  public final boolean contains(final int value) {
+    return this.contains(BigInteger.valueOf(value));
+  }
+
+  @Override
+  public final boolean contains(final BigInteger value) {
+    if (value == null) {
+      throw new IllegalArgumentException();
+    }
+    return this.abstractContains(value);
+  }
+
+  @Override
+  public final boolean contains(final Element element) {
+    if (element == null) {
+      throw new IllegalArgumentException();
+    }
+    return this.equals(element.getSet());
+  }
+
+  @Override
   public final Element getElement(final int value) {
     return this.getElement(BigInteger.valueOf(value));
   }
@@ -116,32 +137,16 @@ public abstract class AbstractSet implements Set {
   }
 
   @Override
-  public final boolean contains(final BigInteger value) {
-    if (value == null) {
-      throw new IllegalArgumentException();
-    }
-    return this.abstractContains(value);
-  }
-
-  @Override
-  public final boolean contains(final Element element) {
-    if (element == null) {
-      throw new IllegalArgumentException();
-    }
-    return this.equals(element.getSet());
-  }
-
-  @Override
   public final boolean areEqual(final Element element1, final Element element2) {
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();
     }
-    return this.standardAreEqual(element1, element2);
+    return element1.equals(element2);
   }
 
   @Override
   public final boolean isAtomic() {
-    return true;
+    return this.standardIsAtomic();
   }
 
   @Override
@@ -181,12 +186,12 @@ public abstract class AbstractSet implements Set {
   // They may need to be changed in certain sub-classes.
   //
 
-  protected BigInteger standardGetMinOrder() {
-    return BigInteger.ZERO;
+  protected boolean standardIsAtomic() {
+    return true;
   }
 
-  protected boolean standardAreEqual(Element element1, Element element2) {
-    return element1.getValue().equals(element2.getValue());
+  protected BigInteger standardGetMinOrder() {
+    return BigInteger.ZERO;
   }
 
   protected int standardHashCode() {
