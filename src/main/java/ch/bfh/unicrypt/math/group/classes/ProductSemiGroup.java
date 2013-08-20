@@ -43,7 +43,7 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public Element apply(Element element1, Element element2) {
+  public final Element apply(Element element1, Element element2) {
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();
     }
@@ -55,7 +55,7 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public Element apply(Element... elements) {
+  public final Element apply(Element... elements) {
     if (elements == null || elements.length == 0) {
       throw new IllegalArgumentException();
     }
@@ -71,7 +71,7 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public Element selfApply(Element element, BigInteger amount) {
+  public final Element selfApply(Element element, BigInteger amount) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
@@ -83,7 +83,7 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public Element selfApply(Element element, Element amount) {
+  public final Element selfApply(Element element, Element amount) {
     if (amount == null) {
       throw new IllegalArgumentException();
     }
@@ -91,17 +91,17 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public Element selfApply(Element element, int amount) {
+  public final Element selfApply(Element element, int amount) {
     return this.selfApply(element, BigInteger.valueOf(amount));
   }
 
   @Override
-  public Element selfApply(Element element) {
+  public final Element selfApply(Element element) {
     return this.apply(element, element);
   }
 
   @Override
-  public Element multiSelfApply(Element[] elements, BigInteger[] amounts) {
+  public final Element multiSelfApply(Element[] elements, BigInteger[] amounts) {
     if ((elements == null) || (amounts == null) || (elements.length != amounts.length) || (elements.length == 0)) {
       throw new IllegalArgumentException();
     }
@@ -113,11 +113,11 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   /**
-   * This is a static factory method to construct a composed set without calling
-   * respective constructors. The input sets are given as an array.
-   * @param semiGroups The array of input sets
-   * @return The corresponding product set
-   * @throws IllegalArgumentException if {@code sets} is null or contains null
+   * This is a static factory method to construct a composed semigroup without
+   * calling respective constructors. The input semigroups are given as an array.
+   * @param semiGroups The array of input semigroups
+   * @return The corresponding product semigroup
+   * @throws IllegalArgumentException if {@code semigroups} is null or contains null
    */
   public static ProductSemiGroup getInstance(final SemiGroup... semiGroups) {
     if (semiGroups == null) {

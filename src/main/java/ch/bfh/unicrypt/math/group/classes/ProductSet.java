@@ -470,7 +470,7 @@ public class ProductSet extends AbstractSet implements Set {
   // STATIC HELPER METHODS
   //
 
-  public static boolean areEqual(Set[] sets) {
+  protected static boolean areEqual(Set[] sets) {
     if (sets.length == 0) {
       return true;
     }
@@ -486,7 +486,6 @@ public class ProductSet extends AbstractSet implements Set {
     }
     return true;
   }
-
 
 //  /**
 //   * This is a static factory method to construct a composed element without the

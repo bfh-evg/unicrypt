@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 /**
  * This is a helper class with some static methods for various mathematical functions.
- *  
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -14,7 +14,7 @@ import java.util.HashSet;
 public final class MathUtil {
 
   /**
-   * Returns the value obtained from applying the Euler totient function to an integer {@code value}. 
+   * Returns the value obtained from applying the Euler totient function to an integer {@code value}.
    * <dt><b>Preconditions:</b></dt>
    * <dd>{@code primeFactorSet} is the complete set of prime factors of {@code value}.</dd>
    * @param value The input value
@@ -47,7 +47,7 @@ public final class MathUtil {
    * @param value The given value
    * @param factors A given array of potential prime factors
    * @return {@code true} if all values are prime factors, {@code false} otherwise
-   */  
+   */
   public static boolean arePrimeFactors(final BigInteger value, final BigInteger... factors) {
     if (factors == null) {
       return false;
@@ -68,7 +68,7 @@ public final class MathUtil {
    * Tests if some given BigInteger values are all prime numbers.
    * @param values A given array of potential prime numbers
    * @return {@code true} if all values are prime numbers, {@code false} otherwise
-   */  
+   */
   public static boolean arePrime(final BigInteger... values) {
     if (values == null) {
       return false;
@@ -85,19 +85,35 @@ public final class MathUtil {
    * Tests if a given BigInteger value is a positive prime number.
    * @param value A potential prime number
    * @return {@code true} if {@code value} is prime, {@code false} otherwise
-   */  
+   */
   public static boolean isPrime(final BigInteger value) {
     return isPositive(value) && value.isProbablePrime(MathUtil.NUMBER_OF_PRIME_TESTS);
   }
 
   /**
    * Tests if a given BigInteger value is a save prime.
-   * @param value A potential save prime 
+   * @param value A potential save prime
    * @return {@code true} if {@code value} is a save prime, {@code false} otherwise
-   */  
+   */
   public static boolean isSavePrime(final BigInteger value) {
     return isPrime(value) && isPrime(value.subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)));
   }
+
+  public static boolean areRelativelyPrime(BigInteger value1, BigInteger value2) {
+    return value1.gcd(value2).equals(BigInteger.ONE);
+  }
+
+  public static boolean areRelativelyPrime(BigInteger... values) {
+    for (int i = 0; i < values.length; i++) {
+      for (int j = i + 1; j < values.length; j++) {
+        if (!MathUtil.areRelativelyPrime(values[i], values[j])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
 
   public static final int NUMBER_OF_PRIME_TESTS = 40;
 
@@ -105,7 +121,7 @@ public final class MathUtil {
    * Tests if some given BigInteger values are all positive.
    * @param values A given array of potential positive numbers
    * @return {@code true} if all values are positive, {@code false} otherwise
-   */  
+   */
   public static boolean arePositive(final BigInteger... values) {
     if (values == null) {
       return false;
@@ -122,7 +138,7 @@ public final class MathUtil {
    * Tests if a given BigInteger value is positive.
    * @param value A potential positive number
    * @return {@code true} if {@code value} is positive, {@code false} otherwise
-   */  
+   */
   public static boolean isPositive(final BigInteger value) {
     if (value == null) {
       return false;
@@ -134,7 +150,7 @@ public final class MathUtil {
    * Tests if some given integer values are all positive.
    * @param values A given array of potential positive numbers
    * @return {@code true} is all values are positive, {@code false} otherwise
-   */  
+   */
   public static boolean arePositive(final int... values) {
     for (int value : values) {
       if (value <= 0) {
@@ -219,7 +235,7 @@ public final class MathUtil {
 
   /**
    * Computes the elegant pairing function for a given list of non-negative BigInteger values. The
-   * order in which the binary pairing function is applied is recursively from left to right. 
+   * order in which the binary pairing function is applied is recursively from left to right.
    * @see <a href="http://szudzik.com/ElegantPairing.pdf">ElegantPairing.pdf</a>
    * @param values The given values
    * @return The result of applying the elegant pairing function
@@ -248,7 +264,7 @@ public final class MathUtil {
   }
 
   /**
-   * Computes the elegant pairing function for a given list of non-negative BigInteger values. 
+   * Computes the elegant pairing function for a given list of non-negative BigInteger values.
    * The size of the given input list is taken as an additional input value.
    * @see <a href="http://szudzik.com/ElegantPairing.pdf">ElegantPairing.pdf</a>
    * @param values The given values

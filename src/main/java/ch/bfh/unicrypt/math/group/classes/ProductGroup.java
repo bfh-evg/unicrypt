@@ -8,6 +8,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Monoid;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
@@ -25,31 +26,58 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class ProductGroup extends ProductMonoid implements Group {
 
-
-  @Override
-  protected Element abstractIdentityElement() {
-    final Element[] identityElements = new Element[this.getArity()];
-    for (int i = 0; i < identityElements.length; i++) {
-      identityElements[i] = this.getAt(i).getIdentityElement();
-    }
-    return abstractGetElement(identityElements);
+  protected ProductGroup(final Group[] groups) {
+    super(groups);
   }
 
+  protected ProductGroup(final Group group, final int arity) {
+    super(group, arity);
+  }
+
+  protected ProductGroup() {
+    super();
+  }
 
   @Override
-  protected Element abstractInvert(final Element element) {
-    final Element[] results = new Element[this.getArity()];
+  public Group getAt(final int index) {
+    return (Group) this.getAt(index);
+  }
+
+  @Override
+  public Group getAt(int... indices) {
+    return (Group) this.getAt(indices);
+  }
+
+  @Override
+  public Group getFirst() {
+    return (Group) this.getFirst();
+  }
+
+  @Override
+  public Group removeAt(final int index) {
+    return (Group) this.removeAt(index);
+  }
+
+  @Override
+  public final Element invert(Element element) {
+    if (!this.contains(element)) {
+      throw new IllegalArgumentException();
+    }
+    final Element[] invertedElements = new Element[this.getArity()];
     for (int i = 0; i < this.getArity(); i++) {
-      results[i] = element.getAt(i).invert();
+      invertedElements[i] = element.getAt(i).invert();
     }
-    return abstractGetElement(results);
+    return abstractGetElement(invertedElements);
   }
 
-
+  @Override
+  public final Element applyInverse(Element element1, Element element2) {
+    return this.apply(element1, this.invert(element2));
+  }
 
   //
   // STATIC FACTORY METHODS
@@ -62,30 +90,20 @@ public class ProductGroup extends ProductMonoid implements Group {
    * @return The corresponding composed group
    * @throws IllegalArgumentException if {@code groups} is null or contains null
    */
-  public static Group getInstance(final Group... groups) {
+  public static ProductGroup getInstance(final Group... groups) {
     if (groups == null) {
       throw new IllegalArgumentException();
     }
     if (groups.length == 0) {
       return new ProductGroup();
     }
-    boolean isPowerGroup = true;
-    Group firstGroup = groups[0];
-    for (final Group group: groups) {
-      if (group == null) {
-        throw new IllegalArgumentException();
-      }
-      if (!group.equals(firstGroup)) {
-        isPowerGroup = false;
-      }
-    }
-    if (isPowerGroup) {
-      return new ProductGroup(firstGroup, groups.length);
+    if (ProductSet.areEqual(groups)) {
+      return new ProductGroup(groups[0], groups.length);
     }
     return new ProductGroup(groups);
   }
 
-  public static Group getInstance(final Group group, int arity) {
+  public static ProductGroup getInstance(final Group group, int arity) {
     if ((group == null) || (arity < 0)) {
       throw new IllegalArgumentException();
     }
@@ -93,20 +111,6 @@ public class ProductGroup extends ProductMonoid implements Group {
       return new ProductGroup();
     }
     return new ProductGroup(group, arity);
-  }
-
-  /**
-   * This is a static factory method to construct a composed group without calling respective
-   * constructors. The input groups are given as a list.
-   * @param groups The list of input groups
-   * @return The corresponding composed group
-   * @throws IllegalArgumentException if {@code groups} is null or contains null
-   */
-  public static Group getInstance(List<Group> groups){
-    if (groups == null) {
-      throw new IllegalArgumentException();
-    }
-    return ProductGroup.getInstance(groups.toArray(new Group[0]));
   }
 
 }

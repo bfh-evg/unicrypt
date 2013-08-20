@@ -36,9 +36,6 @@ public abstract class AbstractMonoid extends AbstractSemiGroup implements Monoid
 
   @Override
   public final boolean isIdentityElement(final Element element) {
-    if (element == null) {
-      throw new IllegalArgumentException();
-    }
     return this.areEqual(element, getIdentityElement());
   }
 

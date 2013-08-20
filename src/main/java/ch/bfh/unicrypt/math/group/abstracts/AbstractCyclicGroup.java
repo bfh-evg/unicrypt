@@ -32,7 +32,7 @@ public abstract class AbstractCyclicGroup extends AbstractGroup implements Cycli
   @Override
   public final boolean isGenerator(Element element) {
     if (!this.contains(element)) {
-      return false;
+      throw new IllegalArgumentException();
     }
     return this.abstractIsGenerator(element);
   }
