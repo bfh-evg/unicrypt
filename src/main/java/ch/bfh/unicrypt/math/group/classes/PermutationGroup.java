@@ -71,6 +71,10 @@ public class PermutationGroup extends AbstractGroup {
     return this.abstractGetElement(permutation);
   }
 
+  protected Element abstractGetElement(Permutation permutation) {
+    return new PermutationElement(this, permutation);
+  }
+
   //
   // The following protected methods override the standard implementation from
   // various super-classes
@@ -134,10 +138,6 @@ public class PermutationGroup extends AbstractGroup {
     return abstractGetElement(new Permutation(MathUtil.bigIntegerToIntArray(values)));
   }
 
-  protected Element abstractGetElement(Permutation permutation) {
-    return new PermutationElement(this, permutation);
-  }
-
   // LOCAL CLASS: PERMUTATION_ELEMENT
 
   final private class PermutationElement extends Element {
@@ -182,6 +182,7 @@ public class PermutationGroup extends AbstractGroup {
     }
 
   }
+
   //
   // STATIC FACTORY METHODS
   //

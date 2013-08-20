@@ -21,49 +21,58 @@ public class StringMonoid extends AbstractAdditiveMonoid {
   private StringMonoid() {
   }
 
+  public Element getElement(final String string) {
+    if (string == null) {
+      throw new IllegalArgumentException();
+    }
+    return this.abstractGetElement(string);
+  }
+
+  protected Element abstractGetElement(String string) {
+    return new StringMonoid.StringElement(this, string);
+  }
+
   @Override
   protected Element abstractGetIdentityElement() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return this.abstractGetElement("");
   }
 
   @Override
   protected Element abstractApply(Element element1, Element element2) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return this.abstractGetElement(((StringElement) element1).getString() + ((StringElement) element2).getString());
   }
 
   @Override
   protected BigInteger abstractGetOrder() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return Set.INFINITE_ORDER;
   }
 
   @Override
   protected Element abstractGetElement(BigInteger value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return this.abstractGetElement(new String(value.toByteArray()));
   }
 
   @Override
   protected Element abstractGetRandomElement(Random random) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    throw new UnsupportedOperationException();
   }
 
   @Override
   protected boolean abstractContains(BigInteger value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return value.signum() >= 0;
   }
 
   @Override
   protected boolean abstractEquals(Set set) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return true;
   }
 
   //
   // LOCAL ELEMENT CLASS
   //
-
- final private class StringElement extends Element {
+  final private class StringElement extends Element {
 
     private static final long serialVersionUID = 1L;
-
     private final String string;
 
     private StringElement(final Set set, final String string) {
@@ -94,16 +103,15 @@ public class StringMonoid extends AbstractAdditiveMonoid {
     public String standardToString() {
       return this.getString();
     }
-
   }
   //
   // STATIC FACTORY METHODS
   //
-
   private static StringMonoid instance;
 
   /**
    * Returns the singleton object of this class.
+   *
    * @return The singleton object of this class
    */
   public static StringMonoid getInstance() {
@@ -112,5 +120,4 @@ public class StringMonoid extends AbstractAdditiveMonoid {
     }
     return StringMonoid.instance;
   }
-
 }

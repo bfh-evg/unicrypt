@@ -13,8 +13,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
 /**
  * This class implements the additive cyclic group of (positive and negative) integers with infinite order.
  * Its identity element is 0, and there are exactly two generators, namely 1 and -1. To invert an element,
- * it is multiplied with -1. The methods {@link #getRandomElement()} and {@link #getRandomElement(Random)}
- * return random elements of a certain bit length.
+ * it is multiplied with -1.
  *
  * @see "Handbook of Applied Cryptography, Example 2.164"
  * @see <a href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
@@ -32,7 +31,7 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
    * This is the private constructor of this class. It is called by the static factory methods
    * of the static nested class Factory.
    */
-  protected ZPlus() {
+  private ZPlus() {
   }
 
   //
@@ -52,8 +51,7 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {
-    return this.abstractGetElement(RandomUtil.createRandomBigInteger(RANDOM_ELEMENT_BIT_LENGTH, random));
-    // THIS IS NOT A UNIFORM DISTRIBUTION!!!
+    throw new UnsupportedOperationException();
   }
 
   @Override

@@ -137,6 +137,10 @@ public class ProductSet extends AbstractSet implements Set {
     return abstractGetElement(elements);
   }
 
+  protected Element abstractGetElement(final Element[] elements) {
+    return new TupleElement(this, elements);
+  }
+
   /**
    * Checks if the arity of the set is 0.
    *
@@ -362,10 +366,6 @@ public class ProductSet extends AbstractSet implements Set {
       }
     }
     return true;
-  }
-
-  protected Element abstractGetElement(final Element[] elements) {
-    return new TupleElement(this, elements);
   }
 
   //

@@ -13,8 +13,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
 /**
 /**
  * This class implements the additive cyclic group of non-negative integers with infinite order.
- * Its identity element is 0. The methods {@link #getRandomElement()} and {@link #getRandomElement(Random)}
- * return random elements of a certain bit length.
+ * Its identity element is 0.
  *
  * @see "Handbook of Applied Cryptography, Example 2.164"
  * @see <a href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
@@ -52,8 +51,7 @@ public class NPlus extends AbstractAdditiveMonoid {
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {
-    return this.abstractGetElement(RandomUtil.createRandomBigInteger(RANDOM_ELEMENT_BIT_LENGTH, random));
-    // THIS IS NOT A UNIFORM DISTRIBUTION!!!
+    throw new UnsupportedOperationException();
   }
 
   @Override

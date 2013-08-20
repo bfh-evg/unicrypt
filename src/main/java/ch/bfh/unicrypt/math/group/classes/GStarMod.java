@@ -12,22 +12,22 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
- * This interface represents the concept of a sub-group G_m (of order m) of a cyclic group of integers Z*_n 
- * with the operation of multiplication modulo n. For Z*_n to be cyclic, n must be 2, 4, p^e, or 2p^e, where 
- * p>2 is prime and e>0. The actual sub-group depends on the given set of prime factors of the order phi(n) 
- * of Z*_n, where phi(n) is the Euler totient function. The order m=|G_m| is the product of all given 
- * prime factors of phi(n). If all prime factors of phi(n) are given, which implies m=phi(n), then 
- * G_m is the parent group Z*_n. 
- * 
+ * This interface represents the concept of a sub-group G_m (of order m) of a cyclic group of integers Z*_n
+ * with the operation of multiplication modulo n. For Z*_n to be cyclic, n must be 2, 4, p^e, or 2p^e, where
+ * p>2 is prime and e>0. The actual sub-group depends on the given set of prime factors of the order phi(n)
+ * of Z*_n, where phi(n) is the Euler totient function. The order m=|G_m| is the product of all given
+ * prime factors of phi(n). If all prime factors of phi(n) are given, which implies m=phi(n), then
+ * G_m is the parent group Z*_n.
+ *
  * @see "Handbook of Applied Cryptography,  Fact 2.132"
  * @see "Handbook of Applied Cryptography,  Definition 2.100"
  * @see "Handbook of Applied Cryptography,  Definition 2.166"
- * 
+ *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class GStarMod extends ZStarMod implements MultiplicativeCyclicGroup, DDHGroup {
+public class GStarMod extends MultiplicativeCyclicGroup implements DDHGroup {
 
   // This class should inherit from both ZStarModClass and AbstractMultiplicativeCyclicGroup, but since
   // Java does not support multiple inheritance, we copy some code from AbstractMultiplicativeCyclicGroup
@@ -43,7 +43,7 @@ public class GStarMod extends ZStarMod implements MultiplicativeCyclicGroup, DDH
   }
 
   /**
-   * Returns the quotient k=phi(n)/m of the orders of the two involved groups. 
+   * Returns the quotient k=phi(n)/m of the orders of the two involved groups.
    * @return The quotient of the two orders.
    */
   public BigInteger getOrderQuotient() {
@@ -51,7 +51,7 @@ public class GStarMod extends ZStarMod implements MultiplicativeCyclicGroup, DDH
   }
 
   /**
-   * Returns prime factorization of the group order phi(n) of Z*_n. 
+   * Returns prime factorization of the group order phi(n) of Z*_n.
    * @return The prime factorization of the group order
    */
   public Factorization getOrderFactorization() {
@@ -127,7 +127,7 @@ public class GStarMod extends ZStarMod implements MultiplicativeCyclicGroup, DDH
   //
 
   // The following method is not very nice, because it copies some code from the parent class. However, it is not
-  // possible to call super.createRandomElement(), this would be incorrect. 
+  // possible to call super.createRandomElement(), this would be incorrect.
   // VERSION2: a subgroup should have access to the parent group to call the parent method from there.
   @Override
   protected Element abstractGetRandomElement(final Random random) {
@@ -165,7 +165,7 @@ public class GStarMod extends ZStarMod implements MultiplicativeCyclicGroup, DDH
   //
 
   /**
-   * This is the general static factory method for this class. 
+   * This is the general static factory method for this class.
    * @param moduloFactorization
    * @param orderFactorization
    * @throws IllegalArgumentException if {@code moduloFactorization} or {@code orderFactorization} is null
@@ -204,16 +204,16 @@ public class GStarMod extends ZStarMod implements MultiplicativeCyclicGroup, DDH
   }
 
   /**
-   * This is the general static factory method for this class. Returns a new instance for the general case n=p^k or n=2p^k, 
-   * where p is prime and e>=1 (and e=1 for p=2). 
+   * This is the general static factory method for this class. Returns a new instance for the general case n=p^k or n=2p^k,
+   * where p is prime and e>=1 (and e=1 for p=2).
    * @param prime The given prime number p
    * @param exponent The given exponent e
-   * @param doubling A Boolean value indicating whether n=p^k ({@code false}) or n=2p^k ({@code true}) 
+   * @param doubling A Boolean value indicating whether n=p^k ({@code false}) or n=2p^k ({@code true})
    * @param orderFactorization The given prime factorization of phi(n)
    * @throws IllegalArgumentException if {@code prime} is null or not prime
    * @throws IllegalArgumentException if {@code exponent<1}
    * @throws IllegalArgumentException if {@code prime=2} and {@code exponent>1}
-   * @throws IllegalArgumentException if {@code orderPrimeFactors} is null, contains null or values that are not prime 
+   * @throws IllegalArgumentException if {@code orderPrimeFactors} is null, contains null or values that are not prime
    * @throws IllegalArgumentException if {@code orderExponents} is null or contains values<1
    * @throws IllegalArgumentException if the lengths of {@code orderPrimeFactors} and {@code orderExponents} are different
    * @throws IllegalArgumentException  if the product-of-powers of {@code orderPrimeFactors} and {@code orderExponents} does not divide the group order
@@ -247,6 +247,141 @@ public class GStarMod extends ZStarMod implements MultiplicativeCyclicGroup, DDH
    */
   public static GStarMod createInstance(final BigInteger safePrime) {
     return GStarMod.createInstance(safePrime, true);
+  }
+
+  @Override
+  public Element invert(Element element) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element applyInverse(Element element1, Element element2) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element getIdentityElement() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean isIdentityElement(Element element) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element apply(Element element1, Element element2) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element apply(Element... elements) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element selfApply(Element element, BigInteger amount) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element selfApply(Element element, Element amount) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element selfApply(Element element, int amount) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element selfApply(Element element) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element multiSelfApply(Element[] elements, BigInteger[] amounts) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public BigInteger getOrder() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean isEmpty() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean isSingleton() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public ZPlusMod getOrderGroup() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public BigInteger getMinOrder() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public ZPlusMod getMinOrderGroup() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean contains(int value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean contains(BigInteger value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean contains(Element element) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element getElement(int value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element getElement(BigInteger value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element getElement(Element element) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element getRandomElement() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Element getRandomElement(Random random) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean areEqual(Element element1, Element element2) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean isAtomic() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
 
