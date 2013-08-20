@@ -148,8 +148,8 @@ public class PermutationGroup extends AbstractGroup {
     // is redundant, but we we keep it for convenience
     private final Permutation permutation;
 
-    protected PermutationElement(final PermutationGroup group, final Permutation permutationVector) {
-      super(group);
+    private PermutationElement(final Set set, final Permutation permutationVector) {
+      super(set);
       this.permutation = permutationVector;
     }
 

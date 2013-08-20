@@ -25,7 +25,15 @@ public class SingletonGroup extends AbstractCyclicGroup {
   private final Element element;
 
   private SingletonGroup(BigInteger value) {
-    this.element = abstractGetElement(value);
+    this.element = new SingletonElement(this, value);
+  }
+
+  public final Element getElement() {
+    return this.element;
+  }
+
+  public final BigInteger getValue() {
+    return this.getElement().getValue();
   }
 
   //
@@ -34,12 +42,12 @@ public class SingletonGroup extends AbstractCyclicGroup {
 
   @Override
   protected Element standardSelfApply(Element element, BigInteger amount) {
-    return this.element;
+    return this.getElement();
   }
 
   @Override
   protected Element abstractGetRandomElement(Random random) {
-    return this.element;
+    return this.getElement();
   }
 
   @Override
@@ -49,37 +57,37 @@ public class SingletonGroup extends AbstractCyclicGroup {
 
   @Override
   protected boolean abstractContains(BigInteger value) {
-    return this.element.getValue().equals(value);
+    return this.getValue().equals(value);
   }
 
   @Override
   protected Element abstractGetIdentityElement() {
-    return this.element;
+    return this.getElement();
   }
 
   @Override
   protected Element abstractApply(Element element1, Element element2) {
-    return this.element;
+    return this.getElement();
   }
 
   @Override
   protected Element abstractInvert(Element element) {
-    return this.element;
+    return this.getElement();
   }
 
   @Override
   protected Element abstractGetElement(final BigInteger value) {
-    return this.element;
+    return this.getElement();
   }
 
   @Override
   protected Element abstractGetDefaultGenerator() {
-    return this.element;
+    return this.getElement();
   }
 
   @Override
   protected Element abstractGetRandomGenerator(Random random) {
-    return this.element;
+    return this.getElement();
   }
 
   @Override
@@ -89,7 +97,7 @@ public class SingletonGroup extends AbstractCyclicGroup {
 
   @Override
   protected boolean abstractEquals(Set set) {
-    return true;
+    return this.getValue().equals(((SingletonGroup) set).getValue());
   }
 
   //
@@ -100,8 +108,8 @@ public class SingletonGroup extends AbstractCyclicGroup {
 
     private static final long serialVersionUID = 1L;
 
-    protected SingletonElement(final Group group, final BigInteger value) {
-      super(group, value);
+    protected SingletonElement(final Set set, final BigInteger value) {
+      super(set, value);
     }
 
   }

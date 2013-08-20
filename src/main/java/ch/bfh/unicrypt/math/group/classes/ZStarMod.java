@@ -141,6 +141,9 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
 
   @Override
   protected Element abstractGetIdentityElement() {
+    if (this.getModulus().equals(BigInteger.ONE)) {
+      return this.abstractGetElement(BigInteger.ZERO);
+    }
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -167,8 +170,8 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
 
     private static final long serialVersionUID = 1L;
 
-    protected ZStarModElement(final Group group, final BigInteger value) {
-      super(group, value);
+    protected ZStarModElement(final Set set, final BigInteger value) {
+      super(set, value);
     }
 
   }

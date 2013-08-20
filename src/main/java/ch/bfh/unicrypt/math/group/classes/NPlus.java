@@ -5,15 +5,15 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
 /**
- * This class implements the additive cyclic group of (positive and negative) integers with infinite order.
- * Its identity element is 0, and there are exactly two generators, namely 1 and -1. To invert an element,
- * it is multiplied with -1. The methods {@link #getRandomElement()} and {@link #getRandomElement(Random)}
+ * This class implements the additive cyclic group of non-negative integers with infinite order.
+ * Its identity element is 0. The methods {@link #getRandomElement()} and {@link #getRandomElement(Random)}
  * return random elements of a certain bit length.
  *
  * @see "Handbook of Applied Cryptography, Example 2.164"
@@ -23,7 +23,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlus extends AbstractAdditiveCyclicGroup {
+public class NPlus extends AbstractAdditiveMonoid {
 
   private static final long serialVersionUID = 1L;
   private static final int RANDOM_ELEMENT_BIT_LENGTH = 1000;
@@ -32,7 +32,7 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
    * This is the private constructor of this class. It is called by the static factory methods
    * of the static nested class Factory.
    */
-  protected ZPlus() {
+  private NPlus() {
   }
 
   //
@@ -58,22 +58,12 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected boolean abstractContains(final BigInteger value) {
-    return true;
+    return value.signum() >= 0;
   }
 
   @Override
   protected BigInteger abstractGetOrder() {
     return Group.INFINITE_ORDER;
-  }
-
-  @Override
-  protected Element abstractGetDefaultGenerator() {
-    return this.abstractGetElement(BigInteger.ONE);
-  }
-
-  @Override
-  public boolean abstractIsGenerator(final Element element) {
-    return element.getValue().abs().equals(BigInteger.ONE);
   }
 
   @Override
@@ -87,21 +77,8 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractInvert(final Element element) {
-    return this.abstractGetElement(element.getValue().negate());
-  }
-
-  @Override
-  public Element abstractGetRandomGenerator(final Random random) {
-    if (RandomUtil.createRandomBoolean(random)) {
-      return this.getDefaultGenerator();
-    }
-    return this.getDefaultGenerator().invert();
-  }
-
-  @Override
   protected Element abstractGetElement(BigInteger value) {
-    return new ZPlusElement(this, value);
+    return new NPlusElement(this, value);
   }
 
   @Override
@@ -113,11 +90,11 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   // LOCAL ELEMENT CLASS
   //
 
-  final private class ZPlusElement extends Element {
+  final private class NPlusElement extends Element {
 
     private static final long serialVersionUID = 1L;
 
-    protected ZPlusElement(final Set set, final BigInteger value) {
+    protected NPlusElement(final Set set, final BigInteger value) {
       super(set, value);
     }
 
@@ -127,17 +104,17 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   // STATIC FACTORY METHODS
   //
 
-  private static ZPlus instance;
+  private static NPlus instance;
 
   /**
    * Returns the singleton object of this class.
    * @return The singleton object of this class
    */
-  public static ZPlus getInstance() {
-    if (ZPlus.instance == null) {
-      ZPlus.instance = new ZPlus();
+  public static NPlus getInstance() {
+    if (NPlus.instance == null) {
+      NPlus.instance = new NPlus();
     }
-    return ZPlus.instance;
+    return NPlus.instance;
   }
 
 }
