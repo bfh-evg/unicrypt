@@ -4,131 +4,130 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Factorization;
 import ch.bfh.unicrypt.math.helper.SpecialFactorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
- * This interface represents the concept of a sub-group G_m (of order m) of a cyclic group of integers Z*_n
- * with the operation of multiplication modulo n. For Z*_n to be cyclic, n must be 2, 4, p^e, or 2p^e, where
- * p>2 is prime and e>0. The actual sub-group depends on the given set of prime factors of the order phi(n)
- * of Z*_n, where phi(n) is the Euler totient function. The order m=|G_m| is the product of all given
- * prime factors of phi(n). If all prime factors of phi(n) are given, which implies m=phi(n), then
- * G_m is the parent group Z*_n.
+ * This interface represents the concept of a sub-group G_m (of order m) of a
+ * cyclic group of integers Z*_n with the operation of multiplication modulo n.
+ * For Z*_n to be cyclic, n must be 2, 4, p^e, or 2p^e, where p>2 is prime and
+ * e>0. The actual sub-group depends on the given set of prime factors of the
+ * order phi(n) of Z*_n, where phi(n) is the Euler totient function. The order
+ * m=|G_m| is the product of all given prime factors of phi(n). If all prime
+ * factors of phi(n) are given, which implies m=phi(n), then G_m is the parent
+ * group Z*_n.
  *
- * @see "Handbook of Applied Cryptography,  Fact 2.132"
- * @see "Handbook of Applied Cryptography,  Definition 2.100"
- * @see "Handbook of Applied Cryptography,  Definition 2.166"
+ * @see "Handbook of Applied Cryptography, Fact 2.132"
+ * @see "Handbook of Applied Cryptography, Definition 2.100"
+ * @see "Handbook of Applied Cryptography, Definition 2.166"
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class GStarMod extends MultiplicativeCyclicGroup implements DDHGroup {
+public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGroup {
 
   // This class should inherit from both ZStarModClass and AbstractMultiplicativeCyclicGroup, but since
   // Java does not support multiple inheritance, we copy some code from AbstractMultiplicativeCyclicGroup
-
   private static final long serialVersionUID = 1L;
-
+  private final BigInteger modulus;
+  private final SpecialFactorization moduloFactorization;
   private final Factorization orderFactorization;
-  private Element defaultGenerator;
+  private ZStarMod superGroup;
 
-  protected GStarMod(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
-    super(moduloFactorization);
+  private GStarMod(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
+    this.modulus = moduloFactorization.getValue();
+    this.moduloFactorization = moduloFactorization;
     this.orderFactorization = orderFactorization;
   }
 
   /**
+   * Returns the modulus if this group.
+   *
+   * @return The modulus
+   */
+  public final BigInteger getModulus() {
+    return this.modulus;
+  }
+
+  /**
+   * Returns a (possibly incomplete) prime factorization the modulus if this
+   * group. An incomplete factorization implies that the group order is unknown
+   * in such a case.
+   *
+   * @return The prime factorization
+   */
+  public final SpecialFactorization getModuloFactorization() {
+    return this.moduloFactorization;
+  }
+
+  /**
+   * Returns prime factorization of the group order phi(n) of Z*_n.
+   *
+   * @return The prime factorization of the group order
+   */
+  public final Factorization getOrderFactorization() {
+    return this.orderFactorization;
+  }
+
+  public final ZStarMod getSuperGroup() {
+    if (this.superGroup == null) {
+      this.superGroup = ZStarMod.getInstance(this.getModuloFactorization());
+    }
+    return this.superGroup;
+  }
+
+  /**
    * Returns the quotient k=phi(n)/m of the orders of the two involved groups.
+   *
    * @return The quotient of the two orders.
    */
   public BigInteger getOrderQuotient() {
     return this.getSuperGroup().getOrder().divide(this.getOrder());
   }
 
-  /**
-   * Returns prime factorization of the group order phi(n) of Z*_n.
-   * @return The prime factorization of the group order
-   */
-  public Factorization getOrderFactorization() {
-    return this.orderFactorization;
+  //
+  // The following protected methods override the standard implementation from
+  // various super-classes
+  //
+
+  @Override
+  protected Element standardSelfApply(final Element element, final BigInteger amount) {
+    BigInteger newAmount = amount.mod(this.getOrder());
+    return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
   }
 
   @Override
-  public Element getDefaultGenerator() {
-    if (this.defaultGenerator == null) {
-      this.defaultGenerator = this.computeDefaultGenerator();
-    }
-    return this.defaultGenerator;
-  }
-
-  @Override
-  public Element getRandomGenerator() {
-    return this.getRandomGenerator(null);
-  }
-
-
-  // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-  @Override
-  public Element getRandomGenerator(final Random random) {
-    Element element;
-    do {
-      element = this.getRandomElement(random);
-    } while (!this.isGenerator(element));
-    return element;
-  }
-
-  // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81 (the implemented)
-  // method is a mix between 4.80 and 4.81
-  @Override
-  public boolean isGenerator(final Element element) {
-    if (!this.contains(element)) {
-      return false;
-    }
-    for (final BigInteger prime : this.getOrderFactorization().getPrimeFactors()) {
-      if (element.selfApply(this.getOrder().divide(prime)).equals(this.getIdentityElement())) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
+  public int standardHashCode() {
     final int prime = 31;
-    int result = super.hashCode();
-    result = (prime * result) + this.getOrder().hashCode();
+    int result = 1;
+    result = prime * result + this.getModulus().hashCode();
+    result = prime * result + this.getOrder().hashCode();
     return result;
   }
 
   @Override
-  public boolean equals(final Object obj) {
-    if (!super.equals(obj)) {
-      return false;
-    }
-    if (obj instanceof GStarMod) {
-      final GStarMod other = (GStarMod) obj;
-      return this.getOrder().equals(other.getOrder());
-    }
-    return false;
+  public String standardToString() {
+    return this.getModulus().toString() + "," + this.getOrder().toString();
   }
 
+  //
+  // The following protected methods implement the abstract methods from
+  // various super-classes
+  //
   @Override
-  public String toString() {
-    return "" + this.getClass().getSimpleName() + "[modulo=" + this.getModulus() + ",order=" + this.getOrder() + "]";
+  protected boolean abstractEquals(Set set) {
+    final GStarMod gStarMod = (GStarMod) set;
+    return this.getModulus().equals(gStarMod.getModulus()) && this.getOrder().equals(gStarMod.getOrder());
   }
 
-  //
-  // The following protected methods override the standard implementation from {@code AbstractGroup}
-  //
-
-  // The following method is not very nice, because it copies some code from the parent class. However, it is not
-  // possible to call super.createRandomElement(), this would be incorrect.
-  // VERSION2: a subgroup should have access to the parent group to call the parent method from there.
   @Override
   protected Element abstractGetRandomElement(final Random random) {
     if (this.getOrder().compareTo(this.getOrderQuotient()) > 0) { // choose between the faster method
@@ -145,10 +144,40 @@ public class GStarMod extends MultiplicativeCyclicGroup implements DDHGroup {
 
   @Override
   protected boolean abstractContains(final BigInteger value) {
-    return super.contains(value) && value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE);
+    if (value == null) {
+      throw new IllegalArgumentException();
+    }
+    return (value.signum() >= 0) && (value.compareTo(this.getModulus()) < 0) && MathUtil.areRelativelyPrime(value, this.getModulus())
+            && value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE);
   }
 
-  protected Element computeDefaultGenerator() {
+  @Override
+  protected BigInteger abstractGetOrder() {
+    return MathUtil.eulerFunction(this.getModulus(), this.getModuloFactorization().getPrimeFactors());
+  }
+
+  @Override
+  protected Element abstractGetIdentityElement() {
+    return this.abstractGetElement(BigInteger.ONE);
+  }
+
+  @Override
+  protected Element abstractApply(final Element element1, final Element element2) {
+    return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+  }
+
+  @Override
+  public Element abstractInvert(final Element element) {
+    return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
+  }
+
+  @Override
+  protected Element abstractGetElement(final BigInteger value) {
+    return new GStarMod.GStarModElement(this, value);
+  }
+
+  @Override
+  protected Element abstractGetDefaultGenerator() {
     BigInteger alpha = BigInteger.ZERO;
     Element element;
     do {
@@ -158,6 +187,45 @@ public class GStarMod extends MultiplicativeCyclicGroup implements DDHGroup {
       element = this.abstractGetElement(alpha.modPow(this.getOrderQuotient(), this.getModulus()));
     } while (!this.isGenerator(element)); // this test could be skipped for a prime order
     return element;
+  }
+
+  // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
+  @Override
+  protected Element abstractGetRandomGenerator(Random random) {
+    Element element;
+    do {
+      element = this.getRandomElement(random);
+    } while (!this.isGenerator(element));
+    return element;
+  }
+
+  // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81 (the implemented)
+  // method is a mix between 4.80 and 4.81
+  @Override
+  protected boolean abstractIsGenerator(Element element) {
+    if (!this.contains(element)) {
+      return false;
+    }
+    for (final BigInteger prime : this.getOrderFactorization().getPrimeFactors()) {
+      if (element.selfApply(this.getOrder().divide(prime)).equals(this.getIdentityElement())) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  //
+  // LOCAL ELEMENT CLASS
+  //
+
+  final private class GStarModElement extends Element {
+
+    private static final long serialVersionUID = 1L;
+
+    protected GStarModElement(final Set set, final BigInteger value) {
+      super(set, value);
+    }
+
   }
 
   //
@@ -248,141 +316,5 @@ public class GStarMod extends MultiplicativeCyclicGroup implements DDHGroup {
   public static GStarMod createInstance(final BigInteger safePrime) {
     return GStarMod.createInstance(safePrime, true);
   }
-
-  @Override
-  public Element invert(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element applyInverse(Element element1, Element element2) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element getIdentityElement() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean isIdentityElement(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element apply(Element element1, Element element2) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element apply(Element... elements) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element selfApply(Element element, BigInteger amount) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element selfApply(Element element, Element amount) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element selfApply(Element element, int amount) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element selfApply(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element multiSelfApply(Element[] elements, BigInteger[] amounts) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public BigInteger getOrder() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean isSingleton() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public ZPlusMod getOrderGroup() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public BigInteger getMinOrder() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public ZPlusMod getMinOrderGroup() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean contains(int value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean contains(BigInteger value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean contains(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element getElement(int value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element getElement(BigInteger value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element getElement(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element getRandomElement() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Element getRandomElement(Random random) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean areEqual(Element element1, Element element2) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean isAtomic() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
 
 }

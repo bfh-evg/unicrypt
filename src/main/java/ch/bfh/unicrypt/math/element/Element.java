@@ -255,6 +255,10 @@ public abstract class Element implements Serializable {
     return this.value;
   }
 
+  public final Element getFirst() {
+     return this.getAt(0);
+  }
+
   /**
    * Returns the element with the given index. The indices are numbered from 0
    * to the element's arity minus one.

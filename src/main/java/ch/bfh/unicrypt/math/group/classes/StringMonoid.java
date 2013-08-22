@@ -21,7 +21,14 @@ public class StringMonoid extends AbstractAdditiveMonoid {
   private StringMonoid() {
   }
 
-  public Element getElement(final String string) {
+  public final String getString(Element element) {
+    if (!this.contains(element)) {
+      throw new IllegalArgumentException();
+    }
+    return ((StringMonoid.StringElement) element).getString();
+  }
+
+  public final Element getElement(final String string) {
     if (string == null) {
       throw new IllegalArgumentException();
     }
@@ -31,6 +38,11 @@ public class StringMonoid extends AbstractAdditiveMonoid {
   protected Element abstractGetElement(String string) {
     return new StringMonoid.StringElement(this, string);
   }
+
+  //
+  // The following protected methods implement the abstract methods from
+  // various super-classes
+  //
 
   @Override
   protected Element abstractGetIdentityElement() {

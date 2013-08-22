@@ -106,7 +106,7 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
       Element keyElement = element.getAt(0);     
       BigInteger key = keyElement.getValue();
       // HACK: This hack is required in order to re-insert lost 0-bits.
-      int requiredKeySizeInBytes = ((int) Math.ceil((keyElement.getSet().getOrderGroup().getModulus().bitLength() + 1) / 8));       
+      int requiredKeySizeInBytes = ((int) Math.ceil((keyElement.getSet().getZPlusModOrder().getModulus().bitLength() + 1) / 8));       
       byte[] keyBytes = key.toByteArray(); //
       byte[] nKey = new byte[requiredKeySizeInBytes]; //
       System.arraycopy(keyBytes, 0, nKey, requiredKeySizeInBytes-keyBytes.length, keyBytes.length); //
@@ -146,7 +146,7 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
       Element keyElement = element.getAt(0);     
       BigInteger key = keyElement.getValue();
       // HACK: This hack is required in order to re-insert lost 0-bits.
-      int requiredKeySizeInBytes = ((int) Math.ceil((keyElement.getSet().getOrderGroup().getModulus().bitLength() + 1) / 8));       
+      int requiredKeySizeInBytes = ((int) Math.ceil((keyElement.getSet().getZPlusModOrder().getModulus().bitLength() + 1) / 8));       
       byte[] keyBytes = key.toByteArray(); //
       byte[] nKey = new byte[requiredKeySizeInBytes]; //
       System.arraycopy(keyBytes, 0, nKey, requiredKeySizeInBytes-keyBytes.length, keyBytes.length); //

@@ -3,7 +3,10 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
+import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -19,8 +22,13 @@ import java.util.Random;
  */
 public class IdentityFunction extends AbstractFunction {
 
-  private IdentityFunction(final Group domain, final Group coDomain) {
+  private IdentityFunction(final Set domain, final ProductSet coDomain) {
     super(domain, coDomain);
+  }
+
+  @Override
+  public ProductSet getCoDomain() {
+    return (ProductSet) this.getCoDomain();
   }
 
   //
@@ -45,16 +53,16 @@ public class IdentityFunction extends AbstractFunction {
   /**
    * This is the standard constructor for this class. It creates a generalized identity function for a given group,
    * which reproduces the input value multiple time.
-   * @param group The given Group
+   * @param set The given set
    * @param arity The arity of the output element
    * @throws IllegalArgumentException if {@code group} is null
    * @throws IllegalArgumentException if {@code arity} is negative
    */
-  public static IdentityFunction getInstance(final Group group, final int arity) {
-    if (group == null || arity < 0) {
+  public static IdentityFunction getInstance(final Set set, final int arity) {
+    if (set == null || arity < 0) {
       throw new IllegalArgumentException();
     }
-    return new IdentityFunction(group, ProductGroup.getInstance(group, arity));
+    return new IdentityFunction(set, ProductSet.getInstance(set, arity));
   }
 
 }

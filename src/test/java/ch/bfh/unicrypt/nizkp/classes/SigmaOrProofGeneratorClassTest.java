@@ -66,7 +66,7 @@ public class SigmaOrProofGeneratorClassTest {
 	public void testProofOk() {
 
 		// Create an element for which we want to generate the proof
-		Element valueToProof = ddhGroup.getOrderGroup().createRandomElement(
+		Element valueToProof = ddhGroup.getZPlusModOrder().createRandomElement(
 				random);
 
 		// Arbitrarily choose a random index which defines the function we'll
@@ -101,7 +101,7 @@ public class SigmaOrProofGeneratorClassTest {
 	@Test
 	public void testProofWrongIndex() {
 		// Create an element for which we want to generate the proof
-		Element valueToProof = ddhGroup.getOrderGroup().createRandomElement(
+		Element valueToProof = ddhGroup.getZPlusModOrder().createRandomElement(
 				random);
 
 		// Arbitrarily choose a random index which defines the function we'll
@@ -136,7 +136,7 @@ public class SigmaOrProofGeneratorClassTest {
 	@Test
 	public void testProofWrongSecret() {
 		// Create an element for which we want to generate the proof
-		Element valueToProof = ddhGroup.getOrderGroup().createRandomElement(
+		Element valueToProof = ddhGroup.getZPlusModOrder().createRandomElement(
 				random);
 
 		// Arbitrarily choose a random index which defines the function we'll
@@ -163,7 +163,7 @@ public class SigmaOrProofGeneratorClassTest {
 		// Choose a different value and make sure that it is for sure different to the originally chosen secret
 		Element fakeValueToProof;
 		do {
-			fakeValueToProof = ddhGroup.getOrderGroup().createRandomElement(
+			fakeValueToProof = ddhGroup.getZPlusModOrder().createRandomElement(
 					random);
 		} while (ddhGroup.areEqualElements(valueToProof, fakeValueToProof));
 		

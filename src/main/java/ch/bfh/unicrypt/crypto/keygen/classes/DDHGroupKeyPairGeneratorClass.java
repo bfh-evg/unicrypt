@@ -26,7 +26,7 @@ public class DDHGroupKeyPairGeneratorClass extends KeyPairGeneratorAbstract impl
   }
 
   public DDHGroupKeyPairGeneratorClass(final DDHGroup ddhGroup, final Element generator) {
-    super(new ProductGroup(ddhGroup.getOrderGroup(), ddhGroup));
+    super(new ProductGroup(ddhGroup.getZPlusModOrder(), ddhGroup));
     if ((generator == null) || !ddhGroup.contains(generator)) { // or is not a generator!
       throw new IllegalArgumentException();
     }
@@ -86,7 +86,7 @@ public class DDHGroupKeyPairGeneratorClass extends KeyPairGeneratorAbstract impl
   @Override
   public Function getPublicKeyGeneratorFunction() {
     final ProductFunction tmp = (ProductFunction) ((CompositeFunction) this.getKeyGenerationFunction()).getFunctionAt(2);
-    return tmp.getFunctionAt(1);
+    return tmp.getAt(1);
   }
 
 }

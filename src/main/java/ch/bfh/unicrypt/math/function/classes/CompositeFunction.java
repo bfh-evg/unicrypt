@@ -3,7 +3,7 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -23,9 +23,13 @@ public final class CompositeFunction extends AbstractFunction {
 
   private final Function[] functions;
 
-  private CompositeFunction(final Group domain, final Group coDomain, final Function[] functions) {
+  private CompositeFunction(final Set domain, final Set coDomain, final Function[] functions) {
     super(domain, coDomain);
     this.functions = functions.clone();
+  }
+
+  protected int getArity() {
+    return this.functions.length;
   }
 
   @Override

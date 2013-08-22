@@ -6,6 +6,8 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.group.classes.ZStarMod;
+import ch.bfh.unicrypt.math.group.classes.ZTimesMod;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -24,7 +26,6 @@ public abstract class AbstractSet implements Set {
   private static final long serialVersionUID = 1L;
 
   private BigInteger order, minOrder;
-  private ZPlusMod orderGroup, minOrderGroup;
 
   @Override
   public final BigInteger getOrder() {
@@ -32,28 +33,6 @@ public abstract class AbstractSet implements Set {
       this.order = this.abstractGetOrder();
     }
     return this.order;
-  }
-
-  @Override
-  public final boolean isEmpty() {
-    return this.getOrder().equals(BigInteger.ZERO);
-  }
-
-  @Override
-  public final boolean isSingleton() {
-    return this.getOrder().equals(BigInteger.ONE);
-  }
-
-  @Override
-  public final ZPlusMod getOrderGroup() {
-    if (this.orderGroup == null) {
-      BigInteger order = this.getOrder();
-      if (order.equals(Set.INFINITE_ORDER) || order.equals(Set.UNKNOWN_ORDER)) {
-        throw new UnsupportedOperationException();
-      }
-      this.orderGroup = ZPlusMod.getInstance(order);
-    }
-    return this.orderGroup;
   }
 
   @Override
@@ -70,15 +49,40 @@ public abstract class AbstractSet implements Set {
   }
 
   @Override
-  public final ZPlusMod getMinOrderGroup() {
-    if (this.minOrderGroup == null) {
-      BigInteger minOrder = this.getMinOrder();
-      if (minOrder.equals(Set.INFINITE_ORDER)) {
-        throw new UnsupportedOperationException();
-      }
-      this.minOrderGroup = ZPlusMod.getInstance(minOrder);
+  public final boolean isEmpty() {
+    return this.getOrder().equals(BigInteger.ZERO);
+  }
+
+  @Override
+  public final boolean isSingleton() {
+    return this.getOrder().equals(BigInteger.ONE);
+  }
+
+  @Override
+  public final ZPlusMod getZPlusModOrder() {
+    BigInteger order = this.getOrder();
+    if (order.equals(Set.INFINITE_ORDER) || order.equals(Set.UNKNOWN_ORDER)) {
+      throw new UnsupportedOperationException();
     }
-    return this.minOrderGroup;
+    return ZPlusMod.getInstance(order);
+  }
+
+  @Override
+  public final ZTimesMod getZTimesModOrder() {
+    BigInteger order = this.getOrder();
+    if (order.equals(Set.INFINITE_ORDER) || order.equals(Set.UNKNOWN_ORDER)) {
+      throw new UnsupportedOperationException();
+    }
+    return ZTimesMod.getInstance(order);
+  }
+
+  @Override
+  public final ZStarMod getZStarModOrder() {
+    BigInteger order = this.getOrder();
+    if (order.equals(Set.INFINITE_ORDER) || order.equals(Set.UNKNOWN_ORDER)) {
+      throw new UnsupportedOperationException();
+    }
+    return ZStarMod.getInstance(order);
   }
 
   @Override

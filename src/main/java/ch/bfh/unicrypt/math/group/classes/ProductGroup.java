@@ -43,6 +43,11 @@ public class ProductGroup extends ProductMonoid implements Group {
   }
 
   @Override
+  public Group getFirst() {
+    return (Group) this.getFirst();
+  }
+
+  @Override
   public Group getAt(final int index) {
     return (Group) this.getAt(index);
   }
@@ -53,13 +58,13 @@ public class ProductGroup extends ProductMonoid implements Group {
   }
 
   @Override
-  public Group getFirst() {
-    return (Group) this.getFirst();
+  public Group[] getAll() {
+    return (Group[]) this.getAll();
   }
 
   @Override
-  public Group removeAt(final int index) {
-    return (Group) this.removeAt(index);
+  public ProductGroup removeAt(final int index) {
+    return (ProductGroup) this.removeAt(index);
   }
 
   @Override

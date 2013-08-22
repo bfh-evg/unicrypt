@@ -39,7 +39,7 @@ public class PedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme
         || !ddhGroup.contains(otherGenerator)) {
       throw new IllegalArgumentException();
     }
-    final ZPlusMod orderGroup = ddhGroup.getOrderGroup();
+    final ZPlusMod orderGroup = ddhGroup.getZPlusModOrder();
     this.messageSpace = orderGroup;
     this.randomizationSpace = orderGroup;
     this.commitmentSpace = ddhGroup;

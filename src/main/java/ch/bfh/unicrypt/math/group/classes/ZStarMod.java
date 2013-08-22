@@ -35,9 +35,8 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
    * of the static nested class Factory.
    * @param modulus The given modulus
    */
-  protected ZStarMod(final BigInteger modulus) {
-    this.modulus = modulus;
-    this.moduloFactorization = new Factorization();
+  private ZStarMod(final BigInteger modulus) {
+    this(modulus, new Factorization());
   }
 
   /**
@@ -45,9 +44,8 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
    * of the static nested class Factory.
    * @param factorization The given factorization
    */
-  protected ZStarMod(final Factorization factorization) {
-    this.modulus = factorization.getValue();
-    this.moduloFactorization = factorization;
+  private ZStarMod(final Factorization factorization) {
+    this(factorization.getValue(), factorization);
   }
 
   /**
@@ -56,7 +54,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
    * @param modulus The given modulus
    * @param factorization The given factorization
    */
-  protected ZStarMod(final BigInteger modulus, final Factorization factorization) {
+  private ZStarMod(final BigInteger modulus, final Factorization factorization) {
     this.modulus = modulus;
     this.moduloFactorization = factorization;
   }
@@ -65,7 +63,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
    * Returns the modulus if this group.
    * @return The modulus
    */
-  public BigInteger getModulus() {
+  public final BigInteger getModulus() {
     return this.modulus;
   }
 
@@ -74,7 +72,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
    * factorization implies that the group order is unknown in such a case.
    * @return The prime factorization
    */
-  public Factorization getModuloFactorization() {
+  public final Factorization getModuloFactorization() {
     return this.moduloFactorization;
   }
 
@@ -128,7 +126,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
     if (value == null) {
       throw new IllegalArgumentException();
     }
-    return value.signum() >= 0 && value.compareTo(this.getModulus()) < 0 && value.gcd(this.getModulus()).equals(BigInteger.ONE);
+    return value.signum() >= 0 && value.compareTo(this.getModulus()) < 0 && MathUtil.areRelativelyPrime(value, this.getModulus());
   }
 
   @Override

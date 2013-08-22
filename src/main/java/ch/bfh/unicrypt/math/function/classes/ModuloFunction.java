@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -19,9 +20,14 @@ public class ModuloFunction extends AbstractFunction {
 
   private BigInteger modulus;
 
-  private ModuloFunction(final Group domain, final Group coDomain, final BigInteger modulus) {
+  private ModuloFunction(final Set domain, final ZPlusMod coDomain, final BigInteger modulus) {
     super(domain, coDomain);
     this.modulus = modulus;
+  }
+
+  @Override
+  public ZPlusMod getCoDomain() {
+    return (ZPlusMod) this.getCoDomain();
   }
 
   public BigInteger getModulus() {
@@ -46,7 +52,7 @@ public class ModuloFunction extends AbstractFunction {
    * @param domain The given Group
    * @throws IllegalArgumentException if the group is null
    */
-  public static ModuloFunction getInstance(final Group domain, BigInteger modulus) {
+  public static ModuloFunction getInstance(final Set domain, BigInteger modulus) {
     return new ModuloFunction(domain, ZPlusMod.getInstance(modulus), modulus);
   }
 

@@ -165,6 +165,10 @@ public class ProductSet extends AbstractSet implements Set {
     return this.sets.length <= 1;
   }
 
+  public Set getFirst() {
+    return this.getAt(0);
+  }
+
   /**
    * Returns the set for the given index. The indices are numbered from 0 to the
    * set's arity minus one.
@@ -211,8 +215,16 @@ public class ProductSet extends AbstractSet implements Set {
     return set;
   }
 
-  public Set getFirst() {
-    return this.getAt(0);
+  /**
+   * Returns an array of length {@code this.getArity()} containing all the
+   * sets of which {@code this} set is composed of.
+   */
+  public Set[] getAll() {
+    Set[] result = new Set[this.getArity()];
+    for (int index = 0; index < this.getArity(); index++) {
+      result[index] = this.getAt(index);
+    }
+    return result;
   }
 
   /**
@@ -224,7 +236,7 @@ public class ProductSet extends AbstractSet implements Set {
    * @throws IndexOutOfBoundsException if
    * {@code index<0} or {@code index>arity-1}
    */
-  public Set removeAt(final int index) {
+  public ProductSet removeAt(final int index) {
     if (index < 0 || index > this.getArity() - 1) {
       throw new IndexOutOfBoundsException();
     }

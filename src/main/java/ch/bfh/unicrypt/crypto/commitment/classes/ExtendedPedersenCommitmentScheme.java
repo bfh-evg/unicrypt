@@ -37,7 +37,7 @@ public class ExtendedPedersenCommitmentScheme extends AbstractRandomizedCommitme
       throw new IllegalArgumentException();
     }
     this.arity = generators.size();
-    final ZPlusMod orderGroup = ddhGroup.getOrderGroup();
+    final ZPlusMod orderGroup = ddhGroup.getZPlusModOrder();
     this.messageSpace = orderGroup;
     this.messagesSpace = new PowerGroup(orderGroup, this.arity);
     this.randomizationSpace = orderGroup;

@@ -40,8 +40,13 @@ public class ProductMonoid extends ProductSemiGroup implements Monoid {
   }
 
   @Override
-  public Monoid removeAt(final int index) {
-    return (Monoid) this.removeAt(index);
+  public Monoid[] getAll() {
+    return (Monoid[]) this.getAll();
+  }
+
+  @Override
+  public ProductMonoid removeAt(final int index) {
+    return (ProductMonoid) this.removeAt(index);
   }
 
   @Override

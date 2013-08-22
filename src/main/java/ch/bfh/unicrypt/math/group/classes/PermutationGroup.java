@@ -47,11 +47,11 @@ public class PermutationGroup extends AbstractGroup {
    * which represents the trivial case of an empty permutation.
    * @return The permutation size
    */
-  public int getSize() {
+  public final int getSize() {
     return this.size;
   }
 
-  public Permutation getPermutation(Element element) {
+  public final Permutation getPermutation(Element element) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }

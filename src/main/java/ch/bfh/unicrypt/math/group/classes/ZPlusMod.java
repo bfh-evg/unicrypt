@@ -36,7 +36,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
    * Returns the modulus if this group.
    * @return The modulus
    */
-  public BigInteger getModulus() {
+  public final BigInteger getModulus() {
     return this.modulus;
   }
 

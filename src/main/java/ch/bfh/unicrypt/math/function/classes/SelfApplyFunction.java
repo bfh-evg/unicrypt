@@ -2,9 +2,13 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.group.classes.NPlus;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
+import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.classes.ZPlus;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -22,7 +26,7 @@ import java.util.Random;
  */
 public class SelfApplyFunction extends AbstractFunction {
 
-  private SelfApplyFunction(final Group domain, final Group coDomain) {
+  private SelfApplyFunction(final ProductSet domain, final SemiGroup coDomain) {
     super(domain, coDomain);
   }
 
@@ -43,17 +47,17 @@ public class SelfApplyFunction extends AbstractFunction {
    * This is a special constructor, where the group of the second parameter is selected automatically
    * from the given group.
    *
-   * @param group The underlying group
+   * @param semiGroup The underlying group
    * @throws IllegalArgumentException if {@code group} is null
    */
-  public static SelfApplyFunction getInstance(final Group group) {
-    if (group == null) {
+  public static SelfApplyFunction getInstance(final SemiGroup semiGroup) {
+    if (semiGroup == null) {
       throw new IllegalArgumentException();
     }
-    if (group.getOrder() == Group.INFINITE_ORDER || group.getOrder() == Group.UNKNOWN_ORDER) {
-      return SelfApplyFunction.getInstance(group, ZPlus.getInstance());
+    if (semiGroup.getOrder() == Set.INFINITE_ORDER || semiGroup.getOrder() == Set.UNKNOWN_ORDER) {
+      return SelfApplyFunction.getInstance(semiGroup, NPlus.getInstance());
     }
-    return SelfApplyFunction.getInstance(group, group.getOrderGroup());
+    return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZPlusModOrder());
   }
 
   /**
@@ -61,16 +65,16 @@ public class SelfApplyFunction extends AbstractFunction {
    * and the second parameter is the atomic group, from which an element is needed to determine the number
    * of times the group operation is applied.
    *
-   * @param group The underlying group
-   * @param amountGroup
+   * @param semiGroup The underlying group
+   * @param amountSet
    * @throws IllegalArgumentException if {@code group} is null
    * @throws IllegalArgumentException if {@code amountGroup} is negative
    */
-  public static SelfApplyFunction getInstance(final Group group, final Group amountGroup) {
-    if (group == null || amountGroup == null) {
+  public static SelfApplyFunction getInstance(final SemiGroup semiGroup, final Set amountSet) {
+    if (semiGroup == null || amountSet == null) {
       throw new IllegalArgumentException();
     }
-    return new SelfApplyFunction(ProductGroup.getInstance(group, amountGroup), group);
+    return new SelfApplyFunction(ProductSet.getInstance(semiGroup, amountSet), semiGroup);
   }
 
 }

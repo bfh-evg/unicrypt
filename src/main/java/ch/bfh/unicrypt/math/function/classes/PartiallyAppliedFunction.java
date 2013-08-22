@@ -3,7 +3,9 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -16,7 +18,7 @@ import java.util.Random;
  *
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public class PartiallyAppliedFunction extends AbstractFunction {
 
@@ -34,11 +36,16 @@ public class PartiallyAppliedFunction extends AbstractFunction {
    * @throws IndexOutOfBoundsException if the {@code index} is negative or > the arity of the function's domain
    * @throws IllegalArgumentException if the {@code element} is not an element of the corresponding group
    */
-  private PartiallyAppliedFunction(final Group domain, final Group coDomain, final Function parentFunction, final Element parameter, final int index) {
+  private PartiallyAppliedFunction(final ProductSet domain, final Set coDomain, final Function parentFunction, final Element parameter, final int index) {
     super(domain, coDomain);
     this.parentFunction = parentFunction;
     this.parameter = parameter;
     this.index = index;
+  }
+
+  @Override
+  public ProductSet getDomain() {
+    return (ProductSet) this.getDomain();
   }
 
   /**
@@ -80,7 +87,7 @@ public class PartiallyAppliedFunction extends AbstractFunction {
       }
       allElements[this.getIndex()] = this.getParameter();
     }
-    return this.getFunction().apply(allElements, random);
+    return this.getParentFunction().apply(allElements, random);
   }
 
   //
@@ -97,14 +104,14 @@ public class PartiallyAppliedFunction extends AbstractFunction {
    * @throws IndexOutOfBoundsException if the {@code index} is negative or > the arity of the function's domain
    * @throws IllegalArgumentException if the {@code element} is not an element of the corresponding group
    */
-  public static PartiallyAppliedFunction getInstance(final Function parentfunction, final Element element, final int index) {
-    if (parentfunction == null) {
+  public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element, final int index) {
+    if (parentFunction == null) {
       throw new IllegalArgumentException();
     }
-    if (!parentfunction.getDomain().getAt(index).contains(element)) {
+    if (parentFunction.getDomain().isAtomic() || !((ProductSet) parentFunction.getDomain()).getAt(index).contains(element)) {
       throw new IllegalArgumentException();
     }
-    return new PartiallyAppliedFunction(parentfunction.getDomain().removeAt(index), parentfunction.getCoDomain(), parentfunction, element, index);
+    return new PartiallyAppliedFunction(((ProductSet) parentFunction.getDomain()).removeAt(index), parentFunction.getCoDomain(), parentFunction, element, index);
   }
 
 }

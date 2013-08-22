@@ -19,7 +19,7 @@ public class StandardBlindingScheme extends AbstractBlindingScheme {
     if (blindingSpace == null)
       throw new IllegalArgumentException();
     this.blindingSpace = blindingSpace;
-    this.blindingValueSpace = blindingSpace.getOrderGroup();
+    this.blindingValueSpace = blindingSpace.getZPlusModOrder();
     this.blindingFunction = new SelfApplyFunction(this.blindingSpace, this.blindingValueSpace);
   }
 

@@ -2,7 +2,9 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.group.classes.ProductCyclicGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
+import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Monoid;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
@@ -28,8 +30,13 @@ public class ConstantFunction extends AbstractFunction {
    * @throws IllegalArgumentException if {@code element} is null
    */
   private ConstantFunction(Set coDomain, Element element) {
-    super(ProductGroup.getInstance(), coDomain);
+    super(ProductCyclicGroup.getInstance(), coDomain);
     this.element = element;
+  }
+
+  @Override
+  public ProductCyclicGroup getDomain() {
+    return (ProductCyclicGroup) this.getDomain();
   }
 
   @Override

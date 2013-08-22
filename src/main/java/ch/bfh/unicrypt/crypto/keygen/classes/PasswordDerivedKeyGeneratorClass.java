@@ -83,7 +83,7 @@ public class PasswordDerivedKeyGeneratorClass extends KeyGeneratorAbstract imple
       byte[] salt = element.getAt(1).getValue().toByteArray();
       Key key = null;
       try {
-        int keySizeInBits = ((int) Math.ceil((this.getCoDomain().getOrderGroup().getModulus().bitLength() + 1) / 8)) * 8;       
+        int keySizeInBits = ((int) Math.ceil((this.getCoDomain().getZPlusModOrder().getModulus().bitLength() + 1) / 8)) * 8;       
         key = AESUtil.generateKey(password, salt, this.iterationAmount, keySizeInBits);
       } catch (Exception e) {
         throw new IllegalArgumentException();

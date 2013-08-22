@@ -2,7 +2,9 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
 import java.util.Random;
 
 /**
@@ -20,6 +22,16 @@ public class InvertFunction extends AbstractFunction {
 
   private InvertFunction(final Group domain, Group coDomain) {
     super(domain, coDomain);
+  }
+
+  @Override
+  public Group getDomain() {
+    return (Group) this.getDomain();
+  }
+
+  @Override
+  public Group getCoDomain() {
+    return (Group) this.getCoDomain();
   }
 
   //

@@ -4,7 +4,11 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
+import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
+import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import java.util.Random;
 
@@ -21,8 +25,26 @@ import java.util.Random;
  */
 public class PermutationFunction extends AbstractFunction {
 
-  private PermutationFunction(final Group domain, final Group coDomain) {
+  private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {
     super(domain, coDomain);
+  }
+
+  /**
+   * Returns the permutation group of size n, which is need to conduct the actual permutation.
+   * @return The permutation group
+   */
+  public PermutationGroup getPermutationGroup() {
+    return (PermutationGroup) this.getDomain().getAt(1);
+  }
+
+  @Override
+  public ProductSet getDomain() {
+    return (ProductSet) this.getDomain();
+  }
+
+  @Override
+  public ProductSet getCoDomain() {
+    return (ProductSet) this.getCoDomain();
   }
 
   //
@@ -43,14 +65,6 @@ public class PermutationFunction extends AbstractFunction {
     return this.getCoDomain().getElement(result);
   }
 
-  /**
-   * Returns the permutation group of size n, which is need to conduct the actual permutation.
-   * @return The permutation group
-   */
-  public PermutationGroup getPermutationGroup() {
-    return (PermutationGroup) this.getDomain().getAt(1);
-  }
-
   //
   // STATIC FACTORY METHODS
   //
@@ -58,29 +72,29 @@ public class PermutationFunction extends AbstractFunction {
   /**
    * This is the general constructor of this class, which construct a permutation function from a
    * given group and for the specified arity.
-   * @param group The given group
+   * @param set The given group
    * @param arity The arity of the tuple elements to permute
    * @throws IllegalArgumentException if {@code group} is null
    * @throws IllegalArgumentException if {@code arity} is negative
    */
-  public static PermutationFunction getInstance(final Group group, final int arity) {
-    if (group == null || arity < 0) {
+  public static PermutationFunction getInstance(final Set set, final int arity) {
+    if (set == null || arity < 0) {
       throw new IllegalArgumentException();
     }
-    return PermutationFunction.getInstance(ProductGroup.getInstance(group, arity));
+    return PermutationFunction.getInstance(ProductSet.getInstance(set, arity));
   }
 
   /**
    * This is a special constructor of this class, which deals with the particular case, where a product
    * group is given from the beginning.
-   * @param group The given power group
+   * @param productSet The given power group
    * @throws IllegalArgumentException if {@code group} is null
    */
-  public static PermutationFunction getInstance(final Group group) {
-    if (group == null || !group.isPower()) {
+  public static PermutationFunction getInstance(final ProductSet productSet) {
+    if (productSet == null || !productSet.isPower()) {
       throw new IllegalArgumentException();
     }
-    return new PermutationFunction(ProductGroup.getInstance(group, PermutationGroup.getInstance(group.getArity())), group);
+    return new PermutationFunction(ProductSet.getInstance(productSet, PermutationGroup.getInstance(productSet.getArity())), productSet);
   }
 
 }

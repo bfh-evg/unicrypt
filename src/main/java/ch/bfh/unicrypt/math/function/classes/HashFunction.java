@@ -2,8 +2,10 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.group.classes.BooleanGroup;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -33,10 +35,15 @@ public class HashFunction extends AbstractFunction {
   private MessageDigest messageDigest;
   private boolean recursiveHash;
 
-  private HashFunction(Group domain, Group coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
+  private HashFunction(Set domain, ZPlusMod coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
     super(domain, coDomain);
     this.messageDigest = messageDigest;
     this.recursiveHash = recursiveHash;
+  }
+
+  @Override
+  public ZPlusMod getCoDomain() {
+    return (ZPlusMod) this.getCoDomain();
   }
 
   @Override
@@ -61,11 +68,11 @@ public class HashFunction extends AbstractFunction {
   /**
    * This constructor generates a standard SHA-256 hash function. The order of the co-domain is 2^256.
    */
-  public static HashFunction getInstance(Group domain) {
+  public static HashFunction getInstance(Set domain) {
     return HashFunction.getInstance(domain, Element.STANDARD_HASH_ALGORITHM, false);
   }
 
-  public static HashFunction getInstance(Group domain, boolean recursiveHash) {
+  public static HashFunction getInstance(Set domain, boolean recursiveHash) {
     return HashFunction.getInstance(domain, Element.STANDARD_HASH_ALGORITHM, recursiveHash);
   }
 
@@ -75,11 +82,11 @@ public class HashFunction extends AbstractFunction {
    * @param hashAlgorithm The name of the hash algorithm
    * @throws IllegalArgumentException if {@code algorithmName} is null or an unknown hash algorithm name
    */
-  public static HashFunction getInstance(Group domain, final String hashAlgorithm) {
+  public static HashFunction getInstance(Set domain, final String hashAlgorithm) {
     return HashFunction.getInstance(domain, hashAlgorithm, false);
   }
 
-  public static HashFunction getInstance(Group domain, final String hashAlgorithm, boolean recursiveHash) {
+  public static HashFunction getInstance(Set domain, final String hashAlgorithm, boolean recursiveHash) {
     if (hashAlgorithm == null) {
       throw new IllegalArgumentException();
     }
@@ -92,7 +99,7 @@ public class HashFunction extends AbstractFunction {
     return HashFunction.getInstance(domain, messageDigest, recursiveHash);
   }
 
-  public static HashFunction getInstance(Group domain, final MessageDigest messageDigest) {
+  public static HashFunction getInstance(Set domain, final MessageDigest messageDigest) {
     return HashFunction.getInstance(domain, messageDigest, false);
   }
 
@@ -107,7 +114,7 @@ public class HashFunction extends AbstractFunction {
    * @return The resulting hash function
    * @throws IllegalArgumentException if {@code domain} or {@code messageDigest} is null
    */
-  public static HashFunction getInstance(Group domain, final MessageDigest messageDigest, boolean recursiveHash) {
+  public static HashFunction getInstance(Set domain, final MessageDigest messageDigest, boolean recursiveHash) {
     if (domain == null || messageDigest == null) {
       throw new IllegalArgumentException();
     }

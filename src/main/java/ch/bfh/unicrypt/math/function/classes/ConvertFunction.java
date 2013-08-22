@@ -3,6 +3,7 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Random;
  */
 public class ConvertFunction extends AbstractFunction {
 
-  private ConvertFunction(final Group domain, final Group coDomain) {
+  private ConvertFunction(final Set domain, final Set coDomain) {
     super(domain, coDomain);
   }
 
@@ -32,7 +33,7 @@ public class ConvertFunction extends AbstractFunction {
    * @return The resulting function
    * @throws IllegalArgumentException if the domain or coDomain is null
    */
-  public static ConvertFunction getInstance(final Group domain, final Group coDomain) {
+  public static ConvertFunction getInstance(final Set domain, final Set coDomain) {
     return new ConvertFunction(domain, coDomain);
   }
 

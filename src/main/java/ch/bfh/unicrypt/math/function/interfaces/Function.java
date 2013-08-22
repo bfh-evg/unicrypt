@@ -94,29 +94,6 @@ public interface Function {
   public Element apply(Element[] elements, Random random);
 
   /**
-   * The arity of a function is the number of functions applied in parallel when
-   * calling the function. For arity<>1, the arity corresponds to the arity of
-   * both the domain and the co-domain of the funciton.
-   *
-   * @return The function's arity
-   */
-  public int getArity();
-
-  /**
-   * Returns the arity of the domain and the input elements.
-   *
-   * @return The input arity
-   */
-  public int getArityIn();
-
-  /**
-   * Returns the arity of the co-domain and the output elements.
-   *
-   * @return The output arity
-   */
-  public int getArityOut();
-
-  /**
    * Returns the domain of this function.
    *
    * @return The domain
@@ -131,65 +108,12 @@ public interface Function {
   public Set getCoDomain();
 
   /**
-   * Returns the function at index 0.
-   *
-   * @return The function at index 0
-   * @throws UnsupportedOperationException for functions of arity 0
-   */
-  public Function getFunction();
-
-  /**
-   * Returns the function at the given index.
-   *
-   * @param index The given index
-   * @return The corresponding function
-   * @throws IndexOutOfBoundsException if {
-   * @ode index} is an invalid index
-   */
-  public Function getFunctionAt(int index);
-
-  /**
-   * Select and returns in a hierarchy of composed function the function that
-   * corresponds to a given sequence of indices. (e.g., 0,3,2 for the third
-   * function in the fourth composed function of the first composed function).
-   * Returns {@code this} function if {@code indices} is empty.
-   *
-   * @param indices The given sequence of indices
-   * @return The corresponding function
-   * @throws IllegalArgumentException if {
-   * @ode indices} is null or if its length exceeds the hierarchy's depth
-   * @throws IndexOutOfBoundsException if {
-   * @ode indices} contains an out-of-bounds index
-   */
-  public Function getFunctionAt(int... indices);
-
-  /**
    * A function is atomic, if it is not composed of multiple internal functions
    * that are applied in parallel.
    *
    * @return {@code true} if the function is atomic, {@code false} otherwise
    */
-  public boolean isAtomicFunction();
-
-  /**
-   * An empty function is a very special non-atomic function consisting of zero
-   * internal functions. This implies that both the domain and the co-domain are
-   * empty groups, and that the function simply maps the empty element into the
-   * empty element.
-   *
-   * @return {@code true} if the function is empty, {@code false} otherwise
-   */
-  public boolean isEmptyFunction();
-
-  /**
-   * Checks if function is composed of multiple copies of the same function.
-   * Such a function is called power function. All functions of arity 1 or less
-   * are power funcitons.
-   *
-   * @return {@code true}, if the function is a power function, {@code false}
-   * otherwise
-   */
-  public boolean isPowerFunction();
+  public boolean isAtomic();
 
   /**
    * This method applies a single input value to a given function. The result is
@@ -204,4 +128,5 @@ public interface Function {
    * @throws IndexOutOfBoundsException if {@code index} is an invalid index
    */
   public Function partiallyApply(Element element, int index);
+
 }

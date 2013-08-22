@@ -6,6 +6,8 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.group.classes.ZStarMod;
+import ch.bfh.unicrypt.math.group.classes.ZTimesMod;
 
 /**
  * This interface represents the concept a mathematical set of elements.
@@ -42,6 +44,13 @@ public interface Set extends Serializable {
   public BigInteger getOrder();
 
   /**
+   * Returns a lower bound for the group order in case the exact group order is unknown. The least return value is 1.
+   * Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
+   * @return A lower bound for the group order.
+   */
+  public BigInteger getMinOrder();
+
+  /**
    * Checks if the set is of order 0.
    * @return {@code true} if the order is 0, {@code false} otherwise
    */
@@ -59,22 +68,23 @@ public interface Set extends Serializable {
    * @return The resulting additive group.
    * @throws UnsupportedOperationException if the group order is infinite or unknown
    */
-  public ZPlusMod getOrderGroup();
+  public ZPlusMod getZPlusModOrder();
 
   /**
-   * Returns a lower bound for the group order in case the exact group order is unknown. The least return value is 1.
-   * Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
-   * @return A lower bound for the group order.
+   * Returns an multiplicative integer group of type {@link ZTimesMod} with the same group order. For this to work, the group
+   * order must be finite and known.
+   * @return The resulting multiplicative group.
+   * @throws UnsupportedOperationException if the group order is infinite or unknown
    */
-  public BigInteger getMinOrder();
+  public ZTimesMod getZTimesModOrder();
 
   /**
-   * Returns an additive integer group of type {@link ZPlusMod}. Its order corresponds to {@link #getMinOrder()}.
-   * For this to work, the lower bound of the group order must be finite.
-   * @return The resulting additive group
-   * @throws UnsupportedOperationException if the lower bound of the group order is infinite
+   * Returns an multiplicative integer group of type {@link ZTimesMod} with the same group order. For this to work, the group
+   * order must be finite and known.
+   * @return The resulting multiplicative group.
+   * @throws UnsupportedOperationException if the group order is infinite or unknown
    */
-  public ZPlusMod getMinOrderGroup();
+  public ZStarMod getZStarModOrder();
 
   /**
    * Checks if {@code this} set contains an element that corresponds to a given

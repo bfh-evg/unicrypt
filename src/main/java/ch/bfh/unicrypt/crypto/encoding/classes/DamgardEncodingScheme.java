@@ -19,7 +19,7 @@ public class DamgardEncodingScheme extends AbstractEncodingScheme {
     if (zPrimSave == null) {
       throw new IllegalArgumentException();
     }
-    final ZPlusMod orderGroup = zPrimSave.getOrderGroup();
+    final ZPlusMod orderGroup = zPrimSave.getZPlusModOrder();
     this.encodingFunction = new EncodingFunction(orderGroup, zPrimSave);
     this.decodingFunction = new DecodingFunction(zPrimSave, orderGroup);
   }

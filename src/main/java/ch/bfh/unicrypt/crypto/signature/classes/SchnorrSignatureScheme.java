@@ -64,7 +64,7 @@ public class SchnorrSignatureScheme extends AbstractRandomizedSignatureScheme {
     if ((ddhGroup == null) || (generator == null) || !ddhGroup.contains(generator)) {
       throw new IllegalArgumentException();
     }
-    this.zPlusMod = ddhGroup.getOrderGroup();
+    this.zPlusMod = ddhGroup.getZPlusModOrder();
     this.ddhGroup = ddhGroup;
     this.generator = generator;
 

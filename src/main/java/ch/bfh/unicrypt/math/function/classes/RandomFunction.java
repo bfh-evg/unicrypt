@@ -2,8 +2,11 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.group.classes.ProductCyclicGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
+import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -17,8 +20,13 @@ import java.util.Random;
  */
 public class RandomFunction extends AbstractFunction {
 
-  private RandomFunction(final Group domain, final Group coDomain) {
-    super(domain, coDomain);
+  private RandomFunction(final Set coDomain) {
+    super(ProductCyclicGroup.getInstance(), coDomain);
+  }
+
+  @Override
+  public ProductCyclicGroup getDomain() {
+    return (ProductCyclicGroup) this.getDomain();
   }
 
   //
@@ -37,14 +45,14 @@ public class RandomFunction extends AbstractFunction {
   /**
    * This is the general constructor of this class. It creates a function that generates random elements
    * from a given group.
-   * @param group The given group
+   * @param set The given group
    * @throws IllegalArgumentException if {@code group} is null
    */
-  public static RandomFunction getInstance(final Group group) {
-    if (group == null) {
+  public static RandomFunction getInstance(final Set set) {
+    if (set == null) {
       throw new IllegalArgumentException();
     }
-    return new RandomFunction(ProductGroup.getInstance(), group);
+    return new RandomFunction(set);
   }
 
 }

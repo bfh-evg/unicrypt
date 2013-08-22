@@ -3,7 +3,9 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
+import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
 import java.util.Random;
 
 /**
@@ -23,8 +25,18 @@ import java.util.Random;
  */
 public class ApplyFunction extends AbstractFunction {
 
-  private ApplyFunction(final Group domain, final Group coDomain) {
+  private ApplyFunction(final ProductSemiGroup domain, final SemiGroup coDomain) {
     super(domain, coDomain);
+  }
+
+  @Override
+  public ProductSemiGroup getDomain() {
+    return (ProductSemiGroup) this.getDomain();
+  }
+
+  @Override
+  public SemiGroup getCoDomain() {
+    return (SemiGroup) this.getCoDomain();
   }
 
   @Override
@@ -40,8 +52,8 @@ public class ApplyFunction extends AbstractFunction {
    * @return The resulting function
    * @throws IllegalArgumentException if {@code group} is null
    */
-  public static ApplyFunction getInstance(final Group group) {
-    return ApplyFunction.getInstance(group, 2);
+  public static ApplyFunction getInstance(final SemiGroup semiGroup) {
+    return ApplyFunction.getInstance(semiGroup, 2);
   }
 
   /**
@@ -49,17 +61,17 @@ public class ApplyFunction extends AbstractFunction {
    * the group on which it operates, and the second parameter is the number of
    * input elements.
    *
-   * @param group The group on which this function operates
+   * @param semiGroup The group on which this function operates
    * @param arity The number of input elements
    * @return The resulting function
    * @throws IllegalArgumentException if {@code group} is null
    * @throws IllegalArgumentException if {@code arity} is negative
    */
-  public static ApplyFunction getInstance(final Group group, final int arity) {
-    if (group == null || arity < 0) {
+  public static ApplyFunction getInstance(final SemiGroup semiGroup, final int arity) {
+    if (semiGroup == null || arity < 0) {
       throw new IllegalArgumentException();
     }
-    return new ApplyFunction(ProductGroup.getInstance(group, arity), group);
+    return new ApplyFunction(ProductSemiGroup.getInstance(semiGroup, arity), semiGroup);
   }
 
 }

@@ -2,7 +2,9 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -17,13 +19,18 @@ public class SelectionFunction extends AbstractFunction {
 
   private final int[] indices;
 
-  private SelectionFunction(final Group domain, final Group coDomain, int[] indices) {
+  private SelectionFunction(final ProductSet domain, final Set coDomain, int[] indices) {
     super(domain, coDomain);
     this.indices = indices;
   }
 
   public int[] getIndices() {
     return this.indices;
+  }
+
+  @Override
+  public ProductSet getDomain() {
+    return (ProductSet) this.getDomain();
   }
 
   //
@@ -43,17 +50,17 @@ public class SelectionFunction extends AbstractFunction {
    * This is the general constructor of this class. The resulting function selects and returns in a hierarchy of
    * tuple elements the element that corresponds to a given sequence of indices (e.g., 0,3,2 for the third element
    * in the fourth tuple element of the first tuple element).
-   * @param group The product group that defines the domain of the function
+   * @param productSet The product group that defines the domain of the function
    * @param indices The given sequence of indices
    * @throws IllegalArgumentException of {@code group} is null
    * @throws IllegalArgumentException if {@code indices} is null or if its length exceeds the hierarchy's depth
    * @throws IndexOutOfBoundsException if {@code indices} contains an out-of-bounds index
    */
-  public static SelectionFunction getInstance(final Group group, final int... indices) {
-    if (group == null) {
+  public static SelectionFunction getInstance(final ProductSet productSet, final int... indices) {
+    if (productSet == null) {
       throw new IllegalArgumentException();
     }
-    return new SelectionFunction(group, group.getAt(indices), indices);
+    return new SelectionFunction(productSet, productSet.getAt(indices), indices);
   }
 
 }

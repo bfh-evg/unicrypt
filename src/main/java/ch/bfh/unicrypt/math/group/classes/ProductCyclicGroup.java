@@ -31,6 +31,11 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
   }
 
   @Override
+  public CyclicGroup getFirst() {
+    return (CyclicGroup) this.getFirst();
+  }
+
+  @Override
   public CyclicGroup getAt(final int index) {
     return (CyclicGroup) this.getAt(index);
   }
@@ -41,13 +46,13 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
   }
 
   @Override
-  public CyclicGroup getFirst() {
-    return (CyclicGroup) this.getFirst();
+  public CyclicGroup[] getAll() {
+    return (CyclicGroup[]) this.getAll();
   }
 
   @Override
-  public CyclicGroup removeAt(final int index) {
-    return (CyclicGroup) this.removeAt(index);
+  public ProductCyclicGroup removeAt(final int index) {
+    return (ProductCyclicGroup) this.removeAt(index);
   }
 
   @Override
