@@ -29,8 +29,8 @@ public final class CompositeFunction extends AbstractCompoundFunction {
   @Override
   protected final Element abstractApply(final Element element, final Random random) {
     Element result = element;
-    for (int i = 0; i < this.getArity(); i++) {
-      result = this.getAt(i).apply(result, random);
+    for (Function function: this) {
+      result = function.apply(result, random);
     }
     return result;
   }

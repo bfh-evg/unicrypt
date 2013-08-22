@@ -38,7 +38,6 @@ import java.util.List;
 public abstract class Element implements Serializable {
 
   private static final long serialVersionUID = 1L;
-
   public static final String STANDARD_HASH_ALGORITHM = "SHA-256";
   private final Set set;
   private BigInteger value;
@@ -255,68 +254,11 @@ public abstract class Element implements Serializable {
     return this.value;
   }
 
-  public final Element getFirst() {
-     return this.getAt(0);
+  public final byte[] getHashValue() {
+    return this.getHashValue(Element.STANDARD_HASH_ALGORITHM);
   }
 
-  /**
-   * Returns the element with the given index. The indices are numbered from 0
-   * to the element's arity minus one.
-   *
-   * @param index The given index
-   * @return The corresponding element
-   * @throws IndexOutOfBoundsException if
-   * {@code index<0} or {@code index>arity-1}
-   */
-  public final Element getAt(final int index) {
-    if (index < 0 || index >= this.getArity()) {
-      throw new IndexOutOfBoundsException();
-    }
-    return standardGetAt(index);
-  }
-
-  /**
-   * Selects and returns in a hierarchy of elements the element that corresponds
-   * to a given array of indices (e.g., 0,3,2 for the third element in the
-   * fourth element of the first element). Returns {@code this} element if
-   * {@code indices} is empty.
-   *
-   * @param indices The given array of indices
-   * @return The corresponding element
-   * @throws IllegalArgumentException if {@code indices} is null or if its
-   * length does exceed the hierarchy's depth
-   * @throws IndexOutOfBoundsException if {@code indices} contains an
-   * out-of-bounds index
-   */
-  public final Element getAt(final int... indices) {
-    if (indices == null) {
-      throw new IllegalArgumentException();
-    }
-    Element element = this;
-    for (final int index : indices) {
-      element = element.getAt(index);
-    }
-    return element;
-  }
-
-  /**
-   * Returns an array of length {@code this.getArity()} containing all the
-   * elements of which {@code this} element is composed of. If the arity is 1,
-   * the array contains only {@code this}.
-   */
-  public final Element[] getAll() {
-    Element[] result = new Element[this.getArity()];
-    for (int index = 0; index < this.getArity(); index++) {
-      result[index] = this.getAt(index);
-    }
-    return result;
-  }
-
-  public final byte[] hashValue() {
-    return this.hashValue(Element.STANDARD_HASH_ALGORITHM);
-  }
-
-  public final byte[] hashValue(String hashAlgorithm) {
+  public final byte[] getHashValue(String hashAlgorithm) {
     if (hashAlgorithm == null) {
       throw new IllegalArgumentException();
     }
@@ -326,10 +268,10 @@ public abstract class Element implements Serializable {
     } catch (final NoSuchAlgorithmException e) {
       throw new IllegalArgumentException();
     }
-    return this.hashValue(messageDigest);
+    return this.getHashValue(messageDigest);
   }
 
-  public byte[] hashValue(MessageDigest messageDigest) {
+  public byte[] getHashValue(MessageDigest messageDigest) {
     if (messageDigest == null) {
       throw new IllegalArgumentException();
     }
@@ -337,11 +279,11 @@ public abstract class Element implements Serializable {
     return messageDigest.digest(this.getValue().toByteArray());
   }
 
-  public byte[] recursiveHashValue() {
-    return this.recursiveHashValue(Element.STANDARD_HASH_ALGORITHM);
+  public byte[] getRecursiveHashValue() {
+    return this.getRecursiveHashValue(Element.STANDARD_HASH_ALGORITHM);
   }
 
-  public byte[] recursiveHashValue(String hashAlgorithm) {
+  public byte[] getRecursiveHashValue(String hashAlgorithm) {
     if (hashAlgorithm == null) {
       throw new IllegalArgumentException();
     }
@@ -351,54 +293,19 @@ public abstract class Element implements Serializable {
     } catch (final NoSuchAlgorithmException e) {
       throw new IllegalArgumentException();
     }
-    return this.recursiveHashValue(messageDigest);
+    return this.getRecursiveHashValue(messageDigest);
   }
 
-  public byte[] recursiveHashValue(MessageDigest messageDigest) {
+  public byte[] getRecursiveHashValue(MessageDigest messageDigest) {
     if (messageDigest == null) {
       throw new IllegalArgumentException();
     }
-    messageDigest.reset();
-    if (this.getArity() == 1) {
-      return messageDigest.digest(this.getValue().toByteArray());
-    }
-    byte[][] hashValues = new byte[this.getArity()][];
-    for (int i = 0; i < this.getArity(); i++) {
-      hashValues[i] = this.getAt(i).recursiveHashValue(messageDigest);
-    }
-    for (int i = 0; i < this.getArity(); i++) {
-      messageDigest.update(hashValues[i]);
-    }
-    return messageDigest.digest();
+    return standardGetRecursiveHashValue(messageDigest);
   }
 
   //
   // The following methods are equivalent to corresponding Set methods
   //
-
-  /**
-   * @see Group#getArity()
-   */
-  public final int getArity() {
-    ProductSet productSet = this.getProductSet();
-    return productSet.getArity();
-  }
-
-  /**
-   * @see Group#isNull()
-   */
-  public final boolean isNull() {
-    ProductSet productSet = this.getProductSet();
-    return productSet.isNull();
-  }
-
-  /**
-   * @see Group#isAtomicGroup()
-   */
-  public final boolean isAtomic() {
-    return this.set.isAtomic();
-  }
-
   /**
    * @see Group#apply(Element, Element)
    */
@@ -571,7 +478,6 @@ public abstract class Element implements Serializable {
   // The standard implementations of the following three methods are
   // insufficient for elements.
   //
-
   @Override
   public final boolean equals(final Object object) {
     if (this == object) {
@@ -606,17 +512,16 @@ public abstract class Element implements Serializable {
   //
   // The following protected methods are standard implementations, which may change in sub-classes
   //
-
   protected BigInteger standardGetValue() {
-    throw new UnsupportedOperationException();
-  }
-
-  protected Element standardGetAt(final int index) {
     throw new UnsupportedOperationException();
   }
 
   protected boolean standardEquals(Element element) {
     return this.getValue().equals(element.getValue());
+  }
+
+  protected byte[] standardGetRecursiveHashValue(MessageDigest messageDigest) {
+    return this.getHashValue(messageDigest);
   }
 
   protected int standardHashCode() {
@@ -626,5 +531,4 @@ public abstract class Element implements Serializable {
   protected String standardToString() {
     return this.getValue().toString();
   }
-
 }

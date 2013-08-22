@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
@@ -74,8 +75,9 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
   @Override
   public final Element getRandomGenerator(Random random) {
-    Element[] randomElements = new Element[this.getArity()];
-    for (int i=0; i<this.getArity(); i++) {
+    int arity = this.getArity();
+    Element[] randomElements = new Element[arity];
+    for (int i=0; i<arity; i++) {
       randomElements[i] = this.getAt(i).getRandomElement(random);
     }
     return this.abstractGetElement(randomElements);
@@ -86,8 +88,9 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
+    CompoundElement compoundElement = (CompoundElement) element;
     for (int i=0; i<this.getArity(); i++) {
-      if (!this.getAt(i).isGenerator(element.getAt(i))) {
+      if (!this.getAt(i).isGenerator(compoundElement.getAt(i))) {
         return false;
       }
     }

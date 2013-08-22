@@ -149,11 +149,6 @@ public abstract class AbstractSet implements Set {
   }
 
   @Override
-  public final boolean isAtomic() {
-    return this.standardIsAtomic();
-  }
-
-  @Override
   public final boolean equals(final Object object) {
     if (this == object) {
       return true;
@@ -189,10 +184,6 @@ public abstract class AbstractSet implements Set {
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
   //
-
-  protected boolean standardIsAtomic() {
-    return true;
-  }
 
   protected BigInteger standardGetMinOrder() {
     return BigInteger.ZERO;

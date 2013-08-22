@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.PermutationGroup;
@@ -56,8 +57,9 @@ public class PermutationFunction extends AbstractFunction {
     if (!this.getDomain().contains(element)) {
       throw new IllegalArgumentException();
     }
-    final Element tuple = element.getAt(0);
-    final Permutation permutation = ((PermutationGroup) this.getDomain().getAt(1)).getPermutation(element.getAt(1));
+    CompoundElement compoundElement = (CompoundElement) element;
+    final CompoundElement tuple = (CompoundElement) compoundElement.getAt(0);
+    final Permutation permutation = ((PermutationGroup) this.getDomain().getAt(1)).getPermutation(compoundElement.getAt(1));
     final Element[] result = new Element[tuple.getArity()];
     for (int i = 0; i < tuple.getArity(); i++) {
       result[i] = tuple.getAt(permutation.permute(i));
@@ -91,7 +93,7 @@ public class PermutationFunction extends AbstractFunction {
    * @throws IllegalArgumentException if {@code group} is null
    */
   public static PermutationFunction getInstance(final ProductSet productSet) {
-    if (productSet == null || !productSet.isPower()) {
+    if (productSet == null || !productSet.isUniform()) {
       throw new IllegalArgumentException();
     }
     return new PermutationFunction(ProductSet.getInstance(productSet, PermutationGroup.getInstance(productSet.getArity())), productSet);

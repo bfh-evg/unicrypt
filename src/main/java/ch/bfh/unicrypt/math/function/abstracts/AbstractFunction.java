@@ -1,11 +1,13 @@
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Compound;
 import java.util.Random;
 
 /**
@@ -38,11 +40,8 @@ public abstract class AbstractFunction implements Function {
     if (this.getDomain().contains(element)) {
       return this.abstractApply(element, random);
     }
-    // This is for increased convenience for a function with a ProductSet domain of arity 1.
-    if (element.isAtomic()) {
-      return this.apply(new Element[]{element}, random);
-    }
-    throw new IllegalArgumentException();
+    // This is for increased convenience for a function with a CompoundSet domain of arity 1.
+    return this.apply(new Element[]{element}, random);
   }
 
   @Override
@@ -52,10 +51,10 @@ public abstract class AbstractFunction implements Function {
 
   @Override
   public final Element apply(final Element[] elements, final Random random) {
-    if (this.getDomain().isAtomic()) {
-      throw new UnsupportedOperationException();
+    if (this.getDomain() instanceof ProductSet) {
+      return this.apply(((ProductSet) this.getDomain()).getElement(elements), random);
     }
-    return this.apply(((ProductSet) this.getDomain()).getElement(elements), random);
+    throw new UnsupportedOperationException();
   }
 
   @Override
@@ -77,7 +76,6 @@ public abstract class AbstractFunction implements Function {
   // The following protected abstract method must be implemented in every direct
   // sub-class
   //
-
   /**
    * This abstract method is the main method to implement in each sub-class of
    * {@link AbstractFunction}. The validity of the two parameters has already
@@ -92,5 +90,4 @@ public abstract class AbstractFunction implements Function {
    * @return The resulting output element
    */
   protected abstract Element abstractApply(Element element, Random random);
-
 }

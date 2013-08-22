@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
@@ -72,9 +73,11 @@ public class ProductGroup extends ProductMonoid implements Group {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
-    final Element[] invertedElements = new Element[this.getArity()];
-    for (int i = 0; i < this.getArity(); i++) {
-      invertedElements[i] = element.getAt(i).invert();
+    int arity = this.getArity();
+    CompoundElement compoundElement = (CompoundElement) element;
+    final Element[] invertedElements = new Element[arity];
+    for (int i = 0; i < arity; i++) {
+      invertedElements[i] = compoundElement.getAt(i).invert();
     }
     return abstractGetElement(invertedElements);
   }

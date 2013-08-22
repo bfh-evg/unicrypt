@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.BooleanGroup;
@@ -11,10 +12,10 @@ import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Random;
 
 /**
- * This class represents the concept of a function, which tests the given
- * input elements for equality. For this to work, its domain is a power group
- * and its co-domain the Boolean group. If all all input elements are equal,
- * the function outputs {@link BooleanGroup#TRUE}, and {@link BooleanGroup#FALSE}
+ * This class represents the concept of a function, which tests the given input
+ * elements for equality. For this to work, its domain is a power group and its
+ * co-domain the Boolean group. If all all input elements are equal, the
+ * function outputs {@link BooleanGroup#TRUE}, and {@link BooleanGroup#FALSE}
  * otherwise.
  *
  * @author R. Haenni
@@ -39,10 +40,12 @@ public class EqualityFunction extends AbstractFunction {
 
   @Override
   public Element abstractApply(final Element element, final Random random) {
-    if (element.getArity() > 1) {
-      final Element firstElement = element.getFirst();
-      for (int i = 1; i < element.getArity(); i++) {
-        if (!firstElement.equals(element.getAt(i))) {
+    CompoundElement compoundElement = (CompoundElement) element;
+    int arity = compoundElement.getArity();
+    if (arity > 1) {
+      final Element firstElement = compoundElement.getFirst();
+      for (Element currentElement: compoundElement) {
+        if (!firstElement.equals(currentElement)) {
           return BooleanGroup.FALSE;
         }
       }
@@ -66,6 +69,7 @@ public class EqualityFunction extends AbstractFunction {
    * This is the general factory method of this class. The first parameter is
    * the group on which it operates, and the second parameter is the number of
    * input elements to compare.
+   *
    * @param set The group on which this function operates
    * @param arity The number of input elements to compare
    * @return The resulting equality function
@@ -75,5 +79,4 @@ public class EqualityFunction extends AbstractFunction {
   public static EqualityFunction getInstance(final Set set, final int arity) {
     return new EqualityFunction(ProductSet.getInstance(set, arity), BooleanGroup.getInstance());
   }
-
 }

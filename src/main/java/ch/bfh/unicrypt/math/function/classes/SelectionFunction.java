@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
@@ -39,7 +40,8 @@ public class SelectionFunction extends AbstractFunction {
 
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    return element.getAt(this.indices);
+    CompoundElement compoundElement = (CompoundElement) element;
+    return compoundElement.getAt(this.indices);
   }
 
   //

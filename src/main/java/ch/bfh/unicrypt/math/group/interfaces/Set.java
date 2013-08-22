@@ -162,12 +162,6 @@ public interface Set extends Serializable {
    */
   public boolean areEqual(Element element1, Element element2);
 
-  /**
-   * Checks if the set is atomic, which is equivalent to checking arity <= 1.
-   * @return {@code true} if the arity is <= 1, {@code false} otherwise
-   */
-  public boolean isAtomic();
-
   //
   // The standard implementations of the following three inherited methods are
   // insufficient for sets

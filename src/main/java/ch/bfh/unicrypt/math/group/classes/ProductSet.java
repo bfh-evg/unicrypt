@@ -1,6 +1,8 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractCompoundSet;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
@@ -14,24 +16,18 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public class ProductSet extends AbstractSet implements Set {
-
-  private final Set[] sets;
-  private int arity;
+public class ProductSet extends AbstractCompoundSet implements Set {
 
   protected ProductSet(final Set[] sets) {
-    this.sets = sets;
-    this.arity = sets.length;
+    super(sets);
   }
 
   protected ProductSet(final Set set, final int arity) {
-    this.sets = new Set[]{set};
-    this.arity = arity;
+    super(set, arity);
   }
 
   protected ProductSet() {
-    this.sets = new Set[]{};
-    this.arity = 0;
+    this(new Set[]{});
   }
 
   /**
@@ -57,10 +53,11 @@ public class ProductSet extends AbstractSet implements Set {
    * @throws IllegalArgumentException if the length of {@code values} is different from the set's arity
    */
   public final boolean contains(BigInteger... values) {
-    if (values == null || values.length != this.getArity()) {
+    int arity = this.getArity();
+    if (values == null || values.length != arity) {
       throw new IllegalArgumentException();
     }
-    for (int i = 0; i < this.getArity(); i++) {
+    for (int i = 0; i < arity; i++) {
       if (!this.getAt(i).contains(values[i])) {
         return false;
       }
@@ -78,10 +75,11 @@ public class ProductSet extends AbstractSet implements Set {
    * @throws IllegalArgumentException if the length of {@code elements} is different from the set's arity
    */
   public final boolean contains(Element... elements) {
-    if (elements == null || elements.length != this.getArity()) {
+    int arity = this.getArity();
+    if (elements == null || elements.length != arity) {
       throw new IllegalArgumentException();
     }
-    for (int i = 0; i < this.getArity(); i++) {
+    for (int i = 0; i < arity; i++) {
       if (!this.getAt(i).contains(elements[i])) {
         return false;
       }
@@ -103,11 +101,12 @@ public class ProductSet extends AbstractSet implements Set {
    * if no such element exists
    */
   public final Element getElement(BigInteger[] values) {
-    if (values == null || values.length != this.getArity()) {
+    int arity = this.getArity();
+    if (values == null || values.length != arity) {
       throw new IllegalArgumentException();
     }
-    Element[] elements = new Element[this.getArity()];
-    for (int i = 0; i < this.getArity(); i++) {
+    Element[] elements = new Element[arity];
+    for (int i = 0; i < arity; i++) {
       elements[i] = this.getAt(i).getElement(values[i]);
     }
     return this.abstractGetElement(elements);
@@ -126,10 +125,11 @@ public class ProductSet extends AbstractSet implements Set {
    * group
    */
   public final Element getElement(final Element[] elements) {
-    if (elements == null || elements.length != this.getArity()) {
+    int arity = this.getArity();
+    if (elements == null || elements.length != arity) {
       throw new IllegalArgumentException();
     }
-    for (int i = 0; i < this.getArity(); i++) {
+    for (int i = 0; i < arity; i++) {
       if (!this.getAt(i).contains(elements[i])) {
         throw new IllegalArgumentException();
       }
@@ -142,92 +142,6 @@ public class ProductSet extends AbstractSet implements Set {
   }
 
   /**
-   * Checks if the arity of the set is 0.
-   *
-   * @return {@code true} if the arity is 0, {@code false} otherwise
-   */
-  public final int getArity() {
-    return this.arity;
-  }
-
-  public final boolean isNull() {
-    return this.getArity() == 0;
-  }
-
-  /**
-   * Checks if the set consists of multiple copies of the same set. Such a
-   * product set is called 'power set'.
-   *
-   * @return {@code true}, if the product group is a power group, {@code false}
-   * otherwise
-   */
-  public final boolean isPower() {
-    return this.sets.length <= 1;
-  }
-
-  public Set getFirst() {
-    return this.getAt(0);
-  }
-
-  /**
-   * Returns the set for the given index. The indices are numbered from 0 to the
-   * set's arity minus one.
-   *
-   * @param index The given index
-   * @return The corresponding set
-   * @throws IndexOutOfBoundsException if
-   * {@code index<0} or {@code index>arity-1}
-   */
-  public Set getAt(final int index) {
-    if (index < 0 || index > this.getArity() - 1) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (this.isPower()) {
-      return this.sets[0];
-    }
-    return this.sets[index];
-  }
-
-  /**
-   * Selects and returns in a hierarchy of sets the set that corresponds to a
-   * given sequence of indices (e.g., 0,3,2 for the third set in the fourth set
-   * of the first set). Returns {@code this} set if {@code indices} is empty.
-   *
-   * @param indices The given sequence of indices
-   * @return The corresponding set
-   * @throws IllegalArgumentException if {@code indices} is null or if its
-   * length exceeds the hierarchy's depth
-   * @throws IndexOutOfBoundsException if {@code indices} contains an
-   * out-of-bounds index
-   */
-  public Set getAt(final int... indices) {
-    if (indices == null) {
-      throw new IllegalArgumentException();
-    }
-    Set set = this;
-    for (final int index : indices) {
-      if (set instanceof ProductSet) {
-        set = ((ProductSet) set).getAt(index);
-      } else {
-        throw new IllegalArgumentException();
-      }
-    }
-    return set;
-  }
-
-  /**
-   * Returns an array of length {@code this.getArity()} containing all the
-   * sets of which {@code this} set is composed of.
-   */
-  public Set[] getAll() {
-    Set[] result = new Set[this.getArity()];
-    for (int index = 0; index < this.getArity(); index++) {
-      result[index] = this.getAt(index);
-    }
-    return result;
-  }
-
-  /**
    * Creates a new product set which contains one set less than the given
    * product set.
    *
@@ -237,19 +151,19 @@ public class ProductSet extends AbstractSet implements Set {
    * {@code index<0} or {@code index>arity-1}
    */
   public ProductSet removeAt(final int index) {
-    if (index < 0 || index > this.getArity() - 1) {
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
       throw new IndexOutOfBoundsException();
     }
-    int arity = this.getArity();
-    if (this.isPower()) {
-      return ProductSet.getInstance(this.getFirst(), arity - 1);
+    if (this.isUniform()) {
+      return ProductSet.getInstance(this.getFirst(), arity-1);
     }
     final Set[] remainingSets = new Set[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
+    for (int i=0; i < arity-1; i++) {
       if (i < index) {
         remainingSets[i] = this.getAt(i);
       } else {
-        remainingSets[i] = this.getAt(i + 1);
+        remainingSets[i] = this.getAt(i+1);
       }
     }
     return ProductSet.getInstance(remainingSets);
@@ -261,19 +175,14 @@ public class ProductSet extends AbstractSet implements Set {
   //
 
   @Override
-  protected boolean standardIsAtomic() {
-    return false;
-  }
-
-  @Override
   protected BigInteger standardGetMinOrder() {
-    if (this.isPower()) {
+    if (this.isUniform()) {
       BigInteger minOrder = this.getFirst().getMinOrder();
       return minOrder.pow(this.getArity());
     }
     BigInteger result = BigInteger.ONE;
-    for (int i = 0; i < this.getArity(); i++) {
-      final BigInteger minOrder = this.getAt(i).getMinOrder();
+    for (Set set: this) {
+      final BigInteger minOrder = set.getMinOrder();
       result = result.multiply(minOrder);
     }
     return result;
@@ -283,7 +192,7 @@ public class ProductSet extends AbstractSet implements Set {
   protected int standardHashCode() {
     final int prime = 31;
     int result = 1;
-    for (Set set : this.sets) {
+    for (Set set : this) {
       result = prime * result + set.hashCode();
     }
     result = prime * result + this.getArity();
@@ -295,11 +204,11 @@ public class ProductSet extends AbstractSet implements Set {
     if (this.isEmpty()) {
       return "";
     }
-    if (this.isPower()) {
+    if (this.isUniform()) {
       return this.getFirst().toString() + "^" + this.getArity();
     }
     String result = null;
-    for (Set set : this.sets) {
+    for (Set set: this) {
       if (result == null) {
         result = set.toString();
       } else {
@@ -319,7 +228,7 @@ public class ProductSet extends AbstractSet implements Set {
     if (this.isNull()) {
       return BigInteger.ONE;
     }
-    if (this.isPower()) {
+    if (this.isUniform()) {
       BigInteger order = this.getFirst().getOrder();
       if (order.equals(Set.INFINITE_ORDER) || order.equals(Set.UNKNOWN_ORDER)) {
         return order;
@@ -327,8 +236,8 @@ public class ProductSet extends AbstractSet implements Set {
       return order.pow(this.getArity());
     }
     BigInteger result = BigInteger.ONE;
-    for (int i = 0; i < this.getArity(); i++) {
-      final BigInteger order = this.getAt(i).getOrder();
+    for (Set set: this) {
+      final BigInteger order = set.getOrder();
       if (order.equals(BigInteger.ZERO)) {
         return BigInteger.ZERO;
       }
@@ -353,8 +262,9 @@ public class ProductSet extends AbstractSet implements Set {
 
   @Override
   protected Element abstractGetRandomElement(Random random) {
-    final Element[] randomElements = new Element[this.getArity()];
-    for (int i = 0; i < randomElements.length; i++) {
+    int arity = this.getArity();
+    final Element[] randomElements = new Element[arity];
+    for (int i = 0; i < arity; i++) {
       randomElements[i] = this.getAt(i).getRandomElement(random);
     }
     return abstractGetElement(randomElements);
@@ -368,11 +278,12 @@ public class ProductSet extends AbstractSet implements Set {
 
   @Override
   protected boolean abstractEquals(Set set) {
+    int arity = this.getArity();
     ProductSet productSet = (ProductSet) set;
-    if (this.getArity() != productSet.getArity()) {
+    if (arity != productSet.getArity()) {
       return false;
     }
-    for (int i = 0; i < this.getArity(); i++) {
+    for (int i = 0; i < arity; i++) {
       if (!this.getAt(i).equals(productSet.getAt(i))) {
         return false;
       }
@@ -384,62 +295,10 @@ public class ProductSet extends AbstractSet implements Set {
   // LOCAL ELEMENT CLASS
   //
 
-  final private class TupleElement extends Element {
-
-    private static final long serialVersionUID = 1L;
-    private Element[] elements;
+  final private class TupleElement extends CompoundElement {
 
     protected TupleElement(final Set set, final Element[] elements) {
-      super(set);
-      this.elements = elements;
-    }
-
-    @Override
-    protected BigInteger standardGetValue() {
-      BigInteger[] values = new BigInteger[this.getArity()];
-      for (int i = 0; i < this.getArity(); i++) {
-        values[i] = this.elements[i].getValue();
-      }
-      return MathUtil.elegantPair(values);
-    }
-
-    @Override
-    protected Element standardGetAt(final int index) {
-      return this.elements[index];
-    }
-
-    @Override
-    protected boolean standardEquals(Element element) {
-      for (int i=0; i<this.getArity(); i++) {
-        if (!this.getAt(i).equals(element.getAt(i))) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    @Override
-    protected int standardHashCode() {
-      final int prime = 31;
-      int result = 1;
-      for (Element element : this.elements) {
-        result = prime * result + element.hashCode();
-      }
-      result = prime * result + this.getArity();
-      return result;
-    }
-
-    @Override
-    protected String standardToString() {
-      String result = null;
-      for (Element element : this.elements) {
-        if (result == null) {
-          result = element.toString();
-        } else {
-          result = result + "," + element.toString();
-        }
-      }
-      return result;
+      super(set, elements);
     }
 
   }

@@ -23,8 +23,8 @@ import java.util.Random;
  * {@link ZPlusMod}. Its order corresponds to the size of the cryptographic
  * hash function's output space (a power of 2).
  *
- * @see Element#hashValue()
- * @see Element#recursiveHashValue()
+ * @see Element#getHashValue()
+ * @see Element#getRecursiveHashValue()
  *
  * @author R. Haenni
  * @author R. E. Koenig
@@ -50,9 +50,9 @@ public class HashFunction extends AbstractFunction {
   protected Element abstractApply(final Element element, final Random random) {
     BigInteger value;
     if (this.recursiveHash) {
-      value = new BigInteger(element.recursiveHashValue(this.messageDigest));
+      value = new BigInteger(element.getRecursiveHashValue(this.messageDigest));
     } else {
-      value = new BigInteger(element.hashValue(this.messageDigest));
+      value = new BigInteger(element.getHashValue(this.messageDigest));
     }
     return this.getCoDomain().getElement(value);
   }

@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.NPlus;
@@ -36,7 +37,8 @@ public class SelfApplyFunction extends AbstractFunction {
 
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    return element.getAt(0).selfApply(element.getAt(1));
+    CompoundElement compoundElement = (CompoundElement) element;
+    return compoundElement.getAt(0).selfApply(compoundElement.getAt(1));
   }
 
   //

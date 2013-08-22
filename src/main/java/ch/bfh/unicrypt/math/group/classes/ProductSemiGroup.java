@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
 import java.math.BigInteger;
@@ -52,9 +53,12 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();
     }
-    final Element[] results = new Element[this.getArity()];
-    for (int i = 0; i < this.getArity(); i++) {
-      results[i] = element1.getAt(i).apply(element2.getAt(i));
+    int arity = this.getArity();
+    CompoundElement compoundElement1 = (CompoundElement) element1;
+    CompoundElement compoundElement2 = (CompoundElement) element2;
+    final Element[] results = new Element[arity];
+    for (int i = 0; i < arity; i++) {
+      results[i] = compoundElement1.getAt(i).apply(compoundElement1.getAt(i));
     }
     return this.abstractGetElement(results);
   }
@@ -80,9 +84,11 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
-    final Element[] results = new Element[this.getArity()];
-    for (int i = 0; i < this.getArity(); i++) {
-      results[i] = element.getAt(i).selfApply(amount);
+    int arity = this.getArity();
+    CompoundElement compoundElement = (CompoundElement) element;
+    final Element[] results = new Element[arity];
+    for (int i = 0; i < arity; i++) {
+      results[i] = compoundElement.getAt(i).selfApply(amount);
     }
     return abstractGetElement(results);
   }

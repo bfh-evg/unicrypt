@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -65,9 +66,11 @@ public final class ProductFunction extends AbstractCompoundFunction {
   //
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    final Element[] elements = new Element[this.getArity()];
-    for (int i = 0; i < this.getArity(); i++) {
-      elements[i] = this.getAt(i).apply(element.getAt(i), random);
+    int arity = this.getArity();
+    CompoundElement compoundElement = (CompoundElement) element;
+    final Element[] elements = new Element[arity];
+    for (int i = 0; i < arity; i++) {
+      elements[i] = this.getAt(i).apply(compoundElement.getAt(i), random);
     }
     return this.getCoDomain().getElement(elements);
   }

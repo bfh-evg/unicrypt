@@ -4,16 +4,19 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.math.function.interfaces.CompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractCompoundSet;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Compound;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction extends AbstractFunction implements CompoundFunction {
+public abstract class AbstractCompoundFunction extends AbstractFunction implements Compound<Function> {
 
   private final Function[] functions;
   private final int arity;
@@ -41,7 +44,7 @@ public abstract class AbstractCompoundFunction extends AbstractFunction implemen
   }
 
   @Override
-  public final boolean isPower() {
+  public final boolean isUniform() {
     return this.functions.length <= 1;
   }
 
@@ -53,10 +56,10 @@ public abstract class AbstractCompoundFunction extends AbstractFunction implemen
 
   @Override
   public Function getAt(int index) {
-    if (index < 0 || index > this.getArity() - 1) {
+    if (index < 0 || index >= this.getArity()) {
       throw new IndexOutOfBoundsException();
     }
-    if (this.isPower()) {
+    if (this.isUniform()) {
       return this.functions[0];
     }
     return this.functions[index];
@@ -69,8 +72,8 @@ public abstract class AbstractCompoundFunction extends AbstractFunction implemen
     }
     Function function = this;
     for (final int index : indices) {
-      if (function instanceof CompoundFunction) {
-        function = ((CompoundFunction) function).getAt(index);
+      if (function instanceof Compound) {
+        function = ((Compound<Function>) function).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }
@@ -80,11 +83,38 @@ public abstract class AbstractCompoundFunction extends AbstractFunction implemen
 
   @Override
   public Function[] getAll() {
-    Function[] result = new Function[this.getArity()];
-    for (int index = 0; index < this.getArity(); index++) {
-      result[index] = this.getAt(index);
+    int arity = this.getArity();
+    Function[] result = new Function[arity];
+    for (int i = 0; i < arity; i++) {
+      result[i] = this.getAt(i);
     }
     return result;
+  }
+
+  @Override
+  public Iterator<Function> iterator() {
+    final AbstractCompoundFunction compoundFunction = this;
+    return new Iterator<Function>() {
+      int currentIndex = 0;
+
+      @Override
+      public boolean hasNext() {
+        return currentIndex >= compoundFunction.getArity();
+      }
+
+      @Override
+      public Function next() {
+        if (this.hasNext()) {
+          return compoundFunction.getAt(this.currentIndex);
+        }
+        throw new NoSuchElementException();
+      }
+
+      @Override
+      public void remove() {
+        throw new UnsupportedOperationException("Not supported yet.");
+      }
+    };
   }
 
 }
