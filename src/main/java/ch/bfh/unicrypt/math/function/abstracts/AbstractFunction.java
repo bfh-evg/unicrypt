@@ -69,23 +69,8 @@ public abstract class AbstractFunction implements Function {
   }
 
   @Override
-  public final boolean isAtomic() {
-    return this.standardIsAtomic();
-  }
-
-  @Override
   public final Function partiallyApply(final Element element, final int index) {
     return PartiallyAppliedFunction.getInstance(this, element, index);
-  }
-
-  //
-  // The following protected methods are standard implementations for atomic
-  // functions of arity 1. The standard implementation may change in sub-classes
-  // for non-atomic functions.
-  //
-
-  protected boolean standardIsAtomic() {
-    return true;
   }
 
   //

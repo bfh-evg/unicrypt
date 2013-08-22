@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
@@ -19,34 +20,19 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public final class CompositeFunction extends AbstractFunction {
-
-  private final Function[] functions;
+public final class CompositeFunction extends AbstractCompoundFunction {
 
   private CompositeFunction(final Set domain, final Set coDomain, final Function[] functions) {
-    super(domain, coDomain);
-    this.functions = functions.clone();
-  }
-
-  protected int getArity() {
-    return this.functions.length;
+    super(domain, coDomain, functions);
   }
 
   @Override
   protected final Element abstractApply(final Element element, final Random random) {
     Element result = element;
-    for (final Function function : this.functions) {
-      result = function.apply(result, random);
+    for (int i = 0; i < this.getArity(); i++) {
+      result = this.getAt(i).apply(result, random);
     }
     return result;
-  }
-
-  /**
-   * Returns the array of internal functions of which this function consists.
-   * @return The array of internal functions
-   */
-  public Function[] getFunctions() {
-    return this.functions.clone();
   }
 
   /**

@@ -107,13 +107,13 @@ public interface Function {
    */
   public Set getCoDomain();
 
-  /**
-   * A function is atomic, if it is not composed of multiple internal functions
-   * that are applied in parallel.
-   *
-   * @return {@code true} if the function is atomic, {@code false} otherwise
-   */
-  public boolean isAtomic();
+//  /**
+//   * A function is atomic, if it is not composed of multiple internal functions
+//   * that are applied in parallel.
+//   *
+//   * @return {@code true} if the function is atomic, {@code false} otherwise
+//   */
+//  public boolean isAtomic();
 
   /**
    * This method applies a single input value to a given function. The result is
