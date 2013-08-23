@@ -159,7 +159,7 @@ public abstract class AbstractSet implements Set {
     if (this.getClass() != object.getClass()) {
       return false;
     }
-    return this.abstractEquals((Set) object);
+    return this.standardEquals((Set) object);
   }
 
   @Override
@@ -189,6 +189,10 @@ public abstract class AbstractSet implements Set {
     return BigInteger.ZERO;
   }
 
+  protected boolean standardEquals(Set set) {
+    return true;
+  }
+
   protected int standardHashCode() {
     return 0;
   }
@@ -211,7 +215,5 @@ public abstract class AbstractSet implements Set {
   protected abstract Element abstractGetRandomElement(Random random);
 
   protected abstract boolean abstractContains(BigInteger value);
-
-  protected abstract boolean abstractEquals(Set set);
 
 }

@@ -97,11 +97,6 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
     return this.getDefaultGenerator().invert();
   }
 
-  @Override
-  protected boolean abstractEquals(Set set) {
-    return true;
-  }
-
   //
   // STATIC FACTORY METHODS
   //

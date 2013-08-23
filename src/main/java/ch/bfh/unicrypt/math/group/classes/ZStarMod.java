@@ -92,6 +92,12 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   }
 
   @Override
+  public boolean standardEquals(final Set set) {
+    final ZStarMod zStarMod = (ZStarMod) set;
+    return this.getModulus().equals(zStarMod.getModulus());
+  }
+
+  @Override
   public int standardHashCode() {
     return this.getModulus().hashCode();
   }
@@ -105,12 +111,6 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-
-  @Override
-  public boolean abstractEquals(final Set set) {
-    final ZStarMod zStarMod = (ZStarMod) set;
-    return this.getModulus().equals(zStarMod.getModulus());
-  }
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {

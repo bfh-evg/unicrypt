@@ -66,7 +66,7 @@ public class ZTimes extends AbstractMultiplicativeMonoid {
   }
 
   @Override
-  protected boolean abstractEquals(Set set) {
+  protected boolean standardEquals(Set set) {
     return true;
   }
 

@@ -39,6 +39,11 @@ public class StringMonoid extends AbstractAdditiveMonoid {
     return new StringMonoid.StringElement(this, string);
   }
 
+  @Override
+  protected Element standardGetElement(BigInteger value) {
+    return this.standardGetElement(new String(value.toByteArray()));
+  }
+
   //
   // The following protected methods implement the abstract methods from
   // various super-classes
@@ -60,11 +65,6 @@ public class StringMonoid extends AbstractAdditiveMonoid {
   }
 
   @Override
-  protected Element standardGetElement(BigInteger value) {
-    return this.standardGetElement(new String(value.toByteArray()));
-  }
-
-  @Override
   protected Element abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
@@ -72,11 +72,6 @@ public class StringMonoid extends AbstractAdditiveMonoid {
   @Override
   protected boolean abstractContains(BigInteger value) {
     return value.signum() >= 0;
-  }
-
-  @Override
-  protected boolean abstractEquals(Set set) {
-    return true;
   }
 
   //

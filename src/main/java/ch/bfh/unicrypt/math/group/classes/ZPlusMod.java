@@ -51,6 +51,12 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
+  public boolean standardEquals(final Set set) {
+    final ZPlusMod zPlusMod = (ZPlusMod) set;
+    return this.getModulus().equals(zPlusMod.getModulus());
+  }
+
+  @Override
   public int standardHashCode() {
     return this.getModulus().hashCode();
   }
@@ -64,12 +70,6 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-
-  @Override
-  public boolean abstractEquals(final Set set) {
-    final ZPlusMod zPlusMod = (ZPlusMod) set;
-    return this.getModulus().equals(zPlusMod.getModulus());
-  }
 
   @Override
   protected BigInteger abstractGetOrder() {

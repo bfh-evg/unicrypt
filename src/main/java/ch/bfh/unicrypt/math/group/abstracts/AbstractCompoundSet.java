@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.group.abstracts;
 
+import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
 import java.util.Iterator;
@@ -112,4 +113,49 @@ public abstract class AbstractCompoundSet extends AbstractSet implements Compoun
     };
   }
 
+  @Override
+  protected boolean standardEquals(Set set) {
+    AbstractCompoundSet other = (AbstractCompoundSet) set;
+    int arity = this.getArity();
+    if (arity != other.getArity()) {
+      return false;
+    }
+    for (int i = 0; i < arity; i++) {
+      if (!this.getAt(i).equals(other.getAt(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
+  protected int standardHashCode() {
+    final int prime = 31;
+    int result = 1;
+    for (Set set : this) {
+      result = prime * result + set.hashCode();
+    }
+    result = prime * result + this.getArity();
+    return result;
+  }
+
+  @Override
+  protected String standardToString() {
+    if (this.isNull()) {
+      return "";
+    }
+    if (this.isUniform()) {
+      return this.getFirst().toString() + "^" + this.getArity();
+    }
+    String result = "";
+    String separator = "";
+    for (Set set: this) {
+      result = result + separator + set.toString();
+      separator = ",";
+    }
+    return result;
+  }
+
 }
+
+

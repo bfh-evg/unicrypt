@@ -105,6 +105,12 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   }
 
   @Override
+  protected boolean standardEquals(Set set) {
+    final GStarMod other = (GStarMod) set;
+    return this.getModulus().equals(other.getModulus()) && this.getOrder().equals(other.getOrder());
+  }
+
+  @Override
   public int standardHashCode() {
     final int prime = 31;
     int result = 1;
@@ -122,11 +128,6 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-  @Override
-  protected boolean abstractEquals(Set set) {
-    final GStarMod gStarMod = (GStarMod) set;
-    return this.getModulus().equals(gStarMod.getModulus()) && this.getOrder().equals(gStarMod.getOrder());
-  }
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {

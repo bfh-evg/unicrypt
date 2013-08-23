@@ -90,7 +90,7 @@ public abstract class AbstractFunction implements Function {
     if (!this.getCoDomain().equals(other.getCoDomain())) {
       return false;
     }
-    return this.abstractEquals(other);
+    return this.standardEquals(other);
   }
 
   @Override
@@ -113,6 +113,10 @@ public abstract class AbstractFunction implements Function {
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
   //
+
+  protected boolean standardEquals(Function function) {
+    return true;
+  }
 
   protected int standardHashCode() {
     return 0;
@@ -138,6 +142,5 @@ public abstract class AbstractFunction implements Function {
    */
   protected abstract Element abstractApply(Element element, Random random);
 
-  protected abstract boolean abstractEquals(Function function);
 
 }

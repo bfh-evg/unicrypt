@@ -50,11 +50,6 @@ public class PartiallyAppliedFunction extends AbstractFunction {
     this.index = index;
   }
 
-  @Override
-  public ProductSet getDomain() {
-    return (ProductSet) this.getDomain();
-  }
-
   /**
    * Returns the parent function from which {@code this} function has been
    * derived.
@@ -83,6 +78,29 @@ public class PartiallyAppliedFunction extends AbstractFunction {
    */
   public int getIndex() {
     return this.index;
+  }
+
+  @Override
+  public ProductSet getDomain() {
+    return (ProductSet) this.getDomain();
+  }
+
+  @Override
+  protected boolean standardEquals(Function function) {
+    PartiallyAppliedFunction other = (PartiallyAppliedFunction) function;
+    return this.getParentFunction().equals(other.getParentFunction())
+            && this.getParameter().equals(other.getParameter())
+            && this.getIndex() == other.getIndex();
+  }
+
+ @Override
+  protected int standardHashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + this.getParentFunction().hashCode();
+    result = prime * result + this.getParameter().hashCode();
+    result = prime * result + this.getIndex();
+    return result;
   }
 
   //

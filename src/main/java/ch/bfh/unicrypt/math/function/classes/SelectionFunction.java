@@ -3,9 +3,11 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -32,6 +34,16 @@ public class SelectionFunction extends AbstractFunction {
   @Override
   public ProductSet getDomain() {
     return (ProductSet) this.getDomain();
+  }
+
+  @Override
+  protected boolean standardEquals(Function function) {
+    return Arrays.equals(this.getIndices(), ((SelectionFunction) function).getIndices());
+  }
+
+ @Override
+  protected int standardHashCode() {
+    return this.getIndices().hashCode();
   }
 
   //

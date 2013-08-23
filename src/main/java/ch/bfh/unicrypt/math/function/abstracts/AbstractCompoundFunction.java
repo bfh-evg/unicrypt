@@ -117,4 +117,30 @@ public abstract class AbstractCompoundFunction extends AbstractFunction implemen
     };
   }
 
+  @Override
+  protected boolean standardEquals(Function function) {
+    AbstractCompoundFunction other = (AbstractCompoundFunction) function;
+    int arity = this.getArity();
+    if (arity != other.getArity()) {
+      return false;
+    }
+    for (int i = 0; i < arity; i++) {
+      if (!this.getAt(i).equals(other.getAt(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
+  protected int standardHashCode() {
+    final int prime = 31;
+    int result = 1;
+    for (Function function : this) {
+      result = prime * result + function.hashCode();
+    }
+    result = prime * result + this.getArity();
+    return result;
+  }
+
 }

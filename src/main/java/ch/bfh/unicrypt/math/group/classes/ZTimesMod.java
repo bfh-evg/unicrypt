@@ -66,7 +66,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
   //
 
   @Override
-  public boolean abstractEquals(final Set set) {
+  public boolean standardEquals(final Set set) {
     final ZTimesMod zTimesMod = (ZTimesMod) set;
     return this.getModulus().equals(zTimesMod.getModulus());
   }

@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.element;
 
+import ch.bfh.unicrypt.math.group.abstracts.AbstractCompoundSet;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
@@ -39,51 +40,16 @@ public abstract class CompoundElement extends Element implements Compound<Elemen
   }
 
   @Override
-  protected boolean standardEquals(Element element) {
-    CompoundElement compoundElement = (CompoundElement) element;
-    for (int i = 0; i < this.getArity(); i++) {
-      if (!this.getAt(i).equals(compoundElement.getAt(i))) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
   protected byte[] standardGetRecursiveHashValue(MessageDigest messageDigest) {
     int arity = this.getArity();
     byte[][] hashValues = new byte[arity][];
     for (int i = 0; i < arity; i++) {
       hashValues[i] = this.getAt(i).getRecursiveHashValue(messageDigest);
     }
-    for (byte[] hashValue: hashValues) {
+    for (byte[] hashValue : hashValues) {
       messageDigest.update(hashValue);
     }
     return messageDigest.digest();
-  }
-
-  @Override
-  protected int standardHashCode() {
-    final int prime = 31;
-    int result = 1;
-    for (Element element : this) {
-      result = prime * result + element.hashCode();
-    }
-    result = prime * result + this.getArity();
-    return result;
-  }
-
-  @Override
-  protected String standardToString() {
-    String result = null;
-    for (Element element : this) {
-      if (result == null) {
-        result = element.toString();
-      } else {
-        result = result + "," + element.toString();
-      }
-    }
-    return result;
   }
 
   @Override
@@ -170,6 +136,38 @@ public abstract class CompoundElement extends Element implements Compound<Elemen
     };
   }
 
+  @Override
+  protected boolean standardEquals(Element element) {
+    CompoundElement other = (CompoundElement) element;
+    for (int i = 0; i < this.getArity(); i++) {
+      if (!this.getAt(i).equals(other.getAt(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
+  protected int standardHashCode() {
+    final int prime = 31;
+    int result = 1;
+    for (Element element : this) {
+      result = prime * result + element.hashCode();
+    }
+    return result;
+  }
+
+  @Override
+  protected String standardToString() {
+    String result = "";
+    String separator = "";
+    for (Element element : this) {
+      result = result + separator + element.toString();
+      separator = ",";
+    }
+    return result;
+  }
+
   /**
    * This is a static factory method to construct a composed element without the
    * need of constructing the corresponding product or power group beforehand.
@@ -186,7 +184,7 @@ public abstract class CompoundElement extends Element implements Compound<Elemen
     }
     int arity = elements.length;
     final Set[] sets = new Set[arity];
-    for (int i=0; i < arity; i++) {
+    for (int i = 0; i < arity; i++) {
       if (elements[i] == null) {
         throw new IllegalArgumentException();
       }
@@ -194,5 +192,4 @@ public abstract class CompoundElement extends Element implements Compound<Elemen
     }
     return ProductSet.getInstance(sets).getElement(elements);
   }
-
 }

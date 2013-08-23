@@ -277,7 +277,7 @@ public class ProductSet extends AbstractCompoundSet implements Set {
   }
 
   @Override
-  protected boolean abstractEquals(Set set) {
+  protected boolean standardEquals(Set set) {
     int arity = this.getArity();
     ProductSet productSet = (ProductSet) set;
     if (arity != productSet.getArity()) {

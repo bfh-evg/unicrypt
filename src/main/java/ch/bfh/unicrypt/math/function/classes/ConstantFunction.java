@@ -2,6 +2,7 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.ProductCyclicGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
@@ -34,21 +35,31 @@ public class ConstantFunction extends AbstractFunction {
     this.element = element;
   }
 
+  /**
+   * Returns the constant element returned by this function.
+   * @return The constant element
+   */
+  public Element getElement() {
+    return this.element;
+  }
+
   @Override
   public ProductCyclicGroup getDomain() {
     return (ProductCyclicGroup) this.getDomain();
   }
 
   @Override
-  protected Element abstractApply(Element element, Random random) {
-    return this.element;
+  protected boolean standardEquals(Function function) {
+    return this.getElement().equals(((ConstantFunction) function).getElement());
   }
 
-  /**
-   * Returns the constant element returned by this function.
-   * @return The constant element
-   */
-  public Element getElement() {
+ @Override
+  protected int standardHashCode() {
+    return this.getElement().hashCode();
+  }
+
+  @Override
+  protected Element abstractApply(Element element, Random random) {
     return this.element;
   }
 

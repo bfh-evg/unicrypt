@@ -40,6 +40,26 @@ public class SingletonGroup extends AbstractCyclicGroup {
   //
 
   @Override
+  protected boolean standardEquals(Set set) {
+    return this.getValue().equals(((SingletonGroup) set).getValue());
+  }
+
+  @Override
+  protected int standardHashCode() {
+    return this.getValue().hashCode();
+  }
+
+  @Override
+  protected String standardToString() {
+    return this.getValue().toString();
+  }
+
+  @Override
+  protected Element standardGetElement(final BigInteger value) {
+    return this.getElement();
+  }
+
+  @Override
   protected Element standardSelfApply(Element element, BigInteger amount) {
     return this.getElement();
   }
@@ -75,11 +95,6 @@ public class SingletonGroup extends AbstractCyclicGroup {
   }
 
   @Override
-  protected Element standardGetElement(final BigInteger value) {
-    return this.getElement();
-  }
-
-  @Override
   protected Element abstractGetDefaultGenerator() {
     return this.getElement();
   }
@@ -92,11 +107,6 @@ public class SingletonGroup extends AbstractCyclicGroup {
   @Override
   protected boolean abstractIsGenerator(Element element) {
     return true;
-  }
-
-  @Override
-  protected boolean abstractEquals(Set set) {
-    return this.getValue().equals(((SingletonGroup) set).getValue());
   }
 
   //

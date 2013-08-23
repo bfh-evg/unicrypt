@@ -74,11 +74,6 @@ public class NPlus extends AbstractAdditiveMonoid {
     return this.standardGetElement(element1.getValue().add(element2.getValue()));
   }
 
-  @Override
-  protected boolean abstractEquals(Set set) {
-    return true;
-  }
-
   //
   // STATIC FACTORY METHODS
   //

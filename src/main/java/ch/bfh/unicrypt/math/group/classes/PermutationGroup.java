@@ -81,6 +81,12 @@ public class PermutationGroup extends AbstractGroup {
   //
 
   @Override
+  public boolean standardEquals(final Set set) {
+    final PermutationGroup other = (PermutationGroup) set;
+    return this.getSize() == other.getSize();
+  }
+
+  @Override
   public int standardHashCode() {
     return this.size;
   }
@@ -94,12 +100,6 @@ public class PermutationGroup extends AbstractGroup {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-
-  @Override
-  public boolean abstractEquals(final Set set) {
-    final PermutationGroup other = (PermutationGroup) set;
-    return this.getSize() == other.getSize();
-  }
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {

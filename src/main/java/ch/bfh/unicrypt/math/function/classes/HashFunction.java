@@ -2,6 +2,7 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.BooleanGroup;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
@@ -44,6 +45,16 @@ public class HashFunction extends AbstractFunction {
   @Override
   public ZPlusMod getCoDomain() {
     return (ZPlusMod) this.getCoDomain();
+  }
+
+  @Override
+  protected boolean standardEquals(Function function) {
+    return this.isRecursive() == ((HashFunction) function).isRecursive();
+  }
+
+  @Override
+  protected int standardHashCode() {
+    return (this.isRecursive()) ? 0 : 1;
   }
 
   @Override

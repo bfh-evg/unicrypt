@@ -489,13 +489,18 @@ public abstract class Element implements Serializable {
     if (this.getClass() != object.getClass()) {
       return false;
     }
-    return this.standardEquals((Element) object);
+    Element other = (Element) object;
+    if (!this.getSet().equals(other.getSet())) {
+      return false;
+    }
+    return this.standardEquals(other);
   }
 
   @Override
   public final int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + this.getSet().hashCode();
     result = prime * result + this.standardHashCode();
     return result;
   }
