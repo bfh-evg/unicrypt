@@ -69,7 +69,7 @@ public class ProductGroup extends ProductMonoid implements Group {
   }
 
   @Override
-  public final Element invert(Element element) {
+  public final CompoundElement invert(Element element) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
@@ -79,11 +79,11 @@ public class ProductGroup extends ProductMonoid implements Group {
     for (int i = 0; i < arity; i++) {
       invertedElements[i] = compoundElement.getAt(i).invert();
     }
-    return abstractGetElement(invertedElements);
+    return standardGetElement(invertedElements);
   }
 
   @Override
-  public final Element applyInverse(Element element1, Element element2) {
+  public final CompoundElement applyInverse(Element element1, Element element2) {
     return this.apply(element1, this.invert(element2));
   }
 

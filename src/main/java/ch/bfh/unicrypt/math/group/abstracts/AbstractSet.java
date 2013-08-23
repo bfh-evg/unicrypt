@@ -116,7 +116,7 @@ public abstract class AbstractSet implements Set {
     if (value == null || !this.contains(value)) {
       throw new IllegalArgumentException();
     }
-    return this.abstractGetElement(value);
+    return this.standardGetElement(value);
   }
 
   @Override
@@ -197,14 +197,16 @@ public abstract class AbstractSet implements Set {
     return "";
   }
 
+  protected Element standardGetElement(BigInteger value) {
+    return new Element(this, value){};
+  }
+
   //
   // The following protected abstract method must be implemented in every direct
   // sub-class.
   //
 
   protected abstract BigInteger abstractGetOrder();
-
-  protected abstract Element abstractGetElement(final BigInteger value);
 
   protected abstract Element abstractGetRandomElement(Random random);
 

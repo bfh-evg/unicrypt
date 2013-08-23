@@ -41,7 +41,7 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected Element standardSelfApply(Element element, BigInteger amount) {
-    return this.abstractGetElement(element.getValue().multiply(amount));
+    return this.standardGetElement(element.getValue().multiply(amount));
   }
 
   //
@@ -66,7 +66,7 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected Element abstractGetDefaultGenerator() {
-    return this.abstractGetElement(BigInteger.ONE);
+    return this.standardGetElement(BigInteger.ONE);
   }
 
   @Override
@@ -76,17 +76,17 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected Element abstractGetIdentityElement() {
-    return this.abstractGetElement(BigInteger.ZERO);
+    return this.standardGetElement(BigInteger.ZERO);
   }
 
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
-    return this.abstractGetElement(element1.getValue().add(element2.getValue()));
+    return this.standardGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
   protected Element abstractInvert(final Element element) {
-    return this.abstractGetElement(element.getValue().negate());
+    return this.standardGetElement(element.getValue().negate());
   }
 
   @Override
@@ -98,27 +98,8 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractGetElement(BigInteger value) {
-    return new ZPlusElement(this, value);
-  }
-
-  @Override
   protected boolean abstractEquals(Set set) {
     return true;
-  }
-
-  //
-  // LOCAL ELEMENT CLASS
-  //
-
-  final private class ZPlusElement extends Element {
-
-    private static final long serialVersionUID = 1L;
-
-    protected ZPlusElement(final Set set, final BigInteger value) {
-      super(set, value);
-    }
-
   }
 
   //

@@ -87,7 +87,7 @@ public class ProductSet extends AbstractCompoundSet implements Set {
     return true;
   }
 
-  public final Element getElement(final int[] values) {
+  public final CompoundElement getElement(final int[] values) {
     return this.getElement(MathUtil.intToBigIntegerArray(values));
   }
 
@@ -100,7 +100,7 @@ public class ProductSet extends AbstractCompoundSet implements Set {
    * @throws IllegalArgumentException if {@code values} is or contains null or
    * if no such element exists
    */
-  public final Element getElement(BigInteger[] values) {
+  public final CompoundElement getElement(BigInteger[] values) {
     int arity = this.getArity();
     if (values == null || values.length != arity) {
       throw new IllegalArgumentException();
@@ -109,7 +109,7 @@ public class ProductSet extends AbstractCompoundSet implements Set {
     for (int i = 0; i < arity; i++) {
       elements[i] = this.getAt(i).getElement(values[i]);
     }
-    return this.abstractGetElement(elements);
+    return this.standardGetElement(elements);
   }
 
   /**
@@ -124,7 +124,7 @@ public class ProductSet extends AbstractCompoundSet implements Set {
    * @throws IllegalArgumentException if an element is not in the corresponding
    * group
    */
-  public final Element getElement(final Element[] elements) {
+  public final CompoundElement getElement(final Element[] elements) {
     int arity = this.getArity();
     if (elements == null || elements.length != arity) {
       throw new IllegalArgumentException();
@@ -134,12 +134,12 @@ public class ProductSet extends AbstractCompoundSet implements Set {
         throw new IllegalArgumentException();
       }
     }
-    return abstractGetElement(elements);
+    return standardGetElement(elements);
   }
 
-  protected Element abstractGetElement(final Element[] elements) {
-    return new TupleElement(this, elements);
-  }
+  protected CompoundElement standardGetElement(final Element[] elements) {
+      return new CompoundElement(this, elements) {};
+    }
 
   /**
    * Creates a new product set which contains one set less than the given
@@ -255,19 +255,19 @@ public class ProductSet extends AbstractCompoundSet implements Set {
   }
 
   @Override
-  protected Element abstractGetElement(BigInteger value) {
+  protected CompoundElement standardGetElement(BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getArity());
     return this.getElement(values);
   }
 
   @Override
-  protected Element abstractGetRandomElement(Random random) {
+  protected CompoundElement abstractGetRandomElement(Random random) {
     int arity = this.getArity();
     final Element[] randomElements = new Element[arity];
     for (int i = 0; i < arity; i++) {
       randomElements[i] = this.getAt(i).getRandomElement(random);
     }
-    return abstractGetElement(randomElements);
+    return standardGetElement(randomElements);
   }
 
   @Override
@@ -289,18 +289,6 @@ public class ProductSet extends AbstractCompoundSet implements Set {
       }
     }
     return true;
-  }
-
-  //
-  // LOCAL ELEMENT CLASS
-  //
-
-  final private class TupleElement extends CompoundElement {
-
-    protected TupleElement(final Set set, final Element[] elements) {
-      super(set, elements);
-    }
-
   }
 
   //
@@ -358,51 +346,4 @@ public class ProductSet extends AbstractCompoundSet implements Set {
     return true;
   }
 
-//  /**
-//   * This is a static factory method to construct a composed element without the
-//   * need of constructing the corresponding product or power group beforehand.
-//   * The input elements are given as an array.
-//   *
-//   * @param elements The array of input elements
-//   * @return The corresponding tuple element
-//   * @throws IllegalArgumentException if {@code elements} is null or contains
-//   * null
-//   */
-//  public static Element getInstance(Element... elements) {
-//    if (elements == null) {
-//      throw new IllegalArgumentException();
-//    }
-//    int arity = elements.length;
-//    if (arity == 1) {
-//      return elements[0];
-//    }
-//    final Set[] sets = new Set[arity];
-//    int i = 0;
-//    for (final Element element : elements) {
-//      if (element == null) {
-//        throw new IllegalArgumentException();
-//      }
-//      sets[i] = element.getSet();
-//      i++;
-//    }
-//    ProductSet productSet = ProductSet.getInstance(sets);
-//    return productSet.getElement(elements);
-//  }
-//
-//  /**
-//   * This is a static factory method to construct a composed element without the
-//   * need of constructing the corresponding product or power group beforehand.
-//   * The input elements are given as a list.
-//   *
-//   * @param elements The list of input elements
-//   * @return The corresponding tuple element
-//   * @throws IllegalArgumentException if {@code elements} is null or contains
-//   * null
-//   */
-//  public static Element getInstance(List<Element> elements) {
-//    if (elements == null) {
-//      throw new IllegalArgumentException();
-//    }
-//    return Element.getInstance(elements.toArray(new Element[0]));
-//  }
 }

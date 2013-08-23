@@ -101,7 +101,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   @Override
   protected Element standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount.mod(this.getOrder());
-    return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
+    return this.standardGetElement(element.getValue().modPow(newAmount, this.getModulus()));
   }
 
   @Override
@@ -136,7 +136,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
       do {
         randomValue = RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
       } while (!randomValue.gcd(this.getModulus()).equals(BigInteger.ONE));
-      return this.abstractGetElement(randomValue.modPow(this.getOrderQuotient(), this.getModulus()));
+      return this.standardGetElement(randomValue.modPow(this.getOrderQuotient(), this.getModulus()));
     }
     // Method 2
     return this.getDefaultGenerator().selfApply(RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getOrder(), random));
@@ -158,22 +158,17 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
 
   @Override
   protected Element abstractGetIdentityElement() {
-    return this.abstractGetElement(BigInteger.ONE);
+    return this.standardGetElement(BigInteger.ONE);
   }
 
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
-    return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+    return this.standardGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
   public Element abstractInvert(final Element element) {
-    return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
-  }
-
-  @Override
-  protected Element abstractGetElement(final BigInteger value) {
-    return new GStarMod.GStarModElement(this, value);
+    return this.standardGetElement(element.getValue().modInverse(this.getModulus()));
   }
 
   @Override
@@ -184,7 +179,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
       do {
         alpha = alpha.add(BigInteger.ONE);
       } while (!alpha.gcd(this.getModulus()).equals(BigInteger.ONE));
-      element = this.abstractGetElement(alpha.modPow(this.getOrderQuotient(), this.getModulus()));
+      element = this.standardGetElement(alpha.modPow(this.getOrderQuotient(), this.getModulus()));
     } while (!this.isGenerator(element)); // this test could be skipped for a prime order
     return element;
   }
@@ -212,20 +207,6 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
       }
     }
     return true;
-  }
-
-  //
-  // LOCAL ELEMENT CLASS
-  //
-
-  final private class GStarModElement extends Element {
-
-    private static final long serialVersionUID = 1L;
-
-    protected GStarModElement(final Set set, final BigInteger value) {
-      super(set, value);
-    }
-
   }
 
   //

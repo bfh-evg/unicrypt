@@ -47,7 +47,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected Element standardSelfApply(Element element, BigInteger amount) {
-    return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
+    return this.standardGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
   }
 
   @Override
@@ -78,7 +78,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {
-    return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
+    return this.standardGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
   @Override
@@ -88,7 +88,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected Element abstractGetDefaultGenerator() {
-    return this.abstractGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
+    return this.standardGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
   }
 
   @Override
@@ -101,17 +101,17 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
 
   @Override
   protected Element abstractGetIdentityElement() {
-    return this.abstractGetElement(BigInteger.ZERO);
+    return this.standardGetElement(BigInteger.ZERO);
   }
 
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
-    return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
+    return this.standardGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
   protected Element abstractInvert(final Element element) {
-    return this.abstractGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
+    return this.standardGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
   }
 
   @Override
@@ -121,25 +121,6 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));
     return element;
-  }
-
-  @Override
-  protected Element abstractGetElement(final BigInteger value) {
-    return new ZPlusModElement(this, value);
-  }
-
-  //
-  // LOCAL ELEMENT CLASS
-  //
-
-  final private class ZPlusModElement extends Element {
-
-    private static final long serialVersionUID = 1L;
-
-    protected ZPlusModElement(final Set set, final BigInteger value) {
-      super(set, value);
-    }
-
   }
 
   //

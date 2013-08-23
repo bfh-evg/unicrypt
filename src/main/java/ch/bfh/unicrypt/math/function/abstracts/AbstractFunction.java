@@ -72,10 +72,57 @@ public abstract class AbstractFunction implements Function {
     return PartiallyAppliedFunction.getInstance(this, element, index);
   }
 
+  @Override
+  public final boolean equals(final Object object) {
+    if (this == object) {
+      return true;
+    }
+    if (object == null) {
+      return false;
+    }
+    if (this.getClass() != object.getClass()) {
+      return false;
+    }
+    Function other = (Function) object;
+    if (!this.getDomain().equals(other.getDomain())) {
+      return false;
+    }
+    if (!this.getCoDomain().equals(other.getCoDomain())) {
+      return false;
+    }
+    return this.abstractEquals(other);
+  }
+
+  @Override
+  public final int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + this.getClass().hashCode();
+    result = prime * result + this.getDomain().hashCode();
+    result = prime * result + this.getCoDomain().hashCode();
+    result = prime * result + this.standardHashCode();
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return this.getClass().getSimpleName() + "[" + this.getDomain() + "-->"+ this.getCoDomain() + "]";
+  }
+
+  //
+  // The following protected methods are standard implementations for sets.
+  // They may need to be changed in certain sub-classes.
+  //
+
+  protected int standardHashCode() {
+    return 0;
+  }
+
   //
   // The following protected abstract method must be implemented in every direct
   // sub-class
   //
+
   /**
    * This abstract method is the main method to implement in each sub-class of
    * {@link AbstractFunction}. The validity of the two parameters has already
@@ -90,4 +137,7 @@ public abstract class AbstractFunction implements Function {
    * @return The resulting output element
    */
   protected abstract Element abstractApply(Element element, Random random);
+
+  protected abstract boolean abstractEquals(Function function);
+
 }

@@ -57,36 +57,17 @@ public class ZTimes extends AbstractMultiplicativeMonoid {
 
   @Override
   protected Element abstractGetIdentityElement() {
-    return this.abstractGetElement(BigInteger.ONE);
+    return this.standardGetElement(BigInteger.ONE);
   }
 
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
-    return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
-  }
-
-  @Override
-  protected Element abstractGetElement(BigInteger value) {
-    return new ZTimesElement(this, value);
+    return this.standardGetElement(element1.getValue().multiply(element2.getValue()));
   }
 
   @Override
   protected boolean abstractEquals(Set set) {
     return true;
-  }
-
-  //
-  // LOCAL ELEMENT CLASS
-  //
-
-  final private class ZTimesElement extends Element {
-
-    private static final long serialVersionUID = 1L;
-
-    protected ZTimesElement(final Set set, final BigInteger value) {
-      super(set, value);
-    }
-
   }
 
   //

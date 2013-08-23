@@ -41,7 +41,7 @@ public class NPlus extends AbstractAdditiveMonoid {
 
   @Override
   protected Element standardSelfApply(Element element, BigInteger amount) {
-    return this.abstractGetElement(element.getValue().multiply(amount));
+    return this.standardGetElement(element.getValue().multiply(amount));
   }
 
   //
@@ -66,36 +66,17 @@ public class NPlus extends AbstractAdditiveMonoid {
 
   @Override
   protected Element abstractGetIdentityElement() {
-    return this.abstractGetElement(BigInteger.ZERO);
+    return this.standardGetElement(BigInteger.ZERO);
   }
 
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
-    return this.abstractGetElement(element1.getValue().add(element2.getValue()));
-  }
-
-  @Override
-  protected Element abstractGetElement(BigInteger value) {
-    return new NPlusElement(this, value);
+    return this.standardGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
   protected boolean abstractEquals(Set set) {
     return true;
-  }
-
-  //
-  // LOCAL ELEMENT CLASS
-  //
-
-  final private class NPlusElement extends Element {
-
-    private static final long serialVersionUID = 1L;
-
-    protected NPlusElement(final Set set, final BigInteger value) {
-      super(set, value);
-    }
-
   }
 
   //

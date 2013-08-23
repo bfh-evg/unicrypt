@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.CompoundElement;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.interfaces.Monoid;
 import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
@@ -10,7 +11,7 @@ import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
  */
 public class ProductMonoid extends ProductSemiGroup implements Monoid {
 
-  private Element identityElement;
+  private CompoundElement identityElement;
 
   protected ProductMonoid(final Monoid[] monoids) {
     super(monoids);
@@ -50,13 +51,13 @@ public class ProductMonoid extends ProductSemiGroup implements Monoid {
   }
 
   @Override
-  public final Element getIdentityElement() {
+  public final CompoundElement getIdentityElement() {
     if (this.identityElement == null) {
       final Element[] identityElements = new Element[this.getArity()];
       for (int i=0; i<identityElements.length; i++) {
         identityElements[i] = this.getAt(i).getIdentityElement();
       }
-      this.identityElement = this.abstractGetElement(identityElements);
+      this.identityElement = this.standardGetElement(identityElements);
     }
     return this.identityElement;
   }

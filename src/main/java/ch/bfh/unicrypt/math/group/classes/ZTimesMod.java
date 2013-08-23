@@ -47,7 +47,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
 
   @Override
   protected Element standardSelfApply(Element element, BigInteger amount) {
-    return this.abstractGetElement(element.getValue().modPow(amount,this.getModulus()));
+    return this.standardGetElement(element.getValue().modPow(amount,this.getModulus()));
   }
 
   @Override
@@ -78,7 +78,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {
-    return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
+    return this.standardGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
   @Override
@@ -89,33 +89,14 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
   @Override
   protected Element abstractGetIdentityElement() {
     if (this.getModulus().equals(BigInteger.ONE)) {
-      return this.abstractGetElement(BigInteger.ZERO);
+      return this.standardGetElement(BigInteger.ZERO);
     }
-    return this.abstractGetElement(BigInteger.ONE);
+    return this.standardGetElement(BigInteger.ONE);
   }
 
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
-    return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
-  }
-
-  @Override
-  protected Element abstractGetElement(final BigInteger value) {
-    return new ZTimesModElement(this, value);
-  }
-
-  //
-  // LOCAL ELEMENT CLASS
-  //
-
-  final private class ZTimesModElement extends Element {
-
-    private static final long serialVersionUID = 1L;
-
-    protected ZTimesModElement(final Set set, final BigInteger value) {
-      super(set, value);
-    }
-
+    return this.standardGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   //

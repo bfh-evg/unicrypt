@@ -68,11 +68,11 @@ public class PermutationGroup extends AbstractGroup {
     if (permutation == null || permutation.getSize() != this.getSize()) {
       throw new IllegalArgumentException();
     }
-    return this.abstractGetElement(permutation);
+    return this.standardGetElement(permutation);
   }
 
-  protected Element abstractGetElement(Permutation permutation) {
-    return new PermutationElement(this, permutation);
+  protected Element standardGetElement(Permutation permutation) {
+    return new PermutationGroup.PermutationElement(this, permutation);
   }
 
   //
@@ -103,7 +103,7 @@ public class PermutationGroup extends AbstractGroup {
 
   @Override
   protected Element abstractGetRandomElement(final Random random) {
-    return this.abstractGetElement(new Permutation(this.getSize(), random));
+    return this.standardGetElement(new Permutation(this.getSize(), random));
   }
 
   @Override
@@ -114,12 +114,12 @@ public class PermutationGroup extends AbstractGroup {
 
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
-    return this.abstractGetElement(this.getPermutation(element1).compose(this.getPermutation(element2)));
+    return this.standardGetElement(this.getPermutation(element1).compose(this.getPermutation(element2)));
   }
 
   @Override
   protected Element abstractInvert(final Element element) {
-    return this.abstractGetElement(this.getPermutation(element).invert());
+    return this.standardGetElement(this.getPermutation(element).invert());
   }
 
   @Override
@@ -129,13 +129,13 @@ public class PermutationGroup extends AbstractGroup {
 
   @Override
   protected Element abstractGetIdentityElement() {
-    return this.abstractGetElement(new Permutation(this.getSize()));
+    return this.standardGetElement(new Permutation(this.getSize()));
   }
 
   @Override
-  protected Element abstractGetElement(final BigInteger value) {
+  protected Element standardGetElement(final BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getSize());
-    return abstractGetElement(new Permutation(MathUtil.bigIntegerToIntArray(values)));
+    return standardGetElement(new Permutation(MathUtil.bigIntegerToIntArray(values)));
   }
 
   // LOCAL CLASS: PERMUTATION_ELEMENT

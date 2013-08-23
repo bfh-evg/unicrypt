@@ -32,10 +32,10 @@ public class StringMonoid extends AbstractAdditiveMonoid {
     if (string == null) {
       throw new IllegalArgumentException();
     }
-    return this.abstractGetElement(string);
+    return this.standardGetElement(string);
   }
 
-  protected Element abstractGetElement(String string) {
+  protected Element standardGetElement(String string) {
     return new StringMonoid.StringElement(this, string);
   }
 
@@ -46,12 +46,12 @@ public class StringMonoid extends AbstractAdditiveMonoid {
 
   @Override
   protected Element abstractGetIdentityElement() {
-    return this.abstractGetElement("");
+    return this.standardGetElement("");
   }
 
   @Override
   protected Element abstractApply(Element element1, Element element2) {
-    return this.abstractGetElement(((StringElement) element1).getString() + ((StringElement) element2).getString());
+    return this.standardGetElement(((StringElement) element1).getString() + ((StringElement) element2).getString());
   }
 
   @Override
@@ -60,8 +60,8 @@ public class StringMonoid extends AbstractAdditiveMonoid {
   }
 
   @Override
-  protected Element abstractGetElement(BigInteger value) {
-    return this.abstractGetElement(new String(value.toByteArray()));
+  protected Element standardGetElement(BigInteger value) {
+    return this.standardGetElement(new String(value.toByteArray()));
   }
 
   @Override

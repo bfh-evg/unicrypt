@@ -49,7 +49,7 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public final Element apply(Element element1, Element element2) {
+  public final CompoundElement apply(Element element1, Element element2) {
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();
     }
@@ -60,16 +60,17 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
     for (int i = 0; i < arity; i++) {
       results[i] = compoundElement1.getAt(i).apply(compoundElement1.getAt(i));
     }
-    return this.abstractGetElement(results);
+    return this.standardGetElement(results);
   }
 
   @Override
-  public final Element apply(Element... elements) {
+  public final CompoundElement apply(Element... elements) {
     if (elements == null || elements.length == 0) {
       throw new IllegalArgumentException();
     }
-    Element result = null;
-    for (Element element : elements) {
+    CompoundElement[] compoundElements = (CompoundElement[]) elements;
+    CompoundElement result = null;
+    for (CompoundElement element : compoundElements) {
       if (result == null) {
         result = element;
       } else {
@@ -80,7 +81,7 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public final Element selfApply(Element element, BigInteger amount) {
+  public final CompoundElement selfApply(Element element, BigInteger amount) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
@@ -90,11 +91,11 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
     for (int i = 0; i < arity; i++) {
       results[i] = compoundElement.getAt(i).selfApply(amount);
     }
-    return abstractGetElement(results);
+    return standardGetElement(results);
   }
 
   @Override
-  public final Element selfApply(Element element, Element amount) {
+  public final CompoundElement selfApply(Element element, Element amount) {
     if (amount == null) {
       throw new IllegalArgumentException();
     }
@@ -102,21 +103,21 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public final Element selfApply(Element element, int amount) {
+  public final CompoundElement selfApply(Element element, int amount) {
     return this.selfApply(element, BigInteger.valueOf(amount));
   }
 
   @Override
-  public final Element selfApply(Element element) {
+  public final CompoundElement selfApply(Element element) {
     return this.apply(element, element);
   }
 
   @Override
-  public final Element multiSelfApply(Element[] elements, BigInteger[] amounts) {
+  public final CompoundElement multiSelfApply(Element[] elements, BigInteger[] amounts) {
     if ((elements == null) || (amounts == null) || (elements.length != amounts.length) || (elements.length == 0)) {
       throw new IllegalArgumentException();
     }
-    Element[] results = new Element[elements.length];
+    CompoundElement[] results = new CompoundElement[elements.length];
     for (int i = 0; i < elements.length; i++) {
       results[i] = this.selfApply(elements[i], amounts[i]);
     }

@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
-  private Element defaultGenerator;
+  private CompoundElement defaultGenerator;
 
   protected ProductCyclicGroup(final CyclicGroup[] cyclicGroups) {
     super(cyclicGroups);
@@ -57,30 +57,30 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
   }
 
   @Override
-  public final Element getDefaultGenerator() {
+  public final CompoundElement getDefaultGenerator() {
     if (this.defaultGenerator == null) {
       Element[] generators = new Element[this.getArity()];
       for (int i=0; i<this.getArity(); i++) {
         generators[i] = this.getAt(i).getDefaultGenerator();
       }
-      this.defaultGenerator = this.abstractGetElement(generators);
+      this.defaultGenerator = this.standardGetElement(generators);
     }
     return this.defaultGenerator;
   }
 
   @Override
-  public final Element getRandomGenerator() {
+  public final CompoundElement getRandomGenerator() {
     return this.getRandomGenerator(null);
   }
 
   @Override
-  public final Element getRandomGenerator(Random random) {
+  public final CompoundElement getRandomGenerator(Random random) {
     int arity = this.getArity();
     Element[] randomElements = new Element[arity];
     for (int i=0; i<arity; i++) {
       randomElements[i] = this.getAt(i).getRandomElement(random);
     }
-    return this.abstractGetElement(randomElements);
+    return this.standardGetElement(randomElements);
   }
 
   @Override

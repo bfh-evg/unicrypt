@@ -107,14 +107,6 @@ public interface Function {
    */
   public Set getCoDomain();
 
-//  /**
-//   * A function is atomic, if it is not composed of multiple internal functions
-//   * that are applied in parallel.
-//   *
-//   * @return {@code true} if the function is atomic, {@code false} otherwise
-//   */
-//  public boolean isAtomic();
-
   /**
    * This method applies a single input value to a given function. The result is
    * a new function with an input arity decreased by 1.
@@ -128,5 +120,19 @@ public interface Function {
    * @throws IndexOutOfBoundsException if {@code index} is an invalid index
    */
   public Function partiallyApply(Element element, int index);
+
+  //
+  // The standard implementations of the following three inherited methods are
+  // insufficient for sets
+  //
+
+  @Override
+  public boolean equals(Object obj);
+
+  @Override
+  public int hashCode();
+
+  @Override
+  public String toString();
 
 }

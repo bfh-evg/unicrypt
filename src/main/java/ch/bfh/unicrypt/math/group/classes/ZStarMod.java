@@ -88,7 +88,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
     if (!order.equals(Group.UNKNOWN_ORDER)) {
       newAmount = amount.mod(order);
     }
-    return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
+    return this.standardGetElement(element.getValue().modPow(newAmount, this.getModulus()));
   }
 
   @Override
@@ -118,7 +118,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
     do {
       randomValue = RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
     } while (!this.contains(randomValue));
-    return this.abstractGetElement(randomValue);
+    return this.standardGetElement(randomValue);
   }
 
   @Override
@@ -140,38 +140,19 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   @Override
   protected Element abstractGetIdentityElement() {
     if (this.getModulus().equals(BigInteger.ONE)) {
-      return this.abstractGetElement(BigInteger.ZERO);
+      return this.standardGetElement(BigInteger.ZERO);
     }
-    return this.abstractGetElement(BigInteger.ONE);
+    return this.standardGetElement(BigInteger.ONE);
   }
 
   @Override
   protected Element abstractApply(final Element element1, final Element element2) {
-    return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+    return this.standardGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
   public Element abstractInvert(final Element element) {
-    return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
-  }
-
-  @Override
-  protected Element abstractGetElement(final BigInteger value) {
-    return new ZStarModElement(this, value);
-  }
-
-  //
-  // LOCAL ELEMENT CLASS
-  //
-
-  final private class ZStarModElement extends Element {
-
-    private static final long serialVersionUID = 1L;
-
-    protected ZStarModElement(final Set set, final BigInteger value) {
-      super(set, value);
-    }
-
+    return this.standardGetElement(element.getValue().modInverse(this.getModulus()));
   }
 
   //
