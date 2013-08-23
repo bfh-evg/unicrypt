@@ -33,27 +33,27 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
   @Override
   public CyclicGroup getFirst() {
-    return (CyclicGroup) this.getFirst();
+    return (CyclicGroup) super.getFirst();
   }
 
   @Override
   public CyclicGroup getAt(final int index) {
-    return (CyclicGroup) this.getAt(index);
+    return (CyclicGroup) super.getAt(index);
   }
 
   @Override
   public CyclicGroup getAt(int... indices) {
-    return (CyclicGroup) this.getAt(indices);
+    return (CyclicGroup) super.getAt(indices);
   }
 
   @Override
   public CyclicGroup[] getAll() {
-    return (CyclicGroup[]) this.getAll();
+    return (CyclicGroup[]) super.getAll();
   }
 
   @Override
   public ProductCyclicGroup removeAt(final int index) {
-    return (ProductCyclicGroup) this.removeAt(index);
+    return (ProductCyclicGroup) super.removeAt(index);
   }
 
   @Override

@@ -27,27 +27,27 @@ public class ProductMonoid extends ProductSemiGroup implements Monoid {
 
   @Override
   public Monoid getAt(final int index) {
-    return (Monoid) this.getAt(index);
+    return (Monoid) super.getAt(index);
   }
 
   @Override
   public Monoid getAt(int... indices) {
-    return (Monoid) this.getAt(indices);
+    return (Monoid) super.getAt(indices);
   }
 
   @Override
   public Monoid getFirst() {
-    return (Monoid) this.getFirst();
+    return (Monoid) super.getFirst();
   }
 
   @Override
   public Monoid[] getAll() {
-    return (Monoid[]) this.getAll();
+    return (Monoid[]) super.getAll();
   }
 
   @Override
   public ProductMonoid removeAt(final int index) {
-    return (ProductMonoid) this.removeAt(index);
+    return (ProductMonoid) super.removeAt(index);
   }
 
   @Override

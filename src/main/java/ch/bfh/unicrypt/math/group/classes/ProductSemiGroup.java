@@ -25,27 +25,27 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
 
   @Override
   public SemiGroup getFirst() {
-    return (SemiGroup) this.getFirst();
+    return (SemiGroup) super.getFirst();
   }
 
   @Override
   public SemiGroup getAt(final int index) {
-    return (SemiGroup) this.getAt(index);
+    return (SemiGroup) super.getAt(index);
   }
 
   @Override
   public SemiGroup getAt(int... indices) {
-    return (SemiGroup) this.getAt(indices);
+    return (SemiGroup) super.getAt(indices);
   }
 
   @Override
   public SemiGroup[] getAll() {
-    return (SemiGroup[]) this.getAll();
+    return (SemiGroup[]) super.getAll();
   }
 
   @Override
   public ProductSemiGroup removeAt(final int index) {
-    return (ProductSemiGroup) this.removeAt(index);
+    return (ProductSemiGroup) super.removeAt(index);
   }
 
   @Override

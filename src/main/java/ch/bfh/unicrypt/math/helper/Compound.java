@@ -4,6 +4,8 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import ch.bfh.unicrypt.math.group.classes.ProductSet;
+
 /**
  *
  * @author rolfhaenni
@@ -64,5 +66,16 @@ public interface Compound<T> extends Iterable<T> {
    * @return The corresponding array of functions
    */
   public T[] getAll();
+
+//  /**
+//   * Creates a new product set which contains one set less than the given
+//   * product set.
+//   *
+//   * @param index The index of the set to remove
+//   * @return The resulting product set.
+//   * @throws IndexOutOfBoundsException if
+//   * {@code index<0} or {@code index>arity-1}
+//   */
+//  public Compound<T> removeAt(final int index);
 
 }
