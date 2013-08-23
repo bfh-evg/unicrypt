@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
-import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;

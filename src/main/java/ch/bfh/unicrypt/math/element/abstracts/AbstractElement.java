@@ -568,18 +568,4 @@ public abstract class AbstractElement<T extends Element> implements Element, Ser
     return this.getValue().toString();
   }
 
-  /**
-   * This is a static factory method to create elements of a given set for a
-   * given BigInteger value
-   * @param value The given BigInteger value
-   * @return The corresponding element
-   * @throws IllegalArgumentException if {@code set} or {@code value} is null
-   */
-  public static Element getInstance(Set set, BigInteger value) {
-    if (set == null) {
-      throw new IllegalArgumentException();
-    }
-    return set.getElement(value);
-  }
-
 }

@@ -1,8 +1,9 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.CompoundElement;
+import ch.bfh.unicrypt.math.element.classes.CompoundElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
@@ -130,6 +131,31 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
       orders[i] = cyclicGroups[i].getOrder();
     }
     return MathUtil.areRelativelyPrime(orders);
+  }
+
+  /**
+   * This is a static factory method to construct a composed element without the
+   * need of constructing the corresponding product or power group beforehand.
+   * The input elements are given as an array.
+   *
+   * @param elements The array of input elements
+   * @return The corresponding tuple element
+   * @throws IllegalArgumentException if {@code elements} is null or contains
+   * null
+   */
+  public static CompoundElement constructElement(Element... elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException();
+    }
+    int arity = elements.length;
+    final CyclicGroup[] cyclicGroups = new CyclicGroup[arity];
+    for (int i = 0; i < arity; i++) {
+      if (elements[i] == null) {
+        throw new IllegalArgumentException();
+      }
+      cyclicGroups[i] = elements[i].getCyclicGroup();
+    }
+    return ProductCyclicGroup.getInstance(cyclicGroups).getElement(elements);
   }
 
 }

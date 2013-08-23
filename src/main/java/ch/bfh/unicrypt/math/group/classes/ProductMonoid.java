@@ -1,8 +1,9 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.CompoundElement;
+import ch.bfh.unicrypt.math.element.classes.CompoundElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.Monoid;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 
 /**
  *
@@ -94,6 +95,31 @@ public class ProductMonoid extends ProductSemiGroup implements Monoid {
       return new ProductMonoid();
     }
     return new ProductMonoid(monoid, arity);
+  }
+
+  /**
+   * This is a static factory method to construct a composed element without the
+   * need of constructing the corresponding product or power group beforehand.
+   * The input elements are given as an array.
+   *
+   * @param elements The array of input elements
+   * @return The corresponding tuple element
+   * @throws IllegalArgumentException if {@code elements} is null or contains
+   * null
+   */
+  public static CompoundElement constructElement(Element... elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException();
+    }
+    int arity = elements.length;
+    final Monoid[] monoids = new Monoid[arity];
+    for (int i = 0; i < arity; i++) {
+      if (elements[i] == null) {
+        throw new IllegalArgumentException();
+      }
+      monoids[i] = elements[i].getMonoid();
+    }
+    return ProductMonoid.getInstance(monoids).getElement(elements);
   }
 
 }

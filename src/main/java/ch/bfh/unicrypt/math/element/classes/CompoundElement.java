@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.element.abstracts;
+package ch.bfh.unicrypt.math.element.classes;
 
+import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
@@ -18,7 +19,7 @@ import java.util.NoSuchElementException;
  *
  * @author rolfhaenni
  */
-public abstract class CompoundElement extends AbstractElement<CompoundElement> implements Compound<Element> {
+public class CompoundElement extends AbstractElement<CompoundElement> implements Compound<Element> {
 
   private final Element[] elements;
   private final int arity;
@@ -168,28 +169,4 @@ public abstract class CompoundElement extends AbstractElement<CompoundElement> i
     return result;
   }
 
-  /**
-   * This is a static factory method to construct a composed element without the
-   * need of constructing the corresponding product or power group beforehand.
-   * The input elements are given as an array.
-   *
-   * @param elements The array of input elements
-   * @return The corresponding tuple element
-   * @throws IllegalArgumentException if {@code elements} is null or contains
-   * null
-   */
-  public static CompoundElement getInstance(Element... elements) {
-    if (elements == null) {
-      throw new IllegalArgumentException();
-    }
-    int arity = elements.length;
-    final Set[] sets = new Set[arity];
-    for (int i = 0; i < arity; i++) {
-      if (elements[i] == null) {
-        throw new IllegalArgumentException();
-      }
-      sets[i] = elements[i].getSet();
-    }
-    return ProductSet.getInstance(sets).getElement(elements);
-  }
 }

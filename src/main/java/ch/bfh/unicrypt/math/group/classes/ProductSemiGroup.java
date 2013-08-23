@@ -1,8 +1,9 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.CompoundElement;
+import ch.bfh.unicrypt.math.element.classes.CompoundElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.math.BigInteger;
 
 /**
@@ -152,6 +153,31 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
       return new ProductSemiGroup();
     }
     return new ProductSemiGroup(semiGroup, arity);
+  }
+
+  /**
+   * This is a static factory method to construct a composed element without the
+   * need of constructing the corresponding product or power group beforehand.
+   * The input elements are given as an array.
+   *
+   * @param elements The array of input elements
+   * @return The corresponding tuple element
+   * @throws IllegalArgumentException if {@code elements} is null or contains
+   * null
+   */
+  public static CompoundElement constructElement(Element... elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException();
+    }
+    int arity = elements.length;
+    final SemiGroup[] semiGroups = new SemiGroup[arity];
+    for (int i = 0; i < arity; i++) {
+      if (elements[i] == null) {
+        throw new IllegalArgumentException();
+      }
+      semiGroups[i] = elements[i].getSemiGroup();
+    }
+    return ProductSemiGroup.getInstance(semiGroups).getElement(elements);
   }
 
 }

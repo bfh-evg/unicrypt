@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.element.abstracts;
+package ch.bfh.unicrypt.math.element.classes;
 
+import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.math.BigInteger;
 
@@ -11,7 +12,7 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public abstract class AtomicElement extends AbstractElement<AtomicElement> {
+public class AtomicElement extends AbstractElement<AtomicElement> {
 
   protected AtomicElement(final Set set) {
     super(set);

@@ -4,7 +4,7 @@
  */
 package ch.bfh.unicrypt.math.group.abstracts;
 
-import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import java.math.BigInteger;
 
 /**
@@ -13,6 +13,7 @@ import java.math.BigInteger;
  */
 public abstract class AbstractAtomicSet extends AbstractSet<AtomicElement> {
 
+  @Override
   protected AtomicElement abstractGetElement(BigInteger value) {
     return new AtomicElement(this, value) {};
   }

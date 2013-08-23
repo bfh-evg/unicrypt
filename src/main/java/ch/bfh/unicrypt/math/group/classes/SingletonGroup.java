@@ -3,7 +3,7 @@
  */
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
 import java.util.HashMap;
