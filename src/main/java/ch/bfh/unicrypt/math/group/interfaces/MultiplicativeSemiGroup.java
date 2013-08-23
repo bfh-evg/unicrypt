@@ -1,8 +1,7 @@
 package ch.bfh.unicrypt.math.group.interfaces;
 
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
-
-import ch.bfh.unicrypt.math.element.Element;
 
 /**
  * This interface provides the renaming of some group operations for the case of
@@ -88,5 +87,5 @@ public interface MultiplicativeSemiGroup extends SemiGroup {
    * have different lengths
    */
   public Element productOfPowers(Element[] elements, BigInteger[] amounts);
-  
+
 }

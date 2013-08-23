@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.group.abstracts;
 
+import ch.bfh.unicrypt.math.element.abstracts.CompoundElement;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
@@ -14,7 +15,7 @@ import java.util.NoSuchElementException;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundSet extends AbstractSet implements Compound<Set> {
+public abstract class AbstractCompoundSet extends AbstractSet<CompoundElement> implements Compound<Set> {
 
   private final Set[] sets;
   private final int arity;
@@ -85,6 +86,25 @@ public abstract class AbstractCompoundSet extends AbstractSet implements Compoun
       result[i] = this.getAt(i);
     }
     return result;
+  }
+
+  public AbstractCompoundSet removeAt(final int index) {
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    if (this.isUniform()) {
+      return ProductSet.getInstance(this.getFirst(), arity-1);
+    }
+    final Set[] remainingSets = new Set[arity - 1];
+    for (int i=0; i < arity-1; i++) {
+      if (i < index) {
+        remainingSets[i] = this.getAt(i);
+      } else {
+        remainingSets[i] = this.getAt(i+1);
+      }
+    }
+    return ProductSet.getInstance(remainingSets);
   }
 
   @Override

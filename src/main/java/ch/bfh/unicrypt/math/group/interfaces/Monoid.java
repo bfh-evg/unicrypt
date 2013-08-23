@@ -1,10 +1,6 @@
 package ch.bfh.unicrypt.math.group.interfaces;
 
-import java.math.BigInteger;
-import java.util.Random;
-
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 
 /**
  * This interface represents the mathematical concept a  group. It

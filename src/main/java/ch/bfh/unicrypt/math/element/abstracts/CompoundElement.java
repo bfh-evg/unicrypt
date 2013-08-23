@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.element;
+package ch.bfh.unicrypt.math.element.abstracts;
 
-import ch.bfh.unicrypt.math.group.abstracts.AbstractCompoundSet;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
  *
  * @author rolfhaenni
  */
-public abstract class CompoundElement extends Element implements Compound<Element> {
+public abstract class CompoundElement extends AbstractElement<CompoundElement> implements Compound<Element> {
 
   private final Element[] elements;
   private final int arity;
@@ -178,7 +178,7 @@ public abstract class CompoundElement extends Element implements Compound<Elemen
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Element getInstance(Element... elements) {
+  public static CompoundElement getInstance(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

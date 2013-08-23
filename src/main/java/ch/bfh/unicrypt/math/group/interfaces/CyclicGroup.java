@@ -1,8 +1,7 @@
 package ch.bfh.unicrypt.math.group.interfaces;
 
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.util.Random;
-
-import ch.bfh.unicrypt.math.element.Element;
 
 /**
  * This interface represents the concept a cyclic atomic group. Every element of a cyclic group can be written

@@ -4,11 +4,10 @@
  */
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Permutation;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -35,12 +34,12 @@ public class StringMonoid extends AbstractAdditiveMonoid {
     return this.standardGetElement(string);
   }
 
-  protected Element standardGetElement(String string) {
+  protected AtomicElement standardGetElement(String string) {
     return new StringMonoid.StringElement(this, string);
   }
 
   @Override
-  protected Element standardGetElement(BigInteger value) {
+  protected AtomicElement abstractGetElement(BigInteger value) {
     return this.standardGetElement(new String(value.toByteArray()));
   }
 
@@ -50,12 +49,12 @@ public class StringMonoid extends AbstractAdditiveMonoid {
   //
 
   @Override
-  protected Element abstractGetIdentityElement() {
+  protected AtomicElement abstractGetIdentityElement() {
     return this.standardGetElement("");
   }
 
   @Override
-  protected Element abstractApply(Element element1, Element element2) {
+  protected AtomicElement abstractApply(Element element1, Element element2) {
     return this.standardGetElement(((StringElement) element1).getString() + ((StringElement) element2).getString());
   }
 
@@ -65,7 +64,7 @@ public class StringMonoid extends AbstractAdditiveMonoid {
   }
 
   @Override
-  protected Element abstractGetRandomElement(Random random) {
+  protected AtomicElement abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -77,7 +76,7 @@ public class StringMonoid extends AbstractAdditiveMonoid {
   //
   // LOCAL ELEMENT CLASS
   //
-  final private class StringElement extends Element {
+  final private class StringElement extends AtomicElement {
 
     private static final long serialVersionUID = 1L;
     private final String string;

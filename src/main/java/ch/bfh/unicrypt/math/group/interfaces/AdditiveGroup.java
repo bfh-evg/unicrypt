@@ -1,7 +1,6 @@
 package ch.bfh.unicrypt.math.group.interfaces;
 
-import ch.bfh.unicrypt.math.element.Element;
-
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 
 /**
  * This interface provides represents an additively written group. It provides

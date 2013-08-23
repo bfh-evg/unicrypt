@@ -1,9 +1,10 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
@@ -82,13 +83,13 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   //
 
   @Override
-  protected Element standardSelfApply(final Element element, final BigInteger amount) {
+  protected AtomicElement standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount;
     final BigInteger order = this.getOrder();
     if (!order.equals(Group.UNKNOWN_ORDER)) {
       newAmount = amount.mod(order);
     }
-    return this.standardGetElement(element.getValue().modPow(newAmount, this.getModulus()));
+    return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
   }
 
   @Override
@@ -113,12 +114,12 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   //
 
   @Override
-  protected Element abstractGetRandomElement(final Random random) {
+  protected AtomicElement abstractGetRandomElement(final Random random) {
     BigInteger randomValue;
     do {
       randomValue = RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
     } while (!this.contains(randomValue));
-    return this.standardGetElement(randomValue);
+    return this.abstractGetElement(randomValue);
   }
 
   @Override
@@ -138,21 +139,21 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   }
 
   @Override
-  protected Element abstractGetIdentityElement() {
+  protected AtomicElement abstractGetIdentityElement() {
     if (this.getModulus().equals(BigInteger.ONE)) {
-      return this.standardGetElement(BigInteger.ZERO);
+      return this.abstractGetElement(BigInteger.ZERO);
     }
-    return this.standardGetElement(BigInteger.ONE);
+    return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  protected Element abstractApply(final Element element1, final Element element2) {
-    return this.standardGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+    return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public Element abstractInvert(final Element element) {
-    return this.standardGetElement(element.getValue().modInverse(this.getModulus()));
+  public AtomicElement abstractInvert(final Element element) {
+    return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 
   //

@@ -1,13 +1,12 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Factorization;
 import ch.bfh.unicrypt.math.helper.SpecialFactorization;
@@ -99,9 +98,9 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   //
 
   @Override
-  protected Element standardSelfApply(final Element element, final BigInteger amount) {
+  protected AtomicElement standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount.mod(this.getOrder());
-    return this.standardGetElement(element.getValue().modPow(newAmount, this.getModulus()));
+    return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
   }
 
   @Override
@@ -130,17 +129,17 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   //
 
   @Override
-  protected Element abstractGetRandomElement(final Random random) {
+  protected AtomicElement abstractGetRandomElement(final Random random) {
     if (this.getOrder().compareTo(this.getOrderQuotient()) > 0) { // choose between the faster method
       // Method 1
       BigInteger randomValue;
       do {
         randomValue = RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
       } while (!randomValue.gcd(this.getModulus()).equals(BigInteger.ONE));
-      return this.standardGetElement(randomValue.modPow(this.getOrderQuotient(), this.getModulus()));
+      return this.abstractGetElement(randomValue.modPow(this.getOrderQuotient(), this.getModulus()));
     }
     // Method 2
-    return this.getDefaultGenerator().selfApply(RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getOrder(), random));
+    return this.selfApply(this.getDefaultGenerator(), RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getOrder(), random));
   }
 
   @Override
@@ -158,37 +157,37 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   }
 
   @Override
-  protected Element abstractGetIdentityElement() {
-    return this.standardGetElement(BigInteger.ONE);
+  protected AtomicElement abstractGetIdentityElement() {
+    return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  protected Element abstractApply(final Element element1, final Element element2) {
-    return this.standardGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+    return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public Element abstractInvert(final Element element) {
-    return this.standardGetElement(element.getValue().modInverse(this.getModulus()));
+  public AtomicElement abstractInvert(final Element element) {
+    return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 
   @Override
-  protected Element abstractGetDefaultGenerator() {
+  protected AtomicElement abstractGetDefaultGenerator() {
     BigInteger alpha = BigInteger.ZERO;
-    Element element;
+    AtomicElement element;
     do {
       do {
         alpha = alpha.add(BigInteger.ONE);
       } while (!alpha.gcd(this.getModulus()).equals(BigInteger.ONE));
-      element = this.standardGetElement(alpha.modPow(this.getOrderQuotient(), this.getModulus()));
+      element = this.abstractGetElement(alpha.modPow(this.getOrderQuotient(), this.getModulus()));
     } while (!this.isGenerator(element)); // this test could be skipped for a prime order
     return element;
   }
 
   // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
   @Override
-  protected Element abstractGetRandomGenerator(Random random) {
-    Element element;
+  protected AtomicElement abstractGetRandomGenerator(Random random) {
+    AtomicElement element;
     do {
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));

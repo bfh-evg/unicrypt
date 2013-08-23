@@ -1,16 +1,9 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.CompoundElement;
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import ch.bfh.unicrypt.math.element.abstracts.CompoundElement;
 
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractGroup;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.Monoid;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  * This class represents the concept of a direct product of groups ("product group" for short).
@@ -45,27 +38,27 @@ public class ProductGroup extends ProductMonoid implements Group {
 
   @Override
   public Group getFirst() {
-    return (Group) this.getFirst();
+    return (Group) super.getFirst();
   }
 
   @Override
   public Group getAt(final int index) {
-    return (Group) this.getAt(index);
+    return (Group) super.getAt(index);
   }
 
   @Override
   public Group getAt(int... indices) {
-    return (Group) this.getAt(indices);
+    return (Group) super.getAt(indices);
   }
 
   @Override
   public Group[] getAll() {
-    return (Group[]) this.getAll();
+    return (Group[]) super.getAll();
   }
 
   @Override
   public ProductGroup removeAt(final int index) {
-    return (ProductGroup) this.removeAt(index);
+    return (ProductGroup) super.removeAt(index);
   }
 
   @Override

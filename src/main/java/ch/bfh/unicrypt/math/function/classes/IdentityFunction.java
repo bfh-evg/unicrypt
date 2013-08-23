@@ -1,11 +1,9 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.util.Arrays;
 import java.util.Random;

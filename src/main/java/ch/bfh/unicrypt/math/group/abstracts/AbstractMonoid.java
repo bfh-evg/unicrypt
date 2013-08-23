@@ -1,20 +1,17 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
+import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
 import java.math.BigInteger;
-import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.Monoid;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  * This abstract class provides a basis implementation for objects of type
  * {@link Monoid}.
  *
- * @see Element
+ * @see AbstractElement
  *
  * @author R. Haenni
  * @author R. E. Koenig
@@ -24,10 +21,10 @@ public abstract class AbstractMonoid extends AbstractSemiGroup implements Monoid
 
   private static final long serialVersionUID = 1L;
 
-  private Element identityElement;
+  private AtomicElement identityElement;
 
   @Override
-  public final Element getIdentityElement() {
+  public final AtomicElement getIdentityElement() {
     if (this.identityElement == null) {
       this.identityElement = this.abstractGetIdentityElement();
     }
@@ -36,7 +33,7 @@ public abstract class AbstractMonoid extends AbstractSemiGroup implements Monoid
 
   @Override
   public final boolean isIdentityElement(final Element element) {
-    return this.areEqual(element, getIdentityElement());
+    return this.areEqual(element, this.getIdentityElement());
   }
 
   //
@@ -44,12 +41,13 @@ public abstract class AbstractMonoid extends AbstractSemiGroup implements Monoid
   // various super-classes
   //
 
+  @Override
   protected BigInteger standardGetMinOrder() {
     return BigInteger.ONE;
   }
 
   @Override
-  protected Element standardSelfApply(Element element, BigInteger amount) {
+  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
     if (amount.signum() == 0) {
       return this.getIdentityElement();
     }
@@ -60,6 +58,6 @@ public abstract class AbstractMonoid extends AbstractSemiGroup implements Monoid
   // The following protected abstract method must be implemented in every direct sub-class.
   //
 
-  protected abstract Element abstractGetIdentityElement();
+  protected abstract AtomicElement abstractGetIdentityElement();
 
 }

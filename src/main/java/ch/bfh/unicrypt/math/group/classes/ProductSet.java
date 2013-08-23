@@ -1,15 +1,11 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.CompoundElement;
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.element.abstracts.CompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractCompoundSet;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractSet;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
-import static ch.bfh.unicrypt.math.group.interfaces.Set.UNKNOWN_ORDER;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -188,36 +184,6 @@ public class ProductSet extends AbstractCompoundSet implements Set {
     return result;
   }
 
-  @Override
-  protected int standardHashCode() {
-    final int prime = 31;
-    int result = 1;
-    for (Set set : this) {
-      result = prime * result + set.hashCode();
-    }
-    result = prime * result + this.getArity();
-    return result;
-  }
-
-  @Override
-  protected String standardToString() {
-    if (this.isEmpty()) {
-      return "";
-    }
-    if (this.isUniform()) {
-      return this.getFirst().toString() + "^" + this.getArity();
-    }
-    String result = null;
-    for (Set set: this) {
-      if (result == null) {
-        result = set.toString();
-      } else {
-        result = result + "," + set.toString();
-      }
-    }
-    return result;
-  }
-
   //
   // The following protected methods implement the abstract methods from
   // various super-classes
@@ -255,7 +221,7 @@ public class ProductSet extends AbstractCompoundSet implements Set {
   }
 
   @Override
-  protected CompoundElement standardGetElement(BigInteger value) {
+  protected CompoundElement abstractGetElement(BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getArity());
     return this.getElement(values);
   }
@@ -274,21 +240,6 @@ public class ProductSet extends AbstractCompoundSet implements Set {
   protected boolean abstractContains(BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getArity());
     return this.contains(values);
-  }
-
-  @Override
-  protected boolean standardEquals(Set set) {
-    int arity = this.getArity();
-    ProductSet productSet = (ProductSet) set;
-    if (arity != productSet.getArity()) {
-      return false;
-    }
-    for (int i = 0; i < arity; i++) {
-      if (!this.getAt(i).equals(productSet.getAt(i))) {
-        return false;
-      }
-    }
-    return true;
   }
 
   //

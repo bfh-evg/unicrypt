@@ -1,13 +1,13 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
@@ -46,8 +46,8 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   //
 
   @Override
-  protected Element standardSelfApply(Element element, BigInteger amount) {
-    return this.standardGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
+  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+    return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
   }
 
   @Override
@@ -77,8 +77,8 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractGetRandomElement(final Random random) {
-    return this.standardGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
+  protected AtomicElement abstractGetRandomElement(final Random random) {
+    return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
   @Override
@@ -87,8 +87,8 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractGetDefaultGenerator() {
-    return this.standardGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
+  protected AtomicElement abstractGetDefaultGenerator() {
+    return this.abstractGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
   }
 
   @Override
@@ -100,23 +100,23 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractGetIdentityElement() {
-    return this.standardGetElement(BigInteger.ZERO);
+  protected AtomicElement abstractGetIdentityElement() {
+    return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected Element abstractApply(final Element element1, final Element element2) {
-    return this.standardGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
+  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+    return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  protected Element abstractInvert(final Element element) {
-    return this.standardGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
+  protected AtomicElement abstractInvert(final Element element) {
+    return this.abstractGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public Element abstractGetRandomGenerator(final Random random) {
-    Element element;
+  public AtomicElement abstractGetRandomGenerator(final Random random) {
+    AtomicElement element;
     do {
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));

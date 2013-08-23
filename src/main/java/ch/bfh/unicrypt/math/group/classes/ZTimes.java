@@ -1,15 +1,13 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.Monoid;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
 /**
@@ -41,7 +39,7 @@ public class ZTimes extends AbstractMultiplicativeMonoid {
   //
 
   @Override
-  protected Element abstractGetRandomElement(final Random random) {
+  protected AtomicElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -56,13 +54,13 @@ public class ZTimes extends AbstractMultiplicativeMonoid {
   }
 
   @Override
-  protected Element abstractGetIdentityElement() {
-    return this.standardGetElement(BigInteger.ONE);
+  protected AtomicElement abstractGetIdentityElement() {
+    return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  protected Element abstractApply(final Element element1, final Element element2) {
-    return this.standardGetElement(element1.getValue().multiply(element2.getValue()));
+  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+    return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
 
   @Override

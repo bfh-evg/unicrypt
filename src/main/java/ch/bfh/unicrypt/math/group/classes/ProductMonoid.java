@@ -1,9 +1,8 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.CompoundElement;
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.element.abstracts.CompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.Monoid;
-import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
 
 /**
  *

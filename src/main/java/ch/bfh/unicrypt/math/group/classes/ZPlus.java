@@ -1,12 +1,12 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
@@ -40,8 +40,8 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   //
 
   @Override
-  protected Element standardSelfApply(Element element, BigInteger amount) {
-    return this.standardGetElement(element.getValue().multiply(amount));
+  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+    return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
   //
@@ -50,7 +50,7 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   //
 
   @Override
-  protected Element abstractGetRandomElement(final Random random) {
+  protected AtomicElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -65,8 +65,8 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractGetDefaultGenerator() {
-    return this.standardGetElement(BigInteger.ONE);
+  protected AtomicElement abstractGetDefaultGenerator() {
+    return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
@@ -75,26 +75,26 @@ public class ZPlus extends AbstractAdditiveCyclicGroup {
   }
 
   @Override
-  protected Element abstractGetIdentityElement() {
-    return this.standardGetElement(BigInteger.ZERO);
+  protected AtomicElement abstractGetIdentityElement() {
+    return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected Element abstractApply(final Element element1, final Element element2) {
-    return this.standardGetElement(element1.getValue().add(element2.getValue()));
+  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+    return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
-  protected Element abstractInvert(final Element element) {
-    return this.standardGetElement(element.getValue().negate());
+  protected AtomicElement abstractInvert(final Element element) {
+    return this.abstractGetElement(element.getValue().negate());
   }
 
   @Override
-  public Element abstractGetRandomGenerator(final Random random) {
+  public AtomicElement abstractGetRandomGenerator(final Random random) {
     if (RandomUtil.createRandomBoolean(random)) {
       return this.getDefaultGenerator();
     }
-    return this.getDefaultGenerator().invert();
+    return this.invert(this.getDefaultGenerator());
   }
 
   //

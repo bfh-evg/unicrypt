@@ -1,5 +1,6 @@
-package ch.bfh.unicrypt.math.element;
+package ch.bfh.unicrypt.math.element.abstracts;
 
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductMonoid;
 import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
@@ -21,12 +22,11 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 /**
  * This abstract class represents the concept an element in a mathematical
  * group. It allows applying the group operation and other methods from a
- * {@link Group} in a convenient way. Most methods provided by {@link Element}
+ * {@link Group} in a convenient way. Most methods provided by {@link AbstractElement}
  * have an equivalent method in {@link Group}.
  *
  * @see Group
@@ -35,26 +35,17 @@ import java.util.List;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class Element implements Serializable {
+public abstract class AbstractElement<T extends Element> implements Element, Serializable {
 
   private static final long serialVersionUID = 1L;
-  public static final String STANDARD_HASH_ALGORITHM = "SHA-256";
   private final Set set;
-  private BigInteger value;
+  protected BigInteger value;
 
-  protected Element(final Set set) {
+  protected AbstractElement(final Set set) {
     if (set == null) {
       throw new IllegalArgumentException();
     }
     this.set = set;
-  }
-
-  protected Element(final Set set, final BigInteger value) {
-    this(set);
-    if (!set.contains(value)) {
-      throw new IllegalArgumentException();
-    }
-    this.value = value;
   }
 
   /**
@@ -70,6 +61,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final SemiGroup getSemiGroup() {
     if (this.set instanceof SemiGroup) {
       return (SemiGroup) this.set;
@@ -81,6 +73,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final Monoid getMonoid() {
     if (this.set instanceof Monoid) {
       return (Monoid) this.set;
@@ -92,6 +85,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final Group getGroup() {
     if (this.set instanceof Group) {
       return (Group) this.set;
@@ -103,6 +97,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final CyclicGroup getCyclicGroup() {
     if (this.set instanceof CyclicGroup) {
       return (CyclicGroup) this.set;
@@ -114,6 +109,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final AdditiveSemiGroup getAdditiveSemiGroup() {
     if (this.set instanceof AdditiveSemiGroup) {
       return (AdditiveSemiGroup) this.set;
@@ -125,6 +121,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final AdditiveMonoid getAdditiveMonoid() {
     if (this.set instanceof AdditiveMonoid) {
       return (AdditiveMonoid) this.set;
@@ -136,6 +133,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final AdditiveGroup getAdditiveGroup() {
     if (this.set instanceof AdditiveGroup) {
       return (AdditiveGroup) this.set;
@@ -147,6 +145,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final AdditiveCyclicGroup getAdditiveCyclicGroup() {
     if (this.set instanceof AdditiveCyclicGroup) {
       return (AdditiveCyclicGroup) this.set;
@@ -158,6 +157,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final MultiplicativeSemiGroup getMultiplicativeSemiGroup() {
     if (this.set instanceof MultiplicativeSemiGroup) {
       return (MultiplicativeSemiGroup) this.set;
@@ -169,6 +169,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final MultiplicativeMonoid getMultiplicativeMonoid() {
     if (this.set instanceof MultiplicativeMonoid) {
       return (MultiplicativeMonoid) this.set;
@@ -180,6 +181,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final MultiplicativeGroup getMultiplicativeGroup() {
     if (this.set instanceof MultiplicativeGroup) {
       return (MultiplicativeGroup) this.set;
@@ -191,6 +193,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final MultiplicativeCyclicGroup getMultiplicativeCyclicGroup() {
     if (this.set instanceof MultiplicativeCyclicGroup) {
       return (MultiplicativeCyclicGroup) this.set;
@@ -202,6 +205,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final ProductSet getProductSet() {
     if (this.set instanceof ProductSet) {
       return (ProductSet) this.set;
@@ -213,6 +217,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final ProductSemiGroup getProductSemiGroup() {
     if (this.set instanceof ProductSemiGroup) {
       return (ProductSemiGroup) this.set;
@@ -224,6 +229,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final ProductMonoid getProductMonoid() {
     if (this.set instanceof ProductMonoid) {
       return (ProductMonoid) this.set;
@@ -235,6 +241,7 @@ public abstract class Element implements Serializable {
    *
    * @return
    */
+  @Override
   public final ProductGroup getProductGroup() {
     if (this.set instanceof ProductGroup) {
       return (ProductGroup) this.set;
@@ -247,6 +254,7 @@ public abstract class Element implements Serializable {
    *
    * @return The corresponding BigInteger value
    */
+  @Override
   public final BigInteger getValue() {
     if (this.value == null) {
       this.value = standardGetValue();
@@ -254,10 +262,12 @@ public abstract class Element implements Serializable {
     return this.value;
   }
 
+  @Override
   public final byte[] getHashValue() {
     return this.getHashValue(Element.STANDARD_HASH_ALGORITHM);
   }
 
+  @Override
   public final byte[] getHashValue(String hashAlgorithm) {
     if (hashAlgorithm == null) {
       throw new IllegalArgumentException();
@@ -271,6 +281,7 @@ public abstract class Element implements Serializable {
     return this.getHashValue(messageDigest);
   }
 
+  @Override
   public byte[] getHashValue(MessageDigest messageDigest) {
     if (messageDigest == null) {
       throw new IllegalArgumentException();
@@ -279,10 +290,12 @@ public abstract class Element implements Serializable {
     return messageDigest.digest(this.getValue().toByteArray());
   }
 
+  @Override
   public byte[] getRecursiveHashValue() {
-    return this.getRecursiveHashValue(Element.STANDARD_HASH_ALGORITHM);
+    return this.getRecursiveHashValue(AbstractElement.STANDARD_HASH_ALGORITHM);
   }
 
+  @Override
   public byte[] getRecursiveHashValue(String hashAlgorithm) {
     if (hashAlgorithm == null) {
       throw new IllegalArgumentException();
@@ -296,6 +309,7 @@ public abstract class Element implements Serializable {
     return this.getRecursiveHashValue(messageDigest);
   }
 
+  @Override
   public byte[] getRecursiveHashValue(MessageDigest messageDigest) {
     if (messageDigest == null) {
       throw new IllegalArgumentException();
@@ -309,153 +323,170 @@ public abstract class Element implements Serializable {
   /**
    * @see Group#apply(Element, Element)
    */
-  public final Element apply(final Element element) {
+  @Override
+  public final T apply(final Element element) {
     SemiGroup semiGroup = this.getSemiGroup();
-    return semiGroup.apply(this, element);
+    return (T) semiGroup.apply(this, element);
   }
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
-  public final Element applyInverse(final Element element) {
+  @Override
+  public final T applyInverse(final Element element) {
     Group group = this.getGroup();
-    return group.applyInverse(this, element);
+    return (T) group.applyInverse(this, element);
   }
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
-  public final Element selfApply(final BigInteger amount) {
+  @Override
+  public final T selfApply(final BigInteger amount) {
     SemiGroup semiGroup = this.getSemiGroup();
-    return semiGroup.selfApply(this, amount);
+    return (T) semiGroup.selfApply(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public final Element selfApply(final Element amount) {
+  @Override
+  public final T selfApply(final Element amount) {
     SemiGroup semiGroup = this.getSemiGroup();
-    return semiGroup.selfApply(this, amount);
+    return (T) semiGroup.selfApply(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public final Element selfApply(final int amount) {
+  @Override
+  public final T selfApply(final int amount) {
     SemiGroup semiGroup = this.getSemiGroup();
-    return semiGroup.selfApply(this, amount);
+    return (T) semiGroup.selfApply(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
-  public final Element selfApply() {
+  @Override
+  public final T selfApply() {
     SemiGroup semiGroup = this.getSemiGroup();
-    return semiGroup.selfApply(this);
+    return (T) semiGroup.selfApply(this);
   }
 
   /**
    * @see Group#apply(Element, Element)
    */
-  public final Element add(final Element element) {
+  @Override
+  public final T add(final Element element) {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return semiGroup.add(this, element);
+    return (T) semiGroup.add(this, element);
   }
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
-  public final Element subtract(final Element element) {
+  @Override
+  public final T subtract(final Element element) {
     AdditiveGroup group = this.getAdditiveGroup();
-    return group.subtract(this, element);
+    return (T) group.subtract(this, element);
   }
 
   /**
-   * @see Group#selfApply(Element, BigInteger)
+   * @see Group#T(Element, BigInteger)
    */
-  public final Element times(final BigInteger amount) {
+  @Override
+  public final T times(final BigInteger amount) {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return semiGroup.times(this, amount);
+    return (T) semiGroup.times(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public final Element times(final Element amount) {
+  @Override
+  public final T times(final Element amount) {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return semiGroup.times(this, amount);
+    return (T) semiGroup.times(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public final Element times(final int amount) {
+  @Override
+  public final T times(final int amount) {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return semiGroup.times(this, amount);
+    return (T) semiGroup.times(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
-  public final Element timesTwo() {
+  @Override
+  public final T timesTwo() {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return semiGroup.timesTwo(this);
+    return (T) semiGroup.timesTwo(this);
   }
 
   /**
    * @see Group#apply(Element, Element)
    */
-  public final Element multiply(final Element element) {
+  @Override
+  public final T multiply(final Element element) {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return semiGroup.multiply(this, element);
+    return (T) semiGroup.multiply(this, element);
   }
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
-  public final Element divide(final Element element) {
+  @Override
+  public final T divide(final Element element) {
     MultiplicativeGroup group = this.getMultiplicativeGroup();
-    return group.divide(this, element);
+    return (T) group.divide(this, element);
   }
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
-  public final Element power(final BigInteger amount) {
+  @Override
+  public final T power(final BigInteger amount) {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return semiGroup.power(this, amount);
+    return (T) semiGroup.power(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public final Element power(final Element amount) {
+  @Override
+  public final T power(final Element amount) {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return semiGroup.power(this, amount);
+    return (T) semiGroup.power(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public final Element power(final int amount) {
+  @Override
+  public final T power(final int amount) {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return semiGroup.power(this, amount);
+    return (T) semiGroup.power(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
-  public final Element square() {
+  public final T square() {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return semiGroup.square(this);
+    return (T) semiGroup.square(this);
   }
 
   /**
    * @see Group#invert(Element)
    */
-  public final Element invert() {
+  public final T invert() {
     Group group = this.getGroup();
-    return group.invert(this);
+    return (T) group.invert(this);
   }
 
   /**
@@ -489,7 +520,7 @@ public abstract class Element implements Serializable {
     if (this.getClass() != object.getClass()) {
       return false;
     }
-    Element other = (Element) object;
+    T other = (T) object;
     if (!this.getSet().equals(other.getSet())) {
       return false;
     }

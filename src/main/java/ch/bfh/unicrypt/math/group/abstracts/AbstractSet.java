@@ -3,25 +3,23 @@ package ch.bfh.unicrypt.math.group.abstracts;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.classes.ProductGroup;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.group.classes.ZStarMod;
 import ch.bfh.unicrypt.math.group.classes.ZTimesMod;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  * This abstract class provides a basis implementation for atomic sets.
  *
- * @see Element
+ * @see AbstractElement
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractSet implements Set {
+public abstract class AbstractSet<T extends Element> implements Set {
 
   private static final long serialVersionUID = 1L;
 
@@ -107,36 +105,36 @@ public abstract class AbstractSet implements Set {
   }
 
   @Override
-  public final Element getElement(final int value) {
+  public final T getElement(final int value) {
     return this.getElement(BigInteger.valueOf(value));
   }
 
   @Override
-  public final Element getElement(BigInteger value) {
+  public final T getElement(BigInteger value) {
     if (value == null || !this.contains(value)) {
       throw new IllegalArgumentException();
     }
-    return this.standardGetElement(value);
+    return this.abstractGetElement(value);
   }
 
   @Override
-  public final Element getElement(final Element element) {
+  public final T getElement(final Element element) {
     if (element == null) {
       throw new IllegalArgumentException();
     }
     if (this.contains(element)) {
-      return element;
+      return (T) element;
     }
     return this.getElement(element.getValue());
   }
 
   @Override
-  public final Element getRandomElement() {
+  public final T getRandomElement() {
     return this.getRandomElement(null);
   }
 
   @Override
-  public final Element getRandomElement(Random random) {
+  public final T getRandomElement(Random random) {
     return this.abstractGetRandomElement(random);
   }
 
@@ -201,10 +199,6 @@ public abstract class AbstractSet implements Set {
     return "";
   }
 
-  protected Element standardGetElement(BigInteger value) {
-    return new Element(this, value){};
-  }
-
   //
   // The following protected abstract method must be implemented in every direct
   // sub-class.
@@ -212,7 +206,9 @@ public abstract class AbstractSet implements Set {
 
   protected abstract BigInteger abstractGetOrder();
 
-  protected abstract Element abstractGetRandomElement(Random random);
+  protected abstract T abstractGetElement(BigInteger value);
+
+  protected abstract T abstractGetRandomElement(Random random);
 
   protected abstract boolean abstractContains(BigInteger value);
 

@@ -1,14 +1,12 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.element.abstracts.AtomicElement;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
 /**
@@ -40,8 +38,8 @@ public class NPlus extends AbstractAdditiveMonoid {
   //
 
   @Override
-  protected Element standardSelfApply(Element element, BigInteger amount) {
-    return this.standardGetElement(element.getValue().multiply(amount));
+  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+    return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
   //
@@ -50,7 +48,7 @@ public class NPlus extends AbstractAdditiveMonoid {
   //
 
   @Override
-  protected Element abstractGetRandomElement(final Random random) {
+  protected AtomicElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -65,13 +63,13 @@ public class NPlus extends AbstractAdditiveMonoid {
   }
 
   @Override
-  protected Element abstractGetIdentityElement() {
-    return this.standardGetElement(BigInteger.ZERO);
+  protected AtomicElement abstractGetIdentityElement() {
+    return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected Element abstractApply(final Element element1, final Element element2) {
-    return this.standardGetElement(element1.getValue().add(element2.getValue()));
+  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+    return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   //

@@ -1,8 +1,7 @@
 package ch.bfh.unicrypt.math.group.interfaces;
 
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
-
-import ch.bfh.unicrypt.math.element.Element;
 
 /**
  * This interface provides the renaming of some group operations for the case of

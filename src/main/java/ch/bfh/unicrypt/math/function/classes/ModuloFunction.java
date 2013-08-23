@@ -1,10 +1,9 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Random;
@@ -35,15 +34,16 @@ public class ModuloFunction extends AbstractFunction {
     return this.modulus;
   }
 
- @Override
-  protected int standardHashCode() {
-    return this.getModulus().hashCode();
-  }
-
   @Override
   protected boolean standardEquals(Function function) {
     return this.getModulus().equals(((ModuloFunction) function).getModulus());
   }
+
+  @Override
+  protected int standardHashCode() {
+    return this.getModulus().hashCode();
+  }
+
   //
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //

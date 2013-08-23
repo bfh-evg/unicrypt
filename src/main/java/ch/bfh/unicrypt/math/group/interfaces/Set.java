@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.group.classes.ZStarMod;
 import ch.bfh.unicrypt.math.group.classes.ZTimesMod;
