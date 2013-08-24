@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeMonoid;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeAtomicMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 
@@ -21,7 +21,7 @@ import ch.bfh.unicrypt.math.group.interfaces.Set;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZTimes extends AbstractMultiplicativeMonoid {
+public class ZTimes extends AbstractMultiplicativeAtomicMonoid {
 
   private static final long serialVersionUID = 1L;
   private static final int RANDOM_ELEMENT_BIT_LENGTH = 1000;

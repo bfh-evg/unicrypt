@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveAtomicCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
@@ -22,7 +22,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlusMod extends AbstractAdditiveCyclicGroup {
+public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
 
   private static final long serialVersionUID = 1L;
 

@@ -1,12 +1,12 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
+import ch.bfh.unicrypt.math.group.interfaces.AdditiveMonoid;
 
-public abstract class AbstractAdditiveGroup extends AbstractAtomicGroup implements AdditiveGroup {
+public abstract class AbstractAdditiveAtomicMonoid extends AbstractAtomicMonoid implements AdditiveMonoid {
 
   private static final long serialVersionUID = 1L;
 
@@ -36,18 +36,13 @@ public abstract class AbstractAdditiveGroup extends AbstractAtomicGroup implemen
   }
 
   @Override
-  public final AtomicElement timesTwo(Element element) {
+  public AtomicElement timesTwo(Element element) {
     return this.selfApply(element);
   }
 
   @Override
-  public final AtomicElement sumOfProducts(Element[] elements, BigInteger[] amounts) {
+  public AtomicElement sumOfProducts(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
-  }
-
-  @Override
-  public final AtomicElement subtract(final Element element1, final Element element2) {
-    return this.applyInverse(element1, element2);
   }
 
 }

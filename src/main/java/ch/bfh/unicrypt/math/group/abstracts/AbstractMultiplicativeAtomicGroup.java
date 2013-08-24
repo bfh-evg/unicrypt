@@ -4,9 +4,9 @@ import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeMonoid;
+import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
 
-public abstract class AbstractMultiplicativeMonoid extends AbstractAtomicMonoid implements MultiplicativeMonoid {
+public abstract class AbstractMultiplicativeAtomicGroup extends AbstractAtomicGroup implements MultiplicativeGroup {
 
   private static final long serialVersionUID = 1L;
 
@@ -36,13 +36,18 @@ public abstract class AbstractMultiplicativeMonoid extends AbstractAtomicMonoid 
   }
 
   @Override
-  public final AtomicElement square(Element element) {
+  public AtomicElement square(Element element) {
     return this.selfApply(element);
   }
 
   @Override
-  public final AtomicElement productOfPowers(Element[] elements, BigInteger[] amounts) {
+  public AtomicElement productOfPowers(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
+  }
+
+  @Override
+  public final AtomicElement divide(final Element element1, final Element element2) {
+    return this.applyInverse(element1, element2);
   }
 
 }

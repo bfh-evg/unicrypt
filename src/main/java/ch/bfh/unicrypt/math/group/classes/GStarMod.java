@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeAtomicCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Factorization;
@@ -31,10 +31,10 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGroup {
+public class GStarMod extends AbstractMultiplicativeAtomicCyclicGroup implements DDHGroup {
 
-  // This class should inherit from both ZStarModClass and AbstractMultiplicativeCyclicGroup, but since
-  // Java does not support multiple inheritance, we copy some code from AbstractMultiplicativeCyclicGroup
+  // This class should inherit from both ZStarModClass and AbstractMultiplicativeAtomicCyclicGroup, but since
+  // Java does not support multiple inheritance, we copy some code from AbstractMultiplicativeAtomicCyclicGroup
   private static final long serialVersionUID = 1L;
   private final BigInteger modulus;
   private final SpecialFactorization moduloFactorization;

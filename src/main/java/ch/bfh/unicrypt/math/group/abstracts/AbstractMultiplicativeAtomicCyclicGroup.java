@@ -4,9 +4,9 @@ import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeSemiGroup;
+import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeCyclicGroup;
 
-public abstract class AbstractMultiplicativeSemiGroup extends AbstractAtomicSemiGroup implements MultiplicativeSemiGroup {
+public abstract class AbstractMultiplicativeAtomicCyclicGroup extends AbstractAtomicCyclicGroup implements MultiplicativeCyclicGroup {
 
   private static final long serialVersionUID = 1L;
 
@@ -43,6 +43,11 @@ public abstract class AbstractMultiplicativeSemiGroup extends AbstractAtomicSemi
   @Override
   public final AtomicElement productOfPowers(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
+  }
+
+  @Override
+  public final AtomicElement divide(final Element element1, final Element element2) {
+    return this.applyInverse(element1, element2);
   }
 
 }

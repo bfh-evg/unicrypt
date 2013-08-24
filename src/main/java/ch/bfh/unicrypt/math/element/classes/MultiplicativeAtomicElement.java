@@ -4,7 +4,7 @@
  */
 package ch.bfh.unicrypt.math.element.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.math.BigInteger;
 
@@ -12,13 +12,13 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public class AtomicElement extends AbstractElement<AtomicElement> {
+public class MultiplicativeAtomicElement extends AbstractMultiplicativeElement<MultiplicativeAtomicElement> {
 
-  protected AtomicElement(final Set set) {
+  protected MultiplicativeAtomicElement(final Set set) {
     super(set);
   }
 
-  protected AtomicElement(final Set set, final BigInteger value) {
+  protected MultiplicativeAtomicElement(final Set set, final BigInteger value) {
     super(set);
     if (!set.contains(value)) {
       throw new IllegalArgumentException();

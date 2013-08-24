@@ -1,12 +1,12 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeMonoid;
 
-public abstract class AbstractMultiplicativeCyclicGroup extends AbstractAtomicCyclicGroup implements MultiplicativeCyclicGroup {
+public abstract class AbstractMultiplicativeAtomicMonoid extends AbstractAtomicMonoid implements MultiplicativeMonoid {
 
   private static final long serialVersionUID = 1L;
 
@@ -43,11 +43,6 @@ public abstract class AbstractMultiplicativeCyclicGroup extends AbstractAtomicCy
   @Override
   public final AtomicElement productOfPowers(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
-  }
-
-  @Override
-  public final AtomicElement divide(final Element element1, final Element element2) {
-    return this.applyInverse(element1, element2);
   }
 
 }

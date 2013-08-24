@@ -1,12 +1,12 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.interfaces.AdditiveSemiGroup;
+import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
 
-public abstract class AbstractAdditiveSemiGroup extends AbstractAtomicSemiGroup implements AdditiveSemiGroup {
+public abstract class AbstractAdditiveAtomicGroup extends AbstractAtomicGroup implements AdditiveGroup {
 
   private static final long serialVersionUID = 1L;
 
@@ -43,6 +43,11 @@ public abstract class AbstractAdditiveSemiGroup extends AbstractAtomicSemiGroup 
   @Override
   public final AtomicElement sumOfProducts(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
+  }
+
+  @Override
+  public final AtomicElement subtract(final Element element1, final Element element2) {
+    return this.applyInverse(element1, element2);
   }
 
 }

@@ -195,66 +195,6 @@ public interface Element {
   public Element selfApply();
 
   /**
-   * @see Group#apply(Element, Element)
-   */
-  public Element add(Element element);
-
-  /**
-   * @see Group#applyInverse(Element, Element)
-   */
-  public Element subtract(Element element);
-
-  /**
-   * @see Group#selfApply(Element, BigInteger)
-   */
-  public Element times(BigInteger amount);
-
-  /**
-   * @see Group#selfApply(Element, Element)
-   */
-  public Element times(Element amount);
-
-  /**
-   * @see Group#selfApply(Element, int)
-   */
-  public Element times(int amount);
-
-  /**
-   * @see Group#selfApply(Element)
-   */
-  public Element timesTwo();
-
-  /**
-   * @see Group#apply(Element, Element)
-   */
-  public Element multiply(Element element);
-
-  /**
-   * @see Group#applyInverse(Element, Element)
-   */
-  public Element divide(Element element);
-
-  /**
-   * @see Group#selfApply(Element, BigInteger)
-   */
-  public Element power(BigInteger amount);
-
-  /**
-   * @see Group#selfApply(Element, Element)
-   */
-  public Element power(Element amount);
-
-  /**
-   * @see Group#selfApply(Element, int)
-   */
-  public Element power(int amount);
-
-  /**
-   * @see Group#selfApply(Element)
-   */
-  public Element square();
-
-  /**
    * @see Group#invert(Element)
    */
   public Element invert();

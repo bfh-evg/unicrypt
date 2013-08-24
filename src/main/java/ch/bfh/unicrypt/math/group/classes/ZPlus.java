@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveAtomicCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
@@ -22,7 +22,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlus extends AbstractAdditiveCyclicGroup {
+public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
 
   private static final long serialVersionUID = 1L;
   private static final int RANDOM_ELEMENT_BIT_LENGTH = 1000;

@@ -5,7 +5,7 @@ import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeAtomicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Factorization;
@@ -24,7 +24,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZStarMod extends AbstractMultiplicativeGroup {
+public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
 
   private static final long serialVersionUID = 1L;
 

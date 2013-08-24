@@ -8,7 +8,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeMonoid;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeAtomicMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
@@ -23,7 +23,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZTimesMod extends AbstractMultiplicativeMonoid {
+public class ZTimesMod extends AbstractMultiplicativeAtomicMonoid {
 
   private static final long serialVersionUID = 1L;
   private BigInteger modulus;
