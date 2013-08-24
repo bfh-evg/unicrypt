@@ -10,14 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.group.abstracts.AbstractCyclicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractAtomicCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 
 /**
  * @author rolfhaenni
  *
  */
-public class SingletonGroup extends AbstractCyclicGroup {
+public class SingletonGroup extends AbstractAtomicCyclicGroup {
 
   private static final long serialVersionUID = 1L;
   private final AtomicElement element;

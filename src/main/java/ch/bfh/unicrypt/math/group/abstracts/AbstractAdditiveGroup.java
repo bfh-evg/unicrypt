@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
 
-public abstract class AbstractAdditiveGroup extends AbstractGroup implements AdditiveGroup {
+public abstract class AbstractAdditiveGroup extends AbstractAtomicGroup implements AdditiveGroup {
 
   private static final long serialVersionUID = 1L;
 

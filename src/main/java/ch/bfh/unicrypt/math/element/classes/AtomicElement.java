@@ -20,10 +20,9 @@ public class AtomicElement extends AbstractElement<AtomicElement> {
 
   protected AtomicElement(final Set set, final BigInteger value) {
     super(set);
-        if (!set.contains(value)) {
+    if (!set.contains(value)) {
       throw new IllegalArgumentException();
     }
     this.value = value;
   }
-
 }

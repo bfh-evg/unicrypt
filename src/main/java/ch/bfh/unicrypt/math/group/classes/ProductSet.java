@@ -297,4 +297,29 @@ public class ProductSet extends AbstractCompoundSet implements Set {
     return true;
   }
 
+  /**
+   * This is a static factory method to construct a composed element without the
+   * need of constructing the corresponding product or power group beforehand.
+   * The input elements are given as an array.
+   *
+   * @param elements The array of input elements
+   * @return The corresponding tuple element
+   * @throws IllegalArgumentException if {@code elements} is null or contains
+   * null
+   */
+  public static CompoundElement constructElement(Element... elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException();
+    }
+    int arity = elements.length;
+    final Set[] sets = new Set[arity];
+    for (int i = 0; i < arity; i++) {
+      if (elements[i] == null) {
+        throw new IllegalArgumentException();
+      }
+      sets[i] = elements[i].getSet();
+    }
+    return ProductSet.getInstance(sets).getElement(elements);
+  }
+
 }

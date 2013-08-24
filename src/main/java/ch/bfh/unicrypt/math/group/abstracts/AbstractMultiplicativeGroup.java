@@ -6,7 +6,7 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
 
-public abstract class AbstractMultiplicativeGroup extends AbstractGroup implements MultiplicativeGroup {
+public abstract class AbstractMultiplicativeGroup extends AbstractAtomicGroup implements MultiplicativeGroup {
 
   private static final long serialVersionUID = 1L;
 

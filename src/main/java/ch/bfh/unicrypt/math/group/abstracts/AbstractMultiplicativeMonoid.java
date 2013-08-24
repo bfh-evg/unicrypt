@@ -6,7 +6,7 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeMonoid;
 
-public abstract class AbstractMultiplicativeMonoid extends AbstractMonoid implements MultiplicativeMonoid {
+public abstract class AbstractMultiplicativeMonoid extends AbstractAtomicMonoid implements MultiplicativeMonoid {
 
   private static final long serialVersionUID = 1L;
 

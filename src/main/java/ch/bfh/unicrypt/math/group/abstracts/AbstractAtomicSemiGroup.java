@@ -17,7 +17,7 @@ import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractSemiGroup extends AbstractAtomicSet implements SemiGroup {
+public abstract class AbstractAtomicSemiGroup extends AbstractAtomicSet implements SemiGroup {
 
   private static final long serialVersionUID = 1L;
 

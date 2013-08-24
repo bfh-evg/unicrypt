@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractAtomicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -28,7 +28,7 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PermutationGroup extends AbstractGroup {
+public class PermutationGroup extends AbstractAtomicGroup {
 
   private static final long serialVersionUID = 1L;
 

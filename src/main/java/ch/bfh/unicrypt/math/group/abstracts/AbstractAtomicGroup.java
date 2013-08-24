@@ -16,7 +16,7 @@ import ch.bfh.unicrypt.math.group.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractGroup extends AbstractMonoid implements Group {
+public abstract class AbstractAtomicGroup extends AbstractAtomicMonoid implements Group {
 
   private static final long serialVersionUID = 1L;
 

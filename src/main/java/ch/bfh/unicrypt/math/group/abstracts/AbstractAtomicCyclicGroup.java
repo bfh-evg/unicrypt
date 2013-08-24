@@ -6,7 +6,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.group.interfaces.CyclicGroup;
 
-public abstract class AbstractCyclicGroup extends AbstractGroup implements CyclicGroup {
+public abstract class AbstractAtomicCyclicGroup extends AbstractAtomicGroup implements CyclicGroup {
 
   private static final long serialVersionUID = 1L;
 

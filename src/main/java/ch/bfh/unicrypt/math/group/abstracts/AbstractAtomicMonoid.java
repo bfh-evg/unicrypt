@@ -17,7 +17,7 @@ import ch.bfh.unicrypt.math.group.interfaces.Monoid;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractMonoid extends AbstractSemiGroup implements Monoid {
+public abstract class AbstractAtomicMonoid extends AbstractAtomicSemiGroup implements Monoid {
 
   private static final long serialVersionUID = 1L;
 

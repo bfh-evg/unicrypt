@@ -6,7 +6,7 @@ import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.AdditiveSemiGroup;
 
-public abstract class AbstractAdditiveSemiGroup extends AbstractSemiGroup implements AdditiveSemiGroup {
+public abstract class AbstractAdditiveSemiGroup extends AbstractAtomicSemiGroup implements AdditiveSemiGroup {
 
   private static final long serialVersionUID = 1L;
 
