@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AdditiveAtomicElement;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -40,7 +40,7 @@ public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
   //
 
   @Override
-  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected AdditiveAtomicElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -50,7 +50,7 @@ public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
   //
 
   @Override
-  protected AtomicElement abstractGetRandomElement(final Random random) {
+  protected AdditiveAtomicElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -65,7 +65,7 @@ public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AtomicElement abstractGetDefaultGenerator() {
+  protected AdditiveAtomicElement abstractGetDefaultGenerator() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -75,22 +75,22 @@ public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AtomicElement abstractGetIdentityElement() {
+  protected AdditiveAtomicElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+  protected AdditiveAtomicElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
-  protected AtomicElement abstractInvert(final Element element) {
+  protected AdditiveAtomicElement abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().negate());
   }
 
   @Override
-  public AtomicElement abstractGetRandomGenerator(final Random random) {
+  public AdditiveAtomicElement abstractGetRandomGenerator(final Random random) {
     if (RandomUtil.createRandomBoolean(random)) {
       return this.getDefaultGenerator();
     }

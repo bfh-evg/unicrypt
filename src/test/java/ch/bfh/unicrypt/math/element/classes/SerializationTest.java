@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.math.element.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;

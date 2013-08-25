@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.MultiplicativeAtomicElement;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -98,7 +98,7 @@ public class GStarMod extends AbstractMultiplicativeAtomicCyclicGroup implements
   //
 
   @Override
-  protected AtomicElement standardSelfApply(final Element element, final BigInteger amount) {
+  protected MultiplicativeAtomicElement standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount.mod(this.getOrder());
     return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
   }
@@ -129,7 +129,7 @@ public class GStarMod extends AbstractMultiplicativeAtomicCyclicGroup implements
   //
 
   @Override
-  protected AtomicElement abstractGetRandomElement(final Random random) {
+  protected MultiplicativeAtomicElement abstractGetRandomElement(final Random random) {
     if (this.getOrder().compareTo(this.getOrderQuotient()) > 0) { // choose between the faster method
       // Method 1
       BigInteger randomValue;
@@ -157,24 +157,24 @@ public class GStarMod extends AbstractMultiplicativeAtomicCyclicGroup implements
   }
 
   @Override
-  protected AtomicElement abstractGetIdentityElement() {
+  protected MultiplicativeAtomicElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+  protected MultiplicativeAtomicElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public AtomicElement abstractInvert(final Element element) {
+  public MultiplicativeAtomicElement abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 
   @Override
-  protected AtomicElement abstractGetDefaultGenerator() {
+  protected MultiplicativeAtomicElement abstractGetDefaultGenerator() {
     BigInteger alpha = BigInteger.ZERO;
-    AtomicElement element;
+    MultiplicativeAtomicElement element;
     do {
       do {
         alpha = alpha.add(BigInteger.ONE);
@@ -186,8 +186,8 @@ public class GStarMod extends AbstractMultiplicativeAtomicCyclicGroup implements
 
   // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
   @Override
-  protected AtomicElement abstractGetRandomGenerator(Random random) {
-    AtomicElement element;
+  protected MultiplicativeAtomicElement abstractGetRandomGenerator(Random random) {
+    MultiplicativeAtomicElement element;
     do {
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));

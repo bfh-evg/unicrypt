@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.element.interfaces.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.EncodedElement;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlus;

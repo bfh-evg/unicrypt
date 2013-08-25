@@ -4,6 +4,11 @@
  */
 package ch.bfh.unicrypt.math.element.interfaces;
 
+import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
+import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeMonoid;
+import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeSemiGroup;
 import java.math.BigInteger;
 
 /**
@@ -12,35 +17,58 @@ import java.math.BigInteger;
  */
 public interface MultiplicativeElement extends Element {
 
+  /**
+   *
+   * @return
+   */
+  public MultiplicativeSemiGroup getMultiplicativeSemiGroup();
+
+  /**
+   *
+   * @return
+   */
+  public MultiplicativeMonoid getMultiplicativeMonoid();
+
+  /**
+   *
+   * @return
+   */
+  public MultiplicativeGroup getMultiplicativeGroup();
+
+  /**
+   *
+   * @return
+   */
+  public MultiplicativeCyclicGroup getMultiplicativeCyclicGroup();
 
   /**
    * @see Group#apply(Element, Element)
    */
-  public Element multiply(Element element);
+  public MultiplicativeElement multiply(Element element);
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
-  public Element divide(Element element);
+  public MultiplicativeElement divide(Element element);
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
-  public Element power(BigInteger amount);
+  public MultiplicativeElement power(BigInteger amount);
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public Element power(Element amount);
+  public MultiplicativeElement power(Element amount);
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public Element power(int amount);
+  public MultiplicativeElement power(int amount);
 
   /**
    * @see Group#selfApply(Element)
    */
-  public Element square();
+  public MultiplicativeElement square();
 
 }

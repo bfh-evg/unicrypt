@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ch.bfh.unicrypt.encryption.classes.ElGamalEncryptionClass;
-import ch.bfh.unicrypt.math.element.interfaces.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
 import ch.bfh.unicrypt.math.function.interfaces.Function;

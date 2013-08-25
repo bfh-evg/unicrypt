@@ -15,7 +15,7 @@ import ch.bfh.unicrypt.crypto.encryption.classes.AESEncryptionScheme;
 import ch.bfh.unicrypt.crypto.hash.classes.HashSchemeClass;
 import ch.bfh.unicrypt.crypto.hash.interfaces.HashScheme;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;

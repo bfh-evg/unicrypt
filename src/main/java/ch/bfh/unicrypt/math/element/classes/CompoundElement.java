@@ -6,6 +6,9 @@ package ch.bfh.unicrypt.math.element.classes;
 
 import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.group.classes.ProductGroup;
+import ch.bfh.unicrypt.math.group.classes.ProductMonoid;
+import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
@@ -28,6 +31,50 @@ public class CompoundElement extends AbstractElement<CompoundElement> implements
     super(set);
     this.elements = elements;
     this.arity = elements.length;
+  }
+
+  /**
+   *
+   * @return
+   */
+  public final ProductSet getProductSet() {
+    if (this.getSet() instanceof ProductSet) {
+      return (ProductSet) this.getSet();
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   *
+   * @return
+   */
+  public final ProductSemiGroup getProductSemiGroup() {
+    if (this.getSet() instanceof ProductSemiGroup) {
+      return (ProductSemiGroup) this.getSet();
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   *
+   * @return
+   */
+  public final ProductMonoid getProductMonoid() {
+    if (this.getSet() instanceof ProductMonoid) {
+      return (ProductMonoid) this.getSet();
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   *
+   * @return
+   */
+  public final ProductGroup getProductGroup() {
+    if (this.getSet() instanceof ProductGroup) {
+      return (ProductGroup) this.getSet();
+    }
+    throw new UnsupportedOperationException();
   }
 
   @Override

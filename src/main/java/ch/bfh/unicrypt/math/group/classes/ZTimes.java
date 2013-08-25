@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.MultiplicativeAtomicElement;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -39,7 +39,7 @@ public class ZTimes extends AbstractMultiplicativeAtomicMonoid {
   //
 
   @Override
-  protected AtomicElement abstractGetRandomElement(final Random random) {
+  protected MultiplicativeAtomicElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -54,12 +54,12 @@ public class ZTimes extends AbstractMultiplicativeAtomicMonoid {
   }
 
   @Override
-  protected AtomicElement abstractGetIdentityElement() {
+  protected MultiplicativeAtomicElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+  protected MultiplicativeAtomicElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
 

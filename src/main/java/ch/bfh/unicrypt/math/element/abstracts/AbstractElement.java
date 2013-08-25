@@ -35,7 +35,7 @@ import java.security.NoSuchAlgorithmException;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<T extends Element> implements Element, Serializable {
+public abstract class AbstractElement<E extends AbstractElement> implements Element, Serializable {
 
   private static final long serialVersionUID = 1L;
   private final Set set;
@@ -48,11 +48,20 @@ public abstract class AbstractElement<T extends Element> implements Element, Ser
     this.set = set;
   }
 
+  protected AbstractElement(final Set set, final BigInteger value) {
+    this(set);
+    if (!set.contains(value)) {
+      throw new IllegalArgumentException();
+    }
+    this.value = value;
+  }
+
   /**
    * Returns the unique {@link Set} to which this element belongs
    *
    * @return The element's set
    */
+  @Override
   public final Set getSet() {
     return this.set;
   }
@@ -101,150 +110,6 @@ public abstract class AbstractElement<T extends Element> implements Element, Ser
   public final CyclicGroup getCyclicGroup() {
     if (this.set instanceof CyclicGroup) {
       return (CyclicGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final AdditiveSemiGroup getAdditiveSemiGroup() {
-    if (this.set instanceof AdditiveSemiGroup) {
-      return (AdditiveSemiGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final AdditiveMonoid getAdditiveMonoid() {
-    if (this.set instanceof AdditiveMonoid) {
-      return (AdditiveMonoid) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final AdditiveGroup getAdditiveGroup() {
-    if (this.set instanceof AdditiveGroup) {
-      return (AdditiveGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final AdditiveCyclicGroup getAdditiveCyclicGroup() {
-    if (this.set instanceof AdditiveCyclicGroup) {
-      return (AdditiveCyclicGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final MultiplicativeSemiGroup getMultiplicativeSemiGroup() {
-    if (this.set instanceof MultiplicativeSemiGroup) {
-      return (MultiplicativeSemiGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final MultiplicativeMonoid getMultiplicativeMonoid() {
-    if (this.set instanceof MultiplicativeMonoid) {
-      return (MultiplicativeMonoid) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final MultiplicativeGroup getMultiplicativeGroup() {
-    if (this.set instanceof MultiplicativeGroup) {
-      return (MultiplicativeGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final MultiplicativeCyclicGroup getMultiplicativeCyclicGroup() {
-    if (this.set instanceof MultiplicativeCyclicGroup) {
-      return (MultiplicativeCyclicGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final ProductSet getProductSet() {
-    if (this.set instanceof ProductSet) {
-      return (ProductSet) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final ProductSemiGroup getProductSemiGroup() {
-    if (this.set instanceof ProductSemiGroup) {
-      return (ProductSemiGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final ProductMonoid getProductMonoid() {
-    if (this.set instanceof ProductMonoid) {
-      return (ProductMonoid) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final ProductGroup getProductGroup() {
-    if (this.set instanceof ProductGroup) {
-      return (ProductGroup) this.set;
     }
     throw new UnsupportedOperationException();
   }
@@ -324,62 +189,62 @@ public abstract class AbstractElement<T extends Element> implements Element, Ser
    * @see Group#apply(Element, Element)
    */
   @Override
-  public final T apply(final Element element) {
+  public final E apply(final Element element) {
     SemiGroup semiGroup = this.getSemiGroup();
-    return (T) semiGroup.apply(this, element);
+    return (E) semiGroup.apply(this, element);
   }
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
   @Override
-  public final T applyInverse(final Element element) {
+  public final E applyInverse(final Element element) {
     Group group = this.getGroup();
-    return (T) group.applyInverse(this, element);
+    return (E) group.applyInverse(this, element);
   }
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
   @Override
-  public final T selfApply(final BigInteger amount) {
+  public final E selfApply(final BigInteger amount) {
     SemiGroup semiGroup = this.getSemiGroup();
-    return (T) semiGroup.selfApply(this, amount);
+    return (E) semiGroup.selfApply(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
   @Override
-  public final T selfApply(final Element amount) {
+  public final E selfApply(final Element amount) {
     SemiGroup semiGroup = this.getSemiGroup();
-    return (T) semiGroup.selfApply(this, amount);
+    return (E) semiGroup.selfApply(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
   @Override
-  public final T selfApply(final int amount) {
+  public final E selfApply(final int amount) {
     SemiGroup semiGroup = this.getSemiGroup();
-    return (T) semiGroup.selfApply(this, amount);
+    return (E) semiGroup.selfApply(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
   @Override
-  public final T selfApply() {
+  public final E selfApply() {
     SemiGroup semiGroup = this.getSemiGroup();
-    return (T) semiGroup.selfApply(this);
+    return (E) semiGroup.selfApply(this);
   }
 
   /**
    * @see Group#invert(Element)
    */
-  public final T invert() {
+  public final E invert() {
     Group group = this.getGroup();
-    return (T) group.invert(this);
+    return (E) group.invert(this);
   }
 
   /**
@@ -413,7 +278,7 @@ public abstract class AbstractElement<T extends Element> implements Element, Ser
     if (this.getClass() != object.getClass()) {
       return false;
     }
-    T other = (T) object;
+    E other = (E) object;
     if (!this.getSet().equals(other.getSet())) {
       return false;
     }

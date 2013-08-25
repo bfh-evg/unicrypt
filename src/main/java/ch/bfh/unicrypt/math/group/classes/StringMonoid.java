@@ -6,7 +6,7 @@ package ch.bfh.unicrypt.math.group.classes;
 
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveAtomicMonoid;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractAtomicMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Random;
@@ -15,7 +15,7 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public class StringMonoid extends AbstractAdditiveAtomicMonoid {
+public class StringMonoid extends AbstractAtomicMonoid {
 
   private StringMonoid() {
   }

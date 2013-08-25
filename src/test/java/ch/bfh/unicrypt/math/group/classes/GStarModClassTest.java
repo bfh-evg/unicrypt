@@ -11,8 +11,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.AtomicElement;
-import ch.bfh.unicrypt.math.element.interfaces.MultiplicativeElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.MultiplicativeElement;
 import ch.bfh.unicrypt.math.group.interfaces.GStarMod;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlus;
 

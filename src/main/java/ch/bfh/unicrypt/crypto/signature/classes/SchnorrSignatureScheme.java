@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.signature.abstracts.AbstractRandomizedSignatureScheme;
 import ch.bfh.unicrypt.crypto.signature.interfaces.SchnorrSignatureScheme;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
 import ch.bfh.unicrypt.math.function.abstracts.ProductDomainFunctionAbstract;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;

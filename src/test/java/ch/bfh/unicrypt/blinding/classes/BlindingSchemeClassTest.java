@@ -15,7 +15,7 @@ import ch.bfh.unicrypt.crypto.blinding.classes.StandardBlindingScheme;
 import ch.bfh.unicrypt.crypto.blinding.interfaces.BlindingScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.element.interfaces.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;

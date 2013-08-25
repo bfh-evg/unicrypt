@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AdditiveAtomicElement;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
   //
 
   @Override
-  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected AdditiveAtomicElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
   }
 
@@ -77,7 +77,7 @@ public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AtomicElement abstractGetRandomElement(final Random random) {
+  protected AdditiveAtomicElement abstractGetRandomElement(final Random random) {
     return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
@@ -87,7 +87,7 @@ public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AtomicElement abstractGetDefaultGenerator() {
+  protected AdditiveAtomicElement abstractGetDefaultGenerator() {
     return this.abstractGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
   }
 
@@ -100,23 +100,23 @@ public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AtomicElement abstractGetIdentityElement() {
+  protected AdditiveAtomicElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+  protected AdditiveAtomicElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  protected AtomicElement abstractInvert(final Element element) {
+  protected AdditiveAtomicElement abstractInvert(final Element element) {
     return this.abstractGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public AtomicElement abstractGetRandomGenerator(final Random random) {
-    AtomicElement element;
+  public AdditiveAtomicElement abstractGetRandomGenerator(final Random random) {
+    AdditiveAtomicElement element;
     do {
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));

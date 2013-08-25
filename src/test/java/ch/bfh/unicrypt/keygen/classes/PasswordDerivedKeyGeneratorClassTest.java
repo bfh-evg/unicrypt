@@ -17,7 +17,7 @@ import ch.bfh.unicrypt.crypto.keygen.classes.PasswordDerivedKeyGeneratorClass;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordDerivedKeyGenerator;
 import ch.bfh.unicrypt.crypto.utility.AESUtil;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.ZPlusModClass;
 import ch.bfh.unicrypt.math.group.interfaces.AtomicGroup;

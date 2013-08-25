@@ -1,9 +1,10 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
 
@@ -17,12 +18,12 @@ import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractAtomicSemiGroup extends AbstractAtomicSet implements SemiGroup {
+public abstract class AbstractAtomicSemiGroup<T extends AbstractAtomicElement> extends AbstractAtomicSet<T> implements SemiGroup {
 
   private static final long serialVersionUID = 1L;
 
   @Override
-  public final AtomicElement apply(final Element element1, final Element element2) {
+  public final T apply(final Element element1, final Element element2) {
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();
     }
@@ -30,14 +31,14 @@ public abstract class AbstractAtomicSemiGroup extends AbstractAtomicSet implemen
   }
 
   @Override
-  public final AtomicElement apply(final Element... elements) {
+  public final T apply(final Element... elements) {
     if (elements == null || elements.length == 0) {
       throw new IllegalArgumentException();
     }
-    AtomicElement result = null;
+    T result = null;
     for (Element element : elements) {
       if (result == null) {
-        result = (AtomicElement) element;
+        result = (T) element;
       } else {
         result = this.apply(result, element);
       }
@@ -46,7 +47,7 @@ public abstract class AbstractAtomicSemiGroup extends AbstractAtomicSet implemen
   }
 
   @Override
-  public final AtomicElement selfApply(final Element element, final BigInteger amount) {
+  public final T selfApply(final Element element, final BigInteger amount) {
     if (!this.contains(element) || (amount == null)) {
       throw new IllegalArgumentException();
     }
@@ -54,7 +55,7 @@ public abstract class AbstractAtomicSemiGroup extends AbstractAtomicSet implemen
   }
 
   @Override
-  public final AtomicElement selfApply(final Element element, final Element amount) {
+  public final T selfApply(final Element element, final Element amount) {
     if (amount == null) {
       throw new IllegalArgumentException();
     }
@@ -62,17 +63,17 @@ public abstract class AbstractAtomicSemiGroup extends AbstractAtomicSet implemen
   }
 
   @Override
-  public final AtomicElement selfApply(final Element element, final int amount) {
+  public final T selfApply(final Element element, final int amount) {
     return this.selfApply(element, BigInteger.valueOf(amount));
   }
 
   @Override
-  public final AtomicElement selfApply(final Element element) {
+  public final T selfApply(final Element element) {
     return this.apply(element, element);
   }
 
   @Override
-  public final AtomicElement multiSelfApply(final Element[] elements, final BigInteger[] amounts) {
+  public final T multiSelfApply(final Element[] elements, final BigInteger[] amounts) {
     if ((elements == null) || (amounts == null) || (elements.length != amounts.length) || (elements.length == 0)) {
       throw new IllegalArgumentException();
     }
@@ -88,12 +89,12 @@ public abstract class AbstractAtomicSemiGroup extends AbstractAtomicSet implemen
   // They may need to be changed in certain sub-classes.
   //
 
-  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected T standardSelfApply(Element element, BigInteger amount) {
     if (amount.signum() <= 0) {
       throw new IllegalArgumentException();
     }
-    AtomicElement result = null;
-    AtomicElement atomicElement = (AtomicElement) element;
+    T result = null;
+    T atomicElement = (T) element;
     for (int i = amount.bitLength()-1; i >= 0; i--) {
       if (result == null) {
         result = atomicElement;
@@ -111,7 +112,7 @@ public abstract class AbstractAtomicSemiGroup extends AbstractAtomicSet implemen
   // The following protected abstract method must be implemented in every direct sub-class.
   //
 
-  protected abstract AtomicElement abstractApply(Element element1, Element element2);
+  protected abstract T abstractApply(Element element1, Element element2);
 
 }
 

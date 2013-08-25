@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
+import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import java.math.BigInteger;
 
@@ -17,14 +18,14 @@ import ch.bfh.unicrypt.math.group.interfaces.Monoid;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractAtomicMonoid extends AbstractAtomicSemiGroup implements Monoid {
+public abstract class AbstractAtomicMonoid<T extends AbstractAtomicElement> extends AbstractAtomicSemiGroup<T> implements Monoid {
 
   private static final long serialVersionUID = 1L;
 
-  private AtomicElement identityElement;
+  private T identityElement;
 
   @Override
-  public final AtomicElement getIdentityElement() {
+  public final T getIdentityElement() {
     if (this.identityElement == null) {
       this.identityElement = this.abstractGetIdentityElement();
     }
@@ -47,7 +48,7 @@ public abstract class AbstractAtomicMonoid extends AbstractAtomicSemiGroup imple
   }
 
   @Override
-  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected T standardSelfApply(Element element, BigInteger amount) {
     if (amount.signum() == 0) {
       return this.getIdentityElement();
     }
@@ -58,6 +59,6 @@ public abstract class AbstractAtomicMonoid extends AbstractAtomicSemiGroup imple
   // The following protected abstract method must be implemented in every direct sub-class.
   //
 
-  protected abstract AtomicElement abstractGetIdentityElement();
+  protected abstract T abstractGetIdentityElement();
 
 }

@@ -1,53 +1,58 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
+import ch.bfh.unicrypt.math.element.classes.AdditiveAtomicElement;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
 
-public abstract class AbstractAdditiveAtomicGroup extends AbstractAtomicGroup implements AdditiveGroup {
+public abstract class AbstractAdditiveAtomicGroup extends AbstractAtomicGroup<AdditiveAtomicElement> implements AdditiveGroup {
 
   private static final long serialVersionUID = 1L;
 
-@Override
-  public final AtomicElement add(final Element element1, final Element element2) {
+  @Override
+  protected AdditiveAtomicElement abstractGetElement(BigInteger value) {
+    return new AdditiveAtomicElement(this, value) {};
+  }
+
+  @Override
+  public final AdditiveAtomicElement add(final Element element1, final Element element2) {
     return this.apply(element1, element2);
   }
 
   @Override
-  public final AtomicElement add(final Element... elements) {
+  public final AdditiveAtomicElement add(final Element... elements) {
     return this.apply(elements);
   }
 
   @Override
-  public final AtomicElement times(final Element element, final BigInteger amount) {
+  public final AdditiveAtomicElement times(final Element element, final BigInteger amount) {
     return this.selfApply(element, amount);
   }
 
   @Override
-  public final AtomicElement times(final Element element, final Element amount) {
+  public final AdditiveAtomicElement times(final Element element, final Element amount) {
     return this.selfApply(element, amount);
   }
 
   @Override
-  public final AtomicElement times(final Element element, final int amount) {
+  public final AdditiveAtomicElement times(final Element element, final int amount) {
     return this.selfApply(element, amount);
   }
 
   @Override
-  public final AtomicElement timesTwo(Element element) {
+  public final AdditiveAtomicElement timesTwo(Element element) {
     return this.selfApply(element);
   }
 
   @Override
-  public final AtomicElement sumOfProducts(Element[] elements, BigInteger[] amounts) {
+  public final AdditiveAtomicElement sumOfProducts(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
   }
 
   @Override
-  public final AtomicElement subtract(final Element element1, final Element element2) {
+  public final AdditiveAtomicElement subtract(final Element element1, final Element element2) {
     return this.applyInverse(element1, element2);
   }
-
 }

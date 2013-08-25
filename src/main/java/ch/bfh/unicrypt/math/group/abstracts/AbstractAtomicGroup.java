@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
+import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import java.math.BigInteger;
 
@@ -16,12 +17,12 @@ import ch.bfh.unicrypt.math.group.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractAtomicGroup extends AbstractAtomicMonoid implements Group {
+public abstract class AbstractAtomicGroup<T extends AbstractAtomicElement> extends AbstractAtomicMonoid<T> implements Group {
 
   private static final long serialVersionUID = 1L;
 
   @Override
-  public final AtomicElement invert(final Element element) {
+  public final T invert(final Element element) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
@@ -29,12 +30,12 @@ public abstract class AbstractAtomicGroup extends AbstractAtomicMonoid implement
   }
 
   @Override
-  public final AtomicElement applyInverse(Element element1, Element element2) {
+  public final T applyInverse(Element element1, Element element2) {
     return this.apply(element1, this.invert(element2));
   }
 
   @Override
-  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected T standardSelfApply(Element element, BigInteger amount) {
     if (amount.signum() < 0) {
       return this.invert(super.selfApply(element, amount.abs()));
     }
@@ -45,6 +46,6 @@ public abstract class AbstractAtomicGroup extends AbstractAtomicMonoid implement
   // The following protected abstract method must be implemented in every direct sub-class.
   //
 
-  protected abstract AtomicElement abstractInvert(Element element);
+  protected abstract T abstractInvert(Element element);
 
 }

@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.MultiplicativeAtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
 import java.util.Random;
@@ -83,7 +83,7 @@ public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
   //
 
   @Override
-  protected AtomicElement standardSelfApply(final Element element, final BigInteger amount) {
+  protected MultiplicativeAtomicElement standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount;
     final BigInteger order = this.getOrder();
     if (!order.equals(Group.UNKNOWN_ORDER)) {
@@ -114,7 +114,7 @@ public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
   //
 
   @Override
-  protected AtomicElement abstractGetRandomElement(final Random random) {
+  protected MultiplicativeAtomicElement abstractGetRandomElement(final Random random) {
     BigInteger randomValue;
     do {
       randomValue = RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
@@ -139,7 +139,7 @@ public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
   }
 
   @Override
-  protected AtomicElement abstractGetIdentityElement() {
+  protected MultiplicativeAtomicElement abstractGetIdentityElement() {
     if (this.getModulus().equals(BigInteger.ONE)) {
       return this.abstractGetElement(BigInteger.ZERO);
     }
@@ -147,12 +147,12 @@ public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
   }
 
   @Override
-  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+  protected MultiplicativeAtomicElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public AtomicElement abstractInvert(final Element element) {
+  public MultiplicativeAtomicElement abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 

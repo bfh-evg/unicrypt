@@ -1,19 +1,20 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
+import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.group.interfaces.CyclicGroup;
 
-public abstract class AbstractAtomicCyclicGroup extends AbstractAtomicGroup implements CyclicGroup {
+public abstract class AbstractAtomicCyclicGroup<T extends AbstractAtomicElement> extends AbstractAtomicGroup<T> implements CyclicGroup {
 
   private static final long serialVersionUID = 1L;
 
-  private AtomicElement defaultGenerator;
+  private T defaultGenerator;
 
   @Override
-  public final AtomicElement getDefaultGenerator() {
+  public final T getDefaultGenerator() {
     if (this.defaultGenerator == null) {
       this.defaultGenerator = this.abstractGetDefaultGenerator();
     }
@@ -21,12 +22,12 @@ public abstract class AbstractAtomicCyclicGroup extends AbstractAtomicGroup impl
   }
 
   @Override
-  public final AtomicElement getRandomGenerator() {
+  public final T getRandomGenerator() {
     return this.getRandomGenerator(null);
   }
 
   @Override
-  public final AtomicElement getRandomGenerator(Random random) {
+  public final T getRandomGenerator(Random random) {
     return this.abstractGetRandomGenerator(random);
   }
 
@@ -42,9 +43,9 @@ public abstract class AbstractAtomicCyclicGroup extends AbstractAtomicGroup impl
   // The following protected abstract method must be implemented in every direct sub-class
   //
 
-  protected abstract AtomicElement abstractGetDefaultGenerator();
+  protected abstract T abstractGetDefaultGenerator();
 
-  protected abstract AtomicElement abstractGetRandomGenerator(Random random);
+  protected abstract T abstractGetRandomGenerator(Random random);
 
   protected abstract boolean abstractIsGenerator(Element element);
 

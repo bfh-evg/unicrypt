@@ -1,12 +1,11 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.classes.MultiplicativeAtomicElement;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeAtomicMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
@@ -46,7 +45,7 @@ public class ZTimesMod extends AbstractMultiplicativeAtomicMonoid {
   //
 
   @Override
-  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected MultiplicativeAtomicElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().modPow(amount,this.getModulus()));
   }
 
@@ -77,7 +76,7 @@ public class ZTimesMod extends AbstractMultiplicativeAtomicMonoid {
   }
 
   @Override
-  protected AtomicElement abstractGetRandomElement(final Random random) {
+  protected MultiplicativeAtomicElement abstractGetRandomElement(final Random random) {
     return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
@@ -87,7 +86,7 @@ public class ZTimesMod extends AbstractMultiplicativeAtomicMonoid {
   }
 
   @Override
-  protected AtomicElement abstractGetIdentityElement() {
+  protected MultiplicativeAtomicElement abstractGetIdentityElement() {
     if (this.getModulus().equals(BigInteger.ONE)) {
       return this.abstractGetElement(BigInteger.ZERO);
     }
@@ -95,7 +94,7 @@ public class ZTimesMod extends AbstractMultiplicativeAtomicMonoid {
   }
 
   @Override
-  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+  protected MultiplicativeAtomicElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
