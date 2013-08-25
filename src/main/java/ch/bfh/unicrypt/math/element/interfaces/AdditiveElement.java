@@ -71,4 +71,29 @@ public interface AdditiveElement extends Element {
    */
   public AdditiveElement timesTwo();
 
+  //
+  // The following methods override corresponding parent methods with different return type
+  //
+
+  @Override
+  public AdditiveElement apply(Element element);
+
+  @Override
+  public AdditiveElement applyInverse(Element element);
+
+  @Override
+  public AdditiveElement selfApply(BigInteger amount);
+
+  @Override
+  public AdditiveElement selfApply(Element amount);
+
+  @Override
+  public AdditiveElement selfApply(int amount);
+
+  @Override
+  public AdditiveElement selfApply();
+
+  @Override
+  public AdditiveElement invert();
+
 }
