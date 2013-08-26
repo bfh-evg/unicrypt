@@ -2,11 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.element.classes;
+package ch.bfh.unicrypt.math.element.abstracts;
 
 import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
 import ch.bfh.unicrypt.math.group.interfaces.AdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.group.interfaces.AdditiveMonoid;
@@ -19,13 +18,13 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public class AdditiveAtomicElement extends AbstractAtomicElement<AdditiveAtomicElement> implements AdditiveElement {
+public abstract class AbstractAdditiveElement extends AbstractElement<AdditiveElement> implements AdditiveElement {
 
-  protected AdditiveAtomicElement(final Set set) {
+  protected AbstractAdditiveElement(final Set set) {
     super(set);
   }
 
-  protected AdditiveAtomicElement(final Set set, final BigInteger value) {
+  protected AbstractAdditiveElement(final Set set, final BigInteger value) {
     super(set);
     if (!set.contains(value)) {
       throw new IllegalArgumentException();
@@ -85,54 +84,54 @@ public class AdditiveAtomicElement extends AbstractAtomicElement<AdditiveAtomicE
    * @see Group#apply(Element, Element)
    */
   @Override
-  public final AdditiveAtomicElement add(final Element element) {
+  public final AbstractAdditiveElement add(final Element element) {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AdditiveAtomicElement) semiGroup.add(this, element);
+    return (AbstractAdditiveElement) semiGroup.add(this, element);
   }
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
   @Override
-  public final AdditiveAtomicElement subtract(final Element element) {
+  public final AbstractAdditiveElement subtract(final Element element) {
     AdditiveGroup group = this.getAdditiveGroup();
-    return (AdditiveAtomicElement) group.subtract(this, element);
+    return (AbstractAdditiveElement) group.subtract(this, element);
   }
 
   /**
    * @see Group#T(Element, BigInteger)
    */
   @Override
-  public final AdditiveAtomicElement times(final BigInteger amount) {
+  public final AbstractAdditiveElement times(final BigInteger amount) {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AdditiveAtomicElement) semiGroup.times(this, amount);
+    return (AbstractAdditiveElement) semiGroup.times(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
   @Override
-  public final AdditiveAtomicElement times(final Element amount) {
+  public final AbstractAdditiveElement times(final Element amount) {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AdditiveAtomicElement) semiGroup.times(this, amount);
+    return (AbstractAdditiveElement) semiGroup.times(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
   @Override
-  public final AdditiveAtomicElement times(final int amount) {
+  public final AbstractAdditiveElement times(final int amount) {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AdditiveAtomicElement) semiGroup.times(this, amount);
+    return (AbstractAdditiveElement) semiGroup.times(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
   @Override
-  public final AdditiveAtomicElement timesTwo() {
+  public final AbstractAdditiveElement timesTwo() {
     AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AdditiveAtomicElement) semiGroup.timesTwo(this);
+    return (AbstractAdditiveElement) semiGroup.timesTwo(this);
   }
 
 }

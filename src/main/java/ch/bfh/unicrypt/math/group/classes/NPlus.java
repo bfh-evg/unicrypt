@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AdditiveAtomicElement;
+import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveAtomicMonoid;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 
 /**
@@ -20,7 +20,7 @@ import ch.bfh.unicrypt.math.group.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class NPlus extends AbstractAdditiveAtomicMonoid {
+public class NPlus extends AbstractAdditiveMonoid {
 
   private static final long serialVersionUID = 1L;
   private static final int RANDOM_ELEMENT_BIT_LENGTH = 1000;
@@ -38,7 +38,7 @@ public class NPlus extends AbstractAdditiveAtomicMonoid {
   //
 
   @Override
-  protected AdditiveAtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected AdditiveElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -48,7 +48,7 @@ public class NPlus extends AbstractAdditiveAtomicMonoid {
   //
 
   @Override
-  protected AdditiveAtomicElement abstractGetRandomElement(final Random random) {
+  protected AdditiveElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -63,12 +63,12 @@ public class NPlus extends AbstractAdditiveAtomicMonoid {
   }
 
   @Override
-  protected AdditiveAtomicElement abstractGetIdentityElement() {
+  protected AdditiveElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected AdditiveAtomicElement abstractApply(final Element element1, final Element element2) {
+  protected AdditiveElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 

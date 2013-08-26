@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.CompoundElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractCompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractCompoundSet;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
@@ -134,7 +135,7 @@ public class ProductSet extends AbstractCompoundSet implements Set {
   }
 
   protected CompoundElement standardGetElement(final Element[] elements) {
-      return new CompoundElement(this, elements) {};
+      return new AbstractCompoundElement(this, elements) {};
     }
 
   /**

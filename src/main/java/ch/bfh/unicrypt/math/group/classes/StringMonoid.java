@@ -4,9 +4,9 @@
  */
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAtomicMonoid;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Random;
@@ -15,7 +15,7 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public class StringMonoid extends AbstractAtomicMonoid {
+public class StringMonoid extends AbstractMonoid {
 
   private StringMonoid() {
   }
@@ -34,12 +34,12 @@ public class StringMonoid extends AbstractAtomicMonoid {
     return this.standardGetElement(string);
   }
 
-  protected AtomicElement standardGetElement(String string) {
+  protected Element standardGetElement(String string) {
     return new StringMonoid.StringElement(this, string);
   }
 
   @Override
-  protected AtomicElement abstractGetElement(BigInteger value) {
+  protected Element abstractGetElement(BigInteger value) {
     return this.standardGetElement(new String(value.toByteArray()));
   }
 
@@ -49,12 +49,12 @@ public class StringMonoid extends AbstractAtomicMonoid {
   //
 
   @Override
-  protected AtomicElement abstractGetIdentityElement() {
+  protected Element abstractGetIdentityElement() {
     return this.standardGetElement("");
   }
 
   @Override
-  protected AtomicElement abstractApply(Element element1, Element element2) {
+  protected Element abstractApply(Element element1, Element element2) {
     return this.standardGetElement(((StringElement) element1).getString() + ((StringElement) element2).getString());
   }
 
@@ -64,7 +64,7 @@ public class StringMonoid extends AbstractAtomicMonoid {
   }
 
   @Override
-  protected AtomicElement abstractGetRandomElement(Random random) {
+  protected Element abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -76,7 +76,7 @@ public class StringMonoid extends AbstractAtomicMonoid {
   //
   // LOCAL ELEMENT CLASS
   //
-  final private class StringElement extends AtomicElement {
+  final private class StringElement extends AbstractElement {
 
     private static final long serialVersionUID = 1L;
     private final String string;

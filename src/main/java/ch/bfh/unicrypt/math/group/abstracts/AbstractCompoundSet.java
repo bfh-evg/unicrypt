@@ -4,7 +4,7 @@
  */
 package ch.bfh.unicrypt.math.group.abstracts;
 
-import ch.bfh.unicrypt.math.element.classes.CompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
 import ch.bfh.unicrypt.math.group.classes.ProductSet;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;

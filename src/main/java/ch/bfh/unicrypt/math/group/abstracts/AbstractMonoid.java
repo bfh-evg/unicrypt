@@ -1,7 +1,5 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
@@ -18,7 +16,7 @@ import ch.bfh.unicrypt.math.group.interfaces.Monoid;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractAtomicMonoid<T extends AbstractAtomicElement> extends AbstractAtomicSemiGroup<T> implements Monoid {
+public abstract class AbstractMonoid<T extends Element> extends AbstractSemiGroup<T> implements Monoid {
 
   private static final long serialVersionUID = 1L;
 

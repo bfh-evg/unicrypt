@@ -3,30 +3,30 @@
  */
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAtomicCyclicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 
 /**
  * @author rolfhaenni
  *
  */
-public class SingletonGroup extends AbstractAtomicCyclicGroup {
+public class SingletonGroup extends AbstractCyclicGroup {
 
   private static final long serialVersionUID = 1L;
-  private final AtomicElement element;
+  private final Element element;
 
   private SingletonGroup(BigInteger value) {
-    this.element = new AtomicElement(this, value){};
+    this.element = new AbstractElement(this, value){};
   }
 
-  public final AtomicElement getElement() {
+  public final Element getElement() {
     return this.element;
   }
 
@@ -54,17 +54,17 @@ public class SingletonGroup extends AbstractAtomicCyclicGroup {
   }
 
   @Override
-  protected AtomicElement abstractGetElement(final BigInteger value) {
+  protected Element abstractGetElement(final BigInteger value) {
     return this.getElement();
   }
 
   @Override
-  protected AtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected Element standardSelfApply(Element element, BigInteger amount) {
     return this.getElement();
   }
 
   @Override
-  protected AtomicElement abstractGetRandomElement(Random random) {
+  protected Element abstractGetRandomElement(Random random) {
     return this.getElement();
   }
 
@@ -79,27 +79,27 @@ public class SingletonGroup extends AbstractAtomicCyclicGroup {
   }
 
   @Override
-  protected AtomicElement abstractGetIdentityElement() {
+  protected Element abstractGetIdentityElement() {
     return this.getElement();
   }
 
   @Override
-  protected AtomicElement abstractApply(Element element1, Element element2) {
+  protected Element abstractApply(Element element1, Element element2) {
     return this.getElement();
   }
 
   @Override
-  protected AtomicElement abstractInvert(Element element) {
+  protected Element abstractInvert(Element element) {
     return this.getElement();
   }
 
   @Override
-  protected AtomicElement abstractGetDefaultGenerator() {
+  protected Element abstractGetDefaultGenerator() {
     return this.getElement();
   }
 
   @Override
-  protected AtomicElement abstractGetRandomGenerator(Random random) {
+  protected Element abstractGetRandomGenerator(Random random) {
     return this.getElement();
   }
 

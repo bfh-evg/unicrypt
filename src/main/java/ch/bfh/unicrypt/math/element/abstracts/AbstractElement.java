@@ -35,7 +35,7 @@ import java.security.NoSuchAlgorithmException;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<E extends AbstractElement> implements Element, Serializable {
+public abstract class AbstractElement<E extends Element> implements Element, Serializable {
 
   private static final long serialVersionUID = 1L;
   private final Set set;

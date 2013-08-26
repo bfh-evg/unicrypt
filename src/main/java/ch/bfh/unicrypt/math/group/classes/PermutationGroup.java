@@ -1,13 +1,13 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAtomicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -28,7 +28,7 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PermutationGroup extends AbstractAtomicGroup {
+public class PermutationGroup extends AbstractGroup {
 
   private static final long serialVersionUID = 1L;
 
@@ -65,14 +65,14 @@ public class PermutationGroup extends AbstractAtomicGroup {
    * @return The corresponding group element
    * @throws IllegalArgumentException if {@code permutation} is null or if it is not a proper permutation for the group's permutation size
    */
-  public AtomicElement getElement(final Permutation permutation) {
+  public Element getElement(final Permutation permutation) {
     if (permutation == null || permutation.getSize() != this.getSize()) {
       throw new IllegalArgumentException();
     }
     return this.standardGetElement(permutation);
   }
 
-  protected AtomicElement standardGetElement(Permutation permutation) {
+  protected Element standardGetElement(Permutation permutation) {
     return new PermutationGroup.PermutationElement(this, permutation);
   }
 
@@ -103,7 +103,7 @@ public class PermutationGroup extends AbstractAtomicGroup {
   //
 
   @Override
-  protected AtomicElement abstractGetRandomElement(final Random random) {
+  protected Element abstractGetRandomElement(final Random random) {
     return this.standardGetElement(new Permutation(this.getSize(), random));
   }
 
@@ -114,12 +114,12 @@ public class PermutationGroup extends AbstractAtomicGroup {
   }
 
   @Override
-  protected AtomicElement abstractApply(final Element element1, final Element element2) {
+  protected Element abstractApply(final Element element1, final Element element2) {
     return this.standardGetElement(this.getPermutation(element1).compose(this.getPermutation(element2)));
   }
 
   @Override
-  protected AtomicElement abstractInvert(final Element element) {
+  protected Element abstractInvert(final Element element) {
     return this.standardGetElement(this.getPermutation(element).invert());
   }
 
@@ -129,19 +129,19 @@ public class PermutationGroup extends AbstractAtomicGroup {
   }
 
   @Override
-  protected AtomicElement abstractGetIdentityElement() {
+  protected Element abstractGetIdentityElement() {
     return this.standardGetElement(new Permutation(this.getSize()));
   }
 
   @Override
-  protected AtomicElement abstractGetElement(final BigInteger value) {
+  protected Element abstractGetElement(final BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getSize());
     return standardGetElement(new Permutation(MathUtil.bigIntegerToIntArray(values)));
   }
 
   // LOCAL CLASS: PERMUTATION_ELEMENT
 
-  final private class PermutationElement extends AtomicElement {
+  final private class PermutationElement extends AbstractElement {
 
     private static final long serialVersionUID = 1L;
 

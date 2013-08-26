@@ -1,11 +1,12 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.MultiplicativeAtomicElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractMultiplicativeElement;
 import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeAtomicMonoid;
+import ch.bfh.unicrypt.math.element.interfaces.MultiplicativeElement;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeMonoid;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 
@@ -21,7 +22,7 @@ import ch.bfh.unicrypt.math.group.interfaces.Set;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZTimes extends AbstractMultiplicativeAtomicMonoid {
+public class ZTimes extends AbstractMultiplicativeMonoid {
 
   private static final long serialVersionUID = 1L;
   private static final int RANDOM_ELEMENT_BIT_LENGTH = 1000;
@@ -39,7 +40,7 @@ public class ZTimes extends AbstractMultiplicativeAtomicMonoid {
   //
 
   @Override
-  protected MultiplicativeAtomicElement abstractGetRandomElement(final Random random) {
+  protected AbstractMultiplicativeElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -54,12 +55,12 @@ public class ZTimes extends AbstractMultiplicativeAtomicMonoid {
   }
 
   @Override
-  protected MultiplicativeAtomicElement abstractGetIdentityElement() {
+  protected MultiplicativeElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  protected MultiplicativeAtomicElement abstractApply(final Element element1, final Element element2) {
+  protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
 

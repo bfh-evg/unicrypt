@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.CompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;

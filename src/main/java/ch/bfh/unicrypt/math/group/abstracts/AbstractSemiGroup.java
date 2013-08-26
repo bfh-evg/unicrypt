@@ -1,10 +1,8 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
 
@@ -18,7 +16,7 @@ import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractAtomicSemiGroup<T extends AbstractAtomicElement> extends AbstractAtomicSet<T> implements SemiGroup {
+public abstract class AbstractSemiGroup<T extends Element> extends AbstractSet<T> implements SemiGroup {
 
   private static final long serialVersionUID = 1L;
 

@@ -1,13 +1,11 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.group.interfaces.CyclicGroup;
 
-public abstract class AbstractAtomicCyclicGroup<T extends AbstractAtomicElement> extends AbstractAtomicGroup<T> implements CyclicGroup {
+public abstract class AbstractCyclicGroup<T extends Element> extends AbstractGroup<T> implements CyclicGroup {
 
   private static final long serialVersionUID = 1L;
 

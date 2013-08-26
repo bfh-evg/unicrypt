@@ -1,13 +1,14 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AdditiveAtomicElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractAdditiveElement;
+import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveAtomicCyclicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
@@ -22,7 +23,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
+public class ZPlusMod extends AbstractAdditiveCyclicGroup {
 
   private static final long serialVersionUID = 1L;
 
@@ -46,7 +47,7 @@ public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
   //
 
   @Override
-  protected AdditiveAtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected AdditiveElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
   }
 
@@ -77,7 +78,7 @@ public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AdditiveAtomicElement abstractGetRandomElement(final Random random) {
+  protected AdditiveElement abstractGetRandomElement(final Random random) {
     return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
@@ -87,7 +88,7 @@ public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AdditiveAtomicElement abstractGetDefaultGenerator() {
+  protected AdditiveElement abstractGetDefaultGenerator() {
     return this.abstractGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
   }
 
@@ -100,23 +101,23 @@ public class ZPlusMod extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AdditiveAtomicElement abstractGetIdentityElement() {
+  protected AdditiveElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected AdditiveAtomicElement abstractApply(final Element element1, final Element element2) {
+  protected AdditiveElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  protected AdditiveAtomicElement abstractInvert(final Element element) {
+  protected AdditiveElement abstractInvert(final Element element) {
     return this.abstractGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public AdditiveAtomicElement abstractGetRandomGenerator(final Random random) {
-    AdditiveAtomicElement element;
+  public AdditiveElement abstractGetRandomGenerator(final Random random) {
+    AdditiveElement element;
     do {
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));

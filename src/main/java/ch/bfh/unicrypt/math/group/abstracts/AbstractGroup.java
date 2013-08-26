@@ -1,7 +1,5 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
@@ -17,7 +15,7 @@ import ch.bfh.unicrypt.math.group.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractAtomicGroup<T extends AbstractAtomicElement> extends AbstractAtomicMonoid<T> implements Group {
+public abstract class AbstractGroup<T extends Element> extends AbstractMonoid<T> implements Group {
 
   private static final long serialVersionUID = 1L;
 

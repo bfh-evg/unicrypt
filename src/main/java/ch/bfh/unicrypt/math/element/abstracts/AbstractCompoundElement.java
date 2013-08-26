@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.element.classes;
+package ch.bfh.unicrypt.math.element.abstracts;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductMonoid;
 import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
@@ -22,12 +22,12 @@ import java.util.NoSuchElementException;
  *
  * @author rolfhaenni
  */
-public class CompoundElement extends AbstractElement<CompoundElement> implements Compound<Element> {
+public abstract class AbstractCompoundElement extends AbstractElement<CompoundElement> implements CompoundElement {
 
   private final Element[] elements;
   private final int arity;
 
-  protected CompoundElement(final Set set, final Element[] elements) {
+  protected AbstractCompoundElement(final Set set, final Element[] elements) {
     super(set);
     this.elements = elements;
     this.arity = elements.length;
@@ -37,6 +37,7 @@ public class CompoundElement extends AbstractElement<CompoundElement> implements
    *
    * @return
    */
+  @Override
   public final ProductSet getProductSet() {
     if (this.getSet() instanceof ProductSet) {
       return (ProductSet) this.getSet();
@@ -48,6 +49,7 @@ public class CompoundElement extends AbstractElement<CompoundElement> implements
    *
    * @return
    */
+  @Override
   public final ProductSemiGroup getProductSemiGroup() {
     if (this.getSet() instanceof ProductSemiGroup) {
       return (ProductSemiGroup) this.getSet();
@@ -59,6 +61,7 @@ public class CompoundElement extends AbstractElement<CompoundElement> implements
    *
    * @return
    */
+  @Override
   public final ProductMonoid getProductMonoid() {
     if (this.getSet() instanceof ProductMonoid) {
       return (ProductMonoid) this.getSet();
@@ -70,6 +73,7 @@ public class CompoundElement extends AbstractElement<CompoundElement> implements
    *
    * @return
    */
+  @Override
   public final ProductGroup getProductGroup() {
     if (this.getSet() instanceof ProductGroup) {
       return (ProductGroup) this.getSet();

@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.MultiplicativeAtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.element.interfaces.MultiplicativeElement;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeAtomicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Factorization;
@@ -24,7 +24,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
+public class ZStarMod extends AbstractMultiplicativeGroup {
 
   private static final long serialVersionUID = 1L;
 
@@ -83,7 +83,7 @@ public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
   //
 
   @Override
-  protected MultiplicativeAtomicElement standardSelfApply(final Element element, final BigInteger amount) {
+  protected MultiplicativeElement standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount;
     final BigInteger order = this.getOrder();
     if (!order.equals(Group.UNKNOWN_ORDER)) {
@@ -114,7 +114,7 @@ public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
   //
 
   @Override
-  protected MultiplicativeAtomicElement abstractGetRandomElement(final Random random) {
+  protected MultiplicativeElement abstractGetRandomElement(final Random random) {
     BigInteger randomValue;
     do {
       randomValue = RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
@@ -139,7 +139,7 @@ public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
   }
 
   @Override
-  protected MultiplicativeAtomicElement abstractGetIdentityElement() {
+  protected MultiplicativeElement abstractGetIdentityElement() {
     if (this.getModulus().equals(BigInteger.ONE)) {
       return this.abstractGetElement(BigInteger.ZERO);
     }
@@ -147,12 +147,12 @@ public class ZStarMod extends AbstractMultiplicativeAtomicGroup {
   }
 
   @Override
-  protected MultiplicativeAtomicElement abstractApply(final Element element1, final Element element2) {
+  protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public MultiplicativeAtomicElement abstractInvert(final Element element) {
+  public MultiplicativeElement abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 

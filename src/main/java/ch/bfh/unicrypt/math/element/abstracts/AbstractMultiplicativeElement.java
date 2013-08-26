@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.element.classes;
+package ch.bfh.unicrypt.math.element.abstracts;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractAtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.element.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
@@ -19,13 +18,13 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public class MultiplicativeAtomicElement extends AbstractAtomicElement<MultiplicativeAtomicElement> implements MultiplicativeElement {
+public abstract class AbstractMultiplicativeElement extends AbstractElement<MultiplicativeElement> implements MultiplicativeElement {
 
-  protected MultiplicativeAtomicElement(final Set set) {
+  protected AbstractMultiplicativeElement(final Set set) {
     super(set);
   }
 
-  protected MultiplicativeAtomicElement(final Set set, final BigInteger value) {
+  protected AbstractMultiplicativeElement(final Set set, final BigInteger value) {
     super(set);
     if (!set.contains(value)) {
       throw new IllegalArgumentException();
@@ -85,54 +84,54 @@ public class MultiplicativeAtomicElement extends AbstractAtomicElement<Multiplic
    * @see Group#apply(Element, Element)
    */
   @Override
-  public final MultiplicativeAtomicElement multiply(final Element element) {
+  public final AbstractMultiplicativeElement multiply(final Element element) {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (MultiplicativeAtomicElement) semiGroup.multiply(this, element);
+    return (AbstractMultiplicativeElement) semiGroup.multiply(this, element);
   }
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
   @Override
-  public final MultiplicativeAtomicElement divide(final Element element) {
+  public final AbstractMultiplicativeElement divide(final Element element) {
     MultiplicativeGroup group = this.getMultiplicativeGroup();
-    return (MultiplicativeAtomicElement) group.divide(this, element);
+    return (AbstractMultiplicativeElement) group.divide(this, element);
   }
 
   /**
    * @see Group#T(Element, BigInteger)
    */
   @Override
-  public final MultiplicativeAtomicElement power(final BigInteger amount) {
+  public final AbstractMultiplicativeElement power(final BigInteger amount) {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (MultiplicativeAtomicElement) semiGroup.power(this, amount);
+    return (AbstractMultiplicativeElement) semiGroup.power(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
   @Override
-  public final MultiplicativeAtomicElement power(final Element amount) {
+  public final AbstractMultiplicativeElement power(final Element amount) {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (MultiplicativeAtomicElement) semiGroup.power(this, amount);
+    return (AbstractMultiplicativeElement) semiGroup.power(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
   @Override
-  public final MultiplicativeAtomicElement power(final int amount) {
+  public final AbstractMultiplicativeElement power(final int amount) {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (MultiplicativeAtomicElement) semiGroup.power(this, amount);
+    return (AbstractMultiplicativeElement) semiGroup.power(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
   @Override
-  public final MultiplicativeAtomicElement square() {
+  public final AbstractMultiplicativeElement square() {
     MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (MultiplicativeAtomicElement) semiGroup.square(this);
+    return (AbstractMultiplicativeElement) semiGroup.square(this);
   }
 
 }

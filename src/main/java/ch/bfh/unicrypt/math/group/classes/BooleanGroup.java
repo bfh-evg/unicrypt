@@ -3,6 +3,7 @@ package ch.bfh.unicrypt.math.group.classes;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 
 /**
  * This interface represents the group that consists of two elements only, for
@@ -17,8 +18,8 @@ import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 public class BooleanGroup extends ZPlusMod {
 
   private static final long serialVersionUID = 1L;
-  public static final AbstractElement TRUE = BooleanGroup.getInstance().getElement(BigInteger.ONE);
-  public static final AbstractElement FALSE = BooleanGroup.getInstance().getElement(BigInteger.ZERO);
+  public static final AdditiveElement TRUE = BooleanGroup.getInstance().getElement(BigInteger.ONE);
+  public static final AdditiveElement FALSE = BooleanGroup.getInstance().getElement(BigInteger.ZERO);
 
   private BooleanGroup() {
     super(BigInteger.valueOf(2));
@@ -31,7 +32,7 @@ public class BooleanGroup extends ZPlusMod {
    * @param value The given Boolean value
    * @return The corresponding group element
    */
-  public AbstractElement getElement(final boolean value) {
+  public AdditiveElement getElement(final boolean value) {
     if (value) {
       return BooleanGroup.TRUE;
     }

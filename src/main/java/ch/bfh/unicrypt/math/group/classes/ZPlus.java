@@ -1,11 +1,12 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.classes.AdditiveAtomicElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractAdditiveElement;
+import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveAtomicCyclicGroup;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractAdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
@@ -22,7 +23,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
+public class ZPlus extends AbstractAdditiveCyclicGroup {
 
   private static final long serialVersionUID = 1L;
   private static final int RANDOM_ELEMENT_BIT_LENGTH = 1000;
@@ -40,7 +41,7 @@ public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
   //
 
   @Override
-  protected AdditiveAtomicElement standardSelfApply(Element element, BigInteger amount) {
+  protected AdditiveElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -50,7 +51,7 @@ public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
   //
 
   @Override
-  protected AdditiveAtomicElement abstractGetRandomElement(final Random random) {
+  protected AdditiveElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -65,7 +66,7 @@ public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AdditiveAtomicElement abstractGetDefaultGenerator() {
+  protected AdditiveElement abstractGetDefaultGenerator() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -75,22 +76,22 @@ public class ZPlus extends AbstractAdditiveAtomicCyclicGroup {
   }
 
   @Override
-  protected AdditiveAtomicElement abstractGetIdentityElement() {
+  protected AdditiveElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected AdditiveAtomicElement abstractApply(final Element element1, final Element element2) {
+  protected AdditiveElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
-  protected AdditiveAtomicElement abstractInvert(final Element element) {
+  protected AdditiveElement abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().negate());
   }
 
   @Override
-  public AdditiveAtomicElement abstractGetRandomGenerator(final Random random) {
+  public AdditiveElement abstractGetRandomGenerator(final Random random) {
     if (RandomUtil.createRandomBoolean(random)) {
       return this.getDefaultGenerator();
     }
