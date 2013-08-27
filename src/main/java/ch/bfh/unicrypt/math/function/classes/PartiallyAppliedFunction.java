@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.classes.ProductSet;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
+import ch.bfh.unicrypt.math.set.classes.ProductSet;
+import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -107,7 +107,7 @@ public class PartiallyAppliedFunction extends AbstractFunction {
   //
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    CompoundElement compoundElement = (CompoundElement) element;
+    Tuple compoundElement = (Tuple) element;
     int arity = compoundElement.getArity();
     final Element[] allElements = new Element[arity + 1];
     for (int i = 0; i < arity; i++) {

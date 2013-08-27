@@ -6,7 +6,7 @@ import ch.bfh.unicrypt.crypto.nizkp.abstracts.ProofGeneratorAbstract;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
@@ -54,7 +54,7 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
   }
 
   @Override
-  public TupleElement generate(final Element secretInput, final Element publicInput, final Element otherInput, final Random random) {
+  public Tuple generate(final Element secretInput, final Element publicInput, final Element otherInput, final Random random) {
     if ((secretInput == null) || !this.getResponseSpace().contains(secretInput) || (publicInput == null)
         || !this.getCommitmentSpace().contains(publicInput)) {
       throw new IllegalArgumentException();
@@ -93,12 +93,12 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
     return randomElement.apply(secretInput.selfApply(challenge));
   }
 
-  public TupleElement createProof(final Element commitment, final Element response) {
+  public Tuple createProof(final Element commitment, final Element response) {
     return this.getProofSpace().getElement(commitment, response);
   }
 
   @Override
-  public boolean verify(final TupleElement proof, final Element publicInput, final Element otherInput) {
+  public boolean verify(final Tuple proof, final Element publicInput, final Element otherInput) {
     if ((proof == null) || !this.getProofSpace().contains(proof) || (publicInput == null) || !this.getCommitmentSpace().contains(publicInput)) {
       throw new IllegalArgumentException();
     }
@@ -139,7 +139,7 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
   }
 
   @Override
-  public Element getCommitment(final TupleElement element) {
+  public Element getCommitment(final Tuple element) {
     if (element == null) {
       throw new IllegalArgumentException();
     }
@@ -147,7 +147,7 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
   }
 
   @Override
-  public Element getResponse(final TupleElement element) {
+  public Element getResponse(final Tuple element) {
     if (element == null) {
       throw new IllegalArgumentException();
     }

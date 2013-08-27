@@ -5,10 +5,10 @@
 package ch.bfh.unicrypt.math.element.interfaces;
 
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.interfaces.MultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeMonoid;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeSemiGroup;
+import ch.bfh.unicrypt.math.monoid.interfaces.MultiplicativeMonoid;
+import ch.bfh.unicrypt.math.semigroup.interfaces.MultiplicativeSemiGroup;
 import java.math.BigInteger;
 
 /**

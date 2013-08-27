@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.group.classes.BooleanGroup;
-import ch.bfh.unicrypt.math.group.classes.ProductSet;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
+import ch.bfh.unicrypt.math.set.classes.ProductSet;
+import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -37,7 +37,7 @@ public class EqualityFunction extends AbstractFunction {
 
   @Override
   public Element abstractApply(final Element element, final Random random) {
-    CompoundElement compoundElement = (CompoundElement) element;
+    Tuple compoundElement = (Tuple) element;
     int arity = compoundElement.getArity();
     if (arity > 1) {
       final Element firstElement = compoundElement.getFirst();

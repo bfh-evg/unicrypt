@@ -16,8 +16,8 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.group.classes.ZPlus;
-import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlus;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
 
 public class AESEncryptionScheme extends AbstractEncryptionScheme implements DeterministicEncryptionScheme {
   private int encryptionIterations;

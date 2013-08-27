@@ -15,11 +15,11 @@ import org.junit.Test;
 import ch.bfh.unicrypt.encryption.classes.ElGamalEncryptionClass;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSaveClass;
 import ch.bfh.unicrypt.math.group.classes.ProductGroupClass;
-import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.interfaces.DDHGroup;
 
 public class SigmaOrProofGeneratorClassTest {
 
@@ -95,7 +95,7 @@ public class SigmaOrProofGeneratorClassTest {
 				publicProofInputElement, null, random);
 
 		// validate the proof
-		assertTrue(sopg.verify((TupleElement) proof, publicProofInputElement));
+		assertTrue(sopg.verify((Tuple) proof, publicProofInputElement));
 	}
 
 	@Test
@@ -130,7 +130,7 @@ public class SigmaOrProofGeneratorClassTest {
 				publicProofInputElement, null, random);
 
 		// validate the proof
-		assertFalse(sopg.verify((TupleElement) proof, publicProofInputElement));
+		assertFalse(sopg.verify((Tuple) proof, publicProofInputElement));
 	}
 	
 	@Test
@@ -172,6 +172,6 @@ public class SigmaOrProofGeneratorClassTest {
 				publicProofInputElement, null, random);
 
 		// validate the proof
-		assertFalse(sopg.verify((TupleElement) proof, publicProofInputElement));
+		assertFalse(sopg.verify((Tuple) proof, publicProofInputElement));
 	}
 }

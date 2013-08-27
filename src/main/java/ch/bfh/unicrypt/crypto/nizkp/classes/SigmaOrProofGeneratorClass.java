@@ -9,7 +9,7 @@ import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction.HashAlgorithm;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
@@ -64,7 +64,7 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
 	 * @param random
 	 * @return
 	 */
-	public TupleElement generate(final Element secretInput, final int index,
+	public Tuple generate(final Element secretInput, final int index,
 			final Element publicInput, final Element otherInput,
 			final Random random) {
 		
@@ -91,7 +91,7 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
 		// compute the commitments
 		for (int j = 0; j < n; j++){
 			if (j != index){
-				t.add(functions[j].apply(s.get(j)).apply(((TupleElement) publicInput).getElementAt(j).selfApply((AtomicElement)c.get(j).invert())));
+				t.add(functions[j].apply(s.get(j)).apply(((Tuple) publicInput).getElementAt(j).selfApply((AtomicElement)c.get(j).invert())));
 			}
 			else {
 				t.add(null);
@@ -101,7 +101,7 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
 		final Element randomElement = functions[0].getDomain().getRandomElement(random);
 		t.set(index, functions[index].apply(randomElement));
 		
-		TupleElement commitment = ProductGroup.createTupleElement(t);
+		Tuple commitment = ProductGroup.createTupleElement(t);
 		
 		
 		this.sigmaProofGenerator = new SigmaProofGeneratorClass(functions[index], hashAlgorithm, concatParameter, mapper);
@@ -134,9 +134,9 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
 	}
 	
 	/* (non-Javadoc)
-	 * @see ch.bfh.unicrypt.nizkp.interfaces.ProofGenerator#verify(ch.bfh.unicrypt.math.element.interfaces.TupleElement, ch.bfh.unicrypt.math.element.interfaces.Element, ch.bfh.unicrypt.math.element.interfaces.Element)
+	 * @see ch.bfh.unicrypt.nizkp.interfaces.ProofGenerator#verify(ch.bfh.unicrypt.math.element.interfaces.Tuple, ch.bfh.unicrypt.math.element.interfaces.Element, ch.bfh.unicrypt.math.element.interfaces.Element)
 	 */
-	public boolean verify(final TupleElement proof, final Element publicInput,
+	public boolean verify(final Tuple proof, final Element publicInput,
 			final Element otherInput) {
 			
 		// Input validation
@@ -144,9 +144,9 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
 			throw new IllegalArgumentException("Proof must have arity of 3");
 		}
 				
-		TupleElement commitment = (TupleElement) getCommitment(proof);
-		TupleElement response = (TupleElement) getResponse(proof);
-		TupleElement challenge = (TupleElement) getChallenge(proof);
+		Tuple commitment = (Tuple) getCommitment(proof);
+		Tuple response = (Tuple) getResponse(proof);
+		Tuple challenge = (Tuple) getChallenge(proof);
 		
 		if (commitment.getArity() != response.getArity() || response.getArity() != challenge.getArity()){
 			throw new IllegalArgumentException("Arities of commitment, challenge and response are not equal!");
@@ -157,7 +157,7 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
 		// applying function on all response values and check if correct
 		for (int j = 0; j < response.getArity(); j++){
 			sApplied = functions[j].apply(response.getElementAt(j));
-			if (!sApplied.getSet().areEqual(sApplied, commitment.getElementAt(j).apply(((TupleElement)publicInput).getElementAt(j).selfApply((AtomicElement)challenge.getElementAt(j))))){
+			if (!sApplied.getSet().areEqual(sApplied, commitment.getElementAt(j).apply(((Tuple)publicInput).getElementAt(j).selfApply((AtomicElement)challenge.getElementAt(j))))){
 				return false;
 			}
 		}
@@ -209,16 +209,16 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
 	}
 
 	@Override
-	public Element getCommitment(TupleElement proof) {		
+	public Element getCommitment(Tuple proof) {		
 		return proof.getElementAt(0);
 	}
 
 	@Override
-	public Element getResponse(TupleElement proof) {
+	public Element getResponse(Tuple proof) {
 		return proof.getElementAt(2);
 	}
 	
-	public Element getChallenge(TupleElement proof){
+	public Element getChallenge(Tuple proof){
 		return proof.getElementAt(1);	
 	}
 
@@ -229,7 +229,7 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
 
 
 	@Override
-	public TupleElement generate(Element secretInput, Element publicInput,
+	public Tuple generate(Element secretInput, Element publicInput,
 			Element otherInput, Random random) {
 		throw new UnsupportedOperationException("Please use the generate method with index.");
 	}

@@ -8,8 +8,8 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractGroup;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Permutation;
+import ch.bfh.unicrypt.math.set.interfaces.Set;
+import ch.bfh.unicrypt.math.utility.Permutation;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**

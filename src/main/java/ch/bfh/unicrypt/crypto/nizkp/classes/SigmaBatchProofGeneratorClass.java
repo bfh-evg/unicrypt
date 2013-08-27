@@ -6,7 +6,7 @@ import ch.bfh.unicrypt.crypto.nizkp.abstracts.ProductProofGeneratorAbstract;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaBatchProofGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction.HashAlgorithm;
 import ch.bfh.unicrypt.math.function.classes.PowerFunction;
@@ -35,12 +35,12 @@ public class SigmaBatchProofGeneratorClass extends ProductProofGeneratorAbstract
   }
 
   @Override
-  public TupleElement generate(final Element secretInput, final Element publicInput, final Element otherInput, final Random random) {
+  public Tuple generate(final Element secretInput, final Element publicInput, final Element otherInput, final Random random) {
     return this.sigmaProofGenerator.generate(secretInput, publicInput, otherInput, random);
   }
 
   @Override
-  public boolean verify(final TupleElement proof, final Element publicInput, final Element otherInput) {
+  public boolean verify(final Tuple proof, final Element publicInput, final Element otherInput) {
     return this.sigmaProofGenerator.verify(proof, publicInput, otherInput);
   }
 
@@ -60,8 +60,8 @@ public class SigmaBatchProofGeneratorClass extends ProductProofGeneratorAbstract
   }
 
   @Override
-  public TupleElement getResponse(final TupleElement proof) {
-    return (TupleElement) this.sigmaProofGenerator.getResponse(proof);
+  public Tuple getResponse(final Tuple proof) {
+    return (Tuple) this.sigmaProofGenerator.getResponse(proof);
   }
 
   @Override
@@ -70,8 +70,8 @@ public class SigmaBatchProofGeneratorClass extends ProductProofGeneratorAbstract
   }
 
   @Override
-  public TupleElement getCommitment(final TupleElement proof) {
-    return (TupleElement) this.sigmaProofGenerator.getCommitment(proof);
+  public Tuple getCommitment(final Tuple proof) {
+    return (Tuple) this.sigmaProofGenerator.getCommitment(proof);
   }
 
   @Override

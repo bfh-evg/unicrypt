@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.group.classes.ProductSemiGroup;
+import ch.bfh.unicrypt.math.semigroup.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
 import java.util.Random;
 
 /**
@@ -41,7 +41,7 @@ public class ApplyFunction extends AbstractFunction {
 
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    CompoundElement compoundElement = (CompoundElement) element;
+    Tuple compoundElement = (Tuple) element;
     return this.getCoDomain().apply(compoundElement.getAll());
   }
 

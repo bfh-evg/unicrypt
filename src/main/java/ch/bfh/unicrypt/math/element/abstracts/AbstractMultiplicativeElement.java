@@ -7,11 +7,11 @@ package ch.bfh.unicrypt.math.element.abstracts;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.element.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.interfaces.MultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeMonoid;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeSemiGroup;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
+import ch.bfh.unicrypt.math.monoid.interfaces.MultiplicativeMonoid;
+import ch.bfh.unicrypt.math.semigroup.interfaces.MultiplicativeSemiGroup;
+import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.math.BigInteger;
 
 /**

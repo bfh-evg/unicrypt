@@ -7,8 +7,8 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.group.abstracts.AbstractMultiplicativeGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Factorization;
+import ch.bfh.unicrypt.math.set.interfaces.Set;
+import ch.bfh.unicrypt.math.utility.Factorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
@@ -36,7 +36,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
    * of the static nested class Factory.
    * @param modulus The given modulus
    */
-  private ZStarMod(final BigInteger modulus) {
+  protected ZStarMod(final BigInteger modulus) {
     this(modulus, new Factorization());
   }
 
@@ -45,7 +45,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
    * of the static nested class Factory.
    * @param factorization The given factorization
    */
-  private ZStarMod(final Factorization factorization) {
+  protected ZStarMod(final Factorization factorization) {
     this(factorization.getValue(), factorization);
   }
 
@@ -55,7 +55,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
    * @param modulus The given modulus
    * @param factorization The given factorization
    */
-  private ZStarMod(final BigInteger modulus, final Factorization factorization) {
+  protected ZStarMod(final BigInteger modulus, final Factorization factorization) {
     this.modulus = modulus;
     this.moduloFactorization = factorization;
   }

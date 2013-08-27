@@ -1,5 +1,7 @@
 package ch.bfh.unicrypt.math.group.interfaces;
 
+import ch.bfh.unicrypt.math.monoid.interfaces.AdditiveMonoid;
+import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 
 /**
@@ -18,6 +20,6 @@ public interface AdditiveGroup extends Group, AdditiveMonoid {
    * @param element2 the same as in {@link #Group.applyInverse(Element, Element)}
    * @return the same as in {@link #Group.applyInverse(Element, Element)}
    */
-  public Element subtract(Element element1, Element element2);
+  public AdditiveElement subtract(Element element1, Element element2);
 
 }

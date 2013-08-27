@@ -5,7 +5,7 @@
 package ch.bfh.unicrypt.math.element.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.classes.ZPlusModClass;
@@ -90,7 +90,7 @@ public class SerializationTest {
         
         final ProductGroup prodGroup = new ProductGroup(g_q,g_q,z_q);
 
-        TupleElement tuple1 = prodGroup.getRandomElement();
+        Tuple tuple1 = prodGroup.getRandomElement();
         //Works also by creating a Tuple with: ProductGroupClass.createTupleElement(atomic1, atomic2);
         
         ByteArrayOutputStream out2 = new ByteArrayOutputStream();
@@ -103,7 +103,7 @@ public class SerializationTest {
         Object o2 = ois2.readObject();
         ois2.close();
         
-        Element tuple2 = (TupleElement)o2;
+        Element tuple2 = (Tuple)o2;
         
         assertTrue(prodGroup.areEqual(tuple1, tuple2));
     }

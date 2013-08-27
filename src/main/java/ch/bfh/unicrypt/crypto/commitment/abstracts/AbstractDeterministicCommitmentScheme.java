@@ -2,7 +2,7 @@ package ch.bfh.unicrypt.crypto.commitment.abstracts;
 
 import ch.bfh.unicrypt.crypto.commitment.interfaces.DeterministicCommitmentScheme;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.classes.BooleanGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
 
 public abstract class AbstractDeterministicCommitmentScheme extends AbstractCommitmentScheme implements DeterministicCommitmentScheme {
 

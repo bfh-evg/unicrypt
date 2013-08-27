@@ -1,8 +1,8 @@
 package ch.bfh.unicrypt.crypto.keygen.interfaces;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.cyclicgroup.interfaces.DDHGroup;
 
 public interface DDHGroupKeyPairGenerator extends KeyPairGenerator {
 

@@ -1,9 +1,12 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.set.classes.ProductSet;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.group.abstracts.AbstractProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
+import ch.bfh.unicrypt.math.monoid.classes.ProductMonoid;
+import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 
 /**
  * This class represents the concept of a direct product of groups ("product group" for short).
@@ -22,7 +25,7 @@ import ch.bfh.unicrypt.math.group.interfaces.Set;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ProductGroup extends ProductMonoid implements Group {
+public class ProductGroup extends AbstractProductGroup<Group> {
 
   protected ProductGroup(final Group[] groups) {
     super(groups);
@@ -36,48 +39,23 @@ public class ProductGroup extends ProductMonoid implements Group {
     super();
   }
 
-  @Override
-  public Group getFirst() {
-    return (Group) super.getFirst();
-  }
-
-  @Override
-  public Group getAt(final int index) {
-    return (Group) super.getAt(index);
-  }
-
-  @Override
-  public Group getAt(int... indices) {
-    return (Group) super.getAt(indices);
-  }
-
-  @Override
-  public Group[] getAll() {
-    return (Group[]) super.getAll();
-  }
-
-  @Override
   public ProductGroup removeAt(final int index) {
-    return (ProductGroup) super.removeAt(index);
-  }
-
-  @Override
-  public final CompoundElement invert(Element element) {
-    if (!this.contains(element)) {
-      throw new IllegalArgumentException();
-    }
     int arity = this.getArity();
-    CompoundElement compoundElement = (CompoundElement) element;
-    final Element[] invertedElements = new Element[arity];
-    for (int i = 0; i < arity; i++) {
-      invertedElements[i] = compoundElement.getAt(i).invert();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
     }
-    return standardGetElement(invertedElements);
-  }
-
-  @Override
-  public final CompoundElement applyInverse(Element element1, Element element2) {
-    return this.apply(element1, this.invert(element2));
+    if (this.isUniform()) {
+      return ProductGroup.getInstance(this.getFirst(), arity-1);
+    }
+    final Group[] remainingGroups = new Group[arity - 1];
+    for (int i=0; i < arity-1; i++) {
+      if (i < index) {
+        remainingGroups[i] = this.getAt(i);
+      } else {
+        remainingGroups[i] = this.getAt(i+1);
+      }
+    }
+    return ProductGroup.getInstance(remainingGroups);
   }
 
   //
@@ -98,10 +76,16 @@ public class ProductGroup extends ProductMonoid implements Group {
     if (groups.length == 0) {
       return new ProductGroup();
     }
-    if (ProductSet.areEqual(groups)) {
-      return new ProductGroup(groups[0], groups.length);
+    Group first = groups[0];
+    for (final Group group : groups) {
+      if (group == null) {
+        throw new IllegalArgumentException();
+      }
+      if (!group.equals(first)) {
+        return new ProductGroup(groups);
+      }
     }
-    return new ProductGroup(groups);
+    return new ProductGroup(first, groups.length);
   }
 
   public static ProductGroup getInstance(final Group group, int arity) {
@@ -124,7 +108,7 @@ public class ProductGroup extends ProductMonoid implements Group {
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static CompoundElement constructElement(Element... elements) {
+  public static Tuple constructElement(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

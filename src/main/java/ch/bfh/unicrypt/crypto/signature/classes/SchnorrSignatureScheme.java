@@ -8,7 +8,7 @@ import ch.bfh.unicrypt.crypto.signature.abstracts.AbstractRandomizedSignatureSch
 import ch.bfh.unicrypt.crypto.signature.interfaces.SchnorrSignatureScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.ProductDomainFunctionAbstract;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
@@ -17,12 +17,12 @@ import ch.bfh.unicrypt.math.function.classes.HashFunction.HashAlgorithm;
 import ch.bfh.unicrypt.math.function.interfaces.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.function.interfaces.HashFunction;
-import ch.bfh.unicrypt.math.group.classes.BooleanGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.group.classes.ZPlus;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlus;
 import ch.bfh.unicrypt.math.group.interfaces.BooleanGroup;
-import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.group.interfaces.PowerGroup;
 import ch.bfh.unicrypt.math.group.interfaces.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlusMod;
@@ -77,8 +77,8 @@ public class SchnorrSignatureScheme extends AbstractRandomizedSignatureScheme {
   }
 
   @Override
-  public TupleElement sign(final Element privateKey, final Element message, final Element randomization) {
-    return (TupleElement) super.sign(privateKey, message, randomization);
+  public Tuple sign(final Element privateKey, final Element message, final Element randomization) {
+    return (Tuple) super.sign(privateKey, message, randomization);
   }
 
   @Override
@@ -152,7 +152,7 @@ public class SchnorrSignatureScheme extends AbstractRandomizedSignatureScheme {
 
     @Override
     public Element apply(final Element element, final Random random) {
-      final TupleElement tuple = (TupleElement) element;
+      final Tuple tuple = (Tuple) element;
       final AtomicElement privateKey = (AtomicElement) tuple.getElementAt(0);
       final Element message = tuple.getElementAt(1);
       final AtomicElement randomization = (AtomicElement) tuple.getElementAt(2);
@@ -196,7 +196,7 @@ public class SchnorrSignatureScheme extends AbstractRandomizedSignatureScheme {
 
     @Override
     public Element apply(final Element element, final Random random) {
-      final TupleElement tuple = (TupleElement) element;
+      final Tuple tuple = (Tuple) element;
       final Element publicKey = tuple.getElementAt(0);
       final Element message = tuple.getElementAt(1);
       final AtomicElement left = (AtomicElement) tuple.getElementAt(2, 0);

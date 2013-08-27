@@ -5,7 +5,7 @@
 package ch.bfh.unicrypt.math;
 
 import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.group.classes.ZPlus;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlus;
 
 /**
  *

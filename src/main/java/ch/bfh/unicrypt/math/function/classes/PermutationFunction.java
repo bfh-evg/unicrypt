@@ -1,12 +1,12 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.PermutationGroup;
-import ch.bfh.unicrypt.math.group.classes.ProductSet;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Permutation;
+import ch.bfh.unicrypt.math.set.classes.ProductSet;
+import ch.bfh.unicrypt.math.set.interfaces.Set;
+import ch.bfh.unicrypt.math.utility.Permutation;
 import java.util.Random;
 
 /**
@@ -53,8 +53,8 @@ public class PermutationFunction extends AbstractFunction {
     if (!this.getDomain().contains(element)) {
       throw new IllegalArgumentException();
     }
-    CompoundElement compoundElement = (CompoundElement) element;
-    final CompoundElement tuple = (CompoundElement) compoundElement.getAt(0);
+    Tuple compoundElement = (Tuple) element;
+    final Tuple tuple = (Tuple) compoundElement.getAt(0);
     final Permutation permutation = ((PermutationGroup) this.getDomain().getAt(1)).getPermutation(compoundElement.getAt(1));
     final Element[] result = new Element[tuple.getArity()];
     for (int i = 0; i < tuple.getArity(); i++) {

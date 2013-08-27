@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.group.abstracts;
 
+import ch.bfh.unicrypt.math.monoid.abstracts.AbstractMonoid;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;

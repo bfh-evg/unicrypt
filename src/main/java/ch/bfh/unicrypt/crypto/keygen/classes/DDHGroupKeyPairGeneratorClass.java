@@ -11,8 +11,8 @@ import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.cyclicgroup.interfaces.DDHGroup;
 
 public class DDHGroupKeyPairGeneratorClass extends KeyPairGeneratorAbstract implements DDHGroupDistributedKeyPairGenerator {
 

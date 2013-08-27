@@ -9,12 +9,12 @@ import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupDistributedKeyPairGenera
 import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupKeyPairGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.group.interfaces.GStarSave;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlusMod;
@@ -65,13 +65,13 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement keyPair = instance.getKeyGenerator().generateKey(random);
+		Tuple keyPair = instance.getKeyGenerator().generateKey(random);
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
 		random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement ciphertext1 = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
+		Tuple ciphertext1 = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
 		assertFalse(plaintext.equals(ciphertext1));
 		random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement ciphertext2 = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
+		Tuple ciphertext2 = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
 		assertEquals(ciphertext1, ciphertext2);
 
 	}
@@ -85,9 +85,9 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement keyPair = instance.getKeyGenerator().generateKey(random);
+		Tuple keyPair = instance.getKeyGenerator().generateKey(random);
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), null);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), null);
 		assertFalse(plaintext.equals(ciphertext));
 		AtomicElement decryption = instance.decrypt(instance.getKeyGenerator().getPrivateKey(keyPair), ciphertext);
 		assertEquals(plaintext, decryption);
@@ -103,9 +103,9 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement keyPair = instance.getKeyGenerator().generateKey(random);
+		Tuple keyPair = instance.getKeyGenerator().generateKey(random);
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext);
 		assertFalse(plaintext.equals(ciphertext));
 		AtomicElement decryption = instance.decrypt(instance.getKeyGenerator().getPrivateKey(keyPair), ciphertext);
 		assertEquals(plaintext, decryption);
@@ -122,17 +122,17 @@ public class ElGamalEncryptionClassTest {
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
 
-		Set<TupleElement> keyPairs = new HashSet<TupleElement>();
+		Set<Tuple> keyPairs = new HashSet<Tuple>();
 		while (keyPairs.size() < group.getMinOrderGroup().getOrder().intValue()) {
-			TupleElement keyPair = instance.getKeyGenerator().generateKey(random);
+			Tuple keyPair = instance.getKeyGenerator().generateKey(random);
 			if (keyPairs.add(keyPair)) {
 				Set<Element> plaintexts = new HashSet<Element>();
 				while (plaintexts.size() < group.getOrder().intValue()) {
 					Element plaintext = group.getRandomElement(random);
 					if (plaintexts.add(plaintext)) {
-						Set<TupleElement> cipherTexts = new HashSet<TupleElement>();
+						Set<Tuple> cipherTexts = new HashSet<Tuple>();
 						while (cipherTexts.size() < group.getMinOrderGroup().getOrder().intValue()) {
-							TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
+							Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
 							if (cipherTexts.add(ciphertext)) {
 								AtomicElement decryption = instance.decrypt(instance.getKeyGenerator().getPrivateKey(keyPair), ciphertext);
 								assertEquals(plaintext, decryption);
@@ -158,10 +158,10 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement keyPair = instance.getKeyGenerator().generateKey(random);
+		Tuple keyPair = instance.getKeyGenerator().generateKey(random);
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
-		TupleElement ciphertext2 = instance.reEncrypt(null, null);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
+		Tuple ciphertext2 = instance.reEncrypt(null, null);
 	}
 
 	/**
@@ -173,10 +173,10 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement keyPair = instance.getKeyGenerator().generateKey(random);
+		Tuple keyPair = instance.getKeyGenerator().generateKey(random);
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
-		TupleElement ciphertext2 = instance.reEncrypt(instance.getKeyGenerator().getPublicKey(keyPair), null);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
+		Tuple ciphertext2 = instance.reEncrypt(instance.getKeyGenerator().getPublicKey(keyPair), null);
 
 	}
 
@@ -189,10 +189,10 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement keyPair = instance.getKeyGenerator().generateKey(random);
+		Tuple keyPair = instance.getKeyGenerator().generateKey(random);
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
-		TupleElement ciphertext2 = instance.reEncrypt(instance.getKeyGenerator().getPublicKey(keyPair), ciphertext, random);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
+		Tuple ciphertext2 = instance.reEncrypt(instance.getKeyGenerator().getPublicKey(keyPair), ciphertext, random);
 		System.out.println(ciphertext);
 		System.out.println(ciphertext2);
 		assertFalse(ciphertext.equals(ciphertext2));
@@ -209,10 +209,10 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement keyPair = instance.getKeyGenerator().generateKey(random);
+		Tuple keyPair = instance.getKeyGenerator().generateKey(random);
 		random = RandomUtil.createRandomGenerator("123".getBytes());
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair), plaintext, random);
 		AtomicElement partial1 = instance.decrypt(instance.getKeyGenerator().getPrivateKey(keyPair), ciphertext);
 		assertEquals(plaintext, partial1);
 	}
@@ -226,16 +226,16 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement keyPair1 = instance.getKeyGenerator().generateKey(random);
+		Tuple keyPair1 = instance.getKeyGenerator().generateKey(random);
 		random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement keyPair2 = instance.getKeyGenerator().generateKey(random);
+		Tuple keyPair2 = instance.getKeyGenerator().generateKey(random);
 		System.out.println(keyPair1);
 		System.out.println(keyPair2);
 		assertEquals(keyPair1, keyPair2);
 
 		Element combinedPublicKey = instance.getKeyGenerator().combinePublicKeys(instance.getKeyGenerator().getPublicKey(keyPair1), instance.getKeyGenerator().getPublicKey(keyPair2));
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(combinedPublicKey, plaintext);
+		Tuple ciphertext = instance.encrypt(combinedPublicKey, plaintext);
 		AtomicElement partial1 = instance.partialDecrypt(instance.getKeyGenerator().getPrivateKey(keyPair1), ciphertext);
 		AtomicElement partial2 = instance.partialDecrypt(instance.getKeyGenerator().getPrivateKey(keyPair2), ciphertext);
 		assertEquals(partial1, partial2);
@@ -250,11 +250,11 @@ public class ElGamalEncryptionClassTest {
 		System.out.println("testCombinePartialDecryptions");
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
-		TupleElement keyPair1 = instance.getKeyGenerator().generateKey();
-		TupleElement keyPair2 = instance.getKeyGenerator().generateKey();
+		Tuple keyPair1 = instance.getKeyGenerator().generateKey();
+		Tuple keyPair2 = instance.getKeyGenerator().generateKey();
 		Element combinedPublicKey = instance.getKeyGenerator().combinePublicKeys(instance.getKeyGenerator().getPublicKey(keyPair1), instance.getKeyGenerator().getPublicKey(keyPair2));
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(combinedPublicKey, plaintext);
+		Tuple ciphertext = instance.encrypt(combinedPublicKey, plaintext);
 		AtomicElement partial1 = instance.partialDecrypt(instance.getKeyGenerator().getPrivateKey(keyPair1), ciphertext);
 		AtomicElement partial2 = instance.partialDecrypt(instance.getKeyGenerator().getPrivateKey(keyPair2), ciphertext);
 		Element decrypted = instance.combinePartialDecryptions(ciphertext, partial1, partial2);
@@ -269,7 +269,7 @@ public class ElGamalEncryptionClassTest {
 		System.out.println("testGetKeyGenerator");
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
-		TupleElement keyPair = instance.getKeyGenerator().generateKey();
+		Tuple keyPair = instance.getKeyGenerator().generateKey();
 		assertNotNull(keyPair);
 	}
 
@@ -281,10 +281,10 @@ public class ElGamalEncryptionClassTest {
 		System.out.println("getEncryptionFunction");
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
-		TupleElement keyPair1 = instance.getKeyGenerator().generateKey();
+		Tuple keyPair1 = instance.getKeyGenerator().generateKey();
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext, random);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext, random);
 		random = RandomUtil.createRandomGenerator("123".getBytes());
 		final Element randomization = instance.getRandomizationSpace().getRandomElement(random);
 		Function function = instance.getEncryptionFunction();
@@ -301,10 +301,10 @@ public class ElGamalEncryptionClassTest {
 		System.out.println("getEncryptionFunctionLeft");
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
-		TupleElement keyPair1 = instance.getKeyGenerator().generateKey();
+		Tuple keyPair1 = instance.getKeyGenerator().generateKey();
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext, random);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext, random);
 		random = RandomUtil.createRandomGenerator("123".getBytes());
 		final Element randomization = instance.getRandomizationSpace().getRandomElement(random);
 		Function functionLeft = instance.getEncryptionFunctionLeft();
@@ -321,10 +321,10 @@ public class ElGamalEncryptionClassTest {
 		System.out.println("getEncryptionFunctionRight");
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
-		TupleElement keyPair1 = instance.getKeyGenerator().generateKey();
+		Tuple keyPair1 = instance.getKeyGenerator().generateKey();
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext, random);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext, random);
 		random = RandomUtil.createRandomGenerator("123".getBytes());
 		final Element randomization = instance.getRandomizationSpace().getRandomElement(random);
 		Function functionRight = instance.getEncryptionFunctionRight();
@@ -342,10 +342,10 @@ public class ElGamalEncryptionClassTest {
 		System.out.println("getIdentityEncryptionFunction");
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
-		TupleElement keyPair1 = instance.getKeyGenerator().generateKey();
+		Tuple keyPair1 = instance.getKeyGenerator().generateKey();
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
 		Random random = RandomUtil.createRandomGenerator("123".getBytes());
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext, random);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext, random);
 		Function result = instance.getEncryptionFunction();
 		random = RandomUtil.createRandomGenerator("123".getBytes());
 		Element result11 = result.apply(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext, instance.getRandomizationSpace().getRandomElement(random));
@@ -360,9 +360,9 @@ public class ElGamalEncryptionClassTest {
 		System.out.println("getDecryptionFunction");
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
-		TupleElement keyPair1 = instance.getKeyGenerator().generateKey();
+		Tuple keyPair1 = instance.getKeyGenerator().generateKey();
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext);
+		Tuple ciphertext = instance.encrypt(instance.getKeyGenerator().getPublicKey(keyPair1), plaintext);
 		Element decrypted = instance.decrypt(instance.getKeyGenerator().getPrivateKey(keyPair1), ciphertext);
 		Function result = instance.getDecryptionFunction();
 		Element result11 = result.apply(instance.getKeyGenerator().getPrivateKey(keyPair1), ciphertext);
@@ -379,16 +379,16 @@ public class ElGamalEncryptionClassTest {
 		System.out.println("getPartialDecryptionFunction");
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionScheme instance = new ElGamalEncryptionScheme(group);
-		TupleElement keyPair1 = instance.getKeyGenerator().generateKey();
-		TupleElement keyPair2 = instance.getKeyGenerator().generateKey();
+		Tuple keyPair1 = instance.getKeyGenerator().generateKey();
+		Tuple keyPair2 = instance.getKeyGenerator().generateKey();
 		Element combinedPublicKey = instance.getKeyGenerator().combinePublicKeys(instance.getKeyGenerator().getPublicKey(keyPair1), instance.getKeyGenerator().getPublicKey(keyPair2));
 		Element plaintext = group.getElement(BigInteger.valueOf(13));
-		TupleElement ciphertext = instance.encrypt(combinedPublicKey, plaintext);
+		Tuple ciphertext = instance.encrypt(combinedPublicKey, plaintext);
 		AtomicElement partial1 = instance.partialDecrypt(instance.getKeyGenerator().getPrivateKey(keyPair1), ciphertext);
 		AtomicElement partial2 = instance.partialDecrypt(instance.getKeyGenerator().getPrivateKey(keyPair2), ciphertext);
 		Element decrypted = instance.combinePartialDecryptions(ciphertext, partial1, partial2);
 		Function result = instance.getPartialDecryptionFunction();
-		Element partial11 = result.apply(instance.getKeyGenerator().getPrivateKey(keyPair1), ((TupleElement) ciphertext).getElementAt(0));
+		Element partial11 = result.apply(instance.getKeyGenerator().getPrivateKey(keyPair1), ((Tuple) ciphertext).getElementAt(0));
 		assertEquals(partial1, partial11);
 		assertEquals(plaintext, decrypted);
 
@@ -446,7 +446,7 @@ public class ElGamalEncryptionClassTest {
             final ElGamalEncryptionScheme ecs = new ElGamalEncryptionScheme(g_q, generator);
             //keys
             final DDHGroupKeyPairGenerator keyGen = ecs.getKeyGenerator();
-     	    final TupleElement keyPair = keyGen.generateKeyPair();
+     	    final Tuple keyPair = keyGen.generateKeyPair();
 
             final ZPlusMod z_q = g_q.getOrderGroup();
 	    
@@ -458,12 +458,12 @@ public class ElGamalEncryptionClassTest {
 	    final Element ciphertext = ecs.encrypt(keyGen.getPublicKey(keyPair), possibleMessagesList[0], randomization);
 	    
             //compute proof 1 with index=0
-            final TupleElement validityProof1 = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 0, null, possibleMessagesList);
+            final Tuple validityProof1 = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 0, null, possibleMessagesList);
 	    
             assertTrue(ecs.verifyValidityProof(validityProof1, ciphertext, keyGen.getPublicKey(keyPair), possibleMessagesList));
             
             //compute proof 2 with index=1
-            final TupleElement validityProof2 = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 1, null, possibleMessagesList);
+            final Tuple validityProof2 = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 1, null, possibleMessagesList);
 	    
             assertFalse(ecs.verifyValidityProof(validityProof2, ciphertext, keyGen.getPublicKey(keyPair), possibleMessagesList));  
         }
@@ -480,7 +480,7 @@ public class ElGamalEncryptionClassTest {
             final ElGamalEncryptionScheme ecs = new ElGamalEncryptionScheme(g_q, generator);
             //keys
             final DDHGroupKeyPairGenerator keyGen = ecs.getKeyGenerator();
-     	    final TupleElement keyPair = keyGen.generateKeyPair();
+     	    final Tuple keyPair = keyGen.generateKeyPair();
 
             final ZPlusMod z_q = g_q.getOrderGroup();
 	    
@@ -489,7 +489,7 @@ public class ElGamalEncryptionClassTest {
 	    final AtomicElement randomization = z_q.getElement(10);
 	    
             //compute proof with index bigger than the possible message array
-            final TupleElement validityProof = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 2, null, possibleMessagesList);
+            final Tuple validityProof = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 2, null, possibleMessagesList);
        }
         
          /**
@@ -504,7 +504,7 @@ public class ElGamalEncryptionClassTest {
             final ElGamalEncryptionScheme ecs = new ElGamalEncryptionScheme(g_q, generator);
             //keys
             final DDHGroupKeyPairGenerator keyGen = ecs.getKeyGenerator();
-     	    final TupleElement keyPair = keyGen.generateKeyPair();
+     	    final Tuple keyPair = keyGen.generateKeyPair();
 
             final ZPlusMod z_q = g_q.getOrderGroup();
 	    
@@ -513,7 +513,7 @@ public class ElGamalEncryptionClassTest {
 	    final AtomicElement randomization = z_q.getElement(10);
 	    
             //compute proof with only one possible message
-            final TupleElement validityProof = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 0, null, possibleMessagesList);
+            final Tuple validityProof = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 0, null, possibleMessagesList);
        }
         
         /**
@@ -528,7 +528,7 @@ public class ElGamalEncryptionClassTest {
             final ElGamalEncryptionScheme ecs = new ElGamalEncryptionScheme(g_q, generator);
             //keys
             final DDHGroupKeyPairGenerator keyGen = ecs.getKeyGenerator();
-     	    final TupleElement keyPair = keyGen.generateKeyPair();
+     	    final Tuple keyPair = keyGen.generateKeyPair();
 
             final ZPlusMod z_q = g_q.getOrderGroup();
 	    
@@ -540,7 +540,7 @@ public class ElGamalEncryptionClassTest {
 	    final Element ciphertext = ecs.encrypt(keyGen.getPublicKey(keyPair), possibleMessagesList[0], randomization);
 	    
             //compute proof 1 with index=0
-            final TupleElement validityProof1 = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 0, null, possibleMessagesList);
+            final Tuple validityProof1 = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 0, null, possibleMessagesList);
 	    
             //test with a to small possibleMessagesList array
             AtomicElement possibleMessagesList2[] = { g_q.getElement(generator.getValue().modPow(BigInteger.ZERO, g_q.getModulus()))};
@@ -559,7 +559,7 @@ public class ElGamalEncryptionClassTest {
             final ElGamalEncryptionScheme ecs = new ElGamalEncryptionScheme(g_q, generator);
             //keys
             final DDHGroupKeyPairGenerator keyGen = ecs.getKeyGenerator();
-     	    final TupleElement keyPair = keyGen.generateKeyPair();
+     	    final Tuple keyPair = keyGen.generateKeyPair();
 
             final ZPlusMod z_q = g_q.getOrderGroup();
 	    
@@ -571,10 +571,10 @@ public class ElGamalEncryptionClassTest {
 	    final Element ciphertext = ecs.encrypt(keyGen.getPublicKey(keyPair), possibleMessagesList[0], randomization);
 	    
             //compute proof 1 with index=0
-            final TupleElement validityProof1 = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 0, null, possibleMessagesList);
+            final Tuple validityProof1 = ecs.createValididtyProof(randomization, keyGen.getPublicKey(keyPair), 0, null, possibleMessagesList);
 	    
             //verify with a to small proof
-            final TupleElement validityProof2 = ProductGroup.createTupleElement(validityProof1.getElementAt(0),validityProof1.getElementAt(1));
+            final Tuple validityProof2 = ProductGroup.createTupleElement(validityProof1.getElementAt(0),validityProof1.getElementAt(1));
             ecs.verifyValidityProof(validityProof2, ciphertext, keyGen.getPublicKey(keyPair), possibleMessagesList);
        }
         

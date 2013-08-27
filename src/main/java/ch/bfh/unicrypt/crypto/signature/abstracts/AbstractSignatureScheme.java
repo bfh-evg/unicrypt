@@ -2,8 +2,8 @@ package ch.bfh.unicrypt.crypto.signature.abstracts;
 
 import ch.bfh.unicrypt.crypto.signature.interfaces.SignatureScheme;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.classes.BooleanGroup;
-import ch.bfh.unicrypt.math.group.classes.ZPlus;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlus;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 
 public abstract class AbstractSignatureScheme implements SignatureScheme {

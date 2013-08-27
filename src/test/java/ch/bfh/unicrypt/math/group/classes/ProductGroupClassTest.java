@@ -13,7 +13,7 @@ import ch.bfh.unicrypt.crypto.concat.classes.ConcatSchemeClass;
 import ch.bfh.unicrypt.crypto.concat.interfaces.ConcatScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.group.interfaces.GStarMod;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
@@ -374,7 +374,7 @@ public class ProductGroupClassTest {
     elts.add(elt1);
     elts.add(elt2);
     elts.add(elt5);
-    TupleElement telt1 = ProductGroup.createTupleElement(elts);
+    Tuple telt1 = ProductGroup.createTupleElement(elts);
     Assert.assertEquals(telt1.getGroup().getIdentityElement(), telt1);
     Assert.assertFalse(telt1.getGroup() instanceof PowerGroup);
     Assert.assertTrue(telt1.getGroup().contains(telt1));
@@ -398,20 +398,20 @@ public class ProductGroupClassTest {
 
   @Test
   public final void testCreateTupleElementElementArray() {
-    TupleElement telt1 = ProductGroup.createTupleElement(elt1, elt2, elt5);
+    Tuple telt1 = ProductGroup.createTupleElement(elt1, elt2, elt5);
     Assert.assertEquals(telt1.getGroup().getIdentityElement(), telt1);
     Assert.assertFalse(telt1.getGroup() instanceof PowerGroup);
     Assert.assertTrue(telt1.getGroup().contains(telt1));
     Assert.assertEquals(new ProductGroup(g1, g2, g5).getElement(elt1, elt2, elt5), telt1);
 
-    TupleElement telt2 = ProductGroup.createTupleElement(elt1);
+    Tuple telt2 = ProductGroup.createTupleElement(elt1);
     Assert.assertEquals(telt2.getGroup().getIdentityElement(), telt2);
     Assert.assertTrue(telt2.getGroup() instanceof PowerGroup);
     Assert.assertTrue(telt2.getGroup().contains(telt2));
     Assert.assertEquals(new ProductGroup(g1).getElement(elt1), telt2);
     Assert.assertEquals(new PowerGroup(g1, 1).getElement(elt1), telt2);
 
-    TupleElement telt3 = ProductGroup.createTupleElement();
+    Tuple telt3 = ProductGroup.createTupleElement();
     Assert.assertEquals(telt3.getGroup().getIdentityElement(), telt3);
     Assert.assertTrue(telt3.getGroup() instanceof PowerGroup);
     Assert.assertTrue(telt3.getGroup().contains(telt3));
@@ -508,7 +508,7 @@ public class ProductGroupClassTest {
     ZPlusMod z5 = new ZPlusModClass(BigInteger.valueOf(5));
     ZStarMod z7 = new ZStarMod(BigInteger.valueOf(7));
     ProductGroup pg = new ProductGroup(z5, z7);
-    TupleElement elt;
+    Tuple elt;
     for (int i=0; i<5; i++) {
       for (int j=1; j<7; j++) {
         do {
@@ -527,7 +527,7 @@ public class ProductGroupClassTest {
     ZPlusMod z5 = new ZPlusModClass(BigInteger.valueOf(5));
     ZStarMod z7 = new ZStarMod(BigInteger.valueOf(7));
     ProductGroup pg = new ProductGroup(z5, z7);
-    TupleElement elt;
+    Tuple elt;
     for (int i=0; i<5; i++) {
       for (int j=1; j<7; j++) {
         do {
@@ -556,7 +556,7 @@ public class ProductGroupClassTest {
     ZPlusMod z5 = new ZPlusModClass(BigInteger.valueOf(5));
     ZStarMod z7 = new ZStarMod(BigInteger.valueOf(7));
     ProductGroup pg = new ProductGroup(z5, z7);
-    TupleElement elt;
+    Tuple elt;
     int z=0;
     for (int i=0; i<5; i++) {
       for (int j=1; j<7; j++) {
@@ -579,7 +579,7 @@ public class ProductGroupClassTest {
     ZPlusMod z5 = new ZPlusModClass(BigInteger.valueOf(5));
     ZStarMod z7 = new ZStarMod(BigInteger.valueOf(7));
     ProductGroup pg = new ProductGroup(z5, z7);
-    TupleElement elt, inv;
+    Tuple elt, inv;
     for (int i=0; i<5; i++) {
       for (int j=1; j<7; j++) {
         elt = pg.getElement(z5.getElement(i), z7.getElement(j));
@@ -595,7 +595,7 @@ public class ProductGroupClassTest {
   @Test
   public final void testContainsElement() {
     for (ProductGroup pg: pgs) {
-      TupleElement rnd = pg.getRandomElement();
+      Tuple rnd = pg.getRandomElement();
       Assert.assertTrue(pg.contains(rnd));
       Assert.assertFalse(pg.contains(elt2));
       Assert.assertTrue(pg.contains(pg.getElement(rnd.getElements()))); 
@@ -610,7 +610,7 @@ public class ProductGroupClassTest {
   @Test
   public final void testAreEqualElements() {
     for (ProductGroup pg: pgs) {
-      TupleElement rnd = pg.getRandomElement();
+      Tuple rnd = pg.getRandomElement();
       Assert.assertTrue(pg.areEqual(rnd, rnd));
       Assert.assertFalse(pg.areEqual(rnd, elt2));
       Assert.assertTrue(pg.areEqual(rnd, pg.getElement(rnd.getElements()))); 
@@ -618,7 +618,7 @@ public class ProductGroupClassTest {
     ZPlusMod z5 = new ZPlusModClass(BigInteger.valueOf(5));
     ZStarMod z7 = new ZStarMod(BigInteger.valueOf(7));
     ProductGroup pg = new ProductGroup(z5, z7);
-    TupleElement elt1, elt2;
+    Tuple elt1, elt2;
     int z=0;
     for (int i=0; i<5; i++) {
       for (int j=1; j<7; j++) {
@@ -652,7 +652,7 @@ public class ProductGroupClassTest {
     ZPlusMod z5 = new ZPlusModClass(BigInteger.valueOf(5));
     ZStarMod z7 = new ZStarMod(BigInteger.valueOf(7));
     ProductGroup pg = new ProductGroup(z5, z7);
-    TupleElement elt1, elt2, res;
+    Tuple elt1, elt2, res;
     for (int i=0; i<5; i++) {
       for (int j=1; j<7; j++) {
         for (int k=0; k<5; k++) {
@@ -896,10 +896,10 @@ public class ProductGroupClassTest {
     String two="2";
     String three="3";
     ExternalDataMapper mapper=new ExternalDataMapperClass();
-    TupleElement element1=mapper.getEncodedElement(one,two,three);
-    TupleElement element2=mapper.getEncodedElement(one,two,three);
+    Tuple element1=mapper.getEncodedElement(one,two,three);
+    Tuple element2=mapper.getEncodedElement(one,two,three);
 
-    TupleElement element3=ProductGroup.createTupleElement(element1,element2);
+    Tuple element3=ProductGroup.createTupleElement(element1,element2);
     ConcatScheme concat=new ConcatSchemeClass(ConcatParameter.PipeBrackets,new CharsetXRadixYMapperClass());
     AtomicElement concatElement=concat.concat(element3);
     //System.out.println(

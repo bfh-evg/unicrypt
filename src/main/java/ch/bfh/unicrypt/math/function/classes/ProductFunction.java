@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.classes.ProductSet;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
+import ch.bfh.unicrypt.math.set.classes.ProductSet;
+import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -64,7 +64,7 @@ public final class ProductFunction extends AbstractCompoundFunction {
   @Override
   protected Element abstractApply(final Element element, final Random random) {
     int arity = this.getArity();
-    CompoundElement compoundElement = (CompoundElement) element;
+    Tuple compoundElement = (Tuple) element;
     final Element[] elements = new Element[arity];
     for (int i = 0; i < arity; i++) {
       elements[i] = this.getAt(i).apply(compoundElement.getAt(i), random);

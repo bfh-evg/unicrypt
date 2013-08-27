@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.group.interfaces;
 
+import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 
 /**

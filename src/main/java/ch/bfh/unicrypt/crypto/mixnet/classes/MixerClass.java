@@ -7,7 +7,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.crypto.mixnet.interfaces.Mixer;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.interfaces.PermutationElement;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.function.interfaces.PermutationFunction;
 import ch.bfh.unicrypt.math.group.classes.PermutationGroup;
@@ -49,8 +49,8 @@ public class MixerClass implements Mixer {
     final int size = elements.size();
     final PermutationFunction function = new PermutationFunction(new PowerGroup(this.getGroup(), size));
     final PowerGroup powerGroup = (PowerGroup) function.getDomain().getGroupAt(0);
-    final TupleElement tuple = powerGroup.getElement(elements.toArray(new Element[size]));
-    final TupleElement result = function.apply(tuple, permutation);
+    final Tuple tuple = powerGroup.getElement(elements.toArray(new Element[size]));
+    final Tuple result = function.apply(tuple, permutation);
     return Arrays.asList(result.getElements());
   }
 

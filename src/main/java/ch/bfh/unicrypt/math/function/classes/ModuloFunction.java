@@ -3,8 +3,8 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.group.interfaces.Set;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Random;
 

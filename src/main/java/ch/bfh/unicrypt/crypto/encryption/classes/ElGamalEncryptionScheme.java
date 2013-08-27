@@ -18,8 +18,8 @@ import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.group.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.cyclicgroup.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 
 public class ElGamalEncryptionScheme extends AbstractEncryptionScheme {

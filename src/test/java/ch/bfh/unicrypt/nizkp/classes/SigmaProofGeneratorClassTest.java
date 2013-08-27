@@ -20,11 +20,11 @@ import ch.bfh.unicrypt.crypto.nizkp.classes.SigmaProofGeneratorClass;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
-import ch.bfh.unicrypt.math.group.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlusMod;
 import ch.bfh.unicrypt.math.java2unicrypt.classes.ExternalDataMapperClass;
 import ch.bfh.unicrypt.math.java2unicrypt.interfaces.ExternalDataMapper;
@@ -74,20 +74,20 @@ public class SigmaProofGeneratorClassTest {
 		ElGamalEncryption elGamalEnc = new ElGamalEncryptionScheme(ddhGroup, generator);
 		KeyPairGenerator keyPairGen = elGamalEnc.getKeyGenerator();
 		Function proofFunction = keyPairGen.getPublicKeyGeneratorFunction();
-		TupleElement keyPair = keyPairGen.generateKeyPair();
+		Tuple keyPair = keyPairGen.generateKeyPair();
 		Element privateKey = keyPairGen.getPrivateKey(keyPair);
 		AtomicElement publicKey = (AtomicElement) keyPairGen.getPublicKey(keyPair);
 		SigmaProofGenerator proofGen = new SigmaProofGeneratorClass(proofFunction);
 		ExternalDataMapper externalMapper=new ExternalDataMapperClass();
 		Element optStringElement = concat.concat(externalMapper.getEncodedElement(optString));
-		TupleElement result = proofGen.generate(privateKey, publicKey,optStringElement);
+		Tuple result = proofGen.generate(privateKey, publicKey,optStringElement);
 		
 		BigInteger commitment = ((AtomicElement) proofGen.getCommitment(result)).getValue();
 		BigInteger response = ((AtomicElement) proofGen.getResponse(result)).getValue();
 		
 		Element commitmentElement = ((DDHGroup) proofGen.getCommitmentSpace()).getElement(commitment);
 		Element responseElement = ((ZPlusMod) proofGen.getResponseSpace()).getElement(response);
-		TupleElement proofReconstructed = proofGen.getProofSpace().getElement(commitmentElement, responseElement);
+		Tuple proofReconstructed = proofGen.getProofSpace().getElement(commitmentElement, responseElement);
 		assertTrue(proofGen.verify(proofReconstructed, publicKey,optStringElement));
 	}
   @Test
@@ -100,19 +100,19 @@ public class SigmaProofGeneratorClassTest {
     ElGamalEncryption elGamalEnc = new ElGamalEncryptionScheme(ddhGroup, generator);
     KeyPairGenerator keyPairGen = elGamalEnc.getKeyGenerator();
     Function proofFunction = keyPairGen.getPublicKeyGeneratorFunction();
-    TupleElement keyPair = keyPairGen.generateKeyPair();
+    Tuple keyPair = keyPairGen.generateKeyPair();
     Element privateKey = keyPairGen.getPrivateKey(keyPair);
     AtomicElement publicKey = (AtomicElement) keyPairGen.getPublicKey(keyPair);
     SigmaProofGenerator proofGen = new SigmaProofGeneratorClass(proofFunction);
 
-    TupleElement result = proofGen.generate(privateKey, publicKey);
+    Tuple result = proofGen.generate(privateKey, publicKey);
 
     BigInteger commitment = ((AtomicElement) proofGen.getCommitment(result)).getValue();
     BigInteger response = ((AtomicElement) proofGen.getResponse(result)).getValue();
 
     Element commitmentElement = ((DDHGroup) proofGen.getCommitmentSpace()).getElement(commitment);
     Element responseElement = ((ZPlusMod) proofGen.getResponseSpace()).getElement(response);
-    TupleElement proofReconstructed = proofGen.getProofSpace().getElement(commitmentElement, responseElement);
+    Tuple proofReconstructed = proofGen.getProofSpace().getElement(commitmentElement, responseElement);
     assertTrue(proofGen.verify(proofReconstructed, publicKey));
   }
 

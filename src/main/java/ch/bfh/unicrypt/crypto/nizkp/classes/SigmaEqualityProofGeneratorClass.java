@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.crypto.nizkp.abstracts.ProductCoDomainProofGeneratorAbstr
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaEqualityProofGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction.HashAlgorithm;
@@ -57,12 +57,12 @@ public class SigmaEqualityProofGeneratorClass extends ProductCoDomainProofGenera
   }
 
   @Override
-  public TupleElement generate(final Element secretInput, final Element publicInput, final Element otherInput, final Random random) {
+  public Tuple generate(final Element secretInput, final Element publicInput, final Element otherInput, final Random random) {
     return this.sigmaProofGenerator.generate(secretInput, publicInput, otherInput, random);
   }
 
   @Override
-  public boolean verify(final TupleElement proof, final Element publicInput, final Element otherInput) {
+  public boolean verify(final Tuple proof, final Element publicInput, final Element otherInput) {
     return this.sigmaProofGenerator.verify(proof, publicInput, otherInput);
   }
 
@@ -87,7 +87,7 @@ public class SigmaEqualityProofGeneratorClass extends ProductCoDomainProofGenera
   }
 
   @Override
-  public Element getResponse(final TupleElement proof) {
+  public Element getResponse(final Tuple proof) {
     return this.sigmaProofGenerator.getResponse(proof);
   }
 
@@ -97,8 +97,8 @@ public class SigmaEqualityProofGeneratorClass extends ProductCoDomainProofGenera
   }
 
   @Override
-  public TupleElement getCommitment(final TupleElement proof) {
-    return (TupleElement) this.sigmaProofGenerator.getCommitment(proof);
+  public Tuple getCommitment(final Tuple proof) {
+    return (Tuple) this.sigmaProofGenerator.getCommitment(proof);
   }
 
   @Override

@@ -1,5 +1,8 @@
 package ch.bfh.unicrypt.math.group.classes;
 
+import ch.bfh.unicrypt.math.cyclicgroup.classes.SingletonGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlus;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Random;
