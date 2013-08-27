@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.cyclicgroup.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import java.math.BigInteger;
 import java.util.HashMap;

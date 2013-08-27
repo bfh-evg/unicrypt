@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.semigroup.interfaces;
 
-import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.element.interfaces.MultiplicativeElement;
 import java.math.BigInteger;

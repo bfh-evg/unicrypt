@@ -27,6 +27,34 @@ public class ProductSet extends AbstractProductSet<Set> {
     super();
   }
 
+  /**
+   * Creates a new product set which contains one set less than the given
+   * product set.
+   *
+   * @param index The index of the set to remove
+   * @return The resulting product set.
+   * @throws IndexOutOfBoundsException if
+   * {@code index<0} or {@code index>arity-1}
+   */
+  public ProductSet removeAt(final int index) {
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    if (this.isUniform()) {
+      return ProductSet.getInstance(this.getFirst(), arity-1);
+    }
+    final Set[] remainingSets = new Set[arity - 1];
+    for (int i=0; i < arity-1; i++) {
+      if (i < index) {
+        remainingSets[i] = this.getAt(i);
+      } else {
+        remainingSets[i] = this.getAt(i+1);
+      }
+    }
+    return ProductSet.getInstance(remainingSets);
+  }
+
   //
   // STATIC FACTORY METHODS
   //
@@ -65,34 +93,6 @@ public class ProductSet extends AbstractProductSet<Set> {
       return new ProductSet();
     }
     return new ProductSet(set, arity);
-  }
-
-  /**
-   * Creates a new product set which contains one set less than the given
-   * product set.
-   *
-   * @param index The index of the set to remove
-   * @return The resulting product set.
-   * @throws IndexOutOfBoundsException if
-   * {@code index<0} or {@code index>arity-1}
-   */
-  public ProductSet removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (this.isUniform()) {
-      return ProductSet.getInstance(this.getFirst(), arity-1);
-    }
-    final Set[] remainingSets = new Set[arity - 1];
-    for (int i=0; i < arity-1; i++) {
-      if (i < index) {
-        remainingSets[i] = this.getAt(i);
-      } else {
-        remainingSets[i] = this.getAt(i+1);
-      }
-    }
-    return ProductSet.getInstance(remainingSets);
   }
 
   //

@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.monoid.interfaces;
 
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 import ch.bfh.unicrypt.math.semigroup.interfaces.AdditiveSemiGroup;
 
 /**

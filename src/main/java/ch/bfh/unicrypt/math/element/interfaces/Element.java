@@ -1,27 +1,12 @@
 package ch.bfh.unicrypt.math.element.interfaces;
 
-import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.monoid.classes.ProductMonoid;
-import ch.bfh.unicrypt.math.semigroup.classes.ProductSemiGroup;
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
-import ch.bfh.unicrypt.math.cyclicgroup.interfaces.AdditiveCyclicGroup;
-import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
-import ch.bfh.unicrypt.math.monoid.interfaces.AdditiveMonoid;
-import ch.bfh.unicrypt.math.semigroup.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.cyclicgroup.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
-import ch.bfh.unicrypt.math.cyclicgroup.interfaces.MultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
-import ch.bfh.unicrypt.math.monoid.interfaces.MultiplicativeMonoid;
-import ch.bfh.unicrypt.math.semigroup.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 /**
  * This abstract class represents the concept an element in a mathematical
