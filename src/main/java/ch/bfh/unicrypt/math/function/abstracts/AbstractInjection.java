@@ -4,11 +4,9 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.function.interfaces.Injection;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
-import java.util.Random;
 
 /**
  *

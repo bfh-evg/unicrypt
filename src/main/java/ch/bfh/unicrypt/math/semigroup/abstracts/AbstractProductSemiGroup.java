@@ -6,11 +6,8 @@ package ch.bfh.unicrypt.math.semigroup.abstracts;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
-import ch.bfh.unicrypt.math.semigroup.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.set.abstracts.AbstractProductSet;
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
-import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.math.BigInteger;
 
 /**
@@ -41,7 +38,7 @@ public abstract class AbstractProductSemiGroup<S extends SemiGroup> extends Abst
     Tuple compoundElement2 = (Tuple) element2;
     final Element[] results = new Element[arity];
     for (int i = 0; i < arity; i++) {
-      results[i] = compoundElement1.getAt(i).apply(compoundElement1.getAt(i));
+      results[i] = compoundElement1.getAt(i).apply(compoundElement2.getAt(i));
     }
     return this.standardGetElement(results);
   }

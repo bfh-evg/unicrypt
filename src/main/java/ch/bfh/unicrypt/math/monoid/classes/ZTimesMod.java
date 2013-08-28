@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.monoid.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractMultiplicativeElement;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +24,6 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  */
 public class ZTimesMod extends AbstractMultiplicativeMonoid {
 
-  private static final long serialVersionUID = 1L;
   private BigInteger modulus;
 
   protected ZTimesMod(final BigInteger modulus) {

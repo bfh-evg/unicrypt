@@ -28,9 +28,7 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PermutationGroup extends AbstractGroup {
-
-  private static final long serialVersionUID = 1L;
+public class PermutationGroup extends AbstractGroup<Element> {
 
   private final int size;
 
@@ -141,12 +139,8 @@ public class PermutationGroup extends AbstractGroup {
 
   // LOCAL CLASS: PERMUTATION_ELEMENT
 
-  final private class PermutationElement extends AbstractElement {
+  final private class PermutationElement extends AbstractElement<Element> {
 
-    private static final long serialVersionUID = 1L;
-
-    // Since a permutation element is atomic, storing both the permutation and the corresponding BigInteger value
-    // is redundant, but we we keep it for convenience
     private final Permutation permutation;
 
     private PermutationElement(final Set set, final Permutation permutationVector) {

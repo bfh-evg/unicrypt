@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.math.function.abstracts;
 
 import ch.bfh.unicrypt.math.function.interfaces.Bijection;
-import ch.bfh.unicrypt.math.function.interfaces.Injection;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 
 /**

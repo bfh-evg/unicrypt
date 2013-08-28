@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.set.interfaces;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -23,7 +22,7 @@ import ch.bfh.unicrypt.math.monoid.classes.ZTimesMod;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface Set extends Serializable {
+public interface Set {
 
   /**
    * A constant value that represents an infinite order.

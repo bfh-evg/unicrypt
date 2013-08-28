@@ -24,8 +24,6 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  */
 public class ZPlusMod extends AbstractAdditiveCyclicGroup {
 
-  private static final long serialVersionUID = 1L;
-
   private BigInteger modulus;
 
   protected ZPlusMod(final BigInteger modulus) {

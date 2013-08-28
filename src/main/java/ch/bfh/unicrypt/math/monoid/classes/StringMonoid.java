@@ -15,7 +15,7 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public class StringMonoid extends AbstractMonoid {
+public class StringMonoid extends AbstractMonoid<Element> {
 
   private StringMonoid() {
   }
@@ -76,9 +76,8 @@ public class StringMonoid extends AbstractMonoid {
   //
   // LOCAL ELEMENT CLASS
   //
-  final private class StringElement extends AbstractElement {
+  final private class StringElement extends AbstractElement<Element> {
 
-    private static final long serialVersionUID = 1L;
     private final String string;
 
     private StringElement(final Set set, final String string) {

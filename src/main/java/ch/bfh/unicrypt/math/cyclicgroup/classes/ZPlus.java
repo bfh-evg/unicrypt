@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.cyclicgroup.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import java.math.BigInteger;
 import java.util.Random;
@@ -24,9 +23,6 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @version 2.0
  */
 public class ZPlus extends AbstractAdditiveCyclicGroup {
-
-  private static final long serialVersionUID = 1L;
-  private static final int RANDOM_ELEMENT_BIT_LENGTH = 1000;
 
   /**
    * This is the private constructor of this class. It is called by the static factory methods

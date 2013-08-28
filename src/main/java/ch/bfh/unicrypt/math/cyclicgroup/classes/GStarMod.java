@@ -34,9 +34,6 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  */
 public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGroup {
 
-  // This class should inherit from both ZStarModClass and AbstractMultiplicativeCyclicGroup, but since
-  // Java does not support multiple inheritance, we copy some code from AbstractMultiplicativeCyclicGroup
-  private static final long serialVersionUID = 1L;
   private final BigInteger modulus;
   private final SpecialFactorization moduloFactorization;
   private final Factorization orderFactorization;

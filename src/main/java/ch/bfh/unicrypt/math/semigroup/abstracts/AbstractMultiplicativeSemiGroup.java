@@ -9,8 +9,6 @@ import ch.bfh.unicrypt.math.semigroup.interfaces.MultiplicativeSemiGroup;
 
 public abstract class AbstractMultiplicativeSemiGroup extends AbstractSemiGroup<MultiplicativeElement> implements MultiplicativeSemiGroup {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   protected MultiplicativeElement abstractGetElement(BigInteger value) {
     return new AbstractMultiplicativeElement(this, value) {};

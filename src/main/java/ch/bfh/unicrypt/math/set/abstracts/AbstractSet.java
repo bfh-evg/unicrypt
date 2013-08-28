@@ -21,8 +21,6 @@ import ch.bfh.unicrypt.math.set.interfaces.Set;
  */
 public abstract class AbstractSet<T extends Element> implements Set {
 
-  private static final long serialVersionUID = 1L;
-
   private BigInteger order, minOrder;
 
   @Override

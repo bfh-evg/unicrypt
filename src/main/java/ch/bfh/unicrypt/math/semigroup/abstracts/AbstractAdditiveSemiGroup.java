@@ -9,8 +9,6 @@ import ch.bfh.unicrypt.math.semigroup.interfaces.AdditiveSemiGroup;
 
 public abstract class AbstractAdditiveSemiGroup extends AbstractSemiGroup<AdditiveElement> implements AdditiveSemiGroup {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   protected AdditiveElement abstractGetElement(BigInteger value) {
     return new AbstractAdditiveElement(this, value) {};

@@ -1,11 +1,9 @@
 package ch.bfh.unicrypt.math.semigroup.classes;
 
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.semigroup.abstracts.AbstractProductSemiGroup;
 import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.set.interfaces.Set;
 
 /**
  *

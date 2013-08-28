@@ -17,9 +17,8 @@ import ch.bfh.unicrypt.math.set.interfaces.Set;
  * @author rolfhaenni
  *
  */
-public class SingletonGroup extends AbstractCyclicGroup {
+public class SingletonGroup extends AbstractCyclicGroup<Element> {
 
-  private static final long serialVersionUID = 1L;
   private final Element element;
 
   private SingletonGroup(BigInteger value) {

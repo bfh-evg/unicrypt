@@ -9,8 +9,6 @@ import ch.bfh.unicrypt.math.monoid.interfaces.AdditiveMonoid;
 
 public abstract class AbstractAdditiveMonoid extends AbstractMonoid<AdditiveElement> implements AdditiveMonoid {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   protected AdditiveElement abstractGetElement(BigInteger value) {
     return new AbstractAdditiveElement(this, value) {};

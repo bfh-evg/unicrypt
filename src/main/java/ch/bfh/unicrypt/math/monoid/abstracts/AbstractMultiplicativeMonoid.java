@@ -9,8 +9,6 @@ import ch.bfh.unicrypt.math.monoid.interfaces.MultiplicativeMonoid;
 
 public abstract class AbstractMultiplicativeMonoid extends AbstractMonoid<MultiplicativeElement> implements MultiplicativeMonoid {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   protected MultiplicativeElement abstractGetElement(BigInteger value) {
     return new AbstractMultiplicativeElement(this, value) {};

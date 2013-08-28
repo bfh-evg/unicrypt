@@ -9,8 +9,6 @@ import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
 
 public abstract class AbstractMultiplicativeGroup extends AbstractGroup<MultiplicativeElement> implements MultiplicativeGroup {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   protected MultiplicativeElement abstractGetElement(BigInteger value) {
     return new AbstractMultiplicativeElement(this, value) {};

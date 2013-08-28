@@ -26,8 +26,6 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  */
 public class ZStarMod extends AbstractMultiplicativeGroup {
 
-  private static final long serialVersionUID = 1L;
-
   private final BigInteger modulus;
   private final Factorization moduloFactorization;
 

@@ -4,13 +4,10 @@
  */
 package ch.bfh.unicrypt.math.cyclicgroup.abstracts;
 
-import ch.bfh.unicrypt.math.cyclicgroup.classes.ProductCyclicGroup;
 import ch.bfh.unicrypt.math.cyclicgroup.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractProductGroup;
-import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
 import java.util.Random;
 
 /**

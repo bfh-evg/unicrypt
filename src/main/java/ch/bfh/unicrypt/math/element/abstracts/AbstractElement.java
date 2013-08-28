@@ -1,21 +1,9 @@
 package ch.bfh.unicrypt.math.element.abstracts;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.monoid.classes.ProductMonoid;
-import ch.bfh.unicrypt.math.semigroup.classes.ProductSemiGroup;
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
-import ch.bfh.unicrypt.math.cyclicgroup.interfaces.AdditiveCyclicGroup;
-import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
-import ch.bfh.unicrypt.math.monoid.interfaces.AdditiveMonoid;
-import ch.bfh.unicrypt.math.semigroup.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.cyclicgroup.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
-import ch.bfh.unicrypt.math.cyclicgroup.interfaces.MultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.math.group.interfaces.MultiplicativeGroup;
-import ch.bfh.unicrypt.math.monoid.interfaces.MultiplicativeMonoid;
-import ch.bfh.unicrypt.math.semigroup.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.io.Serializable;
@@ -35,9 +23,8 @@ import java.security.NoSuchAlgorithmException;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<E extends Element> implements Element, Serializable {
+public abstract class AbstractElement<E extends Element> implements Element {
 
-  private static final long serialVersionUID = 1L;
   private final Set set;
   protected BigInteger value;
 

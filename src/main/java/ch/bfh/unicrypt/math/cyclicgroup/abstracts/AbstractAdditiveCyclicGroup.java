@@ -9,8 +9,6 @@ import ch.bfh.unicrypt.math.cyclicgroup.interfaces.AdditiveCyclicGroup;
 
 public abstract class AbstractAdditiveCyclicGroup extends AbstractCyclicGroup<AdditiveElement> implements AdditiveCyclicGroup {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   protected AdditiveElement abstractGetElement(BigInteger value) {
     return new AbstractAdditiveElement(this, value) {};

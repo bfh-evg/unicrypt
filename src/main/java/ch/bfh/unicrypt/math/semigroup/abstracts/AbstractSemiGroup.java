@@ -19,8 +19,6 @@ import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
  */
 public abstract class AbstractSemiGroup<T extends Element> extends AbstractSet<T> implements SemiGroup {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   public final T apply(final Element element1, final Element element2) {
     if (!this.contains(element1) || !this.contains(element2)) {

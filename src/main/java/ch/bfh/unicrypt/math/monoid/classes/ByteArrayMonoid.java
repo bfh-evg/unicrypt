@@ -16,7 +16,7 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public class ByteArrayMonoid extends AbstractMonoid {
+public class ByteArrayMonoid extends AbstractMonoid<Element> {
 
   private ByteArrayMonoid() {
   }
@@ -81,9 +81,8 @@ public class ByteArrayMonoid extends AbstractMonoid {
   //
   // LOCAL ELEMENT CLASS
   //
-  final private class ByteArrayElement extends AbstractElement {
+  final private class ByteArrayElement extends AbstractElement<Element> {
 
-    private static final long serialVersionUID = 1L;
     private final byte[] bytes;
 
     private ByteArrayElement(final Set set, final byte[] bytes) {
@@ -102,7 +101,7 @@ public class ByteArrayMonoid extends AbstractMonoid {
 
     @Override
     protected boolean standardEquals(Element element) {
-      return this.getByteArray().equals(((ByteArrayMonoid.ByteArrayElement) element).getByteArray());
+      return Arrays.equals(this.getByteArray(), ((ByteArrayMonoid.ByteArrayElement) element).getByteArray());
     }
 
     @Override

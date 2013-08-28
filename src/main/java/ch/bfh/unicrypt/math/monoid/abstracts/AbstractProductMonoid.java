@@ -6,11 +6,8 @@ package ch.bfh.unicrypt.math.monoid.abstracts;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
-import ch.bfh.unicrypt.math.monoid.classes.ProductMonoid;
 import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 import ch.bfh.unicrypt.math.semigroup.abstracts.AbstractProductSemiGroup;
-import ch.bfh.unicrypt.math.semigroup.classes.ProductSemiGroup;
-import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
 
 /**
  *
@@ -31,7 +28,7 @@ public abstract class AbstractProductMonoid<S extends Monoid> extends AbstractPr
   protected AbstractProductMonoid() {
     super();
   }
-  
+
   @Override
   public final Tuple getIdentityElement() {
     if (this.identityElement == null) {

@@ -2,8 +2,8 @@ package ch.bfh.unicrypt.math.cyclicgroup.classes;
 
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 
 /**
  * This interface represents the group that consists of two elements only, for
@@ -17,7 +17,6 @@ import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
  */
 public class BooleanGroup extends ZPlusMod {
 
-  private static final long serialVersionUID = 1L;
   public static final AdditiveElement TRUE = BooleanGroup.getInstance().getElement(BigInteger.ONE);
   public static final AdditiveElement FALSE = BooleanGroup.getInstance().getElement(BigInteger.ZERO);
 
@@ -48,7 +47,7 @@ public class BooleanGroup extends ZPlusMod {
    * @throws IllegalArgumentException if {@code element} is null or does not
    * belong to the group
    */
-  public boolean getBoolean(final AbstractElement element) {
+  public boolean getBoolean(final Element element) {
     if (!contains(element)) {
       throw new IllegalArgumentException();
     }

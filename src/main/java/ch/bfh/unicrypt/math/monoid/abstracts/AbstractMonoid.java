@@ -19,8 +19,6 @@ import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
  */
 public abstract class AbstractMonoid<T extends Element> extends AbstractSemiGroup<T> implements Monoid {
 
-  private static final long serialVersionUID = 1L;
-
   private T identityElement;
 
   @Override

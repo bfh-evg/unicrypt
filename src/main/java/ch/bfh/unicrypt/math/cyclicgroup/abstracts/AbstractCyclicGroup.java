@@ -8,8 +8,6 @@ import ch.bfh.unicrypt.math.cyclicgroup.interfaces.CyclicGroup;
 
 public abstract class AbstractCyclicGroup<T extends Element> extends AbstractGroup<T> implements CyclicGroup {
 
-  private static final long serialVersionUID = 1L;
-
   private T defaultGenerator;
 
   @Override

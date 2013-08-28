@@ -6,11 +6,8 @@ package ch.bfh.unicrypt.math.group.abstracts;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
-import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.monoid.abstracts.AbstractProductMonoid;
-import ch.bfh.unicrypt.math.monoid.classes.ProductMonoid;
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 
 /**
  *

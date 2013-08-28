@@ -22,9 +22,6 @@ import ch.bfh.unicrypt.math.group.interfaces.Group;
  */
 public class NPlus extends AbstractAdditiveMonoid {
 
-  private static final long serialVersionUID = 1L;
-  private static final int RANDOM_ELEMENT_BIT_LENGTH = 1000;
-
   /**
    * This is the private constructor of this class. It is called by the static factory methods
    * of the static nested class Factory.

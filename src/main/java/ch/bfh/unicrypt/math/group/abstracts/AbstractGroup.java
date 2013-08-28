@@ -18,8 +18,6 @@ import ch.bfh.unicrypt.math.group.interfaces.Group;
  */
 public abstract class AbstractGroup<T extends Element> extends AbstractMonoid<T> implements Group {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   public final T invert(final Element element) {
     if (!this.contains(element)) {

@@ -9,8 +9,6 @@ import ch.bfh.unicrypt.math.cyclicgroup.interfaces.MultiplicativeCyclicGroup;
 
 public abstract class AbstractMultiplicativeCyclicGroup extends AbstractCyclicGroup<MultiplicativeElement> implements MultiplicativeCyclicGroup {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   protected MultiplicativeElement abstractGetElement(BigInteger value) {
     return new AbstractMultiplicativeElement(this, value) {};

@@ -9,8 +9,6 @@ import ch.bfh.unicrypt.math.group.interfaces.AdditiveGroup;
 
 public abstract class AbstractAdditiveGroup extends AbstractGroup<AdditiveElement> implements AdditiveGroup {
 
-  private static final long serialVersionUID = 1L;
-
   @Override
   protected AdditiveElement abstractGetElement(BigInteger value) {
     return new AbstractAdditiveElement(this, value) {};

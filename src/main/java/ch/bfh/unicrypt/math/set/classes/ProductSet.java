@@ -1,13 +1,9 @@
 package ch.bfh.unicrypt.math.set.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractTuple;
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.set.abstracts.AbstractProductSet;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
-import ch.bfh.unicrypt.math.utility.MathUtil;
-import java.math.BigInteger;
-import java.util.Random;
 
 /**
  *

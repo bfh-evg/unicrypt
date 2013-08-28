@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.math.set.abstracts;
 
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -287,7 +286,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
 
   @Override
   public Iterator<S> iterator() {
-    final AbstractProductSet compoundSet = this;
+    final AbstractProductSet<S> compoundSet = this;
     return new Iterator<S>() {
       int currentIndex = 0;
 
@@ -313,7 +312,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
 
   @Override
   protected boolean standardEquals(Set set) {
-    AbstractProductSet other = (AbstractProductSet) set;
+    AbstractProductSet<S> other = (AbstractProductSet<S>) set;
     int arity = this.getArity();
     if (arity != other.getArity()) {
       return false;

@@ -5,8 +5,6 @@
 package ch.bfh.unicrypt.math.function.abstracts;
 
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.set.abstracts.AbstractProductSet;
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.Compound;
 import java.util.Iterator;

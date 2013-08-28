@@ -1,12 +1,9 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
-import ch.bfh.unicrypt.math.monoid.classes.ProductMonoid;
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 
 /**
  * This class represents the concept of a direct product of groups ("product group" for short).
