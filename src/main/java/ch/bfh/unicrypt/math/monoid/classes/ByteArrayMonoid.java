@@ -9,38 +9,39 @@ import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.monoid.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
-public class StringMonoid extends AbstractMonoid {
+public class ByteArrayMonoid extends AbstractMonoid {
 
-  private StringMonoid() {
+  private ByteArrayMonoid() {
   }
 
-  public final String getString(Element element) {
+  public final byte[] getByteArray(Element element) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
-    return ((StringMonoid.StringElement) element).getString();
+    return ((ByteArrayMonoid.ByteArrayElement) element).getByteArray();
   }
 
-  public final Element getElement(final String string) {
-    if (string == null) {
+  public final Element getElement(final byte[] bytes) {
+    if (bytes == null) {
       throw new IllegalArgumentException();
     }
-    return this.standardGetElement(string);
+    return this.standardGetElement(bytes);
   }
 
-  protected Element standardGetElement(String string) {
-    return new StringMonoid.StringElement(this, string);
+  protected Element standardGetElement(byte[] bytes) {
+    return new ByteArrayMonoid.ByteArrayElement(this, bytes);
   }
 
   @Override
   protected Element abstractGetElement(BigInteger value) {
-    return this.standardGetElement(new String(value.toByteArray()));
+    return this.standardGetElement(value.toByteArray());
   }
 
   //
@@ -50,12 +51,16 @@ public class StringMonoid extends AbstractMonoid {
 
   @Override
   protected Element abstractGetIdentityElement() {
-    return this.standardGetElement("");
+    return this.standardGetElement(new byte[]{});
   }
 
   @Override
   protected Element abstractApply(Element element1, Element element2) {
-    return this.standardGetElement(((StringElement) element1).getString() + ((StringElement) element2).getString());
+    byte[] bytes1 = ((ByteArrayElement) element1).getByteArray();
+    byte[] bytes2 = ((ByteArrayElement) element2).getByteArray();
+    byte[] result = Arrays.copyOf(bytes1, bytes1.length + bytes2.length);
+    System.arraycopy(bytes2, 0, result, bytes2.length, bytes2.length);
+    return this.standardGetElement(result);
   }
 
   @Override
@@ -76,54 +81,54 @@ public class StringMonoid extends AbstractMonoid {
   //
   // LOCAL ELEMENT CLASS
   //
-  final private class StringElement extends AbstractElement {
+  final private class ByteArrayElement extends AbstractElement {
 
     private static final long serialVersionUID = 1L;
-    private final String string;
+    private final byte[] bytes;
 
-    private StringElement(final Set set, final String string) {
+    private ByteArrayElement(final Set set, final byte[] bytes) {
       super(set);
-      this.string = string;
+      this.bytes = bytes;
     }
 
-    public String getString() {
-      return this.string;
+    public byte[] getByteArray() {
+      return this.bytes;
     }
 
     @Override
     protected BigInteger standardGetValue() {
-      return new BigInteger(this.getString().getBytes());
+      return new BigInteger(this.getByteArray());
     }
 
     @Override
     protected boolean standardEquals(Element element) {
-      return this.getString().equals(((StringMonoid.StringElement) element).getString());
+      return this.getByteArray().equals(((ByteArrayMonoid.ByteArrayElement) element).getByteArray());
     }
 
     @Override
     protected int standardHashCode() {
-      return this.getString().hashCode();
+      return this.getByteArray().hashCode();
     }
 
     @Override
     public String standardToString() {
-      return this.getString();
+      return this.getByteArray().toString();
     }
   }
   //
   // STATIC FACTORY METHODS
   //
-  private static StringMonoid instance;
+  private static ByteArrayMonoid instance;
 
   /**
    * Returns the singleton object of this class.
    *
    * @return The singleton object of this class
    */
-  public static StringMonoid getInstance() {
-    if (StringMonoid.instance == null) {
-      StringMonoid.instance = new StringMonoid();
+  public static ByteArrayMonoid getInstance() {
+    if (ByteArrayMonoid.instance == null) {
+      ByteArrayMonoid.instance = new ByteArrayMonoid();
     }
-    return StringMonoid.instance;
+    return ByteArrayMonoid.instance;
   }
 }
