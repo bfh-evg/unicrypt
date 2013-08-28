@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.Tuple;
-import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
-import ch.bfh.unicrypt.math.set.interfaces.Set;
+import ch.bfh.unicrypt.math.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import java.util.Random;
 
 /**

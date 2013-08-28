@@ -1,10 +1,10 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.element.interfaces.Tuple;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
+import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
-import ch.bfh.unicrypt.math.set.interfaces.Set;
+import ch.bfh.unicrypt.math.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import java.util.Arrays;
 import java.util.Random;
 

@@ -6,13 +6,13 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.mixnet.interfaces.Mixer;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.PermutationElement;
-import ch.bfh.unicrypt.math.element.interfaces.Tuple;
+import ch.bfh.unicrypt.math.general.interfaces.PermutationElement;
+import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.function.interfaces.PermutationFunction;
-import ch.bfh.unicrypt.math.group.classes.PermutationGroup;
+import ch.bfh.unicrypt.math.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.general.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.PermutationGroup;
 import ch.bfh.unicrypt.math.group.interfaces.PowerGroup;
 

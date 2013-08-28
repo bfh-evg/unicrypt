@@ -7,8 +7,8 @@ import ch.bfh.unicrypt.crypto.encoding.abstracts.AbstractEncodingScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.GStarMod;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.multiplicative.classes.GStarMod;
+import ch.bfh.unicrypt.math.additive.classes.ZPlusMod;
 
 public class DamgardEncodingScheme extends AbstractEncodingScheme {
 

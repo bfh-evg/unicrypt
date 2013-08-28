@@ -1,12 +1,12 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.ProductCyclicGroup;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.SingletonGroup;
+import ch.bfh.unicrypt.math.product.classes.ProductCyclicGroup;
+import ch.bfh.unicrypt.math.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
-import ch.bfh.unicrypt.math.set.interfaces.Set;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import java.util.Random;
 
 /**

@@ -4,9 +4,9 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.set.interfaces.Set;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.Compound;
 import java.util.Iterator;
 import java.util.NoSuchElementException;

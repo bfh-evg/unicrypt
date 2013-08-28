@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.set.interfaces.Set;
+import ch.bfh.unicrypt.math.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.security.MessageDigest;

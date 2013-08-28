@@ -5,8 +5,8 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.encryption.interfaces.RandomizedAsymmetricHomomorphicEncryptionScheme;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.PermutationElement;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.general.interfaces.PermutationElement;
+import ch.bfh.unicrypt.math.general.interfaces.Group;
 
 public interface ReEncryptionMixer extends Mixer {
 

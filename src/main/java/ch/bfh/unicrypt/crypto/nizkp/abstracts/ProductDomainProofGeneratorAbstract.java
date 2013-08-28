@@ -5,7 +5,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.ProductDomainProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.Tuple;
+import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.group.interfaces.ProductGroup;
 
 public abstract class ProductDomainProofGeneratorAbstract extends ProofGeneratorAbstract implements ProductDomainProofGenerator {

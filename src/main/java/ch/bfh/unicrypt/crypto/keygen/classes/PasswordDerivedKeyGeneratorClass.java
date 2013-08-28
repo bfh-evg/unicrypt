@@ -10,9 +10,9 @@ import ch.bfh.unicrypt.crypto.utility.AESUtil;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlus;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.additive.classes.ZPlus;
+import ch.bfh.unicrypt.math.additive.classes.ZPlusMod;
 
 /**
  * This class derives a cryptographic (secret) key for AES from a T

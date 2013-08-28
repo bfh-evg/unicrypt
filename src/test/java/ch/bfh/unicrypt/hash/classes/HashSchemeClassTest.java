@@ -20,7 +20,7 @@ import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.HashFunction.HashAlgorithm;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlus;
+import ch.bfh.unicrypt.math.additive.classes.ZPlus;
 import ch.bfh.unicrypt.math.group.classes.ZPlusModClass;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlusMod;
 import ch.bfh.unicrypt.math.java2unicrypt.classes.ExternalDataMapperClass;

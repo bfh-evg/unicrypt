@@ -4,9 +4,9 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Bijection;
-import ch.bfh.unicrypt.math.set.interfaces.Set;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 
 /**
  *

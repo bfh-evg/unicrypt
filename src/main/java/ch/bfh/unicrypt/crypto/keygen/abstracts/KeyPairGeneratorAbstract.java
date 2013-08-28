@@ -4,8 +4,8 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.group.classes.ProductGroup;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.general.interfaces.Group;
 
 public abstract class KeyPairGeneratorAbstract extends RandomizedKeyGeneratorAbstract implements KeyPairGenerator {
 

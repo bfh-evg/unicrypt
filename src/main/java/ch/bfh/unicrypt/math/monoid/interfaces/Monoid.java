@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.math.monoid.interfaces;
 
-import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 
 /**
  * This interface represents the mathematical concept a  group. It

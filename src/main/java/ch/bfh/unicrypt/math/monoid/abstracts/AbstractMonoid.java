@@ -1,10 +1,10 @@
 package ch.bfh.unicrypt.math.monoid.abstracts;
 
-import ch.bfh.unicrypt.math.semigroup.abstracts.AbstractSemiGroup;
+import ch.bfh.unicrypt.math.general.abstracts.AbstractSemiGroup;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 
 /**

@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.crypto.commitment.interfaces;
 
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.general.interfaces.Group;
 
 public interface CommitmentScheme {
 

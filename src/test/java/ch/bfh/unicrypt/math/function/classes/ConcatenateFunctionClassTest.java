@@ -15,7 +15,7 @@ import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.interfaces.ConcatenateFunction;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlus;
+import ch.bfh.unicrypt.math.additive.classes.ZPlus;
 import ch.bfh.unicrypt.math.group.interfaces.ProductGroup;
 import ch.bfh.unicrypt.math.java2unicrypt.classes.ExternalDataMapperClass;
 

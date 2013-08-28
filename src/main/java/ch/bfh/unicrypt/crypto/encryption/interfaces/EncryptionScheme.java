@@ -3,7 +3,7 @@ package ch.bfh.unicrypt.crypto.encryption.interfaces;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.general.interfaces.Group;
 
 public interface EncryptionScheme {
 

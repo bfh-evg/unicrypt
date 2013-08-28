@@ -7,8 +7,8 @@ import java.util.Random;
 import ch.bfh.unicrypt.crypto.blinding.interfaces.BlindingScheme;
 import ch.bfh.unicrypt.crypto.mixnet.interfaces.BlindingMixer;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.element.interfaces.PermutationElement;
+import ch.bfh.unicrypt.math.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.general.interfaces.PermutationElement;
 
 public class BlindingMixerClass extends MixerClass implements BlindingMixer {
 
