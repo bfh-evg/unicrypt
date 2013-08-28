@@ -175,7 +175,7 @@ public abstract class AbstractSet<T extends Element> implements Set {
   public String toString() {
     String str = this.standardToString();
     if (str.length() == 0) {
-      this.getClass().getSimpleName();
+    	return this.getClass().getSimpleName();
     }
     return this.getClass().getSimpleName() + "[" + str + "]";
   }
