@@ -4,17 +4,17 @@
  */
 package ch.bfh.unicrypt.math.additive.abstracts;
 
-import ch.bfh.unicrypt.math.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.general.interfaces.Element;
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.math.additive.interfaces.AdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.general.interfaces.Set;
-import java.math.BigInteger;
 
 /**
  *

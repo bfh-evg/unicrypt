@@ -22,7 +22,7 @@ public class SingletonGroup extends AbstractCyclicGroup<Element> {
   private final Element element;
 
   private SingletonGroup(BigInteger value) {
-    this.element = new AbstractElement(this, value){};
+    this.element = new AbstractElement<Element>(this, value){};
   }
 
   public final Element getElement() {

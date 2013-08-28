@@ -12,7 +12,6 @@ import ch.bfh.unicrypt.math.product.classes.ProductMonoid;
 import ch.bfh.unicrypt.math.product.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.product.classes.ProductSet;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
-import ch.bfh.unicrypt.math.utility.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -144,8 +143,8 @@ public abstract class AbstractTuple extends AbstractElement<Tuple> implements Tu
     }
     Element element = this;
     for (final int index : indices) {
-      if (element instanceof Compound) {
-        element = ((Compound<Element>) element).getAt(index);
+      if (element instanceof Tuple) {
+        element = ((Tuple) element).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }

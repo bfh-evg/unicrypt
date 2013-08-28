@@ -1,9 +1,9 @@
 package ch.bfh.unicrypt.math.concatenative.interfaces;
 
-import ch.bfh.unicrypt.math.additive.interfaces.*;
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
-import java.math.BigInteger;
 
 /**
  * This interface provides the renaming of some group operations for the case of

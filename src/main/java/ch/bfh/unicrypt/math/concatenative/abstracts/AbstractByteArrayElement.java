@@ -4,12 +4,12 @@
  */
 package ch.bfh.unicrypt.math.concatenative.abstracts;
 
-import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
-import ch.bfh.unicrypt.math.general.interfaces.Element;
-import ch.bfh.unicrypt.math.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
 import java.math.BigInteger;
 import java.util.Arrays;
+
+import ch.bfh.unicrypt.math.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 
 /**
  *

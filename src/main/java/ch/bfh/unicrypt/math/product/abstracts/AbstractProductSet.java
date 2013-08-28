@@ -21,16 +21,16 @@ import java.util.Random;
  */
 public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tuple> implements Compound<S> {
 
-  private final Set[] sets;
+  private final S[] sets;
   private final int arity;
 
   protected AbstractProductSet(Set[] sets) {
-    this.sets = sets.clone();
+    this.sets = (S[]) sets.clone();
     this.arity = sets.length;
   }
 
   protected AbstractProductSet(Set set, int arity) {
-    this.sets = new Set[]{set};
+    this.sets = (S[]) new Set[]{set};
     this.arity = arity;
   }
 
@@ -265,7 +265,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
     }
     S set = (S) this;
     for (final int index : indices) {
-      if (set instanceof Compound) {
+      if (set instanceof Compound<?>) {
         set = ((Compound<S>) set).getAt(index);
       } else {
         throw new IllegalArgumentException();

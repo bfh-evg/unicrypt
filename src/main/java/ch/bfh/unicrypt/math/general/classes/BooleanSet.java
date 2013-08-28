@@ -4,13 +4,14 @@
  */
 package ch.bfh.unicrypt.math.general.classes;
 
-import ch.bfh.unicrypt.math.general.abstracts.AbstractBooleanElement;
-import ch.bfh.unicrypt.math.concatenative.abstracts.AbstractStringElement;
-import ch.bfh.unicrypt.math.general.interfaces.BooleanElement;
-import ch.bfh.unicrypt.math.general.abstracts.AbstractSet;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.general.abstracts.AbstractBooleanElement;
+import ch.bfh.unicrypt.math.general.abstracts.AbstractSet;
+import ch.bfh.unicrypt.math.general.interfaces.BooleanElement;
+import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
  * This interface represents the group that consists of two elements only, for

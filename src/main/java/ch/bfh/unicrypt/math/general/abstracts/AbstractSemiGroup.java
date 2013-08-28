@@ -89,19 +89,14 @@ public abstract class AbstractSemiGroup<T extends Element> extends AbstractSet<T
     if (amount.signum() <= 0) {
       throw new IllegalArgumentException();
     }
-    T result = null;
-    T atomicElement = (T) element;
-    for (int i = amount.bitLength()-1; i >= 0; i--) {
-      if (result == null) {
-        result = atomicElement;
-      } else {
-        result = this.selfApply(result);
-      }
+    Element result = element;
+    for (int i = amount.bitLength()-2; i >= 0; i--) {
+      result = result.selfApply();
       if (amount.testBit(i)) {
-        result = this.apply(result, atomicElement);
+        result = result.apply(element);
       }
     }
-    return result;
+    return (T) result;
   }
 
   //

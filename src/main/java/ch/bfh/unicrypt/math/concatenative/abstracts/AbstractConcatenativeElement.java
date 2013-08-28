@@ -59,45 +59,45 @@ public abstract class AbstractConcatenativeElement<E extends ConcatenativeElemen
    * @see Group#apply(Element, Element)
    */
   @Override
-  public final AbstractConcatenativeElement concatenate(final Element element) {
+  public final AbstractConcatenativeElement<E> concatenate(final Element element) {
     ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement) semiGroup.concatenate(this, element);
+    return (AbstractConcatenativeElement<E>) semiGroup.concatenate(this, element);
   }
 
   /**
    * @see Group#T(Element, BigInteger)
    */
   @Override
-  public final AbstractConcatenativeElement selfConcatenate(final BigInteger amount) {
+  public final AbstractConcatenativeElement<E> selfConcatenate(final BigInteger amount) {
     ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement) semiGroup.selfConcatenate(this, amount);
+    return (AbstractConcatenativeElement<E>) semiGroup.selfConcatenate(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
   @Override
-  public final AbstractConcatenativeElement selfConcatenate(final Element amount) {
+  public final AbstractConcatenativeElement<E> selfConcatenate(final Element amount) {
     ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement) semiGroup.selfConcatenate(this, amount);
+    return (AbstractConcatenativeElement<E>) semiGroup.selfConcatenate(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
   @Override
-  public final AbstractConcatenativeElement selfConcatenate(final int amount) {
+  public final AbstractConcatenativeElement<E> selfConcatenate(final int amount) {
     ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement) semiGroup.selfConcatenate(this, amount);
+    return (AbstractConcatenativeElement<E>) semiGroup.selfConcatenate(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
   @Override
-  public final AbstractConcatenativeElement selfConcatenate() {
+  public final AbstractConcatenativeElement<E> selfConcatenate() {
     ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement) semiGroup.selfConcatenate(this);
+    return (AbstractConcatenativeElement<E>) semiGroup.selfConcatenate(this);
   }
 
 }

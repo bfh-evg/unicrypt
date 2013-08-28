@@ -92,7 +92,7 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
 
   @Override
   public Iterator<Function> iterator() {
-    final AbstractCompoundFunction compoundFunction = this;
+    final AbstractCompoundFunction<D, C, E> compoundFunction = this;
     return new Iterator<Function>() {
       int currentIndex = 0;
 
@@ -118,7 +118,7 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
 
   @Override
   protected boolean standardEquals(Function function) {
-    AbstractCompoundFunction other = (AbstractCompoundFunction) function;
+    AbstractCompoundFunction<D,C,E> other = (AbstractCompoundFunction<D,C,E>) function;
     int arity = this.getArity();
     if (arity != other.getArity()) {
       return false;

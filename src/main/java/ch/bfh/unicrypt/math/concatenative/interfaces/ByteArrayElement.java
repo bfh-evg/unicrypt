@@ -4,7 +4,6 @@
  */
 package ch.bfh.unicrypt.math.concatenative.interfaces;
 
-import ch.bfh.unicrypt.math.general.interfaces.Element;
 
 /**
  *

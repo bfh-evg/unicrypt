@@ -4,12 +4,11 @@
  */
 package ch.bfh.unicrypt.math.concatenative.abstracts;
 
-import ch.bfh.unicrypt.math.general.interfaces.Element;
-import ch.bfh.unicrypt.math.concatenative.interfaces.StringElement;
-import ch.bfh.unicrypt.math.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.general.interfaces.Set;
 import java.math.BigInteger;
+
+import ch.bfh.unicrypt.math.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.concatenative.interfaces.StringElement;
+import ch.bfh.unicrypt.math.general.interfaces.Element;
 
 /**
  *
