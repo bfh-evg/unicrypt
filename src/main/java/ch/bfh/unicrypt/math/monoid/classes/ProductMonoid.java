@@ -88,7 +88,7 @@ public class ProductMonoid extends AbstractProductMonoid<Monoid> {
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Tuple constructElement(Element... elements) {
+  public static Tuple getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

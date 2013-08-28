@@ -6,6 +6,8 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.semigroup.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.semigroup.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.set.classes.ProductSet;
+import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.util.Random;
 
 /**
@@ -23,20 +25,10 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ApplyFunction extends AbstractFunction {
+public class ApplyFunction extends AbstractFunction<ProductSemiGroup, SemiGroup> {
 
   private ApplyFunction(final ProductSemiGroup domain, final SemiGroup coDomain) {
     super(domain, coDomain);
-  }
-
-  @Override
-  public ProductSemiGroup getDomain() {
-    return (ProductSemiGroup) this.getDomain();
-  }
-
-  @Override
-  public SemiGroup getCoDomain() {
-    return (SemiGroup) this.getCoDomain();
   }
 
   @Override

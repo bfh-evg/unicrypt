@@ -292,13 +292,13 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
 
       @Override
       public boolean hasNext() {
-        return currentIndex >= compoundSet.getArity();
+        return currentIndex < compoundSet.getArity();
       }
 
       @Override
       public S next() {
         if (this.hasNext()) {
-          return (S) compoundSet.getAt(this.currentIndex);
+          return (S) compoundSet.getAt(this.currentIndex++);
         }
         throw new NoSuchElementException();
       }
@@ -308,6 +308,11 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
         throw new UnsupportedOperationException("Not supported yet.");
       }
     };
+  }
+
+  @Override
+  protected boolean standardIsCompound() {
+    return true;
   }
 
   @Override

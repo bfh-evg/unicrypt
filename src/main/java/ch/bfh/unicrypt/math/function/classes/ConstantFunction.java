@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.ProductCyclicGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.util.Random;
@@ -16,7 +17,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ConstantFunction extends AbstractFunction {
+public class ConstantFunction extends AbstractFunction<SingletonGroup, Set> {
 
   private Element element;
 
@@ -28,7 +29,7 @@ public class ConstantFunction extends AbstractFunction {
    * @throws IllegalArgumentException if {@code element} is null
    */
   private ConstantFunction(Set coDomain, Element element) {
-    super(ProductCyclicGroup.getInstance(), coDomain);
+    super(SingletonGroup.getInstance(), coDomain);
     this.element = element;
   }
 
@@ -38,11 +39,6 @@ public class ConstantFunction extends AbstractFunction {
    */
   public Element getElement() {
     return this.element;
-  }
-
-  @Override
-  public ProductCyclicGroup getDomain() {
-    return (ProductCyclicGroup) this.getDomain();
   }
 
   @Override

@@ -20,7 +20,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public final class ProductFunction extends AbstractCompoundFunction {
+public final class ProductFunction extends AbstractCompoundFunction<ProductSet, ProductSet> {
 
   /**
    * This is the general constructor of this class. It takes a list of functions
@@ -46,16 +46,6 @@ public final class ProductFunction extends AbstractCompoundFunction {
    */
   protected ProductFunction(ProductSet domain, ProductSet coDomain, Function function, int arity) {
     super(domain, coDomain, function, arity);
-  }
-
-  @Override
-  public ProductSet getDomain() {
-    return (ProductSet) this.getDomain();
-  }
-
-  @Override
-  public ProductSet getCoDomain() {
-    return (ProductSet) this.getCoDomain();
   }
 
   //

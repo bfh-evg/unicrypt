@@ -34,6 +34,8 @@ public interface Set {
    */
   public static final BigInteger UNKNOWN_ORDER = BigInteger.ZERO;
 
+  public boolean isCompound();
+
   /**
    * Returns the group order. If the group order is unknown, {@link #UNKNOWN_ORDER} is returned.
    * If the group order is infinite, {@link #INFINITE_ORDER} is returned.

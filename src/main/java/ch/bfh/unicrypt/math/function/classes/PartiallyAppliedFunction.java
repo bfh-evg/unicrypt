@@ -21,7 +21,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class PartiallyAppliedFunction extends AbstractFunction {
+public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set> {
 
   private final Function parentFunction;
   private final Element parameter;
@@ -77,11 +77,6 @@ public class PartiallyAppliedFunction extends AbstractFunction {
    */
   public int getIndex() {
     return this.index;
-  }
-
-  @Override
-  public ProductSet getDomain() {
-    return (ProductSet) this.getDomain();
   }
 
   @Override

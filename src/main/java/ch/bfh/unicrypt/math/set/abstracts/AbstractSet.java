@@ -24,6 +24,11 @@ public abstract class AbstractSet<T extends Element> implements Set {
   private BigInteger order, minOrder;
 
   @Override
+  public final boolean isCompound() {
+    return this.standardIsCompound();
+  }
+
+  @Override
   public final BigInteger getOrder() {
     if (this.order == null) {
       this.order = this.abstractGetOrder();
@@ -180,6 +185,10 @@ public abstract class AbstractSet<T extends Element> implements Set {
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
   //
+
+  protected boolean standardIsCompound() {
+    return false;
+  }
 
   protected BigInteger standardGetMinOrder() {
     return BigInteger.ZERO;

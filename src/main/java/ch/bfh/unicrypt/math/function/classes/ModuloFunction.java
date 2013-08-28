@@ -16,18 +16,13 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class ModuloFunction extends AbstractFunction {
+public class ModuloFunction extends AbstractFunction<Set, ZPlusMod> {
 
   private BigInteger modulus;
 
   private ModuloFunction(final Set domain, final ZPlusMod coDomain, final BigInteger modulus) {
     super(domain, coDomain);
     this.modulus = modulus;
-  }
-
-  @Override
-  public ZPlusMod getCoDomain() {
-    return (ZPlusMod) this.getCoDomain();
   }
 
   public BigInteger getModulus() {

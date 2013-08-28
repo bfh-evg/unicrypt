@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction extends AbstractFunction implements Compound<Function> {
+public abstract class AbstractCompoundFunction<D extends Set, C extends Set> extends AbstractFunction<D, C> implements Compound<Function> {
 
   private final Function[] functions;
   private final int arity;
@@ -97,13 +97,13 @@ public abstract class AbstractCompoundFunction extends AbstractFunction implemen
 
       @Override
       public boolean hasNext() {
-        return currentIndex >= compoundFunction.getArity();
+        return currentIndex < compoundFunction.getArity();
       }
 
       @Override
       public Function next() {
         if (this.hasNext()) {
-          return compoundFunction.getAt(this.currentIndex);
+          return compoundFunction.getAt(this.currentIndex++);
         }
         throw new NoSuchElementException();
       }

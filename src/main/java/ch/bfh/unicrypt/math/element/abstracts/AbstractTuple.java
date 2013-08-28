@@ -170,13 +170,13 @@ public abstract class AbstractTuple extends AbstractElement<Tuple> implements Tu
 
       @Override
       public boolean hasNext() {
-        return currentIndex >= compoundElement.getArity();
+        return currentIndex < compoundElement.getArity();
       }
 
       @Override
       public Element next() {
         if (this.hasNext()) {
-          return compoundElement.getAt(this.currentIndex);
+          return compoundElement.getAt(this.currentIndex++);
         }
         throw new NoSuchElementException();
       }

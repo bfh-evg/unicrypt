@@ -12,7 +12,7 @@ import ch.bfh.unicrypt.math.set.interfaces.Set;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractInjection extends AbstractFunction implements Injection {
+public abstract class AbstractInjection<D extends Set, C extends Set> extends AbstractFunction<D, C> implements Injection {
 
   protected  AbstractInjection(Set domain, Set coDomain) {
     super(domain, coDomain);

@@ -29,7 +29,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class HashFunction extends AbstractFunction {
+public class HashFunction extends AbstractFunction<Set, ZPlusMod> {
 
   private MessageDigest messageDigest;
   private boolean recursiveHash;
@@ -38,11 +38,6 @@ public class HashFunction extends AbstractFunction {
     super(domain, coDomain);
     this.messageDigest = messageDigest;
     this.recursiveHash = recursiveHash;
-  }
-
-  @Override
-  public ZPlusMod getCoDomain() {
-    return (ZPlusMod) this.getCoDomain();
   }
 
   @Override

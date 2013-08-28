@@ -18,15 +18,10 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class IdentityFunction extends AbstractFunction {
+public class IdentityFunction extends AbstractFunction<Set, ProductSet> {
 
   private IdentityFunction(final Set domain, final ProductSet coDomain) {
     super(domain, coDomain);
-  }
-
-  @Override
-  public ProductSet getCoDomain() {
-    return (ProductSet) this.getCoDomain();
   }
 
   //
@@ -44,8 +39,8 @@ public class IdentityFunction extends AbstractFunction {
   // STATIC FACTORY METHODS
   //
 
-  public static IdentityFunction getInstance(final Group group) {
-    return IdentityFunction.getInstance(group, 1);
+  public static IdentityFunction getInstance(final Set set) {
+    return IdentityFunction.getInstance(set, 1);
   }
 
   /**

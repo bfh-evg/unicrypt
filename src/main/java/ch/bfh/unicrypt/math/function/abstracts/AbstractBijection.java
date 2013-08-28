@@ -11,7 +11,7 @@ import ch.bfh.unicrypt.math.set.interfaces.Set;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractBijection extends AbstractInjection implements Bijection {
+public abstract class AbstractBijection<D extends Set, C extends Set> extends AbstractInjection<D, C> implements Bijection {
 
   protected AbstractBijection(Set domain, Set coDomain) {
     super(domain, coDomain);

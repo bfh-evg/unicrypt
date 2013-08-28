@@ -17,7 +17,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class SelectionFunction extends AbstractFunction {
+public class SelectionFunction extends AbstractFunction<ProductSet, Set> {
 
   private final int[] indices;
 
@@ -28,11 +28,6 @@ public class SelectionFunction extends AbstractFunction {
 
   public int[] getIndices() {
     return this.indices;
-  }
-
-  @Override
-  public ProductSet getDomain() {
-    return (ProductSet) this.getDomain();
   }
 
   @Override

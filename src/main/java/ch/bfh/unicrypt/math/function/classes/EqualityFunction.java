@@ -19,20 +19,10 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class EqualityFunction extends AbstractFunction {
+public class EqualityFunction extends AbstractFunction<ProductSet, BooleanGroup> {
 
   private EqualityFunction(final ProductSet domain, final BooleanGroup coDomain) {
     super(domain, coDomain);
-  }
-
-  @Override
-  public ProductSet getDomain() {
-    return (ProductSet) this.getDomain();
-  }
-
-  @Override
-  public BooleanGroup getCoDomain() {
-    return (BooleanGroup) this.getCoDomain();
   }
 
   @Override

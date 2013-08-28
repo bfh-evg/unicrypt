@@ -13,7 +13,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ConvertFunction extends AbstractFunction {
+public class ConvertFunction extends AbstractFunction<Set, Set> {
 
   private ConvertFunction(final Set domain, final Set coDomain) {
     super(domain, coDomain);

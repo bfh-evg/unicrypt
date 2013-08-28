@@ -19,7 +19,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public final class CompositeFunction extends AbstractCompoundFunction {
+public final class CompositeFunction extends AbstractCompoundFunction<Set, Set> {
 
   private CompositeFunction(final Set domain, final Set coDomain, final Function[] functions) {
     super(domain, coDomain, functions);

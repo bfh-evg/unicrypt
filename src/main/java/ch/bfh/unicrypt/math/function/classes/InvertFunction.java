@@ -16,20 +16,10 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class InvertFunction extends AbstractFunction {
+public class InvertFunction extends AbstractFunction<Group, Group> {
 
   private InvertFunction(final Group domain, Group coDomain) {
     super(domain, coDomain);
-  }
-
-  @Override
-  public Group getDomain() {
-    return (Group) this.getDomain();
-  }
-
-  @Override
-  public Group getCoDomain() {
-    return (Group) this.getCoDomain();
   }
 
   //

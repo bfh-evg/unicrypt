@@ -3,6 +3,7 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.ProductCyclicGroup;
+import ch.bfh.unicrypt.math.cyclicgroup.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.util.Random;
 
@@ -15,15 +16,10 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class RandomFunction extends AbstractFunction {
+public class RandomFunction extends AbstractFunction<SingletonGroup, Set> {
 
   private RandomFunction(final Set coDomain) {
-    super(ProductCyclicGroup.getInstance(), coDomain);
-  }
-
-  @Override
-  public ProductCyclicGroup getDomain() {
-    return (ProductCyclicGroup) this.getDomain();
+    super(SingletonGroup.getInstance(), coDomain);
   }
 
   //

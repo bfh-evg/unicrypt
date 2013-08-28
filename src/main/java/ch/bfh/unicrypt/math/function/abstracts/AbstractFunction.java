@@ -3,8 +3,7 @@ package ch.bfh.unicrypt.math.function.abstracts;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.set.classes.ProductSet;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
+import ch.bfh.unicrypt.math.set.abstracts.AbstractProductSet;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.util.Random;
 
@@ -18,14 +17,14 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction implements Function {
+public abstract class AbstractFunction<D extends Set, C extends Set> implements Function {
 
-  private final Set domain;
-  private final Set coDomain;
+  private final D domain;
+  private final C coDomain;
 
   protected AbstractFunction(final Set domain, final Set coDomain) {
-    this.coDomain = coDomain;
-    this.domain = domain;
+    this.domain = (D) domain;
+    this.coDomain = (C) coDomain;
   }
 
   @Override
@@ -49,19 +48,19 @@ public abstract class AbstractFunction implements Function {
 
   @Override
   public final Element apply(final Element[] elements, final Random random) {
-    if (this.getDomain() instanceof ProductSet) {
-      return this.apply(((ProductSet) this.getDomain()).getElement(elements), random);
+    if (this.getDomain().isCompound()) {
+      return this.apply(((AbstractProductSet) this.getDomain()).getElement(elements), random);
     }
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public Set getDomain() {
+  public D getDomain() {
     return this.domain;
   }
 
   @Override
-  public Set getCoDomain() {
+  public C getCoDomain() {
     return this.coDomain;
   }
 

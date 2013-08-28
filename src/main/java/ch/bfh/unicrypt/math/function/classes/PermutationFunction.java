@@ -20,7 +20,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PermutationFunction extends AbstractFunction {
+public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet> {
 
   private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {
     super(domain, coDomain);
@@ -32,16 +32,6 @@ public class PermutationFunction extends AbstractFunction {
    */
   public PermutationGroup getPermutationGroup() {
     return (PermutationGroup) this.getDomain().getAt(1);
-  }
-
-  @Override
-  public ProductSet getDomain() {
-    return (ProductSet) this.getDomain();
-  }
-
-  @Override
-  public ProductSet getCoDomain() {
-    return (ProductSet) this.getCoDomain();
   }
 
   //
