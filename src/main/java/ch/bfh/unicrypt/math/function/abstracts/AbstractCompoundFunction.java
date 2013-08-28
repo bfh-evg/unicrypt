@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.Compound;
@@ -14,7 +15,7 @@ import java.util.NoSuchElementException;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction<D extends Set, C extends Set> extends AbstractFunction<D, C> implements Compound<Function> {
+public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Compound<Function> {
 
   private final Function[] functions;
   private final int arity;

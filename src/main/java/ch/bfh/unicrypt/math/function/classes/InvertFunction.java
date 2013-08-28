@@ -16,7 +16,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class InvertFunction extends AbstractFunction<Group, Group> {
+public class InvertFunction extends AbstractFunction<Group, Group, Element> {
 
   private InvertFunction(final Group domain, Group coDomain) {
     super(domain, coDomain);

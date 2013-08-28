@@ -1,9 +1,9 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.set.classes.ProductSet;
-import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.util.Arrays;
 import java.util.Random;
@@ -18,7 +18,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class IdentityFunction extends AbstractFunction<Set, ProductSet> {
+public class IdentityFunction extends AbstractFunction<Set, ProductSet, Tuple> {
 
   private IdentityFunction(final Set domain, final ProductSet coDomain) {
     super(domain, coDomain);
@@ -29,7 +29,7 @@ public class IdentityFunction extends AbstractFunction<Set, ProductSet> {
   //
 
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
+  protected Tuple abstractApply(final Element element, final Random random) {
     final Element[] elements = new Element[this.getCoDomain().getArity()];
     Arrays.fill(elements, element);
     return this.getCoDomain().getElement(elements);

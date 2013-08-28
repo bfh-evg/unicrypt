@@ -23,7 +23,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup> {
+public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, Element> {
 
   private SelfApplyFunction(final ProductSet domain, final SemiGroup coDomain) {
     super(domain, coDomain);

@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.math.function.interfaces;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.group.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.interfaces.Group;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
@@ -119,7 +120,7 @@ public interface Function {
    * element of the corresponding sub-domain group
    * @throws IndexOutOfBoundsException if {@code index} is an invalid index
    */
-  public Function partiallyApply(Element element, int index);
+  public PartiallyAppliedFunction partiallyApply(Element element, int index);
 
   //
   // The standard implementations of the following three inherited methods are

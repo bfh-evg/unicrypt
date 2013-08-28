@@ -20,7 +20,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public final class ProductFunction extends AbstractCompoundFunction<ProductSet, ProductSet> {
+public final class ProductFunction extends AbstractCompoundFunction<ProductSet, ProductSet, Tuple> {
 
   /**
    * This is the general constructor of this class. It takes a list of functions
@@ -52,7 +52,7 @@ public final class ProductFunction extends AbstractCompoundFunction<ProductSet, 
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
+  protected Tuple abstractApply(final Element element, final Random random) {
     int arity = this.getArity();
     Tuple compoundElement = (Tuple) element;
     final Element[] elements = new Element[arity];

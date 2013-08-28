@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -29,7 +30,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class HashFunction extends AbstractFunction<Set, ZPlusMod> {
+public class HashFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElement> {
 
   private MessageDigest messageDigest;
   private boolean recursiveHash;
@@ -51,7 +52,7 @@ public class HashFunction extends AbstractFunction<Set, ZPlusMod> {
   }
 
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
+  protected AdditiveElement abstractApply(final Element element, final Random random) {
     BigInteger value;
     if (this.recursiveHash) {
       value = new BigInteger(element.getRecursiveHashValue(this.messageDigest));

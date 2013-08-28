@@ -1,12 +1,13 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractPermutationElement;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.element.interfaces.PermutationElement;
 import ch.bfh.unicrypt.math.group.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.Permutation;
@@ -28,7 +29,7 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PermutationGroup extends AbstractGroup<Element> {
+public class PermutationGroup extends AbstractGroup<PermutationElement> {
 
   private final int size;
 
@@ -50,28 +51,21 @@ public class PermutationGroup extends AbstractGroup<Element> {
     return this.size;
   }
 
-  public final Permutation getPermutation(Element element) {
-    if (!this.contains(element)) {
-      throw new IllegalArgumentException();
-    }
-    return ((PermutationElement) element).getPermutation();
-  }
-
   /**
    * Creates and returns a group element for the given permutation (if one exists).
    * @param permutation The given permutation
    * @return The corresponding group element
    * @throws IllegalArgumentException if {@code permutation} is null or if it is not a proper permutation for the group's permutation size
    */
-  public Element getElement(final Permutation permutation) {
+  public PermutationElement getElement(final Permutation permutation) {
     if (permutation == null || permutation.getSize() != this.getSize()) {
       throw new IllegalArgumentException();
     }
     return this.standardGetElement(permutation);
   }
 
-  protected Element standardGetElement(Permutation permutation) {
-    return new PermutationGroup.PermutationElement(this, permutation);
+  protected PermutationElement standardGetElement(Permutation permutation) {
+    return new AbstractPermutationElement(this, permutation){};
   }
 
   //
@@ -101,7 +95,7 @@ public class PermutationGroup extends AbstractGroup<Element> {
   //
 
   @Override
-  protected Element abstractGetRandomElement(final Random random) {
+  protected PermutationElement abstractGetRandomElement(final Random random) {
     return this.standardGetElement(new Permutation(this.getSize(), random));
   }
 
@@ -112,13 +106,13 @@ public class PermutationGroup extends AbstractGroup<Element> {
   }
 
   @Override
-  protected Element abstractApply(final Element element1, final Element element2) {
-    return this.standardGetElement(this.getPermutation(element1).compose(this.getPermutation(element2)));
+  protected PermutationElement abstractApply(final Element element1, final Element element2) {
+    return this.standardGetElement(((PermutationElement) element1).getPermutation().compose(((PermutationElement) element2).getPermutation()));
   }
 
   @Override
-  protected Element abstractInvert(final Element element) {
-    return this.standardGetElement(this.getPermutation(element).invert());
+  protected PermutationElement abstractInvert(final Element element) {
+    return this.standardGetElement(((PermutationElement) element).getPermutation().invert());
   }
 
   @Override
@@ -127,55 +121,14 @@ public class PermutationGroup extends AbstractGroup<Element> {
   }
 
   @Override
-  protected Element abstractGetIdentityElement() {
+  protected PermutationElement abstractGetIdentityElement() {
     return this.standardGetElement(new Permutation(this.getSize()));
   }
 
   @Override
-  protected Element abstractGetElement(final BigInteger value) {
+  protected PermutationElement abstractGetElement(final BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getSize());
     return standardGetElement(new Permutation(MathUtil.bigIntegerToIntArray(values)));
-  }
-
-  // LOCAL CLASS: PERMUTATION_ELEMENT
-
-  final private class PermutationElement extends AbstractElement<Element> {
-
-    private final Permutation permutation;
-
-    private PermutationElement(final Set set, final Permutation permutationVector) {
-      super(set);
-      this.permutation = permutationVector;
-    }
-
-    /**
-     * Returns the corresponding permutation
-     * @return The permutation
-     */
-    public Permutation getPermutation() {
-      return this.permutation;
-    }
-
-    @Override
-    protected BigInteger standardGetValue() {
-      return MathUtil.elegantPair(MathUtil.intToBigIntegerArray(this.getPermutation().getPermutationVector()));
-    }
-
-    @Override
-    protected boolean standardEquals(Element element) {
-      return this.getPermutation().equals(((PermutationElement) element).getPermutation());
-    }
-
-    @Override
-    protected int standardHashCode() {
-      return this.getPermutation().hashCode();
-    }
-
-    @Override
-    public String standardToString() {
-      return this.getPermutation().toString();
-    }
-
   }
 
   //

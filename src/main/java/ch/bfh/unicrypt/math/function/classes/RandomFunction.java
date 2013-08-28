@@ -16,7 +16,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class RandomFunction extends AbstractFunction<SingletonGroup, Set> {
+public class RandomFunction extends AbstractFunction<SingletonGroup, Set, Element> {
 
   private RandomFunction(final Set coDomain) {
     super(SingletonGroup.getInstance(), coDomain);

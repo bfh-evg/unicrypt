@@ -3,7 +3,8 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
+import ch.bfh.unicrypt.math.element.interfaces.BooleanElement;
+import ch.bfh.unicrypt.math.set.classes.BooleanSet;
 import ch.bfh.unicrypt.math.set.classes.ProductSet;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.util.Random;
@@ -19,25 +20,25 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class EqualityFunction extends AbstractFunction<ProductSet, BooleanGroup> {
+public class EqualityFunction extends AbstractFunction<ProductSet, BooleanSet, BooleanElement> {
 
-  private EqualityFunction(final ProductSet domain, final BooleanGroup coDomain) {
+  private EqualityFunction(final ProductSet domain, final BooleanSet coDomain) {
     super(domain, coDomain);
   }
 
   @Override
-  public Element abstractApply(final Element element, final Random random) {
+  public BooleanElement abstractApply(final Element element, final Random random) {
     Tuple compoundElement = (Tuple) element;
     int arity = compoundElement.getArity();
     if (arity > 1) {
       final Element firstElement = compoundElement.getFirst();
       for (Element currentElement: compoundElement) {
         if (!firstElement.equals(currentElement)) {
-          return BooleanGroup.FALSE;
+          return BooleanSet.FALSE;
         }
       }
     }
-    return BooleanGroup.TRUE;
+    return BooleanSet.TRUE;
   }
 
   /**
@@ -64,6 +65,6 @@ public class EqualityFunction extends AbstractFunction<ProductSet, BooleanGroup>
    * @throws IllegalArgumentException if {@code arity} is negative
    */
   public static EqualityFunction getInstance(final Set set, final int arity) {
-    return new EqualityFunction(ProductSet.getInstance(set, arity), BooleanGroup.getInstance());
+    return new EqualityFunction(ProductSet.getInstance(set, arity), BooleanSet.getInstance());
   }
 }

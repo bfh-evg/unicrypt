@@ -4,7 +4,8 @@
  */
 package ch.bfh.unicrypt.math.monoid.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractByteArrayElement;
+import ch.bfh.unicrypt.math.element.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.monoid.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
@@ -16,31 +17,24 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public class ByteArrayMonoid extends AbstractMonoid<Element> {
+public class ByteArrayMonoid extends AbstractMonoid<ByteArrayElement> {
 
   private ByteArrayMonoid() {
   }
 
-  public final byte[] getByteArray(Element element) {
-    if (!this.contains(element)) {
-      throw new IllegalArgumentException();
-    }
-    return ((ByteArrayMonoid.ByteArrayElement) element).getByteArray();
-  }
-
-  public final Element getElement(final byte[] bytes) {
+  public final ByteArrayElement getElement(final byte[] bytes) {
     if (bytes == null) {
       throw new IllegalArgumentException();
     }
     return this.standardGetElement(bytes);
   }
 
-  protected Element standardGetElement(byte[] bytes) {
-    return new ByteArrayMonoid.ByteArrayElement(this, bytes);
+  protected ByteArrayElement standardGetElement(byte[] bytes) {
+    return new AbstractByteArrayElement(this, bytes){};
   }
 
   @Override
-  protected Element abstractGetElement(BigInteger value) {
+  protected ByteArrayElement abstractGetElement(BigInteger value) {
     return this.standardGetElement(value.toByteArray());
   }
 
@@ -50,14 +44,14 @@ public class ByteArrayMonoid extends AbstractMonoid<Element> {
   //
 
   @Override
-  protected Element abstractGetIdentityElement() {
+  protected ByteArrayElement abstractGetIdentityElement() {
     return this.standardGetElement(new byte[]{});
   }
 
   @Override
-  protected Element abstractApply(Element element1, Element element2) {
-    byte[] bytes1 = ((ByteArrayElement) element1).getByteArray();
-    byte[] bytes2 = ((ByteArrayElement) element2).getByteArray();
+  protected ByteArrayElement abstractApply(Element element1, Element element2) {
+    byte[] bytes1 = ((ByteArrayElement) element1).getBytes();
+    byte[] bytes2 = ((ByteArrayElement) element2).getBytes();
     byte[] result = Arrays.copyOf(bytes1, bytes1.length + bytes2.length);
     System.arraycopy(bytes2, 0, result, bytes2.length, bytes2.length);
     return this.standardGetElement(result);
@@ -69,7 +63,7 @@ public class ByteArrayMonoid extends AbstractMonoid<Element> {
   }
 
   @Override
-  protected Element abstractGetRandomElement(Random random) {
+  protected ByteArrayElement abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -78,42 +72,6 @@ public class ByteArrayMonoid extends AbstractMonoid<Element> {
     return value.signum() >= 0;
   }
 
-  //
-  // LOCAL ELEMENT CLASS
-  //
-  final private class ByteArrayElement extends AbstractElement<Element> {
-
-    private final byte[] bytes;
-
-    private ByteArrayElement(final Set set, final byte[] bytes) {
-      super(set);
-      this.bytes = bytes;
-    }
-
-    public byte[] getByteArray() {
-      return this.bytes;
-    }
-
-    @Override
-    protected BigInteger standardGetValue() {
-      return new BigInteger(this.getByteArray());
-    }
-
-    @Override
-    protected boolean standardEquals(Element element) {
-      return Arrays.equals(this.getByteArray(), ((ByteArrayMonoid.ByteArrayElement) element).getByteArray());
-    }
-
-    @Override
-    protected int standardHashCode() {
-      return this.getByteArray().hashCode();
-    }
-
-    @Override
-    public String standardToString() {
-      return this.getByteArray().toString();
-    }
-  }
   //
   // STATIC FACTORY METHODS
   //

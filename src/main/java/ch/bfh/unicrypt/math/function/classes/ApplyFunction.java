@@ -25,7 +25,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ApplyFunction extends AbstractFunction<ProductSemiGroup, SemiGroup> {
+public class ApplyFunction extends AbstractFunction<ProductSemiGroup, SemiGroup, Element> {
 
   private ApplyFunction(final ProductSemiGroup domain, final SemiGroup coDomain) {
     super(domain, coDomain);

@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Bijection;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 
@@ -11,7 +12,7 @@ import ch.bfh.unicrypt.math.set.interfaces.Set;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractBijection<D extends Set, C extends Set> extends AbstractInjection<D, C> implements Bijection {
+public abstract class AbstractBijection<D extends Set, C extends Set, E extends Element> extends AbstractInjection<D, C, E> implements Bijection {
 
   protected AbstractBijection(Set domain, Set coDomain) {
     super(domain, coDomain);

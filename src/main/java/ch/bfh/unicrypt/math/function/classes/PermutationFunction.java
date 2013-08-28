@@ -2,6 +2,7 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.element.interfaces.Tuple;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.element.interfaces.PermutationElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.group.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.set.classes.ProductSet;
@@ -20,7 +21,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet> {
+public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet, Tuple> {
 
   private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {
     super(domain, coDomain);
@@ -39,13 +40,13 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
   //
 
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
+  protected Tuple abstractApply(final Element element, final Random random) {
     if (!this.getDomain().contains(element)) {
       throw new IllegalArgumentException();
     }
     Tuple compoundElement = (Tuple) element;
     final Tuple tuple = (Tuple) compoundElement.getAt(0);
-    final Permutation permutation = ((PermutationGroup) this.getDomain().getAt(1)).getPermutation(compoundElement.getAt(1));
+    final Permutation permutation = ((PermutationElement) compoundElement.getAt(1)).getPermutation();
     final Element[] result = new Element[tuple.getArity()];
     for (int i = 0; i < tuple.getArity(); i++) {
       result[i] = tuple.getAt(permutation.permute(i));

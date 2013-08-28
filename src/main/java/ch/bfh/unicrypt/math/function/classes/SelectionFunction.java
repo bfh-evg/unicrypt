@@ -17,7 +17,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class SelectionFunction extends AbstractFunction<ProductSet, Set> {
+public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element> {
 
   private final int[] indices;
 

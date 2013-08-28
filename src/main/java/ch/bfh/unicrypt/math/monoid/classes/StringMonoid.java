@@ -4,8 +4,9 @@
  */
 package ch.bfh.unicrypt.math.monoid.classes;
 
-import ch.bfh.unicrypt.math.element.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.element.abstracts.AbstractStringElement;
 import ch.bfh.unicrypt.math.element.interfaces.Element;
+import ch.bfh.unicrypt.math.element.interfaces.StringElement;
 import ch.bfh.unicrypt.math.monoid.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.math.BigInteger;
@@ -15,31 +16,24 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public class StringMonoid extends AbstractMonoid<Element> {
+public class StringMonoid extends AbstractMonoid<StringElement> {
 
   private StringMonoid() {
   }
 
-  public final String getString(Element element) {
-    if (!this.contains(element)) {
-      throw new IllegalArgumentException();
-    }
-    return ((StringMonoid.StringElement) element).getString();
-  }
-
-  public final Element getElement(final String string) {
+  public final StringElement getElement(final String string) {
     if (string == null) {
       throw new IllegalArgumentException();
     }
     return this.standardGetElement(string);
   }
 
-  protected Element standardGetElement(String string) {
-    return new StringMonoid.StringElement(this, string);
+  protected StringElement standardGetElement(String string) {
+    return new AbstractStringElement(this, string){};
   }
 
   @Override
-  protected Element abstractGetElement(BigInteger value) {
+  protected StringElement abstractGetElement(BigInteger value) {
     return this.standardGetElement(new String(value.toByteArray()));
   }
 
@@ -49,12 +43,12 @@ public class StringMonoid extends AbstractMonoid<Element> {
   //
 
   @Override
-  protected Element abstractGetIdentityElement() {
+  protected StringElement abstractGetIdentityElement() {
     return this.standardGetElement("");
   }
 
   @Override
-  protected Element abstractApply(Element element1, Element element2) {
+  protected StringElement abstractApply(Element element1, Element element2) {
     return this.standardGetElement(((StringElement) element1).getString() + ((StringElement) element2).getString());
   }
 
@@ -64,7 +58,7 @@ public class StringMonoid extends AbstractMonoid<Element> {
   }
 
   @Override
-  protected Element abstractGetRandomElement(Random random) {
+  protected StringElement abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -73,42 +67,6 @@ public class StringMonoid extends AbstractMonoid<Element> {
     return value.signum() >= 0;
   }
 
-  //
-  // LOCAL ELEMENT CLASS
-  //
-  final private class StringElement extends AbstractElement<Element> {
-
-    private final String string;
-
-    private StringElement(final Set set, final String string) {
-      super(set);
-      this.string = string;
-    }
-
-    public String getString() {
-      return this.string;
-    }
-
-    @Override
-    protected BigInteger standardGetValue() {
-      return new BigInteger(this.getString().getBytes());
-    }
-
-    @Override
-    protected boolean standardEquals(Element element) {
-      return this.getString().equals(((StringMonoid.StringElement) element).getString());
-    }
-
-    @Override
-    protected int standardHashCode() {
-      return this.getString().hashCode();
-    }
-
-    @Override
-    public String standardToString() {
-      return this.getString();
-    }
-  }
   //
   // STATIC FACTORY METHODS
   //

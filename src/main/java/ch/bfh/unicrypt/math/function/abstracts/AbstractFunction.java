@@ -17,7 +17,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction<D extends Set, C extends Set> implements Function {
+public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element> implements Function {
 
   private final D domain;
   private final C coDomain;
@@ -28,12 +28,12 @@ public abstract class AbstractFunction<D extends Set, C extends Set> implements 
   }
 
   @Override
-  public final Element apply(final Element element) {
+  public final E apply(final Element element) {
     return this.apply(element, (Random) null);
   }
 
   @Override
-  public final Element apply(final Element element, final Random random) {
+  public final E apply(final Element element, final Random random) {
     if (this.getDomain().contains(element)) {
       return this.abstractApply(element, random);
     }
@@ -42,12 +42,12 @@ public abstract class AbstractFunction<D extends Set, C extends Set> implements 
   }
 
   @Override
-  public final Element apply(final Element... elements) {
+  public final E apply(final Element... elements) {
     return this.apply(elements, (Random) null);
   }
 
   @Override
-  public final Element apply(final Element[] elements, final Random random) {
+  public final E apply(final Element[] elements, final Random random) {
     if (this.getDomain().isCompound()) {
       return this.apply(((AbstractProductSet) this.getDomain()).getElement(elements), random);
     }
@@ -65,7 +65,7 @@ public abstract class AbstractFunction<D extends Set, C extends Set> implements 
   }
 
   @Override
-  public final Function partiallyApply(final Element element, final int index) {
+  public final PartiallyAppliedFunction partiallyApply(final Element element, final int index) {
     return PartiallyAppliedFunction.getInstance(this, element, index);
   }
 
@@ -137,7 +137,7 @@ public abstract class AbstractFunction<D extends Set, C extends Set> implements 
    * @param random Either {@code null} or a given random generator
    * @return The resulting output element
    */
-  protected abstract Element abstractApply(Element element, Random random);
+  protected abstract E abstractApply(Element element, Random random);
 
 
 }

@@ -17,7 +17,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ConstantFunction extends AbstractFunction<SingletonGroup, Set> {
+public class ConstantFunction extends AbstractFunction<SingletonGroup, Set, Element> {
 
   private Element element;
 

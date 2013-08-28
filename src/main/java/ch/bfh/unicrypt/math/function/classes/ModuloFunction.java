@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Random;
@@ -16,7 +17,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class ModuloFunction extends AbstractFunction<Set, ZPlusMod> {
+public class ModuloFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElement> {
 
   private BigInteger modulus;
 
@@ -44,7 +45,7 @@ public class ModuloFunction extends AbstractFunction<Set, ZPlusMod> {
   //
 
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
+  protected AdditiveElement abstractApply(final Element element, final Random random) {
     return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
   }
 

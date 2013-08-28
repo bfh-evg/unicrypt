@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import ch.bfh.unicrypt.math.element.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.function.interfaces.Injection;
 import ch.bfh.unicrypt.math.set.interfaces.Set;
@@ -12,7 +13,7 @@ import ch.bfh.unicrypt.math.set.interfaces.Set;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractInjection<D extends Set, C extends Set> extends AbstractFunction<D, C> implements Injection {
+public abstract class AbstractInjection<D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Injection {
 
   protected  AbstractInjection(Set domain, Set coDomain) {
     super(domain, coDomain);

@@ -21,7 +21,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set> {
+public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, Element> {
 
   private final Function parentFunction;
   private final Element parameter;
