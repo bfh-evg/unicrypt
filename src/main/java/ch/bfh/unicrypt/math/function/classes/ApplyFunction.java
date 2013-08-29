@@ -40,6 +40,7 @@ public class ApplyFunction extends AbstractFunction<ProductSemiGroup, SemiGroup,
    * This is a special factory method for this class for the particular case of
    * two input elements of a given group.
    *
+   * @param semiGroup
    * @param group The group on which this function operates
    * @return The resulting function
    * @throws IllegalArgumentException if {@code group} is null

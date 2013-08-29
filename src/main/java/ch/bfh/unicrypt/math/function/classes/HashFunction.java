@@ -4,7 +4,6 @@ import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.general.interfaces.Set;

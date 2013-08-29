@@ -18,6 +18,7 @@ public abstract class AbstractBijection<D extends Set, C extends Set, E extends 
     super(domain, coDomain);
   }
 
+  @Override
   public Bijection invert() {
     return (Bijection) super.invert();
   }

@@ -15,10 +15,11 @@ import ch.bfh.unicrypt.math.general.interfaces.Set;
  */
 public abstract class AbstractInjection<D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Injection {
 
-  protected  AbstractInjection(Set domain, Set coDomain) {
+  protected AbstractInjection(Set domain, Set coDomain) {
     super(domain, coDomain);
   }
 
+  @Override
   public Function invert() {
     return abstractInvert(this.getCoDomain(), this.getDomain()); // domain<->coDomain
   }
