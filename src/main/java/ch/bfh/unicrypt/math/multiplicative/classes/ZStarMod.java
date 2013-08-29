@@ -8,6 +8,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.multiplicative.abstracts.AbstractMultiplicativeGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
+import ch.bfh.unicrypt.math.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.utility.Factorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
@@ -25,7 +26,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZStarMod extends AbstractMultiplicativeGroup {
+public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement> {
 
   private final BigInteger modulus;
   private final Factorization moduloFactorization;
@@ -121,6 +122,12 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
+  @Override
+  protected MultiplicativeElement abstractGetElement(BigInteger value) {
+    return new AbstractMultiplicativeElement<ZStarMod, MultiplicativeElement>(this, value) {
+    };
+  }
+
   @Override
   protected MultiplicativeElement abstractGetRandomElement(final Random random) {
     BigInteger randomValue;

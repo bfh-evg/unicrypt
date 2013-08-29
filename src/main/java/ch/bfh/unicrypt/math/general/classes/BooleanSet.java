@@ -36,7 +36,8 @@ public class BooleanSet extends AbstractSet<BooleanElement> {
    * @return The corresponding group element
    */
   public final BooleanElement getElement(final boolean bit) {
-    return new AbstractBooleanElement(this, bit){};
+    return new AbstractBooleanElement<BooleanSet, BooleanElement>(this, bit) {
+    };
   }
 
   @Override
@@ -58,11 +59,9 @@ public class BooleanSet extends AbstractSet<BooleanElement> {
   protected boolean abstractContains(BigInteger value) {
     return value.equals(BigInteger.ZERO) || value.equals(BigInteger.ONE);
   }
-
   //
   // STATIC FACTORY METHODS
   //
-
   private static BooleanSet instance;
 
   /**

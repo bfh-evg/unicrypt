@@ -1,7 +1,6 @@
 package ch.bfh.unicrypt.math.general.interfaces;
 
 import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
@@ -21,35 +20,13 @@ public interface Element {
 
   public static final String STANDARD_HASH_ALGORITHM = "SHA-256";
 
+  public boolean isCompound();
+
   /**
    *
    * @return
    */
   public Set getSet();
-
-  /**
-   *
-   * @return
-   */
-  public SemiGroup getSemiGroup();
-
-  /**
-   *
-   * @return
-   */
-  public Monoid getMonoid();
-
-  /**
-   *
-   * @return
-   */
-  public Group getGroup();
-
-  /**
-   *
-   * @return
-   */
-  public CyclicGroup getCyclicGroup();
 
   /**
    * Returns the positive BigInteger value that corresponds the element.

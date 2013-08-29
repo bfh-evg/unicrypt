@@ -14,7 +14,7 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductCyclicGroup<S extends CyclicGroup> extends AbstractProductGroup<S> implements CyclicGroup {
+public abstract class AbstractProductCyclicGroup<S extends CyclicGroup, E extends Tuple> extends AbstractProductGroup<S, E> implements CyclicGroup {
 
   private Tuple defaultGenerator;
 
@@ -34,10 +34,10 @@ public abstract class AbstractProductCyclicGroup<S extends CyclicGroup> extends 
   public final Tuple getDefaultGenerator() {
     if (this.defaultGenerator == null) {
       Element[] generators = new Element[this.getArity()];
-      for (int i=0; i<this.getArity(); i++) {
+      for (int i = 0; i < this.getArity(); i++) {
         generators[i] = this.getAt(i).getDefaultGenerator();
       }
-      this.defaultGenerator = this.standardGetElement(generators);
+      this.defaultGenerator = this.abstractGetElement(generators);
     }
     return this.defaultGenerator;
   }
@@ -51,10 +51,10 @@ public abstract class AbstractProductCyclicGroup<S extends CyclicGroup> extends 
   public final Tuple getRandomGenerator(Random random) {
     int arity = this.getArity();
     Element[] randomElements = new Element[arity];
-    for (int i=0; i<arity; i++) {
+    for (int i = 0; i < arity; i++) {
       randomElements[i] = this.getAt(i).getRandomElement(random);
     }
-    return this.standardGetElement(randomElements);
+    return this.abstractGetElement(randomElements);
   }
 
   @Override
@@ -63,7 +63,7 @@ public abstract class AbstractProductCyclicGroup<S extends CyclicGroup> extends 
       throw new IllegalArgumentException();
     }
     Tuple compoundElement = (Tuple) element;
-    for (int i=0; i<this.getArity(); i++) {
+    for (int i = 0; i < this.getArity(); i++) {
       if (!this.getAt(i).isGenerator(compoundElement.getAt(i))) {
         return false;
       }

@@ -2,7 +2,7 @@ package ch.bfh.unicrypt.math.concatenative.abstracts;
 
 import ch.bfh.unicrypt.math.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
-import ch.bfh.unicrypt.math.monoid.abstracts.AbstractMonoid;
+import ch.bfh.unicrypt.math.general.abstracts.AbstractMonoid;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.concatenative.interfaces.ConcatenativeMonoid;

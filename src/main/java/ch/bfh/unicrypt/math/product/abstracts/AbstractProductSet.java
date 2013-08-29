@@ -19,7 +19,7 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tuple> implements Compound<S> {
+public abstract class AbstractProductSet<S extends Set, E extends Tuple> extends AbstractSet<E> implements Compound<S> {
 
   private final S[] sets;
   private final int arity;
@@ -98,7 +98,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
     return true;
   }
 
-  public final Tuple getElement(final int[] values) {
+  public final E getElement(final int[] values) {
     return this.getElement(MathUtil.intToBigIntegerArray(values));
   }
 
@@ -111,7 +111,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
    * @throws IllegalArgumentException if {@code values} is or contains null or
    * if no such element exists
    */
-  public final Tuple getElement(BigInteger[] values) {
+  public final E getElement(BigInteger[] values) {
     int arity = this.getArity();
     if (values == null || values.length != arity) {
       throw new IllegalArgumentException();
@@ -120,7 +120,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
     for (int i = 0; i < arity; i++) {
       elements[i] = this.getAt(i).getElement(values[i]);
     }
-    return this.standardGetElement(elements);
+    return this.abstractGetElement(elements);
   }
 
   /**
@@ -135,7 +135,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
    * @throws IllegalArgumentException if an element is not in the corresponding
    * group
    */
-  public final Tuple getElement(final Element[] elements) {
+  public final E getElement(final Element[] elements) {
     int arity = this.getArity();
     if (elements == null || elements.length != arity) {
       throw new IllegalArgumentException();
@@ -145,13 +145,10 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
         throw new IllegalArgumentException();
       }
     }
-    return standardGetElement(elements);
+    return this.abstractGetElement(elements);
   }
 
-  protected Tuple standardGetElement(final Element[] elements) {
-    return new AbstractTuple(this, elements) {
-    };
-  }
+  protected abstract E abstractGetElement(final Element[] elements);
 
   //
   // The following protected methods override the standard implementation from
@@ -207,19 +204,19 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
   }
 
   @Override
-  protected Tuple abstractGetElement(BigInteger value) {
+  protected E abstractGetElement(BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getArity());
     return this.getElement(values);
   }
 
   @Override
-  protected Tuple abstractGetRandomElement(Random random) {
+  protected E abstractGetRandomElement(Random random) {
     int arity = this.getArity();
     final Element[] randomElements = new Element[arity];
     for (int i = 0; i < arity; i++) {
       randomElements[i] = this.getAt(i).getRandomElement(random);
     }
-    return standardGetElement(randomElements);
+    return this.abstractGetElement(randomElements);
   }
 
   @Override
@@ -245,7 +242,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
 
   @Override
   public S getFirst() {
-    return (S) this.getAt(0);
+    return this.getAt(0);
 
   }
 
@@ -255,9 +252,9 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
       throw new IndexOutOfBoundsException();
     }
     if (this.isUniform()) {
-      return (S) this.sets[0];
+      return this.sets[0];
     }
-    return (S) this.sets[index];
+    return this.sets[index];
   }
 
   @Override
@@ -267,7 +264,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
     }
     S set = (S) this;
     for (final int index : indices) {
-      if (set instanceof Compound<?>) {
+      if (set.isCompound()) {
         set = ((Compound<S>) set).getAt(index);
       } else {
         throw new IllegalArgumentException();
@@ -288,7 +285,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
 
   @Override
   public Iterator<S> iterator() {
-    final AbstractProductSet<S> compoundSet = this;
+    final Compound<S> compoundSet = this;
     return new Iterator<S>() {
       int currentIndex = 0;
 
@@ -319,7 +316,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
 
   @Override
   protected boolean standardEquals(Set set) {
-    AbstractProductSet<S> other = (AbstractProductSet<S>) set;
+    AbstractProductSet other = (AbstractProductSet) set;
     int arity = this.getArity();
     if (arity != other.getArity()) {
       return false;
@@ -364,4 +361,5 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
     }
     return result;
   }
+
 }

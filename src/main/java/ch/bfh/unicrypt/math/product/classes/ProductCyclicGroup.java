@@ -5,13 +5,14 @@ import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractProductCyclicGroup;
+import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
 import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup> {
+public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup, Tuple> {
 
   protected ProductCyclicGroup(final CyclicGroup[] cyclicGroups) {
     super(cyclicGroups);
@@ -31,23 +32,29 @@ public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup> 
       throw new IndexOutOfBoundsException();
     }
     final CyclicGroup[] remainingGroups = new CyclicGroup[arity - 1];
-    for (int i=0; i < arity-1; i++) {
+    for (int i = 0; i < arity - 1; i++) {
       if (i < index) {
         remainingGroups[i] = this.getAt(i);
       } else {
-        remainingGroups[i] = this.getAt(i+1);
+        remainingGroups[i] = this.getAt(i + 1);
       }
     }
     return ProductCyclicGroup.getInstance(remainingGroups);
   }
 
+  protected Tuple abstractGetElement(final Element[] elements) {
+    return new AbstractTuple<ProductCyclicGroup, Tuple>(this, elements) {
+    };
+  }
+
   //
   // STATIC FACTORY METHODS
   //
-
   /**
-   * This is a static factory method to construct a composed cyclic group without
-   * calling respective constructors. The input groups are given as an array.
+   * This is a static factory method to construct a composed cyclic group
+   * without calling respective constructors. The input groups are given as an
+   * array.
+   *
    * @param cyclicGroups The array of cyclic groups
    * @return The corresponding composed group
    * @throws IllegalArgumentException if {@code groups} is null or contains null
@@ -68,10 +75,9 @@ public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup> 
   //
   // STATIC HELPER METHODS
   //
-
   private static boolean areRelativelyPrime(CyclicGroup[] cyclicGroups) {
     BigInteger[] orders = new BigInteger[cyclicGroups.length];
-    for (int i=0; i<cyclicGroups.length; i++) {
+    for (int i = 0; i < cyclicGroups.length; i++) {
       if (cyclicGroups[i] == null) {
         throw new IllegalArgumentException();
       }
@@ -100,7 +106,7 @@ public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup> 
       if (elements[i] == null) {
         throw new IllegalArgumentException();
       }
-      cyclicGroups[i] = elements[i].getCyclicGroup();
+      cyclicGroups[i] = (CyclicGroup) elements[i].getSet();
     }
     return ProductCyclicGroup.getInstance(cyclicGroups).getElement(elements);
   }

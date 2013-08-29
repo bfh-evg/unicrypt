@@ -10,6 +10,9 @@ import ch.bfh.unicrypt.math.general.interfaces.Set;
 
 /**
  *
+ * @param <D>
+ * @param <C>
+ * @param <E>
  * @author rolfhaenni
  */
 public abstract class AbstractBijection<D extends Set, C extends Set, E extends Element> extends AbstractInjection<D, C, E> implements Bijection {

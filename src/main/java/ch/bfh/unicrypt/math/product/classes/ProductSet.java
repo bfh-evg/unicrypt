@@ -4,12 +4,13 @@ import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractProductSet;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
+import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductSet extends AbstractProductSet<Set> {
+public class ProductSet extends AbstractProductSet<Set, Tuple> {
 
   protected ProductSet(final Set[] sets) {
     super(sets);
@@ -38,22 +39,27 @@ public class ProductSet extends AbstractProductSet<Set> {
       throw new IndexOutOfBoundsException();
     }
     if (this.isUniform()) {
-      return ProductSet.getInstance(this.getFirst(), arity-1);
+      return ProductSet.getInstance(this.getFirst(), arity - 1);
     }
     final Set[] remainingSets = new Set[arity - 1];
-    for (int i=0; i < arity-1; i++) {
+    for (int i = 0; i < arity - 1; i++) {
       if (i < index) {
         remainingSets[i] = this.getAt(i);
       } else {
-        remainingSets[i] = this.getAt(i+1);
+        remainingSets[i] = this.getAt(i + 1);
       }
     }
     return ProductSet.getInstance(remainingSets);
   }
 
+  protected Tuple abstractGetElement(final Element[] elements) {
+    return new AbstractTuple<ProductSet, Tuple>(this, elements) {
+    };
+  }
   //
   // STATIC FACTORY METHODS
   //
+
   /**
    * This is a static factory method to construct a composed set without calling
    * respective constructors. The input sets are given as an array.
@@ -94,7 +100,6 @@ public class ProductSet extends AbstractProductSet<Set> {
   //
   // STATIC HELPER METHODS
   //
-
   /**
    * This is a static factory method to construct a composed element without the
    * need of constructing the corresponding product or power group beforehand.
@@ -119,4 +124,5 @@ public class ProductSet extends AbstractProductSet<Set> {
     }
     return ProductSet.getInstance(sets).getElement(elements);
   }
+
 }

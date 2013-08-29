@@ -19,30 +19,6 @@ import java.math.BigInteger;
 public interface MultiplicativeElement extends Element {
 
   /**
-   *
-   * @return
-   */
-  public MultiplicativeSemiGroup getMultiplicativeSemiGroup();
-
-  /**
-   *
-   * @return
-   */
-  public MultiplicativeMonoid getMultiplicativeMonoid();
-
-  /**
-   *
-   * @return
-   */
-  public MultiplicativeGroup getMultiplicativeGroup();
-
-  /**
-   *
-   * @return
-   */
-  public MultiplicativeCyclicGroup getMultiplicativeCyclicGroup();
-
-  /**
    * @see Group#apply(Element, Element)
    */
   public MultiplicativeElement multiply(Element element);
@@ -75,7 +51,6 @@ public interface MultiplicativeElement extends Element {
   //
   // The following methods override corresponding parent methods with different return type
   //
-
   @Override
   public MultiplicativeElement apply(Element element);
 

@@ -13,7 +13,7 @@ import ch.bfh.unicrypt.math.product.abstracts.AbstractProductMonoid;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductGroup<S extends Group> extends AbstractProductMonoid<S> implements Group {
+public abstract class AbstractProductGroup<S extends Group, E extends Tuple> extends AbstractProductMonoid<S, E> implements Group {
 
   protected AbstractProductGroup(final Group[] groups) {
     super(groups);
@@ -38,7 +38,7 @@ public abstract class AbstractProductGroup<S extends Group> extends AbstractProd
     for (int i = 0; i < arity; i++) {
       invertedElements[i] = compoundElement.getAt(i).invert();
     }
-    return standardGetElement(invertedElements);
+    return this.abstractGetElement(invertedElements);
   }
 
   @Override

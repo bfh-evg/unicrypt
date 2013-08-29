@@ -14,11 +14,11 @@ import ch.bfh.unicrypt.math.general.interfaces.Element;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractStringElement extends AbstractConcatenativeElement<StringElement> implements StringElement {
+public abstract class AbstractStringElement<S extends StringMonoid, E extends StringElement> extends AbstractConcatenativeElement<S, E> implements StringElement {
 
   private final String string;
 
-  protected AbstractStringElement(final StringMonoid monoid, final String string) {
+  protected AbstractStringElement(final S monoid, final String string) {
     super(monoid);
     this.string = string;
   }
@@ -52,4 +52,5 @@ public abstract class AbstractStringElement extends AbstractConcatenativeElement
   public String standardToString() {
     return "\"" + this.getString() + "\"";
   }
+
 }

@@ -13,6 +13,9 @@ import java.util.NoSuchElementException;
 
 /**
  *
+ * @param <D>
+ * @param <C>
+ * @param <E>
  * @author rolfhaenni
  */
 public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Compound<Function> {
@@ -71,7 +74,7 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
     }
     Function function = this;
     for (final int index : indices) {
-      if (function instanceof Compound) {
+      if (function.isCompound()) {
         function = ((Compound<Function>) function).getAt(index);
       } else {
         throw new IllegalArgumentException();
@@ -92,7 +95,7 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
 
   @Override
   public Iterator<Function> iterator() {
-    final AbstractCompoundFunction<D, C, E> compoundFunction = this;
+    final Compound<Function> compoundFunction = this;
     return new Iterator<Function>() {
       int currentIndex = 0;
 
@@ -117,8 +120,13 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
   }
 
   @Override
+  protected boolean standardIsCompound() {
+    return true;
+  }
+
+  @Override
   protected boolean standardEquals(Function function) {
-    AbstractCompoundFunction<D,C,E> other = (AbstractCompoundFunction<D,C,E>) function;
+    AbstractCompoundFunction<D, C, E> other = (AbstractCompoundFunction<D, C, E>) function;
     int arity = this.getArity();
     if (arity != other.getArity()) {
       return false;

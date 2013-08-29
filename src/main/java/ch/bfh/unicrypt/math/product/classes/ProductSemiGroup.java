@@ -4,12 +4,13 @@ import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractProductSemiGroup;
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductSemiGroup extends AbstractProductSemiGroup<SemiGroup> {
+public class ProductSemiGroup extends AbstractProductSemiGroup<SemiGroup, Tuple> {
 
   protected ProductSemiGroup(final SemiGroup[] semiGroups) {
     super(semiGroups);
@@ -29,25 +30,33 @@ public class ProductSemiGroup extends AbstractProductSemiGroup<SemiGroup> {
       throw new IndexOutOfBoundsException();
     }
     if (this.isUniform()) {
-      return ProductSemiGroup.getInstance(this.getFirst(), arity-1);
+      return ProductSemiGroup.getInstance(this.getFirst(), arity - 1);
     }
     final SemiGroup[] remainingSemiGroups = new SemiGroup[arity - 1];
-    for (int i=0; i < arity-1; i++) {
+    for (int i = 0; i < arity - 1; i++) {
       if (i < index) {
         remainingSemiGroups[i] = this.getAt(i);
       } else {
-        remainingSemiGroups[i] = this.getAt(i+1);
+        remainingSemiGroups[i] = this.getAt(i + 1);
       }
     }
     return ProductSemiGroup.getInstance(remainingSemiGroups);
   }
 
+  protected Tuple abstractGetElement(final Element[] elements) {
+    return new AbstractTuple<ProductSemiGroup, Tuple>(this, elements) {
+    };
+  }
+
   /**
    * This is a static factory method to construct a composed semigroup without
-   * calling respective constructors. The input semigroups are given as an array.
+   * calling respective constructors. The input semigroups are given as an
+   * array.
+   *
    * @param semiGroups The array of input semigroups
    * @return The corresponding product semigroup
-   * @throws IllegalArgumentException if {@code semigroups} is null or contains null
+   * @throws IllegalArgumentException if {@code semigroups} is null or contains
+   * null
    */
   public static ProductSemiGroup getInstance(final SemiGroup... semiGroups) {
     if (semiGroups == null) {
@@ -98,7 +107,7 @@ public class ProductSemiGroup extends AbstractProductSemiGroup<SemiGroup> {
       if (elements[i] == null) {
         throw new IllegalArgumentException();
       }
-      semiGroups[i] = elements[i].getSemiGroup();
+      semiGroups[i] = (SemiGroup) elements[i].getSet();
     }
     return ProductSemiGroup.getInstance(semiGroups).getElement(elements);
   }

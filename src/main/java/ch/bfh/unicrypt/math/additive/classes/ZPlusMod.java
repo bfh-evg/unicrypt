@@ -8,6 +8,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.additive.abstracts.AbstractAdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
@@ -23,7 +24,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlusMod extends AbstractAdditiveCyclicGroup {
+public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement> {
 
   private BigInteger modulus;
 
@@ -74,6 +75,12 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
+  @Override
+  protected AdditiveElement abstractGetElement(BigInteger value) {
+    return new AbstractAdditiveElement<ZPlusMod, AdditiveElement>(this, value) {
+    };
+  }
+
   @Override
   protected BigInteger abstractGetOrder() {
     return this.getModulus();
@@ -134,6 +141,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
    * Returns a the unique instance of this class for a given positive modulus.
    *
    * @param modulus The modulus
+   * @return
    * @throws IllegalArgumentException if {@code modulus} is null, zero, or
    * negative
    */
@@ -152,4 +160,5 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup {
   public static ZPlusMod getInstance() {
     return getInstance(BigInteger.ONE);
   }
+
 }

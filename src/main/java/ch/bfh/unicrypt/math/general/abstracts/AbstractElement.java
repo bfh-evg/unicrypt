@@ -5,7 +5,7 @@ import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
+import ch.bfh.unicrypt.math.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
 import java.math.BigInteger;
@@ -19,30 +19,36 @@ import java.util.Arrays;
  * {@link Group} in a convenient way. Most methods provided by
  * {@link AbstractElement} have an equivalent method in {@link Group}.
  *
+ * @param <E>
  * @see Group
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<E extends Element> implements Element {
+public abstract class AbstractElement<S extends Set, E extends Element> implements Element {
 
-  private final Set set;
+  private final S set;
   protected BigInteger value;
 
-  protected AbstractElement(final Set set) {
+  protected AbstractElement(final S set) {
     if (set == null) {
       throw new IllegalArgumentException();
     }
     this.set = set;
   }
 
-  protected AbstractElement(final Set set, final BigInteger value) {
+  protected AbstractElement(final S set, final BigInteger value) {
     this(set);
     if (!set.contains(value)) {
       throw new IllegalArgumentException();
     }
     this.value = value;
+  }
+
+  @Override
+  public final boolean isCompound() {
+    return this.standardIsCompound();
   }
 
   /**
@@ -51,56 +57,8 @@ public abstract class AbstractElement<E extends Element> implements Element {
    * @return The element's set
    */
   @Override
-  public final Set getSet() {
+  public final S getSet() {
     return this.set;
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final SemiGroup getSemiGroup() {
-    if (this.set instanceof SemiGroup) {
-      return (SemiGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final Monoid getMonoid() {
-    if (this.set instanceof Monoid) {
-      return (Monoid) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final Group getGroup() {
-    if (this.set instanceof Group) {
-      return (Group) this.set;
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final CyclicGroup getCyclicGroup() {
-    if (this.set instanceof CyclicGroup) {
-      return (CyclicGroup) this.set;
-    }
-    throw new UnsupportedOperationException();
   }
 
   /**
@@ -179,7 +137,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
    */
   @Override
   public final E apply(final Element element) {
-    SemiGroup semiGroup = this.getSemiGroup();
+    SemiGroup semiGroup = ((SemiGroup) this.getSet());
     return (E) semiGroup.apply(this, element);
   }
 
@@ -188,7 +146,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
    */
   @Override
   public final E applyInverse(final Element element) {
-    Group group = this.getGroup();
+    Group group = ((Group) this.getSet());
     return (E) group.applyInverse(this, element);
   }
 
@@ -197,7 +155,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
    */
   @Override
   public final E selfApply(final BigInteger amount) {
-    SemiGroup semiGroup = this.getSemiGroup();
+    SemiGroup semiGroup = ((SemiGroup) this.getSet());
     return (E) semiGroup.selfApply(this, amount);
   }
 
@@ -206,7 +164,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
    */
   @Override
   public final E selfApply(final Element amount) {
-    SemiGroup semiGroup = this.getSemiGroup();
+    SemiGroup semiGroup = ((SemiGroup) this.getSet());
     return (E) semiGroup.selfApply(this, amount);
   }
 
@@ -215,7 +173,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
    */
   @Override
   public final E selfApply(final int amount) {
-    SemiGroup semiGroup = this.getSemiGroup();
+    SemiGroup semiGroup = ((SemiGroup) this.getSet());
     return (E) semiGroup.selfApply(this, amount);
   }
 
@@ -224,7 +182,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
    */
   @Override
   public final E selfApply() {
-    SemiGroup semiGroup = this.getSemiGroup();
+    SemiGroup semiGroup = ((SemiGroup) this.getSet());
     return (E) semiGroup.selfApply(this);
   }
 
@@ -233,7 +191,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
    */
   @Override
   public final E invert() {
-    Group group = this.getGroup();
+    Group group = ((Group) this.getSet());
     return (E) group.invert(this);
   }
 
@@ -242,7 +200,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
    */
   @Override
   public final boolean isIdentity() {
-    Monoid monoid = this.getMonoid();
+    Monoid monoid = ((Monoid) this.getSet());
     return monoid.isIdentityElement(this);
   }
 
@@ -251,7 +209,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
    */
   @Override
   public final boolean isGenerator() {
-    CyclicGroup cyclicGroup = this.getCyclicGroup();
+    CyclicGroup cyclicGroup = ((CyclicGroup) this.getSet());
     return cyclicGroup.isGenerator(this);
   }
 
@@ -298,6 +256,10 @@ public abstract class AbstractElement<E extends Element> implements Element {
   //
   // The following protected methods are standard implementations, which may change in sub-classes
   //
+  protected boolean standardIsCompound() {
+    return false;
+  }
+
   protected BigInteger standardGetValue() {
     throw new UnsupportedOperationException();
   }

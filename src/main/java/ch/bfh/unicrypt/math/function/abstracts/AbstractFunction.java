@@ -13,6 +13,9 @@ import java.util.Random;
  * sufficient to inherit from {@link AbstractFunction} and to implement the
  * single abstract method {@link abstractApply(Element element, Random random)}.
  *
+ * @param <D>
+ * @param <E>
+ * @param <C>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
@@ -25,6 +28,11 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
   protected AbstractFunction(final Set domain, final Set coDomain) {
     this.domain = (D) domain;
     this.coDomain = (C) coDomain;
+  }
+
+  @Override
+  public final boolean isCompound() {
+    return this.standardIsCompound();
   }
 
   @Override
@@ -103,13 +111,16 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
 
   @Override
   public String toString() {
-    return this.getClass().getSimpleName() + "[" + this.getDomain() + "-->"+ this.getCoDomain() + "]";
+    return this.getClass().getSimpleName() + "[" + this.getDomain() + "-->" + this.getCoDomain() + "]";
   }
 
   //
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
   //
+  protected boolean standardIsCompound() {
+    return false;
+  }
 
   protected boolean standardEquals(Function function) {
     return true;
@@ -123,7 +134,6 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
   // The following protected abstract method must be implemented in every direct
   // sub-class
   //
-
   /**
    * This abstract method is the main method to implement in each sub-class of
    * {@link AbstractFunction}. The validity of the two parameters has already
@@ -138,6 +148,5 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
    * @return The resulting output element
    */
   protected abstract E abstractApply(Element element, Random random);
-
 
 }

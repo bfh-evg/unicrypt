@@ -18,33 +18,9 @@ import java.math.BigInteger;
  */
 public interface Tuple extends Element, Compound<Element> {
 
-  /**
-   *
-   * @return
-   */
-  public ProductSet getProductSet();
-
-  /**
-   *
-   * @return
-   */
-  public ProductSemiGroup getProductSemiGroup();
-  /**
-   *
-   * @return
-   */
-  public ProductMonoid getProductMonoid();
-
-  /**
-   *
-   * @return
-   */
-  public ProductGroup getProductGroup();
-
   //
   // The following methods override corresponding parent methods with different return type
   //
-
   @Override
   public Tuple apply(Element element);
 

@@ -9,6 +9,7 @@ import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.multiplicative.abstracts.AbstractMultiplicativeMonoid;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
+import ch.bfh.unicrypt.math.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
@@ -22,7 +23,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZTimesMod extends AbstractMultiplicativeMonoid {
+public class ZTimesMod extends AbstractMultiplicativeMonoid<MultiplicativeElement> {
 
   private BigInteger modulus;
 
@@ -63,14 +64,9 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
   // various super-classes
   //
   @Override
-  public boolean standardEquals(final Set set) {
-    final ZTimesMod zTimesMod = (ZTimesMod) set;
-    return this.getModulus().equals(zTimesMod.getModulus());
-  }
-
-  @Override
-  protected boolean standardIsCompatible(Set set) {
-    return (set instanceof ZTimesMod);
+  protected MultiplicativeElement abstractGetElement(BigInteger value) {
+    return new AbstractMultiplicativeElement<ZTimesMod, MultiplicativeElement>(this, value) {
+    };
   }
 
   @Override
@@ -99,6 +95,17 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
   @Override
   protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+  }
+
+  @Override
+  public boolean standardEquals(final Set set) {
+    final ZTimesMod zTimesMod = (ZTimesMod) set;
+    return this.getModulus().equals(zTimesMod.getModulus());
+  }
+
+  @Override
+  protected boolean standardIsCompatible(Set set) {
+    return (set instanceof ZTimesMod);
   }
   //
   // STATIC FACTORY METHODS

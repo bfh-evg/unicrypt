@@ -11,19 +11,21 @@ import ch.bfh.unicrypt.math.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import java.math.BigInteger;
 
 /**
  *
+ * @param <E>
  * @author rolfhaenni
  */
-public abstract class AbstractConcatenativeElement<E extends ConcatenativeElement> extends AbstractElement<E> implements ConcatenativeElement {
+public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement> extends AbstractElement<S, E> implements ConcatenativeElement {
 
-  protected AbstractConcatenativeElement(final SemiGroup semiGroup) {
+  protected AbstractConcatenativeElement(final S semiGroup) {
     super(semiGroup);
   }
 
-  protected AbstractConcatenativeElement(final SemiGroup semiGroup, final BigInteger value) {
+  protected AbstractConcatenativeElement(final S semiGroup, final BigInteger value) {
     super(semiGroup);
     if (!semiGroup.contains(value)) {
       throw new IllegalArgumentException();
@@ -32,72 +34,43 @@ public abstract class AbstractConcatenativeElement<E extends ConcatenativeElemen
   }
 
   /**
-   *
-   * @return
-   */
-  @Override
-  public final ConcatenativeSemiGroup getConcatenativeSemiGroup() {
-    if (this.getSet() instanceof ConcatenativeSemiGroup) {
-      return (ConcatenativeSemiGroup) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final ConcatenativeMonoid getConcatenativeMonoid() {
-    if (this.getSet() instanceof ConcatenativeMonoid) {
-      return (ConcatenativeMonoid) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
    * @see Group#apply(Element, Element)
    */
   @Override
-  public final AbstractConcatenativeElement<E> concatenate(final Element element) {
-    ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement<E>) semiGroup.concatenate(this, element);
+  public final E concatenate(final Element element) {
+    return (E) this.getSet().concatenate(this, element);
   }
 
   /**
    * @see Group#T(Element, BigInteger)
    */
   @Override
-  public final AbstractConcatenativeElement<E> selfConcatenate(final BigInteger amount) {
-    ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement<E>) semiGroup.selfConcatenate(this, amount);
+  public final E selfConcatenate(final BigInteger amount) {
+    return (E) this.getSet().selfConcatenate(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
   @Override
-  public final AbstractConcatenativeElement<E> selfConcatenate(final Element amount) {
-    ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement<E>) semiGroup.selfConcatenate(this, amount);
+  public final E selfConcatenate(final Element amount) {
+    return (E) this.getSet().selfConcatenate(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
   @Override
-  public final AbstractConcatenativeElement<E> selfConcatenate(final int amount) {
-    ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement<E>) semiGroup.selfConcatenate(this, amount);
+  public final E selfConcatenate(final int amount) {
+    return (E) this.getSet().selfConcatenate(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
   @Override
-  public final AbstractConcatenativeElement<E> selfConcatenate() {
-    ConcatenativeSemiGroup semiGroup = this.getConcatenativeSemiGroup();
-    return (AbstractConcatenativeElement<E>) semiGroup.selfConcatenate(this);
+  public final E selfConcatenate() {
+    return (E) this.getSet().selfConcatenate(this);
   }
 
 }

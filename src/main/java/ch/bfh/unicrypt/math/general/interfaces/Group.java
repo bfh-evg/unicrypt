@@ -1,7 +1,5 @@
 package ch.bfh.unicrypt.math.general.interfaces;
 
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
-
 /**
  * This interface represents the mathematical concept a group. It
  * defines a set of elements and an associative (but not necessarily

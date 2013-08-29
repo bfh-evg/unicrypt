@@ -15,11 +15,11 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractPermutationElement extends AbstractElement<PermutationElement> implements PermutationElement {
+public abstract class AbstractPermutationElement<S extends PermutationGroup, E extends PermutationElement> extends AbstractElement<S, E> implements PermutationElement {
 
   private final Permutation permutation;
 
-  protected AbstractPermutationElement(final PermutationGroup group, final Permutation permutationVector) {
+  protected AbstractPermutationElement(final S group, final Permutation permutationVector) {
     super(group);
     this.permutation = permutationVector;
   }
@@ -48,4 +48,5 @@ public abstract class AbstractPermutationElement extends AbstractElement<Permuta
   public String standardToString() {
     return this.getPermutation().toString();
   }
+
 }

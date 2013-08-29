@@ -22,7 +22,8 @@ public class SingletonGroup extends AbstractCyclicGroup<Element> {
   private final Element element;
 
   private SingletonGroup(BigInteger value) {
-    this.element = new AbstractElement<Element>(this, value){};
+    this.element = new AbstractElement<SingletonGroup, Element>(this, value) {
+    };
   }
 
   public final Element getElement() {
@@ -36,7 +37,6 @@ public class SingletonGroup extends AbstractCyclicGroup<Element> {
   //
   // The following protected methods override the standard implementation from {@code AbstractGroup}
   //
-
   @Override
   protected boolean standardEquals(Set set) {
     return this.getValue().equals(((SingletonGroup) set).getValue());
@@ -106,12 +106,10 @@ public class SingletonGroup extends AbstractCyclicGroup<Element> {
   protected boolean abstractIsGenerator(Element element) {
     return true;
   }
-
   //
   // STATIC FACTORY METHODS
   //
-
-  private static final Map<BigInteger,SingletonGroup> instances = new HashMap<BigInteger,SingletonGroup>();
+  private static final Map<BigInteger, SingletonGroup> instances = new HashMap<BigInteger, SingletonGroup>();
 
   public static SingletonGroup getInstance(final BigInteger value) {
     if (value == null) {

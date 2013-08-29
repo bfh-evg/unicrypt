@@ -4,25 +4,30 @@ import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractProductGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
 
 /**
- * This class represents the concept of a direct product of groups ("product group" for short).
- * The elements are tuples of respective elements of the involved groups, i.e., the set of elements of
- * the product group is the Cartesian product of the respective sets of elements. The involved groups
- * themselves can be product groups, i.e., arbitrary hierarchies of product groups are possible. The binary operation
- * is defined component-wise. Applying the operation to tuple elements yields another
- * tuple element. The group's unique identity element is the tuple of respective identity elements.
- * The inverse element is computed component-wise. The order of the product group is the product of
- * the individual group orders (it may be infinite or unknown). The special case of a product group of arity 0 is
- * isomorphic to the group consisting of a single element (see {@code SingletonGroup}).
+ * This class represents the concept of a direct product of groups ("product
+ * group" for short). The elements are tuples of respective elements of the
+ * involved groups, i.e., the set of elements of the product group is the
+ * Cartesian product of the respective sets of elements. The involved groups
+ * themselves can be product groups, i.e., arbitrary hierarchies of product
+ * groups are possible. The binary operation is defined component-wise. Applying
+ * the operation to tuple elements yields another tuple element. The group's
+ * unique identity element is the tuple of respective identity elements. The
+ * inverse element is computed component-wise. The order of the product group is
+ * the product of the individual group orders (it may be infinite or unknown).
+ * The special case of a product group of arity 0 is isomorphic to the group
+ * consisting of a single element (see {@code SingletonGroup}).
  *
- * @see <a href="http://en.wikipedia.org/wiki/Direct_product_of_groups">http://en.wikipedia.org/wiki/Direct_product_of_groups</a>
+ * @see <a
+ * href="http://en.wikipedia.org/wiki/Direct_product_of_groups">http://en.wikipedia.org/wiki/Direct_product_of_groups</a>
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ProductGroup extends AbstractProductGroup<Group> {
+public class ProductGroup extends AbstractProductGroup<Group, Tuple> {
 
   protected ProductGroup(final Group[] groups) {
     super(groups);
@@ -42,26 +47,31 @@ public class ProductGroup extends AbstractProductGroup<Group> {
       throw new IndexOutOfBoundsException();
     }
     if (this.isUniform()) {
-      return ProductGroup.getInstance(this.getFirst(), arity-1);
+      return ProductGroup.getInstance(this.getFirst(), arity - 1);
     }
     final Group[] remainingGroups = new Group[arity - 1];
-    for (int i=0; i < arity-1; i++) {
+    for (int i = 0; i < arity - 1; i++) {
       if (i < index) {
         remainingGroups[i] = this.getAt(i);
       } else {
-        remainingGroups[i] = this.getAt(i+1);
+        remainingGroups[i] = this.getAt(i + 1);
       }
     }
     return ProductGroup.getInstance(remainingGroups);
   }
 
+  protected Tuple abstractGetElement(final Element[] elements) {
+    return new AbstractTuple<ProductGroup, Tuple>(this, elements) {
+    };
+  }
+
   //
   // STATIC FACTORY METHODS
   //
-
   /**
-   * This is a static factory method to construct a composed group without calling respective
-   * constructors. The input groups are given as an array.
+   * This is a static factory method to construct a composed group without
+   * calling respective constructors. The input groups are given as an array.
+   *
    * @param groups The array of input groups
    * @return The corresponding composed group
    * @throws IllegalArgumentException if {@code groups} is null or contains null
@@ -115,7 +125,7 @@ public class ProductGroup extends AbstractProductGroup<Group> {
       if (elements[i] == null) {
         throw new IllegalArgumentException();
       }
-      groups[i] = elements[i].getGroup();
+      groups[i] = (Group) elements[i].getSet();
     }
     return ProductGroup.getInstance(groups).getElement(elements);
   }

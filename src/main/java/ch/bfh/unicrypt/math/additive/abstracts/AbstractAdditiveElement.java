@@ -20,13 +20,13 @@ import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractAdditiveElement extends AbstractElement<AdditiveElement> implements AdditiveElement {
+public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E extends AdditiveElement> extends AbstractElement<S, E> implements AdditiveElement {
 
-  protected AbstractAdditiveElement(final SemiGroup semiGroup) {
+  protected AbstractAdditiveElement(final S semiGroup) {
     super(semiGroup);
   }
 
-  protected AbstractAdditiveElement(final SemiGroup semiGroup, final BigInteger value) {
+  protected AbstractAdditiveElement(final S semiGroup, final BigInteger value) {
     super(semiGroup);
     if (!semiGroup.contains(value)) {
       throw new IllegalArgumentException();
@@ -35,105 +35,52 @@ public abstract class AbstractAdditiveElement extends AbstractElement<AdditiveEl
   }
 
   /**
-   *
-   * @return
-   */
-  @Override
-  public final AdditiveSemiGroup getAdditiveSemiGroup() {
-    if (this.getSet() instanceof AdditiveSemiGroup) {
-      return (AdditiveSemiGroup) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final AdditiveMonoid getAdditiveMonoid() {
-    if (this.getSet() instanceof AdditiveMonoid) {
-      return (AdditiveMonoid) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final AdditiveGroup getAdditiveGroup() {
-    if (this.getSet() instanceof AdditiveGroup) {
-      return (AdditiveGroup) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final AdditiveCyclicGroup getAdditiveCyclicGroup() {
-    if (this.getSet() instanceof AdditiveCyclicGroup) {
-      return (AdditiveCyclicGroup) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
    * @see Group#apply(Element, Element)
    */
   @Override
-  public final AbstractAdditiveElement add(final Element element) {
-    AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AbstractAdditiveElement) semiGroup.add(this, element);
+  public final E add(final Element element) {
+    return (E) this.getSet().add(this, element);
   }
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
   @Override
-  public final AbstractAdditiveElement subtract(final Element element) {
-    AdditiveGroup group = this.getAdditiveGroup();
-    return (AbstractAdditiveElement) group.subtract(this, element);
+  public final E subtract(final Element element) {
+    AdditiveGroup group = ((AdditiveGroup) this.getSet());
+    return (E) group.subtract(this, element);
   }
 
   /**
    * @see Group#T(Element, BigInteger)
    */
   @Override
-  public final AbstractAdditiveElement times(final BigInteger amount) {
-    AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AbstractAdditiveElement) semiGroup.times(this, amount);
+  public final E times(final BigInteger amount) {
+    return (E) this.getSet().times(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
   @Override
-  public final AbstractAdditiveElement times(final Element amount) {
-    AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AbstractAdditiveElement) semiGroup.times(this, amount);
+  public final E times(final Element amount) {
+    return (E) this.getSet().times(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
   @Override
-  public final AbstractAdditiveElement times(final int amount) {
-    AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AbstractAdditiveElement) semiGroup.times(this, amount);
+  public final E times(final int amount) {
+    return (E) this.getSet().times(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
   @Override
-  public final AbstractAdditiveElement timesTwo() {
-    AdditiveSemiGroup semiGroup = this.getAdditiveSemiGroup();
-    return (AbstractAdditiveElement) semiGroup.timesTwo(this);
+  public final E timesTwo() {
+    return (E) this.getSet().timesTwo(this);
   }
 
 }

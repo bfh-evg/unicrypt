@@ -19,30 +19,6 @@ import java.math.BigInteger;
 public interface AdditiveElement extends Element {
 
   /**
-   *
-   * @return
-   */
-  public AdditiveSemiGroup getAdditiveSemiGroup();
-
-  /**
-   *
-   * @return
-   */
-  public AdditiveMonoid getAdditiveMonoid();
-
-  /**
-   *
-   * @return
-   */
-  public AdditiveGroup getAdditiveGroup();
-
-  /**
-   *
-   * @return
-   */
-  public AdditiveCyclicGroup getAdditiveCyclicGroup();
-
-  /**
    * @see Group#apply(Element, Element)
    */
   public AdditiveElement add(Element element);
@@ -75,7 +51,6 @@ public interface AdditiveElement extends Element {
   //
   // The following methods override corresponding parent methods with different return type
   //
-
   @Override
   public AdditiveElement apply(Element element);
 

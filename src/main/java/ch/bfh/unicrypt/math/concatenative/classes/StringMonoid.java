@@ -31,7 +31,8 @@ public class StringMonoid extends AbstractConcatenativeMonoid<StringElement> {
   }
 
   protected StringElement standardGetElement(String string) {
-    return new AbstractStringElement(this, string){};
+    return new AbstractStringElement<StringMonoid, StringElement>(this, string) {
+    };
   }
 
   @Override
@@ -43,7 +44,6 @@ public class StringMonoid extends AbstractConcatenativeMonoid<StringElement> {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-
   @Override
   protected StringElement abstractGetIdentityElement() {
     return this.standardGetElement("");
@@ -68,7 +68,6 @@ public class StringMonoid extends AbstractConcatenativeMonoid<StringElement> {
   protected boolean abstractContains(BigInteger value) {
     return value.signum() >= 0;
   }
-
   //
   // STATIC FACTORY METHODS
   //
@@ -85,4 +84,5 @@ public class StringMonoid extends AbstractConcatenativeMonoid<StringElement> {
     }
     return StringMonoid.instance;
   }
+
 }

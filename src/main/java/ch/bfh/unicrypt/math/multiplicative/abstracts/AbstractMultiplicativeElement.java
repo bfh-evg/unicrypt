@@ -19,13 +19,13 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractMultiplicativeElement extends AbstractElement<MultiplicativeElement> implements MultiplicativeElement {
+public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup, E extends MultiplicativeElement> extends AbstractElement<S, E> implements MultiplicativeElement {
 
-  protected AbstractMultiplicativeElement(final SemiGroup semiGroup) {
+  protected AbstractMultiplicativeElement(final S semiGroup) {
     super(semiGroup);
   }
 
-  protected AbstractMultiplicativeElement(final SemiGroup semiGroup, final BigInteger value) {
+  protected AbstractMultiplicativeElement(final S semiGroup, final BigInteger value) {
     super(semiGroup);
     if (!semiGroup.contains(value)) {
       throw new IllegalArgumentException();
@@ -34,105 +34,52 @@ public abstract class AbstractMultiplicativeElement extends AbstractElement<Mult
   }
 
   /**
-   *
-   * @return
-   */
-  @Override
-  public final MultiplicativeSemiGroup getMultiplicativeSemiGroup() {
-    if (this.getSet() instanceof MultiplicativeSemiGroup) {
-      return (MultiplicativeSemiGroup) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final MultiplicativeMonoid getMultiplicativeMonoid() {
-    if (this.getSet() instanceof MultiplicativeMonoid) {
-      return (MultiplicativeMonoid) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final MultiplicativeGroup getMultiplicativeGroup() {
-    if (this.getSet() instanceof MultiplicativeGroup) {
-      return (MultiplicativeGroup) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final MultiplicativeCyclicGroup getMultiplicativeCyclicGroup() {
-    if (this.getSet() instanceof MultiplicativeCyclicGroup) {
-      return (MultiplicativeCyclicGroup) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
    * @see Group#apply(Element, Element)
    */
   @Override
-  public final AbstractMultiplicativeElement multiply(final Element element) {
-    MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (AbstractMultiplicativeElement) semiGroup.multiply(this, element);
+  public final E multiply(final Element element) {
+    return (E) this.getSet().multiply(this, element);
   }
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
   @Override
-  public final AbstractMultiplicativeElement divide(final Element element) {
-    MultiplicativeGroup group = this.getMultiplicativeGroup();
-    return (AbstractMultiplicativeElement) group.divide(this, element);
+  public final E divide(final Element element) {
+    MultiplicativeGroup group = ((MultiplicativeGroup) this.getSet());
+    return (E) group.divide(this, element);
   }
 
   /**
    * @see Group#T(Element, BigInteger)
    */
   @Override
-  public final AbstractMultiplicativeElement power(final BigInteger amount) {
-    MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (AbstractMultiplicativeElement) semiGroup.power(this, amount);
+  public final E power(final BigInteger amount) {
+    return (E) this.getSet().power(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, Element)
    */
   @Override
-  public final AbstractMultiplicativeElement power(final Element amount) {
-    MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (AbstractMultiplicativeElement) semiGroup.power(this, amount);
+  public final E power(final Element amount) {
+    return (E) this.getSet().power(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element, int)
    */
   @Override
-  public final AbstractMultiplicativeElement power(final int amount) {
-    MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (AbstractMultiplicativeElement) semiGroup.power(this, amount);
+  public final E power(final int amount) {
+    return (E) this.getSet().power(this, amount);
   }
 
   /**
    * @see Group#selfApply(Element)
    */
   @Override
-  public final AbstractMultiplicativeElement square() {
-    MultiplicativeSemiGroup semiGroup = this.getMultiplicativeSemiGroup();
-    return (AbstractMultiplicativeElement) semiGroup.square(this);
+  public final E square() {
+    return (E) this.getSet().square(this);
   }
 
 }

@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.additive.classes;
 
+import ch.bfh.unicrypt.math.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.additive.interfaces.AdditiveElement;
 import java.math.BigInteger;
 import java.util.Random;
@@ -9,22 +10,23 @@ import ch.bfh.unicrypt.math.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
 
 /**
-/**
- * This class implements the additive cyclic group of non-negative integers with infinite order.
- * Its identity element is 0.
+ * /**
+ * This class implements the additive cyclic group of non-negative integers with
+ * infinite order. Its identity element is 0.
  *
  * @see "Handbook of Applied Cryptography, Example 2.164"
- * @see <a href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
+ * @see <a
+ * href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class NPlus extends AbstractAdditiveMonoid {
+public class NPlus extends AbstractAdditiveMonoid<AdditiveElement> {
 
   /**
-   * This is the private constructor of this class. It is called by the static factory methods
-   * of the static nested class Factory.
+   * This is the private constructor of this class. It is called by the static
+   * factory methods of the static nested class Factory.
    */
   private NPlus() {
   }
@@ -33,7 +35,6 @@ public class NPlus extends AbstractAdditiveMonoid {
   // The following protected methods override the standard implementation from
   // various super-classes
   //
-
   @Override
   protected AdditiveElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
@@ -43,6 +44,11 @@ public class NPlus extends AbstractAdditiveMonoid {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
+  @Override
+  protected AdditiveElement abstractGetElement(BigInteger value) {
+    return new AbstractAdditiveElement<NPlus, AdditiveElement>(this, value) {
+    };
+  }
 
   @Override
   protected AdditiveElement abstractGetRandomElement(final Random random) {
@@ -68,15 +74,14 @@ public class NPlus extends AbstractAdditiveMonoid {
   protected AdditiveElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
-
   //
   // STATIC FACTORY METHODS
   //
-
   private static NPlus instance;
 
   /**
    * Returns the singleton object of this class.
+   *
    * @return The singleton object of this class
    */
   public static NPlus getInstance() {

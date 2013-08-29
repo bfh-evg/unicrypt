@@ -11,22 +11,23 @@ import ch.bfh.unicrypt.math.general.interfaces.Group;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
 
 /**
-/**
- * This class implements the multiplicative monoid of (positive and negative) integers with infinite order.
- * Its identity element is 0.
+ * /**
+ * This class implements the multiplicative monoid of (positive and negative)
+ * integers with infinite order. Its identity element is 0.
  *
  * @see "Handbook of Applied Cryptography, Example 2.164"
- * @see <a href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
+ * @see <a
+ * href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZTimes extends AbstractMultiplicativeMonoid {
+public class ZTimes extends AbstractMultiplicativeMonoid<MultiplicativeElement> {
 
   /**
-   * This is the private constructor of this class. It is called by the static factory methods
-   * of the static nested class Factory.
+   * This is the private constructor of this class. It is called by the static
+   * factory methods of the static nested class Factory.
    */
   private ZTimes() {
   }
@@ -35,6 +36,11 @@ public class ZTimes extends AbstractMultiplicativeMonoid {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
+  @Override
+  protected MultiplicativeElement abstractGetElement(BigInteger value) {
+    return new AbstractMultiplicativeElement<ZTimes, MultiplicativeElement>(this, value) {
+    };
+  }
 
   @Override
   protected AbstractMultiplicativeElement abstractGetRandomElement(final Random random) {
@@ -65,15 +71,14 @@ public class ZTimes extends AbstractMultiplicativeMonoid {
   protected boolean standardEquals(Set set) {
     return true;
   }
-
   //
   // STATIC FACTORY METHODS
   //
-
   private static ZTimes instance;
 
   /**
    * Returns the singleton object of this class.
+   *
    * @return The singleton object of this class
    */
   public static ZTimes getInstance() {

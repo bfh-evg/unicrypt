@@ -3,13 +3,14 @@ package ch.bfh.unicrypt.math.product.classes;
 import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractProductMonoid;
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
+import ch.bfh.unicrypt.math.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductMonoid extends AbstractProductMonoid<Monoid> {
+public class ProductMonoid extends AbstractProductMonoid<Monoid, Tuple> {
 
   protected ProductMonoid(final Monoid[] monoids) {
     super(monoids);
@@ -29,22 +30,28 @@ public class ProductMonoid extends AbstractProductMonoid<Monoid> {
       throw new IndexOutOfBoundsException();
     }
     if (this.isUniform()) {
-      return ProductMonoid.getInstance(this.getFirst(), arity-1);
+      return ProductMonoid.getInstance(this.getFirst(), arity - 1);
     }
     final Monoid[] remainingMonoids = new Monoid[arity - 1];
-    for (int i=0; i < arity-1; i++) {
+    for (int i = 0; i < arity - 1; i++) {
       if (i < index) {
         remainingMonoids[i] = this.getAt(i);
       } else {
-        remainingMonoids[i] = this.getAt(i+1);
+        remainingMonoids[i] = this.getAt(i + 1);
       }
     }
     return ProductMonoid.getInstance(remainingMonoids);
   }
 
+  protected Tuple abstractGetElement(final Element[] elements) {
+    return new AbstractTuple<ProductMonoid, Tuple>(this, elements) {
+    };
+  }
+
   /**
-   * This is a static factory method to construct a composed monoid without calling
-   * respective constructors. The input monids are given as an array.
+   * This is a static factory method to construct a composed monoid without
+   * calling respective constructors. The input monids are given as an array.
+   *
    * @param monoids The array of input monoids
    * @return The corresponding product monoids
    * @throws IllegalArgumentException if {@code monids} is null or contains null
@@ -98,7 +105,7 @@ public class ProductMonoid extends AbstractProductMonoid<Monoid> {
       if (elements[i] == null) {
         throw new IllegalArgumentException();
       }
-      monoids[i] = elements[i].getMonoid();
+      monoids[i] = (Monoid) elements[i].getSet();
     }
     return ProductMonoid.getInstance(monoids).getElement(elements);
   }

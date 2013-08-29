@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.multiplicative.interfaces;
 
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
+import ch.bfh.unicrypt.math.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.multiplicative.interfaces.MultiplicativeSemiGroup;
 
 /**

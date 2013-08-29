@@ -12,13 +12,14 @@ import ch.bfh.unicrypt.math.general.interfaces.Set;
 /**
  * This abstract class provides a basis implementation for atomic sets.
  *
+ * @param <E>
  * @see AbstractElement
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractSet<T extends Element> implements Set {
+public abstract class AbstractSet<E extends Element> implements Set {
 
   private BigInteger order, minOrder;
 
@@ -107,12 +108,12 @@ public abstract class AbstractSet<T extends Element> implements Set {
   }
 
   @Override
-  public final T getElement(final int value) {
+  public final E getElement(final int value) {
     return this.getElement(BigInteger.valueOf(value));
   }
 
   @Override
-  public final T getElement(BigInteger value) {
+  public final E getElement(BigInteger value) {
     if (value == null || !this.contains(value)) {
       throw new IllegalArgumentException();
     }
@@ -120,23 +121,23 @@ public abstract class AbstractSet<T extends Element> implements Set {
   }
 
   @Override
-  public final T getElement(final Element element) {
+  public final E getElement(final Element element) {
     if (element == null) {
       throw new IllegalArgumentException();
     }
     if (this.contains(element)) {
-      return (T) element;
+      return (E) element;
     }
     return this.getElement(element.getValue());
   }
 
   @Override
-  public final T getRandomElement() {
+  public final E getRandomElement() {
     return this.getRandomElement(null);
   }
 
   @Override
-  public final T getRandomElement(Random random) {
+  public final E getRandomElement(Random random) {
     return this.abstractGetRandomElement(random);
   }
 
@@ -184,7 +185,7 @@ public abstract class AbstractSet<T extends Element> implements Set {
   public String toString() {
     String str = this.standardToString();
     if (str.length() == 0) {
-    	return this.getClass().getSimpleName();
+      return this.getClass().getSimpleName();
     }
     return this.getClass().getSimpleName() + "[" + str + "]";
   }
@@ -193,7 +194,6 @@ public abstract class AbstractSet<T extends Element> implements Set {
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
   //
-
   protected boolean standardIsCompound() {
     return false;
   }
@@ -222,12 +222,11 @@ public abstract class AbstractSet<T extends Element> implements Set {
   // The following protected abstract method must be implemented in every direct
   // sub-class.
   //
-
   protected abstract BigInteger abstractGetOrder();
 
-  protected abstract T abstractGetElement(BigInteger value);
+  protected abstract E abstractGetElement(BigInteger value);
 
-  protected abstract T abstractGetRandomElement(Random random);
+  protected abstract E abstractGetRandomElement(Random random);
 
   protected abstract boolean abstractContains(BigInteger value);
 

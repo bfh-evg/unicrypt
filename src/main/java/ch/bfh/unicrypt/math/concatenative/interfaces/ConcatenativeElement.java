@@ -17,18 +17,6 @@ public interface ConcatenativeElement extends Element {
   public int getLength();
 
   /**
-   *
-   * @return
-   */
-  public ConcatenativeSemiGroup getConcatenativeSemiGroup();
-
-  /**
-   *
-   * @return
-   */
-  public ConcatenativeMonoid getConcatenativeMonoid();
-
-  /**
    * @see Group#apply(Element, Element)
    */
   public ConcatenativeElement concatenate(Element element);
@@ -56,7 +44,6 @@ public interface ConcatenativeElement extends Element {
   //
   // The following methods override corresponding parent methods with different return type
   //
-
   @Override
   public ConcatenativeElement apply(Element element);
 

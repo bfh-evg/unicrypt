@@ -11,6 +11,9 @@ import ch.bfh.unicrypt.math.general.interfaces.Set;
 
 /**
  *
+ * @param <D>
+ * @param <E>
+ * @param <C>
  * @author rolfhaenni
  */
 public abstract class AbstractInjection<D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Injection {

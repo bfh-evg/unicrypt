@@ -8,6 +8,7 @@ import ch.bfh.unicrypt.math.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.general.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
+import ch.bfh.unicrypt.math.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.utility.Factorization;
 import ch.bfh.unicrypt.math.utility.SpecialFactorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -31,7 +32,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGroup {
+public class GStarMod extends AbstractMultiplicativeCyclicGroup<MultiplicativeElement> implements DDHGroup {
 
   private final BigInteger modulus;
   private final SpecialFactorization moduloFactorization;
@@ -128,6 +129,12 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
+  @Override
+  protected MultiplicativeElement abstractGetElement(BigInteger value) {
+    return new AbstractMultiplicativeElement<GStarMod, MultiplicativeElement>(this, value) {
+    };
+  }
+
   @Override
   protected MultiplicativeElement abstractGetRandomElement(final Random random) {
     if (this.getOrder().compareTo(this.getOrderQuotient()) > 0) { // choose between the faster method

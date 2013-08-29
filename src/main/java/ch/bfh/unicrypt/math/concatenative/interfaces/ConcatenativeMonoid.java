@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.concatenative.interfaces;
 
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
+import ch.bfh.unicrypt.math.general.interfaces.Monoid;
 
 /**
  * This interface provides represents an additively written monoid. No

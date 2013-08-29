@@ -29,6 +29,8 @@ import java.util.Random;
  */
 public interface Function {
 
+  public boolean isCompound();
+
   /**
    * Applies the function to an input element from the domain and returns the
    * resulting output element from the co-domain.
@@ -126,7 +128,6 @@ public interface Function {
   // The standard implementations of the following three inherited methods are
   // insufficient for sets
   //
-
   @Override
   public boolean equals(Object obj);
 

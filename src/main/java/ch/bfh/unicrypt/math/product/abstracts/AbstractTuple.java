@@ -9,11 +9,8 @@ import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.interfaces.Tuple;
-import ch.bfh.unicrypt.math.product.classes.ProductGroup;
-import ch.bfh.unicrypt.math.product.classes.ProductMonoid;
-import ch.bfh.unicrypt.math.product.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.product.classes.ProductSet;
-import ch.bfh.unicrypt.math.general.interfaces.Set;
+import ch.bfh.unicrypt.math.utility.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -24,63 +21,15 @@ import java.util.NoSuchElementException;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractTuple extends AbstractElement<Tuple> implements Tuple {
+public abstract class AbstractTuple<S extends AbstractProductSet, E extends Tuple> extends AbstractElement<S, E> implements Tuple {
 
   private final Element[] elements;
   private final int arity;
 
-  protected AbstractTuple(final Set set, final Element[] elements) {
+  protected AbstractTuple(final S set, final Element[] elements) {
     super(set);
     this.elements = elements;
     this.arity = elements.length;
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final ProductSet getProductSet() {
-    if (this.getSet() instanceof ProductSet) {
-      return (ProductSet) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final ProductSemiGroup getProductSemiGroup() {
-    if (this.getSet() instanceof ProductSemiGroup) {
-      return (ProductSemiGroup) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final ProductMonoid getProductMonoid() {
-    if (this.getSet() instanceof ProductMonoid) {
-      return (ProductMonoid) this.getSet();
-    }
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   *
-   * @return
-   */
-  @Override
-  public final ProductGroup getProductGroup() {
-    if (this.getSet() instanceof ProductGroup) {
-      return (ProductGroup) this.getSet();
-    }
-    throw new UnsupportedOperationException();
   }
 
   @Override
@@ -142,8 +91,8 @@ public abstract class AbstractTuple extends AbstractElement<Tuple> implements Tu
     }
     Element element = this;
     for (final int index : indices) {
-      if (element instanceof Tuple) {
-        element = ((Tuple) element).getAt(index);
+      if (element.isCompound()) {
+        element = ((Compound<Element>) element).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }
@@ -163,7 +112,7 @@ public abstract class AbstractTuple extends AbstractElement<Tuple> implements Tu
 
   @Override
   public Iterator<Element> iterator() {
-    final Tuple compoundElement = this;
+    final Compound<Element> compoundElement = this;
     return new Iterator<Element>() {
       int currentIndex = 0;
 
@@ -195,6 +144,10 @@ public abstract class AbstractTuple extends AbstractElement<Tuple> implements Tu
         return false;
       }
     }
+    return true;
+  }
+
+  protected boolean standardIsCompound() {
     return true;
   }
 

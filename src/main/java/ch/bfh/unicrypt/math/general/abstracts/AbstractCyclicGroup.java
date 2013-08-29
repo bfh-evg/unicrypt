@@ -6,12 +6,12 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.general.interfaces.CyclicGroup;
 
-public abstract class AbstractCyclicGroup<T extends Element> extends AbstractGroup<T> implements CyclicGroup {
+public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGroup<E> implements CyclicGroup {
 
-  private T defaultGenerator;
+  private E defaultGenerator;
 
   @Override
-  public final T getDefaultGenerator() {
+  public final E getDefaultGenerator() {
     if (this.defaultGenerator == null) {
       this.defaultGenerator = this.abstractGetDefaultGenerator();
     }
@@ -19,12 +19,12 @@ public abstract class AbstractCyclicGroup<T extends Element> extends AbstractGro
   }
 
   @Override
-  public final T getRandomGenerator() {
+  public final E getRandomGenerator() {
     return this.getRandomGenerator(null);
   }
 
   @Override
-  public final T getRandomGenerator(Random random) {
+  public final E getRandomGenerator(Random random) {
     return this.abstractGetRandomGenerator(random);
   }
 
@@ -39,10 +39,9 @@ public abstract class AbstractCyclicGroup<T extends Element> extends AbstractGro
   //
   // The following protected abstract method must be implemented in every direct sub-class
   //
+  protected abstract E abstractGetDefaultGenerator();
 
-  protected abstract T abstractGetDefaultGenerator();
-
-  protected abstract T abstractGetRandomGenerator(Random random);
+  protected abstract E abstractGetRandomGenerator(Random random);
 
   protected abstract boolean abstractIsGenerator(Element element);
 

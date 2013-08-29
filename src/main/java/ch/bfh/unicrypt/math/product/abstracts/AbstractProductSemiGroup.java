@@ -14,7 +14,7 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductSemiGroup<S extends SemiGroup> extends AbstractProductSet<S> implements SemiGroup {
+public abstract class AbstractProductSemiGroup<S extends SemiGroup, E extends Tuple> extends AbstractProductSet<S, E> implements SemiGroup {
 
   protected AbstractProductSemiGroup(final SemiGroup[] semiGroups) {
     super(semiGroups);
@@ -40,7 +40,7 @@ public abstract class AbstractProductSemiGroup<S extends SemiGroup> extends Abst
     for (int i = 0; i < arity; i++) {
       results[i] = compoundElement1.getAt(i).apply(compoundElement2.getAt(i));
     }
-    return this.standardGetElement(results);
+    return this.abstractGetElement(results);
   }
 
   @Override
@@ -71,7 +71,7 @@ public abstract class AbstractProductSemiGroup<S extends SemiGroup> extends Abst
     for (int i = 0; i < arity; i++) {
       results[i] = compoundElement.getAt(i).selfApply(amount);
     }
-    return standardGetElement(results);
+    return abstractGetElement(results);
   }
 
   @Override

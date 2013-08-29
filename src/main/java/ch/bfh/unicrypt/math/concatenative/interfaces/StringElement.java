@@ -4,13 +4,16 @@
  */
 package ch.bfh.unicrypt.math.concatenative.interfaces;
 
-
 /**
  *
  * @author rolfhaenni
  */
 public interface StringElement extends ConcatenativeElement {
 
+  /**
+   *
+   * @return
+   */
   public String getString();
 
 }

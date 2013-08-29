@@ -1,11 +1,11 @@
-package ch.bfh.unicrypt.math.monoid.abstracts;
+package ch.bfh.unicrypt.math.general.abstracts;
 
 import ch.bfh.unicrypt.math.general.abstracts.AbstractSemiGroup;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
-import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
+import ch.bfh.unicrypt.math.general.interfaces.Monoid;
 
 /**
  * This abstract class provides a basis implementation for objects of type

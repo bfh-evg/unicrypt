@@ -11,11 +11,11 @@ import ch.bfh.unicrypt.math.general.classes.BooleanSet;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractBooleanElement extends AbstractElement<BooleanElement> implements BooleanElement {
+public abstract class AbstractBooleanElement<S extends BooleanSet, E extends BooleanElement> extends AbstractElement<S, E> implements BooleanElement {
 
   private final boolean bit;
 
-  protected AbstractBooleanElement(final BooleanSet set, final boolean bit) {
+  protected AbstractBooleanElement(final S set, final boolean bit) {
     super(set);
     this.bit = bit;
   }

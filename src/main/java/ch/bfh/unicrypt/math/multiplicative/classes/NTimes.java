@@ -7,24 +7,26 @@ import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.multiplicative.abstracts.AbstractMultiplicativeMonoid;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.multiplicative.abstracts.AbstractMultiplicativeElement;
 
 /**
-/**
- * This class implements the multiplicative monoid of non-negative integers with infinite order.
- * Its identity element is 0.
+ * /**
+ * This class implements the multiplicative monoid of non-negative integers with
+ * infinite order. Its identity element is 0.
  *
  * @see "Handbook of Applied Cryptography, Example 2.164"
- * @see <a href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
+ * @see <a
+ * href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class NTimes extends AbstractMultiplicativeMonoid {
+public class NTimes extends AbstractMultiplicativeMonoid<MultiplicativeElement> {
 
   /**
-   * This is the private constructor of this class. It is called by the static factory methods
-   * of the static nested class Factory.
+   * This is the private constructor of this class. It is called by the static
+   * factory methods of the static nested class Factory.
    */
   private NTimes() {
   }
@@ -33,6 +35,11 @@ public class NTimes extends AbstractMultiplicativeMonoid {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
+  @Override
+  protected MultiplicativeElement abstractGetElement(BigInteger value) {
+    return new AbstractMultiplicativeElement<NTimes, MultiplicativeElement>(this, value) {
+    };
+  }
 
   @Override
   protected MultiplicativeElement abstractGetRandomElement(final Random random) {
@@ -58,15 +65,14 @@ public class NTimes extends AbstractMultiplicativeMonoid {
   protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
-
   //
   // STATIC FACTORY METHODS
   //
-
   private static NTimes instance;
 
   /**
    * Returns the singleton object of this class.
+   *
    * @return The singleton object of this class
    */
   public static NTimes getInstance() {

@@ -14,16 +14,19 @@ import ch.bfh.unicrypt.math.utility.Permutation;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
- * An instance of this class represents the group of permutations for a given size. The elements of the group
- * are permutations, which contain the values from 0 to size-1 in a permuted order. Applying
- * the group operation to two permutation elements means to construct the combined permutation element.
- * Note that this operation is not commutative. The identity element is the permutation
- * [0, ..., size-1]. To invert an element, the inverse permutation is computed. Permutation elements
- * are considered to be atomic. This means that they can be converted into a unique integer value and
- * back. The group order is the factorial of its size.
+ * An instance of this class represents the group of permutations for a given
+ * size. The elements of the group are permutations, which contain the values
+ * from 0 to size-1 in a permuted order. Applying the group operation to two
+ * permutation elements means to construct the combined permutation element.
+ * Note that this operation is not commutative. The identity element is the
+ * permutation [0, ..., size-1]. To invert an element, the inverse permutation
+ * is computed. Permutation elements are considered to be atomic. This means
+ * that they can be converted into a unique integer value and back. The group
+ * order is the factorial of its size.
  *
  * @see "Handbook of Applied Cryptography, Example 2.164"
- * @see <a href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
+ * @see <a
+ * href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
  *
  * @author R. Haenni
  * @author R. E. Koenig
@@ -35,6 +38,7 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
 
   /**
    * Returns a new instance of this class for a given {@code size >= 0}.
+   *
    * @param size The size
    * @throws IllegalArgumentException if {@code size} is negative
    */
@@ -43,8 +47,10 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
   }
 
   /**
-   * Returns the size of the permutation elements in this group. The smallest possible size is 0,
-   * which represents the trivial case of an empty permutation.
+   * Returns the size of the permutation elements in this group. The smallest
+   * possible size is 0, which represents the trivial case of an empty
+   * permutation.
+   *
    * @return The permutation size
    */
   public final int getSize() {
@@ -52,10 +58,13 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
   }
 
   /**
-   * Creates and returns a group element for the given permutation (if one exists).
+   * Creates and returns a group element for the given permutation (if one
+   * exists).
+   *
    * @param permutation The given permutation
    * @return The corresponding group element
-   * @throws IllegalArgumentException if {@code permutation} is null or if it is not a proper permutation for the group's permutation size
+   * @throws IllegalArgumentException if {@code permutation} is null or if it is
+   * not a proper permutation for the group's permutation size
    */
   public PermutationElement getElement(final Permutation permutation) {
     if (permutation == null || permutation.getSize() != this.getSize()) {
@@ -65,14 +74,14 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
   }
 
   protected PermutationElement standardGetElement(Permutation permutation) {
-    return new AbstractPermutationElement(this, permutation){};
+    return new AbstractPermutationElement<PermutationGroup, PermutationElement>(this, permutation) {
+    };
   }
 
   //
   // The following protected methods override the standard implementation from
   // various super-classes
   //
-
   @Override
   public boolean standardEquals(final Set set) {
     final PermutationGroup other = (PermutationGroup) set;
@@ -93,7 +102,6 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-
   @Override
   protected PermutationElement abstractGetRandomElement(final Random random) {
     return this.standardGetElement(new Permutation(this.getSize(), random));
@@ -130,17 +138,18 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getSize());
     return standardGetElement(new Permutation(MathUtil.bigIntegerToIntArray(values)));
   }
-
   //
   // STATIC FACTORY METHODS
   //
-
-  private static final Map<Integer,PermutationGroup> instances = new HashMap<Integer,PermutationGroup>();
+  private static final Map<Integer, PermutationGroup> instances = new HashMap<Integer, PermutationGroup>();
 
   /**
-   * Returns a the unique instance of this class for a given non-negative permutation size.
+   * Returns a the unique instance of this class for a given non-negative
+   * permutation size.
+   *
    * @param size The size of the permutation
-   * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
+   * @throws IllegalArgumentException if {@code modulus} is null, zero, or
+   * negative
    */
   public static PermutationGroup getInstance(final int size) {
     if (size < 0) {
@@ -149,7 +158,7 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
     PermutationGroup instance = PermutationGroup.instances.get(Integer.valueOf(size));
     if (instance == null) {
       instance = new PermutationGroup(size);
-      PermutationGroup.instances.put(Integer.valueOf(size),instance);
+      PermutationGroup.instances.put(Integer.valueOf(size), instance);
     }
     return instance;
   }

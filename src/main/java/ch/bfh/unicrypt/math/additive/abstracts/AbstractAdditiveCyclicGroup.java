@@ -7,50 +7,45 @@ import java.math.BigInteger;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.additive.interfaces.AdditiveCyclicGroup;
 
-public abstract class AbstractAdditiveCyclicGroup extends AbstractCyclicGroup<AdditiveElement> implements AdditiveCyclicGroup {
+public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement> extends AbstractCyclicGroup<E> implements AdditiveCyclicGroup {
 
   @Override
-  protected AdditiveElement abstractGetElement(BigInteger value) {
-    return new AbstractAdditiveElement(this, value) {};
-  }
-
-  @Override
-  public final AdditiveElement add(final Element element1, final Element element2) {
+  public final E add(final Element element1, final Element element2) {
     return this.apply(element1, element2);
   }
 
   @Override
-  public final AdditiveElement add(final Element... elements) {
+  public final E add(final Element... elements) {
     return this.apply(elements);
   }
 
   @Override
-  public final AdditiveElement times(final Element element, final BigInteger amount) {
+  public final E times(final Element element, final BigInteger amount) {
     return this.selfApply(element, amount);
   }
 
   @Override
-  public final AdditiveElement times(final Element element, final Element amount) {
+  public final E times(final Element element, final Element amount) {
     return this.selfApply(element, amount);
   }
 
   @Override
-  public final AdditiveElement times(final Element element, final int amount) {
+  public final E times(final Element element, final int amount) {
     return this.selfApply(element, amount);
   }
 
   @Override
-  public final AdditiveElement timesTwo(Element element) {
+  public final E timesTwo(Element element) {
     return this.selfApply(element);
   }
 
   @Override
-  public final AdditiveElement sumOfProducts(Element[] elements, BigInteger[] amounts) {
+  public final E sumOfProducts(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
   }
 
   @Override
-  public final AdditiveElement subtract(final Element element1, final Element element2) {
+  public final E subtract(final Element element1, final Element element2) {
     return this.applyInverse(element1, element2);
   }
 

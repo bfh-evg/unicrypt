@@ -1,4 +1,4 @@
-package ch.bfh.unicrypt.math.monoid.interfaces;
+package ch.bfh.unicrypt.math.general.interfaces;
 
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Element;

@@ -30,7 +30,8 @@ public class ByteArrayMonoid extends AbstractConcatenativeMonoid<ByteArrayElemen
   }
 
   protected ByteArrayElement standardGetElement(byte[] bytes) {
-    return new AbstractByteArrayElement(this, bytes){};
+    return new AbstractByteArrayElement<ByteArrayMonoid, ByteArrayElement>(this, bytes) {
+    };
   }
 
   @Override
@@ -42,7 +43,6 @@ public class ByteArrayMonoid extends AbstractConcatenativeMonoid<ByteArrayElemen
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-
   @Override
   protected ByteArrayElement abstractGetIdentityElement() {
     return this.standardGetElement(new byte[]{});
@@ -71,7 +71,6 @@ public class ByteArrayMonoid extends AbstractConcatenativeMonoid<ByteArrayElemen
   protected boolean abstractContains(BigInteger value) {
     return value.signum() >= 0;
   }
-
   //
   // STATIC FACTORY METHODS
   //
@@ -88,4 +87,5 @@ public class ByteArrayMonoid extends AbstractConcatenativeMonoid<ByteArrayElemen
     }
     return ByteArrayMonoid.instance;
   }
+
 }

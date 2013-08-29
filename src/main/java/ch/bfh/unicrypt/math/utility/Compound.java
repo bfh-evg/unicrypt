@@ -6,6 +6,7 @@ package ch.bfh.unicrypt.math.utility;
 
 /**
  *
+ * @param <T>
  * @author rolfhaenni
  */
 public interface Compound<T> extends Iterable<T> {
@@ -21,10 +22,11 @@ public interface Compound<T> extends Iterable<T> {
   public boolean isNull();
 
   /**
-   * Checks if a compound function consists of multiple copies of the same function.
+   * Checks if a compound function consists of multiple copies of the same
+   * function.
    *
-   * @return {@code true}, if the function is a power function,
-   * {@code false} otherwise
+   * @return {@code true}, if the function is a power function, {@code false}
+   * otherwise
    */
   public boolean isUniform();
 
@@ -41,7 +43,8 @@ public interface Compound<T> extends Iterable<T> {
    *
    * @param index The given index
    * @return The corresponding function
-   * @throws IndexOutOfBoundsException if {@ode index} is an invalid index
+   * @throws IndexOutOfBoundsException if {
+   * @ode index} is an invalid index
    */
   public T getAt(int index);
 
@@ -53,13 +56,16 @@ public interface Compound<T> extends Iterable<T> {
    *
    * @param indices The given sequence of indices
    * @return The corresponding function
-   * @throws IllegalArgumentException if {@ode indices} is null or if its length exceeds the hierarchy's depth
-   * @throws IndexOutOfBoundsException if {@ode indices} contains an out-of-bounds index
+   * @throws IllegalArgumentException if {
+   * @ode indices} is null or if its length exceeds the hierarchy's depth
+   * @throws IndexOutOfBoundsException if {
+   * @ode indices} contains an out-of-bounds index
    */
   public T getAt(int... indices);
 
   /**
-   * Returns an array containing all the functions of which {@code this} function is composed of.
+   * Returns an array containing all the functions of which {@code this}
+   * function is composed of.
    *
    * @return The corresponding array of functions
    */
@@ -75,5 +81,4 @@ public interface Compound<T> extends Iterable<T> {
 //   * {@code index<0} or {@code index>arity-1}
 //   */
 //  public Compound<T> removeAt(final int index);
-
 }
