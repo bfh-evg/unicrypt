@@ -5,6 +5,8 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -16,12 +18,12 @@ import java.util.Random;
  * This class represents the concept of a hash function, which maps an
  * arbitrarily long input element into an element of a given co-domain. The
  * mapping itself is defined by some cryptographic hash function such as
- * SHA-256. For complex input elements, there are two options: one in which
- * the individual elements are first recursively paired with
+ * SHA-256. For complex input elements, there are two options: one in which the
+ * individual elements are first recursively paired with
  * {@link MathUtil#elegantPair(java.math.BigInteger[])}, and one in which the
  * hashing itself is done recursively. The co-domain is always an instance of
- * {@link ZPlusMod}. Its order corresponds to the size of the cryptographic
- * hash function's output space (a power of 2).
+ * {@link ZPlusMod}. Its order corresponds to the size of the cryptographic hash
+ * function's output space (a power of 2).
  *
  * @see Element#getHashValue()
  * @see Element#getRecursiveHashValue()
@@ -30,12 +32,12 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class HashFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElement> {
+public class HashFunction extends AbstractFunction<Set, ByteArrayMonoid, ConcatenativeElement> {
 
   private MessageDigest messageDigest;
   private boolean recursiveHash;
 
-  private HashFunction(Set domain, ZPlusMod coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
+  private HashFunction(Set domain, ByteArrayMonoid coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
     super(domain, coDomain);
     this.messageDigest = messageDigest;
     this.recursiveHash = recursiveHash;
@@ -52,14 +54,12 @@ public class HashFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElemen
   }
 
   @Override
-  protected AdditiveElement abstractApply(final Element element, final Random random) {
+  protected ConcatenativeElement abstractApply(final Element element, final Random random) {
     BigInteger value;
     if (this.recursiveHash) {
-      value = new BigInteger(element.getRecursiveHashValue(this.messageDigest));
-    } else {
-      value = new BigInteger(element.getHashValue(this.messageDigest));
+      return element.getRecursiveHashValue(this.messageDigest);
     }
-    return this.getCoDomain().getElement(value);
+    return element.getHashValue(this.messageDigest);
   }
 
   public MessageDigest getMessageDigest() {
@@ -71,7 +71,8 @@ public class HashFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElemen
   }
 
   /**
-   * This constructor generates a standard SHA-256 hash function. The order of the co-domain is 2^256.
+   * This constructor generates a standard SHA-256 hash function. The order of
+   * the co-domain is 2^256.
    */
   public static HashFunction getInstance(Set domain) {
     return HashFunction.getInstance(domain, Element.STANDARD_HASH_ALGORITHM, false);
@@ -82,10 +83,12 @@ public class HashFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElemen
   }
 
   /**
-   * This constructor generates a standard hash function for a given hash algorithm name. The co-domain
-   * is chosen accordingly.
+   * This constructor generates a standard hash function for a given hash
+   * algorithm name. The co-domain is chosen accordingly.
+   *
    * @param hashAlgorithm The name of the hash algorithm
-   * @throws IllegalArgumentException if {@code algorithmName} is null or an unknown hash algorithm name
+   * @throws IllegalArgumentException if {@code algorithmName} is null or an
+   * unknown hash algorithm name
    */
   public static HashFunction getInstance(Set domain, final String hashAlgorithm) {
     return HashFunction.getInstance(domain, hashAlgorithm, false);
@@ -113,18 +116,19 @@ public class HashFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElemen
    * function for a given domain. The cryptographic hash function is defined by
    * a given instance of type {@link MessageDigest}. A boolean value
    * {@code recursiveHash} defines which of the two hashing methods is used.
+   *
    * @param domain The given domain
    * @param messageDigest The given cryptographic hash function
    * @param recursiveHash The boolean value
    * @return The resulting hash function
-   * @throws IllegalArgumentException if {@code domain} or {@code messageDigest} is null
+   * @throws IllegalArgumentException if {@code domain} or {@code messageDigest}
+   * is null
    */
   public static HashFunction getInstance(Set domain, final MessageDigest messageDigest, boolean recursiveHash) {
     if (domain == null || messageDigest == null) {
       throw new IllegalArgumentException();
     }
-    BigInteger modulus = BigInteger.valueOf(2).pow(8*messageDigest.getDigestLength());
-    return new HashFunction(domain, ZPlusMod.getInstance(modulus), messageDigest, recursiveHash);
+    return new HashFunction(domain, ByteArrayMonoid.getInstance(), messageDigest, recursiveHash);
   }
 
 }

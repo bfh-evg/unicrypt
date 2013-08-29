@@ -4,6 +4,8 @@
  */
 package ch.bfh.unicrypt.math.product.abstracts;
 
+import ch.bfh.unicrypt.math.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.interfaces.Tuple;
@@ -92,16 +94,13 @@ public abstract class AbstractTuple extends AbstractElement<Tuple> implements Tu
   }
 
   @Override
-  protected byte[] standardGetRecursiveHashValue(MessageDigest messageDigest) {
+  protected ByteArrayElement standardGetRecursiveHashValue(MessageDigest messageDigest) {
     int arity = this.getArity();
-    byte[][] hashValues = new byte[arity][];
+    ByteArrayElement[] hashValues = new ByteArrayElement[arity];
     for (int i = 0; i < arity; i++) {
       hashValues[i] = this.getAt(i).getRecursiveHashValue(messageDigest);
     }
-    for (byte[] hashValue : hashValues) {
-      messageDigest.update(hashValue);
-    }
-    return messageDigest.digest();
+    return ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(messageDigest);
   }
 
   @Override

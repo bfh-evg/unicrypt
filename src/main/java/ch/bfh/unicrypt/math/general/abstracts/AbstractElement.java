@@ -1,21 +1,23 @@
 package ch.bfh.unicrypt.math.general.abstracts;
 
+import ch.bfh.unicrypt.math.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
 import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 /**
  * This abstract class represents the concept an element in a mathematical
  * group. It allows applying the group operation and other methods from a
- * {@link Group} in a convenient way. Most methods provided by {@link AbstractElement}
- * have an equivalent method in {@link Group}.
+ * {@link Group} in a convenient way. Most methods provided by
+ * {@link AbstractElement} have an equivalent method in {@link Group}.
  *
  * @see Group
  *
@@ -115,12 +117,12 @@ public abstract class AbstractElement<E extends Element> implements Element {
   }
 
   @Override
-  public final byte[] getHashValue() {
+  public final ByteArrayElement getHashValue() {
     return this.getHashValue(Element.STANDARD_HASH_ALGORITHM);
   }
 
   @Override
-  public final byte[] getHashValue(String hashAlgorithm) {
+  public final ByteArrayElement getHashValue(String hashAlgorithm) {
     if (hashAlgorithm == null) {
       throw new IllegalArgumentException();
     }
@@ -134,21 +136,21 @@ public abstract class AbstractElement<E extends Element> implements Element {
   }
 
   @Override
-  public byte[] getHashValue(MessageDigest messageDigest) {
+  public ByteArrayElement getHashValue(MessageDigest messageDigest) {
     if (messageDigest == null) {
       throw new IllegalArgumentException();
     }
     messageDigest.reset();
-    return messageDigest.digest(this.getValue().toByteArray());
+    return ByteArrayMonoid.getInstance().getElement(messageDigest.digest(this.getValue().toByteArray()));
   }
 
   @Override
-  public byte[] getRecursiveHashValue() {
+  public ByteArrayElement getRecursiveHashValue() {
     return this.getRecursiveHashValue(AbstractElement.STANDARD_HASH_ALGORITHM);
   }
 
   @Override
-  public byte[] getRecursiveHashValue(String hashAlgorithm) {
+  public ByteArrayElement getRecursiveHashValue(String hashAlgorithm) {
     if (hashAlgorithm == null) {
       throw new IllegalArgumentException();
     }
@@ -162,7 +164,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
   }
 
   @Override
-  public byte[] getRecursiveHashValue(MessageDigest messageDigest) {
+  public ByteArrayElement getRecursiveHashValue(MessageDigest messageDigest) {
     if (messageDigest == null) {
       throw new IllegalArgumentException();
     }
@@ -229,6 +231,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
   /**
    * @see Group#invert(Element)
    */
+  @Override
   public final E invert() {
     Group group = this.getGroup();
     return (E) group.invert(this);
@@ -237,6 +240,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
   /**
    * @see Group#isIdentityElement(Element)
    */
+  @Override
   public final boolean isIdentity() {
     Monoid monoid = this.getMonoid();
     return monoid.isIdentityElement(this);
@@ -245,6 +249,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
   /**
    * @see CyclicGroup#isGenerator(Element)
    */
+  @Override
   public final boolean isGenerator() {
     CyclicGroup cyclicGroup = this.getCyclicGroup();
     return cyclicGroup.isGenerator(this);
@@ -301,7 +306,7 @@ public abstract class AbstractElement<E extends Element> implements Element {
     return this.getValue().equals(element.getValue());
   }
 
-  protected byte[] standardGetRecursiveHashValue(MessageDigest messageDigest) {
+  protected ByteArrayElement standardGetRecursiveHashValue(MessageDigest messageDigest) {
     return this.getHashValue(messageDigest);
   }
 

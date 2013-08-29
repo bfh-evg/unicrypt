@@ -1,10 +1,7 @@
 package ch.bfh.unicrypt.math.general.interfaces;
 
-import ch.bfh.unicrypt.math.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.monoid.interfaces.Monoid;
-import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.general.interfaces.Set;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
@@ -61,22 +58,21 @@ public interface Element {
    */
   public BigInteger getValue();
 
-  public byte[] getHashValue();
+  public ByteArrayElement getHashValue();
 
-  public byte[] getHashValue(String hashAlgorithm);
+  public ByteArrayElement getHashValue(String hashAlgorithm);
 
-  public byte[] getHashValue(MessageDigest messageDigest);
+  public ByteArrayElement getHashValue(MessageDigest messageDigest);
 
-  public byte[] getRecursiveHashValue();
+  public ByteArrayElement getRecursiveHashValue();
 
-  public byte[] getRecursiveHashValue(String hashAlgorithm);
+  public ByteArrayElement getRecursiveHashValue(String hashAlgorithm);
 
-  public byte[] getRecursiveHashValue(MessageDigest messageDigest);
+  public ByteArrayElement getRecursiveHashValue(MessageDigest messageDigest);
 
   //
   // The following methods are equivalent to corresponding Set methods
   //
-
   /**
    * @see Group#apply(Element, Element)
    */
@@ -126,7 +122,6 @@ public interface Element {
   // The standard implementations of the following three methods are
   // insufficient for elements.
   //
-
   @Override
   public boolean equals(Object object);
 

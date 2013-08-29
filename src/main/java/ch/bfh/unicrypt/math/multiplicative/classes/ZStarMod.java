@@ -32,7 +32,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
 
   /**
    * This is a private constructor of this class. It is called by the static
-   * factory methods of the static nested class Factory.
+   * factory methods.
    *
    * @param modulus The given modulus
    */
@@ -42,7 +42,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
 
   /**
    * This is a private constructor of this class. It is called by the static
-   * factory methods of the static nested class Factory.
+   * factory methods.
    *
    * @param factorization The given factorization
    */
@@ -52,7 +52,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
 
   /**
    * This is a private constructor of this class. It is called by the static
-   * factory methods of the static nested class Factory.
+   * factory methods.
    *
    * @param modulus The given modulus
    * @param factorization The given factorization
@@ -188,40 +188,6 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
 
   /**
    * This is a static factory method to construct a new instance of this class,
-   * where the group's modulus is the product of given list of prime factors.
-   * This always leads to a group of known order.
-   *
-   * @param primeFactors The given prime factors
-   * @throws IllegalArgumentException if {@code primeFactors} is null or empty
-   * @throws IllegalArgumentException if {@code primeFactors} contains null,
-   * values smaller than 2, or composite numbers
-   */
-  public static ZStarMod getInstance(final BigInteger... primeFactors) {
-    return new ZStarMod(new Factorization(primeFactors));
-  }
-
-  /**
-   * This is a static factory method to construct a new instance of this class,
-   * where the group's modulus is the product-of-powers of the given lists of
-   * prime factors and exponents. This always leads to a group of known order.
-   *
-   * @param primeFactors The given prime factors
-   * @param exponents The given exponents
-   * @throws IllegalArgumentException if {@code primeFactors} or
-   * {@code exponents} is null or empty
-   * @throws IllegalArgumentException if {@code primeFactors} contains null, a
-   * value smaller than 2, or a composite number
-   * @throws IllegalArgumentException if {@code exponents} contains a value
-   * smaller than 1
-   * @throws IllegalArgumentException if {@code primeFactors} and
-   * {@code exponents} have different lengths
-   */
-  public static ZStarMod getInstance(final BigInteger[] primeFactors, final int[] exponents) {
-    return new ZStarMod(new Factorization(primeFactors, exponents));
-  }
-
-  /**
-   * This is a static factory method to construct a new instance of this class,
    * where the group's modulus is value of the given prime factorization. This
    * always leads to a group of known order.
    *
@@ -237,7 +203,4 @@ public class ZStarMod extends AbstractMultiplicativeGroup {
     return new ZStarMod(factorization);
   }
 
-  public static ZStarMod getInstance() {
-    return getInstance(BigInteger.valueOf(2));
-  }
 }

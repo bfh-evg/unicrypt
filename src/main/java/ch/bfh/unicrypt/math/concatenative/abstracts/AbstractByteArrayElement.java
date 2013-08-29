@@ -10,6 +10,7 @@ import java.util.Arrays;
 import ch.bfh.unicrypt.math.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 /**
  *
@@ -51,6 +52,8 @@ public abstract class AbstractByteArrayElement extends AbstractConcatenativeElem
 
   @Override
   public String standardToString() {
-    return this.getBytes().toString();
+    String str = Base64.encode(this.getBytes());
+    return str.substring(0, str.length() - 1);
   }
+
 }
