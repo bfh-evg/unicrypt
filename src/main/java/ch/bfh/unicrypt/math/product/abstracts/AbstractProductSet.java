@@ -45,7 +45,8 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
    * @param values The given integer values
    * @return {@code true} if such an element exists, {@code false} otherwise
    * @throws IllegalArgumentException if {@code values} is null
-   * @throws IllegalArgumentException if the length of {@code values} is different from the set's arity
+   * @throws IllegalArgumentException if the length of {@code values} is
+   * different from the set's arity
    */
   public final boolean contains(final int[] values) {
     return this.contains(MathUtil.intToBigIntegerArray(values));
@@ -58,7 +59,8 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
    * @param values The given BigInteger values
    * @return {@code true} if such an element exists, {@code false} otherwise
    * @throws IllegalArgumentException if {@code values} is or contains null
-   * @throws IllegalArgumentException if the length of {@code values} is different from the set's arity
+   * @throws IllegalArgumentException if the length of {@code values} is
+   * different from the set's arity
    */
   public final boolean contains(BigInteger... values) {
     int arity = this.getArity();
@@ -80,7 +82,8 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
    * @param elements The given elements
    * @return {@code true} if such an element exists, {@code false} otherwise
    * @throws IllegalArgumentException if {@code elements} is or contains null
-   * @throws IllegalArgumentException if the length of {@code elements} is different from the set's arity
+   * @throws IllegalArgumentException if the length of {@code elements} is
+   * different from the set's arity
    */
   public final boolean contains(Element... elements) {
     int arity = this.getArity();
@@ -146,14 +149,14 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
   }
 
   protected Tuple standardGetElement(final Element[] elements) {
-      return new AbstractTuple(this, elements) {};
-    }
+    return new AbstractTuple(this, elements) {
+    };
+  }
 
   //
   // The following protected methods override the standard implementation from
   // various super-classes
   //
-
   @Override
   protected BigInteger standardGetMinOrder() {
     if (this.isUniform()) {
@@ -161,7 +164,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
       return minOrder.pow(this.getArity());
     }
     BigInteger result = BigInteger.ONE;
-    for (Set set: this) {
+    for (Set set : this) {
       final BigInteger minOrder = set.getMinOrder();
       result = result.multiply(minOrder);
     }
@@ -172,7 +175,6 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-
   @Override
   protected BigInteger abstractGetOrder() {
     if (this.isNull()) {
@@ -186,7 +188,7 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
       return order.pow(this.getArity());
     }
     BigInteger result = BigInteger.ONE;
-    for (Set set: this) {
+    for (Set set : this) {
       final BigInteger order = set.getOrder();
       if (order.equals(BigInteger.ZERO)) {
         return BigInteger.ZERO;
@@ -331,6 +333,11 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
   }
 
   @Override
+  protected boolean standardIsCompatible(Set set) {
+    return (set instanceof AbstractProductSet);
+  }
+
+  @Override
   protected int standardHashCode() {
     final int prime = 31;
     int result = 1;
@@ -351,13 +358,10 @@ public abstract class AbstractProductSet<S extends Set> extends AbstractSet<Tupl
     }
     String result = "";
     String separator = "";
-    for (Set set: this) {
+    for (Set set : this) {
       result = result + separator + set.toString();
       separator = ",";
     }
     return result;
   }
-
 }
-
-

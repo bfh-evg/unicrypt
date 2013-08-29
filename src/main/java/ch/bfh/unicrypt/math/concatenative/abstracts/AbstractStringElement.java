@@ -29,6 +29,11 @@ public abstract class AbstractStringElement extends AbstractConcatenativeElement
   }
 
   @Override
+  public int getLength() {
+    return this.getString().length();
+  }
+
+  @Override
   protected BigInteger standardGetValue() {
     return new BigInteger(this.getString().getBytes());
   }
@@ -45,6 +50,6 @@ public abstract class AbstractStringElement extends AbstractConcatenativeElement
 
   @Override
   public String standardToString() {
-    return this.getString();
+    return "\"" + this.getString() + "\"";
   }
 }

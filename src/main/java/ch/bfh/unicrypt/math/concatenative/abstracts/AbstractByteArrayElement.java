@@ -30,6 +30,11 @@ public abstract class AbstractByteArrayElement extends AbstractConcatenativeElem
   }
 
   @Override
+  public int getLength() {
+    return this.getBytes().length;
+  }
+
+  @Override
   protected BigInteger standardGetValue() {
     return new BigInteger(this.getBytes());
   }

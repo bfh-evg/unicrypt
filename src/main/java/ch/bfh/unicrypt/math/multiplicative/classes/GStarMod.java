@@ -7,7 +7,6 @@ import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.general.interfaces.DDHGroup;
-import ch.bfh.unicrypt.math.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.Factorization;
 import ch.bfh.unicrypt.math.utility.SpecialFactorization;
@@ -94,7 +93,6 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   // The following protected methods override the standard implementation from
   // various super-classes
   //
-
   @Override
   protected MultiplicativeElement standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount.mod(this.getOrder());
@@ -105,6 +103,11 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   protected boolean standardEquals(Set set) {
     final GStarMod other = (GStarMod) set;
     return this.getModulus().equals(other.getModulus()) && this.getOrder().equals(other.getOrder());
+  }
+
+  @Override
+  protected boolean standardIsCompatible(Set set) {
+    return (set instanceof GStarMod);
   }
 
   @Override
@@ -125,7 +128,6 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-
   @Override
   protected MultiplicativeElement abstractGetRandomElement(final Random random) {
     if (this.getOrder().compareTo(this.getOrderQuotient()) > 0) { // choose between the faster method
@@ -210,90 +212,22 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup implements DDHGr
   //
   // STATIC FACTORY METHODS
   //
-
   /**
    * This is the general static factory method for this class.
+   *
    * @param moduloFactorization
    * @param orderFactorization
-   * @throws IllegalArgumentException if {@code moduloFactorization} or {@code orderFactorization} is null
-   * @throws IllegalArgumentException if the value of {@code orderFactorization} does not divide phi(n)
+   * @throws IllegalArgumentException if {@code moduloFactorization} or
+   * {@code orderFactorization} is null
+   * @throws IllegalArgumentException if the value of {@code orderFactorization}
+   * does not divide phi(n)
    */
-  public static GStarMod createInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
+  public static GStarMod getInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
     GStarMod group = new GStarMod(moduloFactorization, orderFactorization);
     if (!group.getOrder().mod(orderFactorization.getValue()).equals(BigInteger.ZERO)) {
       throw new IllegalArgumentException();
     }
     return group;
-  }
-
-  /**
-   * This is a special case of the general constructor where {@code exponent} and {@code doubling} is not specified
-   * @see #GStarMod.Factory.createInstance(BigInteger, int, boolean, Factorization)
-   */
-  public static GStarMod createInstance(final BigInteger prime, final Factorization orderFactorization) {
-    return GStarMod.createInstance(prime, 1, false, orderFactorization);
-  }
-
-  /**
-   * This is a special case of the general constructor where {@code exponent} and {@code orderExponents} are not specified
-   * @see #GStarMod.Factory.createInstance(BigInteger, int, boolean, Factorization)
-   */
-  public static GStarMod createInstance(final BigInteger prime, final boolean doubling, final Factorization orderFactorization) {
-    return GStarMod.createInstance(prime, 1, doubling, orderFactorization);
-  }
-
-  /**
-   * This is a special case of the general constructor where {@code doubling} and {@code orderExponents} are not specified
-   * @see #GStarMod.Factory.createInstance(BigInteger, int, boolean, Factorization)
-   */
-  public static GStarMod createInstance(final BigInteger prime, final int exponent, final Factorization orderFactorization) {
-    return GStarMod.createInstance(prime, exponent, false, orderFactorization);
-  }
-
-  /**
-   * This is the general static factory method for this class. Returns a new instance for the general case n=p^k or n=2p^k,
-   * where p is prime and e>=1 (and e=1 for p=2).
-   * @param prime The given prime number p
-   * @param exponent The given exponent e
-   * @param doubling A Boolean value indicating whether n=p^k ({@code false}) or n=2p^k ({@code true})
-   * @param orderFactorization The given prime factorization of phi(n)
-   * @throws IllegalArgumentException if {@code prime} is null or not prime
-   * @throws IllegalArgumentException if {@code exponent<1}
-   * @throws IllegalArgumentException if {@code prime=2} and {@code exponent>1}
-   * @throws IllegalArgumentException if {@code orderPrimeFactors} is null, contains null or values that are not prime
-   * @throws IllegalArgumentException if {@code orderExponents} is null or contains values<1
-   * @throws IllegalArgumentException if the lengths of {@code orderPrimeFactors} and {@code orderExponents} are different
-   * @throws IllegalArgumentException  if the product-of-powers of {@code orderPrimeFactors} and {@code orderExponents} does not divide the group order
-   */
-  public static GStarMod createInstance(final BigInteger prime, final int exponent, final boolean doubling, final Factorization orderFactorization) {
-    return GStarMod.createInstance(new SpecialFactorization(prime, exponent, doubling), orderFactorization);
-  }
-
-  /**
-   * This is the general static factory method of this class, we It creates and return an instance of this class
-   * for a given safe prime p. The second argument {@code subGroup} indicates whether the subgroup
-   * of order q=(p-1)/2 is taken or the full group Z*_p.
-   * @param safePrime The given safe prime
-   * @param subGroup The Boolean indicator
-   * @throws IllegalArgumentException if safePrime is null or not a safe prime
-   */
-  public static GStarMod createInstance(final BigInteger safePrime, final boolean subGroup) {
-    if (safePrime == null || !MathUtil.isSavePrime(safePrime)) {
-      throw new IllegalArgumentException();
-    }
-    final BigInteger primeFactor = safePrime.subtract(BigInteger.ONE).divide(BigInteger.valueOf(2));
-    if (subGroup) {
-      return GStarMod.createInstance(safePrime, new Factorization(new BigInteger[]{primeFactor}));
-    }
-    return  GStarMod.createInstance(safePrime, new Factorization(new BigInteger[]{primeFactor, BigInteger.valueOf(2)}));
-  }
-
-  /**
-   * This is a special case of the general constructor where {@code subGroup} is true.
-   * @see #GStarSave.Factory.createInstance(BigInteger, boolean)
-   */
-  public static GStarMod createInstance(final BigInteger safePrime) {
-    return GStarMod.createInstance(safePrime, true);
   }
 
 }

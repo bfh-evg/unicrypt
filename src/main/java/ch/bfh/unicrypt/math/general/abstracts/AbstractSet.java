@@ -149,6 +149,14 @@ public abstract class AbstractSet<T extends Element> implements Set {
   }
 
   @Override
+  public final boolean isCompatible(Set set) {
+    if (set == null) {
+      throw new IllegalArgumentException();
+    }
+    return standardIsCompatible(set);
+  }
+
+  @Override
   public final boolean equals(final Object object) {
     if (this == object) {
       return true;
@@ -156,10 +164,11 @@ public abstract class AbstractSet<T extends Element> implements Set {
     if (object == null) {
       return false;
     }
-    if (this.getClass() != object.getClass()) {
+    Set other = ((Set) object);
+    if (!this.isCompatible(other)) {
       return false;
     }
-    return this.standardEquals((Set) object);
+    return this.standardEquals(other);
   }
 
   @Override
@@ -191,6 +200,10 @@ public abstract class AbstractSet<T extends Element> implements Set {
 
   protected BigInteger standardGetMinOrder() {
     return BigInteger.ZERO;
+  }
+
+  protected boolean standardIsCompatible(Set set) {
+    return this.getClass() == set.getClass();
   }
 
   protected boolean standardEquals(Set set) {

@@ -18,6 +18,8 @@ import java.util.Random;
  */
 public class StringMonoid extends AbstractConcatenativeMonoid<StringElement> {
 
+  public static final StringElement EMPTY_STRING = StringMonoid.getInstance().getElement("");
+
   private StringMonoid() {
   }
 

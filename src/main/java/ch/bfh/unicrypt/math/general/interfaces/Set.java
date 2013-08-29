@@ -162,6 +162,8 @@ public interface Set {
    */
   public boolean areEqual(Element element1, Element element2);
 
+  public boolean isCompatible(Set set);
+
   //
   // The standard implementations of the following three inherited methods are
   // insufficient for sets

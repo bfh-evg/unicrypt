@@ -12,9 +12,9 @@ import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
- * This class implements the monoid Z_n = {0,...,n-1} with the
- * operation of multiplication modulo n. Its identity element is 1, except in
- * the case of Z_1 = {0}, where the identity element is 0.
+ * This class implements the monoid Z_n = {0,...,n-1} with the operation of
+ * multiplication modulo n. Its identity element is 1, except in the case of Z_1
+ * = {0}, where the identity element is 0.
  *
  * @see "Handbook of Applied Cryptography, Definition 2.113"
  *
@@ -32,6 +32,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
 
   /**
    * Returns the modulus if this group.
+   *
    * @return The modulus
    */
   public final BigInteger getModulus() {
@@ -42,10 +43,9 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
   // The following protected methods override the standard implementation from
   // various super-classes
   //
-
   @Override
   protected MultiplicativeElement standardSelfApply(Element element, BigInteger amount) {
-    return this.abstractGetElement(element.getValue().modPow(amount,this.getModulus()));
+    return this.abstractGetElement(element.getValue().modPow(amount, this.getModulus()));
   }
 
   @Override
@@ -62,11 +62,15 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
   // The following protected methods implement the abstract methods from
   // various super-classes
   //
-
   @Override
   public boolean standardEquals(final Set set) {
     final ZTimesMod zTimesMod = (ZTimesMod) set;
     return this.getModulus().equals(zTimesMod.getModulus());
+  }
+
+  @Override
+  protected boolean standardIsCompatible(Set set) {
+    return (set instanceof ZTimesMod);
   }
 
   @Override
@@ -96,17 +100,17 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
   protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
-
   //
   // STATIC FACTORY METHODS
   //
-
-  private static final Map<BigInteger,ZTimesMod> instances = new HashMap<BigInteger,ZTimesMod>();
+  private static final Map<BigInteger, ZTimesMod> instances = new HashMap<BigInteger, ZTimesMod>();
 
   /**
    * Returns a the unique instance of this class for a given positive modulus.
+   *
    * @param modulus The modulus
-   * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
+   * @throws IllegalArgumentException if {@code modulus} is null, zero, or
+   * negative
    */
   public static ZTimesMod getInstance(final BigInteger modulus) {
     if ((modulus == null) || (modulus.signum() < 1)) {
@@ -118,10 +122,6 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid {
       ZTimesMod.instances.put(modulus, instance);
     }
     return instance;
-  }
-
-  public static ZTimesMod getInstance() {
-    return getInstance(BigInteger.ONE);
   }
 
 }

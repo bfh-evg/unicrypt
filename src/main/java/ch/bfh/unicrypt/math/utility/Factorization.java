@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.math.utility;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-
 public class Factorization {
 
   private BigInteger value = BigInteger.ONE;
@@ -23,7 +22,7 @@ public class Factorization {
   }
 
   public Factorization(BigInteger... primeFactors) {
-    this(primeFactors, computeExponents(primeFactors));
+    this(primeFactors, Factorization.computeExponents(primeFactors));
   }
 
   private static int[] computeExponents(BigInteger[] primeFactors) {
@@ -39,16 +38,16 @@ public class Factorization {
     if (primeFactors == null || exponents == null || primeFactors.length != exponents.length) {
       throw new IllegalArgumentException();
     }
-    for (int i=0; i<primeFactors.length; i++) {
-      if (primeFactors[i] == null || !MathUtil.isPrime(primeFactors[i]) || exponents[i]<1) {
+    for (int i = 0; i < primeFactors.length; i++) {
+      if (primeFactors[i] == null || !MathUtil.isPrime(primeFactors[i]) || exponents[i] < 1) {
         throw new IllegalArgumentException();
       }
       this.value = this.value.multiply(primeFactors[i].pow(exponents[i]));
     }
     this.primeFactors = MathUtil.removeDuplicates(primeFactors);
     this.exponents = new int[this.primeFactors.length];
-    for (int i=0; i<this.primeFactors.length; i++) {
-      for (int j=0; i<primeFactors.length; j++) {
+    for (int i = 0; i < this.primeFactors.length; i++) {
+      for (int j = 0; j < primeFactors.length; j++) {
         if (this.primeFactors[i].equals(primeFactors[j])) {
           this.exponents[i] = this.exponents[i] + exponents[j];
         }
@@ -90,5 +89,4 @@ public class Factorization {
     Factorization other = (Factorization) obj;
     return this.value.equals(other.value);
   }
-
 }

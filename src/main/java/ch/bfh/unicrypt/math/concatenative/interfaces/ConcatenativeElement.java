@@ -14,6 +14,8 @@ import java.math.BigInteger;
  */
 public interface ConcatenativeElement extends Element {
 
+  public int getLength();
+
   /**
    *
    * @return
