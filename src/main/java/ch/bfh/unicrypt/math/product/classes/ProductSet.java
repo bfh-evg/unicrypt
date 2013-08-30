@@ -10,7 +10,7 @@ import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
  *
  * @author rolfhaenni
  */
-public class ProductSet extends AbstractProductSet<Set, Tuple, Element> {
+public class ProductSet extends AbstractProductSet<ProductSet, Set, Tuple, Element> {
 
   protected ProductSet(final Set[] sets) {
     super(sets);
@@ -24,43 +24,25 @@ public class ProductSet extends AbstractProductSet<Set, Tuple, Element> {
     super();
   }
 
-  /**
-   * Creates a new product set which contains one set less than the given
-   * product set.
-   *
-   * @param index The index of the set to remove
-   * @return The resulting product set.
-   * @throws IndexOutOfBoundsException if
-   * {@code index<0} or {@code index>arity-1}
-   */
-  public ProductSet removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (this.isUniform()) {
-      return ProductSet.getInstance(this.getFirst(), arity - 1);
-    }
-    final Set[] remainingSets = new Set[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
-      if (i < index) {
-        remainingSets[i] = this.getAt(i);
-      } else {
-        remainingSets[i] = this.getAt(i + 1);
-      }
-    }
-    return ProductSet.getInstance(remainingSets);
-  }
-
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
     return new AbstractTuple<ProductSet, Tuple, Element>(this, elements) {
     };
   }
+
+  @Override
+  protected ProductSet abstractRemoveAt(Set set, int arity) {
+    return ProductSet.getInstance(set, arity);
+  }
+
+  @Override
+  protected ProductSet abstractRemoveAt(Set[] sets) {
+    return ProductSet.getInstance(sets);
+  }
+
   //
   // STATIC FACTORY METHODS
   //
-
   /**
    * This is a static factory method to construct a composed set without calling
    * respective constructors. The input sets are given as an array.

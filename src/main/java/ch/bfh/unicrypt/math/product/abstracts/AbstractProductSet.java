@@ -19,12 +19,12 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductSet<S extends Set, T extends Tuple, E extends Element> extends AbstractSet<T> implements Compound<S> {
+public abstract class AbstractProductSet<P extends AbstractProductSet, S extends Set, T extends Tuple, E extends Element> extends AbstractSet<T> implements Compound<S> {
 
   private final S[] sets;
   private final int arity;
 
-  protected AbstractProductSet(Set[] sets) {
+  protected AbstractProductSet(Set... sets) {
     this.sets = (S[]) sets.clone();
     this.arity = sets.length;
   }
@@ -32,10 +32,6 @@ public abstract class AbstractProductSet<S extends Set, T extends Tuple, E exten
   protected AbstractProductSet(Set set, int arity) {
     this.sets = (S[]) new Set[]{set};
     this.arity = arity;
-  }
-
-  protected AbstractProductSet() {
-    this(new Set[]{});
   }
 
   /**
@@ -149,6 +145,38 @@ public abstract class AbstractProductSet<S extends Set, T extends Tuple, E exten
   }
 
   protected abstract T abstractGetElement(final Element[] elements);
+
+  /**
+   * Creates a new product set which contains one set less than the given
+   * product set.
+   *
+   * @param index The index of the set to remove
+   * @return The resulting product set.
+   * @throws IndexOutOfBoundsException if
+   * {@code index<0} or {@code index>arity-1}
+   */
+  public P removeAt(final int index) {
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    if (this.isUniform()) {
+      return this.abstractRemoveAt(this.getFirst(), arity - 1);
+    }
+    final S[] remainingSets = (S[]) new Set[arity - 1];
+    for (int i = 0; i < arity - 1; i++) {
+      if (i < index) {
+        remainingSets[i] = this.getAt(i);
+      } else {
+        remainingSets[i] = this.getAt(i + 1);
+      }
+    }
+    return abstractRemoveAt(remainingSets);
+  }
+
+  protected abstract P abstractRemoveAt(Set set, int arity);
+
+  protected abstract P abstractRemoveAt(Set[] sets);
 
   //
   // The following protected methods override the standard implementation from

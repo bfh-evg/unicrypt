@@ -3,6 +3,8 @@ package ch.bfh.unicrypt.math.product.classes;
 import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractProductCyclicGroup;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
@@ -12,9 +14,9 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup, Tuple, Element> {
+public class ProductCyclicGroup extends AbstractProductCyclicGroup<ProductCyclicGroup, CyclicGroup, Tuple, Element> {
 
-  protected ProductCyclicGroup(final CyclicGroup[] cyclicGroups) {
+  protected ProductCyclicGroup(final CyclicGroup... cyclicGroups) {
     super(cyclicGroups);
   }
 
@@ -22,30 +24,20 @@ public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup, 
     super(cyclicGroup, arity);
   }
 
-  protected ProductCyclicGroup() {
-    super();
-  }
-
-  public ProductCyclicGroup removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    final CyclicGroup[] remainingGroups = new CyclicGroup[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
-      if (i < index) {
-        remainingGroups[i] = this.getAt(i);
-      } else {
-        remainingGroups[i] = this.getAt(i + 1);
-      }
-    }
-    return ProductCyclicGroup.getInstance(remainingGroups);
-  }
-
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
     return new AbstractTuple<ProductCyclicGroup, Tuple, Element>(this, elements) {
     };
+  }
+
+  @Override
+  protected ProductCyclicGroup abstractRemoveAt(Set set, int arity) {
+    return ProductCyclicGroup.getInstance((CyclicGroup) set, arity);
+  }
+
+  @Override
+  protected ProductCyclicGroup abstractRemoveAt(Set[] sets) {
+    return ProductCyclicGroup.getInstance((CyclicGroup[]) sets);
   }
 
   //
@@ -71,6 +63,16 @@ public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup, 
       return new ProductCyclicGroup(cyclicGroups);
     }
     throw new IllegalArgumentException();
+  }
+
+  public static ProductCyclicGroup getInstance(final CyclicGroup group, int arity) {
+    if ((group == null) || (arity < 0) || (arity > 1)) {
+      throw new IllegalArgumentException();
+    }
+    if (arity == 0) {
+      return new ProductCyclicGroup();
+    }
+    return new ProductCyclicGroup(group);
   }
 
   //

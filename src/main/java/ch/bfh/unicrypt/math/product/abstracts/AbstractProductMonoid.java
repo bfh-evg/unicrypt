@@ -12,20 +12,16 @@ import ch.bfh.unicrypt.math.general.interfaces.Monoid;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductMonoid<S extends Monoid, T extends Tuple, E extends Element> extends AbstractProductSemiGroup<S, T, E> implements Monoid {
+public abstract class AbstractProductMonoid<P extends AbstractProductMonoid, S extends Monoid, T extends Tuple, E extends Element> extends AbstractProductSemiGroup<P, S, T, E> implements Monoid {
 
   private T identityElement;
 
-  protected AbstractProductMonoid(final Monoid[] monoids) {
+  protected AbstractProductMonoid(final Monoid... monoids) {
     super(monoids);
   }
 
   protected AbstractProductMonoid(final Monoid monoid, final int arity) {
     super(monoid, arity);
-  }
-
-  protected AbstractProductMonoid() {
-    super();
   }
 
   @Override

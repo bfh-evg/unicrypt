@@ -4,13 +4,15 @@ import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractProductMonoid;
 import ch.bfh.unicrypt.math.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductMonoid extends AbstractProductMonoid<Monoid, Tuple, Element> {
+public class ProductMonoid extends AbstractProductMonoid<ProductMonoid, Monoid, Tuple, Element> {
 
   protected ProductMonoid(final Monoid[] monoids) {
     super(monoids);
@@ -24,29 +26,20 @@ public class ProductMonoid extends AbstractProductMonoid<Monoid, Tuple, Element>
     super();
   }
 
-  public ProductMonoid removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (this.isUniform()) {
-      return ProductMonoid.getInstance(this.getFirst(), arity - 1);
-    }
-    final Monoid[] remainingMonoids = new Monoid[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
-      if (i < index) {
-        remainingMonoids[i] = this.getAt(i);
-      } else {
-        remainingMonoids[i] = this.getAt(i + 1);
-      }
-    }
-    return ProductMonoid.getInstance(remainingMonoids);
-  }
-
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
     return new AbstractTuple<ProductMonoid, Tuple, Element>(this, elements) {
     };
+  }
+
+  @Override
+  protected ProductMonoid abstractRemoveAt(Set set, int arity) {
+    return ProductMonoid.getInstance((Monoid) set, arity);
+  }
+
+  @Override
+  protected ProductMonoid abstractRemoveAt(Set[] sets) {
+    return ProductMonoid.getInstance((Monoid[]) sets);
   }
 
   /**

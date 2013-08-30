@@ -4,13 +4,14 @@ import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractProductSemiGroup;
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductSemiGroup extends AbstractProductSemiGroup<SemiGroup, Tuple, Element> {
+public class ProductSemiGroup extends AbstractProductSemiGroup<ProductSemiGroup, SemiGroup, Tuple, Element> {
 
   protected ProductSemiGroup(final SemiGroup[] semiGroups) {
     super(semiGroups);
@@ -24,29 +25,20 @@ public class ProductSemiGroup extends AbstractProductSemiGroup<SemiGroup, Tuple,
     super();
   }
 
-  public ProductSemiGroup removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (this.isUniform()) {
-      return ProductSemiGroup.getInstance(this.getFirst(), arity - 1);
-    }
-    final SemiGroup[] remainingSemiGroups = new SemiGroup[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
-      if (i < index) {
-        remainingSemiGroups[i] = this.getAt(i);
-      } else {
-        remainingSemiGroups[i] = this.getAt(i + 1);
-      }
-    }
-    return ProductSemiGroup.getInstance(remainingSemiGroups);
-  }
-
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
     return new AbstractTuple<ProductSemiGroup, Tuple, Element>(this, elements) {
     };
+  }
+
+  @Override
+  protected ProductSemiGroup abstractRemoveAt(Set set, int arity) {
+    return ProductSemiGroup.getInstance((SemiGroup) set, arity);
+  }
+
+  @Override
+  protected ProductSemiGroup abstractRemoveAt(Set[] sets) {
+    return ProductSemiGroup.getInstance((SemiGroup[]) sets);
   }
 
   /**

@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractProductGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.general.interfaces.Set;
 import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
 
 /**
@@ -27,7 +28,7 @@ import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ProductGroup extends AbstractProductGroup<Group, Tuple, Element> {
+public class ProductGroup extends AbstractProductGroup<ProductGroup, Group, Tuple, Element> {
 
   protected ProductGroup(final Group[] groups) {
     super(groups);
@@ -41,29 +42,20 @@ public class ProductGroup extends AbstractProductGroup<Group, Tuple, Element> {
     super();
   }
 
-  public ProductGroup removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (this.isUniform()) {
-      return ProductGroup.getInstance(this.getFirst(), arity - 1);
-    }
-    final Group[] remainingGroups = new Group[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
-      if (i < index) {
-        remainingGroups[i] = this.getAt(i);
-      } else {
-        remainingGroups[i] = this.getAt(i + 1);
-      }
-    }
-    return ProductGroup.getInstance(remainingGroups);
-  }
-
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
     return new AbstractTuple<ProductGroup, Tuple, Element>(this, elements) {
     };
+  }
+
+  @Override
+  protected ProductGroup abstractRemoveAt(Set set, int arity) {
+    return ProductGroup.getInstance((Group) set, arity);
+  }
+
+  @Override
+  protected ProductGroup abstractRemoveAt(Set[] sets) {
+    return ProductGroup.getInstance((Group[]) sets);
   }
 
   //
