@@ -7,14 +7,13 @@ package ch.bfh.unicrypt.math.product.abstracts;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.product.abstracts.AbstractProductSet;
 import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductSemiGroup<S extends SemiGroup, E extends Tuple> extends AbstractProductSet<S, E> implements SemiGroup {
+public abstract class AbstractProductSemiGroup<S extends SemiGroup, T extends Tuple, E extends Element> extends AbstractProductSet<S, T, E> implements SemiGroup {
 
   protected AbstractProductSemiGroup(final SemiGroup[] semiGroups) {
     super(semiGroups);
@@ -29,53 +28,53 @@ public abstract class AbstractProductSemiGroup<S extends SemiGroup, E extends Tu
   }
 
   @Override
-  public final Tuple apply(Element element1, Element element2) {
+  public final T apply(Element element1, Element element2) {
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();
     }
     int arity = this.getArity();
-    Tuple compoundElement1 = (Tuple) element1;
-    Tuple compoundElement2 = (Tuple) element2;
-    final Element[] results = new Element[arity];
+    T tuple1 = (T) element1;
+    T tuple2 = (T) element2;
+    final E[] results = (E[]) new Element[arity];
     for (int i = 0; i < arity; i++) {
-      results[i] = compoundElement1.getAt(i).apply(compoundElement2.getAt(i));
+      results[i] = (E) tuple1.getAt(i).apply(tuple2.getAt(i));
     }
     return this.abstractGetElement(results);
   }
 
   @Override
-  public final Tuple apply(Element... elements) {
+  public final T apply(Element... elements) {
     if (elements == null || elements.length == 0) {
       throw new IllegalArgumentException();
     }
-    Tuple[] compoundElements = (Tuple[]) elements;
-    Tuple result = null;
-    for (Tuple element : compoundElements) {
+    T[] tuples = (T[]) elements;
+    T result = null;
+    for (T tuple : tuples) {
       if (result == null) {
-        result = element;
+        result = tuple;
       } else {
-        result = this.apply(result, element);
+        result = this.apply(result, tuple);
       }
     }
     return result;
   }
 
   @Override
-  public final Tuple selfApply(Element element, BigInteger amount) {
+  public final T selfApply(Element element, BigInteger amount) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
     int arity = this.getArity();
-    Tuple compoundElement = (Tuple) element;
-    final Element[] results = new Element[arity];
+    T tuple = (T) element;
+    final E[] results = (E[]) new Element[arity];
     for (int i = 0; i < arity; i++) {
-      results[i] = compoundElement.getAt(i).selfApply(amount);
+      results[i] = (E) tuple.getAt(i).selfApply(amount);
     }
     return abstractGetElement(results);
   }
 
   @Override
-  public final Tuple selfApply(Element element, Element amount) {
+  public final T selfApply(Element element, Element amount) {
     if (amount == null) {
       throw new IllegalArgumentException();
     }
@@ -83,21 +82,21 @@ public abstract class AbstractProductSemiGroup<S extends SemiGroup, E extends Tu
   }
 
   @Override
-  public final Tuple selfApply(Element element, int amount) {
+  public final T selfApply(Element element, int amount) {
     return this.selfApply(element, BigInteger.valueOf(amount));
   }
 
   @Override
-  public final Tuple selfApply(Element element) {
+  public final T selfApply(Element element) {
     return this.apply(element, element);
   }
 
   @Override
-  public final Tuple multiSelfApply(Element[] elements, BigInteger[] amounts) {
+  public final T multiSelfApply(Element[] elements, BigInteger[] amounts) {
     if ((elements == null) || (amounts == null) || (elements.length != amounts.length) || (elements.length == 0)) {
       throw new IllegalArgumentException();
     }
-    Tuple[] results = new Tuple[elements.length];
+    T[] results = (T[]) new Tuple[elements.length];
     for (int i = 0; i < elements.length; i++) {
       results[i] = this.selfApply(elements[i], amounts[i]);
     }

@@ -7,16 +7,15 @@ package ch.bfh.unicrypt.math.product.abstracts;
 import ch.bfh.unicrypt.math.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.interfaces.Tuple;
-import ch.bfh.unicrypt.math.product.abstracts.AbstractProductGroup;
 import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductCyclicGroup<S extends CyclicGroup, E extends Tuple> extends AbstractProductGroup<S, E> implements CyclicGroup {
+public abstract class AbstractProductCyclicGroup<S extends CyclicGroup, T extends Tuple, E extends Element> extends AbstractProductGroup<S, T, E> implements CyclicGroup {
 
-  private Tuple defaultGenerator;
+  private T defaultGenerator;
 
   protected AbstractProductCyclicGroup(final CyclicGroup[] cyclicGroups) {
     super(cyclicGroups);
@@ -31,11 +30,11 @@ public abstract class AbstractProductCyclicGroup<S extends CyclicGroup, E extend
   }
 
   @Override
-  public final Tuple getDefaultGenerator() {
+  public final T getDefaultGenerator() {
     if (this.defaultGenerator == null) {
-      Element[] generators = new Element[this.getArity()];
+      E[] generators = (E[]) new Element[this.getArity()];
       for (int i = 0; i < this.getArity(); i++) {
-        generators[i] = this.getAt(i).getDefaultGenerator();
+        generators[i] = (E) this.getAt(i).getDefaultGenerator();
       }
       this.defaultGenerator = this.abstractGetElement(generators);
     }
@@ -43,16 +42,16 @@ public abstract class AbstractProductCyclicGroup<S extends CyclicGroup, E extend
   }
 
   @Override
-  public final Tuple getRandomGenerator() {
+  public final T getRandomGenerator() {
     return this.getRandomGenerator(null);
   }
 
   @Override
-  public final Tuple getRandomGenerator(Random random) {
+  public final T getRandomGenerator(Random random) {
     int arity = this.getArity();
-    Element[] randomElements = new Element[arity];
+    E[] randomElements = (E[]) new Element[arity];
     for (int i = 0; i < arity; i++) {
-      randomElements[i] = this.getAt(i).getRandomElement(random);
+      randomElements[i] = (E) this.getAt(i).getRandomElement(random);
     }
     return this.abstractGetElement(randomElements);
   }
@@ -62,9 +61,9 @@ public abstract class AbstractProductCyclicGroup<S extends CyclicGroup, E extend
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
-    Tuple compoundElement = (Tuple) element;
+    T tuple = (T) element;
     for (int i = 0; i < this.getArity(); i++) {
-      if (!this.getAt(i).isGenerator(compoundElement.getAt(i))) {
+      if (!this.getAt(i).isGenerator(tuple.getAt(i))) {
         return false;
       }
     }

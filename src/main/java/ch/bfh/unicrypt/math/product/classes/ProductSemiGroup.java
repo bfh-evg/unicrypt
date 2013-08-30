@@ -10,7 +10,7 @@ import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
  *
  * @author rolfhaenni
  */
-public class ProductSemiGroup extends AbstractProductSemiGroup<SemiGroup, Tuple> {
+public class ProductSemiGroup extends AbstractProductSemiGroup<SemiGroup, Tuple, Element> {
 
   protected ProductSemiGroup(final SemiGroup[] semiGroups) {
     super(semiGroups);
@@ -43,8 +43,9 @@ public class ProductSemiGroup extends AbstractProductSemiGroup<SemiGroup, Tuple>
     return ProductSemiGroup.getInstance(remainingSemiGroups);
   }
 
+  @Override
   protected Tuple abstractGetElement(final Element[] elements) {
-    return new AbstractTuple<ProductSemiGroup, Tuple>(this, elements) {
+    return new AbstractTuple<ProductSemiGroup, Tuple, Element>(this, elements) {
     };
   }
 

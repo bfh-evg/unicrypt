@@ -7,13 +7,12 @@ package ch.bfh.unicrypt.math.product.abstracts;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Group;
-import ch.bfh.unicrypt.math.product.abstracts.AbstractProductMonoid;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductGroup<S extends Group, E extends Tuple> extends AbstractProductMonoid<S, E> implements Group {
+public abstract class AbstractProductGroup<S extends Group, T extends Tuple, E extends Element> extends AbstractProductMonoid<S, T, E> implements Group {
 
   protected AbstractProductGroup(final Group[] groups) {
     super(groups);
@@ -28,21 +27,21 @@ public abstract class AbstractProductGroup<S extends Group, E extends Tuple> ext
   }
 
   @Override
-  public final Tuple invert(Element element) {
+  public final T invert(Element element) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
     int arity = this.getArity();
-    Tuple compoundElement = (Tuple) element;
-    final Element[] invertedElements = new Element[arity];
+    T tuple = (T) element;
+    final E[] invertedElements = (E[]) new Element[arity];
     for (int i = 0; i < arity; i++) {
-      invertedElements[i] = compoundElement.getAt(i).invert();
+      invertedElements[i] = (E) tuple.getAt(i).invert();
     }
     return this.abstractGetElement(invertedElements);
   }
 
   @Override
-  public final Tuple applyInverse(Element element1, Element element2) {
+  public final T applyInverse(Element element1, Element element2) {
     return this.apply(element1, this.invert(element2));
   }
 

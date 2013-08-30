@@ -10,7 +10,7 @@ import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
  *
  * @author rolfhaenni
  */
-public class ProductSet extends AbstractProductSet<Set, Tuple> {
+public class ProductSet extends AbstractProductSet<Set, Tuple, Element> {
 
   protected ProductSet(final Set[] sets) {
     super(sets);
@@ -52,8 +52,9 @@ public class ProductSet extends AbstractProductSet<Set, Tuple> {
     return ProductSet.getInstance(remainingSets);
   }
 
+  @Override
   protected Tuple abstractGetElement(final Element[] elements) {
-    return new AbstractTuple<ProductSet, Tuple>(this, elements) {
+    return new AbstractTuple<ProductSet, Tuple, Element>(this, elements) {
     };
   }
   //

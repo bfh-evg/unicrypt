@@ -7,15 +7,14 @@ package ch.bfh.unicrypt.math.product.abstracts;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.general.interfaces.Monoid;
-import ch.bfh.unicrypt.math.product.abstracts.AbstractProductSemiGroup;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductMonoid<S extends Monoid, E extends Tuple> extends AbstractProductSemiGroup<S, E> implements Monoid {
+public abstract class AbstractProductMonoid<S extends Monoid, T extends Tuple, E extends Element> extends AbstractProductSemiGroup<S, T, E> implements Monoid {
 
-  private Tuple identityElement;
+  private T identityElement;
 
   protected AbstractProductMonoid(final Monoid[] monoids) {
     super(monoids);
@@ -30,11 +29,11 @@ public abstract class AbstractProductMonoid<S extends Monoid, E extends Tuple> e
   }
 
   @Override
-  public final Tuple getIdentityElement() {
+  public final T getIdentityElement() {
     if (this.identityElement == null) {
-      final Element[] identityElements = new Element[this.getArity()];
+      final E[] identityElements = (E[]) new Element[this.getArity()];
       for (int i = 0; i < identityElements.length; i++) {
-        identityElements[i] = this.getAt(i).getIdentityElement();
+        identityElements[i] = (E) this.getAt(i).getIdentityElement();
       }
       this.identityElement = this.abstractGetElement(identityElements);
     }

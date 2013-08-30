@@ -10,7 +10,7 @@ import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
  *
  * @author rolfhaenni
  */
-public class ProductMonoid extends AbstractProductMonoid<Monoid, Tuple> {
+public class ProductMonoid extends AbstractProductMonoid<Monoid, Tuple, Element> {
 
   protected ProductMonoid(final Monoid[] monoids) {
     super(monoids);
@@ -43,8 +43,9 @@ public class ProductMonoid extends AbstractProductMonoid<Monoid, Tuple> {
     return ProductMonoid.getInstance(remainingMonoids);
   }
 
+  @Override
   protected Tuple abstractGetElement(final Element[] elements) {
-    return new AbstractTuple<ProductMonoid, Tuple>(this, elements) {
+    return new AbstractTuple<ProductMonoid, Tuple, Element>(this, elements) {
     };
   }
 

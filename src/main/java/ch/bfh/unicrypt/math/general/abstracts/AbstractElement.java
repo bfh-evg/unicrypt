@@ -137,8 +137,11 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E apply(final Element element) {
-    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-    return (E) semiGroup.apply(this, element);
+    if (this.getSet() instanceof SemiGroup) {
+      SemiGroup semiGroup = ((SemiGroup) this.getSet());
+      return (E) semiGroup.apply(this, element);
+    }
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -146,8 +149,11 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E applyInverse(final Element element) {
-    Group group = ((Group) this.getSet());
-    return (E) group.applyInverse(this, element);
+    if (this.getSet() instanceof Group) {
+      Group group = ((Group) this.getSet());
+      return (E) group.applyInverse(this, element);
+    }
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -155,8 +161,11 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E selfApply(final BigInteger amount) {
-    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-    return (E) semiGroup.selfApply(this, amount);
+    if (this.getSet() instanceof SemiGroup) {
+      SemiGroup semiGroup = ((SemiGroup) this.getSet());
+      return (E) semiGroup.selfApply(this, amount);
+    }
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -164,8 +173,11 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E selfApply(final Element amount) {
-    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-    return (E) semiGroup.selfApply(this, amount);
+    if (this.getSet() instanceof SemiGroup) {
+      SemiGroup semiGroup = ((SemiGroup) this.getSet());
+      return (E) semiGroup.selfApply(this, amount);
+    }
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -173,8 +185,11 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E selfApply(final int amount) {
-    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-    return (E) semiGroup.selfApply(this, amount);
+    if (this.getSet() instanceof SemiGroup) {
+      SemiGroup semiGroup = ((SemiGroup) this.getSet());
+      return (E) semiGroup.selfApply(this, amount);
+    }
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -182,8 +197,11 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E selfApply() {
-    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-    return (E) semiGroup.selfApply(this);
+    if (this.getSet() instanceof SemiGroup) {
+      SemiGroup semiGroup = ((SemiGroup) this.getSet());
+      return (E) semiGroup.selfApply(this);
+    }
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -191,8 +209,11 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E invert() {
-    Group group = ((Group) this.getSet());
-    return (E) group.invert(this);
+    if (this.getSet() instanceof Group) {
+      Group group = ((Group) this.getSet());
+      return (E) group.invert(this);
+    }
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -200,8 +221,11 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final boolean isIdentity() {
-    Monoid monoid = ((Monoid) this.getSet());
-    return monoid.isIdentityElement(this);
+    if (this.getSet() instanceof Monoid) {
+      Monoid monoid = ((Monoid) this.getSet());
+      return monoid.isIdentityElement(this);
+    }
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -209,8 +233,11 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final boolean isGenerator() {
-    CyclicGroup cyclicGroup = ((CyclicGroup) this.getSet());
-    return cyclicGroup.isGenerator(this);
+    if (this.getSet() instanceof CyclicGroup) {
+      CyclicGroup cyclicGroup = ((CyclicGroup) this.getSet());
+      return cyclicGroup.isGenerator(this);
+    }
+    throw new UnsupportedOperationException();
   }
 
   //

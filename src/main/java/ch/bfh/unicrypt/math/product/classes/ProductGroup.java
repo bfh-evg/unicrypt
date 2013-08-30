@@ -27,7 +27,7 @@ import ch.bfh.unicrypt.math.product.abstracts.AbstractTuple;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ProductGroup extends AbstractProductGroup<Group, Tuple> {
+public class ProductGroup extends AbstractProductGroup<Group, Tuple, Element> {
 
   protected ProductGroup(final Group[] groups) {
     super(groups);
@@ -60,8 +60,9 @@ public class ProductGroup extends AbstractProductGroup<Group, Tuple> {
     return ProductGroup.getInstance(remainingGroups);
   }
 
+  @Override
   protected Tuple abstractGetElement(final Element[] elements) {
-    return new AbstractTuple<ProductGroup, Tuple>(this, elements) {
+    return new AbstractTuple<ProductGroup, Tuple, Element>(this, elements) {
     };
   }
 

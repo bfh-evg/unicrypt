@@ -12,7 +12,7 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup, Tuple> {
+public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup, Tuple, Element> {
 
   protected ProductCyclicGroup(final CyclicGroup[] cyclicGroups) {
     super(cyclicGroups);
@@ -42,8 +42,9 @@ public class ProductCyclicGroup extends AbstractProductCyclicGroup<CyclicGroup, 
     return ProductCyclicGroup.getInstance(remainingGroups);
   }
 
+  @Override
   protected Tuple abstractGetElement(final Element[] elements) {
-    return new AbstractTuple<ProductCyclicGroup, Tuple>(this, elements) {
+    return new AbstractTuple<ProductCyclicGroup, Tuple, Element>(this, elements) {
     };
   }
 

@@ -19,7 +19,7 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductSet<S extends Set, E extends Tuple> extends AbstractSet<E> implements Compound<S> {
+public abstract class AbstractProductSet<S extends Set, T extends Tuple, E extends Element> extends AbstractSet<T> implements Compound<S> {
 
   private final S[] sets;
   private final int arity;
@@ -98,7 +98,7 @@ public abstract class AbstractProductSet<S extends Set, E extends Tuple> extends
     return true;
   }
 
-  public final E getElement(final int[] values) {
+  public final T getElement(final int[] values) {
     return this.getElement(MathUtil.intToBigIntegerArray(values));
   }
 
@@ -111,14 +111,14 @@ public abstract class AbstractProductSet<S extends Set, E extends Tuple> extends
    * @throws IllegalArgumentException if {@code values} is or contains null or
    * if no such element exists
    */
-  public final E getElement(BigInteger[] values) {
+  public final T getElement(BigInteger[] values) {
     int arity = this.getArity();
     if (values == null || values.length != arity) {
       throw new IllegalArgumentException();
     }
-    Element[] elements = new Element[arity];
+    E[] elements = (E[]) new Element[arity];
     for (int i = 0; i < arity; i++) {
-      elements[i] = this.getAt(i).getElement(values[i]);
+      elements[i] = (E) this.getAt(i).getElement(values[i]);
     }
     return this.abstractGetElement(elements);
   }
@@ -135,7 +135,7 @@ public abstract class AbstractProductSet<S extends Set, E extends Tuple> extends
    * @throws IllegalArgumentException if an element is not in the corresponding
    * group
    */
-  public final E getElement(final Element[] elements) {
+  public final T getElement(final Element[] elements) {
     int arity = this.getArity();
     if (elements == null || elements.length != arity) {
       throw new IllegalArgumentException();
@@ -148,7 +148,7 @@ public abstract class AbstractProductSet<S extends Set, E extends Tuple> extends
     return this.abstractGetElement(elements);
   }
 
-  protected abstract E abstractGetElement(final Element[] elements);
+  protected abstract T abstractGetElement(final Element[] elements);
 
   //
   // The following protected methods override the standard implementation from
@@ -204,13 +204,13 @@ public abstract class AbstractProductSet<S extends Set, E extends Tuple> extends
   }
 
   @Override
-  protected E abstractGetElement(BigInteger value) {
+  protected T abstractGetElement(BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getArity());
     return this.getElement(values);
   }
 
   @Override
-  protected E abstractGetRandomElement(Random random) {
+  protected T abstractGetRandomElement(Random random) {
     int arity = this.getArity();
     final Element[] randomElements = new Element[arity];
     for (int i = 0; i < arity; i++) {

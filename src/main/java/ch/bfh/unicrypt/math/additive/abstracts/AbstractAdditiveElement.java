@@ -47,8 +47,11 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E ext
    */
   @Override
   public final E subtract(final Element element) {
-    AdditiveGroup group = ((AdditiveGroup) this.getSet());
-    return (E) group.subtract(this, element);
+    if (this.getSet() instanceof AdditiveGroup) {
+      AdditiveGroup group = ((AdditiveGroup) this.getSet());
+      return (E) group.subtract(this, element);
+    }
+    throw new UnsupportedOperationException();
   }
 
   /**
