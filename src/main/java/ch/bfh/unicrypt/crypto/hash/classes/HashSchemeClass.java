@@ -3,7 +3,7 @@ package ch.bfh.unicrypt.crypto.hash.classes;
 import ch.bfh.unicrypt.crypto.hash.interfaces.HashScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
-import ch.bfh.unicrypt.math.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 
 public class HashSchemeClass implements HashScheme {
 

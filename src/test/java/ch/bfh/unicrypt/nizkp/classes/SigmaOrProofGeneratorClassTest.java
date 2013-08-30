@@ -14,12 +14,12 @@ import org.junit.Test;
 
 import ch.bfh.unicrypt.encryption.classes.ElGamalEncryptionClass;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.general.interfaces.Element;
-import ch.bfh.unicrypt.math.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSaveClass;
 import ch.bfh.unicrypt.math.group.classes.ProductGroupClass;
-import ch.bfh.unicrypt.math.general.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 
 public class SigmaOrProofGeneratorClassTest {
 

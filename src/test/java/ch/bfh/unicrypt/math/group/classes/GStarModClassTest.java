@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.multiplicative.classes.ZStarMod;
-import ch.bfh.unicrypt.math.general.classes.SingletonGroup;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
 import java.math.BigInteger;
 import java.util.ArrayList;

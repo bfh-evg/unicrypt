@@ -23,7 +23,7 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.EncodedElement;
 import ch.bfh.unicrypt.math.group.classes.ZPlusModClass;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlus;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlusMod;
 import ch.bfh.unicrypt.math.utility.RandomUtil;

@@ -3,7 +3,7 @@ package ch.bfh.unicrypt.crypto.commitment.abstracts;
 import ch.bfh.unicrypt.crypto.commitment.interfaces.RandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public abstract class AbstractRandomizedCommitmentScheme extends AbstractCommitmentScheme implements RandomizedCommitmentScheme {
 

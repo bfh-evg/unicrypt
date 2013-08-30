@@ -5,9 +5,9 @@
 package ch.bfh.unicrypt.math.element.classes;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
-import ch.bfh.unicrypt.math.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
 import ch.bfh.unicrypt.math.group.classes.ZPlusModClass;
 import ch.bfh.unicrypt.math.group.interfaces.GStarSave;
 import ch.bfh.unicrypt.math.group.interfaces.ProductGroup;

@@ -9,14 +9,14 @@ import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupDistributedKeyPairGenera
 import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupKeyPairGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;
-import ch.bfh.unicrypt.math.product.classes.ProductGroup;
-import ch.bfh.unicrypt.math.general.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.group.interfaces.GStarSave;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlusMod;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 

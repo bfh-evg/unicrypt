@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.crypto.nizkp.abstracts.ProductCoDomainProofGeneratorAbstr
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaEqualityProofGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction.HashAlgorithm;
@@ -15,7 +15,7 @@ import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.function.interfaces.HashFunction;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.ProductGroup;
 import ch.bfh.unicrypt.math.utility.mapper.interfaces.Mapper;
 

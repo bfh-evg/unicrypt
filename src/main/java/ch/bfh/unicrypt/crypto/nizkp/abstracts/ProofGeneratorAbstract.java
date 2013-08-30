@@ -4,8 +4,8 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.ProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.product.interfaces.Tuple;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public abstract class ProofGeneratorAbstract implements ProofGenerator {
 

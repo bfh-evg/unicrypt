@@ -1,10 +1,10 @@
 package ch.bfh.unicrypt.math.function.interfaces;
 
-import ch.bfh.unicrypt.math.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
-import ch.bfh.unicrypt.math.product.classes.ProductGroup;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
-import ch.bfh.unicrypt.math.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Random;
 
 /**

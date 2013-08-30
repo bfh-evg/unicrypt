@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.crypto.keygen.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyGenerator;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public abstract class KeyGeneratorAbstract implements KeyGenerator {
 

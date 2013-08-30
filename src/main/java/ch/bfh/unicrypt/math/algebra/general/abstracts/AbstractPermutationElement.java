@@ -1,0 +1,52 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ch.bfh.unicrypt.math.algebra.general.abstracts;
+
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.PermutationElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
+import ch.bfh.unicrypt.math.utility.MathUtil;
+import ch.bfh.unicrypt.math.helper.Permutation;
+import java.math.BigInteger;
+
+/**
+ *
+ * @author rolfhaenni
+ */
+public abstract class AbstractPermutationElement<S extends PermutationGroup, E extends PermutationElement> extends AbstractElement<S, E> implements PermutationElement {
+
+  private final Permutation permutation;
+
+  protected AbstractPermutationElement(final S group, final Permutation permutationVector) {
+    super(group);
+    this.permutation = permutationVector;
+  }
+
+  @Override
+  public Permutation getPermutation() {
+    return this.permutation;
+  }
+
+  @Override
+  protected BigInteger standardGetValue() {
+    return MathUtil.elegantPair(MathUtil.intToBigIntegerArray(this.getPermutation().getPermutationVector()));
+  }
+
+  @Override
+  protected boolean standardEquals(Element element) {
+    return this.getPermutation().equals(((PermutationElement) element).getPermutation());
+  }
+
+  @Override
+  protected int standardHashCode() {
+    return this.getPermutation().hashCode();
+  }
+
+  @Override
+  public String standardToString() {
+    return this.getPermutation().toString();
+  }
+
+}

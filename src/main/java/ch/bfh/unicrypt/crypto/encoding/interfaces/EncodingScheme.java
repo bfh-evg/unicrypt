@@ -2,7 +2,7 @@ package ch.bfh.unicrypt.crypto.encoding.interfaces;
 
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public interface EncodingScheme {
 

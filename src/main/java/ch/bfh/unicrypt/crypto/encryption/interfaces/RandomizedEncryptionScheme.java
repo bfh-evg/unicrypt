@@ -4,7 +4,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.keygen.interfaces.RandomizedKeyGenerator;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public interface RandomizedEncryptionScheme extends EncryptionScheme {
 

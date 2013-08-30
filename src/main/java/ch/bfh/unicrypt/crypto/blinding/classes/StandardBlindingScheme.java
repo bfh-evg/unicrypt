@@ -6,8 +6,8 @@ import ch.bfh.unicrypt.crypto.blinding.abstracts.AbstractBlindingScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public class StandardBlindingScheme extends AbstractBlindingScheme {
 

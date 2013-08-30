@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.general.classes.SingletonGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
 import java.math.BigInteger;
 import java.util.Random;
@@ -10,10 +10,10 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.EncodedElement;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlus;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlusMod;
 

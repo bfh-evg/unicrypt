@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.general.classes.SingletonGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -13,7 +13,7 @@ import org.junit.Test;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.classes.MultiplicativeElement;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.ZPlus;
 import ch.bfh.unicrypt.math.group.interfaces.ZStarMod;
 

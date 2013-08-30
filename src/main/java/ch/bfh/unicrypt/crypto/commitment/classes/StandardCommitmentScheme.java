@@ -9,9 +9,9 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.product.classes.ProductGroup;
-import ch.bfh.unicrypt.math.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.general.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 
 public class StandardCommitmentScheme extends AbstractDeterministicCommitmentScheme {
 

@@ -5,7 +5,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.crypto.blinding.interfaces.BlindingScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public abstract class AbstractBlindingScheme implements BlindingScheme {
 

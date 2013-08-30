@@ -1,13 +1,13 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.product.interfaces.Tuple;
-import ch.bfh.unicrypt.math.general.interfaces.Element;
-import ch.bfh.unicrypt.math.general.interfaces.PermutationElement;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.PermutationElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.general.classes.PermutationGroup;
-import ch.bfh.unicrypt.math.product.classes.ProductSet;
-import ch.bfh.unicrypt.math.general.interfaces.Set;
-import ch.bfh.unicrypt.math.utility.Permutation;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Permutation;
 import java.util.Random;
 
 /**

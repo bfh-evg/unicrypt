@@ -1,9 +1,9 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Random;
 
 /**
