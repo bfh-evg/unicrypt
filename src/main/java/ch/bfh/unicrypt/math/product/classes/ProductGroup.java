@@ -45,6 +45,10 @@ public class ProductGroup extends AbstractProductGroup<ProductGroup, Group, Tupl
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
     return new AbstractTuple<ProductGroup, Tuple, Element>(this, elements) {
+      @Override
+      protected Tuple abstractRemoveAt(Element[] elements) {
+        return ProductGroup.getTuple(elements);
+      }
     };
   }
 

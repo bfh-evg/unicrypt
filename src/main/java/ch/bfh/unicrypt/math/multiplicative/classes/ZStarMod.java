@@ -210,4 +210,15 @@ public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement>
     return new ZStarMod(factorization);
   }
 
+  public static ZStarMod getRandomInstance(int bitLength, Random random) {
+    if (bitLength < 1) {
+      throw new IllegalArgumentException();
+    }
+    return ZStarMod.getInstance(RandomUtil.createRandomBigInteger(bitLength, random));
+  }
+
+  public static ZStarMod getRandomInstance(int bitLength) {
+    return ZStarMod.getRandomInstance(bitLength, (Random) null);
+  }
+
 }

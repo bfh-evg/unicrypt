@@ -1,7 +1,6 @@
 package ch.bfh.unicrypt.math.general.abstracts;
 
 import ch.bfh.unicrypt.math.general.interfaces.Element;
-import ch.bfh.unicrypt.math.general.abstracts.AbstractGroup;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.general.interfaces.CyclicGroup;

@@ -18,9 +18,20 @@ import java.math.BigInteger;
  */
 public interface Tuple extends Element, Compound<Element> {
 
+  /**
+   * Creates a new product set which contains one set less than the given
+   * product set.
+   *
+   * @param index The index of the set to remove
+   * @return The resulting product set.
+   * @throws IndexOutOfBoundsException if
+   * {@code index<0} or {@code index>arity-1}
+   */
+  public Tuple removeAt(int index);
   //
   // The following methods override corresponding parent methods with different return type
   //
+
   @Override
   public Tuple apply(Element element);
 

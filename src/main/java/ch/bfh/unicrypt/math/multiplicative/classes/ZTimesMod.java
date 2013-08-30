@@ -131,4 +131,15 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid<MultiplicativeElemen
     return instance;
   }
 
+  public static ZTimesMod getRandomInstance(int bitLength, Random random) {
+    if (bitLength < 1) {
+      throw new IllegalArgumentException();
+    }
+    return ZTimesMod.getInstance(RandomUtil.createRandomBigInteger(bitLength, random));
+  }
+
+  public static ZTimesMod getRandomInstance(int bitLength) {
+    return ZTimesMod.getRandomInstance(bitLength, (Random) null);
+  }
+
 }

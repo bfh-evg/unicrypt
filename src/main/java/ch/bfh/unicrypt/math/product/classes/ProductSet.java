@@ -27,6 +27,10 @@ public class ProductSet extends AbstractProductSet<ProductSet, Set, Tuple, Eleme
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
     return new AbstractTuple<ProductSet, Tuple, Element>(this, elements) {
+      @Override
+      protected Tuple abstractRemoveAt(Element[] elements) {
+        return ProductSet.getTuple(elements);
+      }
     };
   }
 

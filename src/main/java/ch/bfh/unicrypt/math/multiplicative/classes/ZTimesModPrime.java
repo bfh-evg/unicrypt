@@ -5,7 +5,9 @@
 package ch.bfh.unicrypt.math.multiplicative.classes;
 
 import ch.bfh.unicrypt.math.utility.Prime;
+import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
+import java.util.Random;
 
 /**
  *
@@ -25,7 +27,15 @@ public class ZTimesModPrime extends ZTimesMod {
   }
 
   public static ZTimesModPrime getInstance(BigInteger prime) {
-    return ZTimesModPrime.getInstance(new Prime(prime));
+    return new ZTimesModPrime(Prime.getInstance(prime));
+  }
+
+  public static ZTimesModPrime getRandomInstance(int bitLength, Random random) {
+    return new ZTimesModPrime(Prime.getRandomInstance(bitLength, random));
+  }
+
+  public static ZTimesModPrime getRandomInstance(int bitLength) {
+    return ZTimesModPrime.getRandomInstance(bitLength, (Random) null);
   }
 
 }

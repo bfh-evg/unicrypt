@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.math.general.abstracts;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.general.interfaces.Element;
-import ch.bfh.unicrypt.math.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.general.interfaces.SemiGroup;
 
 /**
@@ -124,3 +123,4 @@ public abstract class AbstractSemiGroup<E extends Element> extends AbstractSet<E
 //      }
 //    }
 //    return result;
+

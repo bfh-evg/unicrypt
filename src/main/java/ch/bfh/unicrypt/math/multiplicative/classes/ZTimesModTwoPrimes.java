@@ -4,8 +4,11 @@
  */
 package ch.bfh.unicrypt.math.multiplicative.classes;
 
+import ch.bfh.unicrypt.math.utility.Prime;
+import ch.bfh.unicrypt.math.utility.RandomUtil;
 import ch.bfh.unicrypt.math.utility.TwoPrimes;
 import java.math.BigInteger;
+import java.util.Random;
 
 /**
  *
@@ -33,14 +36,26 @@ public class ZTimesModTwoPrimes extends ZTimesMod {
   }
 
   public static ZTimesModTwoPrimes getInstance(final TwoPrimes twoPrimes) {
-    if (twoPrimes== null) {
+    if (twoPrimes == null) {
       throw new IllegalArgumentException();
     }
     return new ZTimesModTwoPrimes(twoPrimes);
   }
 
   public static ZTimesModTwoPrimes getInstance(BigInteger prime1, BigInteger prime2) {
-    return ZTimesModTwoPrimes.getInstance(new TwoPrimes(prime1, prime2));
+    return new ZTimesModTwoPrimes(TwoPrimes.getInstance(prime1, prime2));
+  }
+
+  public static ZTimesModTwoPrimes getInstance(Prime prime1, Prime prime2) {
+    return new ZTimesModTwoPrimes(TwoPrimes.getInstance(prime1, prime2));
+  }
+
+  public static ZTimesModTwoPrimes getRandomInstance(int bitLength, Random random) {
+    return new ZTimesModTwoPrimes(TwoPrimes.getRandomInstance(bitLength, random));
+  }
+
+  public static ZTimesModTwoPrimes getRandomInstance(int bitLength) {
+    return ZTimesModTwoPrimes.getRandomInstance(bitLength, (Random) null);
   }
 
 }

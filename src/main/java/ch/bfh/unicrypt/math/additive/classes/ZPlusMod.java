@@ -157,8 +157,15 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement> {
     return instance;
   }
 
-  public static ZPlusMod getInstance() {
-    return getInstance(BigInteger.ONE);
+  public static ZPlusMod getRandomInstance(int bitLength, Random random) {
+    if (bitLength < 1) {
+      throw new IllegalArgumentException();
+    }
+    return ZPlusMod.getInstance(RandomUtil.createRandomBigInteger(bitLength, random));
+  }
+
+  public static ZPlusMod getRandomInstance(int bitLength) {
+    return ZPlusMod.getRandomInstance(bitLength, (Random) null);
   }
 
 }

@@ -1,9 +1,7 @@
 package ch.bfh.unicrypt.math.general.abstracts;
 
-import ch.bfh.unicrypt.math.general.abstracts.AbstractSemiGroup;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
 import ch.bfh.unicrypt.math.general.interfaces.Monoid;
 
@@ -38,7 +36,6 @@ public abstract class AbstractMonoid<T extends Element> extends AbstractSemiGrou
   // The following protected methods override the standard implementation from
   // various super-classes
   //
-
   @Override
   protected BigInteger standardGetMinOrder() {
     return BigInteger.ONE;
@@ -55,7 +52,6 @@ public abstract class AbstractMonoid<T extends Element> extends AbstractSemiGrou
   //
   // The following protected abstract method must be implemented in every direct sub-class.
   //
-
   protected abstract T abstractGetIdentityElement();
 
 }

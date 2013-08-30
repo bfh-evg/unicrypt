@@ -29,6 +29,10 @@ public class ProductMonoid extends AbstractProductMonoid<ProductMonoid, Monoid, 
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
     return new AbstractTuple<ProductMonoid, Tuple, Element>(this, elements) {
+      @Override
+      protected Tuple abstractRemoveAt(Element[] elements) {
+        return ProductMonoid.getTuple(elements);
+      }
     };
   }
 

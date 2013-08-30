@@ -6,6 +6,7 @@ package ch.bfh.unicrypt.math.multiplicative.classes;
 
 import ch.bfh.unicrypt.math.utility.Prime;
 import java.math.BigInteger;
+import java.util.Random;
 
 /**
  *
@@ -28,6 +29,7 @@ public class GStarModPrime extends GStarMod {
   }
 
   public static GStarModPrime getInstance(final BigInteger modulus, BigInteger orderFactor) {
-    return GStarModPrime.getInstance(new Prime(modulus), new Prime(orderFactor));
+    return GStarModPrime.getInstance(Prime.getInstance(modulus), Prime.getInstance(orderFactor));
   }
+
 }

@@ -28,6 +28,10 @@ public class ProductSemiGroup extends AbstractProductSemiGroup<ProductSemiGroup,
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
     return new AbstractTuple<ProductSemiGroup, Tuple, Element>(this, elements) {
+      @Override
+      protected Tuple abstractRemoveAt(Element[] elements) {
+        return ProductSemiGroup.getTuple(elements);
+      }
     };
   }
 

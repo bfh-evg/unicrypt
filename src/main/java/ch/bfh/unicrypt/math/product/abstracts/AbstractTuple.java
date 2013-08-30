@@ -8,6 +8,7 @@ import ch.bfh.unicrypt.math.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.general.interfaces.Element;
+import ch.bfh.unicrypt.math.product.classes.ProductSet;
 import ch.bfh.unicrypt.math.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.utility.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -30,6 +31,25 @@ public abstract class AbstractTuple<S extends AbstractProductSet, T extends Tupl
     this.elements = elements;
     this.arity = elements.length;
   }
+
+  @Override
+  public T removeAt(final int index) {
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    final E[] remainingElements = (E[]) new Element[arity - 1];
+    for (int i = 0; i < arity - 1; i++) {
+      if (i < index) {
+        remainingElements[i] = this.getAt(i);
+      } else {
+        remainingElements[i] = this.getAt(i + 1);
+      }
+    }
+    return abstractRemoveAt(remainingElements);
+  }
+
+  protected abstract T abstractRemoveAt(Element[] elements);
 
   @Override
   protected BigInteger standardGetValue() {
