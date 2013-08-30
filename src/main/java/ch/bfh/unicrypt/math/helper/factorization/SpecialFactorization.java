@@ -18,7 +18,7 @@ import java.math.BigInteger;
  */
 public class SpecialFactorization extends Factorization {
 
-  private SpecialFactorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {
+  protected SpecialFactorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {
     super(value, primeFactors, exponents);
   }
 

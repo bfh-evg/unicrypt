@@ -10,6 +10,7 @@ import java.util.Arrays;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 /**
