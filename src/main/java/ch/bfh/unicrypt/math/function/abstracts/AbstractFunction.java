@@ -111,7 +111,7 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
 
   @Override
   public String toString() {
-    return this.getClass().getSimpleName() + "[" + this.getDomain() + "-->" + this.getCoDomain() + "]";
+    return this.getClass().getSimpleName() + "[" + this.getDomain() + " => " + this.getCoDomain() + "]";
   }
 
   //

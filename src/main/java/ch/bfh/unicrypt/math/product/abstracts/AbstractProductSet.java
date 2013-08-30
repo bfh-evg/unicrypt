@@ -385,7 +385,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
     String separator = "";
     for (Set set : this) {
       result = result + separator + set.toString();
-      separator = ",";
+      separator = " x ";
     }
     return result;
   }
