@@ -38,7 +38,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement>
    * @param modulus The given modulus
    */
   protected ZStarMod(final BigInteger modulus) {
-    this(modulus, new Factorization());
+    this(modulus, Factorization.getInstance());
   }
 
   /**
@@ -188,7 +188,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement>
       throw new IllegalArgumentException();
     }
     if (MathUtil.isPrime(modulus)) {
-      return new ZStarMod(modulus, new Factorization(new BigInteger[]{modulus}));
+      return new ZStarMod(modulus, Factorization.getInstance(new BigInteger[]{modulus}));
     }
     return new ZStarMod(modulus);
   }

@@ -18,7 +18,7 @@ public class TwoPrimes extends Factorization {
   }
 
   protected TwoPrimes(BigInteger prime1, BigInteger prime2) {
-    super(new BigInteger[]{prime1, prime2});
+    super(prime1.multiply(prime2), new BigInteger[]{prime1, prime2}, new int[]{1, 1});
   }
 
   public BigInteger getFirstPrime() {

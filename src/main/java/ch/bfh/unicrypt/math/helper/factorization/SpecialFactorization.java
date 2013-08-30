@@ -18,20 +18,36 @@ import java.math.BigInteger;
  */
 public class SpecialFactorization extends Factorization {
 
-  public SpecialFactorization(BigInteger primeFactor) {
-    this(primeFactor, 1, false);
+  private SpecialFactorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {
+    super(value, primeFactors, exponents);
   }
 
-  public SpecialFactorization(BigInteger primeFactor, int exponent) {
-    this(primeFactor, exponent, false);
+  public static SpecialFactorization getInstance(BigInteger primeFactor) {
+    return SpecialFactorization.getInstance(primeFactor, 1, false);
   }
 
-  public SpecialFactorization(BigInteger primeFactor, boolean doubling) {
-    this(primeFactor, 1, doubling);
+  public static SpecialFactorization getInstance(BigInteger primeFactor, int exponent) {
+    return SpecialFactorization.getInstance(primeFactor, exponent, false);
   }
 
-  public SpecialFactorization(BigInteger primeFactor, int exponent, boolean doubling) {
-    super((doubling) ? new BigInteger[]{primeFactor, BigInteger.valueOf(2)} : new BigInteger[]{primeFactor}, (doubling) ? new int[]{exponent, 1} : new int[]{exponent});
+  public static SpecialFactorization getInstance(BigInteger primeFactor, boolean doubling) {
+    return SpecialFactorization.getInstance(primeFactor, 1, doubling);
+  }
+
+  public static SpecialFactorization getInstance(BigInteger primeFactor, int exponent, boolean doubling) {
+    BigInteger[] primeFactors;
+    int[] exponents;
+    BigInteger value;
+    if (doubling) {
+      value = primeFactor.pow(exponent).multiply(BigInteger.valueOf(2));
+      primeFactors = new BigInteger[]{primeFactor, BigInteger.valueOf(2)};
+      exponents = new int[]{exponent, 1};
+    } else {
+      value = primeFactor.pow(exponent);
+      primeFactors = new BigInteger[]{primeFactor};
+      exponents = new int[]{exponent};
+    }
+    return new SpecialFactorization(value, primeFactors, exponents);
   }
 
 }

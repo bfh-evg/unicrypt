@@ -15,7 +15,7 @@ import java.util.Random;
 public class Prime extends SpecialFactorization {
 
   protected Prime(BigInteger prime) {
-    super(prime);
+    super(prime, new BigInteger[]{prime}, new int[]{1});
   }
 
   public static Prime getInstance(BigInteger prime) {
