@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 
-public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement> extends AbstractSemiGroup<E> implements AdditiveSemiGroup {
+public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement> extends AbstractSemiGroup<E> implements AdditiveSemiGroup<E> {
 
   @Override
   public final E add(final Element element1, final Element element2) {

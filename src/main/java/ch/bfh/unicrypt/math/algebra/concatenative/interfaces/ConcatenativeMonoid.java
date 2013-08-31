@@ -10,6 +10,5 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface ConcatenativeMonoid extends Monoid, ConcatenativeSemiGroup {
-
+public interface ConcatenativeMonoid<E extends ConcatenativeElement> extends Monoid<E>, ConcatenativeSemiGroup<E> {
 }

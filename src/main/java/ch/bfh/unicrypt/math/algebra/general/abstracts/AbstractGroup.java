@@ -16,7 +16,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractGroup<E extends Element> extends AbstractMonoid<E> implements Group {
+public abstract class AbstractGroup<E extends Element> extends AbstractMonoid<E> implements Group<E> {
 
   @Override
   public final E invert(final Element element) {

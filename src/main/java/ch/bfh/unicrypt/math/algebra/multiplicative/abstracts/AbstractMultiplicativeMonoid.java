@@ -7,7 +7,7 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 
-public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement> extends AbstractMonoid<E> implements MultiplicativeMonoid {
+public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement> extends AbstractMonoid<E> implements MultiplicativeMonoid<E> {
 
   @Override
   public final E multiply(final Element element1, final Element element2) {

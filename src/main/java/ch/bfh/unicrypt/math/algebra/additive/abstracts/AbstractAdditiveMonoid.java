@@ -7,7 +7,7 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 
-public abstract class AbstractAdditiveMonoid<E extends AdditiveElement> extends AbstractMonoid<E> implements AdditiveMonoid {
+public abstract class AbstractAdditiveMonoid<E extends AdditiveElement> extends AbstractMonoid<E> implements AdditiveMonoid<E> {
 
   @Override
   public final E add(final Element element1, final Element element2) {

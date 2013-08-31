@@ -11,6 +11,5 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemi
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface MultiplicativeMonoid extends Monoid, MultiplicativeSemiGroup {
-
+public interface MultiplicativeMonoid<E extends MultiplicativeElement> extends Monoid<E>, MultiplicativeSemiGroup<E> {
 }

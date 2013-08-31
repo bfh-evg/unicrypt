@@ -12,7 +12,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductMonoid<P extends AbstractProductMonoid, S extends Monoid, T extends Tuple, E extends Element> extends AbstractProductSemiGroup<P, S, T, E> implements Monoid {
+public abstract class AbstractProductMonoid<P extends AbstractProductMonoid, S extends Monoid, T extends Tuple, E extends Element> extends AbstractProductSemiGroup<P, S, T, E> implements Monoid<T> {
 
   private T identityElement;
 
