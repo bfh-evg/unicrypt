@@ -11,9 +11,10 @@ import ch.bfh.unicrypt.math.helper.Permutation;
 import java.util.Random;
 
 /**
- * This interface represents the concept of a function f:X^n x Z->X^n, where Z is a permutation group of
- * size n. Calling the function permutes the given input tuple element of X^n according to the permutation
- * element given as a second argument. The output of the function is the permuted tuple element.
+ * This interface represents the concept of a function f:X^n x Z->X^n, where Z
+ * is a permutation group of size n. Calling the function permutes the given
+ * input tuple element of X^n according to the permutation element given as a
+ * second argument. The output of the function is the permuted tuple element.
  *
  * @see PermutationGroup
  *
@@ -28,7 +29,9 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
   }
 
   /**
-   * Returns the permutation group of size n, which is need to conduct the actual permutation.
+   * Returns the permutation group of size n, which is need to conduct the
+   * actual permutation.
+   *
    * @return The permutation group
    */
   public PermutationGroup getPermutationGroup() {
@@ -38,18 +41,17 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
   //
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
-
   @Override
   protected Tuple abstractApply(final Element element, final Random random) {
     if (!this.getDomain().contains(element)) {
       throw new IllegalArgumentException();
     }
-    Tuple compoundElement = (Tuple) element;
-    final Tuple tuple = (Tuple) compoundElement.getAt(0);
-    final Permutation permutation = ((PermutationElement) compoundElement.getAt(1)).getPermutation();
-    final Element[] result = new Element[tuple.getArity()];
-    for (int i = 0; i < tuple.getArity(); i++) {
-      result[i] = tuple.getAt(permutation.permute(i));
+    final Tuple outerTuple = (Tuple) element;
+    final Tuple innerTuple = (Tuple) outerTuple.getAt(0);
+    final Permutation permutation = ((PermutationElement) outerTuple.getAt(1)).getPermutation();
+    final Element[] result = new Element[innerTuple.getArity()];
+    for (int i = 0; i < innerTuple.getArity(); i++) {
+      result[i] = innerTuple.getAt(permutation.permute(i));
     }
     return this.getCoDomain().getElement(result);
   }
@@ -57,10 +59,10 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
   //
   // STATIC FACTORY METHODS
   //
-
   /**
-   * This is the general constructor of this class, which construct a permutation function from a
-   * given group and for the specified arity.
+   * This is the general constructor of this class, which construct a
+   * permutation function from a given group and for the specified arity.
+   *
    * @param set The given group
    * @param arity The arity of the tuple elements to permute
    * @throws IllegalArgumentException if {@code group} is null
@@ -74,8 +76,9 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
   }
 
   /**
-   * This is a special constructor of this class, which deals with the particular case, where a product
-   * group is given from the beginning.
+   * This is a special constructor of this class, which deals with the
+   * particular case, where a product group is given from the beginning.
+   *
    * @param productSet The given power group
    * @throws IllegalArgumentException if {@code group} is null
    */

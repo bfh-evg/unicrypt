@@ -16,7 +16,7 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public interface Tuple<E extends Element> extends Element, Compound<E> {
+public interface Tuple extends Element, Compound<Element> {
 
   /**
    * Creates a new product set which contains one set less than the given

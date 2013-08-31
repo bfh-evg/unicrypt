@@ -28,11 +28,11 @@ public class EqualityFunction extends AbstractFunction<ProductSet, BooleanSet, B
 
   @Override
   public BooleanElement abstractApply(final Element element, final Random random) {
-    Tuple compoundElement = (Tuple) element;
-    int arity = compoundElement.getArity();
+    Tuple tuple = (Tuple) element;
+    int arity = tuple.getArity();
     if (arity > 1) {
-      final Element firstElement = compoundElement.getFirst();
-      for (Element currentElement: compoundElement) {
+      final Element firstElement = tuple.getFirst();
+      for (Element currentElement : tuple) {
         if (!firstElement.equals(currentElement)) {
           return BooleanSet.FALSE;
         }
@@ -67,4 +67,5 @@ public class EqualityFunction extends AbstractFunction<ProductSet, BooleanSet, B
   public static EqualityFunction getInstance(final Set set, final int arity) {
     return new EqualityFunction(ProductSet.getInstance(set, arity), BooleanSet.getInstance());
   }
+
 }

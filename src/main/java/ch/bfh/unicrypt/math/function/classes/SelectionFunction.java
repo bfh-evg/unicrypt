@@ -35,7 +35,7 @@ public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element
     return Arrays.equals(this.getIndices(), ((SelectionFunction) function).getIndices());
   }
 
- @Override
+  @Override
   protected int standardHashCode() {
     return this.getIndices().hashCode();
   }
@@ -43,26 +43,28 @@ public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element
   //
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
-
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    Tuple compoundElement = (Tuple) element;
-    return compoundElement.getAt(this.indices);
+    Tuple tuple = (Tuple) element;
+    return tuple.getAt(this.indices);
   }
 
   //
   // STATIC FACTORY METHODS
   //
-
   /**
-   * This is the general constructor of this class. The resulting function selects and returns in a hierarchy of
-   * tuple elements the element that corresponds to a given sequence of indices (e.g., 0,3,2 for the third element
-   * in the fourth tuple element of the first tuple element).
+   * This is the general constructor of this class. The resulting function
+   * selects and returns in a hierarchy of tuple elements the element that
+   * corresponds to a given sequence of indices (e.g., 0,3,2 for the third
+   * element in the fourth tuple element of the first tuple element).
+   *
    * @param productSet The product group that defines the domain of the function
    * @param indices The given sequence of indices
    * @throws IllegalArgumentException of {@code group} is null
-   * @throws IllegalArgumentException if {@code indices} is null or if its length exceeds the hierarchy's depth
-   * @throws IndexOutOfBoundsException if {@code indices} contains an out-of-bounds index
+   * @throws IllegalArgumentException if {@code indices} is null or if its
+   * length exceeds the hierarchy's depth
+   * @throws IndexOutOfBoundsException if {@code indices} contains an
+   * out-of-bounds index
    */
   public static SelectionFunction getInstance(final ProductSet productSet, final int... indices) {
     if (productSet == null) {
