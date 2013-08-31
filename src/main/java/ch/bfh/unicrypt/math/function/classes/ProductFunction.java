@@ -20,7 +20,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public final class ProductFunction extends AbstractCompoundFunction<ProductSet, ProductSet, Tuple> {
+public final class ProductFunction extends AbstractCompoundFunction<Function, ProductSet, ProductSet, Tuple> {
 
   /**
    * This is the general constructor of this class. It takes a list of functions

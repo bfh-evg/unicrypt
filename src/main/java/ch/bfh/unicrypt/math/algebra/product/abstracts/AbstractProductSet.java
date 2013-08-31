@@ -24,12 +24,12 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
   private final S[] sets;
   private final int arity;
 
-  protected AbstractProductSet(Set... sets) {
+  protected AbstractProductSet(S... sets) {
     this.sets = (S[]) sets.clone();
     this.arity = sets.length;
   }
 
-  protected AbstractProductSet(Set set, int arity) {
+  protected AbstractProductSet(S set, int arity) {
     this.sets = (S[]) new Set[]{set};
     this.arity = arity;
   }
@@ -325,7 +325,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
       @Override
       public S next() {
         if (this.hasNext()) {
-          return (S) compoundSet.getAt(this.currentIndex++);
+          return compoundSet.getAt(this.currentIndex++);
         }
         throw new NoSuchElementException();
       }
@@ -344,7 +344,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
 
   @Override
   protected boolean standardEquals(Set set) {
-    AbstractProductSet other = (AbstractProductSet) set;
+    Compound<S> other = (Compound<S>) set;
     int arity = this.getArity();
     if (arity != other.getArity()) {
       return false;

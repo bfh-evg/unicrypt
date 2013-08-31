@@ -16,11 +16,11 @@ public abstract class AbstractProductMonoid<P extends AbstractProductMonoid, S e
 
   private T identityElement;
 
-  protected AbstractProductMonoid(final Monoid... monoids) {
+  protected AbstractProductMonoid(final S... monoids) {
     super(monoids);
   }
 
-  protected AbstractProductMonoid(final Monoid monoid, final int arity) {
+  protected AbstractProductMonoid(final S monoid, final int arity) {
     super(monoid, arity);
   }
 

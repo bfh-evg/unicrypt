@@ -18,20 +18,20 @@ import java.util.NoSuchElementException;
  * @param <E>
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Compound<Function> {
+public abstract class AbstractCompoundFunction<F extends Function, D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Compound<F> {
 
-  private final Function[] functions;
+  private final F[] functions;
   private final int arity;
 
-  protected AbstractCompoundFunction(Set domain, Set coDomain, Function[] functions) {
+  protected AbstractCompoundFunction(D domain, C coDomain, F[] functions) {
     super(domain, coDomain);
     this.functions = functions.clone();
     this.arity = functions.length;
   }
 
-  protected AbstractCompoundFunction(Set domain, Set coDomain, Function function, int arity) {
+  protected AbstractCompoundFunction(D domain, C coDomain, F function, int arity) {
     super(domain, coDomain);
-    this.functions = new Function[]{function};
+    this.functions = (F[]) new Function[]{function};
     this.arity = arity;
   }
 
@@ -51,13 +51,13 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
   }
 
   @Override
-  public Function getFirst() {
+  public F getFirst() {
     return this.getAt(0);
 
   }
 
   @Override
-  public Function getAt(int index) {
+  public F getAt(int index) {
     if (index < 0 || index >= this.getArity()) {
       throw new IndexOutOfBoundsException();
     }
@@ -68,14 +68,14 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
   }
 
   @Override
-  public Function getAt(int... indices) {
+  public F getAt(int... indices) {
     if (indices == null) {
       throw new IllegalArgumentException();
     }
-    Function function = this;
+    F function = (F) this;
     for (final int index : indices) {
       if (function.isCompound()) {
-        function = ((Compound<Function>) function).getAt(index);
+        function = ((Compound<F>) function).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }
@@ -84,9 +84,9 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
   }
 
   @Override
-  public Function[] getAll() {
+  public F[] getAll() {
     int arity = this.getArity();
-    Function[] result = new Function[arity];
+    F[] result = (F[]) new Function[arity];
     for (int i = 0; i < arity; i++) {
       result[i] = this.getAt(i);
     }
@@ -94,9 +94,9 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
   }
 
   @Override
-  public Iterator<Function> iterator() {
-    final Compound<Function> compoundFunction = this;
-    return new Iterator<Function>() {
+  public Iterator<F> iterator() {
+    final Compound<F> compoundFunction = this;
+    return new Iterator<F>() {
       int currentIndex = 0;
 
       @Override
@@ -105,7 +105,7 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
       }
 
       @Override
-      public Function next() {
+      public F next() {
         if (this.hasNext()) {
           return compoundFunction.getAt(this.currentIndex++);
         }
@@ -126,7 +126,7 @@ public abstract class AbstractCompoundFunction<D extends Set, C extends Set, E e
 
   @Override
   protected boolean standardEquals(Function function) {
-    AbstractCompoundFunction<D, C, E> other = (AbstractCompoundFunction<D, C, E>) function;
+    Compound<F> other = (Compound<F>) function;
     int arity = this.getArity();
     if (arity != other.getArity()) {
       return false;

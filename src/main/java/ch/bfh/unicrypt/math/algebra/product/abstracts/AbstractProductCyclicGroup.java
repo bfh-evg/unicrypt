@@ -17,11 +17,11 @@ public abstract class AbstractProductCyclicGroup<P extends AbstractProductCyclic
 
   private T defaultGenerator;
 
-  protected AbstractProductCyclicGroup(final CyclicGroup... cyclicGroups) {
+  protected AbstractProductCyclicGroup(final S... cyclicGroups) {
     super(cyclicGroups);
   }
 
-  protected AbstractProductCyclicGroup(final CyclicGroup cyclicGroup, final int arity) {
+  protected AbstractProductCyclicGroup(final S cyclicGroup, final int arity) {
     super(cyclicGroup, arity);
   }
 
