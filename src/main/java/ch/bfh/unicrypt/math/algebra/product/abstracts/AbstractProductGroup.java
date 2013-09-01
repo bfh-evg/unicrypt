@@ -12,7 +12,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductGroup<P extends AbstractProductGroup, S extends Group, T extends Tuple, E extends Element> extends AbstractProductMonoid<P, S, T, E> implements Group<T> {
+public abstract class AbstractProductGroup<P extends AbstractProductGroup, S extends Group, T extends Tuple, E extends Element> extends AbstractProductMonoid<P, S, T, E> implements Group {
 
   protected AbstractProductGroup(final S... groups) {
     super(groups);

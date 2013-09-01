@@ -5,7 +5,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 
-public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGroup<E> implements CyclicGroup<E> {
+public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGroup<E> implements CyclicGroup {
 
   private E defaultGenerator;
 

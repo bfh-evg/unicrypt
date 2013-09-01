@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 
-public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement> extends AbstractSemiGroup<E> implements MultiplicativeSemiGroup<E> {
+public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement> extends AbstractSemiGroup<E> implements MultiplicativeSemiGroup {
 
   @Override
   public final E multiply(final Element element1, final Element element2) {

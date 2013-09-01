@@ -13,81 +13,67 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface ConcatenativeSemiGroup<E extends ConcatenativeElement> extends SemiGroup<E> {
+public interface ConcatenativeSemiGroup extends SemiGroup {
 
   /**
    * This method is a synonym for {@link #Group.apply(Element, Element)}.
-   *
    * @param element1 the same as in {@link #Group.apply(Element, Element)}
    * @param element2 the same as in {@link #Group.apply(Element, Element)}
    * @return the same as in {@link #Group.apply(Element, Element)}
    */
-  public E concatenate(Element element1, Element element2);
+  public ConcatenativeElement concatenate(Element element1, Element element2);
 
   /**
    * This method is a synonym for {@link #Group.apply(Element...)}.
-   *
    * @param elements the same as in {@link #Group.apply(Element...)}
    * @return the same as in {@link #Group.apply(Element...)}
    */
-  public E concatenate(Element... elements);
+  public ConcatenativeElement concatenate(Element... elements);
 
   /**
    * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
-   *
    * @param element the same as in {@link #Group.selfApply(Element, BigInteger)}
    * @param amount the same as in {@link #Group.selfApply(Element, BigInteger)}
    * @return the same as in {@link #Group.selfApply(Element, BigInteger)}
    */
-  public E selfConcatenate(Element element, BigInteger amount);
+  public ConcatenativeElement selfConcatenate(Element element, BigInteger amount);
 
   /**
    * This method is a synonym for {@link #Group.selfApply(Element, Element)}.
-   *
    * @param element the same as in {@link #Group.selfApply(Element, Element)}
    * @param amount the same as in {@link #Group.selfApply(Element, Element)}
    * @return the same as in {@link #Group.selfApply(Element, Element)}
    */
-  public E selfConcatenate(Element element, Element amount);
+  public ConcatenativeElement selfConcatenate(Element element, Element amount);
 
   /**
    * This method is a synonym for {@link #Group.selfApply(Element, int)}.
-   *
    * @param element the same as in {@link #Group.selfApply(Element, int)}
    * @param amount the same as in {@link #Group.selfApply(Element, int)}
    * @return the same as in {@link #Group.selfApply(Element, int)}
    */
-  public E selfConcatenate(Element element, int amount);
+  public ConcatenativeElement selfConcatenate(Element element, int amount);
 
   /**
-   * Applies the group operation to two instances of a given group element. This
-   * is equivalent to {@code selfApply(element, 2)}.
-   *
+   * Applies the group operation to two instances of a given group element. This is equivalent to {@code selfApply(element, 2)}.
    * @param element A given group element
    * @return The result of applying the group operation to the input element
-   * @throws IllegalArgumentException if {@code element} is null or does not
-   * belong to the group
+   * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
    */
-  public E selfConcatenate(Element element);
+  public ConcatenativeElement selfConcatenate(Element element);
 
   /**
-   * Applies the binary operation pair-wise sequentially to the results of
-   * computing {@link #selfApply(Element, BigInteger)} multiple times. In an
-   * additive group, this operation is sometimes called 'weighed sum', and
-   * 'product-of-powers' in a multiplicative group.
-   *
+   * Applies the binary operation pair-wise sequentially to the results of computing {@link #selfApply(Element, BigInteger)}
+   * multiple times. In an additive group, this operation is sometimes called 'weighed sum', and 'product-of-powers' in
+   * a multiplicative group.
    * @param elements A given array of elements
    * @param amounts Corresponding amounts
    * @return The result of this operation
-   * @throws IllegalArgumentException if {@code elements} or one of its elements
-   * is null
-   * @throws IllegalArgumentException if {@code amounts} or one of its values is
-   * null
-   * @throws IllegalArgumentException if one of the elements of {@code elements}
-   * does not belong to the group
-   * @throws IllegalArgumentException if {@code elements} and {@code amounts}
-   * have different lengths
+   * @throws IllegalArgumentException if {@code elements} or one of its elements is null
+   * @throws IllegalArgumentException if {@code amounts} or one of its values is null
+   * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
+   * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
    */
-  public E multiSelfConcatenate(Element[] elements, BigInteger[] amounts);
+  public ConcatenativeElement multiSelfConcatenate(Element[] elements, BigInteger[] amounts);
 
 }

@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 
-public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement> extends AbstractSemiGroup<E> implements ConcatenativeSemiGroup<E> {
+public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement> extends AbstractSemiGroup<E> implements ConcatenativeSemiGroup {
 
   @Override
   public final E concatenate(final Element element1, final Element element2) {
@@ -43,5 +43,4 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
   public final E multiSelfConcatenate(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
   }
-
 }

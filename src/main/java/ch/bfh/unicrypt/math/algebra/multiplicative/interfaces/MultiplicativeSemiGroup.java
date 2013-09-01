@@ -12,7 +12,7 @@ import java.math.BigInteger;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface MultiplicativeSemiGroup<E extends MultiplicativeElement> extends SemiGroup<E> {
+public interface MultiplicativeSemiGroup extends SemiGroup {
 
   /**
    * This method is a synonym for {@link #Group.apply(Element, Element)}.
@@ -21,7 +21,7 @@ public interface MultiplicativeSemiGroup<E extends MultiplicativeElement> extend
    * @param element2 the same as in {@link #Group.apply(Element, Element)}
    * @return the same as in {@link #Group.apply(Element, Element)}
    */
-  public E multiply(Element element1, Element element2);
+  public MultiplicativeElement multiply(Element element1, Element element2);
 
   /**
    * This method is a synonym for {@link #Group.apply(Element...)}.
@@ -29,7 +29,7 @@ public interface MultiplicativeSemiGroup<E extends MultiplicativeElement> extend
    * @param elements the same as in {@link #Group.apply(Element...)}
    * @return the same as in {@link #Group.apply(Element...)}
    */
-  public E multiply(Element... elements);
+  public MultiplicativeElement multiply(Element... elements);
 
   /**
    * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
@@ -38,7 +38,7 @@ public interface MultiplicativeSemiGroup<E extends MultiplicativeElement> extend
    * @param amount the same as in {@link #Group.selfApply(Element, BigInteger)}
    * @return the same as in {@link #Group.selfApply(Element, BigInteger)}
    */
-  public E power(Element element, BigInteger amount);
+  public MultiplicativeElement power(Element element, BigInteger amount);
 
   /**
    * This method is a synonym for {@link #Group.selfApply(Element, Element)}.
@@ -47,7 +47,7 @@ public interface MultiplicativeSemiGroup<E extends MultiplicativeElement> extend
    * @param amount the same as in {@link #Group.selfApply(Element, Element)}
    * @return the same as in {@link #Group.selfApply(Element, Element)}
    */
-  public E power(Element element, Element amount);
+  public MultiplicativeElement power(Element element, Element amount);
 
   /**
    * This method is a synonym for {@link #Group.selfApply(Element, int)}.
@@ -56,7 +56,7 @@ public interface MultiplicativeSemiGroup<E extends MultiplicativeElement> extend
    * @param amount the same as in {@link #Group.selfApply(Element, int)}
    * @return the same as in {@link #Group.selfApply(Element, int)}
    */
-  public E power(Element element, int amount);
+  public MultiplicativeElement power(Element element, int amount);
 
   /**
    * Applies the group operation to two instances of a given group element. This
@@ -67,7 +67,7 @@ public interface MultiplicativeSemiGroup<E extends MultiplicativeElement> extend
    * @throws IllegalArgumentException if {@code element} is null or does not
    * belong to the group
    */
-  public E square(Element element);
+  public MultiplicativeElement square(Element element);
 
   /**
    * Applies the binary operation pair-wise sequentially to the results of
@@ -87,6 +87,6 @@ public interface MultiplicativeSemiGroup<E extends MultiplicativeElement> extend
    * @throws IllegalArgumentException if {@code elements} and {@code amounts}
    * have different lengths
    */
-  public E productOfPowers(Element[] elements, BigInteger[] amounts);
+  public MultiplicativeElement productOfPowers(Element[] elements, BigInteger[] amounts);
 
 }

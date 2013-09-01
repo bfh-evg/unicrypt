@@ -11,17 +11,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface AdditiveGroup<E extends AdditiveElement> extends Group<E>, AdditiveMonoid<E> {
+public interface AdditiveGroup extends Group, AdditiveMonoid {
 
   /**
    * This method is a synonym for {@link #Group.applyInverse(Element, Element)}.
-   *
-   * @param element1 the same as in
-   * {@link #Group.applyInverse(Element, Element)}
-   * @param element2 the same as in
-   * {@link #Group.applyInverse(Element, Element)}
+   * @param element1 the same as in {@link #Group.applyInverse(Element, Element)}
+   * @param element2 the same as in {@link #Group.applyInverse(Element, Element)}
    * @return the same as in {@link #Group.applyInverse(Element, Element)}
    */
-  public E subtract(Element element1, Element element2);
+  public AdditiveElement subtract(Element element1, Element element2);
 
 }

@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 
-public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement> extends AbstractCyclicGroup<E> implements MultiplicativeCyclicGroup<E> {
+public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement> extends AbstractCyclicGroup<E> implements MultiplicativeCyclicGroup {
 
   @Override
   public final E multiply(final Element element1, final Element element2) {

@@ -7,7 +7,7 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 
-public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement> extends AbstractGroup<E> implements MultiplicativeGroup<E> {
+public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement> extends AbstractGroup<E> implements MultiplicativeGroup {
 
   @Override
   public final E multiply(final Element element1, final Element element2) {

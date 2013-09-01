@@ -19,7 +19,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractSet<E extends Element> implements Set<E> {
+public abstract class AbstractSet<E extends Element> implements Set {
 
   private BigInteger order, minOrder;
 

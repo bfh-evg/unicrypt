@@ -12,17 +12,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface MultiplicativeGroup<E extends MultiplicativeElement> extends Group<E>, MultiplicativeMonoid<E> {
+public interface MultiplicativeGroup extends Group, MultiplicativeMonoid {
 
   /**
    * This method is a synonym for {@link #Group.applyInverse(Element, Element)}.
-   *
-   * @param element1 the same as in
-   * {@link #Group.applyInverse(Element, Element)}
-   * @param element2 the same as in
-   * {@link #Group.applyInverse(Element, Element)}
+   * @param element1 the same as in {@link #Group.applyInverse(Element, Element)}
+   * @param element2 the same as in {@link #Group.applyInverse(Element, Element)}
    * @return the same as in {@link #Group.applyInverse(Element, Element)}
    */
-  public E divide(Element element1, Element element2);
+  public MultiplicativeElement divide(Element element1, Element element2);
 
 }

@@ -13,7 +13,7 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductSemiGroup<P extends AbstractProductSemiGroup, S extends SemiGroup, T extends Tuple, E extends Element> extends AbstractProductSet<P, S, T, E> implements SemiGroup<T> {
+public abstract class AbstractProductSemiGroup<P extends AbstractProductSemiGroup, S extends SemiGroup, T extends Tuple, E extends Element> extends AbstractProductSet<P, S, T, E> implements SemiGroup {
 
   protected AbstractProductSemiGroup(final S... semiGroups) {
     super(semiGroups);

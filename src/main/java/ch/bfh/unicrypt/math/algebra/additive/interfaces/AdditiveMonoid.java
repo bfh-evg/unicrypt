@@ -10,5 +10,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface AdditiveMonoid<E extends AdditiveElement> extends Monoid<E>, AdditiveSemiGroup<E> {
+public interface AdditiveMonoid extends Monoid, AdditiveSemiGroup {
+
 }

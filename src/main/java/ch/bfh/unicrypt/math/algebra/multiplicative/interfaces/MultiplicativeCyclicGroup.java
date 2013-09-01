@@ -5,13 +5,13 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGrou
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 
 /**
- * This interface provides represents an multiplicatively written cyclic group.
- * No functionality is added to the super interfaces
+ * This interface provides represents an multiplicatively written cyclic group. No functionality is added to the super interfaces
  * {@link MultiplicativeSemiGroup} and {@link CyclicGroup}.
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface MultiplicativeCyclicGroup<E extends MultiplicativeElement> extends CyclicGroup<E>, MultiplicativeGroup<E> {
+public interface MultiplicativeCyclicGroup extends CyclicGroup, MultiplicativeGroup {
+
 }

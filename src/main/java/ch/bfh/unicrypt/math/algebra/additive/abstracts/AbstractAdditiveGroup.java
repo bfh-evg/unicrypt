@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 
-public abstract class AbstractAdditiveGroup<E extends AdditiveElement> extends AbstractGroup<E> implements AdditiveGroup<E> {
+public abstract class AbstractAdditiveGroup<E extends AdditiveElement> extends AbstractGroup<E> implements AdditiveGroup {
 
   @Override
   public final E add(final Element element1, final Element element2) {

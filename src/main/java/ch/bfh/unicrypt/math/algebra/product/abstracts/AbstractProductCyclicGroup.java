@@ -13,7 +13,7 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductCyclicGroup<P extends AbstractProductCyclicGroup, S extends CyclicGroup, T extends Tuple, E extends Element> extends AbstractProductGroup<P, S, T, E> implements CyclicGroup<T> {
+public abstract class AbstractProductCyclicGroup<P extends AbstractProductCyclicGroup, S extends CyclicGroup, T extends Tuple, E extends Element> extends AbstractProductGroup<P, S, T, E> implements CyclicGroup {
 
   private T defaultGenerator;
 

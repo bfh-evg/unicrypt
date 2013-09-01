@@ -7,7 +7,7 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 
-public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement> extends AbstractMonoid<E> implements ConcatenativeMonoid<E> {
+public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement> extends AbstractMonoid<E> implements ConcatenativeMonoid {
 
   @Override
   public final E concatenate(final Element element1, final Element element2) {
@@ -43,5 +43,4 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
   public E multiSelfConcatenate(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
   }
-
 }

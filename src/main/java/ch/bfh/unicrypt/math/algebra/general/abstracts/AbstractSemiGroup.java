@@ -15,7 +15,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractSemiGroup<E extends Element> extends AbstractSet<E> implements SemiGroup<E> {
+public abstract class AbstractSemiGroup<E extends Element> extends AbstractSet<E> implements SemiGroup {
 
   @Override
   public final E apply(final Element element1, final Element element2) {
