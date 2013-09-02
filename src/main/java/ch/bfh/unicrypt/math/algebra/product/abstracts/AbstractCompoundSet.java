@@ -4,12 +4,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -19,17 +20,18 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductSet<P extends AbstractProductSet, S extends Set, T extends Tuple, E extends Element> extends AbstractSet<T> implements Compound<S> {
+public abstract class AbstractCompoundSet<CS extends CompoundSet<S>, CE extends CompoundElement<CS, S, E>, S extends Set, E extends Element<S>>
+        extends AbstractSet<CE> implements CompoundSet<S> {
 
   private final S[] sets;
   private final int arity;
 
-  protected AbstractProductSet(S... sets) {
+  protected AbstractCompoundSet(S... sets) {
     this.sets = (S[]) sets.clone();
     this.arity = sets.length;
   }
 
-  protected AbstractProductSet(S set, int arity) {
+  protected AbstractCompoundSet(S set, int arity) {
     this.sets = (S[]) new Set[]{set};
     this.arity = arity;
   }
@@ -94,7 +96,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
     return true;
   }
 
-  public final T getElement(final int[] values) {
+  public final CE getElement(final int[] values) {
     return this.getElement(MathUtil.intToBigIntegerArray(values));
   }
 
@@ -107,7 +109,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
    * @throws IllegalArgumentException if {@code values} is or contains null or
    * if no such element exists
    */
-  public final T getElement(BigInteger[] values) {
+  public final CE getElement(BigInteger[] values) {
     int arity = this.getArity();
     if (values == null || values.length != arity) {
       throw new IllegalArgumentException();
@@ -131,7 +133,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
    * @throws IllegalArgumentException if an element is not in the corresponding
    * group
    */
-  public final T getElement(final Element[] elements) {
+  public final CE getElement(final Element[] elements) {
     int arity = this.getArity();
     if (elements == null || elements.length != arity) {
       throw new IllegalArgumentException();
@@ -144,7 +146,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
     return this.abstractGetElement(elements);
   }
 
-  protected abstract T abstractGetElement(final Element[] elements);
+  protected abstract CE abstractGetElement(final Element[] elements);
 
   /**
    * Creates a new product set which contains one set less than the given
@@ -155,7 +157,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
    * @throws IndexOutOfBoundsException if
    * {@code index<0} or {@code index>arity-1}
    */
-  public P removeAt(final int index) {
+  public CS removeAt(final int index) {
     int arity = this.getArity();
     if (index < 0 || index >= arity) {
       throw new IndexOutOfBoundsException();
@@ -174,9 +176,9 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
     return abstractRemoveAt(remainingSets);
   }
 
-  protected abstract P abstractRemoveAt(Set set, int arity);
+  protected abstract CS abstractRemoveAt(Set set, int arity);
 
-  protected abstract P abstractRemoveAt(Set[] sets);
+  protected abstract CS abstractRemoveAt(Set[] sets);
 
   //
   // The following protected methods override the standard implementation from
@@ -232,13 +234,13 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
   }
 
   @Override
-  protected T abstractGetElement(BigInteger value) {
+  protected CE abstractGetElement(BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpair(value, this.getArity());
     return this.getElement(values);
   }
 
   @Override
-  protected T abstractGetRandomElement(Random random) {
+  protected CE abstractGetRandomElement(Random random) {
     int arity = this.getArity();
     final Element[] randomElements = new Element[arity];
     for (int i = 0; i < arity; i++) {
@@ -313,7 +315,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
 
   @Override
   public Iterator<S> iterator() {
-    final Compound<S> compoundSet = this;
+    final CompoundSet<S> compoundSet = this;
     return new Iterator<S>() {
       int currentIndex = 0;
 
@@ -359,7 +361,7 @@ public abstract class AbstractProductSet<P extends AbstractProductSet, S extends
 
   @Override
   protected boolean standardIsCompatible(Set set) {
-    return (set instanceof AbstractProductSet);
+    return (set instanceof AbstractCompoundSet);
   }
 
   @Override

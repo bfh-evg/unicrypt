@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -11,7 +11,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 /**
  * This abstract class represents the concept an element in a mathematical
@@ -26,7 +25,7 @@ import java.util.Arrays;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<S extends Set, E extends Element> implements Element {
+public abstract class AbstractElement<S extends Set, E extends Element<S>> implements Element<S> {
 
   private final S set;
   protected BigInteger value;

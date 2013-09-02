@@ -1,16 +1,15 @@
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractProductSet;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractTuple;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductSet extends AbstractProductSet<ProductSet, Set, Tuple, Element> {
+public class ProductSet extends AbstractCompoundSet<ProductSet, Tuple<ProductSet, Set>, Set, Element<Set>> {
 
   protected ProductSet(final Set[] sets) {
     super(sets);
@@ -25,10 +24,10 @@ public class ProductSet extends AbstractProductSet<ProductSet, Set, Tuple, Eleme
   }
 
   @Override
-  protected Tuple abstractGetElement(final Element[] elements) {
-    return new AbstractTuple<ProductSet, Tuple, Element>(this, elements) {
+  protected Tuple<ProductSet, Set> abstractGetElement(final Element[] elements) {
+    return new Tuple<ProductSet, Set>(this, elements) {
       @Override
-      protected Tuple abstractRemoveAt(Element[] elements) {
+      protected Tuple<ProductSet, Set> abstractRemoveAt(Element[] elements) {
         return ProductSet.getTuple(elements);
       }
     };
@@ -97,7 +96,7 @@ public class ProductSet extends AbstractProductSet<ProductSet, Set, Tuple, Eleme
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Tuple getTuple(Element... elements) {
+  public static Tuple<ProductSet, Set> getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

@@ -22,7 +22,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class NPlus extends AbstractAdditiveMonoid<AdditiveElement> {
+public class NPlus extends AbstractAdditiveMonoid<AdditiveElement<NPlus>> {
 
   /**
    * This is the private constructor of this class. It is called by the static
@@ -36,7 +36,7 @@ public class NPlus extends AbstractAdditiveMonoid<AdditiveElement> {
   // various super-classes
   //
   @Override
-  protected AdditiveElement standardSelfApply(Element element, BigInteger amount) {
+  protected AdditiveElement<NPlus> standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -45,13 +45,13 @@ public class NPlus extends AbstractAdditiveMonoid<AdditiveElement> {
   // various super-classes
   //
   @Override
-  protected AdditiveElement abstractGetElement(BigInteger value) {
-    return new AbstractAdditiveElement<NPlus, AdditiveElement>(this, value) {
+  protected AdditiveElement<NPlus> abstractGetElement(BigInteger value) {
+    return new AbstractAdditiveElement<NPlus, AdditiveElement<NPlus>>(this, value) {
     };
   }
 
   @Override
-  protected AdditiveElement abstractGetRandomElement(final Random random) {
+  protected AdditiveElement<NPlus> abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 

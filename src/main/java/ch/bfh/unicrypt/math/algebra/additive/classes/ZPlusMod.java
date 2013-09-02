@@ -24,7 +24,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement> {
+public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement<ZPlusMod>> {
 
   private BigInteger modulus;
 
@@ -76,8 +76,8 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement> {
   // various super-classes
   //
   @Override
-  protected AdditiveElement abstractGetElement(BigInteger value) {
-    return new AbstractAdditiveElement<ZPlusMod, AdditiveElement>(this, value) {
+  protected AdditiveElement<ZPlusMod> abstractGetElement(BigInteger value) {
+    return new AbstractAdditiveElement<ZPlusMod, AdditiveElement<ZPlusMod>>(this, value) {
     };
   }
 
@@ -87,7 +87,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement> {
   }
 
   @Override
-  protected AdditiveElement abstractGetRandomElement(final Random random) {
+  protected AdditiveElement<ZPlusMod> abstractGetRandomElement(final Random random) {
     return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
@@ -97,12 +97,12 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement> {
   }
 
   @Override
-  protected AdditiveElement abstractGetDefaultGenerator() {
+  protected AdditiveElement<ZPlusMod> abstractGetDefaultGenerator() {
     return this.abstractGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
   }
 
   @Override
-  public boolean abstractIsGenerator(final Element element) {
+  protected boolean abstractIsGenerator(final Element element) {
     if (this.getModulus().equals(BigInteger.ONE)) {
       return true;
     }
@@ -115,17 +115,17 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement> {
   }
 
   @Override
-  protected AdditiveElement abstractApply(final Element element1, final Element element2) {
+  protected AdditiveElement<ZPlusMod> abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  protected AdditiveElement abstractInvert(final Element element) {
+  protected AdditiveElement<ZPlusMod> abstractInvert(final Element element) {
     return this.abstractGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public AdditiveElement abstractGetRandomGenerator(final Random random) {
+  protected AdditiveElement<ZPlusMod> abstractGetRandomGenerator(final Random random) {
     AdditiveElement element;
     do {
       element = this.getRandomElement(random);

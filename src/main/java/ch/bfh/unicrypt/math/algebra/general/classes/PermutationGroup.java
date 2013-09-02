@@ -1,13 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractPermutationElement;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Permutation;
@@ -74,7 +72,7 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
   }
 
   protected PermutationElement standardGetElement(Permutation permutation) {
-    return new AbstractPermutationElement<PermutationGroup, PermutationElement>(this, permutation) {
+    return new PermutationElement(this, permutation) {
     };
   }
 

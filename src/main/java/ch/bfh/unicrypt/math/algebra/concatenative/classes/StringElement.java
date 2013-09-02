@@ -2,28 +2,26 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
+package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
+import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.StringElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractStringElement<S extends StringMonoid, E extends StringElement> extends AbstractConcatenativeElement<S, E> implements StringElement {
+public class StringElement extends AbstractConcatenativeElement<StringMonoid, StringElement> {
 
   private final String string;
 
-  protected AbstractStringElement(final S monoid, final String string) {
+  protected StringElement(final StringMonoid monoid, final String string) {
     super(monoid);
     this.string = string;
   }
 
-  @Override
   public String getString() {
     return this.string;
   }

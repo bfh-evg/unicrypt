@@ -1,12 +1,13 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.PermutationElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import java.util.Random;
 
@@ -46,8 +47,8 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
     if (!this.getDomain().contains(element)) {
       throw new IllegalArgumentException();
     }
-    final Tuple outerTuple = (Tuple) element;
-    final Tuple innerTuple = (Tuple) outerTuple.getAt(0);
+    final Compound<Element> outerTuple = (Compound<Element>) element;
+    final Compound<Element> innerTuple = (Compound<Element>) outerTuple.getAt(0);
     final Permutation permutation = ((PermutationElement) outerTuple.getAt(1)).getPermutation();
     final Element[] result = new Element[innerTuple.getArity()];
     for (int i = 0; i < innerTuple.getArity(); i++) {

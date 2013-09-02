@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Compound;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -45,7 +45,7 @@ public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element
   //
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    Tuple tuple = (Tuple) element;
+    Compound<Element> tuple = (Compound<Element>) element;
     return tuple.getAt(this.indices);
   }
 

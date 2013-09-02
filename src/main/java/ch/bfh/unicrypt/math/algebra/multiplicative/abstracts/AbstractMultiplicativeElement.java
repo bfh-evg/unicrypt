@@ -19,7 +19,7 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup, E extends MultiplicativeElement> extends AbstractElement<S, E> implements MultiplicativeElement {
+public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup, E extends MultiplicativeElement<S>> extends AbstractElement<S, E> implements MultiplicativeElement<S> {
 
   protected AbstractMultiplicativeElement(final S semiGroup) {
     super(semiGroup);

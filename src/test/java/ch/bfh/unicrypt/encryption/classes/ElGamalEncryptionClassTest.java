@@ -9,7 +9,7 @@ import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupDistributedKeyPairGenera
 import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupKeyPairGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;

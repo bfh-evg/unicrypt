@@ -1,18 +1,17 @@
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractProductMonoid;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractTuple;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductMonoid extends AbstractProductMonoid<ProductMonoid, Monoid, Tuple, Element> {
+public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, Tuple<ProductMonoid, Monoid>, Monoid, Element<Monoid>> {
 
   protected ProductMonoid(final Monoid[] monoids) {
     super(monoids);
@@ -27,10 +26,10 @@ public class ProductMonoid extends AbstractProductMonoid<ProductMonoid, Monoid, 
   }
 
   @Override
-  protected Tuple abstractGetElement(final Element[] elements) {
-    return new AbstractTuple<ProductMonoid, Tuple, Element>(this, elements) {
+  protected Tuple<ProductMonoid, Monoid> abstractGetElement(final Element[] elements) {
+    return new Tuple<ProductMonoid, Monoid>(this, elements) {
       @Override
-      protected Tuple abstractRemoveAt(Element[] elements) {
+      protected Tuple<ProductMonoid, Monoid> abstractRemoveAt(Element[] elements) {
         return ProductMonoid.getTuple(elements);
       }
     };
@@ -93,7 +92,7 @@ public class ProductMonoid extends AbstractProductMonoid<ProductMonoid, Monoid, 
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Tuple getTuple(Element... elements) {
+  public static Tuple<ProductMonoid, Monoid> getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

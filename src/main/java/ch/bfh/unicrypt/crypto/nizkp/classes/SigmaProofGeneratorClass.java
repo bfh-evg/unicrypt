@@ -6,7 +6,7 @@ import ch.bfh.unicrypt.crypto.nizkp.abstracts.ProofGeneratorAbstract;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;

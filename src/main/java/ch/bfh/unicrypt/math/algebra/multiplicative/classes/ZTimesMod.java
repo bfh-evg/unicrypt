@@ -65,7 +65,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid<MultiplicativeElemen
   //
   @Override
   protected MultiplicativeElement abstractGetElement(BigInteger value) {
-    return new AbstractMultiplicativeElement<ZTimesMod, MultiplicativeElement>(this, value) {
+    return new AbstractMultiplicativeElement<ZTimesMod, MultiplicativeElement<ZTimesMod>>(this, value) {
     };
   }
 

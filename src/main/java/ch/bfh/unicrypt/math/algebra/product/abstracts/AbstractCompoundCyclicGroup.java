@@ -6,27 +6,29 @@ package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
 import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductCyclicGroup<P extends AbstractProductCyclicGroup, S extends CyclicGroup, T extends Tuple, E extends Element> extends AbstractProductGroup<P, S, T, E> implements CyclicGroup {
+public abstract class AbstractCompoundCyclicGroup<CS extends CompoundCyclicGroup<S>, CE extends CompoundElement<CS, S, E>, S extends CyclicGroup, E extends Element<S>>
+        extends AbstractCompoundGroup<CS, CE, S, E> implements CompoundCyclicGroup<S> {
 
-  private T defaultGenerator;
+  private CE defaultGenerator;
 
-  protected AbstractProductCyclicGroup(final S... cyclicGroups) {
+  protected AbstractCompoundCyclicGroup(final S... cyclicGroups) {
     super(cyclicGroups);
   }
 
-  protected AbstractProductCyclicGroup(final S cyclicGroup, final int arity) {
+  protected AbstractCompoundCyclicGroup(final S cyclicGroup, final int arity) {
     super(cyclicGroup, arity);
   }
 
   @Override
-  public final T getDefaultGenerator() {
+  public final CE getDefaultGenerator() {
     if (this.defaultGenerator == null) {
       E[] generators = (E[]) new Element[this.getArity()];
       for (int i = 0; i < this.getArity(); i++) {
@@ -38,12 +40,12 @@ public abstract class AbstractProductCyclicGroup<P extends AbstractProductCyclic
   }
 
   @Override
-  public final T getRandomGenerator() {
+  public final CE getRandomGenerator() {
     return this.getRandomGenerator(null);
   }
 
   @Override
-  public final T getRandomGenerator(Random random) {
+  public final CE getRandomGenerator(Random random) {
     int arity = this.getArity();
     E[] randomElements = (E[]) new Element[arity];
     for (int i = 0; i < arity; i++) {
@@ -57,7 +59,7 @@ public abstract class AbstractProductCyclicGroup<P extends AbstractProductCyclic
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
-    T tuple = (T) element;
+    CE tuple = (CE) element;
     for (int i = 0; i < this.getArity(); i++) {
       if (!this.getAt(i).isGenerator(tuple.getAt(i))) {
         return false;

@@ -11,11 +11,10 @@ public abstract class AbstractBlindingScheme implements BlindingScheme {
 
   Group blindingSpace;
   Group blindingValueSpace;
-  
   Function blindingFunction;
   Function unblindingFunction;
 
-  public AbstractBlindingScheme(final Group blindingSpace, Group blindingValueSpace) {
+  protected AbstractBlindingScheme(final Group blindingSpace, Group blindingValueSpace) {
     if (blindingSpace == null || blindingValueSpace == null) {
       throw new IllegalArgumentException();
     }
@@ -72,4 +71,5 @@ public abstract class AbstractBlindingScheme implements BlindingScheme {
   public Function getUnblindingFunction(final Element value) {
     return this.getUnblindingFunction().partiallyApply(value, 0);
   }
+
 }

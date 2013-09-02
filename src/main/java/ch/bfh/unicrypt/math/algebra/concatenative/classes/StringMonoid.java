@@ -5,9 +5,7 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractStringElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.StringElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Random;
@@ -31,7 +29,7 @@ public class StringMonoid extends AbstractConcatenativeMonoid<StringElement> {
   }
 
   protected StringElement standardGetElement(String string) {
-    return new AbstractStringElement<StringMonoid, StringElement>(this, string) {
+    return new StringElement(this, string) {
     };
   }
 

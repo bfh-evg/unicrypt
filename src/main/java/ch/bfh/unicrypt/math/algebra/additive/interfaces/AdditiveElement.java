@@ -12,60 +12,60 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public interface AdditiveElement extends Element {
+public interface AdditiveElement<S extends AdditiveSemiGroup> extends Element<S> {
 
   /**
    * @see Group#apply(Element, Element)
    */
-  public AdditiveElement add(Element element);
+  public AdditiveElement<S> add(Element element);
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
-  public AdditiveElement subtract(Element element);
+  public AdditiveElement<S> subtract(Element element);
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
-  public AdditiveElement times(BigInteger amount);
+  public AdditiveElement<S> times(BigInteger amount);
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public AdditiveElement times(Element amount);
+  public AdditiveElement<S> times(Element amount);
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public AdditiveElement times(int amount);
+  public AdditiveElement<S> times(int amount);
 
   /**
    * @see Group#selfApply(Element)
    */
-  public AdditiveElement timesTwo();
+  public AdditiveElement<S> timesTwo();
 
   //
   // The following methods override corresponding parent methods with different return type
   //
   @Override
-  public AdditiveElement apply(Element element);
+  public AdditiveElement<S> apply(Element element);
 
   @Override
-  public AdditiveElement applyInverse(Element element);
+  public AdditiveElement<S> applyInverse(Element element);
 
   @Override
-  public AdditiveElement selfApply(BigInteger amount);
+  public AdditiveElement<S> selfApply(BigInteger amount);
 
   @Override
-  public AdditiveElement selfApply(Element amount);
+  public AdditiveElement<S> selfApply(Element amount);
 
   @Override
-  public AdditiveElement selfApply(int amount);
+  public AdditiveElement<S> selfApply(int amount);
 
   @Override
-  public AdditiveElement selfApply();
+  public AdditiveElement<S> selfApply();
 
   @Override
-  public AdditiveElement invert();
+  public AdditiveElement<S> invert();
 
 }

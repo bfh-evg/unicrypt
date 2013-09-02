@@ -131,7 +131,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<MultiplicativeEl
   //
   @Override
   protected MultiplicativeElement abstractGetElement(BigInteger value) {
-    return new AbstractMultiplicativeElement<GStarMod, MultiplicativeElement>(this, value) {
+    return new AbstractMultiplicativeElement<GStarMod, MultiplicativeElement<GStarMod>>(this, value) {
     };
   }
 
@@ -174,7 +174,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<MultiplicativeEl
   }
 
   @Override
-  public MultiplicativeElement abstractInvert(final Element element) {
+  protected MultiplicativeElement abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 

@@ -20,7 +20,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E extends AdditiveElement> extends AbstractElement<S, E> implements AdditiveElement {
+public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E extends AdditiveElement<S>> extends AbstractElement<S, E> implements AdditiveElement<S> {
 
   protected AbstractAdditiveElement(final S semiGroup) {
     super(semiGroup);

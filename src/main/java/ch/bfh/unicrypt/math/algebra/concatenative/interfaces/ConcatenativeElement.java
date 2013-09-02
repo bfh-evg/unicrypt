@@ -12,57 +12,57 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public interface ConcatenativeElement extends Element {
+public interface ConcatenativeElement<S extends ConcatenativeSemiGroup> extends Element<S> {
 
   public int getLength();
 
   /**
    * @see Group#apply(Element, Element)
    */
-  public ConcatenativeElement concatenate(Element element);
+  public ConcatenativeElement<S> concatenate(Element element);
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
-  public ConcatenativeElement selfConcatenate(BigInteger amount);
+  public ConcatenativeElement<S> selfConcatenate(BigInteger amount);
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public ConcatenativeElement selfConcatenate(Element amount);
+  public ConcatenativeElement<S> selfConcatenate(Element amount);
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public ConcatenativeElement selfConcatenate(int amount);
+  public ConcatenativeElement<S> selfConcatenate(int amount);
 
   /**
    * @see Group#selfApply(Element)
    */
-  public ConcatenativeElement selfConcatenate();
+  public ConcatenativeElement<S> selfConcatenate();
 
   //
   // The following methods override corresponding parent methods with different return type
   //
   @Override
-  public ConcatenativeElement apply(Element element);
+  public ConcatenativeElement<S> apply(Element element);
 
   @Override
-  public ConcatenativeElement applyInverse(Element element);
+  public ConcatenativeElement<S> applyInverse(Element element);
 
   @Override
-  public ConcatenativeElement selfApply(BigInteger amount);
+  public ConcatenativeElement<S> selfApply(BigInteger amount);
 
   @Override
-  public ConcatenativeElement selfApply(Element amount);
+  public ConcatenativeElement<S> selfApply(Element amount);
 
   @Override
-  public ConcatenativeElement selfApply(int amount);
+  public ConcatenativeElement<S> selfApply(int amount);
 
   @Override
-  public ConcatenativeElement selfApply();
+  public ConcatenativeElement<S> selfApply();
 
   @Override
-  public ConcatenativeElement invert();
+  public ConcatenativeElement<S> invert();
 
 }

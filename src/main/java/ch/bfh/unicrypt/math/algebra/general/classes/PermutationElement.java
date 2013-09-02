@@ -2,11 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.algebra.general.abstracts;
+package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.PermutationElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import java.math.BigInteger;
@@ -15,16 +14,15 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractPermutationElement<S extends PermutationGroup, E extends PermutationElement> extends AbstractElement<S, E> implements PermutationElement {
+public class PermutationElement extends AbstractElement<PermutationGroup, PermutationElement> {
 
   private final Permutation permutation;
 
-  protected AbstractPermutationElement(final S group, final Permutation permutationVector) {
+  protected PermutationElement(final PermutationGroup group, final Permutation permutationVector) {
     super(group);
     this.permutation = permutationVector;
   }
 
-  @Override
   public Permutation getPermutation() {
     return this.permutation;
   }

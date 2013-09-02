@@ -8,9 +8,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractBooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.BooleanElement;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
@@ -36,7 +34,7 @@ public class BooleanSet extends AbstractSet<BooleanElement> {
    * @return The corresponding group element
    */
   public final BooleanElement getElement(final boolean bit) {
-    return new AbstractBooleanElement<BooleanSet, BooleanElement>(this, bit) {
+    return new BooleanElement(this, bit) {
     };
   }
 

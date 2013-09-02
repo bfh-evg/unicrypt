@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
@@ -16,7 +16,7 @@ import java.security.MessageDigest;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface Element {
+public interface Element<S extends Set> {
 
   public static final String STANDARD_HASH_ALGORITHM = "SHA-256";
 
@@ -26,7 +26,7 @@ public interface Element {
    *
    * @return
    */
-  public Set getSet();
+  public S getSet();
 
   /**
    * Returns the positive BigInteger value that corresponds the element.
@@ -53,37 +53,37 @@ public interface Element {
   /**
    * @see Group#apply(Element, Element)
    */
-  public Element apply(Element element);
+  public Element<S> apply(Element element);
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
-  public Element applyInverse(Element element);
+  public Element<S> applyInverse(Element element);
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
-  public Element selfApply(BigInteger amount);
+  public Element<S> selfApply(BigInteger amount);
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public Element selfApply(Element amount);
+  public Element<S> selfApply(Element amount);
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public Element selfApply(int amount);
+  public Element<S> selfApply(int amount);
 
   /**
    * @see Group#selfApply(Element)
    */
-  public Element selfApply();
+  public Element<S> selfApply();
 
   /**
    * @see Group#invert(Element)
    */
-  public Element invert();
+  public Element<S> invert();
 
   /**
    * @see Group#isIdentityElement(Element)

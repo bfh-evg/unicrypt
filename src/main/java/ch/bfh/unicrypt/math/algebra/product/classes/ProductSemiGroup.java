@@ -1,17 +1,16 @@
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractProductSemiGroup;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractTuple;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductSemiGroup extends AbstractProductSemiGroup<ProductSemiGroup, SemiGroup, Tuple, Element> {
+public class ProductSemiGroup extends AbstractCompoundSemiGroup<ProductSemiGroup, Tuple<ProductSemiGroup, SemiGroup>, SemiGroup, Element<SemiGroup>> {
 
   protected ProductSemiGroup(final SemiGroup[] semiGroups) {
     super(semiGroups);
@@ -27,7 +26,7 @@ public class ProductSemiGroup extends AbstractProductSemiGroup<ProductSemiGroup,
 
   @Override
   protected Tuple abstractGetElement(final Element[] elements) {
-    return new AbstractTuple<ProductSemiGroup, Tuple, Element>(this, elements) {
+    return new Tuple<ProductSemiGroup, SemiGroup>(this, elements) {
       @Override
       protected Tuple abstractRemoveAt(Element[] elements) {
         return ProductSemiGroup.getTuple(elements);
@@ -94,7 +93,7 @@ public class ProductSemiGroup extends AbstractProductSemiGroup<ProductSemiGroup,
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Tuple getTuple(Element... elements) {
+  public static Tuple<ProductSemiGroup, SemiGroup> getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

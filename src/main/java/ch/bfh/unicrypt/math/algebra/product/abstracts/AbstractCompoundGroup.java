@@ -5,30 +5,32 @@
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundGroup;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductGroup<P extends AbstractProductGroup, S extends Group, T extends Tuple, E extends Element> extends AbstractProductMonoid<P, S, T, E> implements Group {
+public abstract class AbstractCompoundGroup<CS extends CompoundGroup<S>, CE extends CompoundElement<CS, S, E>, S extends Group, E extends Element<S>>
+        extends AbstractCompoundMonoid<CS, CE, S, E> implements CompoundGroup<S> {
 
-  protected AbstractProductGroup(final S... groups) {
+  protected AbstractCompoundGroup(final S... groups) {
     super(groups);
   }
 
-  protected AbstractProductGroup(final S group, final int arity) {
+  protected AbstractCompoundGroup(final S group, final int arity) {
     super(group, arity);
   }
 
   @Override
-  public final T invert(Element element) {
+  public final CE invert(Element element) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
     int arity = this.getArity();
-    T tuple = (T) element;
+    CE tuple = (CE) element;
     final E[] invertedElements = (E[]) new Element[arity];
     for (int i = 0; i < arity; i++) {
       invertedElements[i] = (E) tuple.getAt(i).invert();
@@ -37,7 +39,7 @@ public abstract class AbstractProductGroup<P extends AbstractProductGroup, S ext
   }
 
   @Override
-  public final T applyInverse(Element element1, Element element2) {
+  public final CE applyInverse(Element element1, Element element2) {
     return this.apply(element1, this.invert(element2));
   }
 

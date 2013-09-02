@@ -1,11 +1,10 @@
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractProductGroup;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractTuple;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
 
 /**
  * This class represents the concept of a direct product of groups ("product
@@ -28,7 +27,7 @@ import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractTuple;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ProductGroup extends AbstractProductGroup<ProductGroup, Group, Tuple, Element> {
+public class ProductGroup extends AbstractCompoundGroup<ProductGroup, Tuple<ProductGroup, Group>, Group, Element<Group>> {
 
   protected ProductGroup(final Group[] groups) {
     super(groups);
@@ -43,10 +42,10 @@ public class ProductGroup extends AbstractProductGroup<ProductGroup, Group, Tupl
   }
 
   @Override
-  protected Tuple abstractGetElement(final Element[] elements) {
-    return new AbstractTuple<ProductGroup, Tuple, Element>(this, elements) {
+  protected Tuple<ProductGroup, Group> abstractGetElement(final Element[] elements) {
+    return new Tuple<ProductGroup, Group>(this, elements) {
       @Override
-      protected Tuple abstractRemoveAt(Element[] elements) {
+      protected Tuple<ProductGroup, Group> abstractRemoveAt(Element[] elements) {
         return ProductGroup.getTuple(elements);
       }
     };
@@ -112,7 +111,7 @@ public class ProductGroup extends AbstractProductGroup<ProductGroup, Group, Tupl
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Tuple getTuple(Element... elements) {
+  public static Tuple<ProductGroup, Group> getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

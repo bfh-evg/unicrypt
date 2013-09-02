@@ -5,27 +5,33 @@
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundMonoid;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSemiGroup;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductMonoid<P extends AbstractProductMonoid, S extends Monoid, T extends Tuple, E extends Element> extends AbstractProductSemiGroup<P, S, T, E> implements Monoid {
+public abstract class AbstractCompoundMonoid<CS extends CompoundMonoid<S>, CE extends CompoundElement<CS, S, E>, S extends Monoid, E extends Element<S>>
+        extends AbstractCompoundSemiGroup<CS, CE, S, E> implements CompoundMonoid<S> {
 
-  private T identityElement;
+  private CE identityElement;
 
-  protected AbstractProductMonoid(final S... monoids) {
+  protected AbstractCompoundMonoid(final S... monoids) {
     super(monoids);
   }
 
-  protected AbstractProductMonoid(final S monoid, final int arity) {
+  protected AbstractCompoundMonoid(final S monoid, final int arity) {
     super(monoid, arity);
   }
 
   @Override
-  public final T getIdentityElement() {
+  public final CE getIdentityElement() {
     if (this.identityElement == null) {
       final E[] identityElements = (E[]) new Element[this.getArity()];
       for (int i = 0; i < identityElements.length; i++) {

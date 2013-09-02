@@ -4,9 +4,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
@@ -30,7 +28,7 @@ public class ByteArrayMonoid extends AbstractConcatenativeMonoid<ByteArrayElemen
   }
 
   protected ByteArrayElement standardGetElement(byte[] bytes) {
-    return new AbstractByteArrayElement<ByteArrayMonoid, ByteArrayElement>(this, bytes) {
+    return new ByteArrayElement(this, bytes) {
     };
   }
 

@@ -37,7 +37,7 @@ public class NTimes extends AbstractMultiplicativeMonoid<MultiplicativeElement> 
   //
   @Override
   protected MultiplicativeElement abstractGetElement(BigInteger value) {
-    return new AbstractMultiplicativeElement<NTimes, MultiplicativeElement>(this, value) {
+    return new AbstractMultiplicativeElement<NTimes, MultiplicativeElement<NTimes>>(this, value) {
     };
   }
 

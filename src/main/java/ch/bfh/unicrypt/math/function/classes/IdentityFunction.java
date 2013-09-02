@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;

@@ -5,32 +5,37 @@
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSemiGroup;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
 import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractProductSemiGroup<P extends AbstractProductSemiGroup, S extends SemiGroup, T extends Tuple, E extends Element> extends AbstractProductSet<P, S, T, E> implements SemiGroup {
+public abstract class AbstractCompoundSemiGroup<CS extends CompoundSemiGroup<S>, CE extends CompoundElement<CS, S, E>, S extends SemiGroup, E extends Element<S>>
+        extends AbstractCompoundSet<CS, CE, S, E> implements CompoundSemiGroup<S> {
 
-  protected AbstractProductSemiGroup(final S... semiGroups) {
+  protected AbstractCompoundSemiGroup(final S... semiGroups) {
     super(semiGroups);
   }
 
-  protected AbstractProductSemiGroup(final S semiGroup, final int arity) {
+  protected AbstractCompoundSemiGroup(final S semiGroup, final int arity) {
     super(semiGroup, arity);
   }
 
   @Override
-  public final T apply(Element element1, Element element2) {
+  public final CE apply(Element element1, Element element2) {
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();
     }
     int arity = this.getArity();
-    T tuple1 = (T) element1;
-    T tuple2 = (T) element2;
+    CE tuple1 = (CE) element1;
+    CE tuple2 = (CE) element2;
     final E[] results = (E[]) new Element[arity];
     for (int i = 0; i < arity; i++) {
       results[i] = (E) tuple1.getAt(i).apply(tuple2.getAt(i));
@@ -39,13 +44,13 @@ public abstract class AbstractProductSemiGroup<P extends AbstractProductSemiGrou
   }
 
   @Override
-  public final T apply(Element... elements) {
+  public final CE apply(Element... elements) {
     if (elements == null || elements.length == 0) {
       throw new IllegalArgumentException();
     }
-    T[] tuples = (T[]) elements;
-    T result = null;
-    for (T tuple : tuples) {
+    CE[] tuples = (CE[]) elements;
+    CE result = null;
+    for (CE tuple : tuples) {
       if (result == null) {
         result = tuple;
       } else {
@@ -56,12 +61,12 @@ public abstract class AbstractProductSemiGroup<P extends AbstractProductSemiGrou
   }
 
   @Override
-  public final T selfApply(Element element, BigInteger amount) {
+  public final CE selfApply(Element element, BigInteger amount) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
     int arity = this.getArity();
-    T tuple = (T) element;
+    CE tuple = (CE) element;
     final E[] results = (E[]) new Element[arity];
     for (int i = 0; i < arity; i++) {
       results[i] = (E) tuple.getAt(i).selfApply(amount);
@@ -70,7 +75,7 @@ public abstract class AbstractProductSemiGroup<P extends AbstractProductSemiGrou
   }
 
   @Override
-  public final T selfApply(Element element, Element amount) {
+  public final CE selfApply(Element element, Element amount) {
     if (amount == null) {
       throw new IllegalArgumentException();
     }
@@ -78,21 +83,21 @@ public abstract class AbstractProductSemiGroup<P extends AbstractProductSemiGrou
   }
 
   @Override
-  public final T selfApply(Element element, int amount) {
+  public final CE selfApply(Element element, int amount) {
     return this.selfApply(element, BigInteger.valueOf(amount));
   }
 
   @Override
-  public final T selfApply(Element element) {
+  public final CE selfApply(Element element) {
     return this.apply(element, element);
   }
 
   @Override
-  public final T multiSelfApply(Element[] elements, BigInteger[] amounts) {
+  public final CE multiSelfApply(Element[] elements, BigInteger[] amounts) {
     if ((elements == null) || (amounts == null) || (elements.length != amounts.length) || (elements.length == 0)) {
       throw new IllegalArgumentException();
     }
-    T[] results = (T[]) new Tuple[elements.length];
+    CE[] results = (CE[]) new Tuple[elements.length];
     for (int i = 0; i < elements.length; i++) {
       results[i] = this.selfApply(elements[i], amounts[i]);
     }

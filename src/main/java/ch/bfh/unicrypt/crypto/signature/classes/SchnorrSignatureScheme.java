@@ -8,7 +8,7 @@ import ch.bfh.unicrypt.crypto.signature.abstracts.AbstractRandomizedSignatureSch
 import ch.bfh.unicrypt.crypto.signature.interfaces.SchnorrSignatureScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.ProductDomainFunctionAbstract;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;

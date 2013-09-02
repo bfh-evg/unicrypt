@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.product.classes.ProductSemiGroup;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.helper.Compound;
 
 /**
  * This interface represents the the concept of a function f:X^n->X, which
@@ -32,8 +32,8 @@ public class ApplyFunction extends AbstractFunction<ProductSemiGroup, SemiGroup,
 
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    Tuple compoundElement = (Tuple) element;
-    return this.getCoDomain().apply(compoundElement.getAll());
+    Compound<Element> tuple = (Compound<Element>) element;
+    return this.getCoDomain().apply(tuple.getAll());
   }
 
   /**

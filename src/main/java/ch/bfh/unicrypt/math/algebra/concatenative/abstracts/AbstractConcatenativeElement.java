@@ -6,12 +6,9 @@ package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 
 /**
@@ -19,7 +16,7 @@ import java.math.BigInteger;
  * @param <E>
  * @author rolfhaenni
  */
-public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement> extends AbstractElement<S, E> implements ConcatenativeElement {
+public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement<S>> extends AbstractElement<S, E> implements ConcatenativeElement<S> {
 
   protected AbstractConcatenativeElement(final S semiGroup) {
     super(semiGroup);

@@ -4,13 +4,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
-import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -21,19 +21,19 @@ import java.util.NoSuchElementException;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractTuple<S extends AbstractProductSet, T extends Tuple, E extends Element> extends AbstractElement<S, T> implements Tuple {
+public abstract class AbstractCompoundElement<CS extends CompoundSet, CE extends CompoundElement<CS, S, E>, S extends Set, E extends Element<S>>
+        extends AbstractElement<CS, CE> implements CompoundElement<CS, S, E> {
 
   private final E[] elements;
   private final int arity;
 
-  protected AbstractTuple(final S set, final E[] elements) {
+  protected AbstractCompoundElement(final CS set, final E[] elements) {
     super(set);
     this.elements = elements;
     this.arity = elements.length;
   }
 
-  @Override
-  public T removeAt(final int index) {
+  public CE removeAt(final int index) {
     int arity = this.getArity();
     if (index < 0 || index >= arity) {
       throw new IndexOutOfBoundsException();
@@ -49,7 +49,7 @@ public abstract class AbstractTuple<S extends AbstractProductSet, T extends Tupl
     return abstractRemoveAt(remainingElements);
   }
 
-  protected abstract T abstractRemoveAt(Element[] elements);
+  protected abstract CE abstractRemoveAt(Element[] elements);
 
   @Override
   protected BigInteger standardGetValue() {
@@ -111,7 +111,7 @@ public abstract class AbstractTuple<S extends AbstractProductSet, T extends Tupl
     E element = (E) this;
     for (final int index : indices) {
       if (element.isCompound()) {
-        element = (E) ((T) element).getAt(index);
+        element = (E) ((CE) element).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }
@@ -130,9 +130,9 @@ public abstract class AbstractTuple<S extends AbstractProductSet, T extends Tupl
   }
 
   @Override
-  public Iterator<Element> iterator() {
-    final Compound<Element> tuple = this;
-    return new Iterator<Element>() {
+  public Iterator<E> iterator() {
+    final CompoundElement<CS, S, E> tuple = this;
+    return new Iterator<E>() {
       int currentIndex = 0;
 
       @Override
@@ -143,7 +143,7 @@ public abstract class AbstractTuple<S extends AbstractProductSet, T extends Tupl
       @Override
       public E next() {
         if (this.hasNext()) {
-          return (E) tuple.getAt(this.currentIndex++);
+          return tuple.getAt(this.currentIndex++);
         }
         throw new NoSuchElementException();
       }
@@ -157,7 +157,7 @@ public abstract class AbstractTuple<S extends AbstractProductSet, T extends Tupl
 
   @Override
   protected boolean standardEquals(Element element) {
-    T other = (T) element;
+    CE other = (CE) element;
     for (int i = 0; i < this.getArity(); i++) {
       if (!this.getAt(i).equals(other.getAt(i))) {
         return false;

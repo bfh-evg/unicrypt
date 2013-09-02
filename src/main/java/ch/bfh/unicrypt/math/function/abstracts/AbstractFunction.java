@@ -3,7 +3,7 @@ package ch.bfh.unicrypt.math.function.abstracts;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractProductSet;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Random;
 
@@ -57,7 +57,7 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
   @Override
   public final E apply(final Element[] elements, final Random random) {
     if (this.getDomain().isCompound()) {
-      return this.apply(((AbstractProductSet) this.getDomain()).getElement(elements), random);
+      return this.apply(((AbstractCompoundSet) this.getDomain()).getElement(elements), random);
     }
     throw new UnsupportedOperationException();
   }

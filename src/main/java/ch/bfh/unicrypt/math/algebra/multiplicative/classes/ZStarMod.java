@@ -124,7 +124,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement>
   //
   @Override
   protected MultiplicativeElement abstractGetElement(BigInteger value) {
-    return new AbstractMultiplicativeElement<ZStarMod, MultiplicativeElement>(this, value) {
+    return new AbstractMultiplicativeElement<ZStarMod, MultiplicativeElement<ZStarMod>>(this, value) {
     };
   }
 

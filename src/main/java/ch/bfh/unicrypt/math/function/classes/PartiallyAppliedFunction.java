@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Compound;
 import java.util.Random;
 
 /**
@@ -87,7 +87,7 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
             && this.getIndex() == other.getIndex();
   }
 
- @Override
+  @Override
   protected int standardHashCode() {
     final int prime = 31;
     int result = 1;
@@ -102,14 +102,14 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
   //
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    Tuple compoundElement = (Tuple) element;
-    int arity = compoundElement.getArity();
+    Compound<Element> tuple = (Compound<Element>) element;
+    int arity = tuple.getArity();
     final Element[] allElements = new Element[arity + 1];
     for (int i = 0; i < arity; i++) {
       if (i < this.getIndex()) {
-        allElements[i] = compoundElement.getAt(i);
+        allElements[i] = tuple.getAt(i);
       } else {
-        allElements[i + 1] = compoundElement.getAt(i);
+        allElements[i + 1] = tuple.getAt(i);
       }
       allElements[this.getIndex()] = this.getParameter();
     }

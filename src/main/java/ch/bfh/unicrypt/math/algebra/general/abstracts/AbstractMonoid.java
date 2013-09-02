@@ -15,12 +15,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractMonoid<T extends Element> extends AbstractSemiGroup<T> implements Monoid {
+public abstract class AbstractMonoid<E extends Element> extends AbstractSemiGroup<E> implements Monoid {
 
-  private T identityElement;
+  private E identityElement;
 
   @Override
-  public final T getIdentityElement() {
+  public final E getIdentityElement() {
     if (this.identityElement == null) {
       this.identityElement = this.abstractGetIdentityElement();
     }
@@ -42,7 +42,7 @@ public abstract class AbstractMonoid<T extends Element> extends AbstractSemiGrou
   }
 
   @Override
-  protected T standardSelfApply(Element element, BigInteger amount) {
+  protected E standardSelfApply(Element element, BigInteger amount) {
     if (amount.signum() == 0) {
       return this.getIdentityElement();
     }
@@ -52,6 +52,6 @@ public abstract class AbstractMonoid<T extends Element> extends AbstractSemiGrou
   //
   // The following protected abstract method must be implemented in every direct sub-class.
   //
-  protected abstract T abstractGetIdentityElement();
+  protected abstract E abstractGetIdentityElement();
 
 }

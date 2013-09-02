@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
@@ -16,60 +17,60 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public interface MultiplicativeElement extends Element {
+public interface MultiplicativeElement<S extends MultiplicativeSemiGroup> extends Element<S> {
 
   /**
    * @see Group#apply(Element, Element)
    */
-  public MultiplicativeElement multiply(Element element);
+  public MultiplicativeElement<S> multiply(Element element);
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
-  public MultiplicativeElement divide(Element element);
+  public MultiplicativeElement<S> divide(Element element);
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
-  public MultiplicativeElement power(BigInteger amount);
+  public MultiplicativeElement<S> power(BigInteger amount);
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public MultiplicativeElement power(Element amount);
+  public MultiplicativeElement<S> power(Element amount);
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public MultiplicativeElement power(int amount);
+  public MultiplicativeElement<S> power(int amount);
 
   /**
    * @see Group#selfApply(Element)
    */
-  public MultiplicativeElement square();
+  public MultiplicativeElement<S> square();
 
   //
   // The following methods override corresponding parent methods with different return type
   //
   @Override
-  public MultiplicativeElement apply(Element element);
+  public MultiplicativeElement<S> apply(Element element);
 
   @Override
-  public MultiplicativeElement applyInverse(Element element);
+  public MultiplicativeElement<S> applyInverse(Element element);
 
   @Override
-  public MultiplicativeElement selfApply(BigInteger amount);
+  public MultiplicativeElement<S> selfApply(BigInteger amount);
 
   @Override
-  public MultiplicativeElement selfApply(Element amount);
+  public MultiplicativeElement<S> selfApply(Element amount);
 
   @Override
-  public MultiplicativeElement selfApply(int amount);
+  public MultiplicativeElement<S> selfApply(int amount);
 
   @Override
-  public MultiplicativeElement selfApply();
+  public MultiplicativeElement<S> selfApply();
 
   @Override
-  public MultiplicativeElement invert();
+  public MultiplicativeElement<S> invert();
 
 }

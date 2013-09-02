@@ -3,7 +3,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class SingletonGroup extends AbstractCyclicGroup<Element> {
   private final Element element;
 
   private SingletonGroup(BigInteger value) {
-    this.element = new AbstractElement<SingletonGroup, Element>(this, value) {
+    this.element = new SingletonElement(this, value) {
     };
   }
 

@@ -25,7 +25,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlus extends AbstractAdditiveCyclicGroup<AdditiveElement> {
+public class ZPlus extends AbstractAdditiveCyclicGroup<AdditiveElement<ZPlus>> {
 
   /**
    * This is the private constructor of this class. It is called by the static
@@ -39,7 +39,7 @@ public class ZPlus extends AbstractAdditiveCyclicGroup<AdditiveElement> {
   // various super-classes
   //
   @Override
-  protected AdditiveElement standardSelfApply(Element element, BigInteger amount) {
+  protected AdditiveElement<ZPlus> standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -48,13 +48,13 @@ public class ZPlus extends AbstractAdditiveCyclicGroup<AdditiveElement> {
   // various super-classes
   //
   @Override
-  protected AdditiveElement abstractGetElement(BigInteger value) {
-    return new AbstractAdditiveElement<ZPlus, AdditiveElement>(this, value) {
+  protected AdditiveElement<ZPlus> abstractGetElement(BigInteger value) {
+    return new AbstractAdditiveElement<ZPlus, AdditiveElement<ZPlus>>(this, value) {
     };
   }
 
   @Override
-  protected AdditiveElement abstractGetRandomElement(final Random random) {
+  protected AdditiveElement<ZPlus> abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -69,32 +69,32 @@ public class ZPlus extends AbstractAdditiveCyclicGroup<AdditiveElement> {
   }
 
   @Override
-  protected AdditiveElement abstractGetDefaultGenerator() {
+  protected AdditiveElement<ZPlus> abstractGetDefaultGenerator() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  public boolean abstractIsGenerator(final Element element) {
+  protected boolean abstractIsGenerator(final Element element) {
     return element.getValue().abs().equals(BigInteger.ONE);
   }
 
   @Override
-  protected AdditiveElement abstractGetIdentityElement() {
+  protected AdditiveElement<ZPlus> abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected AdditiveElement abstractApply(final Element element1, final Element element2) {
+  protected AdditiveElement<ZPlus> abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
-  protected AdditiveElement abstractInvert(final Element element) {
+  protected AdditiveElement<ZPlus> abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().negate());
   }
 
   @Override
-  public AdditiveElement abstractGetRandomGenerator(final Random random) {
+  protected AdditiveElement<ZPlus> abstractGetRandomGenerator(final Random random) {
     if (RandomUtil.createRandomBoolean(random)) {
       return this.getDefaultGenerator();
     }

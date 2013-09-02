@@ -20,7 +20,7 @@ import ch.bfh.unicrypt.crypto.nizkp.classes.SigmaProofGeneratorClass;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;

@@ -7,7 +7,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.crypto.mixnet.interfaces.Mixer;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.PermutationElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.function.interfaces.PermutationFunction;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;

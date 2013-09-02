@@ -2,13 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
+package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
+import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
@@ -17,16 +16,15 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractByteArrayElement<S extends ByteArrayMonoid, E extends ByteArrayElement> extends AbstractConcatenativeElement<S, E> implements ByteArrayElement {
+public class ByteArrayElement extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement> {
 
   private final byte[] bytes;
 
-  protected AbstractByteArrayElement(final S monoid, final byte[] bytes) {
+  protected ByteArrayElement(final ByteArrayMonoid monoid, final byte[] bytes) {
     super(monoid);
     this.bytes = bytes;
   }
 
-  @Override
   public byte[] getBytes() {
     return this.bytes;
   }
