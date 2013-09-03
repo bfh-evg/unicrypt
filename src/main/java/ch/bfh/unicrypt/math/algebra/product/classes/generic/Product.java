@@ -1,4 +1,4 @@
-package ch.bfh.unicrypt.math.algebra.product.classes.nongeneric;
+package ch.bfh.unicrypt.math.algebra.product.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -8,30 +8,30 @@ import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
  *
  * @author rolfhaenni
  */
-public class ProductSet extends AbstractCompoundSet<ProductSet, ProductSetElement, Set, Element> {
+public class Product<S extends Set> extends AbstractCompoundSet<Product<S>, Tuple<S>, S, Element> {
 
-  protected ProductSet(final Set... sets) {
+  protected Product(final S... sets) {
     super(sets);
   }
 
-  protected ProductSet(final Set set, final int arity) {
+  protected Product(final S set, final int arity) {
     super(set, arity);
   }
 
   @Override
-  protected ProductSetElement abstractGetElement(final Element[] elements) {
-    return new ProductSetElement(this, elements) {
+  protected Tuple<S> abstractGetElement(final Element[] elements) {
+    return new Tuple<S>(this, elements) {
     };
   }
 
   @Override
-  protected ProductSet abstractRemoveAt(Set set, int arity) {
-    return ProductSet.getInstance(set, arity);
+  protected Product<S> abstractRemoveAt(S set, int arity) {
+    return Product.<S>getInstance(set, arity);
   }
 
   @Override
-  protected ProductSet abstractRemoveAt(Set[] sets) {
-    return ProductSet.getInstance(sets);
+  protected Product<S> abstractRemoveAt(S[] sets) {
+    return Product.<S>getInstance(sets);
   }
 
   //
@@ -45,14 +45,14 @@ public class ProductSet extends AbstractCompoundSet<ProductSet, ProductSetElemen
    * @return The corresponding product set
    * @throws IllegalArgumentException if {@code sets} is null or contains null
    */
-  public static ProductSet getInstance(final Set... sets) {
+  public static <S extends Set> Product<S> getInstance(final S... sets) {
     if (sets == null) {
       throw new IllegalArgumentException();
     }
     if (sets.length > 0) {
       boolean uniform = true;
-      Set first = sets[0];
-      for (final Set set : sets) {
+      S first = sets[0];
+      for (final S set : sets) {
         if (set == null) {
           throw new IllegalArgumentException();
         }
@@ -61,23 +61,23 @@ public class ProductSet extends AbstractCompoundSet<ProductSet, ProductSetElemen
         }
       }
       if (uniform) {
-        return ProductSet.getInstance(first, sets.length);
+        return Product.<S>getInstance(first, sets.length);
       }
     }
-    return new ProductSet(sets);
+    return new Product<S>(sets);
   }
 
-  public static ProductSet getInstance(final Set set, int arity) {
+  public static <S extends Set> Product<S> getInstance(final S set, int arity) {
     if ((set == null) || (arity < 0)) {
       throw new IllegalArgumentException();
     }
     if (arity == 0) {
-      return new ProductSet();
+      return new Product<S>();
     }
-    return new ProductSet(set, arity);
+    return new Product<S>(set, arity);
   }
 
-  //
+//
   // STATIC HELPER METHODS
   //
   /**
@@ -90,19 +90,19 @@ public class ProductSet extends AbstractCompoundSet<ProductSet, ProductSetElemen
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static ProductSetElement getTuple(Element... elements) {
+  public static <S extends Set> Tuple<S> getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }
     int arity = elements.length;
-    final Set[] sets = new Set[arity];
+    final S[] sets = (S[]) new Set[arity];
     for (int i = 0; i < arity; i++) {
       if (elements[i] == null) {
         throw new IllegalArgumentException();
       }
-      sets[i] = elements[i].getSet();
+      sets[i] = (S) elements[i].getSet();
     }
-    return ProductSet.getInstance(sets).getElement(elements);
+    return Product.<S>getInstance(sets).getElement(elements);
   }
 
 }

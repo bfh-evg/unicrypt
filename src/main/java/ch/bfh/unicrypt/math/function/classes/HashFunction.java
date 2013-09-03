@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
@@ -55,7 +54,6 @@ public class HashFunction extends AbstractFunction<Set, ByteArrayMonoid, ByteArr
 
   @Override
   protected ByteArrayElement abstractApply(final Element element, final Random random) {
-    BigInteger value;
     if (this.recursiveHash) {
       return element.getRecursiveHashValue(this.messageDigest);
     }

@@ -7,7 +7,6 @@ package ch.bfh.unicrypt.math.algebra.product.classes;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
 
 /**
  *
@@ -20,7 +19,7 @@ public class Tuple<S extends Set> extends AbstractCompoundElement<Product<S>, Tu
   }
 
   @Override
-  protected Tuple abstractRemoveAt(Element[] elements) {
+  protected Tuple<S> abstractRemoveAt(Element[] elements) {
     return Product.getTuple(elements);
   }
 

@@ -13,7 +13,7 @@ import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;
-import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.group.interfaces.GStarSave;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;

@@ -6,17 +6,15 @@ package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundGroup;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundGroup<CS extends CompoundGroup<CS, S>, CE extends CompoundElement<CE, E>, S extends Group, E extends Element>
+public abstract class AbstractCompoundGroup<CS extends AbstractCompoundGroup<CS, CE, S, E>, CE extends AbstractCompoundElement<CS, CE, S, E>, S extends Group, E extends Element>
         extends AbstractCompoundMonoid<CS, CE, S, E> implements Group {
 
-  protected AbstractCompoundGroup(final S... groups) {
+  protected AbstractCompoundGroup(final S[] groups) {
     super(groups);
   }
 

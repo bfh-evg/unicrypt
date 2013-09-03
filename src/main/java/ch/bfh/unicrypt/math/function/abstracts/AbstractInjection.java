@@ -16,7 +16,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Injection;
  * @param <C>
  * @author rolfhaenni
  */
-public abstract class AbstractInjection<D extends Set, C extends Set, E extends Element<C>> extends AbstractFunction<D, C, E> implements Injection {
+public abstract class AbstractInjection<D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Injection {
 
   protected AbstractInjection(Set domain, Set coDomain) {
     super(domain, coDomain);

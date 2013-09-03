@@ -12,8 +12,6 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 
@@ -21,13 +19,13 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundSet<CS extends CompoundSet<CS, S>, CE extends CompoundElement<CE, E>, S extends Set, E extends Element>
+public abstract class AbstractCompoundSet<CS extends AbstractCompoundSet<CS, CE, S, E>, CE extends AbstractCompoundElement<CS, CE, S, E>, S extends Set, E extends Element>
         extends AbstractSet<CE> implements Compound<CS, S> {
 
   private final S[] sets;
   private final int arity;
 
-  protected AbstractCompoundSet(S... sets) {
+  protected AbstractCompoundSet(S[] sets) {
     this.sets = (S[]) sets.clone();
     this.arity = sets.length;
   }
@@ -264,7 +262,7 @@ public abstract class AbstractCompoundSet<CS extends CompoundSet<CS, S>, CE exte
     S set = (S) this;
     for (final int index : indices) {
       if (set.isCompound()) {
-        set = ((CompoundSet<CS, S>) set).getAt(index);
+        set = ((Compound<CS, S>) set).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }

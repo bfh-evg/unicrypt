@@ -21,7 +21,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element<C>> implements Function {
+public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element> implements Function {
 
   private final D domain;
   private final C coDomain;

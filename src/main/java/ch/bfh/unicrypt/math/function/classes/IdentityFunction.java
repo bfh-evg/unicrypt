@@ -5,8 +5,8 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductSet;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSetElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
@@ -18,7 +18,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class IdentityFunction extends AbstractFunction<Set, ProductSet, Tuple<ProductSet, Set>> {
+public class IdentityFunction extends AbstractFunction<Set, ProductSet, ProductSetElement> {
 
   private IdentityFunction(final Set domain, final ProductSet coDomain) {
     super(domain, coDomain);
@@ -28,7 +28,7 @@ public class IdentityFunction extends AbstractFunction<Set, ProductSet, Tuple<Pr
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Tuple<ProductSet, Set> abstractApply(final Element element, final Random random) {
+  protected ProductSetElement abstractApply(final Element element, final Random random) {
     final Element[] elements = new Element[this.getCoDomain().getArity()];
     Arrays.fill(elements, element);
     return this.getCoDomain().getElement(elements);

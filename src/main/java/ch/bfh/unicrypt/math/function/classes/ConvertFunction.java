@@ -14,14 +14,14 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ConvertFunction extends AbstractFunction<Set, Set, Element<Set>> {
+public class ConvertFunction extends AbstractFunction<Set, Set, Element> {
 
   private ConvertFunction(final Set domain, final Set coDomain) {
     super(domain, coDomain);
   }
 
   @Override
-  protected Element<Set> abstractApply(final Element element, final Random random) {
+  protected Element abstractApply(final Element element, final Random random) {
     return this.getCoDomain().getElement(element);
   }
 

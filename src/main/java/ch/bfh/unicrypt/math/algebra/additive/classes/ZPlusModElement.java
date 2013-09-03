@@ -4,8 +4,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import java.math.BigInteger;
+
+import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 
 /**
  *

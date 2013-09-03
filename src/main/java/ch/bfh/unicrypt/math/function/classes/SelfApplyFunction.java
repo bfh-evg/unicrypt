@@ -7,8 +7,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductSet;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSetElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
@@ -24,7 +24,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, Element<SemiGroup>> {
+public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, Element> {
 
   private SelfApplyFunction(final ProductSet domain, final SemiGroup coDomain) {
     super(domain, coDomain);
@@ -34,9 +34,9 @@ public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, E
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Element<SemiGroup> abstractApply(final Element element, final Random random) {
-    Tuple<ProductSet, Set> tuple = (Tuple<ProductSet, Set>) element;
-    return ((Element<SemiGroup>) ((Element<? super SemiGroup>) tuple.getAt(0)).selfApply(tuple.getAt(1)));
+  protected Element abstractApply(final Element element, final Random random) {
+    ProductSetElement tuple = (ProductSetElement) element;
+    return tuple.getAt(0).selfApply(tuple.getAt(1));
   }
 
   //

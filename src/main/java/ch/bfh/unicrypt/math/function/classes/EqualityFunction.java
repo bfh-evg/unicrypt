@@ -6,8 +6,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductSet;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSetElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
@@ -29,7 +29,7 @@ public class EqualityFunction extends AbstractFunction<ProductSet, BooleanSet, B
 
   @Override
   public BooleanElement abstractApply(final Element element, final Random random) {
-    Tuple<ProductSet, Set> tuple = (Tuple<ProductSet, Set>) element;
+    ProductSetElement tuple = (ProductSetElement) element;
     int arity = tuple.getArity();
     if (arity > 1) {
       final Element firstElement = tuple.getFirst();

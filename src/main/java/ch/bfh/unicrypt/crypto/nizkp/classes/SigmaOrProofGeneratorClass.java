@@ -16,7 +16,7 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.function.interfaces.HashFunction;
 import ch.bfh.unicrypt.math.function.interfaces.ProductFunction;
-import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.ProductGroup;
 import ch.bfh.unicrypt.math.utility.mapper.interfaces.Mapper;

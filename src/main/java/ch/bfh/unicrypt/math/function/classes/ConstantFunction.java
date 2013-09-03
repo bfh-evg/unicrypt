@@ -17,7 +17,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ConstantFunction extends AbstractFunction<SingletonGroup, Set, Element<Set>> {
+public class ConstantFunction extends AbstractFunction<SingletonGroup, Set, Element> {
 
   private Element element;
 
@@ -53,7 +53,7 @@ public class ConstantFunction extends AbstractFunction<SingletonGroup, Set, Elem
   }
 
   @Override
-  protected Element<Set> abstractApply(Element element, Random random) {
+  protected Element abstractApply(Element element, Random random) {
     return this.element;
   }
 

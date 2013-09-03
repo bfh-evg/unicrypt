@@ -6,8 +6,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductSet;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSetElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.helper.Permutation;
 
@@ -23,7 +23,7 @@ import ch.bfh.unicrypt.math.helper.Permutation;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet, Tuple<ProductSet, Set>> {
+public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet, ProductSetElement> {
 
   private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {
     super(domain, coDomain);
@@ -43,16 +43,13 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Tuple<ProductSet, Set> abstractApply(final Element element, final Random random) {
-    if (!this.getDomain().contains(element)) {
-      throw new IllegalArgumentException();
-    }
-    final Tuple<ProductSet, Set> outerTuple = (Tuple<ProductSet, Set>) element;
-    final Tuple<?, Set> innerTuple = (Tuple<?, Set>) outerTuple.getAt(0);
-    final Permutation permutation = ((PermutationElement) ((Element<? extends Set>) outerTuple.getAt(1))).getPermutation();
-    final Element[] result = new Element[innerTuple.getArity()];
-    for (int i = 0; i < innerTuple.getArity(); i++) {
-      result[i] = innerTuple.getAt(permutation.permute(i));
+  protected ProductSetElement abstractApply(final Element element, final Random random) {
+    final ProductSetElement pair = (ProductSetElement) element;
+    final ProductSetElement elements = (ProductSetElement) pair.getAt(0);
+    final Permutation permutation = ((PermutationElement) pair.getAt(1)).getPermutation();
+    final Element[] result = new Element[elements.getArity()];
+    for (int i = 0; i < elements.getArity(); i++) {
+      result[i] = elements.getAt(permutation.permute(i));
     }
     return this.getCoDomain().getElement(result);
   }

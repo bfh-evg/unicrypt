@@ -102,7 +102,7 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
   //
   @Override
   protected PermutationElement abstractGetRandomElement(final Random random) {
-    return this.standardGetElement(new Permutation(this.getSize(), random));
+    return this.standardGetElement(Permutation.getRandomInstance(this.getSize(), random));
   }
 
   @Override
@@ -128,7 +128,7 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
 
   @Override
   protected PermutationElement abstractGetIdentityElement() {
-    return this.standardGetElement(new Permutation(this.getSize()));
+    return this.standardGetElement(Permutation.getInstance(this.getSize()));
   }
 
   @Override

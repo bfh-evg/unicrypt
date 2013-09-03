@@ -8,19 +8,17 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundCyclicGroup;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundCyclicGroup<CS extends CompoundCyclicGroup<CS, S>, CE extends CompoundElement<CE, E>, S extends CyclicGroup, E extends Element>
+public abstract class AbstractCompoundCyclicGroup<CS extends AbstractCompoundCyclicGroup<CS, CE, S, E>, CE extends AbstractCompoundElement<CS, CE, S, E>, S extends CyclicGroup, E extends Element>
         extends AbstractCompoundGroup<CS, CE, S, E> implements CyclicGroup {
 
   private CE defaultGenerator;
 
-  protected AbstractCompoundCyclicGroup(final S... cyclicGroups) {
+  protected AbstractCompoundCyclicGroup(final S[] cyclicGroups) {
     super(cyclicGroups);
   }
 

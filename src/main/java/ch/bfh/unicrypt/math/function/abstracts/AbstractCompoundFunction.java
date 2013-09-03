@@ -19,12 +19,12 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <E>
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction<CF extends CompoundFunction<CF, F>, F extends Function, D extends Set, C extends Set, E extends Element<C>> extends AbstractFunction<D, C, E> implements CompoundFunction<CF, F> {
+public abstract class AbstractCompoundFunction<CF extends CompoundFunction<CF, F>, F extends Function, D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements CompoundFunction<CF, F> {
 
   private final F[] functions;
   private final int arity;
 
-  protected AbstractCompoundFunction(D domain, C coDomain, F... functions) {
+  protected AbstractCompoundFunction(D domain, C coDomain, F[] functions) {
     super(domain, coDomain);
     this.functions = functions.clone();
     this.arity = functions.length;

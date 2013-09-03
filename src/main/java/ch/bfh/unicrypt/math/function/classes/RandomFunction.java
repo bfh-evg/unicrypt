@@ -16,7 +16,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class RandomFunction extends AbstractFunction<SingletonGroup, Set, Element<Set>> {
+public class RandomFunction extends AbstractFunction<SingletonGroup, Set, Element> {
 
   private RandomFunction(final Set coDomain) {
     super(SingletonGroup.getInstance(), coDomain);
@@ -26,7 +26,7 @@ public class RandomFunction extends AbstractFunction<SingletonGroup, Set, Elemen
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Element<Set> abstractApply(final Element element, final Random random) {
+  protected Element abstractApply(final Element element, final Random random) {
     return this.getCoDomain().getRandomElement(random);
   }
 

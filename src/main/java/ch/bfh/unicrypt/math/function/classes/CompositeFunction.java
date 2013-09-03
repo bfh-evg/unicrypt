@@ -4,7 +4,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
@@ -21,7 +21,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author R. E. Koenig
  * @version 2.0
  */
-public final class CompositeFunction extends AbstractCompoundFunction<CompositeFunction, Function, Set, Set, Element<Set>> {
+public final class CompositeFunction extends AbstractCompoundFunction<CompositeFunction, Function, Set, Set, Element> {
 
   private CompositeFunction(final Set domain, final Set coDomain, final Function[] functions) {
     super(domain, coDomain, functions);
@@ -32,8 +32,8 @@ public final class CompositeFunction extends AbstractCompoundFunction<CompositeF
   }
 
   @Override
-  protected final Element<Set> abstractApply(final Element element, final Random random) {
-    Element<Set> result = element;
+  protected final Element abstractApply(final Element element, final Random random) {
+    Element result = element;
     for (Function function : this) {
       result = function.apply(result, random);
     }

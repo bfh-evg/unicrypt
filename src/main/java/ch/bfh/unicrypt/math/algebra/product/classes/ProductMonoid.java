@@ -1,8 +1,7 @@
-package ch.bfh.unicrypt.math.algebra.product.classes.nongeneric;
+package ch.bfh.unicrypt.math.algebra.product.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundMonoid;
 
 /**
@@ -17,10 +16,6 @@ public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, Product
 
   protected ProductMonoid(final Monoid monoid, final int arity) {
     super(monoid, arity);
-  }
-
-  protected ProductMonoid() {
-    super();
   }
 
   @Override
@@ -74,34 +69,9 @@ public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, Product
       throw new IllegalArgumentException();
     }
     if (arity == 0) {
-      return new ProductMonoid();
+      return new ProductMonoid(new Monoid[]{});
     }
     return new ProductMonoid(monoid, arity);
-  }
-
-  /**
-   * This is a static factory method to construct a composed element without the
-   * need of constructing the corresponding product or power group beforehand.
-   * The input elements are given as an array.
-   *
-   * @param elements The array of input elements
-   * @return The corresponding tuple element
-   * @throws IllegalArgumentException if {@code elements} is null or contains
-   * null
-   */
-  public static ProductMonoidElement getTuple(Element... elements) {
-    if (elements == null) {
-      throw new IllegalArgumentException();
-    }
-    int arity = elements.length;
-    final Monoid[] monoids = new Monoid[arity];
-    for (int i = 0; i < arity; i++) {
-      if (elements[i] == null) {
-        throw new IllegalArgumentException();
-      }
-      monoids[i] = (Monoid) elements[i].getSet();
-    }
-    return ProductMonoid.getInstance(monoids).getElement(elements);
   }
 
 }

@@ -5,8 +5,8 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductSet;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSetElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
@@ -18,7 +18,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element<Set>> {
+public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element> {
 
   private final int[] indices;
 
@@ -45,8 +45,8 @@ public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Element<Set> abstractApply(final Element element, final Random random) {
-    Tuple<ProductSet, Set> tuple = (Tuple<ProductSet, Set>) element;
+  protected Element abstractApply(final Element element, final Random random) {
+    ProductSetElement tuple = (ProductSetElement) element;
     return tuple.getAt(this.indices);
   }
 
