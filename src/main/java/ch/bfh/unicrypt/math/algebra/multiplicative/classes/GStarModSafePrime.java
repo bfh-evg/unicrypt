@@ -4,10 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.math.helper.factorization.Prime;
-import ch.bfh.unicrypt.math.helper.factorization.SafePrime;
 import java.math.BigInteger;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.helper.factorization.Prime;
+import ch.bfh.unicrypt.math.helper.factorization.SafePrime;
 
 /**
  *

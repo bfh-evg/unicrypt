@@ -4,24 +4,24 @@
  */
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
-import ch.bfh.unicrypt.math.utility.MathUtil;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
+import ch.bfh.unicrypt.math.utility.MathUtil;
+
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundSet<CS extends CompoundSet<S>, CE extends CompoundElement<CS, S, E>, S extends Set, E extends Element<S>>
-        extends AbstractSet<CE> implements CompoundSet<S> {
+public abstract class AbstractCompoundSet<CS extends CompoundSet<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends Set, E extends Element<S>>
+        extends AbstractSet<CE> implements CompoundSet<CS, S> {
 
   private final S[] sets;
   private final int arity;
@@ -148,38 +148,6 @@ public abstract class AbstractCompoundSet<CS extends CompoundSet<S>, CE extends 
 
   protected abstract CE abstractGetElement(final Element[] elements);
 
-  /**
-   * Creates a new product set which contains one set less than the given
-   * product set.
-   *
-   * @param index The index of the set to remove
-   * @return The resulting product set.
-   * @throws IndexOutOfBoundsException if
-   * {@code index<0} or {@code index>arity-1}
-   */
-  public CS removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (this.isUniform()) {
-      return this.abstractRemoveAt(this.getFirst(), arity - 1);
-    }
-    final S[] remainingSets = (S[]) new Set[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
-      if (i < index) {
-        remainingSets[i] = this.getAt(i);
-      } else {
-        remainingSets[i] = this.getAt(i + 1);
-      }
-    }
-    return abstractRemoveAt(remainingSets);
-  }
-
-  protected abstract CS abstractRemoveAt(Set set, int arity);
-
-  protected abstract CS abstractRemoveAt(Set[] sets);
-
   //
   // The following protected methods override the standard implementation from
   // various super-classes
@@ -295,7 +263,7 @@ public abstract class AbstractCompoundSet<CS extends CompoundSet<S>, CE extends 
     S set = (S) this;
     for (final int index : indices) {
       if (set.isCompound()) {
-        set = ((Compound<S>) set).getAt(index);
+        set = ((CompoundSet<CS, S>) set).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }
@@ -314,8 +282,32 @@ public abstract class AbstractCompoundSet<CS extends CompoundSet<S>, CE extends 
   }
 
   @Override
+  public CS removeAt(final int index) {
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    if (this.isUniform()) {
+      return this.abstractRemoveAt(this.getFirst(), arity - 1);
+    }
+    final S[] remainingSets = (S[]) new Set[arity - 1];
+    for (int i = 0; i < arity - 1; i++) {
+      if (i < index) {
+        remainingSets[i] = this.getAt(i);
+      } else {
+        remainingSets[i] = this.getAt(i + 1);
+      }
+    }
+    return abstractRemoveAt(remainingSets);
+  }
+
+  protected abstract CS abstractRemoveAt(Set set, int arity);
+
+  protected abstract CS abstractRemoveAt(Set[] sets);
+
+  @Override
   public Iterator<S> iterator() {
-    final CompoundSet<S> compoundSet = this;
+    final CompoundSet<CS, S> compoundSet = this;
     return new Iterator<S>() {
       int currentIndex = 0;
 
@@ -346,7 +338,7 @@ public abstract class AbstractCompoundSet<CS extends CompoundSet<S>, CE extends 
 
   @Override
   protected boolean standardEquals(Set set) {
-    Compound<S> other = (Compound<S>) set;
+    CS other = (CS) set;
     int arity = this.getArity();
     if (arity != other.getArity()) {
       return false;
@@ -368,7 +360,7 @@ public abstract class AbstractCompoundSet<CS extends CompoundSet<S>, CE extends 
   protected int standardHashCode() {
     final int prime = 31;
     int result = 1;
-    for (Set set : this) {
+    for (S set : this) {
       result = prime * result + set.hashCode();
     }
     result = prime * result + this.getArity();
@@ -385,7 +377,7 @@ public abstract class AbstractCompoundSet<CS extends CompoundSet<S>, CE extends 
     }
     String result = "";
     String separator = "";
-    for (Set set : this) {
+    for (S set : this) {
       result = result + separator + set.toString();
       separator = " x ";
     }

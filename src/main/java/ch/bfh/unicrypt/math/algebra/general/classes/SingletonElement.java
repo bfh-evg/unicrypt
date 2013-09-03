@@ -4,8 +4,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import java.math.BigInteger;
+
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 
 /**
  *

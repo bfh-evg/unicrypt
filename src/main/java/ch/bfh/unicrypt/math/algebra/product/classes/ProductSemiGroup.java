@@ -1,10 +1,9 @@
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSemiGroup;
 
 /**
  *
@@ -58,19 +57,22 @@ public class ProductSemiGroup extends AbstractCompoundSemiGroup<ProductSemiGroup
     if (semiGroups == null) {
       throw new IllegalArgumentException();
     }
-    if (semiGroups.length == 0) {
-      return new ProductSemiGroup();
-    }
-    SemiGroup first = semiGroups[0];
-    for (final SemiGroup semiGroup : semiGroups) {
-      if (semiGroup == null) {
-        throw new IllegalArgumentException();
+    if (semiGroups.length > 0) {
+      boolean uniform = true;
+      SemiGroup first = semiGroups[0];
+      for (final SemiGroup semiGroup : semiGroups) {
+        if (semiGroup == null) {
+          throw new IllegalArgumentException();
+        }
+        if (!semiGroup.equals(first)) {
+          uniform = false;
+        }
       }
-      if (!semiGroup.equals(first)) {
-        return new ProductSemiGroup(semiGroups);
+      if (uniform) {
+        return ProductSemiGroup.getInstance(first, semiGroups.length);
       }
     }
-    return new ProductSemiGroup(first, semiGroups.length);
+    return new ProductSemiGroup(semiGroups);
   }
 
   public static ProductSemiGroup getInstance(final SemiGroup semiGroup, int arity) {

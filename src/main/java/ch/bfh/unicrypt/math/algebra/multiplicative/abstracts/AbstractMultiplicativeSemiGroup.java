@@ -2,9 +2,9 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
 import java.math.BigInteger;
 
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 
 public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement> extends AbstractSemiGroup<E> implements MultiplicativeSemiGroup {

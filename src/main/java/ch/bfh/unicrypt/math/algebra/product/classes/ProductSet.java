@@ -1,9 +1,8 @@
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
 
 /**
  *
@@ -11,16 +10,12 @@ import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
  */
 public class ProductSet extends AbstractCompoundSet<ProductSet, Tuple<ProductSet, Set>, Set, Element<Set>> {
 
-  protected ProductSet(final Set[] sets) {
+  protected ProductSet(final Set... sets) {
     super(sets);
   }
 
   protected ProductSet(final Set set, final int arity) {
     super(set, arity);
-  }
-
-  protected ProductSet() {
-    super();
   }
 
   @Override
@@ -58,19 +53,22 @@ public class ProductSet extends AbstractCompoundSet<ProductSet, Tuple<ProductSet
     if (sets == null) {
       throw new IllegalArgumentException();
     }
-    if (sets.length == 0) {
-      return new ProductSet();
-    }
-    Set first = sets[0];
-    for (final Set set : sets) {
-      if (set == null) {
-        throw new IllegalArgumentException();
+    if (sets.length > 0) {
+      boolean uniform = true;
+      Set first = sets[0];
+      for (final Set set : sets) {
+        if (set == null) {
+          throw new IllegalArgumentException();
+        }
+        if (!set.equals(first)) {
+          uniform = false;
+        }
       }
-      if (!set.equals(first)) {
-        return new ProductSet(sets);
+      if (uniform) {
+        return ProductSet.getInstance(first, sets.length);
       }
     }
-    return new ProductSet(first, sets.length);
+    return new ProductSet(sets);
   }
 
   public static ProductSet getInstance(final Set set, int arity) {

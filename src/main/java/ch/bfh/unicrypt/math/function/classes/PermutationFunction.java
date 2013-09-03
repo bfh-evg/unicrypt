@@ -1,15 +1,15 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
-import ch.bfh.unicrypt.math.helper.Permutation;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.helper.Permutation;
 
 /**
  * This interface represents the concept of a function f:X^n x Z->X^n, where Z
@@ -23,7 +23,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet, Tuple> {
+public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet, Tuple<ProductSet, Set>> {
 
   private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {
     super(domain, coDomain);
@@ -43,13 +43,13 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Tuple abstractApply(final Element element, final Random random) {
+  protected Tuple<ProductSet, Set> abstractApply(final Element element, final Random random) {
     if (!this.getDomain().contains(element)) {
       throw new IllegalArgumentException();
     }
-    final Compound<Element> outerTuple = (Compound<Element>) element;
-    final Compound<Element> innerTuple = (Compound<Element>) outerTuple.getAt(0);
-    final Permutation permutation = ((PermutationElement) outerTuple.getAt(1)).getPermutation();
+    final Tuple<ProductSet, Set> outerTuple = (Tuple<ProductSet, Set>) element;
+    final Tuple<?, Set> innerTuple = (Tuple<?, Set>) outerTuple.getAt(0);
+    final Permutation permutation = ((PermutationElement) ((Element<? extends Set>) outerTuple.getAt(1))).getPermutation();
     final Element[] result = new Element[innerTuple.getArity()];
     for (int i = 0; i < innerTuple.getArity(); i++) {
       result[i] = innerTuple.getAt(permutation.permute(i));

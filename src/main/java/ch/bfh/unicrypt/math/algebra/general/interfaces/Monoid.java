@@ -1,7 +1,5 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  * This interface represents the mathematical concept a  group. It

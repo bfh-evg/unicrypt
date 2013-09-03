@@ -1,9 +1,10 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
  * This class represents the the concept of a function f:X->Y, which outputs the
@@ -13,20 +14,21 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ConvertFunction extends AbstractFunction<Set, Set, Element> {
+public class ConvertFunction extends AbstractFunction<Set, Set, Element<Set>> {
 
   private ConvertFunction(final Set domain, final Set coDomain) {
     super(domain, coDomain);
   }
 
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
+  protected Element<Set> abstractApply(final Element element, final Random random) {
     return this.getCoDomain().getElement(element);
   }
 
   /**
    * This is the general factory method for this class. It creates an function
    * that converts values from the domain into values from the co-domain.
+   *
    * @param domain The given domain
    * @param coDomain The given co-domain
    * @return The resulting function

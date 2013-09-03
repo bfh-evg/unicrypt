@@ -1,23 +1,24 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Random;
 
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
+
 /**
- * This class represents the concept of an identity function f:X->Z_2 with f(x)=x mod N for
- * all elements x in X.
+ * This class represents the concept of an identity function f:X->Z_2 with
+ * f(x)=x mod N for all elements x in X.
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
-public class ModuloFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElement> {
+public class ModuloFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElement<ZPlusMod>> {
 
   private BigInteger modulus;
 
@@ -43,18 +44,18 @@ public class ModuloFunction extends AbstractFunction<Set, ZPlusMod, AdditiveElem
   //
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
-
   @Override
-  protected AdditiveElement abstractApply(final Element element, final Random random) {
+  protected AdditiveElement<ZPlusMod> abstractApply(final Element element, final Random random) {
     return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
   }
 
   //
   // STATIC FACTORY METHODS
   //
-
   /**
-   * This is the standard constructor for this class. It creates an identity function for a given group.
+   * This is the standard constructor for this class. It creates an identity
+   * function for a given group.
+   *
    * @param domain The given Group
    * @throws IllegalArgumentException if the group is null
    */

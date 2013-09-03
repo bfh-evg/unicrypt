@@ -1,10 +1,10 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import java.math.BigInteger;
 
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 
 public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement> extends AbstractMonoid<E> implements MultiplicativeMonoid {

@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement> extends AbstractSemiGroup<E> implements ConcatenativeSemiGroup {
 

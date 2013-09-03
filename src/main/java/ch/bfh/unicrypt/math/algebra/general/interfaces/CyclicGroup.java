@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.util.Random;
 
 /**

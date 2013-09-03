@@ -1,9 +1,9 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGroup<E> implements CyclicGroup {
 

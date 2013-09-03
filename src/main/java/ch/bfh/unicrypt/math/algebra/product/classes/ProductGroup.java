@@ -1,10 +1,9 @@
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundGroup;
 
 /**
  * This class represents the concept of a direct product of groups ("product
@@ -76,19 +75,22 @@ public class ProductGroup extends AbstractCompoundGroup<ProductGroup, Tuple<Prod
     if (groups == null) {
       throw new IllegalArgumentException();
     }
-    if (groups.length == 0) {
-      return new ProductGroup();
-    }
-    Group first = groups[0];
-    for (final Group group : groups) {
-      if (group == null) {
-        throw new IllegalArgumentException();
+    if (groups.length > 0) {
+      boolean uniform = true;
+      Group first = groups[0];
+      for (final Group group : groups) {
+        if (group == null) {
+          throw new IllegalArgumentException();
+        }
+        if (!group.equals(first)) {
+          uniform = false;
+        }
       }
-      if (!group.equals(first)) {
-        return new ProductGroup(groups);
+      if (uniform) {
+        return ProductGroup.getInstance(first, groups.length);
       }
     }
-    return new ProductGroup(first, groups.length);
+    return new ProductGroup(groups);
   }
 
   public static ProductGroup getInstance(final Group group, int arity) {

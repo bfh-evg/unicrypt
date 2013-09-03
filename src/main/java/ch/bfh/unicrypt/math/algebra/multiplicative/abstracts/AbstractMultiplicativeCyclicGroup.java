@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import java.math.BigInteger;
 
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 
 public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement> extends AbstractCyclicGroup<E> implements MultiplicativeCyclicGroup {
 

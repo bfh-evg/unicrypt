@@ -1,17 +1,18 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  * This class represents the concept of a hash function, which maps an
@@ -31,7 +32,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class HashFunction extends AbstractFunction<Set, ByteArrayMonoid, ConcatenativeElement> {
+public class HashFunction extends AbstractFunction<Set, ByteArrayMonoid, ByteArrayElement> {
 
   private MessageDigest messageDigest;
   private boolean recursiveHash;
@@ -53,7 +54,7 @@ public class HashFunction extends AbstractFunction<Set, ByteArrayMonoid, Concate
   }
 
   @Override
-  protected ConcatenativeElement abstractApply(final Element element, final Random random) {
+  protected ByteArrayElement abstractApply(final Element element, final Random random) {
     BigInteger value;
     if (this.recursiveHash) {
       return element.getRecursiveHashValue(this.messageDigest);

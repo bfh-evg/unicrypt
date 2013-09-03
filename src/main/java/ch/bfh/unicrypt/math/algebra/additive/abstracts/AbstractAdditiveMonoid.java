@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import java.math.BigInteger;
 
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public abstract class AbstractAdditiveMonoid<E extends AdditiveElement> extends AbstractMonoid<E> implements AdditiveMonoid {
 

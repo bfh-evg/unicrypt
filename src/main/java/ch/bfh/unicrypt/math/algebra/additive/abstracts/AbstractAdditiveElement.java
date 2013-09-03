@@ -6,15 +6,12 @@ package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 
 /**
  *

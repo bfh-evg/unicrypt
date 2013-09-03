@@ -5,20 +5,16 @@
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundMonoid;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSemiGroup;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundMonoid<CS extends CompoundMonoid<S>, CE extends CompoundElement<CS, S, E>, S extends Monoid, E extends Element<S>>
-        extends AbstractCompoundSemiGroup<CS, CE, S, E> implements CompoundMonoid<S> {
+public abstract class AbstractCompoundMonoid<CS extends CompoundMonoid<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends Monoid, E extends Element<S>>
+        extends AbstractCompoundSemiGroup<CS, CE, S, E> implements CompoundMonoid<CS, S> {
 
   private CE identityElement;
 

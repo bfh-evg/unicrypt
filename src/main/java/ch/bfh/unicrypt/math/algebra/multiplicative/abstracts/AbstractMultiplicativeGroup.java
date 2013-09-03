@@ -1,10 +1,10 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import java.math.BigInteger;
 
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 
 public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement> extends AbstractGroup<E> implements MultiplicativeGroup {

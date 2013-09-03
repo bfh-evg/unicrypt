@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 
 /**
  * This is a marker interface to indicate that a cyclic group satisfies the generalized 'Discrete Logarithm' (DL) assumption.

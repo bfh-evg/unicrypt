@@ -1,8 +1,9 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import java.math.BigInteger;
 
 /**
  * This interface provides the renaming of some group operations for the case of

@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public abstract class AbstractAdditiveGroup<E extends AdditiveElement> extends AbstractGroup<E> implements AdditiveGroup {
 

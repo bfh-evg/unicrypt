@@ -4,6 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
@@ -12,17 +17,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
 import ch.bfh.unicrypt.math.utility.MathUtil;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundElement<CS extends CompoundSet, CE extends CompoundElement<CS, S, E>, S extends Set, E extends Element<S>>
-        extends AbstractElement<CS, CE> implements CompoundElement<CS, S, E> {
+public abstract class AbstractCompoundElement<CS extends CompoundSet<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends Set, E extends Element<S>>
+        extends AbstractElement<CS, CE> implements CompoundElement<CS, CE, S, E> {
 
   private final E[] elements;
   private final int arity;
@@ -32,24 +33,6 @@ public abstract class AbstractCompoundElement<CS extends CompoundSet, CE extends
     this.elements = elements;
     this.arity = elements.length;
   }
-
-  public CE removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    final E[] remainingElements = (E[]) new Element[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
-      if (i < index) {
-        remainingElements[i] = this.getAt(i);
-      } else {
-        remainingElements[i] = this.getAt(i + 1);
-      }
-    }
-    return abstractRemoveAt(remainingElements);
-  }
-
-  protected abstract CE abstractRemoveAt(Element[] elements);
 
   @Override
   protected BigInteger standardGetValue() {
@@ -130,8 +113,27 @@ public abstract class AbstractCompoundElement<CS extends CompoundSet, CE extends
   }
 
   @Override
+  public CE removeAt(final int index) {
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    final E[] remainingElements = (E[]) new Element[arity - 1];
+    for (int i = 0; i < arity - 1; i++) {
+      if (i < index) {
+        remainingElements[i] = this.getAt(i);
+      } else {
+        remainingElements[i] = this.getAt(i + 1);
+      }
+    }
+    return abstractRemoveAt(remainingElements);
+  }
+
+  protected abstract CE abstractRemoveAt(Element[] elements);
+
+  @Override
   public Iterator<E> iterator() {
-    final CompoundElement<CS, S, E> tuple = this;
+    final CompoundElement<CS, CE, S, E> tuple = this;
     return new Iterator<E>() {
       int currentIndex = 0;
 
@@ -175,7 +177,7 @@ public abstract class AbstractCompoundElement<CS extends CompoundSet, CE extends
   protected int standardHashCode() {
     final int prime = 31;
     int result = 1;
-    for (Element element : this) {
+    for (E element : this) {
       result = prime * result + element.hashCode();
     }
     return result;
@@ -185,7 +187,7 @@ public abstract class AbstractCompoundElement<CS extends CompoundSet, CE extends
   protected String standardToString() {
     String result = "";
     String separator = "";
-    for (Element element : this) {
+    for (E element : this) {
       result = result + separator + element.toString();
       separator = ",";
     }

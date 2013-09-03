@@ -1,11 +1,9 @@
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundMonoid;
 
 /**
  *
@@ -57,19 +55,22 @@ public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, Tuple<P
     if (monoids == null) {
       throw new IllegalArgumentException();
     }
-    if (monoids.length == 0) {
-      return new ProductMonoid();
-    }
-    Monoid first = monoids[0];
-    for (final Monoid monoid : monoids) {
-      if (monoid == null) {
-        throw new IllegalArgumentException();
+    if (monoids.length > 0) {
+      boolean uniform = true;
+      Monoid first = monoids[0];
+      for (final Monoid monoid : monoids) {
+        if (monoid == null) {
+          throw new IllegalArgumentException();
+        }
+        if (!monoid.equals(first)) {
+          uniform = false;
+        }
       }
-      if (!monoid.equals(first)) {
-        return new ProductMonoid(monoids);
+      if (uniform) {
+        return ProductMonoid.getInstance(first, monoids.length);
       }
     }
-    return new ProductMonoid(first, monoids.length);
+    return new ProductMonoid(monoids);
   }
 
   public static ProductMonoid getInstance(final Monoid monoid, int arity) {

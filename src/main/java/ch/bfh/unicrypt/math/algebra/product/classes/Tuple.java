@@ -13,7 +13,8 @@ import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
  *
  * @author rolfhaenni
  */
-public class Tuple<CS extends AbstractCompoundSet, S extends Set> extends AbstractCompoundElement<CS, Tuple<CS, S>, S, Element<S>> {
+public class Tuple<CS extends AbstractCompoundSet<CS, Tuple<CS, S>, S, Element<S>>, S extends Set>
+        extends AbstractCompoundElement<CS, Tuple<CS, S>, S, Element<S>> {
 
   protected Tuple(CS compoundSet, Element<S>[] elements) {
     super(compoundSet, elements);

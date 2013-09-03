@@ -1,13 +1,14 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
 import java.util.Arrays;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  * This class represents the concept of a restricted identity function, which
@@ -17,7 +18,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element> {
+public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element<Set>> {
 
   private final int[] indices;
 
@@ -44,8 +45,8 @@ public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
-    Compound<Element> tuple = (Compound<Element>) element;
+  protected Element<Set> abstractApply(final Element element, final Random random) {
+    Tuple<ProductSet, Set> tuple = (Tuple<ProductSet, Set>) element;
     return tuple.getAt(this.indices);
   }
 

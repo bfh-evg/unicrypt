@@ -5,11 +5,10 @@
 package ch.bfh.unicrypt.math.algebra.product.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *
  * @author rolfhaenni
  */
-public interface CompoundMonoid<S extends Monoid> extends Monoid, CompoundSemiGroup<S> {
+public interface CompoundMonoid<CS extends CompoundMonoid<CS, S>, S extends Monoid> extends Monoid, CompoundSemiGroup<CS, S> {
 }

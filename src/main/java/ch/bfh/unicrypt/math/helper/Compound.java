@@ -9,7 +9,7 @@ package ch.bfh.unicrypt.math.helper;
  * @param <T>
  * @author rolfhaenni
  */
-public interface Compound<T> extends Iterable<T> {
+public interface Compound<C extends Compound<C, T>, T> extends Iterable<T> {
 
   /**
    * The arity of a function is the number of functions applied in parallel or
@@ -71,14 +71,15 @@ public interface Compound<T> extends Iterable<T> {
    */
   public T[] getAll();
 
-//  /**
-//   * Creates a new product set which contains one set less than the given
-//   * product set.
-//   *
-//   * @param index The index of the set to remove
-//   * @return The resulting product set.
-//   * @throws IndexOutOfBoundsException if
-//   * {@code index<0} or {@code index>arity-1}
-//   */
-//  public Compound<T> removeAt(final int index);
+  /**
+   * Creates a new product set which contains one set less than the given
+   * product set.
+   *
+   * @param index The index of the set to remove
+   * @return The resulting product set.
+   * @throws IndexOutOfBoundsException if
+   * {@code index<0} or {@code index>arity-1}
+   */
+  public Compound<C, T> removeAt(final int index);
+
 }

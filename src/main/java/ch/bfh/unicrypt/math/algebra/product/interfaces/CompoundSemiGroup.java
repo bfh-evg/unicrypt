@@ -6,11 +6,10 @@ package ch.bfh.unicrypt.math.algebra.product.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
 
 /**
  *
  * @author rolfhaenni
  */
-public interface CompoundSemiGroup<S extends Set> extends SemiGroup, CompoundSet<S> {
+public interface CompoundSemiGroup<CS extends CompoundSemiGroup<CS, S>, S extends Set> extends SemiGroup, CompoundSet<CS, S> {
 }

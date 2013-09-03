@@ -4,11 +4,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.helper.Permutation;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  *

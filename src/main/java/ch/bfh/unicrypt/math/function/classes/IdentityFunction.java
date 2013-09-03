@@ -1,24 +1,24 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Arrays;
 import java.util.Random;
 
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+
 /**
  * This class represents the concept of a generalized identity function f:X->X^n
- * with f(x)=(x,...,x) for all elements x in X.
- * This class represents the concept of an identity function f:X->X with f(x)=x for
- * all elements x in X.
+ * with f(x)=(x,...,x) for all elements x in X. This class represents the
+ * concept of an identity function f:X->X with f(x)=x for all elements x in X.
  *
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
-public class IdentityFunction extends AbstractFunction<Set, ProductSet, Tuple> {
+public class IdentityFunction extends AbstractFunction<Set, ProductSet, Tuple<ProductSet, Set>> {
 
   private IdentityFunction(final Set domain, final ProductSet coDomain) {
     super(domain, coDomain);
@@ -27,9 +27,8 @@ public class IdentityFunction extends AbstractFunction<Set, ProductSet, Tuple> {
   //
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
-
   @Override
-  protected Tuple abstractApply(final Element element, final Random random) {
+  protected Tuple<ProductSet, Set> abstractApply(final Element element, final Random random) {
     final Element[] elements = new Element[this.getCoDomain().getArity()];
     Arrays.fill(elements, element);
     return this.getCoDomain().getElement(elements);
@@ -38,14 +37,15 @@ public class IdentityFunction extends AbstractFunction<Set, ProductSet, Tuple> {
   //
   // STATIC FACTORY METHODS
   //
-
   public static IdentityFunction getInstance(final Set set) {
     return IdentityFunction.getInstance(set, 1);
   }
 
   /**
-   * This is the standard constructor for this class. It creates a generalized identity function for a given group,
-   * which reproduces the input value multiple time.
+   * This is the standard constructor for this class. It creates a generalized
+   * identity function for a given group, which reproduces the input value
+   * multiple time.
+   *
    * @param set The given set
    * @param arity The arity of the output element
    * @throws IllegalArgumentException if {@code group} is null

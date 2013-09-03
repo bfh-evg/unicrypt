@@ -11,5 +11,5 @@ import ch.bfh.unicrypt.math.helper.Compound;
  *
  * @author rolfhaenni
  */
-public interface CompoundSet<S extends Set> extends Set, Compound<S> {
+public interface CompoundSet<CS extends CompoundSet<CS, S>, S extends Set> extends Set, Compound<CS, S> {
 }

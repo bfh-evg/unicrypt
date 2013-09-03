@@ -5,11 +5,10 @@
 package ch.bfh.unicrypt.math.algebra.product.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *
  * @author rolfhaenni
  */
-public interface CompoundGroup<S extends Group> extends Group, CompoundMonoid<S> {
+public interface CompoundGroup<CS extends CompoundGroup<CS, S>, S extends Group> extends Group, CompoundMonoid<CS, S> {
 }

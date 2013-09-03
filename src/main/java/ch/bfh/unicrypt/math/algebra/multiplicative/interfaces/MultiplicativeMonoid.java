@@ -1,7 +1,6 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 
 /**
  * This interface provides represents an additively written monoid. No

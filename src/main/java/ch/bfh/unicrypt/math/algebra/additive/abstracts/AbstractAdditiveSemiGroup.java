@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement> extends AbstractSemiGroup<E> implements AdditiveSemiGroup {
 

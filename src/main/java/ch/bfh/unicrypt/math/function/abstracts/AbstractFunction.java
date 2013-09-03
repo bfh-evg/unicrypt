@@ -1,11 +1,12 @@
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import java.util.Random;
+
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.util.Random;
 
 /**
  * This abstract class contains standard implementations for most methods of
@@ -20,7 +21,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element> implements Function {
+public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element<C>> implements Function {
 
   private final D domain;
   private final C coDomain;

@@ -1,14 +1,15 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import java.util.Random;
+
 import ch.bfh.unicrypt.math.algebra.additive.classes.NPlus;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
-import java.util.Random;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
  * This class represents the the concept of a function f:XxZ->Y, where Z is an
@@ -23,7 +24,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, Element> {
+public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, Element<SemiGroup>> {
 
   private SelfApplyFunction(final ProductSet domain, final SemiGroup coDomain) {
     super(domain, coDomain);
@@ -33,9 +34,9 @@ public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, E
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
-    Compound<Element> tuple = (Compound<Element>) element;
-    return tuple.getAt(0).selfApply(tuple.getAt(1));
+  protected Element<SemiGroup> abstractApply(final Element element, final Random random) {
+    Tuple<ProductSet, Set> tuple = (Tuple<ProductSet, Set>) element;
+    return ((Element<SemiGroup>) ((Element<? super SemiGroup>) tuple.getAt(0)).selfApply(tuple.getAt(1)));
   }
 
   //

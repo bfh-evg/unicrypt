@@ -4,21 +4,20 @@
  */
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSemiGroup;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
-import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundSemiGroup<CS extends CompoundSemiGroup<S>, CE extends CompoundElement<CS, S, E>, S extends SemiGroup, E extends Element<S>>
-        extends AbstractCompoundSet<CS, CE, S, E> implements CompoundSemiGroup<S> {
+public abstract class AbstractCompoundSemiGroup<CS extends CompoundSemiGroup<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends SemiGroup, E extends Element<S>>
+        extends AbstractCompoundSet<CS, CE, S, E> implements CompoundSemiGroup<CS, S> {
 
   protected AbstractCompoundSemiGroup(final S... semiGroups) {
     super(semiGroups);

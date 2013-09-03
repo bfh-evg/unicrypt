@@ -5,11 +5,10 @@
 package ch.bfh.unicrypt.math.algebra.product.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *
  * @author rolfhaenni
  */
-public interface CompoundCyclicGroup<S extends CyclicGroup> extends CyclicGroup, CompoundGroup<S> {
+public interface CompoundCyclicGroup<CS extends CompoundCyclicGroup<CS, S>, S extends CyclicGroup> extends CyclicGroup, CompoundGroup<CS, S> {
 }

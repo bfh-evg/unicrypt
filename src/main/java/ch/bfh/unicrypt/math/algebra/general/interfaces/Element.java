@@ -1,8 +1,9 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 
 /**
  * This abstract class represents the concept an element in a mathematical

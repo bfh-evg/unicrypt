@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import java.math.BigInteger;
 
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement> extends AbstractMonoid<E> implements ConcatenativeMonoid {
 

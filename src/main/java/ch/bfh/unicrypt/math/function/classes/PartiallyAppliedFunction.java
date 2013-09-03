@@ -1,12 +1,13 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import java.util.Random;
+
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
-import java.util.Random;
 
 /**
  * This class represents the concept of a function, which is derived from
@@ -21,7 +22,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, Element> {
+public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, Element<Set>> {
 
   private final Function parentFunction;
   private final Element parameter;
@@ -102,7 +103,7 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
   //
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    Compound<Element> tuple = (Compound<Element>) element;
+    Tuple<ProductSet, Set> tuple = (Tuple<ProductSet, Set>) element;
     int arity = tuple.getArity();
     final Element[] allElements = new Element[arity + 1];
     for (int i = 0; i < arity; i++) {

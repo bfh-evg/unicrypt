@@ -1,10 +1,12 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import java.util.Random;
+
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.util.Random;
 
 /**
  * This class represents the concept of a composite function f:X_1->Y_n. It
@@ -19,19 +21,33 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public final class CompositeFunction extends AbstractCompoundFunction<Function, Set, Set, Element> {
+public final class CompositeFunction extends AbstractCompoundFunction<CompositeFunction, Function, Set, Set, Element<Set>> {
 
   private CompositeFunction(final Set domain, final Set coDomain, final Function[] functions) {
     super(domain, coDomain, functions);
   }
 
+  protected CompositeFunction(Set domain, Set coDomain, Function function, int arity) {
+    super(domain, coDomain, function, arity);
+  }
+
   @Override
-  protected final Element abstractApply(final Element element, final Random random) {
-    Element result = element;
+  protected final Element<Set> abstractApply(final Element element, final Random random) {
+    Element<Set> result = element;
     for (Function function : this) {
       result = function.apply(result, random);
     }
     return result;
+  }
+
+  @Override
+  protected CompositeFunction abstractRemoveAt(Function function, int arity) {
+    return CompositeFunction.getInstance(function, arity);
+  }
+
+  @Override
+  protected CompositeFunction abstractRemoveAt(Function[] functions) {
+    return CompositeFunction.getInstance(functions);
   }
 
   /**
@@ -55,6 +71,16 @@ public final class CompositeFunction extends AbstractCompoundFunction<Function, 
       }
     }
     return new CompositeFunction(functions[0].getDomain(), functions[functions.length - 1].getCoDomain(), functions);
+  }
+
+  public static CompositeFunction getInstance(final Function function, final int arity) {
+    if (function == null || arity < 0) {
+      throw new IllegalArgumentException();
+    }
+    if (arity > 1 && !function.getDomain().equals(function.getCoDomain())) {
+      throw new IllegalArgumentException();
+    }
+    return new CompositeFunction(ProductSet.getInstance(function.getDomain(), arity), ProductSet.getInstance(function.getCoDomain(), arity), function, arity);
   }
 
 }

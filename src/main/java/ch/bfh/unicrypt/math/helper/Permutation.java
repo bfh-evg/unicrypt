@@ -1,8 +1,9 @@
 package ch.bfh.unicrypt.math.helper;
 
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.util.Arrays;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 
 public class Permutation {

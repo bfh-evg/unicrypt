@@ -1,13 +1,12 @@
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.utility.MathUtil;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundCyclicGroup;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundElement;
 import java.math.BigInteger;
+
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundCyclicGroup;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  *
@@ -59,9 +58,6 @@ public class ProductCyclicGroup extends AbstractCompoundCyclicGroup<ProductCycli
     if (cyclicGroups == null) {
       throw new IllegalArgumentException();
     }
-    if (cyclicGroups.length == 0) {
-      return new ProductCyclicGroup();
-    }
     if (ProductCyclicGroup.areRelativelyPrime(cyclicGroups)) {
       return new ProductCyclicGroup(cyclicGroups);
     }
@@ -102,7 +98,7 @@ public class ProductCyclicGroup extends AbstractCompoundCyclicGroup<ProductCycli
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Tuple<ProductCyclicGroup, CyclicGroup> getTuple(Element... elements) {
+  public static Tuple getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

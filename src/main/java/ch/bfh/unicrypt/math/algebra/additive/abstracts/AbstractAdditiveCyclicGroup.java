@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement> extends AbstractCyclicGroup<E> implements AdditiveCyclicGroup {
 

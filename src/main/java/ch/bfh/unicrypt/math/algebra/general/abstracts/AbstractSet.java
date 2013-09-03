@@ -3,11 +3,11 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZTimesMod;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  * This abstract class provides a basis implementation for atomic sets.

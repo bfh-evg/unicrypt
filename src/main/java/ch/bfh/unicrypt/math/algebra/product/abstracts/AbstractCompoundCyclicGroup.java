@@ -4,18 +4,19 @@
  */
 package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
+import java.util.Random;
+
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
-import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundCyclicGroup<CS extends CompoundCyclicGroup<S>, CE extends CompoundElement<CS, S, E>, S extends CyclicGroup, E extends Element<S>>
-        extends AbstractCompoundGroup<CS, CE, S, E> implements CompoundCyclicGroup<S> {
+public abstract class AbstractCompoundCyclicGroup<CS extends CompoundCyclicGroup<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends CyclicGroup, E extends Element<S>>
+        extends AbstractCompoundGroup<CS, CE, S, E> implements CompoundCyclicGroup<CS, S> {
 
   private CE defaultGenerator;
 

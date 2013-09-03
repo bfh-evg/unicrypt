@@ -4,12 +4,13 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.interfaces.CompoundFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
@@ -18,12 +19,12 @@ import java.util.NoSuchElementException;
  * @param <E>
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction<F extends Function, D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Compound<F> {
+public abstract class AbstractCompoundFunction<CF extends CompoundFunction<CF, F>, F extends Function, D extends Set, C extends Set, E extends Element<C>> extends AbstractFunction<D, C, E> implements CompoundFunction<CF, F> {
 
   private final F[] functions;
   private final int arity;
 
-  protected AbstractCompoundFunction(D domain, C coDomain, F[] functions) {
+  protected AbstractCompoundFunction(D domain, C coDomain, F... functions) {
     super(domain, coDomain);
     this.functions = functions.clone();
     this.arity = functions.length;
@@ -75,7 +76,7 @@ public abstract class AbstractCompoundFunction<F extends Function, D extends Set
     F function = (F) this;
     for (final int index : indices) {
       if (function.isCompound()) {
-        function = ((Compound<F>) function).getAt(index);
+        function = ((CompoundFunction<CF, F>) function).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }
@@ -94,8 +95,32 @@ public abstract class AbstractCompoundFunction<F extends Function, D extends Set
   }
 
   @Override
+  public CF removeAt(final int index) {
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    if (this.isUniform()) {
+      return this.abstractRemoveAt(this.getFirst(), arity - 1);
+    }
+    final F[] remainingFunction = (F[]) new Function[arity - 1];
+    for (int i = 0; i < arity - 1; i++) {
+      if (i < index) {
+        remainingFunction[i] = this.getAt(i);
+      } else {
+        remainingFunction[i] = this.getAt(i + 1);
+      }
+    }
+    return abstractRemoveAt(remainingFunction);
+  }
+
+  protected abstract CF abstractRemoveAt(Function function, int arity);
+
+  protected abstract CF abstractRemoveAt(Function[] functions);
+
+  @Override
   public Iterator<F> iterator() {
-    final Compound<F> compoundFunction = this;
+    final CompoundFunction<CF, F> compoundFunction = this;
     return new Iterator<F>() {
       int currentIndex = 0;
 
@@ -126,7 +151,7 @@ public abstract class AbstractCompoundFunction<F extends Function, D extends Set
 
   @Override
   protected boolean standardEquals(Function function) {
-    Compound<F> other = (Compound<F>) function;
+    CF other = (CF) function;
     int arity = this.getArity();
     if (arity != other.getArity()) {
       return false;
@@ -143,7 +168,7 @@ public abstract class AbstractCompoundFunction<F extends Function, D extends Set
   protected int standardHashCode() {
     final int prime = 31;
     int result = 1;
-    for (Function function : this) {
+    for (F function : this) {
       result = prime * result + function.hashCode();
     }
     result = prime * result + this.getArity();
