@@ -19,7 +19,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.function.interfaces.HashFunction;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
 import ch.bfh.unicrypt.math.group.interfaces.BooleanGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;

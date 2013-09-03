@@ -1,4 +1,4 @@
-package ch.bfh.unicrypt.math.algebra.product.classes;
+package ch.bfh.unicrypt.math.algebra.product.classes.nongeneric;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
@@ -9,7 +9,7 @@ import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundMonoid;
  *
  * @author rolfhaenni
  */
-public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, Tuple<ProductMonoid, Monoid>, Monoid, Element<Monoid>> {
+public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, ProductMonoidElement, Monoid, Element> {
 
   protected ProductMonoid(final Monoid[] monoids) {
     super(monoids);
@@ -24,23 +24,19 @@ public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, Tuple<P
   }
 
   @Override
-  protected Tuple<ProductMonoid, Monoid> abstractGetElement(final Element[] elements) {
-    return new Tuple<ProductMonoid, Monoid>(this, elements) {
-      @Override
-      protected Tuple<ProductMonoid, Monoid> abstractRemoveAt(Element[] elements) {
-        return ProductMonoid.getTuple(elements);
-      }
+  protected ProductMonoidElement abstractGetElement(final Element[] elements) {
+    return new ProductMonoidElement(this, elements) {
     };
   }
 
   @Override
-  protected ProductMonoid abstractRemoveAt(Set set, int arity) {
-    return ProductMonoid.getInstance((Monoid) set, arity);
+  protected ProductMonoid abstractRemoveAt(Monoid monoid, int arity) {
+    return ProductMonoid.getInstance(monoid, arity);
   }
 
   @Override
-  protected ProductMonoid abstractRemoveAt(Set[] sets) {
-    return ProductMonoid.getInstance((Monoid[]) sets);
+  protected ProductMonoid abstractRemoveAt(Monoid[] monoids) {
+    return ProductMonoid.getInstance(monoids);
   }
 
   /**
@@ -93,7 +89,7 @@ public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, Tuple<P
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Tuple<ProductMonoid, Monoid> getTuple(Element... elements) {
+  public static ProductMonoidElement getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

@@ -18,7 +18,7 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.product.classes.nongeneric.ProductGroup;
 import ch.bfh.unicrypt.math.group.classes.ZPlusModClass;
 import ch.bfh.unicrypt.math.group.interfaces.AtomicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;

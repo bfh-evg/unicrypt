@@ -15,8 +15,8 @@ import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundCyclicGroup<CS extends CompoundCyclicGroup<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends CyclicGroup, E extends Element<S>>
-        extends AbstractCompoundGroup<CS, CE, S, E> implements CompoundCyclicGroup<CS, S> {
+public abstract class AbstractCompoundCyclicGroup<CS extends CompoundCyclicGroup<CS, S>, CE extends CompoundElement<CE, E>, S extends CyclicGroup, E extends Element>
+        extends AbstractCompoundGroup<CS, CE, S, E> implements CyclicGroup {
 
   private CE defaultGenerator;
 

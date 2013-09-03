@@ -13,8 +13,8 @@ import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundMonoid;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundMonoid<CS extends CompoundMonoid<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends Monoid, E extends Element<S>>
-        extends AbstractCompoundSemiGroup<CS, CE, S, E> implements CompoundMonoid<CS, S> {
+public abstract class AbstractCompoundMonoid<CS extends CompoundMonoid<CS, S>, CE extends CompoundElement<CE, E>, S extends Monoid, E extends Element>
+        extends AbstractCompoundSemiGroup<CS, CE, S, E> implements Monoid {
 
   private CE identityElement;
 

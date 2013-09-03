@@ -5,9 +5,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeMonoid;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 
 /**
  * /**
@@ -22,7 +20,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
  * @author R. E. Koenig
  * @version 2.0
  */
-public class NTimes extends AbstractMultiplicativeMonoid<MultiplicativeElement> {
+public class NTimes extends AbstractMultiplicativeMonoid<NTimesElement> {
 
   /**
    * This is the private constructor of this class. It is called by the static
@@ -36,13 +34,13 @@ public class NTimes extends AbstractMultiplicativeMonoid<MultiplicativeElement> 
   // various super-classes
   //
   @Override
-  protected MultiplicativeElement abstractGetElement(BigInteger value) {
-    return new AbstractMultiplicativeElement<NTimes, MultiplicativeElement<NTimes>>(this, value) {
+  protected NTimesElement abstractGetElement(BigInteger value) {
+    return new NTimesElement(this, value) {
     };
   }
 
   @Override
-  protected MultiplicativeElement abstractGetRandomElement(final Random random) {
+  protected NTimesElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -57,12 +55,12 @@ public class NTimes extends AbstractMultiplicativeMonoid<MultiplicativeElement> 
   }
 
   @Override
-  protected MultiplicativeElement abstractGetIdentityElement() {
+  protected NTimesElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
+  protected NTimesElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
   //

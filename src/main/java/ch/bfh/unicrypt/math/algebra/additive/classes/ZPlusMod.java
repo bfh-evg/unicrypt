@@ -24,7 +24,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement<ZPlusMod>> {
+public class ZPlusMod extends AbstractAdditiveCyclicGroup<ZPlusModElement> {
 
   private BigInteger modulus;
 
@@ -46,7 +46,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement<ZPlusM
   // various super-classes
   //
   @Override
-  protected AdditiveElement standardSelfApply(Element element, BigInteger amount) {
+  protected ZPlusModElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
   }
 
@@ -76,8 +76,8 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement<ZPlusM
   // various super-classes
   //
   @Override
-  protected AdditiveElement<ZPlusMod> abstractGetElement(BigInteger value) {
-    return new AbstractAdditiveElement<ZPlusMod, AdditiveElement<ZPlusMod>>(this, value) {
+  protected ZPlusModElement abstractGetElement(BigInteger value) {
+    return new ZPlusModElement(this, value) {
     };
   }
 
@@ -87,7 +87,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement<ZPlusM
   }
 
   @Override
-  protected AdditiveElement<ZPlusMod> abstractGetRandomElement(final Random random) {
+  protected ZPlusModElement abstractGetRandomElement(final Random random) {
     return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
@@ -97,7 +97,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement<ZPlusM
   }
 
   @Override
-  protected AdditiveElement<ZPlusMod> abstractGetDefaultGenerator() {
+  protected ZPlusModElement abstractGetDefaultGenerator() {
     return this.abstractGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
   }
 
@@ -110,23 +110,23 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<AdditiveElement<ZPlusM
   }
 
   @Override
-  protected AdditiveElement abstractGetIdentityElement() {
+  protected ZPlusModElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected AdditiveElement<ZPlusMod> abstractApply(final Element element1, final Element element2) {
+  protected ZPlusModElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  protected AdditiveElement<ZPlusMod> abstractInvert(final Element element) {
+  protected ZPlusModElement abstractInvert(final Element element) {
     return this.abstractGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  protected AdditiveElement<ZPlusMod> abstractGetRandomGenerator(final Random random) {
-    AdditiveElement element;
+  protected ZPlusModElement abstractGetRandomGenerator(final Random random) {
+    ZPlusModElement element;
     do {
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));

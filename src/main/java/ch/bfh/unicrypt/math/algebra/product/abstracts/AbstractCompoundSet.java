@@ -14,14 +14,15 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
+import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundSet<CS extends CompoundSet<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends Set, E extends Element<S>>
-        extends AbstractSet<CE> implements CompoundSet<CS, S> {
+public abstract class AbstractCompoundSet<CS extends CompoundSet<CS, S>, CE extends CompoundElement<CE, E>, S extends Set, E extends Element>
+        extends AbstractSet<CE> implements Compound<CS, S> {
 
   private final S[] sets;
   private final int arity;
@@ -301,13 +302,13 @@ public abstract class AbstractCompoundSet<CS extends CompoundSet<CS, S>, CE exte
     return abstractRemoveAt(remainingSets);
   }
 
-  protected abstract CS abstractRemoveAt(Set set, int arity);
+  protected abstract CS abstractRemoveAt(S set, int arity);
 
-  protected abstract CS abstractRemoveAt(Set[] sets);
+  protected abstract CS abstractRemoveAt(S[] sets);
 
   @Override
   public Iterator<S> iterator() {
-    final CompoundSet<CS, S> compoundSet = this;
+    final Compound<CS, S> compoundSet = this;
     return new Iterator<S>() {
       int currentIndex = 0;
 

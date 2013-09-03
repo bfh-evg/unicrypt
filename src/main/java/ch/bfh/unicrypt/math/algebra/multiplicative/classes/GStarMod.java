@@ -7,8 +7,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.helper.factorization.SpecialFactorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -32,7 +30,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class GStarMod extends AbstractMultiplicativeCyclicGroup<MultiplicativeElement> implements DDHGroup {
+public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement> implements DDHGroup {
 
   private final BigInteger modulus;
   private final SpecialFactorization moduloFactorization;
@@ -95,7 +93,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<MultiplicativeEl
   // various super-classes
   //
   @Override
-  protected MultiplicativeElement standardSelfApply(final Element element, final BigInteger amount) {
+  protected GStarModElement standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount.mod(this.getOrder());
     return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
   }
@@ -130,13 +128,13 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<MultiplicativeEl
   // various super-classes
   //
   @Override
-  protected MultiplicativeElement abstractGetElement(BigInteger value) {
-    return new AbstractMultiplicativeElement<GStarMod, MultiplicativeElement<GStarMod>>(this, value) {
+  protected GStarModElement abstractGetElement(BigInteger value) {
+    return new GStarModElement(this, value) {
     };
   }
 
   @Override
-  protected MultiplicativeElement abstractGetRandomElement(final Random random) {
+  protected GStarModElement abstractGetRandomElement(final Random random) {
     if (this.getOrder().compareTo(this.getOrderQuotient()) > 0) { // choose between the faster method
       // Method 1
       BigInteger randomValue;
@@ -164,24 +162,24 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<MultiplicativeEl
   }
 
   @Override
-  protected MultiplicativeElement abstractGetIdentityElement() {
+  protected GStarModElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
+  protected GStarModElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  protected MultiplicativeElement abstractInvert(final Element element) {
+  protected GStarModElement abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 
   @Override
-  protected MultiplicativeElement abstractGetDefaultGenerator() {
+  protected GStarModElement abstractGetDefaultGenerator() {
     BigInteger alpha = BigInteger.ZERO;
-    MultiplicativeElement element;
+    GStarModElement element;
     do {
       do {
         alpha = alpha.add(BigInteger.ONE);
@@ -193,8 +191,8 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<MultiplicativeEl
 
   // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
   @Override
-  protected MultiplicativeElement abstractGetRandomGenerator(Random random) {
-    MultiplicativeElement element;
+  protected GStarModElement abstractGetRandomGenerator(Random random) {
+    GStarModElement element;
     do {
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));

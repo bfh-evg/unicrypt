@@ -17,7 +17,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface Element<S extends Set> {
+public interface Element {
 
   public static final String STANDARD_HASH_ALGORITHM = "SHA-256";
 
@@ -27,7 +27,7 @@ public interface Element<S extends Set> {
    *
    * @return
    */
-  public S getSet();
+  public Set getSet();
 
   /**
    * Returns the positive BigInteger value that corresponds the element.
@@ -54,37 +54,37 @@ public interface Element<S extends Set> {
   /**
    * @see Group#apply(Element, Element)
    */
-  public Element<S> apply(Element element);
+  public Element apply(Element element);
 
   /**
    * @see Group#applyInverse(Element, Element)
    */
-  public Element<S> applyInverse(Element element);
+  public Element applyInverse(Element element);
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
-  public Element<S> selfApply(BigInteger amount);
+  public Element selfApply(BigInteger amount);
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public Element<S> selfApply(Element amount);
+  public Element selfApply(Element amount);
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public Element<S> selfApply(int amount);
+  public Element selfApply(int amount);
 
   /**
    * @see Group#selfApply(Element)
    */
-  public Element<S> selfApply();
+  public Element selfApply();
 
   /**
    * @see Group#invert(Element)
    */
-  public Element<S> invert();
+  public Element invert();
 
   /**
    * @see Group#isIdentityElement(Element)

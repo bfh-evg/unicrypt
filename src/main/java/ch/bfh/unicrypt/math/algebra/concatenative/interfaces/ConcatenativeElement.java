@@ -13,57 +13,57 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  *
  * @author rolfhaenni
  */
-public interface ConcatenativeElement<S extends ConcatenativeSemiGroup> extends Element<S> {
+public interface ConcatenativeElement extends Element {
 
   public int getLength();
 
   /**
    * @see Group#apply(Element, Element)
    */
-  public ConcatenativeElement<S> concatenate(Element element);
+  public ConcatenativeElement concatenate(Element element);
 
   /**
    * @see Group#selfApply(Element, BigInteger)
    */
-  public ConcatenativeElement<S> selfConcatenate(BigInteger amount);
+  public ConcatenativeElement selfConcatenate(BigInteger amount);
 
   /**
    * @see Group#selfApply(Element, Element)
    */
-  public ConcatenativeElement<S> selfConcatenate(Element amount);
+  public ConcatenativeElement selfConcatenate(Element amount);
 
   /**
    * @see Group#selfApply(Element, int)
    */
-  public ConcatenativeElement<S> selfConcatenate(int amount);
+  public ConcatenativeElement selfConcatenate(int amount);
 
   /**
    * @see Group#selfApply(Element)
    */
-  public ConcatenativeElement<S> selfConcatenate();
+  public ConcatenativeElement selfConcatenate();
 
   //
   // The following methods override corresponding parent methods with different return type
   //
   @Override
-  public ConcatenativeElement<S> apply(Element element);
+  public ConcatenativeElement apply(Element element);
 
   @Override
-  public ConcatenativeElement<S> applyInverse(Element element);
+  public ConcatenativeElement applyInverse(Element element);
 
   @Override
-  public ConcatenativeElement<S> selfApply(BigInteger amount);
+  public ConcatenativeElement selfApply(BigInteger amount);
 
   @Override
-  public ConcatenativeElement<S> selfApply(Element amount);
+  public ConcatenativeElement selfApply(Element amount);
 
   @Override
-  public ConcatenativeElement<S> selfApply(int amount);
+  public ConcatenativeElement selfApply(int amount);
 
   @Override
-  public ConcatenativeElement<S> selfApply();
+  public ConcatenativeElement selfApply();
 
   @Override
-  public ConcatenativeElement<S> invert();
+  public ConcatenativeElement invert();
 
 }

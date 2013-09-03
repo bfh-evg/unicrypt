@@ -17,7 +17,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemi
  *
  * @author rolfhaenni
  */
-public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup, E extends MultiplicativeElement<S>> extends AbstractElement<S, E> implements MultiplicativeElement<S> {
+public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup, E extends MultiplicativeElement> extends AbstractElement<S, E> implements MultiplicativeElement {
 
   protected AbstractMultiplicativeElement(final S semiGroup) {
     super(semiGroup);

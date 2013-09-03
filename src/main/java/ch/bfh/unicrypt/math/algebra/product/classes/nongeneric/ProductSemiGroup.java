@@ -1,4 +1,4 @@
-package ch.bfh.unicrypt.math.algebra.product.classes;
+package ch.bfh.unicrypt.math.algebra.product.classes.nongeneric;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -9,7 +9,7 @@ import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSemiGroup;
  *
  * @author rolfhaenni
  */
-public class ProductSemiGroup extends AbstractCompoundSemiGroup<ProductSemiGroup, Tuple<ProductSemiGroup, SemiGroup>, SemiGroup, Element<SemiGroup>> {
+public class ProductSemiGroup extends AbstractCompoundSemiGroup<ProductSemiGroup, ProductSemiGroupElement, SemiGroup, Element> {
 
   protected ProductSemiGroup(final SemiGroup[] semiGroups) {
     super(semiGroups);
@@ -24,23 +24,19 @@ public class ProductSemiGroup extends AbstractCompoundSemiGroup<ProductSemiGroup
   }
 
   @Override
-  protected Tuple abstractGetElement(final Element[] elements) {
-    return new Tuple<ProductSemiGroup, SemiGroup>(this, elements) {
-      @Override
-      protected Tuple abstractRemoveAt(Element[] elements) {
-        return ProductSemiGroup.getTuple(elements);
-      }
+  protected ProductSemiGroupElement abstractGetElement(final Element[] elements) {
+    return new ProductSemiGroupElement(this, elements) {
     };
   }
 
   @Override
-  protected ProductSemiGroup abstractRemoveAt(Set set, int arity) {
-    return ProductSemiGroup.getInstance((SemiGroup) set, arity);
+  protected ProductSemiGroup abstractRemoveAt(SemiGroup semiGroup, int arity) {
+    return ProductSemiGroup.getInstance(semiGroup, arity);
   }
 
   @Override
-  protected ProductSemiGroup abstractRemoveAt(Set[] sets) {
-    return ProductSemiGroup.getInstance((SemiGroup[]) sets);
+  protected ProductSemiGroup abstractRemoveAt(SemiGroup[] semiGroups) {
+    return ProductSemiGroup.getInstance(semiGroups);
   }
 
   /**
@@ -95,7 +91,7 @@ public class ProductSemiGroup extends AbstractCompoundSemiGroup<ProductSemiGroup
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Tuple<ProductSemiGroup, SemiGroup> getTuple(Element... elements) {
+  public static ProductSemiGroupElement getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

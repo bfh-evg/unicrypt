@@ -6,9 +6,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeMonoid;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 
 /**
  * /**
@@ -23,7 +21,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZTimes extends AbstractMultiplicativeMonoid<MultiplicativeElement> {
+public class ZTimes extends AbstractMultiplicativeMonoid<ZTimesElement> {
 
   /**
    * This is the private constructor of this class. It is called by the static
@@ -37,13 +35,13 @@ public class ZTimes extends AbstractMultiplicativeMonoid<MultiplicativeElement> 
   // various super-classes
   //
   @Override
-  protected MultiplicativeElement abstractGetElement(BigInteger value) {
-    return new AbstractMultiplicativeElement<ZTimes, MultiplicativeElement<ZTimes>>(this, value) {
+  protected ZTimesElement abstractGetElement(BigInteger value) {
+    return new ZTimesElement(this, value) {
     };
   }
 
   @Override
-  protected AbstractMultiplicativeElement abstractGetRandomElement(final Random random) {
+  protected ZTimesElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -58,12 +56,12 @@ public class ZTimes extends AbstractMultiplicativeMonoid<MultiplicativeElement> 
   }
 
   @Override
-  protected MultiplicativeElement abstractGetIdentityElement() {
+  protected ZTimesElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
   @Override
-  protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
+  protected ZTimesElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
 

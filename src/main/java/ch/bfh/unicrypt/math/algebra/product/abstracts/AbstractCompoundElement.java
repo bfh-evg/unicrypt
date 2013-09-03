@@ -22,8 +22,8 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundElement<CS extends CompoundSet<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends Set, E extends Element<S>>
-        extends AbstractElement<CS, CE> implements CompoundElement<CS, CE, S, E> {
+public abstract class AbstractCompoundElement<CS extends CompoundSet<CS, S>, CE extends CompoundElement<CE, E>, S extends Set, E extends Element>
+        extends AbstractElement<CS, CE> implements CompoundElement<CE, E> {
 
   private final E[] elements;
   private final int arity;
@@ -133,7 +133,7 @@ public abstract class AbstractCompoundElement<CS extends CompoundSet<CS, S>, CE 
 
   @Override
   public Iterator<E> iterator() {
-    final CompoundElement<CS, CE, S, E> tuple = this;
+    final CompoundElement<CE, E> tuple = this;
     return new Iterator<E>() {
       int currentIndex = 0;
 

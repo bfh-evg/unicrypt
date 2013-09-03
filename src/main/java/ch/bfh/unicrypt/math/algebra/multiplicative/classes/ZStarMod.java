@@ -6,9 +6,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
@@ -26,7 +24,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement> {
+public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
 
   private final BigInteger modulus;
   private final Factorization moduloFactorization;
@@ -88,7 +86,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement>
   // various super-classes
   //
   @Override
-  protected MultiplicativeElement standardSelfApply(final Element element, final BigInteger amount) {
+  protected ZStarModElement standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount;
     final BigInteger order = this.getOrder();
     if (!order.equals(Group.UNKNOWN_ORDER)) {
@@ -123,13 +121,13 @@ public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement>
   // various super-classes
   //
   @Override
-  protected MultiplicativeElement abstractGetElement(BigInteger value) {
-    return new AbstractMultiplicativeElement<ZStarMod, MultiplicativeElement<ZStarMod>>(this, value) {
+  protected ZStarModElement abstractGetElement(BigInteger value) {
+    return new ZStarModElement(this, value) {
     };
   }
 
   @Override
-  protected MultiplicativeElement abstractGetRandomElement(final Random random) {
+  protected ZStarModElement abstractGetRandomElement(final Random random) {
     BigInteger randomValue;
     do {
       randomValue = RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
@@ -154,7 +152,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement>
   }
 
   @Override
-  protected MultiplicativeElement abstractGetIdentityElement() {
+  protected ZStarModElement abstractGetIdentityElement() {
     if (this.getModulus().equals(BigInteger.ONE)) {
       return this.abstractGetElement(BigInteger.ZERO);
     }
@@ -162,12 +160,12 @@ public class ZStarMod extends AbstractMultiplicativeGroup<MultiplicativeElement>
   }
 
   @Override
-  protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
+  protected ZStarModElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 
   @Override
-  public MultiplicativeElement abstractInvert(final Element element) {
+  public ZStarModElement abstractInvert(final Element element) {
     return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 

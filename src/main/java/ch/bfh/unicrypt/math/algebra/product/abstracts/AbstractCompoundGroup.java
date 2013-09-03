@@ -13,8 +13,8 @@ import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundGroup;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundGroup<CS extends CompoundGroup<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends Group, E extends Element<S>>
-        extends AbstractCompoundMonoid<CS, CE, S, E> implements CompoundGroup<CS, S> {
+public abstract class AbstractCompoundGroup<CS extends CompoundGroup<CS, S>, CE extends CompoundElement<CE, E>, S extends Group, E extends Element>
+        extends AbstractCompoundMonoid<CS, CE, S, E> implements Group {
 
   protected AbstractCompoundGroup(final S... groups) {
     super(groups);

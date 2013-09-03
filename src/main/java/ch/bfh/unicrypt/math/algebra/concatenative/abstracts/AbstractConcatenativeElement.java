@@ -17,7 +17,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  * @param <E>
  * @author rolfhaenni
  */
-public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement<S>> extends AbstractElement<S, E> implements ConcatenativeElement<S> {
+public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement> extends AbstractElement<S, E> implements ConcatenativeElement {
 
   protected AbstractConcatenativeElement(final S semiGroup) {
     super(semiGroup);

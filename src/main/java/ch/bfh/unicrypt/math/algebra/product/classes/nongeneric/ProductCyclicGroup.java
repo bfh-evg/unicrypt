@@ -1,4 +1,4 @@
-package ch.bfh.unicrypt.math.algebra.product.classes;
+package ch.bfh.unicrypt.math.algebra.product.classes.nongeneric;
 
 import java.math.BigInteger;
 
@@ -12,7 +12,7 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  *
  * @author rolfhaenni
  */
-public class ProductCyclicGroup extends AbstractCompoundCyclicGroup<ProductCyclicGroup, Tuple<ProductCyclicGroup, CyclicGroup>, CyclicGroup, Element<CyclicGroup>> {
+public class ProductCyclicGroup extends AbstractCompoundCyclicGroup<ProductCyclicGroup, ProductCyclicGroupElement, CyclicGroup, Element> {
 
   protected ProductCyclicGroup(final CyclicGroup... cyclicGroups) {
     super(cyclicGroups);
@@ -23,23 +23,19 @@ public class ProductCyclicGroup extends AbstractCompoundCyclicGroup<ProductCycli
   }
 
   @Override
-  protected Tuple<ProductCyclicGroup, CyclicGroup> abstractGetElement(final Element[] elements) {
-    return new Tuple<ProductCyclicGroup, CyclicGroup>(this, elements) {
-      @Override
-      protected Tuple<ProductCyclicGroup, CyclicGroup> abstractRemoveAt(Element[] elements) {
-        return ProductCyclicGroup.getTuple(elements);
-      }
+  protected ProductCyclicGroupElement abstractGetElement(final Element[] elements) {
+    return new ProductCyclicGroupElement(this, elements) {
     };
   }
 
   @Override
-  protected ProductCyclicGroup abstractRemoveAt(Set set, int arity) {
-    return ProductCyclicGroup.getInstance((CyclicGroup) set, arity);
+  protected ProductCyclicGroup abstractRemoveAt(CyclicGroup cyclicGroup, int arity) {
+    return ProductCyclicGroup.getInstance(cyclicGroup, arity);
   }
 
   @Override
-  protected ProductCyclicGroup abstractRemoveAt(Set[] sets) {
-    return ProductCyclicGroup.getInstance((CyclicGroup[]) sets);
+  protected ProductCyclicGroup abstractRemoveAt(CyclicGroup[] cyclicGroups) {
+    return ProductCyclicGroup.getInstance(cyclicGroups);
   }
 
   //
@@ -98,7 +94,7 @@ public class ProductCyclicGroup extends AbstractCompoundCyclicGroup<ProductCycli
    * @throws IllegalArgumentException if {@code elements} is null or contains
    * null
    */
-  public static Tuple getTuple(Element... elements) {
+  public static ProductCyclicGroupElement getTuple(Element... elements) {
     if (elements == null) {
       throw new IllegalArgumentException();
     }

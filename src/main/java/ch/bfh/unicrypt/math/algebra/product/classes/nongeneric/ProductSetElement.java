@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.algebra.product.classes;
+package ch.bfh.unicrypt.math.algebra.product.classes.nongeneric;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -13,15 +13,15 @@ import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundSet;
  *
  * @author rolfhaenni
  */
-public class Tuple<S extends Set> extends AbstractCompoundElement<Product<S>, Tuple<S>, S, Element> {
+public class ProductSetElement extends AbstractCompoundElement<ProductSet, ProductSetElement, Set, Element> {
 
-  protected Tuple(Product<S> product, Element[] elements) {
-    super(product, elements);
+  protected ProductSetElement(ProductSet productSet, Element[] elements) {
+    super(productSet, elements);
   }
 
   @Override
-  protected Tuple abstractRemoveAt(Element[] elements) {
-    return Product.getTuple(elements);
+  protected ProductSetElement abstractRemoveAt(Element[] elements) {
+    return ProductSet.getTuple(elements);
   }
 
 }

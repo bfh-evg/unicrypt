@@ -7,9 +7,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeMonoid;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
@@ -23,7 +21,7 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZTimesMod extends AbstractMultiplicativeMonoid<MultiplicativeElement> {
+public class ZTimesMod extends AbstractMultiplicativeMonoid<ZTimesModElement> {
 
   private BigInteger modulus;
 
@@ -45,7 +43,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid<MultiplicativeElemen
   // various super-classes
   //
   @Override
-  protected MultiplicativeElement standardSelfApply(Element element, BigInteger amount) {
+  protected ZTimesModElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().modPow(amount, this.getModulus()));
   }
 
@@ -64,8 +62,8 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid<MultiplicativeElemen
   // various super-classes
   //
   @Override
-  protected MultiplicativeElement abstractGetElement(BigInteger value) {
-    return new AbstractMultiplicativeElement<ZTimesMod, MultiplicativeElement<ZTimesMod>>(this, value) {
+  protected ZTimesModElement abstractGetElement(BigInteger value) {
+    return new ZTimesModElement(this, value) {
     };
   }
 
@@ -75,7 +73,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid<MultiplicativeElemen
   }
 
   @Override
-  protected MultiplicativeElement abstractGetRandomElement(final Random random) {
+  protected ZTimesModElement abstractGetRandomElement(final Random random) {
     return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
@@ -85,7 +83,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid<MultiplicativeElemen
   }
 
   @Override
-  protected MultiplicativeElement abstractGetIdentityElement() {
+  protected ZTimesModElement abstractGetIdentityElement() {
     if (this.getModulus().equals(BigInteger.ONE)) {
       return this.abstractGetElement(BigInteger.ZERO);
     }
@@ -93,7 +91,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid<MultiplicativeElemen
   }
 
   @Override
-  protected MultiplicativeElement abstractApply(final Element element1, final Element element2) {
+  protected ZTimesModElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
   }
 

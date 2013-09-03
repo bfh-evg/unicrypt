@@ -8,7 +8,6 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
 import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSemiGroup;
 
@@ -16,8 +15,8 @@ import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSemiGroup;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundSemiGroup<CS extends CompoundSemiGroup<CS, S>, CE extends CompoundElement<CS, CE, S, E>, S extends SemiGroup, E extends Element<S>>
-        extends AbstractCompoundSet<CS, CE, S, E> implements CompoundSemiGroup<CS, S> {
+public abstract class AbstractCompoundSemiGroup<CS extends CompoundSemiGroup<CS, S>, CE extends CompoundElement<CE, E>, S extends SemiGroup, E extends Element>
+        extends AbstractCompoundSet<CS, CE, S, E> implements SemiGroup {
 
   protected AbstractCompoundSemiGroup(final S... semiGroups) {
     super(semiGroups);
@@ -96,7 +95,7 @@ public abstract class AbstractCompoundSemiGroup<CS extends CompoundSemiGroup<CS,
     if ((elements == null) || (amounts == null) || (elements.length != amounts.length) || (elements.length == 0)) {
       throw new IllegalArgumentException();
     }
-    CE[] results = (CE[]) new Tuple[elements.length];
+    CE[] results = (CE[]) new Element[elements.length];
     for (int i = 0; i < elements.length; i++) {
       results[i] = this.selfApply(elements[i], amounts[i]);
     }

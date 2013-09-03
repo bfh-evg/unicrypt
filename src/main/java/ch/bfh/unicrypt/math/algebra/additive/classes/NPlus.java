@@ -22,7 +22,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class NPlus extends AbstractAdditiveMonoid<AdditiveElement<NPlus>> {
+public class NPlus extends AbstractAdditiveMonoid<NPlusElement> {
 
   /**
    * This is the private constructor of this class. It is called by the static
@@ -36,7 +36,7 @@ public class NPlus extends AbstractAdditiveMonoid<AdditiveElement<NPlus>> {
   // various super-classes
   //
   @Override
-  protected AdditiveElement<NPlus> standardSelfApply(Element element, BigInteger amount) {
+  protected NPlusElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -45,13 +45,13 @@ public class NPlus extends AbstractAdditiveMonoid<AdditiveElement<NPlus>> {
   // various super-classes
   //
   @Override
-  protected AdditiveElement<NPlus> abstractGetElement(BigInteger value) {
-    return new AbstractAdditiveElement<NPlus, AdditiveElement<NPlus>>(this, value) {
+  protected NPlusElement abstractGetElement(BigInteger value) {
+    return new NPlusElement(this, value) {
     };
   }
 
   @Override
-  protected AdditiveElement<NPlus> abstractGetRandomElement(final Random random) {
+  protected NPlusElement abstractGetRandomElement(final Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -66,12 +66,12 @@ public class NPlus extends AbstractAdditiveMonoid<AdditiveElement<NPlus>> {
   }
 
   @Override
-  protected AdditiveElement abstractGetIdentityElement() {
+  protected NPlusElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected AdditiveElement abstractApply(final Element element1, final Element element2) {
+  protected NPlusElement abstractApply(final Element element1, final Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
   //

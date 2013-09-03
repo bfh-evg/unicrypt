@@ -26,7 +26,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<S extends Set, E extends Element<S>> implements Element<S> {
+public abstract class AbstractElement<S extends Set, E extends Element> implements Element {
 
   private final S set;
   protected BigInteger value;
