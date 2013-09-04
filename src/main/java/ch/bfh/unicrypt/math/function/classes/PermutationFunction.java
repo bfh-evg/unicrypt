@@ -7,9 +7,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductSetElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
-import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.helper.Permutation;
 
@@ -25,9 +23,9 @@ import ch.bfh.unicrypt.math.helper.Permutation;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PermutationFunction extends AbstractFunction<ProductSet, CompoundSet, CompoundElement> {
+public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet, Tuple> {
 
-  private PermutationFunction(final ProductSet domain, final CompoundSet coDomain) {
+  private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {
     super(domain, coDomain);
   }
 
@@ -45,9 +43,9 @@ public class PermutationFunction extends AbstractFunction<ProductSet, CompoundSe
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected CompoundElement abstractApply(final Element element, final Random random) {
-    final ProductSetElement pair = (ProductSetElement) element;
-    final CompoundElement elements = (CompoundElement) pair.getAt(0);
+  protected Tuple abstractApply(final Element element, final Random random) {
+    final Tuple pair = (Tuple) element;
+    final Tuple elements = (Tuple) pair.getAt(0);
     final Permutation permutation = ((PermutationElement) pair.getAt(1)).getPermutation();
     final Element[] result = new Element[elements.getArity()];
     for (int i = 0; i < elements.getArity(); i++) {
@@ -79,14 +77,14 @@ public class PermutationFunction extends AbstractFunction<ProductSet, CompoundSe
    * This is a special constructor of this class, which deals with the
    * particular case, where a product group is given from the beginning.
    *
-   * @param compoundSet The given power group
+   * @param productSet The given power group
    * @throws IllegalArgumentException if {@code group} is null
    */
-  public static PermutationFunction getInstance(final CompoundSet compoundSet) {
-    if (compoundSet == null || !compoundSet.isUniform()) {
+  public static PermutationFunction getInstance(final ProductSet productSet) {
+    if (productSet == null || !productSet.isUniform()) {
       throw new IllegalArgumentException();
     }
-    return new PermutationFunction(ProductSet.getInstance(compoundSet, PermutationGroup.getInstance(compoundSet.getArity())), compoundSet);
+    return new PermutationFunction(ProductSet.getInstance(productSet, PermutationGroup.getInstance(productSet.getArity())), productSet);
   }
 
 }

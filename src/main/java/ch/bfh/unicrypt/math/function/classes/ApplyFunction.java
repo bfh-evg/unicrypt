@@ -6,7 +6,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.product.classes.ProductSemiGroup;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductSemiGroupElement;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
@@ -32,7 +32,7 @@ public class ApplyFunction extends AbstractFunction<ProductSemiGroup, SemiGroup,
 
   @Override
   protected Element abstractApply(final Element element, final Random random) {
-    ProductSemiGroupElement tuple = (ProductSemiGroupElement) element;
+    Tuple tuple = (Tuple) element;
     return this.getCoDomain().apply(tuple.getAll());
   }
 

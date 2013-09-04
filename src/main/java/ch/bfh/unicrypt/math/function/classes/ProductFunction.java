@@ -5,7 +5,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.product.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductSetElement;
+import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
@@ -21,7 +21,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author R. E. Koenig
  * @version 1.0
  */
-public final class ProductFunction extends AbstractCompoundFunction<ProductFunction, Function, ProductSet, ProductSet, ProductSetElement> {
+public final class ProductFunction extends AbstractCompoundFunction<ProductFunction, Function, ProductSet, ProductSet, Tuple> {
 
   /**
    * This is the general constructor of this class. It takes a list of functions
@@ -53,9 +53,9 @@ public final class ProductFunction extends AbstractCompoundFunction<ProductFunct
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected ProductSetElement abstractApply(final Element element, final Random random) {
+  protected Tuple abstractApply(final Element element, final Random random) {
     int arity = this.getArity();
-    ProductSetElement tuple = (ProductSetElement) element;
+    Tuple tuple = (Tuple) element;
     final Element[] elements = new Element[arity];
     for (int i = 0; i < arity; i++) {
       elements[i] = this.getAt(i).apply(tuple.getAt(i), random);

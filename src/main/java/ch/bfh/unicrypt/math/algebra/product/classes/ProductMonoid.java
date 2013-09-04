@@ -1,14 +1,20 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundMonoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, ProductMonoidElement, Monoid, Element> {
+public class ProductMonoid extends ProductSemiGroup implements Monoid {
+
+  private Tuple identityElement;
 
   protected ProductMonoid(final Monoid[] monoids) {
     super(monoids);
@@ -19,19 +25,48 @@ public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, Product
   }
 
   @Override
-  protected ProductMonoidElement abstractGetElement(final Element[] elements) {
-    return new ProductMonoidElement(this, elements) {
-    };
+  public Monoid getFirst() {
+    return (Monoid) super.getFirst();
   }
 
   @Override
-  protected ProductMonoid abstractRemoveAt(Monoid monoid, int arity) {
-    return ProductMonoid.getInstance(monoid, arity);
+  public Monoid getAt(int index) {
+    return (Monoid) super.getAt(index);
   }
 
   @Override
-  protected ProductMonoid abstractRemoveAt(Monoid[] monoids) {
-    return ProductMonoid.getInstance(monoids);
+  public Monoid getAt(int... indices) {
+    return (Monoid) super.getAt(indices);
+  }
+
+  @Override
+  public Monoid[] getAll() {
+    return (Monoid[]) super.getAll();
+  }
+
+  @Override
+  public ProductMonoid removeAt(final int index) {
+    return (ProductMonoid) super.removeAt(index);
+  }
+
+  @Override
+  protected ProductMonoid standardRemoveAt(Set set, int arity) {
+    return ProductMonoid.getInstance((Monoid) set, arity);
+  }
+
+  @Override
+  protected ProductMonoid standardRemoveAt(Set[] sets) {
+    return ProductMonoid.getInstance((Monoid[]) sets);
+  }
+
+  @Override
+  public Element getIdentityElement() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean isIdentityElement(Element element) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   /**
@@ -72,6 +107,21 @@ public class ProductMonoid extends AbstractCompoundMonoid<ProductMonoid, Product
       return new ProductMonoid(new Monoid[]{});
     }
     return new ProductMonoid(monoid, arity);
+  }
+
+  public static Tuple getTuple(Element... elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException();
+    }
+    int arity = elements.length;
+    final Monoid[] monoids = new Monoid[arity];
+    for (int i = 0; i < arity; i++) {
+      if (elements[i] == null) {
+        throw new IllegalArgumentException();
+      }
+      monoids[i] = (Monoid) elements[i].getSet();
+    }
+    return ProductMonoid.getInstance(monoids).getElement(elements);
   }
 
 }

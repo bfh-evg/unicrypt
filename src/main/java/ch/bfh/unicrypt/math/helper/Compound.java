@@ -6,9 +6,10 @@ package ch.bfh.unicrypt.math.helper;
 
 /**
  *
+ * @param <T>
  * @author rolfhaenni
  */
-public interface Compound {
+public interface Compound<C extends Compound<C, T>, T> extends Iterable<T> {
 
   /**
    * The arity of a function is the number of functions applied in parallel or
@@ -35,7 +36,7 @@ public interface Compound {
    * @return The function at index 0
    * @throws UnsupportedOperationException for functions of arity 0
    */
-  public Object getFirst();
+  public T getFirst();
 
   /**
    * Returns the function at the given index.
@@ -45,7 +46,7 @@ public interface Compound {
    * @throws IndexOutOfBoundsException if {
    * @ode index} is an invalid index
    */
-  public Object getAt(int index);
+  public T getAt(int index);
 
   /**
    * Select and returns in a hierarchy of compound functions the function that
@@ -60,7 +61,7 @@ public interface Compound {
    * @throws IndexOutOfBoundsException if {
    * @ode indices} contains an out-of-bounds index
    */
-  public Object getAt(int... indices);
+  public T getAt(int... indices);
 
   /**
    * Returns an array containing all the functions of which {@code this}
@@ -68,7 +69,7 @@ public interface Compound {
    *
    * @return The corresponding array of functions
    */
-  public Object[] getAll();
+  public T[] getAll();
 
   /**
    * Creates a new product set which contains one set less than the given
@@ -79,6 +80,6 @@ public interface Compound {
    * @throws IndexOutOfBoundsException if
    * {@code index<0} or {@code index>arity-1}
    */
-  public Compound removeAt(final int index);
+  public Compound<C, T> removeAt(final int index);
 
 }

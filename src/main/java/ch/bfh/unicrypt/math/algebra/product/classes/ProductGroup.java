@@ -1,31 +1,18 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ch.bfh.unicrypt.math.algebra.product.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.product.abstracts.AbstractCompoundGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
- * This class represents the concept of a direct product of groups ("product
- * group" for short). The elements are tuples of respective elements of the
- * involved groups, i.e., the set of elements of the product group is the
- * Cartesian product of the respective sets of elements. The involved groups
- * themselves can be product groups, i.e., arbitrary hierarchies of product
- * groups are possible. The binary operation is defined component-wise. Applying
- * the operation to tuple elements yields another tuple element. The group's
- * unique identity element is the tuple of respective identity elements. The
- * inverse element is computed component-wise. The order of the product group is
- * the product of the individual group orders (it may be infinite or unknown).
- * The special case of a product group of arity 0 is isomorphic to the group
- * consisting of a single element (see {@code SingletonGroup}).
  *
- * @see <a
- * href="http://en.wikipedia.org/wiki/Direct_product_of_groups">http://en.wikipedia.org/wiki/Direct_product_of_groups</a>
- *
- * @author R. Haenni
- * @author R. E. Koenig
- * @version 2.0
+ * @author rolfhaenni
  */
-public class ProductGroup extends AbstractCompoundGroup<ProductGroup, ProductGroupElement, Group, Element> {
+public class ProductGroup extends ProductMonoid implements Group {
 
   protected ProductGroup(final Group[] groups) {
     super(groups);
@@ -36,24 +23,62 @@ public class ProductGroup extends AbstractCompoundGroup<ProductGroup, ProductGro
   }
 
   @Override
-  protected ProductGroupElement abstractGetElement(final Element[] elements) {
-    return new ProductGroupElement(this, elements) {
-    };
+  public Group getFirst() {
+    return (Group) super.getFirst();
   }
 
   @Override
-  protected ProductGroup abstractRemoveAt(Group group, int arity) {
-    return ProductGroup.getInstance((Group) group, arity);
+  public Group getAt(int index) {
+    return (Group) super.getAt(index);
   }
 
   @Override
-  protected ProductGroup abstractRemoveAt(Group[] groups) {
-    return ProductGroup.getInstance(groups);
+  public Group getAt(int... indices) {
+    return (Group) super.getAt(indices);
   }
 
-  //
+  @Override
+  public Group[] getAll() {
+    return (Group[]) super.getAll();
+  }
+
+  @Override
+  public ProductGroup removeAt(final int index) {
+    return (ProductGroup) super.removeAt(index);
+  }
+
+  @Override
+  protected ProductGroup standardRemoveAt(Set set, int arity) {
+    return ProductGroup.getInstance((Group) set, arity);
+  }
+
+  @Override
+  protected ProductGroup standardRemoveAt(Set[] sets) {
+    return ProductGroup.getInstance((Group[]) sets);
+  }
+
+  @Override
+  public final Tuple invert(Element element) {
+    if (!this.contains(element)) {
+      throw new IllegalArgumentException();
+    }
+    int arity = this.getArity();
+    Tuple tuple = (Tuple) element;
+    final Element[] invertedElements = new Element[arity];
+    for (int i = 0; i < arity; i++) {
+      invertedElements[i] = tuple.getAt(i).invert();
+    }
+    return this.standardGetElement(invertedElements);
+  }
+
+  @Override
+  public final Tuple applyInverse(Element element1, Element element2) {
+    return this.apply(element1, this.invert(element2));
+  }
+//
   // STATIC FACTORY METHODS
   //
+
   /**
    * This is a static factory method to construct a composed group without
    * calling respective constructors. The input groups are given as an array.
@@ -92,6 +117,21 @@ public class ProductGroup extends AbstractCompoundGroup<ProductGroup, ProductGro
       return new ProductGroup(new Group[]{});
     }
     return new ProductGroup(group, arity);
+  }
+
+  public static Tuple getTuple(Element... elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException();
+    }
+    int arity = elements.length;
+    final Group[] group = new Group[arity];
+    for (int i = 0; i < arity; i++) {
+      if (elements[i] == null) {
+        throw new IllegalArgumentException();
+      }
+      group[i] = (Group) elements[i].getSet();
+    }
+    return ProductGroup.getInstance(group).getElement(elements);
   }
 
 }
