@@ -13,7 +13,7 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public interface CompoundSet extends Set, Compound<CompoundSet> {
+public interface CompoundSet extends Set, Compound {
 
   /**
    * Checks if {@code this} set contains an element that corresponds to the
