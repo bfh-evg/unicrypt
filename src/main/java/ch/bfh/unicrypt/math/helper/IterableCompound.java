@@ -6,36 +6,37 @@ package ch.bfh.unicrypt.math.helper;
 
 /**
  *
+ * @param <T>
  * @author rolfhaenni
  */
-public interface Compound {
+public interface IterableCompound<C extends IterableCompound<C, T>, T> extends Compound, Iterable<T> {
 
-  /**
-   * The arity of a function is the number of functions applied in parallel or
-   * in series when calling the function.
-   *
-   * @return The function's arity
-   */
-  public int getArity();
-
-  public boolean isNull();
-
-  /**
-   * Checks if a compound function consists of multiple copies of the same
-   * function.
-   *
-   * @return {@code true}, if the function is a power function, {@code false}
-   * otherwise
-   */
-  public boolean isUniform();
-
+//  /**
+//   * The arity of a function is the number of functions applied in parallel or
+//   * in series when calling the function.
+//   *
+//   * @return The function's arity
+//   */
+//  public int getArity();
+//
+//  public boolean isNull();
+//
+//  /**
+//   * Checks if a compound function consists of multiple copies of the same
+//   * function.
+//   *
+//   * @return {@code true}, if the function is a power function, {@code false}
+//   * otherwise
+//   */
+//  public boolean isUniform();
   /**
    * Returns the function at index 0.
    *
    * @return The function at index 0
    * @throws UnsupportedOperationException for functions of arity 0
    */
-  public Object getFirst();
+  @Override
+  public T getFirst();
 
   /**
    * Returns the function at the given index.
@@ -45,7 +46,8 @@ public interface Compound {
    * @throws IndexOutOfBoundsException if {
    * @ode index} is an invalid index
    */
-  public Object getAt(int index);
+  @Override
+  public T getAt(int index);
 
   /**
    * Select and returns in a hierarchy of compound functions the function that
@@ -60,7 +62,8 @@ public interface Compound {
    * @throws IndexOutOfBoundsException if {
    * @ode indices} contains an out-of-bounds index
    */
-  public Object getAt(int... indices);
+  @Override
+  public T getAt(int... indices);
 
   /**
    * Returns an array containing all the functions of which {@code this}
@@ -68,7 +71,8 @@ public interface Compound {
    *
    * @return The corresponding array of functions
    */
-  public Object[] getAll();
+  @Override
+  public T[] getAll();
 
   /**
    * Creates a new product set which contains one set less than the given
@@ -79,6 +83,7 @@ public interface Compound {
    * @throws IndexOutOfBoundsException if
    * {@code index<0} or {@code index>arity-1}
    */
-  public Compound removeAt(final int index);
+  @Override
+  public IterableCompound<C, T> removeAt(final int index);
 
 }

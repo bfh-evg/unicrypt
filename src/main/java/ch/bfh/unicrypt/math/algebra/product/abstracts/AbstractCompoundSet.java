@@ -12,7 +12,8 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSet;
+import ch.bfh.unicrypt.math.helper.IterableCompound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
@@ -20,7 +21,7 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * @author rolfhaenni
  */
 public abstract class AbstractCompoundSet<CS extends AbstractCompoundSet<CS, CE, S, E>, CE extends AbstractCompoundElement<CS, CE, S, E>, S extends Set, E extends Element>
-        extends AbstractSet<CE> implements Compound<CS, S> {
+        extends AbstractSet<CE> implements CompoundSet, IterableCompound<CS, S> {
 
   private final S[] sets;
   private final int arity;
@@ -35,30 +36,12 @@ public abstract class AbstractCompoundSet<CS extends AbstractCompoundSet<CS, CE,
     this.arity = arity;
   }
 
-  /**
-   * Checks if {@code this} set contains an element that corresponds to the
-   * composition of some given integer values.
-   *
-   * @param values The given integer values
-   * @return {@code true} if such an element exists, {@code false} otherwise
-   * @throws IllegalArgumentException if {@code values} is null
-   * @throws IllegalArgumentException if the length of {@code values} is
-   * different from the set's arity
-   */
+  @Override
   public final boolean contains(final int[] values) {
     return this.contains(MathUtil.intToBigIntegerArray(values));
   }
 
-  /**
-   * Checks if {@code this} set contains an element that corresponds to the
-   * composition of some given BigInteger values.
-   *
-   * @param values The given BigInteger values
-   * @return {@code true} if such an element exists, {@code false} otherwise
-   * @throws IllegalArgumentException if {@code values} is or contains null
-   * @throws IllegalArgumentException if the length of {@code values} is
-   * different from the set's arity
-   */
+  @Override
   public final boolean contains(BigInteger... values) {
     int arity = this.getArity();
     if (values == null || values.length != arity) {
@@ -72,16 +55,7 @@ public abstract class AbstractCompoundSet<CS extends AbstractCompoundSet<CS, CE,
     return true;
   }
 
-  /**
-   * Checks if {@code this} set contains an element that corresponds to the
-   * composition of some given elements.
-   *
-   * @param elements The given elements
-   * @return {@code true} if such an element exists, {@code false} otherwise
-   * @throws IllegalArgumentException if {@code elements} is or contains null
-   * @throws IllegalArgumentException if the length of {@code elements} is
-   * different from the set's arity
-   */
+  @Override
   public final boolean contains(Element... elements) {
     int arity = this.getArity();
     if (elements == null || elements.length != arity) {
@@ -95,19 +69,12 @@ public abstract class AbstractCompoundSet<CS extends AbstractCompoundSet<CS, CE,
     return true;
   }
 
+  @Override
   public final CE getElement(final int[] values) {
     return this.getElement(MathUtil.intToBigIntegerArray(values));
   }
 
-  /**
-   * Creates and returns the element that corresponds to the given BigInteger
-   * values (if one exists).
-   *
-   * @param values The given BigInteger values
-   * @return The corresponding element
-   * @throws IllegalArgumentException if {@code values} is or contains null or
-   * if no such element exists
-   */
+  @Override
   public final CE getElement(BigInteger[] values) {
     int arity = this.getArity();
     if (values == null || values.length != arity) {
@@ -120,18 +87,7 @@ public abstract class AbstractCompoundSet<CS extends AbstractCompoundSet<CS, CE,
     return this.abstractGetElement(elements);
   }
 
-  /**
-   * Creates a new tuple element for from a given array of elements. For this to
-   * work, each of the given elements must be contained in the corresponding
-   * involved set.
-   *
-   * @param elements The given array of elements
-   * @return The resulting tuple element
-   * @throws IllegalArgumentException if {@code elements} is null or contains
-   * null, or if its size does not correspond to the group's arity
-   * @throws IllegalArgumentException if an element is not in the corresponding
-   * group
-   */
+  @Override
   public final CE getElement(final Element[] elements) {
     int arity = this.getArity();
     if (elements == null || elements.length != arity) {
@@ -262,7 +218,7 @@ public abstract class AbstractCompoundSet<CS extends AbstractCompoundSet<CS, CE,
     S set = (S) this;
     for (final int index : indices) {
       if (set.isCompound()) {
-        set = ((Compound<CS, S>) set).getAt(index);
+        set = ((IterableCompound<CS, S>) set).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }
@@ -306,7 +262,7 @@ public abstract class AbstractCompoundSet<CS extends AbstractCompoundSet<CS, CE,
 
   @Override
   public Iterator<S> iterator() {
-    final Compound<CS, S> compoundSet = this;
+    final IterableCompound<CS, S> compoundSet = this;
     return new Iterator<S>() {
       int currentIndex = 0;
 

@@ -6,13 +6,14 @@ package ch.bfh.unicrypt.math.algebra.product.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundMonoid;
 
 /**
  *
  * @author rolfhaenni
  */
 public abstract class AbstractCompoundMonoid<CS extends AbstractCompoundMonoid<CS, CE, S, E>, CE extends AbstractCompoundElement<CS, CE, S, E>, S extends Monoid, E extends Element>
-        extends AbstractCompoundSemiGroup<CS, CE, S, E> implements Monoid {
+        extends AbstractCompoundSemiGroup<CS, CE, S, E> implements CompoundMonoid {
 
   private CE identityElement;
 

@@ -4,11 +4,11 @@
  */
 package ch.bfh.unicrypt.math.function.interfaces;
 
-import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.helper.IterableCompound;
 
 /**
  *
  * @author rolfhaenni
  */
-public interface CompoundFunction<CF extends CompoundFunction<CF, F>, F extends Function> extends Function, Compound<CF, F> {
+public interface CompoundFunction<CF extends CompoundFunction<CF, F>, F extends Function> extends Function, IterableCompound<CF, F> {
 }

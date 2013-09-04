@@ -8,13 +8,14 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundSemiGroup;
 
 /**
  *
  * @author rolfhaenni
  */
 public abstract class AbstractCompoundSemiGroup<CS extends AbstractCompoundSemiGroup<CS, CE, S, E>, CE extends AbstractCompoundElement<CS, CE, S, E>, S extends SemiGroup, E extends Element>
-        extends AbstractCompoundSet<CS, CE, S, E> implements SemiGroup {
+        extends AbstractCompoundSet<CS, CE, S, E> implements CompoundSemiGroup {
 
   protected AbstractCompoundSemiGroup(final S[] semiGroups) {
     super(semiGroups);

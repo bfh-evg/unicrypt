@@ -14,7 +14,8 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.algebra.product.interfaces.CompoundElement;
+import ch.bfh.unicrypt.math.helper.IterableCompound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
@@ -22,7 +23,7 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * @author rolfhaenni
  */
 public abstract class AbstractCompoundElement<CS extends AbstractCompoundSet<CS, CE, S, E>, CE extends AbstractCompoundElement<CS, CE, S, E>, S extends Set, E extends Element>
-        extends AbstractElement<CS, CE> implements Compound<CE, E> {
+        extends AbstractElement<CS, CE> implements CompoundElement, IterableCompound<CE, E> {
 
   private final E[] elements;
   private final int arity;
@@ -132,7 +133,7 @@ public abstract class AbstractCompoundElement<CS extends AbstractCompoundSet<CS,
 
   @Override
   public Iterator<E> iterator() {
-    final Compound<CE, E> tuple = this;
+    final IterableCompound<CE, E> tuple = this;
     return new Iterator<E>() {
       int currentIndex = 0;
 
