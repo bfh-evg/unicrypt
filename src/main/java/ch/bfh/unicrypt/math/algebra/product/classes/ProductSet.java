@@ -33,7 +33,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
     this.arity = arity;
   }
 
-  public final boolean contains(final int[] values) {
+  public final boolean contains(final int... values) {
     return this.contains(MathUtil.intToBigIntegerArray(values));
   }
 
@@ -63,7 +63,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
     return true;
   }
 
-  public final Tuple getElement(final int[] values) {
+  public final Tuple getElement(final int... values) {
     return this.getElement(MathUtil.intToBigIntegerArray(values));
   }
 
@@ -79,7 +79,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
     return this.standardGetElement(elements);
   }
 
-  public final Tuple getElement(final Element[] elements) {
+  public final Tuple getElement(final Element... elements) {
     int arity = this.getArity();
     if (elements == null || elements.length != arity) {
       throw new IllegalArgumentException();
@@ -92,7 +92,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
     return this.standardGetElement(elements);
   }
 
-  protected Tuple standardGetElement(final Element[] elements) {
+  protected Tuple standardGetElement(final Element... elements) {
     return new Tuple(this, elements) {
     };
   }

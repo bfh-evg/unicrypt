@@ -42,6 +42,10 @@ public class ZTimesModTwoPrimes extends ZTimesMod {
     return new ZTimesModTwoPrimes(twoPrimes);
   }
 
+  public static ZTimesModTwoPrimes getInstance(final int prime1, final int prime2) {
+    return ZTimesModTwoPrimes.getInstance(BigInteger.valueOf(prime1), BigInteger.valueOf(prime2));
+  }
+
   public static ZTimesModTwoPrimes getInstance(BigInteger prime1, BigInteger prime2) {
     return new ZTimesModTwoPrimes(TwoPrimes.getInstance(prime1, prime2));
   }

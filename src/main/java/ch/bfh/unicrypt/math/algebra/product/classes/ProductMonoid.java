@@ -7,6 +7,7 @@ package ch.bfh.unicrypt.math.algebra.product.classes;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.math.BigInteger;
 
 /**
  *
@@ -60,13 +61,36 @@ public class ProductMonoid extends ProductSemiGroup implements Monoid {
   }
 
   @Override
-  public Element getIdentityElement() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Tuple getIdentityElement() {
+    if (this.identityElement == null) {
+      final Element[] identityElements = new Element[this.getArity()];
+      for (int i = 0; i < identityElements.length; i++) {
+        identityElements[i] = this.getAt(i).getIdentityElement();
+      }
+      this.identityElement = this.standardGetElement(identityElements);
+    }
+    return this.identityElement;
   }
 
   @Override
   public boolean isIdentityElement(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return this.areEqual(element, this.getIdentityElement());
+  }
+
+  @Override
+  public Tuple standardApply(final Element[] elements) {
+    if (elements.length == 0) {
+      return this.getIdentityElement();
+    }
+    return super.standardApply(elements);
+  }
+
+  @Override
+  protected Tuple standardMultiSelfApply(final Element[] elements, BigInteger[] amounts) {
+    if (elements.length == 0) {
+      return this.getIdentityElement();
+    }
+    return super.standardMultiSelfApply(elements, amounts);
   }
 
   /**

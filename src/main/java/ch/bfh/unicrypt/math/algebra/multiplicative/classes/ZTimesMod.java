@@ -110,6 +110,10 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid<ZTimesModElement> {
   //
   private static final Map<BigInteger, ZTimesMod> instances = new HashMap<BigInteger, ZTimesMod>();
 
+  public static ZTimesMod getInstance(final int modulus) {
+    return ZTimesMod.getInstance(BigInteger.valueOf(modulus));
+  }
+
   /**
    * Returns a the unique instance of this class for a given positive modulus.
    *

@@ -23,6 +23,10 @@ public class ZStarModPrime extends ZStarMod {
     return new ZStarModPrime(modulus);
   }
 
+  public static ZStarModPrime getInstance(final int modulus) {
+    return ZStarModPrime.getInstance(BigInteger.valueOf(modulus));
+  }
+
   public static ZStarModPrime getInstance(final BigInteger modulus) {
     return ZStarModPrime.getInstance(Prime.getInstance(modulus));
   }

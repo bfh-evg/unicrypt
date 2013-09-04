@@ -135,6 +135,10 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<ZPlusModElement> {
   //
   private static final Map<BigInteger, ZPlusMod> instances = new HashMap<BigInteger, ZPlusMod>();
 
+  public static ZPlusMod getInstance(final int modulus) {
+    return ZPlusMod.getInstance(BigInteger.valueOf(modulus));
+  }
+
   /**
    * Returns a the unique instance of this class for a given positive modulus.
    *

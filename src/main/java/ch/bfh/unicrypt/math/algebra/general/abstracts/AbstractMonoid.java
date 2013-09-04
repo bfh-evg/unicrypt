@@ -42,11 +42,27 @@ public abstract class AbstractMonoid<E extends Element> extends AbstractSemiGrou
   }
 
   @Override
+  public E standardApply(final Element[] elements) {
+    if (elements.length == 0) {
+      return this.getIdentityElement();
+    }
+    return super.standardApply(elements);
+  }
+
+  @Override
   protected E standardSelfApply(Element element, BigInteger amount) {
     if (amount.signum() == 0) {
       return this.getIdentityElement();
     }
     return super.standardSelfApply(element, amount);
+  }
+
+  @Override
+  protected E standardMultiSelfApply(final Element[] elements, BigInteger[] amounts) {
+    if (elements.length == 0) {
+      return this.getIdentityElement();
+    }
+    return super.standardMultiSelfApply(elements, amounts);
   }
 
   //

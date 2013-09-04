@@ -28,6 +28,10 @@ public class GStarModPrime extends GStarMod {
     return new GStarModPrime(modulo, orderFactor);
   }
 
+  public static GStarModPrime getInstance(final int modulus, final int orderFactor) {
+    return GStarModPrime.getInstance(BigInteger.valueOf(modulus), BigInteger.valueOf(orderFactor));
+  }
+
   public static GStarModPrime getInstance(final BigInteger modulus, BigInteger orderFactor) {
     return GStarModPrime.getInstance(Prime.getInstance(modulus), Prime.getInstance(orderFactor));
   }

@@ -172,6 +172,10 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
   //
   // STATIC FACTORY METHODS
   //
+  public static ZStarMod getInstance(final int modulus) {
+    return ZStarMod.getInstance(BigInteger.valueOf(modulus));
+  }
+
   /**
    * This is a static factory method to construct a new instance of this class
    * for a given {@code modulus >= 2}. If {@code modulus} is not prime, then a

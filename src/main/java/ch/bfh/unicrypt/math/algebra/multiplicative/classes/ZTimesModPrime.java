@@ -26,6 +26,10 @@ public class ZTimesModPrime extends ZTimesMod {
     return new ZTimesModPrime(prime);
   }
 
+  public static ZTimesModPrime getInstance(final int modulus) {
+    return ZTimesModPrime.getInstance(BigInteger.valueOf(modulus));
+  }
+
   public static ZTimesModPrime getInstance(BigInteger prime) {
     return new ZTimesModPrime(Prime.getInstance(prime));
   }

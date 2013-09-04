@@ -22,23 +22,15 @@ public abstract class AbstractSemiGroup<E extends Element> extends AbstractSet<E
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();
     }
-    return abstractApply(element1, element2);
+    return this.abstractApply(element1, element2);
   }
 
   @Override
   public final E apply(final Element... elements) {
-    if (elements == null || elements.length == 0) {
+    if (elements == null) {
       throw new IllegalArgumentException();
     }
-    E result = null;
-    for (Element element : elements) {
-      if (result == null) {
-        result = (E) element;
-      } else {
-        result = this.apply(result, element);
-      }
-    }
-    return result;
+    return this.standardApply(elements);
   }
 
   @Override
@@ -46,7 +38,7 @@ public abstract class AbstractSemiGroup<E extends Element> extends AbstractSet<E
     if (!this.contains(element) || (amount == null)) {
       throw new IllegalArgumentException();
     }
-    return standardSelfApply(element, amount);
+    return this.standardSelfApply(element, amount);
   }
 
   @Override
@@ -69,20 +61,31 @@ public abstract class AbstractSemiGroup<E extends Element> extends AbstractSet<E
 
   @Override
   public final E multiSelfApply(final Element[] elements, final BigInteger[] amounts) {
-    if ((elements == null) || (amounts == null) || (elements.length != amounts.length) || (elements.length == 0)) {
+    if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
       throw new IllegalArgumentException();
     }
-    Element[] results = new Element[elements.length];
-    for (int i = 0; i < elements.length; i++) {
-      results[i] = this.selfApply(elements[i], amounts[i]);
-    }
-    return this.apply(results);
+    return this.standardMultiSelfApply(elements, amounts);
   }
 
   //
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
   //
+  protected E standardApply(final Element... elements) {
+    if (elements.length == 0) {
+      throw new IllegalArgumentException();
+    }
+    E result = null;
+    for (Element element : elements) {
+      if (result == null) {
+        result = (E) element;
+      } else {
+        result = this.apply(result, element);
+      }
+    }
+    return result;
+  }
+
   protected E standardSelfApply(Element element, BigInteger amount) {
     if (amount.signum() <= 0) {
       throw new IllegalArgumentException();
@@ -97,30 +100,44 @@ public abstract class AbstractSemiGroup<E extends Element> extends AbstractSet<E
     return (E) result;
   }
 
+  protected E standardMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {
+    if (elements.length == 0) {
+      throw new IllegalArgumentException();
+    }
+    Element[] results = new Element[elements.length];
+    for (int i = 0; i < elements.length; i++) {
+      results[i] = this.selfApply(elements[i], amounts[i]);
+    }
+    return this.apply(results);
+  }
+
   //
-  // The following protected abstract method must be implemented in every direct sub-class.
+  // The following protected abstract method must be implemented in every
+  // direct sub-class.
   //
   protected abstract E abstractApply(Element element1, Element element2);
 
 }
-// THIS IS OLD CODE FOR AN OPTIMZED multiSelfApply ALGORITHM (works only for commutative operators)
-//      bitLength = Math.max(bitLength, amounts[i].bitLength());
-//    }
-//    int bitLength = 0;
-//    for (int i = 0; i < elements.length; i++) {
-//      if ((elements[i] == null) || (amounts[i] == null) || (amounts[i].equals(BigInteger.ZERO))) {
-//        throw new IllegalArgumentException();
-//      }
-//      bitLength = Math.max(bitLength, amounts[i].bitLength());
-//    }
-//    Element result = this.getIdentityElement();
-//    for (int i = bitLength - 1; i >= 0; i--) {
-//      result = result.selfApply();
-//      for (int j = 0; j < amounts.length; j++) {
-//        if (amounts[j].testBit(i)) {
-//          result = result.apply(elements[j]);
-//        }
-//      }
-//    }
-//    return result;
+// THIS IS OLD CODE FOR AN OPTIMZED multiSelfApply ALGORITHM (works only for
+// commutative operators)
+// bitLength = Math.max(bitLength, amounts[i].bitLength());
+// }
+// int bitLength = 0;
+// for (int i = 0; i < elements.length; i++) {
+// if ((elements[i] == null) || (amounts[i] == null) ||
+// (amounts[i].equals(BigInteger.ZERO))) {
+// throw new IllegalArgumentException();
+// }
+// bitLength = Math.max(bitLength, amounts[i].bitLength());
+// }
+// Element result = this.getIdentityElement();
+// for (int i = bitLength - 1; i >= 0; i--) {
+// result = result.selfApply();
+// for (int j = 0; j < amounts.length; j++) {
+// if (amounts[j].testBit(i)) {
+// result = result.apply(elements[j]);
+// }
+// }
+// }
+// return result;
 

@@ -74,20 +74,11 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public final Tuple apply(Element... elements) {
-    if (elements == null || elements.length == 0) {
+  public final Tuple apply(final Element... elements) {
+    if (elements == null) {
       throw new IllegalArgumentException();
     }
-    Tuple[] tuples = (Tuple[]) elements;
-    Tuple result = null;
-    for (Tuple tuple : tuples) {
-      if (result == null) {
-        result = tuple;
-      } else {
-        result = this.apply(result, tuple);
-      }
-    }
-    return result;
+    return this.standardApply(elements);
   }
 
   @Override
@@ -123,11 +114,33 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  public final Tuple multiSelfApply(Element[] elements, BigInteger[] amounts) {
-    if ((elements == null) || (amounts == null) || (elements.length != amounts.length) || (elements.length == 0)) {
+  public final Tuple multiSelfApply(final Element[] elements, final BigInteger[] amounts) {
+    if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
       throw new IllegalArgumentException();
     }
-    Tuple[] results = new Tuple[elements.length];
+    return this.standardMultiSelfApply(elements, amounts);
+  }
+
+  protected Tuple standardApply(final Element... elements) {
+    if (elements.length == 0) {
+      throw new IllegalArgumentException();
+    }
+    Element result = null;
+    for (Element element : elements) {
+      if (result == null) {
+        result = element;
+      } else {
+        result = this.apply(result, element);
+      }
+    }
+    return (Tuple) result;
+  }
+
+  protected Tuple standardMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {
+    if (elements.length == 0) {
+      throw new IllegalArgumentException();
+    }
+    Element[] results = new Element[elements.length];
     for (int i = 0; i < elements.length; i++) {
       results[i] = this.selfApply(elements[i], amounts[i]);
     }

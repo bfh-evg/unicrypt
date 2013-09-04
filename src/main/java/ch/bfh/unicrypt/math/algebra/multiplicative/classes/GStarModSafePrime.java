@@ -27,6 +27,10 @@ public class GStarModSafePrime extends GStarModPrime {
     return new GStarModSafePrime(safePrime);
   }
 
+  public static GStarModSafePrime getInstance(final int modulus) {
+    return GStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
+  }
+
   public static GStarModSafePrime getInstance(final BigInteger modulus) {
     return new GStarModSafePrime(SafePrime.getInstance(modulus));
   }
