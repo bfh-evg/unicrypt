@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import ch.bfh.unicrypt.crypto.encryption.classes.AESEncryptionScheme;
 import ch.bfh.unicrypt.crypto.keygen.classes.PasswordDerivedKeyGeneratorClass;
-import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordDerivedKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordKeyGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.element.interfaces.EncodedElement;
@@ -94,7 +94,7 @@ public class AESEncryptionClassTest {
 
   @Test
   public void testAESEncryptionClassIntKeyGenerator() {
-    PasswordDerivedKeyGenerator keyGenerator = new PasswordDerivedKeyGeneratorClass();
+    PasswordKeyGenerator keyGenerator = new PasswordDerivedKeyGeneratorClass();
     AESEncryptionScheme aes = new AESEncryptionScheme(1, keyGenerator);
   }
 
@@ -190,7 +190,7 @@ public class AESEncryptionClassTest {
 
   @Test
   public void testGetKeyGenerator() {
-    PasswordDerivedKeyGenerator keyGenerator = new PasswordDerivedKeyGeneratorClass();
+    PasswordKeyGenerator keyGenerator = new PasswordDerivedKeyGeneratorClass();
     AESEncryptionScheme aes = new AESEncryptionScheme(1, keyGenerator);
     Assert.assertSame(keyGenerator, aes.getKeyGenerator());
     }

@@ -8,7 +8,7 @@ import ch.bfh.unicrypt.crypto.signature.abstracts.AbstractRandomizedSignatureSch
 import ch.bfh.unicrypt.crypto.signature.interfaces.SchnorrSignatureScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.ProductDomainFunctionAbstract;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
@@ -19,7 +19,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.function.interfaces.HashFunction;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
 import ch.bfh.unicrypt.math.group.classes.PowerGroup;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
 import ch.bfh.unicrypt.math.group.interfaces.BooleanGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;

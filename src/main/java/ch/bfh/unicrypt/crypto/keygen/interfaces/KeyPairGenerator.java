@@ -1,27 +1,41 @@
 package ch.bfh.unicrypt.crypto.keygen.interfaces;
 
-import java.util.Random;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
-import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.math.BigInteger;
 
-public interface KeyPairGenerator extends RandomizedKeyGenerator {
+public interface KeyPairGenerator extends KeyGenerator {
 
-  public Element generateKeyPair();
+  public Set getPublicKeySpace();
 
-  public Element generateKeyPair(Random random);
+  public Set getPrivateKeySpace();
 
-  public Group getPublicKeySpace();
+  public Function getPrivateKeyGenerationFunction();
 
-  public Group getPrivateKeySpace();
+  public Function getPublicKeyGenerationFunction();
 
-  public Element getPublicKey(Element keyPair);
+  public Tuple getKeyPair(BigInteger value);
 
-  public Element getPrivateKey(Element keyPair);
+  public Tuple getKeyPair(BigInteger value1, BigInteger value2);
 
-  public Function getPrivateKeyGeneratorFunction();
+  public Element getPrivateKey(BigInteger value);
 
-  public Function getPublicKeyGeneratorFunction();
+  public Element getPrivateKey(Tuple keyPair);
+
+  public Element getPublicKey(BigInteger value);
+
+  public Element getPublicKey(Tuple keyPair);
+
+  public Element getPublicKey(Element privateKey);
+
+  @Override
+  public ProductSet getKeySpace();
+
+  @Override
+  public Tuple getKey(BigInteger value);
 
 }

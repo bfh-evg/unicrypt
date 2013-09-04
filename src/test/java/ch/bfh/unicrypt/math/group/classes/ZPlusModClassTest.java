@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.math.group.classes;
 
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
 import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;

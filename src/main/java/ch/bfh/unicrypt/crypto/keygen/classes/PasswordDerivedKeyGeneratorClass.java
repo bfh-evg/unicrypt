@@ -5,12 +5,12 @@ import java.security.Key;
 import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.keygen.abstracts.KeyGeneratorAbstract;
-import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordDerivedKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordKeyGenerator;
 import ch.bfh.unicrypt.crypto.utility.AESUtil;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 
@@ -21,12 +21,12 @@ import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
  * @author reto
  * 
  */
-public class PasswordDerivedKeyGeneratorClass extends KeyGeneratorAbstract implements PasswordDerivedKeyGenerator {
+public class PasswordDerivedKeyGeneratorClass extends KeyGeneratorAbstract implements PasswordKeyGenerator {
 
   private final KeyGenerationFunction keyGenerationFunction;
 
   /**
-   * Creates a default {@link PasswordDerivedKeyGenerator} where cryptographic
+   * Creates a default {@link PasswordKeyGenerator} where cryptographic
    * key-size = 256bit iterations during key-generation = 1024
    */
   public PasswordDerivedKeyGeneratorClass() {
@@ -34,7 +34,7 @@ public class PasswordDerivedKeyGeneratorClass extends KeyGeneratorAbstract imple
   }
 
   /**
-   * Creates a {@link PasswordDerivedKeyGenerator} with custom values. Caution:
+   * Creates a {@link PasswordKeyGenerator} with custom values. Caution:
    * In order to get a keySpace of bit-size 256 you have to create the following
    * key-space: <code>new ZPlusModClass(BigInteger.valueOf(2).pow(256))</code>
    * in contrast, <code>new ZPlusModClass(BigInteger.valueOf(2).pow(256))</code>

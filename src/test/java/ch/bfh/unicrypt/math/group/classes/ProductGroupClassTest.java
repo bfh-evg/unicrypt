@@ -13,7 +13,7 @@ import ch.bfh.unicrypt.crypto.concat.classes.ConcatSchemeClass;
 import ch.bfh.unicrypt.crypto.concat.interfaces.ConcatScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.group.interfaces.GStarMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;

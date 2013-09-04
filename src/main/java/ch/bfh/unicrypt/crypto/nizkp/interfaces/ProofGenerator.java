@@ -3,7 +3,7 @@ package ch.bfh.unicrypt.crypto.nizkp.interfaces;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.group.interfaces.ProductGroup;

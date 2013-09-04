@@ -10,7 +10,7 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 
@@ -79,12 +79,12 @@ public class DDHGroupKeyPairGeneratorClass extends KeyPairGeneratorAbstract impl
 //  }
 
   @Override
-  public Function getPrivateKeyGeneratorFunction() {
+  public Function getPrivateKeyGenerationFunction() {
     return ((CompositeFunction) this.getKeyGenerationFunction()).getFunctionAt(0);
   }
 
   @Override
-  public Function getPublicKeyGeneratorFunction() {
+  public Function getPublicKeyGenerationFunction() {
     final ProductFunction tmp = (ProductFunction) ((CompositeFunction) this.getKeyGenerationFunction()).getFunctionAt(2);
     return tmp.getAt(1);
   }

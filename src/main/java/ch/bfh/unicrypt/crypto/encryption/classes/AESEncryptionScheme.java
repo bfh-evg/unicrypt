@@ -10,18 +10,18 @@ import javax.xml.bind.DatatypeConverter;
 import ch.bfh.unicrypt.crypto.encryption.abstracts.AbstractEncryptionScheme;
 import ch.bfh.unicrypt.crypto.encryption.interfaces.DeterministicEncryptionScheme;
 import ch.bfh.unicrypt.crypto.keygen.classes.PasswordDerivedKeyGeneratorClass;
-import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordDerivedKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordKeyGenerator;
 import ch.bfh.unicrypt.crypto.utility.AESUtil;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.product.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 
 public class AESEncryptionScheme extends AbstractEncryptionScheme implements DeterministicEncryptionScheme {
   private int encryptionIterations;
-  private PasswordDerivedKeyGenerator keyGenerator;
+  private PasswordKeyGenerator keyGenerator;
   private EncryptionFunction encryptionFunction;
   private DecryptionFunction decryptionFunction;
 
@@ -37,7 +37,7 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
     this(encryptionIterations, new PasswordDerivedKeyGeneratorClass(keySpace, keyIterations));
   }
 
-  public AESEncryptionScheme(int encryptionIterations, PasswordDerivedKeyGenerator keyGenerator) {
+  public AESEncryptionScheme(int encryptionIterations, PasswordKeyGenerator keyGenerator) {
     if(encryptionIterations<1)
       throw new IllegalArgumentException();
     this.encryptionIterations = encryptionIterations;
@@ -77,7 +77,7 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
     throw new RuntimeException("This method does not make sense... Redesign");
   }
 
-  public PasswordDerivedKeyGenerator getKeyGenerator() {
+  public PasswordKeyGenerator getKeyGenerator() {
     return this.keyGenerator;
   }
 
@@ -92,7 +92,7 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
   private class EncryptionFunction extends AbstractFunction {
     private int iterations;
 
-    public EncryptionFunction(PasswordDerivedKeyGenerator keyGenerator, int iterationAmount) {
+    public EncryptionFunction(PasswordKeyGenerator keyGenerator, int iterationAmount) {
       super(new ProductGroup(keyGenerator.getKeySpace(), ZPlus.Factory.getInstance()), ZPlus.Factory.getInstance());
       if (iterationAmount <= 0) {
         throw new IllegalArgumentException();
@@ -129,7 +129,7 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
   private class DecryptionFunction extends AbstractFunction {
     private int iterations;
 
-    public DecryptionFunction(PasswordDerivedKeyGenerator keyGenerator, int iterationAmount) {
+    public DecryptionFunction(PasswordKeyGenerator keyGenerator, int iterationAmount) {
       super(new ProductGroup(keyGenerator.getKeySpace(), ZPlus.Factory.getInstance()), ZPlus.Factory.getInstance());
       if (iterationAmount <= 0) {
         throw new IllegalArgumentException();

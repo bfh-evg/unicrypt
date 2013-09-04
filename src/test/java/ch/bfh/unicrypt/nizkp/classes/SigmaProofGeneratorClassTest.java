@@ -20,7 +20,7 @@ import ch.bfh.unicrypt.crypto.nizkp.classes.SigmaProofGeneratorClass;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.group.classes.GStarSave;
@@ -73,7 +73,7 @@ public class SigmaProofGeneratorClassTest {
 		
 		ElGamalEncryption elGamalEnc = new ElGamalEncryptionScheme(ddhGroup, generator);
 		KeyPairGenerator keyPairGen = elGamalEnc.getKeyGenerator();
-		Function proofFunction = keyPairGen.getPublicKeyGeneratorFunction();
+		Function proofFunction = keyPairGen.getPublicKeyGenerationFunction();
 		Tuple keyPair = keyPairGen.generateKeyPair();
 		Element privateKey = keyPairGen.getPrivateKey(keyPair);
 		AtomicElement publicKey = (AtomicElement) keyPairGen.getPublicKey(keyPair);
@@ -99,7 +99,7 @@ public class SigmaProofGeneratorClassTest {
 
     ElGamalEncryption elGamalEnc = new ElGamalEncryptionScheme(ddhGroup, generator);
     KeyPairGenerator keyPairGen = elGamalEnc.getKeyGenerator();
-    Function proofFunction = keyPairGen.getPublicKeyGeneratorFunction();
+    Function proofFunction = keyPairGen.getPublicKeyGenerationFunction();
     Tuple keyPair = keyPairGen.generateKeyPair();
     Element privateKey = keyPairGen.getPrivateKey(keyPair);
     AtomicElement publicKey = (AtomicElement) keyPairGen.getPublicKey(keyPair);

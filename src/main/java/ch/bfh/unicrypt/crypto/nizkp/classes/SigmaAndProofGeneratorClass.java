@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.crypto.nizkp.abstracts.ProductProofGeneratorAbstract;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaAndProofGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.algebra.product.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction.HashAlgorithm;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
