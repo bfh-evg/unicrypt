@@ -96,4 +96,9 @@ public class Factorization {
     return new Factorization(value, newPrimeFactors, newExponents);
   }
 
+  @Override
+  public final String toString() {
+    return this.getClass().getSimpleName() + "[" + this.getValue() + "]";
+  }
+
 }

@@ -18,6 +18,10 @@ public class Prime extends SpecialFactorization {
     super(prime, new BigInteger[]{prime}, new int[]{1});
   }
 
+  public static Prime getInstance(int prime) {
+    return Prime.getInstance(BigInteger.valueOf(prime));
+  }
+
   public static Prime getInstance(BigInteger prime) {
     return new Prime(prime);
   }

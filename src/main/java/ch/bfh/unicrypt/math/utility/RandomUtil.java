@@ -203,8 +203,8 @@ public final class RandomUtil {
     BigInteger randomValue;
     int bitLength = maxValue.bitLength();
     do {
-      randomValue = RandomUtil.createRandomBigInteger(bitLength, random);
-    } while (randomValue.subtract(maxValue).signum() > 0);
+      randomValue = new BigInteger(bitLength, RandomUtil.getRandomGenerator(random));
+    } while (randomValue.compareTo(maxValue) > 0);
     return randomValue;
   }
 

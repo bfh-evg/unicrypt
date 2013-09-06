@@ -1,11 +1,10 @@
 package ch.bfh.unicrypt.crypto.keygen.classes;
 
-import ch.bfh.unicrypt.crypto.keygen.abstracts.KeyPairGeneratorAbstract;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupDistributedKeyPairGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
-import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
-import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
@@ -14,7 +13,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 
-public class DDHGroupKeyPairGeneratorClass extends KeyPairGeneratorAbstract implements DDHGroupDistributedKeyPairGenerator {
+public class DDHGroupKeyPairGeneratorClass extends KeyPairGenerator implements DDHGroupDistributedKeyPairGenerator {
 
   private final ZPlusMod zModPlus;
   private final DDHGroup ddhGroup;
@@ -60,9 +59,9 @@ public class DDHGroupKeyPairGeneratorClass extends KeyPairGeneratorAbstract impl
     //@formatter:off
     return new CompositeFunction(
         new RandomFunction(this.zModPlus), 
-        new IdentityFunction(this.zModPlus, 2), 
+        new MultiIdentityFunction(this.zModPlus, 2), 
         new ProductFunction(
-            new IdentityFunction(this.zModPlus),
+            new MultiIdentityFunction(this.zModPlus),
             new SelfApplyFunction(this.ddhGroup, this.zModPlus).partiallyApply(this.generator, 0)
 //            this.createPublicKeyGenerationFunction()
 ));

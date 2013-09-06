@@ -11,7 +11,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
 import ch.bfh.unicrypt.math.function.classes.HashFunction.HashAlgorithm;
-import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.function.interfaces.HashFunction;
@@ -43,7 +43,7 @@ public class SigmaEqualityProofGeneratorClass extends ProductCoDomainProofGenera
       final HashAlgorithm hashAlgorithm,
       final ConcatParameter concatParameter,
       final Mapper mapper) {
-    final Function function = new CompositeFunction(new IdentityFunction(SigmaEqualityProofGeneratorClass.getDomain(functions), functions.length),
+    final Function function = new CompositeFunction(new MultiIdentityFunction(SigmaEqualityProofGeneratorClass.getDomain(functions), functions.length),
         new ProductFunction(functions));
     this.sigmaProofGenerator = new SigmaProofGeneratorClass(function, hashAlgorithm, concatParameter, mapper);
     this.functions = functions;

@@ -11,7 +11,7 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.InvertFunction;
-import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
@@ -245,7 +245,7 @@ public class ElGamalEncryptionScheme extends AbstractEncryptionScheme {
         final ProductGroup encryptionDomain = new ProductGroup(this.ddhGroup, this.ddhGroup, this.zModPlus);
         //@formatter:off
         return new CompositeFunction(
-            new IdentityFunction(encryptionDomain, 2),
+            new MultiIdentityFunction(encryptionDomain, 2),
             new ProductFunction(
                 new CompositeFunction(
                    new SelectionFunction(encryptionDomain, 2),
@@ -261,10 +261,10 @@ public class ElGamalEncryptionScheme extends AbstractEncryptionScheme {
     private Function createEncryptionFunctionRight(final ProductGroup encryptionDomain) {
       //@formatter:off
       return new CompositeFunction(
-          new IdentityFunction(encryptionDomain, 2),
+          new MultiIdentityFunction(encryptionDomain, 2),
           new ProductFunction(
               new CompositeFunction(
-                  new IdentityFunction(encryptionDomain, 2),
+                  new MultiIdentityFunction(encryptionDomain, 2),
                   new ProductFunction(
                       new SelectionFunction(encryptionDomain, 0),
                       new SelectionFunction(encryptionDomain, 2)),
@@ -282,10 +282,10 @@ public class ElGamalEncryptionScheme extends AbstractEncryptionScheme {
       final ProductGroup decryptionDomain = new ProductGroup(this.zModPlus, new PowerGroup(this.ddhGroup, 2));
       //@formatter:off
       return new CompositeFunction(
-          new IdentityFunction(decryptionDomain, 2),
+          new MultiIdentityFunction(decryptionDomain, 2),
           new ProductFunction(
               new CompositeFunction(
-                  new IdentityFunction(decryptionDomain, 2),
+                  new MultiIdentityFunction(decryptionDomain, 2),
                   new ProductFunction(
                       new SelectionFunction(decryptionDomain, 0),
                       new SelectionFunction(decryptionDomain, 1, 0)),
@@ -299,7 +299,7 @@ public class ElGamalEncryptionScheme extends AbstractEncryptionScheme {
       final ProductGroup partialDecryptionDomain = new ProductGroup(this.zModPlus, this.ddhGroup);
       //@formatter:off
       return new CompositeFunction(
-          new IdentityFunction(partialDecryptionDomain, 2),
+          new MultiIdentityFunction(partialDecryptionDomain, 2),
           new ProductFunction(
               new SelectionFunction(partialDecryptionDomain, 1),
               new CompositeFunction(

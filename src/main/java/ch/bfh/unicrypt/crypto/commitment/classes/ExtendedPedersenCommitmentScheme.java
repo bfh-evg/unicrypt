@@ -9,7 +9,7 @@ import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
-import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
@@ -112,10 +112,10 @@ public class ExtendedPedersenCommitmentScheme extends AbstractRandomizedCommitme
     final ProductGroup openingDomain = new ProductGroup(this.getMessagesSpace(), this.getRandomizationSpace(), this.getCommitmentSpace());
     //@formatter:off
     return new CompositeFunction(
-        new IdentityFunction(openingDomain,2),
+        new MultiIdentityFunction(openingDomain,2),
         new ProductFunction(
             new CompositeFunction(
-                new IdentityFunction(openingDomain,2),
+                new MultiIdentityFunction(openingDomain,2),
                 new ProductFunction(
                     new SelectionFunction(openingDomain, 0),
                     new SelectionFunction(openingDomain, 1)),

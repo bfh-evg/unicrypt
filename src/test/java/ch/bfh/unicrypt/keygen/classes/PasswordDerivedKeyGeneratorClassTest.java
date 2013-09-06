@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ch.bfh.unicrypt.crypto.keygen.classes.PasswordDerivedKeyGeneratorClass;
+import ch.bfh.unicrypt.crypto.keygen.classes.PasswordBasedKeyGenerator;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordKeyGenerator;
 import ch.bfh.unicrypt.crypto.utility.AESUtil;
 import ch.bfh.unicrypt.math.element.Element;
@@ -42,28 +42,28 @@ public class PasswordDerivedKeyGeneratorClassTest {
 
   @Test
   public void testPasswordDerivedKeyGeneratorClass() {
-    PasswordKeyGenerator generator = new PasswordDerivedKeyGeneratorClass();
+    PasswordKeyGenerator generator = new PasswordBasedKeyGenerator();
     Assert.assertNotNull(generator);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testPasswordDerivedKeyGeneratorClassNoKeySpaceSalt() {
-    PasswordKeyGenerator generator = new PasswordDerivedKeyGeneratorClass(null, 1);
+    PasswordKeyGenerator generator = new PasswordBasedKeyGenerator(null, 1);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testPasswordDerivedKeyGeneratorClassKeySpaceNegativeSalt() {
-    PasswordKeyGenerator generator = new PasswordDerivedKeyGeneratorClass(new ZPlusModClass(BigInteger.ONE), -1);
+    PasswordKeyGenerator generator = new PasswordBasedKeyGenerator(new ZPlusModClass(BigInteger.ONE), -1);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testPasswordDerivedKeyGeneratorClassKeySpaceZeroSalt() {
-    PasswordKeyGenerator generator = new PasswordDerivedKeyGeneratorClass(new ZPlusModClass(BigInteger.ONE), 0);
+    PasswordKeyGenerator generator = new PasswordBasedKeyGenerator(new ZPlusModClass(BigInteger.ONE), 0);
   }
 
   @Test
   public void testGetKeyGenerationFunction() {
-    PasswordKeyGenerator generator = new PasswordDerivedKeyGeneratorClass();
+    PasswordKeyGenerator generator = new PasswordBasedKeyGenerator();
     Function generatorFunction = generator.getKeyGenerationFunction();
     Assert.assertNotNull(generatorFunction);
   }
@@ -74,7 +74,7 @@ public class PasswordDerivedKeyGeneratorClassTest {
 //      String password = "ABCD";
 //      byte[] salt = { 4, 7, 1, 1 };
 //
-//      PasswordKeyGenerator generator = new PasswordDerivedKeyGeneratorClass();
+//      PasswordKeyGenerator generator = new PasswordBasedKeyGenerator();
 //      Element element = generator.generateKey(password, salt);
 //
 //      Key key = AESUtil.generateKey(password.toCharArray(), salt, 1024, 256);
@@ -94,7 +94,7 @@ public class PasswordDerivedKeyGeneratorClassTest {
       String password = "ABCD";
       byte[] salt = { 4, 7, 1, 1 };
 
-      PasswordKeyGenerator generator = new PasswordDerivedKeyGeneratorClass(new ZPlusModClass(BigInteger.valueOf(2).pow(256)), 1);
+      PasswordKeyGenerator generator = new PasswordBasedKeyGenerator(new ZPlusModClass(BigInteger.valueOf(2).pow(256)), 1);
 
       Element element = generator.generateKey(password, salt);
 
@@ -114,7 +114,7 @@ public class PasswordDerivedKeyGeneratorClassTest {
 //    String password = "ABCD";
 //    byte[] salt = { 4, 7, 1, 1 };
 //
-//    PasswordKeyGenerator generator = new PasswordDerivedKeyGeneratorClass(new ZPlusModClass(BigInteger.valueOf(2).pow(256)), 1024);
+//    PasswordKeyGenerator generator = new PasswordBasedKeyGenerator(new ZPlusModClass(BigInteger.valueOf(2).pow(256)), 1024);
 //
 //    Element element = generator.generateKey(password, salt);
 //    Assert.assertEquals(256, ((AtomicElement) element).getBigInteger().bitLength());
@@ -128,7 +128,7 @@ public class PasswordDerivedKeyGeneratorClassTest {
     String password = "ABCD";
     byte[] salt = { 4, 7, 1, 1 };
 
-    PasswordKeyGenerator generator = new PasswordDerivedKeyGeneratorClass(new ZPlusModClass(BigInteger.valueOf(2).pow(256)), 1024);
+    PasswordKeyGenerator generator = new PasswordBasedKeyGenerator(new ZPlusModClass(BigInteger.valueOf(2).pow(256)), 1024);
 
     Element element = generator.generateKey(password, salt);
     Assert.assertEquals(new BigInteger("26eaebc6c35ca47b4ed396f74e965b9161524b6bad15aeac4f88774e259a22bb", 16), ((AtomicElement) element).getValue());

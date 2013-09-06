@@ -72,7 +72,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
     return this.orderFactorization;
   }
 
-  public final ZStarMod getSuperGroup() {
+  public final ZStarMod getZStarMod() {
     if (this.superGroup == null) {
       this.superGroup = ZStarMod.getInstance(this.getModuloFactorization());
     }
@@ -85,7 +85,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
    * @return The quotient of the two orders.
    */
   public BigInteger getOrderQuotient() {
-    return this.getSuperGroup().getOrder().divide(this.getOrder());
+    return this.getZStarMod().getOrder().divide(this.getOrder());
   }
 
   //
@@ -137,14 +137,11 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
   protected GStarModElement abstractGetRandomElement(final Random random) {
     if (this.getOrder().compareTo(this.getOrderQuotient()) > 0) { // choose between the faster method
       // Method 1
-      BigInteger randomValue;
-      do {
-        randomValue = RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
-      } while (!randomValue.gcd(this.getModulus()).equals(BigInteger.ONE));
-      return this.abstractGetElement(randomValue.modPow(this.getOrderQuotient(), this.getModulus()));
+      ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
+      return this.getElement(randomElement.power(this.getOrderQuotient()));
     }
     // Method 2
-    return this.selfApply(this.getDefaultGenerator(), RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getOrder(), random));
+    return this.getDefaultGenerator().power(this.getZPlusModOrder().getRandomElement(random));
   }
 
   @Override
@@ -158,7 +155,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
 
   @Override
   protected BigInteger abstractGetOrder() {
-    return MathUtil.eulerFunction(this.getModulus(), this.getModuloFactorization().getPrimeFactors());
+    return this.getOrderFactorization().getValue();
   }
 
   @Override

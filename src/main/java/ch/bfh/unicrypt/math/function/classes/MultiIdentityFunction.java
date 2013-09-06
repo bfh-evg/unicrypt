@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -17,23 +18,29 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class IdentityFunction extends AbstractFunction<Set, Set, Element> {
+public class MultiIdentityFunction extends AbstractFunction<Set, ProductSet, Tuple> {
 
-  private IdentityFunction(final Set set) {
-    super(set, set);
+  private MultiIdentityFunction(final Set domain, final ProductSet coDomain) {
+    super(domain, coDomain);
   }
 
   //
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
-    return element;
+  protected Tuple abstractApply(final Element element, final Random random) {
+    final Element[] elements = new Element[this.getCoDomain().getArity()];
+    Arrays.fill(elements, element);
+    return this.getCoDomain().getElement(elements);
   }
 
   //
   // STATIC FACTORY METHODS
   //
+  public static MultiIdentityFunction getInstance(final Set set) {
+    return MultiIdentityFunction.getInstance(set, 1);
+  }
+
   /**
    * This is the standard constructor for this class. It creates a generalized
    * identity function for a given group, which reproduces the input value
@@ -44,11 +51,11 @@ public class IdentityFunction extends AbstractFunction<Set, Set, Element> {
    * @throws IllegalArgumentException if {@code group} is null
    * @throws IllegalArgumentException if {@code arity} is negative
    */
-  public static IdentityFunction getInstance(final Set set) {
-    if (set == null) {
+  public static MultiIdentityFunction getInstance(final Set set, final int arity) {
+    if (set == null || arity < 0) {
       throw new IllegalArgumentException();
     }
-    return new IdentityFunction(set);
+    return new MultiIdentityFunction(set, ProductSet.getInstance(set, arity));
   }
 
 }

@@ -4,7 +4,7 @@ import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractDeterministicCommitme
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
-import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
@@ -49,7 +49,7 @@ public class StandardCommitmentScheme extends AbstractDeterministicCommitmentSch
     final ProductGroup openingDomain = new ProductGroup(orderGroup, ddhGroup);
     //@formatter:off
     return new CompositeFunction(
-        new IdentityFunction(openingDomain,2),
+        new MultiIdentityFunction(openingDomain,2),
         new ProductFunction(
             new CompositeFunction(
                 new SelectionFunction(openingDomain, 0),

@@ -9,7 +9,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import ch.bfh.unicrypt.crypto.encryption.abstracts.AbstractEncryptionScheme;
 import ch.bfh.unicrypt.crypto.encryption.interfaces.DeterministicEncryptionScheme;
-import ch.bfh.unicrypt.crypto.keygen.classes.PasswordDerivedKeyGeneratorClass;
+import ch.bfh.unicrypt.crypto.keygen.classes.PasswordBasedKeyGenerator;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordKeyGenerator;
 import ch.bfh.unicrypt.crypto.utility.AESUtil;
 import ch.bfh.unicrypt.math.element.Element;
@@ -30,11 +30,11 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
   }
 
   public AESEncryptionScheme(int encryptionIterations) {
-    this(encryptionIterations, new PasswordDerivedKeyGeneratorClass());
+    this(encryptionIterations, new PasswordBasedKeyGenerator());
   }
 
   public AESEncryptionScheme(int encryptionIterations, ZPlusMod keySpace, int keyIterations) {
-    this(encryptionIterations, new PasswordDerivedKeyGeneratorClass(keySpace, keyIterations));
+    this(encryptionIterations, new PasswordBasedKeyGenerator(keySpace, keyIterations));
   }
 
   public AESEncryptionScheme(int encryptionIterations, PasswordKeyGenerator keyGenerator) {

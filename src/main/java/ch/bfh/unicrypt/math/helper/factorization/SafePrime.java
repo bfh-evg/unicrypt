@@ -19,6 +19,10 @@ public class SafePrime extends Prime {
     super(safePrime);
   }
 
+  public static SafePrime getInstance(int safePrime) {
+    return SafePrime.getInstance(BigInteger.valueOf(safePrime));
+  }
+
   public static SafePrime getInstance(BigInteger safePrime) {
     if (!MathUtil.isSavePrime(safePrime)) {
       throw new IllegalArgumentException();
