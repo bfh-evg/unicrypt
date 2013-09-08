@@ -44,7 +44,7 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
    */
   @Override
   public final E divide(final Element element) {
-    if (this.getSet() instanceof MultiplicativeGroup) {
+    if (this.getSet().isGroup()) {
       MultiplicativeGroup group = ((MultiplicativeGroup) this.getSet());
       return (E) group.divide(this, element);
     }

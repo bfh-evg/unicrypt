@@ -37,6 +37,11 @@ public abstract class AbstractMonoid<E extends Element> extends AbstractSemiGrou
   // various super-classes
   //
   @Override
+  protected boolean standardIsMonoid() {
+    return true;
+  }
+
+  @Override
   protected BigInteger standardGetMinOrder() {
     return BigInteger.ONE;
   }

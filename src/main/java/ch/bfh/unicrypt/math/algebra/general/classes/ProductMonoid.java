@@ -61,6 +61,11 @@ public class ProductMonoid extends ProductSemiGroup implements Monoid {
   }
 
   @Override
+  protected boolean standardIsMonoid() {
+    return true;
+  }
+
+  @Override
   public Tuple getIdentityElement() {
     if (this.identityElement == null) {
       final Element[] identityElements = new Element[this.getArity()];

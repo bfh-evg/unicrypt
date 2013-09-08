@@ -139,7 +139,7 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
     if (parentFunction == null) {
       throw new IllegalArgumentException();
     }
-    if (parentFunction.getDomain() instanceof ProductSet) {
+    if (parentFunction.getDomain().isCompound()) {
       ProductSet domain = (ProductSet) parentFunction.getDomain();
       if (!domain.getAt(index).contains(element)) {
         throw new IllegalArgumentException();

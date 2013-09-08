@@ -137,7 +137,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E apply(final Element element) {
-    if (this.getSet() instanceof SemiGroup) {
+    if (this.getSet().isSemiGroup()) {
       SemiGroup semiGroup = ((SemiGroup) this.getSet());
       return (E) semiGroup.apply(this, element);
     }
@@ -149,7 +149,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E applyInverse(final Element element) {
-    if (this.getSet() instanceof Group) {
+    if (this.getSet().isGroup()) {
       Group group = ((Group) this.getSet());
       return (E) group.applyInverse(this, element);
     }
@@ -161,7 +161,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E selfApply(final BigInteger amount) {
-    if (this.getSet() instanceof SemiGroup) {
+    if (this.getSet().isSemiGroup()) {
       SemiGroup semiGroup = ((SemiGroup) this.getSet());
       return (E) semiGroup.selfApply(this, amount);
     }
@@ -173,7 +173,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E selfApply(final Element amount) {
-    if (this.getSet() instanceof SemiGroup) {
+    if (this.getSet().isSemiGroup()) {
       SemiGroup semiGroup = ((SemiGroup) this.getSet());
       return (E) semiGroup.selfApply(this, amount);
     }
@@ -185,7 +185,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E selfApply(final int amount) {
-    if (this.getSet() instanceof SemiGroup) {
+    if (this.getSet().isSemiGroup()) {
       SemiGroup semiGroup = ((SemiGroup) this.getSet());
       return (E) semiGroup.selfApply(this, amount);
     }
@@ -197,7 +197,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E selfApply() {
-    if (this.getSet() instanceof SemiGroup) {
+    if (this.getSet().isSemiGroup()) {
       SemiGroup semiGroup = ((SemiGroup) this.getSet());
       return (E) semiGroup.selfApply(this);
     }
@@ -209,7 +209,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final E invert() {
-    if (this.getSet() instanceof Group) {
+    if (this.getSet().isGroup()) {
       Group group = ((Group) this.getSet());
       return (E) group.invert(this);
     }
@@ -221,7 +221,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final boolean isIdentity() {
-    if (this.getSet() instanceof Monoid) {
+    if (this.getSet().isMonoid()) {
       Monoid monoid = ((Monoid) this.getSet());
       return monoid.isIdentityElement(this);
     }
@@ -233,7 +233,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
    */
   @Override
   public final boolean isGenerator() {
-    if (this.getSet() instanceof CyclicGroup) {
+    if (this.getSet().isCyclicGroup()) {
       CyclicGroup cyclicGroup = ((CyclicGroup) this.getSet());
       return cyclicGroup.isGenerator(this);
     }

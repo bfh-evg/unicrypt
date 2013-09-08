@@ -62,6 +62,10 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
     return ProductCyclicGroup.getInstance((CyclicGroup[]) sets);
   }
 
+  protected boolean standardCyclicGroup() {
+    return true;
+  }
+
   @Override
   public final Tuple getDefaultGenerator() {
     if (this.defaultGenerator == null) {

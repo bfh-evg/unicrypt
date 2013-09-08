@@ -24,6 +24,31 @@ public abstract class AbstractSet<E extends Element> implements Set {
   private BigInteger order, minOrder;
 
   @Override
+  public final boolean isSemiGroup() {
+    return this.standardIsSemiGroup();
+  }
+
+  @Override
+  public final boolean isMonoid() {
+    return this.standardIsMonoid();
+  }
+
+  @Override
+  public final boolean isGroup() {
+    return this.standardIsGroup();
+  }
+
+  @Override
+  public final boolean isCyclicGroup() {
+    return this.standardCyclicGroup();
+  }
+
+  @Override
+  public final boolean isFinite() {
+    return !this.getOrder().equals(Set.INFINITE_ORDER);
+  }
+
+  @Override
   public final boolean isCompound() {
     return this.standardIsCompound();
   }
@@ -194,6 +219,22 @@ public abstract class AbstractSet<E extends Element> implements Set {
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
   //
+  protected boolean standardIsSemiGroup() {
+    return false;
+  }
+
+  protected boolean standardIsMonoid() {
+    return false;
+  }
+
+  protected boolean standardIsGroup() {
+    return false;
+  }
+
+  protected boolean standardCyclicGroup() {
+    return false;
+  }
+
   protected boolean standardIsCompound() {
     return false;
   }

@@ -4,12 +4,9 @@
  */
 package ch.bfh.unicrypt.crypto.keygen.classes;
 
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
-import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
+import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
@@ -23,16 +20,11 @@ public class ElGamalKeyPairGenerator extends KeyPairGenerator {
   }
 
   public static ElGamalKeyPairGenerator getInstance(GStarModSafePrime publicKeySpace) {
-    return ElGamalKeyPairGenerator.getInstance(publicKeySpace, publicKeySpace.getDefaultGenerator());
+    return new ElGamalKeyPairGenerator(GeneratorFunction.getInstance(publicKeySpace));
   }
 
-  public static ElGamalKeyPairGenerator getInstance(GStarModSafePrime publicKeySpace, Element generator) {
-    if (publicKeySpace == null || generator == null || !generator.isGenerator()) {
-      throw new IllegalArgumentException();
-    }
-    ZPlusMod privateKeySpace = publicKeySpace.getZPlusModOrder();
-    Function function = SelfApplyFunction.getInstance(publicKeySpace, privateKeySpace).partiallyApply(generator, 0);
-    return new ElGamalKeyPairGenerator(CompositeFunction.getInstance(MultiIdentityFunction.getInstance(privateKeySpace), function));
+  public static ElGamalKeyPairGenerator getInstance(Element generator) {
+    return new ElGamalKeyPairGenerator(GeneratorFunction.getInstance(generator));
   }
 
 }

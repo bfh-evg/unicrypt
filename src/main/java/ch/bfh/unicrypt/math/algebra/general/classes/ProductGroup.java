@@ -58,6 +58,11 @@ public class ProductGroup extends ProductMonoid implements Group {
   }
 
   @Override
+  protected boolean standardIsGroup() {
+    return true;
+  }
+
+  @Override
   public final Tuple invert(Element element) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();

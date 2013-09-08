@@ -35,6 +35,10 @@ public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGro
     return this.abstractIsGenerator(element);
   }
 
+  protected boolean standardCyclicGroup() {
+    return true;
+  }
+
   //
   // The following protected abstract method must be implemented in every direct sub-class
   //
