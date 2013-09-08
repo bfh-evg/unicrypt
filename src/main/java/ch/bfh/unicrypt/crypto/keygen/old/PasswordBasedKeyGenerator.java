@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.crypto.keygen.old;
 
+import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyGenerator;
 import java.math.BigInteger;
 import java.security.Key;
 import java.util.Random;

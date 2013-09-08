@@ -8,6 +8,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
@@ -104,7 +105,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<ZPlusModElement> {
     if (this.getModulus().equals(BigInteger.ONE)) {
       return true;
     }
-    return this.getModulus().gcd(element.getValue()).equals(BigInteger.ONE);
+    return MathUtil.areRelativelyPrime(element.getValue(), this.getModulus());
   }
 
   @Override

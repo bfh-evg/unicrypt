@@ -10,7 +10,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicat
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.helper.factorization.SpecialFactorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
  * This interface represents the concept of a sub-group G_m (of order m) of a
@@ -173,6 +172,11 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
     return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
   }
 
+  /**
+   * See http://en.wikipedia.org/wiki/Schnorr_group
+   *
+   * @return
+   */
   @Override
   protected GStarModElement abstractGetDefaultGenerator() {
     BigInteger alpha = BigInteger.ZERO;
@@ -180,7 +184,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
     do {
       do {
         alpha = alpha.add(BigInteger.ONE);
-      } while (!alpha.gcd(this.getModulus()).equals(BigInteger.ONE));
+      } while (!MathUtil.areRelativelyPrime(alpha, this.getModulus()));
       element = this.abstractGetElement(alpha.modPow(this.getOrderQuotient(), this.getModulus()));
     } while (!this.isGenerator(element)); // this test could be skipped for a prime order
     return element;
@@ -198,11 +202,9 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
 
   // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81 (the implemented)
   // method is a mix between 4.80 and 4.81
+  // See also http://en.wikipedia.org/wiki/Schnorr_group
   @Override
   protected boolean abstractIsGenerator(Element element) {
-    if (!this.contains(element)) {
-      return false;
-    }
     for (final BigInteger prime : this.getOrderFactorization().getPrimeFactors()) {
       if (element.selfApply(this.getOrder().divide(prime)).equals(this.getIdentityElement())) {
         return false;
