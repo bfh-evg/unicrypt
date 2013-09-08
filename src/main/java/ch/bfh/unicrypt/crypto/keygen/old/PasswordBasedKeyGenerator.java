@@ -1,4 +1,4 @@
-package ch.bfh.unicrypt.crypto.keygen.classes;
+package ch.bfh.unicrypt.crypto.keygen.old;
 
 import java.math.BigInteger;
 import java.security.Key;

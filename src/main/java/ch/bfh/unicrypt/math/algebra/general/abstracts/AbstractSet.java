@@ -4,10 +4,15 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZTimesMod;
+import ch.bfh.unicrypt.math.helper.Compound;
 
 /**
  * This abstract class provides a basis implementation for atomic sets.
@@ -25,22 +30,22 @@ public abstract class AbstractSet<E extends Element> implements Set {
 
   @Override
   public final boolean isSemiGroup() {
-    return this.standardIsSemiGroup();
+    return this instanceof SemiGroup;
   }
 
   @Override
   public final boolean isMonoid() {
-    return this.standardIsMonoid();
+    return this instanceof Monoid;
   }
 
   @Override
   public final boolean isGroup() {
-    return this.standardIsGroup();
+    return this instanceof Group;
   }
 
   @Override
   public final boolean isCyclicGroup() {
-    return this.standardCyclicGroup();
+    return this instanceof CyclicGroup;
   }
 
   @Override
@@ -50,7 +55,7 @@ public abstract class AbstractSet<E extends Element> implements Set {
 
   @Override
   public final boolean isCompound() {
-    return this.standardIsCompound();
+    return this instanceof Compound;
   }
 
   @Override
@@ -219,26 +224,6 @@ public abstract class AbstractSet<E extends Element> implements Set {
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
   //
-  protected boolean standardIsSemiGroup() {
-    return false;
-  }
-
-  protected boolean standardIsMonoid() {
-    return false;
-  }
-
-  protected boolean standardIsGroup() {
-    return false;
-  }
-
-  protected boolean standardCyclicGroup() {
-    return false;
-  }
-
-  protected boolean standardIsCompound() {
-    return false;
-  }
-
   protected BigInteger standardGetMinOrder() {
     return BigInteger.ZERO;
   }

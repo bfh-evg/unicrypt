@@ -71,11 +71,6 @@ public abstract class AbstractSemiGroup<E extends Element> extends AbstractSet<E
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
   //
-  @Override
-  protected boolean standardIsSemiGroup() {
-    return true;
-  }
-
   protected E standardApply(final Element... elements) {
     if (elements.length == 0) {
       throw new IllegalArgumentException();

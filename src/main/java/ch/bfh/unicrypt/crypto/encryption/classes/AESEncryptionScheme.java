@@ -9,7 +9,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import ch.bfh.unicrypt.crypto.encryption.abstracts.AbstractEncryptionScheme;
 import ch.bfh.unicrypt.crypto.encryption.interfaces.DeterministicEncryptionScheme;
-import ch.bfh.unicrypt.crypto.keygen.classes.PasswordBasedKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygen.old.PasswordBasedKeyGenerator;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordKeyGenerator;
 import ch.bfh.unicrypt.crypto.utility.AESUtil;
 import ch.bfh.unicrypt.math.element.Element;

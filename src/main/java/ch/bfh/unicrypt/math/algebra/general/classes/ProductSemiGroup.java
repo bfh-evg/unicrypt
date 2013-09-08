@@ -59,11 +59,6 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
   }
 
   @Override
-  protected boolean standardIsSemiGroup() {
-    return true;
-  }
-
-  @Override
   public final Tuple apply(Element element1, Element element2) {
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();

@@ -285,11 +285,6 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
   }
 
   @Override
-  protected boolean standardIsCompound() {
-    return true;
-  }
-
-  @Override
   protected boolean standardEquals(Set set) {
     ProductSet other = (ProductSet) set;
     int arity = this.getArity();

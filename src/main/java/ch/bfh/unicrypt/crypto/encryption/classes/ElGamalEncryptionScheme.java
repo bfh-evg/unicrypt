@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.encryption.abstracts.AbstractEncryptionScheme;
-import ch.bfh.unicrypt.crypto.keygen.classes.DDHGroupKeyPairGeneratorClass;
+import ch.bfh.unicrypt.crypto.keygen.old.DDHGroupKeyPairGeneratorClass;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupDistributedKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.classes.SigmaOrProofGeneratorClass;
 import ch.bfh.unicrypt.math.element.Element;

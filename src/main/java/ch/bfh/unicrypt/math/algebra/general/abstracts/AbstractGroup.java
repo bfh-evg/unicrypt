@@ -32,11 +32,6 @@ public abstract class AbstractGroup<E extends Element> extends AbstractMonoid<E>
   }
 
   @Override
-  protected boolean standardIsGroup() {
-    return true;
-  }
-
-  @Override
   protected E standardSelfApply(Element element, BigInteger amount) {
     if (amount.signum() < 0) {
       return this.invert(super.selfApply(element, amount.abs()));

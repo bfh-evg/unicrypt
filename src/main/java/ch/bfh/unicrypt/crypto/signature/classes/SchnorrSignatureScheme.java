@@ -2,7 +2,7 @@ package ch.bfh.unicrypt.crypto.signature.classes;
 
 import java.util.Random;
 
-import ch.bfh.unicrypt.crypto.keygen.classes.DDHGroupKeyPairGeneratorClass;
+import ch.bfh.unicrypt.crypto.keygen.old.DDHGroupKeyPairGeneratorClass;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.signature.abstracts.AbstractRandomizedSignatureScheme;
 import ch.bfh.unicrypt.crypto.signature.interfaces.SchnorrSignatureScheme;

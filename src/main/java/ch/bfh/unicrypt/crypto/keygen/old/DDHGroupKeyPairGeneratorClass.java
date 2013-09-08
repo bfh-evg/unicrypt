@@ -1,4 +1,4 @@
-package ch.bfh.unicrypt.crypto.keygen.classes;
+package ch.bfh.unicrypt.crypto.keygen.old;
 
 import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupDistributedKeyPairGenerator;
 import ch.bfh.unicrypt.math.element.Element;
