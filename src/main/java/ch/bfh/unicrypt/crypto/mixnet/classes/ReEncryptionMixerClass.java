@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ch.bfh.unicrypt.crypto.encryption.interfaces.RandomizedAsymmetricHomomorphicEncryptionScheme;
+import ch.bfh.unicrypt.crypto.encryption.interfaces.HomomorphicEncryptionScheme;
 import ch.bfh.unicrypt.crypto.mixnet.interfaces.ReEncryptionMixer;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.PermutationElement;
@@ -12,10 +12,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public class ReEncryptionMixerClass extends MixerClass implements ReEncryptionMixer {
 
-  RandomizedAsymmetricHomomorphicEncryptionScheme encryptionScheme;
+  HomomorphicEncryptionScheme encryptionScheme;
   Element publicKey;
 
-  public ReEncryptionMixerClass(final RandomizedAsymmetricHomomorphicEncryptionScheme encryptionScheme, final Element publicKey) {
+  public ReEncryptionMixerClass(final HomomorphicEncryptionScheme encryptionScheme, final Element publicKey) {
     super(encryptionScheme.getCiphertextSpace());
     this.encryptionScheme = encryptionScheme;
     this.publicKey = publicKey;
@@ -68,7 +68,7 @@ public class ReEncryptionMixerClass extends MixerClass implements ReEncryptionMi
   }
 
   @Override
-  public RandomizedAsymmetricHomomorphicEncryptionScheme getEncryptionScheme() {
+  public HomomorphicEncryptionScheme getEncryptionScheme() {
     return this.encryptionScheme;
   }
 

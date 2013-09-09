@@ -3,7 +3,7 @@ package ch.bfh.unicrypt.crypto.mixnet.interfaces;
 import java.util.List;
 import java.util.Random;
 
-import ch.bfh.unicrypt.crypto.encryption.interfaces.RandomizedAsymmetricHomomorphicEncryptionScheme;
+import ch.bfh.unicrypt.crypto.encryption.interfaces.HomomorphicEncryptionScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -18,7 +18,7 @@ public interface ReEncryptionMixer extends Mixer {
 
   public List<Element> shuffle(List<Element> elements, PermutationElement permutation, List<Element> randomizations);
 
-  public RandomizedAsymmetricHomomorphicEncryptionScheme getEncryptionScheme();
+  public HomomorphicEncryptionScheme getEncryptionScheme();
 
   public Group getRandomizationSpace();
 
