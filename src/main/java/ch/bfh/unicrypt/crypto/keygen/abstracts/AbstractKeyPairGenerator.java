@@ -7,10 +7,11 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.math.BigInteger;
 import java.util.Random;
 
-public abstract class AbstractKeyPairGenerator<S extends Set, T extends Set, E extends Element, F extends Element> implements KeyPairGenerator {
+public abstract class AbstractKeyPairGenerator<S extends Set, T extends Set, E extends Element, F extends Element> extends UniCrypt implements KeyPairGenerator {
 
   private Function publicKeyFunction;
   private ProductSet keyPairSpace;
@@ -92,6 +93,11 @@ public abstract class AbstractKeyPairGenerator<S extends Set, T extends Set, E e
   @Override
   public F getPublicKey(Element privateKey) {
     return (F) this.getPublicKeyFunction().apply(privateKey);
+  }
+
+  @Override
+  protected String standardToStringContent() {
+    return this.getPrivateKeySpace().toString() + ", " + this.getPublicKeySpace().toString();
   }
 
 }

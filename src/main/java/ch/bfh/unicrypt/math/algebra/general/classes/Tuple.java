@@ -178,12 +178,17 @@ public class Tuple extends AbstractElement<ProductSet, Tuple> implements Compoun
   }
 
   @Override
-  protected String standardToString() {
+  protected String standardToStringName() {
+    return this.getSet().getClass().getSimpleName() + "Tuple";
+  }
+
+  @Override
+  protected String standardToStringContent() {
     String result = "";
     String separator = "";
     for (Element element : this) {
       result = result + separator + element.toString();
-      separator = ",";
+      separator = ", ";
     }
     return result;
   }

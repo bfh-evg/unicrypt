@@ -32,7 +32,7 @@ public final class ProductFunction extends AbstractCompoundFunction<ProductFunct
    * null
    */
   protected ProductFunction(final ProductSet domain, ProductSet coDomain, Function... functions) {
-    super(domain, coDomain, functions);
+    super(domain, coDomain, functions, Function.class);
   }
 
   /**
@@ -46,7 +46,7 @@ public final class ProductFunction extends AbstractCompoundFunction<ProductFunct
    * @throws IllegalArgumentException if {@code arity} is negative
    */
   protected ProductFunction(ProductSet domain, ProductSet coDomain, Function function, int arity) {
-    super(domain, coDomain, function, arity);
+    super(domain, coDomain, function, arity, Function.class);
   }
 
   //

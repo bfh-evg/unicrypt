@@ -47,7 +47,7 @@ public class SingletonGroup extends AbstractCyclicGroup<Element> {
   }
 
   @Override
-  protected String standardToString() {
+  protected String standardToStringContent() {
     return this.getValue().toString();
   }
 

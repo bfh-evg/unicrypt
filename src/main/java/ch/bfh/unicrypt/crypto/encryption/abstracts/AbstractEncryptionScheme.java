@@ -5,8 +5,9 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 
-public abstract class AbstractEncryptionScheme<P extends Set, C extends Set, PE extends Element, CE extends Element> implements EncryptionScheme {
+public abstract class AbstractEncryptionScheme<P extends Set, C extends Set, PE extends Element, CE extends Element> extends UniCrypt implements EncryptionScheme {
 
   private Function encryptionFunction;
   private Function decryptionFunction;

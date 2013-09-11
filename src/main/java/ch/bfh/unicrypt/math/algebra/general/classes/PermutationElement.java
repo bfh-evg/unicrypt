@@ -44,7 +44,7 @@ public class PermutationElement extends AbstractElement<PermutationGroup, Permut
   }
 
   @Override
-  public String standardToString() {
+  public String standardToStringContent() {
     return this.getPermutation().toString();
   }
 

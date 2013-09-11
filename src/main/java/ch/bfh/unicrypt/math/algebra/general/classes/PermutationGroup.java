@@ -92,7 +92,7 @@ public class PermutationGroup extends AbstractGroup<PermutationElement> {
   }
 
   @Override
-  public String standardToString() {
+  public String standardToStringContent() {
     return "" + this.getSize();
   }
 

@@ -42,22 +42,32 @@ public class ProductMonoid extends ProductSemiGroup implements Monoid {
 
   @Override
   public Monoid[] getAll() {
-    return (Monoid[]) super.getAll();
+    int arity = this.getArity();
+    Monoid[] result = new Monoid[arity];
+    for (int i = 0; i < arity; i++) {
+      result[i] = this.getAt(i);
+    }
+    return result;
   }
 
   @Override
   public ProductMonoid removeAt(final int index) {
-    return (ProductMonoid) super.removeAt(index);
-  }
-
-  @Override
-  protected ProductMonoid standardRemoveAt(Set set, int arity) {
-    return ProductMonoid.getInstance((Monoid) set, arity);
-  }
-
-  @Override
-  protected ProductMonoid standardRemoveAt(Set[] sets) {
-    return ProductMonoid.getInstance((Monoid[]) sets);
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    if (this.isUniform()) {
+      return ProductMonoid.getInstance(this.getFirst(), arity - 1);
+    }
+    final Monoid[] remaining = new Monoid[arity - 1];
+    for (int i = 0; i < arity - 1; i++) {
+      if (i < index) {
+        remaining[i] = this.getAt(i);
+      } else {
+        remaining[i] = this.getAt(i + 1);
+      }
+    }
+    return ProductMonoid.getInstance(remaining);
   }
 
   @Override

@@ -19,7 +19,7 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
   private Tuple defaultGenerator;
 
-  protected ProductCyclicGroup(final CyclicGroup... cyclicGroups) {
+  protected ProductCyclicGroup(final CyclicGroup[] cyclicGroups) {
     super(cyclicGroups);
   }
 
@@ -44,22 +44,32 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
   @Override
   public CyclicGroup[] getAll() {
-    return (CyclicGroup[]) super.getAll();
+    int arity = this.getArity();
+    CyclicGroup[] result = new CyclicGroup[arity];
+    for (int i = 0; i < arity; i++) {
+      result[i] = this.getAt(i);
+    }
+    return result;
   }
 
   @Override
   public ProductCyclicGroup removeAt(final int index) {
-    return (ProductCyclicGroup) super.removeAt(index);
-  }
-
-  @Override
-  protected ProductCyclicGroup standardRemoveAt(Set set, int arity) {
-    return ProductCyclicGroup.getInstance((CyclicGroup) set, arity);
-  }
-
-  @Override
-  protected ProductCyclicGroup standardRemoveAt(Set[] sets) {
-    return ProductCyclicGroup.getInstance((CyclicGroup[]) sets);
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    if (this.isUniform()) {
+      return ProductCyclicGroup.getInstance(this.getFirst(), arity - 1);
+    }
+    final CyclicGroup[] remaining = new CyclicGroup[arity - 1];
+    for (int i = 0; i < arity - 1; i++) {
+      if (i < index) {
+        remaining[i] = this.getAt(i);
+      } else {
+        remaining[i] = this.getAt(i + 1);
+      }
+    }
+    return ProductCyclicGroup.getInstance(remaining);
   }
 
   protected boolean standardCyclicGroup() {
@@ -134,9 +144,9 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
       throw new IllegalArgumentException();
     }
     if (arity == 0) {
-      return new ProductCyclicGroup();
+      return new ProductCyclicGroup(new CyclicGroup[]{});
     }
-    return new ProductCyclicGroup(group);
+    return new ProductCyclicGroup(new CyclicGroup[]{group});
   }
 
   //

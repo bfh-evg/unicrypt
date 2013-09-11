@@ -66,7 +66,7 @@ public class ZPlusMod extends AbstractAdditiveCyclicGroup<ZPlusModElement> {
   }
 
   @Override
-  public String standardToString() {
+  public String standardToStringContent() {
     return this.getModulus().toString();
   }
 

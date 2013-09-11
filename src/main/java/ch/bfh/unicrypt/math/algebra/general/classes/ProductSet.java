@@ -24,7 +24,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
   private final int arity;
 
   protected ProductSet(Set[] sets) {
-    this.sets = sets.clone();
+    this.sets = sets;
     this.arity = sets.length;
   }
 
@@ -97,10 +97,6 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
     };
   }
 
-  //
-  // The following protected methods override the standard implementation from
-  // various super-classes
-  //
   @Override
   protected BigInteger standardGetMinOrder() {
     if (this.isUniform()) {
@@ -224,7 +220,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
   public Set[] getAll() {
     int arity = this.getArity();
     Set[] result = new Set[arity];
-    for (int i = 0; i < this.arity; i++) {
+    for (int i = 0; i < arity; i++) {
       result[i] = this.getAt(i);
     }
     return result;
@@ -237,7 +233,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
       throw new IndexOutOfBoundsException();
     }
     if (this.isUniform()) {
-      return this.standardRemoveAt(this.getFirst(), arity - 1);
+      return ProductSet.getInstance(this.getFirst(), arity - 1);
     }
     final Set[] remaining = new Set[arity - 1];
     for (int i = 0; i < arity - 1; i++) {
@@ -247,15 +243,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
         remaining[i] = this.getAt(i + 1);
       }
     }
-    return this.standardRemoveAt(remaining);
-  }
-
-  protected ProductSet standardRemoveAt(Set set, int arity) {
-    return ProductSet.getInstance(set, arity);
-  }
-
-  protected ProductSet standardRemoveAt(Set[] sets) {
-    return ProductSet.getInstance(sets);
+    return ProductSet.getInstance(remaining);
   }
 
   @Override
@@ -316,7 +304,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
   }
 
   @Override
-  protected String standardToString() {
+  protected String standardToStringContent() {
     if (this.isNull()) {
       return "";
     }

@@ -112,7 +112,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
   }
 
   @Override
-  public String standardToString() {
+  public String standardToStringContent() {
     return this.getModulus().toString();
   }
 

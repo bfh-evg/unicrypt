@@ -50,7 +50,7 @@ public class ByteArrayElement extends AbstractConcatenativeElement<ByteArrayMono
   }
 
   @Override
-  public String standardToString() {
+  public String standardToStringContent() {
     String str = Base64.encode(this.getBytes());
     return str.substring(0, str.length() - 1);
   }

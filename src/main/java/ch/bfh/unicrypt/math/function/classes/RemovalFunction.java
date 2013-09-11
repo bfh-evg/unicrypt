@@ -18,36 +18,36 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element> {
+public class RemovalFunction extends AbstractFunction<ProductSet, ProductSet, Tuple> {
 
-  private final int[] indices;
+  private final int index;
 
-  private SelectionFunction(final ProductSet domain, final Set coDomain, int[] indices) {
+  private RemovalFunction(final ProductSet domain, final Set coDomain, int index) {
     super(domain, coDomain);
-    this.indices = indices;
+    this.index = index;
   }
 
-  public int[] getIndices() {
-    return this.indices;
+  public int getIndex() {
+    return this.index;
   }
 
   @Override
   protected boolean standardEquals(Function function) {
-    return Arrays.equals(this.getIndices(), ((SelectionFunction) function).getIndices());
+    return this.getIndex() == ((RemovalFunction) function).getIndex();
   }
 
   @Override
   protected int standardHashCode() {
-    return this.getIndices().hashCode();
+    return this.getIndex();
   }
 
   //
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected Element abstractApply(final Element element, final Random random) {
+  protected Tuple abstractApply(final Element element, final Random random) {
     Tuple tuple = (Tuple) element;
-    return tuple.getAt(this.getIndices());
+    return tuple.removeAt(this.getIndex());
   }
 
   //
@@ -60,18 +60,18 @@ public class SelectionFunction extends AbstractFunction<ProductSet, Set, Element
    * element in the fourth tuple element of the first tuple element).
    *
    * @param productSet The product group that defines the domain of the function
-   * @param indices The given sequence of indices
+   * @param index The given sequence of indices
    * @throws IllegalArgumentException of {@code group} is null
    * @throws IllegalArgumentException if {@code indices} is null or if its
    * length exceeds the hierarchy's depth
    * @throws IndexOutOfBoundsException if {@code indices} contains an
    * out-of-bounds index
    */
-  public static SelectionFunction getInstance(final ProductSet productSet, final int... indices) {
+  public static RemovalFunction getInstance(final ProductSet productSet, final int index) {
     if (productSet == null) {
       throw new IllegalArgumentException();
     }
-    return new SelectionFunction(productSet, productSet.getAt(indices), indices);
+    return new RemovalFunction(productSet, productSet.removeAt(index), index);
   }
 
 }

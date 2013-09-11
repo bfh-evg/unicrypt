@@ -9,8 +9,9 @@ import java.util.NoSuchElementException;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.interfaces.CompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.Compound;
+import java.lang.reflect.Array;
 
 /**
  *
@@ -19,21 +20,25 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <E>
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction<CF extends CompoundFunction<CF, F>, F extends Function, D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements CompoundFunction<CF, F> {
+public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, F, D, C, E>, F extends Function, D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Compound<CF, F> {
 
   private final F[] functions;
   private final int arity;
+  private final Class<F> functionClass;
 
-  protected AbstractCompoundFunction(D domain, C coDomain, F[] functions) {
+  protected AbstractCompoundFunction(D domain, C coDomain, F[] functions, Class<F> functionClass) {
     super(domain, coDomain);
     this.functions = functions.clone();
     this.arity = functions.length;
+    this.functionClass = functionClass;
   }
 
-  protected AbstractCompoundFunction(D domain, C coDomain, F function, int arity) {
+  protected AbstractCompoundFunction(D domain, C coDomain, F function, int arity, Class<F> functionClass) {
     super(domain, coDomain);
-    this.functions = (F[]) new Function[]{function};
+    this.functions = (F[]) Array.newInstance(functionClass, 1);
+    this.functions[0] = function;
     this.arity = arity;
+    this.functionClass = functionClass;
   }
 
   @Override
@@ -63,9 +68,9 @@ public abstract class AbstractCompoundFunction<CF extends CompoundFunction<CF, F
       throw new IndexOutOfBoundsException();
     }
     if (this.isUniform()) {
-      return this.functions[0];
+      return (F) this.functions[0];
     }
-    return this.functions[index];
+    return (F) this.functions[index];
   }
 
   @Override
@@ -76,7 +81,7 @@ public abstract class AbstractCompoundFunction<CF extends CompoundFunction<CF, F
     F function = (F) this;
     for (final int index : indices) {
       if (function.isCompound()) {
-        function = ((CompoundFunction<CF, F>) function).getAt(index);
+        function = ((Compound<CF, F>) function).getAt(index);
       } else {
         throw new IllegalArgumentException();
       }
@@ -87,7 +92,7 @@ public abstract class AbstractCompoundFunction<CF extends CompoundFunction<CF, F
   @Override
   public F[] getAll() {
     int arity = this.getArity();
-    F[] result = (F[]) new Function[arity];
+    F[] result = (F[]) Array.newInstance(this.functionClass, arity);
     for (int i = 0; i < arity; i++) {
       result[i] = this.getAt(i);
     }
@@ -103,7 +108,7 @@ public abstract class AbstractCompoundFunction<CF extends CompoundFunction<CF, F
     if (this.isUniform()) {
       return this.abstractRemoveAt(this.getFirst(), arity - 1);
     }
-    final F[] remainingFunction = (F[]) new Function[arity - 1];
+    final F[] remainingFunction = (F[]) Array.newInstance(this.functionClass, arity - 1);
     for (int i = 0; i < arity - 1; i++) {
       if (i < index) {
         remainingFunction[i] = this.getAt(i);
@@ -114,13 +119,13 @@ public abstract class AbstractCompoundFunction<CF extends CompoundFunction<CF, F
     return abstractRemoveAt(remainingFunction);
   }
 
-  protected abstract CF abstractRemoveAt(Function function, int arity);
+  protected abstract CF abstractRemoveAt(F function, int arity);
 
-  protected abstract CF abstractRemoveAt(Function[] functions);
+  protected abstract CF abstractRemoveAt(F[] functions);
 
   @Override
   public Iterator<F> iterator() {
-    final CompoundFunction<CF, F> compoundFunction = this;
+    final Compound<CF, F> compoundFunction = this;
     return new Iterator<F>() {
       int currentIndex = 0;
 

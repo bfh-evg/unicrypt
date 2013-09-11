@@ -40,22 +40,32 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
 
   @Override
   public SemiGroup[] getAll() {
-    return (SemiGroup[]) super.getAll();
+    int arity = this.getArity();
+    SemiGroup[] result = new SemiGroup[arity];
+    for (int i = 0; i < arity; i++) {
+      result[i] = this.getAt(i);
+    }
+    return result;
   }
 
   @Override
   public ProductSemiGroup removeAt(final int index) {
-    return (ProductSemiGroup) super.removeAt(index);
-  }
-
-  @Override
-  protected ProductSemiGroup standardRemoveAt(Set set, int arity) {
-    return ProductSemiGroup.getInstance((SemiGroup) set, arity);
-  }
-
-  @Override
-  protected ProductSemiGroup standardRemoveAt(Set[] sets) {
-    return ProductSemiGroup.getInstance((SemiGroup[]) sets);
+    int arity = this.getArity();
+    if (index < 0 || index >= arity) {
+      throw new IndexOutOfBoundsException();
+    }
+    if (this.isUniform()) {
+      return ProductSemiGroup.getInstance(this.getFirst(), arity - 1);
+    }
+    final SemiGroup[] remaining = new SemiGroup[arity - 1];
+    for (int i = 0; i < arity - 1; i++) {
+      if (i < index) {
+        remaining[i] = this.getAt(i);
+      } else {
+        remaining[i] = this.getAt(i + 1);
+      }
+    }
+    return ProductSemiGroup.getInstance(remaining);
   }
 
   @Override

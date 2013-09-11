@@ -13,7 +13,7 @@ package ch.bfh.unicrypt.nizkp.classes;
 
 import ch.bfh.unicrypt.crypto.concat.classes.ConcatSchemeClass;
 import ch.bfh.unicrypt.crypto.concat.interfaces.ConcatScheme;
-import ch.bfh.unicrypt.crypto.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.crypto.encryption.classes.ElGamalEncryptionSchemeOld;
 import ch.bfh.unicrypt.crypto.encryption.interfaces.ElGamalEncryption;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.classes.SigmaProofGeneratorClass;
@@ -71,7 +71,7 @@ public class SigmaProofGeneratorClassTest {
 		
 		ConcatScheme concat = new ConcatSchemeClass(ConcatenateFunction.ConcatParameter.PipeBrackets,new CharsetXRadixYMapperClass(CharsetXRadixYMapperClass.DEFAULT_CHARSET,0));
 		
-		ElGamalEncryption elGamalEnc = new ElGamalEncryptionScheme(ddhGroup, generator);
+		ElGamalEncryption elGamalEnc = new ElGamalEncryptionSchemeOld(ddhGroup, generator);
 		KeyPairGenerator keyPairGen = elGamalEnc.getKeyGenerator();
 		Function proofFunction = keyPairGen.getPublicKeyGenerationFunction();
 		Tuple keyPair = keyPairGen.generateKeyPair();
@@ -97,7 +97,7 @@ public class SigmaProofGeneratorClassTest {
 
     ConcatScheme concat = new ConcatSchemeClass(ConcatenateFunction.ConcatParameter.PipeBrackets,new CharsetXRadixYMapperClass(CharsetXRadixYMapperClass.DEFAULT_CHARSET,0));
 
-    ElGamalEncryption elGamalEnc = new ElGamalEncryptionScheme(ddhGroup, generator);
+    ElGamalEncryption elGamalEnc = new ElGamalEncryptionSchemeOld(ddhGroup, generator);
     KeyPairGenerator keyPairGen = elGamalEnc.getKeyGenerator();
     Function proofFunction = keyPairGen.getPublicKeyGenerationFunction();
     Tuple keyPair = keyPairGen.generateKeyPair();

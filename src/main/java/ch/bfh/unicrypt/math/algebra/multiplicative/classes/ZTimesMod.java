@@ -53,7 +53,7 @@ public class ZTimesMod extends AbstractMultiplicativeMonoid<ZTimesModElement> {
   }
 
   @Override
-  public String standardToString() {
+  public String standardToStringContent() {
     return this.getModulus().toString();
   }
 

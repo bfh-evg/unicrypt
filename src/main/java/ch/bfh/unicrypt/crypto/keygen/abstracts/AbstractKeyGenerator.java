@@ -1,13 +1,13 @@
 package ch.bfh.unicrypt.crypto.keygen.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyGenerator;
-import ch.bfh.unicrypt.crypto.keygen.classes.*;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.math.BigInteger;
 import java.util.Random;
 
-public abstract class AbstractKeyGenerator<S extends Set, E extends Element> implements KeyGenerator {
+public abstract class AbstractKeyGenerator<S extends Set, E extends Element> extends UniCrypt implements KeyGenerator {
 
   private final S keySpace;
 
@@ -35,10 +35,9 @@ public abstract class AbstractKeyGenerator<S extends Set, E extends Element> imp
     return (E) this.getKeySpace().getRandomElement(random);
   }
 
-//  public static AbstractKeyGenerator getInstance(Set keySpace) {
-//    if (keySpace == null) {
-//      throw new IllegalArgumentException();
-//    }
-//    return new AbstractKeyGenerator(keySpace);
-//  }
+  @Override
+  protected String standardToStringContent() {
+    return this.getKeySpace().toString();
+  }
+
 }

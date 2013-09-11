@@ -8,6 +8,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 /**
  * This abstract class contains standard implementations for most methods of
@@ -22,7 +23,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element> implements Function {
+public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element> extends UniCrypt implements Function {
 
   private final D domain;
   private final C coDomain;
@@ -112,8 +113,8 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
   }
 
   @Override
-  public String toString() {
-    return this.getClass().getSimpleName() + "[" + this.getDomain() + " => " + this.getCoDomain() + "]";
+  public String standardToStringContent() {
+    return "[" + this.getDomain() + " => " + this.getCoDomain() + "]";
   }
 
   //

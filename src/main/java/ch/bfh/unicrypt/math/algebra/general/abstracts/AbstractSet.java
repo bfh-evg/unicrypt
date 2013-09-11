@@ -13,6 +13,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZTimesMod;
 import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 /**
  * This abstract class provides a basis implementation for atomic sets.
@@ -24,7 +25,7 @@ import ch.bfh.unicrypt.math.helper.Compound;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractSet<E extends Element> implements Set {
+public abstract class AbstractSet<E extends Element> extends UniCrypt implements Set {
 
   private BigInteger order, minOrder;
 
@@ -211,15 +212,6 @@ public abstract class AbstractSet<E extends Element> implements Set {
     return result;
   }
 
-  @Override
-  public String toString() {
-    String str = this.standardToString();
-    if (str.length() == 0) {
-      return this.getClass().getSimpleName();
-    }
-    return this.getClass().getSimpleName() + "[" + str + "]";
-  }
-
   //
   // The following protected methods are standard implementations for sets.
   // They may need to be changed in certain sub-classes.
@@ -238,10 +230,6 @@ public abstract class AbstractSet<E extends Element> implements Set {
 
   protected int standardHashCode() {
     return 0;
-  }
-
-  protected String standardToString() {
-    return "";
   }
 
   //

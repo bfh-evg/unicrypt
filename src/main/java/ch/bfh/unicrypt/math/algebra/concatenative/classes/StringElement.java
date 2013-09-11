@@ -47,7 +47,7 @@ public class StringElement extends AbstractConcatenativeElement<StringMonoid, St
   }
 
   @Override
-  public String standardToString() {
+  public String standardToStringContent() {
     return "\"" + this.getString() + "\"";
   }
 

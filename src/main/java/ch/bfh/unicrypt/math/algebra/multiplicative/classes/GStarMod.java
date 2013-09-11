@@ -118,7 +118,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
   }
 
   @Override
-  public String standardToString() {
+  public String standardToStringContent() {
     return this.getModulus().toString() + "," + this.getOrder().toString();
   }
 

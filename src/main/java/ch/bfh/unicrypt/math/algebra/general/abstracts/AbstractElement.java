@@ -12,6 +12,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 /**
  * This abstract class represents the concept an element in a mathematical
@@ -26,7 +27,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<S extends Set, E extends Element> implements Element {
+public abstract class AbstractElement<S extends Set, E extends Element> extends UniCrypt implements Element {
 
   private final S set;
   protected BigInteger value;
@@ -271,15 +272,6 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
     return result;
   }
 
-  @Override
-  public final String toString() {
-    String str = this.standardToString();
-    if (str.length() == 0) {
-      return this.getSet().getClass().getSimpleName() + "Element";
-    }
-    return this.getSet().getClass().getSimpleName() + "Element[" + str + "]";
-  }
-
   //
   // The following protected methods are standard implementations, which may change in sub-classes
   //
@@ -303,7 +295,13 @@ public abstract class AbstractElement<S extends Set, E extends Element> implemen
     return this.getValue().hashCode();
   }
 
-  protected String standardToString() {
+  @Override
+  protected String standardToStringName() {
+    return this.getClass().getSuperclass().getSimpleName();
+  }
+
+  @Override
+  protected String standardToStringContent() {
     return this.getValue().toString();
   }
 
