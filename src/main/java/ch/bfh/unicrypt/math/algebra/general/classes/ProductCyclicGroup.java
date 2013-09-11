@@ -44,32 +44,20 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
   @Override
   public CyclicGroup[] getAll() {
-    int arity = this.getArity();
-    CyclicGroup[] result = new CyclicGroup[arity];
-    for (int i = 0; i < arity; i++) {
-      result[i] = this.getAt(i);
-    }
-    return result;
+    return (CyclicGroup[]) super.getAll();
   }
 
   @Override
   public ProductCyclicGroup removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (this.isUniform()) {
-      return ProductCyclicGroup.getInstance(this.getFirst(), arity - 1);
-    }
-    final CyclicGroup[] remaining = new CyclicGroup[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
-      if (i < index) {
-        remaining[i] = this.getAt(i);
-      } else {
-        remaining[i] = this.getAt(i + 1);
-      }
-    }
-    return ProductCyclicGroup.getInstance(remaining);
+    return (ProductCyclicGroup) super.removeAt(index);
+  }
+
+  protected ProductCyclicGroup abstractRemoveAt(Set set, int arity) {
+    return ProductCyclicGroup.getInstance((CyclicGroup) set, arity);
+  }
+
+  protected ProductCyclicGroup abstractRemoveAt(Set[] sets) {
+    return ProductCyclicGroup.getInstance((CyclicGroup[]) sets);
   }
 
   protected boolean standardCyclicGroup() {

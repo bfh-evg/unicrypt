@@ -26,7 +26,7 @@ public class Tuple extends AbstractElement<ProductSet, Tuple> implements Compoun
 
   protected Tuple(final ProductSet set, final Element[] elements) {
     super(set);
-    this.elements = elements;
+    this.elements = elements.clone();
     this.arity = elements.length;
   }
 

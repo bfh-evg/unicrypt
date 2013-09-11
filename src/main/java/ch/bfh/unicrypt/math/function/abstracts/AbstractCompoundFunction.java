@@ -24,21 +24,21 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 
   private final F[] functions;
   private final int arity;
-  private final Class<F> functionClass;
+  private final Class<?> functionClass; // this is needed to create generic arrays of type F
 
-  protected AbstractCompoundFunction(D domain, C coDomain, F[] functions, Class<F> functionClass) {
+  protected AbstractCompoundFunction(D domain, C coDomain, F[] functions) {
     super(domain, coDomain);
+    this.functionClass = functions.getClass().getComponentType();
     this.functions = functions.clone();
     this.arity = functions.length;
-    this.functionClass = functionClass;
   }
 
-  protected AbstractCompoundFunction(D domain, C coDomain, F function, int arity, Class<F> functionClass) {
+  protected AbstractCompoundFunction(D domain, C coDomain, F function, int arity) {
     super(domain, coDomain);
-    this.functions = (F[]) Array.newInstance(functionClass, 1);
+    this.functionClass = function.getClass();
+    this.functions = (F[]) Array.newInstance(this.functionClass, 1);
     this.functions[0] = function;
     this.arity = arity;
-    this.functionClass = functionClass;
   }
 
   @Override
@@ -108,15 +108,15 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
     if (this.isUniform()) {
       return this.abstractRemoveAt(this.getFirst(), arity - 1);
     }
-    final F[] remainingFunction = (F[]) Array.newInstance(this.functionClass, arity - 1);
+    final F[] remaining = (F[]) Array.newInstance(this.functionClass, arity - 1);
     for (int i = 0; i < arity - 1; i++) {
       if (i < index) {
-        remainingFunction[i] = this.getAt(i);
+        remaining[i] = this.getAt(i);
       } else {
-        remainingFunction[i] = this.getAt(i + 1);
+        remaining[i] = this.getAt(i + 1);
       }
     }
-    return abstractRemoveAt(remainingFunction);
+    return this.abstractRemoveAt(remaining);
   }
 
   protected abstract CF abstractRemoveAt(F function, int arity);

@@ -9,6 +9,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -22,15 +23,18 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
 
   private final Set[] sets;
   private final int arity;
+  private final Class<?> setClass; // this is needed to create arrays of the actual type
 
   protected ProductSet(Set[] sets) {
-    this.sets = sets;
+    this.sets = sets.clone();
     this.arity = sets.length;
+    this.setClass = sets.getClass().getComponentType();
   }
 
   protected ProductSet(Set set, int arity) {
     this.sets = new Set[]{set};
     this.arity = arity;
+    this.setClass = set.getClass();
   }
 
   public final boolean contains(final int... values) {
@@ -219,7 +223,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
   @Override
   public Set[] getAll() {
     int arity = this.getArity();
-    Set[] result = new Set[arity];
+    Set[] result = (Set[]) Array.newInstance(this.setClass, arity);
     for (int i = 0; i < arity; i++) {
       result[i] = this.getAt(i);
     }
@@ -233,9 +237,9 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
       throw new IndexOutOfBoundsException();
     }
     if (this.isUniform()) {
-      return ProductSet.getInstance(this.getFirst(), arity - 1);
+      return this.abstractRemoveAt(this.getFirst(), arity - 1);
     }
-    final Set[] remaining = new Set[arity - 1];
+    final Set[] remaining = (Set[]) Array.newInstance(this.setClass, arity - 1);
     for (int i = 0; i < arity - 1; i++) {
       if (i < index) {
         remaining[i] = this.getAt(i);
@@ -243,7 +247,15 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
         remaining[i] = this.getAt(i + 1);
       }
     }
-    return ProductSet.getInstance(remaining);
+    return this.abstractRemoveAt(remaining);
+  }
+
+  protected ProductSet abstractRemoveAt(Set set, int arity) {
+    return ProductSet.getInstance(set, arity);
+  }
+
+  protected ProductSet abstractRemoveAt(Set[] sets) {
+    return ProductSet.getInstance(sets);
   }
 
   @Override

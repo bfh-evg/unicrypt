@@ -24,11 +24,11 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 public final class CompositeFunction extends AbstractCompoundFunction<CompositeFunction, Function, Set, Set, Element> {
 
   private CompositeFunction(final Set domain, final Set coDomain, final Function[] functions) {
-    super(domain, coDomain, functions, Function.class);
+    super(domain, coDomain, functions);
   }
 
   protected CompositeFunction(Set domain, Set coDomain, Function function, int arity) {
-    super(domain, coDomain, function, arity, Function.class);
+    super(domain, coDomain, function, arity);
   }
 
   @Override

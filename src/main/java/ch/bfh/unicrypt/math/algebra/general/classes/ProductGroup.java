@@ -39,32 +39,22 @@ public class ProductGroup extends ProductMonoid implements Group {
 
   @Override
   public Group[] getAll() {
-    int arity = this.getArity();
-    Group[] result = new Group[arity];
-    for (int i = 0; i < arity; i++) {
-      result[i] = this.getAt(i);
-    }
-    return result;
+    return (Group[]) super.getAll();
   }
 
   @Override
   public ProductGroup removeAt(final int index) {
-    int arity = this.getArity();
-    if (index < 0 || index >= arity) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (this.isUniform()) {
-      return ProductGroup.getInstance(this.getFirst(), arity - 1);
-    }
-    final Group[] remaining = new Group[arity - 1];
-    for (int i = 0; i < arity - 1; i++) {
-      if (i < index) {
-        remaining[i] = this.getAt(i);
-      } else {
-        remaining[i] = this.getAt(i + 1);
-      }
-    }
-    return ProductGroup.getInstance(remaining);
+    return (ProductGroup) super.removeAt(index);
+  }
+
+  @Override
+  protected ProductGroup abstractRemoveAt(Set set, int arity) {
+    return ProductGroup.getInstance((Group) set, arity);
+  }
+
+  @Override
+  protected ProductGroup abstractRemoveAt(Set[] sets) {
+    return ProductGroup.getInstance((Group[]) sets);
   }
 
   @Override
