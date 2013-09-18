@@ -4,8 +4,10 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGroup<E> implements CyclicGroup {
+public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGroup<E> implements CyclicGroup, Iterable<E> {
 
   private E defaultGenerator;
 
@@ -35,8 +37,34 @@ public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGro
     return this.abstractIsGenerator(element);
   }
 
-  protected boolean standardCyclicGroup() {
-    return true;
+  @Override
+  public Iterator<E> iterator() {
+    final AbstractCyclicGroup<E> cyclicGroup = this;
+    return new Iterator<E>() {
+      boolean next = true;
+      E currentElement = cyclicGroup.getIdentityElement();
+
+      @Override
+      public boolean hasNext() {
+        return this.next;
+      }
+
+      @Override
+      public E next() {
+        if (this.hasNext()) {
+          E nextElement = currentElement;
+          currentElement = cyclicGroup.apply(currentElement, cyclicGroup.getDefaultGenerator());
+          this.next = !currentElement.equals(cyclicGroup.getIdentityElement());
+          return nextElement;
+        }
+        throw new NoSuchElementException();
+      }
+
+      @Override
+      public void remove() {
+        throw new UnsupportedOperationException("Not supported yet.");
+      }
+    };
   }
 
   //

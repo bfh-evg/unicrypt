@@ -27,7 +27,7 @@ import ch.bfh.unicrypt.math.helper.UniCrypt;
  */
 public abstract class AbstractSet<E extends Element> extends UniCrypt implements Set {
 
-  private BigInteger order, minOrder;
+  private BigInteger order, minOrder, maxOrder;
 
   @Override
   public final boolean isSemiGroup() {
@@ -50,13 +50,18 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   }
 
   @Override
+  public final boolean isCompound() {
+    return this instanceof Compound;
+  }
+
+  @Override
   public final boolean isFinite() {
     return !this.getOrder().equals(Set.INFINITE_ORDER);
   }
 
   @Override
-  public final boolean isCompound() {
-    return this instanceof Compound;
+  public final boolean hasKnownOrder() {
+    return !this.getOrder().equals(Set.UNKNOWN_ORDER);
   }
 
   @Override
@@ -70,14 +75,25 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   @Override
   public final BigInteger getMinOrder() {
     if (this.minOrder == null) {
-      BigInteger order = this.getOrder();
-      if (order.equals(Set.UNKNOWN_ORDER)) {
-        this.minOrder = this.standardGetMinOrder();
+      if (this.hasKnownOrder()) {
+        this.minOrder = this.getOrder();
       } else {
-        this.minOrder = order;
+        this.minOrder = this.standardGetMinOrder();
       }
     }
     return this.minOrder;
+  }
+
+  @Override
+  public final BigInteger getMaxOrder() {
+    if (this.maxOrder == null) {
+      if (this.hasKnownOrder()) {
+        this.maxOrder = this.getOrder();
+      } else {
+        this.maxOrder = this.standardGetMaxOrder();
+      }
+    }
+    return this.maxOrder;
   }
 
   @Override
@@ -92,8 +108,7 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
 
   @Override
   public final ZPlusMod getZPlusModOrder() {
-    BigInteger order = this.getOrder();
-    if (order.equals(Set.INFINITE_ORDER) || order.equals(Set.UNKNOWN_ORDER)) {
+    if (!(this.isFinite() && this.hasKnownOrder())) {
       throw new UnsupportedOperationException();
     }
     return ZPlusMod.getInstance(order);
@@ -101,8 +116,7 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
 
   @Override
   public final ZTimesMod getZTimesModOrder() {
-    BigInteger order = this.getOrder();
-    if (order.equals(Set.INFINITE_ORDER) || order.equals(Set.UNKNOWN_ORDER)) {
+    if (!(this.isFinite() && this.hasKnownOrder())) {
       throw new UnsupportedOperationException();
     }
     return ZTimesMod.getInstance(order);
@@ -110,8 +124,7 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
 
   @Override
   public final ZStarMod getZStarModOrder() {
-    BigInteger order = this.getOrder();
-    if (order.equals(Set.INFINITE_ORDER) || order.equals(Set.UNKNOWN_ORDER)) {
+    if (!(this.isFinite() && this.hasKnownOrder())) {
       throw new UnsupportedOperationException();
     }
     return ZStarMod.getInstance(order);
@@ -218,6 +231,10 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   //
   protected BigInteger standardGetMinOrder() {
     return BigInteger.ZERO;
+  }
+
+  protected BigInteger standardGetMaxOrder() {
+    return Set.INFINITE_ORDER;
   }
 
   protected boolean standardIsCompatible(Set set) {

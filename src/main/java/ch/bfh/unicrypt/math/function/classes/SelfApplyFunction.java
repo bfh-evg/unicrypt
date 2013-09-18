@@ -53,10 +53,10 @@ public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, E
     if (semiGroup == null) {
       throw new IllegalArgumentException();
     }
-    if (semiGroup.getOrder() == Set.INFINITE_ORDER || semiGroup.getOrder() == Set.UNKNOWN_ORDER) {
-      return SelfApplyFunction.getInstance(semiGroup, NPlus.getInstance());
+    if (semiGroup.isFinite() && semiGroup.hasKnownOrder()) {
+      return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZPlusModOrder());
     }
-    return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZPlusModOrder());
+    return SelfApplyFunction.getInstance(semiGroup, NPlus.getInstance());
   }
 
   /**

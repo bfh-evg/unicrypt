@@ -40,9 +40,11 @@ public interface Set {
 
   public boolean isCyclicGroup();
 
+  public boolean isCompound();
+
   public boolean isFinite();
 
-  public boolean isCompound();
+  public boolean hasKnownOrder();
 
   /**
    * Returns the group order. If the group order is unknown,
@@ -62,6 +64,8 @@ public interface Set {
    * @return A lower bound for the group order.
    */
   public BigInteger getMinOrder();
+
+  public BigInteger getMaxOrder();
 
   /**
    * Checks if the set is of order 0.

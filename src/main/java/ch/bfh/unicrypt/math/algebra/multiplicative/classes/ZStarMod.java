@@ -89,10 +89,15 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
   protected ZStarModElement standardSelfApply(final Element element, final BigInteger amount) {
     BigInteger newAmount = amount;
     final BigInteger order = this.getOrder();
-    if (!order.equals(Group.UNKNOWN_ORDER)) {
+    if (this.hasKnownOrder()) {
       newAmount = amount.mod(order);
     }
     return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
+  }
+
+  @Override
+  protected BigInteger standardGetMaxOrder() {
+    return this.getModulus().subtract(BigInteger.ONE);
   }
 
   @Override

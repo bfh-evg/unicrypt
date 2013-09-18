@@ -104,13 +104,26 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
   @Override
   protected BigInteger standardGetMinOrder() {
     if (this.isUniform()) {
-      BigInteger minOrder = this.getFirst().getMinOrder();
-      return minOrder.pow(this.getArity());
+      return this.getFirst().getMinOrder().pow(this.getArity());
     }
     BigInteger result = BigInteger.ONE;
     for (Set set : this) {
-      final BigInteger minOrder = set.getMinOrder();
-      result = result.multiply(minOrder);
+      result = result.multiply(set.getMinOrder());
+    }
+    return result;
+  }
+
+  @Override
+  protected BigInteger standardGetMaxOrder() {
+    if (this.isUniform()) {
+      return this.getFirst().getMaxOrder().pow(this.getArity());
+    }
+    BigInteger result = BigInteger.ONE;
+    for (Set set : this) {
+      if (set.getMaxOrder().equals(Set.INFINITE_ORDER)) {
+        return Set.INFINITE_ORDER;
+      }
+      result = result.multiply(set.getMaxOrder());
     }
     return result;
   }
@@ -125,25 +138,24 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
       return BigInteger.ONE;
     }
     if (this.isUniform()) {
-      BigInteger order = this.getFirst().getOrder();
-      if (order.equals(Set.INFINITE_ORDER) || order.equals(Set.UNKNOWN_ORDER)) {
-        return order;
+      Set first = this.getFirst();
+      if (first.isFinite() && first.hasKnownOrder()) {
+        return first.getOrder().pow(this.getArity());
       }
-      return order.pow(this.getArity());
+      return first.getOrder();
     }
     BigInteger result = BigInteger.ONE;
     for (Set set : this) {
-      final BigInteger order = set.getOrder();
-      if (order.equals(BigInteger.ZERO)) {
+      if (set.isEmpty()) {
         return BigInteger.ZERO;
       }
-      if (order.equals(Set.INFINITE_ORDER) || result.equals(Set.INFINITE_ORDER)) {
+      if (!set.isFinite() || result.equals(Set.INFINITE_ORDER)) {
         result = Set.INFINITE_ORDER;
       } else {
-        if (order.equals(Set.UNKNOWN_ORDER) || result.equals(Set.UNKNOWN_ORDER)) {
+        if (!set.hasKnownOrder() || result.equals(Set.UNKNOWN_ORDER)) {
           result = Set.UNKNOWN_ORDER;
         } else {
-          result = result.multiply(order);
+          result = result.multiply(set.getOrder());
         }
       }
     }

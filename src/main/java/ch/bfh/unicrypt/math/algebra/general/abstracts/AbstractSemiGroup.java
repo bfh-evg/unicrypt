@@ -118,26 +118,4 @@ public abstract class AbstractSemiGroup<E extends Element> extends AbstractSet<E
   protected abstract E abstractApply(Element element1, Element element2);
 
 }
-// THIS IS OLD CODE FOR AN OPTIMZED multiSelfApply ALGORITHM (works only for
-// commutative operators)
-// bitLength = Math.max(bitLength, amounts[i].bitLength());
-// }
-// int bitLength = 0;
-// for (int i = 0; i < elements.length; i++) {
-// if ((elements[i] == null) || (amounts[i] == null) ||
-// (amounts[i].equals(BigInteger.ZERO))) {
-// throw new IllegalArgumentException();
-// }
-// bitLength = Math.max(bitLength, amounts[i].bitLength());
-// }
-// Element result = this.getIdentityElement();
-// for (int i = bitLength - 1; i >= 0; i--) {
-// result = result.selfApply();
-// for (int j = 0; j < amounts.length; j++) {
-// if (amounts[j].testBit(i)) {
-// result = result.apply(elements[j]);
-// }
-// }
-// }
-// return result;
 
