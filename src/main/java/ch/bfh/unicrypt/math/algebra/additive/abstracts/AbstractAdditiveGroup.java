@@ -49,4 +49,19 @@ public abstract class AbstractAdditiveGroup<E extends AdditiveElement> extends A
     return this.applyInverse(element1, element2);
   }
 
+  @Override
+  public final E minus(final Element element) {
+    return this.invert(element);
+  }
+
+  @Override
+  public E getZero() {
+    return this.getIdentityElement();
+  }
+
+  @Override
+  public boolean isZero(Element element) {
+    return this.isIdentityElement(element);
+  }
+
 }

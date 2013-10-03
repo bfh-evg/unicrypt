@@ -83,7 +83,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
    *
    * @return The quotient of the two orders.
    */
-  public BigInteger getOrderQuotient() {
+  public BigInteger getCoFactor() {
     return this.getZStarMod().getOrder().divide(this.getOrder());
   }
 
@@ -134,10 +134,10 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
 
   @Override
   protected GStarModElement abstractGetRandomElement(final Random random) {
-    if (this.getOrder().compareTo(this.getOrderQuotient()) > 0) { // choose between the faster method
+    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
       // Method 1
       ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
-      return this.getElement(randomElement.power(this.getOrderQuotient()));
+      return this.getElement(randomElement.power(this.getCoFactor()));
     }
     // Method 2
     return this.getDefaultGenerator().power(this.getZPlusModOrder().getRandomElement(random));
@@ -185,7 +185,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
       do {
         alpha = alpha.add(BigInteger.ONE);
       } while (!MathUtil.areRelativelyPrime(alpha, this.getModulus()));
-      element = this.abstractGetElement(alpha.modPow(this.getOrderQuotient(), this.getModulus()));
+      element = this.abstractGetElement(alpha.modPow(this.getCoFactor(), this.getModulus()));
     } while (!this.isGenerator(element)); // this test could be skipped for a prime order
     return element;
   }

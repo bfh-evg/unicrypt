@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 
 /**
@@ -11,5 +12,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
  * @version 2.0
  */
 public interface AdditiveMonoid extends Monoid, AdditiveSemiGroup {
+
+  public AdditiveElement getZero();
+
+  public boolean isZero(Element element);
 
 }

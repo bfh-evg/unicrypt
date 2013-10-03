@@ -44,4 +44,14 @@ public abstract class AbstractAdditiveMonoid<E extends AdditiveElement> extends 
     return this.multiSelfApply(elements, amounts);
   }
 
+  @Override
+  public E getZero() {
+    return this.getIdentityElement();
+  }
+
+  @Override
+  public boolean isZero(Element element) {
+    return this.isIdentityElement(element);
+  }
+
 }

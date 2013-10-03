@@ -8,10 +8,10 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
  *
@@ -31,17 +31,11 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E ext
     this.value = value;
   }
 
-  /**
-   * @see Group#apply(Element, Element)
-   */
   @Override
   public final E add(final Element element) {
     return (E) this.getSet().add(this, element);
   }
 
-  /**
-   * @see Group#applyInverse(Element, Element)
-   */
   @Override
   public final E subtract(final Element element) {
     if (this.getSet().isGroup()) {
@@ -51,36 +45,42 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E ext
     throw new UnsupportedOperationException();
   }
 
-  /**
-   * @see Group#T(Element, BigInteger)
-   */
   @Override
   public final E times(final BigInteger amount) {
     return (E) this.getSet().times(this, amount);
   }
 
-  /**
-   * @see Group#selfApply(Element, Element)
-   */
   @Override
   public final E times(final Element amount) {
     return (E) this.getSet().times(this, amount);
   }
 
-  /**
-   * @see Group#selfApply(Element, int)
-   */
   @Override
   public final E times(final int amount) {
     return (E) this.getSet().times(this, amount);
   }
 
-  /**
-   * @see Group#selfApply(Element)
-   */
   @Override
   public final E timesTwo() {
     return (E) this.getSet().timesTwo(this);
+  }
+
+  @Override
+  public final E minus() {
+    if (this.getSet().isGroup()) {
+      AdditiveGroup group = ((AdditiveGroup) this.getSet());
+      return (E) group.invert(this);
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean isZero() {
+    if (this.getSet().isMonoid()) {
+      AdditiveMonoid monoid = ((AdditiveMonoid) this.getSet());
+      return monoid.isZero(this);
+    }
+    throw new UnsupportedOperationException();
   }
 
 }

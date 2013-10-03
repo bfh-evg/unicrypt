@@ -15,10 +15,15 @@ public interface MultiplicativeGroup extends Group, MultiplicativeMonoid {
 
   /**
    * This method is a synonym for {@link #Group.applyInverse(Element, Element)}.
-   * @param element1 the same as in {@link #Group.applyInverse(Element, Element)}
-   * @param element2 the same as in {@link #Group.applyInverse(Element, Element)}
+   *
+   * @param element1 the same as in
+   * {@link #Group.applyInverse(Element, Element)}
+   * @param element2 the same as in
+   * {@link #Group.applyInverse(Element, Element)}
    * @return the same as in {@link #Group.applyInverse(Element, Element)}
    */
   public MultiplicativeElement divide(Element element1, Element element2);
+
+  public MultiplicativeElement oneOver(Element element);
 
 }

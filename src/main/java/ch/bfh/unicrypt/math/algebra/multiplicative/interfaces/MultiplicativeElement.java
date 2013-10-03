@@ -45,28 +45,11 @@ public interface MultiplicativeElement extends Element {
    */
   public MultiplicativeElement square();
 
-  //
-  // The following methods override corresponding parent methods with different return type
-  //
-  @Override
-  public MultiplicativeElement apply(Element element);
+  /**
+   * @see Group#oneOver(Element)
+   */
+  public MultiplicativeElement oneOver();
 
-  @Override
-  public MultiplicativeElement applyInverse(Element element);
-
-  @Override
-  public MultiplicativeElement selfApply(BigInteger amount);
-
-  @Override
-  public MultiplicativeElement selfApply(Element amount);
-
-  @Override
-  public MultiplicativeElement selfApply(int amount);
-
-  @Override
-  public MultiplicativeElement selfApply();
-
-  @Override
-  public MultiplicativeElement invert();
+  public boolean isOne();
 
 }

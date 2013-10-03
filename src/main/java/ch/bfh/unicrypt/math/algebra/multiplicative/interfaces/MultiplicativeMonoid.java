@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 
 /**
@@ -11,5 +12,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
  * @version 2.0
  */
 public interface MultiplicativeMonoid extends Monoid, MultiplicativeSemiGroup {
+
+  public MultiplicativeElement getOne();
+
+  public boolean isOne(Element element);
 
 }

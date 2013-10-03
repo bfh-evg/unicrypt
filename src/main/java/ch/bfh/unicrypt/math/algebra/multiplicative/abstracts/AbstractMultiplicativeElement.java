@@ -11,6 +11,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 
 /**
@@ -81,6 +82,24 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
   @Override
   public final E square() {
     return (E) this.getSet().square(this);
+  }
+
+  @Override
+  public final E oneOver() {
+    if (this.getSet().isGroup()) {
+      MultiplicativeGroup group = ((MultiplicativeGroup) this.getSet());
+      return (E) group.invert(this);
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean isOne() {
+    if (this.getSet().isMonoid()) {
+      MultiplicativeMonoid monoid = ((MultiplicativeMonoid) this.getSet());
+      return monoid.isOne(this);
+    }
+    throw new UnsupportedOperationException();
   }
 
 }

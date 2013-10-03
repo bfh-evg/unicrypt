@@ -49,4 +49,19 @@ public abstract class AbstractMultiplicativeCyclicGroup<E extends Multiplicative
     return this.applyInverse(element1, element2);
   }
 
+  @Override
+  public final E oneOver(final Element element) {
+    return this.invert(element);
+  }
+
+  @Override
+  public E getOne() {
+    return this.getIdentityElement();
+  }
+
+  @Override
+  public boolean isOne(Element element) {
+    return this.isIdentityElement(element);
+  }
+
 }

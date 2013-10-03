@@ -15,10 +15,15 @@ public interface AdditiveGroup extends Group, AdditiveMonoid {
 
   /**
    * This method is a synonym for {@link #Group.applyInverse(Element, Element)}.
-   * @param element1 the same as in {@link #Group.applyInverse(Element, Element)}
-   * @param element2 the same as in {@link #Group.applyInverse(Element, Element)}
+   *
+   * @param element1 the same as in
+   * {@link #Group.applyInverse(Element, Element)}
+   * @param element2 the same as in
+   * {@link #Group.applyInverse(Element, Element)}
    * @return the same as in {@link #Group.applyInverse(Element, Element)}
    */
   public AdditiveElement subtract(Element element1, Element element2);
+
+  public AdditiveElement minus(Element element);
 
 }

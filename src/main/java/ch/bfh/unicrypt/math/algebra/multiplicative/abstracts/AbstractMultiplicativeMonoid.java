@@ -44,4 +44,14 @@ public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeEleme
     return this.multiSelfApply(elements, amounts);
   }
 
+  @Override
+  public E getOne() {
+    return this.getIdentityElement();
+  }
+
+  @Override
+  public boolean isOne(Element element) {
+    return this.isIdentityElement(element);
+  }
+
 }
