@@ -8,6 +8,7 @@ import ch.bfh.unicrypt.crypto.encryption.abstracts.AbstractHomomorphicEncryption
 import ch.bfh.unicrypt.crypto.keygen.classes.ElGamalKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZPlusTimesMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
@@ -60,9 +61,9 @@ public class ElGamalEncryptionScheme extends AbstractHomomorphicEncryptionScheme
   }
 
   private static ElGamalEncryptionScheme makeInstance(GStarModSafePrime gStarMod, GStarModElement generator) {
-    ZPlusMod zPlusMod = gStarMod.getZPlusModOrder();
+    ZPlusTimesMod zPlusTimesMod = gStarMod.getZPlusTimesModOrder();
 
-    ProductGroup encryptionSpace = ProductGroup.getInstance(gStarMod, gStarMod, zPlusMod);
+    ProductGroup encryptionSpace = ProductGroup.getInstance(gStarMod, gStarMod, zPlusTimesMod);
     Function encryptionFunctionLeft = GeneratorFunction.getInstance(generator);
     Function encryptionFunctionRight = CompositeFunction.getInstance(
             MultiIdentityFunction.getInstance(encryptionSpace, 2),
@@ -76,14 +77,14 @@ public class ElGamalEncryptionScheme extends AbstractHomomorphicEncryptionScheme
                                                                       encryptionFunctionLeft),
                                         encryptionFunctionRight));
 
-    ProductGroup decryptionSpace = ProductGroup.getInstance(zPlusMod, ProductGroup.getInstance(gStarMod, 2));
+    ProductGroup decryptionSpace = ProductGroup.getInstance(zPlusTimesMod, ProductGroup.getInstance(gStarMod, 2));
     Function decryptionFunction = CompositeFunction.getInstance(
             MultiIdentityFunction.getInstance(decryptionSpace, 2),
             ProductFunction.getInstance(SelectionFunction.getInstance(decryptionSpace, 1, 1),
                                         CompositeFunction.getInstance(MultiIdentityFunction.getInstance(decryptionSpace, 2),
                                                                       ProductFunction.getInstance(SelectionFunction.getInstance(decryptionSpace, 1, 0),
                                                                                                   SelectionFunction.getInstance(decryptionSpace, 0)),
-                                                                      SelfApplyFunction.getInstance(gStarMod, zPlusMod))),
+                                                                      SelfApplyFunction.getInstance(gStarMod, zPlusTimesMod))),
             ApplyInverseFunction.getInstance(gStarMod));
 
     return new ElGamalEncryptionScheme(ElGamalKeyPairGenerator.getInstance(generator), encryptionFunctionLeft, encryptionFunctionRight, encryptionFunction, decryptionFunction);

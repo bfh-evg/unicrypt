@@ -4,6 +4,10 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZPlusTimesMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -11,7 +15,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZTimesMod;
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 
@@ -47,6 +50,21 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   @Override
   public final boolean isCyclicGroup() {
     return this instanceof CyclicGroup;
+  }
+
+  @Override
+  public final boolean isSemiRing() {
+    return this instanceof SemiRing;
+  }
+
+  @Override
+  public final boolean isRing() {
+    return this instanceof Ring;
+  }
+
+  @Override
+  public final boolean isField() {
+    return this instanceof Field;
   }
 
   @Override
@@ -107,19 +125,11 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   }
 
   @Override
-  public final ZPlusMod getZPlusModOrder() {
+  public final ZPlusTimesMod getZPlusTimesModOrder() {
     if (!(this.isFinite() && this.hasKnownOrder())) {
       throw new UnsupportedOperationException();
     }
-    return ZPlusMod.getInstance(order);
-  }
-
-  @Override
-  public final ZTimesMod getZTimesModOrder() {
-    if (!(this.isFinite() && this.hasKnownOrder())) {
-      throw new UnsupportedOperationException();
-    }
-    return ZTimesMod.getInstance(order);
+    return ZPlusTimesMod.getInstance(order);
   }
 
   @Override

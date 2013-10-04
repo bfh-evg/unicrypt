@@ -4,15 +4,15 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractField<E extends DualisticElement> extends AbstractRing<E> implements Field {
+public abstract class AbstractCyclicField<E extends DualisticElement> extends AbstractCyclicRing<E> implements CyclicField {
 
   @Override
   public DualisticElement divide(Element element1, Element element2) {

@@ -40,7 +40,7 @@ public class ElGamalEncryptionSchemeOld extends AbstractEncryptionScheme {
         if ((ddhGroup == null) || (generator == null) || !ddhGroup.contains(generator)) {
             throw new IllegalArgumentException();
         }
-        this.zModPlus = ddhGroup.getZPlusModOrder();
+        this.zModPlus = ddhGroup.getZPlusTimesModOrder();
         this.ddhGroup = ddhGroup;
         this.generator = generator;
 

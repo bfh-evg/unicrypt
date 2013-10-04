@@ -128,6 +128,11 @@ public abstract class AbstractSemiRing<E extends DualisticElement> extends Abstr
     return this.apply(results);
   }
 
+  @Override
+  protected BigInteger standardGetMinOrder() {
+    return BigInteger.valueOf(2);
+  }
+
   //
   // The following protected abstract method must be implemented in every
   // direct sub-class.

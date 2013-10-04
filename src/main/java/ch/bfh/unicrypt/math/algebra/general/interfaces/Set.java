@@ -4,8 +4,8 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZPlusTimesMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZTimesMod;
 
 /**
  * This interface represents the concept a mathematical set of elements. The
@@ -39,6 +39,12 @@ public interface Set {
   public boolean isGroup();
 
   public boolean isCyclicGroup();
+
+  public boolean isSemiRing();
+
+  public boolean isRing();
+
+  public boolean isField();
 
   public boolean isCompound();
 
@@ -89,18 +95,7 @@ public interface Set {
    * @throws UnsupportedOperationException if the group order is infinite or
    * unknown
    */
-  public ZPlusMod getZPlusModOrder();
-
-  /**
-   * Returns an multiplicative integer group of type {@link ZTimesMod} with the
-   * same group order. For this to work, the group order must be finite and
-   * known.
-   *
-   * @return The resulting multiplicative group.
-   * @throws UnsupportedOperationException if the group order is infinite or
-   * unknown
-   */
-  public ZTimesMod getZTimesModOrder();
+  public ZPlusTimesMod getZPlusTimesModOrder();
 
   /**
    * Returns an multiplicative integer group of type {@link ZTimesMod} with the

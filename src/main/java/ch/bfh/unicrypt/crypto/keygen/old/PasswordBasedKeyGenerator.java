@@ -81,7 +81,7 @@ public class PasswordBasedKeyGenerator extends KeyGenerator {
       byte[] salt = element.getAt(1).getValue().toByteArray();
       Key key = null;
       try {
-        int keySizeInBits = ((int) Math.ceil((this.getCoDomain().getZPlusModOrder().getModulus().bitLength() + 1) / 8)) * 8;
+        int keySizeInBits = ((int) Math.ceil((this.getCoDomain().getZPlusTimesModOrder().getModulus().bitLength() + 1) / 8)) * 8;
         key = AESUtil.generateKey(password, salt, this.iterationAmount, keySizeInBits);
       } catch (Exception e) {
         throw new IllegalArgumentException();

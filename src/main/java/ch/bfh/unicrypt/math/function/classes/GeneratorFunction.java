@@ -5,6 +5,7 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZPlusTimesMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -18,7 +19,7 @@ public class GeneratorFunction extends AbstractFunction<ZPlusMod, CyclicGroup, E
 
   Element generator;
 
-  public GeneratorFunction(ZPlusMod domain, CyclicGroup coDomain, Element generator) {
+  public GeneratorFunction(ZPlusTimesMod domain, CyclicGroup coDomain, Element generator) {
     super(domain, coDomain);
     this.generator = generator;
   }
@@ -33,14 +34,14 @@ public class GeneratorFunction extends AbstractFunction<ZPlusMod, CyclicGroup, E
       throw new IllegalArgumentException();
     }
     CyclicGroup cyclicGroup = (CyclicGroup) generator.getSet();
-    return new GeneratorFunction(cyclicGroup.getZPlusModOrder(), cyclicGroup, generator);
+    return new GeneratorFunction(cyclicGroup.getZPlusTimesModOrder(), cyclicGroup, generator);
   }
 
   public static GeneratorFunction getInstance(CyclicGroup cyclicGroup) {
     if (cyclicGroup == null) {
       throw new IllegalArgumentException();
     }
-    return new GeneratorFunction(cyclicGroup.getZPlusModOrder(), cyclicGroup, cyclicGroup.getDefaultGenerator());
+    return new GeneratorFunction(cyclicGroup.getZPlusTimesModOrder(), cyclicGroup, cyclicGroup.getDefaultGenerator());
   }
 
 }

@@ -23,7 +23,7 @@ public class StandardCommitmentScheme extends AbstractDeterministicCommitmentSch
     if ((ddhGroup == null) || (generator == null) || !ddhGroup.contains(generator)) {
       throw new IllegalArgumentException();
     }
-    final ZPlusMod orderGroup = ddhGroup.getZPlusModOrder();
+    final ZPlusMod orderGroup = ddhGroup.getZPlusTimesModOrder();
     this.messageSpace = orderGroup;
     this.commitmentSpace = ddhGroup;
 

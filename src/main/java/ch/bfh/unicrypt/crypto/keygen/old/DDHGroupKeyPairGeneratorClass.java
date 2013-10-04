@@ -25,7 +25,7 @@ public class DDHGroupKeyPairGeneratorClass extends KeyPairGenerator implements D
   }
 
   public DDHGroupKeyPairGeneratorClass(final DDHGroup ddhGroup, final Element generator) {
-    super(new ProductGroup(ddhGroup.getZPlusModOrder(), ddhGroup));
+    super(new ProductGroup(ddhGroup.getZPlusTimesModOrder(), ddhGroup));
     if ((generator == null) || !ddhGroup.contains(generator)) { // or is not a generator!
       throw new IllegalArgumentException();
     }
