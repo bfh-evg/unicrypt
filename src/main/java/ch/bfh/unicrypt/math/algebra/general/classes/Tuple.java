@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrays;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.Compound;
@@ -48,7 +48,7 @@ public class Tuple extends AbstractElement<ProductSet, Tuple> implements Compoun
     for (int i = 0; i < arity; i++) {
       hashValues[i] = this.getAt(i).getRecursiveHashValue(messageDigest);
     }
-    return ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(messageDigest);
+    return ByteArrays.getInstance().apply(hashValues).getHashValue(messageDigest);
   }
 
   @Override
@@ -90,7 +90,7 @@ public class Tuple extends AbstractElement<ProductSet, Tuple> implements Compoun
     }
     Element element = this;
     for (final int index : indices) {
-      if (element.isCompound()) {
+      if (element.isTuple()) {
         element = ((Tuple) element).getAt(index);
       } else {
         throw new IllegalArgumentException();
@@ -160,11 +160,6 @@ public class Tuple extends AbstractElement<ProductSet, Tuple> implements Compoun
         return false;
       }
     }
-    return true;
-  }
-
-  @Override
-  protected boolean standardIsCompound() {
     return true;
   }
 

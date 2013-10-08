@@ -6,7 +6,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrays;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -31,12 +31,12 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class HashFunction extends AbstractFunction<Set, ByteArrayMonoid, ByteArrayElement> {
+public class HashFunction extends AbstractFunction<Set, ByteArrays, ByteArrayElement> {
 
   private MessageDigest messageDigest;
   private boolean recursiveHash;
 
-  private HashFunction(Set domain, ByteArrayMonoid coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
+  private HashFunction(Set domain, ByteArrays coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
     super(domain, coDomain);
     this.messageDigest = messageDigest;
     this.recursiveHash = recursiveHash;
@@ -126,7 +126,7 @@ public class HashFunction extends AbstractFunction<Set, ByteArrayMonoid, ByteArr
     if (domain == null || messageDigest == null) {
       throw new IllegalArgumentException();
     }
-    return new HashFunction(domain, ByteArrayMonoid.getInstance(), messageDigest, recursiveHash);
+    return new HashFunction(domain, ByteArrays.getInstance(), messageDigest, recursiveHash);
   }
 
 }

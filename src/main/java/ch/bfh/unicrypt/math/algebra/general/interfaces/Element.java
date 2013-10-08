@@ -21,7 +21,15 @@ public interface Element {
 
   public static final String STANDARD_HASH_ALGORITHM = "SHA-256";
 
-  public boolean isCompound();
+  public boolean isAdditive();
+
+  public boolean isMultiplicative();
+
+  public boolean isConcatenative();
+
+  public boolean isDualistic();
+
+  public boolean isTuple();
 
   /**
    *

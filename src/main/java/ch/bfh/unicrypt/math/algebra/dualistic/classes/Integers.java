@@ -27,14 +27,14 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class Z extends AbstractCyclicRing<ZElement> {
+public class Integers extends AbstractCyclicRing<IntegerElement> {
 
   //
   // The following protected methods override the standard implementation from
   // various super-classes
   //
   @Override
-  protected ZElement standardSelfApply(Element element, BigInteger amount) {
+  protected IntegerElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -43,27 +43,27 @@ public class Z extends AbstractCyclicRing<ZElement> {
   // various super-classes
   //
   @Override
-  protected ZElement abstractApply(Element element1, Element element2) {
+  protected IntegerElement abstractApply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
-  protected ZElement abstractGetIdentityElement() {
+  protected IntegerElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected ZElement abstractInvert(Element element) {
+  protected IntegerElement abstractInvert(Element element) {
     return this.abstractGetElement(element.getValue().negate());
   }
 
   @Override
-  protected ZElement abstractMultiply(Element element1, Element element2) {
+  protected IntegerElement abstractMultiply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
 
   @Override
-  protected ZElement abstractGetOne() {
+  protected IntegerElement abstractGetOne() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -73,13 +73,13 @@ public class Z extends AbstractCyclicRing<ZElement> {
   }
 
   @Override
-  protected ZElement abstractGetElement(BigInteger value) {
-    return new ZElement(this, value) {
+  protected IntegerElement abstractGetElement(BigInteger value) {
+    return new IntegerElement(this, value) {
     };
   }
 
   @Override
-  protected ZElement abstractGetRandomElement(Random random) {
+  protected IntegerElement abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -89,7 +89,7 @@ public class Z extends AbstractCyclicRing<ZElement> {
   }
 
   @Override
-  protected ZElement abstractGetDefaultGenerator() {
+  protected IntegerElement abstractGetDefaultGenerator() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -99,7 +99,7 @@ public class Z extends AbstractCyclicRing<ZElement> {
   }
 
   @Override
-  protected ZElement abstractGetRandomGenerator(final Random random) {
+  protected IntegerElement abstractGetRandomGenerator(final Random random) {
     if (RandomUtil.createRandomBoolean(random)) {
       return this.getDefaultGenerator();
     }
@@ -108,18 +108,18 @@ public class Z extends AbstractCyclicRing<ZElement> {
   //
   // STATIC FACTORY METHODS
   //
-  private static Z instance;
+  private static Integers instance;
 
   /**
    * Returns the singleton object of this class.
    *
    * @return The singleton object of this class
    */
-  public static Z getInstance() {
-    if (Z.instance == null) {
-      Z.instance = new Z();
+  public static Integers getInstance() {
+    if (Integers.instance == null) {
+      Integers.instance = new Integers();
     }
-    return Z.instance;
+    return Integers.instance;
   }
 
 }

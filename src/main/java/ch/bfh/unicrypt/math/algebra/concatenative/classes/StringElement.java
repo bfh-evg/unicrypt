@@ -13,11 +13,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  *
  * @author rolfhaenni
  */
-public class StringElement extends AbstractConcatenativeElement<StringMonoid, StringElement> {
+public class StringElement extends AbstractConcatenativeElement<Strings, StringElement> {
 
   private final String string;
 
-  protected StringElement(final StringMonoid monoid, final String string) {
+  protected StringElement(final Strings monoid, final String string) {
     super(monoid);
     this.string = string;
   }

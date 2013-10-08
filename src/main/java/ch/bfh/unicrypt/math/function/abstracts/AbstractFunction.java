@@ -59,7 +59,7 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
 
   @Override
   public final E apply(final Element[] elements, final Random random) {
-    if (this.getDomain().isCompound()) {
+    if (this.getDomain().isProduct()) {
       return this.apply(((ProductSet) this.getDomain()).getElement(elements), random);
     }
     throw new UnsupportedOperationException();

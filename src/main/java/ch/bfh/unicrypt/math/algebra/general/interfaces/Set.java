@@ -38,15 +38,21 @@ public interface Set {
 
   public boolean isGroup();
 
-  public boolean isCyclicGroup();
-
   public boolean isSemiRing();
 
   public boolean isRing();
 
   public boolean isField();
 
-  public boolean isCompound();
+  public boolean isCyclic();
+
+  public boolean isAdditive();
+
+  public boolean isMultiplicative();
+
+  public boolean isConcatenative();
+
+  public boolean isProduct();
 
   public boolean isFinite();
 

@@ -1,17 +1,22 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrays;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 /**
@@ -48,8 +53,28 @@ public abstract class AbstractElement<S extends Set, E extends Element> extends 
   }
 
   @Override
-  public final boolean isCompound() {
-    return this.standardIsCompound();
+  public boolean isAdditive() {
+    return this instanceof AdditiveElement;
+  }
+
+  @Override
+  public boolean isMultiplicative() {
+    return this instanceof MultiplicativeElement;
+  }
+
+  @Override
+  public boolean isConcatenative() {
+    return this instanceof ConcatenativeElement;
+  }
+
+  @Override
+  public boolean isDualistic() {
+    return this instanceof DualisticElement;
+  }
+
+  @Override
+  public final boolean isTuple() {
+    return this instanceof Tuple;
   }
 
   /**
@@ -100,7 +125,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> extends 
       throw new IllegalArgumentException();
     }
     messageDigest.reset();
-    return ByteArrayMonoid.getInstance().getElement(messageDigest.digest(this.getValue().toByteArray()));
+    return ByteArrays.getInstance().getElement(messageDigest.digest(this.getValue().toByteArray()));
   }
 
   @Override
@@ -234,7 +259,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> extends 
    */
   @Override
   public final boolean isGenerator() {
-    if (this.getSet().isCyclicGroup()) {
+    if (this.getSet().isCyclic()) {
       CyclicGroup cyclicGroup = ((CyclicGroup) this.getSet());
       return cyclicGroup.isGenerator(this);
     }
@@ -275,10 +300,6 @@ public abstract class AbstractElement<S extends Set, E extends Element> extends 
   //
   // The following protected methods are standard implementations, which may change in sub-classes
   //
-  protected boolean standardIsCompound() {
-    return false;
-  }
-
   protected BigInteger standardGetValue() {
     throw new UnsupportedOperationException();
   }

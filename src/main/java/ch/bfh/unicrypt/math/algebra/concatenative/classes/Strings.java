@@ -15,11 +15,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  *
  * @author rolfhaenni
  */
-public class StringMonoid extends AbstractConcatenativeMonoid<StringElement> {
+public class Strings extends AbstractConcatenativeMonoid<StringElement> {
 
-  public static final StringElement EMPTY_STRING = StringMonoid.getInstance().getElement("");
+  public static final StringElement EMPTY_STRING = Strings.getInstance().getElement("");
 
-  private StringMonoid() {
+  private Strings() {
   }
 
   public final StringElement getElement(final String string) {
@@ -70,18 +70,18 @@ public class StringMonoid extends AbstractConcatenativeMonoid<StringElement> {
   //
   // STATIC FACTORY METHODS
   //
-  private static StringMonoid instance;
+  private static Strings instance;
 
   /**
    * Returns the singleton object of this class.
    *
    * @return The singleton object of this class
    */
-  public static StringMonoid getInstance() {
-    if (StringMonoid.instance == null) {
-      StringMonoid.instance = new StringMonoid();
+  public static Strings getInstance() {
+    if (Strings.instance == null) {
+      Strings.instance = new Strings();
     }
-    return StringMonoid.instance;
+    return Strings.instance;
   }
 
 }

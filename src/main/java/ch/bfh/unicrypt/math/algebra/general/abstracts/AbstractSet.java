@@ -1,5 +1,7 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -14,6 +16,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 
@@ -47,11 +50,6 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   }
 
   @Override
-  public final boolean isCyclicGroup() {
-    return this instanceof CyclicGroup;
-  }
-
-  @Override
   public final boolean isSemiRing() {
     return this instanceof SemiRing;
   }
@@ -67,7 +65,27 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   }
 
   @Override
-  public final boolean isCompound() {
+  public final boolean isCyclic() {
+    return this instanceof CyclicGroup;
+  }
+
+  @Override
+  public boolean isAdditive() {
+    return this instanceof AdditiveSemiGroup;
+  }
+
+  @Override
+  public boolean isMultiplicative() {
+    return this instanceof MultiplicativeSemiGroup;
+  }
+
+  @Override
+  public boolean isConcatenative() {
+    return this instanceof ConcatenativeSemiGroup;
+  }
+
+  @Override
+  public final boolean isProduct() {
     return this instanceof Compound;
   }
 

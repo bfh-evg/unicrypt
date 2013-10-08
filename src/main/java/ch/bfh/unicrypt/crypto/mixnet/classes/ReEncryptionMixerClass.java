@@ -6,7 +6,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.encryption.interfaces.HomomorphicEncryptionScheme;
 import ch.bfh.unicrypt.crypto.mixnet.interfaces.ReEncryptionMixer;
-import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public class ReEncryptionMixerClass extends MixerClass implements ReEncryptionMixer {

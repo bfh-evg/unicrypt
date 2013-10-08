@@ -16,11 +16,11 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
  *
  * @author rolfhaenni
  */
-public class ByteArrayElement extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement> {
+public class ByteArrayElement extends AbstractConcatenativeElement<ByteArrays, ByteArrayElement> {
 
   private final byte[] bytes;
 
-  protected ByteArrayElement(final ByteArrayMonoid monoid, final byte[] bytes) {
+  protected ByteArrayElement(final ByteArrays monoid, final byte[] bytes) {
     super(monoid);
     this.bytes = bytes;
   }

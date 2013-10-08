@@ -12,9 +12,9 @@ import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement
  *
  * @author rolfhaenni
  */
-public class ZElement extends AbstractDualisticElement<Z, ZElement> {
+public class IntegerElement extends AbstractDualisticElement<Integers, IntegerElement> {
 
-  protected ZElement(final Z zPlusTimes, final BigInteger value) {
+  protected IntegerElement(final Integers zPlusTimes, final BigInteger value) {
     super(zPlusTimes, value);
   }
 

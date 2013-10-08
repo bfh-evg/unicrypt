@@ -224,7 +224,7 @@ public class ProductSet extends AbstractSet<Tuple> implements Compound<ProductSe
     }
     Set set = this;
     for (final int index : indices) {
-      if (set.isCompound()) {
+      if (set.isProduct()) {
         set = ((ProductSet) set).getAt(index);
       } else {
         throw new IllegalArgumentException();

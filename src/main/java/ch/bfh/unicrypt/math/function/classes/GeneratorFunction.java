@@ -31,7 +31,7 @@ public class GeneratorFunction extends AbstractFunction<ZPlusMod, CyclicGroup, E
   }
 
   public static GeneratorFunction getInstance(Element generator) {
-    if (generator == null || !generator.getSet().isCyclicGroup() || !generator.isGenerator()) {
+    if (generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()) {
       throw new IllegalArgumentException();
     }
     CyclicGroup cyclicGroup = (CyclicGroup) generator.getSet();
