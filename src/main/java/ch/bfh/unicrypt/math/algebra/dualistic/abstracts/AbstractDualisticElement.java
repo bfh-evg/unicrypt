@@ -4,12 +4,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.math.BigInteger;
 
 /**
  *

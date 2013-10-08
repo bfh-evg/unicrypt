@@ -5,15 +5,12 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.signature.abstracts.AbstractSignatureScheme;
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
-import ch.bfh.unicrypt.math.group.classes.PowerGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 
 /**
  * Diese Klasse ist deshalb noch ein 'Hack', da die RSA-Gruppe noch nicht

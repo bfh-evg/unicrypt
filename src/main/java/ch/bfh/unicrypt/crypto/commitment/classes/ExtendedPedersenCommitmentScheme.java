@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractRandomizedCommitmentScheme;
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
@@ -14,10 +16,6 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.classes.PowerGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 
 public class ExtendedPedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme {
 
@@ -37,7 +35,7 @@ public class ExtendedPedersenCommitmentScheme extends AbstractRandomizedCommitme
       throw new IllegalArgumentException();
     }
     this.arity = generators.size();
-    final ZPlusMod orderGroup = ddhGroup.getZPlusTimesModOrder();
+    final ZPlusMod orderGroup = ddhGroup.getZModOrder();
     this.messageSpace = orderGroup;
     this.messagesSpace = new PowerGroup(orderGroup, this.arity);
     this.randomizationSpace = orderGroup;

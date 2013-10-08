@@ -4,10 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.math.BigInteger;
 
 /**
  *

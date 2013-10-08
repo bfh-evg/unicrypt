@@ -4,20 +4,21 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import java.math.BigInteger;
+import java.util.Random;
+
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
-import java.math.BigInteger;
-import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ZPlusTimesModPrime extends ZPlusTimesMod implements CyclicField {
+public class ZModPrime extends ZMod implements CyclicField {
 
-  protected ZPlusTimesModPrime(Prime prime) {
+  protected ZModPrime(Prime prime) {
     super(prime.getValue());
   }
 
@@ -27,12 +28,12 @@ public class ZPlusTimesModPrime extends ZPlusTimesMod implements CyclicField {
   }
 
   @Override
-  public ZPlusTimesModElement divide(Element element1, Element element2) {
+  public ZModElement divide(Element element1, Element element2) {
     return this.multiply(element1, this.oneOver(element2));
   }
 
   @Override
-  public ZPlusTimesModElement oneOver(Element element) {
+  public ZModElement oneOver(Element element) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
@@ -45,27 +46,27 @@ public class ZPlusTimesModPrime extends ZPlusTimesMod implements CyclicField {
   //
   // STATIC FACTORY METHODS
   //
-  public static ZPlusTimesModPrime getInstance(final Prime prime) {
+  public static ZModPrime getInstance(final Prime prime) {
     if (prime == null) {
       throw new IllegalArgumentException();
     }
-    return new ZPlusTimesModPrime(prime);
+    return new ZModPrime(prime);
   }
 
-  public static ZPlusTimesModPrime getInstance(final int modulus) {
-    return ZPlusTimesModPrime.getInstance(BigInteger.valueOf(modulus));
+  public static ZModPrime getInstance(final int modulus) {
+    return ZModPrime.getInstance(BigInteger.valueOf(modulus));
   }
 
-  public static ZPlusTimesModPrime getInstance(BigInteger prime) {
-    return new ZPlusTimesModPrime(Prime.getInstance(prime));
+  public static ZModPrime getInstance(BigInteger prime) {
+    return new ZModPrime(Prime.getInstance(prime));
   }
 
-  public static ZPlusTimesModPrime getRandomInstance(int bitLength, Random random) {
-    return new ZPlusTimesModPrime(Prime.getRandomInstance(bitLength, random));
+  public static ZModPrime getRandomInstance(int bitLength, Random random) {
+    return new ZModPrime(Prime.getRandomInstance(bitLength, random));
   }
 
-  public static ZPlusTimesModPrime getRandomInstance(int bitLength) {
-    return ZPlusTimesModPrime.getRandomInstance(bitLength, (Random) null);
+  public static ZModPrime getRandomInstance(int bitLength) {
+    return ZModPrime.getRandomInstance(bitLength, (Random) null);
   }
 
 }

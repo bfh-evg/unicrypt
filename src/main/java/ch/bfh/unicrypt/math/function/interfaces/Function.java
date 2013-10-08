@@ -2,10 +2,10 @@ package ch.bfh.unicrypt.math.function.interfaces;
 
 import java.util.Random;
 
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 
 /**

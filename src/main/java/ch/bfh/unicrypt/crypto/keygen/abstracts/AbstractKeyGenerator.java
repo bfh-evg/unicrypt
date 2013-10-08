@@ -1,11 +1,12 @@
 package ch.bfh.unicrypt.crypto.keygen.abstracts;
 
+import java.math.BigInteger;
+import java.util.Random;
+
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
-import java.math.BigInteger;
-import java.util.Random;
 
 public abstract class AbstractKeyGenerator<S extends Set, E extends Element> extends UniCrypt implements KeyGenerator {
 

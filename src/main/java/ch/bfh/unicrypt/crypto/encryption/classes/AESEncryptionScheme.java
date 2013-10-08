@@ -8,16 +8,12 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 import ch.bfh.unicrypt.crypto.encryption.abstracts.AbstractEncryptionScheme;
-import ch.bfh.unicrypt.crypto.encryption.interfaces.DeterministicEncryptionScheme;
 import ch.bfh.unicrypt.crypto.keygen.old.PasswordBasedKeyGenerator;
-import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordKeyGenerator;
 import ch.bfh.unicrypt.crypto.utility.AESUtil;
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 
 public class AESEncryptionScheme extends AbstractEncryptionScheme implements DeterministicEncryptionScheme {
   private int encryptionIterations;

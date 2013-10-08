@@ -5,9 +5,11 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.encryption.abstracts.AbstractEncryptionScheme;
 import ch.bfh.unicrypt.crypto.keygen.old.DDHGroupKeyPairGeneratorClass;
-import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupDistributedKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.classes.SigmaOrProofGeneratorClass;
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.InvertFunction;
@@ -16,11 +18,6 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.classes.PowerGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public class ElGamalEncryptionSchemeOld extends AbstractEncryptionScheme {
 
@@ -40,7 +37,7 @@ public class ElGamalEncryptionSchemeOld extends AbstractEncryptionScheme {
         if ((ddhGroup == null) || (generator == null) || !ddhGroup.contains(generator)) {
             throw new IllegalArgumentException();
         }
-        this.zModPlus = ddhGroup.getZPlusTimesModOrder();
+        this.zModPlus = ddhGroup.getZModOrder();
         this.ddhGroup = ddhGroup;
         this.generator = generator;
 

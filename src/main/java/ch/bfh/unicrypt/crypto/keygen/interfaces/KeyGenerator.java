@@ -4,10 +4,11 @@
  */
 package ch.bfh.unicrypt.crypto.keygen.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *

@@ -1,17 +1,16 @@
 package ch.bfh.unicrypt.crypto.keygen.old;
 
-import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupDistributedKeyPairGenerator;
-import ch.bfh.unicrypt.math.element.Element;
+import java.security.KeyPairGenerator;
+
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 
 public class DDHGroupKeyPairGeneratorClass extends KeyPairGenerator implements DDHGroupDistributedKeyPairGenerator {
 
@@ -25,7 +24,7 @@ public class DDHGroupKeyPairGeneratorClass extends KeyPairGenerator implements D
   }
 
   public DDHGroupKeyPairGeneratorClass(final DDHGroup ddhGroup, final Element generator) {
-    super(new ProductGroup(ddhGroup.getZPlusTimesModOrder(), ddhGroup));
+    super(new ProductGroup(ddhGroup.getZModOrder(), ddhGroup));
     if ((generator == null) || !ddhGroup.contains(generator)) { // or is not a generator!
       throw new IllegalArgumentException();
     }

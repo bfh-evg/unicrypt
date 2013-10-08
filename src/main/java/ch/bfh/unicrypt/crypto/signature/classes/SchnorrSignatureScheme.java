@@ -3,31 +3,13 @@ package ch.bfh.unicrypt.crypto.signature.classes;
 import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.keygen.old.DDHGroupKeyPairGeneratorClass;
-import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.signature.abstracts.AbstractRandomizedSignatureScheme;
-import ch.bfh.unicrypt.crypto.signature.interfaces.SchnorrSignatureScheme;
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.element.classes.AtomicElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.function.abstracts.ProductDomainFunctionAbstract;
-import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
-import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction.ConcatParameter;
-import ch.bfh.unicrypt.math.function.classes.HashFunction;
-import ch.bfh.unicrypt.math.function.classes.HashFunction.HashAlgorithm;
-import ch.bfh.unicrypt.math.function.interfaces.ConcatenateFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.function.interfaces.HashFunction;
-import ch.bfh.unicrypt.math.cyclicgroup.classes.BooleanGroup;
-import ch.bfh.unicrypt.math.group.classes.PowerGroup;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
-import ch.bfh.unicrypt.math.group.interfaces.BooleanGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
-import ch.bfh.unicrypt.math.group.interfaces.PowerGroup;
-import ch.bfh.unicrypt.math.group.interfaces.ProductGroup;
-import ch.bfh.unicrypt.math.group.interfaces.ZPlusMod;
-import ch.bfh.unicrypt.math.utility.mapper.classes.CharsetXRadixYMapperClass;
-import ch.bfh.unicrypt.math.utility.mapper.interfaces.Mapper;
+import ch.bfh.unicrypt.math.function.classes.HashFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class SchnorrSignatureScheme extends AbstractRandomizedSignatureScheme {
 
@@ -64,7 +46,7 @@ public class SchnorrSignatureScheme extends AbstractRandomizedSignatureScheme {
     if ((ddhGroup == null) || (generator == null) || !ddhGroup.contains(generator)) {
       throw new IllegalArgumentException();
     }
-    this.zPlusMod = ddhGroup.getZPlusTimesModOrder();
+    this.zPlusMod = ddhGroup.getZModOrder();
     this.ddhGroup = ddhGroup;
     this.generator = generator;
 

@@ -1,13 +1,9 @@
 package ch.bfh.unicrypt.crypto.blinding.classes;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.crypto.blinding.abstracts.AbstractBlindingScheme;
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 
 public class StandardBlindingScheme extends AbstractBlindingScheme {
 
@@ -19,7 +15,7 @@ public class StandardBlindingScheme extends AbstractBlindingScheme {
     if (blindingSpace == null)
       throw new IllegalArgumentException();
     this.blindingSpace = blindingSpace;
-    this.blindingValueSpace = blindingSpace.getZPlusTimesModOrder();
+    this.blindingValueSpace = blindingSpace.getZModOrder();
     this.blindingFunction = new SelfApplyFunction(this.blindingSpace, this.blindingValueSpace);
   }
 

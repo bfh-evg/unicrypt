@@ -4,12 +4,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
  * /**
@@ -24,14 +24,14 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class NPlusTimes extends AbstractSemiRing<NPlusTimesElement> {
+public class N extends AbstractSemiRing<NElement> {
 
   //
   // The following protected methods override the standard implementation from
   // various super-classes
   //
   @Override
-  protected NPlusTimesElement standardSelfApply(Element element, BigInteger amount) {
+  protected NElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -40,22 +40,22 @@ public class NPlusTimes extends AbstractSemiRing<NPlusTimesElement> {
   // various super-classes
   //
   @Override
-  protected NPlusTimesElement abstractApply(Element element1, Element element2) {
+  protected NElement abstractApply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
-  protected NPlusTimesElement abstractGetIdentityElement() {
+  protected NElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected NPlusTimesElement abstractMultiply(Element element1, Element element2) {
+  protected NElement abstractMultiply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
 
   @Override
-  protected NPlusTimesElement abstractGetOne() {
+  protected NElement abstractGetOne() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -65,13 +65,13 @@ public class NPlusTimes extends AbstractSemiRing<NPlusTimesElement> {
   }
 
   @Override
-  protected NPlusTimesElement abstractGetElement(BigInteger value) {
-    return new NPlusTimesElement(this, value) {
+  protected NElement abstractGetElement(BigInteger value) {
+    return new NElement(this, value) {
     };
   }
 
   @Override
-  protected NPlusTimesElement abstractGetRandomElement(Random random) {
+  protected NElement abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -82,18 +82,18 @@ public class NPlusTimes extends AbstractSemiRing<NPlusTimesElement> {
   //
   // STATIC FACTORY METHODS
   //
-  private static NPlusTimes instance;
+  private static N instance;
 
   /**
    * Returns the singleton object of this class.
    *
    * @return The singleton object of this class
    */
-  public static NPlusTimes getInstance() {
-    if (NPlusTimes.instance == null) {
-      NPlusTimes.instance = new NPlusTimes();
+  public static N getInstance() {
+    if (N.instance == null) {
+      N.instance = new N();
     }
-    return NPlusTimes.instance;
+    return N.instance;
   }
 
 }

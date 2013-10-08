@@ -1,7 +1,6 @@
 package ch.bfh.unicrypt.crypto.encoding.abstracts;
 
 import ch.bfh.unicrypt.crypto.encoding.interfaces.EncodingScheme;
-import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public abstract class AbstractEncodingScheme implements EncodingScheme {

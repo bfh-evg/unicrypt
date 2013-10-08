@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -11,7 +12,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.Compound;
-import java.lang.reflect.Array;
 
 /**
  *

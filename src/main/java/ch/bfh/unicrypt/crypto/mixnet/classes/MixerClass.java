@@ -5,16 +5,11 @@ import java.util.List;
 import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.mixnet.interfaces.Mixer;
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.PermutationElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
-import ch.bfh.unicrypt.math.function.interfaces.PermutationFunction;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
-import ch.bfh.unicrypt.math.group.classes.PowerGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.group.interfaces.PermutationGroup;
-import ch.bfh.unicrypt.math.group.interfaces.PowerGroup;
+import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 
 public class MixerClass implements Mixer {
 

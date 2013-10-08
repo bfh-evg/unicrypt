@@ -1,8 +1,9 @@
 package ch.bfh.unicrypt.math.helper.factorization;
 
-import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Arrays;
+
+import ch.bfh.unicrypt.math.utility.MathUtil;
 
 public class Factorization {
 

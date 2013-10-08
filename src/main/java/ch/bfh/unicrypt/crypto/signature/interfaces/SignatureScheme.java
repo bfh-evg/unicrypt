@@ -1,10 +1,8 @@
 package ch.bfh.unicrypt.crypto.signature.interfaces;
 
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public interface SignatureScheme {
 

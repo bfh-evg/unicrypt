@@ -4,12 +4,13 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import java.util.Random;
+
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZPlusTimesMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import java.util.Random;
 
 /**
  *
@@ -19,7 +20,7 @@ public class GeneratorFunction extends AbstractFunction<ZPlusMod, CyclicGroup, E
 
   Element generator;
 
-  public GeneratorFunction(ZPlusTimesMod domain, CyclicGroup coDomain, Element generator) {
+  public GeneratorFunction(ZMod domain, CyclicGroup coDomain, Element generator) {
     super(domain, coDomain);
     this.generator = generator;
   }
@@ -34,14 +35,14 @@ public class GeneratorFunction extends AbstractFunction<ZPlusMod, CyclicGroup, E
       throw new IllegalArgumentException();
     }
     CyclicGroup cyclicGroup = (CyclicGroup) generator.getSet();
-    return new GeneratorFunction(cyclicGroup.getZPlusTimesModOrder(), cyclicGroup, generator);
+    return new GeneratorFunction(cyclicGroup.getZModOrder(), cyclicGroup, generator);
   }
 
   public static GeneratorFunction getInstance(CyclicGroup cyclicGroup) {
     if (cyclicGroup == null) {
       throw new IllegalArgumentException();
     }
-    return new GeneratorFunction(cyclicGroup.getZPlusTimesModOrder(), cyclicGroup, cyclicGroup.getDefaultGenerator());
+    return new GeneratorFunction(cyclicGroup.getZModOrder(), cyclicGroup, cyclicGroup.getDefaultGenerator());
   }
 
 }

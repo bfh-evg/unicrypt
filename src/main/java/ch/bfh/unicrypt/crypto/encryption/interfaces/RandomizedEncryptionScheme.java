@@ -1,8 +1,9 @@
 package ch.bfh.unicrypt.crypto.encryption.interfaces;
 
+import java.util.Random;
+
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.util.Random;
 
 public interface RandomizedEncryptionScheme extends AsymmetricEncryptionScheme {
 

@@ -4,11 +4,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
@@ -107,14 +108,14 @@ public abstract class AbstractSemiRing<E extends DualisticElement> extends Abstr
     if (amount.signum() == 0) {
       return this.getOne();
     }
-    Element result = element;
+    E result = (E) element;
     for (int i = amount.bitLength() - 2; i >= 0; i--) {
-      result = result.selfApply();
+      result = this.square(result);
       if (amount.testBit(i)) {
-        result = result.apply(element);
+        result = this.multiply(result, element);
       }
     }
-    return (E) result;
+    return result;
   }
 
   protected E standardProductOfPowers(final Element[] elements, final BigInteger[] amounts) {
@@ -123,9 +124,9 @@ public abstract class AbstractSemiRing<E extends DualisticElement> extends Abstr
     }
     Element[] results = new Element[elements.length];
     for (int i = 0; i < elements.length; i++) {
-      results[i] = this.selfApply(elements[i], amounts[i]);
+      results[i] = this.power(elements[i], amounts[i]);
     }
-    return this.apply(results);
+    return this.multiply(results);
   }
 
   @Override

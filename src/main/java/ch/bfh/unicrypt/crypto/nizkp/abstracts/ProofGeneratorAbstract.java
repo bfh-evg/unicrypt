@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.crypto.nizkp.abstracts;
 import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.ProofGenerator;
-import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 

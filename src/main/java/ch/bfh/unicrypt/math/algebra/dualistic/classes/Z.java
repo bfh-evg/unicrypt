@@ -4,12 +4,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import java.math.BigInteger;
+import java.util.Random;
+
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
-import java.math.BigInteger;
-import java.util.Random;
 
 /**
  * /**
@@ -26,14 +27,14 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZPlusTimes extends AbstractCyclicRing<ZPlusTimesElement> {
+public class Z extends AbstractCyclicRing<ZElement> {
 
   //
   // The following protected methods override the standard implementation from
   // various super-classes
   //
   @Override
-  protected ZPlusTimesElement standardSelfApply(Element element, BigInteger amount) {
+  protected ZElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -42,27 +43,27 @@ public class ZPlusTimes extends AbstractCyclicRing<ZPlusTimesElement> {
   // various super-classes
   //
   @Override
-  protected ZPlusTimesElement abstractApply(Element element1, Element element2) {
+  protected ZElement abstractApply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
-  protected ZPlusTimesElement abstractGetIdentityElement() {
+  protected ZElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected ZPlusTimesElement abstractInvert(Element element) {
+  protected ZElement abstractInvert(Element element) {
     return this.abstractGetElement(element.getValue().negate());
   }
 
   @Override
-  protected ZPlusTimesElement abstractMultiply(Element element1, Element element2) {
+  protected ZElement abstractMultiply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
 
   @Override
-  protected ZPlusTimesElement abstractGetOne() {
+  protected ZElement abstractGetOne() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -72,13 +73,13 @@ public class ZPlusTimes extends AbstractCyclicRing<ZPlusTimesElement> {
   }
 
   @Override
-  protected ZPlusTimesElement abstractGetElement(BigInteger value) {
-    return new ZPlusTimesElement(this, value) {
+  protected ZElement abstractGetElement(BigInteger value) {
+    return new ZElement(this, value) {
     };
   }
 
   @Override
-  protected ZPlusTimesElement abstractGetRandomElement(Random random) {
+  protected ZElement abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -88,7 +89,7 @@ public class ZPlusTimes extends AbstractCyclicRing<ZPlusTimesElement> {
   }
 
   @Override
-  protected ZPlusTimesElement abstractGetDefaultGenerator() {
+  protected ZElement abstractGetDefaultGenerator() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -98,7 +99,7 @@ public class ZPlusTimes extends AbstractCyclicRing<ZPlusTimesElement> {
   }
 
   @Override
-  protected ZPlusTimesElement abstractGetRandomGenerator(final Random random) {
+  protected ZElement abstractGetRandomGenerator(final Random random) {
     if (RandomUtil.createRandomBoolean(random)) {
       return this.getDefaultGenerator();
     }
@@ -107,18 +108,18 @@ public class ZPlusTimes extends AbstractCyclicRing<ZPlusTimesElement> {
   //
   // STATIC FACTORY METHODS
   //
-  private static ZPlusTimes instance;
+  private static Z instance;
 
   /**
    * Returns the singleton object of this class.
    *
    * @return The singleton object of this class
    */
-  public static ZPlusTimes getInstance() {
-    if (ZPlusTimes.instance == null) {
-      ZPlusTimes.instance = new ZPlusTimes();
+  public static Z getInstance() {
+    if (Z.instance == null) {
+      Z.instance = new Z();
     }
-    return ZPlusTimes.instance;
+    return Z.instance;
   }
 
 }

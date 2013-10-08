@@ -4,9 +4,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 
 /**
  *

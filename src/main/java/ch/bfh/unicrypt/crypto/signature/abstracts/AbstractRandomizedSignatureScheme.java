@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.crypto.signature.abstracts;
 import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.math.element.Element;
 
 public abstract class AbstractRandomizedSignatureScheme extends AbstractSignatureScheme implements RandomizedSignatureScheme {
 

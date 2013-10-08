@@ -140,7 +140,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
       return this.getElement(randomElement.power(this.getCoFactor()));
     }
     // Method 2
-    return this.getDefaultGenerator().power(this.getZPlusTimesModOrder().getRandomElement(random));
+    return this.getDefaultGenerator().power(this.getZModOrder().getRandomElement(random));
   }
 
   @Override

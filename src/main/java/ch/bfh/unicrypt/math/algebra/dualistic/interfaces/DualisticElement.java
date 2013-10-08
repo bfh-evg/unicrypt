@@ -6,7 +6,6 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import java.math.BigInteger;
 
 /**
  *

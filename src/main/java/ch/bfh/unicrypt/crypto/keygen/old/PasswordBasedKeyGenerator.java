@@ -1,18 +1,15 @@
 package ch.bfh.unicrypt.crypto.keygen.old;
 
-import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyGenerator;
 import java.math.BigInteger;
 import java.security.Key;
 import java.util.Random;
 
-import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.crypto.utility.AESUtil;
-import ch.bfh.unicrypt.math.element.Element;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlus;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
  * This class derives a cryptographic (secret) key for AES from a T
@@ -81,7 +78,7 @@ public class PasswordBasedKeyGenerator extends KeyGenerator {
       byte[] salt = element.getAt(1).getValue().toByteArray();
       Key key = null;
       try {
-        int keySizeInBits = ((int) Math.ceil((this.getCoDomain().getZPlusTimesModOrder().getModulus().bitLength() + 1) / 8)) * 8;
+        int keySizeInBits = ((int) Math.ceil((this.getCoDomain().getZModOrder().getModulus().bitLength() + 1) / 8)) * 8;
         key = AESUtil.generateKey(password, salt, this.iterationAmount, keySizeInBits);
       } catch (Exception e) {
         throw new IllegalArgumentException();

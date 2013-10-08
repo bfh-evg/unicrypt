@@ -4,13 +4,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *

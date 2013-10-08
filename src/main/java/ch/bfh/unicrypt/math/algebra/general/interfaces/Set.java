@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZPlusTimesMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 
 /**
@@ -95,7 +95,7 @@ public interface Set {
    * @throws UnsupportedOperationException if the group order is infinite or
    * unknown
    */
-  public ZPlusTimesMod getZPlusTimesModOrder();
+  public ZMod getZModOrder();
 
   /**
    * Returns an multiplicative integer group of type {@link ZTimesMod} with the

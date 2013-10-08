@@ -4,6 +4,8 @@
  */
 package ch.bfh.unicrypt.crypto.encryption.abstracts;
 
+import java.util.Random;
+
 import ch.bfh.unicrypt.crypto.encryption.interfaces.HomomorphicEncryptionScheme;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -16,7 +18,6 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.RemovalFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 /**
  *

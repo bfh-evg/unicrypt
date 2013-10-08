@@ -8,7 +8,7 @@ import ch.bfh.unicrypt.crypto.encryption.abstracts.AbstractHomomorphicEncryption
 import ch.bfh.unicrypt.crypto.keygen.classes.ElGamalKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZPlusTimesMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
@@ -61,7 +61,7 @@ public class ElGamalEncryptionScheme extends AbstractHomomorphicEncryptionScheme
   }
 
   private static ElGamalEncryptionScheme makeInstance(GStarModSafePrime gStarMod, GStarModElement generator) {
-    ZPlusTimesMod zPlusTimesMod = gStarMod.getZPlusTimesModOrder();
+    ZMod zPlusTimesMod = gStarMod.getZModOrder();
 
     ProductGroup encryptionSpace = ProductGroup.getInstance(gStarMod, gStarMod, zPlusTimesMod);
     Function encryptionFunctionLeft = GeneratorFunction.getInstance(generator);

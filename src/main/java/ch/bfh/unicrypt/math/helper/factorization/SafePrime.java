@@ -4,10 +4,11 @@
  */
 package ch.bfh.unicrypt.math.helper.factorization;
 
-import ch.bfh.unicrypt.math.utility.MathUtil;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.utility.MathUtil;
+import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
  *

@@ -4,16 +4,17 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
+
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 
 /**
  *

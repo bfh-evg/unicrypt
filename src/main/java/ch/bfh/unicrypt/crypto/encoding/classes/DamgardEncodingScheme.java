@@ -4,11 +4,10 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.encoding.abstracts.AbstractEncodingScheme;
-import ch.bfh.unicrypt.math.element.Element;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 
 public class DamgardEncodingScheme extends AbstractEncodingScheme {
 
@@ -19,7 +18,7 @@ public class DamgardEncodingScheme extends AbstractEncodingScheme {
     if (zPrimSave == null) {
       throw new IllegalArgumentException();
     }
-    final ZPlusMod orderGroup = zPrimSave.getZPlusTimesModOrder();
+    final ZPlusMod orderGroup = zPrimSave.getZModOrder();
     this.encodingFunction = new EncodingFunction(orderGroup, zPrimSave);
     this.decodingFunction = new DecodingFunction(zPrimSave, orderGroup);
   }

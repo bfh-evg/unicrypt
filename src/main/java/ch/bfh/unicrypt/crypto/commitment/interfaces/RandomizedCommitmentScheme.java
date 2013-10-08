@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.crypto.commitment.interfaces;
 
-import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public interface RandomizedCommitmentScheme extends CommitmentScheme {

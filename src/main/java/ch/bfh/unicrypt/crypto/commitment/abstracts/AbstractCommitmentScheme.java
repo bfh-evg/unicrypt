@@ -1,8 +1,8 @@
 package ch.bfh.unicrypt.crypto.commitment.abstracts;
 
 import ch.bfh.unicrypt.crypto.commitment.interfaces.CommitmentScheme;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public abstract class AbstractCommitmentScheme implements CommitmentScheme {
 

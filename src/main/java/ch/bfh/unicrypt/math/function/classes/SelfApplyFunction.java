@@ -1,14 +1,14 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.NPlusTimes;
 import java.util.Random;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
@@ -54,9 +54,9 @@ public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, E
       throw new IllegalArgumentException();
     }
     if (semiGroup.isFinite() && semiGroup.hasKnownOrder()) {
-      return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZPlusTimesModOrder());
+      return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZModOrder());
     }
-    return SelfApplyFunction.getInstance(semiGroup, NPlusTimes.getInstance());
+    return SelfApplyFunction.getInstance(semiGroup, N.getInstance());
   }
 
   /**

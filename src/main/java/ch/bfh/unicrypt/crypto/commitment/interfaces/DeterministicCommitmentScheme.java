@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.crypto.commitment.interfaces;
 
-import ch.bfh.unicrypt.math.element.Element;
 
 public interface DeterministicCommitmentScheme extends CommitmentScheme {
 

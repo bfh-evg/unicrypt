@@ -1,8 +1,8 @@
 package ch.bfh.unicrypt.crypto.nizkp.interfaces;
 
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.group.interfaces.ProductGroup;
 
 public interface SigmaEqualityProofGenerator extends ProductCoDomainProofGenerator, SigmaProofGenerator {
 

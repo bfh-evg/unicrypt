@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.crypto.encryption.interfaces;
 
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyGenerator;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *

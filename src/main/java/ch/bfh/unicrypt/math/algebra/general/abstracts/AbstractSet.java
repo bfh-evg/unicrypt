@@ -3,8 +3,7 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZPlusTimesMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -125,11 +124,11 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   }
 
   @Override
-  public final ZPlusTimesMod getZPlusTimesModOrder() {
+  public final ZMod getZModOrder() {
     if (!(this.isFinite() && this.hasKnownOrder())) {
       throw new UnsupportedOperationException();
     }
-    return ZPlusTimesMod.getInstance(order);
+    return ZMod.getInstance(order);
   }
 
   @Override
