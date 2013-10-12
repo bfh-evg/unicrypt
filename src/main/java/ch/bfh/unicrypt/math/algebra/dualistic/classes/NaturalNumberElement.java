@@ -12,9 +12,9 @@ import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement
  *
  * @author rolfhaenni
  */
-public class NaturalElement extends AbstractDualisticElement<Naturals, NaturalElement> {
+public class NaturalNumberElement extends AbstractDualisticElement<NaturalNumbers, NaturalNumberElement> {
 
-  protected NaturalElement(final Naturals nPlusTimes, final BigInteger value) {
+  protected NaturalNumberElement(final NaturalNumbers nPlusTimes, final BigInteger value) {
     super(nPlusTimes, value);
   }
 

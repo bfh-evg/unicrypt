@@ -2,7 +2,7 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Naturals;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.NaturalNumbers;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -56,7 +56,7 @@ public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, E
     if (semiGroup.isFinite() && semiGroup.hasKnownOrder()) {
       return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZModOrder());
     }
-    return SelfApplyFunction.getInstance(semiGroup, Naturals.getInstance());
+    return SelfApplyFunction.getInstance(semiGroup, NaturalNumbers.getInstance());
   }
 
   /**

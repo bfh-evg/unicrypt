@@ -24,14 +24,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class Naturals extends AbstractSemiRing<NaturalElement> {
+public class NaturalNumbers extends AbstractSemiRing<NaturalNumberElement> {
 
   //
   // The following protected methods override the standard implementation from
   // various super-classes
   //
   @Override
-  protected NaturalElement standardSelfApply(Element element, BigInteger amount) {
+  protected NaturalNumberElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -40,22 +40,22 @@ public class Naturals extends AbstractSemiRing<NaturalElement> {
   // various super-classes
   //
   @Override
-  protected NaturalElement abstractApply(Element element1, Element element2) {
+  protected NaturalNumberElement abstractApply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
-  protected NaturalElement abstractGetIdentityElement() {
+  protected NaturalNumberElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected NaturalElement abstractMultiply(Element element1, Element element2) {
+  protected NaturalNumberElement abstractMultiply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
 
   @Override
-  protected NaturalElement abstractGetOne() {
+  protected NaturalNumberElement abstractGetOne() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -65,13 +65,13 @@ public class Naturals extends AbstractSemiRing<NaturalElement> {
   }
 
   @Override
-  protected NaturalElement abstractGetElement(BigInteger value) {
-    return new NaturalElement(this, value) {
+  protected NaturalNumberElement abstractGetElement(BigInteger value) {
+    return new NaturalNumberElement(this, value) {
     };
   }
 
   @Override
-  protected NaturalElement abstractGetRandomElement(Random random) {
+  protected NaturalNumberElement abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -82,18 +82,18 @@ public class Naturals extends AbstractSemiRing<NaturalElement> {
   //
   // STATIC FACTORY METHODS
   //
-  private static Naturals instance;
+  private static NaturalNumbers instance;
 
   /**
    * Returns the singleton object of this class.
    *
    * @return The singleton object of this class
    */
-  public static Naturals getInstance() {
-    if (Naturals.instance == null) {
-      Naturals.instance = new Naturals();
+  public static NaturalNumbers getInstance() {
+    if (NaturalNumbers.instance == null) {
+      NaturalNumbers.instance = new NaturalNumbers();
     }
-    return Naturals.instance;
+    return NaturalNumbers.instance;
   }
 
 }

@@ -19,7 +19,12 @@ public abstract class AbstractFiniteField<E extends DualisticElement, M extends 
 
   @Override
   public final BigInteger getCharacteristic() {
+    if (this.characteristic == null) {
+      this.characteristic = this.abstractGetCharacteristic();
+    }
     return this.characteristic;
   }
+
+  protected abstract BigInteger abstractGetCharacteristic();
 
 }
