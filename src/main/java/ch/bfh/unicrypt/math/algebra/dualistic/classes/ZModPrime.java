@@ -7,7 +7,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicField;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
@@ -16,7 +16,7 @@ import ch.bfh.unicrypt.math.helper.factorization.Prime;
  *
  * @author rolfhaenni
  */
-public class ZModPrime extends ZMod implements CyclicField {
+public class ZModPrime extends ZMod implements PrimeField {
 
   protected ZModPrime(Prime prime) {
     super(prime.getValue());
@@ -67,6 +67,11 @@ public class ZModPrime extends ZMod implements CyclicField {
 
   public static ZModPrime getRandomInstance(int bitLength) {
     return ZModPrime.getRandomInstance(bitLength, (Random) null);
+  }
+
+  @Override
+  public BigInteger getCharacteristic() {
+    return this.getOrder();
   }
 
 }

@@ -8,5 +8,5 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
  *
  * @author rolfhaenni
  */
-public interface CyclicField extends Field, CyclicRing {
+public interface PrimeField extends FiniteField, CyclicRing {
 }

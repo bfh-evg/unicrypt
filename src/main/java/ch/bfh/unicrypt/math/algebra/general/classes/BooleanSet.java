@@ -7,7 +7,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 

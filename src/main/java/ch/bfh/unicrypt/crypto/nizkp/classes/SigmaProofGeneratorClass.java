@@ -8,6 +8,7 @@ import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -17,7 +18,6 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
   public static final HashFunction.HashAlgorithm DEFAULT_HASH_ALGORITHM = HashFunction.HashAlgorithm.SHA256;
   public static final ConcatenateFunction.ConcatParameter DEFAULT_CONCAT_ALGORITHM = ConcatParameter.Plain;
   public static final Mapper DEFAULT_MAPPER = new CharsetXRadixYMapperClass(CharsetXRadixYMapperClass.DEFAULT_CHARSET, CharsetXRadixYMapperClass.DEFAULT_RADIX);
-
   private final Function function;
   private final HashFunction hashFunction;
   private final ZPlusMod challengeSpace;
@@ -30,9 +30,9 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
   }
 
   public SigmaProofGeneratorClass(final Function function,
-      final HashFunction.HashAlgorithm hashAlgorithm,
-      final ConcatenateFunction.ConcatParameter concatParameter,
-      final Mapper mapper) {
+          final HashFunction.HashAlgorithm hashAlgorithm,
+          final ConcatenateFunction.ConcatParameter concatParameter,
+          final Mapper mapper) {
     if ((function == null) || (hashAlgorithm == null) || (concatParameter == null) || (mapper == null)) {
       throw new IllegalArgumentException();
     }
@@ -48,7 +48,7 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
   @Override
   public Tuple generate(final Element secretInput, final Element publicInput, final Element otherInput, final Random random) {
     if ((secretInput == null) || !this.getResponseSpace().contains(secretInput) || (publicInput == null)
-        || !this.getCommitmentSpace().contains(publicInput)) {
+            || !this.getCommitmentSpace().contains(publicInput)) {
       throw new IllegalArgumentException();
     }
     final Element randomElement = this.createRandomElement(random);

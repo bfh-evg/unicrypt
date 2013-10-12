@@ -6,6 +6,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.ProductCoDomainProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public abstract class ProductCoDomainProofGeneratorAbstract extends ProofGeneratorAbstract implements ProductCoDomainProofGenerator {
 

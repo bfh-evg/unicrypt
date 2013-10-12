@@ -8,6 +8,7 @@ import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaEqualityProofGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
@@ -25,9 +26,9 @@ public class SigmaEqualityProofGeneratorClass extends ProductCoDomainProofGenera
   }
 
   public SigmaEqualityProofGeneratorClass(final List<Function> functions,
-      final HashAlgorithm hashAlgorithm,
-      final ConcatParameter concatParameter,
-      final Mapper mapper) {
+          final HashAlgorithm hashAlgorithm,
+          final ConcatParameter concatParameter,
+          final Mapper mapper) {
     this(functions.toArray(new Function[functions.size()]), hashAlgorithm, concatParameter, mapper);
   }
 
@@ -36,11 +37,11 @@ public class SigmaEqualityProofGeneratorClass extends ProductCoDomainProofGenera
   }
 
   public SigmaEqualityProofGeneratorClass(final Function[] functions,
-      final HashAlgorithm hashAlgorithm,
-      final ConcatParameter concatParameter,
-      final Mapper mapper) {
+          final HashAlgorithm hashAlgorithm,
+          final ConcatParameter concatParameter,
+          final Mapper mapper) {
     final Function function = new CompositeFunction(new MultiIdentityFunction(SigmaEqualityProofGeneratorClass.getDomain(functions), functions.length),
-        new ProductFunction(functions));
+                                                    new ProductFunction(functions));
     this.sigmaProofGenerator = new SigmaProofGeneratorClass(function, hashAlgorithm, concatParameter, mapper);
     this.functions = functions;
   }

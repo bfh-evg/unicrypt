@@ -4,18 +4,25 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractField<E extends DualisticElement, M extends MultiplicativeGroup> extends AbstractRing<E> implements Field {
+public abstract class AbstractPrimeField<E extends DualisticElement, M extends MultiplicativeCyclicGroup> extends AbstractCyclicRing<E> implements PrimeField {
 
   private M multiplicativeGroup;
+  private BigInteger characteristic;
+
+  @Override
+  public final BigInteger getCharacteristic() {
+    return this.characteristic;
+  }
 
   @Override
   public M getMultiplicativeGroup() {
@@ -26,12 +33,12 @@ public abstract class AbstractField<E extends DualisticElement, M extends Multip
   }
 
   @Override
-  public final E divide(Element element1, Element element2) {
+  public E divide(Element element1, Element element2) {
     return this.multiply(element1, this.oneOver(element2));
   }
 
   @Override
-  public final E oneOver(Element element) {
+  public E oneOver(Element element) {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }

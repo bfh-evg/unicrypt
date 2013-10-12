@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.crypto.nizkp.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 

@@ -4,18 +4,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ZPlusModElement extends AbstractAdditiveElement<ZPlusMod, ZPlusModElement> {
+public class PolynomeElement extends AbstractAdditiveElement<Polynomes, PolynomeElement> {
 
-  protected ZPlusModElement(final ZPlusMod zPlusMod, final BigInteger value) {
-    super(zPlusMod, value);
+  protected PolynomeElement(final Polynomes group) {
+    super(group);
   }
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public interface ProductProofGenerator extends ProductDomainProofGenerator, ProductCoDomainProofGenerator {
 

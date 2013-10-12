@@ -9,7 +9,7 @@ import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZTimesMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZTimesModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwoPrimes;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimes;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
@@ -22,7 +22,7 @@ public class RSAEncryptionScheme extends AbstractAsymmetricEncryptionScheme<ZTim
     super(keyPairGenerator, encryptionFunction, decryptionFunction);
   }
 
-  public static RSAEncryptionScheme getInstance(ZModTwoPrimes zTimesMod) {
+  public static RSAEncryptionScheme getInstance(ZModPrimes zTimesMod) {
     if (zTimesMod == null) {
       throw new IllegalArgumentException();
     }

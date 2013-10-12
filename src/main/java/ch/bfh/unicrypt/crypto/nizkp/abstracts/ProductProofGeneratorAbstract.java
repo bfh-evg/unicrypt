@@ -6,6 +6,7 @@ import java.util.Random;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.ProductProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public abstract class ProductProofGeneratorAbstract extends ProductCoDomainProofGeneratorAbstract implements ProductProofGenerator {
 
@@ -14,7 +15,6 @@ public abstract class ProductProofGeneratorAbstract extends ProductCoDomainProof
   // and ProductCoDomainProofGeneratorAbstract, but since Java does not support
   // multiple
   // inheritance, some code from ProductDomainProofGeneratorAbstract is copied.
-
   @Override
   public Tuple generate(final List<Element> secretInputs, final Element publicInput) {
     return this.generate(this.getDomain().getElement(secretInputs), publicInput);

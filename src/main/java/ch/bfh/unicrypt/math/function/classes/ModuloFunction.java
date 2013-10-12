@@ -1,10 +1,10 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -18,11 +18,11 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class ModuloFunction extends AbstractFunction<Set, ZPlusMod, ZPlusModElement> {
+public class ModuloFunction extends AbstractFunction<Set, ZMod, ZModElement> {
 
   private BigInteger modulus;
 
-  private ModuloFunction(final Set domain, final ZPlusMod coDomain, final BigInteger modulus) {
+  private ModuloFunction(final Set domain, final ZMod coDomain, final BigInteger modulus) {
     super(domain, coDomain);
     this.modulus = modulus;
   }
@@ -45,7 +45,7 @@ public class ModuloFunction extends AbstractFunction<Set, ZPlusMod, ZPlusModElem
   // The following protected method implements the abstract method from {@code AbstractFunction}
   //
   @Override
-  protected ZPlusModElement abstractApply(final Element element, final Random random) {
+  protected ZModElement abstractApply(final Element element, final Random random) {
     return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
   }
 
@@ -60,7 +60,7 @@ public class ModuloFunction extends AbstractFunction<Set, ZPlusMod, ZPlusModElem
    * @throws IllegalArgumentException if the group is null
    */
   public static ModuloFunction getInstance(final Set domain, BigInteger modulus) {
-    return new ModuloFunction(domain, ZPlusMod.getInstance(modulus), modulus);
+    return new ModuloFunction(domain, ZMod.getInstance(modulus), modulus);
   }
 
 }

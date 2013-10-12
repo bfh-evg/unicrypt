@@ -8,6 +8,7 @@ import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaAndProofGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -22,9 +23,9 @@ public class SigmaAndProofGeneratorClass extends ProductProofGeneratorAbstract i
   }
 
   public SigmaAndProofGeneratorClass(final List<Function> functions,
-      final HashAlgorithm hashAlgorithm,
-      final ConcatParameter concatParameter,
-      final Mapper mapper) {
+          final HashAlgorithm hashAlgorithm,
+          final ConcatParameter concatParameter,
+          final Mapper mapper) {
     this(functions.toArray(new Function[functions.size()]), hashAlgorithm, concatParameter, mapper);
   }
 

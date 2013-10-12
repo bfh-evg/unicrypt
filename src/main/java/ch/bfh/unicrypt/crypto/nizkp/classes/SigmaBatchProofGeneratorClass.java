@@ -7,6 +7,7 @@ import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaBatchProofGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
@@ -16,14 +17,14 @@ public class SigmaBatchProofGeneratorClass extends ProductProofGeneratorAbstract
 
   public SigmaBatchProofGeneratorClass(final Function function, final int arity) {
     this(function, arity, SigmaProofGeneratorClass.DEFAULT_HASH_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_CONCAT_ALGORITHM,
-        SigmaProofGeneratorClass.DEFAULT_MAPPER);
+         SigmaProofGeneratorClass.DEFAULT_MAPPER);
   }
 
   public SigmaBatchProofGeneratorClass(final Function function,
-      final int arity,
-      final HashAlgorithm hashAlgorithm,
-      final ConcatParameter concatParameter,
-      final Mapper mapper) {
+          final int arity,
+          final HashAlgorithm hashAlgorithm,
+          final ConcatParameter concatParameter,
+          final Mapper mapper) {
     final Function proofFunction = new PowerFunction(function, arity);
     this.sigmaProofGenerator = new SigmaProofGeneratorClass(proofFunction, hashAlgorithm, concatParameter, mapper);
   }
