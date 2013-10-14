@@ -70,7 +70,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement> extends Abstr
   }
 
   @Override
-  public E getOne() {
+  public E getOneElement() {
     if (this.one == null) {
       this.one = this.abstractGetOne();
     }
@@ -78,8 +78,8 @@ public abstract class AbstractSemiRing<E extends DualisticElement> extends Abstr
   }
 
   @Override
-  public boolean isOne(final Element element) {
-    return this.areEqual(element, this.getOne());
+  public boolean isOneElement(final Element element) {
+    return this.areEqual(element, this.getOneElement());
   }
 
 //
@@ -88,7 +88,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement> extends Abstr
 //
   protected E standardMultiply(final Element... elements) {
     if (elements.length == 0) {
-      return this.getOne();
+      return this.getOneElement();
     }
     E result = null;
     for (Element element : elements) {
@@ -106,7 +106,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement> extends Abstr
       throw new IllegalArgumentException();
     }
     if (amount.signum() == 0) {
-      return this.getOne();
+      return this.getOneElement();
     }
     E result = (E) element;
     for (int i = amount.bitLength() - 2; i >= 0; i--) {
@@ -120,7 +120,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement> extends Abstr
 
   protected E standardProductOfPowers(final Element[] elements, final BigInteger[] amounts) {
     if (elements.length == 0) {
-      return this.getOne();
+      return this.getOneElement();
     }
     Element[] results = new Element[elements.length];
     for (int i = 0; i < elements.length; i++) {

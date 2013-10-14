@@ -97,7 +97,7 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
   public boolean isOne() {
     if (this.getSet().isMonoid()) {
       MultiplicativeMonoid monoid = ((MultiplicativeMonoid) this.getSet());
-      return monoid.isOne(this);
+      return monoid.isOneElement(this);
     }
     throw new UnsupportedOperationException();
   }

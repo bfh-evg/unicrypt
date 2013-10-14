@@ -82,7 +82,7 @@ public interface SemiRing extends AdditiveMonoid, MultiplicativeMonoid {
 
   // The following methods are overridden from AdditiveMonoid with an adapted return type
   @Override
-  public DualisticElement getZero();
+  public DualisticElement getZeroElement();
 
   // The following methods are overridden from MultiplicativeSemiGroup with an adapted return type
   @Override
@@ -108,6 +108,6 @@ public interface SemiRing extends AdditiveMonoid, MultiplicativeMonoid {
 
   // The following methods are overridden from MultiplicativeMonoid with an adapted return type
   @Override
-  public DualisticElement getOne();
+  public DualisticElement getOneElement();
 
 }

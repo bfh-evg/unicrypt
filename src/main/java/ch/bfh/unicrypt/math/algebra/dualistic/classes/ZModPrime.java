@@ -37,7 +37,7 @@ public class ZModPrime extends ZMod implements PrimeField {
     if (!this.contains(element)) {
       throw new IllegalArgumentException();
     }
-    if (element.equals(this.getZero())) {
+    if (element.equals(this.getZeroElement())) {
       throw new UnsupportedOperationException();
     }
     return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));

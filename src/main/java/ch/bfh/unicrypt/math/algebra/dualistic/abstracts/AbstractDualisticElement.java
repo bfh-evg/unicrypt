@@ -75,7 +75,7 @@ public abstract class AbstractDualisticElement<S extends SemiRing, E extends Dua
 
   @Override
   public boolean isOne() {
-    return this.getSet().isOne(this);
+    return this.getSet().isOneElement(this);
   }
 
 }

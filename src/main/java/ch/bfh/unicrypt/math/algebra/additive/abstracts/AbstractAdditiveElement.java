@@ -78,7 +78,7 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E ext
   public boolean isZero() {
     if (this.getSet().isMonoid()) {
       AdditiveMonoid monoid = ((AdditiveMonoid) this.getSet());
-      return monoid.isZero(this);
+      return monoid.isZeroElement(this);
     }
     throw new UnsupportedOperationException();
   }

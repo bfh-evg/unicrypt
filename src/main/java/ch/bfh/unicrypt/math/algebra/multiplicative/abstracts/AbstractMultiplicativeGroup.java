@@ -55,12 +55,12 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
   }
 
   @Override
-  public E getOne() {
+  public E getOneElement() {
     return this.getIdentityElement();
   }
 
   @Override
-  public boolean isOne(Element element) {
+  public boolean isOneElement(Element element) {
     return this.isIdentityElement(element);
   }
 

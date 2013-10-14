@@ -4,11 +4,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -30,22 +33,27 @@ public class PolynomialRing extends PolynomialSemiRing implements Ring {
   //
   @Override
   public PolynomialElement invert(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    Map<Integer, DualisticElement> coefficients = new HashMap<Integer, DualisticElement>();
+    PolynomialElement poly = (PolynomialElement) element;
+    for (Integer i : poly.getIndices()) {
+      coefficients.put(i, poly.getCoefficient(i).minus());
+    }
+    return abstractGetElement(coefficients);
   }
 
   @Override
   public PolynomialElement applyInverse(Element element1, Element element2) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return this.apply(element1, this.invert(element2));
   }
 
   @Override
   public PolynomialElement subtract(Element element1, Element element2) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return this.applyInverse(element1, element2);
   }
 
   @Override
   public PolynomialElement minus(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return this.invert(element);
   }
 
   //

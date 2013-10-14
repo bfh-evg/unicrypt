@@ -45,12 +45,12 @@ public abstract class AbstractAdditiveMonoid<E extends AdditiveElement> extends 
   }
 
   @Override
-  public E getZero() {
+  public E getZeroElement() {
     return this.getIdentityElement();
   }
 
   @Override
-  public boolean isZero(Element element) {
+  public boolean isZeroElement(Element element) {
     return this.isIdentityElement(element);
   }
 

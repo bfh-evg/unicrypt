@@ -35,9 +35,17 @@ public abstract class AbstractPolynomialElement<P extends PolynomialSemiRing> ex
     }
     DualisticElement coefficient = this.coefficients.get(index);
     if (coefficient == null) {
-      return this.getSet().getSemiRing().getZero();
+      return this.getSet().getSemiRing().getZeroElement();
     }
     return coefficient;
+  }
+
+  public DualisticElement evaluate(DualisticElement element) {
+    DualisticElement result = this.getSet().getSemiRing().getZeroElement();
+    for (Integer index : this.getIndices()) {
+      result = result.add(this.getCoefficient(index).multiply(element.power(index)));
+    }
+    return element;
   }
 
 }

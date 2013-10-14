@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import java.util.Random;
 
 /**
  * This interface provides the renaming of some group operations for the case of
@@ -89,6 +90,22 @@ public interface AdditiveSemiGroup extends SemiGroup {
    * have different lengths
    */
   public AdditiveElement sumOfProducts(Element[] elements, BigInteger[] amounts);
+
+  // The following methods are overridden from Set with an adapted return type
+  @Override
+  public AdditiveElement getElement(int value);
+
+  @Override
+  public AdditiveElement getElement(BigInteger value);
+
+  @Override
+  public AdditiveElement getElement(Element element);
+
+  @Override
+  public AdditiveElement getRandomElement();
+
+  @Override
+  public AdditiveElement getRandomElement(Random random);
 
   // The following methods are overridden from SemiGroup with an adapted return type
   @Override

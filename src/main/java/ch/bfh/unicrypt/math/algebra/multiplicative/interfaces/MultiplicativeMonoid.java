@@ -14,9 +14,9 @@ import java.math.BigInteger;
  */
 public interface MultiplicativeMonoid extends Monoid, MultiplicativeSemiGroup {
 
-  public MultiplicativeElement getOne();
+  public MultiplicativeElement getOneElement();
 
-  public boolean isOne(Element element);
+  public boolean isOneElement(Element element);
 
   // The following methods are overridden from Monoid with an adapted return type
   @Override

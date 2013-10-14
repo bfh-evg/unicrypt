@@ -13,11 +13,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
  */
 public interface AdditiveMonoid extends Monoid, AdditiveSemiGroup {
 
-  public AdditiveElement getZero();
+  public AdditiveElement getZeroElement();
 
-  public boolean isZero(Element element);
+  public boolean isZeroElement(Element element);
 
-  // The following methods are overridden from SemiGroup with an adapted return type
+  // The following methods are overridden from Monoid with an adapted return type
   @Override
   public AdditiveElement getIdentityElement();
 

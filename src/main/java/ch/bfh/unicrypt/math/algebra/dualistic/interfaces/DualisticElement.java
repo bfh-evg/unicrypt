@@ -61,24 +61,24 @@ public interface DualisticElement extends AdditiveElement, MultiplicativeElement
 
   // The following methods are overridden from MultiplicativeElement with an adapted return type
   @Override
-  public MultiplicativeElement multiply(Element element);
+  public DualisticElement multiply(Element element);
 
   @Override
-  public MultiplicativeElement divide(Element element);
+  public DualisticElement divide(Element element);
 
   @Override
-  public MultiplicativeElement power(BigInteger amount);
+  public DualisticElement power(BigInteger amount);
 
   @Override
-  public MultiplicativeElement power(Element amount);
+  public DualisticElement power(Element amount);
 
   @Override
-  public MultiplicativeElement power(int amount);
+  public DualisticElement power(int amount);
 
   @Override
-  public MultiplicativeElement square();
+  public DualisticElement square();
 
   @Override
-  public MultiplicativeElement oneOver();
+  public DualisticElement oneOver();
 
 }
