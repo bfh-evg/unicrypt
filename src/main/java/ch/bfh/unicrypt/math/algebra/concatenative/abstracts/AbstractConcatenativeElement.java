@@ -7,6 +7,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -69,6 +70,15 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
   @Override
   public final E selfConcatenate() {
     return (E) this.getSet().selfConcatenate(this);
+  }
+
+  @Override
+  public boolean isEmptyElement() {
+    if (this.getSet().isMonoid()) {
+      ConcatenativeMonoid monoid = ((ConcatenativeMonoid) this.getSet());
+      return monoid.isEmptyElement(this);
+    }
+    throw new UnsupportedOperationException();
   }
 
 }

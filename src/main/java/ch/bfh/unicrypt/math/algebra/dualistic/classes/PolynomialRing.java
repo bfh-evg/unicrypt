@@ -5,6 +5,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -28,22 +29,22 @@ public class PolynomialRing extends PolynomialSemiRing implements Ring {
   // various super-classes
   //
   @Override
-  public Element invert(Element element) {
+  public PolynomialElement invert(Element element) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public Element applyInverse(Element element1, Element element2) {
+  public PolynomialElement applyInverse(Element element1, Element element2) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public AdditiveElement subtract(Element element1, Element element2) {
+  public PolynomialElement subtract(Element element1, Element element2) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public AdditiveElement minus(Element element) {
+  public PolynomialElement minus(Element element) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

@@ -52,4 +52,26 @@ public interface MultiplicativeElement extends Element {
 
   public boolean isOne();
 
+  // The following methods are overridden from Element with an adapted return type
+  @Override
+  public MultiplicativeElement apply(Element element);
+
+  @Override
+  public MultiplicativeElement applyInverse(Element element);
+
+  @Override
+  public MultiplicativeElement selfApply(BigInteger amount);
+
+  @Override
+  public MultiplicativeElement selfApply(Element amount);
+
+  @Override
+  public MultiplicativeElement selfApply(int amount);
+
+  @Override
+  public MultiplicativeElement selfApply();
+
+  @Override
+  public MultiplicativeElement invert();
+
 }

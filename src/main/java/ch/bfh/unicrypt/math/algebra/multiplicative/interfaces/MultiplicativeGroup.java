@@ -26,4 +26,11 @@ public interface MultiplicativeGroup extends Group, MultiplicativeMonoid {
 
   public MultiplicativeElement oneOver(Element element);
 
+  // The following methods are overridden from Monoid with an adapted return type
+  @Override
+  public MultiplicativeElement invert(Element element);
+
+  @Override
+  public MultiplicativeElement applyInverse(Element element1, Element element2);
+
 }

@@ -12,4 +12,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
  */
 public interface ConcatenativeMonoid extends Monoid, ConcatenativeSemiGroup {
 
+  // The following methods are overridden from Monoid with an adapted return type
+  @Override
+  public ConcatenativeElement getIdentityElement();
+
 }

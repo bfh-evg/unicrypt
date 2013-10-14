@@ -42,9 +42,9 @@ public interface ConcatenativeElement extends Element {
    */
   public ConcatenativeElement selfConcatenate();
 
-  //
-  // The following methods override corresponding parent methods with different return type
-  //
+  public boolean isEmptyElement();
+
+  // The following methods are overridden from Element with an adapted return type
   @Override
   public ConcatenativeElement apply(Element element);
 

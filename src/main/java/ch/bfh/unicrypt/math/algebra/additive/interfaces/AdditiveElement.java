@@ -52,4 +52,26 @@ public interface AdditiveElement extends Element {
 
   public boolean isZero();
 
+  // The following methods are overridden from Element with an adapted return type
+  @Override
+  public AdditiveElement apply(Element element);
+
+  @Override
+  public AdditiveElement applyInverse(Element element);
+
+  @Override
+  public AdditiveElement selfApply(BigInteger amount);
+
+  @Override
+  public AdditiveElement selfApply(Element amount);
+
+  @Override
+  public AdditiveElement selfApply(int amount);
+
+  @Override
+  public AdditiveElement selfApply();
+
+  @Override
+  public AdditiveElement invert();
+
 }

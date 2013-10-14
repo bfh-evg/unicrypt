@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import java.util.Random;
 
 /**
  * This interface provides the renaming of some group operations for the case of
@@ -89,5 +90,43 @@ public interface MultiplicativeSemiGroup extends SemiGroup {
    * have different lengths
    */
   public MultiplicativeElement productOfPowers(Element[] elements, BigInteger[] amounts);
+
+  // The following methods are overridden from Set with an adapted return type
+  @Override
+  public MultiplicativeElement getElement(int value);
+
+  @Override
+  public MultiplicativeElement getElement(BigInteger value);
+
+  @Override
+  public MultiplicativeElement getElement(Element element);
+
+  @Override
+  public MultiplicativeElement getRandomElement();
+
+  @Override
+  public MultiplicativeElement getRandomElement(Random random);
+
+  // The following methods are overridden from SemiGroup with an adapted return type
+  @Override
+  public MultiplicativeElement apply(Element element1, Element element2);
+
+  @Override
+  public MultiplicativeElement apply(Element... elements);
+
+  @Override
+  public MultiplicativeElement selfApply(Element element, BigInteger amount);
+
+  @Override
+  public MultiplicativeElement selfApply(Element element, Element amount);
+
+  @Override
+  public MultiplicativeElement selfApply(Element element, int amount);
+
+  @Override
+  public MultiplicativeElement selfApply(Element element);
+
+  @Override
+  public MultiplicativeElement multiSelfApply(Element[] elements, BigInteger[] amounts);
 
 }

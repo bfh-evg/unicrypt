@@ -43,4 +43,15 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
   public E multiSelfConcatenate(Element[] elements, BigInteger[] amounts) {
     return this.multiSelfApply(elements, amounts);
   }
+
+  @Override
+  public E getEmptyElement() {
+    return this.getIdentityElement();
+  }
+
+  @Override
+  public boolean isEmptyElement(Element element) {
+    return this.isIdentityElement(element);
+  }
+
 }

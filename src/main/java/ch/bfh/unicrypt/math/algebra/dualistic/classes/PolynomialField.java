@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
@@ -39,22 +40,22 @@ public class PolynomialField extends PolynomialRing implements FiniteField {
   // various super-classes
   //
   @Override
-  public Element invert(Element element) {
+  public PolynomialElement invert(Element element) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public Element applyInverse(Element element1, Element element2) {
+  public PolynomialElement applyInverse(Element element1, Element element2) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public AdditiveElement subtract(Element element1, Element element2) {
+  public PolynomialElement subtract(Element element1, Element element2) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public AdditiveElement minus(Element element) {
+  public PolynomialElement minus(Element element) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
@@ -69,12 +70,12 @@ public class PolynomialField extends PolynomialRing implements FiniteField {
   }
 
   @Override
-  public DualisticElement divide(Element element1, Element element2) {
+  public PolynomialElement divide(Element element1, Element element2) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public DualisticElement oneOver(Element element) {
+  public PolynomialElement oneOver(Element element) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

@@ -17,4 +17,8 @@ public interface AdditiveMonoid extends Monoid, AdditiveSemiGroup {
 
   public boolean isZero(Element element);
 
+  // The following methods are overridden from SemiGroup with an adapted return type
+  @Override
+  public AdditiveElement getIdentityElement();
+
 }
