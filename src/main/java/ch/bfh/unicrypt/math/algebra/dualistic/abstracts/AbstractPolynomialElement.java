@@ -7,6 +7,9 @@ package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.utility.MathUtil;
+import java.math.BigInteger;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,11 +19,17 @@ import java.util.Set;
  */
 public abstract class AbstractPolynomialElement<P extends PolynomialSemiRing> extends AbstractDualisticElement<P, PolynomialElement> implements PolynomialElement {
 
-  Map<Integer, DualisticElement> coefficients;
+  private Map<Integer, DualisticElement> coefficients;
+  private int degree;
 
   protected AbstractPolynomialElement(final P semiRing, final Map<Integer, DualisticElement> coefficients) {
     super(semiRing);
     this.coefficients = coefficients;
+    int degree = 0;
+    for (Integer i : coefficients.keySet()) {
+      degree = Math.max(degree, i);
+    }
+    this.degree = degree;
   }
 
   @Override
@@ -45,7 +54,54 @@ public abstract class AbstractPolynomialElement<P extends PolynomialSemiRing> ex
     for (Integer index : this.getIndices()) {
       result = result.add(this.getCoefficient(index).multiply(element.power(index)));
     }
-    return element;
+    return result;
   }
 
+  public int getDegree() {
+    return this.degree;
+  }
+
+  @Override
+  protected BigInteger standardGetValue() {
+    BigInteger values[] = new BigInteger[this.getDegree() + 1];
+    for (int i = 0; i <= this.getDegree(); i++) {
+      DualisticElement element = this.coefficients.get(i);
+      if (element == null) {
+        values[i] = this.getSet().getSemiRing().getZeroElement().getValue();
+      } else {
+        values[i] = element.getValue();
+      }
+    }
+    return MathUtil.elegantPairWithSize(values);
+  }
+
+  @Override
+  protected boolean standardEquals(Element element) {
+    return this.coefficients.equals(((AbstractPolynomialElement) element).coefficients);
+  }
+
+  @Override
+  protected int standardHashCode() {
+    return this.coefficients.hashCode();
+  }
+
+  @Override
+  public String standardToStringContent() {
+    String result = "f(x)=";
+    String separator = "";
+    for (Integer index : this.coefficients.keySet()) {
+      DualisticElement coefficient = this.coefficients.get(index);
+      if (!coefficient.isZero()) {
+        result = result + separator + coefficient.getValue().toString();
+        if (index == 1) {
+          result = result + "X";
+        }
+        if (index > 1) {
+          result = result + "X^" + index;
+        }
+        separator = "+";
+      }
+    }
+    return result;
+  }
 }

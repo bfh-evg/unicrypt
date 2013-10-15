@@ -16,4 +16,8 @@ public interface PolynomialElement extends DualisticElement {
 
   public DualisticElement getCoefficient(int index);
 
+  public DualisticElement evaluate(DualisticElement element);
+
+  public int getDegree();
+  
 }

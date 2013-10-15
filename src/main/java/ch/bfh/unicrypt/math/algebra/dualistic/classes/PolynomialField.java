@@ -39,25 +39,6 @@ public class PolynomialField extends PolynomialRing implements FiniteField {
   // The following protected methods override the standard implementation from
   // various super-classes
   //
-  @Override
-  public PolynomialElement invert(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public PolynomialElement applyInverse(Element element1, Element element2) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public PolynomialElement subtract(Element element1, Element element2) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public PolynomialElement minus(Element element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
 
   @Override
   public BigInteger getCharacteristic() {

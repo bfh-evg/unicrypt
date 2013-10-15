@@ -12,8 +12,11 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +36,30 @@ public class PolynomialSemiRing extends AbstractSemiRing<PolynomialElement> {
 
   public SemiRing getSemiRing() {
     return this.semiRing;
+  }
+
+  public PolynomialElement getElement(BigInteger[] values) {
+    if (values == null) {
+      throw new IllegalArgumentException();
+    }
+    return this.getElement(ProductSet.getInstance(this.getSemiRing(), values.length).getElement(values));
+  }
+
+  public PolynomialElement getElement(DualisticElement... elements) {
+    if (elements == null) {
+      throw new IllegalArgumentException();
+    }
+    return this.getElement(ProductSet.getTuple(elements));
+  }
+
+  public PolynomialElement getElement(Tuple coefficients) {
+    Map<Integer, DualisticElement> coefficientMap = new HashMap<Integer, DualisticElement>();
+    if (coefficients.isNull() || coefficients.getSet().isUniform() && coefficients.getSet().getFirst().equals(this.getSemiRing())) {
+      for (int i=0; i<coefficients.getArity(); i++) {
+        coefficientMap.put(i, (DualisticElement) coefficients.getAt(i));
+      }
+    }
+    return this.abstractGetElement(coefficientMap);
   }
 
   public PolynomialElement getRandomElement(int degree) {
@@ -109,7 +136,7 @@ public class PolynomialSemiRing extends AbstractSemiRing<PolynomialElement> {
     for (Integer i : poly1.getIndices()) {
       for (Integer j : poly2.getIndices()) {
         Integer k = i + j;
-        DualisticElement coefficient = poly1.getCoefficient(i).add(poly2.getCoefficient(j));
+        DualisticElement coefficient = poly1.getCoefficient(i).multiply(poly2.getCoefficient(j));
         DualisticElement newCoefficient = newCoefficients.get(k);
         if (newCoefficient == null) {
           newCoefficients.put(k, coefficient);
@@ -140,7 +167,8 @@ public class PolynomialSemiRing extends AbstractSemiRing<PolynomialElement> {
 
   @Override
   protected PolynomialElement abstractGetElement(BigInteger value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    BigInteger[] values = MathUtil.elegantUnpairWithSize(value);
+    return this.getElement(values);
   }
 
   @Override
@@ -150,7 +178,13 @@ public class PolynomialSemiRing extends AbstractSemiRing<PolynomialElement> {
 
   @Override
   protected boolean abstractContains(BigInteger value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    BigInteger[] values = MathUtil.elegantUnpairWithSize(value);
+    for (BigInteger val: values) {
+      if (!this.getSemiRing().contains(val)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   //

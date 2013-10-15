@@ -85,11 +85,6 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   }
 
   @Override
-  public boolean isConcatenative() {
-    return this instanceof DualisticSemiGroup;
-  }
-
-  @Override
   public final boolean isProduct() {
     return this instanceof Compound;
   }
