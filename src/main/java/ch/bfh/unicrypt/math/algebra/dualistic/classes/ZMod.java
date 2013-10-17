@@ -171,7 +171,7 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
    * negative
    */
   public static ZMod getInstance(final BigInteger modulus) {
-    if ((modulus == null) || (modulus.signum() < 1)) {
+    if ((modulus == null) || (modulus.compareTo(BigInteger.valueOf(2)) < 0)) {
       throw new IllegalArgumentException();
     }
     ZMod instance = ZMod.instances.get(modulus);
@@ -183,7 +183,7 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
   }
 
   public static ZMod getRandomInstance(int bitLength, Random random) {
-    if (bitLength < 1) {
+    if (bitLength < 2) {
       throw new IllegalArgumentException();
     }
     return ZMod.getInstance(RandomUtil.createRandomBigInteger(bitLength, random));

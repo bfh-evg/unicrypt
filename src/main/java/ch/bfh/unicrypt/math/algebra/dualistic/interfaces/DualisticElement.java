@@ -17,6 +17,9 @@ public interface DualisticElement extends AdditiveElement, MultiplicativeElement
 
   // The following methods are overridden from Element with an adapted return type
   @Override
+  public SemiRing getSet();
+
+  @Override
   public DualisticElement apply(Element element);
 
   @Override

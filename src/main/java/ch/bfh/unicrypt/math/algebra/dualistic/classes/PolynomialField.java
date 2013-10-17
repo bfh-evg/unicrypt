@@ -4,12 +4,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import java.math.BigInteger;
@@ -63,8 +59,8 @@ public class PolynomialField extends PolynomialRing implements FiniteField {
   //
   // STATIC FACTORY METHODS
   //
-  public static PolynomialField getInstance(PrimeField primeField) {
-    if (primeField == null) {
+  public static PolynomialField getInstance(PrimeField primeField, PolynomialElement irreduciblePolynomial) {
+    if (primeField == null || irreduciblePolynomial == null || !irreduciblePolynomial.getSet().getSemiRing().equals(primeField)) {
       throw new IllegalArgumentException();
     }
     return new PolynomialField(primeField);

@@ -4,10 +4,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import java.math.BigInteger;
 
 /**
  *
@@ -53,6 +52,9 @@ public interface AdditiveElement extends Element {
   public boolean isZero();
 
   // The following methods are overridden from Element with an adapted return type
+  @Override
+  public AdditiveSemiGroup getSet();
+
   @Override
   public AdditiveElement apply(Element element);
 

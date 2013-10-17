@@ -4,10 +4,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import java.math.BigInteger;
 
 /**
  *
@@ -45,6 +44,9 @@ public interface ConcatenativeElement extends Element {
   public boolean isEmptyElement();
 
   // The following methods are overridden from Element with an adapted return type
+  @Override
+  public ConcatenativeSemiGroup getSet();
+
   @Override
   public ConcatenativeElement apply(Element element);
 

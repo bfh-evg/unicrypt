@@ -4,10 +4,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import java.math.BigInteger;
 
 /**
  *
@@ -53,6 +52,9 @@ public interface MultiplicativeElement extends Element {
   public boolean isOne();
 
   // The following methods are overridden from Element with an adapted return type
+  @Override
+  public MultiplicativeSemiGroup getSet();
+
   @Override
   public MultiplicativeElement apply(Element element);
 

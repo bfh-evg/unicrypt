@@ -6,14 +6,14 @@ package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractFiniteField<E extends DualisticElement, M extends MultiplicativeCyclicGroup> extends AbstractField<E, M> implements FiniteField {
+public abstract class AbstractFiniteField<E extends DualisticElement, M extends MultiplicativeGroup> extends AbstractField<E, M> implements FiniteField {
 
   private BigInteger characteristic;
 

@@ -4,11 +4,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractPolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PolynomialElement;
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -17,8 +12,10 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  *
@@ -161,7 +158,7 @@ public class PolynomialSemiRing extends AbstractSemiRing<PolynomialElement> {
   }
 
   PolynomialElement abstractGetElement(Map<Integer, DualisticElement> coefficients) {
-    return new AbstractPolynomialElement<PolynomialSemiRing>(this, coefficients) {
+    return new PolynomialElement(this, coefficients) {
     };
   }
 
