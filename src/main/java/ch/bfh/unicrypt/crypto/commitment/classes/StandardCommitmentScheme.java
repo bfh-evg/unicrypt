@@ -1,9 +1,10 @@
 package ch.bfh.unicrypt.crypto.commitment.classes;
 
-import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractDeterministicCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractCommitmentScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
@@ -12,7 +13,7 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class StandardCommitmentScheme extends AbstractDeterministicCommitmentScheme {
+public class StandardCommitmentScheme extends AbstractCommitmentScheme {
 
   public StandardCommitmentScheme(final DDHGroup ddhGroup) {
     this(ddhGroup, ddhGroup.getDefaultGenerator());
@@ -22,17 +23,17 @@ public class StandardCommitmentScheme extends AbstractDeterministicCommitmentSch
     if ((ddhGroup == null) || (generator == null) || !ddhGroup.contains(generator)) {
       throw new IllegalArgumentException();
     }
-    final ZPlusMod orderGroup = ddhGroup.getZModOrder();
-    this.messageSpace = orderGroup;
+    final ZMod zModOrder = ddhGroup.getZModOrder();
+    this.messageSpace = zModOrder;
     this.commitmentSpace = ddhGroup;
 
-    this.commitFunction = StandardCommitmentScheme.createCommitFunction(ddhGroup, orderGroup, generator);
-    this.openFunction = StandardCommitmentScheme.createOpenFunction(ddhGroup, orderGroup, this.commitFunction);
+    this.commitmentFunction = StandardCommitmentScheme.createCommitFunction(ddhGroup, zModOrder, generator);
+    this.decommitmentFunction = StandardCommitmentScheme.createOpenFunction(ddhGroup, zModOrder, this.commitmentFunction);
   }
 
   @Override
-  public ZPlusMod getMessageSpace() {
-    return (ZPlusMod) super.getMessageSpace();
+  public ZMod getMessageSpace() {
+    return (ZMod) super.getMessageSpace();
   }
 
   @Override
@@ -40,11 +41,11 @@ public class StandardCommitmentScheme extends AbstractDeterministicCommitmentSch
     return (DDHGroup) super.getCommitmentSpace();
   }
 
-  private static Function createCommitFunction(final DDHGroup ddhGroup, final ZPlusMod orderGroup, final Element generator) {
-    return new SelfApplyFunction(ddhGroup, orderGroup).partiallyApply(generator, 0);
+  private static Function createCommitFunction(final DDHGroup ddhGroup, final ZMod orderGroup, final Element generator) {
+    return SelfApplyFunction.getInstance(ddhGroup, orderGroup).partiallyApply(generator, 0);
   }
 
-  private static Function createOpenFunction(final DDHGroup ddhGroup, final ZPlusMod orderGroup, final Function commitFunction) {
+  private static Function createOpenFunction(final DDHGroup ddhGroup, final ZMod orderGroup, final Function commitFunction) {
     final ProductGroup openingDomain = new ProductGroup(orderGroup, ddhGroup);
     //@formatter:off
     return new CompositeFunction(
@@ -53,7 +54,7 @@ public class StandardCommitmentScheme extends AbstractDeterministicCommitmentSch
             new CompositeFunction(
                 new SelectionFunction(openingDomain, 0),
                 commitFunction),
-            new SelectionFunction(openingDomain,1)), 
+            new SelectionFunction(openingDomain,1)),
         new EqualityFunction(ddhGroup));
     //@formatter:on
   }

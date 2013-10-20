@@ -7,10 +7,11 @@ package ch.bfh.unicrypt.crypto.encryption.classes;
 import ch.bfh.unicrypt.crypto.encryption.abstracts.AbstractHomomorphicEncryptionScheme;
 import ch.bfh.unicrypt.crypto.keygen.classes.ElGamalKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
@@ -28,7 +29,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  *
  * @author rolfhaenni
  */
-public class ElGamalEncryptionScheme extends AbstractHomomorphicEncryptionScheme<GStarModSafePrime, ProductGroup, ZPlusMod, GStarModElement, Tuple> {
+public class ElGamalEncryptionScheme extends AbstractHomomorphicEncryptionScheme<CyclicGroup, ProductGroup, ZMod, GStarModElement, Tuple> {
 
   Function encryptionFunctionLeft;
   Function encryptionFunctionRight;
@@ -39,53 +40,53 @@ public class ElGamalEncryptionScheme extends AbstractHomomorphicEncryptionScheme
     this.encryptionFunctionRight = encryptionFunctionRight;
   }
 
-  public static ElGamalEncryptionScheme getInstance(GStarModSafePrime gStarMod, GStarModElement generator) {
-    if (gStarMod == null || generator == null || !gStarMod.contains(generator) || !generator.isGenerator()) {
+  public static ElGamalEncryptionScheme getInstance(CyclicGroup cyclicGroup, GStarModElement generator) {
+    if (cyclicGroup == null || generator == null || !cyclicGroup.contains(generator) || !generator.isGenerator()) {
       throw new IllegalArgumentException();
     }
-    return ElGamalEncryptionScheme.makeInstance(gStarMod, generator);
+    return ElGamalEncryptionScheme.makeInstance(cyclicGroup, generator);
   }
 
-  public static ElGamalEncryptionScheme getInstance(GStarModSafePrime gStarMod) {
-    if (gStarMod == null) {
+  public static ElGamalEncryptionScheme getInstance(CyclicGroup cyclicGroup) {
+    if (cyclicGroup == null) {
       throw new IllegalArgumentException();
     }
-    return ElGamalEncryptionScheme.makeInstance(gStarMod, gStarMod.getDefaultGenerator());
+    return ElGamalEncryptionScheme.makeInstance(cyclicGroup, cyclicGroup.getDefaultGenerator());
   }
 
-  public static ElGamalEncryptionScheme getInstance(GStarModElement generator) {
-    if (generator == null || !(generator.getSet() instanceof GStarModSafePrime) || !generator.isGenerator()) {
+  public static ElGamalEncryptionScheme getInstance(Element generator) {
+    if (generator == null || !(generator.getSet().isCyclic()) || !generator.isGenerator()) {
       throw new IllegalArgumentException();
     }
     return ElGamalEncryptionScheme.makeInstance((GStarModSafePrime) generator.getSet(), generator);
   }
 
-  private static ElGamalEncryptionScheme makeInstance(GStarModSafePrime gStarMod, GStarModElement generator) {
-    ZMod zPlusTimesMod = gStarMod.getZModOrder();
+  private static ElGamalEncryptionScheme makeInstance(CyclicGroup cyclicGroup, Element generator) {
+    ZMod zPlusTimesMod = cyclicGroup.getZModOrder();
 
-    ProductGroup encryptionSpace = ProductGroup.getInstance(gStarMod, gStarMod, zPlusTimesMod);
+    ProductGroup encryptionSpace = ProductGroup.getInstance(cyclicGroup, cyclicGroup, zPlusTimesMod);
     Function encryptionFunctionLeft = GeneratorFunction.getInstance(generator);
     Function encryptionFunctionRight = CompositeFunction.getInstance(
             MultiIdentityFunction.getInstance(encryptionSpace, 2),
             ProductFunction.getInstance(SelectionFunction.getInstance(encryptionSpace, 1),
                                         CompositeFunction.getInstance(RemovalFunction.getInstance(encryptionSpace, 1),
-                                                                      SelfApplyFunction.getInstance(gStarMod))),
-            ApplyFunction.getInstance(gStarMod));
+                                                                      SelfApplyFunction.getInstance(cyclicGroup))),
+            ApplyFunction.getInstance(cyclicGroup));
     Function encryptionFunction = CompositeFunction.getInstance(
             MultiIdentityFunction.getInstance(encryptionSpace, 2),
             ProductFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(encryptionSpace, 2),
                                                                       encryptionFunctionLeft),
                                         encryptionFunctionRight));
 
-    ProductGroup decryptionSpace = ProductGroup.getInstance(zPlusTimesMod, ProductGroup.getInstance(gStarMod, 2));
+    ProductGroup decryptionSpace = ProductGroup.getInstance(zPlusTimesMod, ProductGroup.getInstance(cyclicGroup, 2));
     Function decryptionFunction = CompositeFunction.getInstance(
             MultiIdentityFunction.getInstance(decryptionSpace, 2),
             ProductFunction.getInstance(SelectionFunction.getInstance(decryptionSpace, 1, 1),
                                         CompositeFunction.getInstance(MultiIdentityFunction.getInstance(decryptionSpace, 2),
                                                                       ProductFunction.getInstance(SelectionFunction.getInstance(decryptionSpace, 1, 0),
                                                                                                   SelectionFunction.getInstance(decryptionSpace, 0)),
-                                                                      SelfApplyFunction.getInstance(gStarMod, zPlusTimesMod))),
-            ApplyInverseFunction.getInstance(gStarMod));
+                                                                      SelfApplyFunction.getInstance(cyclicGroup, zPlusTimesMod))),
+            ApplyInverseFunction.getInstance(cyclicGroup));
 
     return new ElGamalEncryptionScheme(ElGamalKeyPairGenerator.getInstance(generator), encryptionFunctionLeft, encryptionFunctionRight, encryptionFunction, decryptionFunction);
   }

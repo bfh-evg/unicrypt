@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractRandomizedCommitmentScheme;
+import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractPerfectlyHidingCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
@@ -17,10 +20,10 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class ExtendedPedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme {
+public class ExtendedPedersenCommitmentScheme extends AbstractPerfectlyHidingCommitmentScheme<ZMod, ZMod, CyclicGroup, Element> {
 
   private final int arity;
-  private final PowerGroup messagesSpace;
+  private final ProductGroup messagesSpace;
 
   public ExtendedPedersenCommitmentScheme(final DDHGroup ddhGroup, final int arity) {
     this(ddhGroup, arity, (Random) null);
@@ -35,7 +38,7 @@ public class ExtendedPedersenCommitmentScheme extends AbstractRandomizedCommitme
       throw new IllegalArgumentException();
     }
     this.arity = generators.size();
-    final ZPlusMod orderGroup = ddhGroup.getZModOrder();
+    final ZMod orderGroup = ddhGroup.getZModOrder();
     this.messageSpace = orderGroup;
     this.messagesSpace = new PowerGroup(orderGroup, this.arity);
     this.randomizationSpace = orderGroup;
@@ -45,23 +48,8 @@ public class ExtendedPedersenCommitmentScheme extends AbstractRandomizedCommitme
     this.openFunction = this.createOpeningFunction();
   }
 
-  @Override
-  public ZPlusMod getMessageSpace() {
-    return (ZPlusMod) super.getMessageSpace();
-  }
-
-  public PowerGroup getMessagesSpace() {
+  public ProductGroup getMessagesSpace() {
     return this.messagesSpace;
-  }
-
-  @Override
-  public ZPlusMod getRandomizationSpace() {
-    return (ZPlusMod) super.getRandomizationSpace();
-  }
-
-  @Override
-  public DDHGroup getCommitmentSpace() {
-    return (DDHGroup) super.getCommitmentSpace();
   }
 
   public Element commit(final List<Element> messages, final Element randomization) {
@@ -97,12 +85,12 @@ public class ExtendedPedersenCommitmentScheme extends AbstractRandomizedCommitme
     }
     //@formatter:off
     return new CompositeFunction(
-        new ProductFunction(
+            new ProductFunction(
             new CompositeFunction(
-                new ProductFunction(functions),
-                new ApplyFunction(this.getCommitmentSpace(), this.getArity())),
+            new ProductFunction(functions),
+            new ApplyFunction(this.getCommitmentSpace(), this.getArity())),
             new SelfApplyFunction(this.getCommitmentSpace(), this.getRandomizationSpace()).partiallyApply(otherGenerator, 0)),
-        new ApplyFunction(this.getCommitmentSpace()));
+            new ApplyFunction(this.getCommitmentSpace()));
     //@formatter:on
   }
 
@@ -110,16 +98,16 @@ public class ExtendedPedersenCommitmentScheme extends AbstractRandomizedCommitme
     final ProductGroup openingDomain = new ProductGroup(this.getMessagesSpace(), this.getRandomizationSpace(), this.getCommitmentSpace());
     //@formatter:off
     return new CompositeFunction(
-        new MultiIdentityFunction(openingDomain,2),
-        new ProductFunction(
+            new MultiIdentityFunction(openingDomain, 2),
+            new ProductFunction(
             new CompositeFunction(
-                new MultiIdentityFunction(openingDomain,2),
-                new ProductFunction(
-                    new SelectionFunction(openingDomain, 0),
-                    new SelectionFunction(openingDomain, 1)),
-                this.getCommitFunction()),
-            new SelectionFunction(openingDomain,2)), 
-        new EqualityFunction(this.getCommitmentSpace()));
+            new MultiIdentityFunction(openingDomain, 2),
+            new ProductFunction(
+            new SelectionFunction(openingDomain, 0),
+            new SelectionFunction(openingDomain, 1)),
+            this.getCommitmentFunction()),
+            new SelectionFunction(openingDomain, 2)),
+            new EqualityFunction(this.getCommitmentSpace()));
     //@formatter:on
   }
 

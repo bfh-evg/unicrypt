@@ -5,8 +5,8 @@
 package ch.bfh.unicrypt.crypto.keygen.classes;
 
 import ch.bfh.unicrypt.crypto.keygen.abstracts.AbstractKeyPairGenerator;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusModElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
@@ -18,7 +18,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  *
  * @author rolfhaenni
  */
-public class SchnorrSignatureKeyPairGenerator extends AbstractKeyPairGenerator<ZPlusMod, GStarModPrime, ZPlusModElement, GStarModElement> {
+public class SchnorrSignatureKeyPairGenerator extends AbstractKeyPairGenerator<ZMod, GStarModPrime, ZModElement, GStarModElement> {
 
   protected SchnorrSignatureKeyPairGenerator(Function publicKeyFunction) {
     super(publicKeyFunction);

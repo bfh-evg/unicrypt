@@ -1,28 +1,43 @@
 package ch.bfh.unicrypt.crypto.encoding.abstracts;
 
 import ch.bfh.unicrypt.crypto.encoding.interfaces.EncodingScheme;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractEncodingScheme implements EncodingScheme {
+public abstract class AbstractEncodingScheme<M extends Set, E extends Set, ME extends Element, EE extends Element> implements EncodingScheme {
+
+  private Function encodingFunction;
+  private Function decodingFunction;
 
   @Override
-  public Element encode(final Element element) {
-    return this.getEncodingFunction().apply(element);
+  public Function getEncodingFunction() {
+    return this.encodingFunction;
   }
 
   @Override
-  public Element decode(final Element element) {
-    return this.getDecodingFunction().apply(element);
+  public Function getDecodingFunction() {
+    return this.decodingFunction;
   }
 
   @Override
-  public Group getMessageSpace() {
-    return this.getEncodingFunction().getDomain();
+  public EE encode(final Element element) {
+    return (EE) this.getEncodingFunction().apply(element);
   }
 
   @Override
-  public Group getEncodingSpace() {
-    return this.getEncodingFunction().getCoDomain();
+  public ME decode(final Element element) {
+    return (ME) this.getDecodingFunction().apply(element);
+  }
+
+  @Override
+  public M getMessageSpace() {
+    return (M) this.getEncodingFunction().getDomain();
+  }
+
+  @Override
+  public E getEncodingSpace() {
+    return (E) this.getEncodingFunction().getCoDomain();
   }
 
 }

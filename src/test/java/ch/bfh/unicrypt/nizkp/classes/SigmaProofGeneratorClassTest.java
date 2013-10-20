@@ -13,7 +13,7 @@ package ch.bfh.unicrypt.nizkp.classes;
 
 import ch.bfh.unicrypt.crypto.concat.classes.ConcatSchemeClass;
 import ch.bfh.unicrypt.crypto.concat.interfaces.ConcatScheme;
-import ch.bfh.unicrypt.crypto.encryption.classes.ElGamalEncryptionSchemeOld;
+import ch.bfh.unicrypt.crypto.encryption.old.ElGamalEncryptionSchemeOld;
 import ch.bfh.unicrypt.crypto.encryption.interfaces.ElGamalEncryption;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.nizkp.classes.SigmaProofGeneratorClass;

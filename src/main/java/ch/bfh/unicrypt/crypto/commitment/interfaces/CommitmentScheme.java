@@ -1,16 +1,17 @@
 package ch.bfh.unicrypt.crypto.commitment.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public interface CommitmentScheme {
 
-  public Group getMessageSpace();
+  public Set getMessageSpace();
 
-  public Group getCommitmentSpace();
+  public Set getCommitmentSpace();
 
-  public Function getCommitFunction();
+  public Function getCommitmentFunction();
 
-  public Function getOpenFunction();
+  public Function getDecommitmentFunction();
 
 }

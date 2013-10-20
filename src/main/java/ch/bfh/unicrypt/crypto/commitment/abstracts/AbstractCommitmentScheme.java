@@ -1,35 +1,35 @@
 package ch.bfh.unicrypt.crypto.commitment.abstracts;
 
 import ch.bfh.unicrypt.crypto.commitment.interfaces.CommitmentScheme;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractCommitmentScheme implements CommitmentScheme {
+public abstract class AbstractCommitmentScheme<C extends Set> implements CommitmentScheme {
 
-  protected Group messageSpace;
-  protected Group commitmentSpace;
+  protected Function commitmentFunction;
+  protected Function decommitmentFunction;
 
-  protected Function commitFunction;
-  protected Function openFunction;
-
-  @Override
-  public Group getMessageSpace() {
-    return this.messageSpace;
+  protected AbstractCommitmentScheme(Function commitmentFunction, Function decommitmentFunction) {
+    this.commitmentFunction = commitmentFunction;
+    this.decommitmentFunction = decommitmentFunction;
   }
 
   @Override
-  public Group getCommitmentSpace() {
-    return this.commitmentSpace;
+  public C getCommitmentSpace() {
+    return (C) this.getCommitmentFunction().getCoDomain();
   }
 
   @Override
-  public Function getCommitFunction() {
-    return this.commitFunction;
+  public Function getCommitmentFunction() {
+    return this.commitmentFunction;
   }
 
   @Override
-  public Function getOpenFunction() {
-    return this.openFunction;
+  public Function getDecommitmentFunction() {
+    return this.decommitmentFunction;
   }
 
 }

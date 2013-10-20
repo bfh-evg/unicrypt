@@ -4,7 +4,7 @@
  */
 package ch.bfh.unicrypt.encryption.classes;
 
-import ch.bfh.unicrypt.crypto.encryption.classes.ElGamalEncryptionSchemeOld;
+import ch.bfh.unicrypt.crypto.encryption.old.ElGamalEncryptionSchemeOld;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupDistributedKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.DDHGroupKeyPairGenerator;
 import ch.bfh.unicrypt.math.element.Element;

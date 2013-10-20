@@ -12,7 +12,7 @@ import org.junit.Test;
 import ch.bfh.unicrypt.crypto.concat.classes.ConcatSchemeClass;
 import ch.bfh.unicrypt.crypto.concat.interfaces.ConcatScheme;
 import ch.bfh.unicrypt.crypto.encryption.classes.AESEncryptionScheme;
-import ch.bfh.unicrypt.crypto.hash.classes.HashSchemeClass;
+import ch.bfh.unicrypt.crypto.hash.classes.StandardHashScheme;
 import ch.bfh.unicrypt.crypto.hash.interfaces.HashScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
@@ -47,42 +47,42 @@ public class HashSchemeClassTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testHashSchemeClassStringConcatSchemeNullstringNullConcat() {
-		new HashSchemeClass((String) null, (ConcatScheme) null);
+		new StandardHashScheme((String) null, (ConcatScheme) null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testHashSchemeClassStringConcatSchemeNullstringConcat() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
-		new HashSchemeClass((String) null, concat);
+		new StandardHashScheme((String) null, concat);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testHashSchemeClassStringConcatSchemeStringNullConcat() {
-		new HashSchemeClass(HashAlgorithm.SHA1.getAlgorithmName(), (ConcatScheme) null);
+		new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), (ConcatScheme) null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testHashSchemeClassStringConcatSchemeWrongStringConcat() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
-		new HashSchemeClass("No--", concat);
+		new StandardHashScheme("No--", concat);
 	}
 
 	@Test
 	public void testHashSchemeClassStringConcatSchemeStringConcat() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
-		new HashSchemeClass(HashAlgorithm.SHA1.getAlgorithmName(), concat);
+		new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat);
 	}
 
 	@Test
 	public void testHashSchemeClassHashAlgorithmConcatScheme() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
-		new HashSchemeClass(HashAlgorithm.SHA1, concat);
+		new StandardHashScheme(HashAlgorithm.SHA1, concat);
 	}
 
 	@Test
 	public void testHashSchemeClassStringConcatSchemeZPlusMod() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
-		HashScheme scheme = new HashSchemeClass(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
+		HashScheme scheme = new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
 		scheme.getHashFunction().getCoDomain().equals(HashAlgorithm.SHA1.getCoDomain());
 	}
 
@@ -90,20 +90,20 @@ public class HashSchemeClassTest {
 	public void testHashSchemeClassStringConcatSchemeZPlusMod6() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
 		ZPlusMod coDomain = new ZPlusModClass(BigInteger.valueOf(6));
-		HashScheme scheme = new HashSchemeClass(HashAlgorithm.SHA1.getAlgorithmName(), concat, coDomain);
+		HashScheme scheme = new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat, coDomain);
 		scheme.getHashFunction().getCoDomain().equals(coDomain);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testHashSchemeClassHashAlgorithmConcatSchemeZPlusMod() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
-		new HashSchemeClass(HashAlgorithm.SHA1.getAlgorithmName(), concat, null);
+		new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat, null);
 	}
 
 	@Test
 	public void testHash() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
-		HashScheme scheme = new HashSchemeClass(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
+		HashScheme scheme = new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
 		scheme.getHashFunction().getCoDomain().equals(HashAlgorithm.SHA1.getCoDomain());
 		AtomicElement element = scheme.hash(ZPlus.getInstance().createEncodedElement(new BigInteger("abcde".getBytes())));
 		Assert.assertEquals(new BigInteger("03de6c570bfe24bfc328ccd7ca46b76eadaf4334", 16), element.getValue());
@@ -129,7 +129,7 @@ public class HashSchemeClassTest {
 			//Create Hash
 			ConcatScheme concat = new ConcatSchemeClass(ConcatenateFunction.ConcatParameter.Plain,
 					new CharsetXRadixYMapperClass());
-			HashScheme sha256 = new HashSchemeClass(HashFunction.SHA256, concat);
+			HashScheme sha256 = new StandardHashScheme(HashFunction.SHA256, concat);
 			AtomicElement hashResult = sha256.hash(elementToHash);
 			hashString1 = hashResult.getValue().toString(10);
 		}
@@ -146,7 +146,7 @@ public class HashSchemeClassTest {
 			//Create Hash
 			ConcatScheme concat = new ConcatSchemeClass(ConcatenateFunction.ConcatParameter.Plain,
 					new CharsetXRadixYMapperClass());
-			HashScheme sha256 = new HashSchemeClass(HashFunction.SHA256, concat);
+			HashScheme sha256 = new StandardHashScheme(HashFunction.SHA256, concat);
 			AtomicElement hashResult = sha256.hash(elementToHash);
 			hashString2 = hashResult.getValue().toString(10);
 		}
@@ -157,7 +157,7 @@ public class HashSchemeClassTest {
 	@Test
 	public void testGetHashFunction() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
-		HashScheme scheme = new HashSchemeClass(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
+		HashScheme scheme = new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
 		Assert.assertNotNull(scheme.getHashFunction());
 		//TODO: Warum kann aus der HashFunction nicht der Hash-Algorithmus ausgelesen werden? Methode fehlt!
 
@@ -166,7 +166,7 @@ public class HashSchemeClassTest {
 	@Test
 	public void testGetConcatScheme() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
-		HashScheme scheme = new HashSchemeClass(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
+		HashScheme scheme = new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
 		Assert.assertEquals(concat, scheme.getConcatScheme());
 
 	}

@@ -1,92 +1,73 @@
 package ch.bfh.unicrypt.crypto.commitment.classes;
 
-import java.util.Random;
-
-import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractRandomizedCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
+import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractPerfectlyHidingCommitmentScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.function.classes.AdaptorFunction;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
+import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.Random;
 
-public class PedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme {
+public class PedersenCommitmentScheme extends AbstractPerfectlyHidingCommitmentScheme<ZMod, ZMod, CyclicGroup, Element> {
 
-  public PedersenCommitmentScheme(final DDHGroup ddhGroup) {
-    this(ddhGroup, (Random) null);
+  public PedersenCommitmentScheme(Function commitmentFunction, Function decommitmentFunction) {
+    super(commitmentFunction, decommitmentFunction);
   }
 
-  public PedersenCommitmentScheme(final DDHGroup ddhGroup, final Random random) {
-    this(ddhGroup, ddhGroup.getDefaultGenerator(), ddhGroup.getRandomGenerator(random));
+  public static PedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup) {
+    return PedersenCommitmentScheme.getInstance(cyclicGroup, (Random) null);
   }
 
-  public PedersenCommitmentScheme(final DDHGroup ddhGroup, final Element generator, final Random random) {
-    this(ddhGroup, generator, ddhGroup.getRandomGenerator(random));
-  }
-
-  public PedersenCommitmentScheme(final DDHGroup ddhGroup, final Element otherGenerator) {
-    this(ddhGroup, ddhGroup.getDefaultGenerator(), otherGenerator);
-  }
-
-  public PedersenCommitmentScheme(final DDHGroup ddhGroup, final Element generator, final Element otherGenerator) {
-    if ((ddhGroup == null) || (generator == null) || !ddhGroup.contains(generator) || (otherGenerator == null)
-        || !ddhGroup.contains(otherGenerator)) {
+  public static PedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Random random) {
+    if (cyclicGroup == null) {
       throw new IllegalArgumentException();
     }
-    final ZPlusMod orderGroup = ddhGroup.getZModOrder();
-    this.messageSpace = orderGroup;
-    this.randomizationSpace = orderGroup;
-    this.commitmentSpace = ddhGroup;
-
-    this.commitFunction = this.createCommitFunction(generator, otherGenerator);
-    this.openFunction = this.createOpeningFunction();
+    return PedersenCommitmentScheme.getInstance(cyclicGroup, cyclicGroup.getDefaultGenerator(), cyclicGroup.getRandomGenerator(random));
   }
 
-  @Override
-  public ZPlusMod getMessageSpace() {
-    return (ZPlusMod) super.getMessageSpace();
+  public static PedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Element generator, final Random random) {
+    if (cyclicGroup == null) {
+      throw new IllegalArgumentException();
+    }
+    return PedersenCommitmentScheme.getInstance(cyclicGroup, generator, cyclicGroup.getRandomGenerator(random));
   }
 
-  @Override
-  public ZPlusMod getRandomizationSpace() {
-    return (ZPlusMod) super.getRandomizationSpace();
+  public static PedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Element otherGenerator) {
+    if (cyclicGroup == null) {
+      throw new IllegalArgumentException();
+    }
+    return PedersenCommitmentScheme.getInstance(cyclicGroup, cyclicGroup.getDefaultGenerator(), otherGenerator);
   }
 
-  @Override
-  public DDHGroup getCommitmentSpace() {
-    return (DDHGroup) super.getCommitmentSpace();
-  }
-
-  private Function createCommitFunction(final Element generator, final Element otherGenerator) {
-    //@formatter:off
-    return new CompositeFunction(
-        new ProductFunction(
-            new SelfApplyFunction(this.getCommitmentSpace(), this.getMessageSpace()).partiallyApply(generator, 0),
-            new SelfApplyFunction(this.getCommitmentSpace(), this.getRandomizationSpace()).partiallyApply(otherGenerator, 0)),
-        new ApplyFunction(this.getCommitmentSpace()));
-    //@formatter:on
-  }
-
-  private Function createOpeningFunction() {
-    final ProductGroup openingDomain = new ProductGroup(this.getMessageSpace(), this.getRandomizationSpace(), this.getCommitmentSpace());
-    //@formatter:off
-    return new CompositeFunction(
-        new MultiIdentityFunction(openingDomain,2),
-        new ProductFunction(
-            new CompositeFunction(
-                new MultiIdentityFunction(openingDomain,2),
-                new ProductFunction(
-                    new SelectionFunction(openingDomain, 0),
-                    new SelectionFunction(openingDomain, 1)),
-                this.getCommitFunction()),
-            new SelectionFunction(openingDomain,2)), 
-        new EqualityFunction(this.getCommitmentSpace()));
-    //@formatter:on
+  public static PedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Element generator, final Element otherGenerator) {
+    if ((cyclicGroup == null) || (generator == null) || (otherGenerator == null)
+            || !cyclicGroup.contains(generator) || !cyclicGroup.contains(otherGenerator)
+            || !cyclicGroup.isGenerator(generator) || !cyclicGroup.isGenerator(otherGenerator)) {
+      throw new IllegalArgumentException();
+    }
+    Function commitmentFunction = CompositeFunction.getInstance(
+            ProductFunction.getInstance(GeneratorFunction.getInstance(generator),
+                                        GeneratorFunction.getInstance(otherGenerator)),
+            ApplyFunction.getInstance(cyclicGroup));
+    ZMod zMod = cyclicGroup.getZModOrder();
+    ProductGroup decommitmentDomain = ProductGroup.getInstance(zMod, zMod, cyclicGroup);
+    Function decommitmentFunction = CompositeFunction.getInstance(
+            MultiIdentityFunction.getInstance(decommitmentDomain, 2),
+            ProductFunction.getInstance(CompositeFunction.getInstance(AdaptorFunction.getInstance(decommitmentDomain, 0, 1),
+                                                                      commitmentFunction),
+                                        SelectionFunction.getInstance(decommitmentDomain, 2)),
+            EqualityFunction.getInstance(cyclicGroup));
+    return new PedersenCommitmentScheme(commitmentFunction, decommitmentFunction);
   }
 
 }

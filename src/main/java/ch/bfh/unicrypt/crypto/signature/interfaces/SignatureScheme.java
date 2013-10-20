@@ -1,14 +1,16 @@
 package ch.bfh.unicrypt.crypto.signature.interfaces;
 
 import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public interface SignatureScheme {
 
   public Element sign(final Element privateKey, final Element message);
 
-  public boolean verify(final Element publicKey, final Element message, Element signature);
+  public BooleanElement verify(final Element publicKey, final Element message, Element signature);
 
   public KeyPairGenerator getKeyPairGenerator();
 
@@ -16,8 +18,8 @@ public interface SignatureScheme {
 
   public Function getVerificationFunction();
 
-  public ZPlus getMessageSpace();
+  public Set getMessageSpace();
 
-  public Group getSignatureSpace();
+  public Set getSignatureSpace();
 
 }

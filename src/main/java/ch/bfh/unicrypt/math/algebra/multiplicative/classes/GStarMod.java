@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 import java.math.BigInteger;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
@@ -29,7 +28,7 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement> implements DDHGroup {
+public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement> {
 
   private final BigInteger modulus;
   private final SpecialFactorization moduloFactorization;

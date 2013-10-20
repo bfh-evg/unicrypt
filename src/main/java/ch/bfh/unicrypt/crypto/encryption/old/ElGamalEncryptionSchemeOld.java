@@ -1,4 +1,4 @@
-package ch.bfh.unicrypt.crypto.encryption.classes;
+package ch.bfh.unicrypt.crypto.encryption.old;
 
 import java.util.ArrayList;
 import java.util.Random;
