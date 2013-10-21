@@ -16,8 +16,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ch.bfh.unicrypt.crypto.encryption.classes.AESEncryptionScheme;
-import ch.bfh.unicrypt.crypto.keygen.old.PasswordBasedKeyGenerator;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.AESEncryptionScheme;
+import ch.bfh.unicrypt.crypto.keygenerator.old.PasswordBasedKeyGenerator;
 import ch.bfh.unicrypt.crypto.keygen.interfaces.PasswordKeyGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;

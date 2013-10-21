@@ -5,6 +5,8 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
 
 /**
  *
@@ -21,6 +23,29 @@ public class BooleanElement extends AbstractElement<BooleanSet, BooleanElement> 
 
   public boolean getBoolean() {
     return this.bit;
+  }
+
+  @Override
+  protected BigInteger standardGetValue() {
+    if (this.getBoolean()) {
+      return BigInteger.ONE;
+    }
+    return BigInteger.ZERO;
+  }
+
+  @Override
+  protected boolean standardEquals(Element element) {
+    return this.getBoolean() == ((BooleanElement) element).getBoolean();
+  }
+
+  @Override
+  protected int standardHashCode() {
+    return ((Boolean) this.getBoolean()).hashCode();
+  }
+
+  @Override
+  public String standardToStringContent() {
+    return ((Boolean) this.getBoolean()).toString();
   }
 
 }

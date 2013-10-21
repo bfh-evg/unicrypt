@@ -13,11 +13,11 @@ package ch.bfh.unicrypt.nizkp.classes;
 
 import ch.bfh.unicrypt.crypto.concat.classes.ConcatSchemeClass;
 import ch.bfh.unicrypt.crypto.concat.interfaces.ConcatScheme;
-import ch.bfh.unicrypt.crypto.encryption.old.ElGamalEncryptionSchemeOld;
+import ch.bfh.unicrypt.crypto.schemes.encryption.old.ElGamalEncryptionSchemeOld;
 import ch.bfh.unicrypt.crypto.encryption.interfaces.ElGamalEncryption;
-import ch.bfh.unicrypt.crypto.keygen.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.nizkp.classes.SigmaProofGeneratorClass;
-import ch.bfh.unicrypt.crypto.nizkp.interfaces.SigmaProofGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.SigmaProofGeneratorClass;
+import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;

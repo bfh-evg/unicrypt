@@ -62,7 +62,7 @@ public final class CompositeFunction extends AbstractCompoundFunction<CompositeF
    * from the co-domain of the previous function
    */
   public static CompositeFunction getInstance(final Function... functions) {
-    if (functions == null || functions.length < 1) {
+    if (functions == null || functions.length < 1 || functions[0] == null) {
       throw new IllegalArgumentException();
     }
     for (int i = 1; i < functions.length; i++) {

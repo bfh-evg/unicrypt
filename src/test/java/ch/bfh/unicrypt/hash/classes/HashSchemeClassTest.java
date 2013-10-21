@@ -11,9 +11,9 @@ import org.junit.Test;
 
 import ch.bfh.unicrypt.crypto.concat.classes.ConcatSchemeClass;
 import ch.bfh.unicrypt.crypto.concat.interfaces.ConcatScheme;
-import ch.bfh.unicrypt.crypto.encryption.classes.AESEncryptionScheme;
-import ch.bfh.unicrypt.crypto.hash.classes.StandardHashScheme;
-import ch.bfh.unicrypt.crypto.hash.interfaces.HashScheme;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.AESEncryptionScheme;
+import ch.bfh.unicrypt.crypto.schemes.hash.classes.StandardHashScheme;
+import ch.bfh.unicrypt.crypto.schemes.hash.interfaces.HashScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
 import ch.bfh.unicrypt.math.function.classes.ConcatenateFunction;
