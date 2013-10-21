@@ -1,12 +1,12 @@
 package ch.bfh.unicrypt.crypto.commitment.classes;
 
-import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractPerfectlyHidingCommitmentScheme;
+import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractRandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.classes.AdaptorFunction;
+import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
@@ -18,9 +18,9 @@ import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
-public class PedersenCommitmentScheme extends AbstractPerfectlyHidingCommitmentScheme<ZMod, ZMod, CyclicGroup, Element> {
+public class PedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme<ZMod, ZMod, CyclicGroup, Element> {
 
-  public PedersenCommitmentScheme(Function commitmentFunction, Function decommitmentFunction) {
+  protected PedersenCommitmentScheme(Function commitmentFunction, Function decommitmentFunction) {
     super(commitmentFunction, decommitmentFunction);
   }
 
@@ -63,7 +63,7 @@ public class PedersenCommitmentScheme extends AbstractPerfectlyHidingCommitmentS
     ProductGroup decommitmentDomain = ProductGroup.getInstance(zMod, zMod, cyclicGroup);
     Function decommitmentFunction = CompositeFunction.getInstance(
             MultiIdentityFunction.getInstance(decommitmentDomain, 2),
-            ProductFunction.getInstance(CompositeFunction.getInstance(AdaptorFunction.getInstance(decommitmentDomain, 0, 1),
+            ProductFunction.getInstance(CompositeFunction.getInstance(AdapterFunction.getInstance(decommitmentDomain, 0, 1),
                                                                       commitmentFunction),
                                         SelectionFunction.getInstance(decommitmentDomain, 2)),
             EqualityFunction.getInstance(cyclicGroup));

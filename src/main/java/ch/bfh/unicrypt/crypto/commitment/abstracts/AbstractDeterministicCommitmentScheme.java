@@ -1,15 +1,15 @@
 package ch.bfh.unicrypt.crypto.commitment.abstracts;
 
-import ch.bfh.unicrypt.crypto.commitment.interfaces.PerfectlyBindingCommitmentScheme;
+import ch.bfh.unicrypt.crypto.commitment.interfaces.DeterministicCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractPerfectlyBindingCommitmentScheme<M extends Set, C extends Set, CE extends Element> extends AbstractCommitmentScheme<C> implements PerfectlyBindingCommitmentScheme {
+public abstract class AbstractDeterministicCommitmentScheme<M extends Set, C extends Set, CE extends Element> extends AbstractCommitmentScheme<C> implements DeterministicCommitmentScheme {
 
-  public AbstractPerfectlyBindingCommitmentScheme(Function commitmentFunction, Function decommitmentFunction) {
+  public AbstractDeterministicCommitmentScheme(Function commitmentFunction, Function decommitmentFunction) {
     super(commitmentFunction, decommitmentFunction);
   }
 
@@ -24,8 +24,8 @@ public abstract class AbstractPerfectlyBindingCommitmentScheme<M extends Set, C 
   }
 
   @Override
-  public boolean decommit(final Element message, final Element commitment) {
-    return ((BooleanElement) this.getDecommitmentFunction().apply(message, commitment)).getBoolean();
+  public BooleanElement decommit(final Element message, final Element commitment) {
+    return (BooleanElement) this.getDecommitmentFunction().apply(message, commitment);
   }
 
 }

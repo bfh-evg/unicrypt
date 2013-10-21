@@ -39,7 +39,7 @@ public class DamgardEncodingScheme extends AbstractEncodingScheme {
 
   class EncodingFunction extends AbstractFunction<ZMod, GStarModSafePrime, GStarModElement> {
 
-    EncodingFunction(final ZMod domain, final GStarMod coDomain) {
+    protected EncodingFunction(final ZMod domain, final GStarMod coDomain) {
       super(domain, coDomain);
     }
 
@@ -57,7 +57,7 @@ public class DamgardEncodingScheme extends AbstractEncodingScheme {
 
   class DecodingFunction extends AbstractFunction<GStarModSafePrime, ZMod, ZModElement> {
 
-    DecodingFunction(final GStarMod domain, final ZMod coDomain) {
+    protected DecodingFunction(final GStarMod domain, final ZMod coDomain) {
       super(domain, coDomain);
     }
 
@@ -65,11 +65,10 @@ public class DamgardEncodingScheme extends AbstractEncodingScheme {
     protected ZModElement abstractApply(final Element element, final Random random) {
       final BigInteger value = element.getValue();
       final GStarMod domain = this.getDomain();
-      final ZMod coDomain = this.getCoDomain();
       if (value.compareTo(domain.getOrder()) <= 0) {
-        return coDomain.getElement(value.subtract(BigInteger.ONE));
+        return this.getCoDomain().getElement(value.subtract(BigInteger.ONE));
       }
-      return coDomain.getElement((domain.getModulus().subtract(value)).subtract(BigInteger.ONE));
+      return this.getCoDomain().getElement((domain.getModulus().subtract(value)).subtract(BigInteger.ONE));
     }
 
   }

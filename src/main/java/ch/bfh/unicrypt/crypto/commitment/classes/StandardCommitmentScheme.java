@@ -1,8 +1,9 @@
 package ch.bfh.unicrypt.crypto.commitment.classes;
 
-import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractCommitmentScheme;
+import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractDeterministicCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -13,32 +14,10 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class StandardCommitmentScheme extends AbstractCommitmentScheme {
+public class StandardCommitmentScheme extends AbstractDeterministicCommitmentScheme<ZMod, CyclicGroup, Element> {
 
-  public StandardCommitmentScheme(final DDHGroup ddhGroup) {
-    this(ddhGroup, ddhGroup.getDefaultGenerator());
-  }
-
-  public StandardCommitmentScheme(final DDHGroup ddhGroup, final Element generator) {
-    if ((ddhGroup == null) || (generator == null) || !ddhGroup.contains(generator)) {
-      throw new IllegalArgumentException();
-    }
-    final ZMod zModOrder = ddhGroup.getZModOrder();
-    this.messageSpace = zModOrder;
-    this.commitmentSpace = ddhGroup;
-
-    this.commitmentFunction = StandardCommitmentScheme.createCommitFunction(ddhGroup, zModOrder, generator);
-    this.decommitmentFunction = StandardCommitmentScheme.createOpenFunction(ddhGroup, zModOrder, this.commitmentFunction);
-  }
-
-  @Override
-  public ZMod getMessageSpace() {
-    return (ZMod) super.getMessageSpace();
-  }
-
-  @Override
-  public DDHGroup getCommitmentSpace() {
-    return (DDHGroup) super.getCommitmentSpace();
+  protected StandardCommitmentScheme(Function commitmentFunction, Function decommitmentFunction) {
+    super(commitmentFunction, decommitmentFunction);
   }
 
   private static Function createCommitFunction(final DDHGroup ddhGroup, final ZMod orderGroup, final Element generator) {
@@ -49,14 +28,33 @@ public class StandardCommitmentScheme extends AbstractCommitmentScheme {
     final ProductGroup openingDomain = new ProductGroup(orderGroup, ddhGroup);
     //@formatter:off
     return new CompositeFunction(
-        new MultiIdentityFunction(openingDomain,2),
-        new ProductFunction(
+            new MultiIdentityFunction(openingDomain, 2),
+            new ProductFunction(
             new CompositeFunction(
-                new SelectionFunction(openingDomain, 0),
-                commitFunction),
-            new SelectionFunction(openingDomain,1)),
-        new EqualityFunction(ddhGroup));
+            new SelectionFunction(openingDomain, 0),
+            commitFunction),
+            new SelectionFunction(openingDomain, 1)),
+            new EqualityFunction(ddhGroup));
     //@formatter:on
+  }
+
+  public static StandardCommitmentScheme getInstance(final CyclicGroup cyclicGroup) {
+    if (cyclicGroup == null) {
+      throw new IllegalArgumentException();
+    }
+    return StandardCommitmentScheme.getInstance(cyclicGroup.getDefaultGenerator());
+  }
+
+  public static StandardCommitmentScheme getInstance(final Element generator) {
+    if ((generator == null) || !generator.getSet().isCyclic() || !generator.isGenerator()) {
+      throw new IllegalArgumentException();
+    }
+    final ZMod zModOrder = cyclicGroup.getZModOrder();
+    this.messageSpace = zModOrder;
+    this.commitmentSpace = cyclicGroup;
+
+    this.commitmentFunction = StandardCommitmentScheme.createCommitFunction(cyclicGroup, zModOrder, generator);
+    this.decommitmentFunction = StandardCommitmentScheme.createOpenFunction(cyclicGroup, zModOrder, this.commitmentFunction);
   }
 
 }

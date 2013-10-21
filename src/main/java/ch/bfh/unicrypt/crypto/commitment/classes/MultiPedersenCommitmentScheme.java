@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractPerfectlyHidingCommitmentScheme;
+import ch.bfh.unicrypt.crypto.commitment.abstracts.AbstractRandomizedCommitmentScheme;
+import ch.bfh.unicrypt.crypto.commitment.interfaces.MultiCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -20,20 +21,20 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class ExtendedPedersenCommitmentScheme extends AbstractPerfectlyHidingCommitmentScheme<ZMod, ZMod, CyclicGroup, Element> {
+public class MultiPedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme<ZMod, ZMod, CyclicGroup, Element> implements MultiCommitmentScheme {
 
   private final int arity;
   private final ProductGroup messagesSpace;
 
-  public ExtendedPedersenCommitmentScheme(final DDHGroup ddhGroup, final int arity) {
+  public MultiPedersenCommitmentScheme(final DDHGroup ddhGroup, final int arity) {
     this(ddhGroup, arity, (Random) null);
   }
 
-  public ExtendedPedersenCommitmentScheme(final DDHGroup ddhGroup, final int arity, final Random random) {
-    this(ddhGroup, ExtendedPedersenCommitmentScheme.createGenerators(ddhGroup, arity, random), ddhGroup.getDefaultGenerator());
+  public MultiPedersenCommitmentScheme(final DDHGroup ddhGroup, final int arity, final Random random) {
+    this(ddhGroup, MultiPedersenCommitmentScheme.createGenerators(ddhGroup, arity, random), ddhGroup.getDefaultGenerator());
   }
 
-  public ExtendedPedersenCommitmentScheme(final DDHGroup ddhGroup, final List<Element> generators, final Element otherGenerator) {
+  public MultiPedersenCommitmentScheme(final DDHGroup ddhGroup, final List<Element> generators, final Element otherGenerator) {
     if ((ddhGroup == null) || (otherGenerator == null) || !ddhGroup.contains(otherGenerator) || (generators == null) || (generators.size() < 1)) {
       throw new IllegalArgumentException();
     }
@@ -52,20 +53,7 @@ public class ExtendedPedersenCommitmentScheme extends AbstractPerfectlyHidingCom
     return this.messagesSpace;
   }
 
-  public Element commit(final List<Element> messages, final Element randomization) {
-    if (messages == null) {
-      throw new IllegalArgumentException();
-    }
-    return this.commit(this.getMessagesSpace().getElement(messages.toArray(new Element[this.getArity()])), randomization);
-  }
-
-  public boolean open(final List<Element> messages, final Element randomization, final Element commitment) {
-    if (messages == null) {
-      throw new IllegalArgumentException();
-    }
-    return this.open(this.getMessagesSpace().getElement(messages.toArray(new Element[this.getArity()])), randomization, commitment);
-  }
-
+  @Override
   public int getArity() {
     return this.arity;
   }

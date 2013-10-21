@@ -29,7 +29,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  *
  * @author rolfhaenni
  */
-public class ElGamalEncryptionScheme extends AbstractHomomorphicEncryptionScheme<CyclicGroup, ProductGroup, ZMod, GStarModElement, Tuple> {
+public class ElGamalEncryptionScheme extends AbstractHomomorphicEncryptionScheme<CyclicGroup, ProductGroup, ZMod, Element, Tuple> {
 
   Function encryptionFunctionLeft;
   Function encryptionFunctionRight;

@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.commitment.abstracts;
 
-import ch.bfh.unicrypt.crypto.commitment.interfaces.PerfectlyHidingCommitmentScheme;
+import ch.bfh.unicrypt.crypto.commitment.interfaces.RandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -8,9 +8,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractPerfectlyHidingCommitmentScheme<M extends Set, R extends Set, C extends Set, CE extends Element> extends AbstractCommitmentScheme<C> implements PerfectlyHidingCommitmentScheme {
+public abstract class AbstractRandomizedCommitmentScheme<M extends Set, R extends Set, C extends Set, CE extends Element> extends AbstractCommitmentScheme<C> implements RandomizedCommitmentScheme {
 
-  public AbstractPerfectlyHidingCommitmentScheme(Function commitmentFunction, Function decommitmentFunction) {
+  public AbstractRandomizedCommitmentScheme(Function commitmentFunction, Function decommitmentFunction) {
     super(commitmentFunction, decommitmentFunction);
   }
 
@@ -30,8 +30,8 @@ public abstract class AbstractPerfectlyHidingCommitmentScheme<M extends Set, R e
   }
 
   @Override
-  public boolean decommit(final Element message, final Element randomization, final Element commitment) {
-    return ((BooleanElement) this.getDecommitmentFunction().apply(message, randomization, commitment)).getBoolean();
+  public BooleanElement decommit(final Element message, final Element randomization, final Element commitment) {
+    return (BooleanElement) this.getDecommitmentFunction().apply(message, randomization, commitment);
   }
 
 }

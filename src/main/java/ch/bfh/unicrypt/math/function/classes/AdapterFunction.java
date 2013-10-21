@@ -18,11 +18,11 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class AdaptorFunction extends AbstractFunction<ProductSet, ProductSet, Tuple> {
+public class AdapterFunction extends AbstractFunction<ProductSet, ProductSet, Tuple> {
 
   private final int[] indices;
 
-  private AdaptorFunction(final ProductSet domain, final ProductSet coDomain, int[] indices) {
+  private AdapterFunction(final ProductSet domain, final ProductSet coDomain, int[] indices) {
     super(domain, coDomain);
     this.indices = indices;
   }
@@ -33,7 +33,7 @@ public class AdaptorFunction extends AbstractFunction<ProductSet, ProductSet, Tu
 
   @Override
   protected boolean standardEquals(Function function) {
-    return Arrays.equals(this.getIndices(), ((AdaptorFunction) function).getIndices());
+    return Arrays.equals(this.getIndices(), ((AdapterFunction) function).getIndices());
   }
 
   @Override
@@ -71,7 +71,7 @@ public class AdaptorFunction extends AbstractFunction<ProductSet, ProductSet, Tu
    * @throws IndexOutOfBoundsException if {@code indices} contains an
    * out-of-bounds index
    */
-  public static AdaptorFunction getInstance(final ProductSet productSet, final int... indices) {
+  public static AdapterFunction getInstance(final ProductSet productSet, final int... indices) {
     if (productSet == null || indices == null) {
       throw new IllegalArgumentException();
     }
@@ -79,7 +79,7 @@ public class AdaptorFunction extends AbstractFunction<ProductSet, ProductSet, Tu
     for (int i = 0; i < indices.length; i++) {
       sets[i] = productSet.getAt(indices[i]);
     }
-    return new AdaptorFunction(productSet, ProductSet.getInstance(sets), indices);
+    return new AdapterFunction(productSet, ProductSet.getInstance(sets), indices);
   }
 
 }
