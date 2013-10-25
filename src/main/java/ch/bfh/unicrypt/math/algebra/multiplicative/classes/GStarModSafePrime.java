@@ -20,6 +20,11 @@ public class GStarModSafePrime extends GStarModPrime {
     super(modulo, Prime.getInstance(modulo.getValue().subtract(BigInteger.ONE).divide(BigInteger.valueOf(2))));
   }
 
+  @Override
+  public String standardToStringContent() {
+    return this.getModulus().toString();
+  }
+
   public static GStarModSafePrime getInstance(final SafePrime safePrime) {
     if (safePrime == null) {
       throw new IllegalArgumentException();
@@ -35,12 +40,12 @@ public class GStarModSafePrime extends GStarModPrime {
     return new GStarModSafePrime(SafePrime.getInstance(modulus));
   }
 
-  public static GStarModSafePrime getRandomInstance(int bitLength, Random random) {
-    return new GStarModSafePrime(SafePrime.getRandomInstance(bitLength, random));
-  }
-
   public static GStarModSafePrime getRandomInstance(int bitLength) {
     return GStarModSafePrime.getRandomInstance(bitLength, (Random) null);
+  }
+
+  public static GStarModSafePrime getRandomInstance(int bitLength, Random random) {
+    return new GStarModSafePrime(SafePrime.getRandomInstance(bitLength, random));
   }
 
 }

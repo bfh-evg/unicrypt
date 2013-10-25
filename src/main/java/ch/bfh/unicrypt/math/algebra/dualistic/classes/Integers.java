@@ -100,7 +100,7 @@ public class Integers extends AbstractCyclicRing<IntegerElement> {
 
   @Override
   protected IntegerElement abstractGetRandomGenerator(final Random random) {
-    if (RandomUtil.createRandomBoolean(random)) {
+    if (RandomUtil.getRandomBoolean(random)) {
       return this.getDefaultGenerator();
     }
     return this.getDefaultGenerator().invert();

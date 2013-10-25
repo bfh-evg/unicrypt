@@ -32,7 +32,7 @@ public class Prime extends SpecialFactorization {
   }
 
   public static Prime getRandomInstance(int bitLength, Random random) {
-    return Prime.getInstance(RandomUtil.createRandomPrime(bitLength, random));
+    return Prime.getInstance(RandomUtil.getRandomPrime(bitLength, random));
   }
 
 }

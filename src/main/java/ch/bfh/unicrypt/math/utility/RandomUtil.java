@@ -21,7 +21,39 @@ public final class RandomUtil {
   /**
    * The default pseudo random number generator
    */
-  private static SecureRandom defaultRandomGenerator = RandomUtil.createRandomGenerator();
+  private static SecureRandom defaultRandomNumberGenerator;
+
+  static {
+    RandomUtil.defaultRandomNumberGenerator = RandomUtil.getRandomNumberGenerator();
+    RandomUtil.defaultRandomNumberGenerator.nextBoolean(); // initiates the entropy gathering
+  }
+
+  /**
+   * Creates a new pseudo random number generator.
+   *
+   * @return The new random generator
+   */
+  public static SecureRandom getRandomNumberGenerator() {
+    SecureRandom randomNumberGenerator;
+    try {
+      randomNumberGenerator = SecureRandom.getInstance("SHA1PRNG");
+    } catch (final NoSuchAlgorithmException e) {
+      randomNumberGenerator = new SecureRandom();
+    }
+    return randomNumberGenerator;
+  }
+
+  public static SecureRandom getRandomNumberGenerator(byte[] seed) {
+    SecureRandom randomNumberGenerator = RandomUtil.getRandomNumberGenerator();
+    randomNumberGenerator.setSeed(seed);
+    return randomNumberGenerator;
+  }
+
+  public static SecureRandom getRandomNumberGenerator(long seed) {
+    SecureRandom randomNumberGenerator = RandomUtil.getRandomNumberGenerator();
+    randomNumberGenerator.setSeed(seed);
+    return randomNumberGenerator;
+  }
 
   /**
    * This is a helper method to switch between the default pseudo random number
@@ -32,42 +64,11 @@ public final class RandomUtil {
    * @return {@code random}, if
    * {@code random != null}, {@code defaultRandomGenerator} otherwise
    */
-  private static Random getRandomGenerator(final Random random) {
+  private static Random getRandomNumberGenerator(final Random random) {
     if (random == null) {
-      return RandomUtil.defaultRandomGenerator;
+      return RandomUtil.defaultRandomNumberGenerator;
     }
     return random;
-  }
-
-  /**
-   * Creates a new pseudo random number generator seeded with system-wide
-   * entropy
-   *
-   * @return The new random generator
-   */
-  public static SecureRandom createRandomGenerator() {
-    return createRandomGenerator((byte[]) null);
-  }
-
-  /**
-   * Creates a new pseudo random number generator for a given ByteArray seed. If
-   * no seed is given, it is gathered from system-wide entropy
-   *
-   * @return The new random generator
-   */
-  public static SecureRandom createRandomGenerator(byte[] seed) {
-    SecureRandom randomGenerator;
-    try {
-      randomGenerator = SecureRandom.getInstance("SHA1PRNG");
-    } catch (final NoSuchAlgorithmException e) {
-      randomGenerator = new SecureRandom();
-    }
-    if (seed == null) {
-      randomGenerator.nextBoolean(); // initiates the entropy gathering
-    } else {
-      randomGenerator.setSeed(seed);
-    }
-    return randomGenerator;
   }
 
   /**
@@ -75,8 +76,8 @@ public final class RandomUtil {
    *
    * @return The random boolean value
    */
-  public static boolean createRandomBoolean() {
-    return RandomUtil.createRandomBoolean((Random) null);
+  public static boolean getRandomBoolean() {
+    return RandomUtil.getRandomBoolean((Random) null);
   }
 
   /**
@@ -85,8 +86,8 @@ public final class RandomUtil {
    * @param random The given random generator
    * @return The random boolean value
    */
-  public static boolean createRandomBoolean(final Random random) {
-    return RandomUtil.getRandomGenerator(random).nextBoolean();
+  public static boolean getRandomBoolean(final Random random) {
+    return RandomUtil.getRandomNumberGenerator(random).nextBoolean();
   }
 
   /**
@@ -97,8 +98,8 @@ public final class RandomUtil {
    * @return The random integer
    * @throws IllegalArgumentException if {@code maxValue < 0}
    */
-  public static int createRandomInt(final int maxValue) {
-    return RandomUtil.createRandomInt(maxValue, (Random) null);
+  public static int getRandomInteger(final int maxValue) {
+    return RandomUtil.getRandomInteger(maxValue, (Random) null);
   }
 
   /**
@@ -110,8 +111,8 @@ public final class RandomUtil {
    * @return The random integer
    * @throws IllegalArgumentException if {@code maxValue < minValue}
    */
-  public static int createRandomInt(final int minValue, final int maxValue) {
-    return RandomUtil.createRandomInt(minValue, maxValue, (Random) null);
+  public static int getRandomInteger(final int minValue, final int maxValue) {
+    return RandomUtil.getRandomInteger(minValue, maxValue, (Random) null);
   }
 
   /**
@@ -124,8 +125,8 @@ public final class RandomUtil {
    * @return The random integer
    * @throws IllegalArgumentException if {@code maxValue < minValue}
    */
-  public static int createRandomInt(final int minValue, final int maxValue, final Random random) {
-    return RandomUtil.createRandomInt(maxValue - minValue, random) + minValue;
+  public static int getRandomInteger(final int minValue, final int maxValue, final Random random) {
+    return RandomUtil.getRandomInteger(maxValue - minValue, random) + minValue;
   }
 
   /**
@@ -137,11 +138,11 @@ public final class RandomUtil {
    * @return The random integer
    * @throws IllegalArgumentException if {@code maxValue < 0}
    */
-  public static int createRandomInt(final int maxValue, final Random random) {
+  public static int getRandomInteger(final int maxValue, final Random random) {
     if (maxValue < 0) {
       throw new IllegalArgumentException();
     }
-    return RandomUtil.getRandomGenerator(random).nextInt(maxValue + 1);
+    return RandomUtil.getRandomNumberGenerator(random).nextInt(maxValue + 1);
   }
 
   /**
@@ -152,8 +153,8 @@ public final class RandomUtil {
    * @return The random BigInteger value
    * @throws IllegalArgumentException if {@code bitLength < 0}
    */
-  public static BigInteger createRandomBigInteger(final int bitLength) {
-    return RandomUtil.createRandomBigInteger(bitLength, (Random) null);
+  public static BigInteger getRandomBigInteger(final int bitLength) {
+    return RandomUtil.getRandomBigInteger(bitLength, (Random) null);
   }
 
   /**
@@ -165,14 +166,14 @@ public final class RandomUtil {
    * @return The random BigInteger value
    * @throws IllegalArgumentException if {@code bitLength < 0}
    */
-  public static BigInteger createRandomBigInteger(final int bitLength, final Random random) {
+  public static BigInteger getRandomBigInteger(final int bitLength, final Random random) {
     if (bitLength < 0) {
       throw new IllegalArgumentException();
     }
     if (bitLength == 0) {
       return BigInteger.ZERO;
     }
-    return new BigInteger(bitLength - 1, RandomUtil.getRandomGenerator(random)).add(BigInteger.valueOf(2).pow(bitLength - 1));
+    return new BigInteger(bitLength - 1, RandomUtil.getRandomNumberGenerator(random)).add(BigInteger.valueOf(2).pow(bitLength - 1));
   }
 
   /**
@@ -183,8 +184,8 @@ public final class RandomUtil {
    * @return The random BigInteger value
    * @throws IllegalArgumentException if {@code maxValue} is null or if {@code maxValue < 0}
    */
-  public static BigInteger createRandomBigInteger(final BigInteger maxValue) {
-    return RandomUtil.createRandomBigInteger(maxValue, (Random) null);
+  public static BigInteger getRandomBigInteger(final BigInteger maxValue) {
+    return RandomUtil.getRandomBigInteger(maxValue, (Random) null);
   }
 
   /**
@@ -196,14 +197,14 @@ public final class RandomUtil {
    * @return The random BigInteger value
    * @throws IllegalArgumentException if {@code maxValue} is null or if {@code maxValue < 0}
    */
-  public static BigInteger createRandomBigInteger(final BigInteger maxValue, final Random random) {
+  public static BigInteger getRandomBigInteger(final BigInteger maxValue, final Random random) {
     if (maxValue == null || maxValue.signum() < 0) {
       throw new IllegalArgumentException();
     }
     BigInteger randomValue;
     int bitLength = maxValue.bitLength();
     do {
-      randomValue = new BigInteger(bitLength, RandomUtil.getRandomGenerator(random));
+      randomValue = new BigInteger(bitLength, RandomUtil.getRandomNumberGenerator(random));
     } while (randomValue.compareTo(maxValue) > 0);
     return randomValue;
   }
@@ -218,8 +219,8 @@ public final class RandomUtil {
    * @throws IllegalArgumentException if {@code minValue} or {@code maxValue} is
    * null, or if {@code maxValue < minValue}
    */
-  public static BigInteger createRandomBigInteger(final BigInteger minValue, final BigInteger maxValue) {
-    return RandomUtil.createRandomBigInteger(minValue, maxValue, (Random) null);
+  public static BigInteger getRandomBigInteger(final BigInteger minValue, final BigInteger maxValue) {
+    return RandomUtil.getRandomBigInteger(minValue, maxValue, (Random) null);
   }
 
   /**
@@ -233,11 +234,11 @@ public final class RandomUtil {
    * @throws IllegalArgumentException if {@code minValue} or {@code maxValue} is
    * null, or if {@code maxValue < minValue}
    */
-  public static BigInteger createRandomBigInteger(final BigInteger minValue, final BigInteger maxValue, final Random random) {
+  public static BigInteger getRandomBigInteger(final BigInteger minValue, final BigInteger maxValue, final Random random) {
     if (minValue == null || maxValue == null) {
       throw new IllegalArgumentException();
     }
-    return RandomUtil.createRandomBigInteger(maxValue.subtract(minValue), random).add(minValue);
+    return RandomUtil.getRandomBigInteger(maxValue.subtract(minValue), random).add(minValue);
   }
 
   /**
@@ -248,8 +249,8 @@ public final class RandomUtil {
    * @return The random BigInteger prime number
    * @throws IllegalArgumentException if {@code bitLength < 2}
    */
-  public static BigInteger createRandomPrime(final int bitLength) {
-    return RandomUtil.createRandomPrime(bitLength, (Random) null);
+  public static BigInteger getRandomPrime(final int bitLength) {
+    return RandomUtil.getRandomPrime(bitLength, (Random) null);
   }
 
   /**
@@ -261,11 +262,11 @@ public final class RandomUtil {
    * @return The random BigInteger prime number
    * @throws IllegalArgumentException if {@code bitLength < 2}
    */
-  public static BigInteger createRandomPrime(final int bitLength, final Random random) {
+  public static BigInteger getRandomPrime(final int bitLength, final Random random) {
     if (bitLength < 2) {
       throw new IllegalArgumentException();
     }
-    return new BigInteger(bitLength, MathUtil.NUMBER_OF_PRIME_TESTS, RandomUtil.getRandomGenerator(random));
+    return new BigInteger(bitLength, MathUtil.NUMBER_OF_PRIME_TESTS, RandomUtil.getRandomNumberGenerator(random));
   }
 
   /**
@@ -276,8 +277,8 @@ public final class RandomUtil {
    * @return The random BigInteger save prime number
    * @throws IllegalArgumentException if {@code bitLength < 3}
    */
-  public static BigInteger createRandomSavePrime(final int bitLength) {
-    return RandomUtil.createRandomSavePrime(bitLength, (Random) null);
+  public static BigInteger getRandomSavePrime(final int bitLength) {
+    return RandomUtil.getRandomSavePrime(bitLength, (Random) null);
   }
 
   /**
@@ -291,11 +292,11 @@ public final class RandomUtil {
    * @
    * see "Handbook of Applied Cryptography, Algorithm 4.86"
    */
-  public static BigInteger createRandomSavePrime(final int bitLength, final Random random) {
+  public static BigInteger getRandomSavePrime(final int bitLength, final Random random) {
     BigInteger prime;
     BigInteger savePrime;
     do {
-      prime = RandomUtil.createRandomPrime(bitLength - 1, random);
+      prime = RandomUtil.getRandomPrime(bitLength - 1, random);
       savePrime = prime.shiftLeft(1).add(BigInteger.ONE);
     } while (!MathUtil.isPrime(savePrime));
     return savePrime;
@@ -311,8 +312,8 @@ public final class RandomUtil {
    * @param bitLength2 The bit length of the second random prime
    * @throws IllegalArgumentException if {@code bitLength1 <= bitLength2} or {@code bitLengh2<2}
    */
-  public static BigInteger[] createRandomPrimePair(final int bitLength1, final int bitLength2) {
-    return RandomUtil.createRandomPrimePair(bitLength1, bitLength2, (Random) null);
+  public static BigInteger[] getRandomPrimePair(final int bitLength1, final int bitLength2) {
+    return RandomUtil.getRandomPrimePair(bitLength1, bitLength2, (Random) null);
   }
 
   /**
@@ -326,7 +327,7 @@ public final class RandomUtil {
    * @param random The given random generator
    * @throws IllegalArgumentException if {@code bitLength1 <= bitLength2} or {@code bitLengh2<2}
    */
-  public static BigInteger[] createRandomPrimePair(final int bitLength1, final int bitLength2, final Random random) {
+  public static BigInteger[] getRandomPrimePair(final int bitLength1, final int bitLength2, final Random random) {
     if (bitLength1 <= bitLength2 || bitLength2 < 2) {
       throw new IllegalArgumentException();
     }
@@ -334,10 +335,10 @@ public final class RandomUtil {
     BigInteger prime1, prime2;
     BigInteger minValue, maxValue;
     do {
-      prime2 = RandomUtil.createRandomPrime(bitLength2, random);
+      prime2 = RandomUtil.getRandomPrime(bitLength2, random);
       minValue = BigInteger.ONE.shiftLeft(bitLength1 - 1);
       maxValue = BigInteger.ONE.shiftLeft(bitLength1).subtract(BigInteger.ONE);
-      k = RandomUtil.createRandomBigInteger(minValue.divide(prime2).add(BigInteger.ONE), maxValue.divide(prime2), random);
+      k = RandomUtil.getRandomBigInteger(minValue.divide(prime2).add(BigInteger.ONE), maxValue.divide(prime2), random);
       prime1 = prime2.multiply(k).add(BigInteger.ONE);
     } while (!MathUtil.isPrime(prime1));
     return new BigInteger[]{prime1, prime2};

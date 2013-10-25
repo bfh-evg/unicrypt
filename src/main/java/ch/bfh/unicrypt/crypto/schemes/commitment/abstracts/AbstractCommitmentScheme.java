@@ -32,4 +32,9 @@ public abstract class AbstractCommitmentScheme<M extends Set, C extends Set> ext
     return this.decommitmentFunction;
   }
 
+  @Override
+  protected String standardToStringContent() {
+    return this.getMessageSpace().toString() + "," + this.getCommitmentSpace();
+  }
+
 }

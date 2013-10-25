@@ -124,7 +124,7 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
 
   @Override
   protected ZModElement abstractGetRandomElement(Random random) {
-    return this.abstractGetElement(RandomUtil.createRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
+    return this.abstractGetElement(RandomUtil.getRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
   }
 
   @Override
@@ -186,7 +186,7 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
     if (bitLength < 2) {
       throw new IllegalArgumentException();
     }
-    return ZMod.getInstance(RandomUtil.createRandomBigInteger(bitLength, random));
+    return ZMod.getInstance(RandomUtil.getRandomBigInteger(bitLength, random));
   }
 
   public static ZMod getRandomInstance(int bitLength) {

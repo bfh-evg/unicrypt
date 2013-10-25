@@ -11,6 +11,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
+import ch.bfh.unicrypt.math.utility.RandomUtil;
 
 /**
  *
@@ -19,6 +20,7 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
   private Tuple defaultGenerator;
+  private static final Random defaultRandomNumberGenerator = RandomUtil.getRandomNumberGenerator();
 
   protected ProductCyclicGroup(final CyclicGroup[] cyclicGroups) {
     super(cyclicGroups);
@@ -90,6 +92,23 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
       randomElements[i] = this.getAt(i).getRandomElement(random);
     }
     return this.standardGetElement(randomElements);
+  }
+
+  @Override
+  public final Tuple getIndependentGenerator(long i) {
+    return getIndependentGenerator(i, (Random) null);
+  }
+
+  @Override
+  public final Tuple getIndependentGenerator(long i, Random random) {
+    if (i < 0) {
+      throw new IllegalArgumentException();
+    }
+    if (random == null) {
+      random = ProductCyclicGroup.defaultRandomNumberGenerator;
+    }
+    random.setSeed(i);
+    return this.getRandomGenerator(random);
   }
 
   @Override

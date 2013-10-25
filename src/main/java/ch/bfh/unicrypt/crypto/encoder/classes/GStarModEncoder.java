@@ -14,18 +14,18 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 
-public class DamgardEncoder extends AbstractEncoder<ZMod, GStarModSafePrime, ZModElement, GStarModElement> {
+public class GStarModEncoder extends AbstractEncoder<ZMod, GStarModSafePrime, ZModElement, GStarModElement> {
 
-  protected DamgardEncoder(Function encodingFunction, Function decodingFunction) {
+  protected GStarModEncoder(Function encodingFunction, Function decodingFunction) {
     super(encodingFunction, decodingFunction);
   }
 
-  public static DamgardEncoder getInstance(final GStarModSafePrime gStar) {
+  public static GStarModEncoder getInstance(final GStarModSafePrime gStar) {
     if (gStar == null) {
       throw new IllegalArgumentException();
     }
     ZMod orderGroup = gStar.getZModOrder();
-    return new DamgardEncoder(new EncodingFunction(orderGroup, gStar), new DecodingFunction(gStar, orderGroup));
+    return new GStarModEncoder(new EncodingFunction(orderGroup, gStar), new DecodingFunction(gStar, orderGroup));
   }
 
 }

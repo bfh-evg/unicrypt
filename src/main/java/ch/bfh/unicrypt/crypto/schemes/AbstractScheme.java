@@ -6,12 +6,13 @@ package ch.bfh.unicrypt.crypto.schemes;
 
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractScheme<M extends Set> implements Scheme {
+public abstract class AbstractScheme<M extends Set> extends UniCrypt implements Scheme {
 
   private Encoder encoder;
 

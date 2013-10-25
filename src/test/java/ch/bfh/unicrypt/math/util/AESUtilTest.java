@@ -47,7 +47,7 @@ public class AESUtilTest {
 
   @Test
   public void testRandomDecrypts() throws Exception {
-    Random random = RandomUtil.createRandomGenerator(new byte[] { 1, 2, 3, 4, 5 });
+    Random random = RandomUtil.getRandomNumberGenerator(new byte[] { 1, 2, 3, 4, 5 });
     byte[] randomBytes = null;
     for (int i = 0; i < 1000; i++) {
       randomBytes = new byte[random.nextInt(20) + 10];

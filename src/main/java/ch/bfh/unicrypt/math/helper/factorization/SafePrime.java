@@ -36,7 +36,7 @@ public class SafePrime extends Prime {
   }
 
   public static SafePrime getRandomInstance(int bitLength, Random random) {
-    return new SafePrime(RandomUtil.createRandomSavePrime(bitLength, random));
+    return new SafePrime(RandomUtil.getRandomSavePrime(bitLength, random));
   }
 
 }

@@ -116,7 +116,7 @@ public class Permutation {
     int[] permutationVector = new int[size];
     int randomIndex;
     for (int i = 0; i < size; i++) {
-      randomIndex = RandomUtil.createRandomInt(i, random);
+      randomIndex = RandomUtil.getRandomInteger(i, random);
       permutationVector[i] = permutationVector[randomIndex];
       permutationVector[randomIndex] = i;
     }

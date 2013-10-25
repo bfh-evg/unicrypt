@@ -49,7 +49,7 @@ public class BooleanSet extends AbstractSet<BooleanElement> {
 
   @Override
   protected BooleanElement abstractGetRandomElement(Random random) {
-    return this.getElement(RandomUtil.createRandomBoolean(random));
+    return this.getElement(RandomUtil.getRandomBoolean(random));
   }
 
   @Override

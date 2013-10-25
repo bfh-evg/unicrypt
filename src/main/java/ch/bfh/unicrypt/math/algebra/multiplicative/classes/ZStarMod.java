@@ -135,7 +135,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
   protected ZStarModElement abstractGetRandomElement(final Random random) {
     BigInteger randomValue;
     do {
-      randomValue = RandomUtil.createRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
+      randomValue = RandomUtil.getRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
     } while (!this.contains(randomValue));
     return this.abstractGetElement(randomValue);
   }
@@ -221,7 +221,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
     if (bitLength < 1) {
       throw new IllegalArgumentException();
     }
-    return ZStarMod.getInstance(RandomUtil.createRandomBigInteger(bitLength, random));
+    return ZStarMod.getInstance(RandomUtil.getRandomBigInteger(bitLength, random));
   }
 
   public static ZStarMod getRandomInstance(int bitLength) {

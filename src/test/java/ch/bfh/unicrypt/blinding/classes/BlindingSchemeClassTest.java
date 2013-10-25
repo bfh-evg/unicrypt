@@ -57,7 +57,7 @@ public class BlindingSchemeClassTest {
   
   @Test(expected = IllegalArgumentException.class)
   public void testBlindElementNonInvertableNull() {
-    Random r = RandomUtil.createRandomGenerator(new byte[] { 1 });
+    Random r = RandomUtil.getRandomNumberGenerator(new byte[] { 1 });
     Group g = new GStarSave(BigInteger.valueOf(23));
     BlindingScheme bs = new StandardBlindingScheme(g);
     Element be = bs.blind(null);
@@ -66,7 +66,7 @@ public class BlindingSchemeClassTest {
 
   @Test
   public void testBlindElementNonInvertable() {
-    Random r = RandomUtil.createRandomGenerator(new byte[] { 1 });
+    Random r = RandomUtil.getRandomNumberGenerator(new byte[] { 1 });
     Group g = new GStarSave(BigInteger.valueOf(23));
     Element e = g.getRandomElement(r);
     BlindingScheme bs = new StandardBlindingScheme(g);
@@ -76,7 +76,7 @@ public class BlindingSchemeClassTest {
 
   @Test
   public void testBlindElementAdditiveElement() {
-    Random r = RandomUtil.createRandomGenerator(new byte[] { 1 });
+    Random r = RandomUtil.getRandomNumberGenerator(new byte[] { 1 });
     AtomicGroup g = new GStarSave(BigInteger.valueOf(23));
     AtomicElement e = g.getRandomElement(r);
     AdditiveElement blindingValue = g.getMinOrderGroup().getRandomElement(r);
@@ -87,7 +87,7 @@ public class BlindingSchemeClassTest {
   
   @Test(expected=IllegalArgumentException.class)
   public void testBlindElementAdditiveElementNull() {
-    Random r = RandomUtil.createRandomGenerator(new byte[] { 1 });
+    Random r = RandomUtil.getRandomNumberGenerator(new byte[] { 1 });
     AtomicGroup g = new GStarSave(BigInteger.valueOf(23));
     AtomicElement e = g.getRandomElement(r);
     AdditiveElement blindingValue = g.getMinOrderGroup().getRandomElement(r);
@@ -97,7 +97,7 @@ public class BlindingSchemeClassTest {
 
   @Test
   public void testBlindElementRandom() {
-    Random r = RandomUtil.createRandomGenerator(new byte[] { 1 });
+    Random r = RandomUtil.getRandomNumberGenerator(new byte[] { 1 });
     Group g = new GStarSave(BigInteger.valueOf(23));
     Element e = g.getRandomElement(r);
     BlindingScheme bs = new StandardBlindingScheme(g);
@@ -106,7 +106,7 @@ public class BlindingSchemeClassTest {
   }
   @Test
   public void testBlindElementRandomNull() {
-    Random r = RandomUtil.createRandomGenerator(new byte[] { 1 });
+    Random r = RandomUtil.getRandomNumberGenerator(new byte[] { 1 });
     Group g = new GStarSave(BigInteger.valueOf(23));
     Element e = g.getRandomElement(r);
     BlindingScheme bs = new StandardBlindingScheme(g);
@@ -140,7 +140,7 @@ public class BlindingSchemeClassTest {
 
   @Test(expected= IllegalArgumentException.class)
   public void testGetBlindingFunctionElementNull() {
-    Random r = RandomUtil.createRandomGenerator(new byte[] { 1 });
+    Random r = RandomUtil.getRandomNumberGenerator(new byte[] { 1 });
     Group g = new GStarSave(BigInteger.valueOf(23));
     Element e = g.getRandomElement(r);
     BlindingScheme bs = new StandardBlindingScheme(g);
@@ -151,7 +151,7 @@ public class BlindingSchemeClassTest {
   
   @Test(expected= IllegalArgumentException.class)
   public void testGetBlindingFunctionElementWrong() {
-    Random r = RandomUtil.createRandomGenerator(new byte[] { 1 });
+    Random r = RandomUtil.getRandomNumberGenerator(new byte[] { 1 });
     Group g = new GStarSave(BigInteger.valueOf(23));
     Element e = g.getRandomElement(r);
     BlindingScheme bs = new StandardBlindingScheme(g);
@@ -161,7 +161,7 @@ public class BlindingSchemeClassTest {
   
   @Test
   public void testGetBlindingFunctionElement() {
-    Random r = RandomUtil.createRandomGenerator(new byte[] { 1 });
+    Random r = RandomUtil.getRandomNumberGenerator(new byte[] { 1 });
     Group g = new GStarSave(BigInteger.valueOf(23));
     Element e = g.getRandomElement(r);
     BlindingScheme bs = new StandardBlindingScheme(g);

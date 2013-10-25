@@ -1,102 +1,129 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import ch.bfh.unicrypt.crypto.encoder.classes.GeneralEncoder;
+import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
-import ch.bfh.unicrypt.crypto.schemes.commitment.interfaces.MultiCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
+import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
+import ch.bfh.unicrypt.math.function.classes.GenericFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
-import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.Random;
 
-public class MultiPedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme<ProductSet, ZMod, CyclicGroup, Element> implements MultiCommitmentScheme {
+public class MultiPedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme<Set, ZMod, CyclicGroup, Element> {
 
-  private final int arity;
-  private final ProductGroup messagesSpace;
-
-  public MultiPedersenCommitmentScheme(final DDHGroup ddhGroup, final int arity) {
-    this(ddhGroup, arity, (Random) null);
+  protected MultiPedersenCommitmentScheme(Encoder encoder, Function commitmentFunction, Function decommitmentFunction) {
+    super(encoder, commitmentFunction, decommitmentFunction);
   }
 
-  public MultiPedersenCommitmentScheme(final DDHGroup ddhGroup, final int arity, final Random random) {
-    this(ddhGroup, MultiPedersenCommitmentScheme.createGenerators(ddhGroup, arity, random), ddhGroup.getDefaultGenerator());
+//  @Override
+//  public GenericFunction<ProductGroup, BooleanSet, BooleanElement> getDecommitmentFunction() {
+//    return (GenericFunction<ProductGroup, BooleanSet, BooleanElement>) super.getDecommitmentFunction();
+//  }
+  public static MultiPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup) {
+    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, (Encoder) null);
   }
 
-  public MultiPedersenCommitmentScheme(final DDHGroup ddhGroup, final List<Element> generators, final Element otherGenerator) {
-    if ((ddhGroup == null) || (otherGenerator == null) || !ddhGroup.contains(otherGenerator) || (generators == null) || (generators.size() < 1)) {
+  public static MultiPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, Set messageSpace) {
+    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, GeneralEncoder.getInstance(messageSpace));
+  }
+
+  public static MultiPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, Encoder encoder) {
+    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, (Random) null, encoder);
+  }
+
+  public static MultiPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Random random) {
+    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, random, (Encoder) null);
+  }
+
+  public static MultiPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Random random, Set messageSpace) {
+    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, random, GeneralEncoder.getInstance(messageSpace));
+  }
+
+  public static MultiPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Random random, Encoder encoder) {
+    if (cyclicGroup == null) {
       throw new IllegalArgumentException();
     }
-    this.arity = generators.size();
-    final ZMod orderGroup = ddhGroup.getZModOrder();
-    this.messageSpace = orderGroup;
-    this.messagesSpace = new PowerGroup(orderGroup, this.arity);
-    this.randomizationSpace = orderGroup;
-    this.commitmentSpace = ddhGroup;
-
-    this.commitFunction = this.createCommitFunction(generators, otherGenerator);
-    this.openFunction = this.createOpeningFunction();
+    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup.getDefaultGenerator(), cyclicGroup.getRandomGenerator(random), encoder);
   }
 
-  public ProductGroup getMessagesSpace() {
-    return this.messagesSpace;
+  public static MultiPedersenCommitmentScheme getInstance(final Element generator, final Random random) {
+    return MultiPedersenCommitmentScheme.getInstance(generator, random, (Encoder) null);
   }
 
-  @Override
-  public int getArity() {
-    return this.arity;
+  public static MultiPedersenCommitmentScheme getInstance(final Element generator, final Random random, Set messageSpace) {
+    return MultiPedersenCommitmentScheme.getInstance(generator, random, GeneralEncoder.getInstance(messageSpace));
   }
 
-  private static List<Element> createGenerators(final DDHGroup ddhGroup, final int arity, final Random random) {
-    final List<Element> generators = new ArrayList<Element>();
-    for (int i = 0; i < arity; i++) {
-      generators.add(ddhGroup.getRandomGenerator(random));
+  public static MultiPedersenCommitmentScheme getInstance(final Element generator, final Random random, Encoder encoder) {
+    if (generator == null || !generator.getSet().isCyclic()) {
+      throw new IllegalArgumentException();
     }
-    return generators;
+    return MultiPedersenCommitmentScheme.getInstance(generator, ((CyclicGroup) generator.getSet()).getRandomGenerator(random), encoder);
   }
 
-  private Function createCommitFunction(final List<Element> generators, final Element otherGenerator) {
-    final Function[] functions = new Function[this.getArity()];
-    for (int i = 0; i < this.getArity(); i++) {
-      functions[i] = new SelfApplyFunction(this.getCommitmentSpace(), this.getMessageSpace()).partiallyApply(generators.get(i), 0);
+  public static MultiPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Element otherGenerator) {
+    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, otherGenerator, (Encoder) null);
+  }
+
+  public static MultiPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Element otherGenerator, Set messageSpace) {
+    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, otherGenerator, GeneralEncoder.getInstance(messageSpace));
+  }
+
+  public static MultiPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final Element otherGenerator, Encoder encoder) {
+    if (cyclicGroup == null) {
+      throw new IllegalArgumentException();
     }
-    //@formatter:off
-    return new CompositeFunction(
-            new ProductFunction(
-            new CompositeFunction(
-            new ProductFunction(functions),
-            new ApplyFunction(this.getCommitmentSpace(), this.getArity())),
-            new SelfApplyFunction(this.getCommitmentSpace(), this.getRandomizationSpace()).partiallyApply(otherGenerator, 0)),
-            new ApplyFunction(this.getCommitmentSpace()));
-    //@formatter:on
+    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup.getDefaultGenerator(), otherGenerator, encoder);
   }
 
-  private Function createOpeningFunction() {
-    final ProductGroup openingDomain = new ProductGroup(this.getMessagesSpace(), this.getRandomizationSpace(), this.getCommitmentSpace());
-    //@formatter:off
-    return new CompositeFunction(
-            new MultiIdentityFunction(openingDomain, 2),
-            new ProductFunction(
-            new CompositeFunction(
-            new MultiIdentityFunction(openingDomain, 2),
-            new ProductFunction(
-            new SelectionFunction(openingDomain, 0),
-            new SelectionFunction(openingDomain, 1)),
-            this.getCommitmentFunction()),
-            new SelectionFunction(openingDomain, 2)),
-            new EqualityFunction(this.getCommitmentSpace()));
-    //@formatter:on
+  public static MultiPedersenCommitmentScheme getInstance(final Element generator, final Element otherGenerator) {
+    return MultiPedersenCommitmentScheme.getInstance(generator, otherGenerator, (Encoder) null);
+  }
+
+  public static MultiPedersenCommitmentScheme getInstance(final Element generator, final Element otherGenerator, Set messageSpace) {
+    return MultiPedersenCommitmentScheme.getInstance(generator, otherGenerator, GeneralEncoder.getInstance(messageSpace));
+  }
+
+  public static MultiPedersenCommitmentScheme getInstance(final Element generator, final Element otherGenerator, Encoder encoder) {
+    if ((generator == null) || (otherGenerator == null) || !generator.isGenerator() || !otherGenerator.isGenerator() || !generator.getSet().equals(otherGenerator.getSet())) {
+      throw new IllegalArgumentException();
+    }
+    CyclicGroup cyclicGroup = (CyclicGroup) generator.getSet();
+    ZMod zMod = cyclicGroup.getZModOrder();
+    if (encoder == null) {
+      encoder = GeneralEncoder.getInstance(zMod);
+    } else {
+      if (!encoder.getEncodingSpace().equals(zMod)) {
+        throw new IllegalArgumentException();
+      }
+    }
+    Function commitmentFunction = CompositeFunction.getInstance(
+            ProductFunction.getInstance(GeneratorFunction.getInstance(generator),
+                                        GeneratorFunction.getInstance(otherGenerator)),
+            ApplyFunction.getInstance(cyclicGroup));
+    ProductGroup decommitmentDomain = ProductGroup.getInstance(zMod, zMod, cyclicGroup);
+    Function decommitmentFunction = CompositeFunction.getInstance(
+            MultiIdentityFunction.getInstance(decommitmentDomain, 2),
+            ProductFunction.getInstance(CompositeFunction.getInstance(AdapterFunction.getInstance(decommitmentDomain, 0, 1),
+                                                                      commitmentFunction),
+                                        SelectionFunction.getInstance(decommitmentDomain, 2)),
+            EqualityFunction.getInstance(cyclicGroup));
+    return new MultiPedersenCommitmentScheme(encoder, commitmentFunction, decommitmentFunction);
   }
 
 }
