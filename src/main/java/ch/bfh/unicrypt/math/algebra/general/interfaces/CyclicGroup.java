@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import ch.bfh.unicrypt.math.random.RandomOracle;
 import java.util.Random;
 
 /**
@@ -46,7 +47,7 @@ public interface CyclicGroup extends Group {
 
   public Element getIndependentGenerator(long i);
 
-  public Element getIndependentGenerator(long i, Random random);
+  public Element getIndependentGenerator(long i, RandomOracle randomOracle);
 
   /**
    * Checks if a given element is a generator of the group.

@@ -69,9 +69,9 @@ public class Permutation {
    * of the values from 0 to n-1. For example {3,0,1,2,4} but not {1,4,3,2}.
    *
    * @param permutationVector The given array of integers to test
-   * @return {@code true} if {@code permutationVector} is a permutation vector,
-   * {@code false} otherwise
-   * @throws IllegalArgumentException if {@code permutationVector} is null
+   * @return {@literal true} if {@literal permutationVector} is a permutation vector,
+   * {@literal false} otherwise
+   * @throws IllegalArgumentException if {@literal permutationVector} is null
    */
   public static boolean isPermutationVector(final int... permutationVector) {
     if (permutationVector == null) {

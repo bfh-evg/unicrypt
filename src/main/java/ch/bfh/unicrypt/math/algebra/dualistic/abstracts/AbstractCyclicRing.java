@@ -11,7 +11,9 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.random.RandomOracle;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
+import java.security.SecureRandom;
 
 /**
  *
@@ -20,7 +22,6 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
 public abstract class AbstractCyclicRing<E extends DualisticElement> extends AbstractRing<E> implements CyclicRing, Iterable<E> {
 
   private E defaultGenerator;
-  private static final Random defaultRandomNumberGenerator = RandomUtil.getRandomNumberGenerator();
 
   @Override
   public final E getDefaultGenerator() {
@@ -42,19 +43,15 @@ public abstract class AbstractCyclicRing<E extends DualisticElement> extends Abs
 
   @Override
   public final E getIndependentGenerator(long i) {
-    return getIndependentGenerator(i, (Random) null);
+    return this.getIndependentGenerator(i, RandomOracle.DEFAULT);
   }
 
   @Override
-  public final E getIndependentGenerator(long i, Random random) {
-    if (i < 0) {
+  public final E getIndependentGenerator(long i, RandomOracle randomOracle) {
+    if (randomOracle == null) {
       throw new IllegalArgumentException();
     }
-    if (random == null) {
-      random = AbstractCyclicRing.defaultRandomNumberGenerator;
-    }
-    random.setSeed(i);
-    return this.abstractGetRandomGenerator(random);
+    return this.abstractGetRandomGenerator(randomOracle.getSecureRandom(i));
   }
 
   @Override

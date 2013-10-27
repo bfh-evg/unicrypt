@@ -18,41 +18,22 @@ import java.util.Random;
  */
 public final class RandomUtil {
 
-  /**
-   * The default pseudo random number generator
-   */
-  private static SecureRandom defaultRandomNumberGenerator;
+  public static final String DEFAULT_ALGORITHM_NAME = "SHA1PRNG";
+  private static final SecureRandom DEFAULT = RandomUtil.getSecureRandom();
 
-  static {
-    RandomUtil.defaultRandomNumberGenerator = RandomUtil.getRandomNumberGenerator();
-    RandomUtil.defaultRandomNumberGenerator.nextBoolean(); // initiates the entropy gathering
+  public static SecureRandom getSecureRandom() {
+    return RandomUtil.getSecureRandom(RandomUtil.DEFAULT_ALGORITHM_NAME);
   }
 
-  /**
-   * Creates a new pseudo random number generator.
-   *
-   * @return The new random generator
-   */
-  public static SecureRandom getRandomNumberGenerator() {
-    SecureRandom randomNumberGenerator;
+  public static SecureRandom getSecureRandom(String algorithmName) {
+    SecureRandom secureRandom;
     try {
-      randomNumberGenerator = SecureRandom.getInstance("SHA1PRNG");
+      secureRandom = SecureRandom.getInstance(algorithmName);
     } catch (final NoSuchAlgorithmException e) {
-      randomNumberGenerator = new SecureRandom();
+      secureRandom = new SecureRandom();
     }
-    return randomNumberGenerator;
-  }
-
-  public static SecureRandom getRandomNumberGenerator(byte[] seed) {
-    SecureRandom randomNumberGenerator = RandomUtil.getRandomNumberGenerator();
-    randomNumberGenerator.setSeed(seed);
-    return randomNumberGenerator;
-  }
-
-  public static SecureRandom getRandomNumberGenerator(long seed) {
-    SecureRandom randomNumberGenerator = RandomUtil.getRandomNumberGenerator();
-    randomNumberGenerator.setSeed(seed);
-    return randomNumberGenerator;
+    secureRandom.nextBoolean(); // initiates the entropy gathering
+    return secureRandom;
   }
 
   /**
@@ -60,15 +41,15 @@ public final class RandomUtil {
    * generator and some random generator given as an optional argument. This
    * method is called by several of this class' public methods.
    *
-   * @param random Either {@code null} or a given random generator
-   * @return {@code random}, if
-   * {@code random != null}, {@code defaultRandomGenerator} otherwise
+   * @param randomGenerator Either {@literal null} or a given random generator
+   * @return {@literal random}, if {@literal random != null},
+   * {@literal defaultRandomGenerator} otherwise
    */
-  private static Random getRandomNumberGenerator(final Random random) {
-    if (random == null) {
-      return RandomUtil.defaultRandomNumberGenerator;
+  private static Random getRandomGenerator(final Random randomGenerator) {
+    if (randomGenerator == null) {
+      return RandomUtil.DEFAULT;
     }
-    return random;
+    return randomGenerator;
   }
 
   /**
@@ -87,16 +68,16 @@ public final class RandomUtil {
    * @return The random boolean value
    */
   public static boolean getRandomBoolean(final Random random) {
-    return RandomUtil.getRandomNumberGenerator(random).nextBoolean();
+    return RandomUtil.getRandomGenerator(random).nextBoolean();
   }
 
   /**
    * Uses the default random generator to create a random integer between 0 and
-   * {@code maxValue} (inclusive)
+   * {@literal maxValue} (inclusive)
    *
    * @param maxValue The maximal value
    * @return The random integer
-   * @throws IllegalArgumentException if {@code maxValue < 0}
+   * @throws IllegalArgumentException if {@literal maxValue < 0}
    */
   public static int getRandomInteger(final int maxValue) {
     return RandomUtil.getRandomInteger(maxValue, (Random) null);
@@ -104,12 +85,12 @@ public final class RandomUtil {
 
   /**
    * Uses the default random generator to create a random integer between
-   * {@code minValue} (inclusive) and {@code maxValue} (inclusive)
+   * {@literal minValue} (inclusive) and {@literal maxValue} (inclusive)
    *
    * @param minValue The minimal value
    * @param maxValue The maximal value
    * @return The random integer
-   * @throws IllegalArgumentException if {@code maxValue < minValue}
+   * @throws IllegalArgumentException if {@literal maxValue < minValue}
    */
   public static int getRandomInteger(final int minValue, final int maxValue) {
     return RandomUtil.getRandomInteger(minValue, maxValue, (Random) null);
@@ -117,13 +98,13 @@ public final class RandomUtil {
 
   /**
    * Uses a given random generator to create a random integer between
-   * {@code minValue} (inclusive) and {@code maxValue} (inclusive)
+   * {@literal minValue} (inclusive) and {@literal maxValue} (inclusive)
    *
    * @param minValue The minimal value
    * @param maxValue The maximal value
    * @param random The given random generator
    * @return The random integer
-   * @throws IllegalArgumentException if {@code maxValue < minValue}
+   * @throws IllegalArgumentException if {@literal maxValue < minValue}
    */
   public static int getRandomInteger(final int minValue, final int maxValue, final Random random) {
     return RandomUtil.getRandomInteger(maxValue - minValue, random) + minValue;
@@ -131,18 +112,18 @@ public final class RandomUtil {
 
   /**
    * Uses a given random generator to create a random integer between 0 and
-   * {@code maxValue} (inclusive)
+   * {@literal maxValue} (inclusive)
    *
    * @param maxValue The maximal value
    * @param random The given random generator
    * @return The random integer
-   * @throws IllegalArgumentException if {@code maxValue < 0}
+   * @throws IllegalArgumentException if {@literal maxValue < 0}
    */
   public static int getRandomInteger(final int maxValue, final Random random) {
     if (maxValue < 0) {
       throw new IllegalArgumentException();
     }
-    return RandomUtil.getRandomNumberGenerator(random).nextInt(maxValue + 1);
+    return RandomUtil.getRandomGenerator(random).nextInt(maxValue + 1);
   }
 
   /**
@@ -151,7 +132,7 @@ public final class RandomUtil {
    *
    * @param bitLength The given bit length
    * @return The random BigInteger value
-   * @throws IllegalArgumentException if {@code bitLength < 0}
+   * @throws IllegalArgumentException if {@literal bitLength < 0}
    */
   public static BigInteger getRandomBigInteger(final int bitLength) {
     return RandomUtil.getRandomBigInteger(bitLength, (Random) null);
@@ -164,7 +145,7 @@ public final class RandomUtil {
    * @param bitLength The given bit length
    * @param random The given random generator
    * @return The random BigInteger value
-   * @throws IllegalArgumentException if {@code bitLength < 0}
+   * @throws IllegalArgumentException if {@literal bitLength < 0}
    */
   public static BigInteger getRandomBigInteger(final int bitLength, final Random random) {
     if (bitLength < 0) {
@@ -173,16 +154,17 @@ public final class RandomUtil {
     if (bitLength == 0) {
       return BigInteger.ZERO;
     }
-    return new BigInteger(bitLength - 1, RandomUtil.getRandomNumberGenerator(random)).add(BigInteger.valueOf(2).pow(bitLength - 1));
+    return new BigInteger(bitLength - 1, RandomUtil.getRandomGenerator(random)).add(BigInteger.valueOf(2).pow(bitLength - 1));
   }
 
   /**
    * Uses the default random generator to create a random BigInteger value
-   * between 0 and {@code maxValue} (inclusive)
+   * between 0 and {@literal maxValue} (inclusive)
    *
    * @param maxValue The maximal value
    * @return The random BigInteger value
-   * @throws IllegalArgumentException if {@code maxValue} is null or if {@code maxValue < 0}
+   * @throws IllegalArgumentException if {@literal maxValue} is null or if
+   * {@literal maxValue < 0}
    */
   public static BigInteger getRandomBigInteger(final BigInteger maxValue) {
     return RandomUtil.getRandomBigInteger(maxValue, (Random) null);
@@ -190,12 +172,13 @@ public final class RandomUtil {
 
   /**
    * Uses a given random generator to create a random BigInteger between 0 and
-   * {@code maxValue} (inclusive)
+   * {@literal maxValue} (inclusive)
    *
    * @param maxValue The maximal value
    * @param random The given random generator
    * @return The random BigInteger value
-   * @throws IllegalArgumentException if {@code maxValue} is null or if {@code maxValue < 0}
+   * @throws IllegalArgumentException if {@literal maxValue} is null or if
+   * {@literal maxValue < 0}
    */
   public static BigInteger getRandomBigInteger(final BigInteger maxValue, final Random random) {
     if (maxValue == null || maxValue.signum() < 0) {
@@ -204,20 +187,20 @@ public final class RandomUtil {
     BigInteger randomValue;
     int bitLength = maxValue.bitLength();
     do {
-      randomValue = new BigInteger(bitLength, RandomUtil.getRandomNumberGenerator(random));
+      randomValue = new BigInteger(bitLength, RandomUtil.getRandomGenerator(random));
     } while (randomValue.compareTo(maxValue) > 0);
     return randomValue;
   }
 
   /**
    * Uses the default random generator to create a random BigInteger value
-   * between {@code minValue} (inclusive) and {@code maxValue} (inclusive)
+   * between {@literal minValue} (inclusive) and {@literal maxValue} (inclusive)
    *
    * @param minValue The minimal value
    * @param maxValue The maximal value
    * @return The random BigInteger value
-   * @throws IllegalArgumentException if {@code minValue} or {@code maxValue} is
-   * null, or if {@code maxValue < minValue}
+   * @throws IllegalArgumentException if {@literal minValue} or
+   * {@literal maxValue} is null, or if {@literal maxValue < minValue}
    */
   public static BigInteger getRandomBigInteger(final BigInteger minValue, final BigInteger maxValue) {
     return RandomUtil.getRandomBigInteger(minValue, maxValue, (Random) null);
@@ -225,14 +208,14 @@ public final class RandomUtil {
 
   /**
    * Uses a given random generator to create a random BigInteger value between
-   * {@code minValue} (inclusive) and {@code maxValue} (inclusive)
+   * {@literal minValue} (inclusive) and {@literal maxValue} (inclusive)
    *
    * @param minValue The minimal value
    * @param maxValue The maximal value
    * @param random The given random generator
    * @return The random BigInteger value
-   * @throws IllegalArgumentException if {@code minValue} or {@code maxValue} is
-   * null, or if {@code maxValue < minValue}
+   * @throws IllegalArgumentException if {@literal minValue} or
+   * {@literal maxValue} is null, or if {@literal maxValue < minValue}
    */
   public static BigInteger getRandomBigInteger(final BigInteger minValue, final BigInteger maxValue, final Random random) {
     if (minValue == null || maxValue == null) {
@@ -247,7 +230,7 @@ public final class RandomUtil {
    *
    * @param bitLength The given bit length
    * @return The random BigInteger prime number
-   * @throws IllegalArgumentException if {@code bitLength < 2}
+   * @throws IllegalArgumentException if {@literal bitLength < 2}
    */
   public static BigInteger getRandomPrime(final int bitLength) {
     return RandomUtil.getRandomPrime(bitLength, (Random) null);
@@ -260,13 +243,13 @@ public final class RandomUtil {
    * @param bitLength The given bit length
    * @param random The given random generator
    * @return The random BigInteger prime number
-   * @throws IllegalArgumentException if {@code bitLength < 2}
+   * @throws IllegalArgumentException if {@literal bitLength < 2}
    */
   public static BigInteger getRandomPrime(final int bitLength, final Random random) {
     if (bitLength < 2) {
       throw new IllegalArgumentException();
     }
-    return new BigInteger(bitLength, MathUtil.NUMBER_OF_PRIME_TESTS, RandomUtil.getRandomNumberGenerator(random));
+    return new BigInteger(bitLength, MathUtil.NUMBER_OF_PRIME_TESTS, RandomUtil.getRandomGenerator(random));
   }
 
   /**
@@ -275,7 +258,7 @@ public final class RandomUtil {
    *
    * @param bitLength The given bit length
    * @return The random BigInteger save prime number
-   * @throws IllegalArgumentException if {@code bitLength < 3}
+   * @throws IllegalArgumentException if {@literal bitLength < 3}
    */
   public static BigInteger getRandomSavePrime(final int bitLength) {
     return RandomUtil.getRandomSavePrime(bitLength, (Random) null);
@@ -288,7 +271,7 @@ public final class RandomUtil {
    * @param bitLength The given bit length
    * @param random The given random generator
    * @return The random BigInteger save prime
-   * @throws IllegalArgumentException if {@code bitLength < 3}
+   * @throws IllegalArgumentException if {@literal bitLength < 3}
    * @
    * see "Handbook of Applied Cryptography, Algorithm 4.86"
    */
@@ -310,7 +293,8 @@ public final class RandomUtil {
    *
    * @param bitLength1 The bit length of the first random prime
    * @param bitLength2 The bit length of the second random prime
-   * @throws IllegalArgumentException if {@code bitLength1 <= bitLength2} or {@code bitLengh2<2}
+   * @throws IllegalArgumentException if {@literal bitLength1 <= bitLength2} or
+   * {@literal bitLengh2<2}
    */
   public static BigInteger[] getRandomPrimePair(final int bitLength1, final int bitLength2) {
     return RandomUtil.getRandomPrimePair(bitLength1, bitLength2, (Random) null);
@@ -325,7 +309,8 @@ public final class RandomUtil {
    * @param bitLength1 The bit length of the first random prime
    * @param bitLength2 The bit length of the second random prime
    * @param random The given random generator
-   * @throws IllegalArgumentException if {@code bitLength1 <= bitLength2} or {@code bitLengh2<2}
+   * @throws IllegalArgumentException if {@literal bitLength1 <= bitLength2} or
+   * {@literal bitLengh2<2}
    */
   public static BigInteger[] getRandomPrimePair(final int bitLength1, final int bitLength2, final Random random) {
     if (bitLength1 <= bitLength2 || bitLength2 < 2) {

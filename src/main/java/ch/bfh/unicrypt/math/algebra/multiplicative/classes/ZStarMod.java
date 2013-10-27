@@ -183,11 +183,11 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
 
   /**
    * This is a static factory method to construct a new instance of this class
-   * for a given {@code modulus >= 2}. If {@code modulus} is not prime, then a
+   * for a given {@literal modulus >= 2}. If {@literal modulus} is not prime, then a
    * group of unknown order is returned.
    *
    * @param modulus The modulus
-   * @throws IllegalArgumentException if {@code modulus} is null or smaller than
+   * @throws IllegalArgumentException if {@literal modulus} is null or smaller than
    * 2
    */
   public static ZStarMod getInstance(final BigInteger modulus) {
@@ -206,8 +206,8 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
    * always leads to a group of known order.
    *
    * @param factorization The given prime factorization
-   * @throws IllegalArgumentException if {@code primeFactorization} is null
-   * @throws IllegalArgumentException if {@code primeFactorization.getValue()}
+   * @throws IllegalArgumentException if {@literal primeFactorization} is null
+   * @throws IllegalArgumentException if {@literal primeFactorization.getValue()}
    * is 1
    */
   public static ZStarMod getInstance(final Factorization factorization) {

@@ -6,12 +6,13 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.random.RandomOracle;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
+import java.security.SecureRandom;
 
 public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGroup<E> implements CyclicGroup, Iterable<E> {
 
   private E defaultGenerator;
-  private static final Random defaultRandomNumberGenerator = RandomUtil.getRandomNumberGenerator();
 
   @Override
   public final E getDefaultGenerator() {
@@ -33,19 +34,15 @@ public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGro
 
   @Override
   public final E getIndependentGenerator(long i) {
-    return getIndependentGenerator(i, (Random) null);
+    return this.getIndependentGenerator(i, RandomOracle.DEFAULT);
   }
 
   @Override
-  public final E getIndependentGenerator(long i, Random random) {
-    if (i < 0) {
+  public final E getIndependentGenerator(long i, RandomOracle randomOracle) {
+    if (randomOracle == null) {
       throw new IllegalArgumentException();
     }
-    if (random == null) {
-      random = AbstractCyclicGroup.defaultRandomNumberGenerator;
-    }
-    random.setSeed(i);
-    return this.abstractGetRandomGenerator(random);
+    return this.abstractGetRandomGenerator(randomOracle.getSecureRandom(i));
   }
 
   @Override

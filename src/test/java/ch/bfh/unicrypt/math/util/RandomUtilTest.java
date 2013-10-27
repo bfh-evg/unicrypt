@@ -14,21 +14,21 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
 @SuppressWarnings("static-method")
 public class RandomUtilTest {
 
-  public static Random[] randoms = new Random[] {null, new Random(), RandomUtil.getRandomNumberGenerator()};
+  public static Random[] randoms = new Random[] {null, new Random(), RandomUtil.getSecureRandom()};
 
   @Test
   public void testCreateRandomGenerator() {
-    Random prng1 = RandomUtil.getRandomNumberGenerator();
-    Random prng2 = RandomUtil.getRandomNumberGenerator();
+    Random prng1 = RandomUtil.getSecureRandom();
+    Random prng2 = RandomUtil.getSecureRandom();
     Assert.assertNotSame(prng1, prng2);
     Assert.assertFalse(RandomUtil.getRandomBigInteger(100, prng1).equals(RandomUtil.getRandomBigInteger(100, prng2)));
   }
 
   @Test
   public void testCreateRandomGeneratorByteArray() {
-    Random prng1 = RandomUtil.getRandomNumberGenerator(new byte[]{(byte)123, (byte)231});
-    Random prng2 = RandomUtil.getRandomNumberGenerator(new byte[]{(byte)123, (byte)231});
-    Random prng3 = RandomUtil.getRandomNumberGenerator(new byte[]{(byte)231, (byte)123});
+    Random prng1 = RandomUtil.getSecureRandom(new byte[]{(byte)123, (byte)231});
+    Random prng2 = RandomUtil.getSecureRandom(new byte[]{(byte)123, (byte)231});
+    Random prng3 = RandomUtil.getSecureRandom(new byte[]{(byte)231, (byte)123});
     Assert.assertEquals(RandomUtil.getRandomBigInteger(1, prng1), RandomUtil.getRandomBigInteger(1, prng2));
     Assert.assertEquals(RandomUtil.getRandomBigInteger(10, prng1), RandomUtil.getRandomBigInteger(10, prng2));
     Assert.assertEquals(RandomUtil.getRandomBigInteger(100, prng1), RandomUtil.getRandomBigInteger(100, prng2));

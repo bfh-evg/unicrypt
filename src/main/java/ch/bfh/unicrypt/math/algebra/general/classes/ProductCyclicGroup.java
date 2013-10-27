@@ -10,8 +10,10 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.random.RandomOracle;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
+import java.security.SecureRandom;
 
 /**
  *
@@ -20,7 +22,6 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
 public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
   private Tuple defaultGenerator;
-  private static final Random defaultRandomNumberGenerator = RandomUtil.getRandomNumberGenerator();
 
   protected ProductCyclicGroup(final CyclicGroup[] cyclicGroups) {
     super(cyclicGroups);
@@ -55,10 +56,12 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
     return (ProductCyclicGroup) super.removeAt(index);
   }
 
+  @Override
   protected ProductCyclicGroup abstractRemoveAt(Set set, int arity) {
     return ProductCyclicGroup.getInstance((CyclicGroup) set, arity);
   }
 
+  @Override
   protected ProductCyclicGroup abstractRemoveAt(Set[] sets) {
     return ProductCyclicGroup.getInstance((CyclicGroup[]) sets);
   }
@@ -96,19 +99,15 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
 
   @Override
   public final Tuple getIndependentGenerator(long i) {
-    return getIndependentGenerator(i, (Random) null);
+    return this.getIndependentGenerator(i, RandomOracle.DEFAULT);
   }
 
   @Override
-  public final Tuple getIndependentGenerator(long i, Random random) {
-    if (i < 0) {
+  public final Tuple getIndependentGenerator(long i, RandomOracle randomOracle) {
+    if (randomOracle == null) {
       throw new IllegalArgumentException();
     }
-    if (random == null) {
-      random = ProductCyclicGroup.defaultRandomNumberGenerator;
-    }
-    random.setSeed(i);
-    return this.getRandomGenerator(random);
+    return this.getRandomGenerator(randomOracle.getSecureRandom(i));
   }
 
   @Override
@@ -135,7 +134,8 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
    *
    * @param cyclicGroups The array of cyclic groups
    * @return The corresponding composed group
-   * @throws IllegalArgumentException if {@code groups} is null or contains null
+   * @throws IllegalArgumentException if {@literal groups} is null or contains
+   * null
    */
   public static ProductCyclicGroup getInstance(final CyclicGroup... cyclicGroups) {
     if (cyclicGroups == null) {

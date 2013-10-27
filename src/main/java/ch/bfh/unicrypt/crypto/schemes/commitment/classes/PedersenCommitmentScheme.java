@@ -48,8 +48,8 @@ public class PedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme
         throw new IllegalArgumentException();
       }
     }
-    Element firstGenerator = cyclicGroup.getIndependentGenerator(0, null);
-    Element secondGenerator = cyclicGroup.getIndependentGenerator(1, null);
+    Element firstGenerator = cyclicGroup.getIndependentGenerator(0);
+    Element secondGenerator = cyclicGroup.getIndependentGenerator(1);
     Function commitmentFunction = CompositeFunction.getInstance(
             ProductFunction.getInstance(GeneratorFunction.getInstance(firstGenerator),
                                         GeneratorFunction.getInstance(secondGenerator)),

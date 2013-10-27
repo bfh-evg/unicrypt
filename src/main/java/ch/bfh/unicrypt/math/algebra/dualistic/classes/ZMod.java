@@ -167,7 +167,7 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
    *
    * @param modulus The modulus
    * @return
-   * @throws IllegalArgumentException if {@code modulus} is null, zero, or
+   * @throws IllegalArgumentException if {@literal modulus} is null, zero, or
    * negative
    */
   public static ZMod getInstance(final BigInteger modulus) {

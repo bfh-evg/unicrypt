@@ -57,7 +57,7 @@ public class AESEncryptionClassTest {
     // System.out.println(bytesNew);
 
     AESEncryptionScheme aes = new AESEncryptionScheme();
-    Random random = RandomUtil.getRandomNumberGenerator(new byte[] { 1, 2, 3, 4, 5 });
+    Random random = RandomUtil.getSecureRandom(new byte[] { 1, 2, 3, 4, 5 });
     byte[] randomBytes = null;
     for (int i = 0; i < 1000; i++) {
       randomBytes = new byte[random.nextInt(20) + 10];
