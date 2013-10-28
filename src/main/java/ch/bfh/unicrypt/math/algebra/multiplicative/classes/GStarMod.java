@@ -133,13 +133,16 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
 
   @Override
   protected GStarModElement abstractGetRandomElement(final Random random) {
-    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
-      // Method 1
-      ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
-      return this.getElement(randomElement.power(this.getCoFactor()));
-    }
-    // Method 2
-    return this.getDefaultGenerator().power(this.getZModOrder().getRandomElement(random));
+    ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
+    return this.getElement(randomElement.power(this.getCoFactor()));
+// VERSION WITH OPTIMIZED EFFICIENCY BUT LACK OF INDEPENDENCE
+//    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
+//      // Method 1
+//      ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
+//      return this.getElement(randomElement.power(this.getCoFactor()));
+//    }
+//    // Method 2
+//    return this.getDefaultGenerator().power(this.getZModOrder().getRandomElement(random));
   }
 
   @Override

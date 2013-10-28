@@ -52,7 +52,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement> extends Abs
     if (randomOracle == null) {
       throw new IllegalArgumentException();
     }
-    return this.standardGetIndependentGenerator(query, randomOracle);
+    return this.standardGetRandomGenerator(randomOracle.getRandom(query));
   }
 
   @Override
@@ -100,10 +100,6 @@ public abstract class AbstractCyclicRing<E extends DualisticElement> extends Abs
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));
     return element;
-  }
-
-  protected E standardGetIndependentGenerator(long query, RandomOracle randomOracle) {
-    return this.standardGetRandomGenerator(randomOracle.getRandom(query));
   }
 
   //

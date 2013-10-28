@@ -40,7 +40,7 @@ public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGro
     if (randomOracle == null) {
       throw new IllegalArgumentException();
     }
-    return this.standardGetIndependentGenerator(query, randomOracle);
+    return this.standardGetRandomGenerator(randomOracle.getRandom(query));
   }
 
   @Override
@@ -88,10 +88,6 @@ public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGro
       element = this.getRandomElement(random);
     } while (!this.isGenerator(element));
     return element;
-  }
-
-  protected E standardGetIndependentGenerator(long query, RandomOracle randomOracle) {
-    return this.standardGetRandomGenerator(randomOracle.getRandom(query));
   }
 
   //
