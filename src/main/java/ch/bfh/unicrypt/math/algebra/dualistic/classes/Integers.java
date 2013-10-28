@@ -38,6 +38,14 @@ public class Integers extends AbstractCyclicRing<IntegerElement> {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
+  @Override
+  protected IntegerElement standardGetRandomGenerator(final Random random) {
+    if (RandomUtil.getRandomBoolean(random)) {
+      return this.getDefaultGenerator();
+    }
+    return this.getDefaultGenerator().invert();
+  }
+
   //
   // The following protected methods implement the abstract methods from
   // various super-classes
@@ -98,13 +106,6 @@ public class Integers extends AbstractCyclicRing<IntegerElement> {
     return element.getValue().abs().equals(BigInteger.ONE);
   }
 
-  @Override
-  protected IntegerElement abstractGetRandomGenerator(final Random random) {
-    if (RandomUtil.getRandomBoolean(random)) {
-      return this.getDefaultGenerator();
-    }
-    return this.getDefaultGenerator().invert();
-  }
   //
   // STATIC FACTORY METHODS
   //

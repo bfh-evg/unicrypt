@@ -189,16 +189,6 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
     return element;
   }
 
-  // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-  @Override
-  protected GStarModElement abstractGetRandomGenerator(Random random) {
-    GStarModElement element;
-    do {
-      element = this.getRandomElement(random);
-    } while (!this.isGenerator(element));
-    return element;
-  }
-
   // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81 (the implemented)
   // method is a mix between 4.80 and 4.81
   // See also http://en.wikipedia.org/wiki/Schnorr_group
@@ -220,10 +210,10 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
    *
    * @param moduloFactorization
    * @param orderFactorization
-   * @throws IllegalArgumentException if {@code moduloFactorization} or
-   * {@code orderFactorization} is null
-   * @throws IllegalArgumentException if the value of {@code orderFactorization}
-   * does not divide phi(n)
+   * @throws IllegalArgumentException if {@literal moduloFactorization} or
+   * {@literal orderFactorization} is null
+   * @throws IllegalArgumentException if the value of
+   * {@literal orderFactorization} does not divide phi(n)
    */
   public static GStarMod getInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
     GStarMod group = new GStarMod(moduloFactorization, orderFactorization);

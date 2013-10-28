@@ -45,9 +45,9 @@ public interface CyclicGroup extends Group {
    */
   public Element getRandomGenerator(Random random);
 
-  public Element getIndependentGenerator(long i);
+  public Element getIndependentGenerator(long query);
 
-  public Element getIndependentGenerator(long i, RandomOracle randomOracle);
+  public Element getIndependentGenerator(long query, RandomOracle randomOracle);
 
   /**
    * Checks if a given element is a generator of the group.

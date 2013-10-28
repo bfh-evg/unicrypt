@@ -26,14 +26,14 @@ public class RandomOracle {
     this.algorithmName = algorithmName;
   }
 
-  public SecureRandom getSecureRandom(long i) {
-    if (i < 0) {
+  public SecureRandom getRandom(long query) {
+    if (query < 0) {
       throw new IllegalArgumentException();
     }
     try {
-      SecureRandom secureRandom = SecureRandom.getInstance(this.getAlgorithmName());
-      secureRandom.setSeed(i + 1); // to avoid 0 to be ignored
-      return secureRandom;
+      SecureRandom random = SecureRandom.getInstance(this.getAlgorithmName());
+      random.setSeed(query + 1); // to avoid 0 being ignored as seed
+      return random;
     } catch (final NoSuchAlgorithmException e) {
       throw new InternalError();
     }

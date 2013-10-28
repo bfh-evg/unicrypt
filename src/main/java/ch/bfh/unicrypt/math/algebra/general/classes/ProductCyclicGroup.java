@@ -73,11 +73,12 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
   @Override
   public final Tuple getDefaultGenerator() {
     if (this.defaultGenerator == null) {
-      Element[] generators = new Element[this.getArity()];
-      for (int i = 0; i < this.getArity(); i++) {
-        generators[i] = this.getAt(i).getDefaultGenerator();
+      int arity = this.getArity();
+      Element[] defaultGenerators = new Element[arity];
+      for (int i = 0; i < arity; i++) {
+        defaultGenerators[i] = this.getAt(i).getDefaultGenerator();
       }
-      this.defaultGenerator = this.standardGetElement(generators);
+      this.defaultGenerator = this.standardGetElement(defaultGenerators);
     }
     return this.defaultGenerator;
   }
@@ -90,11 +91,11 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
   @Override
   public final Tuple getRandomGenerator(Random random) {
     int arity = this.getArity();
-    Element[] randomElements = new Element[arity];
+    Element[] randomGenerators = new Element[arity];
     for (int i = 0; i < arity; i++) {
-      randomElements[i] = this.getAt(i).getRandomElement(random);
+      randomGenerators[i] = this.getAt(i).getRandomGenerator(random);
     }
-    return this.standardGetElement(randomElements);
+    return this.standardGetElement(randomGenerators);
   }
 
   @Override
@@ -103,11 +104,13 @@ public class ProductCyclicGroup extends ProductGroup implements CyclicGroup {
   }
 
   @Override
-  public final Tuple getIndependentGenerator(long i, RandomOracle randomOracle) {
-    if (randomOracle == null) {
-      throw new IllegalArgumentException();
+  public final Tuple getIndependentGenerator(long query, RandomOracle randomOracle) {
+    int arity = this.getArity();
+    Element[] independentGenerators = new Element[arity];
+    for (int i = 0; i < arity; i++) {
+      independentGenerators[i] = this.getAt(i).getIndependentGenerator(query, randomOracle);
     }
-    return this.getRandomGenerator(randomOracle.getSecureRandom(i));
+    return this.standardGetElement(independentGenerators);
   }
 
   @Override

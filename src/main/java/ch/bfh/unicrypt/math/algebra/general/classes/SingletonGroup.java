@@ -97,11 +97,6 @@ public class SingletonGroup extends AbstractCyclicGroup<Element> {
   }
 
   @Override
-  protected Element abstractGetRandomGenerator(Random random) {
-    return this.getElement();
-  }
-
-  @Override
   protected boolean abstractIsGenerator(Element element) {
     return true;
   }

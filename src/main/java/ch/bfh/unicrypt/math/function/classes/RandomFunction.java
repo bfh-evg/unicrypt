@@ -38,7 +38,7 @@ public class RandomFunction extends AbstractFunction<SingletonGroup, Set, Elemen
    * generates random elements from a given group.
    *
    * @param set The given group
-   * @throws IllegalArgumentException if {@code group} is null
+   * @throws IllegalArgumentException if {@literal group} is null
    */
   public static RandomFunction getInstance(final Set set) {
     if (set == null) {

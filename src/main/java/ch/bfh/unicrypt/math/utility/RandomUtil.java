@@ -293,6 +293,7 @@ public final class RandomUtil {
    *
    * @param bitLength1 The bit length of the first random prime
    * @param bitLength2 The bit length of the second random prime
+   * @return
    * @throws IllegalArgumentException if {@literal bitLength1 <= bitLength2} or
    * {@literal bitLengh2<2}
    */
@@ -309,6 +310,7 @@ public final class RandomUtil {
    * @param bitLength1 The bit length of the first random prime
    * @param bitLength2 The bit length of the second random prime
    * @param random The given random generator
+   * @return
    * @throws IllegalArgumentException if {@literal bitLength1 <= bitLength2} or
    * {@literal bitLengh2<2}
    */

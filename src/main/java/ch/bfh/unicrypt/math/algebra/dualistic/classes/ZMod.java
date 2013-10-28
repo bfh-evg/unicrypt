@@ -138,15 +138,6 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
   }
 
   @Override
-  protected ZModElement abstractGetRandomGenerator(Random random) {
-    ZModElement element;
-    do {
-      element = this.getRandomElement(random);
-    } while (!this.isGenerator(element));
-    return element;
-  }
-
-  @Override
   protected boolean abstractIsGenerator(Element element) {
     if (this.getModulus().equals(BigInteger.ONE)) {
       return true;

@@ -7,8 +7,6 @@ import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.random.RandomOracle;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
-import java.security.SecureRandom;
 
 public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGroup<E> implements CyclicGroup, Iterable<E> {
 
@@ -29,20 +27,20 @@ public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGro
 
   @Override
   public final E getRandomGenerator(Random random) {
-    return this.abstractGetRandomGenerator(random);
+    return this.standardGetRandomGenerator(random);
   }
 
   @Override
-  public final E getIndependentGenerator(long i) {
-    return this.getIndependentGenerator(i, RandomOracle.DEFAULT);
+  public final E getIndependentGenerator(long query) {
+    return this.getIndependentGenerator(query, RandomOracle.DEFAULT);
   }
 
   @Override
-  public final E getIndependentGenerator(long i, RandomOracle randomOracle) {
+  public final E getIndependentGenerator(long query, RandomOracle randomOracle) {
     if (randomOracle == null) {
       throw new IllegalArgumentException();
     }
-    return this.abstractGetRandomGenerator(randomOracle.getSecureRandom(i));
+    return this.standardGetIndependentGenerator(query, randomOracle);
   }
 
   @Override
@@ -83,12 +81,23 @@ public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGro
     };
   }
 
+  // see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
+  protected E standardGetRandomGenerator(Random random) {
+    E element;
+    do {
+      element = this.getRandomElement(random);
+    } while (!this.isGenerator(element));
+    return element;
+  }
+
+  protected E standardGetIndependentGenerator(long query, RandomOracle randomOracle) {
+    return this.standardGetRandomGenerator(randomOracle.getRandom(query));
+  }
+
   //
   // The following protected abstract method must be implemented in every direct sub-class
   //
   protected abstract E abstractGetDefaultGenerator();
-
-  protected abstract E abstractGetRandomGenerator(Random random);
 
   protected abstract boolean abstractIsGenerator(Element element);
 
