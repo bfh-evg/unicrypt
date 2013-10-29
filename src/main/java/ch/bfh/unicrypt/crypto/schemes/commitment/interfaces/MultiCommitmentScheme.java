@@ -17,7 +17,4 @@ public interface MultiCommitmentScheme extends CommitmentScheme {
   @Override
   public ProductSet getMessageSpace();
 
-  @Override
-  public ProductSet getCommitmentSpace();
-
 }

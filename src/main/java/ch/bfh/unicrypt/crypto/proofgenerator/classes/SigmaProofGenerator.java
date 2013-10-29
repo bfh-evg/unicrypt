@@ -13,23 +13,22 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements SigmaProofGenerator {
+public class SigmaProofGenerator extends ProofGeneratorAbstract implements SigmaProofGenerator {
 
   public static final HashFunction.HashAlgorithm DEFAULT_HASH_ALGORITHM = HashFunction.HashAlgorithm.SHA256;
   public static final ConcatenateFunction.ConcatParameter DEFAULT_CONCAT_ALGORITHM = ConcatParameter.Plain;
   public static final Mapper DEFAULT_MAPPER = new CharsetXRadixYMapperClass(CharsetXRadixYMapperClass.DEFAULT_CHARSET, CharsetXRadixYMapperClass.DEFAULT_RADIX);
-  private final Function function;
   private final HashFunction hashFunction;
   private final ZPlusMod challengeSpace;
   private final ProductGroup proofSpace;
   private final ConcatParameter concatParameter;
   private final Mapper mapper;
 
-  public SigmaProofGeneratorClass(final Function function) {
-    this(function, SigmaProofGeneratorClass.DEFAULT_HASH_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_CONCAT_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_MAPPER);
+  public SigmaProofGenerator(final Function function) {
+    this(function, SigmaProofGenerator.DEFAULT_HASH_ALGORITHM, SigmaProofGenerator.DEFAULT_CONCAT_ALGORITHM, SigmaProofGenerator.DEFAULT_MAPPER);
   }
 
-  public SigmaProofGeneratorClass(final Function function,
+  public SigmaProofGenerator(final Function function,
           final HashFunction.HashAlgorithm hashAlgorithm,
           final ConcatenateFunction.ConcatParameter concatParameter,
           final Mapper mapper) {
@@ -110,43 +109,28 @@ public class SigmaProofGeneratorClass extends ProofGeneratorAbstract implements 
     return left.equals(right);
   }
 
-  @Override
-  public Function getProofFunction() {
-    return this.function;
-  }
-
-  @Override
-  public ProductGroup getProofSpace() {
-    return this.proofSpace;
-  }
-
-  @Override
   public Group getCommitmentSpace() {
     return this.getCoDomain();
   }
 
-  @Override
   public Group getResponseSpace() {
     return this.getDomain();
   }
 
-  @Override
   public Element getCommitment(final Tuple element) {
     if (element == null) {
       throw new IllegalArgumentException();
     }
-    return element.getElementAt(0);
+    return element.getAt(0);
   }
 
-  @Override
   public Element getResponse(final Tuple element) {
     if (element == null) {
       throw new IllegalArgumentException();
     }
-    return element.getElementAt(1);
+    return element.getAt(1);
   }
 
-  @Override
   public HashFunction getHashFunction() {
     return this.hashFunction;
   }

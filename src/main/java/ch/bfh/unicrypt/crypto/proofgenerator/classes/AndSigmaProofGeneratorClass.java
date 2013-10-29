@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.ProductProofGeneratorAbstract;
-import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaAndProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.AndProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -13,29 +13,29 @@ import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class SigmaAndProofGeneratorClass extends ProductProofGeneratorAbstract implements SigmaAndProofGenerator {
+public class AndSigmaProofGeneratorClass extends ProductProofGeneratorAbstract implements AndProofGenerator {
 
   private final SigmaProofGenerator sigmaProofGenerator;
   private final Function[] functions;
 
-  public SigmaAndProofGeneratorClass(final List<Function> functions) {
-    this(functions, SigmaProofGeneratorClass.DEFAULT_HASH_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_CONCAT_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_MAPPER);
+  public AndSigmaProofGeneratorClass(final List<Function> functions) {
+    this(functions, SigmaProofGenerator.DEFAULT_HASH_ALGORITHM, SigmaProofGenerator.DEFAULT_CONCAT_ALGORITHM, SigmaProofGenerator.DEFAULT_MAPPER);
   }
 
-  public SigmaAndProofGeneratorClass(final List<Function> functions,
+  public AndSigmaProofGeneratorClass(final List<Function> functions,
           final HashAlgorithm hashAlgorithm,
           final ConcatParameter concatParameter,
           final Mapper mapper) {
     this(functions.toArray(new Function[functions.size()]), hashAlgorithm, concatParameter, mapper);
   }
 
-  public SigmaAndProofGeneratorClass(final Function... functions) {
-    this(functions, SigmaProofGeneratorClass.DEFAULT_HASH_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_CONCAT_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_MAPPER);
+  public AndSigmaProofGeneratorClass(final Function... functions) {
+    this(functions, SigmaProofGenerator.DEFAULT_HASH_ALGORITHM, SigmaProofGenerator.DEFAULT_CONCAT_ALGORITHM, SigmaProofGenerator.DEFAULT_MAPPER);
   }
 
-  public SigmaAndProofGeneratorClass(final Function[] functions, final HashAlgorithm hashAlgorithm, final ConcatParameter concatParameter, final Mapper mapper) {
+  public AndSigmaProofGeneratorClass(final Function[] functions, final HashAlgorithm hashAlgorithm, final ConcatParameter concatParameter, final Mapper mapper) {
     final Function function = new ProductFunction(functions);
-    this.sigmaProofGenerator = new SigmaProofGeneratorClass(function, hashAlgorithm, concatParameter, mapper);
+    this.sigmaProofGenerator = new SigmaProofGenerator(function, hashAlgorithm, concatParameter, mapper);
     this.functions = functions;
   }
 

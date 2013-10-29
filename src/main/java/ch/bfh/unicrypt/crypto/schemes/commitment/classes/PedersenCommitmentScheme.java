@@ -17,7 +17,7 @@ import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
+import ch.bfh.unicrypt.math.random.RandomOracle;
 
 public class PedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme<Set, ZMod, CyclicGroup, Element> {
 
@@ -26,17 +26,29 @@ public class PedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme
   }
 
   public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
-    return PedersenCommitmentScheme.getInstance(cyclicGroup, (Encoder) null);
+    return PedersenCommitmentScheme.getInstance(cyclicGroup, (RandomOracle) null);
+  }
+
+  public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, RandomOracle randomOracle) {
+    return PedersenCommitmentScheme.getInstance(cyclicGroup, (Encoder) null, randomOracle);
   }
 
   public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Set messageSpace) {
+    return PedersenCommitmentScheme.getInstance(cyclicGroup, messageSpace, (RandomOracle) null);
+  }
+
+  public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Set messageSpace, RandomOracle randomOracle) {
     if (cyclicGroup == null) {
       throw new IllegalArgumentException();
     }
-    return PedersenCommitmentScheme.getInstance(cyclicGroup, GeneralEncoder.getInstance(messageSpace, cyclicGroup.getZModOrder()));
+    return PedersenCommitmentScheme.getInstance(cyclicGroup, GeneralEncoder.getInstance(messageSpace, cyclicGroup.getZModOrder()), randomOracle);
   }
 
   public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Encoder encoder) {
+    return PedersenCommitmentScheme.getInstance(cyclicGroup, encoder, (RandomOracle) null);
+  }
+
+  public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Encoder encoder, RandomOracle randomOracle) {
     if (cyclicGroup == null) {
       throw new IllegalArgumentException();
     }
@@ -48,8 +60,11 @@ public class PedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme
         throw new IllegalArgumentException();
       }
     }
-    Element firstGenerator = cyclicGroup.getIndependentGenerator(0);
-    Element secondGenerator = cyclicGroup.getIndependentGenerator(1);
+    if (randomOracle == null) {
+      randomOracle = RandomOracle.DEFAULT;
+    }
+    Element firstGenerator = cyclicGroup.getIndependentGenerator(0, randomOracle);
+    Element secondGenerator = cyclicGroup.getIndependentGenerator(1, randomOracle);
     Function commitmentFunction = CompositeFunction.getInstance(
             ProductFunction.getInstance(GeneratorFunction.getInstance(firstGenerator),
                                         GeneratorFunction.getInstance(secondGenerator)),

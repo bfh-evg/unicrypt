@@ -16,7 +16,7 @@ import ch.bfh.unicrypt.crypto.concat.interfaces.ConcatScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.old.ElGamalEncryptionSchemeOld;
 import ch.bfh.unicrypt.crypto.encryption.interfaces.ElGamalEncryption;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.SigmaProofGeneratorClass;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.SigmaProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;
@@ -77,7 +77,7 @@ public class SigmaProofGeneratorClassTest {
 		Tuple keyPair = keyPairGen.generateKeyPair();
 		Element privateKey = keyPairGen.getPrivateKey(keyPair);
 		AtomicElement publicKey = (AtomicElement) keyPairGen.getPublicKey(keyPair);
-		SigmaProofGenerator proofGen = new SigmaProofGeneratorClass(proofFunction);
+		SigmaProofGenerator proofGen = new SigmaProofGenerator(proofFunction);
 		ExternalDataMapper externalMapper=new ExternalDataMapperClass();
 		Element optStringElement = concat.concat(externalMapper.getEncodedElement(optString));
 		Tuple result = proofGen.generate(privateKey, publicKey,optStringElement);
@@ -103,7 +103,7 @@ public class SigmaProofGeneratorClassTest {
     Tuple keyPair = keyPairGen.generateKeyPair();
     Element privateKey = keyPairGen.getPrivateKey(keyPair);
     AtomicElement publicKey = (AtomicElement) keyPairGen.getPublicKey(keyPair);
-    SigmaProofGenerator proofGen = new SigmaProofGeneratorClass(proofFunction);
+    SigmaProofGenerator proofGen = new SigmaProofGenerator(proofFunction);
 
     Tuple result = proofGen.generate(privateKey, publicKey);
 

@@ -5,7 +5,7 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractEncryptionScheme;
 import ch.bfh.unicrypt.crypto.keygenerator.old.DDHGroupKeyPairGeneratorClass;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.SigmaOrProofGeneratorClass;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.OrSigmaProofGeneratorClass;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.DDHGroup;
@@ -188,7 +188,7 @@ public class ElGamalEncryptionSchemeOld extends AbstractEncryptionScheme {
             functions[j] = f;
         }
 
-        final SigmaOrProofGeneratorClass proofGen = new SigmaOrProofGeneratorClass(functions);
+        final OrSigmaProofGeneratorClass proofGen = new OrSigmaProofGeneratorClass(functions);
 
         // generate the OR proof with the prepared input and return it
         return proofGen.generate(randomization, index, publicProofInput, null,
@@ -233,7 +233,7 @@ public class ElGamalEncryptionSchemeOld extends AbstractEncryptionScheme {
             functions[j] = f;
         }
 
-        final SigmaOrProofGeneratorClass proofGen = new SigmaOrProofGeneratorClass(functions);
+        final OrSigmaProofGeneratorClass proofGen = new OrSigmaProofGeneratorClass(functions);
 
         return proofGen.verify(validityProof, publicProofInput);
     }

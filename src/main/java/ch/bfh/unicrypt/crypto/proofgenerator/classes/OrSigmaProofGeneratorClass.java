@@ -15,28 +15,28 @@ import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implements SigmaProofGenerator {
+public class OrSigmaProofGeneratorClass extends ProofGeneratorAbstract implements SigmaProofGenerator {
 
-  private SigmaProofGeneratorClass sigmaProofGenerator;
+  private SigmaProofGenerator sigmaProofGenerator;
   private final Function[] functions;
   private final ProductFunction function;
   private final HashAlgorithm hashAlgorithm;
   private final ConcatParameter concatParameter;
   private final Mapper mapper;
 
-  public SigmaOrProofGeneratorClass(final List<Function> functions) {
-    this((Function[]) functions.toArray(), SigmaProofGeneratorClass.DEFAULT_HASH_ALGORITHM,
-         SigmaProofGeneratorClass.DEFAULT_CONCAT_ALGORITHM,
-         SigmaProofGeneratorClass.DEFAULT_MAPPER);
+  public OrSigmaProofGeneratorClass(final List<Function> functions) {
+    this((Function[]) functions.toArray(), SigmaProofGenerator.DEFAULT_HASH_ALGORITHM,
+         SigmaProofGenerator.DEFAULT_CONCAT_ALGORITHM,
+         SigmaProofGenerator.DEFAULT_MAPPER);
   }
 
-  public SigmaOrProofGeneratorClass(final Function... functions) {
-    this(functions, SigmaProofGeneratorClass.DEFAULT_HASH_ALGORITHM,
-         SigmaProofGeneratorClass.DEFAULT_CONCAT_ALGORITHM,
-         SigmaProofGeneratorClass.DEFAULT_MAPPER);
+  public OrSigmaProofGeneratorClass(final Function... functions) {
+    this(functions, SigmaProofGenerator.DEFAULT_HASH_ALGORITHM,
+         SigmaProofGenerator.DEFAULT_CONCAT_ALGORITHM,
+         SigmaProofGenerator.DEFAULT_MAPPER);
   }
 
-  public SigmaOrProofGeneratorClass(final Function[] functions,
+  public OrSigmaProofGeneratorClass(final Function[] functions,
           final HashAlgorithm hashAlgorithm,
           final ConcatParameter concatParameter, final Mapper mapper) {
     function = new ProductFunction(functions);
@@ -96,7 +96,7 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
     Tuple commitment = ProductGroup.createTupleElement(t);
 
 
-    this.sigmaProofGenerator = new SigmaProofGeneratorClass(functions[index], hashAlgorithm, concatParameter, mapper);
+    this.sigmaProofGenerator = new SigmaProofGenerator(functions[index], hashAlgorithm, concatParameter, mapper);
     AdditiveElement challenge = this.sigmaProofGenerator.createChallenge(commitment, publicInput, otherInput);
 
     // Summing up all the c values, except the one for our value we want to prove
@@ -153,7 +153,7 @@ public class SigmaOrProofGeneratorClass extends ProofGeneratorAbstract implement
       }
     }
 
-    this.sigmaProofGenerator = new SigmaProofGeneratorClass(functions[0], hashAlgorithm, concatParameter, mapper);
+    this.sigmaProofGenerator = new SigmaProofGenerator(functions[0], hashAlgorithm, concatParameter, mapper);
     AdditiveElement verificationChallenge = this.sigmaProofGenerator.createChallenge(commitment, publicInput, otherInput);
 
     AdditiveElement sum_c = null;
