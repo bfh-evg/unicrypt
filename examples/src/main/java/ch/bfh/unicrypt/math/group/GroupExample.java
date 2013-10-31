@@ -2,15 +2,10 @@ package ch.bfh.unicrypt.math.group;
 
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.math.element.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.element.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.math.group.classes.ZPlusClass;
-import ch.bfh.unicrypt.math.group.classes.ZPlusModClass;
-import ch.bfh.unicrypt.math.group.classes.ZStarModClass;
-import ch.bfh.unicrypt.math.group.interfaces.ZPlus;
-import ch.bfh.unicrypt.math.group.interfaces.ZPlusMod;
-import ch.bfh.unicrypt.math.group.interfaces.ZStarMod;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 
 public class GroupExample {
 
