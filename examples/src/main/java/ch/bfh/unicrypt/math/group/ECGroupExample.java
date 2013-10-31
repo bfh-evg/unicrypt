@@ -33,12 +33,12 @@ public class ECGroupExample {
 		SafeECGroupFp ec2=SafeECGroupFp.getInstance("secp192r1");
 		ECGroupElement g2=ec2.getDefaultGenerator();
 		BigInteger n2=ec2.getOrder();
-		System.out.println(g2.selfApply(n2));
-		System.out.println(MathUtil.arePrime(n2));
+		System.out.println(g2.selfApply(n2));		//Must be Identity (-1,-1)
+		System.out.println(MathUtil.arePrime(n2));	//Must be true
 		
 		ECGroupElement w2=ec2.getRandomElement();
 		System.out.println(w2);
-		System.out.println(w2.selfApply(n2));
+		System.out.println(w2.selfApply(n2));	//Must be Identity (-1,-1) if h=1
 
 		
 	}

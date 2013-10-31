@@ -38,7 +38,7 @@ public class ECGroupElement extends
 	@Override
 	public String toString() {
 		if (this.x == null && this.y == null) {
-			return "(0,0)";
+			return "(-1,-1)";
 		} else {
 			return "(" + this.x.getValue() + "," + this.y.getValue() + ")";
 		}
