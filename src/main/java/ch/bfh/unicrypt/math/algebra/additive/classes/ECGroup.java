@@ -3,6 +3,7 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 import java.math.BigInteger;
 import java.util.Random;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -10,14 +11,14 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 
 public abstract class ECGroup extends
 		AbstractAdditiveCyclicGroup<ECGroupElement> {
-	private FiniteField finiteField;
+	private ZMod finiteField;
 	private ECGroupElement generator;
 	private DualisticElement a, b;
 	private BigInteger order, h;
 	private final ECGroupElement Identity;
 	private final DualisticElement zero = null;
 
-	protected ECGroup(FiniteField Finitefiled, DualisticElement a,
+	protected ECGroup(ZMod Finitefiled, DualisticElement a,
 			DualisticElement b, DualisticElement gx, DualisticElement gy,
 			BigInteger order, BigInteger h) {
 		super();
@@ -102,10 +103,27 @@ public abstract class ECGroup extends
 	@Override
 	protected ECGroupElement abstractGetRandomElement(Random random) {
 		if (generator != null) {
+			long t1=System.currentTimeMillis();
 			DualisticElement r = this.finiteField.getRandomElement(random);
+			t1=System.currentTimeMillis()-t1;
+			System.out.println(r+" RandomElement "+t1+" ms");
 			return this.generator.selfApply(r);
 		} else {
-			throw new IllegalArgumentException("Get Randomelement without generator not supported yet.");
+			BigInteger p=((ZMod) this.finiteField).getModulus();
+			DualisticElement x=this.finiteField.getRandomElement(random);
+			DualisticElement y=x.power(3).add(a.multiply(x)).add(b);
+			
+			while(!MathUtil.hasSquareRootModp(y.getValue(),p )){
+				x=this.finiteField.getRandomElement(random);
+				y=x.power(3).add(a.multiply(x)).add(b);
+			}
+			
+			y=this.finiteField.getElement(MathUtil.sqrtModp(y.getValue(), p));
+			
+			return this.getElement(x, y);
+			
+			
+			
 		}
 
 	}
@@ -120,7 +138,7 @@ public abstract class ECGroup extends
 	}
 
 	public FiniteField getFiniteField() {
-		return finiteField;
+		return (FiniteField) finiteField;
 	}
 
 	public DualisticElement getA() {
@@ -134,6 +152,7 @@ public abstract class ECGroup extends
 	public BigInteger getH() {
 		return h;
 	}
+	
 
 	public Boolean contains(DualisticElement x, DualisticElement y) {
 		y = y.power(2);

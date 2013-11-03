@@ -2,13 +2,14 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import java.math.BigInteger;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 
 public class SafeECGroupFp extends ECGroupFp {
 
-	private SafeECGroupFp(FiniteField field, DualisticElement a,
+	private SafeECGroupFp(ZMod field, DualisticElement a,
 			DualisticElement b, DualisticElement gx, DualisticElement gy,
 			BigInteger order, BigInteger h) {
 		super(field, a, b, gx, gy, order, h);
@@ -17,7 +18,7 @@ public class SafeECGroupFp extends ECGroupFp {
 
 	
 	public static SafeECGroupFp getInstance(final String SecCurve) {
-	    FiniteField field;
+	    ZMod field;
 	    DualisticElement a,b,gx,gy;
 	    BigInteger order,h;
 		

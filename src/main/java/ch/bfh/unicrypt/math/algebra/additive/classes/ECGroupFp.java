@@ -2,13 +2,14 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import java.math.BigInteger;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public class ECGroupFp extends ECGroup {
 
-	protected ECGroupFp(FiniteField Finitefiled, DualisticElement a,
+	protected ECGroupFp(ZMod Finitefiled, DualisticElement a,
 			DualisticElement b, DualisticElement gx, DualisticElement gy,
 			BigInteger order, BigInteger h) {
 		super(Finitefiled, a, b, gx, gy, order, h);
@@ -50,6 +51,10 @@ public class ECGroupFp extends ECGroup {
 			return this.getElement(rx, ry);
 		}
 
+	}
+	
+	public BigInteger getP(){
+		return  ((ZMod) this.getFiniteField()).getModulus();
 	}
 
 }

@@ -383,5 +383,67 @@ public final class MathUtil {
     }
     return a.subtract(BigInteger.ONE);
   }
+  
+	//Tonelli_Shanks algorithm -> wikipedia
+	public static BigInteger sqrtModp(BigInteger r2, BigInteger p){
+		BigInteger two=new BigInteger("2");
+		BigInteger z=two;
+		
+		//z which must be a quadratic non-residue mod p.
+		while(hasSquareRootModp(z, p)){
+			z=z.add(BigInteger.ONE);
+		}
+		
+		if(!hasSquareRootModp(r2, p)){
+			throw new UnknownError("r has no square root");
+		}
+	else if(p.mod(new BigInteger("4")).equals(new BigInteger("3"))){
+			return r2.modPow(p.add(BigInteger.ONE).divide(new BigInteger("4")), p);
+		}
+		else{
+			BigInteger pMin1=p.subtract(BigInteger.ONE);	//p-1
+			BigInteger s=BigInteger.ONE;
+			BigInteger q=pMin1.divide(two);
+			
+			//Finding Q
+			while(q.mod(two).equals(BigInteger.ZERO)){
+				q=q.divide(two);
+				s=s.add(BigInteger.ONE);
+			}
+			
+			BigInteger c=z.modPow(q, p);
+			BigInteger r=r2.modPow(q.add(BigInteger.ONE).divide(two), p);
+			BigInteger t=r2.modPow(q, p);
+			BigInteger m=s;
+			
+			//Loop until t==1
+			while(!t.equals(BigInteger.ONE)){
+				BigInteger i=BigInteger.ZERO;
+				while(!BigInteger.ONE.equals(t.modPow(two.modPow(i, p), p))){
+					i=i.add(BigInteger.ONE);
+				}
+				
+				BigInteger b=c.modPow(two.modPow(m.subtract(i).subtract(BigInteger.ONE), p), p);
+				r=r.multiply(b).mod(p);
+				t=t.multiply(b.pow(2)).mod(p);
+				c=b.modPow(two, p);
+				m=i;
+			}
+			
+			if(r.modPow(two, p).equals(r2)){
+				return r;
+			}
+			else{
+				throw new IllegalArgumentException("Tonnelli fails...");
+			}
+
+		}
+	}
+	
+	//Check if r has a square root mod p
+	public static boolean hasSquareRootModp(BigInteger r, BigInteger p){
+		BigInteger two=new BigInteger("2");
+		return r.modPow(p.subtract(BigInteger.ONE).divide(two),p).equals(BigInteger.ONE);
+	}
 
 }
