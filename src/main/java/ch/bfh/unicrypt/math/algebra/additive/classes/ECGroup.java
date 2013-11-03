@@ -11,14 +11,14 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 
 public abstract class ECGroup extends
 		AbstractAdditiveCyclicGroup<ECGroupElement> {
-	private ZMod finiteField;
+	private FiniteField finiteField;
 	private ECGroupElement generator;
 	private DualisticElement a, b;
 	private BigInteger order, h;
 	private final ECGroupElement Identity;
 	private final DualisticElement zero = null;
 
-	protected ECGroup(ZMod Finitefiled, DualisticElement a,
+	protected ECGroup(FiniteField Finitefiled, DualisticElement a,
 			DualisticElement b, DualisticElement gx, DualisticElement gy,
 			BigInteger order, BigInteger h) {
 		super();

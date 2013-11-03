@@ -9,7 +9,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 
 public class SafeECGroupFp extends ECGroupFp {
 
-	private SafeECGroupFp(ZMod field, DualisticElement a,
+	private SafeECGroupFp(ZModPrime field, DualisticElement a,
 			DualisticElement b, DualisticElement gx, DualisticElement gy,
 			BigInteger order, BigInteger h) {
 		super(field, a, b, gx, gy, order, h);
@@ -18,7 +18,7 @@ public class SafeECGroupFp extends ECGroupFp {
 
 	
 	public static SafeECGroupFp getInstance(final String SecCurve) {
-	    ZMod field;
+	    ZModPrime field;
 	    DualisticElement a,b,gx,gy;
 	    BigInteger order,h;
 		
