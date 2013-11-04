@@ -1,11 +1,8 @@
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import java.math.BigInteger;
-
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public class ECGroupF2m extends ECGroup {

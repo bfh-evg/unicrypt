@@ -28,18 +28,29 @@ public abstract class ECGroup extends
 		this.h = h;
 		this.finiteField = Finitefiled;
 		this.Identity = this.getElement(zero, zero);
-		this.generator = this.getElement(MathUtil.elegantPair(gx.getValue(),
-				gy.getValue()));
+		this.generator = this.getElement(gx,gy);
 		if (!this.isGenerator(generator)) {
 			throw new IllegalArgumentException("Point " + generator.toString()
 					+ " is not a generator");
 		}
 
 	}
+	
+	protected ECGroup(FiniteField Finitefiled, DualisticElement a,
+			DualisticElement b,	BigInteger order, BigInteger h) {
+		super();
+		this.a = a;
+		this.b = b;
+		this.order = order;
+		this.h = h;
+		this.finiteField = Finitefiled;
+		this.Identity = this.getElement(zero, zero);
+		this.generator = this.computeGenerator();
+	}
 
 	@Override
 	protected ECGroupElement abstractGetDefaultGenerator() {
-		return this.generator;
+			return this.generator;
 	}
 
 	@Override
@@ -112,13 +123,20 @@ public abstract class ECGroup extends
 			BigInteger p=((ZMod) this.finiteField).getModulus();
 			DualisticElement x=this.finiteField.getRandomElement(random);
 			DualisticElement y=x.power(3).add(a.multiply(x)).add(b);
+			boolean neg=x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
 			
 			while(!MathUtil.hasSquareRootModp(y.getValue(),p )){
 				x=this.finiteField.getRandomElement(random);
 				y=x.power(3).add(a.multiply(x)).add(b);
 			}
 			
-			y=this.finiteField.getElement(MathUtil.sqrtModp(y.getValue(), p));
+			//if neg is true return solution 2(p-sqrt) of sqrtModp else solution 1
+			if(neg){
+				y=this.finiteField.getElement(p.subtract(MathUtil.sqrtModp(y.getValue(), p)));
+			}
+			else{
+				y=this.finiteField.getElement(MathUtil.sqrtModp(y.getValue(), p));
+			}
 			
 			return this.getElement(x, y);
 			
@@ -166,5 +184,16 @@ public abstract class ECGroup extends
 		ECGroupElement e = (ECGroupElement) element;
 		return e.getX() == null && e.getY() == null;
 	}
+	
+	protected ECGroupElement computeGenerator(){
+		ECGroupElement e=this.getRandomElement().selfApply(this.h);
+		while(!this.isGenerator(e)){
+			e=this.getRandomElement();
+		}
+		return e;
+	}
+
+	
+	
 
 }

@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public class ECGroupFp extends ECGroup {
@@ -14,6 +13,12 @@ public class ECGroupFp extends ECGroup {
 			DualisticElement b, DualisticElement gx, DualisticElement gy,
 			BigInteger order, BigInteger h) {
 		super(Finitefiled, a, b, gx, gy, order, h);
+		// TODO Auto-generated constructor stub
+	}
+	
+	protected ECGroupFp(ZModPrime Finitefiled, DualisticElement a,
+			DualisticElement b, BigInteger order, BigInteger h) {
+		super(Finitefiled, a, b, order, h);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -56,6 +61,10 @@ public class ECGroupFp extends ECGroup {
 	
 	public BigInteger getP(){
 		return  ((ZMod) this.getFiniteField()).getModulus();
+	}
+	
+	public static ECGroupFp getInstance(ZModPrime f,DualisticElement a, DualisticElement b, BigInteger order, BigInteger h){
+		return new ECGroupFp(f, a, b, order, h);
 	}
 
 }
