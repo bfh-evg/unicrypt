@@ -1,23 +1,30 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.bfh.unicrypt.crypto.schemes;
 
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 /**
  *
  * @author rolfhaenni
+ * @param <M>
  */
-public abstract class AbstractScheme<M extends Set> extends UniCrypt implements Scheme {
+public abstract class AbstractScheme<M extends Set>
+       extends UniCrypt
+       implements Scheme {
 
-  private Encoder encoder;
+  private final M messageSpace;
+  private final Encoder encoder;
 
-  public AbstractScheme(Encoder encoder) {
+  public AbstractScheme(M messageSpace, Encoder encoder) {
+    this.messageSpace = messageSpace;
     this.encoder = encoder;
+  }
+
+  @Override
+  public M getMessageSpace() {
+    return this.messageSpace;
   }
 
   @Override
@@ -25,9 +32,12 @@ public abstract class AbstractScheme<M extends Set> extends UniCrypt implements 
     return this.encoder;
   }
 
-  @Override
-  public M getMessageSpace() {
-    return (M) this.getEncoder().getMessageSpace();
+  protected Element encodeMessage(Element message) {
+    return this.getEncoder().encode(this.getEncoder().getDomain().getElement(message));
+  }
+
+  protected Element decodeMessage(Element element) {
+    return this.getMessageSpace().getElement(this.getEncoder().decode(element));
   }
 
 }

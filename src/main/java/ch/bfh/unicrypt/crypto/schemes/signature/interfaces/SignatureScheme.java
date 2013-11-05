@@ -7,7 +7,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public interface SignatureScheme extends Scheme {
+/**
+ *
+ * @author rolfhaenni
+ */
+public interface SignatureScheme
+       extends Scheme {
 
   public KeyPairGenerator getKeyPairGenerator();
 

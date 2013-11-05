@@ -5,16 +5,55 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public interface EncryptionScheme extends Scheme {
+/**
+ *
+ * @author rolfhaenni
+ */
+public interface EncryptionScheme
+       extends Scheme {
 
+  /**
+   *
+   * @return
+   */
+  public Set getPlaintextSpace();
+
+  /**
+   *
+   * @return
+   */
   public Set getCiphertextSpace();
 
+  /**
+   *
+   * @return
+   */
   public Function getEncryptionFunction();
 
+  /**
+   *
+   * @return
+   */
   public Function getDecryptionFunction();
 
-  public Element encrypt(Element key, Element plaintext);
+  /**
+   *
+   * @param encryptionKey
+   * @param message
+   * @return
+   */
+  public Element encrypt(Element encryptionKey, Element message);
 
-  public Element decrypt(Element key, Element ciphertext);
+  /**
+   *
+   * @param decryptionKey
+   * @param ciphertext
+   * @return
+   */
+  public Element decrypt(Element decryptionKey, Element ciphertext);
+
+  public Set getEncryptionKeySpace();
+
+  public Set getDecryptionKeySpace();
 
 }

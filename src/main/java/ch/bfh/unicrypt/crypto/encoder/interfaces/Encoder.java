@@ -6,15 +6,15 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public interface Encoder {
 
-  public Set getMessageSpace();
+  public Set getDomain();
 
-  public Set getEncodingSpace();
+  public Set getCoDomain();
 
   public Function getEncodingFunction();
 
   public Function getDecodingFunction();
 
-  public Element encode(Element message);
+  public Element encode(Element element);
 
   public Element decode(Element element);
 
