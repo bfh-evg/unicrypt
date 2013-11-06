@@ -1,14 +1,13 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.helper.factorization.SpecialFactorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * This interface represents the concept of a sub-group G_m (of order m) of a
@@ -19,16 +18,17 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * m=|G_m| is the product of all given prime factors of phi(n). If all prime
  * factors of phi(n) are given, which implies m=phi(n), then G_m is the parent
  * group Z*_n.
- *
+ * <p>
  * @see "Handbook of Applied Cryptography, Fact 2.132"
  * @see "Handbook of Applied Cryptography, Definition 2.100"
  * @see "Handbook of Applied Cryptography, Definition 2.166"
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement> {
+public class GStarMod
+       extends AbstractMultiplicativeCyclicGroup<GStarModElement> {
 
   private final BigInteger modulus;
   private final SpecialFactorization moduloFactorization;
@@ -43,7 +43,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
 
   /**
    * Returns the modulus if this group.
-   *
+   * <p>
    * @return The modulus
    */
   public final BigInteger getModulus() {
@@ -54,7 +54,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
    * Returns a (possibly incomplete) prime factorization the modulus if this
    * group. An incomplete factorization implies that the group order is unknown
    * in such a case.
-   *
+   * <p>
    * @return The prime factorization
    */
   public final SpecialFactorization getModuloFactorization() {
@@ -63,7 +63,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
 
   /**
    * Returns prime factorization of the group order phi(n) of Z*_n.
-   *
+   * <p>
    * @return The prime factorization of the group order
    */
   public final Factorization getOrderFactorization() {
@@ -79,7 +79,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
 
   /**
    * Returns the quotient k=phi(n)/m of the orders of the two involved groups.
-   *
+   * <p>
    * @return The quotient of the two orders.
    */
   public BigInteger getCoFactor() {
@@ -151,7 +151,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
       throw new IllegalArgumentException();
     }
     return (value.signum() >= 0) && (value.compareTo(this.getModulus()) < 0) && MathUtil.areRelativelyPrime(value, this.getModulus())
-            && value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE);
+           && value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE);
   }
 
   @Override
@@ -176,7 +176,7 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
 
   /**
    * See http://en.wikipedia.org/wiki/Schnorr_group
-   *
+   * <p>
    * @return
    */
   @Override
@@ -210,13 +210,15 @@ public class GStarMod extends AbstractMultiplicativeCyclicGroup<GStarModElement>
   //
   /**
    * This is the general static factory method for this class.
-   *
+   * <p>
    * @param moduloFactorization
    * @param orderFactorization
+   * @return
    * @throws IllegalArgumentException if {@literal moduloFactorization} or
-   * {@literal orderFactorization} is null
+   *                                  {@literal orderFactorization} is null
    * @throws IllegalArgumentException if the value of
-   * {@literal orderFactorization} does not divide phi(n)
+   *                                  {@literal orderFactorization} does not
+   *                                  divide phi(n)
    */
   public static GStarMod getInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
     GStarMod group = new GStarMod(moduloFactorization, orderFactorization);

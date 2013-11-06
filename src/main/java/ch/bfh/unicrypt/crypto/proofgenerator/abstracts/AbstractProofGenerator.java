@@ -8,35 +8,35 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class ProofGeneratorAbstract implements ProofGenerator {
+public abstract class AbstractProofGenerator<E extends Element, PR extends Set, PU extends Set, PS extends Set, F extends Function> implements ProofGenerator {
 
-  private Function proofFunction;
+  private F proofFunction;
   private Set otherInputSpace;
-  private Set proofSpace;
+  private PS proofSpace;
 
-  public ProofGeneratorAbstract(Function proofFunction, Set otherInputSpace, Set proofSpace) {
+  public AbstractProofGenerator(F proofFunction, Set otherInputSpace, PS proofSpace) {
     this.proofFunction = proofFunction;
     this.otherInputSpace = otherInputSpace;
     this.proofSpace = proofSpace;
   }
 
   @Override
-  public Element generate(final Element privateInput, final Element publicInput) {
+  public E generate(final Element privateInput, final Element publicInput) {
     return this.generate(privateInput, publicInput, (Random) null);
   }
 
   @Override
-  public Element generate(final Element privateInput, final Element publicInput, final Element otherInput) {
+  public E generate(final Element privateInput, final Element publicInput, final Element otherInput) {
     return this.generate(privateInput, publicInput, otherInput, (Random) null);
   }
 
   @Override
-  public Element generate(final Element privateInput, final Element publicInput, final Random random) {
+  public E generate(final Element privateInput, final Element publicInput, final Random random) {
     return this.generate(privateInput, publicInput, (Element) null, random);
   }
 
   @Override
-  public Element generate(Element privateInput, Element publicInput, Element otherInput, Random random) {
+  public E generate(Element privateInput, Element publicInput, Element otherInput, Random random) {
     if (privateInput == null || !this.getPrivateInputSpace().contains(privateInput)
             || publicInput == null || !this.getPublicInputSpace().contains(publicInput)
             || (otherInput != null && !this.getOtherInputSpace().contains(otherInput))) {
@@ -61,18 +61,18 @@ public abstract class ProofGeneratorAbstract implements ProofGenerator {
   }
 
   @Override
-  public Function getProofFunction() {
+  public F getProofFunction() {
     return this.proofFunction;
   }
 
   @Override
-  public Set getPrivateInputSpace() {
-    return this.getProofFunction().getDomain();
+  public PR getPrivateInputSpace() {
+    return (PR) this.getProofFunction().getDomain();
   }
 
   @Override
-  public Set getPublicInputSpace() {
-    return this.getProofFunction().getCoDomain();
+  public PU getPublicInputSpace() {
+    return (PU) this.getProofFunction().getCoDomain();
   }
 
   @Override
@@ -81,11 +81,11 @@ public abstract class ProofGeneratorAbstract implements ProofGenerator {
   }
 
   @Override
-  public Set getProofSpace() {
+  public PS getProofSpace() {
     return this.proofSpace;
   }
 
-  protected abstract Element abstractGenerate(Element secretInput, Element publicInput, Element otherInput, Random random);
+  protected abstract E abstractGenerate(Element secretInput, Element publicInput, Element otherInput, Random random);
 
   protected abstract BooleanElement abstractVerify(Element proof, Element publicInput, Element otherInput);
 

@@ -10,8 +10,13 @@ import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
  *
  * @author rolfhaenni
  */
-public interface SymmetricEncryptionScheme extends EncryptionScheme {
+public interface SymmetricEncryptionScheme
+       extends EncryptionScheme {
 
+  /**
+   *
+   * @return
+   */
   public KeyGenerator getKeyGenerator();
 
 }
