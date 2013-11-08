@@ -1,13 +1,12 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.Random;
 
 /**
  * This class represents the concept of a function, which is derived from
@@ -17,12 +16,13 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * the parent function minus 1. Functions of that type are usually constructed
  * by calling the method {@link Function#partiallyApply(Element, int)} for a
  * given function with a product (or power) group domain.
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, Element> {
+public class PartiallyAppliedFunction
+       extends AbstractFunction<ProductSet, Set, Element> {
 
   private final Function parentFunction;
   private final Element parameter;
@@ -32,16 +32,16 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
    * This is the standard constructor of this class. It derives from a given
    * function a new function, in which one input element is fixed to a given
    * element and thus expects one input element less.
-   *
+   * <p>
    * @param parentFunction The given function
-   * @param parameter The given parameter to fix
-   * @param index The index of the parameter to fix
-   * @throws IllegalArgumentException if the {@code function} is null or not a
-   * ProductGroup
-   * @throws IndexOutOfBoundsException if the {@code index} is negative or > the
-   * arity of the function's domain
-   * @throws IllegalArgumentException if the {@code element} is not an element
-   * of the corresponding group
+   * @param parameter      The given parameter to fix
+   * @param index          The index of the parameter to fix
+   * @throws IllegalArgumentException  if the {@literal function} is null or not
+   *                                   a ProductGroup
+   * @throws IndexOutOfBoundsException if the {@literal index} is negative or >
+   *                                   the arity of the function's domain
+   * @throws IllegalArgumentException  if the {@literal element} is not an
+   *                                   element of the corresponding group
    */
   private PartiallyAppliedFunction(final ProductSet domain, final Set coDomain, final Function parentFunction, final Element parameter, final int index) {
     super(domain, coDomain);
@@ -51,9 +51,9 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
   }
 
   /**
-   * Returns the parent function from which {@code this} function has been
+   * Returns the parent function from which {@literal this} function has been
    * derived.
-   *
+   * <p>
    * @return The parent function
    */
   public Function getParentFunction() {
@@ -61,9 +61,9 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
   }
 
   /**
-   * Returns the input element that has been used to derive {@code this}
+   * Returns the input element that has been used to derive {@literal this}
    * function from the parent function.
-   *
+   * <p>
    * @return The input element
    */
   public Element getParameter() {
@@ -72,8 +72,8 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
 
   /**
    * Returns the index of the parameter that has been fixed to derive
-   * {@code this} function from the parent function.
-   *
+   * {@literal this} function from the parent function.
+   * <p>
    * @return The index of the input element
    */
   public int getIndex() {
@@ -81,21 +81,11 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
   }
 
   @Override
-  protected boolean standardEquals(Function function) {
+  protected boolean standardIsEqual(Function function) {
     PartiallyAppliedFunction other = (PartiallyAppliedFunction) function;
-    return this.getParentFunction().equals(other.getParentFunction())
-            && this.getParameter().equals(other.getParameter())
-            && this.getIndex() == other.getIndex();
-  }
-
-  @Override
-  protected int standardHashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + this.getParentFunction().hashCode();
-    result = prime * result + this.getParameter().hashCode();
-    result = prime * result + this.getIndex();
-    return result;
+    return this.getParentFunction().isEqual(other.getParentFunction())
+           && this.getParameter().isEqual(other.getParameter())
+           && this.getIndex() == other.getIndex();
   }
 
   //
@@ -124,16 +114,16 @@ public class PartiallyAppliedFunction extends AbstractFunction<ProductSet, Set, 
    * This is the standard constructor of this class. It derives from a given
    * function a new function, in which one input element is fixed to a given
    * element and thus expects one input element less.
-   *
+   * <p>
    * @param parentfunction The given function
-   * @param element The given parameter to fix
-   * @param index The index of the parameter to fix
-   * @throws IllegalArgumentException if the {@code function} is null or not a
-   * ProductGroup
-   * @throws IndexOutOfBoundsException if the {@code index} is negative or > the
-   * arity of the function's domain
-   * @throws IllegalArgumentException if the {@code element} is not an element
-   * of the corresponding group
+   * @param element        The given parameter to fix
+   * @param index          The index of the parameter to fix
+   * @throws IllegalArgumentException  if the {@literal function} is null or not
+   *                                   a ProductGroup
+   * @throws IndexOutOfBoundsException if the {@literal index} is negative or >
+   *                                   the arity of the function's domain
+   * @throws IllegalArgumentException  if the {@literal element} is not an
+   *                                   element of the corresponding group
    */
   public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element, final int index) {
     if (parentFunction == null) {

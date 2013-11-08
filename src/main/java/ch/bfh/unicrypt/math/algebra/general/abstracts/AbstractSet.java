@@ -2,9 +2,6 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
@@ -19,18 +16,22 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * This abstract class provides a basis implementation for atomic sets.
- *
+ * <p>
  * @param <E>
  * @see AbstractElement
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractSet<E extends Element> extends UniCrypt implements Set {
+public abstract class AbstractSet<E extends Element>
+       extends UniCrypt
+       implements Set {
 
   private BigInteger order, minOrder, maxOrder;
 
@@ -175,7 +176,7 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
     if (element == null) {
       throw new IllegalArgumentException();
     }
-    return this.equals(element.getSet());
+    return this.isEqual(element.getSet());
   }
 
   @Override
@@ -217,7 +218,7 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
     if (!this.contains(element1) || !this.contains(element2)) {
       throw new IllegalArgumentException();
     }
-    return element1.equals(element2);
+    return element1.isEqual(element2);
   }
 
   @Override
@@ -229,27 +230,17 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
   }
 
   @Override
-  public final boolean equals(final Object object) {
-    if (this == object) {
+  public final boolean isEqual(final Set set) {
+    if (set == null) {
+      throw new IllegalArgumentException();
+    }
+    if (this == set) {
       return true;
     }
-    if (object == null) {
+    if (!this.isCompatible(set)) {
       return false;
     }
-    Set other = ((Set) object);
-    if (!this.isCompatible(other)) {
-      return false;
-    }
-    return this.standardEquals(other);
-  }
-
-  @Override
-  public final int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + this.getClass().hashCode();
-    result = prime * result + this.standardHashCode();
-    return result;
+    return this.standardIsEqual(set);
   }
 
   //
@@ -268,12 +259,8 @@ public abstract class AbstractSet<E extends Element> extends UniCrypt implements
     return this.getClass() == set.getClass();
   }
 
-  protected boolean standardEquals(Set set) {
+  protected boolean standardIsEqual(Set set) {
     return true;
-  }
-
-  protected int standardHashCode() {
-    return 0;
   }
 
   //

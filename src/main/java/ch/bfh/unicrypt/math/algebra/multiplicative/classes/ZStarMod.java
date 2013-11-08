@@ -1,8 +1,5 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -10,21 +7,24 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicat
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * This class implements the group of integers Z*_n with the operation of
  * multiplication modulo n. Its identity element is 1. Every integer in Z*_n is
  * relatively prime to n. The smallest such group is Z*_2 = {1}.
- *
+ * <p>
  * @see "Handbook of Applied Cryptography, Definition 2.124"
  * @see <a
  * href="http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n">http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n</a>
- *
+ <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
+public class ZStarMod
+       extends AbstractMultiplicativeGroup<ZStarModElement> {
 
   private final BigInteger modulus;
   private final Factorization moduloFactorization;
@@ -32,7 +32,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
   /**
    * This is a private constructor of this class. It is called by the static
    * factory methods.
-   *
+   * <p>
    * @param modulus The given modulus
    */
   protected ZStarMod(final BigInteger modulus) {
@@ -42,7 +42,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
   /**
    * This is a private constructor of this class. It is called by the static
    * factory methods.
-   *
+   * <p>
    * @param factorization The given factorization
    */
   protected ZStarMod(final Factorization factorization) {
@@ -52,8 +52,8 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
   /**
    * This is a private constructor of this class. It is called by the static
    * factory methods.
-   *
-   * @param modulus The given modulus
+   * <p>
+   * @param modulus       The given modulus
    * @param factorization The given factorization
    */
   protected ZStarMod(final BigInteger modulus, final Factorization factorization) {
@@ -63,7 +63,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
 
   /**
    * Returns the modulus if this group.
-   *
+   * <p>
    * @return The modulus
    */
   public final BigInteger getModulus() {
@@ -74,7 +74,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
    * Returns a (possibly incomplete) prime factorization the modulus if this
    * group. An incomplete factorization implies that the group order is unknown
    * in such a case.
-   *
+   * <p>
    * @return The prime factorization
    */
   public final Factorization getModuloFactorization() {
@@ -101,7 +101,7 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
   }
 
   @Override
-  public boolean standardEquals(final Set set) {
+  public boolean standardIsEqual(final Set set) {
     final ZStarMod zStarMod = (ZStarMod) set;
     return this.getModulus().equals(zStarMod.getModulus());
   }
@@ -109,11 +109,6 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
   @Override
   protected boolean standardIsCompatible(Set set) {
     return (set instanceof ZStarMod);
-  }
-
-  @Override
-  public int standardHashCode() {
-    return this.getModulus().hashCode();
   }
 
   @Override
@@ -183,12 +178,12 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
 
   /**
    * This is a static factory method to construct a new instance of this class
-   * for a given {@literal modulus >= 2}. If {@literal modulus} is not prime, then a
-   * group of unknown order is returned.
-   *
+   * for a given {@literal modulus >= 2}. If {@literal modulus} is not prime,
+   * then a group of unknown order is returned.
+   * <p>
    * @param modulus The modulus
-   * @throws IllegalArgumentException if {@literal modulus} is null or smaller than
-   * 2
+   * @throws IllegalArgumentException if {@literal modulus} is null or smaller
+   *                                  than 2
    */
   public static ZStarMod getInstance(final BigInteger modulus) {
     if (modulus == null || modulus.compareTo(BigInteger.ONE) <= 0) {
@@ -204,11 +199,12 @@ public class ZStarMod extends AbstractMultiplicativeGroup<ZStarModElement> {
    * This is a static factory method to construct a new instance of this class,
    * where the group's modulus is value of the given prime factorization. This
    * always leads to a group of known order.
-   *
+   * <p>
    * @param factorization The given prime factorization
    * @throws IllegalArgumentException if {@literal primeFactorization} is null
-   * @throws IllegalArgumentException if {@literal primeFactorization.getValue()}
-   * is 1
+   * @throws IllegalArgumentException if
+   *                                  {@literal primeFactorization.getValue()}
+   *                                  is 1
    */
   public static ZStarMod getInstance(final Factorization factorization) {
     if (factorization == null || factorization.getValue().compareTo(BigInteger.ONE) <= 0) {

@@ -4,23 +4,24 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrays;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.helper.Compound;
-import ch.bfh.unicrypt.math.utility.MathUtil;
-
 /**
  *
  * @author rolfhaenni
  */
-public class Tuple extends AbstractElement<ProductSet, Tuple> implements Compound<Tuple, Element> {
+public class Tuple
+       extends AbstractElement<ProductSet, Tuple>
+       implements Compound<Tuple, Element> {
 
   private final Element[] elements;
   private final int arity;
@@ -48,7 +49,7 @@ public class Tuple extends AbstractElement<ProductSet, Tuple> implements Compoun
     for (int i = 0; i < arity; i++) {
       hashValues[i] = this.getAt(i).getRecursiveHashValue(messageDigest);
     }
-    return ByteArrays.getInstance().apply(hashValues).getHashValue(messageDigest);
+    return ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(messageDigest);
   }
 
   @Override
@@ -153,24 +154,14 @@ public class Tuple extends AbstractElement<ProductSet, Tuple> implements Compoun
   }
 
   @Override
-  protected boolean standardEquals(Element element) {
+  protected boolean standardIsEqual(Element element) {
     Tuple other = (Tuple) element;
     for (int i = 0; i < this.getArity(); i++) {
-      if (!this.getAt(i).equals(other.getAt(i))) {
+      if (!this.getAt(i).isEqual(other.getAt(i))) {
         return false;
       }
     }
     return true;
-  }
-
-  @Override
-  protected int standardHashCode() {
-    final int prime = 31;
-    int result = 1;
-    for (Element element : this) {
-      result = prime * result + element.hashCode();
-    }
-    return result;
   }
 
   @Override

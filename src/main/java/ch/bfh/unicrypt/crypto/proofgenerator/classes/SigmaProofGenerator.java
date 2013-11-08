@@ -106,7 +106,7 @@ public class SigmaProofGenerator extends ProofGeneratorAbstract implements Sigma
     final AdditiveElement challenge = this.getHashFunction().apply(hashInput);
     final Element left = this.getProofFunction().apply(this.getResponse(proof));
     final Element right = this.getCommitment(proof).apply(publicInput.selfApply(challenge));
-    return left.equals(right);
+    return left.isEqual(right);
   }
 
   public Group getCommitmentSpace() {

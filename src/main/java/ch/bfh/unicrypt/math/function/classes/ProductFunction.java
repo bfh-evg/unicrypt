@@ -28,7 +28,7 @@ public final class ProductFunction extends AbstractCompoundFunction<ProductFunct
    * as input and produces the corresponding product function.
    *
    * @param functions
-   * @throws IllegalArgumentException if {@code functions} is null or contains
+   * @throws IllegalArgumentException if {@literal functions} is null or contains
    * null
    */
   protected ProductFunction(final ProductSet domain, ProductSet coDomain, Function... functions) {
@@ -42,8 +42,8 @@ public final class ProductFunction extends AbstractCompoundFunction<ProductFunct
    *
    * @param function The given function
    * @param arity The number of times the function is applied in parallel
-   * @throws IllegalArgumentException if {@code function} is null
-   * @throws IllegalArgumentException if {@code arity} is negative
+   * @throws IllegalArgumentException if {@literal function} is null
+   * @throws IllegalArgumentException if {@literal arity} is negative
    */
   protected ProductFunction(ProductSet domain, ProductSet coDomain, Function function, int arity) {
     super(domain, coDomain, function, arity);
@@ -81,7 +81,7 @@ public final class ProductFunction extends AbstractCompoundFunction<ProductFunct
    * as input and produces the corresponding product function.
    *
    * @param functions
-   * @throws IllegalArgumentException if {@code functions} is null or contains
+   * @throws IllegalArgumentException if {@literal functions} is null or contains
    * null
    */
   public static ProductFunction getInstance(final Function... functions) {
@@ -100,7 +100,7 @@ public final class ProductFunction extends AbstractCompoundFunction<ProductFunct
         }
         domains[i] = functions[i].getDomain();
         coDomains[i] = functions[i].getCoDomain();
-        if (!functions[i].equals(first)) {
+        if (!functions[i].isEqual(first)) {
           uniform = false;
         }
       }
@@ -118,8 +118,8 @@ public final class ProductFunction extends AbstractCompoundFunction<ProductFunct
    *
    * @param function The given function
    * @param arity The number of times the function is applied in parallel
-   * @throws IllegalArgumentException if {@code function} is null
-   * @throws IllegalArgumentException if {@code arity} is negative
+   * @throws IllegalArgumentException if {@literal function} is null
+   * @throws IllegalArgumentException if {@literal arity} is negative
    */
   public static ProductFunction getInstance(final Function function, final int arity) {
     if (function == null || arity < 0) {

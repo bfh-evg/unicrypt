@@ -16,9 +16,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  *
  * @author rolfhaenni
  */
-public class ByteArrays extends AbstractConcatenativeMonoid<ByteArrayElement> {
+public class ByteArrayMonoid extends AbstractConcatenativeMonoid<ByteArrayElement> {
 
-  private ByteArrays() {
+  private ByteArrayMonoid() {
   }
 
   public final ByteArrayElement getElement(final byte[] bytes) {
@@ -73,18 +73,18 @@ public class ByteArrays extends AbstractConcatenativeMonoid<ByteArrayElement> {
   //
   // STATIC FACTORY METHODS
   //
-  private static ByteArrays instance;
+  private static ByteArrayMonoid instance;
 
   /**
    * Returns the singleton object of this class.
    *
    * @return The singleton object of this class
    */
-  public static ByteArrays getInstance() {
-    if (ByteArrays.instance == null) {
-      ByteArrays.instance = new ByteArrays();
+  public static ByteArrayMonoid getInstance() {
+    if (ByteArrayMonoid.instance == null) {
+      ByteArrayMonoid.instance = new ByteArrayMonoid();
     }
-    return ByteArrays.instance;
+    return ByteArrayMonoid.instance;
   }
 
 }

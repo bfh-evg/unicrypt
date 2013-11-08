@@ -1,30 +1,30 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.Random;
 
 /**
  * This class represents the concept of a constant function with no input. When
  * the function is called, it returns always the same element as output value.
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ConstantFunction extends AbstractFunction<SingletonGroup, Set, Element> {
+public class ConstantFunction
+       extends AbstractFunction<SingletonGroup, Set, Element> {
 
   private Element element;
 
   /**
    * This is the general constructor of this class. It creates a function that
    * returns always the same element when called.
-   *
+   * <p>
    * @param element The constant output value of the function
    * @throws IllegalArgumentException if {@literal element} is null
    */
@@ -35,7 +35,7 @@ public class ConstantFunction extends AbstractFunction<SingletonGroup, Set, Elem
 
   /**
    * Returns the constant element returned by this function.
-   *
+   * <p>
    * @return The constant element
    */
   public Element getElement() {
@@ -43,13 +43,8 @@ public class ConstantFunction extends AbstractFunction<SingletonGroup, Set, Elem
   }
 
   @Override
-  protected boolean standardEquals(Function function) {
-    return this.getElement().equals(((ConstantFunction) function).getElement());
-  }
-
-  @Override
-  protected int standardHashCode() {
-    return this.getElement().hashCode();
+  protected boolean standardIsEqual(Function function) {
+    return this.getElement().isEqual(((ConstantFunction) function).getElement());
   }
 
   @Override
@@ -60,7 +55,7 @@ public class ConstantFunction extends AbstractFunction<SingletonGroup, Set, Elem
   /**
    * This is the general factory method of this class. It creates a function
    * that always returns the same element when called.
-   *
+   * <p>
    * @param element The given element
    * @return The constant function
    * @throws IllegalArgumentException if {@literal group} is null
@@ -75,7 +70,7 @@ public class ConstantFunction extends AbstractFunction<SingletonGroup, Set, Elem
   /**
    * This is a special factory method of this class, which creates a function
    * that always returns the identity element of the given group.
-   *
+   * <p>
    * @param monoid The given group
    * @return The resulting function
    */

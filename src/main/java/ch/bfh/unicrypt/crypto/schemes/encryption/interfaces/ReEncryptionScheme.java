@@ -9,7 +9,7 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public interface HomomorphicEncryptionScheme
+public interface ReEncryptionScheme
        extends RandomizedEncryptionScheme {
 
   /**

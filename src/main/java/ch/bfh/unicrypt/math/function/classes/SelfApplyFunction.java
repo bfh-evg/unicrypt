@@ -2,7 +2,7 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.NaturalNumbers;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -47,7 +47,7 @@ public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, E
    * selected automatically from the given group.
    *
    * @param semiGroup The underlying group
-   * @throws IllegalArgumentException if {@code group} is null
+   * @throws IllegalArgumentException if {@literal group} is null
    */
   public static SelfApplyFunction getInstance(final SemiGroup semiGroup) {
     if (semiGroup == null) {
@@ -56,7 +56,7 @@ public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, E
     if (semiGroup.isFinite() && semiGroup.hasKnownOrder()) {
       return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZModOrder());
     }
-    return SelfApplyFunction.getInstance(semiGroup, NaturalNumbers.getInstance());
+    return SelfApplyFunction.getInstance(semiGroup, N.getInstance());
   }
 
   /**
@@ -67,8 +67,8 @@ public class SelfApplyFunction extends AbstractFunction<ProductSet, SemiGroup, E
    *
    * @param semiGroup The underlying group
    * @param amountSet
-   * @throws IllegalArgumentException if {@code group} is null
-   * @throws IllegalArgumentException if {@code amountGroup} is negative
+   * @throws IllegalArgumentException if {@literal group} is null
+   * @throws IllegalArgumentException if {@literal amountGroup} is negative
    */
   public static SelfApplyFunction getInstance(final SemiGroup semiGroup, final Set amountSet) {
     if (semiGroup == null || amountSet == null) {

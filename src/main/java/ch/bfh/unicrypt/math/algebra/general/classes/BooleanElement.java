@@ -12,7 +12,8 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public class BooleanElement extends AbstractElement<BooleanSet, BooleanElement> {
+public class BooleanElement
+       extends AbstractElement<BooleanSet, BooleanElement> {
 
   private final boolean bit;
 
@@ -34,13 +35,8 @@ public class BooleanElement extends AbstractElement<BooleanSet, BooleanElement> 
   }
 
   @Override
-  protected boolean standardEquals(Element element) {
+  protected boolean standardIsEqual(Element element) {
     return this.getBoolean() == ((BooleanElement) element).getBoolean();
-  }
-
-  @Override
-  protected int standardHashCode() {
-    return ((Boolean) this.getBoolean()).hashCode();
   }
 
   @Override

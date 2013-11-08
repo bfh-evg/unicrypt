@@ -24,14 +24,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class NaturalNumbers extends AbstractSemiRing<NaturalNumberElement> {
+public class N extends AbstractSemiRing<NElement> {
 
   //
   // The following protected methods override the standard implementation from
   // various super-classes
   //
   @Override
-  protected NaturalNumberElement standardSelfApply(Element element, BigInteger amount) {
+  protected NElement standardSelfApply(Element element, BigInteger amount) {
     return this.abstractGetElement(element.getValue().multiply(amount));
   }
 
@@ -40,22 +40,22 @@ public class NaturalNumbers extends AbstractSemiRing<NaturalNumberElement> {
   // various super-classes
   //
   @Override
-  protected NaturalNumberElement abstractApply(Element element1, Element element2) {
+  protected NElement abstractApply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().add(element2.getValue()));
   }
 
   @Override
-  protected NaturalNumberElement abstractGetIdentityElement() {
+  protected NElement abstractGetIdentityElement() {
     return this.abstractGetElement(BigInteger.ZERO);
   }
 
   @Override
-  protected NaturalNumberElement abstractMultiply(Element element1, Element element2) {
+  protected NElement abstractMultiply(Element element1, Element element2) {
     return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
   }
 
   @Override
-  protected NaturalNumberElement abstractGetOne() {
+  protected NElement abstractGetOne() {
     return this.abstractGetElement(BigInteger.ONE);
   }
 
@@ -65,13 +65,13 @@ public class NaturalNumbers extends AbstractSemiRing<NaturalNumberElement> {
   }
 
   @Override
-  protected NaturalNumberElement abstractGetElement(BigInteger value) {
-    return new NaturalNumberElement(this, value) {
+  protected NElement abstractGetElement(BigInteger value) {
+    return new NElement(this, value) {
     };
   }
 
   @Override
-  protected NaturalNumberElement abstractGetRandomElement(Random random) {
+  protected NElement abstractGetRandomElement(Random random) {
     throw new UnsupportedOperationException();
   }
 
@@ -82,18 +82,18 @@ public class NaturalNumbers extends AbstractSemiRing<NaturalNumberElement> {
   //
   // STATIC FACTORY METHODS
   //
-  private static NaturalNumbers instance;
+  private static N instance;
 
   /**
    * Returns the singleton object of this class.
    *
    * @return The singleton object of this class
    */
-  public static NaturalNumbers getInstance() {
-    if (NaturalNumbers.instance == null) {
-      NaturalNumbers.instance = new NaturalNumbers();
+  public static N getInstance() {
+    if (N.instance == null) {
+      N.instance = new N();
     }
-    return NaturalNumbers.instance;
+    return N.instance;
   }
 
 }

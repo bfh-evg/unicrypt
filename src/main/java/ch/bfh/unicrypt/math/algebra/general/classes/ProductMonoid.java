@@ -100,7 +100,7 @@ public class ProductMonoid extends ProductSemiGroup implements Monoid {
    *
    * @param monoids The array of input monoids
    * @return The corresponding product monoids
-   * @throws IllegalArgumentException if {@code monids} is null or contains null
+   * @throws IllegalArgumentException if {@literal monids} is null or contains null
    */
   public static ProductMonoid getInstance(final Monoid... monoids) {
     if (monoids == null) {
@@ -113,7 +113,7 @@ public class ProductMonoid extends ProductSemiGroup implements Monoid {
         if (monoid == null) {
           throw new IllegalArgumentException();
         }
-        if (!monoid.equals(first)) {
+        if (!monoid.isEqual(first)) {
           uniform = false;
         }
       }

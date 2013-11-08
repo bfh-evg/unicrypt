@@ -83,7 +83,7 @@ public class HashSchemeClassTest {
 	public void testHashSchemeClassStringConcatSchemeZPlusMod() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
 		HashScheme scheme = new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
-		scheme.getHashFunction().getCoDomain().equals(HashAlgorithm.SHA1.getCoDomain());
+		scheme.getHashFunction().getCoDomain().isEqual(HashAlgorithm.SHA1.getCoDomain());
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class HashSchemeClassTest {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
 		ZPlusMod coDomain = new ZPlusModClass(BigInteger.valueOf(6));
 		HashScheme scheme = new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat, coDomain);
-		scheme.getHashFunction().getCoDomain().equals(coDomain);
+		scheme.getHashFunction().getCoDomain().isEqual(coDomain);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -104,7 +104,7 @@ public class HashSchemeClassTest {
 	public void testHash() {
 		final ConcatScheme concat = new ConcatSchemeClass(ConcatParameter.Plain, new CharsetXRadixYMapperClass());
 		HashScheme scheme = new StandardHashScheme(HashAlgorithm.SHA1.getAlgorithmName(), concat, HashAlgorithm.SHA1.getCoDomain());
-		scheme.getHashFunction().getCoDomain().equals(HashAlgorithm.SHA1.getCoDomain());
+		scheme.getHashFunction().getCoDomain().isEqual(HashAlgorithm.SHA1.getCoDomain());
 		AtomicElement element = scheme.hash(ZPlus.getInstance().createEncodedElement(new BigInteger("abcde".getBytes())));
 		Assert.assertEquals(new BigInteger("03de6c570bfe24bfc328ccd7ca46b76eadaf4334", 16), element.getValue());
 	}

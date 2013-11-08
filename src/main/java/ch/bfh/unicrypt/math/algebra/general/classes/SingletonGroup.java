@@ -3,20 +3,20 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-
 /**
  * @author rolfhaenni
- *
+ <p>
  */
-public class SingletonGroup extends AbstractCyclicGroup<Element> {
+public class SingletonGroup
+       extends AbstractCyclicGroup<Element> {
 
   private final Element element;
 
@@ -37,13 +37,8 @@ public class SingletonGroup extends AbstractCyclicGroup<Element> {
   // The following protected methods override the standard implementation from {@code AbstractGroup}
   //
   @Override
-  protected boolean standardEquals(Set set) {
+  protected boolean standardIsEqual(Set set) {
     return this.getValue().equals(((SingletonGroup) set).getValue());
-  }
-
-  @Override
-  protected int standardHashCode() {
-    return this.getValue().hashCode();
   }
 
   @Override

@@ -592,7 +592,7 @@ public class ZPlusClassTest {
   public void testCreateRandomGenerator() {
     for (int i=0; i<=50; i++) {
       AdditiveElement gen = zPlus.getRandomGenerator();
-      Assert.assertTrue(gen.equals(ONE) || gen.equals(MINUS_ONE));
+      Assert.assertTrue(gen.isEqual(ONE) || gen.isEqual(MINUS_ONE));
     }
   }
 
@@ -600,7 +600,7 @@ public class ZPlusClassTest {
   public void testCreateRandomGeneratorRandom() {
     for (int i=0; i<=50; i++) {
       AdditiveElement gen = zPlus.getRandomGenerator(random);
-      Assert.assertTrue(gen.equals(ONE) || gen.equals(MINUS_ONE));
+      Assert.assertTrue(gen.isEqual(ONE) || gen.isEqual(MINUS_ONE));
     }
   }
 

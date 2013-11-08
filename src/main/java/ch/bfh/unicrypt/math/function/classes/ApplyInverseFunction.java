@@ -43,8 +43,8 @@ public class ApplyInverseFunction extends AbstractFunction<ProductGroup, Group, 
    * @param semiGroup The group on which this function operates
    * @param arity The number of input elements
    * @return The resulting function
-   * @throws IllegalArgumentException if {@code group} is null
-   * @throws IllegalArgumentException if {@code arity} is negative
+   * @throws IllegalArgumentException if {@literal group} is null
+   * @throws IllegalArgumentException if {@literal arity} is negative
    */
   public static ApplyInverseFunction getInstance(final Group group) {
     if (group == null) {

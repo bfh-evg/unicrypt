@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.HomomorphicEncryptionScheme;
+import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.crypto.mixer.interfaces.ReEncryptionMixer;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 public class ReEncryptionMixerClass extends MixerClass implements ReEncryptionMixer {
 
-  HomomorphicEncryptionScheme encryptionScheme;
+  ReEncryptionScheme encryptionScheme;
   Element publicKey;
 
-  public ReEncryptionMixerClass(final HomomorphicEncryptionScheme encryptionScheme, final Element publicKey) {
+  public ReEncryptionMixerClass(final ReEncryptionScheme encryptionScheme, final Element publicKey) {
     super(encryptionScheme.getCiphertextSpace());
     this.encryptionScheme = encryptionScheme;
     this.publicKey = publicKey;
@@ -67,7 +67,7 @@ public class ReEncryptionMixerClass extends MixerClass implements ReEncryptionMi
   }
 
   @Override
-  public HomomorphicEncryptionScheme getEncryptionScheme() {
+  public ReEncryptionScheme getEncryptionScheme() {
     return this.encryptionScheme;
   }
 

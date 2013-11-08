@@ -48,8 +48,8 @@ public class MultiIdentityFunction extends AbstractFunction<Set, ProductSet, Tup
    *
    * @param set The given set
    * @param arity The arity of the output element
-   * @throws IllegalArgumentException if {@code group} is null
-   * @throws IllegalArgumentException if {@code arity} is negative
+   * @throws IllegalArgumentException if {@literal group} is null
+   * @throws IllegalArgumentException if {@literal arity} is negative
    */
   public static MultiIdentityFunction getInstance(final Set set, final int arity) {
     if (set == null || arity < 0) {

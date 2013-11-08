@@ -34,7 +34,7 @@ public class EqualityFunction extends AbstractFunction<ProductSet, BooleanSet, B
     if (arity > 1) {
       final Element firstElement = tuple.getFirst();
       for (Element currentElement : tuple) {
-        if (!firstElement.equals(currentElement)) {
+        if (!firstElement.isEqual(currentElement)) {
           return BooleanSet.FALSE;
         }
       }
@@ -48,7 +48,7 @@ public class EqualityFunction extends AbstractFunction<ProductSet, BooleanSet, B
    *
    * @param set The group on which this function operates
    * @return The resulting equality function
-   * @throws IllegalArgumentException if {@code group} is null
+   * @throws IllegalArgumentException if {@literal group} is null
    */
   public static EqualityFunction getInstance(final Set set) {
     return EqualityFunction.getInstance(set, 2);
@@ -62,8 +62,8 @@ public class EqualityFunction extends AbstractFunction<ProductSet, BooleanSet, B
    * @param set The group on which this function operates
    * @param arity The number of input elements to compare
    * @return The resulting equality function
-   * @throws IllegalArgumentException if {@code group} is null
-   * @throws IllegalArgumentException if {@code arity} is negative
+   * @throws IllegalArgumentException if {@literal group} is null
+   * @throws IllegalArgumentException if {@literal arity} is negative
    */
   public static EqualityFunction getInstance(final Set set, final int arity) {
     return new EqualityFunction(ProductSet.getInstance(set, arity), BooleanSet.getInstance());

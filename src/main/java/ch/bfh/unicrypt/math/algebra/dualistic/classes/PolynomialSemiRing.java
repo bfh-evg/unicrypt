@@ -23,7 +23,8 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class PolynomialSemiRing extends AbstractSemiRing<PolynomialElement> {
+public class PolynomialSemiRing
+       extends AbstractSemiRing<PolynomialElement> {
 
   private SemiRing semiRing;
 
@@ -51,8 +52,8 @@ public class PolynomialSemiRing extends AbstractSemiRing<PolynomialElement> {
 
   public PolynomialElement getElement(Tuple coefficients) {
     Map<Integer, DualisticElement> coefficientMap = new HashMap<Integer, DualisticElement>();
-    if (coefficients.isNull() || coefficients.getSet().isUniform() && coefficients.getSet().getFirst().equals(this.getSemiRing())) {
-      for (int i=0; i<coefficients.getArity(); i++) {
+    if (coefficients.isNull() || coefficients.getSet().isUniform() && coefficients.getSet().getFirst().isEqual(this.getSemiRing())) {
+      for (int i = 0; i < coefficients.getArity(); i++) {
         coefficientMap.put(i, (DualisticElement) coefficients.getAt(i));
       }
     }
@@ -82,14 +83,9 @@ public class PolynomialSemiRing extends AbstractSemiRing<PolynomialElement> {
   // various super-classes
   //
   @Override
-  public boolean standardEquals(final Set set) {
+  public boolean standardIsEqual(final Set set) {
     final PolynomialSemiRing other = (PolynomialSemiRing) set;
-    return this.getSemiRing().equals(other.getSemiRing());
-  }
-
-  @Override
-  public int standardHashCode() {
-    return this.getSemiRing().hashCode();
+    return this.getSemiRing().isEqual(other.getSemiRing());
   }
 
   @Override
@@ -176,7 +172,7 @@ public class PolynomialSemiRing extends AbstractSemiRing<PolynomialElement> {
   @Override
   protected boolean abstractContains(BigInteger value) {
     BigInteger[] values = MathUtil.elegantUnpairWithSize(value);
-    for (BigInteger val: values) {
+    for (BigInteger val : values) {
       if (!this.getSemiRing().contains(val)) {
         return false;
       }

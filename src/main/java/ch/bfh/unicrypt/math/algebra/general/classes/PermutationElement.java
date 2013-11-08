@@ -4,18 +4,18 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import ch.bfh.unicrypt.math.utility.MathUtil;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public class PermutationElement extends AbstractElement<PermutationGroup, PermutationElement> {
+public class PermutationElement
+       extends AbstractElement<PermutationGroup, PermutationElement> {
 
   private final Permutation permutation;
 
@@ -34,13 +34,8 @@ public class PermutationElement extends AbstractElement<PermutationGroup, Permut
   }
 
   @Override
-  protected boolean standardEquals(Element element) {
+  protected boolean standardIsEqual(Element element) {
     return this.getPermutation().equals(((PermutationElement) element).getPermutation());
-  }
-
-  @Override
-  protected int standardHashCode() {
-    return this.getPermutation().hashCode();
   }
 
   @Override

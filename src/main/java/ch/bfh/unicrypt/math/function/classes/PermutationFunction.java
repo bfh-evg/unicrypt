@@ -63,8 +63,8 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
    *
    * @param set The given group
    * @param arity The arity of the tuple elements to permute
-   * @throws IllegalArgumentException if {@code group} is null
-   * @throws IllegalArgumentException if {@code arity} is negative
+   * @throws IllegalArgumentException if {@literal group} is null
+   * @throws IllegalArgumentException if {@literal arity} is negative
    */
   public static PermutationFunction getInstance(final Set set, final int arity) {
     if (set == null || arity < 0) {
@@ -78,7 +78,7 @@ public class PermutationFunction extends AbstractFunction<ProductSet, ProductSet
    * particular case, where a product group is given from the beginning.
    *
    * @param productSet The given power group
-   * @throws IllegalArgumentException if {@code group} is null
+   * @throws IllegalArgumentException if {@literal group} is null
    */
   public static PermutationFunction getInstance(final ProductSet productSet) {
     if (productSet == null || !productSet.isUniform()) {

@@ -80,7 +80,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement> extends Abs
         if (this.hasNext()) {
           E nextElement = currentElement;
           currentElement = cyclicRing.apply(currentElement, cyclicRing.getDefaultGenerator());
-          this.next = !currentElement.equals(cyclicRing.getIdentityElement());
+          this.next = !currentElement.isEqual(cyclicRing.getIdentityElement());
           return nextElement;
         }
         throw new NoSuchElementException();

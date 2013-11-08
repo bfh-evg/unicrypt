@@ -1,7 +1,5 @@
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -9,13 +7,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
+import java.util.Random;
 
 /**
  * This abstract class contains standard implementations for most methods of
  * type {@link Function}. For most classes implementing {@link Function}, it is
  * sufficient to inherit from {@link AbstractFunction} and to implement the
  * single abstract method {@link abstractApply(Element element, Random random)}.
- *
+ * <p>
  * @param <D>
  * @param <E>
  * @param <C>
@@ -23,7 +22,9 @@ import ch.bfh.unicrypt.math.helper.UniCrypt;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element> extends UniCrypt implements Function {
+public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element>
+       extends UniCrypt
+       implements Function {
 
   private final D domain;
   private final C coDomain;
@@ -81,35 +82,23 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
   }
 
   @Override
-  public final boolean equals(final Object object) {
-    if (this == object) {
+  public final boolean isEqual(final Function function) {
+    if (function == null) {
+      throw new IllegalArgumentException();
+    }
+    if (this == function) {
       return true;
     }
-    if (object == null) {
+    if (this.getClass() != function.getClass()) {
       return false;
     }
-    if (this.getClass() != object.getClass()) {
+    if (!this.getDomain().isEqual(function.getDomain())) {
       return false;
     }
-    Function other = (Function) object;
-    if (!this.getDomain().equals(other.getDomain())) {
+    if (!this.getCoDomain().isEqual(function.getCoDomain())) {
       return false;
     }
-    if (!this.getCoDomain().equals(other.getCoDomain())) {
-      return false;
-    }
-    return this.standardEquals(other);
-  }
-
-  @Override
-  public final int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + this.getClass().hashCode();
-    result = prime * result + this.getDomain().hashCode();
-    result = prime * result + this.getCoDomain().hashCode();
-    result = prime * result + this.standardHashCode();
-    return result;
+    return this.standardIsEqual(function);
   }
 
   @Override
@@ -125,12 +114,8 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
     return false;
   }
 
-  protected boolean standardEquals(Function function) {
+  protected boolean standardIsEqual(Function function) {
     return true;
-  }
-
-  protected int standardHashCode() {
-    return 0;
   }
 
   //
@@ -141,13 +126,13 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
    * This abstract method is the main method to implement in each sub-class of
    * {@link AbstractFunction}. The validity of the two parameters has already
    * been tested.
-   *
+   * <p>
    * @see apply(Element, Random)
    * @see Group#apply(Element[])
    * @see Element#apply(Element)
-   *
+   * <p>
    * @param element The given input element
-   * @param random Either {@code null} or a given random generator
+   * @param random  Either {@literal null} or a given random generator
    * @return The resulting output element
    */
   protected abstract E abstractApply(Element element, Random random);

@@ -155,7 +155,7 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
    *
    * @param semiGroups The array of input semigroups
    * @return The corresponding product semigroup
-   * @throws IllegalArgumentException if {@code semigroups} is null or contains
+   * @throws IllegalArgumentException if {@literal semigroups} is null or contains
    * null
    */
   public static ProductSemiGroup getInstance(final SemiGroup... semiGroups) {
@@ -169,7 +169,7 @@ public class ProductSemiGroup extends ProductSet implements SemiGroup {
         if (semiGroup == null) {
           throw new IllegalArgumentException();
         }
-        if (!semiGroup.equals(first)) {
+        if (!semiGroup.isEqual(first)) {
           uniform = false;
         }
       }

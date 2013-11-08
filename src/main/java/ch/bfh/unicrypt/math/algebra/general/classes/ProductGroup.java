@@ -85,7 +85,7 @@ public class ProductGroup extends ProductMonoid implements Group {
    *
    * @param groups The array of input groups
    * @return The corresponding composed group
-   * @throws IllegalArgumentException if {@code groups} is null or contains null
+   * @throws IllegalArgumentException if {@literal groups} is null or contains null
    */
   public static ProductGroup getInstance(final Group... groups) {
     if (groups == null) {
@@ -98,7 +98,7 @@ public class ProductGroup extends ProductMonoid implements Group {
         if (group == null) {
           throw new IllegalArgumentException();
         }
-        if (!group.equals(first)) {
+        if (!group.isEqual(first)) {
           uniform = false;
         }
       }

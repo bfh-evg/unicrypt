@@ -68,7 +68,7 @@ public abstract class AbstractCyclicGroup<E extends Element> extends AbstractGro
         if (this.hasNext()) {
           E nextElement = currentElement;
           currentElement = cyclicGroup.apply(currentElement, cyclicGroup.getDefaultGenerator());
-          this.next = !currentElement.equals(cyclicGroup.getIdentityElement());
+          this.next = !currentElement.isEqual(cyclicGroup.getIdentityElement());
           return nextElement;
         }
         throw new NoSuchElementException();

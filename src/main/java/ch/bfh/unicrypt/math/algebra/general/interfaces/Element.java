@@ -1,18 +1,17 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 
 /**
  * This abstract class represents the concept an element in a mathematical
  * group. It allows applying the group operation and other methods from a
  * {@link Group} in a convenient way. Most methods provided by {@link Element}
  * have an equivalent method in {@link Group}.
- *
+ * <p>
  * @see Group
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
@@ -39,7 +38,7 @@ public interface Element {
 
   /**
    * Returns the positive BigInteger value that corresponds the element.
-   *
+   * <p>
    * @return The corresponding BigInteger value
    */
   public BigInteger getValue();
@@ -108,13 +107,6 @@ public interface Element {
   // The standard implementations of the following three methods are
   // insufficient for elements.
   //
-  @Override
-  public boolean equals(Object object);
-
-  @Override
-  public int hashCode();
-
-  @Override
-  public String toString();
+  public boolean isEqual(Element element);
 
 }

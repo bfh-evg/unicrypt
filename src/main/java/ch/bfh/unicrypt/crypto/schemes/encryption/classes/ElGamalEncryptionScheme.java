@@ -7,8 +7,11 @@ package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 import ch.bfh.unicrypt.crypto.encoder.classes.IdentityEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.crypto.keygenerator.classes.ElGamalKeyPairGenerator;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractHomomorphicEncryptionScheme;
+import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractReEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -34,15 +37,28 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <ME>
  */
 public class ElGamalEncryptionScheme<M extends Set, ME extends Element>
-       extends AbstractHomomorphicEncryptionScheme<M, CyclicGroup, ProductGroup, ME, Tuple, CyclicGroup, ZModPrime, ZModPrime> {
+       extends AbstractReEncryptionScheme<M, CyclicGroup, ProductGroup, ME, Tuple, CyclicGroup, ZModPrime, ZModPrime> {
 
-  Function encryptionFunctionLeft;
-  Function encryptionFunctionRight;
+  private final Function encryptionFunctionLeft;
+  private final Function encryptionFunctionRight;
 
-  protected ElGamalEncryptionScheme(M messageSpace, Encoder encoder, Function encryptionFunction, Function decryptionFunction, KeyPairGenerator keyPairGenerator, Function encryptionFunctionLeft, Function encryptionFunctionRight) {
+  protected ElGamalEncryptionScheme(M messageSpace, Encoder encoder, Function encryptionFunction, Function decryptionFunction, ElGamalKeyPairGenerator keyPairGenerator, Function encryptionFunctionLeft, Function encryptionFunctionRight) {
     super(messageSpace, encoder, encryptionFunction, decryptionFunction, keyPairGenerator);
     this.encryptionFunctionLeft = encryptionFunctionLeft;
     this.encryptionFunctionRight = encryptionFunctionRight;
+  }
+
+  @Override
+  protected java.lang.String standardToStringContent() {
+    return this.getMessageSpace().toString();
+  }
+
+  public Function getEncryptionFunctionLeft() {
+    return this.encryptionFunctionLeft;
+  }
+
+  public Function getEncryptionFunctionRight() {
+    return this.encryptionFunctionRight;
   }
 
   public static ElGamalEncryptionScheme getInstance(CyclicGroup cyclicGroup) {
@@ -90,7 +106,7 @@ public class ElGamalEncryptionScheme<M extends Set, ME extends Element>
     if (encoder == null) {
       encoder = IdentityEncoder.getInstance(cyclicGroup);
     } else {
-      if (!encoder.getCoDomain().equals(cyclicGroup)) {
+      if (!encoder.getCoDomain().isEqual(cyclicGroup)) {
         throw new IllegalArgumentException();
       }
     }
@@ -98,9 +114,9 @@ public class ElGamalEncryptionScheme<M extends Set, ME extends Element>
       messageSpace = encoder.getDomain();
     }
 
-    ZMod zPlusTimesMod = cyclicGroup.getZModOrder();
+    ZMod zMod = cyclicGroup.getZModOrder();
 
-    ProductGroup encryptionSpace = ProductGroup.getInstance(cyclicGroup, cyclicGroup, zPlusTimesMod);
+    ProductGroup encryptionSpace = ProductGroup.getInstance(cyclicGroup, cyclicGroup, zMod);
 
     Function encryptionFunctionLeft = GeneratorFunction.getInstance(generator);
 
@@ -117,7 +133,7 @@ public class ElGamalEncryptionScheme<M extends Set, ME extends Element>
                                                                      encryptionFunctionLeft),
                                        encryptionFunctionRight));
 
-    ProductGroup decryptionSpace = ProductGroup.getInstance(zPlusTimesMod, ProductGroup.getInstance(cyclicGroup, 2));
+    ProductGroup decryptionSpace = ProductGroup.getInstance(zMod, ProductGroup.getInstance(cyclicGroup, 2));
 
     Function decryptionFunction = CompositeFunction.getInstance(
            MultiIdentityFunction.getInstance(decryptionSpace, 2),
@@ -125,15 +141,37 @@ public class ElGamalEncryptionScheme<M extends Set, ME extends Element>
                                        CompositeFunction.getInstance(MultiIdentityFunction.getInstance(decryptionSpace, 2),
                                                                      ProductFunction.getInstance(SelectionFunction.getInstance(decryptionSpace, 1, 0),
                                                                                                  SelectionFunction.getInstance(decryptionSpace, 0)),
-                                                                     SelfApplyFunction.getInstance(cyclicGroup, zPlusTimesMod))),
+                                                                     SelfApplyFunction.getInstance(cyclicGroup, zMod))),
            ApplyInverseFunction.getInstance(cyclicGroup));
 
     return new ElGamalEncryptionScheme(messageSpace, encoder, encryptionFunction, decryptionFunction, ElGamalKeyPairGenerator.getInstance(generator), encryptionFunctionLeft, encryptionFunctionRight);
   }
 
-  @Override
-  protected String standardToStringContent() {
-    return this.getMessageSpace().toString();
+  static class ByteArray
+         extends ElGamalEncryptionScheme<ByteArrayMonoid, ByteArrayElement> {
+
+    protected ByteArray(ByteArrayMonoid messageSpace, Encoder encoder, Function encryptionFunction, Function decryptionFunction, ElGamalKeyPairGenerator keyPairGenerator, Function encryptionFunctionLeft, Function encryptionFunctionRight) {
+      super(messageSpace, encoder, encryptionFunction, decryptionFunction, keyPairGenerator, encryptionFunctionLeft, encryptionFunctionRight);
+    }
+
+  }
+
+  static class String
+         extends ElGamalEncryptionScheme<StringMonoid, StringElement> {
+
+    protected String(StringMonoid messageSpace, Encoder encoder, Function encryptionFunction, Function decryptionFunction, ElGamalKeyPairGenerator keyPairGenerator, Function encryptionFunctionLeft, Function encryptionFunctionRight) {
+      super(messageSpace, encoder, encryptionFunction, decryptionFunction, keyPairGenerator, encryptionFunctionLeft, encryptionFunctionRight);
+    }
+
+  }
+
+  static class ZModPrime
+         extends ElGamalEncryptionScheme<ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime, StringElement> {
+
+    protected ZModPrime(ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime messageSpace, Encoder encoder, Function encryptionFunction, Function decryptionFunction, ElGamalKeyPairGenerator keyPairGenerator, Function encryptionFunctionLeft, Function encryptionFunctionRight) {
+      super(messageSpace, encoder, encryptionFunction, decryptionFunction, keyPairGenerator, encryptionFunctionLeft, encryptionFunctionRight);
+    }
+
   }
 
 }

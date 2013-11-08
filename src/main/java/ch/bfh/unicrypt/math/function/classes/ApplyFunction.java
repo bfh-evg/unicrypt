@@ -43,7 +43,7 @@ public class ApplyFunction extends AbstractFunction<ProductSemiGroup, SemiGroup,
    * @param semiGroup
    * @param group The group on which this function operates
    * @return The resulting function
-   * @throws IllegalArgumentException if {@code group} is null
+   * @throws IllegalArgumentException if {@literal group} is null
    */
   public static ApplyFunction getInstance(final SemiGroup semiGroup) {
     return ApplyFunction.getInstance(semiGroup, 2);
@@ -57,8 +57,8 @@ public class ApplyFunction extends AbstractFunction<ProductSemiGroup, SemiGroup,
    * @param semiGroup The group on which this function operates
    * @param arity The number of input elements
    * @return The resulting function
-   * @throws IllegalArgumentException if {@code group} is null
-   * @throws IllegalArgumentException if {@code arity} is negative
+   * @throws IllegalArgumentException if {@literal group} is null
+   * @throws IllegalArgumentException if {@literal arity} is negative
    */
   public static ApplyFunction getInstance(final SemiGroup semiGroup, final int arity) {
     if (semiGroup == null || arity < 0) {

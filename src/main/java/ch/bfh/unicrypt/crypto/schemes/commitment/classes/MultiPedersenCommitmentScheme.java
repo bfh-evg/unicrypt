@@ -58,7 +58,7 @@ public class MultiPedersenCommitmentScheme extends AbstractRandomizedCommitmentS
     if (encoder == null) {
       encoder = GeneralEncoder.getInstance(zMod);
     } else {
-      if (!encoder.getCoDomain().equals(zMod)) {
+      if (!encoder.getCoDomain().isEqual(zMod)) {
         throw new IllegalArgumentException();
       }
     }

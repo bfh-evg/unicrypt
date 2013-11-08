@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.algebra.concatenative.classes;
+package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
@@ -12,13 +13,13 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public class StringElement
-       extends AbstractConcatenativeElement<StringMonoid, StringElement> {
+public class SizedStringElement
+       extends AbstractElement<SizedStringSet, SizedStringElement> {
 
   private final String string;
 
-  protected StringElement(final StringMonoid monoid, final String string) {
-    super(monoid);
+  protected SizedStringElement(final SizedStringSet set, final String string) {
+    super(set);
     this.string = string;
   }
 
@@ -26,20 +27,13 @@ public class StringElement
     return this.string;
   }
 
-  @Override
   public int getLength() {
     return this.getString().length();
   }
 
   @Override
   protected BigInteger standardGetValue() {
-    BigInteger value = BigInteger.ZERO;
-    BigInteger base = BigInteger.valueOf(this.getSet().getAlphabet().getSize());
-    for (int i = 0; i < this.getString().length(); i++) {
-      value = value.multiply(base);
-      value = value.add(BigInteger.valueOf(this.getSet().getAlphabet().getIndex(this.getString().charAt(i)) + 1));
-    }
-    return value;
+    return new BigInteger(this.getString().getBytes());
   }
 
   @Override

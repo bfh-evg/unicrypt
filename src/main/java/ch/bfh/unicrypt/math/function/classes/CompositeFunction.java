@@ -56,7 +56,7 @@ public final class CompositeFunction extends AbstractCompoundFunction<CompositeF
    *
    * @param functions The given array of functions
    * @return The resulting composite function
-   * @throws IllegalArgumentException if {@code functions} is null, contains
+   * @throws IllegalArgumentException if {@literal functions} is null, contains
    * null, or is empty
    * @throws IllegalArgumentException if the domain of a function is different
    * from the co-domain of the previous function
@@ -66,7 +66,7 @@ public final class CompositeFunction extends AbstractCompoundFunction<CompositeF
       throw new IllegalArgumentException();
     }
     for (int i = 1; i < functions.length; i++) {
-      if (functions[i] == null || !(functions[i - 1].getCoDomain().equals(functions[i].getDomain()))) {
+      if (functions[i] == null || !(functions[i - 1].getCoDomain().isEqual(functions[i].getDomain()))) {
         throw new IllegalArgumentException();
       }
     }
@@ -77,7 +77,7 @@ public final class CompositeFunction extends AbstractCompoundFunction<CompositeF
     if (function == null || arity < 0) {
       throw new IllegalArgumentException();
     }
-    if (arity > 1 && !function.getDomain().equals(function.getCoDomain())) {
+    if (arity > 1 && !function.getDomain().isEqual(function.getCoDomain())) {
       throw new IllegalArgumentException();
     }
     return new CompositeFunction(ProductSet.getInstance(function.getDomain(), arity), ProductSet.getInstance(function.getCoDomain(), arity), function, arity);

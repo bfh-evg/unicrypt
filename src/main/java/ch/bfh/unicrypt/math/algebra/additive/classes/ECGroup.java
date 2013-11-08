@@ -29,9 +29,9 @@ public abstract class ECGroup extends
 		this.finiteField = Finitefiled;
 		this.Identity = this.getElement(zero, zero);
 		this.generator = this.getElement(gx,gy);
-		if (!this.isGenerator(generator)) {
-			throw new IllegalArgumentException("Point " + generator.toString()
-					+ " is not a generator");
+		
+		if(!isValid()){
+			throw new IllegalArgumentException("Curve parameters are not valid");
 		}
 
 	}
@@ -46,33 +46,41 @@ public abstract class ECGroup extends
 		this.finiteField = Finitefiled;
 		this.Identity = this.getElement(zero, zero);
 		this.generator = this.computeGenerator();
+		
+		if(!isValid()){
+			throw new IllegalArgumentException("Curve parameters are not valid");
+		}
 	}
+
 
 	@Override
 	protected ECGroupElement abstractGetDefaultGenerator() {
 			return this.generator;
 	}
 
+	protected ECGroupElement computeGenerator(){
+		ECGroupElement e=this.getRandomElement().selfApply(this.getH());
+		while(!this.isGenerator(e)){
+			e=this.getRandomElement();
+		}
+		return e;
+	}
+
 	@Override
 	protected boolean abstractIsGenerator(Element element) {
 		ECGroupElement e = (ECGroupElement) element;
-		e = e.selfApply(order);
-		return MathUtil.isPrime(this.order) && e.isZero();
+		e = e.selfApply(this.getOrder());
+		return MathUtil.isPrime(this.getOrder()) && e.isZero();
 	}
 
 	@Override
-	protected ECGroupElement abstractInvert(Element element) {
-		ECGroupElement r = (ECGroupElement) element;
-
-		if (r.isZero()) {
-			return this.Identity;
-		}
-
-		return new ECGroupElement(this, r.getX(), r.getY().invert());
-	}
+	protected abstract ECGroupElement abstractInvert(Element element);
 
 	@Override
 	protected ECGroupElement abstractGetIdentityElement() {
+		if(Identity==null){
+			return new ECGroupElement(this, zero, zero);
+		}
 		return this.Identity;
 	}
 
@@ -85,14 +93,19 @@ public abstract class ECGroup extends
 	@Override
 	protected ECGroupElement abstractGetElement(BigInteger value) {
 		if (value.equals(zero)) {
-			return this.Identity;
+			return this.getIdentityElement();
 		} else {
 			BigInteger[] result = MathUtil.elegantUnpair(value);
 			DualisticElement x = this.getFiniteField().getElement(result[0]);
 			DualisticElement y = this.getFiniteField().getElement(result[1]);
 
-			if (y.power(2).equals(x.power(3).add(x.multiply(a)).add(b))) {
+<<<<<<< HEAD
+			if (y.power(2).isEqual(x.power(3).add(x.multiply(a)).add(b))) {
 				return new ECGroupElement(this, x, y);
+=======
+			if (contains(x,y)) {
+				return this.getElement(x, y);
+>>>>>>> ff540659e2a33e7fb65ef947f1577a26cf6d8a49
 			} else {
 				throw new IllegalArgumentException("(" + x + "," + y
 						+ ") is not a point on the elliptic curve");
@@ -102,96 +115,91 @@ public abstract class ECGroup extends
 
 	public ECGroupElement getElement(DualisticElement x, DualisticElement y) {
 		if (x == zero && y == zero) {
-			return new ECGroupElement(this, x, y);
+			return this.getIdentityElement();
 		} else if (x == zero || y == zero) {
 			throw new IllegalArgumentException("One coordinate is zero");
-		} else {
-			return this.abstractGetElement(MathUtil.elegantPair(x.getValue(),
-					y.getValue()));
+		} else if(contains(x,y)) {
+			return new ECGroupElement(this, x, y);
+		}
+		else{
+			throw new IllegalArgumentException("Point is not an element of the curve"+ this.toString());
 		}
 	}
 
 	@Override
 	protected ECGroupElement abstractGetRandomElement(Random random) {
-		if (generator != null) {
-			long t1=System.currentTimeMillis();
-			DualisticElement r = this.finiteField.getRandomElement(random);
-			t1=System.currentTimeMillis()-t1;
-			System.out.println(r+" RandomElement "+t1+" ms");
-			return this.generator.selfApply(r);
+		if (this.getDefaultGenerator() != null) {
+			DualisticElement r = this.getFiniteField().getRandomElement(random);
+			return this.getDefaultGenerator().selfApply(r);
 		} else {
-			BigInteger p=((ZMod) this.finiteField).getModulus();
-			DualisticElement x=this.finiteField.getRandomElement(random);
-			DualisticElement y=x.power(3).add(a.multiply(x)).add(b);
-			boolean neg=x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
 			
-			while(!MathUtil.hasSquareRootModp(y.getValue(),p )){
-				x=this.finiteField.getRandomElement(random);
-				y=x.power(3).add(a.multiply(x)).add(b);
-			}
-			
-			//if neg is true return solution 2(p-sqrt) of sqrtModp else solution 1
-			if(neg){
-				y=this.finiteField.getElement(p.subtract(MathUtil.sqrtModp(y.getValue(), p)));
-			}
-			else{
-				y=this.finiteField.getElement(MathUtil.sqrtModp(y.getValue(), p));
-			}
-			
-			return this.getElement(x, y);
-			
-			
-			
+			return this.getRandomElementWithoutGenerator(random);
+						
 		}
-
+	
 	}
+
+	/**
+	 * Returns random element without knowing a generator of the group
+	 * @param random
+	 * @return
+	 */
+	protected abstract ECGroupElement getRandomElementWithoutGenerator(Random random);
 
 	@Override
 	protected boolean abstractContains(BigInteger value) {
 		BigInteger[] result = MathUtil.elegantUnpair(value);
 		DualisticElement x = this.getFiniteField().getElement(result[0]);
 		DualisticElement y = this.getFiniteField().getElement(result[1]);
-		return y.power(2).equals(
+<<<<<<< HEAD
+		return y.power(2).isEqual(
 				x.power(3).add(x.multiply(this.getA())).add(this.b));
+=======
+		return this.contains(x, y);
+>>>>>>> ff540659e2a33e7fb65ef947f1577a26cf6d8a49
+	}
+	
+	/*
+	 * --- Abstract methods - must be implemented in concrete classes ---
+	 */
+
+	protected abstract Boolean contains(DualisticElement x, DualisticElement y);
+	
+	protected abstract boolean isValid();
+
+	/*
+	 * --- Getter methods for additional fields ---
+	 */
+	
+	protected FiniteField getFiniteField() {
+		return finiteField;
 	}
 
-	public FiniteField getFiniteField() {
-		return (FiniteField) finiteField;
-	}
-
-	public DualisticElement getA() {
-		return a;
-	}
-
-	public DualisticElement getB() {
+	protected DualisticElement getB() {
 		return b;
 	}
 
-	public BigInteger getH() {
+	protected DualisticElement getA() {
+		return a;
+	}
+
+<<<<<<< HEAD
+		return y.isEqual(x);
+=======
+	protected BigInteger getH() {
 		return h;
+>>>>>>> ff540659e2a33e7fb65ef947f1577a26cf6d8a49
 	}
+
 	
-
-	public Boolean contains(DualisticElement x, DualisticElement y) {
-		y = y.power(2);
-		x = x.power(3).add(x.multiply(a)).add(b);
-
-		return y.equals(x);
-	}
-
 	@Override
 	public boolean isZeroElement(Element element) {
 		ECGroupElement e = (ECGroupElement) element;
 		return e.getX() == null && e.getY() == null;
 	}
 	
-	protected ECGroupElement computeGenerator(){
-		ECGroupElement e=this.getRandomElement().selfApply(this.h);
-		while(!this.isGenerator(e)){
-			e=this.getRandomElement();
-		}
-		return e;
-	}
+	
+
 
 	
 	

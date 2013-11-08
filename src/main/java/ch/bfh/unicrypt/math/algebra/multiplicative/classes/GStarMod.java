@@ -97,7 +97,7 @@ public class GStarMod
   }
 
   @Override
-  protected boolean standardEquals(Set set) {
+  protected boolean standardIsEqual(Set set) {
     final GStarMod other = (GStarMod) set;
     return this.getModulus().equals(other.getModulus()) && this.getOrder().equals(other.getOrder());
   }
@@ -105,15 +105,6 @@ public class GStarMod
   @Override
   protected boolean standardIsCompatible(Set set) {
     return (set instanceof GStarMod);
-  }
-
-  @Override
-  public int standardHashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + this.getModulus().hashCode();
-    result = prime * result + this.getOrder().hashCode();
-    return result;
   }
 
   @Override
@@ -198,7 +189,7 @@ public class GStarMod
   @Override
   protected boolean abstractIsGenerator(Element element) {
     for (final BigInteger prime : this.getOrderFactorization().getPrimeFactors()) {
-      if (element.selfApply(this.getOrder().divide(prime)).equals(this.getIdentityElement())) {
+      if (element.selfApply(this.getOrder().divide(prime)).isEqual(this.getIdentityElement())) {
         return false;
       }
     }

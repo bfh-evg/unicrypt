@@ -1,15 +1,16 @@
 package ch.bfh.unicrypt.math.helper.factorization;
 
+import ch.bfh.unicrypt.math.helper.UniCrypt;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import ch.bfh.unicrypt.math.utility.MathUtil;
+public class Factorization
+       extends UniCrypt {
 
-public class Factorization {
-
-  private BigInteger value;
-  private BigInteger[] primeFactors;
-  private int[] exponents;
+  private final BigInteger value;
+  private final BigInteger[] primeFactors;
+  private final int[] exponents;
 
   protected Factorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {
     this.value = value;

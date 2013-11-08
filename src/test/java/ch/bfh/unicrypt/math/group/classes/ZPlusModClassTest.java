@@ -63,13 +63,13 @@ public class ZPlusModClassTest {
     AdditiveElement elt2 = zPlusModOne.getElement(1);
     AdditiveElement elt3 = zPlusModOne.getElement(10);
     AdditiveElement elt4 = zPlusModOne.getElement(-5);
-    Assert.assertTrue(elt1.equals(elt2));
-    Assert.assertTrue(elt1.equals(elt3));
-    Assert.assertTrue(elt1.equals(elt4));
-    Assert.assertTrue(elt1.equals(elt2.apply(elt3)));
-    Assert.assertTrue(elt1.equals(elt2.invert()));
-    Assert.assertTrue(elt1.equals(elt2.selfApply()));
-    Assert.assertTrue(elt1.equals(elt2.selfApply(5)));
+    Assert.assertTrue(elt1.isEqual(elt2));
+    Assert.assertTrue(elt1.isEqual(elt3));
+    Assert.assertTrue(elt1.isEqual(elt4));
+    Assert.assertTrue(elt1.isEqual(elt2.apply(elt3)));
+    Assert.assertTrue(elt1.isEqual(elt2.invert()));
+    Assert.assertTrue(elt1.isEqual(elt2.selfApply()));
+    Assert.assertTrue(elt1.isEqual(elt2.selfApply(5)));
     Assert.assertTrue(zPlusModOne.isGenerator(elt1));
     Assert.assertTrue(zPlusModOne.isGenerator(elt2));
     Assert.assertTrue(zPlusModOne.areEqual(elt1, elt2));
@@ -732,7 +732,7 @@ public class ZPlusModClassTest {
   public void testCreateRandomGenerator() {
     for (int i=0; i<=50; i++) {
       AdditiveElement gen = zPlusMod.getRandomGenerator();
-      Assert.assertTrue(gen.equals(ONE) || gen.equals(THREE) || gen.equals(SEVEN) || gen.equals(NINE));
+      Assert.assertTrue(gen.isEqual(ONE) || gen.isEqual(THREE) || gen.isEqual(SEVEN) || gen.isEqual(NINE));
     }
   }
 
@@ -740,7 +740,7 @@ public class ZPlusModClassTest {
   public void testCreateRandomGeneratorRandom() {
     for (int i=0; i<=50; i++) {
       AdditiveElement gen = zPlusMod.getRandomGenerator(random);
-      Assert.assertTrue(gen.equals(ONE) || gen.equals(THREE) || gen.equals(SEVEN) || gen.equals(NINE));
+      Assert.assertTrue(gen.isEqual(ONE) || gen.isEqual(THREE) || gen.isEqual(SEVEN) || gen.isEqual(NINE));
     }
   }
 

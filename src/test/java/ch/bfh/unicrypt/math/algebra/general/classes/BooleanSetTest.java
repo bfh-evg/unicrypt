@@ -322,19 +322,19 @@ public class BooleanSetTest {
     }
 
     /**
-     * Test of equals method, of class BooleanSet.
+     * Test of isEqual method, of class BooleanSet.
      */
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Assert.assertTrue(BooleanSet.getInstance().equals(BooleanSet.getInstance()));
+        Assert.assertTrue(BooleanSet.getInstance().isEqual(BooleanSet.getInstance()));
         {
             ZMod zmod = ZMod.getInstance(2);
-            Assert.assertTrue(!BooleanSet.getInstance().equals(zmod));
+            Assert.assertTrue(!BooleanSet.getInstance().isEqual(zmod));
         }
         {
             ZMod zmod = ZMod.getInstance(3);
-            Assert.assertTrue(!BooleanSet.getInstance().equals(zmod));
+            Assert.assertTrue(!BooleanSet.getInstance().isEqual(zmod));
         }
 
     }

@@ -195,7 +195,7 @@ public class ElGamalEncryptionClassTest {
 		Tuple ciphertext2 = instance.reEncrypt(instance.getKeyGenerator().getPublicKey(keyPair), ciphertext, random);
 		System.out.println(ciphertext);
 		System.out.println(ciphertext2);
-		assertFalse(ciphertext.equals(ciphertext2));
+		assertFalse(ciphertext.isEqual(ciphertext2));
 		AtomicElement decryption = instance.decrypt(instance.getKeyGenerator().getPrivateKey(keyPair), ciphertext2);
 		assertEquals(plaintext, decryption);
 	}

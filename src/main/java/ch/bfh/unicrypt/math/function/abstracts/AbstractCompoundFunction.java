@@ -4,14 +4,13 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import java.lang.reflect.Array;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.Compound;
+import java.lang.reflect.Array;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  *
@@ -20,7 +19,9 @@ import ch.bfh.unicrypt.math.helper.Compound;
  * @param <E>
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, F, D, C, E>, F extends Function, D extends Set, C extends Set, E extends Element> extends AbstractFunction<D, C, E> implements Compound<CF, F> {
+public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, F, D, C, E>, F extends Function, D extends Set, C extends Set, E extends Element>
+       extends AbstractFunction<D, C, E>
+       implements Compound<CF, F> {
 
   private final F[] functions;
   private final int arity;
@@ -155,29 +156,18 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
   }
 
   @Override
-  protected boolean standardEquals(Function function) {
+  protected boolean standardIsEqual(Function function) {
     CF other = (CF) function;
     int arity = this.getArity();
     if (arity != other.getArity()) {
       return false;
     }
     for (int i = 0; i < arity; i++) {
-      if (!this.getAt(i).equals(other.getAt(i))) {
+      if (!this.getAt(i).isEqual(other.getAt(i))) {
         return false;
       }
     }
     return true;
-  }
-
-  @Override
-  protected int standardHashCode() {
-    final int prime = 31;
-    int result = 1;
-    for (F function : this) {
-      result = prime * result + function.hashCode();
-    }
-    result = prime * result + this.getArity();
-    return result;
   }
 
 }

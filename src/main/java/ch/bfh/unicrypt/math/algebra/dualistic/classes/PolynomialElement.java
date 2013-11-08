@@ -16,7 +16,8 @@ import java.util.Set;
  *
  * @author rolfhaenni
  */
-public class PolynomialElement extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement> {
+public class PolynomialElement
+       extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement> {
 
   private Map<Integer, DualisticElement> coefficients;
   private int degree;
@@ -72,13 +73,8 @@ public class PolynomialElement extends AbstractDualisticElement<PolynomialSemiRi
   }
 
   @Override
-  protected boolean standardEquals(Element element) {
+  protected boolean standardIsEqual(Element element) {
     return this.coefficients.equals(((PolynomialElement) element).coefficients);
-  }
-
-  @Override
-  protected int standardHashCode() {
-    return this.coefficients.hashCode();
   }
 
   @Override
@@ -106,4 +102,5 @@ public class PolynomialElement extends AbstractDualisticElement<PolynomialSemiRi
     }
     return result;
   }
+
 }

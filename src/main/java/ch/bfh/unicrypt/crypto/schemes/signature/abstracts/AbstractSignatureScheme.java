@@ -15,7 +15,7 @@ public abstract class AbstractSignatureScheme<M extends Set, S extends Set, E ex
 
   @Override
   public BooleanElement verify(final Element publicKey, final Element message, final Element signature) {
-    return this.getVerificationFunction().apply(publicKey, message, signature).equals(BooleanSet.TRUE);
+    return this.getVerificationFunction().apply(publicKey, message, signature).isEqual(BooleanSet.TRUE);
   }
 
   @Override

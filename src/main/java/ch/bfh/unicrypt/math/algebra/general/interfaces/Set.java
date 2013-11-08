@@ -1,10 +1,9 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * This interface represents the concept a mathematical set of elements. The
@@ -15,7 +14,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
  * of a set corresponds to a unique BigInteger value. Therefore, the interface
  * provides methods for converting elements into corresponding BigInteger values
  * and back.
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
@@ -61,7 +60,7 @@ public interface Set {
    * Returns the group order. If the group order is unknown,
    * {@link #UNKNOWN_ORDER} is returned. If the group order is infinite,
    * {@link #INFINITE_ORDER} is returned.
-   *
+   * <p>
    * @see "Handbook of Applied Cryptography, Definition 2.163"
    * @return The group order.
    */
@@ -71,7 +70,7 @@ public interface Set {
    * Returns a lower bound for the group order in case the exact group order is
    * unknown. The least return value is 1. Otherwise, if the exact group order
    * is known (or infinite), the exact group order is returned.
-   *
+   * <p>
    * @return A lower bound for the group order.
    */
   public BigInteger getMinOrder();
@@ -80,25 +79,25 @@ public interface Set {
 
   /**
    * Checks if the set is of order 0.
-   *
-   * @return {@code true} if the order is 0, {@code false} otherwise
+   * <p>
+   * @return {@literal true} if the order is 0, {@literal false} otherwise
    */
   public boolean isEmpty();
 
   /**
    * Checks if the set is of order 1.
-   *
-   * @return {@code true} if the order is 1, {@code false} otherwise
+   * <p>
+   * @return {@literal true} if the order is 1, {@literal false} otherwise
    */
   public boolean isSingleton();
 
   /**
    * Returns an additive integer group of type {@link ZPlusMod} with the same
    * group order. For this to work, the group order must be finite and known.
-   *
+   * <p>
    * @return The resulting additive group.
    * @throws UnsupportedOperationException if the group order is infinite or
-   * unknown
+   *                                       unknown
    */
   public ZMod getZModOrder();
 
@@ -106,46 +105,48 @@ public interface Set {
    * Returns an multiplicative integer group of type {@link ZTimesMod} with the
    * same group order. For this to work, the group order must be finite and
    * known.
-   *
+   * <p>
    * @return The resulting multiplicative group.
    * @throws UnsupportedOperationException if the group order is infinite or
-   * unknown
+   *                                       unknown
    */
   public ZStarMod getZStarModOrder();
 
   /**
-   * Checks if {@code this} set contains an element that corresponds to a given
-   * integer value.
-   *
+   * Checks if {@literal this} set contains an element that corresponds to a
+   * given integer value.
+   * <p>
    * @param value The given integer value
-   * @return {@code true} if such an element exists, {@code false} otherwise
+   * @return {@literal true} if such an element exists, {@literal false}
+   *         otherwise
    */
   public boolean contains(int value);
 
   /**
-   * Checks if {@code this} set contains an element that corresponds to a given
-   * BigInteger value.
-   *
+   * Checks if {@literal this} set contains an element that corresponds to a
+   * given BigInteger value.
+   * <p>
    * @param value The given BigInteger value
-   * @return {@code true} if such an element exists, {@code false} otherwise
-   * @throws IllegalArgumentException if {@code value} is null
+   * @return {@literal true} if such an element exists, {@literal false}
+   *         otherwise
+   * @throws IllegalArgumentException if {@literal value} is null
    */
   public boolean contains(BigInteger value);
 
   /**
    * Checks if a given element belongs to the group.
-   *
+   * <p>
    * @param element The given element
-   * @return {@code true} if {@code element} belongs to the group, {@code false}
-   * otherwise
-   * @throws IllegalArgumentException if {@code element} is null
+   * @return {@literal true} if {@literal element} belongs to the group,
+   *         {@literal false} otherwise
+   * @throws IllegalArgumentException if {@literal element} is null
    */
   public boolean contains(Element element);
 
   /**
    * Creates and returns the element that corresponds to a given integer (if one
    * exists).
-   *
+   * <p>
    * @param value The given integer
    * @return The corresponding element
    * @throws IllegalArgumentException if no such element exists
@@ -155,22 +156,23 @@ public interface Set {
   /**
    * Creates and returns the group element that corresponds to a given
    * BigInteger value (if one exists).
-   *
+   * <p>
    * @param value The given BigInteger value
    * @return The corresponding group element
-   * @throws IllegalArgumentException if {@code value} is null or if no such
-   * element exists in {@code this} group
+   * @throws IllegalArgumentException if {@literal value} is null or if no such
+   *                                  element exists in {@literal this} group
    */
   public Element getElement(BigInteger value);
 
   /**
    * Creates and returns the group element that corresponds to the integer value
    * of or some other group element (if one exists).
-   *
+   * <p>
    * @param element The given group element
-   * @return The corresponding group element of {@code this} group
-   * @throws IllegalArgumentException if {@code element} is null or if no such
-   * element exists in {@code this} group
+   * @return The corresponding group element of {@literal this} group
+   * @throws IllegalArgumentException if {@literal element} is null or if no
+   *                                  such element exists in {@literal this}
+   *                                  group
    */
   public Element getElement(Element element);
 
@@ -179,48 +181,37 @@ public interface Set {
    * generator. For finite order group, it is selected uniformly at random. For
    * groups of infinite or unknown order, the underlying probability
    * distribution is not further specified.
-   *
+   * <p>
    * @return A random group element
    */
   public Element getRandomElement();
 
   /**
    * Selects and returns a random group element using a given random generator.
-   * If no random generator is specified, i.e., if {@code random} is null, then
-   * the system-wide random generator is taken. For finite order group, it is
-   * selected uniformly at random. For groups of infinite or unknown order, the
-   * underlying probability distribution is not generally specified.
-   *
-   * @param random Either {@code null} or a given random generator
+   * If no random generator is specified, i.e., if {@literal random} is null,
+   * then the system-wide random generator is taken. For finite order group, it
+   * is selected uniformly at random. For groups of infinite or unknown order,
+   * the underlying probability distribution is not generally specified.
+   * <p>
+   * @param random Either {@literal null} or a given random generator
    * @return A random group element
    */
   public Element getRandomElement(Random random);
 
   /**
    * Checks if two given elements of this group are equal.
-   *
+   * <p>
    * @param element1 The first element
    * @param element2 The second element
-   * @return {@code true} if the elements are equal and belong to the group,
-   * {@code false} otherwise
-   * @throws IllegalArgumentException if {@code element1} or {@code element2} is
-   * null
+   * @return {@literal true} if the elements are equal and belong to the group,
+   *         {@literal false} otherwise
+   * @throws IllegalArgumentException if {@literal element1} or
+   *                                  {@literal element2} is null
    */
   public boolean areEqual(Element element1, Element element2);
 
   public boolean isCompatible(Set set);
 
-  //
-  // The standard implementations of the following three inherited methods are
-  // insufficient for sets
-  //
-  @Override
-  public boolean equals(Object obj);
-
-  @Override
-  public int hashCode();
-
-  @Override
-  public String toString();
+  public boolean isEqual(Set set);
 
 }

@@ -1,16 +1,15 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrays;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.utility.MathUtil;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 /**
  * This class represents the concept of a hash function, which maps an
@@ -22,33 +21,29 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
  * hashing itself is done recursively. The co-domain is always an instance of
  * {@link ZPlusMod}. Its order corresponds to the size of the cryptographic hash
  * function's output space (a power of 2).
- *
+ * <p>
  * @see Element#getHashValue()
  * @see Element#getRecursiveHashValue()
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class HashFunction extends AbstractFunction<Set, ByteArrays, ByteArrayElement> {
+public class HashFunction
+       extends AbstractFunction<Set, ByteArrayMonoid, ByteArrayElement> {
 
   private MessageDigest messageDigest;
   private boolean recursiveHash;
 
-  private HashFunction(Set domain, ByteArrays coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
+  private HashFunction(Set domain, ByteArrayMonoid coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
     super(domain, coDomain);
     this.messageDigest = messageDigest;
     this.recursiveHash = recursiveHash;
   }
 
   @Override
-  protected boolean standardEquals(Function function) {
+  protected boolean standardIsEqual(Function function) {
     return this.isRecursive() == ((HashFunction) function).isRecursive();
-  }
-
-  @Override
-  protected int standardHashCode() {
-    return (this.isRecursive()) ? 0 : 1;
   }
 
   @Override
@@ -82,10 +77,10 @@ public class HashFunction extends AbstractFunction<Set, ByteArrays, ByteArrayEle
   /**
    * This constructor generates a standard hash function for a given hash
    * algorithm name. The co-domain is chosen accordingly.
-   *
+   * <p>
    * @param hashAlgorithm The name of the hash algorithm
-   * @throws IllegalArgumentException if {@code algorithmName} is null or an
-   * unknown hash algorithm name
+   * @throws IllegalArgumentException if {@literal algorithmName} is null or an
+   *                                  unknown hash algorithm name
    */
   public static HashFunction getInstance(Set domain, final String hashAlgorithm) {
     return HashFunction.getInstance(domain, hashAlgorithm, false);
@@ -112,20 +107,20 @@ public class HashFunction extends AbstractFunction<Set, ByteArrays, ByteArrayEle
    * This is the general factory method of this class. If generates a new hash
    * function for a given domain. The cryptographic hash function is defined by
    * a given instance of type {@link MessageDigest}. A boolean value
-   * {@code recursiveHash} defines which of the two hashing methods is used.
-   *
-   * @param domain The given domain
+   * {@literal recursiveHash} defines which of the two hashing methods is used.
+   * <p>
+   * @param domain        The given domain
    * @param messageDigest The given cryptographic hash function
    * @param recursiveHash The boolean value
    * @return The resulting hash function
-   * @throws IllegalArgumentException if {@code domain} or {@code messageDigest}
-   * is null
+   * @throws IllegalArgumentException if {@literal domain} or
+   *                                  {@literal messageDigest} is null
    */
   public static HashFunction getInstance(Set domain, final MessageDigest messageDigest, boolean recursiveHash) {
     if (domain == null || messageDigest == null) {
       throw new IllegalArgumentException();
     }
-    return new HashFunction(domain, ByteArrays.getInstance(), messageDigest, recursiveHash);
+    return new HashFunction(domain, ByteArrayMonoid.getInstance(), messageDigest, recursiveHash);
   }
 
 }

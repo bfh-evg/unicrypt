@@ -1,13 +1,13 @@
 package ch.bfh.unicrypt.math.helper;
 
+import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.util.Arrays;
 import java.util.Random;
 
-import ch.bfh.unicrypt.math.utility.RandomUtil;
+public class Permutation
+       extends UniCrypt {
 
-public class Permutation {
-
-  private int[] permutationVector;
+  private final int[] permutationVector;
 
   public Permutation(int[] permutationVector) {
     this.permutationVector = permutationVector;
@@ -17,7 +17,7 @@ public class Permutation {
    * Returns the size of the permutation element, which is the length of the
    * corresponding permutation vector. The size of a permutation element is the
    * same as the size of the corresponding group.
-   *
+   * <p>
    * @return The size of the permutation element
    */
   public int getSize() {
@@ -26,7 +26,7 @@ public class Permutation {
 
   /**
    * Returns the result of applying the permutation vector to a given index.
-   *
+   * <p>
    * @param index The given index
    * @return The permuted index
    * @throw IndexOutOfBoundsException if {@code index} is negative or greater
@@ -67,10 +67,10 @@ public class Permutation {
   /**
    * Checks if an array of integers is a permutation vector, i.e., a permutation
    * of the values from 0 to n-1. For example {3,0,1,2,4} but not {1,4,3,2}.
-   *
+   * <p>
    * @param permutationVector The given array of integers to test
-   * @return {@literal true} if {@literal permutationVector} is a permutation vector,
-   * {@literal false} otherwise
+   * @return {@literal true} if {@literal permutationVector} is a permutation
+   *         vector, {@literal false} otherwise
    * @throws IllegalArgumentException if {@literal permutationVector} is null
    */
   public static boolean isPermutationVector(final int... permutationVector) {

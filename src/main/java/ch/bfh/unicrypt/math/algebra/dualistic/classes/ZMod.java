@@ -4,30 +4,30 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class implements the cyclic group Z_n = {0,...,n-1} with the operation
  * of addition modulo n. Its identity element is 0. Every integer in Z_n that is
  * relatively prime to n is a generator of Z_n. The smallest such group is Z_1 =
  * {0}.
- *
+ * <p>
  * @see "Handbook of Applied Cryptography, Definition 2.113"
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ZMod extends AbstractCyclicRing<ZModElement> {
+public class ZMod
+       extends AbstractCyclicRing<ZModElement> {
 
   private BigInteger modulus;
 
@@ -37,7 +37,7 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
 
   /**
    * Returns the modulus if this group.
-   *
+   * <p>
    * @return The modulus
    */
   public final BigInteger getModulus() {
@@ -59,7 +59,7 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
   }
 
   @Override
-  public boolean standardEquals(final Set set) {
+  public boolean standardIsEqual(final Set set) {
     final ZMod zPlusTimesMod = (ZMod) set;
     return this.getModulus().equals(zPlusTimesMod.getModulus());
   }
@@ -67,11 +67,6 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
   @Override
   protected boolean standardIsCompatible(Set set) {
     return (set instanceof ZMod);
-  }
-
-  @Override
-  public int standardHashCode() {
-    return this.getModulus().hashCode();
   }
 
   @Override
@@ -155,11 +150,11 @@ public class ZMod extends AbstractCyclicRing<ZModElement> {
 
   /**
    * Returns a the unique instance of this class for a given positive modulus.
-   *
+   * <p>
    * @param modulus The modulus
    * @return
    * @throws IllegalArgumentException if {@literal modulus} is null, zero, or
-   * negative
+   *                                  negative
    */
   public static ZMod getInstance(final BigInteger modulus) {
     if ((modulus == null) || (modulus.compareTo(BigInteger.valueOf(2)) < 0)) {

@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bfh.unicrypt.math.algebra.concatenative.classes;
+package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import java.math.BigInteger;
@@ -14,13 +14,13 @@ import java.util.Arrays;
  *
  * @author rolfhaenni
  */
-public class ByteArrayElement
-       extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement> {
+public class SizedByteArrayElement
+       extends AbstractElement<SizedByteArraySet, SizedByteArrayElement> {
 
   private final byte[] bytes;
 
-  protected ByteArrayElement(final ByteArrayMonoid monoid, final byte[] bytes) {
-    super(monoid);
+  protected SizedByteArrayElement(final SizedByteArraySet set, final byte[] bytes) {
+    super(set);
     this.bytes = bytes;
   }
 
@@ -28,7 +28,6 @@ public class ByteArrayElement
     return this.bytes;
   }
 
-  @Override
   public int getLength() {
     return this.getBytes().length;
   }
@@ -40,7 +39,7 @@ public class ByteArrayElement
 
   @Override
   protected boolean standardIsEqual(Element element) {
-    return Arrays.equals(this.getBytes(), ((ByteArrayElement) element).getBytes());
+    return Arrays.equals(this.getBytes(), ((SizedByteArrayElement) element).getBytes());
   }
 
   @Override

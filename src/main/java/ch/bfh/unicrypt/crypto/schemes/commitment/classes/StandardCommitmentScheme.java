@@ -42,7 +42,7 @@ public class StandardCommitmentScheme<M extends Set> extends AbstractRandomizedC
     if (encoder == null) {
       encoder = GeneralEncoder.getInstance(zMod);
     } else {
-      if (!encoder.getCoDomain().equals(zMod)) {
+      if (!encoder.getCoDomain().isEqual(zMod)) {
         throw new IllegalArgumentException();
       }
     }

@@ -16,7 +16,8 @@ import java.util.Set;
  *
  * @author rolfhaenni
  */
-public class BinaryPolynomialElement extends AbstractDualisticElement<BinaryPolynomialField, BinaryPolynomialElement> {
+public class BinaryPolynomialElement
+       extends AbstractDualisticElement<BinaryPolynomialField, BinaryPolynomialElement> {
 
   private Map<Integer, DualisticElement> coefficients;
   private int degree;
@@ -72,13 +73,8 @@ public class BinaryPolynomialElement extends AbstractDualisticElement<BinaryPoly
   }
 
   @Override
-  protected boolean standardEquals(Element element) {
+  protected boolean standardIsEqual(Element element) {
     return this.coefficients.equals(((BinaryPolynomialElement) element).coefficients);
-  }
-
-  @Override
-  protected int standardHashCode() {
-    return this.coefficients.hashCode();
   }
 
   @Override
@@ -106,4 +102,5 @@ public class BinaryPolynomialElement extends AbstractDualisticElement<BinaryPoly
     }
     return result;
   }
+
 }

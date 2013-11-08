@@ -4,26 +4,32 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Alphabet;
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
-public class Strings extends AbstractConcatenativeMonoid<StringElement> {
+public class StringMonoid
+       extends AbstractConcatenativeMonoid<StringElement> {
 
-  public static final StringElement EMPTY_STRING = Strings.getInstance().getElement("");
+  private final Alphabet alphabet;
 
-  private Strings() {
+  private StringMonoid(Alphabet alphabet) {
+    this.alphabet = alphabet;
+  }
+
+  public Alphabet getAlphabet() {
+    return this.alphabet;
   }
 
   public final StringElement getElement(final String string) {
-    if (string == null) {
+    if (string == null || !this.getAlphabet().isValidString(string)) {
       throw new IllegalArgumentException();
     }
     return this.standardGetElement(string);
@@ -36,7 +42,14 @@ public class Strings extends AbstractConcatenativeMonoid<StringElement> {
 
   @Override
   protected StringElement abstractGetElement(BigInteger value) {
-    return this.standardGetElement(new String(value.toByteArray()));
+    String result = "";
+    BigInteger base = BigInteger.valueOf(this.getAlphabet().getSize());
+    while (!value.equals(BigInteger.ZERO)) {
+      value = value.subtract(BigInteger.ONE);
+      result = this.getAlphabet().getCharacter(value.mod(base).intValue()) + result;
+      value = value.divide(base);
+    }
+    return this.standardGetElement(result);
   }
 
   //
@@ -70,18 +83,12 @@ public class Strings extends AbstractConcatenativeMonoid<StringElement> {
   //
   // STATIC FACTORY METHODS
   //
-  private static Strings instance;
 
-  /**
-   * Returns the singleton object of this class.
-   *
-   * @return The singleton object of this class
-   */
-  public static Strings getInstance() {
-    if (Strings.instance == null) {
-      Strings.instance = new Strings();
+  public static StringMonoid getInstance(Alphabet alphabet) {
+    if (alphabet == null) {
+      throw new IllegalArgumentException();
     }
-    return Strings.instance;
+    return new StringMonoid(alphabet);
   }
 
 }

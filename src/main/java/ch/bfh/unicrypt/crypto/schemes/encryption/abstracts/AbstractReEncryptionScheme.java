@@ -6,7 +6,7 @@ package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.HomomorphicEncryptionScheme;
+import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
@@ -32,14 +32,14 @@ import java.util.Random;
  * @param <DK>
  * @param <R>
  */
-public abstract class AbstractHomomorphicEncryptionScheme<M extends Set, P extends Monoid, C extends Monoid, ME extends Element, CE extends Element, EK extends Set, DK extends Set, R extends Monoid>
+public abstract class AbstractReEncryptionScheme<M extends Set, P extends Monoid, C extends Monoid, ME extends Element, CE extends Element, EK extends Set, DK extends Set, R extends Monoid>
        extends AbstractRandomizedEncryptionScheme<M, P, C, ME, CE, EK, DK, R>
-       implements HomomorphicEncryptionScheme {
+       implements ReEncryptionScheme {
 
   private Function identityEncryptionFunction;
   private Function reEncryptionFunction;
 
-  protected AbstractHomomorphicEncryptionScheme(M messageSpace, Encoder encoder, Function encryptionFunction, Function decryptionFunction, KeyPairGenerator keyPairGenerator) {
+  protected AbstractReEncryptionScheme(M messageSpace, Encoder encoder, Function encryptionFunction, Function decryptionFunction, KeyPairGenerator keyPairGenerator) {
     super(messageSpace, encoder, encryptionFunction, decryptionFunction, keyPairGenerator);
   }
 

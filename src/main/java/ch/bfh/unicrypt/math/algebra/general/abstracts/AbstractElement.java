@@ -1,12 +1,8 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrays;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -18,21 +14,26 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * This abstract class represents the concept an element in a mathematical
  * group. It allows applying the group operation and other methods from a
  * {@link Group} in a convenient way. Most methods provided by
  * {@link AbstractElement} have an equivalent method in {@link Group}.
- *
+ * <p>
  * @param <E>
  * @see Group
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<S extends Set, E extends Element> extends UniCrypt implements Element {
+public abstract class AbstractElement<S extends Set, E extends Element>
+       extends UniCrypt
+       implements Element {
 
   private final S set;
   protected BigInteger value;
@@ -79,7 +80,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> extends 
 
   /**
    * Returns the unique {@link Set} to which this element belongs
-   *
+   * <p>
    * @return The element's set
    */
   @Override
@@ -89,7 +90,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> extends 
 
   /**
    * Returns the positive BigInteger value that corresponds the element.
-   *
+   * <p>
    * @return The corresponding BigInteger value
    */
   @Override
@@ -125,7 +126,7 @@ public abstract class AbstractElement<S extends Set, E extends Element> extends 
       throw new IllegalArgumentException();
     }
     messageDigest.reset();
-    return ByteArrays.getInstance().getElement(messageDigest.digest(this.getValue().toByteArray()));
+    return ByteArrayMonoid.getInstance().getElement(messageDigest.digest(this.getValue().toByteArray()));
   }
 
   @Override
@@ -271,30 +272,20 @@ public abstract class AbstractElement<S extends Set, E extends Element> extends 
   // insufficient for elements.
   //
   @Override
-  public final boolean equals(final Object object) {
-    if (this == object) {
+  public final boolean isEqual(final Element element) {
+    if (element == null) {
+      throw new IllegalArgumentException();
+    }
+    if (this == element) {
       return true;
     }
-    if (object == null) {
+    if (this.getClass() != element.getClass()) {
       return false;
     }
-    if (this.getClass() != object.getClass()) {
+    if (!this.getSet().isEqual(element.getSet())) {
       return false;
     }
-    E other = (E) object;
-    if (!this.getSet().equals(other.getSet())) {
-      return false;
-    }
-    return this.standardEquals(other);
-  }
-
-  @Override
-  public final int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + this.getSet().hashCode();
-    result = prime * result + this.standardHashCode();
-    return result;
+    return this.standardIsEqual(element);
   }
 
   //
@@ -304,16 +295,12 @@ public abstract class AbstractElement<S extends Set, E extends Element> extends 
     throw new UnsupportedOperationException();
   }
 
-  protected boolean standardEquals(Element element) {
+  protected boolean standardIsEqual(Element element) {
     return this.getValue().equals(element.getValue());
   }
 
   protected ByteArrayElement standardGetRecursiveHashValue(MessageDigest messageDigest) {
     return this.getHashValue(messageDigest);
-  }
-
-  protected int standardHashCode() {
-    return this.getValue().hashCode();
   }
 
   @Override

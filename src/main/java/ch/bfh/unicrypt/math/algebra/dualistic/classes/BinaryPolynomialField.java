@@ -105,7 +105,7 @@ public class BinaryPolynomialField extends AbstractFiniteField<BinaryPolynomialE
   // STATIC FACTORY METHODS
   //
   public static BinaryPolynomialField getInstance(PolynomialElement irreduciblePolynomial) {
-    if (irreduciblePolynomial == null || !irreduciblePolynomial.getSet().getSemiRing().equals(ZModTwo.getInstance())) {
+    if (irreduciblePolynomial == null || !irreduciblePolynomial.getSet().getSemiRing().isEqual(ZModTwo.getInstance())) {
       throw new IllegalArgumentException();
     }
     return new BinaryPolynomialField(irreduciblePolynomial);
