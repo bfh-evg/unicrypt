@@ -29,7 +29,7 @@ public class StringMonoid
   }
 
   public final StringElement getElement(final String string) {
-    if (string == null || !this.getAlphabet().isValidString(string)) {
+    if (string == null || !this.getAlphabet().isValid(string)) {
       throw new IllegalArgumentException();
     }
     return this.standardGetElement(string);

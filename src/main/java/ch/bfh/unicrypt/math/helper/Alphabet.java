@@ -26,6 +26,11 @@ public class Alphabet {
   private final String characters;
   private final String regExp;
 
+  protected Alphabet(String characters) {
+    this.characters = characters;
+    this.regExp = null;
+  }
+
   protected Alphabet(String characters, String regExp) {
     this.characters = characters;
     this.regExp = "^(" + regExp + ")*$";
@@ -54,7 +59,7 @@ public class Alphabet {
     return index;
   }
 
-  public boolean isValidString(String string) {
+  public boolean isValid(String string) {
     if (this.regExp == null) {
       for (int i = 0; i < string.length(); i++) {
         if (!this.contains(string.charAt(i))) {
@@ -91,7 +96,7 @@ public class Alphabet {
   }
 
   public static Alphabet getInstance(String characters) {
-    return new Alphabet(characters, null);
+    return new Alphabet(characters);
   }
 
   public static Alphabet getInstance(String characters, String regExp) {
@@ -108,9 +113,8 @@ public class Alphabet {
     String characters = "";
     for (char c = lowestChar; c <= highestChar; c++) {
       characters = characters + c;
-
     }
-    return new Alphabet(characters, null);
+    return new Alphabet(characters);
   }
 
 }
