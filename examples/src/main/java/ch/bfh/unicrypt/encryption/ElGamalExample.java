@@ -2,17 +2,24 @@ package ch.bfh.unicrypt.encryption;
 
 import java.math.BigInteger;
 
-import ch.bfh.unicrypt.encryption.classes.ElGamalEncryptionClass;
-import ch.bfh.unicrypt.keygen.interfaces.DDHGroupKeyPairGenerator;
-import ch.bfh.unicrypt.math.element.interfaces.AtomicElement;
-import ch.bfh.unicrypt.math.element.interfaces.Element;
-import ch.bfh.unicrypt.math.element.interfaces.TupleElement;
-import ch.bfh.unicrypt.math.group.classes.GStarSaveClass;
-import ch.bfh.unicrypt.math.group.interfaces.GStarSave;
+import sun.security.jca.GetInstance;
+
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECGroup;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECGroupElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.SafeECGroupFp;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimes;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 public class ElGamalExample {
   public static void main(final String[] args) {
-    final GStarSave g_q = new GStarSaveClass(BigInteger.valueOf(23));
+    
+	//Example over GStarSave
+	/*final GStarSave g_q = new GStarSaveClass(BigInteger.valueOf(23));
     final ElGamalEncryptionClass ecs = new ElGamalEncryptionClass(g_q);
     final DDHGroupKeyPairGenerator keyGen = ecs.getKeyGenerator();
 
@@ -33,6 +40,41 @@ public class ElGamalExample {
     System.out.println("ciphertext: " + cipherText);
     System.out.println("reEnc text: " + reEncryptedCipherText);
     System.out.println(reEncMessage);
+    */
+	  
+	  //Example Elgamal over ECFp
+	  final ECGroup g_q=SafeECGroupFp.getInstance("secp384r1"); //Possible curves secp{112,160,192,224,256,384,521}r1
+	  final ElGamalEncryptionScheme<ECGroup, ECGroupElement> ecs= ElGamalEncryptionScheme.getInstance(g_q);
+	  final KeyPairGenerator keyGen= ecs.getKeyPairGenerator();
+	  final Element message =g_q.getRandomElement();
+	  System.out.println("Message: "+message);
+	  
+	  
+	  // Generate private key
+	  KeyGenerator privateKeyGenerator = keyGen.getPrivateKeyGenerator();
+	  final Element privateKey=privateKeyGenerator.generateKey();
+	  System.out.println("Private Key: "+privateKey);
+	  
+	  //Generate pubilc key
+	  long time=System.currentTimeMillis();
+	  Element publigKey=keyGen.getPublicKey(privateKey);
+	  time=System.currentTimeMillis()-time;
+	  System.out.println("Public Key: "+publigKey);
+	  System.out.println("Time for encryption: "+time+" ms");
+	  
+	  //Encrypt message
+	  time=System.currentTimeMillis();
+	  final Tuple cipherText=ecs.encrypt(publigKey, message);
+	  time=System.currentTimeMillis()-time;
+	  System.out.println("Cipher Text: "+cipherText);
+	  System.out.println("Time for decryption: "+time+" ms");
+	  
+	  //decrypt message
+	  Element newMessage=ecs.decrypt(privateKey, cipherText);
+	  System.out.println("New Message: "+newMessage);
+	  System.out.println("Message == New Message: "+message.equals(newMessage));
+	  
+    
 
   }
 }

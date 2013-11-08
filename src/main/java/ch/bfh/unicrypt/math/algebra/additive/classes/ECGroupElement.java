@@ -31,16 +31,16 @@ public class ECGroupElement extends
 		if (this.isZero()) {
 			return new BigInteger("-1");
 		} else {
-			return MathUtil.elegantPair(this.x.getValue(), this.y.getValue());
+			return MathUtil.elegantPair(this.getX().getValue(), this.getY().getValue());
 		}
 	}
 
 	@Override
 	public String toString() {
-		if (this.x == null && this.y == null) {
-			return "(-1,-1)";
+		if (this.getX() == null && this.getY() == null) {
+			return "ECGroup[(-1,-1)]";
 		} else {
-			return "(" + this.x.getValue() + "," + this.y.getValue() + ")";
+			return "ECGroup[(" + this.getX().getValue() + "," + this.getY().getValue() + ")]";
 		}
 	}
 

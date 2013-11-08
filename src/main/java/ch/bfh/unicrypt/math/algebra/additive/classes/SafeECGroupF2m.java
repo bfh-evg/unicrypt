@@ -11,7 +11,6 @@ public class SafeECGroupF2m extends ECGroupF2m {
 			DualisticElement b, DualisticElement gx, DualisticElement gy,
 			BigInteger order, BigInteger h) {
 		super(Finitefiled, a, b, gx, gy, order, h);
-		// TODO Auto-generated constructor stub
 	}
 
 }

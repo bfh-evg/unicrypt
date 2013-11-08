@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.math.group;
 
 import java.math.BigInteger;
+import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECGroupElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECGroupFp;
@@ -35,10 +36,11 @@ public class ECGroupExample {
 		System.out.println(w.getValue());
 		*/
 		
-		/*
+		
 		//Example 2
-		SafeECGroupFp ec2=SafeECGroupFp.getInstance("secp192r1");
+		SafeECGroupFp ec2=SafeECGroupFp.getInstance("secp224r1");
 		ECGroupElement g2=ec2.getDefaultGenerator();
+		ec2.getRandomElement();
 		BigInteger n2=ec2.getOrder();
 		System.out.println(g2.selfApply(n2));		//Must be Identity (-1,-1)
 		System.out.println(MathUtil.arePrime(n2));	//Must be true
@@ -53,19 +55,20 @@ public class ECGroupExample {
 		t1=System.currentTimeMillis()-t1;
 		System.out.println(w2);	//Must be Identity (-1,-1) if h=1
 		System.out.println("Computing time for n2*w2= "+t1+" ms");
-		*/
+		
+		
 		
 		/*
 		//Example Tonelli_Skanks
-		BigInteger r2=new BigInteger("2");
-		BigInteger p2=new BigInteger("41");
+		BigInteger r2=new BigInteger("659EF8BA043916EEDE8911702B20",16);
+		BigInteger p2=new BigInteger("DB7C2ABF62E35E668076BEAD208B",16);
 		BigInteger result = MathUtil.sqrtModp(r2,p2); // =+-17 mod 41
 		
 		System.out.println("-+ "+result);
 		*/
 		
 		
-		
+		/*
 		//Example 3 with "own" ECGroupFp
 		ZModPrime field=ZModPrime.getInstance(new BigInteger("DB7C2ABF62E35E668076BEAD208B",16));
 		DualisticElement a1=field.getElement(new BigInteger("DB7C2ABF62E35E668076BEAD2088",16));
@@ -76,6 +79,8 @@ public class ECGroupExample {
 		ECGroupElement gen3=ec3.getDefaultGenerator();
 		System.out.println(gen3);
 		System.out.println(gen3.selfApply(h).selfApply(order));
+		*/
+		
 		
 	}
 

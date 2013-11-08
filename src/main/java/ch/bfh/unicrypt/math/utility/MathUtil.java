@@ -373,7 +373,7 @@ public final class MathUtil {
   }
 
   // This is a private helper method to compute the integer square root of a BigInteger value.
-  private static BigInteger sqrt(BigInteger n) {
+  public static BigInteger sqrt(BigInteger n) {
     BigInteger a = BigInteger.ONE;
     BigInteger b = new BigInteger(n.shiftRight(5).add(new BigInteger("8")).toString());
     while(b.compareTo(a) >= 0) {
