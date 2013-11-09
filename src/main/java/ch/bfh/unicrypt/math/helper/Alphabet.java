@@ -25,18 +25,34 @@ public class Alphabet {
 
   private final String characters;
   private final String regExp;
+  private final char minChar;
+  private final char maxChar;
 
   protected Alphabet(String characters) {
     this.characters = characters;
     this.regExp = null;
+    this.minChar = '\u0000';
+    this.maxChar = '\u0000';
   }
 
   protected Alphabet(String characters, String regExp) {
     this.characters = characters;
     this.regExp = "^(" + regExp + ")*$";
+    this.minChar = '\u0000';
+    this.maxChar = '\u0000';
+  }
+
+  protected Alphabet(char minChar, char maxChar) {
+    this.characters = null;
+    this.regExp = null;
+    this.minChar = minChar;
+    this.maxChar = maxChar;
   }
 
   public int getSize() {
+    if (this.characters == null) {
+      return (int) this.maxChar - (int) this.minChar + 1;
+    }
     return this.characters.length();
   }
 
@@ -44,19 +60,27 @@ public class Alphabet {
     if (i < 0 || i >= this.getSize()) {
       throw new IndexOutOfBoundsException();
     }
+    if (this.characters == null) {
+      return (char) (this.minChar + i);
+    }
     return this.characters.charAt(i);
   }
 
   public boolean contains(char c) {
+    if (this.characters == null) {
+      return c >= this.minChar && c <= this.maxChar;
+    }
     return this.characters.lastIndexOf(c) >= 0;
   }
 
   public int getIndex(char c) {
-    int index = this.characters.lastIndexOf(c);
-    if (index < 0) {
+    if (!this.contains(c)) {
       throw new IllegalArgumentException();
     }
-    return index;
+    if (this.characters == null) {
+      return (int) c - (int) this.minChar;
+    }
+    return this.characters.lastIndexOf(c);
   }
 
   public boolean isValid(String string) {
@@ -77,6 +101,8 @@ public class Alphabet {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((this.characters == null) ? 0 : this.characters.hashCode());
+    result = prime * result + this.minChar;
+    result = prime * result + this.maxChar;
     return result;
   }
 
@@ -92,7 +118,7 @@ public class Alphabet {
       return false;
     }
     Alphabet other = (Alphabet) obj;
-    return this.characters.equals(other.characters);
+    return this.characters.equals(other.characters) && this.minChar == other.minChar && this.maxChar == other.maxChar;
   }
 
   public static Alphabet getInstance(String characters) {
@@ -106,15 +132,11 @@ public class Alphabet {
     return new Alphabet(characters, regExp);
   }
 
-  public static Alphabet getInstance(char lowestChar, char highestChar) {
-    if (lowestChar > highestChar) {
+  public static Alphabet getInstance(char minChar, char maxChar) {
+    if (minChar > maxChar) {
       throw new IllegalArgumentException();
     }
-    String characters = "";
-    for (char c = lowestChar; c <= highestChar; c++) {
-      characters = characters + c;
-    }
-    return new Alphabet(characters);
+    return new Alphabet(minChar, maxChar);
   }
 
 }
