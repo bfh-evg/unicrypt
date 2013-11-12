@@ -86,16 +86,16 @@ public class ECGroupFp
     DualisticElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
     boolean neg = x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
 
-    while (!MathUtil.hasSquareRootModp(y.getValue(), p)) {
+    while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
       x = this.getFiniteField().getRandomElement(random);
       y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
     }
 
-    //if neg is true return solution 2(p-sqrt) of sqrtModp else solution 1
+    //if neg is true return solution 2(p-sqrt) of sqrtModPrime else solution 1
     if (neg) {
-      y = this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModp(y.getValue(), p)));
+      y = this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue(), p)));
     } else {
-      y = this.getFiniteField().getElement(MathUtil.sqrtModp(y.getValue(), p));
+      y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue(), p));
     }
 
     return this.getElement(x, y);

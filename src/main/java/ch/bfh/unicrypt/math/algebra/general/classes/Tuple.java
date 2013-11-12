@@ -39,7 +39,7 @@ public class Tuple
     for (int i = 0; i < arity; i++) {
       values[i] = this.elements[i].getValue();
     }
-    return MathUtil.elegantPair(values);
+    return MathUtil.foldAndPair(values);
   }
 
   @Override

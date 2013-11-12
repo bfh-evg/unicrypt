@@ -5,9 +5,8 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
+import ch.bfh.unicrypt.math.helper.Alphabet;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -18,13 +17,19 @@ public class SizedStringSet
        extends AbstractSet<SizedStringElement> {
 
   private final int maxSize;
+  private final Alphabet alphabet;
 
-  private SizedStringSet(int maxSize) {
+  private SizedStringSet(int maxSize, Alphabet alphabet) {
     this.maxSize = maxSize;
+    this.alphabet = alphabet;
   }
 
   public int getMaxSize() {
     return this.maxSize;
+  }
+
+  public Alphabet getAlphabet() {
+    return this.alphabet;
   }
 
   public final SizedStringElement getElement(final String string) {
@@ -35,13 +40,19 @@ public class SizedStringSet
   }
 
   protected SizedStringElement standardGetElement(String string) {
-    return new SizedStringElement(this, string) {
-    };
+    return new SizedStringElement(this, string);
   }
 
   @Override
   protected SizedStringElement abstractGetElement(BigInteger value) {
-    return this.standardGetElement(new String(value.toByteArray()));
+    String result = "";
+    BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
+    while (!value.equals(BigInteger.ZERO)) {
+      value = value.subtract(BigInteger.ONE);
+      result = this.getAlphabet().getCharacter(value.mod(size).intValue()) + result;
+      value = value.divide(size);
+    }
+    return this.standardGetElement(result);
   }
 
   @Override
@@ -63,18 +74,12 @@ public class SizedStringSet
   //
   // STATIC FACTORY METHODS
   //
-  private static final Map<Integer, SizedStringSet> instances = new HashMap<Integer, SizedStringSet>();
 
-  public static SizedStringSet getInstance(final int maxSize) {
-    if (maxSize < 0) {
+  public static SizedStringSet getInstance(final int maxSize, final Alphabet alphabet) {
+    if (maxSize < 0 || alphabet == null) {
       throw new IllegalArgumentException();
     }
-    SizedStringSet instance = SizedStringSet.instances.get(maxSize);
-    if (instance == null) {
-      instance = new SizedStringSet(maxSize);
-      SizedStringSet.instances.put(maxSize, instance);
-    }
-    return instance;
+    return new SizedStringSet(maxSize, alphabet);
   }
 
 }

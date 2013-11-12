@@ -69,7 +69,7 @@ public class BinaryPolynomialElement
         values[i] = element.getValue();
       }
     }
-    return MathUtil.elegantPairWithSize(values);
+    return MathUtil.pairWithSize(values);
   }
 
   @Override

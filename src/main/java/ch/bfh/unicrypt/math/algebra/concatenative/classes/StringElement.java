@@ -34,10 +34,9 @@ public class StringElement
   @Override
   protected BigInteger standardGetValue() {
     BigInteger value = BigInteger.ZERO;
-    BigInteger base = BigInteger.valueOf(this.getSet().getAlphabet().getSize());
+    BigInteger size = BigInteger.valueOf(this.getSet().getAlphabet().getSize());
     for (int i = 0; i < this.getString().length(); i++) {
-      value = value.multiply(base);
-      value = value.add(BigInteger.valueOf(this.getSet().getAlphabet().getIndex(this.getString().charAt(i)) + 1));
+      value = value.multiply(size).add(BigInteger.valueOf(this.getSet().getAlphabet().getIndex(this.getString().charAt(i)) + 1));
     }
     return value;
   }

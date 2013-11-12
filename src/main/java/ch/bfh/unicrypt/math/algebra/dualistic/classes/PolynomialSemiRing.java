@@ -154,13 +154,12 @@ public class PolynomialSemiRing
   }
 
   PolynomialElement abstractGetElement(Map<Integer, DualisticElement> coefficients) {
-    return new PolynomialElement(this, coefficients) {
-    };
+    return new PolynomialElement(this, coefficients);
   }
 
   @Override
   protected PolynomialElement abstractGetElement(BigInteger value) {
-    BigInteger[] values = MathUtil.elegantUnpairWithSize(value);
+    BigInteger[] values = MathUtil.unpairWithSize(value);
     return this.getElement(values);
   }
 
@@ -171,7 +170,7 @@ public class PolynomialSemiRing
 
   @Override
   protected boolean abstractContains(BigInteger value) {
-    BigInteger[] values = MathUtil.elegantUnpairWithSize(value);
+    BigInteger[] values = MathUtil.unpairWithSize(value);
     for (BigInteger val : values) {
       if (!this.getSemiRing().contains(val)) {
         return false;

@@ -69,7 +69,7 @@ public class PolynomialElement
         values[i] = element.getValue();
       }
     }
-    return MathUtil.elegantPairWithSize(values);
+    return MathUtil.pairWithSize(values);
   }
 
   @Override

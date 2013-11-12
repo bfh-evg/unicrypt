@@ -30,7 +30,7 @@ public class PermutationElement
 
   @Override
   protected BigInteger standardGetValue() {
-    return MathUtil.elegantPair(MathUtil.intToBigIntegerArray(this.getPermutation().getPermutationVector()));
+    return MathUtil.pair(MathUtil.intToBigIntegerArray(this.getPermutation().getPermutationVector()));
   }
 
   @Override

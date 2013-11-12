@@ -1,13 +1,14 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
 
-public abstract class AbstractAdditiveGroup<E extends AdditiveElement> extends AbstractGroup<E> implements AdditiveGroup {
+public abstract class AbstractAdditiveGroup<E extends AdditiveElement>
+       extends AbstractGroup<E>
+       implements AdditiveGroup {
 
   @Override
   public final E add(final Element element1, final Element element2) {
@@ -55,12 +56,12 @@ public abstract class AbstractAdditiveGroup<E extends AdditiveElement> extends A
   }
 
   @Override
-  public E getZeroElement() {
+  public final E getZeroElement() {
     return this.getIdentityElement();
   }
 
   @Override
-  public boolean isZeroElement(Element element) {
+  public final boolean isZeroElement(Element element) {
     return this.isIdentityElement(element);
   }
 

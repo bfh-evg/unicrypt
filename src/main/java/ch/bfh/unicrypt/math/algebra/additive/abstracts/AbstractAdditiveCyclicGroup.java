@@ -1,13 +1,14 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
 
-public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement> extends AbstractCyclicGroup<E> implements AdditiveCyclicGroup {
+public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement>
+       extends AbstractCyclicGroup<E>
+       implements AdditiveCyclicGroup {
 
   @Override
   public final E add(final Element element1, final Element element2) {
@@ -55,12 +56,12 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement> ext
   }
 
   @Override
-  public E getZeroElement() {
+  public final E getZeroElement() {
     return this.getIdentityElement();
   }
 
   @Override
-  public boolean isZeroElement(Element element) {
+  public final boolean isZeroElement(Element element) {
     return this.isIdentityElement(element);
   }
 

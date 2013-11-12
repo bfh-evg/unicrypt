@@ -33,7 +33,12 @@ public class SizedStringElement
 
   @Override
   protected BigInteger standardGetValue() {
-    return new BigInteger(this.getString().getBytes());
+    BigInteger value = BigInteger.ZERO;
+    BigInteger size = BigInteger.valueOf(this.getSet().getAlphabet().getSize());
+    for (int i = 0; i < this.getString().length(); i++) {
+      value = value.multiply(size).add(BigInteger.valueOf(this.getSet().getAlphabet().getIndex(this.getString().charAt(i)) + 1));
+    }
+    return value;
   }
 
   @Override

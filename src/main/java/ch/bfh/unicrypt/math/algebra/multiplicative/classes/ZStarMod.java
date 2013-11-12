@@ -18,7 +18,7 @@ import java.util.Random;
  * @see "Handbook of Applied Cryptography, Definition 2.124"
  * @see <a
  * href="http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n">http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n</a>
- <p>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
@@ -122,8 +122,7 @@ public class ZStarMod
   //
   @Override
   protected ZStarModElement abstractGetElement(BigInteger value) {
-    return new ZStarModElement(this, value) {
-    };
+    return new ZStarModElement(this, value);
   }
 
   @Override

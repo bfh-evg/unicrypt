@@ -36,18 +36,17 @@ public class StringMonoid
   }
 
   protected StringElement standardGetElement(String string) {
-    return new StringElement(this, string) {
-    };
+    return new StringElement(this, string);
   }
 
   @Override
   protected StringElement abstractGetElement(BigInteger value) {
     String result = "";
-    BigInteger base = BigInteger.valueOf(this.getAlphabet().getSize());
+    BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
     while (!value.equals(BigInteger.ZERO)) {
       value = value.subtract(BigInteger.ONE);
-      result = this.getAlphabet().getCharacter(value.mod(base).intValue()) + result;
-      value = value.divide(base);
+      result = this.getAlphabet().getCharacter(value.mod(size).intValue()) + result;
+      value = value.divide(size);
     }
     return this.standardGetElement(result);
   }

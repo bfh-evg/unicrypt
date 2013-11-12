@@ -4,19 +4,19 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ByteArrayMonoid extends AbstractConcatenativeMonoid<ByteArrayElement> {
+public class ByteArrayMonoid
+       extends AbstractConcatenativeMonoid<ByteArrayElement> {
 
   private ByteArrayMonoid() {
   }
@@ -29,8 +29,7 @@ public class ByteArrayMonoid extends AbstractConcatenativeMonoid<ByteArrayElemen
   }
 
   protected ByteArrayElement standardGetElement(byte[] bytes) {
-    return new ByteArrayElement(this, bytes) {
-    };
+    return new ByteArrayElement(this, bytes);
   }
 
   @Override
@@ -77,7 +76,7 @@ public class ByteArrayMonoid extends AbstractConcatenativeMonoid<ByteArrayElemen
 
   /**
    * Returns the singleton object of this class.
-   *
+   * <p>
    * @return The singleton object of this class
    */
   public static ByteArrayMonoid getInstance() {

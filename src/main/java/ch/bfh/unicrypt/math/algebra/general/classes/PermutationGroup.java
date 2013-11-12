@@ -24,7 +24,7 @@ import java.util.Random;
  * @see "Handbook of Applied Cryptography, Example 2.164"
  * @see <a
  * href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
- <p>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -61,9 +61,9 @@ public class PermutationGroup
    * <p>
    * @param permutation The given permutation
    * @return The corresponding group element
-   * @throws IllegalArgumentException if {@literal permutation} is null or if it is
-   *                                  not a proper permutation for the group's
-   *                                  permutation size
+   * @throws IllegalArgumentException if {@literal permutation} is null or if it
+   *                                  is not a proper permutation for the
+   *                                  group's permutation size
    */
   public PermutationElement getElement(final Permutation permutation) {
     if (permutation == null || permutation.getSize() != this.getSize()) {
@@ -73,8 +73,7 @@ public class PermutationGroup
   }
 
   protected PermutationElement standardGetElement(Permutation permutation) {
-    return new PermutationElement(this, permutation) {
-    };
+    return new PermutationElement(this, permutation);
   }
 
   //
@@ -103,7 +102,7 @@ public class PermutationGroup
 
   @Override
   protected boolean abstractContains(final BigInteger value) {
-    BigInteger[] values = MathUtil.elegantUnpair(value, this.getSize());
+    BigInteger[] values = MathUtil.unpair(value, this.getSize());
     return Permutation.isPermutationVector(MathUtil.bigIntegerToIntArray(values));
   }
 
@@ -129,7 +128,7 @@ public class PermutationGroup
 
   @Override
   protected PermutationElement abstractGetElement(final BigInteger value) {
-    BigInteger[] values = MathUtil.elegantUnpair(value, this.getSize());
+    BigInteger[] values = MathUtil.unpair(value, this.getSize());
     return standardGetElement(new Permutation(MathUtil.bigIntegerToIntArray(values)));
   }
   //

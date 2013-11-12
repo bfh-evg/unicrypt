@@ -13,7 +13,7 @@ import java.util.Random;
 
 /**
  * @author rolfhaenni
- <p>
+ * <p>
  */
 public class SingletonGroup
        extends AbstractCyclicGroup<Element> {
@@ -21,8 +21,7 @@ public class SingletonGroup
   private final Element element;
 
   private SingletonGroup(BigInteger value) {
-    this.element = new SingletonElement(this, value) {
-    };
+    this.element = new SingletonElement(this, value);
   }
 
   public final Element getElement() {

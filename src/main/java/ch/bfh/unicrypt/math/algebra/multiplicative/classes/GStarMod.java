@@ -118,8 +118,7 @@ public class GStarMod
   //
   @Override
   protected GStarModElement abstractGetElement(BigInteger value) {
-    return new GStarModElement(this, value) {
-    };
+    return new GStarModElement(this, value);
   }
 
   @Override

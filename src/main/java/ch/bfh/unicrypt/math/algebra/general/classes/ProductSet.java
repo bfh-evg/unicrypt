@@ -99,8 +99,7 @@ public class ProductSet
   }
 
   protected Tuple standardGetElement(final Element... elements) {
-    return new Tuple(this, elements) {
-    };
+    return new Tuple(this, elements);
   }
 
   @Override
@@ -166,7 +165,7 @@ public class ProductSet
 
   @Override
   protected Tuple abstractGetElement(BigInteger value) {
-    BigInteger[] values = MathUtil.elegantUnpair(value, this.getArity());
+    BigInteger[] values = MathUtil.unpairAndUnfold(value, this.getArity());
     return this.getElement(values);
   }
 
@@ -182,7 +181,7 @@ public class ProductSet
 
   @Override
   protected boolean abstractContains(BigInteger value) {
-    BigInteger[] values = MathUtil.elegantUnpair(value, this.getArity());
+    BigInteger[] values = MathUtil.unpairAndUnfold(value, this.getArity());
     return this.contains(values);
   }
 

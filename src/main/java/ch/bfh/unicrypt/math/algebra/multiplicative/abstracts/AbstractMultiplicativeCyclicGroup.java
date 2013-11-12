@@ -1,13 +1,14 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
+import java.math.BigInteger;
 
-public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement> extends AbstractCyclicGroup<E> implements MultiplicativeCyclicGroup {
+public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement>
+       extends AbstractCyclicGroup<E>
+       implements MultiplicativeCyclicGroup {
 
   @Override
   public final E multiply(final Element element1, final Element element2) {
@@ -55,12 +56,12 @@ public abstract class AbstractMultiplicativeCyclicGroup<E extends Multiplicative
   }
 
   @Override
-  public E getOneElement() {
+  public final E getOneElement() {
     return this.getIdentityElement();
   }
 
   @Override
-  public boolean isOneElement(Element element) {
+  public final boolean isOneElement(Element element) {
     return this.isIdentityElement(element);
   }
 

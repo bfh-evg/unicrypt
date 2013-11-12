@@ -4,13 +4,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * /**
@@ -18,16 +17,17 @@ import ch.bfh.unicrypt.math.utility.RandomUtil;
  * integers with infinite order. Its identity element is 0, and there are
  * exactly two generators, namely 1 and -1. To invert an element, it is
  * multiplied with -1.
- *
+ * <p>
  * @see "Handbook of Applied Cryptography, Example 2.164"
  * @see <a
  * href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class Z extends AbstractCyclicRing<ZElement> {
+public class Z
+       extends AbstractCyclicRing<ZElement> {
 
   //
   // The following protected methods override the standard implementation from
@@ -82,8 +82,7 @@ public class Z extends AbstractCyclicRing<ZElement> {
 
   @Override
   protected ZElement abstractGetElement(BigInteger value) {
-    return new ZElement(this, value) {
-    };
+    return new ZElement(this, value);
   }
 
   @Override
@@ -113,7 +112,7 @@ public class Z extends AbstractCyclicRing<ZElement> {
 
   /**
    * Returns the singleton object of this class.
-   *
+   * <p>
    * @return The singleton object of this class
    */
   public static Z getInstance() {

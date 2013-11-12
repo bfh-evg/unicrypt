@@ -4,27 +4,27 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * /**
  * This class implements the additive cyclic group of non-negative integers with
  * infinite order. Its identity element is 0.
- *
+ * <p>
  * @see "Handbook of Applied Cryptography, Example 2.164"
  * @see <a
  * href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
- *
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public class N extends AbstractSemiRing<NElement> {
+public class N
+       extends AbstractSemiRing<NElement> {
 
   //
   // The following protected methods override the standard implementation from
@@ -66,8 +66,7 @@ public class N extends AbstractSemiRing<NElement> {
 
   @Override
   protected NElement abstractGetElement(BigInteger value) {
-    return new NElement(this, value) {
-    };
+    return new NElement(this, value);
   }
 
   @Override
@@ -86,7 +85,7 @@ public class N extends AbstractSemiRing<NElement> {
 
   /**
    * Returns the singleton object of this class.
-   *
+   * <p>
    * @return The singleton object of this class
    */
   public static N getInstance() {

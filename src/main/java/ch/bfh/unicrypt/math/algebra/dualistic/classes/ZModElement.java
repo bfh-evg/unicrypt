@@ -4,18 +4,18 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ZModElement extends AbstractDualisticElement<ZMod, ZModElement> {
+public class ZModElement
+       extends AbstractDualisticElement<ZMod, ZModElement> {
 
-  protected ZModElement(final ZMod zPlusTimesMod, final BigInteger value) {
-    super(zPlusTimesMod, value);
+  protected ZModElement(final ZMod zMod, final BigInteger value) {
+    super(zMod, value);
   }
 
 }

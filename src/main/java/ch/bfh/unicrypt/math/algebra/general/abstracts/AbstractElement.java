@@ -24,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
  * {@link Group} in a convenient way. Most methods provided by
  * {@link AbstractElement} have an equivalent method in {@link Group}.
  * <p>
+ * @param <S>
  * @param <E>
  * @see Group
  * <p>

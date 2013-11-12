@@ -7,17 +7,17 @@ package ch.bfh.unicrypt.math.helper;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch
  */
 public class Alphabet {
 
-  public static final Alphabet UNARY = Alphabet.getInstance("1", "1");
-  public static final Alphabet BINARY = Alphabet.getInstance("01", "[01]");
-  public static final Alphabet OCTAL = Alphabet.getInstance("01234567", "[0-7]");
-  public static final Alphabet DECIMAL = Alphabet.getInstance("0123456789", "[0-9]");
+  public static final Alphabet UNARY = Alphabet.getInstance('1', '1');
+  public static final Alphabet BINARY = Alphabet.getInstance('0', '1');
+  public static final Alphabet OCTAL = Alphabet.getInstance('0', '7');
+  public static final Alphabet DECIMAL = Alphabet.getInstance('0', '9');
   public static final Alphabet HEXADECIMAL = Alphabet.getInstance("0123456789ABCDEF", "[0-9A-F]");
-  public static final Alphabet LOWER_CASE = Alphabet.getInstance("abcdefghijklmnopqrstuvwxyz", "[a-z]");
-  public static final Alphabet UPPER_CASE = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "[A-Z]");
+  public static final Alphabet LOWER_CASE = Alphabet.getInstance('a', 'z');
+  public static final Alphabet UPPER_CASE = Alphabet.getInstance('A', 'Z');
   public static final Alphabet LETTERS = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", "[A-Za-z]");
   public static final Alphabet ALPHANUMERIC = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "[A-Za-z0-9]");
   public static final Alphabet BASE64 = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "[A-Za-z0-9\\+\\/]");

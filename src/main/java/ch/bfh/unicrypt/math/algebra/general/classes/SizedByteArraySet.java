@@ -36,8 +36,7 @@ public class SizedByteArraySet
   }
 
   protected SizedByteArrayElement standardGetElement(byte[] bytes) {
-    return new SizedByteArrayElement(this, bytes) {
-    };
+    return new SizedByteArrayElement(this, bytes);
   }
 
   @Override

@@ -1,13 +1,14 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
+import java.math.BigInteger;
 
-public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement> extends AbstractMonoid<E> implements MultiplicativeMonoid {
+public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement>
+       extends AbstractMonoid<E>
+       implements MultiplicativeMonoid {
 
   @Override
   public final E multiply(final Element element1, final Element element2) {
@@ -45,12 +46,12 @@ public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeEleme
   }
 
   @Override
-  public E getOneElement() {
+  public final E getOneElement() {
     return this.getIdentityElement();
   }
 
   @Override
-  public boolean isOneElement(Element element) {
+  public final boolean isOneElement(Element element) {
     return this.isIdentityElement(element);
   }
 

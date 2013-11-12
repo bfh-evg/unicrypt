@@ -4,18 +4,18 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public class NElement extends AbstractDualisticElement<N, NElement> {
+public class NElement
+       extends AbstractDualisticElement<N, NElement> {
 
-  protected NElement(final N nPlusTimes, final BigInteger value) {
-    super(nPlusTimes, value);
+  protected NElement(final N n, final BigInteger value) {
+    super(n, value);
   }
 
 }

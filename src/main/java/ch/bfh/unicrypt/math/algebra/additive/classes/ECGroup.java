@@ -9,14 +9,12 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public abstract class ECGroup
-       extends
-       AbstractAdditiveCyclicGroup<ECGroupElement> {
+       extends AbstractAdditiveCyclicGroup<ECGroupElement> {
 
   private FiniteField finiteField;
   private ECGroupElement generator;
   private DualisticElement a, b;
   private BigInteger order, h;
-  private final ECGroupElement Identity;
   private final DualisticElement zero = null;
 
   protected ECGroup(FiniteField Finitefiled, DualisticElement a,
@@ -28,7 +26,6 @@ public abstract class ECGroup
     this.order = order;
     this.h = h;
     this.finiteField = Finitefiled;
-    this.Identity = this.getElement(zero, zero);
     this.generator = this.getElement(gx, gy);
 
     if (!isValid()) {
@@ -45,7 +42,6 @@ public abstract class ECGroup
     this.order = order;
     this.h = h;
     this.finiteField = Finitefiled;
-    this.Identity = this.getElement(zero, zero);
     this.generator = this.computeGenerator();
 
     if (!isValid()) {
@@ -78,10 +74,7 @@ public abstract class ECGroup
 
   @Override
   protected ECGroupElement abstractGetIdentityElement() {
-    if (Identity == null) {
-      return new ECGroupElement(this, zero, zero);
-    }
-    return this.Identity;
+    return this.getElement(zero, zero);
   }
 
   @Override
@@ -94,7 +87,7 @@ public abstract class ECGroup
     if (value.equals(zero)) {
       return this.getIdentityElement();
     } else {
-      BigInteger[] result = MathUtil.elegantUnpair(value);
+      BigInteger[] result = MathUtil.unpair(value);
       DualisticElement x = this.getFiniteField().getElement(result[0]);
       DualisticElement y = this.getFiniteField().getElement(result[1]);
 
@@ -129,9 +122,7 @@ public abstract class ECGroup
       DualisticElement r = this.getFiniteField().getRandomElement(random);
       return this.getDefaultGenerator().selfApply(r);
     } else {
-
       return this.getRandomElementWithoutGenerator(random);
-
     }
 
   }
@@ -146,7 +137,7 @@ public abstract class ECGroup
 
   @Override
   protected boolean abstractContains(BigInteger value) {
-    BigInteger[] result = MathUtil.elegantUnpair(value);
+    BigInteger[] result = MathUtil.unpair(value);
     DualisticElement x = this.getFiniteField().getElement(result[0]);
     DualisticElement y = this.getFiniteField().getElement(result[1]);
     return this.contains(x, y);
@@ -176,12 +167,6 @@ public abstract class ECGroup
 
   protected BigInteger getH() {
     return h;
-  }
-
-  @Override
-  public boolean isZeroElement(Element element) {
-    ECGroupElement e = (ECGroupElement) element;
-    return e.getX() == null && e.getY() == null;
   }
 
 }

@@ -113,8 +113,7 @@ public class ZMod
 
   @Override
   protected ZModElement abstractGetElement(BigInteger value) {
-    return new ZModElement(this, value) {
-    };
+    return new ZModElement(this, value);
   }
 
   @Override
