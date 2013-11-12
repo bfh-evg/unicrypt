@@ -6,6 +6,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.helper.Alphabet;
+import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -57,14 +58,17 @@ public class SizedStringSet
 
   @Override
   protected BigInteger abstractGetOrder() {
-    throw new UnsupportedOperationException();
-    // to implement this, a charset needs to be defined in this class
+    BigInteger order = BigInteger.ZERO;
+    BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
+    for (int i = 0; i <= this.getMaxSize(); i++) {
+      order = order.add(size.pow(i));
+    }
+    return order;
   }
 
   @Override
   protected SizedStringElement abstractGetRandomElement(Random random) {
-    throw new UnsupportedOperationException();
-    // to implement this, a charset needs to be defined in this class
+    return this.abstractGetElement(RandomUtil.getRandomBigInteger(this.getOrder(), random));
   }
 
   @Override
