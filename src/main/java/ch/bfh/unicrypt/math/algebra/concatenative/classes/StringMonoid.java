@@ -41,14 +41,14 @@ public class StringMonoid
 
   @Override
   protected StringElement abstractGetElement(BigInteger value) {
-    String result = "";
+    StringBuilder strBuilder = new StringBuilder();
     BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
     while (!value.equals(BigInteger.ZERO)) {
       value = value.subtract(BigInteger.ONE);
-      result = this.getAlphabet().getCharacter(value.mod(size).intValue()) + result;
+      strBuilder.append(this.getAlphabet().getCharacter(value.mod(size).intValue()));
       value = value.divide(size);
     }
-    return this.standardGetElement(result);
+    return this.standardGetElement(strBuilder.reverse().toString());
   }
 
   //

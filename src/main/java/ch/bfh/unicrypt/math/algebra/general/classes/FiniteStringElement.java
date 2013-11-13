@@ -13,12 +13,12 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public class SizedStringElement
-       extends AbstractElement<SizedStringSet, SizedStringElement> {
+public class FiniteStringElement
+       extends AbstractElement<FiniteStringSet, FiniteStringElement> {
 
   private final String string;
 
-  protected SizedStringElement(final SizedStringSet set, final String string) {
+  protected FiniteStringElement(final FiniteStringSet set, final String string) {
     super(set);
     this.string = string;
   }
@@ -36,7 +36,12 @@ public class SizedStringElement
     BigInteger value = BigInteger.ZERO;
     BigInteger size = BigInteger.valueOf(this.getSet().getAlphabet().getSize());
     for (int i = 0; i < this.getString().length(); i++) {
-      value = value.multiply(size).add(BigInteger.valueOf(this.getSet().getAlphabet().getIndex(this.getString().charAt(i)) + 1));
+      int charIndex = this.getSet().getAlphabet().getIndex(this.getString().charAt(i));
+      if (this.getSet().equalLength()) {
+        value = value.multiply(size).add(BigInteger.valueOf(charIndex));
+      } else {
+        value = value.multiply(size).add(BigInteger.valueOf(charIndex + 1));
+      }
     }
     return value;
   }

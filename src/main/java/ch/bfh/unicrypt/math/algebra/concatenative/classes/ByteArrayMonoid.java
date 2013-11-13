@@ -48,8 +48,8 @@ public class ByteArrayMonoid
 
   @Override
   protected ByteArrayElement abstractApply(Element element1, Element element2) {
-    byte[] bytes1 = ((ByteArrayElement) element1).getBytes();
-    byte[] bytes2 = ((ByteArrayElement) element2).getBytes();
+    byte[] bytes1 = ((ByteArrayElement) element1).getByteArray();
+    byte[] bytes2 = ((ByteArrayElement) element2).getByteArray();
     byte[] result = Arrays.copyOf(bytes1, bytes1.length + bytes2.length);
     System.arraycopy(bytes2, 0, result, bytes2.length, bytes2.length);
     return this.standardGetElement(result);

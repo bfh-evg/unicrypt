@@ -306,7 +306,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 
   @Override
   protected String standardToStringName() {
-    return this.getClass().getSuperclass().getSimpleName();
+    return this.getClass().getSimpleName();
   }
 
   @Override

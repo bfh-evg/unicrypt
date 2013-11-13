@@ -36,7 +36,8 @@ public class StringElement
     BigInteger value = BigInteger.ZERO;
     BigInteger size = BigInteger.valueOf(this.getSet().getAlphabet().getSize());
     for (int i = 0; i < this.getString().length(); i++) {
-      value = value.multiply(size).add(BigInteger.valueOf(this.getSet().getAlphabet().getIndex(this.getString().charAt(i)) + 1));
+      int charIndex = this.getSet().getAlphabet().getIndex(this.getString().charAt(i));
+      value = value.multiply(size).add(BigInteger.valueOf(charIndex + 1));
     }
     return value;
   }
