@@ -1,26 +1,25 @@
-package ch.bfh.unicrypt.math.algebra.additive.classes;
+package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
-public class ECGroupElement
-       extends AbstractAdditiveElement<ECGroup, ECGroupElement> {
+public abstract class AbstractECElement<E extends AbstractECElement, D extends DualisticElement>
+       extends AbstractAdditiveElement<AbstractEC, E> {
 
-  private final DualisticElement x, y;
+  private final D x, y;
 
-  protected ECGroupElement(ECGroup ecGroup, DualisticElement x, DualisticElement y) {
+  protected AbstractECElement(AbstractEC ecGroup, D x, D y) {
     super(ecGroup);
     this.x = x;
     this.y = y;
   }
 
-  public DualisticElement getX() {
+  public D getX() {
     return this.x;
   }
 
-  public DualisticElement getY() {
+  public D getY() {
     return this.y;
   }
 

@@ -1,6 +1,5 @@
-package ch.bfh.unicrypt.math.algebra.additive.classes;
+package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -8,24 +7,22 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
 
-public abstract class ECGroup
-       extends AbstractAdditiveCyclicGroup<ECGroupElement> {
+public abstract class AbstractEC<E extends AbstractECElement, D extends DualisticElement>
+       extends AbstractAdditiveCyclicGroup<E> {
 
   private FiniteField finiteField;
-  private ECGroupElement generator;
-  private DualisticElement a, b;
+  private E generator;
+  private D a, b;
   private BigInteger order, h;
-  private final DualisticElement zero = null;
+  private final D zero = null;
 
-  protected ECGroup(FiniteField Finitefiled, DualisticElement a,
-         DualisticElement b, DualisticElement gx, DualisticElement gy,
-         BigInteger order, BigInteger h) {
+  protected AbstractEC(FiniteField finiteField, D a, D b, D gx, D gy, BigInteger order, BigInteger h) {
     super();
     this.a = a;
     this.b = b;
     this.order = order;
     this.h = h;
-    this.finiteField = Finitefiled;
+    this.finiteField = finiteField;
     this.generator = this.getElement(gx, gy);
 
     if (!isValid()) {
@@ -34,8 +31,7 @@ public abstract class ECGroup
 
   }
 
-  protected ECGroup(FiniteField Finitefiled, DualisticElement a,
-         DualisticElement b, BigInteger order, BigInteger h) {
+  protected AbstractEC(FiniteField Finitefiled, D a, D b, BigInteger order, BigInteger h) {
     super();
     this.a = a;
     this.b = b;
@@ -50,12 +46,12 @@ public abstract class ECGroup
   }
 
   @Override
-  protected ECGroupElement abstractGetDefaultGenerator() {
+  protected E abstractGetDefaultGenerator() {
     return this.generator;
   }
 
-  protected ECGroupElement computeGenerator() {
-    ECGroupElement e = this.getRandomElement().selfApply(this.getH());
+  protected E computeGenerator() {
+    E e = this.getRandomElement().selfApply(this.getH());
     while (!this.isGenerator(e)) {
       e = this.getRandomElement();
     }
@@ -64,16 +60,16 @@ public abstract class ECGroup
 
   @Override
   protected boolean abstractIsGenerator(Element element) {
-    ECGroupElement e = (ECGroupElement) element;
+    E e = (E) element;
     e = e.selfApply(this.getOrder());
     return MathUtil.isPrime(this.getOrder()) && e.isZero();
   }
 
   @Override
-  protected abstract ECGroupElement abstractInvert(Element element);
+  protected abstract E abstractInvert(Element element);
 
   @Override
-  protected ECGroupElement abstractGetIdentityElement() {
+  protected E abstractGetIdentityElement() {
     return this.getElement(zero, zero);
   }
 
@@ -83,13 +79,13 @@ public abstract class ECGroup
   }
 
   @Override
-  protected ECGroupElement abstractGetElement(BigInteger value) {
+  protected E abstractGetElement(BigInteger value) {
     if (value.equals(zero)) {
       return this.getIdentityElement();
     } else {
       BigInteger[] result = MathUtil.unpair(value);
-      DualisticElement x = this.getFiniteField().getElement(result[0]);
-      DualisticElement y = this.getFiniteField().getElement(result[1]);
+      D x = this.getFiniteField().getElement(result[0]);
+      D y = this.getFiniteField().getElement(result[1]);
 
       if (contains(x, y)) {
         return this.getElement(x, y);
@@ -100,7 +96,7 @@ public abstract class ECGroup
     }
   }
 
-  public ECGroupElement getElement(DualisticElement x, DualisticElement y) {
+  public E getElement(D x, D y) {
     if (x == zero && y == zero) {
       return this.getIdentityElement();
     } else {
@@ -108,7 +104,8 @@ public abstract class ECGroup
         throw new IllegalArgumentException("One coordinate is zero");
       } else {
         if (contains(x, y)) {
-          return new ECGroupElement(this, x, y);
+          return abstractGetElement(x, y);
+//          return new AbstractECElement(this, x, y);
         } else {
           throw new IllegalArgumentException("Point is not an element of the curve" + this.toString());
         }
@@ -116,10 +113,12 @@ public abstract class ECGroup
     }
   }
 
+  protected abstract E abstractGetElement(D x, D y);
+
   @Override
-  protected ECGroupElement abstractGetRandomElement(Random random) {
+  protected E abstractGetRandomElement(Random random) {
     if (this.getDefaultGenerator() != null) {
-      DualisticElement r = this.getFiniteField().getRandomElement(random);
+      D r = this.getFiniteField().getRandomElement(random);
       return this.getDefaultGenerator().selfApply(r);
     } else {
       return this.getRandomElementWithoutGenerator(random);
@@ -133,20 +132,20 @@ public abstract class ECGroup
    * @param random
    * @return
    */
-  protected abstract ECGroupElement getRandomElementWithoutGenerator(Random random);
+  protected abstract E getRandomElementWithoutGenerator(Random random);
 
   @Override
   protected boolean abstractContains(BigInteger value) {
     BigInteger[] result = MathUtil.unpair(value);
-    DualisticElement x = this.getFiniteField().getElement(result[0]);
-    DualisticElement y = this.getFiniteField().getElement(result[1]);
+    D x = this.getFiniteField().getElement(result[0]);
+    D y = this.getFiniteField().getElement(result[1]);
     return this.contains(x, y);
   }
 
   /*
    * --- Abstract methods - must be implemented in concrete classes ---
    */
-  protected abstract Boolean contains(DualisticElement x, DualisticElement y);
+  protected abstract Boolean contains(D x, D y);
 
   protected abstract boolean isValid();
 
@@ -157,11 +156,11 @@ public abstract class ECGroup
     return finiteField;
   }
 
-  protected DualisticElement getB() {
+  protected D getB() {
     return b;
   }
 
-  protected DualisticElement getA() {
+  protected D getA() {
     return a;
   }
 

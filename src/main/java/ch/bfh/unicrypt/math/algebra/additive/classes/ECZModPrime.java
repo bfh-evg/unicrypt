@@ -1,32 +1,33 @@
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
+import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
+import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
 
-public class ECGroupFp
-       extends ECGroup {
+public class ECZModPrime
+       extends AbstractEC<ECGroupFpElement, ZModPrime> {
 
-  protected ECGroupFp(ZModPrime Finitefiled, DualisticElement a,
-         DualisticElement b, DualisticElement gx, DualisticElement gy,
+  protected ECZModPrime(ZModPrime Finitefiled, ZModPrime a,
+         ZModPrime b, ZModPrime gx, ZModPrime gy,
          BigInteger order, BigInteger h) {
     super(Finitefiled, a, b, gx, gy, order, h);
   }
 
-  protected ECGroupFp(ZModPrime Finitefiled, DualisticElement a,
-         DualisticElement b, BigInteger order, BigInteger h) {
+  protected ECZModPrime(ZModPrime Finitefiled, ZModPrime a,
+         ZModPrime b, BigInteger order, BigInteger h) {
     super(Finitefiled, a, b, order, h);
   }
 
   @Override
-  protected ECGroupElement abstractApply(Element element1, Element element2) {
-    DualisticElement s, rx, ry, px, py, qx, qy;
-    ECGroupElement p = (ECGroupElement) element1;
-    ECGroupElement q = (ECGroupElement) element2;
+  protected AbstractECElement abstractApply(Element element1, Element element2) {
+    ZModPrime s, rx, ry, px, py, qx, qy;
+    AbstractECElement p = (AbstractECElement) element1;
+    AbstractECElement q = (AbstractECElement) element2;
     px = p.getX();
     py = p.getY();
     qx = q.getX();
@@ -42,8 +43,8 @@ public class ECGroupFp
           return this.getIdentityElement();
         } else {
           if (element1.isEqual(element2)) {
-            DualisticElement three = this.getFiniteField().getElement(3);
-            DualisticElement two = this.getFiniteField().getElement(2);
+            ZModPrime three = this.getFiniteField().getElement(3);
+            ZModPrime two = this.getFiniteField().getElement(2);
             s = ((px.power(2).multiply(three)).apply(this.getA())).divide(py.multiply(two));
             rx = s.power(2).apply(px.multiply(two).invert());
             ry = s.multiply(px.subtract(rx)).apply(py.invert());
@@ -61,18 +62,18 @@ public class ECGroupFp
   }
 
   @Override
-  protected ECGroupElement abstractInvert(Element element) {
-    ECGroupElement r = (ECGroupElement) element;
+  protected AbstractECElement abstractInvert(Element element) {
+    AbstractECElement r = (AbstractECElement) element;
 
     if (r.isZero()) {
       return this.getIdentityElement();
     }
 
-    return new ECGroupElement(this, r.getX(), r.getY().invert());
+    return new AbstractECElement(this, r.getX(), r.getY().invert());
   }
 
   @Override
-  protected Boolean contains(DualisticElement x, DualisticElement y) {
+  protected Boolean contains(ZModPrime x, ZModPrime y) {
     y = y.power(2);
     x = x.power(3).add(x.multiply(this.getA())).add(this.getB());
 
@@ -80,10 +81,10 @@ public class ECGroupFp
   }
 
   @Override
-  protected ECGroupElement getRandomElementWithoutGenerator(Random random) {
+  protected AbstractECElement getRandomElementWithoutGenerator(Random random) {
     BigInteger p = ((ZModPrime) this.getFiniteField()).getModulus();
-    DualisticElement x = this.getFiniteField().getRandomElement(random);
-    DualisticElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
+    ZModPrime x = this.getFiniteField().getRandomElement(random);
+    ZModPrime y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
     boolean neg = x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
 
     while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
@@ -105,8 +106,8 @@ public class ECGroupFp
   protected boolean isValid() {
     boolean c1, c2, c3, c4, c5, c61, c62;
 
-    DualisticElement i4 = getFiniteField().getElement(4);
-    DualisticElement i27 = getFiniteField().getElement(27);
+    ZModPrime i4 = getFiniteField().getElement(4);
+    ZModPrime i27 = getFiniteField().getElement(27);
     c1 = !getA().power(3).multiply(i4).add(i27.multiply(getB().power(2))).equals(BigInteger.ZERO);
 
     c2 = contains(this.getDefaultGenerator());
@@ -151,8 +152,8 @@ public class ECGroupFp
    * @param h     Co-factor h*order= N -> total order of the group
    * @return
    */
-  public static ECGroupFp getInstance(ZModPrime f, DualisticElement a, DualisticElement b, BigInteger order, BigInteger h) {
-    return new ECGroupFp(f, a, b, order, h);
+  public static ECZModPrime getInstance(ZModPrime f, ZModPrime a, ZModPrime b, BigInteger order, BigInteger h) {
+    return new ECZModPrime(f, a, b, order, h);
   }
 
   /**
@@ -167,8 +168,8 @@ public class ECGroupFp
    * @param h     Co-factor h*order= N -> total order of the group
    * @return
    */
-  public static ECGroupFp getInstance(ZModPrime f, DualisticElement a, DualisticElement b, DualisticElement gx, DualisticElement gy, BigInteger order, BigInteger h) {
-    return new ECGroupFp(f, a, b, gx, gy, order, h);
+  public static ECZModPrime getInstance(ZModPrime f, ZModPrime a, ZModPrime b, ZModPrime gx, ZModPrime gy, BigInteger order, BigInteger h) {
+    return new ECZModPrime(f, a, b, gx, gy, order, h);
   }
 
 }
