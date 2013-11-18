@@ -25,7 +25,7 @@ public abstract class AbstractECElement<E extends AbstractECElement, D extends D
 
   @Override
   protected BigInteger standardGetValue() {
-    if (this.isZero()) {
+    if (null==x && null==y) {
       return new BigInteger("-1");
     } else {
       return MathUtil.pair(this.getX().getValue(), this.getY().getValue());

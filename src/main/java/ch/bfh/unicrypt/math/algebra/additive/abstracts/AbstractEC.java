@@ -7,6 +7,8 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 public abstract class AbstractEC<E extends AbstractECElement, D extends DualisticElement>
        extends AbstractAdditiveCyclicGroup<E> {
 
@@ -14,7 +16,7 @@ public abstract class AbstractEC<E extends AbstractECElement, D extends Dualisti
   private E generator;
   private D a, b;
   private BigInteger order, h;
-  private final D zero = null;
+  protected final D zero = null;
 
   protected AbstractEC(FiniteField finiteField, D a, D b, D gx, D gy, BigInteger order, BigInteger h) {
     super();
@@ -25,9 +27,9 @@ public abstract class AbstractEC<E extends AbstractECElement, D extends Dualisti
     this.finiteField = finiteField;
     this.generator = this.getElement(gx, gy);
 
-    if (!isValid()) {
+    /*if (!isValid()) {
       throw new IllegalArgumentException("Curve parameters are not valid");
-    }
+    }*/
 
   }
 
@@ -51,7 +53,7 @@ public abstract class AbstractEC<E extends AbstractECElement, D extends Dualisti
   }
 
   protected E computeGenerator() {
-    E e = this.getRandomElement().selfApply(this.getH());
+    E e = (E) this.getRandomElement().selfApply(this.getH());
     while (!this.isGenerator(e)) {
       e = this.getRandomElement();
     }
@@ -61,7 +63,7 @@ public abstract class AbstractEC<E extends AbstractECElement, D extends Dualisti
   @Override
   protected boolean abstractIsGenerator(Element element) {
     E e = (E) element;
-    e = e.selfApply(this.getOrder());
+    e = (E) e.selfApply(this.getOrder());
     return MathUtil.isPrime(this.getOrder()) && e.isZero();
   }
 
@@ -69,9 +71,7 @@ public abstract class AbstractEC<E extends AbstractECElement, D extends Dualisti
   protected abstract E abstractInvert(Element element);
 
   @Override
-  protected E abstractGetIdentityElement() {
-    return this.getElement(zero, zero);
-  }
+  protected abstract E abstractGetIdentityElement();
 
   @Override
   protected BigInteger abstractGetOrder() {
@@ -84,33 +84,22 @@ public abstract class AbstractEC<E extends AbstractECElement, D extends Dualisti
       return this.getIdentityElement();
     } else {
       BigInteger[] result = MathUtil.unpair(value);
-      D x = this.getFiniteField().getElement(result[0]);
-      D y = this.getFiniteField().getElement(result[1]);
+      D x = (D) this.getFiniteField().getElement(result[0]);
+      D y = (D) this.getFiniteField().getElement(result[1]);
+      
+      return this.getElement(x, y);
 
-      if (contains(x, y)) {
-        return this.getElement(x, y);
-      } else {
-        throw new IllegalArgumentException("(" + x + "," + y
-               + ") is not a point on the elliptic curve");
-      }
     }
   }
 
   public E getElement(D x, D y) {
-    if (x == zero && y == zero) {
-      return this.getIdentityElement();
-    } else {
-      if (x == zero || y == zero) {
+	  if (x == zero || y == zero) {
         throw new IllegalArgumentException("One coordinate is zero");
       } else {
-        if (contains(x, y)) {
           return abstractGetElement(x, y);
-//          return new AbstractECElement(this, x, y);
-        } else {
-          throw new IllegalArgumentException("Point is not an element of the curve" + this.toString());
-        }
       }
-    }
+      
+    
   }
 
   protected abstract E abstractGetElement(D x, D y);
@@ -118,8 +107,8 @@ public abstract class AbstractEC<E extends AbstractECElement, D extends Dualisti
   @Override
   protected E abstractGetRandomElement(Random random) {
     if (this.getDefaultGenerator() != null) {
-      D r = this.getFiniteField().getRandomElement(random);
-      return this.getDefaultGenerator().selfApply(r);
+      D r = (D) this.getFiniteField().getRandomElement(random);
+      return (E) this.getDefaultGenerator().selfApply(r);
     } else {
       return this.getRandomElementWithoutGenerator(random);
     }
@@ -137,8 +126,8 @@ public abstract class AbstractEC<E extends AbstractECElement, D extends Dualisti
   @Override
   protected boolean abstractContains(BigInteger value) {
     BigInteger[] result = MathUtil.unpair(value);
-    D x = this.getFiniteField().getElement(result[0]);
-    D y = this.getFiniteField().getElement(result[1]);
+    D x = (D) this.getFiniteField().getElement(result[0]);
+    D y = (D) this.getFiniteField().getElement(result[1]);
     return this.contains(x, y);
   }
 
@@ -146,25 +135,26 @@ public abstract class AbstractEC<E extends AbstractECElement, D extends Dualisti
    * --- Abstract methods - must be implemented in concrete classes ---
    */
   protected abstract Boolean contains(D x, D y);
+  protected abstract Boolean contains(D x);
 
   protected abstract boolean isValid();
 
   /*
    * --- Getter methods for additional fields ---
    */
-  protected FiniteField getFiniteField() {
+  public FiniteField getFiniteField() {
     return finiteField;
   }
 
-  protected D getB() {
+  public D getB() {
     return b;
   }
 
-  protected D getA() {
+  public D getA() {
     return a;
   }
 
-  protected BigInteger getH() {
+  public BigInteger getH() {
     return h;
   }
 

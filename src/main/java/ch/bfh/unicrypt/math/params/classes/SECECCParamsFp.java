@@ -1,13 +1,13 @@
 package ch.bfh.unicrypt.math.params.classes;
 
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.params.interfaces.StandardECParams;
+import ch.bfh.unicrypt.math.params.interfaces.StandardECZModParams;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import java.math.BigInteger;
 
-public enum SECECCParamsFp
-       implements StandardECParams {
+public enum SECECCParamsFp implements StandardECZModParams{
 
   secp112r1("db7c2abf62e35e668076bead208b", "db7c2abf62e35e668076bead2088", "659ef8ba043916eede8911702b22", "9487239995a5ee76b55f9c2f098", "a89ce5af8724c0a23e0e0ff77500", "db7c2abf62e35e7628dfac6561c5", "1"),
   secp160r1("ffffffffffffffffffffffffffffffff7fffffff", "ffffffffffffffffffffffffffffffff7ffffffc", "1c97befc54bd7a8b65acf89f81d4d4adc565fa45", "4a96b5688ef573284664698968c38bb913cbfc82", "23a628553168947d59dcc912042351377ac5fb32", "100000000000000000001f4c8f927aed3ca752257", "1"),
@@ -52,23 +52,23 @@ public enum SECECCParamsFp
     return ZModPrime.getInstance(getPrime());
   }
 
-  private DualisticElement getP() {
-    return getFiniteField().getElement(getPrime());
+  public BigInteger getP() {
+    return getPrime();
   }
 
-  public DualisticElement getA() {
+  public ZModElement getA() {
     return getFiniteField().getElement(new BigInteger(a, 16));
   }
 
-  public DualisticElement getB() {
+  public ZModElement getB() {
     return getFiniteField().getElement(new BigInteger(b, 16));
   }
 
-  public DualisticElement getGx() {
+  public ZModElement getGx() {
     return getFiniteField().getElement(new BigInteger(gx, 16));
   }
 
-  public DualisticElement getGy() {
+  public ZModElement getGy() {
     return getFiniteField().getElement(new BigInteger(gy, 16));
   }
 
@@ -91,21 +91,22 @@ public enum SECECCParamsFp
   }
 
   public static void main(String[] args) {
-    String[] params = {"secp112r1", "secp160r1", "secp192k1", "secp192r1", "secp224k1", "secp224r1", "secp256k1", "secp256r1", "secp384r1", "secp521r1"};
-    for (String string : params) {
-      SECECCParamsFp parameter = SECECCParamsFp.getFromString(string);
-      System.out.println(parameter.getFiniteField());
-      System.out.println(parameter.getA());
-      System.out.println(parameter.getB());
-      System.out.println(parameter.getGx());
-      System.out.println(parameter.getGy());
-      System.out.println(parameter.getOrder());
-      System.out.println(parameter.getH());
+  
+    for (SECECCParamsFp params: SECECCParamsFp.values()) {
+		
+
+      System.out.println(params.getFiniteField());
+      System.out.println(params.getA());
+      System.out.println(params.getB());
+      System.out.println(params.getGx());
+      System.out.println(params.getGy());
+      System.out.println(params.getOrder());
+      System.out.println(params.getH());
     }
 
-    for (String string : params) {
-      System.out.print(string + " ");
-      StandardECZModPrime ec = StandardECZModPrime.getInstance(string);
+    for (SECECCParamsFp params: SECECCParamsFp.values()) {
+      System.out.print(params.name() + " ");
+      StandardECZModPrime ec = StandardECZModPrime.getInstance(params);
       System.out.println(ec);
     }
   }

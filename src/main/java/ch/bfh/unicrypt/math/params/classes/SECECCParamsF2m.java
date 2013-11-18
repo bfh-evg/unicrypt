@@ -1,13 +1,18 @@
 package ch.bfh.unicrypt.math.params.classes;
 
+import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECBinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.params.interfaces.StandardECParams;
+import ch.bfh.unicrypt.math.params.interfaces.StandardECBinaryPolinomialFieldParams;
+import ch.bfh.unicrypt.math.params.interfaces.StandardECZModParams;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import java.math.BigInteger;
 
 public enum SECECCParamsF2m
-       implements StandardECParams {
+       implements StandardECBinaryPolinomialFieldParams {
 
   secp112r1("db7c2abf62e35e668076bead208b", "db7c2abf62e35e668076bead2088", "659ef8ba043916eede8911702b22", "9487239995a5ee76b55f9c2f098", "a89ce5af8724c0a23e0e0ff77500", "db7c2abf62e35e7628dfac6561c5", "1"),
   secp160r1("ffffffffffffffffffffffffffffffff7fffffff", "ffffffffffffffffffffffffffffffff7ffffffc", "1c97befc54bd7a8b65acf89f81d4d4adc565fa45", "4a96b5688ef573284664698968c38bb913cbfc82", "23a628553168947d59dcc912042351377ac5fb32", "100000000000000000001f4c8f927aed3ca752257", "1"),
@@ -37,27 +42,28 @@ public enum SECECCParamsF2m
     return new BigInteger(p, 16);
   }
 
-  public ZModPrime getFiniteField() {
-    return ZModPrime.getInstance(getPrime());
+  public BinaryPolynomialField getFiniteField() {
+    PolynomialElement irreduciblePolynomial;
+	return BinaryPolynomialField.getInstance(irreduciblePolynomial);
   }
 
-  private DualisticElement getP() {
+  public BinaryPolynomialElement getP() {
     return getFiniteField().getElement(getPrime());
   }
 
-  public DualisticElement getA() {
+  public BinaryPolynomialElement getA() {
     return getFiniteField().getElement(new BigInteger(a, 16));
   }
 
-  public DualisticElement getB() {
+  public BinaryPolynomialElement getB() {
     return getFiniteField().getElement(new BigInteger(b, 16));
   }
 
-  public DualisticElement getGx() {
+  public BinaryPolynomialElement getGx() {
     return getFiniteField().getElement(new BigInteger(gx, 16));
   }
 
-  public DualisticElement getGy() {
+  public BinaryPolynomialElement getGy() {
     return getFiniteField().getElement(new BigInteger(gy, 16));
   }
 
@@ -69,32 +75,22 @@ public enum SECECCParamsF2m
     return new BigInteger(h, 16);
   }
 
-  public static SECECCParamsF2m getFromString(String s) {
-    for (SECECCParamsF2m parameter : SECECCParamsF2m.values()) {
-      if (parameter.name() == s) {
-        return parameter;
-      }
-    }
 
-    throw new IllegalArgumentException("No Enum with name: " + s);
-  }
 
   public static void main(String[] args) {
-    String[] params = {"secp112r1", "secp160r1", "secp192k1", "secp192r1", "secp224k1", "secp224r1", "secp256k1", "secp256r1", "secp384r1", "secp521r1"};
-    for (String string : params) {
-      SECECCParamsF2m parameter = SECECCParamsF2m.getFromString(string);
-      System.out.println(parameter.getFiniteField());
-      System.out.println(parameter.getA());
-      System.out.println(parameter.getB());
-      System.out.println(parameter.getGx());
-      System.out.println(parameter.getGy());
-      System.out.println(parameter.getOrder());
-      System.out.println(parameter.getH());
+   for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
+      System.out.println(params.getFiniteField());
+      System.out.println(params.getA());
+      System.out.println(params.getB());
+      System.out.println(params.getGx());
+      System.out.println(params.getGy());
+      System.out.println(params.getOrder());
+      System.out.println(params.getH());
     }
 
-    for (String string : params) {
-      System.out.print(string + " ");
-      StandardECZModPrime ec = StandardECZModPrime.getInstance(string);
+   for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
+      System.out.print(params.name() + " ");
+      StandardECBinaryPolynomialField ec = StandardECBinaryPolynomialField.getInstance(params);
       System.out.println(ec);
     }
   }

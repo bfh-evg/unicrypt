@@ -1,19 +1,17 @@
 package ch.bfh.unicrypt.encryption;
 
-import java.math.BigInteger;
-
-import sun.security.jca.GetInstance;
-
+import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECGroup;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECGroupElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.SafeECGroupFp;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimes;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrimeElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.params.classes.SECECCParamsFp;
 
 public class ElGamalExample {
   public static void main(final String[] args) {
@@ -43,11 +41,19 @@ public class ElGamalExample {
     */
 	  
 	  //Example Elgamal over ECFp
-	  final ECGroup g_q=SafeECGroupFp.getInstance("secp384r1"); //Possible curves secp{112,160,192,224,256,384,521}r1
-	  final ElGamalEncryptionScheme<ECGroup, ECGroupElement> ecs= ElGamalEncryptionScheme.getInstance(g_q);
+	  final StandardECZModPrime g_q=StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1); //Possible curves secp{112,160,192,224,256,384,521}r1
+	  final ElGamalEncryptionScheme<StandardECZModPrime, ECZModPrimeElement> ecs= ElGamalEncryptionScheme.getInstance(g_q);
 	  final KeyPairGenerator keyGen= ecs.getKeyPairGenerator();
-	  final Element message =g_q.getRandomElement();
-	  System.out.println("Message: "+message);
+	  
+	  FiniteField f=g_q.getFiniteField();
+	  DualisticElement m=f.getElement(123456789);
+	  ProbabilisticECGroupFpEncoder enc=ProbabilisticECGroupFpEncoder.getInstance(g_q);
+	  
+	  ECZModPrimeElement message=enc.encode(m);
+	  
+	  //final Element message =g_q.getRandomElement();
+	  System.out.println("Message: "+m);
+	  System.out.println("Message encoded: "+message);
 	  
 	  
 	  // Generate private key
@@ -72,7 +78,9 @@ public class ElGamalExample {
 	  //decrypt message
 	  Element newMessage=ecs.decrypt(privateKey, cipherText);
 	  System.out.println("New Message: "+newMessage);
-	  System.out.println("Message == New Message: "+message.equals(newMessage));
+	  System.out.println("Message == New Message: "+message.isEqual(newMessage));
+	  ZModElement plain=enc.decode(newMessage);
+	  System.out.println("Message decoded: "+plain);
 	  
     
 

@@ -7,6 +7,8 @@ package ch.bfh.unicrypt.math.params.interfaces;
 
 import java.math.BigInteger;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -16,16 +18,8 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public interface StandardECParams<E extends FiniteField, D extends DualisticElement> {
+public interface StandardECBinaryPolinomialFieldParams extends StandardECParams<BinaryPolynomialField, BinaryPolynomialElement> {
 	
 
-	public abstract E getFiniteField();
-	public abstract BigInteger getP();
-	public abstract D getA();
-	public abstract D getB();
-	public abstract D getGx();
-	public abstract D getGy();
-	public abstract BigInteger getOrder();
-	public abstract BigInteger getH();
 	
 }

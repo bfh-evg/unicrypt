@@ -2,6 +2,9 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -10,20 +13,27 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class ECBinaryPolynomialField
-       extends AbstractEC {
+       extends AbstractEC<ECBinaryPolynomialFieldElement,BinaryPolynomialElement> {
 
-  public ECBinaryPolynomialField(ZModPrime Finitefiled, DualisticElement a,
-         DualisticElement b, DualisticElement gx, DualisticElement gy,
+  public ECBinaryPolynomialField(BinaryPolynomialField Finitefiled, BinaryPolynomialElement a,
+		  BinaryPolynomialElement b, BinaryPolynomialElement gx, BinaryPolynomialElement gy,
          BigInteger order, BigInteger h) {
     super(Finitefiled, a, b, gx, gy, order, h);
     // TODO Auto-generated constructor stub
   }
+  
+  public ECBinaryPolynomialField(BinaryPolynomialField Finitefiled, BinaryPolynomialElement a,
+		  BinaryPolynomialElement b,
+	         BigInteger order, BigInteger h) {
+	    super(Finitefiled, a, b, order, h);
+	    // TODO Auto-generated constructor stub
+	  }
 
   @Override
-  protected AbstractECElement abstractApply(Element element1, Element element2) {
-    DualisticElement s, rx, ry, px, py, qx, qy;
-    AbstractECElement p = (AbstractECElement) element1;
-    AbstractECElement q = (AbstractECElement) element2;
+  protected ECBinaryPolynomialFieldElement abstractApply(Element element1, Element element2) {
+    BinaryPolynomialElement s, rx, ry, px, py, qx, qy;
+    ECBinaryPolynomialFieldElement p = (ECBinaryPolynomialFieldElement) element1;
+    ECBinaryPolynomialFieldElement q = (ECBinaryPolynomialFieldElement) element2;
     px = p.getX();
     py = p.getY();
     qx = q.getX();
@@ -58,21 +68,21 @@ public class ECBinaryPolynomialField
   }
 
   @Override
-  protected AbstractECElement abstractInvert(Element element) {
-    AbstractECElement e = (AbstractECElement) element;
+  protected ECBinaryPolynomialFieldElement abstractInvert(Element element) {
+	  ECBinaryPolynomialFieldElement e = (ECBinaryPolynomialFieldElement) element;
     return getElement(e.getX(), e.getX().add(e.getY()));
   }
 
   @Override
-  protected AbstractECElement getRandomElementWithoutGenerator(Random random) {
+  protected ECBinaryPolynomialFieldElement getRandomElementWithoutGenerator(Random random) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  protected Boolean contains(DualisticElement x, DualisticElement y) {
-    DualisticElement left = y.power(2).add(x.multiply(getA()));
-    DualisticElement right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
+  protected Boolean contains(BinaryPolynomialElement x, BinaryPolynomialElement y) {
+    BinaryPolynomialElement left = y.power(2).add(x.multiply(getA()));
+    BinaryPolynomialElement right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
     return left.equals(right);
   }
 
@@ -110,5 +120,54 @@ public class ECBinaryPolynomialField
   public String toString() {
     return "y²+xy=x³+" + getA() + "x²+" + getB();
   }
+  
+  /**
+   * Returns an elliptic curve over Fp y²=x³+ax+b
+   * <p>
+   * @param f     Finite field of type ZModPrime
+   * @param a     Element of Fp respresnting a in the curve equation
+   * @param b     Element of Fp respresnting b in the curve equation
+   * @param order Order of the the used subgroup
+   * @param h     Co-factor h*order= N -> total order of the group
+   * @return
+   */
+  public static ECBinaryPolynomialField getInstance(BinaryPolynomialField f, BinaryPolynomialElement a, BinaryPolynomialElement b, BigInteger order, BigInteger h) {
+    return new ECBinaryPolynomialField(f, a, b, order, h);
+  }
+
+  /**
+   * Returns an elliptic curve over Fp y²=x³+ax+b
+   * <p>
+   * @param f     Finite field of type ZModPrime
+   * @param a     Element of Fp respresnting a in the curve equation
+   * @param b     Element of Fp respresnting b in the curve equation
+   * @param gx    x-coordinate of the generator
+   * @param gy    y-coordinate of the generator
+   * @param order Order of the the used subgroup
+   * @param h     Co-factor h*order= N -> total order of the group
+   * @return
+   */
+  public static ECBinaryPolynomialField getInstance(BinaryPolynomialField f, BinaryPolynomialElement a, BinaryPolynomialElement b, BinaryPolynomialElement gx, BinaryPolynomialElement gy, BigInteger order, BigInteger h) {
+    return new ECBinaryPolynomialField(f, a, b, gx, gy, order, h);
+  }
+
+@Override
+protected ECBinaryPolynomialFieldElement abstractGetElement(
+		BinaryPolynomialElement x, BinaryPolynomialElement y) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+protected ECBinaryPolynomialFieldElement abstractGetIdentityElement() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+protected Boolean contains(BinaryPolynomialElement x) {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }

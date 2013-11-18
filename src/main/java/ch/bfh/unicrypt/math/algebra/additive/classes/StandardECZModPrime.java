@@ -1,6 +1,9 @@
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.math.params.interfaces.StandardECParams;
+import ch.bfh.unicrypt.math.params.classes.SECECCParamsF2m;
+import ch.bfh.unicrypt.math.params.classes.SECECCParamsFp;
+import ch.bfh.unicrypt.math.params.interfaces.StandardECZModParams;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import java.math.BigInteger;
@@ -8,16 +11,16 @@ import java.math.BigInteger;
 public class StandardECZModPrime
        extends ECZModPrime {
 
-  private StandardECZModPrime(ZModPrime field, DualisticElement a,
-         DualisticElement b, DualisticElement gx, DualisticElement gy,
+  private StandardECZModPrime(ZModPrime field, ZModElement a,
+		  ZModElement b, ZModElement gx, ZModElement gy,
          BigInteger order, BigInteger h) {
     super(field, a, b, gx, gy, order, h);
     // TODO Auto-generated constructor stub
   }
 
-  public static StandardECZModPrime getInstance(final StandardECParams params) {
+  public static StandardECZModPrime getInstance(final StandardECZModParams params) {
     ZModPrime field;
-    DualisticElement a, b, gx, gy;
+    ZModElement a, b, gx, gy;
     BigInteger order, h;
 
     field = params.getFiniteField();
@@ -32,11 +35,12 @@ public class StandardECZModPrime
   }
 
   public static void main(String[] args) {
-    String[] params = {"secp112r1", "secp160r1", "secp192k1", "secp192r1", "secp224k1", "secp224r1", "secp256k1", "secp256r1", "secp384r1", "secp521r1"};
+    
 
-    for (String string : params) {
-      StandardECZModPrime ec = StandardECZModPrime.getInstance(string);
-      System.out.println(string + "(\"" + ec.getP().toString(16) + "\",\"" + ec.getA().getValue().toString(16) + "\",\"" + ec.getB().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getValue().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getH() + "\"),");
+    for (SECECCParamsFp params : SECECCParamsFp.values()) {
+		
+      StandardECZModPrime ec = StandardECZModPrime.getInstance(params);
+      System.out.println(params.name() + "(\"" + ec.getP().toString(16) + "\",\"" + ec.getA().getValue().toString(16) + "\",\"" + ec.getB().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getValue().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getH() + "\"),");
     }
   }
 

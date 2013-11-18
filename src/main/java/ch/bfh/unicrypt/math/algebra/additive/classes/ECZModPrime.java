@@ -3,6 +3,7 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -10,41 +11,41 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class ECZModPrime
-       extends AbstractEC<ECGroupFpElement, ZModPrime> {
+       extends AbstractEC<ECZModPrimeElement, ZModElement> {
 
-  protected ECZModPrime(ZModPrime Finitefiled, ZModPrime a,
-         ZModPrime b, ZModPrime gx, ZModPrime gy,
+  protected ECZModPrime(ZModPrime Finitefiled, ZModElement a,
+         ZModElement b, ZModElement gx, ZModElement gy,
          BigInteger order, BigInteger h) {
     super(Finitefiled, a, b, gx, gy, order, h);
   }
 
-  protected ECZModPrime(ZModPrime Finitefiled, ZModPrime a,
-         ZModPrime b, BigInteger order, BigInteger h) {
+  protected ECZModPrime(ZModPrime Finitefiled, ZModElement a,
+         ZModElement b, BigInteger order, BigInteger h) {
     super(Finitefiled, a, b, order, h);
   }
 
   @Override
-  protected AbstractECElement abstractApply(Element element1, Element element2) {
-    ZModPrime s, rx, ry, px, py, qx, qy;
-    AbstractECElement p = (AbstractECElement) element1;
-    AbstractECElement q = (AbstractECElement) element2;
+  protected ECZModPrimeElement abstractApply(Element element1, Element element2) {
+    ZModElement s, rx, ry, px, py, qx, qy;
+    ECZModPrimeElement p = (ECZModPrimeElement) element1;
+    ECZModPrimeElement q = (ECZModPrimeElement) element2;
     px = p.getX();
     py = p.getY();
     qx = q.getX();
     qy = q.getY();
 
-    if (p.isZero()) {
+    if (p.isIdentity()) {
       return q;
     } else {
-      if (q.isZero()) {
+      if (q.isIdentity()) {
         return p;
       } else {
-        if (p.equals(q.invert())) {
+        if (p.isEqual(q.invert())) {
           return this.getIdentityElement();
         } else {
           if (element1.isEqual(element2)) {
-            ZModPrime three = this.getFiniteField().getElement(3);
-            ZModPrime two = this.getFiniteField().getElement(2);
+            ZModElement three = (ZModElement) this.getFiniteField().getElement(3);
+            ZModElement two = (ZModElement) this.getFiniteField().getElement(2);
             s = ((px.power(2).multiply(three)).apply(this.getA())).divide(py.multiply(two));
             rx = s.power(2).apply(px.multiply(two).invert());
             ry = s.multiply(px.subtract(rx)).apply(py.invert());
@@ -62,41 +63,41 @@ public class ECZModPrime
   }
 
   @Override
-  protected AbstractECElement abstractInvert(Element element) {
-    AbstractECElement r = (AbstractECElement) element;
+  protected ECZModPrimeElement abstractInvert(Element element) {
+	  ECZModPrimeElement r = (ECZModPrimeElement) element;
 
     if (r.isZero()) {
       return this.getIdentityElement();
     }
 
-    return new AbstractECElement(this, r.getX(), r.getY().invert());
+    return new ECZModPrimeElement(this, r.getX(), r.getY().invert());
   }
 
   @Override
-  protected Boolean contains(ZModPrime x, ZModPrime y) {
+  public Boolean contains(ZModElement x, ZModElement y) {
     y = y.power(2);
     x = x.power(3).add(x.multiply(this.getA())).add(this.getB());
 
-    return y.equals(x);
+    return y.isEqual(x);
   }
 
   @Override
-  protected AbstractECElement getRandomElementWithoutGenerator(Random random) {
+  protected ECZModPrimeElement getRandomElementWithoutGenerator(Random random) {
     BigInteger p = ((ZModPrime) this.getFiniteField()).getModulus();
-    ZModPrime x = this.getFiniteField().getRandomElement(random);
-    ZModPrime y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
+    ZModElement x = (ZModElement) this.getFiniteField().getRandomElement(random);
+    ZModElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
     boolean neg = x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
 
     while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
-      x = this.getFiniteField().getRandomElement(random);
+      x = (ZModElement) this.getFiniteField().getRandomElement(random);
       y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
     }
 
     //if neg is true return solution 2(p-sqrt) of sqrtModPrime else solution 1
     if (neg) {
-      y = this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue(), p)));
+      y = (ZModElement) this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue(), p)));
     } else {
-      y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue(), p));
+      y = (ZModElement) this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue(), p));
     }
 
     return this.getElement(x, y);
@@ -106,8 +107,8 @@ public class ECZModPrime
   protected boolean isValid() {
     boolean c1, c2, c3, c4, c5, c61, c62;
 
-    ZModPrime i4 = getFiniteField().getElement(4);
-    ZModPrime i27 = getFiniteField().getElement(27);
+    ZModElement i4 = (ZModElement) getFiniteField().getElement(4);
+    ZModElement i27 = (ZModElement) getFiniteField().getElement(27);
     c1 = !getA().power(3).multiply(i4).add(i27.multiply(getB().power(2))).equals(BigInteger.ZERO);
 
     c2 = contains(this.getDefaultGenerator());
@@ -152,7 +153,7 @@ public class ECZModPrime
    * @param h     Co-factor h*order= N -> total order of the group
    * @return
    */
-  public static ECZModPrime getInstance(ZModPrime f, ZModPrime a, ZModPrime b, BigInteger order, BigInteger h) {
+  public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger order, BigInteger h) {
     return new ECZModPrime(f, a, b, order, h);
   }
 
@@ -168,8 +169,42 @@ public class ECZModPrime
    * @param h     Co-factor h*order= N -> total order of the group
    * @return
    */
-  public static ECZModPrime getInstance(ZModPrime f, ZModPrime a, ZModPrime b, ZModPrime gx, ZModPrime gy, BigInteger order, BigInteger h) {
+  public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger order, BigInteger h) {
     return new ECZModPrime(f, a, b, gx, gy, order, h);
   }
+
+@Override
+protected ECZModPrimeElement abstractGetElement(ZModElement x, ZModElement y) {
+	if(contains(x,y)){
+		return new ECZModPrimeElement(this, x, y);
+	}
+	else{
+		throw new IllegalArgumentException(x+" and "+y+" are not valid coordinates");
+	}
+
+}
+
+@Override
+protected ECZModPrimeElement abstractGetIdentityElement() {
+	return new ECZModPrimeElement(this, zero, zero);
+}
+
+@Override
+public Boolean contains(ZModElement x) {
+		BigInteger p=this.getP();
+		ZModElement right=x.power(3).add(getA().multiply(x)).add(getB());
+		
+		if(MathUtil.hasSqrtModPrime(right.getValue(), p)){
+			BigInteger y1=MathUtil.sqrtModPrime(right.getValue(), p);
+			ZModElement y=(ZModElement) this.getFiniteField().getElement(y1);
+			return contains(x, y);
+		}
+		else{
+			return false;
+		}
+}
+
+
+
 
 }
