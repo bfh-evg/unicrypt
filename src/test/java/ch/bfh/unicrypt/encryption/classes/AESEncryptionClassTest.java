@@ -68,7 +68,7 @@ public class AESEncryptionClassTest {
       byte[] salt = randomBytes;
       Element key = aes.getKeyGenerator().generateKey(humanPassphrase, salt);
       randomBytes = new byte[random.nextInt(20) + 10];
-      Element plaintext = aes.getPlaintextSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
+      Element plaintext = aes.getMessageSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
       Element ciphertext = aes.encrypt(key, plaintext);
       Element recoveredPlaintext = aes.decrypt(key, ciphertext);
       Assert.assertEquals("Hello World, this is an AES-Test", new String(((EncodedElement) recoveredPlaintext).getValue().toByteArray()));
@@ -117,7 +117,7 @@ public class AESEncryptionClassTest {
       String humanPassphrase = new String("123456");      
       byte[] salt = new byte[]{1,2,3,4,5};
       Element key = aes.getKeyGenerator().generateKey(humanPassphrase, salt);      
-      Element plaintext = aes.getPlaintextSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
+      Element plaintext = aes.getMessageSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
       Element ciphertext = aes.encrypt(key, plaintext);
       Assert.assertNotNull(ciphertext);
   }
@@ -125,7 +125,7 @@ public class AESEncryptionClassTest {
   @Test(expected=IllegalArgumentException.class)
   public void testEncryptElementElementNoKey() {
     AESEncryptionScheme aes = new AESEncryptionScheme();     
-      Element plaintext = aes.getPlaintextSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
+      Element plaintext = aes.getMessageSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
       Element ciphertext = aes.encrypt(null, plaintext);
   }
 
@@ -144,7 +144,7 @@ public class AESEncryptionClassTest {
     String humanPassphrase = new String("123456");      
     byte[] salt = new byte[]{1,2,3,4,5};
     Element key = aes.getKeyGenerator().generateKey(humanPassphrase, salt);      
-    Element plaintext = aes.getPlaintextSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
+    Element plaintext = aes.getMessageSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
     Element ciphertext = aes.encrypt(key, plaintext);
     Element decryptedText=aes.decrypt(key, ciphertext);
     Assert.assertEquals(plaintext, decryptedText);
@@ -156,7 +156,7 @@ public class AESEncryptionClassTest {
     String humanPassphrase = new String("123456");      
     byte[] salt = new byte[]{1,2,3,4,5};
     Element key = aes.getKeyGenerator().generateKey(humanPassphrase, salt);      
-    Element plaintext = aes.getPlaintextSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
+    Element plaintext = aes.getMessageSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
     Element ciphertext = aes.encrypt(key, plaintext);
     Element decryptedText=aes.decrypt(null, ciphertext);
   }
@@ -167,7 +167,7 @@ public class AESEncryptionClassTest {
     String humanPassphrase = new String("123456");      
     byte[] salt = new byte[]{1,2,3,4,5};
     Element key = aes.getKeyGenerator().generateKey(humanPassphrase, salt);      
-    Element plaintext = aes.getPlaintextSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
+    Element plaintext = aes.getMessageSpace().createEncodedElement(new BigInteger("Hello World, this is an AES-Test".getBytes()));
     Element ciphertext = aes.encrypt(key, plaintext);
     Element decryptedText=aes.decrypt(key, null);
   }
@@ -198,13 +198,13 @@ public class AESEncryptionClassTest {
   @Test
   public void testGetPlaintextSpace() {
     AESEncryptionScheme aes = new AESEncryptionScheme();
-    Assert.assertTrue(aes.getPlaintextSpace() instanceof ZPlus);
+    Assert.assertTrue(aes.getMessageSpace() instanceof ZPlus);
   }
 
   @Test
   public void testGetCiphertextSpace() {
     AESEncryptionScheme aes = new AESEncryptionScheme();
-    Assert.assertTrue(aes.getPlaintextSpace() instanceof ZPlus);
+    Assert.assertTrue(aes.getMessageSpace() instanceof ZPlus);
   }
 
 }

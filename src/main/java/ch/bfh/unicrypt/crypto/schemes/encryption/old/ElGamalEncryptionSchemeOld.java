@@ -76,7 +76,7 @@ public class ElGamalEncryptionSchemeOld extends AbstractEncryptionScheme {
 
     @Override
     public Element reEncrypt(final Element publicKey, final Element ciphertext, final Element randomization) {
-        if (!getCiphertextSpace().contains(ciphertext)) {
+        if (!getEncryptionSpace().contains(ciphertext)) {
             throw new IllegalArgumentException();
         }
         return (Element) ciphertext.apply(this.getIdentityEncryptionFunction().apply(publicKey, randomization));
@@ -136,7 +136,7 @@ public class ElGamalEncryptionSchemeOld extends AbstractEncryptionScheme {
     }
 
     @Override
-    public DDHGroup getPlaintextSpace() {
+    public DDHGroup getMessageSpace() {
         return this.ddhGroup;
     }
 
@@ -146,7 +146,7 @@ public class ElGamalEncryptionSchemeOld extends AbstractEncryptionScheme {
     }
 
     @Override
-    public Group getCiphertextSpace() {
+    public Group getEncryptionSpace() {
         return this.getEncryptionFunction().getCoDomain();
     }
     

@@ -395,7 +395,7 @@ public class ElGamalEncryptionClassTest {
 	}
 
 	/**
-	 * Test of getPlaintextSpace method, of class ElGamalEncryptionClass.
+	 * Test of getMessageSpace method, of class ElGamalEncryptionClass.
 	 */
 	@Test
 	public void testGetPlaintextSpace() {
@@ -403,7 +403,7 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionSchemeOld instance = new ElGamalEncryptionSchemeOld(group);
 		DDHGroup expResult = group;
-		DDHGroup result = instance.getPlaintextSpace();
+		DDHGroup result = instance.getMessageSpace();
 		assertEquals(expResult, result);
 	}
 
@@ -421,7 +421,7 @@ public class ElGamalEncryptionClassTest {
 	}
 
 	/**
-	 * Test of getCiphertextSpace method, of class ElGamalEncryptionClass.
+	 * Test of getEncryptionSpace method, of class ElGamalEncryptionClass.
 	 */
 	@Test
 	public void testGetCiphertextSpace() {
@@ -429,7 +429,7 @@ public class ElGamalEncryptionClassTest {
 		DDHGroup group = new GStarSave(BigInteger.valueOf(23));
 		ElGamalEncryptionSchemeOld instance = new ElGamalEncryptionSchemeOld(group);
 		Group expResult = new PowerGroup(group, 2);
-		Group result = instance.getCiphertextSpace();
+		Group result = instance.getEncryptionSpace();
 		assertEquals(expResult, result);
 	}
         

@@ -4,48 +4,45 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
-import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.AsymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
  * @author rolfhaenni
- * @param <M>
- * @param <P>
- * @param <C>
+ * @param <MS>
+ * @param <ES>
  * @param <ME>
- * @param <CE>
+ * @param <EE>
  * @param <EK>
  * @param <DK>
  */
-public abstract class AbstractAsymmetricEncryptionScheme<M extends Set, P extends Set, C extends Set, ME extends Element, CE extends Element, EK extends Set, DK extends Set>
-       extends AbstractEncryptionScheme<M, P, C, ME, CE>
+public abstract class AbstractAsymmetricEncryptionScheme<MS extends Set, ES extends Set, ME extends Element, EE extends Element, EK extends Set, DK extends Set>
+       extends AbstractEncryptionScheme<MS, ES, ME, EE>
        implements AsymmetricEncryptionScheme {
 
-  private final KeyPairGenerator keyPairGenerator;
-
-  protected AbstractAsymmetricEncryptionScheme(M messageSpace, Encoder encoder, Function encryptionFunction, Function decryptionFunction, KeyPairGenerator keyPairGenerator) {
-    super(messageSpace, encoder, encryptionFunction, decryptionFunction);
-    this.keyPairGenerator = keyPairGenerator;
-  }
+  private KeyPairGenerator keyPairGenerator;
 
   @Override
   public final KeyPairGenerator getKeyPairGenerator() {
+    if (this.keyPairGenerator == null) {
+      this.keyPairGenerator = this.abstractGetKeyPairGenerator();
+    }
     return this.keyPairGenerator;
   }
 
   @Override
-  public EK getEncryptionKeySpace() {
+  public final EK getEncryptionKeySpace() {
     return (EK) this.getKeyPairGenerator().getPublicKeySpace();
   }
 
   @Override
-  public DK getDecryptionKeySpace() {
+  public final DK getDecryptionKeySpace() {
     return (DK) this.getKeyPairGenerator().getPrivateKeySpace();
   }
+
+  protected abstract KeyPairGenerator abstractGetKeyPairGenerator();
 
 }

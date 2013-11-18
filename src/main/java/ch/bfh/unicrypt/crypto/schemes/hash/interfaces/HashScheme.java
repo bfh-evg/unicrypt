@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.schemes.hash.interfaces;
 
-import ch.bfh.unicrypt.crypto.schemes.Scheme;
+import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;

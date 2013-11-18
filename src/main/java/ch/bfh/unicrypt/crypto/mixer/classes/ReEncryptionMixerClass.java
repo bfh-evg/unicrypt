@@ -15,7 +15,7 @@ public class ReEncryptionMixerClass extends MixerClass implements ReEncryptionMi
   Element publicKey;
 
   public ReEncryptionMixerClass(final ReEncryptionScheme encryptionScheme, final Element publicKey) {
-    super(encryptionScheme.getCiphertextSpace());
+    super(encryptionScheme.getEncryptionSpace());
     this.encryptionScheme = encryptionScheme;
     this.publicKey = publicKey;
   }

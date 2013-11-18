@@ -1,6 +1,5 @@
-package ch.bfh.unicrypt.crypto.schemes;
+package ch.bfh.unicrypt.crypto.schemes.scheme.interfaces;
 
-import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
@@ -14,11 +13,5 @@ public interface Scheme {
    * @return
    */
   public Set getMessageSpace();
-
-  /**
-   *
-   * @return
-   */
-  public Encoder getEncoder();
 
 }

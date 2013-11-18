@@ -55,13 +55,13 @@ public interface ReEncryptionScheme
    * @return
    */
   @Override
-  public Monoid getPlaintextSpace();
+  public Monoid getMessageSpace();
 
   /**
    *
    * @return
    */
   @Override
-  public Monoid getCiphertextSpace();
+  public Monoid getEncryptionSpace();
 
 }

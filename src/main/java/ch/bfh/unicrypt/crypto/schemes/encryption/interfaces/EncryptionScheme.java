@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.interfaces;
 
-import ch.bfh.unicrypt.crypto.schemes.Scheme;
+import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -16,13 +16,7 @@ public interface EncryptionScheme
    *
    * @return
    */
-  public Set getPlaintextSpace();
-
-  /**
-   *
-   * @return
-   */
-  public Set getCiphertextSpace();
+  public Set getEncryptionSpace();
 
   /**
    *
@@ -47,10 +41,10 @@ public interface EncryptionScheme
   /**
    *
    * @param decryptionKey
-   * @param ciphertext
+   * @param encryption
    * @return
    */
-  public Element decrypt(Element decryptionKey, Element ciphertext);
+  public Element decrypt(Element decryptionKey, Element encryption);
 
   public Set getEncryptionKeySpace();
 

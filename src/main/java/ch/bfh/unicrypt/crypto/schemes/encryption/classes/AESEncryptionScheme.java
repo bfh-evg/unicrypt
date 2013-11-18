@@ -77,11 +77,11 @@ public class AESEncryptionScheme extends AbstractEncryptionScheme implements Det
     return this.keyGenerator;
   }
 
-  public ZPlus getPlaintextSpace() {
+  public ZPlus getMessageSpace() {
     return (ZPlus) this.decryptionFunction.getCoDomain();
   }
 
-  public ZPlus getCiphertextSpace() {
+  public ZPlus getEncryptionSpace() {
     return (ZPlus) this.encryptionFunction.getCoDomain();
   }
 
