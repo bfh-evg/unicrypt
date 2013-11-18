@@ -1,40 +1,46 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment.abstracts;
 
-import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
-import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.interfaces.CommitmentScheme;
+import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractCommitmentScheme<M extends Set, C extends Set> extends AbstractScheme<M> implements CommitmentScheme {
+public abstract class AbstractCommitmentScheme<MS extends Set, CS extends Set>
+       extends AbstractScheme
+       implements CommitmentScheme {
 
   protected Function commitmentFunction;
   protected Function decommitmentFunction;
 
-  protected AbstractCommitmentScheme(Encoder encoder, Function commitmentFunction, Function decommitmentFunction) {
-    super(encoder);
-    this.commitmentFunction = commitmentFunction;
-    this.decommitmentFunction = decommitmentFunction;
+  @Override
+  public final MS getMessageSpace() {
+    return (MS) ((ProductSet) this.getDecommitmentFunction().getDomain()).getAt(0);
   }
 
   @Override
-  public C getCommitmentSpace() {
-    return (C) this.getCommitmentFunction().getCoDomain();
+  public final CS getCommitmentSpace() {
+    return (CS) this.getCommitmentFunction().getCoDomain();
   }
 
   @Override
-  public Function getCommitmentFunction() {
+  public final Function getCommitmentFunction() {
+    if (this.commitmentFunction == null) {
+      this.commitmentFunction = this.abstractGetCommitmentFunction();
+    }
     return this.commitmentFunction;
   }
 
   @Override
-  public Function getDecommitmentFunction() {
+  public final Function getDecommitmentFunction() {
+    if (this.decommitmentFunction == null) {
+      this.decommitmentFunction = this.abstractGetDecommitmentFunction();
+    }
     return this.decommitmentFunction;
   }
 
-  @Override
-  protected String standardToStringContent() {
-    return this.getMessageSpace().toString() + "," + this.getCommitmentSpace();
-  }
+  protected abstract Function abstractGetCommitmentFunction();
+
+  protected abstract Function abstractGetDecommitmentFunction();
 
 }

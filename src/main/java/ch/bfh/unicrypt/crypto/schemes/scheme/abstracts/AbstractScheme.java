@@ -10,4 +10,10 @@ import ch.bfh.unicrypt.math.helper.UniCrypt;
 public abstract class AbstractScheme
        extends UniCrypt
        implements Scheme {
+
+  @Override
+  protected String standardToStringContent() {
+    return this.getMessageSpace().toString();
+  }
+
 }

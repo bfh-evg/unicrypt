@@ -1,8 +1,5 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -11,10 +8,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
+import java.math.BigInteger;
+import java.util.Random;
 
-public abstract class AbstractKeyPairGenerator<S extends Set, T extends Set, E extends Element, F extends Element> extends UniCrypt implements KeyPairGenerator {
+public abstract class AbstractKeyPairGenerator<PRS extends Set, PUS extends Set, PRE extends Element, PUE extends Element>
+       extends UniCrypt
+       implements KeyPairGenerator {
 
-  private Function publicKeyFunction;
+  private final Function publicKeyFunction;
   private ProductSet keyPairSpace;
   private AbstractKeyGenerator privateKeyGenerator;
 
@@ -48,37 +49,37 @@ public abstract class AbstractKeyPairGenerator<S extends Set, T extends Set, E e
   }
 
   @Override
-  public S getPrivateKeySpace() {
-    return (S) this.getPublicKeyFunction().getDomain();
+  public PRS getPrivateKeySpace() {
+    return (PRS) this.getPublicKeyFunction().getDomain();
   }
 
   @Override
   public KeyGenerator getPrivateKeyGenerator() {
     if (this.privateKeyGenerator == null) {
-      this.privateKeyGenerator = new AbstractKeyGenerator<S, E>(this.getPrivateKeySpace()) {
+      this.privateKeyGenerator = new AbstractKeyGenerator<PRS, PRE>(this.getPrivateKeySpace()) {
       };
     }
     return this.privateKeyGenerator;
   }
 
   @Override
-  public E getPrivateKey(BigInteger value) {
-    return (E) this.getPrivateKeyGenerator().getKey(value);
+  public PRE getPrivateKey(BigInteger value) {
+    return (PRE) this.getPrivateKeyGenerator().getKey(value);
   }
 
   @Override
-  public E generatePrivateKey() {
+  public PRE generatePrivateKey() {
     return this.generatePrivateKey(null);
   }
 
   @Override
-  public E generatePrivateKey(Random random) {
-    return (E) this.getPrivateKeyGenerator().generateKey(random);
+  public PRE generatePrivateKey(Random random) {
+    return (PRE) this.getPrivateKeyGenerator().generateKey(random);
   }
 
   @Override
-  public T getPublicKeySpace() {
-    return (T) this.getPublicKeyFunction().getCoDomain();
+  public PUS getPublicKeySpace() {
+    return (PUS) this.getPublicKeyFunction().getCoDomain();
   }
 
   @Override
@@ -87,13 +88,13 @@ public abstract class AbstractKeyPairGenerator<S extends Set, T extends Set, E e
   }
 
   @Override
-  public F getPublicKey(BigInteger value) {
-    return (F) this.getPublicKey(this.getPrivateKey(value));
+  public PUE getPublicKey(BigInteger value) {
+    return (PUE) this.getPublicKey(this.getPrivateKey(value));
   }
 
   @Override
-  public F getPublicKey(Element privateKey) {
-    return (F) this.getPublicKeyFunction().apply(privateKey);
+  public PUE getPublicKey(Element privateKey) {
+    return (PUE) this.getPublicKeyFunction().apply(privateKey);
   }
 
   @Override

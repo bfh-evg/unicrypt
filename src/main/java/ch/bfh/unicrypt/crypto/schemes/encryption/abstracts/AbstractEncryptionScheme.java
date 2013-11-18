@@ -2,7 +2,6 @@ package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.EncryptionScheme;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -16,12 +15,12 @@ public abstract class AbstractEncryptionScheme<MS extends Set, ES extends Set, M
 
   @Override
   public final MS getMessageSpace() {
-    return (MS) ((ProductSet) encryptionFunction.getDomain()).getAt(1);
+    return (MS) this.getDecryptionFunction().getCoDomain();
   }
 
   @Override
   public final ES getEncryptionSpace() {
-    return (ES) ((ProductSet) this.getDecryptionFunction().getDomain()).getAt(1);
+    return (ES) this.getEncryptionFunction().getCoDomain();
   }
 
   @Override
