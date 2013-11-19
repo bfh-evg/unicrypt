@@ -4,7 +4,7 @@ import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.classes.HashFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
@@ -23,21 +23,27 @@ public interface HashScheme
    *
    * @return
    */
-  public HashFunction getHashFunction();
+  public Function getHashFunction();
 
   /**
    *
-   * @param element
    * @return
    */
-  public Element hash(Element element);
+  public Function getCheckFunction();
 
   /**
    *
-   * @param element
+   * @param message
+   * @return
+   */
+  public Element hash(Element message);
+
+  /**
+   *
+   * @param message
    * @param hashValue
    * @return
    */
-  public BooleanElement check(Element element, Element hashValue);
+  public BooleanElement check(Element message, Element hashValue);
 
 }
