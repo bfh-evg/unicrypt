@@ -1,8 +1,8 @@
-package ch.bfh.unicrypt.crypto.blinding.abstracts;
+package ch.bfh.unicrypt.crypto.schemes.blinding.abstracts;
 
 import java.util.Random;
 
-import ch.bfh.unicrypt.crypto.blinding.interfaces.BlindingScheme;
+import ch.bfh.unicrypt.crypto.schemes.blinding.interfaces.BlindingScheme;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 

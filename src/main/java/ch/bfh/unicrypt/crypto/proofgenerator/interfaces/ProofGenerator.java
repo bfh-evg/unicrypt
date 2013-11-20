@@ -5,7 +5,6 @@ import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public interface ProofGenerator {
 
@@ -28,7 +27,5 @@ public interface ProofGenerator {
   public Set getOtherInputSpace();
 
   public Set getProofSpace();
-
-  public Function getProofFunction();
 
 }

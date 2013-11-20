@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ch.bfh.unicrypt.crypto.blinding.interfaces.BlindingScheme;
+import ch.bfh.unicrypt.crypto.schemes.blinding.interfaces.BlindingScheme;
 import ch.bfh.unicrypt.crypto.mixer.interfaces.BlindingMixer;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.PermutationElement;

@@ -16,31 +16,31 @@ import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class SigmaEqualityProofGeneratorClass extends ProductCoDomainProofGeneratorAbstract implements SigmaEqualityProofGenerator {
+public class PreimageEqualityProofGenerator extends ProductCoDomainProofGeneratorAbstract implements SigmaEqualityProofGenerator {
 
   private final SigmaProofGenerator sigmaProofGenerator;
   private final Function[] functions;
 
-  public SigmaEqualityProofGeneratorClass(final List<Function> functions) {
+  public PreimageEqualityProofGenerator(final List<Function> functions) {
     this(functions, SigmaProofGeneratorClass.DEFAULT_HASH_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_CONCAT_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_MAPPER);
   }
 
-  public SigmaEqualityProofGeneratorClass(final List<Function> functions,
+  public PreimageEqualityProofGenerator(final List<Function> functions,
           final HashAlgorithm hashAlgorithm,
           final ConcatParameter concatParameter,
           final Mapper mapper) {
     this(functions.toArray(new Function[functions.size()]), hashAlgorithm, concatParameter, mapper);
   }
 
-  public SigmaEqualityProofGeneratorClass(final Function... functions) {
+  public PreimageEqualityProofGenerator(final Function... functions) {
     this(functions, SigmaProofGeneratorClass.DEFAULT_HASH_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_CONCAT_ALGORITHM, SigmaProofGeneratorClass.DEFAULT_MAPPER);
   }
 
-  public SigmaEqualityProofGeneratorClass(final Function[] functions,
+  public PreimageEqualityProofGenerator(final Function[] functions,
           final HashAlgorithm hashAlgorithm,
           final ConcatParameter concatParameter,
           final Mapper mapper) {
-    final Function function = new CompositeFunction(new MultiIdentityFunction(SigmaEqualityProofGeneratorClass.getDomain(functions), functions.length),
+    final Function function = new CompositeFunction(new MultiIdentityFunction(PreimageEqualityProofGenerator.getDomain(functions), functions.length),
                                                     new ProductFunction(functions));
     this.sigmaProofGenerator = new SigmaProofGeneratorClass(function, hashAlgorithm, concatParameter, mapper);
     this.functions = functions;

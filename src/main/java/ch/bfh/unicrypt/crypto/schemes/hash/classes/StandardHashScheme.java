@@ -1,9 +1,15 @@
 package ch.bfh.unicrypt.crypto.schemes.hash.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.hash.abstracts.AbstractHashScheme;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class StandardHashScheme
        extends AbstractHashScheme {
+
+  @Override
+  protected Function abstractGetHashFunction() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 
 //  private final HashFunction hashFunction;
 //

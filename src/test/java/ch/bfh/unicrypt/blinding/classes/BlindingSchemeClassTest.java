@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ch.bfh.unicrypt.crypto.blinding.classes.StandardBlindingScheme;
-import ch.bfh.unicrypt.crypto.blinding.interfaces.BlindingScheme;
+import ch.bfh.unicrypt.crypto.schemes.blinding.classes.StandardBlindingScheme;
+import ch.bfh.unicrypt.crypto.schemes.blinding.interfaces.BlindingScheme;
 import ch.bfh.unicrypt.math.element.Element;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.element.classes.AtomicElement;

@@ -1,6 +1,6 @@
-package ch.bfh.unicrypt.crypto.blinding.classes;
+package ch.bfh.unicrypt.crypto.schemes.blinding.classes;
 
-import ch.bfh.unicrypt.crypto.blinding.abstracts.AbstractBlindingScheme;
+import ch.bfh.unicrypt.crypto.schemes.blinding.abstracts.AbstractBlindingScheme;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;

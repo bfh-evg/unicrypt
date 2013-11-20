@@ -13,27 +13,27 @@ import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class AndSigmaProofGeneratorClass extends ProductProofGeneratorAbstract implements AndProofGenerator {
+public class PreimageAndProofGenerator extends ProductProofGeneratorAbstract implements AndProofGenerator {
 
   private final SigmaProofGenerator sigmaProofGenerator;
   private final Function[] functions;
 
-  public AndSigmaProofGeneratorClass(final List<Function> functions) {
+  public PreimageAndProofGenerator(final List<Function> functions) {
     this(functions, SigmaProofGenerator.DEFAULT_HASH_ALGORITHM, SigmaProofGenerator.DEFAULT_CONCAT_ALGORITHM, SigmaProofGenerator.DEFAULT_MAPPER);
   }
 
-  public AndSigmaProofGeneratorClass(final List<Function> functions,
+  public PreimageAndProofGenerator(final List<Function> functions,
           final HashAlgorithm hashAlgorithm,
           final ConcatParameter concatParameter,
           final Mapper mapper) {
     this(functions.toArray(new Function[functions.size()]), hashAlgorithm, concatParameter, mapper);
   }
 
-  public AndSigmaProofGeneratorClass(final Function... functions) {
+  public PreimageAndProofGenerator(final Function... functions) {
     this(functions, SigmaProofGenerator.DEFAULT_HASH_ALGORITHM, SigmaProofGenerator.DEFAULT_CONCAT_ALGORITHM, SigmaProofGenerator.DEFAULT_MAPPER);
   }
 
-  public AndSigmaProofGeneratorClass(final Function[] functions, final HashAlgorithm hashAlgorithm, final ConcatParameter concatParameter, final Mapper mapper) {
+  public PreimageAndProofGenerator(final Function[] functions, final HashAlgorithm hashAlgorithm, final ConcatParameter concatParameter, final Mapper mapper) {
     final Function function = new ProductFunction(functions);
     this.sigmaProofGenerator = new SigmaProofGenerator(function, hashAlgorithm, concatParameter, mapper);
     this.functions = functions;

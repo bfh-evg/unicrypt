@@ -21,36 +21,36 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.random.RandomOracle;
 
-public class MultiPedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme<ProductSet, ProductSet, CyclicGroup, Element> implements MultiCommitmentScheme {
+public class GeneralizedPedersenCommitmentScheme extends AbstractRandomizedCommitmentScheme<ProductSet, ProductSet, CyclicGroup, Element> implements MultiCommitmentScheme {
 
-  protected MultiPedersenCommitmentScheme(Encoder encoder, Function commitmentFunction, Function decommitmentFunction) {
+  protected GeneralizedPedersenCommitmentScheme(Encoder encoder, Function commitmentFunction, Function decommitmentFunction) {
     super(encoder, commitmentFunction, decommitmentFunction);
   }
 
-  public static MultiPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
-    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, (RandomOracle) null);
+  public static GeneralizedPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
+    return GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, (RandomOracle) null);
   }
 
-  public static MultiPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, RandomOracle randomOracle) {
-    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, (Encoder) null, randomOracle);
+  public static GeneralizedPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, RandomOracle randomOracle) {
+    return GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, (Encoder) null, randomOracle);
   }
 
-  public static MultiPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Set singleMessageSpace) {
-    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, singleMessageSpace, (RandomOracle) null);
+  public static GeneralizedPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Set singleMessageSpace) {
+    return GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, singleMessageSpace, (RandomOracle) null);
   }
 
-  public static MultiPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Set singleMessageSpace, RandomOracle randomOracle) {
+  public static GeneralizedPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Set singleMessageSpace, RandomOracle randomOracle) {
     if (cyclicGroup == null) {
       throw new IllegalArgumentException();
     }
-    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, GeneralEncoder.getInstance(singleMessageSpace, cyclicGroup.getZModOrder()), randomOracle);
+    return GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, GeneralEncoder.getInstance(singleMessageSpace, cyclicGroup.getZModOrder()), randomOracle);
   }
 
-  public static MultiPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Encoder encoder) {
-    return MultiPedersenCommitmentScheme.getInstance(cyclicGroup, encoder, (RandomOracle) null);
+  public static GeneralizedPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Encoder encoder) {
+    return GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, encoder, (RandomOracle) null);
   }
 
-  public static MultiPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Encoder encoder, RandomOracle randomOracle) {
+  public static GeneralizedPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Encoder encoder, RandomOracle randomOracle) {
     if (cyclicGroup == null) {
       throw new IllegalArgumentException();
     }
@@ -78,7 +78,7 @@ public class MultiPedersenCommitmentScheme extends AbstractRandomizedCommitmentS
                                                                       commitmentFunction),
                                         SelectionFunction.getInstance(decommitmentDomain, 2)),
             EqualityFunction.getInstance(cyclicGroup));
-    return new MultiPedersenCommitmentScheme(encoder, commitmentFunction, decommitmentFunction);
+    return new GeneralizedPedersenCommitmentScheme(encoder, commitmentFunction, decommitmentFunction);
   }
 
   @Override
