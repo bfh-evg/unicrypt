@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -30,12 +30,12 @@ import java.util.Random;
  * @version 2.0
  */
 public class HashFunction
-       extends AbstractFunction<Set, ByteArrayMonoid, ByteArrayElement> {
+       extends AbstractFunction<Set, FiniteByteArraySet, FiniteByteArrayElement> {
 
   private MessageDigest messageDigest;
   private boolean recursiveHash;
 
-  private HashFunction(Set domain, ByteArrayMonoid coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
+  private HashFunction(Set domain, FiniteByteArraySet coDomain, final MessageDigest messageDigest, boolean recursiveHash) {
     super(domain, coDomain);
     this.messageDigest = messageDigest;
     this.recursiveHash = recursiveHash;
@@ -47,11 +47,11 @@ public class HashFunction
   }
 
   @Override
-  protected ByteArrayElement abstractApply(final Element element, final Random random) {
+  protected FiniteByteArrayElement abstractApply(final Element element, final Random random) {
     if (this.recursiveHash) {
-      return element.getRecursiveHashValue(this.messageDigest);
+      return this.getCoDomain().getElement(element.getRecursiveHashValue(this.messageDigest).getByteArray());
     }
-    return element.getHashValue(this.messageDigest);
+    return this.getCoDomain().getElement(element.getHashValue(this.messageDigest).getByteArray());
   }
 
   public MessageDigest getMessageDigest() {
@@ -65,6 +65,9 @@ public class HashFunction
   /**
    * This constructor generates a standard SHA-256 hash function. The order of
    * the co-domain is 2^256.
+   * <p>
+   * @param domain
+   * @return
    */
   public static HashFunction getInstance(Set domain) {
     return HashFunction.getInstance(domain, Element.STANDARD_HASH_ALGORITHM, false);
@@ -78,7 +81,9 @@ public class HashFunction
    * This constructor generates a standard hash function for a given hash
    * algorithm name. The co-domain is chosen accordingly.
    * <p>
+   * @param domain
    * @param hashAlgorithm The name of the hash algorithm
+   * @return
    * @throws IllegalArgumentException if {@literal algorithmName} is null or an
    *                                  unknown hash algorithm name
    */
@@ -120,7 +125,7 @@ public class HashFunction
     if (domain == null || messageDigest == null) {
       throw new IllegalArgumentException();
     }
-    return new HashFunction(domain, ByteArrayMonoid.getInstance(), messageDigest, recursiveHash);
+    return new HashFunction(domain, FiniteByteArraySet.getInstance(messageDigest.getDigestLength(), true), messageDigest, recursiveHash);
   }
 
 }

@@ -2,7 +2,6 @@ package ch.bfh.unicrypt.crypto.schemes.commitment.abstracts;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.interfaces.CommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
@@ -12,11 +11,6 @@ public abstract class AbstractCommitmentScheme<MS extends Set, CS extends Set>
 
   protected Function commitmentFunction;
   protected Function decommitmentFunction;
-
-  @Override
-  public final MS getMessageSpace() {
-    return (MS) ((ProductSet) this.getDecommitmentFunction().getDomain()).getAt(0);
-  }
 
   @Override
   public final CS getCommitmentSpace() {
