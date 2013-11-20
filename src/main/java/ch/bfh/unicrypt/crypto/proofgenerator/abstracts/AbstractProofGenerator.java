@@ -6,7 +6,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Random;
 
-public abstract class AbstractProofGenerator<E extends Element, PRS extends Set, PUS extends Set, OS extends Set, PS extends Set>
+public abstract class AbstractProofGenerator<PRS extends Set, PUS extends Set, PS extends Set, E extends Element>
        implements ProofGenerator {
 
   @Override
@@ -15,8 +15,8 @@ public abstract class AbstractProofGenerator<E extends Element, PRS extends Set,
   }
 
   @Override
-  public final E generate(final Element privateInput, final Element publicInput, final Element otherInput) {
-    return this.generate(privateInput, publicInput, otherInput, (Random) null);
+  public final E generate(final Element privateInput, final Element publicInput, final Element proverID) {
+    return this.generate(privateInput, publicInput, proverID, (Random) null);
   }
 
   @Override
@@ -25,13 +25,11 @@ public abstract class AbstractProofGenerator<E extends Element, PRS extends Set,
   }
 
   @Override
-  public final E generate(Element privateInput, Element publicInput, Element otherInput, Random random) {
-    if (privateInput == null || !this.getPrivateInputSpace().contains(privateInput)
-           || publicInput == null || !this.getPublicInputSpace().contains(publicInput)
-           || (otherInput != null && !this.getOtherInputSpace().contains(otherInput))) {
+  public final E generate(Element privateInput, Element publicInput, Element proverID, Random random) {
+    if (!this.getPrivateInputSpace().contains(privateInput) || !this.getPublicInputSpace().contains(publicInput)) {
       throw new IllegalArgumentException();
     }
-    return this.abstractGenerate(privateInput, publicInput, otherInput, random);
+    return this.abstractGenerate(privateInput, publicInput, proverID, random);
   }
 
   @Override
@@ -40,13 +38,11 @@ public abstract class AbstractProofGenerator<E extends Element, PRS extends Set,
   }
 
   @Override
-  public final BooleanElement verify(Element proof, Element publicInput, Element otherInput) {
-    if (proof == null || !this.getProofSpace().contains(proof)
-           || publicInput == null || !this.getPublicInputSpace().contains(publicInput)
-           || (otherInput != null && !this.getOtherInputSpace().contains(otherInput))) {
+  public final BooleanElement verify(Element proof, Element publicInput, Element proverID) {
+    if (!this.getProofSpace().contains(proof) || !this.getPublicInputSpace().contains(publicInput)) {
       throw new IllegalArgumentException();
     }
-    return this.abstractVerify(proof, publicInput, otherInput);
+    return this.abstractVerify(proof, publicInput, proverID);
   }
 
   @Override
@@ -57,11 +53,6 @@ public abstract class AbstractProofGenerator<E extends Element, PRS extends Set,
   @Override
   public final PUS getPublicInputSpace() {
     return this.abstractGetPublicInputSpace();
-  }
-
-  @Override
-  public final OS getOtherInputSpace() {
-    return this.abstractGetOtherInputSpace();
   }
 
   @Override
@@ -76,8 +67,6 @@ public abstract class AbstractProofGenerator<E extends Element, PRS extends Set,
   protected abstract PRS abstractGetPrivateInputSpace();
 
   protected abstract PUS abstractGetPublicInputSpace();
-
-  protected abstract OS abstractGetOtherInputSpace();
 
   protected abstract PS abstractGetProofSpace();
 
