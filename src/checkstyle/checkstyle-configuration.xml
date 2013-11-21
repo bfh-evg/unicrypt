@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+
+    <!-- Checks that each Java package has a Javadoc file used for commenting. -->
+    <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocPackage -->
+    <!--module name="JavadocPackage">
+      <property name="allowLegacy" value="true"/>
+    </module-->
+
+    <module name="FileLength"/>
+
+    <!-- Checks for Headers. -->
+    <!-- See http://checkstyle.sf.net/config_header.html -->
+    <module name="RegexpHeader">
+        <property name="headerFile" value="${checkstyle.header.file}"/>
+    </module>
+
+    <!-- Line with trailing spaces. -->
+    <!-- See http://checkstyle.sourceforge.net/config_regexp.html#RegexpSingleline -->
+    <module name="RegexpSingleline">
+        <property name="format" value="\s+$"/>
+        <property name="message" value="Line has trailing spaces."/>
+    </module>
+
+    <!-- Checks whether files end with a new line. -->
+    <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
+    <module name="NewlineAtEndOfFile">
+        <property name="lineSeparator" value="lf"/>
+    </module>
+
+    <module name="TreeWalker">
+        <!-- Checks for long lines. -->
+        <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
+        <module name="LineLength">
+            <property name="max" value="120"/>
+            <property name="tabWidth" value="4"/>
+        </module>
+        <!-- Checks for Star imports. -->
+        <!-- See http://checkstyle.sourceforge.net/config_imports.html -->
+        <module name="AvoidStarImport">
+            <!-- <property name="excludes" value="java.io,java.net,java.lang.Math"/> -->
+            <property name="allowClassImports" value="false"/>
+            <property name="allowStaticMemberImports" value="false"/>
+        </module>
+        <!-- Checks for redundant imports. -->
+        <!-- See http://checkstyle.sourceforge.net/config_imports.html -->
+        <module name="RedundantImport"/>
+        <!-- Checks for unused imports. -->
+        <!-- See http://checkstyle.sourceforge.net/config_imports.html -->
+        <module name="UnusedImports"/>
+        <!-- Checks for non-visibility of members. -->
+        <!-- See http://checkstyle.sourceforge.net/config_design.html -->
+        <module name="VisibilityModifier">
+            <property name="protectedAllowed" value="true"/>
+        </module>
+    </module>
+</module>
