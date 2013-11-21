@@ -123,3 +123,17 @@ public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
   }
 
 }
+
+//
+//    // @Override
+//    @Override
+//    public Element partialDecrypt(final Element privateKey, final Element ciphertext) {
+//        return (Element) this.getPartialDecryptionFunction().apply(privateKey, ((Element) ciphertext).getAt(0));
+//    }
+//
+//    // @Override
+//    @Override
+//    public Element combinePartialDecryptions(final Element ciphertext, final Element... partialDecryptions) {
+//        final Element element = ((Element) ciphertext).getAt(1);
+//        return this.ddhGroup.apply(partialDecryptions).apply(element);
+//    }
