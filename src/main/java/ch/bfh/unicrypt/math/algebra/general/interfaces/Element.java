@@ -1,8 +1,8 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.math.BigInteger;
-import java.security.MessageDigest;
 
 /**
  * This abstract class represents the concept an element in a mathematical
@@ -17,8 +17,6 @@ import java.security.MessageDigest;
  * @version 2.0
  */
 public interface Element {
-
-  public static final String STANDARD_HASH_ALGORITHM = "SHA-256";
 
   public boolean isAdditive();
 
@@ -43,17 +41,9 @@ public interface Element {
    */
   public BigInteger getValue();
 
-  public ByteArrayElement getHashValue();
+  public FiniteByteArrayElement getHashValue();
 
-  public ByteArrayElement getHashValue(String hashAlgorithm);
-
-  public ByteArrayElement getHashValue(MessageDigest messageDigest);
-
-  public ByteArrayElement getRecursiveHashValue();
-
-  public ByteArrayElement getRecursiveHashValue(String hashAlgorithm);
-
-  public ByteArrayElement getRecursiveHashValue(MessageDigest messageDigest);
+  public FiniteByteArrayElement getHashValue(HashMethod hashMethod);
 
   //
   // The following methods are equivalent to corresponding Set methods

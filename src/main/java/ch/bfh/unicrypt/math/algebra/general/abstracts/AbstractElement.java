@@ -1,10 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -13,10 +14,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * This abstract class represents the concept an element in a mathematical
@@ -103,58 +104,24 @@ public abstract class AbstractElement<S extends Set, E extends Element>
   }
 
   @Override
-  public final ByteArrayElement getHashValue() {
-    return this.getHashValue(Element.STANDARD_HASH_ALGORITHM);
+  public final FiniteByteArrayElement getHashValue() {
+    return this.getHashValue(HashMethod.DEFAULT);
   }
 
   @Override
-  public final ByteArrayElement getHashValue(String hashAlgorithm) {
-    if (hashAlgorithm == null) {
-      throw new IllegalArgumentException();
+  public final FiniteByteArrayElement getHashValue(HashMethod hashMethod) {
+    if (this.isTuple() && hashMethod.isRecursive()) {
+      Tuple tuple = (Tuple) this;
+      int arity = tuple.getArity();
+      FiniteByteArrayElement[] hashValues = new FiniteByteArrayElement[arity];
+      for (int i = 0; i < arity; i++) {
+        hashValues[i] = tuple.getAt(i).getHashValue(hashMethod);
+      }
+      return ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(hashMethod);
     }
-    MessageDigest messageDigest;
-    try {
-      messageDigest = MessageDigest.getInstance(hashAlgorithm);
-    } catch (final NoSuchAlgorithmException e) {
-      throw new IllegalArgumentException();
-    }
-    return this.getHashValue(messageDigest);
-  }
-
-  @Override
-  public ByteArrayElement getHashValue(MessageDigest messageDigest) {
-    if (messageDigest == null) {
-      throw new IllegalArgumentException();
-    }
+    MessageDigest messageDigest = hashMethod.getMessageDigest();
     messageDigest.reset();
-    return ByteArrayMonoid.getInstance().getElement(messageDigest.digest(this.getValue().toByteArray()));
-  }
-
-  @Override
-  public ByteArrayElement getRecursiveHashValue() {
-    return this.getRecursiveHashValue(AbstractElement.STANDARD_HASH_ALGORITHM);
-  }
-
-  @Override
-  public ByteArrayElement getRecursiveHashValue(String hashAlgorithm) {
-    if (hashAlgorithm == null) {
-      throw new IllegalArgumentException();
-    }
-    MessageDigest messageDigest;
-    try {
-      messageDigest = MessageDigest.getInstance(hashAlgorithm);
-    } catch (final NoSuchAlgorithmException e) {
-      throw new IllegalArgumentException();
-    }
-    return this.getRecursiveHashValue(messageDigest);
-  }
-
-  @Override
-  public ByteArrayElement getRecursiveHashValue(MessageDigest messageDigest) {
-    if (messageDigest == null) {
-      throw new IllegalArgumentException();
-    }
-    return standardGetRecursiveHashValue(messageDigest);
+    return FiniteByteArraySet.getInstance(hashMethod.getLength(), true).getElement(messageDigest.digest(this.getValue().toByteArray()));
   }
 
   //
@@ -298,10 +265,6 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 
   protected boolean standardIsEqual(Element element) {
     return this.getValue().equals(element.getValue());
-  }
-
-  protected ByteArrayElement standardGetRecursiveHashValue(MessageDigest messageDigest) {
-    return this.getHashValue(messageDigest);
   }
 
   @Override

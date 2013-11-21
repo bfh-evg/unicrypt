@@ -4,23 +4,24 @@ import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageProofGene
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PreimageProofGenerator
        extends AbstractPreimageProofGenerator<SemiGroup, SemiGroup, Function, Element, Element> {
 
-  protected PreimageProofGenerator(final Function function, String hashAlgorithm) {
-    super(function, hashAlgorithm);
+  protected PreimageProofGenerator(final Function function, HashMethod hashMethod) {
+    super(function, hashMethod);
   }
 
-  public static PreimageProofGenerator getInstance(Function function) {
-    return PreimageProofGenerator.getInstance(function, "STANDARDHASH"); // TODO STANDARDHASH
+  public static PreimageProofGenerator getInstance(Function proofFunction) {
+    return PreimageProofGenerator.getInstance(proofFunction, HashMethod.DEFAULT);
   }
 
-  public static PreimageProofGenerator getInstance(Function function, String hashAlgorithm) {
-    if (function == null) {
+  public static PreimageProofGenerator getInstance(Function proofFunction, HashMethod hashMethod) {
+    if (proofFunction == null) {
       throw new IllegalArgumentException();
     }
-    return new PreimageProofGenerator(function, hashAlgorithm); // TODO TEST HASHALGORITGHM
+    return new PreimageProofGenerator(proofFunction, hashMethod);
   }
 
 }
