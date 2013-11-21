@@ -20,15 +20,18 @@ public class PreimageAndProofGenerator
 
   public static PreimageAndProofGenerator getInstance(final Function[] proofFunctions, final HashMethod hashMethod) {
     return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunctions), hashMethod);
-  } // TODO TEST HASHALGORITGHM
+  }
 
   public static PreimageAndProofGenerator getInstance(final Function proofFunction, int arity) {
     return PreimageAndProofGenerator.getInstance(proofFunction, arity, HashMethod.DEFAULT);
   }
 
-  public static PreimageAndProofGenerator getInstance(final Function proofFunction, int arity, final HashMethod mashMethod) {
-    return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunction, arity), mashMethod);
-  } // TODO TEST HASHALGORITGHM
+  public static PreimageAndProofGenerator getInstance(final Function proofFunction, int arity, final HashMethod hashMethod) {
+    if (hashMethod == null) {
+      throw new IllegalArgumentException();
+    }
+    return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunction, arity), hashMethod);
+  }
 
   public Function[] getProofFunctions() {
     return this.getProofFunction().getAll();

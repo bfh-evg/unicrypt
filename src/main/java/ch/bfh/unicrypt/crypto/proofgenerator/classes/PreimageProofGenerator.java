@@ -18,7 +18,7 @@ public class PreimageProofGenerator
   }
 
   public static PreimageProofGenerator getInstance(Function proofFunction, HashMethod hashMethod) {
-    if (proofFunction == null) {
+    if (proofFunction == null || hashMethod == null) {
       throw new IllegalArgumentException();
     }
     return new PreimageProofGenerator(proofFunction, hashMethod);

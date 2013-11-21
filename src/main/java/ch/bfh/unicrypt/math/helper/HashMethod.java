@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class HashMethod {
 
-  public static final HashMethod DEFAULT = HashMethod.getInstance("SHA-256");
+  public static final HashMethod DEFAULT = HashMethod.getInstance("SHA-256", true);
 
   private final String algorithmName;
   private final boolean recursive;
