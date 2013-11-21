@@ -12,83 +12,83 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Random;
 
 public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS extends SemiGroup, F extends Function, PUE extends Element, PRE extends Element>
-       extends AbstractProofGenerator<PRS, PUS, ProductSet, Tuple> {
+	   extends AbstractProofGenerator<PRS, PUS, ProductSet, Tuple> {
 
-  private final F proofFunction;
-  private final HashMethod hashMethod;
+	private final F proofFunction;
+	private final HashMethod hashMethod;
 
-  protected AbstractPreimageProofGenerator(F proofFunction, HashMethod hashMethod) {
-    this.proofFunction = proofFunction;
-    this.hashMethod = hashMethod;
-  }
+	protected AbstractPreimageProofGenerator(F proofFunction, HashMethod hashMethod) {
+		this.proofFunction = proofFunction;
+		this.hashMethod = hashMethod;
+	}
 
-  public final F getProofFunction() {
-    return this.proofFunction;
-  }
+	public final F getProofFunction() {
+		return this.proofFunction;
+	}
 
-  public final HashMethod getHashMethod() {
-    return this.hashMethod;
-  }
+	public final HashMethod getHashMethod() {
+		return this.hashMethod;
+	}
 
-  public final PUS getCommitmentSpace() {
-    return this.getPublicInputSpace();
-  }
+	public final PUS getCommitmentSpace() {
+		return this.getPublicInputSpace();
+	}
 
-  public final ZMod getChallengeSpace() {
-    return ZMod.getInstance(this.getPrivateInputSpace().getMinOrder());
-  }
+	public final ZMod getChallengeSpace() {
+		return ZMod.getInstance(this.getPrivateInputSpace().getMinOrder());
+	}
 
-  public final PRS getResponseSpace() {
-    return this.getPrivateInputSpace();
-  }
+	public final PRS getResponseSpace() {
+		return this.getPrivateInputSpace();
+	}
 
-  public final PUE getCommitment(final Tuple proof) {
-    if (!this.getProofSpace().contains(proof)) {
-      throw new IllegalArgumentException();
-    }
-    return (PUE) proof.getAt(0);
-  }
+	public final PUE getCommitment(final Tuple proof) {
+		if (!this.getProofSpace().contains(proof)) {
+			throw new IllegalArgumentException();
+		}
+		return (PUE) proof.getAt(0);
+	}
 
-  public final ZModElement getChallenge(final Tuple proof) {
-    if (!this.getProofSpace().contains(proof)) {
-      throw new IllegalArgumentException();
-    }
-    return (ZModElement) proof.getAt(1);
-  }
+	public final ZModElement getChallenge(final Tuple proof) {
+		if (!this.getProofSpace().contains(proof)) {
+			throw new IllegalArgumentException();
+		}
+		return (ZModElement) proof.getAt(1);
+	}
 
-  public final PRE getResponse(final Tuple proof) {
-    if (!this.getProofSpace().contains(proof)) {
-      throw new IllegalArgumentException();
-    }
-    return (PRE) proof.getAt(2);
-  }
+	public final PRE getResponse(final Tuple proof) {
+		if (!this.getProofSpace().contains(proof)) {
+			throw new IllegalArgumentException();
+		}
+		return (PRE) proof.getAt(2);
+	}
 
-  @Override
-  protected final PRS abstractGetPrivateInputSpace() {
-    return (PRS) this.getProofFunction().getDomain();
-  }
+	@Override
+	protected final PRS abstractGetPrivateInputSpace() {
+		return (PRS) this.getProofFunction().getDomain();
+	}
 
-  @Override
-  protected final PUS abstractGetPublicInputSpace() {
-    return (PUS) this.getProofFunction().getCoDomain();
-  }
+	@Override
+	protected final PUS abstractGetPublicInputSpace() {
+		return (PUS) this.getProofFunction().getCoDomain();
+	}
 
-  @Override
-  protected final ProductSet abstractGetProofSpace() {
-    return ProductSet.getInstance(this.getCommitmentSpace(), this.getChallengeSpace(), this.getResponseSpace());
-  }
+	@Override
+	protected final ProductSet abstractGetProofSpace() {
+		return ProductSet.getInstance(this.getCommitmentSpace(), this.getChallengeSpace(), this.getResponseSpace());
+	}
 
-  @Override
-  protected final Tuple abstractGenerate(Element secretInput, Element publicInput, Element otherInput, Random random) {
-    // TODO
-    return null;
-  }
+	@Override
+	protected final Tuple abstractGenerate(Element secretInput, Element publicInput, Element otherInput, Random random) {
+		// TODO
+		return null;
+	}
 
-  @Override
-  protected final BooleanElement abstractVerify(Element proof, Element publicInput, Element otherInput) {
-    // TODO
-    return null;
-  }
+	@Override
+	protected final BooleanElement abstractVerify(Element proof, Element publicInput, Element otherInput) {
+		// TODO
+		return null;
+	}
 
 // CODE COPIED FROM OLD VERSION FOR REUSE
 //    @Override
