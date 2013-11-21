@@ -5,28 +5,29 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PreimageAndProofGenerator
        extends AbstractPreimageProofGenerator<ProductSemiGroup, ProductSemiGroup, ProductFunction, Tuple, Tuple> {
 
-  protected PreimageAndProofGenerator(final ProductFunction proofFunction, String hashAlgorithm) {
-    super(proofFunction, hashAlgorithm);
+  protected PreimageAndProofGenerator(final ProductFunction proofFunction, HashMethod hashMethod) {
+    super(proofFunction, hashMethod);
   }
 
   public static PreimageAndProofGenerator getInstance(final Function... proofFunctions) {
-    return PreimageAndProofGenerator.getInstance(proofFunctions, "STANDARDHASH"); // TODO STANDARDHASH
+    return PreimageAndProofGenerator.getInstance(proofFunctions, HashMethod.DEFAULT);
   }
 
-  public static PreimageAndProofGenerator getInstance(final Function[] proofFunctions, final String hashAlgorithm) {
-    return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunctions), hashAlgorithm);
+  public static PreimageAndProofGenerator getInstance(final Function[] proofFunctions, final HashMethod hashMethod) {
+    return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunctions), hashMethod);
   } // TODO TEST HASHALGORITGHM
 
   public static PreimageAndProofGenerator getInstance(final Function proofFunction, int arity) {
-    return PreimageAndProofGenerator.getInstance(proofFunction, arity, "STANDARDHASH"); // TODO STANDARDHASH
+    return PreimageAndProofGenerator.getInstance(proofFunction, arity, HashMethod.DEFAULT);
   }
 
-  public static PreimageAndProofGenerator getInstance(final Function proofFunction, int arity, final String hashAlgorithm) {
-    return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunction, arity), hashAlgorithm);
+  public static PreimageAndProofGenerator getInstance(final Function proofFunction, int arity, final HashMethod mashMethod) {
+    return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunction, arity), mashMethod);
   } // TODO TEST HASHALGORITGHM
 
   public Function[] getProofFunctions() {

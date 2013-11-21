@@ -8,25 +8,26 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Random;
 
 public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS extends SemiGroup, F extends Function, PUE extends Element, PRE extends Element>
        extends AbstractProofGenerator<PRS, PUS, ProductSet, Tuple> {
 
   private final F proofFunction;
-  private final String hashAlgorithm;
+  private final HashMethod hashMethod;
 
-  protected AbstractPreimageProofGenerator(F proofFunction, String hashAlgorithm) {
+  protected AbstractPreimageProofGenerator(F proofFunction, HashMethod hashMethod) {
     this.proofFunction = proofFunction;
-    this.hashAlgorithm = hashAlgorithm;
+    this.hashMethod = hashMethod;
   }
 
   public final F getProofFunction() {
     return this.proofFunction;
   }
 
-  public final String getHashAlgorithm() {
-    return this.hashAlgorithm;
+  public final HashMethod getHashMethod() {
+    return this.hashMethod;
   }
 
   public final PUS getCommitmentSpace() {
