@@ -1,23 +1,40 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractProofGenerator;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.util.Random;
 
-/**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- */
 public class ElGamalValidityProofGenerator
-       extends AbstractProofGenerator<Set, Set, Set, Element> {
+	   extends AbstractProofGenerator<Set, Set, Set, Element> {
+
+	@Override
+	protected Element abstractGenerate(Element secretInput, Element publicInput, Element otherInput, Random random) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected BooleanElement abstractVerify(Element proof, Element publicInput, Element otherInput) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected Set abstractGetPrivateInputSpace() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected Set abstractGetPublicInputSpace() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected Set abstractGetProofSpace() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 
 }
-
 //   /**
 //     * Create a validity proof of an encrypted text
 //     * @param randomization randomization used in the encryption
@@ -105,3 +122,4 @@ public class ElGamalValidityProofGenerator
 //
 //        return proofGen.verify(validityProof, publicProofInput);
 //    }
+
