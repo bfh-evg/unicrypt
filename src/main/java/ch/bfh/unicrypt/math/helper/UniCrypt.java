@@ -10,21 +10,21 @@ package ch.bfh.unicrypt.math.helper;
  */
 public abstract class UniCrypt {
 
-  @Override
-  public String toString() {
-    String str = this.standardToStringContent();
-    if (str.length() == 0) {
-      return this.standardToStringName();
-    }
-    return this.standardToStringName() + "[" + str + "]";
-  }
+	@Override
+	public final String toString() {
+		String str = this.standardToStringContent();
+		if (str.length() == 0) {
+			return this.standardToStringName();
+		}
+		return this.standardToStringName() + "[" + str + "]";
+	}
 
-  protected String standardToStringName() {
-    return this.getClass().getSimpleName();
-  }
+	protected String standardToStringName() {
+		return this.getClass().getSimpleName();
+	}
 
-  protected String standardToStringContent() {
-    return "";
-  }
+	protected String standardToStringContent() {
+		return "";
+	}
 
 }

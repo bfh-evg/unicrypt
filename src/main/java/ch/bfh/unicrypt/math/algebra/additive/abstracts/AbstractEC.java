@@ -7,155 +7,155 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+public abstract class AbstractEC<E extends AbstractECElement, F extends FiniteField, D extends DualisticElement>
+			 extends AbstractAdditiveCyclicGroup<E> {
 
-public abstract class AbstractEC<E extends AbstractECElement, D extends DualisticElement>
-       extends AbstractAdditiveCyclicGroup<E> {
+	private final F finiteField;
+	private final E generator;
+	private final D a, b;
+	private final BigInteger order, h;
+	protected final D zero = null;
 
-  private FiniteField finiteField;
-  private E generator;
-  private D a, b;
-  private BigInteger order, h;
-  protected final D zero = null;
+	protected AbstractEC(F finiteField, D a, D b, D gx, D gy, BigInteger order, BigInteger h) {
+		super();
+		this.a = a;
+		this.b = b;
+		this.order = order;
+		this.h = h;
+		this.finiteField = finiteField;
+		this.generator = this.getElement(gx, gy);
 
-  protected AbstractEC(FiniteField finiteField, D a, D b, D gx, D gy, BigInteger order, BigInteger h) {
-    super();
-    this.a = a;
-    this.b = b;
-    this.order = order;
-    this.h = h;
-    this.finiteField = finiteField;
-    this.generator = this.getElement(gx, gy);
+		/* if (!isValid()) { throw new IllegalArgumentException("Curve parameters are not valid"); } */
+	}
 
-    /*if (!isValid()) {
-      throw new IllegalArgumentException("Curve parameters are not valid");
-    }*/
+	protected AbstractEC(F finitefield, D a, D b, BigInteger order, BigInteger h) {
+		super();
+		this.a = a;
+		this.b = b;
+		this.order = order;
+		this.h = h;
+		this.finiteField = finitefield;
+		this.generator = this.computeGenerator();
 
-  }
+		if (!isValid()) {
+			throw new IllegalArgumentException("Curve parameters are not valid");
+		}
+	}
 
-  protected AbstractEC(FiniteField Finitefiled, D a, D b, BigInteger order, BigInteger h) {
-    super();
-    this.a = a;
-    this.b = b;
-    this.order = order;
-    this.h = h;
-    this.finiteField = Finitefiled;
-    this.generator = this.computeGenerator();
+	@Override
+	protected E abstractGetDefaultGenerator() {
+		return this.generator;
+	}
 
-    if (!isValid()) {
-      throw new IllegalArgumentException("Curve parameters are not valid");
-    }
-  }
+	protected E computeGenerator() {
+		E e = (E) this.getRandomElement().selfApply(this.getH());
+		while (!this.isGenerator(e)) {
+			e = this.getRandomElement();
+		}
+		return e;
+	}
 
-  @Override
-  protected E abstractGetDefaultGenerator() {
-    return this.generator;
-  }
+	@Override
+	protected boolean abstractIsGenerator(Element element) {
+		E e = (E) element;
+		e = (E) e.selfApply(this.getOrder());
+		return MathUtil.isPrime(this.getOrder()) && e.isZero();
+	}
 
-  protected E computeGenerator() {
-    E e = (E) this.getRandomElement().selfApply(this.getH());
-    while (!this.isGenerator(e)) {
-      e = this.getRandomElement();
-    }
-    return e;
-  }
+	@Override
+	protected abstract E abstractInvert(Element element);
 
-  @Override
-  protected boolean abstractIsGenerator(Element element) {
-    E e = (E) element;
-    e = (E) e.selfApply(this.getOrder());
-    return MathUtil.isPrime(this.getOrder()) && e.isZero();
-  }
+	@Override
+	protected abstract E abstractGetIdentityElement();
 
-  @Override
-  protected abstract E abstractInvert(Element element);
+	@Override
+	protected BigInteger abstractGetOrder() {
+		return this.order;
+	}
 
-  @Override
-  protected abstract E abstractGetIdentityElement();
+	@Override
+	protected E abstractGetElement(BigInteger value) {
+		if (value.equals(zero)) {
+			return this.getIdentityElement();
+		} else {
+			BigInteger[] result = MathUtil.unpair(value);
+			D x = (D) this.getFiniteField().getElement(result[0]);
+			D y = (D) this.getFiniteField().getElement(result[1]);
 
-  @Override
-  protected BigInteger abstractGetOrder() {
-    return this.order;
-  }
+			return this.getElement(x, y);
 
-  @Override
-  protected E abstractGetElement(BigInteger value) {
-    if (value.equals(zero)) {
-      return this.getIdentityElement();
-    } else {
-      BigInteger[] result = MathUtil.unpair(value);
-      D x = (D) this.getFiniteField().getElement(result[0]);
-      D y = (D) this.getFiniteField().getElement(result[1]);
-      
-      return this.getElement(x, y);
+		}
+	}
 
-    }
-  }
+	public E getElement(D x, D y) {
+		if (x == zero || y == zero) {
+			throw new IllegalArgumentException("One coordinate is zero");
+		} else {
+			return abstractGetElement(x, y);
+		}
 
-  public E getElement(D x, D y) {
-	  if (x == zero || y == zero) {
-        throw new IllegalArgumentException("One coordinate is zero");
-      } else {
-          return abstractGetElement(x, y);
-      }
-      
-    
-  }
+	}
 
-  protected abstract E abstractGetElement(D x, D y);
+	protected abstract E abstractGetElement(D x, D y);
 
-  @Override
-  protected E abstractGetRandomElement(Random random) {
-    if (this.getDefaultGenerator() != null) {
-      D r = (D) this.getFiniteField().getRandomElement(random);
-      return (E) this.getDefaultGenerator().selfApply(r);
-    } else {
-      return this.getRandomElementWithoutGenerator(random);
-    }
+	@Override
+	protected E abstractGetRandomElement(Random random) {
+		if (this.getDefaultGenerator() != null) {
+			D r = (D) this.getFiniteField().getRandomElement(random);
+			return (E) this.getDefaultGenerator().selfApply(r);
+		} else {
+			return this.getRandomElementWithoutGenerator(random);
+		}
 
-  }
+	}
 
-  /**
-   * Returns random element without knowing a generator of the group
-   * <p>
-   * @param random
-   * @return
-   */
-  protected abstract E getRandomElementWithoutGenerator(Random random);
+	/**
+	 * Returns random element without knowing a generator of the group
+	 * <p>
+	 * @param random
+	 * @return
+	 */
+	protected abstract E getRandomElementWithoutGenerator(Random random);
 
-  @Override
-  protected boolean abstractContains(BigInteger value) {
-    BigInteger[] result = MathUtil.unpair(value);
-    D x = (D) this.getFiniteField().getElement(result[0]);
-    D y = (D) this.getFiniteField().getElement(result[1]);
-    return this.contains(x, y);
-  }
+	@Override
+	protected boolean abstractContains(BigInteger value) {
+		BigInteger[] result = MathUtil.unpair(value);
+		D x = (D) this.getFiniteField().getElement(result[0]);
+		D y = (D) this.getFiniteField().getElement(result[1]);
+		return this.contains(x, y);
+	}
 
-  /*
-   * --- Abstract methods - must be implemented in concrete classes ---
-   */
-  protected abstract Boolean contains(D x, D y);
-  protected abstract Boolean contains(D x);
+	/*
+	 * --- Abstract methods - must be implemented in concrete classes ---
+	 */
+	protected abstract Boolean contains(D x, D y);
 
-  protected abstract boolean isValid();
+	protected abstract Boolean contains(D x);
 
-  /*
-   * --- Getter methods for additional fields ---
-   */
-  public FiniteField getFiniteField() {
-    return finiteField;
-  }
+	protected abstract boolean isValid();
 
-  public D getB() {
-    return b;
-  }
+	/*
+	 * --- Getter methods for additional fields ---
+	 */
+	public F getFiniteField() {
+		return this.finiteField;
+	}
 
-  public D getA() {
-    return a;
-  }
+	public D getB() {
+		return this.b;
+	}
 
-  public BigInteger getH() {
-    return h;
-  }
+	public D getA() {
+		return this.a;
+	}
+
+	public BigInteger getH() {
+		return this.h;
+	}
+
+	@Override
+	public String standardToStringContent() {
+		return this.getA().getValue() + "," + getB().getValue();
+	}
 
 }
