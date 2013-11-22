@@ -10,52 +10,62 @@ import java.math.BigInteger;
 import java.util.Random;
 
 /**
- * This class represents the concept of an identity function f:X->Z_2 with
- * f(x)=x mod N for all elements x in X.
+ * This class represents the concept of an identity function f:X->Z_2 with f(x)=x mod N for all elements x in X.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
 public class ModuloFunction
-       extends AbstractFunction<Set, ZMod, ZModElement> {
+			 extends AbstractFunction<Set, ZMod, ZModElement> {
 
-  private BigInteger modulus;
+	private final BigInteger modulus;
 
-  private ModuloFunction(final Set domain, final ZMod coDomain, final BigInteger modulus) {
-    super(domain, coDomain);
-    this.modulus = modulus;
-  }
+	private ModuloFunction(final Set domain, final ZMod coDomain) {
+		super(domain, coDomain);
+		this.modulus = coDomain.getModulus();
+	}
 
-  public BigInteger getModulus() {
-    return this.modulus;
-  }
+	public BigInteger getModulus() {
+		return this.modulus;
+	}
 
-  @Override
-  protected boolean standardIsEqual(Function function) {
-    return this.getModulus().equals(((ModuloFunction) function).getModulus());
-  }
+	@Override
+	protected boolean standardIsEqual(Function function) {
+		return this.getModulus().equals(((ModuloFunction) function).getModulus());
+	}
 
-  //
-  // The following protected method implements the abstract method from {@code AbstractFunction}
-  //
-  @Override
-  protected ZModElement abstractApply(final Element element, final Random random) {
-    return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
-  }
+	//
+	// The following protected method implements the abstract method from {@code AbstractFunction}
+	//
+	@Override
+	protected ZModElement abstractApply(final Element element, final Random random) {
+		return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
+	}
 
-  //
-  // STATIC FACTORY METHODS
-  //
-  /**
-   * This is the standard constructor for this class. It creates an identity
-   * function for a given group.
-   * <p>
-   * @param domain The given Group
-   * @throws IllegalArgumentException if the group is null
-   */
-  public static ModuloFunction getInstance(final Set domain, BigInteger modulus) {
-    return new ModuloFunction(domain, ZMod.getInstance(modulus), modulus);
-  }
+	//
+	// STATIC FACTORY METHODS
+	//
+	/**
+	 * This is the standard constructor for this class. It creates an identity function for a given group.
+	 * <p>
+	 * @param domain  The given Group
+	 * @param modulus
+	 * @return
+	 * @throws IllegalArgumentException if the group is null
+	 */
+	public static ModuloFunction getInstance(final Set domain, BigInteger modulus) {
+		if (domain == null || modulus == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ModuloFunction(domain, ZMod.getInstance(modulus));
+	}
+
+	public static ModuloFunction getInstance(final Set domain, ZMod coDomain) {
+		if (domain == null || coDomain == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ModuloFunction(domain, coDomain);
+	}
 
 }
