@@ -60,9 +60,9 @@ public abstract class AbstractProofGenerator<PRS extends Set, PUS extends Set, P
 		return this.abstractGetProofSpace();
 	}
 
-	protected abstract E abstractGenerate(Element secretInput, Element publicInput, Element otherInput, Random random);
+	protected abstract E abstractGenerate(Element secretInput, Element publicInput, Element proverID, Random random);
 
-	protected abstract BooleanElement abstractVerify(Element proof, Element publicInput, Element otherInput);
+	protected abstract BooleanElement abstractVerify(Element proof, Element publicInput, Element proverID);
 
 	protected abstract PRS abstractGetPrivateInputSpace();
 

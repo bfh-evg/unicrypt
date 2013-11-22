@@ -6,6 +6,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Random;
 
+// TODO Implement!
 public class ElGamalValidityProofGenerator
 	   extends AbstractProofGenerator<Set, Set, Set, Element> {
 
