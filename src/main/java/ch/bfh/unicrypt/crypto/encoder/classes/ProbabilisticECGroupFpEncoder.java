@@ -13,26 +13,35 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class ProbabilisticECGroupFpEncoder
-			 extends
-			 AbstractEncoder<ZModPrime, ECZModPrime, ZModElement, ECZModPrimeElement> {
+			 extends AbstractEncoder<ZModPrime, ECZModPrime, ZModElement, ECZModPrimeElement> {
 
 	protected static final int shift = 10;
 
-	protected ProbabilisticECGroupFpEncoder(Function encodingFunction,
-				 Function decodingFunction) {
-		super(encodingFunction, decodingFunction);
-		// TODO Auto-generated constructor stub
+	private ECZModPrime ec;
+
+	protected ProbabilisticECGroupFpEncoder(ECZModPrime ec) {
+		this.ec = ec;
+	}
+
+	@Override
+	protected Function abstractGetEncodingFunction() {
+		return new ECEncodingFunction(this.ec.getFiniteField(), this.ec);
+	}
+
+	@Override
+	protected Function abstractGetDecodingFunction() {
+		return new ECDecodingFunction(ec, this.ec.getFiniteField());
 	}
 
 	public static ProbabilisticECGroupFpEncoder getInstance(final ECZModPrime ec) {
-		ZModPrime zmodP = (ZModPrime) ec.getFiniteField();
-		return new ProbabilisticECGroupFpEncoder(new ECEncodingFunction(zmodP, ec),
-																						 new ECDecodingFunction(ec, zmodP));
+		if (ec == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ProbabilisticECGroupFpEncoder(ec);
 	}
 
 	static class ECEncodingFunction
-				 extends
-				 AbstractFunction<ZModPrime, ECZModPrime, ECZModPrimeElement> {
+				 extends AbstractFunction<ZModPrime, ECZModPrime, ECZModPrimeElement> {
 
 		protected ECEncodingFunction(ZModPrime domain, ECZModPrime coDomain) {
 			super(domain, coDomain);
@@ -73,8 +82,7 @@ public class ProbabilisticECGroupFpEncoder
 	}
 
 	static class ECDecodingFunction
-				 extends
-				 AbstractFunction<ECZModPrime, ZModPrime, ZModElement> {
+				 extends AbstractFunction<ECZModPrime, ZModPrime, ZModElement> {
 
 		protected ECDecodingFunction(ECZModPrime domain, ZModPrime coDomain) {
 			super(domain, coDomain);

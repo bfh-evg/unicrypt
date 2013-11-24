@@ -7,14 +7,33 @@ import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class IdentityEncoder
-       extends AbstractEncoder<Set, Set, Element, Element> {
+			 extends AbstractEncoder<Set, Set, Element, Element> {
 
-  protected IdentityEncoder(Function encodingFunction, Function decodingFunction) {
-    super(encodingFunction, decodingFunction);
-  }
+	private final Set set;
 
-  public static IdentityEncoder getInstance(Set domain) {
-    return new IdentityEncoder(IdentityFunction.getInstance(domain), IdentityFunction.getInstance(domain));
-  }
+	protected IdentityEncoder(Set set) {
+		this.set = set;
+	}
+
+	public Set getSet() {
+		return this.set;
+	}
+
+	@Override
+	protected Function abstractGetEncodingFunction() {
+		return IdentityFunction.getInstance(this.getSet());
+	}
+
+	@Override
+	protected Function abstractGetDecodingFunction() {
+		return IdentityFunction.getInstance(this.getSet());
+	}
+
+	public static IdentityEncoder getInstance(Set set) {
+		if (set == null) {
+			throw new IllegalArgumentException();
+		}
+		return new IdentityEncoder(set);
+	}
 
 }
