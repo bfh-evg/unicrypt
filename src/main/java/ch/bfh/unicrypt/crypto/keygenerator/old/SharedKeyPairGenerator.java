@@ -4,22 +4,23 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.old;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-
-/**
- *
- * @author rolfhaenni
- */
-public interface SharedKeyPairGenerator extends PublicKeyGenerator, SharedSecretKeyGenerator {
-
-  public Tuple combineKeyPairs(final Tuple... keyPairs);
-
-  public Element combinePrivateKeys(final Element... publicKeys);
-
-  public Element combinePublicKeys(final Element... publicKeys);
-
-  @Override
-  public Tuple combineKeys(final Element... keys);
-
+public interface SharedKeyPairGenerator {
+//import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+//import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+//
+///**
+// *
+// * @author rolfhaenni
+// */
+//public interface SharedKeyPairGenerator extends PublicKeyGenerator, SharedSecretKeyGenerator {
+//
+//  public Tuple combineKeyPairs(final Tuple... keyPairs);
+//
+//  public Element combinePrivateKeys(final Element... publicKeys);
+//
+//  public Element combinePublicKeys(final Element... publicKeys);
+//
+//  @Override
+//  public Tuple combineKeys(final Element... keys);
+//
 }
