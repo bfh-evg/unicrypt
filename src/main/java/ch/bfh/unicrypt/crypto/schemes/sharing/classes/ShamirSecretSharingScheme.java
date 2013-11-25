@@ -49,7 +49,6 @@ public class ShamirSecretSharingScheme
 
 	@Override
 	protected ProductGroup abstractGetShareSpace() {
-		//return ProductCyclicGroup.getInstance(this.zModPrime, ZMod.getInstance(this.getSize()));
 		return ProductGroup.getInstance(this.zModPrime, 2);
 	}
 
