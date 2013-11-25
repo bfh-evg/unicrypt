@@ -1,37 +1,40 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSetMembershipProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
 // TODO Implement!
 public class ElGamalValidityProofGenerator
-	   extends AbstractProofGenerator<Set, Set, Set, Element> {
+	   extends AbstractSetMembershipProofGenerator<SemiGroup, SemiGroup, Function, Element, Element> {
 
 	@Override
-	protected Element abstractGenerate(Element secretInput, Element publicInput, Element otherInput, Random random) {
+	protected Tuple abstractGenerate(Element secretInput, Element publicInput, Element proverID, Random random) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Element proof, Element publicInput, Element otherInput) {
+	protected BooleanElement abstractVerify(Element proof, Element publicInput, Element proverID) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	protected Set abstractGetPrivateInputSpace() {
+	protected SemiGroup abstractGetPrivateInputSpace() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	protected Set abstractGetPublicInputSpace() {
+	protected SemiGroup abstractGetPublicInputSpace() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	protected Set abstractGetProofSpace() {
+	protected ProductSet abstractGetProofSpace() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

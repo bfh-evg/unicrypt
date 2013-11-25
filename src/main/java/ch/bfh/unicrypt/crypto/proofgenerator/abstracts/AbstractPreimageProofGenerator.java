@@ -38,6 +38,7 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS 
 	}
 
 	public final ZMod getChallengeSpace() {
+		// TODO Change it! It's only correct if the private input space is not a product set!
 		return ZMod.getInstance(this.getPrivateInputSpace().getMinOrder());
 	}
 
@@ -83,10 +84,7 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS 
 
 	@Override
 	protected final Tuple abstractGenerate(final Element secretInput, final Element publicInput, final Element proverID, final Random random) {
-		if ((secretInput == null) || !this.getResponseSpace().contains(secretInput) || (publicInput == null)
-			   || !this.getCommitmentSpace().contains(publicInput)) {
-			throw new IllegalArgumentException();
-		}
+
 		final Element randomElement = this.getResponseSpace().getRandomElement(random);
 		final Element commitment = this.getProofFunction().apply(randomElement);
 		final Element challenge = this.createChallenge(commitment, publicInput, proverID);
@@ -105,10 +103,7 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS 
 
 	@Override
 	protected final BooleanElement abstractVerify(final Element proof, final Element publicInput, final Element proverID) {
-		if ((proof == null) || !this.getProofSpace().contains(proof)
-			   || (publicInput == null) || !this.getCommitmentSpace().contains(publicInput)) {
-			throw new IllegalArgumentException();
-		}
+
 		final Tuple proofT = (Tuple) proof;
 		final Element challenge = this.createChallenge(this.getCommitment(proofT), publicInput, proverID);
 		final Element left = this.getProofFunction().apply(this.getResponse(proofT));
