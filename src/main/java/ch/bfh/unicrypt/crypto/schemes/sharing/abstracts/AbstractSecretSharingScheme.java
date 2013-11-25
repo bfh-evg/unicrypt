@@ -57,7 +57,7 @@ public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Ele
 		return this.abstractRecover(shares);
 	}
 
-	protected int getThreshold() {
+	protected int getThreshold() { // this method is not really needed here, but it simplifies the method recover
 		return this.getSize();
 	}
 

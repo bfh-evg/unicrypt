@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -112,9 +113,9 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		if (this.isTuple() && hashMethod.isRecursive()) {
 			Tuple tuple = (Tuple) this;
 			int arity = tuple.getArity();
-			FiniteByteArrayElement[] hashValues = new FiniteByteArrayElement[arity];
+			ByteArrayElement[] hashValues = new ByteArrayElement[arity];
 			for (int i = 0; i < arity; i++) {
-				hashValues[i] = tuple.getAt(i).getHashValue(hashMethod);
+				hashValues[i] = tuple.getAt(i).getHashValue(hashMethod).getByteArrayElement();
 			}
 			return ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(hashMethod);
 		}
@@ -123,7 +124,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		return FiniteByteArraySet.getInstance(hashMethod.getLength(), true).getElement(messageDigest.digest(this.getValue().toByteArray()));
 	}
 
-  //
+	//
 	// The following methods are equivalent to corresponding Set methods
 	//
 	/**
@@ -234,7 +235,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		throw new UnsupportedOperationException();
 	}
 
-  //
+	//
 	// The standard implementations of the following three methods are
 	// insufficient for elements.
 	//
@@ -255,7 +256,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		return this.standardIsEqual(element);
 	}
 
-  //
+	//
 	// The following protected methods are standard implementations, which may change in sub-classes
 	//
 	protected BigInteger standardGetValue() {
