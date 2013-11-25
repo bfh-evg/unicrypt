@@ -15,7 +15,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -35,6 +34,14 @@ public class ShamirSecretSharingScheme
 		this.polynomialRing = PolynomialRing.getInstance(zModPrime);
 	}
 
+	public ZModPrime getZModPrime() {
+		return this.zModPrime;
+	}
+
+	public PolynomialRing getPolynomialRing() {
+		return this.polynomialRing;
+	}
+
 	@Override
 	protected ZModPrime abstractGetMessageSpace() {
 		return this.zModPrime;
@@ -48,74 +55,66 @@ public class ShamirSecretSharingScheme
 
 	@Override
 	protected Tuple[] abstractShare(Element message, Random random) {
-		
-		if (!zModPrime.contains(message)){
-			throw new IllegalArgumentException();
-		}
-		
+
 		// create an array of coefficients with size threshold
 		// the coefficient of degree 0 is fixed (message)
 		// all other coefficients are random
-		DualisticElement [] coefficients = new DualisticElement[getThreshold()];
+		DualisticElement[] coefficients = new DualisticElement[getThreshold()];
 		coefficients[0] = (DualisticElement) message;
-		for (int i = 1; i < getThreshold(); i++){
-			coefficients[i] = zModPrime.getRandomElement(random);
+		for (int i = 1; i < getThreshold(); i++) {
+			coefficients[i] = this.getZModPrime().getRandomElement(random);
 		}
-		
+
 		// create a polynomial out of the coefficients
-		final PolynomialElement polynomial = polynomialRing.getElement(coefficients);
-		
+		final PolynomialElement polynomial = this.getPolynomialRing().getElement(coefficients);
+
 		// create a tuple which stores the shares
 		Tuple[] shares = new Tuple[getSize()];
-		DualisticElement xVal = null;
-		
+		DualisticElement xVal;
+
 		// populate the tuple array with tuples of x and y values
-		for (int i = 0; i < getSize(); i++){
-			xVal = zModPrime.getElement(BigInteger.valueOf(i+1));
+		for (int i = 0; i < getSize(); i++) {
+			xVal = this.getZModPrime().getElement(BigInteger.valueOf(i + 1));
 			shares[i] = ProductSet.getTuple(xVal, polynomial.evaluate(xVal));
 		}
-		
+
 		return shares;
 	}
 
 	@Override
 	protected ZModElement abstractRecover(Element[] shares) {
-		
-		if (!(shares instanceof Tuple[]) || shares == null || shares.length < getThreshold()){
-			throw new IllegalArgumentException();
-		}
-		
+
 		// make sure that we have a tuple array
-		Tuple [] points = (Tuple[])shares;
-		
+		Tuple[] points = (Tuple[]) shares;
+		int length = points.length;
+
 		// Calculating the lagrange coefficients for each point we got
-		DualisticElement product = null;
-		DualisticElement [] lagrangeCoefficients = new DualisticElement[points.length];
-		for (int j = 0; j < lagrangeCoefficients.length; j++){
+		DualisticElement product;
+		DualisticElement[] lagrangeCoefficients = new DualisticElement[length];
+		for (int j = 0; j < length; j++) {
 			product = null;
 			DualisticElement elementJ = (DualisticElement) points[j].getAt(0);
-			for (int l = 0; l < lagrangeCoefficients.length; l++){
+			for (int l = 0; l < length; l++) {
 				DualisticElement elementL = (DualisticElement) points[l].getAt(0);
-				if (!elementJ.equals(elementL)){
-					if (product == null){
+				if (!elementJ.equals(elementL)) {
+					if (product == null) {
 						product = elementL.divide(elementL.subtract(elementJ));
-					}
-					else {
+					} else {
 						product = product.multiply(elementL.divide(elementL.subtract(elementJ)));
 					}
 				}
 			}
 			lagrangeCoefficients[j] = product;
 		}
-		
+
 		// multiply the y-value of the point with the lagrange coefficient and sum everything up
-		ZModElement result = zModPrime.getIdentityElement();
-		for (int j = 0; j < lagrangeCoefficients.length; j++){
+		ZModElement result = this.getZModPrime().getIdentityElement();
+		for (int j = 0; j < length; j++) {
 			DualisticElement value = (DualisticElement) points[j].getAt(1);
 			result = result.add(value.multiply(lagrangeCoefficients[j]));
 		}
-		
-		return result;	
+
+		return result;
 	}
 
 	public static ShamirSecretSharingScheme getInstance(ZModPrime zModPrime, int size, int threshold) {
