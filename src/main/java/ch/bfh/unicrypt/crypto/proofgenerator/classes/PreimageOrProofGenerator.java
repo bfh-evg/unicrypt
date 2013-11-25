@@ -1,247 +1,245 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractProofGenerator;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.HashMethod;
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Random;
 
 // TODO Implement!
 public class PreimageOrProofGenerator
-	   extends AbstractProofGenerator<Set, Set, Set, Element> {
+	   extends AbstractProofGenerator<ProductSet, ProductSet, ProductSet, Tuple> {
 
-	@Override
-	protected Element abstractGenerate(Element secretInput, Element publicInput, Element otherInput, Random random) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	private final Function[] proofFunctions;
+	private final ProductFunction proofFunction;
+	private final HashMethod hashMethod;
+
+	protected PreimageOrProofGenerator(final Function[] functions, HashMethod hashMethod) {
+		this.proofFunctions = functions;
+		this.proofFunction = ProductFunction.getInstance(functions);
+		this.hashMethod = hashMethod;
+	}
+
+	public static PreimageOrProofGenerator getInstance(Function[] proofFunctions) {
+		return PreimageOrProofGenerator.getInstance(proofFunctions, HashMethod.DEFAULT);
+	}
+
+	public static PreimageOrProofGenerator getInstance(Function[] proofFunctions, HashMethod hashMethod) {
+		if (proofFunctions == null || proofFunctions.length < 2 || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new PreimageOrProofGenerator(proofFunctions, hashMethod);
+	}
+
+	public static PreimageOrProofGenerator getInstance(final Function proofFunction, int arity) {
+		return PreimageOrProofGenerator.getInstance(proofFunction, arity, HashMethod.DEFAULT);
+	}
+
+	public static PreimageOrProofGenerator getInstance(final Function proofFunction, int arity, final HashMethod hashMethod) {
+		if (proofFunction == null || arity < 2 || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		Function[] functions = new Function[arity];
+		Arrays.fill(functions, proofFunction);
+		return new PreimageOrProofGenerator(ProductFunction.getInstance(proofFunction, arity).getAll(), hashMethod);
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Element proof, Element publicInput, Element otherInput) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected ProductSet abstractGetPrivateInputSpace() {
+		// TODO Set X int (any domain of the proofFunctions X index of the known value)
+		return null;
 	}
 
 	@Override
-	protected Set abstractGetPrivateInputSpace() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected ProductSet abstractGetPublicInputSpace() {
+		return proofFunction.getCoDomain();
 	}
 
 	@Override
-	protected Set abstractGetPublicInputSpace() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected ProductSet abstractGetProofSpace() {
+		return ProductSet.getInstance(
+			   this.getCommitmentSpace(),
+			   ProductSet.getInstance(this.getChallengeSpace(), this.proofFunctions.length),
+			   this.getResponseSpace());
+	}
+
+	public ProductSet getCommitmentSpace() {
+		return this.proofFunction.getCoDomain();
+	}
+
+	public ProductSet getResponseSpace() {
+		return this.proofFunction.getDomain();
+	}
+
+	public ZMod getChallengeSpace() {
+		return ZMod.getInstance(this.getMinOrder(this.proofFunction.getDomain()));
+	}
+
+	private BigInteger getMinOrder(Set set) {
+		if (!set.isProduct()) {
+			return set.getMinOrder();
+		}
+		BigInteger min = BigInteger.ZERO;
+		for (int i = 0; i < ((ProductSet) set).getArity(); i++) {
+			if (i == 0) {
+				min = this.getMinOrder(((ProductSet) set).getAt(i));
+			} else {
+				min = min.min(this.getMinOrder(((ProductSet) set).getAt(i)));
+			}
+		}
+		return min;
+	}
+
+	public final Tuple getCommitments(final Element proof) {
+		if (!proof.isTuple() || ((Tuple) proof).getArity() != 3) {
+			throw new IllegalArgumentException();
+		}
+		return (Tuple) ((Tuple) proof).getAt(0);
+	}
+
+	public final Tuple getChallenges(final Element proof) {
+		if (!proof.isTuple() || ((Tuple) proof).getArity() != 3) {
+			throw new IllegalArgumentException();
+		}
+		return (Tuple) ((Tuple) proof).getAt(1);
+	}
+
+	public final Tuple getResponses(final Element proof) {
+		if (!proof.isTuple() || ((Tuple) proof).getArity() != 3) {
+			throw new IllegalArgumentException();
+		}
+		return (Tuple) ((Tuple) proof).getAt(2);
+	}
+
+	public Tuple generate(Element privateInput, Element publicInput, Element proverID, Random random) {
+		if (privateInput == null || !privateInput.isTuple() || ((Tuple) privateInput).getArity() != 2 || !this.getPublicInputSpace().contains(publicInput)) {
+			throw new IllegalArgumentException();
+		}
+		// Check private input space based on the index
+		final int index = ((Tuple) privateInput).getAt(1).getValue().intValue();
+		if (!this.proofFunctions[index].getDomain().contains(((Tuple) privateInput).getAt(0))) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractGenerate(privateInput, publicInput, proverID, random);
 	}
 
 	@Override
-	protected Set abstractGetProofSpace() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected Tuple abstractGenerate(Element privateInput, Element publicInput, Element proverId, Random random) {
+
+		// Extract secret input value and index from private input
+		final Element secret = ((Tuple) privateInput).getAt(0);
+		final int index = ((Tuple) privateInput).getAt(1).getValue().intValue();
+
+		// Create lists for proof elements (t, c, s)
+		final Element[] commitments = new Element[proofFunctions.length];
+		final Element[] challenges = new Element[proofFunctions.length];
+		final Element[] responses = new Element[proofFunctions.length];
+
+		// Get challenge space and initialze the summation of the challenges
+		final ZMod challengeSpace = this.getChallengeSpace();
+		ZModElement sumOfChallenges = challengeSpace.getIdentityElement();
+		int z = challengeSpace.getOrder().intValue();
+		// Create proof elements (simulate proof) for all but the known secret
+		for (int i = 0; i < proofFunctions.length; i++) {
+			if (i == index) {
+				continue;
+			}
+
+			// Create random challenge and response
+			ZModElement c = challengeSpace.getRandomElement(random);
+			Function f = proofFunctions[i];
+			Element s = f.getDomain().getRandomElement(random);
+
+			sumOfChallenges = sumOfChallenges.add(c);
+			challenges[i] = c;
+			responses[i] = s;
+			// Calculate commitment based on the the public value and the random challenge and response
+			// t = f(s)/(y^c)
+			commitments[i] = f.apply(s).apply(((Tuple) publicInput).getAt(i).selfApply(c).invert());
+		}
+
+		// Create the proof of the known secret (normal preimage-proof, but with a special challange)
+		// - Create random element and calculate commitment
+		final Element randomElement = proofFunctions[index].getDomain().getRandomElement(random);
+		commitments[index] = proofFunctions[index].apply(randomElement);
+
+		// - Create overall proof challenge
+		final ZModElement challenge = this.createChallenge(ProductGroup.getTuple(commitments), publicInput, proverId);
+		// - Calculate challenge based on the overall challenge and the chosen challenges for the simulated proofs
+		challenges[index] = challenge.apply(sumOfChallenges.invert());
+		// - finally compute response element
+		// TODO Handle case where randomElement is a Tuple (=> domain is a ProductSet)
+		responses[index] = randomElement.apply(randomElement.getSet().getElement(challenges[index]).selfApply(secret));
+
+		// TODO Remove Logs
+		System.out.println("Public input " + Arrays.toString(((Tuple) publicInput).getAll()));
+		System.out.println("Commitments " + Arrays.toString(commitments));
+		System.out.println("Challenges " + Arrays.toString(challenges));
+		System.out.println("Responses " + Arrays.toString(responses));
+		System.out.println("Challenge " + challenge);
+		System.out.println("Randomness " + randomElement);
+
+		// Return proof
+		return this.getProofSpace().getElement(ProductSet.getTuple(commitments),
+											   ProductSet.getTuple(challenges),
+											   ProductSet.getTuple(responses));
+
+	}
+
+	protected ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {
+		Tuple toHash = (proverId == null
+			   ? ProductSet.getTuple(publicInput, commitment)
+			   : ProductSet.getTuple(publicInput, commitment, proverId));
+
+		FiniteByteArrayElement hashValue = FiniteByteArraySet.getInstance(200).getElement(127);//toHash.getHashValue(hashMethod);
+		return ModuloFunction.getInstance(hashValue.getSet(), this.getChallengeSpace()).apply(hashValue);
+	}
+
+	@Override
+	protected BooleanElement abstractVerify(Element proof, Element publicInput, Element proverId) {
+
+		// Extract (t, c, s)
+		final Tuple commitments = this.getCommitments(proof);
+		final Tuple challenges = getChallenges(proof);
+		final Tuple responses = getResponses(proof);
+
+		// 1. Check whether challenges sum up to the overall challenge
+		final ZModElement challenge = this.createChallenge(ProductSet.getTuple(commitments), publicInput, proverId);
+		ZModElement sumOfChallenges = this.getChallengeSpace().getIdentityElement();
+		for (int i = 0; i < challenges.getArity(); i++) {
+			sumOfChallenges = sumOfChallenges.add(challenges.getAt(i));
+		}
+		if (!challenge.isEqual(sumOfChallenges)) {
+			return BooleanSet.FALSE;
+		}
+
+		// 2. Verify all subproofs
+		for (int i = 0; i < proofFunctions.length; i++) {
+			Element a = proofFunctions[i].apply(responses.getAt(i));
+			Element b = commitments.getAt(i).apply(((Tuple) publicInput).getAt(i).selfApply(challenges.getAt(i)));
+			// TODO Remove Log
+			System.out.println("a: " + a + ", b: " + b);
+			if (!a.isEqual(b)) {
+				return BooleanSet.FALSE;
+			}
+		}
+
+		// Proof is valid!
+		return BooleanSet.TRUE;
 	}
 
 }
-//public class PreimageOrProofGeneratorClass extends ProofGeneratorAbstract implements SigmaProofGenerator {
-//
-//  private SigmaProofGenerator sigmaProofGenerator;
-//  private final Function[] functions;
-//  private final ProductFunction function;
-//  private final HashAlgorithm hashAlgorithm;
-//  private final ConcatParameter concatParameter;
-//  private final Mapper mapper;
-//
-//  public PreimageOrProofGeneratorClass(final List<Function> functions) {
-//    this((Function[]) functions.toArray(), SigmaProofGenerator.DEFAULT_HASH_ALGORITHM,
-//         SigmaProofGenerator.DEFAULT_CONCAT_ALGORITHM,
-//         SigmaProofGenerator.DEFAULT_MAPPER);
-//  }
-//
-//  public PreimageOrProofGeneratorClass(final Function... functions) {
-//    this(functions, SigmaProofGenerator.DEFAULT_HASH_ALGORITHM,
-//         SigmaProofGenerator.DEFAULT_CONCAT_ALGORITHM,
-//         SigmaProofGenerator.DEFAULT_MAPPER);
-//  }
-//
-//  public PreimageOrProofGeneratorClass(final Function[] functions,
-//          final HashAlgorithm hashAlgorithm,
-//          final ConcatParameter concatParameter, final Mapper mapper) {
-//    function = new ProductFunction(functions);
-//
-//    this.hashAlgorithm = hashAlgorithm;
-//    this.concatParameter = concatParameter;
-//    this.mapper = mapper;
-//
-//
-//    this.functions = functions;
-//  }
-//
-//  /**
-//   * @param secretInput
-//   * @param index
-//   * @param publicInput
-//   * @param otherInput
-//   * @param random
-//   * @return
-//   */
-//  public Tuple generate(final Element secretInput, final int index,
-//          final Element publicInput, final Element otherInput,
-//          final Random random) {
-//
-//    if (function.getArityIn() != publicInput.getArity()) {
-//      throw new IllegalArgumentException("Arity of public input and proof function does not match");
-//    }
-//
-//    int n = publicInput.getArity();
-//    AtomicElement secret = (AtomicElement) secretInput;
-//
-//    ArrayList<Element> c = new ArrayList<Element>();
-//    ArrayList<Element> s = new ArrayList<Element>();
-//    for (int j = 0; j < n; j++) {
-//      c.add((AtomicElement) secret.getGroup().getRandomElement(random));
-//      s.add((AtomicElement) secret.getGroup().getRandomElement(random));
-//    }
-//
-//
-//    c.set(index, null);
-//    s.set(index, null);
-//
-//    ArrayList<Element> t = new ArrayList<Element>();
-//
-//    // compute the commitments
-//    for (int j = 0; j < n; j++) {
-//      if (j != index) {
-//        t.add(functions[j].apply(s.get(j)).apply(((Tuple) publicInput).getElementAt(j).selfApply((AtomicElement) c.get(j).invert())));
-//      } else {
-//        t.add(null);
-//      }
-//    }
-//
-//    final Element randomElement = functions[0].getDomain().getRandomElement(random);
-//    t.set(index, functions[index].apply(randomElement));
-//
-//    Tuple commitment = ProductGroup.createTupleElement(t);
-//
-//
-//    this.sigmaProofGenerator = new SigmaProofGenerator(functions[index], hashAlgorithm, concatParameter, mapper);
-//    AdditiveElement challenge = this.sigmaProofGenerator.createChallenge(commitment, publicInput, otherInput);
-//
-//    // Summing up all the c values, except the one for our value we want to prove
-//
-//    AdditiveElement sum_c = null;
-//    for (int j = 0; j < n; j++) {
-//      if (j != index) {
-//        if (sum_c == null) {
-//          sum_c = (AdditiveElement) c.get(j);
-//        } else {
-//          sum_c = sum_c.apply(c.get(j));
-//        }
-//      }
-//    }
-//
-//    // subtracting the sum from the challenge
-//    c.set(index, challenge.apply(sum_c.invert()));
-//
-//    s.set(index, (AtomicElement) randomElement.apply(c.get(index).selfApply(secret)));
-//
-//    Element tElement = ((ProductGroup) this.getCommitmentSpace()).getElement(t);
-//    Element cElement = ((ProductGroup) this.getChallengeSpace()).getElement(c);
-//    Element sElement = ((ProductGroup) this.getResponseSpace()).getElement(s);
-//
-//    return this.getProofSpace().getElement(tElement, cElement, sElement);
-//  }
-//
-//  /* (non-Javadoc)
-//   * @see ch.bfh.unicrypt.nizkp.interfaces.ProofGenerator#verify(ch.bfh.unicrypt.math.element.interfaces.Tuple, ch.bfh.unicrypt.math.element.interfaces.Element, ch.bfh.unicrypt.math.element.interfaces.Element)
-//   */
-//  public boolean verify(final Tuple proof, final Element publicInput,
-//          final Element otherInput) {
-//
-//    // Input validation
-//    if (proof == null || proof.getArity() != 3) {
-//      throw new IllegalArgumentException("Proof must have arity of 3");
-//    }
-//
-//    Tuple commitment = (Tuple) getCommitment(proof);
-//    Tuple response = (Tuple) getResponse(proof);
-//    Tuple challenge = (Tuple) getChallenge(proof);
-//
-//    if (commitment.getArity() != response.getArity() || response.getArity() != challenge.getArity()) {
-//      throw new IllegalArgumentException("Arities of commitment, challenge and response are not equal!");
-//    }
-//
-//    Element sApplied = null;
-//
-//    // applying function on all response values and check if correct
-//    for (int j = 0; j < response.getArity(); j++) {
-//      sApplied = functions[j].apply(response.getElementAt(j));
-//      if (!sApplied.getSet().areEqual(sApplied, commitment.getElementAt(j).apply(((Tuple) publicInput).getElementAt(j).selfApply((AtomicElement) challenge.getElementAt(j))))) {
-//        return false;
-//      }
-//    }
-//
-//    this.sigmaProofGenerator = new SigmaProofGenerator(functions[0], hashAlgorithm, concatParameter, mapper);
-//    AdditiveElement verificationChallenge = this.sigmaProofGenerator.createChallenge(commitment, publicInput, otherInput);
-//
-//    AdditiveElement sum_c = null;
-//    for (int j = 0; j < response.getArity(); j++) {
-//      if (sum_c == null) {
-//        sum_c = (AdditiveElement) challenge.getElementAt(j);
-//      } else {
-//        sum_c = sum_c.apply(challenge.getElementAt(j));
-//      }
-//    }
-//
-//    return sum_c.getGroup().areEqual(sum_c, verificationChallenge);
-//  }
-//
-//  @Override
-//  public ProductGroup getProofSpace() {
-//    return new ProductGroup(getCommitmentSpace(), getChallengeSpace(), getResponseSpace());
-//  }
-//
-//  @Override
-//  public ProductFunction getProofFunction() {
-//    return this.function;
-//  }
-//
-//  @Override
-//  public ProductGroup getCoDomain() {
-//    return (ProductGroup) super.getCoDomain();
-//  }
-//
-//  @Override
-//  public Group getCommitmentSpace() {
-//    return this.function.getCoDomain();
-//  }
-//
-//  public Group getChallengeSpace() {
-//    return this.function.getDomain();
-//  }
-//
-//  @Override
-//  public Group getResponseSpace() {
-//    return this.function.getDomain();
-//  }
-//
-//  @Override
-//  public Element getCommitment(Tuple proof) {
-//    return proof.getElementAt(0);
-//  }
-//
-//  @Override
-//  public Element getResponse(Tuple proof) {
-//    return proof.getElementAt(2);
-//  }
-//
-//  public Element getChallenge(Tuple proof) {
-//    return proof.getElementAt(1);
-//  }
-//
-//  @Override
-//  public HashFunction getHashFunction() {
-//    return this.sigmaProofGenerator.getHashFunction();
-//  }
-//
-//  @Override
-//  public Tuple generate(Element secretInput, Element publicInput,
-//          Element otherInput, Random random) {
-//    throw new UnsupportedOperationException("Please use the generate method with index.");
-//  }
-//
-//}
-
