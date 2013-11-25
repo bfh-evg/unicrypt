@@ -5,10 +5,9 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.math.BigInteger;
 
 /**
- * This abstract class represents the concept an element in a mathematical
- * group. It allows applying the group operation and other methods from a
- * {@link Group} in a convenient way. Most methods provided by {@link Element}
- * have an equivalent method in {@link Group}.
+ * This abstract class represents the concept an element in a mathematical group. It allows applying the group operation
+ * and other methods from a {@link Group} in a convenient way. Most methods provided by {@link Element} have an
+ * equivalent method in {@link Group}.
  * <p>
  * @see Group
  * <p>
@@ -18,85 +17,90 @@ import java.math.BigInteger;
  */
 public interface Element {
 
-  public boolean isAdditive();
+    public boolean isAdditive();
 
-  public boolean isMultiplicative();
+    public boolean isMultiplicative();
 
-  public boolean isConcatenative();
+    public boolean isConcatenative();
 
-  public boolean isDualistic();
+    public boolean isDualistic();
 
-  public boolean isTuple();
+    public boolean isTuple();
 
-  /**
-   *
-   * @return
-   */
-  public Set getSet();
+    /**
+     *
+     * @return
+     */
+    public Set getSet();
 
-  /**
-   * Returns the positive BigInteger value that corresponds the element.
-   * <p>
-   * @return The corresponding BigInteger value
-   */
-  public BigInteger getValue();
+    /**
+     * Returns the positive BigInteger value that corresponds the element.
+     * <p>
+     * @return The corresponding BigInteger value
+     */
+    public BigInteger getValue();
 
-  public FiniteByteArrayElement getHashValue();
+    public FiniteByteArrayElement getHashValue();
 
-  public FiniteByteArrayElement getHashValue(HashMethod hashMethod);
+    public FiniteByteArrayElement getHashValue(HashMethod hashMethod);
 
-  //
-  // The following methods are equivalent to corresponding Set methods
-  //
-  /**
-   * @see Group#apply(Element, Element)
-   */
-  public Element apply(Element element);
+      //
+    // The following methods are equivalent to corresponding Set methods
+    //
+    /**
+     * @see Group#apply(Element, Element)
+     */
+    public Element apply(Element element);
 
-  /**
-   * @see Group#applyInverse(Element, Element)
-   */
-  public Element applyInverse(Element element);
+    /**
+     * @see Group#applyInverse(Element, Element)
+     */
+    public Element applyInverse(Element element);
 
-  /**
-   * @see Group#selfApply(Element, BigInteger)
-   */
-  public Element selfApply(BigInteger amount);
+    /**
+     * @see Group#selfApply(Element, BigInteger)
+     */
+    public Element selfApply(BigInteger amount);
 
-  /**
-   * @see Group#selfApply(Element, Element)
-   */
-  public Element selfApply(Element amount);
+    /**
+     * @see Group#selfApply(Element, Element)
+     */
+    public Element selfApply(Element amount);
 
-  /**
-   * @see Group#selfApply(Element, int)
-   */
-  public Element selfApply(int amount);
+    /**
+     * @see Group#selfApply(Element, int)
+     */
+    public Element selfApply(int amount);
 
-  /**
-   * @see Group#selfApply(Element)
-   */
-  public Element selfApply();
+    /**
+     * @see Group#selfApply(Element)
+     */
+    public Element selfApply();
 
-  /**
-   * @see Group#invert(Element)
-   */
-  public Element invert();
+    /**
+     * @see Group#invert(Element)
+     */
+    public Element invert();
 
-  /**
-   * @see Group#isIdentityElement(Element)
-   */
-  public boolean isIdentity();
+    /**
+     * TODO: Sollte das nicht ein BooleanElement sein?
+     *
+     * @see Group#isIdentityElement(Element)
+     */
+    public boolean isIdentity();
 
-  /**
-   * @see CyclicGroup#isGenerator(Element)
-   */
-  public boolean isGenerator();
+    /**
+     * TODO: Sollte das nicht ein BooleanElement sein?
+     *
+     * @see CyclicGroup#isGenerator(Element)
+     */
+    public boolean isGenerator();
 
-  //
-  // The standard implementations of the following three methods are
-  // insufficient for elements.
-  //
-  public boolean isEqual(Element element);
+    //
+// TODO: Sollte das nicht ein BooleanElement sein?
+// The standard implementations of the following three methods are
+    // insufficient for elements.
+    //
+    public boolean isEqual(Element element);
 
 }

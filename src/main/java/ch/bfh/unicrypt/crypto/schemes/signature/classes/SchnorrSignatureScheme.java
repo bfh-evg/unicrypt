@@ -1,6 +1,47 @@
 package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
-public class SchnorrSignatureScheme {
+import ch.bfh.unicrypt.crypto.keygenerator.classes.SchnorrSignatureKeyPairGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
+
+public class SchnorrSignatureScheme<MS extends CyclicGroup, ME extends Element> extends AbstractRandomizedSignatureScheme<Set, Set, Set, Element, Element> {
+
+    private final MS cyclicGroup;
+    private final ME generator;
+    private Function encryptionFunctionLeft;
+    private Function encryptionFunctionRight;
+
+    protected SchnorrSignatureScheme(MS cyclicGroup, ME generator) {
+	this.cyclicGroup = cyclicGroup;
+	this.generator = generator;
+    }
+
+    @Override
+    protected KeyPairGenerator abstractGetKeyPairGenerator() {
+	return SchnorrSignatureKeyPairGenerator.getInstance(this.getGenerator());
+    }
+
+    @Override
+    public Function getSignatureFunction() {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Function getVerificationFunction() {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public final MS getCyclicGroup() {
+	return this.cyclicGroup;
+    }
+
+    public final ME getGenerator() {
+	return this.generator;
+    }
 //import java.util.Random;
 //
 //import ch.bfh.unicrypt.crypto.keygenerator.old.DDHGroupKeyPairGeneratorClass;
