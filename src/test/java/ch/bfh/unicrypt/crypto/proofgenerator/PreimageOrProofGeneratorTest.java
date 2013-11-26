@@ -31,7 +31,12 @@ public class PreimageOrProofGeneratorTest {
 	}
 
 	@Test
-	public void testProof() {
+	public void TestOrProof() {
+		this.testProof(2);
+		this.testProof(4);
+	}
+
+	public void testProof(int index) {
 
 		// y1 = f1(x) = g1^x
 		// y2 = f2(x) = g2^x
@@ -48,11 +53,16 @@ public class PreimageOrProofGeneratorTest {
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};
 		PreimageOrProofGenerator pg = PreimageOrProofGenerator.getInstance(functions);
 
-		//Element secret = this.Z_q.getElement(3);
-		//Element index = this.Z_q.getElement(2);
-		Element secret = Tuple.getInstance(Tuple.getInstance(this.Z_q.getElement(2)), Tuple.getInstance(this.Z_q.getElement(1)));
-		Element index = this.Z_q.getElement(4);
-		Tuple privateInput = Tuple.getInstance(secret, index);
+		// Default
+		Element secret = this.Z_q.getElement(3);
+		Element indexE = this.Z_q.getElement(2);
+		if (index == 4) {
+			secret = Tuple.getInstance(Tuple.getInstance(this.Z_q.getElement(2)), Tuple.getInstance(this.Z_q.getElement(1)));
+			indexE = this.Z_q.getElement(index);
+		}
+
+		//Element
+		Tuple privateInput = Tuple.getInstance(secret, indexE);
 		Tuple publicInput = Tuple.getInstance(
 			   this.G_q.getRandomElement(),
 			   this.G_q2.getRandomElement(),
@@ -76,12 +86,9 @@ public class PreimageOrProofGeneratorTest {
 			   SelfApplyFunction.getInstance(this.G_q, this.Z_q).partiallyApply(h, 0)),
 			   ApplyFunction.getInstance(this.G_q));
 
-		//Element ret = f.apply(ProductSet.getTuple(this.Z_q.getElement(2)), ProductSet.getTuple(this.Z_q.getElement(1)));
-		//System.out.println(ret);
 		return f;
 	}
 
-	@Test
 	public void testFunction1() {
 		Element g = this.G_q.getElement(4);
 		Element h = this.G_q.getElement(6);
@@ -101,7 +108,6 @@ public class PreimageOrProofGeneratorTest {
 		System.out.println(ret3);
 	}
 
-	@Test
 	public void testFunction2() {
 		Element g = this.G_q.getElement(4);
 		Element h = this.G_q.getElement(6);

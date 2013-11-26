@@ -4,9 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.util.Arrays;
 
 /**
  *
@@ -112,7 +114,8 @@ public class ProductGroup
 			}
 		}
 		if (isCyclic) {
-			return ProductCyclicGroup.getInstance(groups);
+			CyclicGroup[] cGroups = Arrays.copyOf(groups, groups.length, CyclicGroup[].class);
+			return ProductCyclicGroup.getInstance(cGroups);
 		}
 		return new ProductGroup(groups);
 	}
@@ -121,8 +124,8 @@ public class ProductGroup
 		if ((group == null) || (arity < 0)) {
 			throw new IllegalArgumentException();
 		}
-		if (group.isCyclic()) {
-			return ProductCyclicGroup.getInstance(group, arity);
+		if (group.isCyclic() && arity < 2) {
+			return ProductCyclicGroup.getInstance((CyclicGroup) group, arity);
 		}
 		if (arity == 0) {
 			return new ProductGroup(new Group[]{});

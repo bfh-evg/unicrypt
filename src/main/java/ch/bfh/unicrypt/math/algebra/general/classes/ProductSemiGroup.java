@@ -5,9 +5,11 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  *
@@ -181,7 +183,8 @@ public class ProductSemiGroup
 			}
 		}
 		if (isMonoid) {
-			return ProductMonoid.getInstance(semiGroups);
+			Monoid[] monoids = Arrays.copyOf(semiGroups, semiGroups.length, Monoid[].class);
+			return ProductMonoid.getInstance(monoids);
 		}
 		return new ProductSemiGroup(semiGroups);
 	}
@@ -191,7 +194,7 @@ public class ProductSemiGroup
 			throw new IllegalArgumentException();
 		}
 		if (semiGroup.isMonoid()) {
-			return ProductMonoid.getInstance(semiGroup, arity);
+			return ProductMonoid.getInstance((Monoid) semiGroup, arity);
 		}
 		if (arity == 0) {
 			return new ProductSemiGroup(new SemiGroup[]{});

@@ -6,11 +6,13 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -369,7 +371,8 @@ public class ProductSet
 			}
 		}
 		if (isSemiGroup) {
-			return ProductSemiGroup.getInstance(sets);
+			SemiGroup[] semiGroups = Arrays.copyOf(sets, sets.length, SemiGroup[].class);
+			return ProductSemiGroup.getInstance(semiGroups);
 		}
 		return new ProductSet(sets);
 	}
@@ -379,7 +382,7 @@ public class ProductSet
 			throw new IllegalArgumentException();
 		}
 		if (set.isSemiGroup()) {
-			return ProductSemiGroup.getInstance(set, arity);
+			return ProductSemiGroup.getInstance((SemiGroup) set, arity);
 		}
 		if (arity == 0) {
 			return new ProductSet(new Set[]{});

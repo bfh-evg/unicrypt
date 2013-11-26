@@ -5,9 +5,11 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  *
@@ -126,7 +128,8 @@ public class ProductMonoid
 			}
 		}
 		if (isGroup) {
-			return ProductGroup.getInstance(monoids);
+			Group[] groups = Arrays.copyOf(monoids, monoids.length, Group[].class);
+			return ProductGroup.getInstance(groups);
 		}
 		return new ProductMonoid(monoids);
 	}
@@ -136,7 +139,7 @@ public class ProductMonoid
 			throw new IllegalArgumentException();
 		}
 		if (monoid.isGroup()) {
-			return ProductGroup.getInstance(monoid, arity);
+			return ProductGroup.getInstance((Group) monoid, arity);
 		}
 		if (arity == 0) {
 			return new ProductMonoid(new Monoid[]{});

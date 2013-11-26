@@ -94,8 +94,8 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS 
 
 	protected ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {
 		Tuple toHash = (proverId == null
-			   ? ProductSet.getTuple(publicInput, commitment)
-			   : ProductSet.getTuple(publicInput, commitment, proverId));
+			   ? Tuple.getInstance(publicInput, commitment)
+			   : Tuple.getInstance(publicInput, commitment, proverId));
 
 		FiniteByteArrayElement hashValue = toHash.getHashValue(hashMethod);
 		return ModuloFunction.getInstance(hashValue.getSet(), this.getChallengeSpace()).apply(hashValue);
