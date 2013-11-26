@@ -7,7 +7,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -125,6 +124,7 @@ public class PreimageOrProofGenerator
 		return (Tuple) ((Tuple) proof).getAt(2);
 	}
 
+	@Override
 	public Tuple generate(Element privateInput, Element publicInput, Element proverID, Random random) {
 		if (privateInput == null || !privateInput.isTuple() || ((Tuple) privateInput).getArity() != 2 || !this.getPublicInputSpace().contains(publicInput)) {
 			throw new IllegalArgumentException();
@@ -178,12 +178,14 @@ public class PreimageOrProofGenerator
 		commitments[index] = proofFunctions[index].apply(randomElement);
 
 		// - Create overall proof challenge
-		final ZModElement challenge = this.createChallenge(ProductGroup.getTuple(commitments), publicInput, proverId);
+		final ZModElement challenge = this.createChallenge(Tuple.getInstance(commitments), publicInput, proverId);
 		// - Calculate challenge based on the overall challenge and the chosen challenges for the simulated proofs
-		challenges[index] = challenge.apply(sumOfChallenges.invert());
+		challenges[index] = challenge.subtract(sumOfChallenges);
 		// - finally compute response element
 		// TODO Handle case where randomElement is a Tuple (=> domain is a ProductSet)
-		responses[index] = randomElement.apply(randomElement.getSet().getElement(challenges[index]).selfApply(secret));
+		// s = r + c*x
+		responses[index] = randomElement.apply(secret.selfApply(challenges[index]));
+		//responses[index] = randomElement.apply(randomElement.getSet().getElement(challenges[index]).selfApply(secret));
 
 		// TODO Remove Logs
 		System.out.println("Public input " + Arrays.toString(((Tuple) publicInput).getAll()));
@@ -194,16 +196,16 @@ public class PreimageOrProofGenerator
 		System.out.println("Randomness " + randomElement);
 
 		// Return proof
-		return this.getProofSpace().getElement(ProductSet.getTuple(commitments),
-											   ProductSet.getTuple(challenges),
-											   ProductSet.getTuple(responses));
+		return this.getProofSpace().getElement(Tuple.getInstance(commitments),
+											   Tuple.getInstance(challenges),
+											   Tuple.getInstance(responses));
 
 	}
 
 	protected ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {
 		Tuple toHash = (proverId == null
-			   ? ProductSet.getTuple(publicInput, commitment)
-			   : ProductSet.getTuple(publicInput, commitment, proverId));
+			   ? Tuple.getInstance(publicInput, commitment)
+			   : Tuple.getInstance(publicInput, commitment, proverId));
 
 		FiniteByteArrayElement hashValue = FiniteByteArraySet.getInstance(200).getElement(127);//toHash.getHashValue(hashMethod);
 		return ModuloFunction.getInstance(hashValue.getSet(), this.getChallengeSpace()).apply(hashValue);
@@ -218,7 +220,7 @@ public class PreimageOrProofGenerator
 		final Tuple responses = getResponses(proof);
 
 		// 1. Check whether challenges sum up to the overall challenge
-		final ZModElement challenge = this.createChallenge(ProductSet.getTuple(commitments), publicInput, proverId);
+		final ZModElement challenge = this.createChallenge(Tuple.getInstance(commitments), publicInput, proverId);
 		ZModElement sumOfChallenges = this.getChallengeSpace().getIdentityElement();
 		for (int i = 0; i < challenges.getArity(); i++) {
 			sumOfChallenges = sumOfChallenges.add(challenges.getAt(i));

@@ -6,6 +6,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -17,8 +18,8 @@ import java.util.NoSuchElementException;
  * @author rolfhaenni
  */
 public class Tuple
-			 extends AbstractElement<ProductSet, Tuple>
-			 implements Compound<Tuple, Element> {
+	   extends AbstractElement<ProductSet, Tuple>
+	   implements Compound<Tuple, Element> {
 
 	private final Element[] elements;
 	private final int arity;
@@ -165,6 +166,33 @@ public class Tuple
 			separator = ", ";
 		}
 		return result;
+	}
+
+	/**
+	 * This is a static factory method to construct a composed element without
+	 * the need of constructing the corresponding product or power group
+	 * beforehand. The input elements are given as an array.
+	 * <p>
+	 * <p/>
+	 * @param elements The array of input elements
+	 * @return The corresponding tuple element
+	 * @throws IllegalArgumentException if {@literal elements} is null or
+	 *                                  contains null
+	 */
+	public static Tuple getInstance(Element... elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		int arity = elements.length;
+		final Set[] sets = new Set[arity];
+
+		for (int i = 0; i < arity; i++) {
+			if (elements[i] == null) {
+				throw new IllegalArgumentException();
+			}
+			sets[i] = elements[i].getSet();
+		}
+		return ProductSet.getInstance(sets).getElement(elements);
 	}
 
 }

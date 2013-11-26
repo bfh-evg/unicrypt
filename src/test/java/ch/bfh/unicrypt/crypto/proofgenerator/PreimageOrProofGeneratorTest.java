@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.crypto.proofgenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageOrProofGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -38,7 +37,7 @@ public class PreimageOrProofGeneratorTest {
 		// y2 = f2(x) = g2^x
 		// y3 = f3(x) = 4^x   =>   x=3, y=64
 		// y4 = f4(x) = g4^x
-		// y4 = f4(x1, x2) = g^x1 * h^x2
+		// y5 = f5(x1, x2) = g^x1 * h^x2
 
 		Function f1 = GeneratorFunction.getInstance(this.G_q.getRandomGenerator());
 		Function f2 = GeneratorFunction.getInstance(this.G_q2.getRandomGenerator());
@@ -49,12 +48,12 @@ public class PreimageOrProofGeneratorTest {
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};
 		PreimageOrProofGenerator pg = PreimageOrProofGenerator.getInstance(functions);
 
-		Element secret = this.Z_q.getElement(3);
-		Element index = this.Z_q.getElement(2);
-		//Element secret = ProductSet.getTuple(ProductSet.getTuple(this.Z_q.getElement(2)), ProductSet.getTuple(this.Z_q.getElement(1)));
-		//Element index = this.Z_q.getElement(4);
-		Tuple privateInput = ProductSet.getTuple(secret, index);
-		Tuple publicInput = ProductSet.getTuple(
+		//Element secret = this.Z_q.getElement(3);
+		//Element index = this.Z_q.getElement(2);
+		Element secret = Tuple.getInstance(Tuple.getInstance(this.Z_q.getElement(2)), Tuple.getInstance(this.Z_q.getElement(1)));
+		Element index = this.Z_q.getElement(4);
+		Tuple privateInput = Tuple.getInstance(secret, index);
+		Tuple publicInput = Tuple.getInstance(
 			   this.G_q.getRandomElement(),
 			   this.G_q2.getRandomElement(),
 			   this.G_q.getElement(64),
@@ -96,7 +95,27 @@ public class PreimageOrProofGeneratorTest {
 
 		Element ret = f1.apply(a);
 		Element ret2 = f2.apply(b);
-		Element ret3 = f3.apply(ProductSet.getTuple(ProductSet.getTuple(a), ProductSet.getTuple(b)));
+		Element ret3 = f3.apply(Tuple.getInstance(Tuple.getInstance(a), Tuple.getInstance(b)));
+		System.out.println(ret);
+		System.out.println(ret2);
+		System.out.println(ret3);
+	}
+
+	@Test
+	public void testFunction2() {
+		Element g = this.G_q.getElement(4);
+		Element h = this.G_q.getElement(6);
+		Element a = this.Z_q.getElement(2);
+		Element b = this.Z_q.getElement(1);
+
+		Function f1 = GeneratorFunction.getInstance(g);
+		Function f2 = GeneratorFunction.getInstance(h);
+
+		Function f3 = ProductFunction.getInstance(f1, f2);
+
+		Element ret = f1.apply(a);
+		Element ret2 = f2.apply(b);
+		Element ret3 = f3.apply(Tuple.getInstance(a, b));
 		System.out.println(ret);
 		System.out.println(ret2);
 		System.out.println(ret3);

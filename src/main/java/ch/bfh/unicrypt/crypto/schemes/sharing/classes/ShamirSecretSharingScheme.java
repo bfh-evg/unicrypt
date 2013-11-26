@@ -12,7 +12,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
@@ -23,7 +22,7 @@ import java.util.Random;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ShamirSecretSharingScheme
-			 extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Tuple> {
+	   extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Tuple> {
 
 	private final ZModPrime zModPrime;
 	private final PolynomialRing polynomialRing;
@@ -74,7 +73,7 @@ public class ShamirSecretSharingScheme
 		// populate the tuple array with tuples of x and y values
 		for (int i = 0; i < getSize(); i++) {
 			xVal = this.getZModPrime().getElement(BigInteger.valueOf(i + 1));
-			shares[i] = ProductSet.getTuple(xVal, polynomial.evaluate(xVal));
+			shares[i] = Tuple.getInstance(xVal, polynomial.evaluate(xVal));
 		}
 
 		return shares;

@@ -24,7 +24,7 @@ import java.util.Random;
  * @version 2.0
  */
 public class PolynomialSemiRing
-			 extends AbstractSemiRing<PolynomialElement> {
+	   extends AbstractSemiRing<PolynomialElement> {
 
 	private final SemiRing semiRing;
 
@@ -47,7 +47,7 @@ public class PolynomialSemiRing
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.getElement(ProductSet.getTuple(elements));
+		return this.getElement(Tuple.getInstance(elements));
 	}
 
 	public PolynomialElement getElement(Tuple coefficients) {
@@ -78,7 +78,7 @@ public class PolynomialSemiRing
 		return abstractGetElement(coefficients);
 	}
 
-  //
+	//
 	// The following protected methods override the standard implementation from
 	// various super-classes
 	//
@@ -93,7 +93,7 @@ public class PolynomialSemiRing
 		return this.getSemiRing().toString();
 	}
 
-  //
+	//
 	// The following protected methods override the standard implementation from
 	// various super-classes
 	//
@@ -179,7 +179,7 @@ public class PolynomialSemiRing
 		return true;
 	}
 
-  //
+	//
 	// STATIC FACTORY METHODS
 	//
 	public static PolynomialSemiRing getInstance(SemiRing semiRing) {
