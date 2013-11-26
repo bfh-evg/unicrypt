@@ -42,7 +42,7 @@ public class PedersenCommitmentScheme<CS extends CyclicGroup, CE extends Element
     protected Function abstractGetCommitmentFunction() {
 	return CompositeFunction.getInstance(
 		ProductFunction.getInstance(GeneratorFunction.getInstance(this.getFirstGenerator()),
-			GeneratorFunction.getInstance(this.getFirstGenerator())),
+			GeneratorFunction.getInstance(this.getSecondGenerator())),
 		ApplyFunction.getInstance(this.getCyclicGroup()));
     }
 
