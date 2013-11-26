@@ -81,7 +81,7 @@ public class PartiallyAppliedFunction
   }
 
   @Override
-  protected boolean standardIsEqual(Function function) {
+  protected boolean abstractIsEqual(Function function) {
     PartiallyAppliedFunction other = (PartiallyAppliedFunction) function;
     return this.getParentFunction().isEqual(other.getParentFunction())
            && this.getParameter().isEqual(other.getParameter())
