@@ -63,7 +63,7 @@ public class PolynomialElement
 		if (element == null || !this.getSet().getSemiRing().contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		return ProductSet.getTuple(element, this.evaluate(element));
+		return Tuple.getInstance(element, this.evaluate(element));
 	}
 
 	public int getDegree() {
