@@ -89,7 +89,7 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS 
 		final Element commitment = this.getProofFunction().apply(randomElement);
 		final Element challenge = this.createChallenge(commitment, publicInput, proverID);
 		final Element response = randomElement.apply(secretInput.selfApply(challenge));
-		return this.getProofSpace().getElement(commitment, response);
+		return this.getProofSpace().getElement(commitment, challenge, response);
 	}
 
 	protected ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {

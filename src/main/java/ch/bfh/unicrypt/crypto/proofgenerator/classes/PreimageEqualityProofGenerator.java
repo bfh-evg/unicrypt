@@ -5,30 +5,41 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PreimageEqualityProofGenerator
-	   extends AbstractPreimageProofGenerator<SemiGroup, ProductSemiGroup, ProductFunction, Tuple, Element> {
+	   extends AbstractPreimageProofGenerator<SemiGroup, ProductSemiGroup, Function, Tuple, Element> {
 
-	protected PreimageEqualityProofGenerator(final ProductFunction proofFunction, HashMethod hashMethod) {
+	protected PreimageEqualityProofGenerator(final Function proofFunction, HashMethod hashMethod) {
 		super(proofFunction, hashMethod);
 	}
 
-	public static PreimageAndProofGenerator getInstance(final Function... proofFunctions) {
-		return PreimageAndProofGenerator.getInstance(proofFunctions, HashMethod.DEFAULT);
+	public static PreimageEqualityProofGenerator getInstance(final Function... proofFunctions) {
+		return PreimageEqualityProofGenerator.getInstance(proofFunctions, HashMethod.DEFAULT);
 	}
 
-	public static PreimageAndProofGenerator getInstance(final Function[] proofFunctions, final HashMethod hashMethod) {
-		if (hashMethod == null) {
+	public static PreimageEqualityProofGenerator getInstance(final Function[] proofFunctions, final HashMethod hashMethod) {
+		if (hashMethod == null || proofFunctions == null || proofFunctions.length < 1) {
 			throw new IllegalArgumentException();
 		}
-		return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunctions), hashMethod);
+		for (int i = 1; i < proofFunctions.length; i++) {
+			if (!proofFunctions[0].getDomain().isEqual(proofFunctions[i].getDomain())) {
+				throw new IllegalArgumentException("All proof functions must have the same domain!");
+			}
+		}
+		Function proofFunction = CompositeFunction.getInstance(
+			   MultiIdentityFunction.getInstance(proofFunctions[0].getDomain(), proofFunctions.length),
+			   ProductFunction.getInstance(proofFunctions));
+
+		return new PreimageEqualityProofGenerator(proofFunction, hashMethod);
 	}
 
 	public Function[] getProofFunctions() {
-		return this.getProofFunction().getAll();
+		return ((ProductFunction) ((CompositeFunction) this.getProofFunction()).getAt(1)).getAll();
 	}
 
 }

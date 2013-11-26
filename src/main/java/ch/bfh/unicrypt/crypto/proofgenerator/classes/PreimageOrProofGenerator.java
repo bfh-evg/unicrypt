@@ -6,7 +6,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -202,8 +201,9 @@ public class PreimageOrProofGenerator
 			   ? Tuple.getInstance(publicInput, commitment)
 			   : Tuple.getInstance(publicInput, commitment, proverId));
 
-		// TODO Use correct hash
-		FiniteByteArrayElement hashValue = FiniteByteArraySet.getInstance(200).getElement(127);//toHash.getHashValue(hashMethod);
+		FiniteByteArrayElement hashValue = toHash.getHashValue(hashMethod);
+		System.out.println("toHash: " + toHash);
+		System.out.println("Spaces: " + hashValue.getSet() + ", " + this.getChallengeSpace());
 		return ModuloFunction.getInstance(hashValue.getSet(), this.getChallengeSpace()).apply(hashValue);
 	}
 
@@ -212,11 +212,11 @@ public class PreimageOrProofGenerator
 
 		// Extract (t, c, s)
 		final Tuple commitments = this.getCommitments(proof);
-		final Tuple challenges = getChallenges(proof);
-		final Tuple responses = getResponses(proof);
+		final Tuple challenges = this.getChallenges(proof);
+		final Tuple responses = this.getResponses(proof);
 
 		// 1. Check whether challenges sum up to the overall challenge
-		final ZModElement challenge = this.createChallenge(Tuple.getInstance(commitments), publicInput, proverId);
+		final ZModElement challenge = this.createChallenge(commitments, publicInput, proverId);
 		ZModElement sumOfChallenges = this.getChallengeSpace().getIdentityElement();
 		for (int i = 0; i < challenges.getArity(); i++) {
 			sumOfChallenges = sumOfChallenges.add(challenges.getAt(i));
