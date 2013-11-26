@@ -10,17 +10,15 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Random;
 
 public class PreimageOrProofGenerator
-	   extends AbstractProofGenerator<ProductSet, ProductSet, ProductSet, Tuple> {
+			 extends AbstractProofGenerator<ProductSet, ProductSet, ProductSet, Tuple> {
 
 	private final Function[] proofFunctions;
 	private final ProductFunction proofFunction;
@@ -69,9 +67,9 @@ public class PreimageOrProofGenerator
 	@Override
 	protected ProductSet abstractGetProofSpace() {
 		return ProductSet.getInstance(
-			   this.getCommitmentSpace(),
-			   ProductSet.getInstance(this.getChallengeSpace(), this.proofFunctions.length),
-			   this.getResponseSpace());
+					 this.getCommitmentSpace(),
+					 ProductSet.getInstance(this.getChallengeSpace(), this.proofFunctions.length),
+					 this.getResponseSpace());
 	}
 
 	public ProductSet getCommitmentSpace() {
@@ -83,22 +81,7 @@ public class PreimageOrProofGenerator
 	}
 
 	public ZMod getChallengeSpace() {
-		return ZMod.getInstance(this.getMinOrder(this.proofFunction.getDomain()));
-	}
-
-	private BigInteger getMinOrder(Set set) {
-		if (!set.isProduct()) {
-			return set.getMinOrder();
-		}
-		BigInteger min = BigInteger.ZERO;
-		for (int i = 0; i < ((ProductSet) set).getArity(); i++) {
-			if (i == 0) {
-				min = this.getMinOrder(((ProductSet) set).getAt(i));
-			} else {
-				min = min.min(this.getMinOrder(((ProductSet) set).getAt(i)));
-			}
-		}
-		return min;
+		return ZMod.getInstance(this.proofFunction.getDomain().getMinimalOrder());
 	}
 
 	public final Tuple getCommitments(final Element proof) {
@@ -130,8 +113,8 @@ public class PreimageOrProofGenerator
 		domainElements[index] = secret;
 
 		return this.getPrivateInputSpace().getElement(
-			   proofFunction.getDomain().getElement(domainElements),
-			   ZMod.getInstance(proofFunctions.length).getElement(index));
+					 proofFunction.getDomain().getElement(domainElements),
+					 ZMod.getInstance(proofFunctions.length).getElement(index));
 	}
 
 	@Override
@@ -191,15 +174,15 @@ public class PreimageOrProofGenerator
 
 		// Return proof
 		return this.getProofSpace().getElement(Tuple.getInstance(commitments),
-											   Tuple.getInstance(challenges),
-											   Tuple.getInstance(responses));
+																					 Tuple.getInstance(challenges),
+																					 Tuple.getInstance(responses));
 
 	}
 
 	protected ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {
 		Tuple toHash = (proverId == null
-			   ? Tuple.getInstance(publicInput, commitment)
-			   : Tuple.getInstance(publicInput, commitment, proverId));
+					 ? Tuple.getInstance(publicInput, commitment)
+					 : Tuple.getInstance(publicInput, commitment, proverId));
 
 		FiniteByteArrayElement hashValue = toHash.getHashValue(hashMethod);
 		System.out.println("toHash: " + toHash);

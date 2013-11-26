@@ -15,7 +15,7 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Random;
 
 public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS extends SemiGroup, F extends Function, PUE extends Element, PRE extends Element>
-	   extends AbstractProofGenerator<PRS, PUS, ProductSet, Tuple> {
+			 extends AbstractProofGenerator<PRS, PUS, ProductSet, Tuple> {
 
 	private final F proofFunction;
 	private final HashMethod hashMethod;
@@ -38,8 +38,7 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS 
 	}
 
 	public final ZMod getChallengeSpace() {
-		// TODO Change it! It's only correct if the private input space is not a product set!
-		return ZMod.getInstance(this.getPrivateInputSpace().getMinOrder());
+		return ZMod.getInstance(this.getPrivateInputSpace().getMinimalOrder());
 	}
 
 	public final PRS getResponseSpace() {
@@ -94,8 +93,8 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PUS 
 
 	protected ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {
 		Tuple toHash = (proverId == null
-			   ? Tuple.getInstance(publicInput, commitment)
-			   : Tuple.getInstance(publicInput, commitment, proverId));
+					 ? Tuple.getInstance(publicInput, commitment)
+					 : Tuple.getInstance(publicInput, commitment, proverId));
 
 		FiniteByteArrayElement hashValue = toHash.getHashValue(hashMethod);
 		return ModuloFunction.getInstance(hashValue.getSet(), this.getChallengeSpace()).apply(hashValue);

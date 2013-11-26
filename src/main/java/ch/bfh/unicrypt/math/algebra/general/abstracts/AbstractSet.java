@@ -30,249 +30,261 @@ import java.util.Random;
  * @version 2.0
  */
 public abstract class AbstractSet<E extends Element>
-       extends UniCrypt
-       implements Set {
+			 extends UniCrypt
+			 implements Set {
 
-  private BigInteger order, minOrder, maxOrder;
+	private BigInteger order, lowerBound, upperBound, minimum;
 
-  @Override
-  public final boolean isSemiGroup() {
-    return this instanceof SemiGroup;
-  }
+	@Override
+	public final boolean isSemiGroup() {
+		return this instanceof SemiGroup;
+	}
 
-  @Override
-  public final boolean isMonoid() {
-    return this instanceof Monoid;
-  }
+	@Override
+	public final boolean isMonoid() {
+		return this instanceof Monoid;
+	}
 
-  @Override
-  public final boolean isGroup() {
-    return this instanceof Group;
-  }
+	@Override
+	public final boolean isGroup() {
+		return this instanceof Group;
+	}
 
-  @Override
-  public final boolean isSemiRing() {
-    return this instanceof SemiRing;
-  }
+	@Override
+	public final boolean isSemiRing() {
+		return this instanceof SemiRing;
+	}
 
-  @Override
-  public final boolean isRing() {
-    return this instanceof Ring;
-  }
+	@Override
+	public final boolean isRing() {
+		return this instanceof Ring;
+	}
 
-  @Override
-  public final boolean isField() {
-    return this instanceof Field;
-  }
+	@Override
+	public final boolean isField() {
+		return this instanceof Field;
+	}
 
-  @Override
-  public final boolean isCyclic() {
-    return this instanceof CyclicGroup;
-  }
+	@Override
+	public final boolean isCyclic() {
+		return this instanceof CyclicGroup;
+	}
 
-  @Override
-  public boolean isAdditive() {
-    return this instanceof AdditiveSemiGroup;
-  }
+	@Override
+	public boolean isAdditive() {
+		return this instanceof AdditiveSemiGroup;
+	}
 
-  @Override
-  public boolean isMultiplicative() {
-    return this instanceof MultiplicativeSemiGroup;
-  }
+	@Override
+	public boolean isMultiplicative() {
+		return this instanceof MultiplicativeSemiGroup;
+	}
 
-  @Override
-  public boolean isConcatenative() {
-    return this instanceof ConcatenativeSemiGroup;
-  }
+	@Override
+	public boolean isConcatenative() {
+		return this instanceof ConcatenativeSemiGroup;
+	}
 
-  @Override
-  public final boolean isProduct() {
-    return this instanceof Compound;
-  }
+	@Override
+	public final boolean isProduct() {
+		return this instanceof Compound;
+	}
 
-  @Override
-  public final boolean isFinite() {
-    return !this.getOrder().equals(Set.INFINITE_ORDER);
-  }
+	@Override
+	public final boolean isFinite() {
+		return !this.getOrder().equals(Set.INFINITE_ORDER);
+	}
 
-  @Override
-  public final boolean hasKnownOrder() {
-    return !this.getOrder().equals(Set.UNKNOWN_ORDER);
-  }
+	@Override
+	public final boolean hasKnownOrder() {
+		return !this.getOrder().equals(Set.UNKNOWN_ORDER);
+	}
 
-  @Override
-  public final BigInteger getOrder() {
-    if (this.order == null) {
-      this.order = this.abstractGetOrder();
-    }
-    return this.order;
-  }
+	@Override
+	public final BigInteger getOrder() {
+		if (this.order == null) {
+			this.order = this.abstractGetOrder();
+		}
+		return this.order;
+	}
 
-  @Override
-  public final BigInteger getMinOrder() {
-    if (this.minOrder == null) {
-      if (this.hasKnownOrder()) {
-        this.minOrder = this.getOrder();
-      } else {
-        this.minOrder = this.standardGetMinOrder();
-      }
-    }
-    return this.minOrder;
-  }
+	@Override
+	public final BigInteger getOrderLowerBound() {
+		if (this.lowerBound == null) {
+			if (this.hasKnownOrder()) {
+				this.lowerBound = this.getOrder();
+			} else {
+				this.lowerBound = this.standardGetOrderLowerBound();
+			}
+		}
+		return this.lowerBound;
+	}
 
-  @Override
-  public final BigInteger getMaxOrder() {
-    if (this.maxOrder == null) {
-      if (this.hasKnownOrder()) {
-        this.maxOrder = this.getOrder();
-      } else {
-        this.maxOrder = this.standardGetMaxOrder();
-      }
-    }
-    return this.maxOrder;
-  }
+	@Override
+	public final BigInteger getOrderUpperBound() {
+		if (this.upperBound == null) {
+			if (this.hasKnownOrder()) {
+				this.upperBound = this.getOrder();
+			} else {
+				this.upperBound = this.standardGetOrderUpperBound();
+			}
+		}
+		return this.upperBound;
+	}
 
-  @Override
-  public final boolean isEmpty() {
-    return this.getOrder().equals(BigInteger.ZERO);
-  }
+	@Override
+	public final BigInteger getMinimalOrder() {
+		if (this.minimum == null) {
+			this.minimum = this.standardGetMinimalOrder();
+		}
+		return this.minimum;
+	}
 
-  @Override
-  public final boolean isSingleton() {
-    return this.getOrder().equals(BigInteger.ONE);
-  }
+	@Override
+	public final boolean isEmpty() {
+		return this.getOrder().equals(BigInteger.ZERO);
+	}
 
-  @Override
-  public final ZMod getZModOrder() {
-    if (!(this.isFinite() && this.hasKnownOrder())) {
-      throw new UnsupportedOperationException();
-    }
-    return ZMod.getInstance(order);
-  }
+	@Override
+	public final boolean isSingleton() {
+		return this.getOrder().equals(BigInteger.ONE);
+	}
 
-  @Override
-  public final ZStarMod getZStarModOrder() {
-    if (!(this.isFinite() && this.hasKnownOrder())) {
-      throw new UnsupportedOperationException();
-    }
-    return ZStarMod.getInstance(order);
-  }
+	@Override
+	public final ZMod getZModOrder() {
+		if (!(this.isFinite() && this.hasKnownOrder())) {
+			throw new UnsupportedOperationException();
+		}
+		return ZMod.getInstance(this.getOrder());
+	}
 
-  @Override
-  public final boolean contains(final int value) {
-    return this.contains(BigInteger.valueOf(value));
-  }
+	@Override
+	public final ZStarMod getZStarModOrder() {
+		if (!(this.isFinite() && this.hasKnownOrder())) {
+			throw new UnsupportedOperationException();
+		}
+		return ZStarMod.getInstance(this.getOrder());
+	}
 
-  @Override
-  public final boolean contains(final BigInteger value) {
-    if (value == null) {
-      throw new IllegalArgumentException();
-    }
-    return this.abstractContains(value);
-  }
+	@Override
+	public final boolean contains(final int value) {
+		return this.contains(BigInteger.valueOf(value));
+	}
 
-  @Override
-  public final boolean contains(final Element element) {
-    if (element == null) {
-      throw new IllegalArgumentException();
-    }
-    return this.isEqual(element.getSet());
-  }
+	@Override
+	public final boolean contains(final BigInteger value) {
+		if (value == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractContains(value);
+	}
 
-  @Override
-  public final E getElement(final int value) {
-    return this.getElement(BigInteger.valueOf(value));
-  }
+	@Override
+	public final boolean contains(final Element element) {
+		if (element == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.isEqual(element.getSet());
+	}
 
-  @Override
-  public final E getElement(BigInteger value) {
-    if (value == null || !this.contains(value)) {
-      throw new IllegalArgumentException();
-    }
-    return this.abstractGetElement(value);
-  }
+	@Override
+	public final E getElement(final int value) {
+		return this.getElement(BigInteger.valueOf(value));
+	}
 
-  @Override
-  public final E getElement(final Element element) {
-    if (element == null) {
-      throw new IllegalArgumentException();
-    }
-    if (this.contains(element)) {
-      return (E) element;
-    }
-    return this.getElement(element.getValue());
-  }
+	@Override
+	public final E getElement(BigInteger value) {
+		if (value == null || !this.contains(value)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractGetElement(value);
+	}
 
-  @Override
-  public final E getRandomElement() {
-    return this.getRandomElement(null);
-  }
+	@Override
+	public final E getElement(final Element element) {
+		if (element == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.contains(element)) {
+			return (E) element;
+		}
+		return this.getElement(element.getValue());
+	}
 
-  @Override
-  public final E getRandomElement(Random random) {
-    return this.abstractGetRandomElement(random);
-  }
+	@Override
+	public final E getRandomElement() {
+		return this.getRandomElement(null);
+	}
 
-  @Override
-  public final boolean areEqual(final Element element1, final Element element2) {
-    if (!this.contains(element1) || !this.contains(element2)) {
-      throw new IllegalArgumentException();
-    }
-    return element1.isEqual(element2);
-  }
+	@Override
+	public final E getRandomElement(Random random) {
+		return this.abstractGetRandomElement(random);
+	}
 
-  @Override
-  public final boolean isCompatible(Set set) {
-    if (set == null) {
-      throw new IllegalArgumentException();
-    }
-    return standardIsCompatible(set);
-  }
+	@Override
+	public final boolean areEqual(final Element element1, final Element element2) {
+		if (!this.contains(element1) || !this.contains(element2)) {
+			throw new IllegalArgumentException();
+		}
+		return element1.isEqual(element2);
+	}
 
-  @Override
-  public final boolean isEqual(final Set set) {
-    if (set == null) {
-      throw new IllegalArgumentException();
-    }
-    if (this == set) {
-      return true;
-    }
-    if (!this.isCompatible(set)) {
-      return false;
-    }
-    return this.standardIsEqual(set);
-  }
+	@Override
+	public final boolean isCompatible(Set set) {
+		if (set == null) {
+			throw new IllegalArgumentException();
+		}
+		return standardIsCompatible(set);
+	}
 
-  //
-  // The following protected methods are standard implementations for sets.
-  // They may need to be changed in certain sub-classes.
-  //
-  protected BigInteger standardGetMinOrder() {
-    return BigInteger.ZERO;
-  }
+	@Override
+	public final boolean isEqual(final Set set) {
+		if (set == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this == set) {
+			return true;
+		}
+		if (!this.isCompatible(set)) {
+			return false;
+		}
+		return this.standardIsEqual(set);
+	}
 
-  protected BigInteger standardGetMaxOrder() {
-    return Set.INFINITE_ORDER;
-  }
+	//
+	// The following protected methods are standard implementations for sets.
+	// They may need to be changed in certain sub-classes.
+	//
+	protected BigInteger standardGetOrderLowerBound() {
+		return BigInteger.ZERO;
+	}
 
-  protected boolean standardIsCompatible(Set set) {
-    return this.getClass() == set.getClass();
-  }
+	protected BigInteger standardGetOrderUpperBound() {
+		return Set.INFINITE_ORDER;
+	}
 
-  protected boolean standardIsEqual(Set set) {
-    return true;
-  }
+	protected BigInteger standardGetMinimalOrder() {
+		return this.getOrderLowerBound();
+	}
 
-  //
-  // The following protected abstract method must be implemented in every direct
-  // sub-class.
-  //
-  protected abstract BigInteger abstractGetOrder();
+	protected boolean standardIsCompatible(Set set) {
+		return this.getClass() == set.getClass();
+	}
 
-  protected abstract E abstractGetElement(BigInteger value);
+	protected boolean standardIsEqual(Set set) {
+		return true;
+	}
 
-  protected abstract E abstractGetRandomElement(Random random);
+	//
+	// The following protected abstract method must be implemented in every direct
+	// sub-class.
+	//
+	protected abstract BigInteger abstractGetOrder();
 
-  protected abstract boolean abstractContains(BigInteger value);
+	protected abstract E abstractGetElement(BigInteger value);
+
+	protected abstract E abstractGetRandomElement(Random random);
+
+	protected abstract boolean abstractContains(BigInteger value);
 
 }
