@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageOrProofGenerator;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -52,17 +53,14 @@ public class PreimageOrProofGeneratorTest {
 
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};
 		PreimageOrProofGenerator pg = PreimageOrProofGenerator.getInstance(functions);
-
+		ZMod indexSet = ZMod.getInstance(functions.length);
 		// Default
 		Element secret = this.Z_q.getElement(3);
-		Element indexE = this.Z_q.getElement(2);
 		if (index == 4) {
 			secret = Tuple.getInstance(Tuple.getInstance(this.Z_q.getElement(2)), Tuple.getInstance(this.Z_q.getElement(1)));
-			indexE = this.Z_q.getElement(index);
 		}
 
-		//Element
-		Tuple privateInput = Tuple.getInstance(secret, indexE);
+		Tuple privateInput = pg.createPrivateInput(secret, index);
 		Tuple publicInput = Tuple.getInstance(
 			   this.G_q.getRandomElement(),
 			   this.G_q2.getRandomElement(),

@@ -25,7 +25,7 @@ public abstract class AbstractProofGenerator<PRS extends Set, PUS extends Set, P
 	}
 
 	@Override
-	public E generate(Element privateInput, Element publicInput, Element proverID, Random random) {
+	public final E generate(Element privateInput, Element publicInput, Element proverID, Random random) {
 		if (!this.getPrivateInputSpace().contains(privateInput) || !this.getPublicInputSpace().contains(publicInput)) {
 			throw new IllegalArgumentException();
 		}

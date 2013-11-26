@@ -7,6 +7,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -19,7 +20,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Random;
 
-// TODO Implement!
 public class PreimageOrProofGenerator
 	   extends AbstractProofGenerator<ProductSet, ProductSet, ProductSet, Tuple> {
 
@@ -59,8 +59,7 @@ public class PreimageOrProofGenerator
 
 	@Override
 	protected ProductSet abstractGetPrivateInputSpace() {
-		// TODO Set X int (any domain of the proofFunctions X index of the known value)
-		return null;
+		return ProductSet.getInstance(proofFunction.getDomain(), ZMod.getInstance(proofFunctions.length));
 	}
 
 	@Override
@@ -124,25 +123,24 @@ public class PreimageOrProofGenerator
 		return (Tuple) ((Tuple) proof).getAt(2);
 	}
 
-	@Override
-	public Tuple generate(Element privateInput, Element publicInput, Element proverID, Random random) {
-		if (privateInput == null || !privateInput.isTuple() || ((Tuple) privateInput).getArity() != 2 || !this.getPublicInputSpace().contains(publicInput)) {
+	public Tuple createPrivateInput(Element secret, int index) {
+		if (index < 0 || index >= proofFunctions.length || !proofFunctions[index].getDomain().contains(secret)) {
 			throw new IllegalArgumentException();
 		}
-		// Check private input space based on the index
-		final int index = ((Tuple) privateInput).getAt(1).getValue().intValue();
-		if (!this.proofFunctions[index].getDomain().contains(((Tuple) privateInput).getAt(0))) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractGenerate(privateInput, publicInput, proverID, random);
+		final Element[] domainElements = ((ProductMonoid) proofFunction.getDomain()).getIdentityElement().getAll();
+		domainElements[index] = secret;
+
+		return this.getPrivateInputSpace().getElement(
+			   proofFunction.getDomain().getElement(domainElements),
+			   ZMod.getInstance(proofFunctions.length).getElement(index));
 	}
 
 	@Override
 	protected Tuple abstractGenerate(Element privateInput, Element publicInput, Element proverId, Random random) {
 
 		// Extract secret input value and index from private input
-		final Element secret = ((Tuple) privateInput).getAt(0);
 		final int index = ((Tuple) privateInput).getAt(1).getValue().intValue();
+		final Element secret = ((Tuple) privateInput).getAt(0, index);
 
 		// Create lists for proof elements (t, c, s)
 		final Element[] commitments = new Element[proofFunctions.length];
@@ -182,10 +180,7 @@ public class PreimageOrProofGenerator
 		// - Calculate challenge based on the overall challenge and the chosen challenges for the simulated proofs
 		challenges[index] = challenge.subtract(sumOfChallenges);
 		// - finally compute response element
-		// TODO Handle case where randomElement is a Tuple (=> domain is a ProductSet)
-		// s = r + c*x
 		responses[index] = randomElement.apply(secret.selfApply(challenges[index]));
-		//responses[index] = randomElement.apply(randomElement.getSet().getElement(challenges[index]).selfApply(secret));
 
 		// TODO Remove Logs
 		System.out.println("Public input " + Arrays.toString(((Tuple) publicInput).getAll()));
@@ -207,6 +202,7 @@ public class PreimageOrProofGenerator
 			   ? Tuple.getInstance(publicInput, commitment)
 			   : Tuple.getInstance(publicInput, commitment, proverId));
 
+		// TODO Use correct hash
 		FiniteByteArrayElement hashValue = FiniteByteArraySet.getInstance(200).getElement(127);//toHash.getHashValue(hashMethod);
 		return ModuloFunction.getInstance(hashValue.getSet(), this.getChallengeSpace()).apply(hashValue);
 	}
