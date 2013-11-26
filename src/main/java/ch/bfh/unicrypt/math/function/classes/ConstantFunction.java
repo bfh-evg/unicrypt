@@ -43,7 +43,7 @@ public class ConstantFunction
   }
 
   @Override
-  protected boolean standardIsEqual(Function function) {
+  protected boolean abstractIsEqual(Function function) {
     return this.getElement().isEqual(((ConstantFunction) function).getElement());
   }
 

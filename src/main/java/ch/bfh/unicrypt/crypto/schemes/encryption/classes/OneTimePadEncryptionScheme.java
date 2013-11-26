@@ -21,58 +21,63 @@ import java.util.Random;
  * @author rolfhaenni
  */
 public class OneTimePadEncryptionScheme
-       extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArrayElement, FiniteByteArraySet> {
+	   extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArrayElement, FiniteByteArraySet> {
 
-  private final FiniteByteArraySet finiteByteArraySet;
+	private final FiniteByteArraySet finiteByteArraySet;
 
 //  protected ElGamalEncryptionScheme(Function encryptionFunction, Function decryptionFunction, ElGamalKeyPairGenerator keyPairGenerator, Function encryptionFunctionLeft, Function encryptionFunctionRight) {
-  protected OneTimePadEncryptionScheme(FiniteByteArraySet finiteByteArraySet) {
-    this.finiteByteArraySet = finiteByteArraySet;
-  }
+	protected OneTimePadEncryptionScheme(FiniteByteArraySet finiteByteArraySet) {
+		this.finiteByteArraySet = finiteByteArraySet;
+	}
 
-  public final FiniteByteArraySet getFiniteByteArraySet() {
-    return this.finiteByteArraySet;
-  }
+	public final FiniteByteArraySet getFiniteByteArraySet() {
+		return this.finiteByteArraySet;
+	}
 
-  @Override
-  protected Function abstractGetEncryptionFunction() {
-    return new OneTimePadFunction(this.getFiniteByteArraySet());
-  }
+	@Override
+	protected Function abstractGetEncryptionFunction() {
+		return new OneTimePadFunction(this.getFiniteByteArraySet());
+	}
 
-  @Override
-  protected Function abstractGetDecryptionFunction() {
-    return new OneTimePadFunction(this.getFiniteByteArraySet());
-  }
+	@Override
+	protected Function abstractGetDecryptionFunction() {
+		return new OneTimePadFunction(this.getFiniteByteArraySet());
+	}
 
-  @Override
-  protected KeyGenerator abstractGetKeyGenerator() {
-    return OneTimePadKeyGenerator.getInstance(this.getFiniteByteArraySet());
-  }
+	@Override
+	protected KeyGenerator abstractGetKeyGenerator() {
+		return OneTimePadKeyGenerator.getInstance(this.getFiniteByteArraySet());
+	}
 
-  public static OneTimePadEncryptionScheme getInstance(int length) {
-    return new OneTimePadEncryptionScheme(FiniteByteArraySet.getInstance(length, true));
-  }
+	public static OneTimePadEncryptionScheme getInstance(int length) {
+		return new OneTimePadEncryptionScheme(FiniteByteArraySet.getInstance(length, true));
+	}
 
-  private class OneTimePadFunction
-         extends AbstractFunction<FiniteByteArraySet, FiniteByteArraySet, FiniteByteArrayElement> {
+	private class OneTimePadFunction
+		   extends AbstractFunction<FiniteByteArraySet, FiniteByteArraySet, FiniteByteArrayElement> {
 
-    protected OneTimePadFunction(FiniteByteArraySet finiteByteArraySet) {
-      super(ProductSet.getInstance(finiteByteArraySet, 2), finiteByteArraySet);
-    }
+		protected OneTimePadFunction(FiniteByteArraySet finiteByteArraySet) {
+			super(ProductSet.getInstance(finiteByteArraySet, 2), finiteByteArraySet);
+		}
 
-    @Override
-    protected FiniteByteArrayElement abstractApply(Element element, Random random) {
-      int length = this.getCoDomain().getLength();
-      Tuple tuple = (Tuple) element;
-      byte[] bytes1 = ((FiniteByteArrayElement) tuple.getAt(0)).getByteArray();
-      byte[] bytes2 = ((FiniteByteArrayElement) tuple.getAt(1)).getByteArray();
-      byte[] result = new byte[length];
-      for (int i = 0; i < length; i++) {
-        result[i] = (byte) (0xff & ((int) bytes1[i]) ^ ((int) bytes2[i]));;
-      }
-      return this.getCoDomain().getElement(result);
-    }
+		@Override
+		protected FiniteByteArrayElement abstractApply(Element element, Random random) {
+			int length = this.getCoDomain().getLength();
+			Tuple tuple = (Tuple) element;
+			byte[] bytes1 = ((FiniteByteArrayElement) tuple.getAt(0)).getByteArray();
+			byte[] bytes2 = ((FiniteByteArrayElement) tuple.getAt(1)).getByteArray();
+			byte[] result = new byte[length];
+			for (int i = 0; i < length; i++) {
+				result[i] = (byte) (0xff & ((int) bytes1[i]) ^ ((int) bytes2[i]));;
+			}
+			return this.getCoDomain().getElement(result);
+		}
 
-  }
+		@Override
+		protected boolean abstractIsEqual(Function function) {
+			return true;
+		}
+
+	}
 
 }

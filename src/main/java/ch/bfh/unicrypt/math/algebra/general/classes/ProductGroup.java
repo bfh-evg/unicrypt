@@ -4,10 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  *
@@ -95,6 +96,7 @@ public class ProductGroup
 		if (groups == null) {
 			throw new IllegalArgumentException();
 		}
+		boolean isCyclic = false;
 		if (groups.length > 0) {
 			boolean uniform = true;
 			Group first = groups[0];
@@ -105,10 +107,15 @@ public class ProductGroup
 				if (!group.isEqual(first)) {
 					uniform = false;
 				}
+				isCyclic = isCyclic && group.isCyclic();
 			}
 			if (uniform) {
 				return ProductGroup.getInstance(first, groups.length);
 			}
+		}
+		if (isCyclic) {
+			CyclicGroup[] cGroups = Arrays.copyOf(groups, groups.length, CyclicGroup[].class);
+			return ProductCyclicGroup.getInstance(cGroups);
 		}
 		return new ProductGroup(groups);
 	}
@@ -117,32 +124,13 @@ public class ProductGroup
 		if ((group == null) || (arity < 0)) {
 			throw new IllegalArgumentException();
 		}
+		if (group.isCyclic() && arity < 2) {
+			return ProductCyclicGroup.getInstance((CyclicGroup) group, arity);
+		}
 		if (arity == 0) {
 			return new ProductGroup(new Group[]{});
 		}
 		return new ProductGroup(group, arity);
-	}
-
-	public static Tuple getTuple(List<Element> elements) {
-		if (elements == null) {
-			throw new IllegalArgumentException();
-		}
-		return getTuple(elements.toArray(new Element[0]));
-	}
-
-	public static Tuple getTuple(Element... elements) {
-		if (elements == null) {
-			throw new IllegalArgumentException();
-		}
-		int arity = elements.length;
-		final Group[] group = new Group[arity];
-		for (int i = 0; i < arity; i++) {
-			if (elements[i] == null) {
-				throw new IllegalArgumentException();
-			}
-			group[i] = (Group) elements[i].getSet();
-		}
-		return ProductGroup.getInstance(group).getElement(elements);
 	}
 
 }

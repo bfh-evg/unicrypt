@@ -32,7 +32,7 @@ public class SelectionFunction
   }
 
   @Override
-  protected boolean standardIsEqual(Function function) {
+  protected boolean abstractIsEqual(Function function) {
     return Arrays.equals(this.getIndices(), ((SelectionFunction) function).getIndices());
   }
 

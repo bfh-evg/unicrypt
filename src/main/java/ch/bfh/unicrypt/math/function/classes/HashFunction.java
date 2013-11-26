@@ -36,7 +36,7 @@ public class HashFunction
 	}
 
 	@Override
-	protected boolean standardIsEqual(Function function) {
+	protected boolean abstractIsEqual(Function function) {
 		return this.getHashMethod().equals(((HashFunction) function).getHashMethod());
 	}
 

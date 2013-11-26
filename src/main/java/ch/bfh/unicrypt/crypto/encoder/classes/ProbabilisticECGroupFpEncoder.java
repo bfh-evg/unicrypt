@@ -13,10 +13,9 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class ProbabilisticECGroupFpEncoder
-			 extends AbstractEncoder<ZModPrime, ECZModPrime, ZModElement, ECZModPrimeElement> {
+	   extends AbstractEncoder<ZModPrime, ECZModPrime, ZModElement, ECZModPrimeElement> {
 
 	protected static final int shift = 10;
-
 	private ECZModPrime ec;
 
 	protected ProbabilisticECGroupFpEncoder(ECZModPrime ec) {
@@ -41,7 +40,7 @@ public class ProbabilisticECGroupFpEncoder
 	}
 
 	static class ECEncodingFunction
-				 extends AbstractFunction<ZModPrime, ECZModPrime, ECZModPrimeElement> {
+		   extends AbstractFunction<ZModPrime, ECZModPrime, ECZModPrimeElement> {
 
 		protected ECEncodingFunction(ZModPrime domain, ECZModPrime coDomain) {
 			super(domain, coDomain);
@@ -49,7 +48,7 @@ public class ProbabilisticECGroupFpEncoder
 
 		@Override
 		protected ECZModPrimeElement abstractApply(Element element,
-					 Random random) {
+			   Random random) {
 			ZModPrime zModPrime = this.getDomain();
 			ECZModPrime ecPrime = this.getCoDomain();
 
@@ -73,16 +72,21 @@ public class ProbabilisticECGroupFpEncoder
 				count++;
 			}
 			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x))
-						 .add(ecPrime.getB());
+				   .add(ecPrime.getB());
 			ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(
-						 y1.getValue(), zModPrime.getModulus()));
+				   y1.getValue(), zModPrime.getModulus()));
 			return ecPrime.getElement(x, y);
+		}
+
+		@Override
+		protected boolean abstractIsEqual(Function function) {
+			return true;
 		}
 
 	}
 
 	static class ECDecodingFunction
-				 extends AbstractFunction<ECZModPrime, ZModPrime, ZModElement> {
+		   extends AbstractFunction<ECZModPrime, ZModPrime, ZModElement> {
 
 		protected ECDecodingFunction(ECZModPrime domain, ZModPrime coDomain) {
 			super(domain, coDomain);
@@ -94,6 +98,11 @@ public class ProbabilisticECGroupFpEncoder
 			BigInteger x1 = e.getX().getValue();
 			x1 = x1.shiftRight(10);
 			return this.getCoDomain().getElement(x1);
+		}
+
+		@Override
+		protected boolean abstractIsEqual(Function function) {
+			return true;
 		}
 
 	}
