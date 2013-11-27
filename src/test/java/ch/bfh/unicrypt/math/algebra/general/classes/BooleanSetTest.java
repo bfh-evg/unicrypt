@@ -182,25 +182,25 @@ public class BooleanSetTest {
     }
 
     /**
-     * Test of getMaxOrder method, of class BooleanSet.
+     * Test of getOrderUpperBound method, of class BooleanSet.
      */
     @Test
     public void testGetMaxOrder() {
-	System.out.println("getMaxOrder");
-	BigInteger expResult = BigInteger.valueOf(2);
-	BigInteger result = BooleanSet.getInstance().getMaxOrder();
-	Assert.assertEquals(expResult, result);
+        System.out.println("getMaxOrder");
+        BigInteger expResult = BigInteger.valueOf(2);
+        BigInteger result = BooleanSet.getInstance().getOrderUpperBound();
+        Assert.assertEquals(expResult, result);
     }
 
     /**
-     * Test of getMinOrder method, of class BooleanSet.
+     * Test of getOrderLowerBound method, of class BooleanSet.
      */
     @Test
     public void testGetMinOrder() {
-	System.out.println("getMinOrder");
-	BigInteger expResult = BigInteger.valueOf(2);
-	BigInteger result = BooleanSet.getInstance().getMinOrder();
-	Assert.assertEquals(expResult, result);
+        System.out.println("getMinOrder");
+        BigInteger expResult = BigInteger.valueOf(2);
+        BigInteger result = BooleanSet.getInstance().getOrderLowerBound();
+        Assert.assertEquals(expResult, result);
     }
 
     /**

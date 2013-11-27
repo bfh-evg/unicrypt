@@ -130,7 +130,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement> extends Abstr
   }
 
   @Override
-  protected BigInteger standardGetMinOrder() {
+  protected BigInteger standardGetOrderLowerBound() {
     return BigInteger.valueOf(2);
   }
 

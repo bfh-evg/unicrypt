@@ -37,7 +37,7 @@ public abstract class AbstractMonoid<E extends Element> extends AbstractSemiGrou
   // various super-classes
   //
   @Override
-  protected BigInteger standardGetMinOrder() {
+  protected BigInteger standardGetOrderLowerBound() {
     return BigInteger.ONE;
   }
 

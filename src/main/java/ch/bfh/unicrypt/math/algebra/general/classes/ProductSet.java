@@ -22,8 +22,8 @@ import java.util.Random;
  * @author rolfhaenni
  */
 public class ProductSet
-	   extends AbstractSet<Tuple>
-	   implements Compound<ProductSet, Set>, Set {
+			 extends AbstractSet<Tuple>
+			 implements Compound<ProductSet, Set>, Set {
 
 	private final Set[] sets;
 	private final int arity;
@@ -105,28 +105,44 @@ public class ProductSet
 	}
 
 	@Override
-	protected BigInteger standardGetMinOrder() {
+	protected BigInteger standardGetOrderLowerBound() {
 		if (this.isUniform()) {
-			return this.getFirst().getMinOrder().pow(this.getArity());
+			return this.getFirst().getOrderLowerBound().pow(this.getArity());
 		}
 		BigInteger result = BigInteger.ONE;
 		for (Set set : this) {
-			result = result.multiply(set.getMinOrder());
+			result = result.multiply(set.getOrderLowerBound());
 		}
 		return result;
 	}
 
 	@Override
-	protected BigInteger standardGetMaxOrder() {
+	protected BigInteger standardGetOrderUpperBound() {
 		if (this.isUniform()) {
-			return this.getFirst().getMaxOrder().pow(this.getArity());
+			return this.getFirst().getOrderUpperBound().pow(this.getArity());
 		}
 		BigInteger result = BigInteger.ONE;
 		for (Set set : this) {
-			if (set.getMaxOrder().equals(Set.INFINITE_ORDER)) {
+			if (set.getOrderUpperBound().equals(Set.INFINITE_ORDER)) {
 				return Set.INFINITE_ORDER;
 			}
-			result = result.multiply(set.getMaxOrder());
+			result = result.multiply(set.getOrderUpperBound());
+		}
+		return result;
+	}
+
+	@Override
+	protected BigInteger standardGetMinimalOrder() {
+		if (this.isUniform()) {
+			return this.getFirst().getMinimalOrder();
+		}
+		BigInteger result = null;
+		for (Set set : this) {
+			if (result == null) {
+				result = set.getMinimalOrder();
+			} else {
+				result = result.min(set.getMinimalOrder());
+			}
 		}
 		return result;
 	}
@@ -166,13 +182,15 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple abstractGetElement(BigInteger value) {
+	protected Tuple abstractGetElement(BigInteger value
+	) {
 		BigInteger[] values = MathUtil.unpairAndUnfold(value, this.getArity());
 		return this.getElement(values);
 	}
 
 	@Override
-	protected Tuple abstractGetRandomElement(Random random) {
+	protected Tuple abstractGetRandomElement(Random random
+	) {
 		int arity = this.getArity();
 		final Element[] randomElements = new Element[arity];
 		for (int i = 0; i < arity; i++) {
@@ -182,7 +200,8 @@ public class ProductSet
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
+	protected boolean abstractContains(BigInteger value
+	) {
 		BigInteger[] values = MathUtil.unpairAndUnfold(value, this.getArity());
 		return this.contains(values);
 	}
@@ -209,7 +228,8 @@ public class ProductSet
 	}
 
 	@Override
-	public Set getAt(int index) {
+	public Set getAt(int index
+	) {
 		if (index < 0 || index >= this.getArity()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -220,7 +240,8 @@ public class ProductSet
 	}
 
 	@Override
-	public Set getAt(int... indices) {
+	public Set getAt(int... indices
+	) {
 		if (indices == null) {
 			throw new IllegalArgumentException();
 		}
@@ -246,7 +267,8 @@ public class ProductSet
 	}
 
 	@Override
-	public ProductSet removeAt(final int index) {
+	public ProductSet removeAt(final int index
+	) {
 		int arity = this.getArity();
 		if (index < 0 || index >= arity) {
 			throw new IndexOutOfBoundsException();
@@ -340,14 +362,13 @@ public class ProductSet
 	// STATIC FACTORY METHODS
 	//
 	/**
-	 * This is a static factory method to construct a composed set without
-	 * calling respective constructors. The input sets are given as an array.
+	 * This is a static factory method to construct a composed set without calling respective constructors. The input sets
+	 * are given as an array.
 	 * <p>
 	 * <p/>
 	 * @param sets The array of input sets
 	 * @return The corresponding product set
-	 * @throws IllegalArgumentException if {@literal sets} is null or contains
-	 *                                  null
+	 * @throws IllegalArgumentException if {@literal sets} is null or contains null
 	 */
 	public static ProductSet getInstance(final Set... sets) {
 		if (sets == null) {

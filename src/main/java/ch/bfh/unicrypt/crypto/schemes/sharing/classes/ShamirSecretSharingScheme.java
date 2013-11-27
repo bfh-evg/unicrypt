@@ -22,7 +22,7 @@ import java.util.Random;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ShamirSecretSharingScheme
-	   extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Tuple> {
+			 extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Tuple> {
 
 	private final ZModPrime zModPrime;
 	private final PolynomialRing polynomialRing;
@@ -73,7 +73,7 @@ public class ShamirSecretSharingScheme
 		// populate the tuple array with tuples of x and y values
 		for (int i = 0; i < getSize(); i++) {
 			xVal = this.getZModPrime().getElement(BigInteger.valueOf(i + 1));
-			shares[i] = Tuple.getInstance(xVal, polynomial.evaluate(xVal));
+			shares[i] = polynomial.getPoint(xVal);
 		}
 
 		return shares;
@@ -116,7 +116,8 @@ public class ShamirSecretSharingScheme
 	}
 
 	public static ShamirSecretSharingScheme getInstance(ZModPrime zModPrime, int size, int threshold) {
-		if (zModPrime == null || size < 1 || threshold < 1 || threshold > size) {
+		if (zModPrime == null || size < 1 || threshold < 1 || threshold > size
+					 || BigInteger.valueOf(size).compareTo(zModPrime.getOrder()) >= 0) {
 			throw new IllegalArgumentException();
 		}
 		return new ShamirSecretSharingScheme(zModPrime, size, threshold);

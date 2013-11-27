@@ -19,7 +19,7 @@ public class PreimageAndProofGenerator
 	}
 
 	public static PreimageAndProofGenerator getInstance(final Function[] proofFunctions, final HashMethod hashMethod) {
-		if (hashMethod == null) {
+		if (hashMethod == null || proofFunctions == null || proofFunctions.length < 1) {
 			throw new IllegalArgumentException();
 		}
 		return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunctions), hashMethod);
@@ -30,7 +30,7 @@ public class PreimageAndProofGenerator
 	}
 
 	public static PreimageAndProofGenerator getInstance(final Function proofFunction, int arity, final HashMethod hashMethod) {
-		if (hashMethod == null) {
+		if (hashMethod == null || proofFunction == null || arity < 1) {
 			throw new IllegalArgumentException();
 		}
 		return new PreimageAndProofGenerator(ProductFunction.getInstance(proofFunction, arity), hashMethod);

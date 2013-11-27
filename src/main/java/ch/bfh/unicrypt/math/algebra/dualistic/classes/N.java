@@ -18,7 +18,7 @@ import java.util.Random;
  * @see "Handbook of Applied Cryptography, Example 2.164"
  * @see <a
  * href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>
- * <p>
+ <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
