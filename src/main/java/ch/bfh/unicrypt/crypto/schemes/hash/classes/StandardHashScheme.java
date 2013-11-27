@@ -1,34 +1,36 @@
 package ch.bfh.unicrypt.crypto.schemes.hash.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.hash.abstracts.AbstractHashScheme;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
+import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class StandardHashScheme
-       extends AbstractHashScheme {
+			 extends AbstractHashScheme<ByteArrayMonoid, FiniteByteArraySet, FiniteByteArrayElement> {
 
-  @Override
-  protected Function abstractGetHashFunction() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+	private final HashMethod hashMethod;
 
-//  private final HashFunction hashFunction;
-//
-//  public StandardHashScheme(final String hashAlgorithmName) {
-//    this(HashFunction.HashAlgorithm.getAlgorithmByName(hashAlgorithmName), concatScheme);
-//  }
-//
-//  public StandardHashScheme(final HashFunction.HashAlgorithm hashAlgorithm, final ConcatScheme concatScheme) {
-//    this(hashAlgorithm, concatScheme, hashAlgorithm.getCoDomain());
-//  }
-//
-//  public StandardHashScheme(final String hashAlgorithmName, final ConcatScheme concatScheme, final ZPlusMod coDomain) {
-//    this(HashFunction.HashAlgorithm.getAlgorithmByName(hashAlgorithmName), concatScheme, coDomain);
-//  }
-//
-//  public StandardHashScheme(final HashFunction.HashAlgorithm hashAlgorithm, final ConcatScheme concatScheme, final ZPlusMod coDomain) {
-//    if (concatScheme == null) {
-//      throw new IllegalArgumentException();
-//    }
-//    this.hashFunction = new HashFunction(hashAlgorithm, coDomain);
-//  }
+	protected StandardHashScheme(HashMethod hashMethod) {
+		this.hashMethod = hashMethod;
+	}
+
+	public HashMethod getHashMethod() {
+		return this.hashMethod;
+	}
+
+	@Override
+	protected Function abstractGetHashFunction() {
+		return HashFunction.getInstance(ByteArrayMonoid.getInstance(), this.getHashMethod());
+	}
+
+	public static StandardHashScheme getInstance(HashMethod hashMethod) {
+		if (hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new StandardHashScheme(hashMethod);
+	}
+
 }

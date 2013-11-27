@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.crypto.encoder.exceptions.EncodingException;
+import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrimeElement;
@@ -58,7 +58,7 @@ public class ProbabilisticECGroupFpEncoder
 			e = e.shiftLeft(SHIFT);
 
 			if (!zModPrime.contains(e)) {
-				throw new EncodingException(e + " can not be encoded");
+				throw new ProbabilisticEncodingException(e + " can not be encoded");
 			}
 
 			ZModElement x = zModPrime.getElement(e);

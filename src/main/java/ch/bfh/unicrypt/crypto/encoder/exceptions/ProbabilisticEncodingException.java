@@ -9,25 +9,25 @@ package ch.bfh.unicrypt.crypto.encoder.exceptions;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class EncodingException
+public class ProbabilisticEncodingException
 			 extends RuntimeException {
 
-	public EncodingException() {
+	public ProbabilisticEncodingException() {
 	}
 
-	public EncodingException(String message) {
+	public ProbabilisticEncodingException(String message) {
 		super(message);
 	}
 
-	public EncodingException(String message, Throwable cause) {
+	public ProbabilisticEncodingException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public EncodingException(Throwable cause) {
+	public ProbabilisticEncodingException(Throwable cause) {
 		super(cause);
 	}
 
-	public EncodingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public ProbabilisticEncodingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
