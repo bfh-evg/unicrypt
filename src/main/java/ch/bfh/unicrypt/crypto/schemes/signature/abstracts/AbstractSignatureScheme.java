@@ -6,8 +6,13 @@ import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public abstract class AbstractSignatureScheme<M extends Set, S extends Set, E extends Element> implements SignatureScheme {
+
+    private Function signatureFunction;
+    private Function verificationFunction;
+    private KeyPairGenerator keyPairGenerator;
 
     @Override
     public E sign(final Element privateKey, final Element message) {
@@ -29,8 +34,6 @@ public abstract class AbstractSignatureScheme<M extends Set, S extends Set, E ex
 	return (S) this.getSignatureFunction().getCoDomain();
     }
 
-    private KeyPairGenerator keyPairGenerator;
-
     @Override
     public final KeyPairGenerator getKeyPairGenerator() {
 	if (this.keyPairGenerator == null) {
@@ -39,6 +42,26 @@ public abstract class AbstractSignatureScheme<M extends Set, S extends Set, E ex
 	return this.keyPairGenerator;
     }
 
+    @Override
+    public final Function getSignatureFunction() {
+	if (this.signatureFunction == null) {
+	    this.signatureFunction = this.abstractGetSignatureFunction();
+	}
+	return this.signatureFunction;
+    }
+
+    @Override
+    public final Function getVerificationFunction() {
+	if (this.verificationFunction == null) {
+	    this.verificationFunction = this.abstractGetVerificationFunction();
+	}
+	return this.verificationFunction;
+    }
+
     protected abstract KeyPairGenerator abstractGetKeyPairGenerator();
+
+    protected abstract Function abstractGetSignatureFunction();
+
+    protected abstract Function abstractGetVerificationFunction();
 
 }

@@ -12,8 +12,6 @@ public class SchnorrSignatureScheme<MS extends CyclicGroup, ME extends Element> 
 
     private final MS cyclicGroup;
     private final ME generator;
-    private Function encryptionFunctionLeft;
-    private Function encryptionFunctionRight;
 
     protected SchnorrSignatureScheme(MS cyclicGroup, ME generator) {
 	this.cyclicGroup = cyclicGroup;
@@ -26,12 +24,18 @@ public class SchnorrSignatureScheme<MS extends CyclicGroup, ME extends Element> 
     }
 
     @Override
-    public Function getSignatureFunction() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Function abstractGetSignatureFunction() {
+//	ZMod zMod = this.getCyclicGroup().getZModOrder();
+//	Function g_pow_r = GeneratorFunction.getInstance(this.getGenerator());  //g^k
+//	Function e_hash_m_Concat_r = HashFunction.getInstance(zMod);
+//	Function s_k = ApplyFunction.getInstance(cyclicGroup).ApplyInverseFunction.getInstance(zMod)
+//		- xe = //(k-xe)
+//		ProductGroup signatureDomain = ProductGroup.getInstance(zMod, ProductGroup.getInstance(this.getCyclicGroup(), 2));
+	return null;
     }
 
     @Override
-    public Function getVerificationFunction() {
+    public Function abstractGetVerificationFunction() {
 	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
