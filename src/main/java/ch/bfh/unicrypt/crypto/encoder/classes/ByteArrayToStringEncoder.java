@@ -18,12 +18,12 @@ import ch.bfh.unicrypt.math.helper.Alphabet;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringToByteArrayEncoder
-			 extends AbstractEncoder<StringMonoid, ByteArrayMonoid, StringElement, ByteArrayElement> {
+public class ByteArrayToStringEncoder
+			 extends AbstractEncoder<ByteArrayMonoid, StringMonoid, ByteArrayElement, StringElement> {
 
 	private final StringMonoid stringMonoid;
 
-	protected StringToByteArrayEncoder(Alphabet alphabet) {
+	protected ByteArrayToStringEncoder(Alphabet alphabet) {
 		this.stringMonoid = StringMonoid.getInstance(alphabet);
 	}
 
@@ -31,25 +31,25 @@ public class StringToByteArrayEncoder
 		return this.stringMonoid.getAlphabet();
 	}
 
-	public ByteArrayToStringEncoder getDecoder() {
-		return ByteArrayToStringEncoder.getInstance(this.getAlphabet());
+	public StringToByteArrayEncoder getDecoder() {
+		return StringToByteArrayEncoder.getInstance(this.getAlphabet());
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return ConvertFunction.getInstance(this.stringMonoid, ByteArrayMonoid.getInstance());
+		return ConvertFunction.getInstance(ByteArrayMonoid.getInstance(), this.stringMonoid);
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return ConvertFunction.getInstance(ByteArrayMonoid.getInstance(), this.stringMonoid);
+		return ConvertFunction.getInstance(this.stringMonoid, ByteArrayMonoid.getInstance());
 	}
 
-	public static StringToByteArrayEncoder getInstance(Alphabet alphabet) {
+	public static ByteArrayToStringEncoder getInstance(Alphabet alphabet) {
 		if (alphabet == null) {
 			throw new IllegalArgumentException();
 		}
-		return new StringToByteArrayEncoder(alphabet);
+		return new ByteArrayToStringEncoder(alphabet);
 	}
 
 }
