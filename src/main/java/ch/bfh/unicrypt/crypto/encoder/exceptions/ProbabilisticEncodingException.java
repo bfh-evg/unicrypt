@@ -10,25 +10,25 @@ package ch.bfh.unicrypt.crypto.encoder.exceptions;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ProbabilisticEncodingException
-			 extends RuntimeException {
+	extends RuntimeException {
 
-	public ProbabilisticEncodingException() {
-	}
+    public ProbabilisticEncodingException() {
+    }
 
-	public ProbabilisticEncodingException(String message) {
-		super(message);
-	}
+    public ProbabilisticEncodingException(String message) {
+	super(message);
+    }
 
-	public ProbabilisticEncodingException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public ProbabilisticEncodingException(String message, Throwable cause) {
+	super(message, cause);
+    }
 
-	public ProbabilisticEncodingException(Throwable cause) {
-		super(cause);
-	}
+    public ProbabilisticEncodingException(Throwable cause) {
+	super(cause);
+    }
 
-	public ProbabilisticEncodingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
+// Only exists >=1.7
+//	public ProbabilisticEncodingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+//		super(message, cause, enableSuppression, writableStackTrace);
+//	}
 }
