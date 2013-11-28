@@ -8,44 +8,98 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class SchnorrSignatureScheme<MS extends CyclicGroup, ME extends Element> extends AbstractRandomizedSignatureScheme<Set, Set, Set, Element, Element> {
+public class SchnorrSignatureScheme<MS extends CyclicGroup, ME extends Element>
+	   extends AbstractRandomizedSignatureScheme<Set, Set, Set, Element, Element> {
 
-    private final MS cyclicGroup;
-    private final ME generator;
+	private final MS cyclicGroup;
+	private final ME generator;
 
-    protected SchnorrSignatureScheme(MS cyclicGroup, ME generator) {
-	this.cyclicGroup = cyclicGroup;
-	this.generator = generator;
-    }
+	protected SchnorrSignatureScheme(MS cyclicGroup, ME generator) {
+		this.cyclicGroup = cyclicGroup;
+		this.generator = generator;
+	}
 
-    @Override
-    protected KeyPairGenerator abstractGetKeyPairGenerator() {
-	return SchnorrSignatureKeyPairGenerator.getInstance(this.getGenerator());
-    }
+	@Override
+	protected KeyPairGenerator abstractGetKeyPairGenerator() {
+		return SchnorrSignatureKeyPairGenerator.getInstance(this.getGenerator());
+	}
 
-    @Override
-    public Function abstractGetSignatureFunction() {
-//	ZMod zMod = this.getCyclicGroup().getZModOrder();
-//	Function g_pow_r = GeneratorFunction.getInstance(this.getGenerator());  //g^k
-//	Function e_hash_m_Concat_r = HashFunction.getInstance(zMod);
-//	Function s_k = ApplyFunction.getInstance(cyclicGroup).ApplyInverseFunction.getInstance(zMod)
-//		- xe = //(k-xe)
-//		ProductGroup signatureDomain = ProductGroup.getInstance(zMod, ProductGroup.getInstance(this.getCyclicGroup(), 2));
-	return null;
-    }
+	@Override
+	public Function abstractGetSignatureFunction() {
 
-    @Override
-    public Function abstractGetVerificationFunction() {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+//		Element g = this.G_q.getElement(4);
+//		Element k = this.G_q.getZModOrder().getElement(3);
+//		Element x = this.G_q.getZModOrder().getElement(5);
+//		StringElement m = StringMonoid.getInstance(Alphabet.BASE64).getElement("MessageXX");
+//
+//		// f(k) = g^k
+//		Function f1 = GeneratorFunction.getInstance(g);
+//		Element r = f1.apply(k);
+//		System.out.println(r);
+//
+//		// f(m,r) = H(m||r)
+//		Function f2 = CompositeFunction.getInstance(
+//			   ApplyFunction.getInstance(m.getSet()),
+//			   HashFunction.getInstance(m.getSet()));
+//		//Element e = f2.apply(Tuple.getInstance(m, r));
+//
+//		FiniteByteArrayElement hash = Tuple.getInstance(m, r).getHashValue();
+//		Element e = ModuloFunction.getInstance(hash.getSet(), this.G_q.getZModOrder()).apply(hash);
+//		System.out.println(e);
+//
+//		// f(k, x, e) = k - xe
+//		ProductSet f4Domain = ProductSet.getInstance(G_q.getZModOrder(), 3);
+//		Function f4 = CompositeFunction.getInstance(
+//			   MultiIdentityFunction.getInstance(f4Domain, 2),
+//			   ProductFunction.getInstance(
+//			   SelectionFunction.getInstance(f4Domain, 0),
+//			   CompositeFunction.getInstance(
+//			   AdapterFunction.getInstance(f4Domain, 1, 2),
+//			   CompositeFunction.getInstance(
+//			   SelfApplyFunction.getInstance((SemiGroup) x.getSet()),
+//			   InvertFunction.getInstance(G_q.getZModOrder())))),
+//			   ApplyFunction.getInstance(G_q.getZModOrder()));
+//
+//		Element s = f4.apply(Tuple.getInstance(k, x, e));
+//		System.out.println(s);
 
-    public final MS getCyclicGroup() {
-	return this.cyclicGroup;
-    }
 
-    public final ME getGenerator() {
-	return this.generator;
-    }
+
+//			Function f4 = CompositeFunction.getInstance(
+//			   MultiIdentityFunction.getInstance(f4Domain, 2),
+//			   ProductFunction.getInstance(
+//					SelectionFunction.getInstance(f4Domain, 0),
+//					CompositeFunction.getInstance(
+//						AdapterFunction.getInstance(f4Domain, 1,2),
+//						CompositeFunction.getInstance(
+//							SelfApplyFunction.getInstance((SemiGroup) x.getSet()),
+//							InvertFunction.getInstance(G_q.getZModOrder())
+//						)
+//					)
+//			   ),
+//			   ApplyFunction.getInstance(G_q.getZModOrder())
+//			   );
+
+
+
+
+
+
+		return null;
+	}
+
+	@Override
+	public Function abstractGetVerificationFunction() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	public final MS getCyclicGroup() {
+		return this.cyclicGroup;
+	}
+
+	public final ME getGenerator() {
+		return this.generator;
+	}
 //import java.util.Random;
 //
 //import ch.bfh.unicrypt.crypto.keygenerator.old.DDHGroupKeyPairGeneratorClass;
