@@ -20,7 +20,7 @@ public class ElGamalValidityProofGeneratorTest {
 	}
 
 	@Test
-	public void TestElGamalValidtiyProof() {
+	public void TestElGamalValidityProof() {
 
 		ElGamalValidityProofGenerator pg = ElGamalValidityProofGenerator.getInstance(
 			   ElGamalEncryptionScheme.getInstance(G_q.getElement(2)),
@@ -38,7 +38,7 @@ public class ElGamalValidityProofGeneratorTest {
 		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(v.getBoolean());
 
-		// Invalid proof -> wrong randomndess
+		// Invalid proof -> wrong randomndness
 		secret = G_q.getZModOrder().getElement(7);
 		index = 1;
 		privateInput = pg.createPrivateInput(secret, index);
