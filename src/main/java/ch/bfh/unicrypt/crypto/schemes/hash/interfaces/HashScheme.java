@@ -11,39 +11,39 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author rolfhaenni
  */
 public interface HashScheme
-       extends Scheme {
+			 extends Scheme {
 
-  /**
-   *
-   * @return
-   */
-  public Set getHashSpace();
+	/**
+	 *
+	 * @return
+	 */
+	public Set getHashSpace();
 
-  /**
-   *
-   * @return
-   */
-  public Function getHashFunction();
+	/**
+	 *
+	 * @return
+	 */
+	public Function getHashFunction();
 
-  /**
-   *
-   * @return
-   */
-  public Function getCheckFunction();
+	/**
+	 *
+	 * @return
+	 */
+	public Function getCheckFunction();
 
-  /**
-   *
-   * @param message
-   * @return
-   */
-  public Element hash(Element message);
+	/**
+	 *
+	 * @param message
+	 * @return
+	 */
+	public Element hash(Element message);
 
-  /**
-   *
-   * @param message
-   * @param hashValue
-   * @return
-   */
-  public BooleanElement check(Element message, Element hashValue);
+	/**
+	 *
+	 * @param message
+	 * @param hashValue
+	 * @return
+	 */
+	public BooleanElement check(Element message, Element hashValue);
 
 }

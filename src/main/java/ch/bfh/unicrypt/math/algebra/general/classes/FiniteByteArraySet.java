@@ -6,9 +6,10 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -47,24 +48,21 @@ public class FiniteByteArraySet
 
 	@Override
 	protected FiniteByteArrayElement abstractGetElement(BigInteger value) {
-		byte[] result = new byte[this.getLength()];
-		Arrays.fill(result, (byte) 0);
-		if (this.equalLength()) {
-			byte[] bytes = value.toByteArray();
-			int offset = (bytes[0] == 0) ? 1 : 0;
-			System.arraycopy(bytes, offset, result, this.getLength() - bytes.length + offset, bytes.length - offset);
-			return this.standardGetElement(result);
-		} else {
-			BigInteger size = BigInteger.valueOf(256);
-			int i = this.getLength();
-			while (!value.equals(BigInteger.ZERO)) {
-				i--;
+		LinkedList<Byte> byteList = new LinkedList<Byte>();
+		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		while (!value.equals(BigInteger.ZERO)) {
+			if (!this.equalLength()) {
 				value = value.subtract(BigInteger.ONE);
-				result[i] = value.mod(size).byteValue();
-				value = value.divide(size);
 			}
-			return this.standardGetElement(Arrays.copyOfRange(result, i, this.getLength()));
+			byteList.addFirst(value.mod(size).byteValue());
+			value = value.divide(size);
 		}
+		if (this.equalLength()) {
+			while (byteList.size() < this.getLength()) {
+				byteList.addFirst((byte) 0);
+			}
+		}
+		return this.standardGetElement(ArrayUtil.byteListToByteArray(byteList));
 	}
 
 	@Override
@@ -81,7 +79,8 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetRandomElement(Random random) {
+	protected FiniteByteArrayElement abstractGetRandomElement(Random random
+	) {
 		return this.abstractGetElement(RandomUtil.getRandomBigInteger(this.getOrder().subtract(BigInteger.ONE), random));
 	}
 
@@ -92,7 +91,8 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	public boolean standardIsEqual(final Set set) {
+	public boolean standardIsEqual(final Set set
+	) {
 		final FiniteByteArraySet other = (FiniteByteArraySet) set;
 		return this.getLength() == other.getLength() && this.equalLength() == other.equalLength();
 	}

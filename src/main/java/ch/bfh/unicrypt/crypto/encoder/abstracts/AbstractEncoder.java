@@ -22,7 +22,7 @@ public abstract class AbstractEncoder<D extends Set, C extends Set, DE extends E
 	@Override
 	public Function getDecodingFunction() {
 		if (this.decodingFunction == null) {
-			this.decodingFunction = this.abstractGetEncodingFunction();
+			this.decodingFunction = this.abstractGetDecodingFunction();
 		}
 		return this.decodingFunction;
 	}

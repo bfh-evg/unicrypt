@@ -19,7 +19,7 @@ public class HashMethod
 
 	private final String algorithmName;
 	private final boolean recursive;
-	private int length;
+	private final int length;
 
 	protected HashMethod(String algorithmName, boolean recursive, int length) {
 		this.algorithmName = algorithmName;
