@@ -42,7 +42,7 @@ public class StandardCommitmentScheme<CS extends CyclicGroup, CE extends Element
     }
 
     public static StandardCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-	return StandardCommitmentScheme.<GStarMod, GStarModElement>getInstance(gStarMod.getDefaultGenerator());
+	return StandardCommitmentScheme.<GStarMod, GStarModElement>getInstance((GStarModElement) gStarMod.getDefaultGenerator());
     }
 
     public static StandardCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
