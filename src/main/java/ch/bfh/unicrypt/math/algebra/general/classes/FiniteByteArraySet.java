@@ -67,7 +67,7 @@ public class FiniteByteArraySet
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		BigInteger size = BigInteger.valueOf(256);
+		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
 		if (this.equalLength) {
 			return size.pow(this.getLength());
 		}
@@ -107,6 +107,27 @@ public class FiniteByteArraySet
 	public static FiniteByteArraySet getInstance(final int length, final boolean equalLength) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
+		}
+		return new FiniteByteArraySet(length, equalLength);
+	}
+
+	public static FiniteByteArraySet getInstance(final BigInteger minOrder) {
+		return FiniteByteArraySet.getInstance(minOrder, false);
+	}
+
+	public static FiniteByteArraySet getInstance(final BigInteger minOrder, boolean equalLength) {
+		if (minOrder == null || minOrder.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		int length = 0;
+		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		BigInteger order = BigInteger.ONE;
+		while (order.compareTo(minOrder) < 0) {
+			order = order.multiply(size);
+			if (equalLength) {
+				order = order.add(BigInteger.ONE);
+			}
+			length++;
 		}
 		return new FiniteByteArraySet(length, equalLength);
 	}
