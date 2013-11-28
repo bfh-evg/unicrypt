@@ -5,9 +5,9 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.Alphabet;
@@ -17,7 +17,7 @@ import org.junit.Test;
 public class PreimageProofGeneratorTest {
 
 	final static int P = 167;
-	final private MultiplicativeCyclicGroup G_q;
+	final private CyclicGroup G_q;
 
 	public PreimageProofGeneratorTest() {
 		this.G_q = GStarModSafePrime.getInstance(P);
