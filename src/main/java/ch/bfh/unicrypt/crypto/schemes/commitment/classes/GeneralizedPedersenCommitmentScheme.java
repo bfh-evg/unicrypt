@@ -55,7 +55,7 @@ public class GeneralizedPedersenCommitmentScheme<CS extends CyclicGroup, CE exte
     }
 
     public static GeneralizedPedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-	return GeneralizedPedersenCommitmentScheme.<GStarMod, GStarModElement>getInstance(gStarMod);
+	return GeneralizedPedersenCommitmentScheme.<GStarMod, GStarModElement>getInstance(gStarMod, null);
     }
 
     public static GeneralizedPedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod, RandomOracle randomOracle) {
