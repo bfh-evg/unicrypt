@@ -34,7 +34,7 @@ public class StandardCommitmentScheme<CS extends CyclicGroup, CE extends Element
     }
 
     public static <CS extends CyclicGroup, CE extends Element> StandardCommitmentScheme<CS, CE> getInstance(CS cyclicGroup) {
-	return new StandardCommitmentScheme<CS, CE>(cyclicGroup, (CE) cyclicGroup.getDefaultGenerator());
+	return StandardCommitmentScheme.<CS, CE>getInternalInstance(cyclicGroup);
     }
 
     public static <CS extends CyclicGroup, CE extends Element> StandardCommitmentScheme<CS, CE> getInstance(CE generator) {
@@ -42,11 +42,15 @@ public class StandardCommitmentScheme<CS extends CyclicGroup, CE extends Element
     }
 
     public static StandardCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-	return StandardCommitmentScheme.<GStarMod, GStarModElement>getInstance((GStarModElement) gStarMod.getDefaultGenerator());
+	return StandardCommitmentScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod);
     }
 
     public static StandardCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
 	return StandardCommitmentScheme.<GStarMod, GStarModElement>getInternalInstance(generator);
+    }
+
+    public static <CS extends CyclicGroup, CE extends Element> StandardCommitmentScheme<CS, CE> getInternalInstance(CS cyclicGroup) {
+	return new StandardCommitmentScheme<CS, CE>(cyclicGroup, (CE) cyclicGroup.getDefaultGenerator());
     }
 
     private static <CS extends CyclicGroup, CE extends Element> StandardCommitmentScheme<CS, CE> getInternalInstance(CE generator) {
