@@ -1,129 +1,51 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSetMembershipProofGenerator;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
+import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
+import ch.bfh.unicrypt.math.function.classes.InvertFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 
-// TODO Implement!
 public class ElGamalValidityProofGenerator
-	   extends AbstractSetMembershipProofGenerator<SemiGroup, SemiGroup, Function, Element, Element> {
+	   extends AbstractSetMembershipProofGenerator {
 
-	@Override
-	protected Tuple abstractGenerate(Element secretInput, Element publicInput, Element proverID, Random random) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected ElGamalValidityProofGenerator(Function proofFunction, Function createProofImageFunction, Tuple members, HashMethod hashMethod) {
+		super(proofFunction, createProofImageFunction, members, hashMethod);
 	}
 
-	@Override
-	protected BooleanElement abstractVerify(Element proof, Element publicInput, Element proverID) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public static ElGamalValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Tuple plaintexts) {
+		return ElGamalValidityProofGenerator.getInstance(elGamalES, publicKey, plaintexts, HashMethod.DEFAULT);
 	}
 
-	@Override
-	protected SemiGroup abstractGetPrivateInputSpace() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+	public static ElGamalValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Tuple plaintexts, HashMethod hashMethod) {
+		if (elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey) || plaintexts == null || plaintexts.getArity() < 1 || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		Function proofFunction =
+			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(elGamalES.getCyclicGroup().getZModOrder(), 1),
+											 elGamalES.getIdentityEncryptionFunction().partiallyApply(publicKey, 0));
 
-	@Override
-	protected SemiGroup abstractGetPublicInputSpace() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+		CyclicGroup elGamalCyclicGroup = elGamalES.getCyclicGroup();
+		ProductSet proofImageFunctionDomain = ProductSet.getInstance(proofFunction.getCoDomain(), elGamalCyclicGroup);
+		Function createProofImageFunction =
+			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(proofImageFunctionDomain, 2),
+											 ProductFunction.getInstance(SelectionFunction.getInstance(proofImageFunctionDomain, 0, 0),
+																		 CompositeFunction.getInstance(MultiIdentityFunction.getInstance(proofImageFunctionDomain, 2),
+																									   ProductFunction.getInstance(SelectionFunction.getInstance(proofImageFunctionDomain, 0, 1),
+																																   CompositeFunction.getInstance(SelectionFunction.getInstance(proofImageFunctionDomain, 1),
+																																								 InvertFunction.getInstance(elGamalCyclicGroup))),
+																									   ApplyFunction.getInstance(elGamalCyclicGroup))));
 
-	@Override
-	protected ProductSet abstractGetProofSpace() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new ElGamalValidityProofGenerator(proofFunction, createProofImageFunction, plaintexts, hashMethod);
 	}
 
 }
-//   /**
-//     * Create a validity proof of an encrypted text
-//     * @param randomization randomization used in the encryption
-//     * @param publicKey public key used in the encryption
-//     * @param index position of the plaintext that was encrypted in the array/list possiblePlainTexts
-//     * @param random random generator
-//     * @param possiblePlaintexts list of admitted plain texts
-//     * @return the proof Tuple
-//     */
-//    public Element createValididtyProof(Element randomization,
-//            Element publicKey, int index, final Random random,
-//            Element... possiblePlaintexts) {
-//        if(possiblePlaintexts.length < 2){
-//            throw new IllegalArgumentException("possiblePlaintexts must have at least a length of 2!");
-//        } else if(index<0 || index >= possiblePlaintexts.length){
-//            throw new IllegalArgumentException("Index must be greater than 0 and smaller than the length of the possiblePlaintexts list!");
-//        }
-//
-//        // perform the precomputation steps
-//        ArrayList<Element> precomputedMessages = new ArrayList<Element>();
-//        for (int j = 0; j < possiblePlaintexts.length; j++) {
-//            precomputedMessages.add(encrypt(publicKey,
-//                    possiblePlaintexts[index].apply(possiblePlaintexts[j]
-//                    .invert()), randomization));
-//        }
-//        final Element publicProofInput = (ProductGroup
-//                .getElement(precomputedMessages));
-//
-//        // create the homomorphic one way function for the proof
-//        final Function f = getIdentityEncryptionFunction().partiallyApply(
-//                publicKey, 0);
-//
-//        // the function for each relation in the proof is always the same, so we need to create a list of functions
-//        Function[] functions = new Function[possiblePlaintexts.length];
-//        for (int j = 0; j < possiblePlaintexts.length; j++) {
-//            functions[j] = f;
-//        }
-//
-//        final PreimageOrProofGeneratorClass proofGen = new PreimageOrProofGeneratorClass(functions);
-//
-//        // generate the OR proof with the prepared input and return it
-//        return proofGen.generate(randomization, index, publicProofInput, null,
-//                random);
-//    }
-//
-//    /**
-//     * Verifies a validity proof
-//     * @param validityProof the proof tuple
-//     * @param ciphertext the cipher text we want to prove the validity
-//     * @param publicKey public key used to generate the cipher text
-//     * @param possiblePlaintexts list of admitted plain texts
-//     * @return true if proof is correct, false otherwise
-//     */
-//    public boolean verifyValidityProof(Element validityProof, Element ciphertext, Element publicKey, Element... possiblePlaintexts) {
-//
-//        if(possiblePlaintexts.length < 2){
-//            throw new IllegalArgumentException("possiblePlaintexts must have at least a length of 2!");
-//        } else if (validityProof.getArity()!= 3){
-//            throw new IllegalArgumentException("proof must have an arity of 3 !");
-//        }
-//
-//        Element a = ((Element) ciphertext).getAt(0);
-//        Element b = ((Element) ciphertext).getAt(1);
-//
-//
-//        // perform the precomputation steps
-//        ArrayList<Element> precomputedMessages = new ArrayList<Element>();
-//        for (int j = 0; j < possiblePlaintexts.length; j++) {
-//            precomputedMessages.add(ProductGroup.getElement(a, b.apply(possiblePlaintexts[j].invert())));
-//        }
-//        final Element publicProofInput = (ProductGroup
-//                .getElement(precomputedMessages));
-//
-//        // create the homomorphic one way function used in the proof
-//        final Function f = getIdentityEncryptionFunction().partiallyApply(
-//                publicKey, 0);
-//
-//        // the function for each relation in the proof is always the same, so we need to create a list of functions
-//        Function[] functions = new Function[validityProof.getAt(2).getArity()];
-//        for (int j = 0; j < validityProof.getAt(2).getArity(); j++) {
-//            functions[j] = f;
-//        }
-//
-//        final PreimageOrProofGeneratorClass proofGen = new PreimageOrProofGeneratorClass(functions);
-//
-//        return proofGen.verify(validityProof, publicProofInput);
-//    }
-

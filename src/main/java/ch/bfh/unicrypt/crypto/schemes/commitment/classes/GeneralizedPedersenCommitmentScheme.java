@@ -14,58 +14,63 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.random.RandomOracle;
 
 public class GeneralizedPedersenCommitmentScheme<CS extends CyclicGroup, CE extends Element>
-			 extends AbstractRandomizedCommitmentScheme<ZMod, CS, CE, ZMod> {
+	extends AbstractRandomizedCommitmentScheme<ZMod, CS, CE, ZMod> {
 
-	private final CS cyclicGroup;
-	private final CE firstGenerator;
-	private final CE secondGenerator;
+    private final CS cyclicGroup;
+    private final CE firstGenerator;
+    private final CE secondGenerator;
 
-	protected GeneralizedPedersenCommitmentScheme(CS cyclicGroup, CE firstGenerator, CE secondGenerator) {
-		this.cyclicGroup = cyclicGroup;
-		this.firstGenerator = firstGenerator;
-		this.secondGenerator = secondGenerator;
+    protected GeneralizedPedersenCommitmentScheme(CS cyclicGroup, CE firstGenerator, CE secondGenerator) {
+	this.cyclicGroup = cyclicGroup;
+	this.firstGenerator = firstGenerator;
+	this.secondGenerator = secondGenerator;
+    }
+
+    public final CS getCyclicGroup() {
+	return this.cyclicGroup;
+    }
+
+    public final CE getFirstGenerator() {
+	return this.firstGenerator;
+    }
+
+    public final CE getSecondGenerator() {
+	return this.secondGenerator;
+    }
+
+    @Override
+    protected Function abstractGetCommitmentFunction() {
+	return CompositeFunction.getInstance(
+		ProductFunction.getInstance(GeneratorFunction.getInstance(this.getFirstGenerator()),
+			GeneratorFunction.getInstance(this.getFirstGenerator())),
+		ApplyFunction.getInstance(this.getCyclicGroup()));
+    }
+
+    public static <CS extends CyclicGroup, CE extends Element> GeneralizedPedersenCommitmentScheme<CS, CE> getInstance(CS cyclicGroup) {
+	return GeneralizedPedersenCommitmentScheme.<CS, CE>getInstance(cyclicGroup, (RandomOracle) null);
+    }
+
+    public static <CS extends CyclicGroup, CE extends Element> GeneralizedPedersenCommitmentScheme<CS, CE> getInstance(CS cyclicGroup, RandomOracle randomOracle) {
+	return GeneralizedPedersenCommitmentScheme.<CS, CE>getInternalInstance(cyclicGroup, randomOracle);
+    }
+
+    public static GeneralizedPedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
+	return GeneralizedPedersenCommitmentScheme.<GStarMod, GStarModElement>getInstance(gStarMod, null);
+    }
+
+    public static GeneralizedPedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod, RandomOracle randomOracle) {
+	return GeneralizedPedersenCommitmentScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod, randomOracle);
+
+    }
+
+    private static <CS extends CyclicGroup, CE extends Element> GeneralizedPedersenCommitmentScheme<CS, CE> getInternalInstance(CS cyclicGroup, RandomOracle randomOracle) {
+	if (randomOracle == null) {
+	    randomOracle = RandomOracle.DEFAULT;
 	}
-
-	public final CS getCyclicGroup() {
-		return this.cyclicGroup;
-	}
-
-	public final CE getFirstGenerator() {
-		return this.firstGenerator;
-	}
-
-	public final CE getSecondGenerator() {
-		return this.secondGenerator;
-	}
-
-	@Override
-	protected Function abstractGetCommitmentFunction() {
-		return CompositeFunction.getInstance(
-					 ProductFunction.getInstance(GeneratorFunction.getInstance(this.getFirstGenerator()),
-																			 GeneratorFunction.getInstance(this.getFirstGenerator())),
-					 ApplyFunction.getInstance(this.getCyclicGroup()));
-	}
-
-	public static <CS extends CyclicGroup, CE extends Element> PedersenCommitmentScheme<CS, CE> getInstance(CS cyclicGroup) {
-		return PedersenCommitmentScheme.<CS, CE>getInstance(cyclicGroup, (RandomOracle) null);
-	}
-
-	public static <CS extends CyclicGroup, CE extends Element> PedersenCommitmentScheme<CS, CE> getInstance(CS cyclicGroup, RandomOracle randomOracle) {
-		if (randomOracle == null) {
-			randomOracle = RandomOracle.DEFAULT;
-		}
-		CE firstGenerator = (CE) cyclicGroup.getIndependentGenerator(0, randomOracle);
-		CE secondGenerator = (CE) cyclicGroup.getIndependentGenerator(1, randomOracle);
-		return new PedersenCommitmentScheme<CS, CE>(cyclicGroup, firstGenerator, secondGenerator);
-	}
-
-	public static PedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-		return PedersenCommitmentScheme.<GStarMod, GStarModElement>getInstance(gStarMod);
-	}
-
-	public static PedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod, RandomOracle randomOracle) {
-		return PedersenCommitmentScheme.<GStarMod, GStarModElement>getInstance(gStarMod, randomOracle);
-	}
+	CE firstGenerator = (CE) cyclicGroup.getIndependentGenerator(0, randomOracle);
+	CE secondGenerator = (CE) cyclicGroup.getIndependentGenerator(1, randomOracle);
+	return new GeneralizedPedersenCommitmentScheme<CS, CE>(cyclicGroup, firstGenerator, secondGenerator);
+    }
 
 //  public static GeneralizedPedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, Encoder encoder, RandomOracle randomOracle) {
 //    if (cyclicGroup == null) {
