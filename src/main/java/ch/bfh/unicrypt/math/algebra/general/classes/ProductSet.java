@@ -9,6 +9,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
@@ -42,7 +43,7 @@ public class ProductSet
 	}
 
 	public final boolean contains(final int... values) {
-		return this.contains(MathUtil.intToBigIntegerArray(values));
+		return this.contains(ArrayUtil.intToBigIntegerArray(values));
 	}
 
 	public final boolean contains(BigInteger... values) {
@@ -72,7 +73,7 @@ public class ProductSet
 	}
 
 	public final Tuple getElement(final int... values) {
-		return this.getElement(MathUtil.intToBigIntegerArray(values));
+		return this.getElement(ArrayUtil.intToBigIntegerArray(values));
 	}
 
 	public final Tuple getElement(BigInteger[] values) {

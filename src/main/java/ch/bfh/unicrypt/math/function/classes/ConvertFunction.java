@@ -7,15 +7,15 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
 /**
- * This class represents the the concept of a function f:X->Y, which outputs the
- * element of Y that corresponds to the integer value of the input element.
+ * This class represents the the concept of a function f:X->Y, which outputs the element of Y that corresponds to the
+ * integer value of the input element.
  * <p/>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
 public class ConvertFunction
-	   extends AbstractFunction<Set, Set, Element> {
+			 extends AbstractFunction<Set, Set, Element> {
 
 	private ConvertFunction(final Set domain, final Set coDomain) {
 		super(domain, coDomain);
@@ -27,8 +27,8 @@ public class ConvertFunction
 	}
 
 	/**
-	 * This is the general factory method for this class. It creates an function
-	 * that converts values from the domain into values from the co-domain.
+	 * This is the general factory method for this class. It creates an function that converts values from the domain into
+	 * values from the co-domain.
 	 * <p/>
 	 * @param domain   The given domain
 	 * @param coDomain The given co-domain
@@ -41,7 +41,7 @@ public class ConvertFunction
 
 	@Override
 	protected boolean abstractIsEqual(Function function) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return true;
 	}
 
 }

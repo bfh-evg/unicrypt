@@ -13,9 +13,12 @@ import java.util.Random;
 /**
  *
  * @author rolfhaenni
+ * @param <D>
+ * @param <C>
+ * @param <E>
  */
 public class GenericFunction<D extends Set, C extends Set, E extends Element>
-	   extends AbstractFunction<D, C, E> {
+			 extends AbstractFunction<D, C, E> {
 
 	Function function;
 

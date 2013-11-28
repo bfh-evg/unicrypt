@@ -7,9 +7,11 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -52,7 +54,14 @@ public class ByteArrayMonoid
 
 	@Override
 	protected ByteArrayElement abstractGetElement(BigInteger value) {
-		return this.standardGetElement(value.toByteArray());
+		LinkedList<Byte> byteList = new LinkedList<Byte>();
+		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		while (!value.equals(BigInteger.ZERO)) {
+			value = value.subtract(BigInteger.ONE);
+			byteList.addFirst(value.mod(size).byteValue());
+			value = value.divide(size);
+		}
+		return this.standardGetElement(ArrayUtil.byteListToByteArray(byteList));
 	}
 
 	//
