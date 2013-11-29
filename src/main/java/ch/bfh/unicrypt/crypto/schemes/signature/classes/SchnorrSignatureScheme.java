@@ -3,103 +3,97 @@ package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 import ch.bfh.unicrypt.crypto.keygenerator.classes.SchnorrSignatureKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
+import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
+import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
+import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
+import ch.bfh.unicrypt.math.function.classes.HashFunction;
+import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
+import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class SchnorrSignatureScheme<MS extends CyclicGroup, ME extends Element>
-	   extends AbstractRandomizedSignatureScheme<Set, Set, Set, Element, Element> {
+public class SchnorrSignatureScheme<MS extends Set, ME extends Element>
+	extends AbstractRandomizedSignatureScheme<MS, ProductGroup, Tuple, ZModPrime> {
 
-	private final MS cyclicGroup;
-	private final ME generator;
+    private final CyclicGroup cyclicGroup;
+    private final Element generator;
+    private final MS messageSpace;
 
-	protected SchnorrSignatureScheme(MS cyclicGroup, ME generator) {
-		this.cyclicGroup = cyclicGroup;
-		this.generator = generator;
-	}
+    protected SchnorrSignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, ME generator) {
+	this.cyclicGroup = cyclicGroup;
+	this.generator = generator;
+	this.messageSpace = messageSpace;
+    }
 
-	@Override
-	protected KeyPairGenerator abstractGetKeyPairGenerator() {
-		return SchnorrSignatureKeyPairGenerator.getInstance(this.getGenerator());
-	}
+    @Override
+    protected KeyPairGenerator abstractGetKeyPairGenerator() {
+	return SchnorrSignatureKeyPairGenerator.getInstance(this.getGenerator());
+    }
 
-	@Override
-	public Function abstractGetSignatureFunction() {
+    @Override
+    public Function abstractGetSignatureFunction() {
+	ZMod z_q = cyclicGroup.getZModOrder();
+	ProductSet domain = ProductSet.getInstance(z_q, this.messageSpace, z_q);
+	Function fPrivateKey = SelectionFunction.getInstance(domain, 0);
+	Function fRandomization = SelectionFunction.getInstance(domain, 2);
+	Function fMessage = SelectionFunction.getInstance(domain, 1);
 
-//		Element g = this.G_q.getElement(4);
-//		Element k = this.G_q.getZModOrder().getElement(3);
-//		Element x = this.G_q.getZModOrder().getElement(5);
-//		StringElement m = StringMonoid.getInstance(Alphabet.BASE64).getElement("MessageXX");
-//
-//		// f(k) = g^k
-//		Function f1 = GeneratorFunction.getInstance(g);
-//		Element r = f1.apply(k);
-//		System.out.println(r);
-//
-//		// f(m,r) = H(m||r)
-//		Function f2 = CompositeFunction.getInstance(
-//			   ApplyFunction.getInstance(m.getSet()),
-//			   HashFunction.getInstance(m.getSet()));
-//		//Element e = f2.apply(Tuple.getInstance(m, r));
-//
-//		FiniteByteArrayElement hash = Tuple.getInstance(m, r).getHashValue();
-//		Element e = ModuloFunction.getInstance(hash.getSet(), this.G_q.getZModOrder()).apply(hash);
-//		System.out.println(e);
-//
-//		// f(k, x, e) = k - xe
-//		ProductSet f4Domain = ProductSet.getInstance(G_q.getZModOrder(), 3);
-//		Function f4 = CompositeFunction.getInstance(
-//			   MultiIdentityFunction.getInstance(f4Domain, 2),
-//			   ProductFunction.getInstance(
-//			   SelectionFunction.getInstance(f4Domain, 0),
-//			   CompositeFunction.getInstance(
-//			   AdapterFunction.getInstance(f4Domain, 1, 2),
-//			   CompositeFunction.getInstance(
-//			   SelfApplyFunction.getInstance((SemiGroup) x.getSet()),
-//			   InvertFunction.getInstance(G_q.getZModOrder())))),
-//			   ApplyFunction.getInstance(G_q.getZModOrder()));
-//
-//		Element s = f4.apply(Tuple.getInstance(k, x, e));
-//		System.out.println(s);
+	//f1=g^{randomization}
+	Function f1 = CompositeFunction.getInstance(fPrivateKey, GeneratorFunction.getInstance(this.generator));
 
+	//f2=h(message||f1)
+	Function f2 = HashFunction.getInstance(ProductSet.getInstance(this.messageSpace, f1.getCoDomain()));
 
+	ProductSet f3Domain = ProductSet.getInstance(z_q, 3);
 
-//			Function f4 = CompositeFunction.getInstance(
-//			   MultiIdentityFunction.getInstance(f4Domain, 2),
-//			   ProductFunction.getInstance(
-//					SelectionFunction.getInstance(f4Domain, 0),
-//					CompositeFunction.getInstance(
-//						AdapterFunction.getInstance(f4Domain, 1,2),
-//						CompositeFunction.getInstance(
-//							SelfApplyFunction.getInstance((SemiGroup) x.getSet()),
-//							InvertFunction.getInstance(G_q.getZModOrder())
-//						)
-//					)
-//			   ),
-//			   ApplyFunction.getInstance(G_q.getZModOrder())
-//			   );
+	//f3=randomization + f2*fPrivateKey
+	Function f3 = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(f3Domain, 2),
+		ProductFunction.getInstance(SelectionFunction.getInstance(f3Domain, 0),
+			CompositeFunction.getInstance(AdapterFunction.getInstance(f3Domain, 1, 2),
+				SelfApplyFunction.getInstance((SemiGroup) z_q))),
+		ApplyFunction.getInstance(z_q));
 
+	//f=randomization + privateKey*f2
+	Function f = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(domain, 3),
+		ProductFunction.getInstance(fRandomization, fPrivateKey,
+			CompositeFunction.getInstance(
+				MultiIdentityFunction.getInstance(domain, 2),
+				ProductFunction.getInstance(fMessage, f1),
+				CompositeFunction.getInstance(f2,
+					ModuloFunction.getInstance(f2.getCoDomain(), z_q)))),
+		f3);
 
+	return f;
+	//Not yet finished... Must return Tuple (e,s) not only s
+    }
 
+    @Override
+    public Function abstractGetVerificationFunction() {
+	//r_=g^s * y^{-e}
+	//e_=H(m||r_)
+	//E_ ?=? E
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
+    public final CyclicGroup getCyclicGroup() {
+	return this.cyclicGroup;
+    }
 
-
-		return null;
-	}
-
-	@Override
-	public Function abstractGetVerificationFunction() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	public final MS getCyclicGroup() {
-		return this.cyclicGroup;
-	}
-
-	public final ME getGenerator() {
-		return this.generator;
-	}
+    public final Element getGenerator() {
+	return this.generator;
+    }
 //import java.util.Random;
 //
 //import ch.bfh.unicrypt.crypto.keygenerator.old.DDHGroupKeyPairGeneratorClass;
