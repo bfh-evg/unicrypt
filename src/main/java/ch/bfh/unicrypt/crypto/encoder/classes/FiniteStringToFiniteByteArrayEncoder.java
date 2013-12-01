@@ -20,7 +20,7 @@ import java.math.BigInteger;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class FiniteStringToFiniteByteArrayEncoder
-			 extends AbstractEncoder<FiniteStringSet, FiniteByteArraySet, FiniteStringElement, FiniteByteArrayElement> {
+			 extends AbstractEncoder<FiniteStringSet, FiniteStringElement, FiniteByteArraySet, FiniteByteArrayElement> {
 
 	private final FiniteStringSet finiteStringSet;
 	private final FiniteByteArraySet finiteByteArraySet;

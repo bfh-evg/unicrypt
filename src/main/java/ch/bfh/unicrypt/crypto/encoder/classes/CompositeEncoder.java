@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class CompositeEncoder
-			 extends AbstractEncoder<Set, Set, Element, Element>
+			 extends AbstractEncoder<Set, Element, Set, Element>
 			 implements Compound<CompositeEncoder, Encoder> {
 
 	private final Encoder[] encoders;

@@ -21,7 +21,7 @@ import java.util.Random;
  * @author rolfhaenni
  */
 public class OneTimePadEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArrayElement, FiniteByteArraySet> {
+			 extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArraySet> {
 
 	private final FiniteByteArraySet finiteByteArraySet;
 
@@ -54,7 +54,7 @@ public class OneTimePadEncryptionScheme
 	}
 
 	private class OneTimePadFunction
-		   extends AbstractFunction<FiniteByteArraySet, FiniteByteArraySet, FiniteByteArrayElement> {
+				 extends AbstractFunction<FiniteByteArraySet, FiniteByteArraySet, FiniteByteArrayElement> {
 
 		protected OneTimePadFunction(FiniteByteArraySet finiteByteArraySet) {
 			super(ProductSet.getInstance(finiteByteArraySet, 2), finiteByteArraySet);

@@ -7,7 +7,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PreimageProofGenerator
-	   extends AbstractPreimageProofGenerator<SemiGroup, SemiGroup, Function, Element, Element> {
+			 extends AbstractPreimageProofGenerator<SemiGroup, Element, SemiGroup, Element, Function> {
 
 	protected PreimageProofGenerator(final Function function, HashMethod hashMethod) {
 		super(function, hashMethod);

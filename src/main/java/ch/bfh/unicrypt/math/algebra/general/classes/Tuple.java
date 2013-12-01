@@ -18,8 +18,8 @@ import java.util.NoSuchElementException;
  * @author rolfhaenni
  */
 public class Tuple
-	   extends AbstractElement<ProductSet, Tuple>
-	   implements Compound<Tuple, Element> {
+			 extends AbstractElement<ProductSet, Tuple>
+			 implements Compound<Tuple, Element> {
 
 	private final Element[] elements;
 	private final int arity;
@@ -169,15 +169,13 @@ public class Tuple
 	}
 
 	/**
-	 * This is a static factory method to construct a composed element without
-	 * the need of constructing the corresponding product or power group
-	 * beforehand. The input elements are given as an array.
+	 * This is a static factory method to construct a composed element without the need of constructing the corresponding
+	 * product or power group beforehand. The input elements are given as an array.
 	 * <p>
 	 * <p/>
 	 * @param elements The array of input elements
 	 * @return The corresponding tuple element
-	 * @throws IllegalArgumentException if {@literal elements} is null or
-	 *                                  contains null
+	 * @throws IllegalArgumentException if {@literal elements} is null or contains null
 	 */
 	public static Tuple getInstance(Element... elements) {
 		if (elements == null) {
@@ -192,7 +190,13 @@ public class Tuple
 			}
 			sets[i] = elements[i].getSet();
 		}
-		return ProductSet.getInstance(sets).getElement(elements);
+		if (arity == 2) {
+			return new Pair(ProductSet.getInstance(sets), elements);
+		}
+		if (arity == 3) {
+			return new Triple(ProductSet.getInstance(sets), elements);
+		}
+		return new Tuple(ProductSet.getInstance(sets), elements);
 	}
 
 }

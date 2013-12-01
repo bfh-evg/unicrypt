@@ -19,7 +19,7 @@ import ch.bfh.unicrypt.math.helper.Alphabet;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class FiniteStringToZModEncoder
-			 extends AbstractEncoder<FiniteStringSet, ZMod, FiniteStringElement, ZModElement> {
+			 extends AbstractEncoder<FiniteStringSet, FiniteStringElement, ZMod, ZModElement> {
 
 	private final FiniteStringSet finiteStringSet;
 	private final ZMod zMod;

@@ -3,7 +3,9 @@ package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageOrProofGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -12,8 +14,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Random;
 
-public abstract class AbstractSetMembershipProofGenerator
-	   extends AbstractProofGenerator<ProductSet, SemiGroup, ProductSet, Tuple> {
+public abstract class AbstractSetMembershipProofGenerator<PUS extends SemiGroup, PUE extends Element>
+			 extends AbstractProofGenerator<ProductSet, Pair, PUS, PUE, ProductSet, Triple> {
 
 	private final Function proofFunction;
 	private final Function createProofImagesFunction;
@@ -33,16 +35,16 @@ public abstract class AbstractSetMembershipProofGenerator
 	}
 
 	@Override
-	protected SemiGroup abstractGetPublicInputSpace() {
-		return (SemiGroup) proofFunction.getCoDomain();
+	protected PUS abstractGetPublicInputSpace() {
+		return (PUS) this.proofFunction.getCoDomain();
 	}
 
 	@Override
 	protected ProductSet abstractGetProofSpace() {
 		return ProductSet.getInstance(
-			   this.getCommitmentSpace(),
-			   ProductSet.getInstance(this.getChallengeSpace(), members.getArity()),
-			   this.getResponseSpace());
+					 this.getCommitmentSpace(),
+					 ProductSet.getInstance(this.getChallengeSpace(), members.getArity()),
+					 this.getResponseSpace());
 	}
 
 	public final ProductSet getCommitmentSpace() {
@@ -57,33 +59,33 @@ public abstract class AbstractSetMembershipProofGenerator
 		return ZMod.getInstance(this.proofFunction.getDomain().getMinimalOrder());
 	}
 
-	public final Tuple getCommitments(final Tuple proof) {
+	public final Tuple getCommitments(final Triple proof) {
 		return this.orProofGenerator.getCommitments(proof);
 	}
 
-	public final Tuple getChallenges(final Tuple proof) {
+	public final Tuple getChallenges(final Triple proof) {
 		return this.orProofGenerator.getChallenges(proof);
 	}
 
-	public final Tuple getResponses(final Tuple proof) {
+	public final Tuple getResponses(final Triple proof) {
 		return this.orProofGenerator.getResponses(proof);
 	}
 
-	public Tuple createPrivateInput(Element secret, int index) {
-		return orProofGenerator.createPrivateInput(secret, index);
+	public Pair createPrivateInput(Element secret, int index) {
+		return (Pair) this.orProofGenerator.createPrivateInput(secret, index);
 	}
 
 	@Override
-	protected Tuple abstractGenerate(Element privateInput, Element publicInput, Element proverId, Random random) {
+	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, Element proverId, Random random) {
 		return this.orProofGenerator.generate(privateInput, this.createProofImages(publicInput), proverId);
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Element proof, Element publicInput, Element proverId) {
+	protected BooleanElement abstractVerify(Triple proof, PUE publicInput, Element proverId) {
 		return this.orProofGenerator.verify(proof, this.createProofImages(publicInput), proverId);
 	}
 
-	private Tuple createProofImages(Element publicInput) {
+	private Tuple createProofImages(PUE publicInput) {
 		final Tuple[] inputs = new Tuple[members.getArity()];
 		for (int i = 0; i < members.getArity(); i++) {
 			inputs[i] = Tuple.getInstance(publicInput, members.getAt(i));

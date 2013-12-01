@@ -102,6 +102,12 @@ public class ProductSet
 	}
 
 	protected Tuple standardGetElement(final Element... elements) {
+		if (this.getArity() == 2) {
+			return new Pair(this, elements);
+		}
+		if (this.getArity() == 3) {
+			return new Triple(this, elements);
+		}
 		return new Tuple(this, elements);
 	}
 

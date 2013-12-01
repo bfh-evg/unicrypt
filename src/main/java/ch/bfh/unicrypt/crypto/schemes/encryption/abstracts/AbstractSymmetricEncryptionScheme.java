@@ -18,30 +18,30 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  * @param <EE>
  * @param <KS>
  */
-public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ES extends Set, ME extends Element, EE extends Element, KS extends Set>
-       extends AbstractEncryptionScheme<MS, ES, ME, EE>
-       implements SymmetricEncryptionScheme {
+public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, KS extends Set>
+			 extends AbstractEncryptionScheme<MS, ME, ES, EE>
+			 implements SymmetricEncryptionScheme {
 
-  private KeyGenerator keyGenerator;
+	private KeyGenerator keyGenerator;
 
-  @Override
-  public final KeyGenerator getKeyGenerator() {
-    if (this.keyGenerator == null) {
-      this.keyGenerator = this.abstractGetKeyGenerator();
-    }
-    return this.keyGenerator;
-  }
+	@Override
+	public final KeyGenerator getKeyGenerator() {
+		if (this.keyGenerator == null) {
+			this.keyGenerator = this.abstractGetKeyGenerator();
+		}
+		return this.keyGenerator;
+	}
 
-  @Override
-  public final KS getEncryptionKeySpace() {
-    return (KS) this.getKeyGenerator().getKeySpace();
-  }
+	@Override
+	public final KS getEncryptionKeySpace() {
+		return (KS) this.getKeyGenerator().getKeySpace();
+	}
 
-  @Override
-  public final KS getDecryptionKeySpace() {
-    return (KS) this.getKeyGenerator().getKeySpace();
-  }
+	@Override
+	public final KS getDecryptionKeySpace() {
+		return (KS) this.getKeyGenerator().getKeySpace();
+	}
 
-  protected abstract KeyGenerator abstractGetKeyGenerator();
+	protected abstract KeyGenerator abstractGetKeyGenerator();
 
 }

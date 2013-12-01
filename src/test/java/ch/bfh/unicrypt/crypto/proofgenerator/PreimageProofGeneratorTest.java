@@ -4,7 +4,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageProofGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -35,7 +35,7 @@ public class PreimageProofGeneratorTest {
 		Element publicInput = f.getCoDomain().getElement(64);
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Tuple proof = pg.generate(privateInput, publicInput, proverId);
+		Triple proof = pg.generate(privateInput, publicInput, proverId);
 
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());

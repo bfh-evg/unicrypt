@@ -18,7 +18,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ByteArrayToStringEncoder
-			 extends AbstractEncoder<ByteArrayMonoid, StringMonoid, ByteArrayElement, StringElement> {
+			 extends AbstractEncoder<ByteArrayMonoid, ByteArrayElement, StringMonoid, StringElement> {
 
 	private final StringMonoid stringMonoid;
 

@@ -7,18 +7,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Random;
 
 public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element>
-			 extends AbstractScheme
+			 extends AbstractScheme<MS>
 			 implements SecretSharingScheme {
 
 	private final int size;
 
 	protected AbstractSecretSharingScheme(int size) {
 		this.size = size;
-	}
-
-	@Override
-	public final MS getMessageSpace() {
-		return this.abstractGetMessageSpace();
 	}
 
 	@Override
@@ -60,8 +55,6 @@ public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Ele
 	protected int getThreshold() { // this method is not really needed here, but it simplifies the method recover
 		return this.getSize();
 	}
-
-	protected abstract MS abstractGetMessageSpace();
 
 	protected abstract SS abstractGetShareSpace();
 

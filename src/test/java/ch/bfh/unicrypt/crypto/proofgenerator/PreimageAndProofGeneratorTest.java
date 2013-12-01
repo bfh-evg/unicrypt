@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageAndProofGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -37,24 +38,24 @@ public class PreimageAndProofGeneratorTest {
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
-			   f1.getDomain().getElement(3),
-			   f2.getDomain().getElement(4));
+					 f1.getDomain().getElement(3),
+					 f2.getDomain().getElement(4));
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(64),
-			   f2.getCoDomain().getElement(16));
+					 f1.getCoDomain().getElement(64),
+					 f2.getCoDomain().getElement(16));
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Tuple proof = pg.generate(privateInput, publicInput, proverId);
+		Triple proof = pg.generate(privateInput, publicInput, proverId);
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
 
 		// Invalid proof -> One preimages is wrong
 		privateInput = Tuple.getInstance(
-			   f1.getDomain().getElement(3),
-			   f2.getDomain().getElement(4));
+					 f1.getDomain().getElement(3),
+					 f2.getDomain().getElement(4));
 		publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(64),
-			   f2.getCoDomain().getElement(32));    // Preimage = 5
+					 f1.getCoDomain().getElement(64),
+					 f2.getCoDomain().getElement(32));    // Preimage = 5
 		proof = pg.generate(privateInput, publicInput, proverId);
 		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(!v.getBoolean());
@@ -69,17 +70,17 @@ public class PreimageAndProofGeneratorTest {
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
-			   f1.getDomain().getElement(2),
-			   f1.getDomain().getElement(3),
-			   f1.getDomain().getElement(4));
+					 f1.getDomain().getElement(2),
+					 f1.getDomain().getElement(3),
+					 f1.getDomain().getElement(4));
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(4),
-			   f1.getCoDomain().getElement(8),
-			   f1.getCoDomain().getElement(16));
+					 f1.getCoDomain().getElement(4),
+					 f1.getCoDomain().getElement(8),
+					 f1.getCoDomain().getElement(16));
 
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Tuple proof = pg.generate(privateInput, publicInput, proverId);
+		Triple proof = pg.generate(privateInput, publicInput, proverId);
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
 	}
@@ -97,7 +98,7 @@ public class PreimageAndProofGeneratorTest {
 
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Tuple proof = pg.generate(privateInput, publicInput, proverId);
+		Triple proof = pg.generate(privateInput, publicInput, proverId);
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
 

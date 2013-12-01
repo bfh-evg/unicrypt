@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.crypto.schemes.hash.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.hash.abstracts.AbstractHashScheme;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
@@ -9,7 +10,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class StandardHashScheme
-			 extends AbstractHashScheme<ByteArrayMonoid, FiniteByteArraySet, FiniteByteArrayElement> {
+			 extends AbstractHashScheme<ByteArrayMonoid, ByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement> {
 
 	private final HashMethod hashMethod;
 

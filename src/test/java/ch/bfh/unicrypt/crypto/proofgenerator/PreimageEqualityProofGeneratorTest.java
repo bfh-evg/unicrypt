@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageEqualityProofGenera
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -38,11 +39,11 @@ public class PreimageEqualityProofGeneratorTest {
 		// Valid proof
 		Element privateInput = f1.getDomain().getElement(3);
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(64),
-			   f2.getCoDomain().getElement(8));
+					 f1.getCoDomain().getElement(64),
+					 f2.getCoDomain().getElement(8));
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Tuple proof = pg.generate(privateInput, publicInput, proverId);
+		Triple proof = pg.generate(privateInput, publicInput, proverId);
 
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
@@ -50,8 +51,8 @@ public class PreimageEqualityProofGeneratorTest {
 		// Invalid proof -> preimages are not equal
 		privateInput = f1.getDomain().getElement(3);
 		publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(64), // Preimage = 3
-			   f2.getCoDomain().getElement(16));    // Preimage = 4
+					 f1.getCoDomain().getElement(64), // Preimage = 3
+					 f2.getCoDomain().getElement(16));    // Preimage = 4
 		proof = pg.generate(privateInput, publicInput, proverId);
 		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(!v.getBoolean());

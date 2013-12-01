@@ -10,10 +10,9 @@ import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.util.Random;
 
 /**
- * This abstract class contains standard implementations for most methods of
- * type {@link Function}. For most classes implementing {@link Function}, it is
- * sufficient to inherit from {@link AbstractFunction} and to implement the
- * single abstract method {@link abstractApply(Element element, Random random)}.
+ * This abstract class contains standard implementations for most methods of type {@link Function}. For most classes
+ * implementing {@link Function}, it is sufficient to inherit from {@link AbstractFunction} and to implement the single
+ * abstract method {@link abstractApply(Element element, Random random)}.
  * <p>
  * <p/>
  * @param <D>
@@ -24,8 +23,8 @@ import java.util.Random;
  * @version 2.0
  */
 public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element>
-	   extends UniCrypt
-	   implements Function {
+			 extends UniCrypt
+			 implements Function {
 
 	private final D domain;
 	private final C coDomain;
@@ -122,9 +121,8 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
 	// sub-class
 	//
 	/**
-	 * This abstract method is the main method to implement in each sub-class of
-	 * {@link AbstractFunction}. The validity of the two parameters has already
-	 * been tested.
+	 * This abstract method is the main method to implement in each sub-class of {@link AbstractFunction}. The validity of
+	 * the two parameters has already been tested.
 	 * <p>
 	 * <p/>
 	 * @see apply(Element, Random)

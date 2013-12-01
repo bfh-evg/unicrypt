@@ -13,7 +13,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class GStarModSafePrimeEncoder
-	   extends AbstractEncoder<ZModPrime, GStarModSafePrime, ZModElement, GStarModElement> {
+			 extends AbstractEncoder<ZModPrime, ZModElement, GStarModSafePrime, GStarModElement> {
 
 	private final GStarModSafePrime gStarModSafePrime;
 
@@ -43,7 +43,7 @@ public class GStarModSafePrimeEncoder
 	}
 
 	static class EncodingFunction
-		   extends AbstractFunction<ZModPrime, GStarModSafePrime, GStarModElement> {
+				 extends AbstractFunction<ZModPrime, GStarModSafePrime, GStarModElement> {
 
 		protected EncodingFunction(final ZModPrime domain, final GStarMod coDomain) {
 			super(domain, coDomain);
@@ -67,7 +67,7 @@ public class GStarModSafePrimeEncoder
 	}
 
 	static class DecodingFunction
-		   extends AbstractFunction<GStarModSafePrime, ZModPrime, ZModElement> {
+				 extends AbstractFunction<GStarModSafePrime, ZModPrime, ZModElement> {
 
 		protected DecodingFunction(final GStarMod domain, final ZModPrime coDomain) {
 			super(domain, coDomain);
