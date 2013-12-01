@@ -6,7 +6,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -58,11 +58,11 @@ public class PolynomialElement
 		return result;
 	}
 
-	public Tuple getPoint(DualisticElement element) {
+	public Pair getPoint(DualisticElement element) {
 		if (element == null || !this.getSet().getSemiRing().contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		return Tuple.getInstance(element, this.evaluate(element));
+		return Pair.getInstance(element, this.evaluate(element));
 	}
 
 	public int getDegree() {

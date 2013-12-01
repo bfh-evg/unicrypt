@@ -11,8 +11,8 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 import java.util.Random;
@@ -22,7 +22,7 @@ import java.util.Random;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ShamirSecretSharingScheme
-			 extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Tuple> {
+			 extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Pair> {
 
 	private final ZModPrime zModPrime;
 	private final PolynomialRing polynomialRing;
@@ -52,7 +52,7 @@ public class ShamirSecretSharingScheme
 	}
 
 	@Override
-	protected Tuple[] abstractShare(Element message, Random random) {
+	protected Pair[] abstractShare(Element message, Random random) {
 
 		// create an array of coefficients with size threshold
 		// the coefficient of degree 0 is fixed (message)
@@ -67,7 +67,7 @@ public class ShamirSecretSharingScheme
 		final PolynomialElement polynomial = this.getPolynomialRing().getElement(coefficients);
 
 		// create a tuple which stores the shares
-		Tuple[] shares = new Tuple[getSize()];
+		Pair[] shares = new Pair[getSize()];
 		DualisticElement xVal;
 
 		// populate the tuple array with tuples of x and y values
@@ -82,18 +82,17 @@ public class ShamirSecretSharingScheme
 	@Override
 	protected ZModElement abstractRecover(Element[] shares) {
 
-		// make sure that we have a tuple array
-		Tuple[] points = (Tuple[]) shares;
-		int length = points.length;
+		Pair[] pairs = (Pair[]) shares;
+		int length = shares.length;
 
 		// Calculating the lagrange coefficients for each point we got
 		DualisticElement product;
 		DualisticElement[] lagrangeCoefficients = new DualisticElement[length];
 		for (int j = 0; j < length; j++) {
 			product = null;
-			DualisticElement elementJ = (DualisticElement) points[j].getAt(0);
+			DualisticElement elementJ = (DualisticElement) pairs[j].getFirst();
 			for (int l = 0; l < length; l++) {
-				DualisticElement elementL = (DualisticElement) points[l].getAt(0);
+				DualisticElement elementL = (DualisticElement) pairs[l].getFirst();
 				if (!elementJ.equals(elementL)) {
 					if (product == null) {
 						product = elementL.divide(elementL.subtract(elementJ));
@@ -108,7 +107,7 @@ public class ShamirSecretSharingScheme
 		// multiply the y-value of the point with the lagrange coefficient and sum everything up
 		ZModElement result = this.getZModPrime().getIdentityElement();
 		for (int j = 0; j < length; j++) {
-			DualisticElement value = (DualisticElement) points[j].getAt(1);
+			DualisticElement value = (DualisticElement) pairs[j].getSecond();
 			result = result.add(value.multiply(lagrangeCoefficients[j]));
 		}
 
