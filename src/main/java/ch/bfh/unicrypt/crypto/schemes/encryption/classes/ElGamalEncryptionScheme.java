@@ -103,24 +103,32 @@ public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
 		return this.encryptionFunctionRight;
 	}
 
-	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(MS cyclicGroup) {
-		return new ElGamalEncryptionScheme<MS, ME>(cyclicGroup, (ME) cyclicGroup.getDefaultGenerator());
-	}
+    public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(MS cyclicGroup) {
+        return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(cyclicGroup);
+    }
 
-	public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-		return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInstance(gStarMod);
-	}
+    public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
+        return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod);
+    }
 
-	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(ME generator) {
-		if (!generator.isGenerator()) {
-			throw new IllegalArgumentException();
-		}
-		return new ElGamalEncryptionScheme<MS, ME>((MS) generator.getSet(), generator);
-	}
+    public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(ME generator) {
+        return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(generator);
+    }
 
-	public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
-		return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInstance(generator);
-	}
+    public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
+        return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(generator);
+    }
+
+    private static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(ME generator) {
+        if (!generator.isGenerator()) {
+            throw new IllegalArgumentException();
+        }
+        return new ElGamalEncryptionScheme<MS, ME>((MS) generator.getSet(), generator);
+    }
+
+    public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(MS cyclicGroup) {
+        return new ElGamalEncryptionScheme<MS, ME>(cyclicGroup, (ME) cyclicGroup.getDefaultGenerator());
+    }
 
 }
 
