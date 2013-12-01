@@ -15,7 +15,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.random.RandomOracle;
 
 public class PedersenCommitmentScheme<CS extends CyclicGroup, CE extends Element>
-			 extends AbstractRandomizedCommitmentScheme<ZMod, ZModElement, CS, CE, ZMod> {
+	   extends AbstractRandomizedCommitmentScheme<ZMod, ZModElement, CS, CE, ZMod> {
 
 	private final CS cyclicGroup;
 	private final CE firstGenerator;
@@ -42,9 +42,9 @@ public class PedersenCommitmentScheme<CS extends CyclicGroup, CE extends Element
 	@Override
 	protected Function abstractGetCommitmentFunction() {
 		return CompositeFunction.getInstance(
-					 ProductFunction.getInstance(GeneratorFunction.getInstance(this.getFirstGenerator()),
-																			 GeneratorFunction.getInstance(this.getSecondGenerator())),
-					 ApplyFunction.getInstance(this.getCyclicGroup()));
+			   ProductFunction.getInstance(GeneratorFunction.getInstance(this.getFirstGenerator()),
+										   GeneratorFunction.getInstance(this.getSecondGenerator())),
+			   ApplyFunction.getInstance(this.getCyclicGroup()));
 	}
 
 	public static <CS extends CyclicGroup, CE extends Element> PedersenCommitmentScheme<CS, CE> getInstance(CS cyclicGroup) {
@@ -61,6 +61,13 @@ public class PedersenCommitmentScheme<CS extends CyclicGroup, CE extends Element
 
 	public static PedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod, RandomOracle randomOracle) {
 		return PedersenCommitmentScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod, randomOracle);
+	}
+
+	public static PedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarModElement firstGenerator, GStarModElement secondGenerator) {
+		if (!firstGenerator.getSet().isEqual(secondGenerator.getSet())) {
+			throw new IllegalArgumentException();
+		}
+		return new PedersenCommitmentScheme<GStarMod, GStarModElement>(firstGenerator.getSet(), firstGenerator, secondGenerator);
 	}
 
 	private static <CS extends CyclicGroup, CE extends Element> PedersenCommitmentScheme<CS, CE> getInternalInstance(CS cyclicGroup, RandomOracle randomOracle) {

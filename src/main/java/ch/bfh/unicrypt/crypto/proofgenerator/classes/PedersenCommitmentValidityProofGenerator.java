@@ -29,10 +29,9 @@ public class PedersenCommitmentValidityProofGenerator
 		if (pedersenCS == null || messages == null || messages.getArity() < 1 || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		//Function oneWayFunction = elGamalES.getEncryptionFunction().partiallyApply(publicKey, 0);
+
 		Function oneWayFunction = pedersenCS.getCommitmentFunction();
 
-		// TODO Head on....
 		ProductSet deltaFunctionDomain = ProductSet.getInstance(pedersenCS.getMessageSpace(), oneWayFunction.getCoDomain());
 		Function deltaFunction =
 			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),

@@ -4,6 +4,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.classes.PedersenCommitmentValidityP
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -36,7 +37,7 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		int index = 1;
 		Tuple privateInput = pg.createPrivateInput(secret, index);
 
-		Tuple proof = pg.generate(privateInput, publicInput);
+		Triple proof = (Triple) pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(v.getBoolean());
 
@@ -45,7 +46,7 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		index = 1;
 		privateInput = pg.createPrivateInput(secret, index);
 
-		proof = pg.generate(privateInput, publicInput);
+		proof = (Triple) pg.generate(privateInput, publicInput);
 		v = pg.verify(proof, publicInput);
 		assertTrue(!v.getBoolean());
 
@@ -54,7 +55,7 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		index = 2;
 		privateInput = pg.createPrivateInput(secret, index);
 
-		proof = pg.generate(privateInput, publicInput);
+		proof = (Triple) pg.generate(privateInput, publicInput);
 		v = pg.verify(proof, publicInput);
 		assertTrue(!v.getBoolean());
 	}
