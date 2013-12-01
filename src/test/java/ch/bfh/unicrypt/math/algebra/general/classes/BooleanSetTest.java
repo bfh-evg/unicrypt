@@ -262,7 +262,7 @@ public class BooleanSetTest {
 		ZModPrime result = (ZModPrime) BooleanSet.getInstance().getZModOrder();
 		
 		// TODO implement equals methods in sets
-		//Assert.assertEquals(expResult, result);
+		Assert.assertTrue(expResult.isEqual(result));
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class BooleanSetTest {
 		ZStarMod expResult = ZStarMod.getInstance(2);
 		ZStarMod result = BooleanSet.getInstance().getZStarModOrder();
 		// TODO implement equals methods in sets
-		//Assert.assertEquals(expResult, result);
+		Assert.assertTrue(expResult.isEqual(result));
 	}
 
 	/**
