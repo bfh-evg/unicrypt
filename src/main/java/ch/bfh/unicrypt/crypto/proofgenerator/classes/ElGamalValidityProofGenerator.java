@@ -18,8 +18,8 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
 public class ElGamalValidityProofGenerator
 	   extends AbstractSetMembershipProofGenerator {
 
-	protected ElGamalValidityProofGenerator(Function proofFunction, Function createProofImageFunction, Tuple members, HashMethod hashMethod) {
-		super(proofFunction, createProofImageFunction, members, hashMethod);
+	protected ElGamalValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Tuple members, HashMethod hashMethod) {
+		super(oneWayFunction, deltaFunction, members, hashMethod);
 	}
 
 	public static ElGamalValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Tuple plaintexts) {
@@ -30,22 +30,20 @@ public class ElGamalValidityProofGenerator
 		if (elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey) || plaintexts == null || plaintexts.getArity() < 1 || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Function proofFunction =
-			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(elGamalES.getCyclicGroup().getZModOrder(), 1),
-											 elGamalES.getIdentityEncryptionFunction().partiallyApply(publicKey, 0));
+		Function oneWayFunction = elGamalES.getEncryptionFunction().partiallyApply(publicKey, 0);
 
 		CyclicGroup elGamalCyclicGroup = elGamalES.getCyclicGroup();
-		ProductSet proofImageFunctionDomain = ProductSet.getInstance(proofFunction.getCoDomain(), elGamalCyclicGroup);
-		Function createProofImageFunction =
-			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(proofImageFunctionDomain, 2),
-											 ProductFunction.getInstance(SelectionFunction.getInstance(proofImageFunctionDomain, 0, 0),
-																		 CompositeFunction.getInstance(MultiIdentityFunction.getInstance(proofImageFunctionDomain, 2),
-																									   ProductFunction.getInstance(SelectionFunction.getInstance(proofImageFunctionDomain, 0, 1),
-																																   CompositeFunction.getInstance(SelectionFunction.getInstance(proofImageFunctionDomain, 1),
+		ProductSet deltaFunctionDomain = ProductSet.getInstance(elGamalCyclicGroup, oneWayFunction.getCoDomain());
+		Function deltaFunction =
+			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
+											 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
+																		 CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
+																									   ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 1),
+																																   CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
 																																								 InvertFunction.getInstance(elGamalCyclicGroup))),
 																									   ApplyFunction.getInstance(elGamalCyclicGroup))));
 
-		return new ElGamalValidityProofGenerator(proofFunction, createProofImageFunction, plaintexts, hashMethod);
+		return new ElGamalValidityProofGenerator(oneWayFunction, deltaFunction, plaintexts, hashMethod);
 	}
 
 }
