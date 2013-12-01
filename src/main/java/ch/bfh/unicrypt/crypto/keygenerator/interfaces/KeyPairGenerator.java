@@ -4,14 +4,12 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
-import java.math.BigInteger;
-import java.util.Random;
-
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.Random;
 
 /**
  *
@@ -19,30 +17,24 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  */
 public interface KeyPairGenerator {
 
-  Tuple generateKeyPair();
+	Pair generateKeyPair();
 
-  Tuple generateKeyPair(Random random);
+	Pair generateKeyPair(Random random);
 
-  Element generatePrivateKey();
+	Element generatePrivateKey();
 
-  Element generatePrivateKey(Random random);
+	Element generatePrivateKey(Random random);
 
-  Tuple getKeyPair(BigInteger value);
+	Element getPublicKey(Element privateKey);
 
-  ProductSet getKeyPairSpace();
+	ProductSet getKeyPairSpace();
 
-  Element getPrivateKey(BigInteger value);
+	Set getPrivateKeySpace();
 
-  KeyGenerator getPrivateKeyGenerator();
+	Set getPublicKeySpace();
 
-  Set getPrivateKeySpace();
+	KeyGenerator getPrivateKeyGenerator();
 
-  Element getPublicKey(BigInteger value);
-
-  Element getPublicKey(Element privateKey);
-
-  Function getPublicKeyFunction();
-
-  Set getPublicKeySpace();
+	Function getPublicKeyFunction();
 
 }

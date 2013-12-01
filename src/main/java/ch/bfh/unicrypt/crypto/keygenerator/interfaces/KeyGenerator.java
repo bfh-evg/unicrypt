@@ -4,7 +4,6 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
-import java.math.BigInteger;
 import java.util.Random;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -16,11 +15,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  */
 public interface KeyGenerator {
 
-  Element generateKey();
+	Element generateKey();
 
-  Element generateKey(Random random);
+	Element generateKey(Random random);
 
-  Element getKey(BigInteger value);
+	Set getKeySpace();
 
-  Set getKeySpace();
 }

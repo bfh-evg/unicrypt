@@ -5,8 +5,9 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
@@ -18,18 +19,45 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  *
  * @author rolfhaenni
  */
-public class SchnorrSignatureKeyPairGenerator extends AbstractKeyPairGenerator<ZMod, GStarModPrime, ZModElement, GStarModElement> {
+public class SchnorrSignatureKeyPairGenerator
+			 extends AbstractKeyPairGenerator<ZModPrime, ZModElement, GStarModPrime, GStarModElement> {
 
-  protected SchnorrSignatureKeyPairGenerator(Function publicKeyFunction) {
-    super(publicKeyFunction);
-  }
+	private final Element generator;
 
-  public static SchnorrSignatureKeyPairGenerator getInstance(GStarModSafePrime publicKeySpace) {
-    return new SchnorrSignatureKeyPairGenerator(GeneratorFunction.getInstance(publicKeySpace));
-  }
+	protected SchnorrSignatureKeyPairGenerator(GStarModSafePrime publicKeySpace) {
+		this.generator = publicKeySpace.getDefaultGenerator();
+	}
 
-  public static SchnorrSignatureKeyPairGenerator getInstance(Element generator) {
-    return new SchnorrSignatureKeyPairGenerator(GeneratorFunction.getInstance(generator));
-  }
+	protected SchnorrSignatureKeyPairGenerator(Element generator) {
+		this.generator = generator;
+	}
+
+	public Element getGenerator() {
+		return this.generator;
+	}
+
+	@Override
+	protected KeyGenerator abstractGetPrivateKeyGenerator() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected Function abstractGetPublicKeyFunction() {
+		return GeneratorFunction.getInstance(this.getGenerator());
+	}
+
+	public static SchnorrSignatureKeyPairGenerator getInstance(GStarModSafePrime publicKeySpace) {
+		if (publicKeySpace == null) {
+			throw new IllegalArgumentException();
+		}
+		return new SchnorrSignatureKeyPairGenerator(publicKeySpace);
+	}
+
+	public static SchnorrSignatureKeyPairGenerator getInstance(Element generator) {
+		if (generator == null) {
+			throw new IllegalArgumentException();
+		}
+		return new SchnorrSignatureKeyPairGenerator(generator);
+	}
 
 }

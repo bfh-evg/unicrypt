@@ -2,104 +2,89 @@ package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
-import java.math.BigInteger;
 import java.util.Random;
 
-public abstract class AbstractKeyPairGenerator<PRS extends Set, PUS extends Set, PRE extends Element, PUE extends Element>
-       extends UniCrypt
-       implements KeyPairGenerator {
+public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element>
+			 extends UniCrypt
+			 implements KeyPairGenerator {
 
-  private final Function publicKeyFunction;
-  private ProductSet keyPairSpace;
-  private AbstractKeyGenerator privateKeyGenerator;
+	private ProductSet keyPairSpace;
+	private KeyGenerator privateKeyGenerator;
+	private Function publicKeyFunction;
 
-  protected AbstractKeyPairGenerator(Function publicKeyFunction) {
-    this.publicKeyFunction = publicKeyFunction;
-  }
+	@Override
+	public ProductSet getKeyPairSpace() {
+		if (this.keyPairSpace == null) {
+			this.keyPairSpace = ProductSet.getInstance(this.getPrivateKeySpace(), this.getPublicKeySpace());
+		}
+		return this.keyPairSpace;
+	}
 
-  @Override
-  public ProductSet getKeyPairSpace() {
-    if (this.keyPairSpace == null) {
-      this.keyPairSpace = ProductSet.getInstance(this.getPrivateKeySpace(), this.getPublicKeySpace());
-    }
-    return this.keyPairSpace;
-  }
+	@Override
+	public Pair generateKeyPair() {
+		return this.generateKeyPair(null);
+	}
 
-  @Override
-  public Tuple getKeyPair(BigInteger value) {
-    Element privateKey = this.getPrivateKey(value);
-    return this.getKeyPairSpace().getElement(privateKey, this.getPublicKey(privateKey));
-  }
+	@Override
+	public Pair generateKeyPair(Random random) {
+		Element privateKey = this.generatePrivateKey(random);
+		return (Pair) this.getKeyPairSpace().getElement(privateKey, this.getPublicKey(privateKey));
+	}
 
-  @Override
-  public Tuple generateKeyPair() {
-    return this.generateKeyPair(null);
-  }
+	@Override
+	public PRS getPrivateKeySpace() {
+		return (PRS) this.getPublicKeyFunction().getDomain();
+	}
 
-  @Override
-  public Tuple generateKeyPair(Random random) {
-    Element privateKey = this.generatePrivateKey(random);
-    return this.getKeyPairSpace().getElement(privateKey, this.getPublicKey(privateKey));
-  }
+	@Override
+	public KeyGenerator getPrivateKeyGenerator() {
+		if (this.privateKeyGenerator == null) {
+			this.privateKeyGenerator = this.abstractGetPrivateKeyGenerator();
+		}
+		return this.privateKeyGenerator;
+	}
 
-  @Override
-  public PRS getPrivateKeySpace() {
-    return (PRS) this.getPublicKeyFunction().getDomain();
-  }
+	@Override
+	public PRE generatePrivateKey() {
+		return this.generatePrivateKey(null);
+	}
 
-  @Override
-  public KeyGenerator getPrivateKeyGenerator() {
-    if (this.privateKeyGenerator == null) {
-      this.privateKeyGenerator = new AbstractKeyGenerator<PRS, PRE>(this.getPrivateKeySpace()) {
-      };
-    }
-    return this.privateKeyGenerator;
-  }
+	@Override
+	public PRE generatePrivateKey(Random random) {
+		return (PRE) this.getPrivateKeyGenerator().generateKey(random);
+	}
 
-  @Override
-  public PRE getPrivateKey(BigInteger value) {
-    return (PRE) this.getPrivateKeyGenerator().getKey(value);
-  }
+	@Override
+	public PUS getPublicKeySpace() {
+		return (PUS) this.getPublicKeyFunction().getCoDomain();
+	}
 
-  @Override
-  public PRE generatePrivateKey() {
-    return this.generatePrivateKey(null);
-  }
+	@Override
+	public Function getPublicKeyFunction() {
+		if (this.publicKeyFunction == null) {
+			this.publicKeyFunction = this.abstractGetPublicKeyFunction();
+		}
+		return this.publicKeyFunction;
+	}
 
-  @Override
-  public PRE generatePrivateKey(Random random) {
-    return (PRE) this.getPrivateKeyGenerator().generateKey(random);
-  }
+	@Override
+	public PUE getPublicKey(Element privateKey) {
+		return (PUE) this.getPublicKeyFunction().apply(privateKey);
+	}
 
-  @Override
-  public PUS getPublicKeySpace() {
-    return (PUS) this.getPublicKeyFunction().getCoDomain();
-  }
+	@Override
+	protected String standardToStringContent() {
+		return this.getPrivateKeySpace().toString() + ", " + this.getPublicKeySpace().toString();
+	}
 
-  @Override
-  public Function getPublicKeyFunction() {
-    return this.publicKeyFunction;
-  }
+	protected abstract Function abstractGetPublicKeyFunction();
 
-  @Override
-  public PUE getPublicKey(BigInteger value) {
-    return (PUE) this.getPublicKey(this.getPrivateKey(value));
-  }
-
-  @Override
-  public PUE getPublicKey(Element privateKey) {
-    return (PUE) this.getPublicKeyFunction().apply(privateKey);
-  }
-
-  @Override
-  protected String standardToStringContent() {
-    return this.getPrivateKeySpace().toString() + ", " + this.getPublicKeySpace().toString();
-  }
+	protected abstract KeyGenerator abstractGetPrivateKeyGenerator();
 
 }
