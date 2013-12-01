@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.ElGamalValidityProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.ElGamalEncryptionValidityProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -24,7 +24,7 @@ public class ElGamalValidityProofGeneratorTest {
 	@Test
 	public void TestElGamalValidityProof() {
 
-		ElGamalValidityProofGenerator pg = ElGamalValidityProofGenerator.getInstance(
+		ElGamalEncryptionValidityProofGenerator pg = ElGamalEncryptionValidityProofGenerator.getInstance(
 					 ElGamalEncryptionScheme.getInstance(G_q.getElement(2)),
 					 G_q.getElement(4),
 					 Tuple.getInstance(G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)));

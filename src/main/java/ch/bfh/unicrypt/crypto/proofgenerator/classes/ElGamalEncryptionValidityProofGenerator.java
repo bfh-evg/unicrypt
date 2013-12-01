@@ -17,18 +17,18 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
-public class ElGamalValidityProofGenerator
+public class ElGamalEncryptionValidityProofGenerator
 			 extends AbstractSetMembershipProofGenerator<ProductGroup, Pair> {
 
-	protected ElGamalValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Tuple members, HashMethod hashMethod) {
+	protected ElGamalEncryptionValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Tuple members, HashMethod hashMethod) {
 		super(oneWayFunction, deltaFunction, members, hashMethod);
 	}
 
-	public static ElGamalValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Tuple plaintexts) {
-		return ElGamalValidityProofGenerator.getInstance(elGamalES, publicKey, plaintexts, HashMethod.DEFAULT);
+	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Tuple plaintexts) {
+		return ElGamalEncryptionValidityProofGenerator.getInstance(elGamalES, publicKey, plaintexts, HashMethod.DEFAULT);
 	}
 
-	public static ElGamalValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Tuple plaintexts, HashMethod hashMethod) {
+	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Tuple plaintexts, HashMethod hashMethod) {
 		if (elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey) || plaintexts == null || plaintexts.getArity() < 1 || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -45,7 +45,7 @@ public class ElGamalValidityProofGenerator
 																																								 InvertFunction.getInstance(elGamalCyclicGroup))),
 																									   ApplyFunction.getInstance(elGamalCyclicGroup))));
 
-		return new ElGamalValidityProofGenerator(oneWayFunction, deltaFunction, plaintexts, hashMethod);
+		return new ElGamalEncryptionValidityProofGenerator(oneWayFunction, deltaFunction, plaintexts, hashMethod);
 	}
 
 }
