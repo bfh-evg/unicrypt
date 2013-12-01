@@ -14,39 +14,38 @@ import java.util.Random;
  *
  * @author rolfhaenni
  * @param <MS>
- * @param <ES>
- * @param <ES>
  * @param <ME>
+ * @param <ES>
  * @param <EE>
  * @param <EK>
  * @param <DK>
  * @param <RS>
  */
-public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ES extends Set, ME extends Element, EE extends Element, EK extends Set, DK extends Set, RS extends Set>
-       extends AbstractAsymmetricEncryptionScheme<MS, ES, ME, EE, EK, DK>
-       implements RandomizedEncryptionScheme {
+public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, EK extends Set, DK extends Set, RS extends Set>
+			 extends AbstractAsymmetricEncryptionScheme<MS, ME, ES, EE, EK, DK>
+			 implements RandomizedEncryptionScheme {
 
-  @Override
-  public final RS getRandomizationSpace() {
-    return (RS) ((ProductSet) this.getEncryptionFunction().getDomain()).getAt(2);
-  }
+	@Override
+	public final RS getRandomizationSpace() {
+		return (RS) ((ProductSet) this.getEncryptionFunction().getDomain()).getAt(2);
+	}
 
-  @Override
-  public final EE encrypt(Element encryptionKey, Element message) {
-    return this.encrypt(encryptionKey, message, (Random) null);
-  }
+	@Override
+	public final EE encrypt(Element encryptionKey, Element message) {
+		return this.encrypt(encryptionKey, message, (Random) null);
+	}
 
-  @Override
-  public final EE encrypt(Element encryptionKey, Element message, Random random) {
-    return this.encrypt(encryptionKey, message, this.getRandomizationSpace().getRandomElement(random));
-  }
+	@Override
+	public final EE encrypt(Element encryptionKey, Element message, Random random) {
+		return this.encrypt(encryptionKey, message, this.getRandomizationSpace().getRandomElement(random));
+	}
 
-  @Override
-  public final EE encrypt(Element encryptionKey, Element message, Element randomization) {
-    if (!this.getEncryptionKeySpace().contains(encryptionKey) || !this.getMessageSpace().contains(message) || !this.getRandomizationSpace().contains(randomization)) {
-      throw new IllegalArgumentException();
-    }
-    return (EE) this.getEncryptionFunction().apply(encryptionKey, message, randomization);
-  }
+	@Override
+	public final EE encrypt(Element encryptionKey, Element message, Element randomization) {
+		if (!this.getEncryptionKeySpace().contains(encryptionKey) || !this.getMessageSpace().contains(message) || !this.getRandomizationSpace().contains(randomization)) {
+			throw new IllegalArgumentException();
+		}
+		return (EE) this.getEncryptionFunction().apply(encryptionKey, message, randomization);
+	}
 
 }

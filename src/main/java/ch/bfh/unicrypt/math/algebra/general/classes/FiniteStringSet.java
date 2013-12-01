@@ -122,4 +122,25 @@ public class FiniteStringSet
 		return new FiniteStringSet(alphabet, length, equalLength);
 	}
 
+	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder) {
+		return FiniteStringSet.getInstance(alphabet, minOrder, false);
+	}
+
+	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder, boolean equalLength) {
+		if (alphabet == null || minOrder == null || minOrder.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		int length = 0;
+		BigInteger order = BigInteger.ONE;
+		BigInteger size = BigInteger.valueOf(alphabet.getSize());
+		while (order.compareTo(minOrder) < 0) {
+			order = order.multiply(size);
+			if (equalLength) {
+				order = order.add(BigInteger.ONE);
+			}
+			length++;
+		}
+		return new FiniteStringSet(alphabet, length, equalLength);
+	}
+
 }

@@ -5,6 +5,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
@@ -12,7 +13,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PreimageEqualityProofGenerator
-	   extends AbstractPreimageProofGenerator<SemiGroup, ProductSemiGroup, Function, Tuple, Element> {
+			 extends AbstractPreimageProofGenerator<SemiGroup, Element, ProductSemiGroup, Tuple, Function> {
 
 	protected PreimageEqualityProofGenerator(final Function proofFunction, HashMethod hashMethod) {
 		super(proofFunction, hashMethod);
@@ -26,14 +27,15 @@ public class PreimageEqualityProofGenerator
 		if (hashMethod == null || proofFunctions == null || proofFunctions.length < 1) {
 			throw new IllegalArgumentException();
 		}
+		Set domain = proofFunctions[0].getDomain();
 		for (int i = 1; i < proofFunctions.length; i++) {
-			if (!proofFunctions[0].getDomain().isEqual(proofFunctions[i].getDomain())) {
+			if (!domain.isEqual(proofFunctions[i].getDomain())) {
 				throw new IllegalArgumentException("All proof functions must have the same domain!");
 			}
 		}
 		Function proofFunction = CompositeFunction.getInstance(
-			   MultiIdentityFunction.getInstance(proofFunctions[0].getDomain(), proofFunctions.length),
-			   ProductFunction.getInstance(proofFunctions));
+					 MultiIdentityFunction.getInstance(domain, proofFunctions.length),
+					 ProductFunction.getInstance(proofFunctions));
 
 		return new PreimageEqualityProofGenerator(proofFunction, hashMethod);
 	}

@@ -15,7 +15,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 public class ProbabilisticECGroupFpEncoder
-			 extends AbstractEncoder<ZModPrime, ECZModPrime, ZModElement, ECZModPrimeElement>
+			 extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECZModPrimeElement>
 			 implements ProbabilisticEncoder {
 
 	protected static final int SHIFT = 10;

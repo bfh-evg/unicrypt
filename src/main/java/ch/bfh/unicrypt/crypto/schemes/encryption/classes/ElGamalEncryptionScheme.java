@@ -7,9 +7,9 @@ package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 import ch.bfh.unicrypt.crypto.keygenerator.classes.ElGamalKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractReEncryptionScheme;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -32,103 +32,95 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <ME>
  */
 public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
-	extends AbstractReEncryptionScheme<MS, ProductGroup, ME, Tuple, CyclicGroup, ZMod, ZMod> {
+			 extends AbstractReEncryptionScheme<MS, ME, ProductGroup, Pair, CyclicGroup, ZModPrime, ZModPrime> {
 
-    private final MS cyclicGroup;
-    private final ME generator;
-    private Function encryptionFunctionLeft;
-    private Function encryptionFunctionRight;
+	private final MS cyclicGroup;
+	private final ME generator;
+	private Function encryptionFunctionLeft;
+	private Function encryptionFunctionRight;
 
-    protected ElGamalEncryptionScheme(MS cyclicGroup, ME generator) {
-	this.cyclicGroup = cyclicGroup;
-	this.generator = generator;
-    }
-
-    public final MS getCyclicGroup() {
-	return this.cyclicGroup;
-    }
-
-    public final ME getGenerator() {
-	return this.generator;
-    }
-
-    @Override
-    protected Function abstractGetEncryptionFunction() {
-	ZMod zMod = this.getCyclicGroup().getZModOrder();
-	ProductGroup encryptionDomain = ProductGroup.getInstance(this.getCyclicGroup(), this.getCyclicGroup(), zMod);
-	return CompositeFunction.getInstance(
-		MultiIdentityFunction.getInstance(encryptionDomain, 2),
-		ProductFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(encryptionDomain, 2),
-				this.getEncryptionFunctionLeft()),
-			this.getEncryptionFunctionRight()));
-    }
-
-    @Override
-    protected Function abstractGetDecryptionFunction() {
-	ZMod zMod = this.getCyclicGroup().getZModOrder();
-	ProductGroup decryptionDomain = ProductGroup.getInstance(zMod, ProductGroup.getInstance(this.getCyclicGroup(), 2));
-	return CompositeFunction.getInstance(
-		MultiIdentityFunction.getInstance(decryptionDomain, 2),
-		ProductFunction.getInstance(SelectionFunction.getInstance(decryptionDomain, 1, 1),
-			CompositeFunction.getInstance(MultiIdentityFunction.getInstance(decryptionDomain, 2),
-				ProductFunction.getInstance(SelectionFunction.getInstance(decryptionDomain, 1, 0),
-					SelectionFunction.getInstance(decryptionDomain, 0)),
-				SelfApplyFunction.getInstance(this.getCyclicGroup(), zMod))),
-		ApplyInverseFunction.getInstance(this.getCyclicGroup()));
-    }
-
-    @Override
-    protected KeyPairGenerator abstractGetKeyPairGenerator() {
-	return ElGamalKeyPairGenerator.getInstance(this.getGenerator());
-    }
-
-    public Function getEncryptionFunctionLeft() {
-	if (this.encryptionFunctionLeft == null) {
-	    this.encryptionFunctionLeft = GeneratorFunction.getInstance(this.getGenerator());
+	protected ElGamalEncryptionScheme(MS cyclicGroup, ME generator) {
+		this.cyclicGroup = cyclicGroup;
+		this.generator = generator;
 	}
-	return this.encryptionFunctionLeft;
-    }
 
-    public Function getEncryptionFunctionRight() {
-	if (this.encryptionFunctionRight == null) {
-	    ZMod zMod = this.getCyclicGroup().getZModOrder();
-	    ProductGroup encryptionDomain = ProductGroup.getInstance(this.getCyclicGroup(), this.getCyclicGroup(), zMod);
-	    this.encryptionFunctionRight = CompositeFunction.getInstance(
-		    MultiIdentityFunction.getInstance(encryptionDomain, 2),
-		    ProductFunction.getInstance(SelectionFunction.getInstance(encryptionDomain, 1),
-			    CompositeFunction.getInstance(RemovalFunction.getInstance(encryptionDomain, 1),
-				    SelfApplyFunction.getInstance(this.getCyclicGroup()))),
-		    ApplyFunction.getInstance(this.getCyclicGroup()));
+	public final MS getCyclicGroup() {
+		return this.cyclicGroup;
 	}
-	return this.encryptionFunctionRight;
-    }
 
-    public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(MS cyclicGroup) {
-	return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(cyclicGroup);
-    }
-
-    public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-	return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod);
-    }
-
-    public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(ME generator) {
-	return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(generator);
-    }
-
-    public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
-	return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(generator);
-    }
-
-    private static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(ME generator) {
-	if (!generator.isGenerator()) {
-	    throw new IllegalArgumentException();
+	public final ME getGenerator() {
+		return this.generator;
 	}
-	return new ElGamalEncryptionScheme<MS, ME>((MS) generator.getSet(), generator);
-    }
 
-    public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(MS cyclicGroup) {
-	return new ElGamalEncryptionScheme<MS, ME>(cyclicGroup, (ME) cyclicGroup.getDefaultGenerator());
-    }
+	@Override
+	protected Function abstractGetEncryptionFunction() {
+		ZModPrime zModPrime = (ZModPrime) this.getCyclicGroup().getZModOrder();
+		ProductGroup encryptionDomain = ProductGroup.getInstance(this.getCyclicGroup(), this.getCyclicGroup(), zModPrime);
+		return CompositeFunction.getInstance(
+					 MultiIdentityFunction.getInstance(encryptionDomain, 2),
+					 ProductFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(encryptionDomain, 2),
+																																		 this.getEncryptionFunctionLeft()),
+																			 this.getEncryptionFunctionRight()));
+	}
+
+	@Override
+	protected Function abstractGetDecryptionFunction() {
+		ZModPrime zModPrime = (ZModPrime) this.getCyclicGroup().getZModOrder();
+		ProductGroup decryptionDomain = ProductGroup.getInstance(zModPrime, ProductGroup.getInstance(this.getCyclicGroup(), 2));
+		return CompositeFunction.getInstance(
+					 MultiIdentityFunction.getInstance(decryptionDomain, 2),
+					 ProductFunction.getInstance(SelectionFunction.getInstance(decryptionDomain, 1, 1),
+																			 CompositeFunction.getInstance(MultiIdentityFunction.getInstance(decryptionDomain, 2),
+																																		 ProductFunction.getInstance(SelectionFunction.getInstance(decryptionDomain, 1, 0),
+																																																 SelectionFunction.getInstance(decryptionDomain, 0)),
+																																		 SelfApplyFunction.getInstance(this.getCyclicGroup(), zModPrime))),
+					 ApplyInverseFunction.getInstance(this.getCyclicGroup()));
+	}
+
+	@Override
+	protected KeyPairGenerator abstractGetKeyPairGenerator() {
+		return ElGamalKeyPairGenerator.getInstance(this.getGenerator());
+	}
+
+	public Function getEncryptionFunctionLeft() {
+		if (this.encryptionFunctionLeft == null) {
+			this.encryptionFunctionLeft = GeneratorFunction.getInstance(this.getGenerator());
+		}
+		return this.encryptionFunctionLeft;
+	}
+
+	public Function getEncryptionFunctionRight() {
+		if (this.encryptionFunctionRight == null) {
+			ZModPrime zModPrime = (ZModPrime) this.getCyclicGroup().getZModOrder();
+			ProductGroup encryptionDomain = ProductGroup.getInstance(this.getCyclicGroup(), this.getCyclicGroup(), zModPrime);
+			this.encryptionFunctionRight = CompositeFunction.getInstance(
+						 MultiIdentityFunction.getInstance(encryptionDomain, 2),
+						 ProductFunction.getInstance(SelectionFunction.getInstance(encryptionDomain, 1),
+																				 CompositeFunction.getInstance(RemovalFunction.getInstance(encryptionDomain, 1),
+																																			 SelfApplyFunction.getInstance(this.getCyclicGroup()))),
+						 ApplyFunction.getInstance(this.getCyclicGroup()));
+		}
+		return this.encryptionFunctionRight;
+	}
+
+	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(MS cyclicGroup) {
+		return new ElGamalEncryptionScheme<MS, ME>(cyclicGroup, (ME) cyclicGroup.getDefaultGenerator());
+	}
+
+	public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
+		return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInstance(gStarMod);
+	}
+
+	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(ME generator) {
+		if (!generator.isGenerator()) {
+			throw new IllegalArgumentException();
+		}
+		return new ElGamalEncryptionScheme<MS, ME>((MS) generator.getSet(), generator);
+	}
+
+	public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
+		return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInstance(generator);
+	}
 
 }
 

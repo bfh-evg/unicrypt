@@ -18,17 +18,12 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractHashScheme<MS extends Set, HS extends Set, HE extends Element>
-			 extends AbstractScheme
+public abstract class AbstractHashScheme<MS extends Set, ME extends Element, HS extends Set, HE extends Element>
+			 extends AbstractScheme<MS>
 			 implements HashScheme {
 
 	protected Function hashFunction;
 	protected Function checkFunction;
-
-	@Override
-	public final MS getMessageSpace() {
-		return (MS) this.getHashFunction().getDomain();
-	}
 
 	@Override
 	public final HS getHashSpace() {
@@ -65,6 +60,11 @@ public abstract class AbstractHashScheme<MS extends Set, HS extends Set, HE exte
 	@Override
 	public final BooleanElement check(Element message, Element hashValue) {
 		return (BooleanElement) this.getCheckFunction().apply(message, hashValue);
+	}
+
+	@Override
+	protected final MS abstractGetMessageSpace() {
+		return (MS) this.getHashFunction().getDomain();
 	}
 
 	protected abstract Function abstractGetHashFunction();

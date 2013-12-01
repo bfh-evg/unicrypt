@@ -6,8 +6,10 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
@@ -18,7 +20,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class PreimageOrProofGenerator
-	   extends AbstractProofGenerator<ProductSet, ProductSet, ProductSet, Tuple> {
+			 extends AbstractProofGenerator<ProductSet, Pair, ProductSet, Tuple, ProductSet, Triple> {
 
 	private final Function[] proofFunctions;
 	private final ProductFunction proofFunction;
@@ -67,9 +69,9 @@ public class PreimageOrProofGenerator
 	@Override
 	protected ProductSet abstractGetProofSpace() {
 		return ProductSet.getInstance(
-			   this.getCommitmentSpace(),
-			   ProductSet.getInstance(this.getChallengeSpace(), this.proofFunctions.length),
-			   this.getResponseSpace());
+					 this.getCommitmentSpace(),
+					 ProductSet.getInstance(this.getChallengeSpace(), this.proofFunctions.length),
+					 this.getResponseSpace());
 	}
 
 	public ProductSet getCommitmentSpace() {
@@ -84,45 +86,45 @@ public class PreimageOrProofGenerator
 		return ZMod.getInstance(this.proofFunction.getDomain().getMinimalOrder());
 	}
 
-	public final Tuple getCommitments(final Tuple proof) {
-		if (proof.getArity() != 3) {
+	public final Tuple getCommitments(final Triple proof) {
+		if (!this.getProofSpace().contains(proof)) {
 			throw new IllegalArgumentException();
 		}
-		return (Tuple) proof.getAt(0);
+		return (Tuple) proof.getFirst();
 	}
 
-	public final Tuple getChallenges(final Tuple proof) {
-		if (proof.getArity() != 3) {
+	public final Tuple getChallenges(final Triple proof) {
+		if (!this.getProofSpace().contains(proof)) {
 			throw new IllegalArgumentException();
 		}
-		return (Tuple) proof.getAt(1);
+		return (Tuple) proof.getSecond();
 	}
 
-	public final Tuple getResponses(final Tuple proof) {
-		if (proof.getArity() != 3) {
+	public final Tuple getResponses(final Triple proof) {
+		if (!this.getProofSpace().contains(proof)) {
 			throw new IllegalArgumentException();
 		}
-		return (Tuple) proof.getAt(2);
+		return (Tuple) proof.getThird();
 	}
 
-	public Tuple createPrivateInput(Element secret, int index) {
+	public Pair createPrivateInput(Element secret, int index) {
 		if (index < 0 || index >= proofFunctions.length || !proofFunctions[index].getDomain().contains(secret)) {
 			throw new IllegalArgumentException();
 		}
 		final Element[] domainElements = ((ProductMonoid) proofFunction.getDomain()).getIdentityElement().getAll();
 		domainElements[index] = secret;
 
-		return this.getPrivateInputSpace().getElement(
-			   proofFunction.getDomain().getElement(domainElements),
-			   ZMod.getInstance(proofFunctions.length).getElement(index));
+		return (Pair) this.getPrivateInputSpace().getElement(
+					 proofFunction.getDomain().getElement(domainElements),
+					 ZMod.getInstance(proofFunctions.length).getElement(index));
 	}
 
 	@Override
-	protected Tuple abstractGenerate(Element privateInput, Element publicInput, Element proverId, Random random) {
+	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, Element proverId, Random random) {
 
 		// Extract secret input value and index from private input
-		final int index = ((Tuple) privateInput).getAt(1).getValue().intValue();
-		final Element secret = ((Tuple) privateInput).getAt(0, index);
+		final int index = privateInput.getSecond().getValue().intValue();
+		final Element secret = ((Tuple) privateInput.getFirst()).getAt(index);
 
 		// Create lists for proof elements (t, c, s)
 		final Element[] commitments = new Element[proofFunctions.length];
@@ -165,16 +167,16 @@ public class PreimageOrProofGenerator
 		responses[index] = randomElement.apply(secret.selfApply(challenges[index]));
 
 		// Return proof
-		return this.getProofSpace().getElement(Tuple.getInstance(commitments),
-											   Tuple.getInstance(challenges),
-											   Tuple.getInstance(responses));
+		return (Triple) this.getProofSpace().getElement(Tuple.getInstance(commitments),
+																										Tuple.getInstance(challenges),
+																										Tuple.getInstance(responses));
 
 	}
 
 	protected ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {
 		Tuple toHash = (proverId == null
-			   ? Tuple.getInstance(publicInput, commitment)
-			   : Tuple.getInstance(publicInput, commitment, proverId));
+					 ? Tuple.getInstance(publicInput, commitment)
+					 : Tuple.getInstance(publicInput, commitment, proverId));
 
 		FiniteByteArrayElement hashValue = toHash.getHashValue(hashMethod);
 		System.out.println("toHash: " + toHash);
@@ -183,12 +185,12 @@ public class PreimageOrProofGenerator
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Element proof, Element publicInput, Element proverId) {
+	protected BooleanElement abstractVerify(Triple proof, Tuple publicInput, Element proverId) {
 
 		// Extract (t, c, s)
-		final Tuple commitments = this.getCommitments((Tuple) proof);
-		final Tuple challenges = this.getChallenges((Tuple) proof);
-		final Tuple responses = this.getResponses((Tuple) proof);
+		final Tuple commitments = this.getCommitments(proof);
+		final Tuple challenges = this.getChallenges(proof);
+		final Tuple responses = this.getResponses(proof);
 
 		// 1. Check whether challenges sum up to the overall challenge
 		final ZModElement challenge = this.createChallenge(commitments, publicInput, proverId);
@@ -203,7 +205,7 @@ public class PreimageOrProofGenerator
 		// 2. Verify all subproofs
 		for (int i = 0; i < proofFunctions.length; i++) {
 			Element a = proofFunctions[i].apply(responses.getAt(i));
-			Element b = commitments.getAt(i).apply(((Tuple) publicInput).getAt(i).selfApply(challenges.getAt(i)));
+			Element b = commitments.getAt(i).apply(publicInput.getAt(i).selfApply(challenges.getAt(i)));
 			if (!a.isEqual(b)) {
 				return BooleanSet.FALSE;
 			}

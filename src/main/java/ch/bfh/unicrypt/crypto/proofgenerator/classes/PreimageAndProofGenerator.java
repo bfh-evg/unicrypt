@@ -8,7 +8,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PreimageAndProofGenerator
-	   extends AbstractPreimageProofGenerator<ProductSemiGroup, ProductSemiGroup, ProductFunction, Tuple, Tuple> {
+			 extends AbstractPreimageProofGenerator<ProductSemiGroup, Tuple, ProductSemiGroup, Tuple, ProductFunction> {
 
 	protected PreimageAndProofGenerator(final ProductFunction proofFunction, HashMethod hashMethod) {
 		super(proofFunction, hashMethod);
