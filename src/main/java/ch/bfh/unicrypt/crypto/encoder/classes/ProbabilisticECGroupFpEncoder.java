@@ -7,7 +7,6 @@ import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrimeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -43,14 +42,14 @@ public class ProbabilisticECGroupFpEncoder
 	}
 
 	static class ECEncodingFunction
-				 extends AbstractFunction<ZModPrime, ECZModPrime, ECZModPrimeElement> {
+				 extends AbstractFunction<ZModPrime, ZModElement, ECZModPrime, ECZModPrimeElement> {
 
 		protected ECEncodingFunction(ZModPrime domain, ECZModPrime coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected ECZModPrimeElement abstractApply(Element element, Random random) {
+		protected ECZModPrimeElement abstractApply(ZModElement element, Random random) {
 			ZModPrime zModPrime = this.getDomain();
 			ECZModPrime ecPrime = this.getCoDomain();
 
@@ -87,16 +86,15 @@ public class ProbabilisticECGroupFpEncoder
 	}
 
 	static class ECDecodingFunction
-				 extends AbstractFunction<ECZModPrime, ZModPrime, ZModElement> {
+				 extends AbstractFunction<ECZModPrime, ECZModPrimeElement, ZModPrime, ZModElement> {
 
 		protected ECDecodingFunction(ECZModPrime domain, ZModPrime coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected ZModElement abstractApply(Element element, Random random) {
-			ECZModPrimeElement e = (ECZModPrimeElement) element;
-			BigInteger x1 = e.getX().getValue();
+		protected ZModElement abstractApply(ECZModPrimeElement element, Random random) {
+			BigInteger x1 = element.getX().getValue();
 			x1 = x1.shiftRight(SHIFT);
 			return this.getCoDomain().getElement(x1);
 		}

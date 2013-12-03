@@ -2,6 +2,8 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
@@ -17,10 +19,10 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class InvertFunction
-			 extends AbstractFunction<Group, Element, Group, Element> {
+public class OneOverFunction
+			 extends AbstractFunction<MultiplicativeGroup, MultiplicativeElement, MultiplicativeGroup, MultiplicativeElement> {
 
-	private InvertFunction(final Group domain, Group coDomain) {
+	private OneOverFunction(final MultiplicativeGroup domain, MultiplicativeGroup coDomain) {
 		super(domain, coDomain);
 	}
 
@@ -28,8 +30,8 @@ public class InvertFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Element abstractApply(final Element element, final Random random) {
-		return element.invert();
+	protected MultiplicativeElement abstractApply(final MultiplicativeElement element, final Random random) {
+		return element.oneOver();
 	}
 
 	//
@@ -38,11 +40,11 @@ public class InvertFunction
 	/**
 	 * This is the standard constructor for this class. It creates an invert function for a given group.
 	 * <p/>
-	 * @param group The given Group
+	 * @param multiplicativeGroup The given Group
 	 * @throws IllegalArgumentException if the group is null
 	 */
-	public static InvertFunction getInstance(final Group group) {
-		return new InvertFunction(group, group);
+	public static OneOverFunction getInstance(final MultiplicativeGroup multiplicativeGroup) {
+		return new OneOverFunction(multiplicativeGroup, multiplicativeGroup);
 	}
 
 	@Override

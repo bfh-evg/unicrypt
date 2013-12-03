@@ -1,5 +1,7 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -17,10 +19,10 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class InvertFunction
-			 extends AbstractFunction<Group, Element, Group, Element> {
+public class MinusFunction
+			 extends AbstractFunction<AdditiveGroup, AdditiveElement, AdditiveGroup, AdditiveElement> {
 
-	private InvertFunction(final Group domain, Group coDomain) {
+	private MinusFunction(final AdditiveGroup domain, AdditiveGroup coDomain) {
 		super(domain, coDomain);
 	}
 
@@ -28,8 +30,8 @@ public class InvertFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Element abstractApply(final Element element, final Random random) {
-		return element.invert();
+	protected AdditiveElement abstractApply(final AdditiveElement element, final Random random) {
+		return element.minus();
 	}
 
 	//
@@ -38,11 +40,11 @@ public class InvertFunction
 	/**
 	 * This is the standard constructor for this class. It creates an invert function for a given group.
 	 * <p/>
-	 * @param group The given Group
+	 * @param additiveGroup The given Group
 	 * @throws IllegalArgumentException if the group is null
 	 */
-	public static InvertFunction getInstance(final Group group) {
-		return new InvertFunction(group, group);
+	public static MinusFunction getInstance(final AdditiveGroup additiveGroup) {
+		return new MinusFunction(additiveGroup, additiveGroup);
 	}
 
 	@Override

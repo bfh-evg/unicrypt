@@ -4,48 +4,59 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import java.math.BigInteger;
-import java.util.Random;
-
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.helper.factorization.SafePrime;
+import java.math.BigInteger;
+import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
-public class GStarModSafePrime extends GStarModPrime {
+public class GStarModSafePrime
+			 extends GStarModPrime {
 
-  protected GStarModSafePrime(SafePrime modulo) {
-    super(modulo, Prime.getInstance(modulo.getValue().subtract(BigInteger.ONE).divide(BigInteger.valueOf(2))));
-  }
+	protected GStarModSafePrime(SafePrime modulo) {
+		super(modulo, Prime.getInstance(modulo.getValue().subtract(BigInteger.ONE).divide(BigInteger.valueOf(2))));
+	}
 
-  @Override
-  public String standardToStringContent() {
-    return this.getModulus().toString();
-  }
+	@Override
+	protected ZModPrime standardGetZModOrder() {
+		return ZModPrime.getInstance(this.getOrder());
+	}
 
-  public static GStarModSafePrime getInstance(final SafePrime safePrime) {
-    if (safePrime == null) {
-      throw new IllegalArgumentException();
-    }
-    return new GStarModSafePrime(safePrime);
-  }
+	@Override
+	protected ZStarModPrime standardGetZStarModOrder() {
+		return ZStarModPrime.getInstance(this.getOrder());
+	}
 
-  public static GStarModSafePrime getInstance(final int modulus) {
-    return GStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
-  }
+	@Override
+	public String standardToStringContent() {
+		return this.getModulus().toString();
+	}
 
-  public static GStarModSafePrime getInstance(final BigInteger modulus) {
-    return new GStarModSafePrime(SafePrime.getInstance(modulus));
-  }
+	public static GStarModSafePrime getInstance(final SafePrime safePrime) {
+		if (safePrime == null) {
+			throw new IllegalArgumentException();
+		}
+		return new GStarModSafePrime(safePrime);
+	}
 
-  public static GStarModSafePrime getRandomInstance(int bitLength) {
-    return GStarModSafePrime.getRandomInstance(bitLength, (Random) null);
-  }
+	public static GStarModSafePrime getInstance(final int modulus) {
+		return GStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
+	}
 
-  public static GStarModSafePrime getRandomInstance(int bitLength, Random random) {
-    return new GStarModSafePrime(SafePrime.getRandomInstance(bitLength, random));
-  }
+	public static GStarModSafePrime getInstance(final BigInteger modulus) {
+		return new GStarModSafePrime(SafePrime.getInstance(modulus));
+	}
+
+	public static GStarModSafePrime getRandomInstance(int bitLength) {
+		return GStarModSafePrime.getRandomInstance(bitLength, (Random) null);
+	}
+
+	public static GStarModSafePrime getRandomInstance(int bitLength, Random random) {
+		return new GStarModSafePrime(SafePrime.getRandomInstance(bitLength, random));
+	}
 
 }

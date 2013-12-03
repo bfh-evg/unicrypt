@@ -1,9 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
@@ -21,33 +23,37 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class ApplyInverseFunction
-			 extends AbstractFunction<ProductGroup, Pair, Group, Element> {
+public class MultiplyFunction
+			 extends AbstractFunction<ProductSemiGroup, Tuple, MultiplicativeSemiGroup, MultiplicativeElement> {
 
-	private ApplyInverseFunction(final ProductGroup domain, final Group coDomain) {
+	private MultiplyFunction(final ProductSemiGroup domain, final MultiplicativeSemiGroup coDomain) {
 		super(domain, coDomain);
 	}
 
 	@Override
-	protected Element abstractApply(final Pair element, final Random random) {
-		return this.getCoDomain().applyInverse(element.getFirst(), element.getSecond());
+	protected MultiplicativeElement abstractApply(final Tuple element, final Random random) {
+		return this.getCoDomain().multiply(element.getAll());
+	}
+
+	public static MultiplyFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup) {
+		return MultiplyFunction.getInstance(multiplicativeSemiGroup, 2);
 	}
 
 	/**
 	 * This is the general factory method of this class. The first parameter is the group on which it operates, and the
 	 * second parameter is the number of input elements.
 	 * <p/>
-	 * @param semiGroup The group on which this function operates
-	 * @param arity     The number of input elements
+	 * @param multiplicativeSemiGroup The group on which this function operates
+	 * @param arity                   The number of input elements
 	 * @return The resulting function
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal arity} is negative
 	 */
-	public static ApplyInverseFunction getInstance(final Group group) {
-		if (group == null) {
+	public static MultiplyFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup, final int arity) {
+		if (multiplicativeSemiGroup == null || arity < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ApplyInverseFunction(ProductGroup.getInstance(group, 2), group);
+		return new MultiplyFunction(ProductSemiGroup.getInstance(multiplicativeSemiGroup, arity), multiplicativeSemiGroup);
 	}
 
 	@Override

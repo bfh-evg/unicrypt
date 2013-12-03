@@ -4,37 +4,50 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-public class RSAEncryptionScheme {
-//import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractAsymmetricEncryptionScheme;
-//import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-//import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
-//import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZTimesMod;
-//import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZTimesModElement;
-//import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimes;
-//import ch.bfh.unicrypt.math.function.interfaces.Function;
-//
-///**
-// *
-// * @author rolfhaenni
-// */
-//public class RSAEncryptionScheme extends AbstractAsymmetricEncryptionScheme<ZTimesMod, ZTimesMod, ZTimesModElement, ZTimesModElement> {
-//
-//  protected RSAEncryptionScheme(KeyPairGenerator keyPairGenerator, Function encryptionFunction, Function decryptionFunction) {
-//    super(keyPairGenerator, encryptionFunction, decryptionFunction);
-//  }
-//
-//  public static RSAEncryptionScheme getInstance(ZModPrimes zTimesMod) {
-//    if (zTimesMod == null) {
-//      throw new IllegalArgumentException();
-//    }
-//    Function encryptionFunction
-//    return new RSAEncryptionScheme
-//
-//  }
-//
-//  @Override
-//  protected String standardToStringContent() {
-//    return this.getPlaintextSpace().toString();
-//  }
+import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyPairGenerator;
+import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractAsymmetricEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
+import ch.bfh.unicrypt.math.function.classes.PowerFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
+
+public class RSAEncryptionScheme
+			 extends AbstractAsymmetricEncryptionScheme<ZMod, ZModElement, ZMod, ZModElement, ZMod, ZMod> {
+
+	private final ZMod zMod;
+
+	protected RSAEncryptionScheme(ZMod zMod) {
+		this.zMod = zMod;
+	}
+
+	public ZMod getZMod() {
+		return this.zMod;
+	}
+
+	@Override
+	protected Function abstractGetEncryptionFunction() {
+		return PowerFunction.getInstance(zMod);
+	}
+
+	@Override
+	protected Function abstractGetDecryptionFunction() {
+		return PowerFunction.getInstance(zMod);
+	}
+
+	@Override
+	protected RSAKeyPairGenerator abstractGetKeyPairGenerator() {
+		if (this.getZMod() instanceof ZModPrimePair) {
+			return RSAKeyPairGenerator.getInstance((ZModPrimePair) this.getZMod());
+		}
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	public static RSAEncryptionScheme getInstance(ZMod zMod) {
+		if (zMod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new RSAEncryptionScheme(zMod);
+	}
 
 }

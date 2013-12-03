@@ -11,13 +11,13 @@ import java.util.Random;
  *
  * @author rolfhaenni
  */
-public class TwoPrimes extends Factorization {
+public class PrimePair extends Factorization {
 
-  protected TwoPrimes(Prime prime1, Prime prime2) {
+  protected PrimePair(Prime prime1, Prime prime2) {
     this(prime1.getValue(), prime2.getValue());
   }
 
-  protected TwoPrimes(BigInteger prime1, BigInteger prime2) {
+  protected PrimePair(BigInteger prime1, BigInteger prime2) {
     super(prime1.multiply(prime2), new BigInteger[]{prime1, prime2}, new int[]{1, 1});
   }
 
@@ -29,26 +29,26 @@ public class TwoPrimes extends Factorization {
     return this.getPrimeFactors()[1];
   }
 
-  public static TwoPrimes getInstance(BigInteger prime1, BigInteger prime2) {
+  public static PrimePair getInstance(BigInteger prime1, BigInteger prime2) {
     if (prime1.equals(prime2)) {
       throw new IllegalArgumentException();
     }
-    return new TwoPrimes(prime1, prime2);
+    return new PrimePair(prime1, prime2);
   }
 
-  public static TwoPrimes getInstance(Prime prime1, Prime prime2) {
+  public static PrimePair getInstance(Prime prime1, Prime prime2) {
     if (prime1.equals(prime2)) {
       throw new IllegalArgumentException();
     }
-    return new TwoPrimes(prime1, prime2);
+    return new PrimePair(prime1, prime2);
   }
 
-  public static TwoPrimes getRandomInstance(int bitLength) {
-    return TwoPrimes.getRandomInstance(bitLength, (Random) null);
+  public static PrimePair getRandomInstance(int bitLength) {
+    return PrimePair.getRandomInstance(bitLength, (Random) null);
   }
 
-  public static TwoPrimes getRandomInstance(int bitLength, Random random) {
-    return TwoPrimes.getInstance(Prime.getRandomInstance(bitLength, random), Prime.getRandomInstance(bitLength, random));
+  public static PrimePair getRandomInstance(int bitLength, Random random) {
+    return PrimePair.getInstance(Prime.getRandomInstance(bitLength, random), Prime.getRandomInstance(bitLength, random));
   }
 
 }

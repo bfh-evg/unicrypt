@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -14,11 +13,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -158,10 +155,7 @@ public abstract class AbstractSet<E extends Element>
 		if (!(this.isFinite() && this.hasKnownOrder())) {
 			throw new UnsupportedOperationException();
 		}
-		if (MathUtil.isPrime(this.getOrder())) {
-			return ZModPrime.getInstance(this.getOrder());
-		}
-		return ZMod.getInstance(this.getOrder());
+		return this.standardGetZModOrder();
 	}
 
 	@Override
@@ -169,10 +163,7 @@ public abstract class AbstractSet<E extends Element>
 		if (!(this.isFinite() && this.hasKnownOrder())) {
 			throw new UnsupportedOperationException();
 		}
-		if (MathUtil.isPrime(this.getOrder())) {
-			return ZStarModPrime.getInstance(this.getOrder());
-		}
-		return ZStarMod.getInstance(this.getOrder());
+		return this.standardGetZStarModOrder();
 	}
 
 	@Override
@@ -264,6 +255,14 @@ public abstract class AbstractSet<E extends Element>
 	// The following protected methods are standard implementations for sets.
 	// They may need to be changed in certain sub-classes.
 	//
+	protected ZMod standardGetZModOrder() {
+		return ZMod.getInstance(this.getOrder());
+	}
+
+	protected ZStarMod standardGetZStarModOrder() {
+		return ZStarMod.getInstance(this.getOrder());
+	}
+
 	protected BigInteger standardGetOrderLowerBound() {
 		return BigInteger.ZERO;
 	}

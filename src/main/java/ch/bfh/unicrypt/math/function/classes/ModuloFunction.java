@@ -17,7 +17,7 @@ import java.util.Random;
  * @version 1.0
  */
 public class ModuloFunction
-			 extends AbstractFunction<Set, ZMod, ZModElement> {
+			 extends AbstractFunction<Set, Element, ZMod, ZModElement> {
 
 	private final BigInteger modulus;
 

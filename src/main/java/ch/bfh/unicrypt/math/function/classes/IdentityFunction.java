@@ -7,16 +7,15 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
 /**
- * This class represents the concept of a generalized identity function f:X->X^n
- * with f(x)=(x,...,x) for all elements x in X. This class represents the
- * concept of an identity function f:X->X with f(x)=x for all elements x in X.
+ * This class represents the concept of a generalized identity function f:X->X^n with f(x)=(x,...,x) for all elements x
+ * in X. This class represents the concept of an identity function f:X->X with f(x)=x for all elements x in X.
  * <p/>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
 public class IdentityFunction
-	   extends AbstractFunction<Set, Set, Element> {
+			 extends AbstractFunction<Set, Element, Set, Element> {
 
 	private IdentityFunction(final Set set) {
 		super(set, set);
@@ -34,9 +33,8 @@ public class IdentityFunction
 	// STATIC FACTORY METHODS
 	//
 	/**
-	 * This is the standard constructor for this class. It creates a generalized
-	 * identity function for a given group, which reproduces the input value
-	 * multiple time.
+	 * This is the standard constructor for this class. It creates a generalized identity function for a given group,
+	 * which reproduces the input value multiple time.
 	 * <p/>
 	 * @param set   The given set
 	 * @param arity The arity of the output element

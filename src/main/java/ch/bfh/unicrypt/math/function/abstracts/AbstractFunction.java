@@ -16,13 +16,13 @@ import java.util.Random;
  * <p>
  * <p/>
  * @param <D>
- * @param <E>
+ * @param <CE>
  * @param <C>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction<D extends Set, C extends Set, E extends Element>
+public abstract class AbstractFunction<D extends Set, DE extends Element, C extends Set, CE extends Element>
 			 extends UniCrypt
 			 implements Function {
 
@@ -40,30 +40,35 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
 	}
 
 	@Override
-	public final E apply(final Element element) {
+	public final CE apply(final Element element) {
 		return this.apply(element, (Random) null);
 	}
 
 	@Override
-	public final E apply(final Element element, final Random random) {
+	public final CE apply(final Element element, final Random random) {
 		if (this.getDomain().contains(element)) {
-			return this.abstractApply(element, random);
+			return this.abstractApply((DE) element, random);
 		}
 		// This is for increased convenience for a function with a CompoundSet domain of arity 1.
 		return this.apply(new Element[]{element}, random);
 	}
 
 	@Override
-	public final E apply(final Element... elements) {
+	public final CE apply(final Element... elements) {
 		return this.apply(elements, (Random) null);
 	}
 
 	@Override
-	public final E apply(final Element[] elements, final Random random) {
+	public final CE apply(final Element[] elements, final Random random) {
 		if (this.getDomain().isProduct()) {
 			return this.apply(((ProductSet) this.getDomain()).getElement(elements), random);
 		}
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public final CE apply(final Random random) {
+		return this.apply(new Element[]{}, random);
 	}
 
 	@Override
@@ -133,6 +138,6 @@ public abstract class AbstractFunction<D extends Set, C extends Set, E extends E
 	 * @param random  Either {@literal null} or a given random generator
 	 * @return The resulting output element
 	 */
-	protected abstract E abstractApply(Element element, Random random);
+	protected abstract CE abstractApply(DE element, Random random);
 
 }

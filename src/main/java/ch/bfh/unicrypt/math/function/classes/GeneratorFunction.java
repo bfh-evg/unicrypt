@@ -5,6 +5,7 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -16,7 +17,7 @@ import java.util.Random;
  * @author rolfhaenni
  */
 public class GeneratorFunction
-	   extends AbstractFunction<ZMod, CyclicGroup, Element> {
+			 extends AbstractFunction<ZMod, ZModElement, CyclicGroup, Element> {
 
 	Element generator;
 
@@ -26,7 +27,7 @@ public class GeneratorFunction
 	}
 
 	@Override
-	protected Element abstractApply(Element element, Random random) {
+	protected Element abstractApply(ZModElement element, Random random) {
 		return generator.selfApply(element);
 	}
 

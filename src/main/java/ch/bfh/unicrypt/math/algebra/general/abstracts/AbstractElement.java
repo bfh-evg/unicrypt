@@ -49,9 +49,6 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 
 	protected AbstractElement(final S set, final BigInteger value) {
 		this(set);
-		if (!set.contains(value)) {
-			throw new IllegalArgumentException();
-		}
 		this.value = value;
 	}
 

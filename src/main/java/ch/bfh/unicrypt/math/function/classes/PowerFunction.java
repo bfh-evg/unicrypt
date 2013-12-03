@@ -5,8 +5,9 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
@@ -23,10 +24,10 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 1.0
  */
-public class SelfApplyFunction
-			 extends AbstractFunction<ProductSet, Pair, SemiGroup, Element> {
+public class PowerFunction
+			 extends AbstractFunction<ProductSet, Pair, MultiplicativeSemiGroup, MultiplicativeElement> {
 
-	private SelfApplyFunction(final ProductSet domain, final SemiGroup coDomain) {
+	private PowerFunction(final ProductSet domain, final MultiplicativeSemiGroup coDomain) {
 		super(domain, coDomain);
 	}
 
@@ -34,8 +35,8 @@ public class SelfApplyFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Element abstractApply(final Pair element, final Random random) {
-		return element.getFirst().selfApply(element.getSecond());
+	protected MultiplicativeElement abstractApply(final Pair element, final Random random) {
+		return ((MultiplicativeElement) element.getFirst()).power(element.getSecond());
 	}
 
 	//
@@ -45,17 +46,18 @@ public class SelfApplyFunction
 	 * This is a special constructor, where the group of the second parameter is selected automatically from the given
 	 * group.
 	 * <p/>
-	 * @param semiGroup The underlying group
+	 * @param multiplicativeSemiGroup The underlying group
+	 * @return
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 */
-	public static SelfApplyFunction getInstance(final SemiGroup semiGroup) {
-		if (semiGroup == null) {
+	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup) {
+		if (multiplicativeSemiGroup == null) {
 			throw new IllegalArgumentException();
 		}
-		if (semiGroup.isFinite() && semiGroup.hasKnownOrder()) {
-			return SelfApplyFunction.getInstance(semiGroup, semiGroup.getZModOrder());
+		if (multiplicativeSemiGroup.isFinite() && multiplicativeSemiGroup.hasKnownOrder()) {
+			return PowerFunction.getInstance(multiplicativeSemiGroup, multiplicativeSemiGroup.getZModOrder());
 		}
-		return SelfApplyFunction.getInstance(semiGroup, N.getInstance());
+		return PowerFunction.getInstance(multiplicativeSemiGroup, N.getInstance());
 	}
 
 	/**
@@ -63,16 +65,17 @@ public class SelfApplyFunction
 	 * second parameter is the atomic group, from which an element is needed to determine the number of times the group
 	 * operation is applied.
 	 * <p/>
-	 * @param semiGroup The underlying group
+	 * @param multiplicativeSemiGroup The underlying group
 	 * @param amountSet
+	 * @return
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
 	 */
-	public static SelfApplyFunction getInstance(final SemiGroup semiGroup, final Set amountSet) {
-		if (semiGroup == null || amountSet == null) {
+	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup, final Set amountSet) {
+		if (multiplicativeSemiGroup == null || amountSet == null) {
 			throw new IllegalArgumentException();
 		}
-		return new SelfApplyFunction(ProductSet.getInstance(semiGroup, amountSet), semiGroup);
+		return new PowerFunction(ProductSet.getInstance(multiplicativeSemiGroup, amountSet), multiplicativeSemiGroup);
 	}
 
 	@Override

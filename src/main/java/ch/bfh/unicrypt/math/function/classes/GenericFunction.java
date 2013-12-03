@@ -15,10 +15,10 @@ import java.util.Random;
  * @author rolfhaenni
  * @param <D>
  * @param <C>
- * @param <E>
+ * @param <CE>
  */
-public class GenericFunction<D extends Set, C extends Set, E extends Element>
-			 extends AbstractFunction<D, C, E> {
+public class GenericFunction<D extends Set, DE extends Element, C extends Set, CE extends Element>
+			 extends AbstractFunction<D, DE, C, CE> {
 
 	Function function;
 
@@ -28,15 +28,15 @@ public class GenericFunction<D extends Set, C extends Set, E extends Element>
 	}
 
 	@Override
-	protected E abstractApply(Element element, Random random) {
-		return (E) this.function.apply(element, random);
+	protected CE abstractApply(DE element, Random random) {
+		return (CE) this.function.apply(element, random);
 	}
 
-	public static <D extends Set, C extends Set, E extends Element> GenericFunction<D, C, E> getInstance(Function function) {
+	public static <D extends Set, DE extends Element, C extends Set, CE extends Element> GenericFunction<D, DE, C, CE> getInstance(Function function) {
 		if (function == null) {
 			throw new IllegalArgumentException();
 		}
-		return new GenericFunction<D, C, E>(function);
+		return new GenericFunction<D, DE, C, CE>(function);
 	}
 
 	@Override

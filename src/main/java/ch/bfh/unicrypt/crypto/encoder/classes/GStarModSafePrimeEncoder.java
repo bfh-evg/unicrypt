@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -43,14 +42,14 @@ public class GStarModSafePrimeEncoder
 	}
 
 	static class EncodingFunction
-				 extends AbstractFunction<ZModPrime, GStarModSafePrime, GStarModElement> {
+				 extends AbstractFunction<ZModPrime, ZModElement, GStarModSafePrime, GStarModElement> {
 
 		protected EncodingFunction(final ZModPrime domain, final GStarMod coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected GStarModElement abstractApply(final Element element, final Random random) {
+		protected GStarModElement abstractApply(final ZModElement element, final Random random) {
 			final BigInteger value = element.getValue().add(BigInteger.ONE);
 			final GStarModSafePrime coDomain = this.getCoDomain();
 			if (coDomain.contains(value)) {
@@ -67,14 +66,14 @@ public class GStarModSafePrimeEncoder
 	}
 
 	static class DecodingFunction
-				 extends AbstractFunction<GStarModSafePrime, ZModPrime, ZModElement> {
+				 extends AbstractFunction<GStarModSafePrime, GStarModElement, ZModPrime, ZModElement> {
 
 		protected DecodingFunction(final GStarMod domain, final ZModPrime coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected ZModElement abstractApply(final Element element, final Random random) {
+		protected ZModElement abstractApply(final GStarModElement element, final Random random) {
 			final BigInteger value = element.getValue();
 			final GStarModSafePrime domain = this.getDomain();
 			if (value.compareTo(domain.getOrder()) <= 0) {

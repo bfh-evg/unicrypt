@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -25,10 +24,12 @@ public class SchnorrSignatureKeyPairGenerator
 	private final Element generator;
 
 	protected SchnorrSignatureKeyPairGenerator(GStarModSafePrime publicKeySpace) {
+		super((ZModPrime) publicKeySpace.getZModOrder());
 		this.generator = publicKeySpace.getDefaultGenerator();
 	}
 
 	protected SchnorrSignatureKeyPairGenerator(Element generator) {
+		super((ZModPrime) generator.getSet().getZModOrder());
 		this.generator = generator;
 	}
 
@@ -37,12 +38,7 @@ public class SchnorrSignatureKeyPairGenerator
 	}
 
 	@Override
-	protected KeyGenerator abstractGetPrivateKeyGenerator() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	protected Function abstractGetPublicKeyFunction() {
+	protected Function abstractGetPublicKeyGenerationFunction() {
 		return GeneratorFunction.getInstance(this.getGenerator());
 	}
 

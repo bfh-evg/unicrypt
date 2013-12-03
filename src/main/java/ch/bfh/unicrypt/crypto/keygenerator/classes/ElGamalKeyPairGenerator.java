@@ -4,9 +4,7 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyGenerator;
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -25,10 +23,12 @@ public class ElGamalKeyPairGenerator
 	private final Element generator;
 
 	protected ElGamalKeyPairGenerator(GStarModSafePrime publicKeySpace) {
+		super((ZModPrime) publicKeySpace.getZModOrder());
 		this.generator = publicKeySpace.getDefaultGenerator();
 	}
 
 	protected ElGamalKeyPairGenerator(Element generator) {
+		super((ZModPrime) generator.getSet().getZModOrder());
 		this.generator = generator;
 	}
 
@@ -37,13 +37,7 @@ public class ElGamalKeyPairGenerator
 	}
 
 	@Override
-	protected KeyGenerator abstractGetPrivateKeyGenerator() {
-		return new AbstractKeyGenerator<ZModPrime, ZModElement>(this.getPrivateKeySpace()) {
-		};
-	}
-
-	@Override
-	protected Function abstractGetPublicKeyFunction() {
+	protected Function abstractGetPublicKeyGenerationFunction() {
 		return GeneratorFunction.getInstance(this.getGenerator());
 	}
 

@@ -17,12 +17,13 @@ import java.util.NoSuchElementException;
  * @param <CF>
  * @param <F>
  * @param <D>
+ * @param <DE>
  * @param <C>
- * @param <E>
+ * @param <CE>
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, F, D, C, E>, F extends Function, D extends Set, C extends Set, E extends Element>
-			 extends AbstractFunction<D, C, E>
+public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, F, D, DE, C, CE>, F extends Function, D extends Set, DE extends Element, C extends Set, CE extends Element>
+			 extends AbstractFunction<D, DE, C, CE>
 			 implements Compound<CF, F> {
 
 	private final F[] functions;

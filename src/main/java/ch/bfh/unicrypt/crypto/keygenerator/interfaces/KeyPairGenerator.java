@@ -17,15 +17,17 @@ import java.util.Random;
  */
 public interface KeyPairGenerator {
 
-	Pair generateKeyPair();
-
-	Pair generateKeyPair(Random random);
-
 	Element generatePrivateKey();
 
 	Element generatePrivateKey(Random random);
 
-	Element getPublicKey(Element privateKey);
+	Element generatePublicKey(Element privateKey);
+
+	Element generatePublicKey(Element privateKey, Random random);
+
+	Pair generateKeyPair();
+
+	Pair generateKeyPair(Random random);
 
 	ProductSet getKeyPairSpace();
 
@@ -33,8 +35,10 @@ public interface KeyPairGenerator {
 
 	Set getPublicKeySpace();
 
-	KeyGenerator getPrivateKeyGenerator();
+	Function getKeyPairGenerationFunction();
 
-	Function getPublicKeyFunction();
+	Function getPrivateKeyGenerationFunction();
+
+	Function getPublicKeyGenerationFunction();
 
 }

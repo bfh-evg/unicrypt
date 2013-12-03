@@ -10,16 +10,15 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * This class represents the concept of a generalized identity function f:X->X^n
- * with f(x)=(x,...,x) for all elements x in X. This class represents the
- * concept of an identity function f:X->X with f(x)=x for all elements x in X.
+ * This class represents the concept of a generalized identity function f:X->X^n with f(x)=(x,...,x) for all elements x
+ * in X. This class represents the concept of an identity function f:X->X with f(x)=x for all elements x in X.
  * <p/>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
 public class MultiIdentityFunction
-	   extends AbstractFunction<Set, ProductSet, Tuple> {
+			 extends AbstractFunction<Set, Element, ProductSet, Tuple> {
 
 	private MultiIdentityFunction(final Set domain, final ProductSet coDomain) {
 		super(domain, coDomain);
@@ -43,9 +42,8 @@ public class MultiIdentityFunction
 	}
 
 	/**
-	 * This is the standard constructor for this class. It creates a generalized
-	 * identity function for a given group, which reproduces the input value
-	 * multiple time.
+	 * This is the standard constructor for this class. It creates a generalized identity function for a given group,
+	 * which reproduces the input value multiple time.
 	 * <p/>
 	 * @param set   The given set
 	 * @param arity The arity of the output element

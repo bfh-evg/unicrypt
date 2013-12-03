@@ -26,53 +26,53 @@ import java.util.Random;
  * @version 2.0
  */
 public class HashFunction
-	extends AbstractFunction<Set, FiniteByteArraySet, FiniteByteArrayElement> {
+			 extends AbstractFunction<Set, Element, FiniteByteArraySet, FiniteByteArrayElement> {
 
-    private HashMethod hashMethod;
+	private HashMethod hashMethod;
 
-    private HashFunction(Set domain, FiniteByteArraySet coDomain, HashMethod hashMethod) {
-	super(domain, coDomain);
-	this.hashMethod = hashMethod;
-    }
-
-    @Override
-    protected boolean abstractIsEqual(Function function) {
-	return this.getHashMethod().equals(((HashFunction) function).getHashMethod());
-    }
-
-    @Override
-    protected FiniteByteArrayElement abstractApply(final Element element, final Random random) {
-	return this.getCoDomain().getElement(element.getHashValue(this.hashMethod).getByteArray());
-    }
-
-    public HashMethod getHashMethod() {
-	return this.hashMethod;
-    }
-
-    /**
-     * This constructor generates a standard SHA-256 hash function. The order of the co-domain is 2^256.
-     * <p>
-     * @param domain
-     * @return
-     */
-    public static HashFunction getInstance(Set domain) {
-	return HashFunction.getInstance(domain, HashMethod.DEFAULT);
-    }
-
-    /**
-     * This constructor generates a standard hash function for a given hash algorithm name. The co-domain is chosen
-     * accordingly.
-     * <p>
-     * @param domain
-     * @param hashMethod The name of the hash algorithm
-     * @return
-     * @throws IllegalArgumentException if {@literal algorithmName} is null or an unknown hash algorithm name
-     */
-    public static HashFunction getInstance(Set domain, final HashMethod hashMethod) {
-	if (domain == null || hashMethod == null) {
-	    throw new IllegalArgumentException();
+	private HashFunction(Set domain, FiniteByteArraySet coDomain, HashMethod hashMethod) {
+		super(domain, coDomain);
+		this.hashMethod = hashMethod;
 	}
-	return new HashFunction(domain, FiniteByteArraySet.getInstance(hashMethod.getLength()), hashMethod);
-    }
+
+	@Override
+	protected boolean abstractIsEqual(Function function) {
+		return this.getHashMethod().equals(((HashFunction) function).getHashMethod());
+	}
+
+	@Override
+	protected FiniteByteArrayElement abstractApply(final Element element, final Random random) {
+		return this.getCoDomain().getElement(element.getHashValue(this.hashMethod).getByteArray());
+	}
+
+	public HashMethod getHashMethod() {
+		return this.hashMethod;
+	}
+
+	/**
+	 * This constructor generates a standard SHA-256 hash function. The order of the co-domain is 2^256.
+	 * <p>
+	 * @param domain
+	 * @return
+	 */
+	public static HashFunction getInstance(Set domain) {
+		return HashFunction.getInstance(domain, HashMethod.DEFAULT);
+	}
+
+	/**
+	 * This constructor generates a standard hash function for a given hash algorithm name. The co-domain is chosen
+	 * accordingly.
+	 * <p>
+	 * @param domain
+	 * @param hashMethod The name of the hash algorithm
+	 * @return
+	 * @throws IllegalArgumentException if {@literal algorithmName} is null or an unknown hash algorithm name
+	 */
+	public static HashFunction getInstance(Set domain, final HashMethod hashMethod) {
+		if (domain == null || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new HashFunction(domain, FiniteByteArraySet.getInstance(hashMethod.getLength()), hashMethod);
+	}
 
 }
