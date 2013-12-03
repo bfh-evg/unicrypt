@@ -2,6 +2,8 @@ package ch.bfh.unicrypt.crypto.proofgenerator;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.ElGamalEncryptionValidityProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -9,6 +11,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.helper.Alphabet;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -25,19 +28,20 @@ public class ElGamalValidityProofGeneratorTest {
 	public void TestElGamalValidityProof() {
 
 		ElGamalEncryptionValidityProofGenerator pg = ElGamalEncryptionValidityProofGenerator.getInstance(
-					 ElGamalEncryptionScheme.getInstance(G_q.getElement(2)),
-					 G_q.getElement(4),
-					 Tuple.getInstance(G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)));
+			   ElGamalEncryptionScheme.getInstance(G_q.getElement(2)),
+			   G_q.getElement(4),
+			   Tuple.getInstance(G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)));
 
 		Pair publicInput = Pair.getInstance(G_q.getElement(8), G_q.getElement(128));   // (2^3, 4^3*2)
+		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
 		// Valid proof
 		Element secret = G_q.getZModOrder().getElement(3);
 		int index = 1;
 		Pair privateInput = pg.createPrivateInput(secret, index);
 
-		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
+		Triple proof = pg.generate(privateInput, publicInput, proverId);
+		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
 
 		// Invalid proof -> wrong randomndness
