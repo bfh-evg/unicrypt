@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.StandardPreimageProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -16,12 +16,12 @@ import ch.bfh.unicrypt.math.helper.Alphabet;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class PreimageProofGeneratorTest {
+public class StandardPreimageProofGeneratorTest {
 
 	final static int P = 167;
 	final private CyclicGroup G_q;
 
-	public PreimageProofGeneratorTest() {
+	public StandardPreimageProofGeneratorTest() {
 		this.G_q = GStarModSafePrime.getInstance(P);
 	}
 
@@ -30,21 +30,21 @@ public class PreimageProofGeneratorTest {
 
 		// Proof generator
 		Function f = GeneratorFunction.getInstance(this.G_q.getElement(4));
-		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(f);
+		StandardPreimageProofGenerator pg = StandardPreimageProofGenerator.getInstance(f);
 
 		// Valid proof
 		Element privateInput = f.getDomain().getElement(3);
 		Element publicInput = f.getCoDomain().getElement(64);
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Triple proof = pg.generate(privateInput, publicInput, proverId);
+		Triple proof = (Triple) pg.generate(privateInput, publicInput, proverId);
 
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
 
 		// Invalid proof -> wrong private value
 		privateInput = f.getDomain().getElement(4);
-		proof = pg.generate(privateInput, publicInput, proverId);
+		proof = (Triple) pg.generate(privateInput, publicInput, proverId);
 		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(!v.getBoolean());
 	}
@@ -58,28 +58,28 @@ public class PreimageProofGeneratorTest {
 		Element m = G_q.getElement(2);
 		Element r = G_q.getZModOrder().getElement(2);
 
-		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(elgamal.getEncryptionFunction().partiallyApply(pk, 0));
+		StandardPreimageProofGenerator pg = StandardPreimageProofGenerator.getInstance(elgamal.getEncryptionFunction().partiallyApply(pk, 0));
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(m, r);
 		Element publicInput = Tuple.getInstance(G_q.getElement(16), G_q.getElement(8));
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Tuple proof = pg.generate(privateInput, publicInput, proverId);
+		Tuple proof = (Triple) pg.generate(privateInput, publicInput, proverId);
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
 
 		// Invalid proof  => wrong r
 		privateInput = Tuple.getInstance(m, G_q.getZModOrder().getElement(7));
 
-		proof = pg.generate(privateInput, publicInput, proverId);
+		proof = (Triple) pg.generate(privateInput, publicInput, proverId);
 		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(!v.getBoolean());
 
 		// Invalid proof  => wrong m
 		privateInput = Tuple.getInstance(G_q.getElement(8), r);
 
-		proof = pg.generate(privateInput, publicInput, proverId);
+		proof = (Triple) pg.generate(privateInput, publicInput, proverId);
 		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(!v.getBoolean());
 	}

@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSetMembershipProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageSetMembershipProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -18,7 +18,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class ElGamalEncryptionValidityProofGenerator
-			 extends AbstractSetMembershipProofGenerator<ProductGroup, Pair> {
+	   extends AbstractPreimageSetMembershipProofGenerator<ProductGroup, Pair> {
 
 	protected ElGamalEncryptionValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Tuple members, HashMethod hashMethod) {
 		super(oneWayFunction, deltaFunction, members, hashMethod);

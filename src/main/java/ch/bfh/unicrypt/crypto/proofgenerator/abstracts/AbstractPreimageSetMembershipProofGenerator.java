@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageOrProofGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SetMembershipProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -18,19 +18,21 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Random;
 
-public abstract class AbstractSetMembershipProofGenerator<PUS extends SemiGroup, PUE extends Element>
-	   extends AbstractProofGenerator<ProductSet, Pair, PUS, PUE, ProductSet, Triple> {
+public abstract class AbstractPreimageSetMembershipProofGenerator<PUS extends SemiGroup, PUE extends Element>
+	   extends AbstractPreimageProofGenerator<ProductSet, Pair, PUS, PUE, Function>
+	   implements SetMembershipProofGenerator {
 
-	private final ProductFunction proofFunctions;
+	private final Function setMembershipProofFunction;
 	private final Function deltaFunction;
+	private final ProductFunction preimageProofFunction;
 	private final Tuple members;
 	private final PreimageOrProofGenerator orProofGenerator;
 
-	// oneWayFunction: f(x,r)
+	// setMembershipProofFunction: f(x,r)
 	// deltaFunction: f(x,y)
-	// proofFunction: oneWayFunction_x(r) o deltaFunction_x(y)
-	protected AbstractSetMembershipProofGenerator(Function oneWayFunction, Function deltaFunction, Tuple members, HashMethod hashMethod) {
-		if (oneWayFunction == null || !oneWayFunction.getDomain().isProduct() || ((ProductSet) oneWayFunction.getDomain()).getArity() != 2) {
+	// preiamgeProofFunction: oneWayFunction_x(r) o deltaFunction_x(y)
+	protected AbstractPreimageSetMembershipProofGenerator(Function setMembershipProofFunction, Function deltaFunction, Tuple members, HashMethod hashMethod) {
+		if (setMembershipProofFunction == null || !setMembershipProofFunction.getDomain().isProduct() || ((ProductSet) setMembershipProofFunction.getDomain()).getArity() != 2) {
 			throw new IllegalArgumentException("Illegal oneWayFunction! OneWayFunction's doman must be a product set with arity 2 (f(x,r))");
 		}
 		if (deltaFunction == null || !deltaFunction.getDomain().isProduct() || ((ProductSet) deltaFunction.getDomain()).getArity() != 2) {
@@ -39,24 +41,36 @@ public abstract class AbstractSetMembershipProofGenerator<PUS extends SemiGroup,
 		if (members == null || members.getArity() < 1) {
 			throw new IllegalArgumentException("Members must have at least arity two");
 		}
+
+		this.setMembershipProofFunction = setMembershipProofFunction;
+		this.deltaFunction = deltaFunction;
+		this.members = members;
+
 		// proofFunction = composite( multiIdentity(2), productFunction(selction(0), oneWayFunction), deltaFunction)
-		Function proofFunction = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(oneWayFunction.getDomain(), 2),
-															   ProductFunction.getInstance(SelectionFunction.getInstance((ProductSet) oneWayFunction.getDomain(), 0),
-																						   oneWayFunction),
+		Function proofFunction = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(setMembershipProofFunction.getDomain(), 2),
+															   ProductFunction.getInstance(SelectionFunction.getInstance((ProductSet) setMembershipProofFunction.getDomain(), 0),
+																						   setMembershipProofFunction),
 															   deltaFunction);
 		// proofFunction_x = composite( multiIdentity(1), proofFunction.partiallyApply(x, 0))
 		Function[] proofFunctions = new Function[members.getArity()];
-		Set rSet = ((ProductSet) oneWayFunction.getDomain()).getAt(1);
+		Set rSet = ((ProductSet) setMembershipProofFunction.getDomain()).getAt(1);
 		for (int i = 0; i < members.getArity(); i++) {
 			proofFunctions[i] = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(rSet, 1),
 															  proofFunction.partiallyApply(members.getAt(i), 0));
 		}
-		this.proofFunctions = ProductFunction.getInstance(proofFunctions);
-		// Save delta function as is, to create proof images (call delta with public y and each singel x)
-		this.deltaFunction = deltaFunction;
-		this.members = members;
+		this.preimageProofFunction = ProductFunction.getInstance(proofFunctions);
 
 		this.orProofGenerator = PreimageOrProofGenerator.getInstance(proofFunctions, hashMethod);
+	}
+
+	@Override
+	public Tuple getMembers() {
+		return this.members;
+	}
+
+	@Override
+	public Function getSetMembershipProofFunction() {
+		return this.setMembershipProofFunction;
 	}
 
 	@Override
@@ -66,7 +80,7 @@ public abstract class AbstractSetMembershipProofGenerator<PUS extends SemiGroup,
 
 	@Override
 	protected PUS abstractGetPublicInputSpace() {
-		return (PUS) proofFunctions.getAt(0).getCoDomain();
+		return (PUS) preimageProofFunction.getAt(0).getCoDomain();
 	}
 
 	@Override
@@ -75,30 +89,6 @@ public abstract class AbstractSetMembershipProofGenerator<PUS extends SemiGroup,
 			   this.getCommitmentSpace(),
 			   ProductSet.getInstance(this.getChallengeSpace(), members.getArity()),
 			   this.getResponseSpace());
-	}
-
-	public final ProductSet getCommitmentSpace() {
-		return this.proofFunctions.getCoDomain();
-	}
-
-	public final ProductSet getResponseSpace() {
-		return this.proofFunctions.getDomain();
-	}
-
-	public final ZMod getChallengeSpace() {
-		return ZMod.getInstance(this.proofFunctions.getAt(0).getDomain().getMinimalOrder());
-	}
-
-	public final Tuple getCommitments(final Triple proof) {
-		return this.orProofGenerator.getCommitments(proof);
-	}
-
-	public final Tuple getChallenges(final Triple proof) {
-		return this.orProofGenerator.getChallenges(proof);
-	}
-
-	public final Tuple getResponses(final Triple proof) {
-		return this.orProofGenerator.getResponses(proof);
 	}
 
 	public Pair createPrivateInput(Element secret, int index) {
@@ -122,6 +112,16 @@ public abstract class AbstractSetMembershipProofGenerator<PUS extends SemiGroup,
 			images[i] = this.deltaFunction.apply(members.getAt(i), publicInput);
 		}
 		return Tuple.getInstance(images);
+	}
+
+	@Override
+	protected Function abstractGetPreimageProofFunction() {
+		return this.preimageProofFunction;
+	}
+
+	@Override
+	protected HashMethod abstractGetHashMethod() {
+		return this.orProofGenerator.getHashMethod();
 	}
 
 }

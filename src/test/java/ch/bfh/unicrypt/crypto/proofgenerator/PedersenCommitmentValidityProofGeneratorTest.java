@@ -37,7 +37,7 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		int index = 1;
 		Tuple privateInput = pg.createPrivateInput(secret, index);
 
-		Triple proof = (Triple) pg.generate(privateInput, publicInput);
+		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(v.getBoolean());
 
@@ -46,7 +46,7 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		index = 1;
 		privateInput = pg.createPrivateInput(secret, index);
 
-		proof = (Triple) pg.generate(privateInput, publicInput);
+		proof = pg.generate(privateInput, publicInput);
 		v = pg.verify(proof, publicInput);
 		assertTrue(!v.getBoolean());
 
@@ -55,7 +55,7 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		index = 2;
 		privateInput = pg.createPrivateInput(secret, index);
 
-		proof = (Triple) pg.generate(privateInput, publicInput);
+		proof = pg.generate(privateInput, publicInput);
 		v = pg.verify(proof, publicInput);
 		assertTrue(!v.getBoolean());
 	}

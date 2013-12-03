@@ -1,6 +1,5 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -13,7 +12,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PreimageEqualityProofGenerator
-			 extends AbstractPreimageProofGenerator<SemiGroup, Element, ProductSemiGroup, Tuple, Function> {
+	   extends StandardPreimageProofGenerator<SemiGroup, Element, ProductSemiGroup, Tuple, Function> {
 
 	protected PreimageEqualityProofGenerator(final Function proofFunction, HashMethod hashMethod) {
 		super(proofFunction, hashMethod);
@@ -34,14 +33,14 @@ public class PreimageEqualityProofGenerator
 			}
 		}
 		Function proofFunction = CompositeFunction.getInstance(
-					 MultiIdentityFunction.getInstance(domain, proofFunctions.length),
-					 ProductFunction.getInstance(proofFunctions));
+			   MultiIdentityFunction.getInstance(domain, proofFunctions.length),
+			   ProductFunction.getInstance(proofFunctions));
 
 		return new PreimageEqualityProofGenerator(proofFunction, hashMethod);
 	}
 
 	public Function[] getProofFunctions() {
-		return ((ProductFunction) ((CompositeFunction) this.getProofFunction()).getAt(1)).getAll();
+		return ((ProductFunction) ((CompositeFunction) this.getPreimageProofFunction()).getAt(1)).getAll();
 	}
 
 }

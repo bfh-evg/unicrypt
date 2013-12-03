@@ -1,18 +1,17 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageProofGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
@@ -20,15 +19,13 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class PreimageOrProofGenerator
-			 extends AbstractProofGenerator<ProductSet, Pair, ProductSet, Tuple, ProductSet, Triple> {
+	   extends AbstractPreimageProofGenerator<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
 
-	private final Function[] proofFunctions;
-	private final ProductFunction proofFunction;
+	private final ProductFunction preimageProofFunction;
 	private final HashMethod hashMethod;
 
 	protected PreimageOrProofGenerator(final Function[] functions, HashMethod hashMethod) {
-		this.proofFunctions = functions;
-		this.proofFunction = ProductFunction.getInstance(functions);
+		this.preimageProofFunction = ProductFunction.getInstance(functions);
 		this.hashMethod = hashMethod;
 	}
 
@@ -57,66 +54,43 @@ public class PreimageOrProofGenerator
 	}
 
 	@Override
-	protected ProductSet abstractGetPrivateInputSpace() {
-		return ProductSet.getInstance(proofFunction.getDomain(), ZMod.getInstance(proofFunctions.length));
-	}
-
-	@Override
-	protected ProductSet abstractGetPublicInputSpace() {
-		return proofFunction.getCoDomain();
-	}
-
-	@Override
 	protected ProductSet abstractGetProofSpace() {
 		return ProductSet.getInstance(
-					 this.getCommitmentSpace(),
-					 ProductSet.getInstance(this.getChallengeSpace(), this.proofFunctions.length),
-					 this.getResponseSpace());
+			   this.getCommitmentSpace(),
+			   ProductSet.getInstance(this.getChallengeSpace(), this.getPreimageProofFunction().getArity()),
+			   this.getResponseSpace());
 	}
 
-	public ProductSet getCommitmentSpace() {
-		return this.proofFunction.getCoDomain();
+	@Override
+	protected ProductSet abstractGetPrivateInputSpace() {
+		return ProductSet.getInstance(this.getPreimageProofFunction().getDomain(), ZMod.getInstance(this.getPreimageProofFunction().getArity()));
 	}
 
-	public ProductSet getResponseSpace() {
-		return this.proofFunction.getDomain();
+	@Override
+	protected final ProductGroup abstractGetPublicInputSpace() {
+		return (ProductGroup) this.getPreimageProofFunction().getCoDomain();
 	}
 
-	public ZMod getChallengeSpace() {
-		return ZMod.getInstance(this.proofFunction.getDomain().getMinimalOrder());
+	@Override
+	protected ProductFunction abstractGetPreimageProofFunction() {
+		return this.preimageProofFunction;
 	}
 
-	public final Tuple getCommitments(final Triple proof) {
-		if (!this.getProofSpace().contains(proof)) {
-			throw new IllegalArgumentException();
-		}
-		return (Tuple) proof.getFirst();
-	}
-
-	public final Tuple getChallenges(final Triple proof) {
-		if (!this.getProofSpace().contains(proof)) {
-			throw new IllegalArgumentException();
-		}
-		return (Tuple) proof.getSecond();
-	}
-
-	public final Tuple getResponses(final Triple proof) {
-		if (!this.getProofSpace().contains(proof)) {
-			throw new IllegalArgumentException();
-		}
-		return (Tuple) proof.getThird();
+	@Override
+	protected HashMethod abstractGetHashMethod() {
+		return this.hashMethod;
 	}
 
 	public Pair createPrivateInput(Element secret, int index) {
-		if (index < 0 || index >= proofFunctions.length || !proofFunctions[index].getDomain().contains(secret)) {
+		if (index < 0 || index >= this.getPreimageProofFunction().getArity() || !this.getPreimageProofFunction().getAt(index).getDomain().contains(secret)) {
 			throw new IllegalArgumentException();
 		}
-		final Element[] domainElements = ((ProductMonoid) proofFunction.getDomain()).getIdentityElement().getAll();
+		final Element[] domainElements = ((ProductMonoid) this.getPreimageProofFunction().getDomain()).getIdentityElement().getAll();
 		domainElements[index] = secret;
 
 		return (Pair) this.getPrivateInputSpace().getElement(
-					 proofFunction.getDomain().getElement(domainElements),
-					 ZMod.getInstance(proofFunctions.length).getElement(index));
+			   this.getPreimageProofFunction().getDomain().getElement(domainElements),
+			   ZMod.getInstance(this.getPreimageProofFunction().getArity()).getElement(index));
 	}
 
 	@Override
@@ -125,6 +99,8 @@ public class PreimageOrProofGenerator
 		// Extract secret input value and index from private input
 		final int index = privateInput.getSecond().getValue().intValue();
 		final Element secret = ((Tuple) privateInput.getFirst()).getAt(index);
+
+		final Function[] proofFunctions = this.getPreimageProofFunction().getAll();
 
 		// Create lists for proof elements (t, c, s)
 		final Element[] commitments = new Element[proofFunctions.length];
@@ -168,29 +144,18 @@ public class PreimageOrProofGenerator
 
 		// Return proof
 		return (Triple) this.getProofSpace().getElement(Tuple.getInstance(commitments),
-																										Tuple.getInstance(challenges),
-																										Tuple.getInstance(responses));
+														Tuple.getInstance(challenges),
+														Tuple.getInstance(responses));
 
-	}
-
-	protected ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {
-		Tuple toHash = (proverId == null
-					 ? Tuple.getInstance(publicInput, commitment)
-					 : Tuple.getInstance(publicInput, commitment, proverId));
-
-		FiniteByteArrayElement hashValue = toHash.getHashValue(hashMethod);
-		System.out.println("toHash: " + toHash);
-		System.out.println("Spaces: " + hashValue.getSet() + ", " + this.getChallengeSpace());
-		return ModuloFunction.getInstance(hashValue.getSet(), this.getChallengeSpace()).apply(hashValue);
 	}
 
 	@Override
 	protected BooleanElement abstractVerify(Triple proof, Tuple publicInput, Element proverId) {
 
 		// Extract (t, c, s)
-		final Tuple commitments = this.getCommitments(proof);
-		final Tuple challenges = this.getChallenges(proof);
-		final Tuple responses = this.getResponses(proof);
+		final Tuple commitments = this.getCommitment(proof);
+		final Tuple challenges = (Tuple) this.getChallenge(proof);
+		final Tuple responses = this.getResponse(proof);
 
 		// 1. Check whether challenges sum up to the overall challenge
 		final ZModElement challenge = this.createChallenge(commitments, publicInput, proverId);
@@ -203,8 +168,8 @@ public class PreimageOrProofGenerator
 		}
 
 		// 2. Verify all subproofs
-		for (int i = 0; i < proofFunctions.length; i++) {
-			Element a = proofFunctions[i].apply(responses.getAt(i));
+		for (int i = 0; i < this.getPreimageProofFunction().getArity(); i++) {
+			Element a = this.getPreimageProofFunction().getAt(i).apply(responses.getAt(i));
 			Element b = commitments.getAt(i).apply(publicInput.getAt(i).selfApply(challenges.getAt(i)));
 			if (!a.isEqual(b)) {
 				return BooleanSet.FALSE;

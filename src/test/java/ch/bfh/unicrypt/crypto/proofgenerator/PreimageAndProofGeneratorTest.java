@@ -38,11 +38,11 @@ public class PreimageAndProofGeneratorTest {
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
-					 f1.getDomain().getElement(3),
-					 f2.getDomain().getElement(4));
+			   f1.getDomain().getElement(3),
+			   f2.getDomain().getElement(4));
 		Element publicInput = Tuple.getInstance(
-					 f1.getCoDomain().getElement(64),
-					 f2.getCoDomain().getElement(16));
+			   f1.getCoDomain().getElement(64),
+			   f2.getCoDomain().getElement(16));
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
 		Triple proof = pg.generate(privateInput, publicInput, proverId);
@@ -51,11 +51,11 @@ public class PreimageAndProofGeneratorTest {
 
 		// Invalid proof -> One preimages is wrong
 		privateInput = Tuple.getInstance(
-					 f1.getDomain().getElement(3),
-					 f2.getDomain().getElement(4));
+			   f1.getDomain().getElement(3),
+			   f2.getDomain().getElement(4));
 		publicInput = Tuple.getInstance(
-					 f1.getCoDomain().getElement(64),
-					 f2.getCoDomain().getElement(32));    // Preimage = 5
+			   f1.getCoDomain().getElement(64),
+			   f2.getCoDomain().getElement(32));    // Preimage = 5
 		proof = pg.generate(privateInput, publicInput, proverId);
 		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(!v.getBoolean());
@@ -70,13 +70,13 @@ public class PreimageAndProofGeneratorTest {
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
-					 f1.getDomain().getElement(2),
-					 f1.getDomain().getElement(3),
-					 f1.getDomain().getElement(4));
+			   f1.getDomain().getElement(2),
+			   f1.getDomain().getElement(3),
+			   f1.getDomain().getElement(4));
 		Element publicInput = Tuple.getInstance(
-					 f1.getCoDomain().getElement(4),
-					 f1.getCoDomain().getElement(8),
-					 f1.getCoDomain().getElement(16));
+			   f1.getCoDomain().getElement(4),
+			   f1.getCoDomain().getElement(8),
+			   f1.getCoDomain().getElement(16));
 
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
@@ -90,22 +90,14 @@ public class PreimageAndProofGeneratorTest {
 
 		// Proof generator
 		Function f1 = GeneratorFunction.getInstance(this.G_q.getElement(2));
-		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(f1);
+		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(f1, 1);
 
-		// Valid proof
 		Element privateInput = Tuple.getInstance(f1.getDomain().getElement(2));
 		Element publicInput = Tuple.getInstance(f1.getCoDomain().getElement(4));
-
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Triple proof = pg.generate(privateInput, publicInput, proverId);
+		Triple proof = (Triple) pg.generate(privateInput, publicInput, proverId);
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
-		assertTrue(v.getBoolean());
-
-		// With arity
-		pg = PreimageAndProofGenerator.getInstance(f1, 1);
-		proof = pg.generate(privateInput, publicInput, proverId);
-		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
 
 	}
