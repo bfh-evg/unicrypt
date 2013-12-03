@@ -37,14 +37,14 @@ public class StandardPreimageProofGeneratorTest {
 		Element publicInput = f.getCoDomain().getElement(64);
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Triple proof = (Triple) pg.generate(privateInput, publicInput, proverId);
+		Triple proof = pg.generate(privateInput, publicInput, proverId);
 
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
 
 		// Invalid proof -> wrong private value
 		privateInput = f.getDomain().getElement(4);
-		proof = (Triple) pg.generate(privateInput, publicInput, proverId);
+		proof = pg.generate(privateInput, publicInput, proverId);
 		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(!v.getBoolean());
 	}
@@ -65,21 +65,21 @@ public class StandardPreimageProofGeneratorTest {
 		Element publicInput = Tuple.getInstance(G_q.getElement(16), G_q.getElement(8));
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		Tuple proof = (Triple) pg.generate(privateInput, publicInput, proverId);
+		Tuple proof = pg.generate(privateInput, publicInput, proverId);
 		BooleanElement v = pg.verify(proof, publicInput, proverId);
 		assertTrue(v.getBoolean());
 
 		// Invalid proof  => wrong r
 		privateInput = Tuple.getInstance(m, G_q.getZModOrder().getElement(7));
 
-		proof = (Triple) pg.generate(privateInput, publicInput, proverId);
+		proof = pg.generate(privateInput, publicInput, proverId);
 		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(!v.getBoolean());
 
 		// Invalid proof  => wrong m
 		privateInput = Tuple.getInstance(G_q.getElement(8), r);
 
-		proof = (Triple) pg.generate(privateInput, publicInput, proverId);
+		proof = pg.generate(privateInput, publicInput, proverId);
 		v = pg.verify(proof, publicInput, proverId);
 		assertTrue(!v.getBoolean());
 	}
