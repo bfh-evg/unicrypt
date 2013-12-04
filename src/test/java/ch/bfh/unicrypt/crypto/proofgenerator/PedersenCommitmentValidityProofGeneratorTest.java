@@ -31,7 +31,7 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 
 		PedersenCommitmentValidityProofGenerator pg = PedersenCommitmentValidityProofGenerator.getInstance(
 			   PedersenCommitmentScheme.getInstance(G_q.getElement(2), G_q.getElement(4)),
-			   Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)));
+			   new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
 
 		Element publicInput = G_q.getElement(128);   // 2^3*4^2 = 128
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
@@ -62,6 +62,27 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		proof = pg.generate(privateInput, publicInput);
 		v = pg.verify(proof, publicInput);
 		assertTrue(!v.getBoolean());
+	}
+
+	@Test
+	public void testPedersenValidityProof2() {
+
+		PedersenCommitmentScheme pdc = PedersenCommitmentScheme.getInstance(G_q.getElement(2), G_q.getElement(4));
+		Element[] members = new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)};
+
+		PedersenCommitmentValidityProofGenerator pg = PedersenCommitmentValidityProofGenerator.getInstance(pdc, members);
+
+		int index = 3;
+		Element r = Z_q.getElement(5);
+		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
+
+		Tuple privateInput = pg.createPrivateInput(r, index);
+		Element publicInput = pdc.commit(members[index], r);
+
+		Triple proof = pg.generate(privateInput, publicInput, proverId);
+		BooleanElement v = pg.verify(proof, publicInput, proverId);
+		assertTrue(v.getBoolean());
+
 	}
 
 }

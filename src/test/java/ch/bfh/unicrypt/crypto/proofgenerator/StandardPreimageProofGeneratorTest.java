@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.StandardPreimageProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -30,7 +30,7 @@ public class StandardPreimageProofGeneratorTest {
 
 		// Proof generator
 		Function f = GeneratorFunction.getInstance(this.G_q.getElement(4));
-		StandardPreimageProofGenerator pg = StandardPreimageProofGenerator.getInstance(f);
+		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(f);
 
 		// Valid proof
 		Element privateInput = f.getDomain().getElement(3);
@@ -58,7 +58,7 @@ public class StandardPreimageProofGeneratorTest {
 		Element m = G_q.getElement(2);
 		Element r = G_q.getZModOrder().getElement(2);
 
-		StandardPreimageProofGenerator pg = StandardPreimageProofGenerator.getInstance(elgamal.getEncryptionFunction().partiallyApply(pk, 0));
+		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(elgamal.getEncryptionFunction().partiallyApply(pk, 0));
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(m, r);

@@ -1,83 +1,66 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.PreimageProofGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
+import java.util.Random;
 
-public abstract class AbstractPreimageProofGenerator<PRS extends Set, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
-	   extends AbstractProofGenerator<PRS, PRE, PUS, PUE, ProductSet, Triple>
-	   implements PreimageProofGenerator {
+public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
+	   extends AbstractTCSProofGenerator<PRS, PRE, PUS, PUE, F> {
 
-	@Override
-	public final F getPreimageProofFunction() {
-		return this.abstractGetPreimageProofFunction();
+	private final F preimageProofFunction;
+	private final HashMethod hashMethod;
+
+	protected AbstractPreimageProofGenerator(final F function, HashMethod hashMethod) {
+		this.preimageProofFunction = function;
+		this.hashMethod = hashMethod;
 	}
 
 	@Override
-	public final HashMethod getHashMethod() {
-		return this.abstractGetHashMethod();
+	protected final PRS abstractGetPrivateInputSpace() {
+		return (PRS) this.getPreimageProofFunction().getDomain();
 	}
 
 	@Override
-	public final Set getCommitmentSpace() {
-		return this.getPreimageProofFunction().getCoDomain();
+	protected final PUS abstractGetPublicInputSpace() {
+		return (PUS) this.getPreimageProofFunction().getCoDomain();
 	}
 
 	@Override
-	public final ZMod getChallengeSpace() {
-		return ZMod.getInstance(this.getPreimageProofFunction().getDomain().getMinimalOrder());
+	protected final ProductSet abstractGetProofSpace() {
+		return ProductSet.getInstance(this.getCommitmentSpace(), this.getChallengeSpace(), this.getResponseSpace());
 	}
 
 	@Override
-	public final Set getResponseSpace() {
-		return this.getPreimageProofFunction().getDomain();
+	protected F abstractGetPreimageProofFunction() {
+		return this.preimageProofFunction;
 	}
 
 	@Override
-	public final PUE getCommitment(final Triple proof) {
-		if (!this.getProofSpace().contains(proof)) {
-			throw new IllegalArgumentException();
-		}
-		return (PUE) proof.getFirst();
+	protected HashMethod abstractGetHashMethod() {
+		return this.hashMethod;
 	}
 
 	@Override
-	public final Element getChallenge(final Triple proof) {
-		if (!this.getProofSpace().contains(proof)) {
-			throw new IllegalArgumentException();
-		}
-		return proof.getSecond();
+	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput, final Element proverID, final Random random) {
+		final Element randomElement = this.getResponseSpace().getRandomElement(random);
+		final Element commitment = this.getPreimageProofFunction().apply(randomElement);
+		final Element challenge = this.createChallenge(commitment, publicInput, proverID);
+		final Element response = randomElement.apply(secretInput.selfApply(challenge));
+		return (Triple) this.getProofSpace().getElement(commitment, challenge, response);
 	}
 
 	@Override
-	public final PRE getResponse(final Triple proof) {
-		if (!this.getProofSpace().contains(proof)) {
-			throw new IllegalArgumentException();
-		}
-		return (PRE) proof.getThird();
+	protected final BooleanElement abstractVerify(final Triple proof, final Element publicInput, final Element proverID) {
+		final Element challenge = this.createChallenge(this.getCommitment(proof), publicInput, proverID);
+		final Element left = this.getPreimageProofFunction().apply(this.getResponse(proof));
+		final Element right = this.getCommitment(proof).apply(publicInput.selfApply(challenge));
+		return BooleanSet.getInstance().getElement(left.isEqual(right));
 	}
-
-	@Override
-	public final ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {
-		Tuple toHash = (proverId == null
-			   ? Tuple.getInstance(publicInput, commitment)
-			   : Tuple.getInstance(publicInput, commitment, proverId));
-		FiniteByteArrayElement hashValue = toHash.getHashValue(this.getHashMethod());
-		return ModuloFunction.getInstance(hashValue.getSet(), this.getChallengeSpace()).apply(hashValue);
-	}
-
-	protected abstract F abstractGetPreimageProofFunction();
-
-	protected abstract HashMethod abstractGetHashMethod();
 
 }

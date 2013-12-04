@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractProofGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.PreimageProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.TCSProofGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
@@ -114,9 +114,9 @@ public class InequalityOfDescreteLogarithmsProofGenerator
 
 		// 2. Create preimage proof:
 		//    f(a,b) = (h^a/z^b, g^a/y^b) = (C,1)  // a=xr, b=r
-		PreimageProofGenerator preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
+		TCSProofGenerator preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
 
-		Triple preimageProof = (Triple) preimageProofGenerator.generate(
+		Triple preimageProof = preimageProofGenerator.generate(
 			   Tuple.getInstance(x.selfApply(r), r),
 			   Tuple.getInstance(c, this.getCyclicGroup().getIdentityElement()),
 			   proverId);
@@ -128,7 +128,7 @@ public class InequalityOfDescreteLogarithmsProofGenerator
 	protected BooleanElement abstractVerify(Pair proof, Pair publicInput, Element proverId) {
 
 		// 1. Verify preimage proof
-		PreimageProofGenerator preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
+		TCSProofGenerator preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
 		BooleanElement v = preimageProofGenerator.verify(
 			   this.getPreimageProof(proof),
 			   Tuple.getInstance(this.getProofCommitment(proof), this.getCyclicGroup().getIdentityElement()),
@@ -141,7 +141,7 @@ public class InequalityOfDescreteLogarithmsProofGenerator
 	}
 
 	// f(a,b) = (h^a/z^b, g^a/y^b)
-	private PreimageProofGenerator createPreimageProofGenerator(Pair publicInput) {
+	private TCSProofGenerator createPreimageProofGenerator(Pair publicInput) {
 		Element g = this.getFirstGenerator();
 		Element h = this.getSecondGenerator();
 		Element y = publicInput.getFirst();

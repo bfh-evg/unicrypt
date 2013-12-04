@@ -7,7 +7,6 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -30,7 +29,7 @@ public class ElGamalValidityProofGeneratorTest {
 		ElGamalEncryptionValidityProofGenerator pg = ElGamalEncryptionValidityProofGenerator.getInstance(
 			   ElGamalEncryptionScheme.getInstance(G_q.getElement(2)),
 			   G_q.getElement(4),
-			   Tuple.getInstance(G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)));
+			   new Element[]{G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)});
 
 		Pair publicInput = Pair.getInstance(G_q.getElement(8), G_q.getElement(128));   // (2^3, 4^3*2)
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");

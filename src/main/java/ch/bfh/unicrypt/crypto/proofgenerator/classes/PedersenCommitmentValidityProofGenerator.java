@@ -1,9 +1,8 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageSetMembershipProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractTCSSetMembershipProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
@@ -17,18 +16,18 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PedersenCommitmentValidityProofGenerator
-	   extends AbstractPreimageSetMembershipProofGenerator<CyclicGroup, Element> {
+	   extends AbstractTCSSetMembershipProofGenerator<CyclicGroup, Element> {
 
-	protected PedersenCommitmentValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Tuple members, HashMethod hashMethod) {
+	protected PedersenCommitmentValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Element[] members, HashMethod hashMethod) {
 		super(oneWayFunction, deltaFunction, members, hashMethod);
 	}
 
-	public static PedersenCommitmentValidityProofGenerator getInstance(PedersenCommitmentScheme pedersenCS, Tuple plaintexts) {
-		return PedersenCommitmentValidityProofGenerator.getInstance(pedersenCS, plaintexts, HashMethod.DEFAULT);
+	public static PedersenCommitmentValidityProofGenerator getInstance(PedersenCommitmentScheme pedersenCS, Element[] members) {
+		return PedersenCommitmentValidityProofGenerator.getInstance(pedersenCS, members, HashMethod.DEFAULT);
 	}
 
-	public static PedersenCommitmentValidityProofGenerator getInstance(PedersenCommitmentScheme pedersenCS, Tuple messages, HashMethod hashMethod) {
-		if (pedersenCS == null || messages == null || messages.getArity() < 1 || hashMethod == null) {
+	public static PedersenCommitmentValidityProofGenerator getInstance(PedersenCommitmentScheme pedersenCS, Element[] messages, HashMethod hashMethod) {
+		if (pedersenCS == null || messages == null || messages.length < 1 || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 
@@ -39,7 +38,7 @@ public class PedersenCommitmentValidityProofGenerator
 			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
 											 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1),
 																		 CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
-																									   GeneratorFunction.getInstance(pedersenCS.getFirstGenerator()),
+																									   GeneratorFunction.getInstance(pedersenCS.getRandomizationGenerator()),
 																									   InvertFunction.getInstance(pedersenCS.getCyclicGroup()))),
 											 ApplyFunction.getInstance(pedersenCS.getCyclicGroup()));
 

@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractTCSProofGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class PreimageOrProofGenerator
-	   extends AbstractPreimageProofGenerator<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
+	   extends AbstractTCSProofGenerator<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
 
 	private final ProductFunction preimageProofFunction;
 	private final HashMethod hashMethod;

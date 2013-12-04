@@ -1,11 +1,10 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageSetMembershipProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractTCSSetMembershipProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
@@ -18,18 +17,18 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class ElGamalEncryptionValidityProofGenerator
-	   extends AbstractPreimageSetMembershipProofGenerator<ProductGroup, Pair> {
+	   extends AbstractTCSSetMembershipProofGenerator<ProductGroup, Pair> {
 
-	protected ElGamalEncryptionValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Tuple members, HashMethod hashMethod) {
+	protected ElGamalEncryptionValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Element[] members, HashMethod hashMethod) {
 		super(oneWayFunction, deltaFunction, members, hashMethod);
 	}
 
-	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Tuple plaintexts) {
+	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Element[] plaintexts) {
 		return ElGamalEncryptionValidityProofGenerator.getInstance(elGamalES, publicKey, plaintexts, HashMethod.DEFAULT);
 	}
 
-	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Tuple plaintexts, HashMethod hashMethod) {
-		if (elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey) || plaintexts == null || plaintexts.getArity() < 1 || hashMethod == null) {
+	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Element[] plaintexts, HashMethod hashMethod) {
+		if (elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey) || plaintexts == null || plaintexts.length < 1 || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 		Function oneWayFunction = elGamalES.getEncryptionFunction().partiallyApply(publicKey, 0);

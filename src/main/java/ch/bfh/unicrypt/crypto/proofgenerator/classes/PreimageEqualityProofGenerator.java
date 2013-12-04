@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractStandardPreimageProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -13,7 +13,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PreimageEqualityProofGenerator
-	   extends AbstractStandardPreimageProofGenerator<SemiGroup, Element, ProductSemiGroup, Tuple, Function> {
+	   extends AbstractPreimageProofGenerator<SemiGroup, Element, ProductSemiGroup, Tuple, Function> {
 
 	protected PreimageEqualityProofGenerator(final Function proofFunction, HashMethod hashMethod) {
 		super(proofFunction, hashMethod);
