@@ -18,50 +18,24 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Random;
 
+//
+// setMembershipProofFunction: f(x,r)
+// deltaFunction: f(x,y)
+// preiamgeProofFunction: setMemebershipFunction_x(r) o deltaFunction_x(y)
+//
 public abstract class AbstractTCSSetMembershipProofGenerator<PUS extends SemiGroup, PUE extends Element>
-	   extends AbstractTCSProofGenerator<ProductSet, Pair, PUS, PUE, Function>
+	   extends AbstractTCSProofGenerator<ProductSet, Pair, PUS, PUE, ProductFunction>
 	   implements TCSSetMembershipProofGenerator {
 
-	private final Function setMembershipProofFunction;
-	private final Function deltaFunction;
-	private final ProductFunction preimageProofFunction;
 	private final Element[] members;
-	private final PreimageOrProofGenerator orProofGenerator;
+	private Function setMembershipProofFunction;
+	private Function deltaFunction;
+	private ProductFunction preimageProofFunction;
+	private PreimageOrProofGenerator orProofGenerator;
 
-	// setMembershipProofFunction: f(x,r)
-	// deltaFunction: f(x,y)
-	// preiamgeProofFunction: setMemebershipFunction_x(r) o deltaFunction_x(y)
-	protected AbstractTCSSetMembershipProofGenerator(Function setMembershipProofFunction, Function deltaFunction, Element[] members, HashMethod hashMethod) {
-		if (setMembershipProofFunction == null || !setMembershipProofFunction.getDomain().isProduct() || ((ProductSet) setMembershipProofFunction.getDomain()).getArity() != 2) {
-			throw new IllegalArgumentException("Illegal oneWayFunction! OneWayFunction's doman must be a product set with arity 2 (f(x,r))");
-		}
-		if (deltaFunction == null || !deltaFunction.getDomain().isProduct() || ((ProductSet) deltaFunction.getDomain()).getArity() != 2) {
-			throw new IllegalArgumentException("Illegal deltaFunction! DeltaFunction's doman must be a product set with arity 2 (f(x,y))");
-		}
-		if (members == null || members.length < 1) {
-			throw new IllegalArgumentException("Members must have at least arity two");
-		}
-
-		this.setMembershipProofFunction = setMembershipProofFunction;
-		this.deltaFunction = deltaFunction;
+	protected AbstractTCSSetMembershipProofGenerator(Element[] members, HashMethod hashMethod) {
+		super(hashMethod);
 		this.members = members.clone();
-
-		// proofFunction = composite( multiIdentity(2), productFunction(selction(0), oneWayFunction), deltaFunction)
-		Function proofFunction = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(setMembershipProofFunction.getDomain(), 2),
-															   ProductFunction.getInstance(SelectionFunction.getInstance((ProductSet) setMembershipProofFunction.getDomain(), 0),
-																						   setMembershipProofFunction),
-															   deltaFunction);
-		// proofFunction_x = composite( multiIdentity(1), proofFunction.partiallyApply(x, 0))
-		Function[] proofFunctions = new Function[this.members.length];
-		Set rSet = ((ProductSet) setMembershipProofFunction.getDomain()).getAt(1);
-		for (int i = 0; i < this.members.length; i++) {
-			proofFunctions[i] = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(rSet, 1),
-															  proofFunction.partiallyApply(this.members[i], 0));
-		}
-
-		this.preimageProofFunction = ProductFunction.getInstance(proofFunctions);
-
-		this.orProofGenerator = PreimageOrProofGenerator.getInstance(proofFunctions, hashMethod);
 	}
 
 	@Override
@@ -71,22 +45,28 @@ public abstract class AbstractTCSSetMembershipProofGenerator<PUS extends SemiGro
 
 	@Override
 	public Function getSetMembershipProofFunction() {
+		if (this.setMembershipProofFunction == null) {
+			this.setMembershipProofFunction = this.abstractGetSetMembershipFunction();
+		}
 		return this.setMembershipProofFunction;
 	}
 
 	@Override
 	public Function getDeltaFunction() {
+		if (this.deltaFunction == null) {
+			this.deltaFunction = this.abstractGetDeltaFunction();
+		}
 		return this.deltaFunction;
 	}
 
 	@Override
 	protected ProductSet abstractGetPrivateInputSpace() {
-		return this.orProofGenerator.getPrivateInputSpace();
+		return this.getOrProofGenerator().getPrivateInputSpace();
 	}
 
 	@Override
 	protected PUS abstractGetPublicInputSpace() {
-		return (PUS) preimageProofFunction.getAt(0).getCoDomain();
+		return (PUS) this.getPreimageProofFunction().getAt(0).getCoDomain();
 	}
 
 	@Override
@@ -97,37 +77,66 @@ public abstract class AbstractTCSSetMembershipProofGenerator<PUS extends SemiGro
 			   this.getResponseSpace());
 	}
 
-	public Pair createPrivateInput(Element secret, int index) {
-		return (Pair) this.orProofGenerator.createPrivateInput(secret, index);
+	@Override
+	protected ProductFunction abstractGetPreimageProofFunction() {
+		if (this.preimageProofFunction == null) {
+			this.preimageProofFunction = this.createPreimageProofFunction();
+		}
+		return this.preimageProofFunction;
 	}
 
 	@Override
 	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, Element proverId, Random random) {
-		return this.orProofGenerator.generate(privateInput, this.createProofImages(publicInput), proverId);
+		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput), proverId);
 	}
 
 	@Override
 	protected BooleanElement abstractVerify(Triple proof, PUE publicInput, Element proverId) {
-		return this.orProofGenerator.verify(proof, this.createProofImages(publicInput), proverId);
+		return this.getOrProofGenerator().verify(proof, this.createProofImages(publicInput), proverId);
+	}
+
+	public Pair createPrivateInput(Element secret, int index) {
+		return (Pair) this.getOrProofGenerator().createPrivateInput(secret, index);
 	}
 
 	private Tuple createProofImages(PUE publicInput) {
 		final Element[] images = new Element[this.members.length];
 
 		for (int i = 0; i < this.members.length; i++) {
-			images[i] = this.deltaFunction.apply(this.members[i], publicInput);
+			images[i] = this.getDeltaFunction().apply(this.members[i], publicInput);
 		}
 		return Tuple.getInstance(images);
 	}
 
-	@Override
-	protected Function abstractGetPreimageProofFunction() {
-		return this.preimageProofFunction;
+	private PreimageOrProofGenerator getOrProofGenerator() {
+		if (this.orProofGenerator == null) {
+			this.orProofGenerator = PreimageOrProofGenerator.getInstance(this.getPreimageProofFunction().getAll(), this.getHashMethod());
+		}
+		return this.orProofGenerator;
 	}
 
-	@Override
-	protected HashMethod abstractGetHashMethod() {
-		return this.orProofGenerator.getHashMethod();
+	private ProductFunction createPreimageProofFunction() {
+
+		// proofFunction = composite( multiIdentity(2), productFunction(selction(0), setMembershipProofFunction), deltaFunction)
+		final ProductSet setMembershipPFDomain = (ProductSet) this.getSetMembershipProofFunction().getDomain();
+		Function proofFunction = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(setMembershipPFDomain, 2),
+															   ProductFunction.getInstance(SelectionFunction.getInstance(setMembershipPFDomain, 0),
+																						   this.getSetMembershipProofFunction()),
+															   this.getDeltaFunction());
+
+		// proofFunction_x = composite( multiIdentity(1), proofFunction.partiallyApply(x, 0))
+		Function[] proofFunctions = new Function[this.members.length];
+		Set rSet = setMembershipPFDomain.getAt(1);
+		for (int i = 0; i < this.members.length; i++) {
+			proofFunctions[i] = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(rSet, 1),
+															  proofFunction.partiallyApply(this.members[i], 0));
+		}
+
+		return ProductFunction.getInstance(proofFunctions);
 	}
+
+	protected abstract Function abstractGetSetMembershipFunction();
+
+	protected abstract Function abstractGetDeltaFunction();
 
 }

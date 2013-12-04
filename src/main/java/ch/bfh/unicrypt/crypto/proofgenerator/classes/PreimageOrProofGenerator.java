@@ -22,11 +22,10 @@ public class PreimageOrProofGenerator
 	   extends AbstractTCSProofGenerator<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
 
 	private final ProductFunction preimageProofFunction;
-	private final HashMethod hashMethod;
 
 	protected PreimageOrProofGenerator(final Function[] functions, HashMethod hashMethod) {
+		super(hashMethod);
 		this.preimageProofFunction = ProductFunction.getInstance(functions);
-		this.hashMethod = hashMethod;
 	}
 
 	public static PreimageOrProofGenerator getInstance(Function[] proofFunctions) {
@@ -74,11 +73,6 @@ public class PreimageOrProofGenerator
 	@Override
 	protected ProductFunction abstractGetPreimageProofFunction() {
 		return this.preimageProofFunction;
-	}
-
-	@Override
-	protected HashMethod abstractGetHashMethod() {
-		return this.hashMethod;
 	}
 
 	public Pair createPrivateInput(Element secret, int index) {

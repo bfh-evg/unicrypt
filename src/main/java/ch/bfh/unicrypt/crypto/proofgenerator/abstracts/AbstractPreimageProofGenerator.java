@@ -14,11 +14,11 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PRE 
 	   extends AbstractTCSProofGenerator<PRS, PRE, PUS, PUE, F> {
 
 	private final F preimageProofFunction;
-	private final HashMethod hashMethod;
 
 	protected AbstractPreimageProofGenerator(final F function, HashMethod hashMethod) {
+		super(hashMethod);
 		this.preimageProofFunction = function;
-		this.hashMethod = hashMethod;
+
 	}
 
 	@Override
@@ -39,11 +39,6 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PRE 
 	@Override
 	protected F abstractGetPreimageProofFunction() {
 		return this.preimageProofFunction;
-	}
-
-	@Override
-	protected HashMethod abstractGetHashMethod() {
-		return this.hashMethod;
 	}
 
 	@Override

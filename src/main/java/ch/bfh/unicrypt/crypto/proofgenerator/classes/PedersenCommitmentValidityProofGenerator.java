@@ -18,12 +18,15 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
 public class PedersenCommitmentValidityProofGenerator
 	   extends AbstractTCSSetMembershipProofGenerator<CyclicGroup, Element> {
 
-	protected PedersenCommitmentValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Element[] members, HashMethod hashMethod) {
-		super(oneWayFunction, deltaFunction, members, hashMethod);
+	private final PedersenCommitmentScheme pedersenCS;
+
+	protected PedersenCommitmentValidityProofGenerator(PedersenCommitmentScheme pedersenCS, Element[] messages, HashMethod hashMethod) {
+		super(messages, hashMethod);
+		this.pedersenCS = pedersenCS;
 	}
 
-	public static PedersenCommitmentValidityProofGenerator getInstance(PedersenCommitmentScheme pedersenCS, Element[] members) {
-		return PedersenCommitmentValidityProofGenerator.getInstance(pedersenCS, members, HashMethod.DEFAULT);
+	public static PedersenCommitmentValidityProofGenerator getInstance(PedersenCommitmentScheme pedersenCS, Element[] messages) {
+		return PedersenCommitmentValidityProofGenerator.getInstance(pedersenCS, messages, HashMethod.DEFAULT);
 	}
 
 	public static PedersenCommitmentValidityProofGenerator getInstance(PedersenCommitmentScheme pedersenCS, Element[] messages, HashMethod hashMethod) {
@@ -31,18 +34,25 @@ public class PedersenCommitmentValidityProofGenerator
 			throw new IllegalArgumentException();
 		}
 
-		Function oneWayFunction = pedersenCS.getCommitmentFunction();
+		return new PedersenCommitmentValidityProofGenerator(pedersenCS, messages, hashMethod);
+	}
 
-		ProductSet deltaFunctionDomain = ProductSet.getInstance(pedersenCS.getMessageSpace(), oneWayFunction.getCoDomain());
+	@Override
+	protected Function abstractGetSetMembershipFunction() {
+		return this.pedersenCS.getCommitmentFunction();
+	}
+
+	@Override
+	protected Function abstractGetDeltaFunction() {
+		ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(), this.getSetMembershipProofFunction().getCoDomain());
 		Function deltaFunction =
 			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
 											 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1),
 																		 CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
-																									   GeneratorFunction.getInstance(pedersenCS.getRandomizationGenerator()),
-																									   InvertFunction.getInstance(pedersenCS.getCyclicGroup()))),
-											 ApplyFunction.getInstance(pedersenCS.getCyclicGroup()));
-
-		return new PedersenCommitmentValidityProofGenerator(oneWayFunction, deltaFunction, messages, hashMethod);
+																									   GeneratorFunction.getInstance(this.pedersenCS.getMessageGenerator()),
+																									   InvertFunction.getInstance(this.pedersenCS.getCyclicGroup()))),
+											 ApplyFunction.getInstance(this.pedersenCS.getCyclicGroup()));
+		return deltaFunction;
 	}
 
 }

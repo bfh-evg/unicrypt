@@ -18,6 +18,12 @@ public abstract class AbstractTCSProofGenerator<PRS extends Set, PRE extends Ele
 	   extends AbstractProofGenerator<PRS, PRE, PUS, PUE, ProductSet, Triple>
 	   implements TCSProofGenerator {
 
+	private final HashMethod hashMethod;
+
+	protected AbstractTCSProofGenerator(HashMethod hashMethod) {
+		this.hashMethod = hashMethod;
+	}
+
 	@Override
 	public final F getPreimageProofFunction() {
 		return this.abstractGetPreimageProofFunction();
@@ -25,7 +31,7 @@ public abstract class AbstractTCSProofGenerator<PRS extends Set, PRE extends Ele
 
 	@Override
 	public final HashMethod getHashMethod() {
-		return this.abstractGetHashMethod();
+		return this.hashMethod;
 	}
 
 	@Override
@@ -76,7 +82,5 @@ public abstract class AbstractTCSProofGenerator<PRS extends Set, PRE extends Ele
 	}
 
 	protected abstract F abstractGetPreimageProofFunction();
-
-	protected abstract HashMethod abstractGetHashMethod();
 
 }

@@ -19,8 +19,13 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
 public class ElGamalEncryptionValidityProofGenerator
 	   extends AbstractTCSSetMembershipProofGenerator<ProductGroup, Pair> {
 
-	protected ElGamalEncryptionValidityProofGenerator(Function oneWayFunction, Function deltaFunction, Element[] members, HashMethod hashMethod) {
-		super(oneWayFunction, deltaFunction, members, hashMethod);
+	private final ElGamalEncryptionScheme elGamalES;
+	private final Element publicKey;
+
+	protected ElGamalEncryptionValidityProofGenerator(ElGamalEncryptionScheme elGamalES, Element publicKey, Element[] plaintexts, HashMethod hashMethod) {
+		super(plaintexts, hashMethod);
+		this.elGamalES = elGamalES;
+		this.publicKey = publicKey;
 	}
 
 	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Element[] plaintexts) {
@@ -28,13 +33,23 @@ public class ElGamalEncryptionValidityProofGenerator
 	}
 
 	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Element[] plaintexts, HashMethod hashMethod) {
-		if (elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey) || plaintexts == null || plaintexts.length < 1 || hashMethod == null) {
+		if (elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey)
+			   || plaintexts == null || plaintexts.length < 1 || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Function oneWayFunction = elGamalES.getEncryptionFunction().partiallyApply(publicKey, 0);
 
-		CyclicGroup elGamalCyclicGroup = elGamalES.getCyclicGroup();
-		ProductSet deltaFunctionDomain = ProductSet.getInstance(elGamalCyclicGroup, oneWayFunction.getCoDomain());
+		return new ElGamalEncryptionValidityProofGenerator(elGamalES, publicKey, plaintexts, hashMethod);
+	}
+
+	@Override
+	protected Function abstractGetSetMembershipFunction() {
+		return this.elGamalES.getEncryptionFunction().partiallyApply(this.publicKey, 0);
+	}
+
+	@Override
+	protected Function abstractGetDeltaFunction() {
+		CyclicGroup elGamalCyclicGroup = this.elGamalES.getCyclicGroup();
+		ProductSet deltaFunctionDomain = ProductSet.getInstance(elGamalCyclicGroup, this.getSetMembershipProofFunction().getCoDomain());
 		Function deltaFunction =
 			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
 											 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
@@ -43,8 +58,7 @@ public class ElGamalEncryptionValidityProofGenerator
 																																   CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
 																																								 InvertFunction.getInstance(elGamalCyclicGroup))),
 																									   ApplyFunction.getInstance(elGamalCyclicGroup))));
-
-		return new ElGamalEncryptionValidityProofGenerator(oneWayFunction, deltaFunction, plaintexts, hashMethod);
+		return deltaFunction;
 	}
 
 }

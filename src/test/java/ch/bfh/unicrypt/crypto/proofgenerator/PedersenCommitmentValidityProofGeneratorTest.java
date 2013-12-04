@@ -30,10 +30,10 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 	public void testPedersenValidityProof() {
 
 		PedersenCommitmentValidityProofGenerator pg = PedersenCommitmentValidityProofGenerator.getInstance(
-			   PedersenCommitmentScheme.getInstance(G_q.getElement(2), G_q.getElement(4)),
+			   PedersenCommitmentScheme.getInstance(G_q.getElement(4), G_q.getElement(2)),
 			   new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
 
-		Element publicInput = G_q.getElement(128);   // 2^3*4^2 = 128
+		Element publicInput = G_q.getElement(128);   // 4^2*2^3 = 128
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
 		// Valid proof
