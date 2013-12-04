@@ -71,11 +71,6 @@ public class OneTimePadEncryptionScheme
 			return this.getCoDomain().getElement(result);
 		}
 
-		@Override
-		protected boolean abstractIsEqual(Function function) {
-			return true;
-		}
-
 	}
 
 }

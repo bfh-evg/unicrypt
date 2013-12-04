@@ -5,7 +5,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -47,6 +46,7 @@ public class MultiIdentityFunction
 	 * <p/>
 	 * @param set   The given set
 	 * @param arity The arity of the output element
+	 * @return
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal arity} is negative
 	 */
@@ -55,11 +55,6 @@ public class MultiIdentityFunction
 			throw new IllegalArgumentException();
 		}
 		return new MultiIdentityFunction(set, ProductSet.getInstance(set, arity));
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		return true;
 	}
 
 }

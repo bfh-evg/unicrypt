@@ -78,6 +78,7 @@ public final class ProductFunction
 	 * product function.
 	 * <p>
 	 * @param functions
+	 * @return
 	 * @throws IllegalArgumentException if {@literal functions} is null or contains null
 	 */
 	public static ProductFunction getInstance(final Function... functions) {
@@ -113,6 +114,7 @@ public final class ProductFunction
 	 * <p>
 	 * @param function The given function
 	 * @param arity    The number of times the function is applied in parallel
+	 * @return
 	 * @throws IllegalArgumentException if {@literal function} is null
 	 * @throws IllegalArgumentException if {@literal arity} is negative
 	 */

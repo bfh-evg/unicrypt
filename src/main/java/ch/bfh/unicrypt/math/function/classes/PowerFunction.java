@@ -9,7 +9,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
 /**
@@ -76,11 +75,6 @@ public class PowerFunction
 			throw new IllegalArgumentException();
 		}
 		return new PowerFunction(ProductSet.getInstance(multiplicativeSemiGroup, amountSet), multiplicativeSemiGroup);
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		return true;
 	}
 
 }

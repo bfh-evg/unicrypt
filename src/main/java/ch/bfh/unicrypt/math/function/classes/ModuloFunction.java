@@ -31,7 +31,7 @@ public class ModuloFunction
 	}
 
 	@Override
-	protected boolean abstractIsEqual(Function function) {
+	protected boolean standardIsEqual(Function function) {
 		return this.getModulus().equals(((ModuloFunction) function).getModulus());
 	}
 

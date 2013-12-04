@@ -31,11 +31,11 @@ public class AdapterFunction
 	}
 
 	@Override
-	protected boolean abstractIsEqual(Function function) {
+	protected boolean standardIsEqual(Function function) {
 		return Arrays.equals(this.getIndices(), ((AdapterFunction) function).getIndices());
 	}
 
-  //
+	//
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
@@ -47,7 +47,7 @@ public class AdapterFunction
 		return this.getCoDomain().getElement(elements);
 	}
 
-  //
+	//
 	// STATIC FACTORY METHODS
 	//
 	/**

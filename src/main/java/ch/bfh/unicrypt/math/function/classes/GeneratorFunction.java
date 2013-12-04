@@ -26,6 +26,15 @@ public class GeneratorFunction
 		this.generator = generator;
 	}
 
+	public Element getGenerator() {
+		return this.generator;
+	}
+
+	@Override
+	protected boolean standardIsEqual(Function function) {
+		return this.getGenerator().isEqual(((GeneratorFunction) function).getGenerator());
+	}
+
 	@Override
 	protected Element abstractApply(ZModElement element, Random random) {
 		return generator.selfApply(element);
@@ -44,11 +53,6 @@ public class GeneratorFunction
 			throw new IllegalArgumentException();
 		}
 		return new GeneratorFunction(cyclicGroup.getZModOrder(), cyclicGroup, cyclicGroup.getDefaultGenerator());
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		return this.generator.isEqual(((GeneratorFunction) function).generator);
 	}
 
 }

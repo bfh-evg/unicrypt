@@ -103,7 +103,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 		if (!this.getCoDomain().isEqual(function.getCoDomain())) {
 			return false;
 		}
-		return this.abstractIsEqual(function);
+		return this.standardIsEqual(function);
 	}
 
 	@Override
@@ -119,7 +119,9 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 		return false;
 	}
 
-	protected abstract boolean abstractIsEqual(Function function);
+	protected boolean standardIsEqual(Function function) {
+		return true;
+	}
 
 	//
 	// The following protected abstract method must be implemented in every direct

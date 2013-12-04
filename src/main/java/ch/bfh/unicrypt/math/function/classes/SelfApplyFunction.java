@@ -8,7 +8,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
 /**
@@ -46,6 +45,7 @@ public class SelfApplyFunction
 	 * group.
 	 * <p/>
 	 * @param semiGroup The underlying group
+	 * @return
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 */
 	public static SelfApplyFunction getInstance(final SemiGroup semiGroup) {
@@ -65,6 +65,7 @@ public class SelfApplyFunction
 	 * <p/>
 	 * @param semiGroup The underlying group
 	 * @param amountSet
+	 * @return
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
 	 */
@@ -73,11 +74,6 @@ public class SelfApplyFunction
 			throw new IllegalArgumentException();
 		}
 		return new SelfApplyFunction(ProductSet.getInstance(semiGroup, amountSet), semiGroup);
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		return true;
 	}
 
 }

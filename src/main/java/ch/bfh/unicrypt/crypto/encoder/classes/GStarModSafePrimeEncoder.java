@@ -58,11 +58,6 @@ public class GStarModSafePrimeEncoder
 			return coDomain.getElement(coDomain.getModulus().subtract(value));
 		}
 
-		@Override
-		protected boolean abstractIsEqual(Function function) {
-			return true;
-		}
-
 	}
 
 	static class DecodingFunction
@@ -80,11 +75,6 @@ public class GStarModSafePrimeEncoder
 				return this.getCoDomain().getElement(value.subtract(BigInteger.ONE));
 			}
 			return this.getCoDomain().getElement((domain.getModulus().subtract(value)).subtract(BigInteger.ONE));
-		}
-
-		@Override
-		protected boolean abstractIsEqual(Function function) {
-			return true;
 		}
 
 	}

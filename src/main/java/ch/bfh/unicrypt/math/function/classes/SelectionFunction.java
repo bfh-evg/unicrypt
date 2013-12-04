@@ -32,11 +32,11 @@ public class SelectionFunction
 	}
 
 	@Override
-	protected boolean abstractIsEqual(Function function) {
+	protected boolean standardIsEqual(Function function) {
 		return Arrays.equals(this.getIndices(), ((SelectionFunction) function).getIndices());
 	}
 
-  //
+	//
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
@@ -44,7 +44,7 @@ public class SelectionFunction
 		return element.getAt(this.getIndices());
 	}
 
-  //
+	//
 	// STATIC FACTORY METHODS
 	//
 	/**
