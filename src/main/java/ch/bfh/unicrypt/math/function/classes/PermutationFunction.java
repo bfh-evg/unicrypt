@@ -8,7 +8,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import java.util.Random;
 
@@ -65,6 +64,7 @@ public class PermutationFunction
 	 * <p/>
 	 * @param set   The given group
 	 * @param arity The arity of the tuple elements to permute
+	 * @return
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal arity} is negative
 	 */
@@ -81,6 +81,7 @@ public class PermutationFunction
 	 * <p>
 	 * <p/>
 	 * @param productSet The given power group
+	 * @return
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 */
 	public static PermutationFunction getInstance(final ProductSet productSet) {
@@ -88,11 +89,6 @@ public class PermutationFunction
 			throw new IllegalArgumentException();
 		}
 		return new PermutationFunction(ProductSet.getInstance(productSet, PermutationGroup.getInstance(productSet.getArity())), productSet);
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

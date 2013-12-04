@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
 /**
@@ -36,8 +35,8 @@ public class IdentityFunction
 	 * This is the standard constructor for this class. It creates a generalized identity function for a given group,
 	 * which reproduces the input value multiple time.
 	 * <p/>
-	 * @param set   The given set
-	 * @param arity The arity of the output element
+	 * @param set The given set
+	 * @return
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal arity} is negative
 	 */
@@ -46,11 +45,6 @@ public class IdentityFunction
 			throw new IllegalArgumentException();
 		}
 		return new IdentityFunction(set);
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

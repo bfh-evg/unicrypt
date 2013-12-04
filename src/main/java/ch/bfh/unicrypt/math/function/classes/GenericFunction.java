@@ -27,6 +27,15 @@ public class GenericFunction<D extends Set, DE extends Element, C extends Set, C
 		this.function = function;
 	}
 
+	public Function getFunction() {
+		return this.getFunction();
+	}
+
+	@Override
+	protected boolean standardIsEqual(Function function) {
+		return this.getFunction().isEqual(((GenericFunction) function).getFunction());
+	}
+
 	@Override
 	protected CE abstractApply(DE element, Random random) {
 		return (CE) this.function.apply(element, random);
@@ -37,11 +46,6 @@ public class GenericFunction<D extends Set, DE extends Element, C extends Set, C
 			throw new IllegalArgumentException();
 		}
 		return new GenericFunction<D, DE, C, CE>(function);
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

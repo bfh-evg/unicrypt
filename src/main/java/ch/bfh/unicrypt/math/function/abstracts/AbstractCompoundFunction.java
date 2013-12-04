@@ -158,7 +158,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	protected boolean abstractIsEqual(Function function) {
+	protected boolean standardIsEqual(Function function) {
 		CF other = (CF) function;
 		int arity = this.getArity();
 		if (arity != other.getArity()) {

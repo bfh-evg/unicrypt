@@ -5,7 +5,6 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
 /**
@@ -41,15 +40,11 @@ public class MinusFunction
 	 * This is the standard constructor for this class. It creates an invert function for a given group.
 	 * <p/>
 	 * @param additiveGroup The given Group
+	 * @return
 	 * @throws IllegalArgumentException if the group is null
 	 */
 	public static MinusFunction getInstance(final AdditiveGroup additiveGroup) {
 		return new MinusFunction(additiveGroup, additiveGroup);
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

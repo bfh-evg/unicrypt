@@ -9,7 +9,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
 /**
@@ -67,6 +66,7 @@ public class TimesFunction
 	 * <p/>
 	 * @param additiveSemiGroup The underlying group
 	 * @param amountSet
+	 * @return
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
 	 */
@@ -75,11 +75,6 @@ public class TimesFunction
 			throw new IllegalArgumentException();
 		}
 		return new TimesFunction(ProductSet.getInstance(additiveSemiGroup, amountSet), additiveSemiGroup);
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		return true;
 	}
 
 }

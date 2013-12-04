@@ -78,11 +78,6 @@ public class ProbabilisticECGroupFpEncoder
 			return ecPrime.getElement(x, y);
 		}
 
-		@Override
-		protected boolean abstractIsEqual(Function function) {
-			return true;
-		}
-
 	}
 
 	static class ECDecodingFunction
@@ -97,11 +92,6 @@ public class ProbabilisticECGroupFpEncoder
 			BigInteger x1 = element.getX().getValue();
 			x1 = x1.shiftRight(SHIFT);
 			return this.getCoDomain().getElement(x1);
-		}
-
-		@Override
-		protected boolean abstractIsEqual(Function function) {
-			return true;
 		}
 
 	}

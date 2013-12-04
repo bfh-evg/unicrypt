@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Random;
 
 /**
@@ -37,11 +36,6 @@ public class ConvertFunction
 	 */
 	public static ConvertFunction getInstance(final Set domain, final Set coDomain) {
 		return new ConvertFunction(domain, coDomain);
-	}
-
-	@Override
-	protected boolean abstractIsEqual(Function function) {
-		return true;
 	}
 
 }

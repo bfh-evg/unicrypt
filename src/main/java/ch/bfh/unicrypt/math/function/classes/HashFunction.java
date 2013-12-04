@@ -35,18 +35,18 @@ public class HashFunction
 		this.hashMethod = hashMethod;
 	}
 
+	public HashMethod getHashMethod() {
+		return this.hashMethod;
+	}
+
 	@Override
-	protected boolean abstractIsEqual(Function function) {
+	protected boolean standardIsEqual(Function function) {
 		return this.getHashMethod().equals(((HashFunction) function).getHashMethod());
 	}
 
 	@Override
 	protected FiniteByteArrayElement abstractApply(final Element element, final Random random) {
 		return this.getCoDomain().getElement(element.getHashValue(this.hashMethod).getByteArray());
-	}
-
-	public HashMethod getHashMethod() {
-		return this.hashMethod;
 	}
 
 	/**
