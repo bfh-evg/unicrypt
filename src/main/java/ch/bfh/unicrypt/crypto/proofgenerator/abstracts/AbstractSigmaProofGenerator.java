@@ -1,27 +1,23 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.TCSProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.helper.HashMethod;
 
-public abstract class AbstractTCSProofGenerator<PRS extends Set, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
+public abstract class AbstractSigmaProofGenerator<PRS extends Set, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
 	   extends AbstractProofGenerator<PRS, PRE, PUS, PUE, ProductSet, Triple>
-	   implements TCSProofGenerator {
+	   implements SigmaProofGenerator {
 
-	private final HashMethod hashMethod;
+	private final SigmaChallengeGenerator challengeGenerator;
 
-	protected AbstractTCSProofGenerator(HashMethod hashMethod) {
-		this.hashMethod = hashMethod;
+	protected AbstractSigmaProofGenerator(final SigmaChallengeGenerator challengeGenerator) {
+		this.challengeGenerator = challengeGenerator;
 	}
 
 	@Override
@@ -30,8 +26,8 @@ public abstract class AbstractTCSProofGenerator<PRS extends Set, PRE extends Ele
 	}
 
 	@Override
-	public final HashMethod getHashMethod() {
-		return this.hashMethod;
+	public final SigmaChallengeGenerator getChallengeGenerator() {
+		return this.challengeGenerator;
 	}
 
 	@Override
@@ -71,14 +67,6 @@ public abstract class AbstractTCSProofGenerator<PRS extends Set, PRE extends Ele
 			throw new IllegalArgumentException();
 		}
 		return (PRE) proof.getThird();
-	}
-
-	protected final ZModElement createChallenge(final Element commitment, final Element publicInput, final Element proverId) {
-		Tuple toHash = (proverId == null
-			   ? Tuple.getInstance(publicInput, commitment)
-			   : Tuple.getInstance(publicInput, commitment, proverId));
-		FiniteByteArrayElement hashValue = toHash.getHashValue(this.getHashMethod());
-		return ModuloFunction.getInstance(hashValue.getSet(), this.getChallengeSpace()).apply(hashValue);
 	}
 
 	protected abstract F abstractGetPreimageProofFunction();

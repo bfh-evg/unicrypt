@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.ElGamalEncryptionValidityProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
@@ -18,29 +19,33 @@ public class ElGamalValidityProofGeneratorTest {
 
 	final static int P = 167;
 	final private CyclicGroup G_q;
+	final private StringElement proverId;
 
 	public ElGamalValidityProofGeneratorTest() {
 		this.G_q = GStarModSafePrime.getInstance(P);
+		this.proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 	}
 
 	@Test
 	public void TestElGamalValidityProof() {
 
-		ElGamalEncryptionValidityProofGenerator pg = ElGamalEncryptionValidityProofGenerator.getInstance(
-			   ElGamalEncryptionScheme.getInstance(G_q.getElement(2)),
-			   G_q.getElement(4),
-			   new Element[]{G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)});
+		ElGamalEncryptionScheme elGamalES = ElGamalEncryptionScheme.getInstance(G_q.getElement(2));
+		Element[] plaintexts = new Element[]{G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)};
+		Element publicKey = G_q.getElement(4);
+
+		SigmaChallengeGenerator scg = ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, plaintexts.length, proverId);
+		ElGamalEncryptionValidityProofGenerator pg = ElGamalEncryptionValidityProofGenerator.getInstance(scg, elGamalES, publicKey, plaintexts);
 
 		Pair publicInput = Pair.getInstance(G_q.getElement(8), G_q.getElement(128));   // (2^3, 4^3*2)
-		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
+
 
 		// Valid proof
 		Element secret = G_q.getZModOrder().getElement(3);
 		int index = 1;
 		Pair privateInput = pg.createPrivateInput(secret, index);
 
-		Triple proof = pg.generate(privateInput, publicInput, proverId);
-		BooleanElement v = pg.verify(proof, publicInput, proverId);
+		Triple proof = pg.generate(privateInput, publicInput);
+		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(v.getBoolean());
 
 		// Invalid proof -> wrong randomndness

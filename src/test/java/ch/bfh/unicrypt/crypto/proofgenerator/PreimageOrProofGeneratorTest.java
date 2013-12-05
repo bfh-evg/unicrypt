@@ -1,5 +1,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageOrProofGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -27,11 +29,14 @@ public class PreimageOrProofGeneratorTest {
 	final private MultiplicativeCyclicGroup G_q;
 	final private MultiplicativeCyclicGroup G_q2;
 	final private ZModPrime Z_q;
+	final private StringElement proverId;
 
 	public PreimageOrProofGeneratorTest() {
 		this.G_q = GStarModSafePrime.getInstance(P);
 		this.Z_q = ZModPrime.getInstance((P - 1) / 2);         // 83
 		this.G_q2 = GStarModSafePrime.getInstance(P2);
+		this.proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
+
 	}
 
 	@Test
@@ -54,7 +59,8 @@ public class PreimageOrProofGeneratorTest {
 		Function f5 = this.getPedersonCommitmentFunction();
 
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};
-		PreimageOrProofGenerator pg = PreimageOrProofGenerator.getInstance(functions);
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(ProductFunction.getInstance(functions), this.proverId);
+		PreimageOrProofGenerator pg = PreimageOrProofGenerator.getInstance(scg, functions);
 
 		// Default
 		Element secret = this.Z_q.getElement(3);
@@ -64,18 +70,17 @@ public class PreimageOrProofGeneratorTest {
 
 		Pair privateInput = pg.createPrivateInput(secret, index);
 		Tuple publicInput = Tuple.getInstance(
-					 this.G_q.getRandomElement(),
-					 this.G_q2.getRandomElement(),
-					 this.G_q.getElement(64),
-					 this.G_q.getRandomElement(),
-					 this.G_q.getElement(96));
-		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
+			   this.G_q.getRandomElement(),
+			   this.G_q2.getRandomElement(),
+			   this.G_q.getElement(64),
+			   this.G_q.getRandomElement(),
+			   this.G_q.getElement(96));
 
 		// Generate
-		Triple proof = pg.generate(privateInput, publicInput, proverId);
+		Triple proof = pg.generate(privateInput, publicInput);
 
 		// Verify
-		BooleanElement v = pg.verify(proof, publicInput, proverId);
+		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(v.getBoolean());
 	}
 
@@ -84,8 +89,8 @@ public class PreimageOrProofGeneratorTest {
 		Element h = this.G_q.getElement(6);
 
 		Function f = CompositeFunction.getInstance(
-					 ProductFunction.getInstance(GeneratorFunction.getInstance(g), GeneratorFunction.getInstance(h)),
-					 ApplyFunction.getInstance(this.G_q));
+			   ProductFunction.getInstance(GeneratorFunction.getInstance(g), GeneratorFunction.getInstance(h)),
+			   ApplyFunction.getInstance(this.G_q));
 
 		return f;
 	}

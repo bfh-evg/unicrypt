@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractTCSProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -14,42 +15,34 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Arrays;
 import java.util.Random;
 
 public class PreimageOrProofGenerator
-	   extends AbstractTCSProofGenerator<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
+	   extends AbstractSigmaProofGenerator<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
 
 	private final ProductFunction preimageProofFunction;
 
-	protected PreimageOrProofGenerator(final Function[] functions, HashMethod hashMethod) {
-		super(hashMethod);
+	protected PreimageOrProofGenerator(final SigmaChallengeGenerator challengeGenerator, final Function[] functions) {
+		super(challengeGenerator);
 		this.preimageProofFunction = ProductFunction.getInstance(functions);
 	}
 
-	public static PreimageOrProofGenerator getInstance(Function[] proofFunctions) {
-		return PreimageOrProofGenerator.getInstance(proofFunctions, HashMethod.DEFAULT);
-	}
-
-	public static PreimageOrProofGenerator getInstance(Function[] proofFunctions, HashMethod hashMethod) {
-		if (proofFunctions == null || proofFunctions.length < 2 || hashMethod == null) {
+	public static PreimageOrProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
+		if (proofFunctions == null || proofFunctions.length < 2 || challengeGenerator == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PreimageOrProofGenerator(proofFunctions, hashMethod);
+		// TODO check space equality of proofFunction and challengeGenerator!
+		return new PreimageOrProofGenerator(challengeGenerator, proofFunctions);
 	}
 
-	public static PreimageOrProofGenerator getInstance(final Function proofFunction, int arity) {
-		return PreimageOrProofGenerator.getInstance(proofFunction, arity, HashMethod.DEFAULT);
-	}
-
-	public static PreimageOrProofGenerator getInstance(final Function proofFunction, int arity, final HashMethod hashMethod) {
-		if (proofFunction == null || arity < 2 || hashMethod == null) {
+	public static PreimageOrProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
+		if (proofFunction == null || arity < 2 || challengeGenerator == null) {
 			throw new IllegalArgumentException();
 		}
 		Function[] functions = new Function[arity];
 		Arrays.fill(functions, proofFunction);
-		return new PreimageOrProofGenerator(ProductFunction.getInstance(proofFunction, arity).getAll(), hashMethod);
+		return new PreimageOrProofGenerator(challengeGenerator, ProductFunction.getInstance(proofFunction, arity).getAll());
 	}
 
 	@Override
@@ -88,7 +81,7 @@ public class PreimageOrProofGenerator
 	}
 
 	@Override
-	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, Element proverId, Random random) {
+	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, Random random) {
 
 		// Extract secret input value and index from private input
 		final int index = privateInput.getSecond().getValue().intValue();
@@ -130,7 +123,7 @@ public class PreimageOrProofGenerator
 		commitments[index] = proofFunctions[index].apply(randomElement);
 
 		// - Create overall proof challenge
-		final ZModElement challenge = this.createChallenge(Tuple.getInstance(commitments), publicInput, proverId);
+		final ZModElement challenge = this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
 		// - Calculate challenge based on the overall challenge and the chosen challenges for the simulated proofs
 		challenges[index] = challenge.subtract(sumOfChallenges);
 		// - finally compute response element
@@ -144,7 +137,7 @@ public class PreimageOrProofGenerator
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Triple proof, Tuple publicInput, Element proverId) {
+	protected BooleanElement abstractVerify(Triple proof, Tuple publicInput) {
 
 		// Extract (t, c, s)
 		final Tuple commitments = this.getCommitment(proof);
@@ -152,7 +145,7 @@ public class PreimageOrProofGenerator
 		final Tuple responses = this.getResponse(proof);
 
 		// 1. Check whether challenges sum up to the overall challenge
-		final ZModElement challenge = this.createChallenge(commitments, publicInput, proverId);
+		final ZModElement challenge = this.getChallengeGenerator().generate(publicInput, commitments);
 		ZModElement sumOfChallenges = this.getChallengeSpace().getIdentityElement();
 		for (int i = 0; i < challenges.getArity(); i++) {
 			sumOfChallenges = sumOfChallenges.add(challenges.getAt(i));

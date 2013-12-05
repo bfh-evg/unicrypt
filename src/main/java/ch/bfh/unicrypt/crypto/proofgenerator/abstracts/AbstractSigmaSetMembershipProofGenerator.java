@@ -1,7 +1,8 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageOrProofGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.TCSSetMembershipProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaSetMembershipProofGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -15,7 +16,6 @@ import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Random;
 
 //
@@ -23,9 +23,9 @@ import java.util.Random;
 // deltaFunction: f(x,y)
 // preiamgeProofFunction: setMemebershipFunction_x(r) o deltaFunction_x(y)
 //
-public abstract class AbstractTCSSetMembershipProofGenerator<PUS extends SemiGroup, PUE extends Element>
-	   extends AbstractTCSProofGenerator<ProductSet, Pair, PUS, PUE, ProductFunction>
-	   implements TCSSetMembershipProofGenerator {
+public abstract class AbstractSigmaSetMembershipProofGenerator<PUS extends SemiGroup, PUE extends Element>
+	   extends AbstractSigmaProofGenerator<ProductSet, Pair, PUS, PUE, ProductFunction>
+	   implements SigmaSetMembershipProofGenerator {
 
 	private final Element[] members;
 	private Function setMembershipProofFunction;
@@ -33,8 +33,8 @@ public abstract class AbstractTCSSetMembershipProofGenerator<PUS extends SemiGro
 	private ProductFunction preimageProofFunction;
 	private PreimageOrProofGenerator orProofGenerator;
 
-	protected AbstractTCSSetMembershipProofGenerator(Element[] members, HashMethod hashMethod) {
-		super(hashMethod);
+	protected AbstractSigmaSetMembershipProofGenerator(final SigmaChallengeGenerator challengeGenerator, Element[] members) {
+		super(challengeGenerator);
 		this.members = members.clone();
 	}
 
@@ -86,13 +86,13 @@ public abstract class AbstractTCSSetMembershipProofGenerator<PUS extends SemiGro
 	}
 
 	@Override
-	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, Element proverId, Random random) {
-		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput), proverId);
+	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, Random random) {
+		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput));
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Triple proof, PUE publicInput, Element proverId) {
-		return this.getOrProofGenerator().verify(proof, this.createProofImages(publicInput), proverId);
+	protected BooleanElement abstractVerify(Triple proof, PUE publicInput) {
+		return this.getOrProofGenerator().verify(proof, this.createProofImages(publicInput));
 	}
 
 	public Pair createPrivateInput(Element secret, int index) {
@@ -110,7 +110,7 @@ public abstract class AbstractTCSSetMembershipProofGenerator<PUS extends SemiGro
 
 	private PreimageOrProofGenerator getOrProofGenerator() {
 		if (this.orProofGenerator == null) {
-			this.orProofGenerator = PreimageOrProofGenerator.getInstance(this.getPreimageProofFunction().getAll(), this.getHashMethod());
+			this.orProofGenerator = PreimageOrProofGenerator.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction().getAll());
 		}
 		return this.orProofGenerator;
 	}

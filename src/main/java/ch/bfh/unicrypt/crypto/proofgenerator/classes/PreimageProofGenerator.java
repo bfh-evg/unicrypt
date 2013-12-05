@@ -1,27 +1,24 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class PreimageProofGenerator
 	   extends AbstractPreimageProofGenerator<SemiGroup, Element, SemiGroup, Element, Function> {
 
-	protected PreimageProofGenerator(final Function function, HashMethod hashMethod) {
-		super(function, hashMethod);
+	protected PreimageProofGenerator(final SigmaChallengeGenerator challengeGenerator, final Function function) {
+		super(challengeGenerator, function);
 	}
 
-	public static PreimageProofGenerator getInstance(Function proofFunction) {
-		return PreimageProofGenerator.getInstance(proofFunction, HashMethod.DEFAULT);
-	}
-
-	public static PreimageProofGenerator getInstance(Function proofFunction, HashMethod hashMethod) {
-		if (proofFunction == null || hashMethod == null) {
+	public static PreimageProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction) {
+		if (proofFunction == null || challengeGenerator == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PreimageProofGenerator(proofFunction, hashMethod);
+		// TODO check space equality of proofFunction and challengeGenerator!
+		return new PreimageProofGenerator(challengeGenerator, proofFunction);
 	}
 
 }

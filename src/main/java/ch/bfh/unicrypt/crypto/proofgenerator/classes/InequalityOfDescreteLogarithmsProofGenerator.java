@@ -1,7 +1,8 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractProofGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.TCSProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
@@ -21,35 +22,30 @@ import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Random;
 
 public class InequalityOfDescreteLogarithmsProofGenerator
 	   extends AbstractProofGenerator<SemiGroup, Element, ProductGroup, Pair, Set, Pair> {
 
+	private final SigmaChallengeGenerator challengeGenerator;
 	private final Element firstGenerator;
 	private final Element secondGenerator;
-	private final HashMethod hashMethod;
 	private final CyclicGroup cyclicGroup;
 
-	protected InequalityOfDescreteLogarithmsProofGenerator(Element firstGenerator, Element secondGenerator, HashMethod hashMethod) {
+	protected InequalityOfDescreteLogarithmsProofGenerator(final SigmaChallengeGenerator challengeGenerator, final Element firstGenerator, final Element secondGenerator) {
+		this.challengeGenerator = challengeGenerator;
 		this.firstGenerator = firstGenerator;
 		this.secondGenerator = secondGenerator;
-		this.hashMethod = hashMethod;
 		this.cyclicGroup = (CyclicGroup) firstGenerator.getSet();
 	}
 
-	public static InequalityOfDescreteLogarithmsProofGenerator getInstance(Element firstGenerator, Element secondGenerator) {
-		return InequalityOfDescreteLogarithmsProofGenerator.getInstance(firstGenerator, secondGenerator, HashMethod.DEFAULT);
-	}
-
-	public static InequalityOfDescreteLogarithmsProofGenerator getInstance(Element firstGenerator, Element secondGenerator, HashMethod hashMethod) {
-		if (firstGenerator == null || secondGenerator == null || !firstGenerator.getSet().isEqual(secondGenerator.getSet())
-			   || !firstGenerator.getSet().isCyclic() || !firstGenerator.isGenerator() || !secondGenerator.isGenerator() || hashMethod == null) {
+	public static InequalityOfDescreteLogarithmsProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Element firstGenerator, final Element secondGenerator) {
+		if (challengeGenerator == null || firstGenerator == null || secondGenerator == null || !firstGenerator.getSet().isEqual(secondGenerator.getSet())
+			   || !firstGenerator.getSet().isCyclic() || !firstGenerator.isGenerator() || !secondGenerator.isGenerator()) {
 			throw new IllegalArgumentException();
 		}
 
-		return new InequalityOfDescreteLogarithmsProofGenerator(firstGenerator, secondGenerator, hashMethod);
+		return new InequalityOfDescreteLogarithmsProofGenerator(challengeGenerator, firstGenerator, secondGenerator);
 	}
 
 	@Override
@@ -97,12 +93,12 @@ public class InequalityOfDescreteLogarithmsProofGenerator
 		return this.secondGenerator;
 	}
 
-	public HashMethod getHashMethod() {
-		return this.hashMethod;
+	public SigmaChallengeGenerator getChallengeGenerator() {
+		return this.challengeGenerator;
 	}
 
 	@Override
-	protected Pair abstractGenerate(Element privateInput, Pair publicInput, Element proverId, Random random) {
+	protected Pair abstractGenerate(Element privateInput, Pair publicInput, Random random) {
 
 		// 1. Create commitment C = (h^x/z)^r with random r
 		Element r = this.getCyclicGroup().getZModOrder().getRandomElement(random);
@@ -114,25 +110,23 @@ public class InequalityOfDescreteLogarithmsProofGenerator
 
 		// 2. Create preimage proof:
 		//    f(a,b) = (h^a/z^b, g^a/y^b) = (C,1)  // a=xr, b=r
-		TCSProofGenerator preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
+		SigmaProofGenerator preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
 
 		Triple preimageProof = preimageProofGenerator.generate(
 			   Tuple.getInstance(x.selfApply(r), r),
-			   Tuple.getInstance(c, this.getCyclicGroup().getIdentityElement()),
-			   proverId);
+			   Tuple.getInstance(c, this.getCyclicGroup().getIdentityElement()));
 
 		return Pair.getInstance(preimageProof, c);
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Pair proof, Pair publicInput, Element proverId) {
+	protected BooleanElement abstractVerify(Pair proof, Pair publicInput) {
 
 		// 1. Verify preimage proof
-		TCSProofGenerator preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
+		SigmaProofGenerator preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
 		BooleanElement v = preimageProofGenerator.verify(
 			   this.getPreimageProof(proof),
-			   Tuple.getInstance(this.getProofCommitment(proof), this.getCyclicGroup().getIdentityElement()),
-			   proverId);
+			   Tuple.getInstance(this.getProofCommitment(proof), this.getCyclicGroup().getIdentityElement()));
 
 		// 2. Check C != 1
 		boolean c = !this.getProofCommitment(proof).isEqual(this.getCyclicGroup().getIdentityElement());
@@ -141,7 +135,7 @@ public class InequalityOfDescreteLogarithmsProofGenerator
 	}
 
 	// f(a,b) = (h^a/z^b, g^a/y^b)
-	private TCSProofGenerator createPreimageProofGenerator(Pair publicInput) {
+	private SigmaProofGenerator createPreimageProofGenerator(Pair publicInput) {
 		Element g = this.getFirstGenerator();
 		Element h = this.getSecondGenerator();
 		Element y = publicInput.getFirst();
@@ -152,7 +146,7 @@ public class InequalityOfDescreteLogarithmsProofGenerator
 		functions[0] = this.createSinglePreimageProofFunction(domain, h, z);
 		functions[1] = this.createSinglePreimageProofFunction(domain, g, y);
 
-		return PreimageEqualityProofGenerator.getInstance(functions, this.getHashMethod());
+		return PreimageEqualityProofGenerator.getInstance(this.getChallengeGenerator(), functions);
 	}
 
 	// f(a,b) = g1^a/g2^b

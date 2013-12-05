@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.InequalityProofGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -20,10 +21,12 @@ public class InequalityProofGeneratorTest {
 	final static int P = 167;
 	final private CyclicGroup G_q;
 	final private ZMod Z_q;
+	final private StringElement proverId;
 
 	public InequalityProofGeneratorTest() {
 		this.G_q = GStarModSafePrime.getInstance(P);
 		this.Z_q = this.G_q.getZModOrder();
+		this.proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 	}
 
 	@Test
@@ -39,14 +42,14 @@ public class InequalityProofGeneratorTest {
 		Function f1 = GeneratorFunction.getInstance(g);
 		Function f2 = GeneratorFunction.getInstance(h);
 
-		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
+		SigmaChallengeGenerator scg = InequalityProofGenerator.createNonInteractiveChallengeGenerator(f1, f2);
 
-		InequalityProofGenerator pg = InequalityProofGenerator.getInstance(f1, f2);
+		InequalityProofGenerator pg = InequalityProofGenerator.getInstance(scg, f1, f2);
 
 		// Valid proof
-		Pair proof = pg.generate(x, Pair.getInstance(y, z), proverId);
+		Pair proof = pg.generate(x, Pair.getInstance(y, z));
 
-		BooleanElement v = pg.verify(proof, Pair.getInstance(y, z), proverId);
+		BooleanElement v = pg.verify(proof, Pair.getInstance(y, z));
 		assertTrue(v.getBoolean());
 
 		// Valid proof without proverId
@@ -56,19 +59,14 @@ public class InequalityProofGeneratorTest {
 
 		// Invalid proof -> wrong x
 		Element xx = this.Z_q.getElement(3);
-		proof = pg.generate(xx, Pair.getInstance(y, z), proverId);
-		v = pg.verify(proof, Pair.getInstance(y, z), proverId);
+		proof = pg.generate(xx, Pair.getInstance(y, z));
+		v = pg.verify(proof, Pair.getInstance(y, z));
 		assertTrue(!v.getBoolean());
 
 		// Invalid proof -> equal descrete logs
 		Element zz = this.G_q.getElement(64);
-		proof = pg.generate(x, Pair.getInstance(y, zz), proverId);
-		v = pg.verify(proof, Pair.getInstance(y, zz), proverId);
-		assertTrue(!v.getBoolean());
-
-		// Invalid proof -> verification without proverId
-		proof = pg.generate(x, Pair.getInstance(y, z), proverId);
-		v = pg.verify(proof, Pair.getInstance(y, z));
+		proof = pg.generate(x, Pair.getInstance(y, zz));
+		v = pg.verify(proof, Pair.getInstance(y, zz));
 		assertTrue(!v.getBoolean());
 
 	}

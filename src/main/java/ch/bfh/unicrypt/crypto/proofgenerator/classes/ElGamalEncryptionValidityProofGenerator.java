@@ -1,6 +1,9 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractTCSSetMembershipProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaSetMembershipProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.NonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -17,28 +20,24 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
 public class ElGamalEncryptionValidityProofGenerator
-	   extends AbstractTCSSetMembershipProofGenerator<ProductGroup, Pair> {
+	   extends AbstractSigmaSetMembershipProofGenerator<ProductGroup, Pair> {
 
 	private final ElGamalEncryptionScheme elGamalES;
 	private final Element publicKey;
 
-	protected ElGamalEncryptionValidityProofGenerator(ElGamalEncryptionScheme elGamalES, Element publicKey, Element[] plaintexts, HashMethod hashMethod) {
-		super(plaintexts, hashMethod);
+	protected ElGamalEncryptionValidityProofGenerator(final SigmaChallengeGenerator challengeGenerator, final ElGamalEncryptionScheme elGamalES, Element publicKey, final Element[] plaintexts) {
+		super(challengeGenerator, plaintexts);
 		this.elGamalES = elGamalES;
 		this.publicKey = publicKey;
 	}
 
-	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Element[] plaintexts) {
-		return ElGamalEncryptionValidityProofGenerator.getInstance(elGamalES, publicKey, plaintexts, HashMethod.DEFAULT);
-	}
-
-	public static ElGamalEncryptionValidityProofGenerator getInstance(ElGamalEncryptionScheme elGamalES, Element publicKey, Element[] plaintexts, HashMethod hashMethod) {
-		if (elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey)
-			   || plaintexts == null || plaintexts.length < 1 || hashMethod == null) {
+	public static ElGamalEncryptionValidityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Element[] plaintexts) {
+		if (challengeGenerator == null || elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey)
+			   || plaintexts == null || plaintexts.length < 1) {
 			throw new IllegalArgumentException();
 		}
 
-		return new ElGamalEncryptionValidityProofGenerator(elGamalES, publicKey, plaintexts, hashMethod);
+		return new ElGamalEncryptionValidityProofGenerator(challengeGenerator, elGamalES, publicKey, plaintexts);
 	}
 
 	@Override
@@ -59,6 +58,27 @@ public class ElGamalEncryptionValidityProofGenerator
 																																								 InvertFunction.getInstance(elGamalCyclicGroup))),
 																									   ApplyFunction.getInstance(elGamalCyclicGroup))));
 		return deltaFunction;
+	}
+
+	public static NonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts) {
+		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, HashMethod.DEFAULT);
+	}
+
+	public static NonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId) {
+		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverId, HashMethod.DEFAULT);
+	}
+
+	public static NonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final HashMethod hashMethod) {
+		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, (Element) null, hashMethod);
+	}
+
+	public static NonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId, final HashMethod hashMethod) {
+		if (elGamalES == null || numberOfPlaintexts < 1 || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		ProductGroup codomain = ProductGroup.getInstance((ProductGroup) elGamalES.getEncryptionFunction().getCoDomain(), numberOfPlaintexts);
+		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(codomain, codomain, elGamalES.getCyclicGroup().getZModOrder(), proverId, hashMethod);
+
 	}
 
 }

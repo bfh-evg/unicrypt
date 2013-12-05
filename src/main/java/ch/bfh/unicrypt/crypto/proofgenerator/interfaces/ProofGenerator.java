@@ -7,22 +7,16 @@ import java.util.Random;
 
 public interface ProofGenerator {
 
-  public Element generate(Element privateInput, Element publicInput);
+	public Element generate(Element privateInput, Element publicInput);
 
-  public Element generate(Element privateInput, Element publicInput, Element proverID);
+	public Element generate(Element privateInput, Element publicInput, Random random);
 
-  public Element generate(Element privateInput, Element publicInput, Random random);
+	public BooleanElement verify(Element proof, Element publicInput);
 
-  public Element generate(Element privateInput, Element publicInput, Element proverID, Random random);
+	public Set getPrivateInputSpace();
 
-  public BooleanElement verify(Element proof, Element publicInput);
+	public Set getPublicInputSpace();
 
-  public BooleanElement verify(Element proof, Element publicInput, Element proverID);
-
-  public Set getPrivateInputSpace();
-
-  public Set getPublicInputSpace();
-
-  public Set getProofSpace();
+	public Set getProofSpace();
 
 }
