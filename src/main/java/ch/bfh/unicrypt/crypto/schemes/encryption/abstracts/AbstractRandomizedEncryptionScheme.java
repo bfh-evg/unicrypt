@@ -21,7 +21,7 @@ import java.util.Random;
  * @param <DK>
  * @param <RS>
  */
-public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, EK extends Set, DK extends Set, RS extends Set>
+public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, RS extends Set, RE extends Element, EK extends Set, DK extends Set>
 			 extends AbstractAsymmetricEncryptionScheme<MS, ME, ES, EE, EK, DK>
 			 implements RandomizedEncryptionScheme {
 

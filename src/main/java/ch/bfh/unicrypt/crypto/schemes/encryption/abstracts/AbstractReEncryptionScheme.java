@@ -29,8 +29,8 @@ import java.util.Random;
  * @param <DK>
  * @param <RS>
  */
-public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends Element, ES extends Monoid, EE extends Element, EK extends Set, DK extends Set, RS extends Monoid>
-			 extends AbstractRandomizedEncryptionScheme<MS, ME, ES, EE, EK, DK, RS>
+public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends Element, ES extends Monoid, EE extends Element, RS extends Monoid, RE extends Element, EK extends Set, DK extends Set>
+			 extends AbstractRandomizedEncryptionScheme<MS, ME, ES, EE, RS, RE, EK, DK>
 			 implements ReEncryptionScheme {
 
 	private Function identityEncryptionFunction;

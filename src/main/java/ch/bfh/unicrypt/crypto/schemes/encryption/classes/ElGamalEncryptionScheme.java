@@ -7,6 +7,7 @@ package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 import ch.bfh.unicrypt.crypto.keygenerator.classes.ElGamalKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractReEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -32,7 +33,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <ME>
  */
 public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
-			 extends AbstractReEncryptionScheme<MS, ME, ProductGroup, Pair, CyclicGroup, ZModPrime, ZModPrime> {
+			 extends AbstractReEncryptionScheme<MS, ME, ProductGroup, Pair, ZModPrime, ZModElement, CyclicGroup, ZModPrime> {
 
 	private final MS cyclicGroup;
 	private final ME generator;
@@ -103,32 +104,32 @@ public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
 		return this.encryptionFunctionRight;
 	}
 
-    public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(MS cyclicGroup) {
-        return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(cyclicGroup);
-    }
+	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(MS cyclicGroup) {
+		return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(cyclicGroup);
+	}
 
-    public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-        return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod);
-    }
+	public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
+		return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod);
+	}
 
-    public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(ME generator) {
-        return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(generator);
-    }
+	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(ME generator) {
+		return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(generator);
+	}
 
-    public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
-        return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(generator);
-    }
+	public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
+		return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(generator);
+	}
 
-    private static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(ME generator) {
-        if (!generator.isGenerator()) {
-            throw new IllegalArgumentException();
-        }
-        return new ElGamalEncryptionScheme<MS, ME>((MS) generator.getSet(), generator);
-    }
+	private static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(ME generator) {
+		if (!generator.isGenerator()) {
+			throw new IllegalArgumentException();
+		}
+		return new ElGamalEncryptionScheme<MS, ME>((MS) generator.getSet(), generator);
+	}
 
-    public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(MS cyclicGroup) {
-        return new ElGamalEncryptionScheme<MS, ME>(cyclicGroup, (ME) cyclicGroup.getDefaultGenerator());
-    }
+	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(MS cyclicGroup) {
+		return new ElGamalEncryptionScheme<MS, ME>(cyclicGroup, (ME) cyclicGroup.getDefaultGenerator());
+	}
 
 }
 

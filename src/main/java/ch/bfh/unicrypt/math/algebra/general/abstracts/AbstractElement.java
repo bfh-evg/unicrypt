@@ -274,4 +274,16 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		return this.getValue().toString();
 	}
 
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		return hash;
+	}
+
+	// THIS METHOD IS NOT THE FINAL IMPLEMENTATION
+	@Override
+	public boolean equals(Object obj) {
+		return this.isEqual((Element) obj);
+	}
+
 }

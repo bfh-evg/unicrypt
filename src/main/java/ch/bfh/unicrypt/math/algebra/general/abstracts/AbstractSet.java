@@ -184,7 +184,7 @@ public abstract class AbstractSet<E extends Element>
 		if (element == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.isEqual(element.getSet());
+		return this.standardContains(element);
 	}
 
 	@Override
@@ -281,6 +281,10 @@ public abstract class AbstractSet<E extends Element>
 
 	protected boolean standardIsEqual(Set set) {
 		return true;
+	}
+
+	protected boolean standardContains(final Element element) {
+		return this.isEqual(element.getSet());
 	}
 
 	//

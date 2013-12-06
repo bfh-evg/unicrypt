@@ -1,6 +1,67 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-public class AESEncryptionScheme {
+import ch.bfh.unicrypt.crypto.keygenerator.classes.AESKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
+import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.Random;
+
+public class AESEncryptionScheme
+			 extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FiniteByteArraySet> {
+
+	@Override
+	protected Function abstractGetEncryptionFunction() {
+		return new AESEncryptionFunction();
+	}
+
+	@Override
+	protected Function abstractGetDecryptionFunction() {
+		return new AESDecryptionFunction();
+	}
+
+	@Override
+	protected KeyGenerator abstractGetKeyGenerator() {
+		return AESKeyGenerator.getInstance();
+	}
+
+	private class AESEncryptionFunction
+				 extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
+
+		protected AESEncryptionFunction() {
+			super(ProductSet.getInstance(FiniteByteArraySet.getInstance(16, true), ByteArrayMonoid.getInstance()),
+						ByteArrayMonoid.getInstance());
+		}
+
+		@Override
+		protected ByteArrayElement abstractApply(Pair element, Random random) {
+			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		}
+
+	}
+
+	private class AESDecryptionFunction
+				 extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
+
+		protected AESDecryptionFunction() {
+			super(ProductSet.getInstance(FiniteByteArraySet.getInstance(16, true), ByteArrayMonoid.getInstance()),
+						ByteArrayMonoid.getInstance());
+		}
+
+		@Override
+		protected ByteArrayElement abstractApply(Pair element, Random random) {
+			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		}
+
+	}
+
+}
+
 //import java.math.BigInteger;
 //import java.util.Random;
 //
@@ -160,4 +221,4 @@ public class AESEncryptionScheme {
 //    }
 //  }
 //
-}
+
