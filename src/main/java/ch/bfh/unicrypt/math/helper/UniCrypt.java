@@ -4,11 +4,18 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import java.io.Serializable;
+
 /**
  *
  * @author rolfhaenni
  */
-public abstract class UniCrypt {
+public abstract class UniCrypt implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public final String toString() {
