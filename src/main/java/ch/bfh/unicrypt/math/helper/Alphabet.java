@@ -21,8 +21,8 @@ public class Alphabet
 	public static final Alphabet UPPER_CASE = Alphabet.getInstance('A', 'Z');
 	public static final Alphabet LETTERS = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", "[A-Za-z]");
 	public static final Alphabet ALPHANUMERIC = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "[A-Za-z0-9]");
-	public static final Alphabet BASE64 = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "[A-Za-z0-9\\+\\/]");
-	public static final Alphabet PRINTABLE_ASCII = Alphabet.getInstance('\u0020', '\u0072');
+	public static final Alphabet BASE64 = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\+\\/", "[A-Za-z0-9\\+\\/]");
+	public static final Alphabet PRINTABLE_ASCII = Alphabet.getInstance('\u0020', '\u007E');
 
 	private final String characters;
 	private final String regExp;

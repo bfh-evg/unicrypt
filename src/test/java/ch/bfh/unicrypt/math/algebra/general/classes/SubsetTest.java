@@ -41,7 +41,7 @@ public class SubsetTest {
 		Assert.assertFalse(subset.contains(e6));
 		Assert.assertEquals(3, subset.getOrder().intValue());
 		for (Element element : subset) {
-			System.err.println(element);
+			System.out.println(element);
 		}
 	}
 
