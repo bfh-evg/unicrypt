@@ -11,6 +11,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Random;
 
 /**
@@ -77,7 +78,7 @@ public class Subset
 		if (superSet == null || elements == null) {
 			throw new IllegalArgumentException();
 		}
-		HashSet<Element> hashSet = new HashSet<Element>();
+		HashSet<Element> hashSet = new LinkedHashSet<Element>();
 		for (Element element : elements) {
 			if (element == null || !superSet.contains(element)) {
 				throw new IllegalArgumentException();
