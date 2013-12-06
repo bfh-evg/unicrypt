@@ -10,6 +10,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
@@ -35,6 +36,11 @@ public class PedersenCommitmentValidityProofGenerator
 			throw new IllegalArgumentException();
 		}
 
+		Set codomain = ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(), messages.length);
+		if (!codomain.isEqual(challengeGenerator.getPublicInputSpace()) || !codomain.isEqual(challengeGenerator.getCommitmentSpace())
+			   || !pedersenCS.getCyclicGroup().getZModOrder().isEqual(challengeGenerator.getChallengeSpace())) {
+			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
+		}
 		return new PedersenCommitmentValidityProofGenerator(challengeGenerator, pedersenCS, messages);
 	}
 

@@ -15,7 +15,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Arrays;
 import java.util.Random;
 
 public class PreimageOrProofGenerator
@@ -23,26 +22,27 @@ public class PreimageOrProofGenerator
 
 	private final ProductFunction preimageProofFunction;
 
-	protected PreimageOrProofGenerator(final SigmaChallengeGenerator challengeGenerator, final Function[] functions) {
+	protected PreimageOrProofGenerator(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
 		super(challengeGenerator);
-		this.preimageProofFunction = ProductFunction.getInstance(functions);
+		this.preimageProofFunction = proofFunction;
 	}
 
 	public static PreimageOrProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
-		if (proofFunctions == null || proofFunctions.length < 2 || challengeGenerator == null) {
-			throw new IllegalArgumentException();
-		}
-		// TODO check space equality of proofFunction and challengeGenerator!
-		return new PreimageOrProofGenerator(challengeGenerator, proofFunctions);
+		return PreimageOrProofGenerator.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
 	}
 
 	public static PreimageOrProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
-		if (proofFunction == null || arity < 2 || challengeGenerator == null) {
+		return PreimageOrProofGenerator.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
+	}
+
+	public static PreimageOrProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+		if (challengeGenerator == null || proofFunction == null || proofFunction.getArity() < 2) {
 			throw new IllegalArgumentException();
 		}
-		Function[] functions = new Function[arity];
-		Arrays.fill(functions, proofFunction);
-		return new PreimageOrProofGenerator(challengeGenerator, ProductFunction.getInstance(proofFunction, arity).getAll());
+		if (PreimageOrProofGenerator.checkSpaceEquality(challengeGenerator, proofFunction)) {
+			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
+		}
+		return new PreimageOrProofGenerator(challengeGenerator, proofFunction);
 	}
 
 	@Override

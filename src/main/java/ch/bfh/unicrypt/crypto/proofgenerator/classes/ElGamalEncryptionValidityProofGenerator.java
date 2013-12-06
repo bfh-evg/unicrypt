@@ -10,6 +10,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.InvertFunction;
@@ -36,7 +37,11 @@ public class ElGamalEncryptionValidityProofGenerator
 			   || plaintexts == null || plaintexts.length < 1) {
 			throw new IllegalArgumentException();
 		}
-
+		Set codomain = ProductGroup.getInstance(elGamalES.getEncryptionFunction().getCoDomain(), plaintexts.length);
+		if (!codomain.isEqual(challengeGenerator.getPublicInputSpace()) || !codomain.isEqual(challengeGenerator.getCommitmentSpace())
+			   || !elGamalES.getCyclicGroup().getZModOrder().isEqual(challengeGenerator.getChallengeSpace())) {
+			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
+		}
 		return new ElGamalEncryptionValidityProofGenerator(challengeGenerator, elGamalES, publicKey, plaintexts);
 	}
 

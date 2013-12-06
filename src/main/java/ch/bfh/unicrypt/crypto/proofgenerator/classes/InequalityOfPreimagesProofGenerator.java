@@ -30,39 +30,45 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Random;
 
-public class InequalityProofGenerator
+public class InequalityOfPreimagesProofGenerator
 	   extends AbstractProofGenerator<SemiGroup, Element, ProductGroup, Pair, Set, Pair> {
 
 	private final SigmaChallengeGenerator challengeGenerator;
 	private final Function firstFunction;
 	private final Function secondFunction;
 
-	protected InequalityProofGenerator(final SigmaChallengeGenerator challengeGenerator, final Function firstFunction, final Function secondFunction) {
+	protected InequalityOfPreimagesProofGenerator(final SigmaChallengeGenerator challengeGenerator, final Function firstFunction, final Function secondFunction) {
 		this.challengeGenerator = challengeGenerator;
 		this.firstFunction = firstFunction;
 		this.secondFunction = secondFunction;
-
 	}
 
-	public static InequalityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function firstFunction, final Function secondFunction) {
+	public static InequalityOfPreimagesProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function firstFunction, final Function secondFunction) {
 		if (challengeGenerator == null || firstFunction == null || secondFunction == null || !firstFunction.getDomain().isEqual(secondFunction.getDomain())
-			   || !firstFunction.getCoDomain().isCyclic() || !secondFunction.getCoDomain().isCyclic()) {
+			   || !firstFunction.getDomain().isSemiGroup() || !firstFunction.getCoDomain().isCyclic() || !secondFunction.getCoDomain().isCyclic()) {
 			throw new IllegalArgumentException();
 		}
 
-		return new InequalityProofGenerator(challengeGenerator, firstFunction, secondFunction);
+		ProductSet codomain = ProductSet.getInstance(secondFunction.getCoDomain(), firstFunction.getCoDomain());
+		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
+		if (!codomain.isEqual(challengeGenerator.getPublicInputSpace()) || !codomain.isEqual(challengeGenerator.getCommitmentSpace())
+			   || !cs.isEqual(challengeGenerator.getChallengeSpace())) {
+			throw new IllegalArgumentException("Spaces of challenge generator don't match proof functions.");
+		}
+		return new InequalityOfPreimagesProofGenerator(challengeGenerator, firstFunction, secondFunction);
 	}
 
 	// Service method to prove inequality fo descrete logarithms
-	public static InequalityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Element firstGenerator, final Element secondGenerator) {
-		if (challengeGenerator == null || firstGenerator == null || secondGenerator == null || !firstGenerator.getSet().isEqual(secondGenerator.getSet())
+	// f1(x) = g1^x, f2(x) = g2^x
+	public static InequalityOfPreimagesProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Element firstGenerator, final Element secondGenerator) {
+		if (firstGenerator == null || secondGenerator == null || !firstGenerator.getSet().isEqual(secondGenerator.getSet())
 			   || !firstGenerator.getSet().isCyclic() || !firstGenerator.isGenerator() || !secondGenerator.isGenerator()) {
 			throw new IllegalArgumentException();
 		}
 		Function f1 = GeneratorFunction.getInstance(firstGenerator);
 		Function f2 = GeneratorFunction.getInstance(secondGenerator);
 
-		return new InequalityProofGenerator(challengeGenerator, f1, f2);
+		return InequalityOfPreimagesProofGenerator.getInstance(challengeGenerator, f1, f2);
 	}
 
 	@Override
@@ -113,15 +119,16 @@ public class InequalityProofGenerator
 	@Override
 	protected Pair abstractGenerate(Element privateInput, Pair publicInput, Random random) {
 
-		// 1. Create commitment C = (h^x/z)^r with random r
+		// 1. Create commitment:
+		//    C = (f2(x)/z)^r with random r            |==> C = (h^x/z)^r
 		Element r = this.getSecondFunction().getCoDomain().getZModOrder().getRandomElement(random);
 		Element x = privateInput;
 		Element z = publicInput.getSecond();
 
 		Element c = this.secondFunction.apply(x).apply(z.invert()).selfApply(r);
 
-		// 2. Create preimage proof:
-		//    f(a,b) = (f2(a)/z^b, f1(a)/y^b) = (C,1)  // a=xr, b=r
+		// 2. Create preimage proof: for a=xr, b=r
+		//    f(a,b) = (f2(a)/z^b, f1(a)/y^b) = (C,1)  |==> f(a,b) = (h^a/z^b, g^a/y^b)
 		SigmaProofGenerator preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
 
 		Triple preimageProof = preimageProofGenerator.generate(
@@ -146,7 +153,7 @@ public class InequalityProofGenerator
 		return BooleanSet.getInstance().getElement(v.getBoolean() && c);
 	}
 
-	// f(a,b) = (f2(a)/z^b, f1(a)/y^b)
+	// f(a,b) = (f2(a)/z^b, f1(a)/y^b)                 |==> f(a,b) = (h^a/z^b, g^a/y^b)
 	private SigmaProofGenerator createPreimageProofGenerator(Pair publicInput) {
 
 		Element y = publicInput.getFirst();
@@ -160,7 +167,7 @@ public class InequalityProofGenerator
 		return PreimageEqualityProofGenerator.getInstance(this.getChallengeGenerator(), functions);
 	}
 
-	// f(a,b) = f(a)/y^b
+	// f(a,b) = f(a)/y^b                               |==> f(a,b) = g1^a/g2^b
 	private Function createSinglePreimageProofFunction(ProductSet domain, Function f, Element y) {
 		return CompositeFunction.getInstance(MultiIdentityFunction.getInstance(domain, 2),
 											 ProductFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(domain, 0),
@@ -172,15 +179,15 @@ public class InequalityProofGenerator
 	}
 
 	public static NonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {
-		return InequalityProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, HashMethod.DEFAULT);
+		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, HashMethod.DEFAULT);
 	}
 
 	public static NonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final Element proverId) {
-		return InequalityProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId, HashMethod.DEFAULT);
+		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId, HashMethod.DEFAULT);
 	}
 
 	public static NonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final HashMethod hashMethod) {
-		return InequalityProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, (Element) null, hashMethod);
+		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, (Element) null, hashMethod);
 	}
 
 	public static NonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final Element proverId, final HashMethod hashMethod) {

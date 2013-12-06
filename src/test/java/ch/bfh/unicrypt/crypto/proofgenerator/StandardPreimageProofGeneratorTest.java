@@ -113,4 +113,15 @@ public class StandardPreimageProofGeneratorTest {
 		assertTrue(!v.getBoolean());
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void TestPreimageProof_Exception() {
+		// Proof generator
+		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q.getElement(4));
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
+			   f.getDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+
+		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
+
+	}
+
 }

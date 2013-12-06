@@ -18,7 +18,6 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PRE 
 	protected AbstractPreimageProofGenerator(final SigmaChallengeGenerator challengeGenerator, final F function) {
 		super(challengeGenerator);
 		this.preimageProofFunction = function;
-
 	}
 
 	@Override

@@ -14,10 +14,13 @@ public class PreimageProofGenerator
 	}
 
 	public static PreimageProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction) {
-		if (proofFunction == null || challengeGenerator == null) {
+		if (challengeGenerator == null || proofFunction == null || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
-		// TODO check space equality of proofFunction and challengeGenerator!
+		if (PreimageProofGenerator.checkSpaceEquality(challengeGenerator, proofFunction)) {
+			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
+		}
+
 		return new PreimageProofGenerator(challengeGenerator, proofFunction);
 	}
 

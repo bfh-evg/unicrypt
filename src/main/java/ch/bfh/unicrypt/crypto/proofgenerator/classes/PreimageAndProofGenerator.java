@@ -15,17 +15,22 @@ public class PreimageAndProofGenerator
 	}
 
 	public static PreimageAndProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
-		if (challengeGenerator == null || proofFunctions == null || proofFunctions.length < 1) {
-			throw new IllegalArgumentException();
-		}
-		return new PreimageAndProofGenerator(challengeGenerator, ProductFunction.getInstance(proofFunctions));
+		return PreimageAndProofGenerator.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
 	}
 
 	public static PreimageAndProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
-		if (challengeGenerator == null || proofFunction == null || arity < 1) {
+		return PreimageAndProofGenerator.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
+	}
+
+	public static PreimageAndProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+		if (challengeGenerator == null || proofFunction == null || proofFunction.getArity() < 1
+			   || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
-		return new PreimageAndProofGenerator(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
+		if (PreimageAndProofGenerator.checkSpaceEquality(challengeGenerator, proofFunction)) {
+			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
+		}
+		return new PreimageAndProofGenerator(challengeGenerator, proofFunction);
 	}
 
 	public Function[] getProofFunctions() {

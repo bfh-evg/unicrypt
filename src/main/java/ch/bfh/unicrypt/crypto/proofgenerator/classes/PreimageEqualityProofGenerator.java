@@ -20,27 +20,28 @@ public class PreimageEqualityProofGenerator
 	}
 
 	public static PreimageEqualityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
-		if (challengeGenerator == null || proofFunctions == null || proofFunctions.length < 1
-			   || !proofFunctions[0].getDomain().isSemiGroup() || !proofFunctions[0].getCoDomain().isSemiGroup()) {
+		if (challengeGenerator == null || proofFunctions == null || proofFunctions.length < 1) {
 			throw new IllegalArgumentException();
 		}
 
 		Set domain = proofFunctions[0].getDomain();
-		for (int i = 1;
-			   i < proofFunctions.length;
-			   i++) {
+		for (int i = 1; i < proofFunctions.length; i++) {
 			if (!domain.isEqual(proofFunctions[i].getDomain())) {
 				throw new IllegalArgumentException("All proof functions must have the same domain!");
 			}
 		}
 
-		Function proofFunction = CompositeFunction.getInstance(
-			   MultiIdentityFunction.getInstance(domain, proofFunctions.length),
-			   ProductFunction.getInstance(proofFunctions));
+		Function proofFunction = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(domain, proofFunctions.length),
+															   ProductFunction.getInstance(proofFunctions));
 
-		// TODO check space equality of proofFunction and challengeGenerator!
+		if (!proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
+			throw new IllegalArgumentException("Domain and codomain of each proof function must be semi groups!");
+		}
+
+		if (PreimageEqualityProofGenerator.checkSpaceEquality(challengeGenerator, proofFunction)) {
+			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
+		}
 		return new PreimageEqualityProofGenerator(challengeGenerator, proofFunction);
-
 	}
 
 	public Function[] getProofFunctions() {

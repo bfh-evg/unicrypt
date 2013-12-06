@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.InequalityProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.InequalityOfPreimagesProofGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -16,14 +16,14 @@ import ch.bfh.unicrypt.math.helper.Alphabet;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class InequalityProofGeneratorTest {
+public class InequalityOfPreimagesProofGeneratorTest {
 
 	final static int P = 167;
 	final private CyclicGroup G_q;
 	final private ZMod Z_q;
 	final private StringElement proverId;
 
-	public InequalityProofGeneratorTest() {
+	public InequalityOfPreimagesProofGeneratorTest() {
 		this.G_q = GStarModSafePrime.getInstance(P);
 		this.Z_q = this.G_q.getZModOrder();
 		this.proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
@@ -42,9 +42,9 @@ public class InequalityProofGeneratorTest {
 		Function f1 = GeneratorFunction.getInstance(g);
 		Function f2 = GeneratorFunction.getInstance(h);
 
-		SigmaChallengeGenerator scg = InequalityProofGenerator.createNonInteractiveChallengeGenerator(f1, f2);
+		SigmaChallengeGenerator scg = InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(f1, f2);
 
-		InequalityProofGenerator pg = InequalityProofGenerator.getInstance(scg, f1, f2);
+		InequalityOfPreimagesProofGenerator pg = InequalityOfPreimagesProofGenerator.getInstance(scg, f1, f2);
 
 		// Valid proof
 		Pair proof = pg.generate(x, Pair.getInstance(y, z));
