@@ -303,7 +303,13 @@ public abstract class AbstractSet<E extends Element>
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(set.getOrder()) < 0;
+				if (set.hasKnownOrder()) {
+					if (set.isFinite()) {
+						return counter.compareTo(set.getOrder()) < 0;
+					}
+					return true;
+				}
+				return false; // the standard iterator does not work for groups of unknonw order
 			}
 
 			@Override
@@ -312,7 +318,7 @@ public abstract class AbstractSet<E extends Element>
 					while (!set.contains(currentValue)) {
 						this.currentValue = this.currentValue.add(BigInteger.ONE);
 					}
-					E element = set.getElement(currentValue);
+					E element = set.abstractGetElement(currentValue);
 					this.counter = this.counter.add(BigInteger.ONE);
 					this.currentValue = this.currentValue.add(BigInteger.ONE);
 					return element;
