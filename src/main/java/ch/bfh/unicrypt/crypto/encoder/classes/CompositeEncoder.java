@@ -7,12 +7,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.helper.CompoundIterator;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class CompositeEncoder
 			 extends AbstractEncoder<Set, Element, Set, Element>
-			 implements Compound<CompositeEncoder, Encoder> {
+			 implements Compound<CompositeEncoder, Encoder>, Iterable<Encoder> {
 
 	private final Encoder[] encoders;
 
@@ -70,32 +70,6 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public Iterator<Encoder> iterator() {
-		final CompositeEncoder encoder = this;
-		return new Iterator<Encoder>() {
-			int currentIndex = 0;
-
-			@Override
-			public boolean hasNext() {
-				return this.currentIndex < encoder.getArity();
-			}
-
-			@Override
-			public Encoder next() {
-				if (this.hasNext()) {
-					return encoder.getAt(this.currentIndex++);
-				}
-				throw new NoSuchElementException();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException("Not supported yet.");
-			}
-		};
-	}
-
-	@Override
 	public CompositeEncoder removeAt(int index) {
 		int arity = this.getArity();
 		if (index < 0 || index >= arity) {
@@ -110,6 +84,11 @@ public class CompositeEncoder
 			}
 		}
 		return CompositeEncoder.getInstance(remaining);
+	}
+
+	@Override
+	public Iterator<Encoder> iterator() {
+		return new CompoundIterator<Encoder>(this);
 	}
 
 	@Override

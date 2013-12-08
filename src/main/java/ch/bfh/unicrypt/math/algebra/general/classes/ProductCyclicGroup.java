@@ -4,22 +4,24 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import java.math.BigInteger;
-import java.util.Random;
-
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.CompoundIterator;
 import ch.bfh.unicrypt.math.random.RandomOracle;
 import ch.bfh.unicrypt.math.utility.MathUtil;
+import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
 public class ProductCyclicGroup
-	   extends ProductGroup
-	   implements CyclicGroup {
+			 extends ProductGroup
+			 implements CyclicGroup {
 
 	private Tuple defaultGenerator;
 
@@ -66,8 +68,49 @@ public class ProductCyclicGroup
 		return ProductCyclicGroup.getInstance((CyclicGroup[]) sets);
 	}
 
+	@Override
+	public Iterable<? extends CyclicGroup> makeIterable() {
+		final ProductSet productCyclicGroup = this;
+		return new Iterable<CyclicGroup>() {
+			@Override
+			public Iterator<CyclicGroup> iterator() {
+				return new CompoundIterator<CyclicGroup>(productCyclicGroup);
+			}
+		};
+	}
+
 	protected boolean standardCyclicGroup() {
 		return true;
+	}
+
+	@Override
+	protected Iterator<Tuple> standardIterator() {
+		final ProductCyclicGroup productCyclicGroup = this;
+		return new Iterator<Tuple>() {
+			BigInteger counter = BigInteger.ZERO;
+			Tuple currentTuple = productCyclicGroup.getIdentityElement();
+
+			@Override
+			public boolean hasNext() {
+				return counter.compareTo(productCyclicGroup.getOrder()) < 0;
+			}
+
+			@Override
+			public Tuple next() {
+				if (this.hasNext()) {
+					this.counter = this.counter.add(BigInteger.ONE);
+					Tuple nextElement = currentTuple;
+					currentTuple = productCyclicGroup.apply(currentTuple, productCyclicGroup.getDefaultGenerator());
+					return nextElement;
+				}
+				throw new NoSuchElementException();
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+		};
 	}
 
 	@Override
@@ -131,14 +174,12 @@ public class ProductCyclicGroup
 	// STATIC FACTORY METHODS
 	//
 	/**
-	 * This is a static factory method to construct a composed cyclic group
-	 * without calling respective constructors. The input groups are given as an
-	 * array.
+	 * This is a static factory method to construct a composed cyclic group without calling respective constructors. The
+	 * input groups are given as an array.
 	 * <p/>
 	 * @param cyclicGroups The array of cyclic groups
 	 * @return The corresponding composed group
-	 * @throws IllegalArgumentException if {@literal groups} is null or contains
-	 *                                  null
+	 * @throws IllegalArgumentException if {@literal groups} is null or contains null
 	 */
 	public static ProductCyclicGroup getInstance(final CyclicGroup... cyclicGroups) {
 		if (cyclicGroups == null) {

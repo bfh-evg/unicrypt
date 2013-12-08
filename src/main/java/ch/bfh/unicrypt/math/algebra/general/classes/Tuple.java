@@ -8,10 +8,10 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.helper.CompoundIterator;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  *
@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
  */
 public class Tuple
 			 extends AbstractElement<ProductSet, Tuple>
-			 implements Compound<Tuple, Element> {
+			 implements Compound<Tuple, Element>, Iterable<Element> {
 
 	private final Element[] elements;
 	private final int arity;
@@ -117,28 +117,7 @@ public class Tuple
 
 	@Override
 	public Iterator<Element> iterator() {
-		final Tuple tuple = this;
-		return new Iterator<Element>() {
-			int currentIndex = 0;
-
-			@Override
-			public boolean hasNext() {
-				return this.currentIndex < tuple.getArity();
-			}
-
-			@Override
-			public Element next() {
-				if (this.hasNext()) {
-					return tuple.getAt(this.currentIndex++);
-				}
-				throw new NoSuchElementException();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException("Not supported yet.");
-			}
-		};
+		return new CompoundIterator<Element>(this);
 	}
 
 	@Override

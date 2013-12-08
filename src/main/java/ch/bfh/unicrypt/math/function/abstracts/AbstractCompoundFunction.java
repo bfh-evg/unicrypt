@@ -8,9 +8,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.helper.CompoundIterator;
 import java.lang.reflect.Array;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  *
@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, F, D, DE, C, CE>, F extends Function, D extends Set, DE extends Element, C extends Set, CE extends Element>
 			 extends AbstractFunction<D, DE, C, CE>
-			 implements Compound<CF, F> {
+			 implements Compound<CF, F>, Iterable<F> {
 
 	private final F[] functions;
 	private final int arity;
@@ -128,28 +128,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 
 	@Override
 	public Iterator<F> iterator() {
-		final Compound<CF, F> compoundFunction = this;
-		return new Iterator<F>() {
-			int currentIndex = 0;
-
-			@Override
-			public boolean hasNext() {
-				return this.currentIndex < compoundFunction.getArity();
-			}
-
-			@Override
-			public F next() {
-				if (this.hasNext()) {
-					return compoundFunction.getAt(this.currentIndex++);
-				}
-				throw new NoSuchElementException();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException("Not supported yet.");
-			}
-		};
+		return new CompoundIterator<F>(this);
 	}
 
 	@Override

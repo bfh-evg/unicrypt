@@ -16,8 +16,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 /**
  *
  * @author philipp
- * @param <MS> MessageSpace
- * @param <ME> MessageElement
+ * @param <>S> MessageSpace
+ * @param <>E> MessageElement
  * @param <CS>
  * @param <CE>
  * @param <RS>

@@ -8,16 +8,18 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.CompoundIterator;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  *
  * @author rolfhaenni
  */
 public class ProductMonoid
-	   extends ProductSemiGroup
-	   implements Monoid {
+			 extends ProductSemiGroup
+			 implements Monoid {
 
 	private Tuple identityElement;
 
@@ -65,6 +67,17 @@ public class ProductMonoid
 	}
 
 	@Override
+	public Iterable<? extends Monoid> makeIterable() {
+		final ProductSet productMonoid = this;
+		return new Iterable<Monoid>() {
+			@Override
+			public Iterator<Monoid> iterator() {
+				return new CompoundIterator<Monoid>(productMonoid);
+			}
+		};
+	}
+
+	@Override
 	public Tuple getIdentityElement() {
 		if (this.identityElement == null) {
 			final Element[] identityElements = new Element[this.getArity()];
@@ -98,13 +111,12 @@ public class ProductMonoid
 	}
 
 	/**
-	 * This is a static factory method to construct a composed monoid without
-	 * calling respective constructors. The input monids are given as an array.
+	 * This is a static factory method to construct a composed monoid without calling respective constructors. The input
+	 * monids are given as an array.
 	 * <p/>
 	 * @param monoids The array of input monoids
 	 * @return The corresponding product monoids
-	 * @throws IllegalArgumentException if {@literal monids} is null or contains
-	 *                                  null
+	 * @throws IllegalArgumentException if {@literal monids} is null or contains null
 	 */
 	public static ProductMonoid getInstance(final Monoid... monoids) {
 		if (monoids == null) {

@@ -8,15 +8,17 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.CompoundIterator;
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  *
  * @author rolfhaenni
  */
 public class ProductGroup
-	   extends ProductMonoid
-	   implements Group {
+			 extends ProductMonoid
+			 implements Group {
 
 	protected ProductGroup(final Group[] groups) {
 		super(groups);
@@ -62,6 +64,17 @@ public class ProductGroup
 	}
 
 	@Override
+	public Iterable<? extends Group> makeIterable() {
+		final ProductSet productGroup = this;
+		return new Iterable<Group>() {
+			@Override
+			public Iterator<Group> iterator() {
+				return new CompoundIterator<Group>(productGroup);
+			}
+		};
+	}
+
+	@Override
 	public final Tuple invert(Element element) {
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
@@ -84,13 +97,12 @@ public class ProductGroup
 	//
 
 	/**
-	 * This is a static factory method to construct a composed group without
-	 * calling respective constructors. The input groups are given as an array.
+	 * This is a static factory method to construct a composed group without calling respective constructors. The input
+	 * groups are given as an array.
 	 * <p/>
 	 * @param groups The array of input groups
 	 * @return The corresponding composed group
-	 * @throws IllegalArgumentException if {@literal groups} is null or contains
-	 *                                  null
+	 * @throws IllegalArgumentException if {@literal groups} is null or contains null
 	 */
 	public static ProductGroup getInstance(final Group... groups) {
 		if (groups == null) {

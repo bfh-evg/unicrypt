@@ -9,13 +9,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.helper.CompoundIterator;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Random;
 
 /**
@@ -24,7 +24,7 @@ import java.util.Random;
  */
 public class ProductSet
 			 extends AbstractSet<Tuple>
-			 implements Compound<ProductSet, Set>, Set {
+			 implements Compound<ProductSet, Set> {
 
 	private final Set[] sets;
 	private final int arity;
@@ -117,7 +117,7 @@ public class ProductSet
 			return this.getFirst().getOrderLowerBound().pow(this.getArity());
 		}
 		BigInteger result = BigInteger.ONE;
-		for (Set set : this) {
+		for (Set set : this.makeIterable()) {
 			result = result.multiply(set.getOrderLowerBound());
 		}
 		return result;
@@ -129,7 +129,7 @@ public class ProductSet
 			return this.getFirst().getOrderUpperBound().pow(this.getArity());
 		}
 		BigInteger result = BigInteger.ONE;
-		for (Set set : this) {
+		for (Set set : this.makeIterable()) {
 			if (set.getOrderUpperBound().equals(Set.INFINITE_ORDER)) {
 				return Set.INFINITE_ORDER;
 			}
@@ -144,7 +144,7 @@ public class ProductSet
 			return this.getFirst().getMinimalOrder();
 		}
 		BigInteger result = null;
-		for (Set set : this) {
+		for (Set set : this.makeIterable()) {
 			if (result == null) {
 				result = set.getMinimalOrder();
 			} else {
@@ -171,7 +171,7 @@ public class ProductSet
 			return first.getOrder();
 		}
 		BigInteger result = BigInteger.ONE;
-		for (Set set : this) {
+		for (Set set : this.makeIterable()) {
 			if (set.isEmpty()) {
 				return BigInteger.ZERO;
 			}
@@ -302,28 +302,12 @@ public class ProductSet
 		return ProductSet.getInstance(sets);
 	}
 
-	@Override
-	public Iterator<Set> iterator() {
-		final Compound<ProductSet, Set> compoundSet = this;
-		return new Iterator<Set>() {
-			int currentIndex = 0;
-
+	public Iterable<? extends Set> makeIterable() {
+		final ProductSet productSet = this;
+		return new Iterable<Set>() {
 			@Override
-			public boolean hasNext() {
-				return this.currentIndex < compoundSet.getArity();
-			}
-
-			@Override
-			public Set next() {
-				if (this.hasNext()) {
-					return compoundSet.getAt(this.currentIndex++);
-				}
-				throw new NoSuchElementException();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException("Not supported yet.");
+			public Iterator<Set> iterator() {
+				return new CompoundIterator<Set>(productSet);
 			}
 		};
 	}
@@ -358,7 +342,7 @@ public class ProductSet
 		}
 		String result = "";
 		String separator = "";
-		for (Set set : this) {
+		for (Set set : this.makeIterable()) {
 			result = result + separator + set.toString();
 			separator = " x ";
 		}

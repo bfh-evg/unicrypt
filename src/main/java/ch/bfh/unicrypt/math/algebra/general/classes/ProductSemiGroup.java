@@ -8,16 +8,18 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.CompoundIterator;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  *
  * @author rolfhaenni
  */
 public class ProductSemiGroup
-	   extends ProductSet
-	   implements SemiGroup {
+			 extends ProductSet
+			 implements SemiGroup {
 
 	protected ProductSemiGroup(SemiGroup[] semiGroups) {
 		super(semiGroups);
@@ -60,6 +62,17 @@ public class ProductSemiGroup
 	@Override
 	protected ProductSemiGroup abstractRemoveAt(Set[] sets) {
 		return ProductSemiGroup.getInstance((SemiGroup[]) sets);
+	}
+
+	@Override
+	public Iterable<? extends SemiGroup> makeIterable() {
+		final ProductSet productSemiGroup = this;
+		return new Iterable<SemiGroup>() {
+			@Override
+			public Iterator<SemiGroup> iterator() {
+				return new CompoundIterator<SemiGroup>(productSemiGroup);
+			}
+		};
 	}
 
 	@Override
@@ -152,14 +165,12 @@ public class ProductSemiGroup
 	}
 
 	/**
-	 * This is a static factory method to construct a composed semigroup without
-	 * calling respective constructors. The input semigroups are given as an
-	 * array.
+	 * This is a static factory method to construct a composed semigroup without calling respective constructors. The
+	 * input semigroups are given as an array.
 	 * <p/>
 	 * @param semiGroups The array of input semigroups
 	 * @return The corresponding product semigroup
-	 * @throws IllegalArgumentException if {@literal semigroups} is null or
-	 *                                  contains null
+	 * @throws IllegalArgumentException if {@literal semigroups} is null or contains null
 	 */
 	public static ProductSemiGroup getInstance(final SemiGroup... semiGroups) {
 		if (semiGroups == null) {

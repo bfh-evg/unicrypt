@@ -17,6 +17,8 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemi
 import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 /**
@@ -31,7 +33,7 @@ import java.util.Random;
  */
 public abstract class AbstractSet<E extends Element>
 			 extends UniCrypt
-			 implements Set {
+			 implements Set, Iterable<E> {
 
 	private BigInteger order, lowerBound, upperBound, minimum;
 
@@ -251,6 +253,11 @@ public abstract class AbstractSet<E extends Element>
 		return this.standardIsEqual(set);
 	}
 
+	@Override
+	public final Iterator<E> iterator() {
+		return this.standardIterator();
+	}
+
 	//
 	// The following protected methods are standard implementations for sets.
 	// They may need to be changed in certain sub-classes.
@@ -285,6 +292,40 @@ public abstract class AbstractSet<E extends Element>
 
 	protected boolean standardContains(final Element element) {
 		return this.isEqual(element.getSet());
+	}
+
+	protected Iterator<E> standardIterator() {
+		final AbstractSet<E> set = this;
+		return new Iterator<E>() {
+
+			BigInteger counter = BigInteger.ZERO;
+			BigInteger currentValue = BigInteger.ZERO;
+
+			@Override
+			public boolean hasNext() {
+				return counter.compareTo(set.getOrder()) < 0;
+			}
+
+			@Override
+			public E next() {
+				if (this.hasNext()) {
+					while (!set.contains(currentValue)) {
+						this.currentValue = this.currentValue.add(BigInteger.ONE);
+					}
+					E element = set.getElement(currentValue);
+					this.counter = this.counter.add(BigInteger.ONE);
+					this.currentValue = this.currentValue.add(BigInteger.ONE);
+					return element;
+				}
+				throw new NoSuchElementException();
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+
+		};
 	}
 
 	//

@@ -39,7 +39,7 @@ public class Subset
 	}
 
 	@Override
-	public Iterator<Element> iterator() {
+	protected Iterator<Element> standardIterator() {
 		return this.hashSet.iterator();
 	}
 
@@ -78,6 +78,7 @@ public class Subset
 		if (superSet == null || elements == null) {
 			throw new IllegalArgumentException();
 		}
+		// A LinkedHashSet retains the order
 		HashSet<Element> hashSet = new LinkedHashSet<Element>();
 		for (Element element : elements) {
 			if (element == null || !superSet.contains(element)) {
