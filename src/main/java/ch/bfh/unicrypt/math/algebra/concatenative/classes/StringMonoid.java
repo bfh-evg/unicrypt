@@ -20,17 +20,24 @@ public class StringMonoid
 			 extends AbstractConcatenativeMonoid<StringElement> {
 
 	private final Alphabet alphabet;
+	private final int blockLength;
 
-	private StringMonoid(Alphabet alphabet) {
+	private StringMonoid(Alphabet alphabet, int blockLength) {
 		this.alphabet = alphabet;
+		this.blockLength = blockLength;
 	}
 
 	public Alphabet getAlphabet() {
 		return this.alphabet;
 	}
 
+	@Override
+	public int getBlockLength() {
+		return this.blockLength;
+	}
+
 	public final StringElement getElement(final String string) {
-		if (string == null || !this.getAlphabet().isValid(string)) {
+		if (string == null || !this.getAlphabet().isValid(string) || string.length() % this.getBlockLength() != 0) {
 			throw new IllegalArgumentException();
 		}
 		return this.standardGetElement(string);
@@ -43,14 +50,14 @@ public class StringMonoid
 
 	@Override
 	public final StringElement getRandomElement(int length, Random random) {
-		if (length < 0) {
+		if (length < 0 || length % this.getBlockLength() != 0) {
 			throw new IllegalArgumentException();
 		}
 		char[] chars = new char[length];
 		for (int i = 0; i < length; i++) {
 			chars[i] = this.getAlphabet().getCharacter(RandomUtil.getRandomInteger(this.getAlphabet().getSize() - 1, random));
 		}
-		return this.getElement(new String(chars));
+		return this.standardGetElement(new String(chars));
 	}
 
 	protected StringElement standardGetElement(String string) {
@@ -59,16 +66,39 @@ public class StringMonoid
 
 	@Override
 	protected StringElement abstractGetElement(BigInteger value) {
+		int blockLength = this.getBlockLength();
 		StringBuilder strBuilder = new StringBuilder();
-		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
+		BigInteger alphabetSize = BigInteger.valueOf(this.getAlphabet().getSize());
+		BigInteger blockSize = alphabetSize.pow(blockLength);
 		while (!value.equals(BigInteger.ZERO)) {
 			value = value.subtract(BigInteger.ONE);
-			strBuilder.append(this.getAlphabet().getCharacter(value.mod(size).intValue()));
-			value = value.divide(size);
+			BigInteger remainder = value.mod(blockSize);
+			for (int i = 0; i < blockLength; i++) {
+				strBuilder.append(this.getAlphabet().getCharacter(remainder.mod(alphabetSize).intValue()));
+				remainder = remainder.divide(alphabetSize);
+			}
+			value = value.divide(blockSize);
 		}
 		return this.standardGetElement(strBuilder.reverse().toString());
 	}
 
+//	@Override
+//	protected ByteArrayElement abstractGetElement(BigInteger value) {
+//		int blockLength = this.getBlockLength();
+//		LinkedList<Byte> byteList = new LinkedList<Byte>();
+//		BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);
+//		BigInteger blockSize = BigInteger.valueOf(1 << (Byte.SIZE * blockLength));
+//		while (!value.equals(BigInteger.ZERO)) {
+//			value = value.subtract(BigInteger.ONE);
+//			BigInteger remainder = value.mod(blockSize);
+//			for (int i = 0; i < blockLength; i++) {
+//				byteList.addFirst(remainder.mod(byteSize).byteValue());
+//				remainder = value.divide(byteSize);
+//			}
+//			value = value.divide(blockSize);
+//		}
+//		return this.standardGetElement(ArrayUtil.byteListToByteArray(byteList));
+//	}
 	//
 	// The following protected methods implement the abstract methods from
 	// various super-classes
@@ -97,15 +127,19 @@ public class StringMonoid
 	protected boolean abstractContains(BigInteger value) {
 		return value.signum() >= 0;
 	}
+
 	//
 	// STATIC FACTORY METHODS
 	//
-
 	public static StringMonoid getInstance(Alphabet alphabet) {
-		if (alphabet == null) {
+		return StringMonoid.getInstance(alphabet, 1);
+	}
+
+	public static StringMonoid getInstance(Alphabet alphabet, int blockLength) {
+		if (alphabet == null || blockLength < 1) {
 			throw new IllegalArgumentException();
 		}
-		return new StringMonoid(alphabet);
+		return new StringMonoid(alphabet, blockLength);
 	}
 
 }

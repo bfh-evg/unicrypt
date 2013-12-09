@@ -15,6 +15,11 @@ import java.util.Random;
 public class AESEncryptionScheme
 			 extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FiniteByteArraySet> {
 
+	public static final int AES_BLOCK_SIZE = 128;
+
+	private final FiniteByteArraySet byteArraySet = FiniteByteArraySet.getInstance(16, true);
+	private final ByteArrayMonoid byteArrayMonoid = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
+
 	@Override
 	protected Function abstractGetEncryptionFunction() {
 		return new AESEncryptionFunction();
@@ -34,8 +39,7 @@ public class AESEncryptionScheme
 				 extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
 		protected AESEncryptionFunction() {
-			super(ProductSet.getInstance(FiniteByteArraySet.getInstance(16, true), ByteArrayMonoid.getInstance()),
-						ByteArrayMonoid.getInstance());
+			super(ProductSet.getInstance(byteArraySet, byteArrayMonoid), byteArrayMonoid);
 		}
 
 		@Override
@@ -49,8 +53,7 @@ public class AESEncryptionScheme
 				 extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
 		protected AESDecryptionFunction() {
-			super(ProductSet.getInstance(FiniteByteArraySet.getInstance(16, true), ByteArrayMonoid.getInstance()),
-						ByteArrayMonoid.getInstance());
+			super(ProductSet.getInstance(byteArraySet, byteArrayMonoid), byteArrayMonoid);
 		}
 
 		@Override

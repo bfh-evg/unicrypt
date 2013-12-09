@@ -15,12 +15,24 @@ import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 public class AESKeyGenerator
 			 extends AbstractKeyGenerator<FiniteByteArraySet, FiniteByteArrayElement> {
 
-	protected AESKeyGenerator() {
-		super(FiniteByteArraySet.getInstance(16, true));
+	static final int DEFAULT_KEY_LENGTH = 128;
+	static final int[] SUPPORTED_KEY_LENGTHS = {128, 192, 256};
+
+	protected AESKeyGenerator(int keyLength) {
+		super(FiniteByteArraySet.getInstance(keyLength / 8, true));
 	}
 
 	public static AESKeyGenerator getInstance() {
-		return new AESKeyGenerator();
+		return AESKeyGenerator.getInstance(AESKeyGenerator.DEFAULT_KEY_LENGTH);
+	}
+
+	public static AESKeyGenerator getInstance(int keyLength) {
+		for (int length : AESKeyGenerator.SUPPORTED_KEY_LENGTHS) {
+			if (keyLength == length) {
+				return new AESKeyGenerator(keyLength);
+			}
+		}
+		throw new IllegalArgumentException();
 	}
 
 }

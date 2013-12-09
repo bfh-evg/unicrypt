@@ -11,7 +11,9 @@ import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -21,11 +23,19 @@ import java.util.Random;
 public class ByteArrayMonoid
 			 extends AbstractConcatenativeMonoid<ByteArrayElement> {
 
-	private ByteArrayMonoid() {
+	private final int blockLength;
+
+	private ByteArrayMonoid(int blockLength) {
+		this.blockLength = blockLength;
+	}
+
+	@Override
+	public int getBlockLength() {
+		return this.blockLength;
 	}
 
 	public final ByteArrayElement getElement(final byte[] bytes) {
-		if (bytes == null) {
+		if (bytes == null || bytes.length % this.getBlockLength() != 0) {
 			throw new IllegalArgumentException();
 		}
 		return this.standardGetElement(bytes);
@@ -38,14 +48,14 @@ public class ByteArrayMonoid
 
 	@Override
 	public final ByteArrayElement getRandomElement(int length, Random random) {
-		if (length < 0) {
+		if (length < 0 || length % this.getBlockLength() != 0) {
 			throw new IllegalArgumentException();
 		}
 		byte[] bytes = new byte[length];
 		for (int i = 0; i < length; i++) {
 			bytes[i] = RandomUtil.getRandomByte(random);
 		}
-		return this.getElement(bytes);
+		return this.standardGetElement(bytes);
 	}
 
 	protected ByteArrayElement standardGetElement(byte[] bytes) {
@@ -54,12 +64,18 @@ public class ByteArrayMonoid
 
 	@Override
 	protected ByteArrayElement abstractGetElement(BigInteger value) {
+		int blockLength = this.getBlockLength();
 		LinkedList<Byte> byteList = new LinkedList<Byte>();
-		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);
+		BigInteger blockSize = BigInteger.valueOf(1 << (Byte.SIZE * blockLength));
 		while (!value.equals(BigInteger.ZERO)) {
 			value = value.subtract(BigInteger.ONE);
-			byteList.addFirst(value.mod(size).byteValue());
-			value = value.divide(size);
+			BigInteger remainder = value.mod(blockSize);
+			for (int i = 0; i < blockLength; i++) {
+				byteList.addFirst(remainder.mod(byteSize).byteValue());
+				remainder = remainder.divide(byteSize);
+			}
+			value = value.divide(blockSize);
 		}
 		return this.standardGetElement(ArrayUtil.byteListToByteArray(byteList));
 	}
@@ -99,18 +115,28 @@ public class ByteArrayMonoid
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static ByteArrayMonoid instance;
+	private static final Map<Integer, ByteArrayMonoid> instances = new HashMap<Integer, ByteArrayMonoid>();
+
+	public static ByteArrayMonoid getInstance() {
+		return ByteArrayMonoid.getInstance(1);
+	}
 
 	/**
 	 * Returns the singleton object of this class.
 	 * <p>
+	 * @param blockLength
 	 * @return The singleton object of this class
 	 */
-	public static ByteArrayMonoid getInstance() {
-		if (ByteArrayMonoid.instance == null) {
-			ByteArrayMonoid.instance = new ByteArrayMonoid();
+	public static ByteArrayMonoid getInstance(int blockLength) {
+		if (blockLength < 1) {
+			throw new IllegalArgumentException();
 		}
-		return ByteArrayMonoid.instance;
+		ByteArrayMonoid instance = ByteArrayMonoid.instances.get(Integer.valueOf(blockLength));
+		if (instance == null) {
+			instance = new ByteArrayMonoid(blockLength);
+			ByteArrayMonoid.instances.put(Integer.valueOf(blockLength), instance);
+		}
+		return instance;
 	}
 
 }

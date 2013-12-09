@@ -16,6 +16,8 @@ import java.util.Random;
 public interface ConcatenativeSemiGroup
 			 extends SemiGroup {
 
+	public int getBlockLength();
+
 	public ConcatenativeElement getRandomElement(int length);
 
 	public ConcatenativeElement getRandomElement(int length, Random random);

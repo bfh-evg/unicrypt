@@ -90,12 +90,7 @@ public class Tuple
 
 	@Override
 	public Element[] getAll() {
-		int arity = this.getArity();
-		Element[] result = new Element[arity];
-		for (int i = 0; i < arity; i++) {
-			result[i] = this.getAt(i);
-		}
-		return result;
+		return this.elements.clone();
 	}
 
 	@Override
