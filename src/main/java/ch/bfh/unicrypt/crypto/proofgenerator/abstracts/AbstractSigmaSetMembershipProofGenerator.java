@@ -6,6 +6,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaSetMembershipProofG
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -27,20 +28,20 @@ public abstract class AbstractSigmaSetMembershipProofGenerator<PUS extends SemiG
 	   extends AbstractSigmaProofGenerator<ProductSet, Pair, PUS, PUE, ProductFunction>
 	   implements SigmaSetMembershipProofGenerator {
 
-	private final Element[] members;
+	private final Subset members;
 	private Function setMembershipProofFunction;
 	private Function deltaFunction;
 	private ProductFunction preimageProofFunction;
 	private PreimageOrProofGenerator orProofGenerator;
 
-	protected AbstractSigmaSetMembershipProofGenerator(final SigmaChallengeGenerator challengeGenerator, Element[] members) {
+	protected AbstractSigmaSetMembershipProofGenerator(final SigmaChallengeGenerator challengeGenerator, final Subset members) {
 		super(challengeGenerator);
-		this.members = members.clone();
+		this.members = members;
 	}
 
 	@Override
-	public Element[] getMembers() {
-		return this.members.clone();
+	public Subset getMembers() {
+		return this.members;
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public abstract class AbstractSigmaSetMembershipProofGenerator<PUS extends SemiG
 	protected ProductSet abstractGetProofSpace() {
 		return ProductSet.getInstance(
 			   this.getCommitmentSpace(),
-			   ProductSet.getInstance(this.getChallengeSpace(), this.members.length),
+			   ProductSet.getInstance(this.getChallengeSpace(), this.members.getOrder().intValue()),
 			   this.getResponseSpace());
 	}
 
@@ -100,10 +101,11 @@ public abstract class AbstractSigmaSetMembershipProofGenerator<PUS extends SemiG
 	}
 
 	private Tuple createProofImages(PUE publicInput) {
-		final Element[] images = new Element[this.members.length];
+		final Element[] memberElements = this.members.getElements();
+		final Element[] images = new Element[memberElements.length];
 
-		for (int i = 0; i < this.members.length; i++) {
-			images[i] = this.getDeltaFunction().apply(this.members[i], publicInput);
+		for (int i = 0; i < memberElements.length; i++) {
+			images[i] = this.getDeltaFunction().apply(memberElements[i], publicInput);
 		}
 		return Tuple.getInstance(images);
 	}
@@ -119,17 +121,18 @@ public abstract class AbstractSigmaSetMembershipProofGenerator<PUS extends SemiG
 
 		// proofFunction = composite( multiIdentity(2), productFunction(selction(0), setMembershipProofFunction), deltaFunction)
 		final ProductSet setMembershipPFDomain = (ProductSet) this.getSetMembershipProofFunction().getDomain();
-		Function proofFunction = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(setMembershipPFDomain, 2),
-															   ProductFunction.getInstance(SelectionFunction.getInstance(setMembershipPFDomain, 0),
-																						   this.getSetMembershipProofFunction()),
-															   this.getDeltaFunction());
+		final Function proofFunction = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(setMembershipPFDomain, 2),
+																	 ProductFunction.getInstance(SelectionFunction.getInstance(setMembershipPFDomain, 0),
+																								 this.getSetMembershipProofFunction()),
+																	 this.getDeltaFunction());
 
 		// proofFunction_x = composite( multiIdentity(1), proofFunction.partiallyApply(x, 0))
-		Function[] proofFunctions = new Function[this.members.length];
-		Set rSet = setMembershipPFDomain.getAt(1);
-		for (int i = 0; i < this.members.length; i++) {
+		final Element[] memberElements = this.members.getElements();
+		final Function[] proofFunctions = new Function[memberElements.length];
+		final Set rSet = setMembershipPFDomain.getAt(1);
+		for (int i = 0; i < memberElements.length; i++) {
 			proofFunctions[i] = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(rSet, 1),
-															  proofFunction.partiallyApply(this.members[i], 0));
+															  proofFunction.partiallyApply(memberElements[i], 0));
 		}
 
 		return ProductFunction.getInstance(proofFunctions);

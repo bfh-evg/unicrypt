@@ -8,6 +8,7 @@ import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -26,18 +27,18 @@ public class ElGamalEncryptionValidityProofGenerator
 	private final ElGamalEncryptionScheme elGamalES;
 	private final Element publicKey;
 
-	protected ElGamalEncryptionValidityProofGenerator(final SigmaChallengeGenerator challengeGenerator, final ElGamalEncryptionScheme elGamalES, Element publicKey, final Element[] plaintexts) {
+	protected ElGamalEncryptionValidityProofGenerator(final SigmaChallengeGenerator challengeGenerator, final ElGamalEncryptionScheme elGamalES, Element publicKey, final Subset plaintexts) {
 		super(challengeGenerator, plaintexts);
 		this.elGamalES = elGamalES;
 		this.publicKey = publicKey;
 	}
 
-	public static ElGamalEncryptionValidityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Element[] plaintexts) {
+	public static ElGamalEncryptionValidityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
 		if (challengeGenerator == null || elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey)
-			   || plaintexts == null || plaintexts.length < 1) {
+			   || plaintexts == null || plaintexts.getOrder().intValue() < 1) {
 			throw new IllegalArgumentException();
 		}
-		Set codomain = ProductGroup.getInstance(elGamalES.getEncryptionFunction().getCoDomain(), plaintexts.length);
+		final Set codomain = ProductGroup.getInstance(elGamalES.getEncryptionFunction().getCoDomain(), plaintexts.getOrder().intValue());
 		if (!codomain.isEqual(challengeGenerator.getPublicInputSpace()) || !codomain.isEqual(challengeGenerator.getCommitmentSpace())
 			   || !elGamalES.getCyclicGroup().getZModOrder().isEqual(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
@@ -52,9 +53,9 @@ public class ElGamalEncryptionValidityProofGenerator
 
 	@Override
 	protected Function abstractGetDeltaFunction() {
-		CyclicGroup elGamalCyclicGroup = this.elGamalES.getCyclicGroup();
-		ProductSet deltaFunctionDomain = ProductSet.getInstance(elGamalCyclicGroup, this.getSetMembershipProofFunction().getCoDomain());
-		Function deltaFunction =
+		final CyclicGroup elGamalCyclicGroup = this.elGamalES.getCyclicGroup();
+		final ProductSet deltaFunctionDomain = ProductSet.getInstance(elGamalCyclicGroup, this.getSetMembershipProofFunction().getCoDomain());
+		final Function deltaFunction =
 			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
 											 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
 																		 CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
@@ -81,7 +82,7 @@ public class ElGamalEncryptionValidityProofGenerator
 		if (elGamalES == null || numberOfPlaintexts < 1 || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		ProductGroup codomain = ProductGroup.getInstance((ProductGroup) elGamalES.getEncryptionFunction().getCoDomain(), numberOfPlaintexts);
+		final ProductGroup codomain = ProductGroup.getInstance((ProductGroup) elGamalES.getEncryptionFunction().getCoDomain(), numberOfPlaintexts);
 		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(codomain, codomain, elGamalES.getCyclicGroup().getZModOrder(), proverId, hashMethod);
 
 	}

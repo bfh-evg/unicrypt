@@ -7,6 +7,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -33,9 +34,9 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 	public void testPedersenValidityProof() {
 
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElement(4), G_q.getElement(2));
-		Element[] messages = new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)};
+		Subset messages = Subset.getInstance(this.Z_q, new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
 
-		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, messages.length, proverId);
+		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
 		PedersenCommitmentValidityProofGenerator pg = PedersenCommitmentValidityProofGenerator.getInstance(scg, pedersenCS, messages);
 
 		Element publicInput = G_q.getElement(128);   // 4^2*2^3 = 128
@@ -73,16 +74,16 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 	public void testPedersenValidityProof2() {
 
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElement(2), G_q.getElement(4));
-		Element[] messages = new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)};
+		Subset messages = Subset.getInstance(this.Z_q, new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
 
-		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, messages.length, proverId);
+		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
 		PedersenCommitmentValidityProofGenerator pg = PedersenCommitmentValidityProofGenerator.getInstance(scg, pedersenCS, messages);
 
 		int index = 3;
 		Element r = Z_q.getElement(5);
 
 		Tuple privateInput = pg.createPrivateInput(r, index);
-		Element publicInput = pedersenCS.commit(messages[index], r);
+		Element publicInput = pedersenCS.commit(messages.getElements()[index], r);
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);

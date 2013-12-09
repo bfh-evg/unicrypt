@@ -7,6 +7,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.Sigma
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -26,17 +27,17 @@ public class PedersenCommitmentValidityProofGenerator
 
 	private final PedersenCommitmentScheme pedersenCS;
 
-	protected PedersenCommitmentValidityProofGenerator(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final Element[] messages) {
+	protected PedersenCommitmentValidityProofGenerator(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final Subset messages) {
 		super(challengeGenerator, messages);
 		this.pedersenCS = pedersenCS;
 	}
 
-	public static PedersenCommitmentValidityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final Element[] messages) {
-		if (challengeGenerator == null || pedersenCS == null || messages == null || messages.length < 1) {
+	public static PedersenCommitmentValidityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final Subset messages) {
+		if (challengeGenerator == null || pedersenCS == null || messages == null || messages.getOrder().intValue() < 1) {
 			throw new IllegalArgumentException();
 		}
 
-		Set codomain = ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(), messages.length);
+		final Set codomain = ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(), messages.getOrder().intValue());
 		if (!codomain.isEqual(challengeGenerator.getPublicInputSpace()) || !codomain.isEqual(challengeGenerator.getCommitmentSpace())
 			   || !pedersenCS.getCyclicGroup().getZModOrder().isEqual(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
@@ -51,8 +52,8 @@ public class PedersenCommitmentValidityProofGenerator
 
 	@Override
 	protected Function abstractGetDeltaFunction() {
-		ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(), this.getSetMembershipProofFunction().getCoDomain());
-		Function deltaFunction =
+		final ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(), this.getSetMembershipProofFunction().getCoDomain());
+		final Function deltaFunction =
 			   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
 											 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1),
 																		 CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
@@ -78,7 +79,7 @@ public class PedersenCommitmentValidityProofGenerator
 		if (pedersenCS == null || numberOfMessages < 1 || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Group codomain = ProductGroup.getInstance((Group) pedersenCS.getCommitmentFunction().getCoDomain(), numberOfMessages);
+		final Group codomain = ProductGroup.getInstance((Group) pedersenCS.getCommitmentFunction().getCoDomain(), numberOfMessages);
 		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(codomain, codomain, pedersenCS.getCyclicGroup().getZModOrder(), proverId, hashMethod);
 
 	}
