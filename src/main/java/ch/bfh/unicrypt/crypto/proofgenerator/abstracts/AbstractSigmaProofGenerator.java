@@ -6,11 +6,10 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractSigmaProofGenerator<PRS extends Set, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
+public abstract class AbstractSigmaProofGenerator<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element, F extends Function>
 	   extends AbstractProofGenerator<PRS, PRE, PUS, PUE, ProductSet, Triple>
 	   implements SigmaProofGenerator {
 
