@@ -13,37 +13,40 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.Alphabet;
+import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class InequalityOfPreimagesProofGeneratorTest {
 
 	final static int P = 167;
-	final private CyclicGroup G_q;
-	final private ZMod Z_q;
+	final static String P2 = "88059184022561109274134540595138392753102891002065208740257707896840303297223";
+	final private CyclicGroup G_q1;
+	final private CyclicGroup G_q2;
 	final private StringElement proverId;
 
 	public InequalityOfPreimagesProofGeneratorTest() {
-		this.G_q = GStarModSafePrime.getInstance(P);
-		this.Z_q = this.G_q.getZModOrder();
+		this.G_q1 = GStarModSafePrime.getInstance(P);
+		this.G_q2 = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		this.proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 	}
 
 	@Test
-	public void testInequlityProof() {
+	public void testInequlityProof2() {
 
-		Element g = this.G_q.getElement(4);
-		Element h = this.G_q.getElement(8);
+		CyclicGroup G_q = this.G_q2;
+		ZMod Z_q = G_q.getZModOrder();
+		Element g = G_q.getElement(4);
+		Element h = G_q.getElement(8);
 
-		Element y = this.G_q.getElement(16);
-		Element z = this.G_q.getElement(32);
-		Element x = this.Z_q.getElement(2);
+		Element y = G_q.getElement(16);
+		Element z = G_q.getElement(32);
+		Element x = Z_q.getElement(2);
 
 		Function f1 = GeneratorFunction.getInstance(g);
 		Function f2 = GeneratorFunction.getInstance(h);
 
-		SigmaChallengeGenerator scg = InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(f1, f2);
-
+		SigmaChallengeGenerator scg = InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(f1, f2, proverId);
 		InequalityOfPreimagesProofGenerator pg = InequalityOfPreimagesProofGenerator.getInstance(scg, f1, f2);
 
 		// Valid proof
@@ -52,19 +55,14 @@ public class InequalityOfPreimagesProofGeneratorTest {
 		BooleanElement v = pg.verify(proof, Pair.getInstance(y, z));
 		assertTrue(v.getBoolean());
 
-		// Valid proof without proverId
-		proof = pg.generate(x, Pair.getInstance(y, z));
-		v = pg.verify(proof, Pair.getInstance(y, z));
-		assertTrue(v.getBoolean());
-
 		// Invalid proof -> wrong x
-		Element xx = this.Z_q.getElement(3);
+		Element xx = Z_q.getElement(3);
 		proof = pg.generate(xx, Pair.getInstance(y, z));
 		v = pg.verify(proof, Pair.getInstance(y, z));
 		assertTrue(!v.getBoolean());
 
 		// Invalid proof -> equal descrete logs
-		Element zz = this.G_q.getElement(64);
+		Element zz = G_q.getElement(64);
 		proof = pg.generate(x, Pair.getInstance(y, zz));
 		v = pg.verify(proof, Pair.getInstance(y, zz));
 		assertTrue(!v.getBoolean());
