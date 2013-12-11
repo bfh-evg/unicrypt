@@ -61,15 +61,15 @@ public class FiniteStringToFiniteByteArrayEncoder
 	}
 
 	public static FiniteStringToFiniteByteArrayEncoder getInstance(FiniteByteArraySet finiteByteArraySet, Alphabet alphabet) {
-		return FiniteStringToFiniteByteArrayEncoder.getInstance(finiteByteArraySet, alphabet, false);
+		return FiniteStringToFiniteByteArrayEncoder.getInstance(finiteByteArraySet, alphabet, 0);
 	}
 
-	public static FiniteStringToFiniteByteArrayEncoder getInstance(FiniteByteArraySet finiteByteArraySet, Alphabet alphabet, boolean equalLength) {
+	public static FiniteStringToFiniteByteArrayEncoder getInstance(FiniteByteArraySet finiteByteArraySet, Alphabet alphabet, int minLength) {
 		if (finiteByteArraySet == null || alphabet == null) {
 			throw new IllegalArgumentException();
 		}
 		BigInteger minOrder = finiteByteArraySet.getOrder();
-		return new FiniteStringToFiniteByteArrayEncoder(FiniteStringSet.getInstance(alphabet, minOrder, equalLength), finiteByteArraySet);
+		return new FiniteStringToFiniteByteArrayEncoder(FiniteStringSet.getInstance(alphabet, minOrder, minLength), finiteByteArraySet);
 	}
 
 }

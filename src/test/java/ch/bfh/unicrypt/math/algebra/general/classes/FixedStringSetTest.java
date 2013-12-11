@@ -13,7 +13,7 @@ import org.junit.Test;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class FiniteStringSetTest {
+public class FixedStringSetTest {
 
 //	@Test
 //	public void testIteration() {
@@ -25,10 +25,7 @@ public class FiniteStringSetTest {
 //	}
 	@Test
 	public void testGetValue() {
-		FiniteStringSet set = FiniteStringSet.getInstance(Alphabet.BINARY, 3, 5);
-		System.out.println(set.getElement("000").getValue());
-		System.out.println(set.getElement("001").getValue());
-		System.out.println(set.getElement("111").getValue());
+		FixedStringSet set = FixedStringSet.getInstance(Alphabet.BINARY, 4);
 		System.out.println(set.getElement("0000").getValue());
 		System.out.println(set.getElement("0001").getValue());
 		System.out.println(set.getElement("0010").getValue());
@@ -38,12 +35,11 @@ public class FiniteStringSetTest {
 		System.out.println(set.getElement("0110").getValue());
 		System.out.println(set.getElement("0111").getValue());
 		System.out.println(set.getElement("1111").getValue());
-		System.out.println(set.getElement("00000").getValue());
-		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(24)) <= 0; i = i.add(BigInteger.ONE)) {
+		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(15)) <= 0; i = i.add(BigInteger.ONE)) {
 			System.out.println(set.getElement(i));
 		}
 		System.out.println(set.getOrder());
-		System.out.println(FiniteStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54), 3).getOrder());
+		System.out.println(FixedStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54)).getOrder());
 	}
 
 }

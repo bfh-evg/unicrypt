@@ -55,14 +55,14 @@ public class FiniteStringToZModEncoder
 	}
 
 	public static FiniteStringToZModEncoder getInstance(ZMod zMod, Alphabet alphabet) {
-		return FiniteStringToZModEncoder.getInstance(zMod, alphabet, false);
+		return FiniteStringToZModEncoder.getInstance(zMod, alphabet, 0);
 	}
 
-	public static FiniteStringToZModEncoder getInstance(ZMod zMod, Alphabet alphabet, boolean equalLength) {
+	public static FiniteStringToZModEncoder getInstance(ZMod zMod, Alphabet alphabet, int minLength) {
 		if (zMod == null || alphabet == null) {
 			throw new IllegalArgumentException();
 		}
-		return new FiniteStringToZModEncoder(FiniteStringSet.getInstance(alphabet, zMod.getOrder(), equalLength), zMod);
+		return new FiniteStringToZModEncoder(FiniteStringSet.getInstance(alphabet, zMod.getOrder(), minLength), zMod);
 	}
 
 }
