@@ -82,23 +82,6 @@ public class StringMonoid
 		return this.standardGetElement(strBuilder.reverse().toString());
 	}
 
-//	@Override
-//	protected ByteArrayElement abstractGetElement(BigInteger value) {
-//		int blockLength = this.getBlockLength();
-//		LinkedList<Byte> byteList = new LinkedList<Byte>();
-//		BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);
-//		BigInteger blockSize = BigInteger.valueOf(1 << (Byte.SIZE * blockLength));
-//		while (!value.equals(BigInteger.ZERO)) {
-//			value = value.subtract(BigInteger.ONE);
-//			BigInteger remainder = value.mod(blockSize);
-//			for (int i = 0; i < blockLength; i++) {
-//				byteList.addFirst(remainder.mod(byteSize).byteValue());
-//				remainder = value.divide(byteSize);
-//			}
-//			value = value.divide(blockSize);
-//		}
-//		return this.standardGetElement(ArrayUtil.byteListToByteArray(byteList));
-//	}
 	//
 	// The following protected methods implement the abstract methods from
 	// various super-classes

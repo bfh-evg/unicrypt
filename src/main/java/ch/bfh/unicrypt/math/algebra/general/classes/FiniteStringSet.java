@@ -19,21 +19,25 @@ public class FiniteStringSet
 			 extends AbstractSet<FiniteStringElement> {
 
 	private final Alphabet alphabet;
-	private final int length;
-	private final boolean equalLength;
+	private final int minLength;
+	private final int maxLength;
 
-	private FiniteStringSet(Alphabet alphabet, int length, boolean equalLength) {
+	protected FiniteStringSet(Alphabet alphabet, int minLength, int maxLength) {
 		this.alphabet = alphabet;
-		this.length = length;
-		this.equalLength = equalLength;
+		this.minLength = minLength;
+		this.maxLength = maxLength;
 	}
 
-	public int getLength() {
-		return this.length;
+	public int getMinLength() {
+		return this.minLength;
 	}
 
-	public boolean equalLength() {
-		return this.equalLength;
+	public int getMaxLength() {
+		return this.maxLength;
+	}
+
+	public boolean fixedLength() {
+		return this.getMinLength() == this.getMaxLength();
 	}
 
 	public Alphabet getAlphabet() {
@@ -41,7 +45,7 @@ public class FiniteStringSet
 	}
 
 	public final FiniteStringElement getElement(final String string) {
-		if (string == null || string.length() > this.getLength() || (this.equalLength() && string.length() < this.getLength())) {
+		if (string == null || string.length() < this.getMinLength() || string.length() > this.getMaxLength()) {
 			throw new IllegalArgumentException();
 		}
 		return this.standardGetElement(string);
@@ -53,19 +57,15 @@ public class FiniteStringSet
 
 	@Override
 	protected FiniteStringElement abstractGetElement(BigInteger value) {
-		StringBuilder strBuilder = new StringBuilder(this.getLength());
+		int minLength = this.getMinLength();
 		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
-		while (!value.equals(BigInteger.ZERO)) {
-			if (!this.equalLength()) {
+		StringBuilder strBuilder = new StringBuilder(this.getMaxLength());
+		while (!value.equals(BigInteger.ZERO) || strBuilder.length() < minLength) {
+			if (strBuilder.length() >= minLength) {
 				value = value.subtract(BigInteger.ONE);
 			}
 			strBuilder.append(this.getAlphabet().getCharacter(value.mod(size).intValue()));
 			value = value.divide(size);
-		}
-		if (this.equalLength()) {
-			while (strBuilder.length() < this.getLength()) {
-				strBuilder.append(this.getAlphabet().getCharacter(0));
-			}
 		}
 		return this.standardGetElement(strBuilder.reverse().toString());
 	}
@@ -73,14 +73,11 @@ public class FiniteStringSet
 	@Override
 	protected BigInteger abstractGetOrder() {
 		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
-		if (this.equalLength) {
-			return size.pow(this.getLength());
-		}
 		BigInteger order = BigInteger.ONE;
-		for (int i = 0; i < this.getLength(); i++) {
+		for (int i = 0; i < this.getMaxLength() - this.getMinLength(); i++) {
 			order = order.multiply(size).add(BigInteger.ONE);
 		}
-		return order;
+		return order.multiply(size.pow(this.getMinLength()));
 	}
 
 	@Override
@@ -96,51 +93,45 @@ public class FiniteStringSet
 	@Override
 	public boolean standardIsEqual(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
-		return this.getAlphabet() == other.getAlphabet() && this.getLength() == other.getLength() && this.equalLength() == other.equalLength();
+		return this.getAlphabet() == other.getAlphabet() && this.getMinLength() == other.getMinLength() && this.getMaxLength() == other.getMaxLength();
 	}
 
 	@Override
 	public String standardToStringContent() {
-		if (this.equalLength()) {
-			return this.getAlphabet().toString() + "^" + this.getLength();
-		} else {
-			return this.getAlphabet().toString() + "^{0..." + this.getLength() + "}";
-		}
+		return this.getAlphabet().toString() + "^{" + this.getMinLength() + "..." + this.getMaxLength() + "}";
 	}
 
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static FiniteStringSet getInstance(final Alphabet alphabet, final int length) {
-		return FiniteStringSet.getInstance(alphabet, length, false);
+	public static FiniteStringSet getInstance(final Alphabet alphabet, final int maxLength) {
+		return FiniteStringSet.getInstance(alphabet, 0, maxLength);
 	}
 
-	public static FiniteStringSet getInstance(final Alphabet alphabet, final int length, boolean equalLength) {
-		if (length < 0 || alphabet == null) {
+	public static FiniteStringSet getInstance(final Alphabet alphabet, final int minLength, final int maxLength) {
+		if (alphabet == null || minLength < 0 || maxLength < minLength) {
 			throw new IllegalArgumentException();
 		}
-		return new FiniteStringSet(alphabet, length, equalLength);
+		return new FiniteStringSet(alphabet, minLength, maxLength);
 	}
 
 	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder) {
-		return FiniteStringSet.getInstance(alphabet, minOrder, false);
+		return FiniteStringSet.getInstance(alphabet, minOrder, 0);
 	}
 
-	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder, boolean equalLength) {
-		if (alphabet == null || minOrder == null || minOrder.signum() < 0) {
+	public static FiniteStringSet getInstance(final Alphabet alphabet, final BigInteger minOrder, int minLength) {
+		if (alphabet == null || minOrder == null || minOrder.signum() < 0 || minLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		int length = 0;
-		BigInteger order = BigInteger.ONE;
+		int maxLength = minLength;
 		BigInteger size = BigInteger.valueOf(alphabet.getSize());
-		while (order.compareTo(minOrder) < 0) {
-			order = order.multiply(size);
-			if (equalLength) {
-				order = order.add(BigInteger.ONE);
-			}
-			length++;
+		BigInteger order1 = size.pow(minLength);
+		BigInteger order2 = BigInteger.ONE;
+		while (order1.multiply(order2).compareTo(minOrder) < 0) {
+			order2 = order2.multiply(size).add(BigInteger.ONE);
+			maxLength++;
 		}
-		return new FiniteStringSet(alphabet, length, equalLength);
+		return new FiniteStringSet(alphabet, minLength, maxLength);
 	}
 
 }

@@ -38,15 +38,16 @@ public class FiniteStringElement
 
 	@Override
 	protected BigInteger standardGetValue() {
+		int length = this.getString().length();
+		int minLength = this.getSet().getMinLength();
 		BigInteger value = BigInteger.ZERO;
 		BigInteger size = BigInteger.valueOf(this.getSet().getAlphabet().getSize());
-		for (int i = 0; i < this.getString().length(); i++) {
+		for (int i = 0; i < length; i++) {
 			int charIndex = this.getSet().getAlphabet().getIndex(this.getString().charAt(i));
-			if (this.getSet().equalLength()) {
-				value = value.multiply(size).add(BigInteger.valueOf(charIndex));
-			} else {
-				value = value.multiply(size).add(BigInteger.valueOf(charIndex + 1));
+			if (i < length - minLength) {
+				charIndex++;
 			}
+			value = value.multiply(size).add(BigInteger.valueOf(charIndex));
 		}
 		return value;
 	}
