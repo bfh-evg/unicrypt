@@ -1,16 +1,16 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import java.math.BigInteger;
 import java.util.Random;
 
 /**
  * This interface represents the concept a mathematical set of elements. The number of elements in the set is called
- * order. The order may be infinite or unknown. A set is either atomic or a product of multiple other (possibly
- * non-atomic) sets. The arity defines the number of sets such a product is composed of. The arity of an atomic set is
- * 1. It is assumed that each element of a set corresponds to a unique BigInteger value. Therefore, the interface
- * provides methods for converting elements into corresponding BigInteger values and back.
+ * order. The order may be infinite or unknown. It is assumed that each element of a set corresponds to a unique
+ * BigInteger value. Therefore, the interface provides methods for converting elements into corresponding BigInteger
+ * values and back.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -27,30 +27,83 @@ public interface Set {
 	 */
 	public static final BigInteger UNKNOWN_ORDER = BigInteger.ZERO;
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isSemiGroup();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isMonoid();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isGroup();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isSemiRing();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isRing();
 
+	/**
+	 * Returns {@code true} if this set is an instance of {@link Field}.
+	 * <p>
+	 * @return {@code true} if this set is a field
+	 */
 	public boolean isField();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isCyclic();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isAdditive();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isMultiplicative();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isConcatenative();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isProduct();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isFinite();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean hasKnownOrder();
 
 	/**
@@ -70,8 +123,16 @@ public interface Set {
 	 */
 	public BigInteger getOrderLowerBound();
 
+	/**
+	 *
+	 * @return
+	 */
 	public BigInteger getOrderUpperBound();
 
+	/**
+	 *
+	 * @return
+	 */
 	public BigInteger getMinimalOrder();
 
 	/**
@@ -191,8 +252,18 @@ public interface Set {
 	 */
 	public boolean areEqual(Element element1, Element element2);
 
+	/**
+	 *
+	 * @param set
+	 * @return
+	 */
 	public boolean isCompatible(Set set);
 
+	/**
+	 *
+	 * @param set
+	 * @return
+	 */
 	public boolean isEqual(Set set);
 
 }
