@@ -34,6 +34,23 @@ public class RandomOracle {
 			throw new InternalError();
 		}
 	}
+//
+// TODO: Replace?
+//
+//	public SecureRandom getRandom(long query) {
+//		if (query < 0) {
+//			throw new IllegalArgumentException();
+//		}
+//		// Taken from SecureRandom.longToByteArray
+//		byte[] queryB = new byte[8];
+//		for (int i = 0; i < 8; i++) {
+//			queryB[i] = (byte) query;
+//			query >>= 8;
+//		}
+//		return this.getRandom(queryB);
+//	}
+//
+//
 
 	public SecureRandom getRandom(byte[] query) {
 		if (query == null || query.length < 1) {
