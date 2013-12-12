@@ -4,7 +4,6 @@ import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
@@ -25,22 +24,20 @@ public class ECBinaryPolynomialField
 	}
 
 	@Override
-	protected ECBinaryPolynomialFieldElement abstractApply(Element element1, Element element2) {
+	protected ECBinaryPolynomialFieldElement abstractApply(ECBinaryPolynomialFieldElement element1, ECBinaryPolynomialFieldElement element2) {
 		BinaryPolynomialElement s, rx, ry, px, py, qx, qy;
-		ECBinaryPolynomialFieldElement p = (ECBinaryPolynomialFieldElement) element1;
-		ECBinaryPolynomialFieldElement q = (ECBinaryPolynomialFieldElement) element2;
-		px = p.getX();
-		py = p.getY();
-		qx = q.getX();
-		qy = q.getY();
+		px = element1.getX();
+		py = element1.getY();
+		qx = element2.getX();
+		qy = element2.getY();
 
-		if (p.isZero()) {
-			return q;
+		if (element1.isZero()) {
+			return element2;
 		} else {
-			if (q.isZero()) {
-				return p;
+			if (element2.isZero()) {
+				return element1;
 			} else {
-				if (p.equals(q.invert())) {
+				if (element1.equals(element2.invert())) {
 					return this.getIdentityElement();
 				} else {
 					if (element1.equals(element2)) {
@@ -63,9 +60,8 @@ public class ECBinaryPolynomialField
 	}
 
 	@Override
-	protected ECBinaryPolynomialFieldElement abstractInvert(Element element) {
-		ECBinaryPolynomialFieldElement e = (ECBinaryPolynomialFieldElement) element;
-		return getElement(e.getX(), e.getX().add(e.getY()));
+	protected ECBinaryPolynomialFieldElement abstractInvert(ECBinaryPolynomialFieldElement element) {
+		return getElement(element.getX(), element.getX().add(element.getY()));
 	}
 
 	@Override

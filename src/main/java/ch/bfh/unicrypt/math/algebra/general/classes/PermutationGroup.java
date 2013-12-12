@@ -1,7 +1,6 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
@@ -101,13 +100,13 @@ public class PermutationGroup
 	}
 
 	@Override
-	protected PermutationElement abstractApply(final Element element1, final Element element2) {
-		return this.standardGetElement(((PermutationElement) element1).getPermutation().compose(((PermutationElement) element2).getPermutation()));
+	protected PermutationElement abstractApply(final PermutationElement element1, final PermutationElement element2) {
+		return this.standardGetElement(element1.getPermutation().compose(element2.getPermutation()));
 	}
 
 	@Override
-	protected PermutationElement abstractInvert(final Element element) {
-		return this.standardGetElement(((PermutationElement) element).getPermutation().invert());
+	protected PermutationElement abstractInvert(final PermutationElement element) {
+		return this.standardGetElement(element.getPermutation().invert());
 	}
 
 	@Override

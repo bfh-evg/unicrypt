@@ -13,36 +13,38 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGrou
  *
  * @author rolfhaenni
  */
-public abstract class AbstractField<E extends DualisticElement, M extends MultiplicativeGroup> extends AbstractRing<E> implements Field {
+public abstract class AbstractField<E extends DualisticElement, M extends MultiplicativeGroup>
+			 extends AbstractRing<E>
+			 implements Field {
 
-  private M multiplicativeGroup;
+	private M multiplicativeGroup;
 
-  @Override
-  public M getMultiplicativeGroup() {
-    if (this.multiplicativeGroup == null) {
-      this.multiplicativeGroup = this.abstractGetMultiplicativeGroup();
-    }
-    return this.multiplicativeGroup;
-  }
+	@Override
+	public M getMultiplicativeGroup() {
+		if (this.multiplicativeGroup == null) {
+			this.multiplicativeGroup = this.abstractGetMultiplicativeGroup();
+		}
+		return this.multiplicativeGroup;
+	}
 
-  @Override
-  public final E divide(Element element1, Element element2) {
-    return this.multiply(element1, this.oneOver(element2));
-  }
+	@Override
+	public final E divide(Element element1, Element element2) {
+		return this.multiply(element1, this.oneOver(element2));
+	}
 
-  @Override
-  public final E oneOver(Element element) {
-    if (!this.contains(element)) {
-      throw new IllegalArgumentException();
-    }
-    if (element.isEqual(this.getZeroElement())) {
-      throw new UnsupportedOperationException();
-    }
-    return this.abstractOneOver(element);
-  }
+	@Override
+	public final E oneOver(Element element) {
+		if (!this.contains(element)) {
+			throw new IllegalArgumentException();
+		}
+		if (element.isEqual(this.getZeroElement())) {
+			throw new UnsupportedOperationException();
+		}
+		return this.abstractOneOver((E) element);
+	}
 
-  protected abstract E abstractOneOver(Element element);
+	protected abstract E abstractOneOver(E element);
 
-  protected abstract M abstractGetMultiplicativeGroup();
+	protected abstract M abstractGetMultiplicativeGroup();
 
 }

@@ -4,142 +4,143 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class AbstractSemiRing<E extends DualisticElement> extends AbstractAdditiveMonoid<E> implements SemiRing {
+public abstract class AbstractSemiRing<E extends DualisticElement>
+			 extends AbstractAdditiveMonoid<E>
+			 implements SemiRing {
 
-  private E one;
+	private E one;
 
-  @Override
-  public E multiply(Element element1, Element element2) {
-    if (!this.contains(element1) || !this.contains(element2)) {
-      throw new IllegalArgumentException();
-    }
-    return this.abstractMultiply(element1, element2);
-  }
+	@Override
+	public E multiply(Element element1, Element element2) {
+		if (!this.contains(element1) || !this.contains(element2)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractMultiply((E) element1, (E) element2);
+	}
 
-  @Override
-  public E multiply(Element... elements) {
-    if (elements == null) {
-      throw new IllegalArgumentException();
-    }
-    return this.standardMultiply(elements);
-  }
+	@Override
+	public E multiply(Element... elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.standardMultiply(elements);
+	}
 
-  @Override
-  public E power(Element element, BigInteger amount) {
-    if (!this.contains(element) || (amount == null)) {
-      throw new IllegalArgumentException();
-    }
-    return this.standardPower(element, amount);
-  }
+	@Override
+	public E power(Element element, BigInteger amount) {
+		if (!this.contains(element) || (amount == null)) {
+			throw new IllegalArgumentException();
+		}
+		return this.standardPower(element, amount);
+	}
 
-  @Override
-  public E power(Element element, Element amount) {
-    if (amount == null) {
-      throw new IllegalArgumentException();
-    }
-    return this.power(element, amount.getValue());
-  }
+	@Override
+	public E power(Element element, Element amount) {
+		if (amount == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.power(element, amount.getValue());
+	}
 
-  @Override
-  public E power(Element element, int amount) {
-    return this.power(element, BigInteger.valueOf(amount));
-  }
+	@Override
+	public E power(Element element, int amount) {
+		return this.power(element, BigInteger.valueOf(amount));
+	}
 
-  @Override
-  public E square(Element element) {
-    return this.multiply(element, element);
-  }
+	@Override
+	public E square(Element element) {
+		return this.multiply(element, element);
+	}
 
-  @Override
-  public E productOfPowers(Element[] elements, BigInteger[] amounts) {
-    if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
-      throw new IllegalArgumentException();
-    }
-    return this.standardProductOfPowers(elements, amounts);
-  }
+	@Override
+	public E productOfPowers(Element[] elements, BigInteger[] amounts) {
+		if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
+			throw new IllegalArgumentException();
+		}
+		return this.standardProductOfPowers(elements, amounts);
+	}
 
-  @Override
-  public E getOneElement() {
-    if (this.one == null) {
-      this.one = this.abstractGetOne();
-    }
-    return this.one;
-  }
+	@Override
+	public E getOneElement() {
+		if (this.one == null) {
+			this.one = this.abstractGetOne();
+		}
+		return this.one;
+	}
 
-  @Override
-  public boolean isOneElement(final Element element) {
-    return this.areEqual(element, this.getOneElement());
-  }
+	@Override
+	public boolean isOneElement(final Element element) {
+		return this.areEqual(element, this.getOneElement());
+	}
 
 //
 // The following protected methods are standard implementations for sets.
 // They may need to be changed in certain sub-classes.
 //
-  protected E standardMultiply(final Element... elements) {
-    if (elements.length == 0) {
-      return this.getOneElement();
-    }
-    E result = null;
-    for (Element element : elements) {
-      if (result == null) {
-        result = (E) element;
-      } else {
-        result = this.apply(result, element);
-      }
-    }
-    return result;
-  }
+	protected E standardMultiply(final Element... elements) {
+		if (elements.length == 0) {
+			return this.getOneElement();
+		}
+		E result = null;
+		for (Element element : elements) {
+			if (result == null) {
+				result = (E) element;
+			} else {
+				result = this.apply(result, element);
+			}
+		}
+		return result;
+	}
 
-  protected E standardPower(Element element, BigInteger amount) {
-    if (amount.signum() < 0) {
-      throw new IllegalArgumentException();
-    }
-    if (amount.signum() == 0) {
-      return this.getOneElement();
-    }
-    E result = (E) element;
-    for (int i = amount.bitLength() - 2; i >= 0; i--) {
-      result = this.square(result);
-      if (amount.testBit(i)) {
-        result = this.multiply(result, element);
-      }
-    }
-    return result;
-  }
+	protected E standardPower(Element element, BigInteger amount) {
+		if (amount.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (amount.signum() == 0) {
+			return this.getOneElement();
+		}
+		E result = (E) element;
+		for (int i = amount.bitLength() - 2; i >= 0; i--) {
+			result = this.square(result);
+			if (amount.testBit(i)) {
+				result = this.multiply(result, element);
+			}
+		}
+		return result;
+	}
 
-  protected E standardProductOfPowers(final Element[] elements, final BigInteger[] amounts) {
-    if (elements.length == 0) {
-      return this.getOneElement();
-    }
-    Element[] results = new Element[elements.length];
-    for (int i = 0; i < elements.length; i++) {
-      results[i] = this.power(elements[i], amounts[i]);
-    }
-    return this.multiply(results);
-  }
+	protected E standardProductOfPowers(final Element[] elements, final BigInteger[] amounts) {
+		if (elements.length == 0) {
+			return this.getOneElement();
+		}
+		Element[] results = new Element[elements.length];
+		for (int i = 0; i < elements.length; i++) {
+			results[i] = this.power(elements[i], amounts[i]);
+		}
+		return this.multiply(results);
+	}
 
-  @Override
-  protected BigInteger standardGetOrderLowerBound() {
-    return BigInteger.valueOf(2);
-  }
+	@Override
+	protected BigInteger standardGetOrderLowerBound() {
+		return BigInteger.valueOf(2);
+	}
 
   //
-  // The following protected abstract method must be implemented in every
-  // direct sub-class.
-  //
-  protected abstract E abstractMultiply(Element element1, Element element2);
+	// The following protected abstract method must be implemented in every
+	// direct sub-class.
+	//
+	protected abstract E abstractMultiply(E element1, E element2);
 
-  protected abstract E abstractGetOne();
+	protected abstract E abstractGetOne();
 
 }

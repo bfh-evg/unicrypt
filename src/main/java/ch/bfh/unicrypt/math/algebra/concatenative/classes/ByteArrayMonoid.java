@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
@@ -90,9 +89,9 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayElement abstractApply(Element element1, Element element2) {
-		byte[] bytes1 = ((ByteArrayElement) element1).getByteArray();
-		byte[] bytes2 = ((ByteArrayElement) element2).getByteArray();
+	protected ByteArrayElement abstractApply(ByteArrayElement element1, ByteArrayElement element2) {
+		byte[] bytes1 = element1.getByteArray();
+		byte[] bytes2 = element2.getByteArray();
 		byte[] result = Arrays.copyOf(bytes1, bytes1.length + bytes2.length);
 		System.arraycopy(bytes2, 0, result, bytes2.length, bytes2.length);
 		return this.standardGetElement(result);

@@ -76,7 +76,7 @@ public class ZStarMod
 		return this.moduloFactorization;
 	}
 
-  //
+	//
 	// The following protected methods override the standard implementation from
 	// various super-classes
 	//
@@ -111,7 +111,7 @@ public class ZStarMod
 		return this.getModulus().toString();
 	}
 
-  //
+	//
 	// The following protected methods implement the abstract methods from
 	// various super-classes
 	//
@@ -154,16 +154,16 @@ public class ZStarMod
 	}
 
 	@Override
-	protected ZStarModElement abstractApply(final Element element1, final Element element2) {
+	protected ZStarModElement abstractApply(final ZStarModElement element1, final ZStarModElement element2) {
 		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
 	}
 
 	@Override
-	public ZStarModElement abstractInvert(final Element element) {
+	public ZStarModElement abstractInvert(final ZStarModElement element) {
 		return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
 	}
 
-  //
+	//
 	// STATIC FACTORY METHODS
 	//
 	public static ZStarMod getInstance(final int modulus) {

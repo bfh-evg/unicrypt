@@ -9,7 +9,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -24,7 +23,7 @@ import java.util.Random;
  * @version 2.0
  */
 public class PolynomialSemiRing
-	   extends AbstractSemiRing<PolynomialElement> {
+			 extends AbstractSemiRing<PolynomialElement> {
 
 	private final SemiRing semiRing;
 
@@ -98,19 +97,17 @@ public class PolynomialSemiRing
 	// various super-classes
 	//
 	@Override
-	protected PolynomialElement abstractApply(Element element1, Element element2) {
+	protected PolynomialElement abstractApply(PolynomialElement element1, PolynomialElement element2) {
 		Map<Integer, DualisticElement> newCoefficients = new HashMap<Integer, DualisticElement>();
-		PolynomialElement poly1 = (PolynomialElement) element1;
-		PolynomialElement poly2 = (PolynomialElement) element2;
-		for (Integer i : poly1.getIndices()) {
-			newCoefficients.put(i, poly1.getCoefficient(i));
+		for (Integer i : element1.getIndices()) {
+			newCoefficients.put(i, element1.getCoefficient(i));
 		}
-		for (Integer i : poly2.getIndices()) {
+		for (Integer i : element2.getIndices()) {
 			DualisticElement coefficient = newCoefficients.get(i);
 			if (coefficient == null) {
-				newCoefficients.put(i, poly1.getCoefficient(i));
+				newCoefficients.put(i, element1.getCoefficient(i));
 			} else {
-				newCoefficients.put(i, coefficient.add(poly2.getCoefficient(i)));
+				newCoefficients.put(i, coefficient.add(element2.getCoefficient(i)));
 			}
 		}
 		return abstractGetElement(newCoefficients);
@@ -122,14 +119,12 @@ public class PolynomialSemiRing
 	}
 
 	@Override
-	protected PolynomialElement abstractMultiply(Element element1, Element element2) {
+	protected PolynomialElement abstractMultiply(PolynomialElement element1, PolynomialElement element2) {
 		Map<Integer, DualisticElement> newCoefficients = new HashMap<Integer, DualisticElement>();
-		PolynomialElement poly1 = (PolynomialElement) element1;
-		PolynomialElement poly2 = (PolynomialElement) element2;
-		for (Integer i : poly1.getIndices()) {
-			for (Integer j : poly2.getIndices()) {
+		for (Integer i : element1.getIndices()) {
+			for (Integer j : element2.getIndices()) {
 				Integer k = i + j;
-				DualisticElement coefficient = poly1.getCoefficient(i).multiply(poly2.getCoefficient(j));
+				DualisticElement coefficient = element1.getCoefficient(i).multiply(element2.getCoefficient(j));
 				DualisticElement newCoefficient = newCoefficients.get(k);
 				if (newCoefficient == null) {
 					newCoefficients.put(k, coefficient);

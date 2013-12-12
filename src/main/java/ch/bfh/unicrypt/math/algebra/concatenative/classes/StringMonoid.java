@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Alphabet;
 import ch.bfh.unicrypt.math.utility.RandomUtil;
@@ -92,8 +91,8 @@ public class StringMonoid
 	}
 
 	@Override
-	protected StringElement abstractApply(Element element1, Element element2) {
-		return this.standardGetElement(((StringElement) element1).getString() + ((StringElement) element2).getString());
+	protected StringElement abstractApply(StringElement element1, StringElement element2) {
+		return this.standardGetElement(element1.getString() + element2.getString());
 	}
 
 	@Override

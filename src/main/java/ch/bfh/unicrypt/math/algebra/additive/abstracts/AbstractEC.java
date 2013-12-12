@@ -2,7 +2,6 @@ package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
@@ -56,17 +55,11 @@ public abstract class AbstractEC<E extends AbstractECElement, F extends FiniteFi
 	}
 
 	@Override
-	protected boolean abstractIsGenerator(Element element) {
+	protected boolean abstractIsGenerator(E element) {
 		E e = (E) element;
 		e = (E) e.selfApply(this.getOrder());
 		return MathUtil.isPrime(this.getOrder()) && e.isZero();
 	}
-
-	@Override
-	protected abstract E abstractInvert(Element element);
-
-	@Override
-	protected abstract E abstractGetIdentityElement();
 
 	@Override
 	protected BigInteger abstractGetOrder() {

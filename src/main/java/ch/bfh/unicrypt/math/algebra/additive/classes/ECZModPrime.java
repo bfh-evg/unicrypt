@@ -3,7 +3,6 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Random;
@@ -23,22 +22,20 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModPrimeElement abstractApply(Element element1, Element element2) {
+	protected ECZModPrimeElement abstractApply(ECZModPrimeElement element1, ECZModPrimeElement element2) {
 		ZModElement s, rx, ry, px, py, qx, qy;
-		ECZModPrimeElement p = (ECZModPrimeElement) element1;
-		ECZModPrimeElement q = (ECZModPrimeElement) element2;
-		px = p.getX();
-		py = p.getY();
-		qx = q.getX();
-		qy = q.getY();
+		px = element1.getX();
+		py = element1.getY();
+		qx = element2.getX();
+		qy = element2.getY();
 
-		if (p.isIdentity()) {
-			return q;
+		if (element1.isIdentity()) {
+			return element2;
 		} else {
-			if (q.isIdentity()) {
-				return p;
+			if (element2.isIdentity()) {
+				return element1;
 			} else {
-				if (p.isEqual(q.invert())) {
+				if (element1.isEqual(element2.invert())) {
 					return this.getIdentityElement();
 				} else {
 					if (element1.isEqual(element2)) {
@@ -61,14 +58,11 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModPrimeElement abstractInvert(Element element) {
-		ECZModPrimeElement r = (ECZModPrimeElement) element;
-
-		if (r.isZero()) {
+	protected ECZModPrimeElement abstractInvert(ECZModPrimeElement element) {
+		if (element.isZero()) {
 			return this.getIdentityElement();
 		}
-
-		return new ECZModPrimeElement(this, r.getX(), r.getY().invert());
+		return new ECZModPrimeElement(this, element.getX(), element.getY().invert());
 	}
 
 	@Override

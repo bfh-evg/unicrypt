@@ -60,7 +60,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement>
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractIsGenerator(element);
+		return this.abstractIsGenerator((E) element);
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
@@ -107,6 +107,6 @@ public abstract class AbstractCyclicRing<E extends DualisticElement>
 	//
 	protected abstract E abstractGetDefaultGenerator();
 
-	protected abstract boolean abstractIsGenerator(Element element);
+	protected abstract boolean abstractIsGenerator(E element);
 
 }
