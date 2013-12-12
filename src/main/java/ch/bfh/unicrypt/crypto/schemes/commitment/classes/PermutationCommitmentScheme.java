@@ -16,7 +16,14 @@ import ch.bfh.unicrypt.math.random.RandomOracle;
 import java.lang.reflect.Array;
 import java.util.Random;
 
-// RS: ProductZModPrime does not exist, so ProductGroup
+//
+//
+//
+// @see [Wik09] Construction 1: Pedersen Commitment
+// @see [TW10]  Matrix Commitment
+//
+// -> Permutation commitment is equal to the columnwise commitment to a permutation matrix
+//
 public class PermutationCommitmentScheme
 	   extends AbstractRandomizedCommitmentScheme<PermutationGroup, PermutationElement, ProductGroup, Tuple, ProductGroup> {
 
@@ -85,7 +92,7 @@ public class PermutationCommitmentScheme
 
 		@Override
 		protected Tuple abstractApply(Pair element, Random random) {
-			final Permutation permutation = ((PermutationElement) element.getFirst()).getPermutation();
+			final Permutation permutation = ((PermutationElement) element.getFirst()).getPermutation().invert();
 			final Tuple randomizations = (Tuple) element.getSecond();
 			Element[] ret = new Element[this.messageGenerators.length];
 			for (int i = 0; i < this.messageGenerators.length; i++) {
