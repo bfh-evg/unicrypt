@@ -16,6 +16,7 @@ import java.util.Random;
  * <p>
  * <p/>
  * @param <D>
+ * @param <DE>
  * @param <CE>
  * @param <C>
  * @author R. Haenni

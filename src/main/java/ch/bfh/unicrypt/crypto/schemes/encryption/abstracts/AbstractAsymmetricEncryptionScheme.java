@@ -13,13 +13,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  *
  * @author rolfhaenni
  * @param <MS>
- * @param <ES>
  * @param <ME>
+ * @param <ES>
  * @param <EE>
  * @param <EK>
  * @param <DK>
+ * @param <KG>
  */
-public abstract class AbstractAsymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, EK extends Set, DK extends Set>
+public abstract class AbstractAsymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, EK extends Set, DK extends Set, KG extends KeyPairGenerator>
 			 extends AbstractEncryptionScheme<MS, ME, ES, EE>
 			 implements AsymmetricEncryptionScheme {
 

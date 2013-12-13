@@ -7,7 +7,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -39,21 +38,23 @@ public class FiniteByteArrayElement
 
 	@Override
 	protected BigInteger standardGetValue() {
-		if (this.getSet().equalLength()) {
-			return new BigInteger(1, this.getByteArray());
-		}
+		int length = this.getLength();
+		int minLength = this.getSet().getMinLength();
 		BigInteger value = BigInteger.ZERO;
-		BigInteger size = BigInteger.valueOf(256);
-		for (byte b : this.getByteArray()) {
-			int intValue = b & 0xFF;
-			value = value.multiply(size).add(BigInteger.valueOf(intValue + 1));
+		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		for (int i = 0; i < length; i++) {
+			int intValue = this.getByteArray()[i] & 0xFF;
+			if (i < length - minLength) {
+				intValue++;
+			}
+			value = value.multiply(size).add(BigInteger.valueOf(intValue));
 		}
 		return value;
 	}
 
 	@Override
-	protected boolean standardIsEqual(Element element) {
-		return Arrays.equals(this.getByteArray(), ((FiniteByteArrayElement) element).getByteArray());
+	protected boolean standardIsEqual(FiniteByteArrayElement element) {
+		return Arrays.equals(this.getByteArray(), element.getByteArray());
 	}
 
 	@Override

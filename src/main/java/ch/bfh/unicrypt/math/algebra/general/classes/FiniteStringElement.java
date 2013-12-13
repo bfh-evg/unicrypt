@@ -7,7 +7,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
@@ -38,7 +37,7 @@ public class FiniteStringElement
 
 	@Override
 	protected BigInteger standardGetValue() {
-		int length = this.getString().length();
+		int length = this.getLength();
 		int minLength = this.getSet().getMinLength();
 		BigInteger value = BigInteger.ZERO;
 		BigInteger size = BigInteger.valueOf(this.getSet().getAlphabet().getSize());
@@ -53,8 +52,8 @@ public class FiniteStringElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(Element element) {
-		return this.getString().equals(((StringElement) element).getString());
+	protected boolean standardIsEqual(FiniteStringElement element) {
+		return this.getString().equals(element.getString());
 	}
 
 	@Override

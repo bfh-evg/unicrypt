@@ -80,14 +80,7 @@ public class ProductSemiGroup
 		if (!this.contains(element1) || !this.contains(element2)) {
 			throw new IllegalArgumentException();
 		}
-		int arity = this.getArity();
-		Tuple tuple1 = (Tuple) element1;
-		Tuple tuple2 = (Tuple) element2;
-		final Element[] results = new Element[arity];
-		for (int i = 0; i < arity; i++) {
-			results[i] = tuple1.getAt(i).apply(tuple2.getAt(i));
-		}
-		return this.standardGetElement(results);
+		return this.abstractApply((Tuple) element1, (Tuple) element2);
 	}
 
 	@Override
@@ -136,6 +129,15 @@ public class ProductSemiGroup
 			throw new IllegalArgumentException();
 		}
 		return this.standardMultiSelfApply(elements, amounts);
+	}
+
+	protected Tuple abstractApply(Tuple tuple1, Tuple tuple2) {
+		int arity = this.getArity();
+		final Element[] results = new Element[arity];
+		for (int i = 0; i < arity; i++) {
+			results[i] = tuple1.getAt(i).apply(tuple2.getAt(i));
+		}
+		return this.standardGetElement(results);
 	}
 
 	protected Tuple standardApply(final Element... elements) {

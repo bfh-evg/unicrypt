@@ -1,45 +1,59 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.AESKeyGenerator;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
+import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class AESEncryptionScheme
-			 extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FiniteByteArraySet> {
+			 extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FixedByteArrayKeyGenerator> {
+
+	public static final int KEY_128 = 128;
+	public static final int KEY_192 = 192;
+	public static final int KEY_256 = 256;
+	public static final int DEFAULT_KEY_LENGTH = KEY_128;
+	public static final int[] SUPPORTED_KEY_LENGTHS = {KEY_128, KEY_192, KEY_256};
 
 	public static final int AES_BLOCK_SIZE = 128;
+	public static final ByteArrayMonoid AES_MESSAGE_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
+	private final int keyLength;
 
-	private final FiniteByteArraySet byteArraySet = FiniteByteArraySet.getInstance(16, true);
-	private final ByteArrayMonoid byteArrayMonoid = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
+	protected AESEncryptionScheme(int keyLength) {
+		this.keyLength = keyLength;
+	}
+
+	public int getKeyLength() {
+		return this.keyLength;
+	}
 
 	@Override
 	protected Function abstractGetEncryptionFunction() {
-		return new AESEncryptionFunction();
+		return new AESEncryptionFunction(this.getKeyGenerator().getKeySpace());
 	}
 
 	@Override
 	protected Function abstractGetDecryptionFunction() {
-		return new AESDecryptionFunction();
+		return new AESDecryptionFunction(this.getKeyGenerator().getKeySpace());
 	}
 
 	@Override
-	protected KeyGenerator abstractGetKeyGenerator() {
-		return AESKeyGenerator.getInstance();
+	protected FixedByteArrayKeyGenerator abstractGetKeyGenerator() {
+		return FixedByteArrayKeyGenerator.getInstance(this.getKeyLength() / Byte.SIZE);
 	}
 
 	private class AESEncryptionFunction
 				 extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
-		protected AESEncryptionFunction() {
-			super(ProductSet.getInstance(byteArraySet, byteArrayMonoid), byteArrayMonoid);
+		protected AESEncryptionFunction(FixedByteArraySet keySpace) {
+			super(ProductSet.getInstance(keySpace, AES_MESSAGE_SPACE), AES_MESSAGE_SPACE);
 		}
 
 		@Override
@@ -52,8 +66,8 @@ public class AESEncryptionScheme
 	private class AESDecryptionFunction
 				 extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
-		protected AESDecryptionFunction() {
-			super(ProductSet.getInstance(byteArraySet, byteArrayMonoid), byteArrayMonoid);
+		protected AESDecryptionFunction(FixedByteArraySet keySpace) {
+			super(ProductSet.getInstance(keySpace, AES_MESSAGE_SPACE), AES_MESSAGE_SPACE);
 		}
 
 		@Override
@@ -61,6 +75,26 @@ public class AESEncryptionScheme
 			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 		}
 
+	}
+
+	private static final Map<Integer, AESEncryptionScheme> instances = new HashMap<Integer, AESEncryptionScheme>();
+
+	public static AESEncryptionScheme getInstance() {
+		return AESEncryptionScheme.getInstance(AESEncryptionScheme.DEFAULT_KEY_LENGTH);
+	}
+
+	public static AESEncryptionScheme getInstance(int keyLength) {
+		for (int length : AESEncryptionScheme.SUPPORTED_KEY_LENGTHS) {
+			if (keyLength == length) {
+				AESEncryptionScheme instance = AESEncryptionScheme.instances.get(keyLength);
+				if (instance == null) {
+					instance = new AESEncryptionScheme(keyLength);
+					AESEncryptionScheme.instances.put(keyLength, instance);
+				}
+				return instance;
+			}
+		}
+		throw new IllegalArgumentException();
 	}
 
 }

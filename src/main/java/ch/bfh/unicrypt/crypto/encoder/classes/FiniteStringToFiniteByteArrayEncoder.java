@@ -49,15 +49,11 @@ public class FiniteStringToFiniteByteArrayEncoder
 	}
 
 	public static FiniteStringToFiniteByteArrayEncoder getInstance(FiniteStringSet finiteStringSet) {
-		return FiniteStringToFiniteByteArrayEncoder.getInstance(finiteStringSet, false);
-	}
-
-	public static FiniteStringToFiniteByteArrayEncoder getInstance(FiniteStringSet finiteStringSet, boolean equalLength) {
 		if (finiteStringSet == null) {
 			throw new IllegalArgumentException();
 		}
 		BigInteger minOrder = finiteStringSet.getOrder();
-		return new FiniteStringToFiniteByteArrayEncoder(finiteStringSet, FiniteByteArraySet.getInstance(minOrder, equalLength));
+		return new FiniteStringToFiniteByteArrayEncoder(finiteStringSet, FiniteByteArraySet.getInstance(minOrder));
 	}
 
 	public static FiniteStringToFiniteByteArrayEncoder getInstance(FiniteByteArraySet finiteByteArraySet, Alphabet alphabet) {

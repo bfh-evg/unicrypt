@@ -6,7 +6,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
+import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -118,7 +118,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		}
 		MessageDigest messageDigest = hashMethod.getMessageDigest();
 		messageDigest.reset();
-		return FiniteByteArraySet.getInstance(hashMethod.getLength(), true).getElement(messageDigest.digest(this.getValue().toByteArray()));
+		return FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getValue().toByteArray()));
 	}
 
 	//
@@ -250,7 +250,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		if (!this.getSet().isEqual(element.getSet())) {
 			return false;
 		}
-		return this.standardIsEqual(element);
+		return this.standardIsEqual((E) element);
 	}
 
 	//
@@ -260,7 +260,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		throw new UnsupportedOperationException();
 	}
 
-	protected boolean standardIsEqual(Element element) {
+	protected boolean standardIsEqual(E element) {
 		return this.getValue().equals(element.getValue());
 	}
 

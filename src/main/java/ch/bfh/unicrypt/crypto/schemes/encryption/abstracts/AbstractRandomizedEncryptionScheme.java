@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.RandomizedEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -17,12 +18,14 @@ import java.util.Random;
  * @param <ME>
  * @param <ES>
  * @param <EE>
+ * @param <RS>
+ * @param <RE>
  * @param <EK>
  * @param <DK>
- * @param <RS>
+ * @param <KG>
  */
-public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, RS extends Set, RE extends Element, EK extends Set, DK extends Set>
-			 extends AbstractAsymmetricEncryptionScheme<MS, ME, ES, EE, EK, DK>
+public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, RS extends Set, RE extends Element, EK extends Set, DK extends Set, KG extends KeyPairGenerator>
+			 extends AbstractAsymmetricEncryptionScheme<MS, ME, ES, EE, EK, DK, KG>
 			 implements RandomizedEncryptionScheme {
 
 	@Override

@@ -19,24 +19,28 @@ import java.util.Random;
 public class FiniteByteArraySet
 			 extends AbstractSet<FiniteByteArrayElement> {
 
-	private final int length;
-	private final boolean equalLength;
+	private final int minLength;
+	private final int maxLength;
 
-	private FiniteByteArraySet(int length, boolean equalLength) {
-		this.length = length;
-		this.equalLength = equalLength;
+	protected FiniteByteArraySet(int minLength, int maxLength) {
+		this.minLength = minLength;
+		this.maxLength = maxLength;
 	}
 
-	public int getLength() {
-		return this.length;
+	public int getMinLength() {
+		return this.minLength;
 	}
 
-	public boolean equalLength() {
-		return this.equalLength;
+	public int getMaxLength() {
+		return this.maxLength;
+	}
+
+	public boolean fixedLength() {
+		return this.getMinLength() == this.getMaxLength();
 	}
 
 	public final FiniteByteArrayElement getElement(final byte[] bytes) {
-		if (bytes == null || bytes.length > this.getLength() || (this.equalLength() && bytes.length < this.getLength())) {
+		if (bytes == null || bytes.length < this.getMinLength() || bytes.length > this.getMaxLength()) {
 			throw new IllegalArgumentException();
 		}
 		return this.standardGetElement(bytes);
@@ -48,19 +52,15 @@ public class FiniteByteArraySet
 
 	@Override
 	protected FiniteByteArrayElement abstractGetElement(BigInteger value) {
-		LinkedList<Byte> byteList = new LinkedList<Byte>();
+		int minLength = this.getMinLength();
 		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
-		while (!value.equals(BigInteger.ZERO)) {
-			if (!this.equalLength()) {
+		LinkedList<Byte> byteList = new LinkedList<Byte>();
+		while (!value.equals(BigInteger.ZERO) || byteList.size() < minLength) {
+			if (byteList.size() >= minLength) {
 				value = value.subtract(BigInteger.ONE);
 			}
 			byteList.addFirst(value.mod(size).byteValue());
 			value = value.divide(size);
-		}
-		if (this.equalLength()) {
-			while (byteList.size() < this.getLength()) {
-				byteList.addFirst((byte) 0);
-			}
 		}
 		return this.standardGetElement(ArrayUtil.byteListToByteArray(byteList));
 	}
@@ -68,68 +68,60 @@ public class FiniteByteArraySet
 	@Override
 	protected BigInteger abstractGetOrder() {
 		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
-		if (this.equalLength) {
-			return size.pow(this.getLength());
-		}
 		BigInteger order = BigInteger.ONE;
-		for (int i = 0; i < this.getLength(); i++) {
+		for (int i = 0; i < this.getMaxLength() - this.getMinLength(); i++) {
 			order = order.multiply(size).add(BigInteger.ONE);
 		}
-		return order;
+		return order.multiply(size.pow(this.getMinLength()));
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetRandomElement(Random random
-	) {
+	protected FiniteByteArrayElement abstractGetRandomElement(Random random) {
 		return this.abstractGetElement(RandomUtil.getRandomBigInteger(this.getOrder().subtract(BigInteger.ONE), random));
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value
-	) {
+	protected boolean abstractContains(BigInteger value) {
 		return (value.signum() >= 0) && (value.compareTo(this.getOrder()) < 0);
 	}
 
 	@Override
-	public boolean standardIsEqual(final Set set
-	) {
+	public boolean standardIsEqual(final Set set) {
 		final FiniteByteArraySet other = (FiniteByteArraySet) set;
-		return this.getLength() == other.getLength() && this.equalLength() == other.equalLength();
+		return this.getMinLength() == other.getMinLength() && this.getMaxLength() == other.getMaxLength();
 	}
 
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static FiniteByteArraySet getInstance(final int length) {
-		return FiniteByteArraySet.getInstance(length, false);
+	public static FiniteByteArraySet getInstance(final int maxLength) {
+		return FiniteByteArraySet.getInstance(0, maxLength);
 	}
 
-	public static FiniteByteArraySet getInstance(final int length, final boolean equalLength) {
-		if (length < 0) {
+	public static FiniteByteArraySet getInstance(final int minLength, final int maxLength) {
+		if (minLength < 0 || maxLength < minLength) {
 			throw new IllegalArgumentException();
 		}
-		return new FiniteByteArraySet(length, equalLength);
+		return new FiniteByteArraySet(minLength, maxLength);
 	}
 
 	public static FiniteByteArraySet getInstance(final BigInteger minOrder) {
-		return FiniteByteArraySet.getInstance(minOrder, false);
+		return FiniteByteArraySet.getInstance(minOrder, 0);
 	}
 
-	public static FiniteByteArraySet getInstance(final BigInteger minOrder, boolean equalLength) {
-		if (minOrder == null || minOrder.signum() < 0) {
+	public static FiniteByteArraySet getInstance(final BigInteger minOrder, int minLength) {
+		if (minOrder == null || minOrder.signum() < 0 || minLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		int length = 0;
+		int maxLength = minLength;
 		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
-		BigInteger order = BigInteger.ONE;
-		while (order.compareTo(minOrder) < 0) {
-			order = order.multiply(size);
-			if (equalLength) {
-				order = order.add(BigInteger.ONE);
-			}
-			length++;
+		BigInteger order1 = size.pow(minLength);
+		BigInteger order2 = BigInteger.ONE;
+		while (order1.multiply(order2).compareTo(minOrder) < 0) {
+			order2 = order2.multiply(size).add(BigInteger.ONE);
+			maxLength++;
 		}
-		return new FiniteByteArraySet(length, equalLength);
+		return new FiniteByteArraySet(minLength, maxLength);
 	}
 
 }

@@ -7,7 +7,6 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Map;
@@ -84,8 +83,8 @@ public class PolynomialElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(Element element) {
-		return this.coefficients.equals(((PolynomialElement) element).coefficients);
+	protected boolean standardIsEqual(PolynomialElement element) {
+		return this.coefficients.equals(element.coefficients);
 	}
 
 	@Override

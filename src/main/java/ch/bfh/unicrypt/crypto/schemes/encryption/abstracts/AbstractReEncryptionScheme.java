@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -25,12 +26,14 @@ import java.util.Random;
  * @param <ES>
  * @param <ME>
  * @param <EE>
+ * @param <RS>
+ * @param <RE>
  * @param <EK>
  * @param <DK>
- * @param <RS>
+ * @param <KG>
  */
-public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends Element, ES extends Monoid, EE extends Element, RS extends Monoid, RE extends Element, EK extends Set, DK extends Set>
-			 extends AbstractRandomizedEncryptionScheme<MS, ME, ES, EE, RS, RE, EK, DK>
+public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends Element, ES extends Monoid, EE extends Element, RS extends Monoid, RE extends Element, EK extends Set, DK extends Set, KG extends KeyPairGenerator>
+			 extends AbstractRandomizedEncryptionScheme<MS, ME, ES, EE, RS, RE, EK, DK, KG>
 			 implements ReEncryptionScheme {
 
 	private Function identityEncryptionFunction;

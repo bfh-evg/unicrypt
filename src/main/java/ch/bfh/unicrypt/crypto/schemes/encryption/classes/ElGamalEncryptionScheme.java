@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.ElGamalKeyPairGenerator;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractReEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -33,7 +32,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <ME>
  */
 public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
-			 extends AbstractReEncryptionScheme<MS, ME, ProductGroup, Pair, ZModPrime, ZModElement, CyclicGroup, ZModPrime> {
+			 extends AbstractReEncryptionScheme<MS, ME, ProductGroup, Pair, ZModPrime, ZModElement, CyclicGroup, ZModPrime, ElGamalKeyPairGenerator> {
 
 	private final MS cyclicGroup;
 	private final ME generator;
@@ -79,7 +78,7 @@ public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
 	}
 
 	@Override
-	protected KeyPairGenerator abstractGetKeyPairGenerator() {
+	protected ElGamalKeyPairGenerator abstractGetKeyPairGenerator() {
 		return ElGamalKeyPairGenerator.getInstance(this.getGenerator());
 	}
 

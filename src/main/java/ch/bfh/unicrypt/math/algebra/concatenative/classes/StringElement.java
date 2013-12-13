@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
@@ -49,8 +48,8 @@ public class StringElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(Element element) {
-		return this.getString().equals(((StringElement) element).getString());
+	protected boolean standardIsEqual(StringElement element) {
+		return this.getString().equals(element.getString());
 	}
 
 	@Override

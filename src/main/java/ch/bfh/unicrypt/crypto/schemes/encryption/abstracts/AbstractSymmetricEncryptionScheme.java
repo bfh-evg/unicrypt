@@ -13,19 +13,21 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  *
  * @author rolfhaenni
  * @param <MS>
- * @param <ES>
  * @param <ME>
+ * @param <ES>
  * @param <EE>
  * @param <KS>
+ * @param <KE>
+ * @param <KG>
  */
-public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, KS extends Set>
+public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, KS extends Set, KG extends KeyGenerator>
 			 extends AbstractEncryptionScheme<MS, ME, ES, EE>
 			 implements SymmetricEncryptionScheme {
 
-	private KeyGenerator keyGenerator;
+	private KG keyGenerator;
 
 	@Override
-	public final KeyGenerator getKeyGenerator() {
+	public final KG getKeyGenerator() {
 		if (this.keyGenerator == null) {
 			this.keyGenerator = this.abstractGetKeyGenerator();
 		}
@@ -42,6 +44,6 @@ public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME exten
 		return (KS) this.getKeyGenerator().getKeySpace();
 	}
 
-	protected abstract KeyGenerator abstractGetKeyGenerator();
+	protected abstract KG abstractGetKeyGenerator();
 
 }

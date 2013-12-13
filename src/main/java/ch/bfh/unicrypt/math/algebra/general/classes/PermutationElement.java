@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -35,8 +34,8 @@ public class PermutationElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(Element element) {
-		return this.getPermutation().equals(((PermutationElement) element).getPermutation());
+	protected boolean standardIsEqual(PermutationElement element) {
+		return this.getPermutation().equals(element.getPermutation());
 	}
 
 	@Override

@@ -116,10 +116,9 @@ public class Tuple
 	}
 
 	@Override
-	protected boolean standardIsEqual(Element element) {
-		Tuple other = (Tuple) element;
+	protected boolean standardIsEqual(Tuple element) {
 		for (int i = 0; i < this.getArity(); i++) {
-			if (!this.getAt(i).isEqual(other.getAt(i))) {
+			if (!this.getAt(i).isEqual(element.getAt(i))) {
 				return false;
 			}
 		}

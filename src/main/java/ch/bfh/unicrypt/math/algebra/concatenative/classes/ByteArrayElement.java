@@ -5,7 +5,6 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -50,8 +49,8 @@ public class ByteArrayElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(Element element) {
-		return Arrays.equals(this.getByteArray(), ((ByteArrayElement) element).getByteArray());
+	protected boolean standardIsEqual(ByteArrayElement element) {
+		return Arrays.equals(this.getByteArray(), element.getByteArray());
 	}
 
 	@Override
