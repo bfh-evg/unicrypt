@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ElementChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.ShuffleProofGenerator;
@@ -65,7 +65,7 @@ public class ShuffleProofGeneratorTest {
 
 		// Shuffle Proof Generator
 		SigmaChallengeGenerator scg = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ElementChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scg, ecg, G_q, size, encryptionPK, ro);
 
 		// Proof and verify
@@ -109,7 +109,7 @@ public class ShuffleProofGeneratorTest {
 
 		// Shuffle Proof Generator
 		SigmaChallengeGenerator scg = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ElementChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scg, ecg, G_q, size, encryptionPK, ro);
 
 		// Proof and verify
@@ -152,7 +152,7 @@ public class ShuffleProofGeneratorTest {
 
 		// Shuffle Proof Generator
 		SigmaChallengeGenerator scg = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ElementChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scg, ecg, G_q, size, encryptionPK, ro);
 
 		// Proof and verify
@@ -191,7 +191,7 @@ public class ShuffleProofGeneratorTest {
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = RandomOracle.DEFAULT;
 
-		final int size = 20;
+		final int size = 10;
 		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, ro);
 
@@ -216,12 +216,12 @@ public class ShuffleProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scgP = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ElementChallengeGenerator ecgP = PermutationCommitmentProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecgP = PermutationCommitmentProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scgP, ecgP, G_q, size, ro);
 
 		// Shuffle Proof Generator
 		SigmaChallengeGenerator scgS = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ElementChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionPK, ro);
 
 		// Proof
