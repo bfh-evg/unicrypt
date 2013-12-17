@@ -125,25 +125,27 @@ public class PermutationCommitmentProofGenerator
 		final Tuple rPrimeV = Tuple.getInstance(rPrimes);
 		final Tuple rPPrimeV = PermutationCommitmentProofGenerator.computeRPrimePrime(ePrimeV, rPrimeV);
 
-		// Compute commitments c'_1,...,c'_N
+		// Compute commitments c'_i and multiplied e-values e''_i
 		final PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(this.cyclicGroup, this.randomOracle);
 		final Element[] cPrimes = new Element[this.size];
-		final Element[] ePrimeMuls = new Element[this.size];
+		final Element[] ePPrimes = new Element[this.size];
 		Element eProd = this.cyclicGroup.getZModOrder().getElement(1);
 		for (int i = 0; i < this.size; i++) {
 			eProd = eProd.selfApply(ePrimeV.getAt(i));
-			ePrimeMuls[i] = eProd;
-			cPrimes[i] = pcs.commit(eProd, rPrimeV.getAt(i));
+			ePPrimes[i] = eProd;
+			cPrimes[i] = pcs.commit(eProd, rPrimeV.getAt(i));    //   [2n]
 		}
-		final Tuple ePrimeMulV = Tuple.getInstance(ePrimeMuls);
+		final Tuple ePPrimeV = Tuple.getInstance(ePPrimes);
 		final Tuple cPrimeV = Tuple.getInstance(cPrimes);
 
 		// Create sigma proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponceSpace(), this.getCommitmentSpace(), this.randomOracle, cPrimeV);
-		Tuple cV = f.apply(Tuple.getInstance(v, w, rV, rPrimeV, rPPrimeV, ePrimeV, ePrimeMulV));
+		Tuple cV = f.computePublicValues(v, w, rV, ePrimeV);    //    [3n]
 		PreimageProofGenerator ppg = PreimageProofGenerator.getInstance(this.sigmaChallengeGenerator, f);
-		Triple preimageProof = ppg.generate(Tuple.getInstance(v, w, rV, rPrimeV, rPPrimeV, ePrimeV, ePrimeMulV), cV, random);
-
+		Triple preimageProof = ppg.generate(Tuple.getInstance(v, w, rV, rPrimeV, rPPrimeV, ePrimeV, ePPrimeV), cV, random);
+		//                                                          [7n-2]
+		//                                                        ---------
+		//                                                         [12n-2]
 		return Pair.getInstance(preimageProof, cV);
 	}
 
@@ -243,17 +245,22 @@ public class PermutationCommitmentProofGenerator
 	private class PreimageProofFunction
 		   extends AbstractFunction<ProductGroup, Tuple, ProductGroup, Tuple> {
 
-		private final CyclicGroup cyclicGroup;
 		private final int size;
-		private final RandomOracle randomOracle;
 		private final Tuple cPrimeV;
+		private final PedersenCommitmentScheme pcs;
+		private final GeneralizedPedersenCommitmentScheme gpcs;
+		private final Element g;
 
 		protected PreimageProofFunction(CyclicGroup cyclicGroup, int size, ProductGroup domain, ProductGroup coDomain, RandomOracle randomOracle, Tuple cPrimeV) {
 			super(domain, coDomain);
-			this.cyclicGroup = cyclicGroup;
 			this.size = size;
-			this.randomOracle = randomOracle;
 			this.cPrimeV = cPrimeV;
+
+			// Prepare commitment schemes
+			this.pcs = PedersenCommitmentScheme.getInstance(cyclicGroup, randomOracle);
+			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, size, randomOracle);
+			this.g = pcs.getRandomizationGenerator();
+
 		}
 
 		@Override
@@ -266,44 +273,94 @@ public class PermutationCommitmentProofGenerator
 			final Tuple rPrimeV = (Tuple) element.getAt(3);
 			final Tuple rPPrimeV = (Tuple) element.getAt(4);
 			final Tuple ePrimeV = (Tuple) element.getAt(5);
-			final Tuple ePrimeMulV = (Tuple) element.getAt(6);
-
-			// Prepare commitment schemes
-			final PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(this.cyclicGroup, this.randomOracle);
-			final GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(this.cyclicGroup, this.size, this.randomOracle);
-			final Element g = pcs.getRandomizationGenerator();
+			final Tuple ePPrimeV = (Tuple) element.getAt(6);
 
 			// Result array
 			final Element[] cV = new Element[3 * this.size];
 
 			// COMPUTE...
-			// - Com(1, v)
-			cV[0] = gpcs.getRandomizationGenerator().selfApply(v);
+			// - Com(0, v)                          [1]
+			this.computeFirst(cV, v);
 
-			// - Com(e', w)
-			cV[1] = gpcs.commit(ePrimeV, w);
+			// - Com(e', w)                       [n+1]
+			this.computeSecond(cV, w, ePrimeV);
 
-			// - Com(e'_i+1, r_i)
+			// - Com(e'_i+1, r_i)                [2n-2]
+			this.computeThird(cV, rV, ePrimeV);
+
+			// - Com(e''_i, r'_i)                  [2n]
+			this.computeFourth(cV, rPrimeV, ePPrimeV);
+
+			// - g^(r''_i) * c'_i^(e'_i+1)       [2n-2]
+			this.computeFifth(cV, rPPrimeV, ePrimeV);
+			//                                 ---------
+			//                                   [7n-2]
+			return Tuple.getInstance(cV);
+		}
+
+		protected Tuple computePublicValues(Element v, Element w, Tuple rV, Tuple ePrimeV) {
+			// Result array
+			final Element[] cV = new Element[3 * this.size];
+
+			// COMPUTE...
+			// - Com(0, v)                          [1]
+			this.computeFirst(cV, v);
+
+			// - Com(e', w)                       [n+1]
+			this.computeSecond(cV, w, ePrimeV);
+
+			// - Com(e'_i+1, r_i)                  [2n]
+			this.computeThird(cV, rV, ePrimeV);
+
+			// - Fill in c'
+			int offset1 = this.size + 1;
+			int offset2 = 2 * this.size;
+			for (int i = 0; i < this.size; i++) {
+				cV[i + offset1] = this.cPrimeV.getAt(i);
+				if (i > 0) {
+					cV[i + offset2] = this.cPrimeV.getAt(i);
+				}
+			}
+			//                                  ---------
+			//                                     [3n]
+			return Tuple.getInstance(cV);
+		}
+
+		// Com(0, v)
+		private void computeFirst(Element[] cV, Element v) {
+			cV[0] = this.gpcs.getRandomizationGenerator().selfApply(v);
+		}
+
+		// Com(e', w)
+		private void computeSecond(Element[] cV, Element w, Tuple ePrimeV) {
+			cV[1] = this.gpcs.commit(ePrimeV, w);
+		}
+
+		// Com(e'_i+1, r_i)
+		private void computeThird(Element[] cV, Tuple rV, Tuple ePrimeV) {
 			int offset = 2;
 			for (int i = 0; i < this.size - 1; i++) {
-				cV[i + offset] = pcs.commit(ePrimeV.getAt(i + 1), rV.getAt(i));
+				cV[i + offset] = this.pcs.commit(ePrimeV.getAt(i + 1), rV.getAt(i));
 			}
+		}
 
-			// - Com(e'_1 * * * e'_i, r'_i)
-			offset += this.size - 1;
+		// Com(e''_i, r'_i)
+		private void computeFourth(Element[] cV, Tuple rPrimeV, Tuple ePPrimeV) {
+			int offset = this.size + 1;
 			for (int i = 0; i < this.size; i++) {
-				cV[i + offset] = pcs.commit(ePrimeMulV.getAt(i), rPrimeV.getAt(i));
+				cV[i + offset] = this.pcs.commit(ePPrimeV.getAt(i), rPrimeV.getAt(i));
 			}
+		}
 
-			// - g^(r''_i) * c'_i^(e'_i+1)
-			offset += this.size;
+		// g^(r''_i) * c'_i^(e'_i+1)
+		private void computeFifth(Element[] cV, Tuple rPPrimeV, Tuple ePrimeV) {
+			int offset = 2 * this.size + 1;
 			for (int i = 0; i < this.size - 1; i++) {
-				Element a1 = g.selfApply(rPPrimeV.getAt(i));
+				Element a1 = this.g.selfApply(rPPrimeV.getAt(i));
 				Element a2 = this.cPrimeV.getAt(i).selfApply(ePrimeV.getAt(i + 1));
 				cV[i + offset] = a1.apply(a2);
 			}
 
-			return Tuple.getInstance(cV);
 		}
 
 	}
