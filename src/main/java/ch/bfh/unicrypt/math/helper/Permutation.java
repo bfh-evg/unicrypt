@@ -1,8 +1,8 @@
 package ch.bfh.unicrypt.math.helper;
 
-import ch.bfh.unicrypt.math.utility.RandomUtil;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import java.util.Arrays;
-import java.util.Random;
 
 public class Permutation
 			 extends UniCrypt {
@@ -127,17 +127,20 @@ public class Permutation
 	}
 
 	public static Permutation getRandomInstance(int size) {
-		return Permutation.getRandomInstance(size, (Random) null);
+		return Permutation.getRandomInstance(size, null);
 	}
 
-	public static Permutation getRandomInstance(int size, Random random) {
+	public static Permutation getRandomInstance(int size, RandomGenerator randomGenerator) {
 		if (size < 0) {
 			throw new IllegalArgumentException();
+		}
+		if (randomGenerator == null) {
+			randomGenerator = PseudoRandomGenerator.DEFAULT;
 		}
 		int[] permutationVector = new int[size];
 		int randomIndex;
 		for (int i = 0; i < size; i++) {
-			randomIndex = RandomUtil.getRandomInteger(i, random);
+			randomIndex = randomGenerator.nextInteger(i);
 			permutationVector[i] = permutationVector[randomIndex];
 			permutationVector[randomIndex] = i;
 		}

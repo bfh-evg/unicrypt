@@ -1,5 +1,7 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -8,7 +10,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.helper.Permutation;
-import ch.bfh.unicrypt.math.random.RandomOracle;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -17,19 +18,18 @@ public class PermutationCommitmentTest {
 	final static int P = 23;
 	final private CyclicGroup G_q;
 	final private ZMod Z_q;
-	final private RandomOracle ro;
+	final private RandomReferenceString rrs;
 
 	public PermutationCommitmentTest() {
 		this.G_q = GStarModSafePrime.getInstance(this.P);
 		this.Z_q = G_q.getZModOrder();
-		this.ro = RandomOracle.DEFAULT;
+		this.rrs = PseudoRandomReferenceString.getInstance();
 
 //		System.out.println("g0: " + this.G_q.getRandomGenerator(ro.getRandom(0)));   //  6
 //		System.out.println("g1: " + this.G_q.getRandomGenerator(ro.getRandom(1)));   // 13
 //		System.out.println("g2: " + this.G_q.getRandomGenerator(ro.getRandom(2)));   //  2
 //		System.out.println("g3: " + this.G_q.getRandomGenerator(ro.getRandom(3)));   //  2
 //		System.out.println("g4: " + this.G_q.getRandomGenerator(ro.getRandom(4)));   // 18
-
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class PermutationCommitmentTest {
 		PermutationElement permutation = PermutationGroup.getInstance(pi.getSize()).getElement(pi);
 		Tuple randomizations = Tuple.getInstance(this.Z_q.getElement(2));
 
-		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.ro);
+		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
 		assertTrue(commitment.getAt(0).isEqual(this.G_q.getElement(8)));   // 6^2 *13 = 8
 	}
@@ -55,7 +55,7 @@ public class PermutationCommitmentTest {
 		PermutationElement permutation = PermutationGroup.getInstance(pi.getSize()).getElement(pi);
 		Tuple randomizations = Tuple.getInstance(this.Z_q.getElement(1), this.Z_q.getElement(2), this.Z_q.getElement(3));
 
-		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.ro);
+		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
 		assertTrue(commitment.getAt(0).isEqual(this.G_q.getElement(12)));  // 6^1 * 2 = 12
 		assertTrue(commitment.getAt(1).isEqual(this.G_q.getElement(3)));   // 6^2 * 2 =  3
@@ -70,7 +70,7 @@ public class PermutationCommitmentTest {
 		PermutationElement permutation = PermutationGroup.getInstance(pi.getSize()).getElement(pi);
 		Tuple randomizations = Tuple.getInstance(this.Z_q.getElement(1), this.Z_q.getElement(2), this.Z_q.getElement(3), this.Z_q.getElement(4));
 
-		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.ro);
+		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
 		assertTrue(commitment.getAt(0).isEqual(this.G_q.getElement(16)));  // 6^1 *18 = 16
 		assertTrue(commitment.getAt(1).isEqual(this.G_q.getElement(3)));   // 6^2 * 2 =  3

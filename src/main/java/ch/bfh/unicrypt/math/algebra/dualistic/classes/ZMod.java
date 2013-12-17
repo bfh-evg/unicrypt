@@ -4,15 +4,15 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * This class implements the cyclic group Z_n = {0,...,n-1} with the operation of addition modulo n. Its identity
@@ -116,8 +116,8 @@ public class ZMod
 	}
 
 	@Override
-	protected ZModElement abstractGetRandomElement(Random random) {
-		return this.abstractGetElement(RandomUtil.getRandomBigInteger(this.getModulus().subtract(BigInteger.ONE), random));
+	protected ZModElement abstractGetRandomElement(RandomGenerator randomGenerator) {
+		return this.abstractGetElement(randomGenerator.nextBigInteger(this.getModulus().subtract(BigInteger.ONE)));
 	}
 
 	@Override
@@ -165,15 +165,18 @@ public class ZMod
 		return instance;
 	}
 
-	public static ZMod getRandomInstance(int bitLength, Random random) {
+	public static ZMod getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
 		if (bitLength < 2) {
 			throw new IllegalArgumentException();
 		}
-		return ZMod.getInstance(RandomUtil.getRandomBigInteger(bitLength, random));
+		if (randomGenerator == null) {
+			randomGenerator = PseudoRandomGenerator.DEFAULT;
+		}
+		return ZMod.getInstance(randomGenerator.nextBigInteger(bitLength));
 	}
 
 	public static ZMod getRandomInstance(int bitLength) {
-		return ZMod.getRandomInstance(bitLength, (Random) null);
+		return ZMod.getRandomInstance(bitLength, null);
 	}
 
 }

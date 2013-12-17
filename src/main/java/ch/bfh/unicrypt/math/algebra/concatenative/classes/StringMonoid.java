@@ -4,12 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Alphabet;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  *
@@ -44,17 +43,17 @@ public class StringMonoid
 
 	@Override
 	public final StringElement getRandomElement(int length) {
-		return this.getRandomElement(length, (Random) null);
+		return this.getRandomElement(length, null);
 	}
 
 	@Override
-	public final StringElement getRandomElement(int length, Random random) {
+	public final StringElement getRandomElement(int length, RandomGenerator randomGenerator) {
 		if (length < 0 || length % this.getBlockLength() != 0) {
 			throw new IllegalArgumentException();
 		}
 		char[] chars = new char[length];
 		for (int i = 0; i < length; i++) {
-			chars[i] = this.getAlphabet().getCharacter(RandomUtil.getRandomInteger(this.getAlphabet().getSize() - 1, random));
+			chars[i] = this.getAlphabet().getCharacter(randomGenerator.nextInteger(this.getAlphabet().getSize() - 1));
 		}
 		return this.standardGetElement(new String(chars));
 	}
@@ -101,7 +100,7 @@ public class StringMonoid
 	}
 
 	@Override
-	protected StringElement abstractGetRandomElement(Random random) {
+	protected StringElement abstractGetRandomElement(RandomGenerator randomGenerator) {
 		throw new UnsupportedOperationException();
 	}
 

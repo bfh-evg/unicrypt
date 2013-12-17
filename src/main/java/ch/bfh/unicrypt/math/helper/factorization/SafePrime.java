@@ -4,39 +4,42 @@
  */
 package ch.bfh.unicrypt.math.helper.factorization;
 
-import java.math.BigInteger;
-import java.util.Random;
-
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.utility.MathUtil;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public class SafePrime extends Prime {
+public class SafePrime
+			 extends Prime {
 
-  protected SafePrime(BigInteger safePrime) {
-    super(safePrime);
-  }
+	protected SafePrime(BigInteger safePrime) {
+		super(safePrime);
+	}
 
-  public static SafePrime getInstance(int safePrime) {
-    return SafePrime.getInstance(BigInteger.valueOf(safePrime));
-  }
+	public static SafePrime getInstance(int safePrime) {
+		return SafePrime.getInstance(BigInteger.valueOf(safePrime));
+	}
 
-  public static SafePrime getInstance(BigInteger safePrime) {
-    if (!MathUtil.isSavePrime(safePrime)) {
-      throw new IllegalArgumentException();
-    }
-    return new SafePrime(safePrime);
-  }
+	public static SafePrime getInstance(BigInteger safePrime) {
+		if (!MathUtil.isSavePrime(safePrime)) {
+			throw new IllegalArgumentException();
+		}
+		return new SafePrime(safePrime);
+	}
 
-  public static SafePrime getRandomInstance(int bitLength) {
-    return SafePrime.getRandomInstance(bitLength, (Random) null);
-  }
+	public static SafePrime getRandomInstance(int bitLength) {
+		return SafePrime.getRandomInstance(bitLength, null);
+	}
 
-  public static SafePrime getRandomInstance(int bitLength, Random random) {
-    return new SafePrime(RandomUtil.getRandomSavePrime(bitLength, random));
-  }
+	public static SafePrime getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
+		if (randomGenerator == null) {
+			randomGenerator = PseudoRandomGenerator.DEFAULT;
+		}
+		return new SafePrime(randomGenerator.nextSavePrime(bitLength));
+	}
 
 }

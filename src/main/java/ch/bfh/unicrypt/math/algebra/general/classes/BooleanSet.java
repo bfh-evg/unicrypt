@@ -4,12 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  * This interface represents the group that consists of two elements only, for example TRUE and FALSE. This group is
@@ -60,15 +59,15 @@ public class BooleanSet
 	}
 
 	@Override
-	protected BooleanElement abstractGetRandomElement(Random random) {
-		return this.getElement(RandomUtil.getRandomBoolean(random));
+	protected BooleanElement abstractGetRandomElement(RandomGenerator randomGenerator) {
+		return this.getElement(randomGenerator.nextBoolean());
 	}
 
 	@Override
 	protected boolean abstractContains(BigInteger value) {
 		return value.equals(BigInteger.ZERO) || value.equals(BigInteger.ONE);
 	}
-  //
+	//
 	// STATIC FACTORY METHODS
 	//
 	private static BooleanSet instance;

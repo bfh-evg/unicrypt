@@ -4,16 +4,18 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.CompoundIterator;
-import ch.bfh.unicrypt.math.random.RandomOracle;
 import ch.bfh.unicrypt.math.utility.MathUtil;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Random;
 
 /**
  *
@@ -132,28 +134,61 @@ public class ProductCyclicGroup
 	}
 
 	@Override
-	public final Tuple getRandomGenerator(Random random) {
+	public final Tuple getRandomGenerator(RandomGenerator randomGenerator) {
 		int arity = this.getArity();
 		Element[] randomGenerators = new Element[arity];
 		for (int i = 0; i < arity; i++) {
-			randomGenerators[i] = this.getAt(i).getRandomGenerator(random);
+			randomGenerators[i] = this.getAt(i).getRandomGenerator(randomGenerator);
 		}
 		return this.standardGetElement(randomGenerators);
 	}
 
 	@Override
-	public final Tuple getIndependentGenerator(long i) {
-		return this.getIndependentGenerator(i, RandomOracle.DEFAULT);
+	public final Tuple getIndependentGenerator(int index) {
+		return this.getIndependentGenerator(index, (RandomReferenceString) null);
 	}
 
 	@Override
-	public final Tuple getIndependentGenerator(long query, RandomOracle randomOracle) {
-		int arity = this.getArity();
-		Element[] independentGenerators = new Element[arity];
-		for (int i = 0; i < arity; i++) {
-			independentGenerators[i] = this.getAt(i).getIndependentGenerator(query, randomOracle);
+	public final Tuple getIndependentGenerator(int index, RandomReferenceString randomReferenceString) {
+		return this.getIndependentGenerators(index, randomReferenceString)[index];
+	}
+
+	@Override
+	public final Tuple[] getIndependentGenerators(int maxIndex) {
+		return this.getIndependentGenerators(maxIndex, (RandomReferenceString) null);
+	}
+
+	@Override
+	public final Tuple[] getIndependentGenerators(int maxIndex, RandomReferenceString randomReferenceString) {
+		return this.getIndependentGenerators(0, maxIndex, randomReferenceString);
+	}
+
+	@Override
+	public final Tuple[] getIndependentGenerators(int minIndex, int maxIndex) {
+		return this.getIndependentGenerators(minIndex, maxIndex, (RandomReferenceString) null);
+	}
+
+	@Override
+	public final Tuple[] getIndependentGenerators(int minIndex, int maxIndex, RandomReferenceString randomReferenceString) {
+		if (minIndex < 0 || maxIndex < minIndex) {
+			throw new IndexOutOfBoundsException();
 		}
-		return this.standardGetElement(independentGenerators);
+		if (randomReferenceString == null) {
+			randomReferenceString = PseudoRandomReferenceString.getInstance();
+		}
+		// The following line is necessary for creating a generic array
+		Tuple[] generators = (Tuple[]) Array.newInstance(this.getIdentityElement().getClass(), maxIndex - minIndex + 1);
+		for (int i = 0; i <= maxIndex; i++) {
+			Tuple generator = this.standardGetIndependentGenerator(randomReferenceString);
+			if (i >= minIndex) {
+				generators[i - minIndex] = generator;
+			}
+		}
+		return generators;
+	}
+
+	protected Tuple standardGetIndependentGenerator(RandomReferenceString randomReferenceString) {
+		return this.getRandomGenerator(randomReferenceString);
 	}
 
 	@Override

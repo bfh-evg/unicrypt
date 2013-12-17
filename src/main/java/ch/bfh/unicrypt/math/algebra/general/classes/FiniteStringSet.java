@@ -4,12 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Alphabet;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  *
@@ -81,8 +80,8 @@ public class FiniteStringSet
 	}
 
 	@Override
-	protected FiniteStringElement abstractGetRandomElement(Random random) {
-		return this.abstractGetElement(RandomUtil.getRandomBigInteger(this.getOrder().subtract(BigInteger.ONE), random));
+	protected FiniteStringElement abstractGetRandomElement(RandomGenerator randomGenerator) {
+		return this.abstractGetElement(randomGenerator.nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 
 	@Override

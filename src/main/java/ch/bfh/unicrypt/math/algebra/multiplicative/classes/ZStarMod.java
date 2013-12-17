@@ -1,14 +1,14 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  * This class implements the group of integers Z*_n with the operation of multiplication modulo n. Its identity element
@@ -121,10 +121,10 @@ public class ZStarMod
 	}
 
 	@Override
-	protected ZStarModElement abstractGetRandomElement(final Random random) {
+	protected ZStarModElement abstractGetRandomElement(final RandomGenerator randomGenerator) {
 		BigInteger randomValue;
 		do {
-			randomValue = RandomUtil.getRandomBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE), random);
+			randomValue = randomGenerator.nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
 		} while (!this.contains(randomValue));
 		return this.abstractGetElement(randomValue);
 	}
@@ -193,6 +193,7 @@ public class ZStarMod
 	 * the given prime factorization. This always leads to a group of known order.
 	 * <p>
 	 * @param factorization The given prime factorization
+	 * @return
 	 * @throws IllegalArgumentException if {@literal primeFactorization} is null
 	 * @throws IllegalArgumentException if {@literal primeFactorization.getValue()} is 1
 	 */
@@ -203,15 +204,18 @@ public class ZStarMod
 		return new ZStarMod(factorization);
 	}
 
-	public static ZStarMod getRandomInstance(int bitLength, Random random) {
+	public static ZStarMod getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
 		if (bitLength < 1) {
 			throw new IllegalArgumentException();
 		}
-		return ZStarMod.getInstance(RandomUtil.getRandomBigInteger(bitLength, random));
+		if (randomGenerator == null) {
+			randomGenerator = PseudoRandomGenerator.DEFAULT;
+		}
+		return ZStarMod.getInstance(randomGenerator.nextBigInteger(bitLength));
 	}
 
 	public static ZStarMod getRandomInstance(int bitLength) {
-		return ZStarMod.getRandomInstance(bitLength, (Random) null);
+		return ZStarMod.getRandomInstance(bitLength, null);
 	}
 
 }

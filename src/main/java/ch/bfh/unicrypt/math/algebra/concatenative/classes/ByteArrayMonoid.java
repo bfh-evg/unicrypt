@@ -4,16 +4,15 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
-import ch.bfh.unicrypt.math.utility.RandomUtil;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Random;
 
 /**
  *
@@ -42,17 +41,17 @@ public class ByteArrayMonoid
 
 	@Override
 	public final ByteArrayElement getRandomElement(int length) {
-		return this.getRandomElement(length, (Random) null);
+		return this.getRandomElement(length, null);
 	}
 
 	@Override
-	public final ByteArrayElement getRandomElement(int length, Random random) {
+	public final ByteArrayElement getRandomElement(int length, RandomGenerator randomGenerator) {
 		if (length < 0 || length % this.getBlockLength() != 0) {
 			throw new IllegalArgumentException();
 		}
 		byte[] bytes = new byte[length];
 		for (int i = 0; i < length; i++) {
-			bytes[i] = RandomUtil.getRandomByte(random);
+			bytes[i] = randomGenerator.nextByte();
 		}
 		return this.standardGetElement(bytes);
 	}
@@ -103,7 +102,7 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayElement abstractGetRandomElement(Random random) {
+	protected ByteArrayElement abstractGetRandomElement(RandomGenerator randomGenerator) {
 		throw new UnsupportedOperationException();
 	}
 

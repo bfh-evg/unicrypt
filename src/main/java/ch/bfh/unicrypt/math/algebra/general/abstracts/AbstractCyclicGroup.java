@@ -1,12 +1,15 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.random.RandomOracle;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Random;
 
 public abstract class AbstractCyclicGroup<E extends Element>
 			 extends AbstractGroup<E>
@@ -28,21 +31,55 @@ public abstract class AbstractCyclicGroup<E extends Element>
 	}
 
 	@Override
-	public final E getRandomGenerator(Random random) {
-		return this.standardGetRandomGenerator(random);
-	}
-
-	@Override
-	public final E getIndependentGenerator(long query) {
-		return this.getIndependentGenerator(query, RandomOracle.DEFAULT);
-	}
-
-	@Override
-	public final E getIndependentGenerator(long query, RandomOracle randomOracle) {
-		if (randomOracle == null) {
-			throw new IllegalArgumentException();
+	public final E getRandomGenerator(RandomGenerator randomGenerator) {
+		if (randomGenerator == null) {
+			randomGenerator = PseudoRandomGenerator.DEFAULT;
 		}
-		return this.standardGetRandomGenerator(randomOracle.getRandom(query));
+		return this.standardGetRandomGenerator(randomGenerator);
+	}
+
+	@Override
+	public final E getIndependentGenerator(int index) {
+		return this.getIndependentGenerator(index, (RandomReferenceString) null);
+	}
+
+	@Override
+	public final E getIndependentGenerator(int index, RandomReferenceString randomReferenceString) {
+		return this.getIndependentGenerators(index, randomReferenceString)[index];
+	}
+
+	@Override
+	public final E[] getIndependentGenerators(int maxIndex) {
+		return this.getIndependentGenerators(maxIndex, (RandomReferenceString) null);
+	}
+
+	@Override
+	public final E[] getIndependentGenerators(int maxIndex, RandomReferenceString randomReferenceString) {
+		return this.getIndependentGenerators(0, maxIndex, randomReferenceString);
+	}
+
+	@Override
+	public final E[] getIndependentGenerators(int minIndex, int maxIndex) {
+		return this.getIndependentGenerators(minIndex, maxIndex, (RandomReferenceString) null);
+	}
+
+	@Override
+	public final E[] getIndependentGenerators(int minIndex, int maxIndex, RandomReferenceString randomReferenceString) {
+		if (minIndex < 0 || maxIndex < minIndex) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (randomReferenceString == null) {
+			randomReferenceString = PseudoRandomReferenceString.getInstance();
+		}
+		// The following line is necessary for creating a generic array
+		E[] generators = (E[]) Array.newInstance(this.getIdentityElement().getClass(), maxIndex - minIndex + 1);
+		for (int i = 0; i <= maxIndex; i++) {
+			E generator = this.standardGetIndependentGenerator(randomReferenceString);
+			if (i >= minIndex) {
+				generators[i - minIndex] = generator;
+			}
+		}
+		return generators;
 	}
 
 	@Override
@@ -54,12 +91,16 @@ public abstract class AbstractCyclicGroup<E extends Element>
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected E standardGetRandomGenerator(Random random) {
+	protected E standardGetRandomGenerator(RandomGenerator randomGenerator) {
 		E element;
 		do {
-			element = this.getRandomElement(random);
+			element = this.getRandomElement(randomGenerator);
 		} while (!this.isGenerator(element));
 		return element;
+	}
+
+	protected E standardGetIndependentGenerator(RandomReferenceString randomReferenceString) {
+		return this.standardGetRandomGenerator(randomReferenceString);
 	}
 
 	@Override
