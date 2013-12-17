@@ -28,32 +28,37 @@ public interface Set {
 	public static final BigInteger UNKNOWN_ORDER = BigInteger.ZERO;
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if this set is an instance of {@link SemiGroup}.
+	 * <p>
+	 * @return {@code true} if this set is a semigroup
 	 */
 	public boolean isSemiGroup();
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if this set is an instance of {@link Monoid}.
+	 * <p>
+	 * @return {@code true} if this set is a monoid
 	 */
 	public boolean isMonoid();
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if this set is an instance of {@link Group}.
+	 * <p>
+	 * @return {@code true} if this set is a group
 	 */
 	public boolean isGroup();
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if this set is an instance of {@link SemiRing}.
+	 * <p>
+	 * @return {@code true} if this set is a semiring
 	 */
 	public boolean isSemiRing();
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if this set is an instance of {@link Ring}.
+	 * <p>
+	 * @return {@code true} if this set is a ring
 	 */
 	public boolean isRing();
 
@@ -65,44 +70,51 @@ public interface Set {
 	public boolean isField();
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if this set is an instance of {@link CyclicGroup}.
+	 * <p>
+	 * @return {@code true} if this set is cyclic
 	 */
 	public boolean isCyclic();
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if this set is an instance of {@link AdditiveSemiGroup}.
+	 * <p>
+	 * @return {@code true} if this set is additive
 	 */
 	public boolean isAdditive();
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if this set is an instance of {@link MultiplicativeSemiGroup}.
+	 * <p>
+	 * @return {@code true} if this set is multiplicative
 	 */
 	public boolean isMultiplicative();
 
 	/**
-	 *
-	 * @return
+	 * Returns {@code true} if this set is an instance of {@link ConcatenativeSemiGroup}.
+	 * <p>
+	 * @return {@code true} if this set is concatenative
 	 */
 	public boolean isConcatenative();
 
 	/**
-	 *
-	 * @return
+	 * TODO Returns {@code true} if this set is an instance of {@link Compound}.
+	 * <p>
+	 * @return {@code true} if this set is compound
 	 */
 	public boolean isProduct();
 
 	/**
-	 *
-	 * @return
+	 * TODO Returns {@code true} if this set is of finite order.
+	 * <p>
+	 * @return {@code true} if this set is finite
 	 */
 	public boolean isFinite();
 
 	/**
-	 *
-	 * @return
+	 * TODO Returns {@code true} if this set has a known order.
+	 * <p>
+	 * @return {@code true} if this set has a known order
 	 */
 	public boolean hasKnownOrder();
 
@@ -111,26 +123,29 @@ public interface Set {
 	 * infinite, {@link #INFINITE_ORDER} is returned.
 	 * <p>
 	 * @see "Handbook of Applied Cryptography, Definition 2.163"
-	 * @return The group order.
+	 * @return The group order
 	 */
 	public BigInteger getOrder();
 
 	/**
-	 * Returns a lower bound for the group order in case the exact group order is unknown. The least return value is 1.
-	 * Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
+	 * TODO Returns a lower bound for the group order in case the exact group order is unknown. The least return value is
+	 * 0. Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
 	 * <p>
-	 * @return A lower bound for the group order.
+	 * @return A lower bound for the group order
 	 */
 	public BigInteger getOrderLowerBound();
 
 	/**
-	 *
-	 * @return
+	 * TODO Returns an upper bound for the group order in case the exact group order is unknown. The heighest return value
+	 * is -1. Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
+	 * <p>
+	 * @return A upper bound for the group order
 	 */
 	public BigInteger getOrderUpperBound();
 
 	/**
-	 *
+	 * TODO Returns the minimal order. The least value is 0.
+	 * <p>
 	 * @return
 	 */
 	public BigInteger getMinimalOrder();
@@ -216,7 +231,7 @@ public interface Set {
 	 * exists).
 	 * <p>
 	 * @param element The given group element
-	 * @return The corresponding group element of {@literal this} group
+	 * @return The corresponding group element of this set
 	 * @throws IllegalArgumentException if {@literal element} is null or if no such element exists in {@literal this}
 	 *                                  group
 	 */
