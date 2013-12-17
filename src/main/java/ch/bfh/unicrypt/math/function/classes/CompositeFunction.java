@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 /**
  * This class represents the concept of a composite function f:X_1->Y_n. It consists of multiple internal functions
@@ -29,10 +29,10 @@ public final class CompositeFunction
 	}
 
 	@Override
-	protected final Element abstractApply(final Element element, final Random random) {
+	protected final Element abstractApply(final Element element, final RandomGenerator randomGenerator) {
 		Element result = element;
 		for (Function function : this) {
-			result = function.apply(result, random);
+			result = function.apply(result, randomGenerator);
 		}
 		return result;
 	}

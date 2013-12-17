@@ -5,6 +5,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -12,7 +13,6 @@ import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Random;
 
 /**
  *
@@ -56,7 +56,12 @@ public class Subset
 
 	@Override
 	protected boolean abstractContains(BigInteger value) {
-		return this.getSuperset().contains(value);
+		for (Element element : this.hashSet) {
+			if (element.getValue().equals(value)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -70,8 +75,8 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetRandomElement(Random random) {
-		return this.getSuperset().getRandomElement(random);
+	protected Element abstractGetRandomElement(RandomGenerator randomGenerator) {
+		return this.getElements()[randomGenerator.nextInteger(this.hashSet.size() - 1)];
 	}
 
 	public static Subset getInstance(Set superSet, Element... elements) {

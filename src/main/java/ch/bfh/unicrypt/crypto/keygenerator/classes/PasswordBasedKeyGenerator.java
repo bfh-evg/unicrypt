@@ -6,9 +6,9 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import java.util.Random;
 
 /**
  *
@@ -23,7 +23,7 @@ public class PasswordBasedKeyGenerator
 	}
 
 	@Override
-	public ZModElement generateKey(Random random) {
+	public ZModElement generateKey(RandomGenerator randomGenerator) {
 		return null;
 	}
 

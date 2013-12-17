@@ -2,6 +2,7 @@ package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -15,10 +16,9 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 public class PreimageOrProofGenerator
-	   extends AbstractSigmaProofGenerator<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
+			 extends AbstractSigmaProofGenerator<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
 
 	private final ProductFunction preimageProofFunction;
 
@@ -48,9 +48,9 @@ public class PreimageOrProofGenerator
 	@Override
 	protected ProductSet abstractGetProofSpace() {
 		return ProductSet.getInstance(
-			   this.getCommitmentSpace(),
-			   ProductSet.getInstance(this.getChallengeSpace(), this.getPreimageProofFunction().getArity()),
-			   this.getResponseSpace());
+					 this.getCommitmentSpace(),
+					 ProductSet.getInstance(this.getChallengeSpace(), this.getPreimageProofFunction().getArity()),
+					 this.getResponseSpace());
 	}
 
 	@Override
@@ -76,12 +76,12 @@ public class PreimageOrProofGenerator
 		domainElements[index] = secret;
 
 		return (Pair) this.getPrivateInputSpace().getElement(
-			   this.getPreimageProofFunction().getDomain().getElement(domainElements),
-			   ZMod.getInstance(this.getPreimageProofFunction().getArity()).getElement(index));
+					 this.getPreimageProofFunction().getDomain().getElement(domainElements),
+					 ZMod.getInstance(this.getPreimageProofFunction().getArity()).getElement(index));
 	}
 
 	@Override
-	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, Random random) {
+	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, RandomGenerator randomGenerator) {
 
 		// Extract secret input value and index from private input
 		final int index = privateInput.getSecond().getValue().intValue();
@@ -105,9 +105,9 @@ public class PreimageOrProofGenerator
 			}
 
 			// Create random challenge and response
-			ZModElement c = challengeSpace.getRandomElement(random);
+			ZModElement c = challengeSpace.getRandomElement(randomGenerator);
 			Function f = proofFunctions[i];
-			Element s = f.getDomain().getRandomElement(random);
+			Element s = f.getDomain().getRandomElement(randomGenerator);
 
 			sumOfChallenges = sumOfChallenges.add(c);
 			challenges[i] = c;
@@ -119,7 +119,7 @@ public class PreimageOrProofGenerator
 
 		// Create the proof of the known secret (normal preimage-proof, but with a special challange)
 		// - Create random element and calculate commitment
-		final Element randomElement = proofFunctions[index].getDomain().getRandomElement(random);
+		final Element randomElement = proofFunctions[index].getDomain().getRandomElement(randomGenerator);
 		commitments[index] = proofFunctions[index].apply(randomElement);
 
 		// - Create overall proof challenge
@@ -131,8 +131,8 @@ public class PreimageOrProofGenerator
 
 		// Return proof
 		return (Triple) this.getProofSpace().getElement(Tuple.getInstance(commitments),
-														Tuple.getInstance(challenges),
-														Tuple.getInstance(responses));
+																										Tuple.getInstance(challenges),
+																										Tuple.getInstance(responses));
 
 	}
 

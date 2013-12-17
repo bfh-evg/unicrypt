@@ -1,25 +1,25 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.ProofGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.util.Random;
 
 public abstract class AbstractProofGenerator<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element, PS extends Set, PE extends Element>
-	   implements ProofGenerator {
+			 implements ProofGenerator {
 
 	@Override
 	public final PE generate(final Element privateInput, final Element publicInput) {
-		return this.generate(privateInput, publicInput, (Random) null);
+		return this.generate(privateInput, publicInput, (RandomGenerator) null);
 	}
 
 	@Override
-	public final PE generate(final Element privateInput, final Element publicInput, final Random random) {
+	public final PE generate(final Element privateInput, final Element publicInput, final RandomGenerator randomGenerator) {
 		if (!this.getPrivateInputSpace().contains(privateInput) || !this.getPublicInputSpace().contains(publicInput)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGenerate((PRE) privateInput, (PUE) publicInput, random);
+		return this.abstractGenerate((PRE) privateInput, (PUE) publicInput, randomGenerator);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public abstract class AbstractProofGenerator<PRS extends Set, PRE extends Elemen
 		return this.abstractGetProofSpace();
 	}
 
-	protected abstract PE abstractGenerate(PRE secretInput, PUE publicInput, Random random);
+	protected abstract PE abstractGenerate(PRE secretInput, PUE publicInput, RandomGenerator randomGenerator);
 
 	protected abstract BooleanElement abstractVerify(PE proof, PUE publicInput);
 

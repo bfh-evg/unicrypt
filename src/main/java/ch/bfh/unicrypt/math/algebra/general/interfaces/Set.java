@@ -1,10 +1,10 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  * This interface represents the concept a mathematical set of elements. The number of elements in the set is called
@@ -237,10 +237,10 @@ public interface Set {
 	 * selected uniformly at random. For groups of infinite or unknown order, the underlying probability distribution is
 	 * not generally specified.
 	 * <p>
-	 * @param random Either {@literal null} or a given random generator
+	 * @param randomGenerator Either {@literal null} or a given random generator
 	 * @return A random group element
 	 */
-	public Element getRandomElement(Random random);
+	public Element getRandomElement(RandomGenerator randomGenerator);
 
 	/**
 	 * Checks if two given elements of this group are equal.

@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.interfaces;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
-import java.util.Random;
 
 /**
  * This interface represents the concept a unary mathematical function f:X->Y. It takes an input element from one group
@@ -45,12 +45,12 @@ public interface Function {
 	 * function is deterministic, then {@literal random} is ignored. This is the main the method to implement for any type
 	 * of function.
 	 * <p>
-	 * @param element The given input element
-	 * @param random  Either {@literal null} or a given random generator
+	 * @param element         The given input element
+	 * @param randomGenerator Either {@literal null} or a given random generator
 	 * @return The resulting output element
 	 * @throws IllegalArgumentException if {@literal element} is null or not contained in the domain
 	 */
-	public Element apply(Element element, Random random);
+	public Element apply(Element element, RandomGenerator randomGenerator);
 
 	/**
 	 * This method provides a shortcut for applying a function with multiple input values. The specified elements are used
@@ -73,17 +73,17 @@ public interface Function {
 	 * as an additional parameter. If no random generator is specified, i.e., if {@literal random} is null, then the
 	 * system-wide random generator is taken. If the function is deterministic, then {@literal random} is ignored.
 	 * <p>
-	 * @param elements The given input elements
-	 * @param random   Either {@literal null} or a given random generator
+	 * @param elements        The given input elements
+	 * @param randomGenerator Either {@literal null} or a given random generator
 	 * @return The resulting output element
 	 * @throws IllegalArgumentException if {@literal elements} is or contains null
 	 * @throws IllegalArgumentException if the elements in {@literal elements} are not contained in the corresponding
 	 *                                  sub-domains
 	 * @throws IllegalArgumentException if the the length of {@literal elements} is different from {@literal getArityIn()}
 	 */
-	public Element apply(Element[] elements, Random random);
+	public Element apply(Element[] elements, RandomGenerator randomGenerator);
 
-	public Element apply(Random random);
+	public Element apply(RandomGenerator randomGenerator);
 
 	/**
 	 * Returns the domain of this function.

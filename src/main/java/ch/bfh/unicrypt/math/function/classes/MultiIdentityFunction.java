@@ -1,12 +1,12 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * This class represents the concept of a generalized identity function f:X->X^n with f(x)=(x,...,x) for all elements x
@@ -27,7 +27,7 @@ public class MultiIdentityFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Tuple abstractApply(final Element element, final Random random) {
+	protected Tuple abstractApply(final Element element, final RandomGenerator randomGenerator) {
 		final Element[] elements = new Element[this.getCoDomain().getArity()];
 		Arrays.fill(elements, element);
 		return this.getCoDomain().getElement(elements);

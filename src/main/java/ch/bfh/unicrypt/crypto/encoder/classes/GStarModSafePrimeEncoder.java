@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -9,7 +10,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.math.BigInteger;
-import java.util.Random;
 
 public class GStarModSafePrimeEncoder
 			 extends AbstractEncoder<ZModPrime, ZModElement, GStarModSafePrime, GStarModElement> {
@@ -49,7 +49,7 @@ public class GStarModSafePrimeEncoder
 		}
 
 		@Override
-		protected GStarModElement abstractApply(final ZModElement element, final Random random) {
+		protected GStarModElement abstractApply(final ZModElement element, final RandomGenerator randomGenerator) {
 			final BigInteger value = element.getValue().add(BigInteger.ONE);
 			final GStarModSafePrime coDomain = this.getCoDomain();
 			if (coDomain.contains(value)) {
@@ -68,7 +68,7 @@ public class GStarModSafePrimeEncoder
 		}
 
 		@Override
-		protected ZModElement abstractApply(final GStarModElement element, final Random random) {
+		protected ZModElement abstractApply(final GStarModElement element, final RandomGenerator randomGenerator) {
 			final BigInteger value = element.getValue();
 			final GStarModSafePrime domain = this.getDomain();
 			if (value.compareTo(domain.getOrder()) <= 0) {

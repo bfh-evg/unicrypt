@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -8,7 +9,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import java.util.Random;
 
 /**
  * This class represents the the concept of a function f:XxZ->Y, where Z is an atomic group. The second input element
@@ -33,7 +33,7 @@ public class SelfApplyFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Element abstractApply(final Pair element, final Random random) {
+	protected Element abstractApply(final Pair element, final RandomGenerator randomGenerator) {
 		return element.getFirst().selfApply(element.getSecond());
 	}
 

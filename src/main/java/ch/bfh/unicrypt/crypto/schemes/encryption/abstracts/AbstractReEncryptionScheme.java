@@ -5,6 +5,7 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -17,7 +18,6 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.RemovalFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 /**
  *
@@ -63,12 +63,12 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 
 	@Override
 	public final EE reEncrypt(final Element publicKey, final Element ciphertext) {
-		return this.reEncrypt(publicKey, ciphertext, (Random) null);
+		return this.reEncrypt(publicKey, ciphertext, (RandomGenerator) null);
 	}
 
 	@Override
-	public final EE reEncrypt(final Element publicKey, final Element ciphertext, Random random) {
-		return this.reEncrypt(publicKey, ciphertext, this.getRandomizationSpace().getRandomElement(random));
+	public final EE reEncrypt(final Element publicKey, final Element ciphertext, RandomGenerator randomGenerator) {
+		return this.reEncrypt(publicKey, ciphertext, this.getRandomizationSpace().getRandomElement(randomGenerator));
 	}
 
 	@Override

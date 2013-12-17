@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 /**
  * This class represents the concept of a restricted identity function, which selects a particular element from an
@@ -38,7 +38,7 @@ public class RemovalFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Tuple abstractApply(final Tuple element, final Random random) {
+	protected Tuple abstractApply(final Tuple element, final RandomGenerator randomGenerator) {
 		return element.removeAt(this.getIndex());
 	}
 

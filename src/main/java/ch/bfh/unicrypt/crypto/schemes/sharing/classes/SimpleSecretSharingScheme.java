@@ -5,10 +5,10 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractSecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import java.util.Random;
 
 /**
  *
@@ -35,11 +35,11 @@ public class SimpleSecretSharingScheme
 	}
 
 	@Override
-	protected Element[] abstractShare(Element message, Random random) {
+	protected Element[] abstractShare(Element message, RandomGenerator randomGenerator) {
 		Element[] shares = new Element[this.getSize()];
 		Element total = this.group.getIdentityElement();
 		for (int i = 1; i < shares.length; i++) {
-			shares[i] = this.group.getRandomElement(random);
+			shares[i] = this.group.getRandomElement(randomGenerator);
 			total = total.apply(shares[i]);
 		}
 		shares[0] = message.applyInverse(total);

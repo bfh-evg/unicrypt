@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
@@ -11,7 +12,6 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class AESEncryptionScheme
 			 extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FixedByteArrayKeyGenerator> {
@@ -57,7 +57,7 @@ public class AESEncryptionScheme
 		}
 
 		@Override
-		protected ByteArrayElement abstractApply(Pair element, Random random) {
+		protected ByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
 			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 		}
 
@@ -71,7 +71,7 @@ public class AESEncryptionScheme
 		}
 
 		@Override
-		protected ByteArrayElement abstractApply(Pair element, Random random) {
+		protected ByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
 			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 		}
 

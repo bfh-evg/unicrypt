@@ -1,12 +1,12 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import java.util.Random;
 
 /**
  * This interface represents the the concept of a function f:X^n->X, which applies the group operation sequentially to
@@ -29,7 +29,7 @@ public class ApplyFunction
 	}
 
 	@Override
-	protected Element abstractApply(final Tuple element, final Random random) {
+	protected Element abstractApply(final Tuple element, final RandomGenerator randomGenerator) {
 		return this.getCoDomain().apply(element.getAll());
 	}
 

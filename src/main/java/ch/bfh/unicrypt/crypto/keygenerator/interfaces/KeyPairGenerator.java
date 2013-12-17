@@ -4,12 +4,12 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 /**
  *
@@ -19,15 +19,15 @@ public interface KeyPairGenerator {
 
 	Element generatePrivateKey();
 
-	Element generatePrivateKey(Random random);
+	Element generatePrivateKey(RandomGenerator randomGenerator);
 
 	Element generatePublicKey(Element privateKey);
 
-	Element generatePublicKey(Element privateKey, Random random);
+	Element generatePublicKey(Element privateKey, RandomGenerator randomGenerator);
 
 	Pair generateKeyPair();
 
-	Pair generateKeyPair(Random random);
+	Pair generateKeyPair(RandomGenerator randomGenerator);
 
 	ProductSet getKeyPairSpace();
 

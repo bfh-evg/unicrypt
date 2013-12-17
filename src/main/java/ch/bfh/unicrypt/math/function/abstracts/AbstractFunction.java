@@ -1,5 +1,7 @@
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -42,34 +44,37 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 
 	@Override
 	public final CE apply(final Element element) {
-		return this.apply(element, (Random) null);
+		return this.apply(element, (RandomGenerator) null);
 	}
 
 	@Override
-	public final CE apply(final Element element, final Random random) {
+	public final CE apply(final Element element, RandomGenerator randomGenerator) {
+		if (randomGenerator == null) {
+			randomGenerator = PseudoRandomGenerator.DEFAULT;
+		}
 		if (this.getDomain().contains(element)) {
-			return this.abstractApply((DE) element, random);
+			return this.abstractApply((DE) element, randomGenerator);
 		}
 		// This is for increased convenience for a function with a CompoundSet domain of arity 1.
-		return this.apply(new Element[]{element}, random);
+		return this.apply(new Element[]{element}, randomGenerator);
 	}
 
 	@Override
 	public final CE apply(final Element... elements) {
-		return this.apply(elements, (Random) null);
+		return this.apply(elements, (RandomGenerator) null);
 	}
 
 	@Override
-	public final CE apply(final Element[] elements, final Random random) {
+	public final CE apply(final Element[] elements, final RandomGenerator randomGenerator) {
 		if (this.getDomain().isProduct()) {
-			return this.apply(((ProductSet) this.getDomain()).getElement(elements), random);
+			return this.apply(((ProductSet) this.getDomain()).getElement(elements), randomGenerator);
 		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public final CE apply(final Random random) {
-		return this.apply(new Element[]{}, random);
+	public final CE apply(final RandomGenerator randomGenerator) {
+		return this.apply(new Element[]{}, randomGenerator);
 	}
 
 	@Override
@@ -137,10 +142,10 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 	 * @see Group#apply(Element[])
 	 * @see Element#apply(Element)
 	 * <p>
-	 * @param element The given input element
-	 * @param random  Either {@literal null} or a given random generator
+	 * @param element         The given input element
+	 * @param randomGenerator Either {@literal null} or a given random generator
 	 * @return The resulting output element
 	 */
-	protected abstract CE abstractApply(DE element, Random random);
+	protected abstract CE abstractApply(DE element, RandomGenerator randomGenerator);
 
 }

@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -9,7 +10,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.helper.Permutation;
-import java.util.Random;
 
 /**
  * This interface represents the concept of a function f:X^n x Z->X^n, where Z is a permutation group of size n. Calling
@@ -44,7 +44,7 @@ public class PermutationFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Tuple abstractApply(final Pair element, final Random random) {
+	protected Tuple abstractApply(final Pair element, final RandomGenerator randomGenerator) {
 		final Tuple elements = (Tuple) element.getFirst();
 		final Permutation permutation = ((PermutationElement) element.getSecond()).getPermutation();
 		final Element[] result = new Element[elements.getArity()];

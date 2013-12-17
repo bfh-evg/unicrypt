@@ -4,10 +4,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractFiniteField;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  *
@@ -90,7 +90,7 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected BinaryPolynomialElement abstractGetRandomElement(Random random) {
+	protected BinaryPolynomialElement abstractGetRandomElement(RandomGenerator randomGenerator) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

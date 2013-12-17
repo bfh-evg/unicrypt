@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
@@ -7,7 +8,6 @@ import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.helper.factorization.SpecialFactorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  * This interface represents the concept of a sub-group G_m (of order m) of a cyclic group of integers Z*_n with the
@@ -118,8 +118,8 @@ public class GStarMod
 	}
 
 	@Override
-	protected GStarModElement abstractGetRandomElement(final Random random) {
-		ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
+	protected GStarModElement abstractGetRandomElement(final RandomGenerator randomGenerator) {
+		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomGenerator);
 		return this.getElement(randomElement.power(this.getCoFactor()));
 // VERSION WITH OPTIMIZED EFFICIENCY BUT LACK OF INDEPENDENCE
 //    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method

@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -8,10 +9,9 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
-	   extends AbstractSigmaProofGenerator<PRS, PRE, PUS, PUE, F> {
+			 extends AbstractSigmaProofGenerator<PRS, PRE, PUS, PUE, F> {
 
 	private final F preimageProofFunction;
 
@@ -41,8 +41,8 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PRE 
 	}
 
 	@Override
-	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput, final Random random) {
-		final Element randomElement = this.getResponseSpace().getRandomElement(random);
+	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput, final RandomGenerator randomGenerator) {
+		final Element randomElement = this.getResponseSpace().getRandomElement(randomGenerator);
 		final Element commitment = this.getPreimageProofFunction().apply(randomElement);
 		final Element challenge = this.getChallengeGenerator().generate(publicInput, commitment);
 		final Element response = randomElement.apply(secretInput.selfApply(challenge));

@@ -1,11 +1,11 @@
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
-import java.util.Random;
 
 public class ECZModPrime
 			 extends AbstractEC<ECZModPrimeElement, ZModPrime, ZModElement> {
@@ -74,14 +74,14 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModPrimeElement getRandomElementWithoutGenerator(Random random) {
+	protected ECZModPrimeElement getRandomElementWithoutGenerator(RandomGenerator randomGenerator) {
 		BigInteger p = this.getFiniteField().getModulus();
-		ZModElement x = (ZModElement) this.getFiniteField().getRandomElement(random);
+		ZModElement x = (ZModElement) this.getFiniteField().getRandomElement(randomGenerator);
 		ZModElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
 		boolean neg = x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
 
 		while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
-			x = (ZModElement) this.getFiniteField().getRandomElement(random);
+			x = (ZModElement) this.getFiniteField().getRandomElement(randomGenerator);
 			y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
 		}
 

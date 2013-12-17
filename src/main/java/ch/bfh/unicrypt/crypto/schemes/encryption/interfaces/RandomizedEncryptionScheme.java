@@ -1,38 +1,38 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.interfaces;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.util.Random;
 
 /**
  *
  * @author rolfhaenni
  */
 public interface RandomizedEncryptionScheme
-       extends AsymmetricEncryptionScheme {
+			 extends AsymmetricEncryptionScheme {
 
-  /**
-   *
-   * @return
-   */
-  public Set getRandomizationSpace();
+	/**
+	 *
+	 * @return
+	 */
+	public Set getRandomizationSpace();
 
-  /**
-   *
-   * @param encryptionKey
-   * @param message
-   * @param random
-   * @return
-   */
-  public Element encrypt(Element encryptionKey, Element message, Random random);
+	/**
+	 *
+	 * @param encryptionKey
+	 * @param message
+	 * @param randomGenerator
+	 * @return
+	 */
+	public Element encrypt(Element encryptionKey, Element message, RandomGenerator randomGenerator);
 
-  /**
-   *
-   * @param decryptionKey
-   * @param message
-   * @param randomization
-   * @return
-   */
-  public Element encrypt(Element decryptionKey, Element message, Element randomization);
+	/**
+	 *
+	 * @param decryptionKey
+	 * @param message
+	 * @param randomization
+	 * @return
+	 */
+	public Element encrypt(Element decryptionKey, Element message, Element randomization);
 
 }

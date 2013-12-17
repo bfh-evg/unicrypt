@@ -5,11 +5,11 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.RandomizedEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.util.Random;
 
 /**
  *
@@ -35,12 +35,12 @@ public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME exte
 
 	@Override
 	public final EE encrypt(Element encryptionKey, Element message) {
-		return this.encrypt(encryptionKey, message, (Random) null);
+		return this.encrypt(encryptionKey, message, (RandomGenerator) null);
 	}
 
 	@Override
-	public final EE encrypt(Element encryptionKey, Element message, Random random) {
-		return this.encrypt(encryptionKey, message, this.getRandomizationSpace().getRandomElement(random));
+	public final EE encrypt(Element encryptionKey, Element message, RandomGenerator randomGenerator) {
+		return this.encrypt(encryptionKey, message, this.getRandomizationSpace().getRandomElement(randomGenerator));
 	}
 
 	@Override

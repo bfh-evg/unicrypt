@@ -4,6 +4,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -16,7 +17,6 @@ import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  *
@@ -189,26 +189,23 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple abstractGetElement(BigInteger value
-	) {
+	protected Tuple abstractGetElement(BigInteger value) {
 		BigInteger[] values = MathUtil.unpairAndUnfold(value, this.getArity());
 		return this.getElement(values);
 	}
 
 	@Override
-	protected Tuple abstractGetRandomElement(Random random
-	) {
+	protected Tuple abstractGetRandomElement(RandomGenerator randomGenerator) {
 		int arity = this.getArity();
 		final Element[] randomElements = new Element[arity];
 		for (int i = 0; i < arity; i++) {
-			randomElements[i] = this.getAt(i).getRandomElement(random);
+			randomElements[i] = this.getAt(i).getRandomElement(randomGenerator);
 		}
 		return this.standardGetElement(randomElements);
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value
-	) {
+	protected boolean abstractContains(BigInteger value) {
 		BigInteger[] values = MathUtil.unpairAndUnfold(value, this.getArity());
 		return this.contains(values);
 	}

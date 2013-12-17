@@ -4,11 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  * /**
@@ -69,7 +69,7 @@ public class N
 	}
 
 	@Override
-	protected NElement abstractGetRandomElement(Random random) {
+	protected NElement abstractGetRandomElement(RandomGenerator randomGenerator) {
 		throw new UnsupportedOperationException();
 	}
 

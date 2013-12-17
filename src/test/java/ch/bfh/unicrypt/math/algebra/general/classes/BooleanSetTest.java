@@ -5,13 +5,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -238,7 +238,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetRandomElement2() {
-		Random random = new SecureRandom(new byte[]{(byte) 1});
+		RandomGenerator random = PseudoRandomGenerator.getInstance();
 		System.out.println("getRandomElement");
 		int counter = 0;
 		while (BooleanSet.getInstance().getRandomElement(random).getBoolean() && counter++ < 100);
@@ -260,7 +260,7 @@ public class BooleanSetTest {
 		System.out.println("getZModOrder");
 		ZModPrime expResult = ZModPrime.getInstance(2);
 		ZModPrime result = (ZModPrime) BooleanSet.getInstance().getZModOrder();
-		
+
 		// TODO implement equals methods in sets
 		Assert.assertTrue(expResult.isEqual(result));
 	}

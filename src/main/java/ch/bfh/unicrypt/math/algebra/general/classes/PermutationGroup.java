@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Permutation;
@@ -8,7 +9,6 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * An instance of this class represents the group of permutations for a given size. The elements of the group are
@@ -89,8 +89,8 @@ public class PermutationGroup
 	// various super-classes
 	//
 	@Override
-	protected PermutationElement abstractGetRandomElement(final Random random) {
-		return this.standardGetElement(Permutation.getRandomInstance(this.getSize(), random));
+	protected PermutationElement abstractGetRandomElement(final RandomGenerator randomGenerator) {
+		return this.standardGetElement(Permutation.getRandomInstance(this.getSize(), randomGenerator));
 	}
 
 	@Override

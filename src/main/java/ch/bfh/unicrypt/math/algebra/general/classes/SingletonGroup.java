@@ -3,13 +3,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * @author rolfhaenni
@@ -32,7 +32,7 @@ public class SingletonGroup
 		return this.getElement().getValue();
 	}
 
-  //
+	//
 	// The following protected methods override the standard implementation from {@code AbstractGroup}
 	//
 	@Override
@@ -56,7 +56,7 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected Element abstractGetRandomElement(Random random) {
+	protected Element abstractGetRandomElement(RandomGenerator randomGenerator) {
 		return this.getElement();
 	}
 
@@ -94,7 +94,7 @@ public class SingletonGroup
 	protected boolean abstractIsGenerator(Element element) {
 		return true;
 	}
-  //
+	//
 	// STATIC FACTORY METHODS
 	//
 	private static final Map<BigInteger, SingletonGroup> instances = new HashMap<BigInteger, SingletonGroup>();

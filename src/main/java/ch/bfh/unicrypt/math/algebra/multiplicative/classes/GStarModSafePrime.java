@@ -4,11 +4,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.helper.factorization.SafePrime;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  *
@@ -52,11 +52,11 @@ public class GStarModSafePrime
 	}
 
 	public static GStarModSafePrime getRandomInstance(int bitLength) {
-		return GStarModSafePrime.getRandomInstance(bitLength, (Random) null);
+		return GStarModSafePrime.getRandomInstance(bitLength, null);
 	}
 
-	public static GStarModSafePrime getRandomInstance(int bitLength, Random random) {
-		return new GStarModSafePrime(SafePrime.getRandomInstance(bitLength, random));
+	public static GStarModSafePrime getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
+		return new GStarModSafePrime(SafePrime.getRandomInstance(bitLength, randomGenerator));
 	}
 
 }

@@ -1,16 +1,16 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.interfaces;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 public interface SigmaProofGenerator
-	   extends ProofGenerator {
+			 extends ProofGenerator {
 
 	public Function getPreimageProofFunction();
 
@@ -32,7 +32,7 @@ public interface SigmaProofGenerator
 	public Triple generate(Element privateInput, Element publicInput);
 
 	@Override
-	public Triple generate(Element privateInput, Element publicInput, Random random);
+	public Triple generate(Element privateInput, Element publicInput, RandomGenerator randomGeneratorı);
 
 	@Override
 	public ProductSet getProofSpace();

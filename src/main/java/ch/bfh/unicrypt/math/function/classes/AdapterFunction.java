@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -7,7 +8,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * This class represents an restricted identity function, which selects multiple elements from an input tuple element.
@@ -39,7 +39,7 @@ public class AdapterFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Tuple abstractApply(final Tuple element, final Random random) {
+	protected Tuple abstractApply(final Tuple element, final RandomGenerator randomGenerator) {
 		Element[] elements = new Element[this.getIndices().length];
 		for (int i = 0; i < this.getIndices().length; i++) {
 			elements[i] = element.getAt(this.getIndices()[i]);

@@ -1,10 +1,10 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
-import java.util.Random;
 
 public abstract class AbstractEC<E extends AbstractECElement, F extends FiniteField, D extends DualisticElement>
 			 extends AbstractAdditiveCyclicGroup<E> {
@@ -92,12 +92,12 @@ public abstract class AbstractEC<E extends AbstractECElement, F extends FiniteFi
 	protected abstract E abstractGetElement(D x, D y);
 
 	@Override
-	protected E abstractGetRandomElement(Random random) {
+	protected E abstractGetRandomElement(RandomGenerator randomGenerator) {
 		if (this.getDefaultGenerator() != null) {
-			D r = (D) this.getFiniteField().getRandomElement(random);
+			D r = (D) this.getFiniteField().getRandomElement(randomGenerator);
 			return (E) this.getDefaultGenerator().selfApply(r);
 		} else {
-			return this.getRandomElementWithoutGenerator(random);
+			return this.getRandomElementWithoutGenerator(randomGenerator);
 		}
 
 	}
@@ -105,10 +105,10 @@ public abstract class AbstractEC<E extends AbstractECElement, F extends FiniteFi
 	/**
 	 * Returns random element without knowing a generator of the group
 	 * <p>
-	 * @param random
+	 * @param randomGenerator
 	 * @return
 	 */
-	protected abstract E getRandomElementWithoutGenerator(Random random);
+	protected abstract E getRandomElementWithoutGenerator(RandomGenerator randomGenerator);
 
 	@Override
 	protected boolean abstractContains(BigInteger value) {

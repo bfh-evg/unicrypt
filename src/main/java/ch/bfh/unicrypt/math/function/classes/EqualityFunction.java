@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -7,7 +8,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import java.util.Random;
 
 /**
  * This class represents the concept of a function, which tests the given input elements for equality. For this to work,
@@ -26,7 +26,7 @@ public class EqualityFunction
 	}
 
 	@Override
-	public BooleanElement abstractApply(final Tuple element, final Random random) {
+	public BooleanElement abstractApply(final Tuple element, final RandomGenerator randomGenerator) {
 		int arity = element.getArity();
 		if (arity > 1) {
 			final Element firstElement = element.getFirst();

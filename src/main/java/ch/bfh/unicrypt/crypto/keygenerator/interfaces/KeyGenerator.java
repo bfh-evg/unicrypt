@@ -4,10 +4,10 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 /**
  *
@@ -17,7 +17,7 @@ public interface KeyGenerator {
 
 	Element generateKey();
 
-	Element generateKey(Random random);
+	Element generateKey(RandomGenerator randomGenerator);
 
 	Function getKeyGenerationFunction();
 

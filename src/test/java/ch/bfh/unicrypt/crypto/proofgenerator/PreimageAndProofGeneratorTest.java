@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.NonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageAndProofGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
@@ -42,7 +42,7 @@ public class PreimageAndProofGeneratorTest {
 		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
 		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, f2);
 		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEqual(f1));
 
@@ -69,7 +69,7 @@ public class PreimageAndProofGeneratorTest {
 		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
 		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, f2);
 		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEqual(f1));
 
@@ -93,7 +93,7 @@ public class PreimageAndProofGeneratorTest {
 		// Proof generator
 		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, 3);
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, 3);
 
 		// Valid proof
@@ -119,7 +119,7 @@ public class PreimageAndProofGeneratorTest {
 		// Proof generator
 		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1);
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, 1);
 
 		Element privateInput = Tuple.getInstance(f1.getDomain().getElement(2));
@@ -134,14 +134,14 @@ public class PreimageAndProofGeneratorTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testPreimageAndProof_Exception() {
 		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f1, this.proverId);
+		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f1, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testPreimageAndProof_ExceptionWithArity() {
 		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f1, this.proverId);
+		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f1, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, 0);
 	}
 

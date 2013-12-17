@@ -1,5 +1,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -7,7 +8,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  * This class represents the concept of an identity function f:X->Z_2 with f(x)=x mod N for all elements x in X.
@@ -39,7 +39,7 @@ public class ModuloFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected ZModElement abstractApply(final Element element, final Random random) {
+	protected ZModElement abstractApply(final Element element, final RandomGenerator randomGenerator) {
 		return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
 	}
 

@@ -5,6 +5,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractThresholdSecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
@@ -15,7 +16,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  *
@@ -52,7 +52,7 @@ public class ShamirSecretSharingScheme
 	}
 
 	@Override
-	protected Pair[] abstractShare(Element message, Random random) {
+	protected Pair[] abstractShare(Element message, RandomGenerator randomGenerator) {
 
 		// create an array of coefficients with size threshold
 		// the coefficient of degree 0 is fixed (message)
@@ -60,7 +60,7 @@ public class ShamirSecretSharingScheme
 		DualisticElement[] coefficients = new DualisticElement[getThreshold()];
 		coefficients[0] = (DualisticElement) message;
 		for (int i = 1; i < getThreshold(); i++) {
-			coefficients[i] = this.getZModPrime().getRandomElement(random);
+			coefficients[i] = this.getZModPrime().getRandomElement(randomGenerator);
 		}
 
 		// create a polynomial out of the coefficients

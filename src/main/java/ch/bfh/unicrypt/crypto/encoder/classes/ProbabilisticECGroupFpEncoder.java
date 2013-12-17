@@ -3,6 +3,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrimeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -11,7 +12,6 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
-import java.util.Random;
 
 public class ProbabilisticECGroupFpEncoder
 			 extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECZModPrimeElement>
@@ -49,7 +49,7 @@ public class ProbabilisticECGroupFpEncoder
 		}
 
 		@Override
-		protected ECZModPrimeElement abstractApply(ZModElement element, Random random) {
+		protected ECZModPrimeElement abstractApply(ZModElement element, RandomGenerator randomGenerator) {
 			ZModPrime zModPrime = this.getDomain();
 			ECZModPrime ecPrime = this.getCoDomain();
 
@@ -88,7 +88,7 @@ public class ProbabilisticECGroupFpEncoder
 		}
 
 		@Override
-		protected ZModElement abstractApply(ECZModPrimeElement element, Random random) {
+		protected ZModElement abstractApply(ECZModPrimeElement element, RandomGenerator randomGenerator) {
 			BigInteger x1 = element.getX().getValue();
 			x1 = x1.shiftRight(SHIFT);
 			return this.getCoDomain().getElement(x1);

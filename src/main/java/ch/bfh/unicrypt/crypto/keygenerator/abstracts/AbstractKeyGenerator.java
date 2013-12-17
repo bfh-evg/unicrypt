@@ -1,13 +1,13 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
-import java.util.Random;
 
 public abstract class AbstractKeyGenerator<KS extends Set, KE extends Element>
 			 extends UniCrypt
@@ -27,12 +27,12 @@ public abstract class AbstractKeyGenerator<KS extends Set, KE extends Element>
 
 	@Override
 	public KE generateKey() {
-		return this.generateKey((Random) null);
+		return this.generateKey((RandomGenerator) null);
 	}
 
 	@Override
-	public KE generateKey(Random random) {
-		return (KE) this.getKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), random);
+	public KE generateKey(RandomGenerator randomGenerator) {
+		return (KE) this.getKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomGenerator);
 	}
 
 	@Override

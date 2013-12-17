@@ -1,5 +1,7 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -19,7 +21,6 @@ import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Random;
 
 /**
  * This abstract class provides a basis implementation for atomic sets.
@@ -219,8 +220,11 @@ public abstract class AbstractSet<E extends Element>
 	}
 
 	@Override
-	public final E getRandomElement(Random random) {
-		return this.abstractGetRandomElement(random);
+	public final E getRandomElement(RandomGenerator randomGenerator) {
+		if (randomGenerator == null) {
+			randomGenerator = PseudoRandomGenerator.DEFAULT;
+		}
+		return this.abstractGetRandomElement(randomGenerator);
 	}
 
 	@Override
@@ -342,7 +346,7 @@ public abstract class AbstractSet<E extends Element>
 
 	protected abstract E abstractGetElement(BigInteger value);
 
-	protected abstract E abstractGetRandomElement(Random random);
+	protected abstract E abstractGetRandomElement(RandomGenerator randomGenerator);
 
 	protected abstract boolean abstractContains(BigInteger value);
 

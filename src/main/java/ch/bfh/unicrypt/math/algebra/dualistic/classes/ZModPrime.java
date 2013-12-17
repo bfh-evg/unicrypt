@@ -4,12 +4,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
 import java.math.BigInteger;
-import java.util.Random;
 
 /**
  *
@@ -72,12 +72,12 @@ public class ZModPrime
 		return new ZModPrime(Prime.getInstance(prime));
 	}
 
-	public static ZModPrime getRandomInstance(int bitLength, Random random) {
-		return new ZModPrime(Prime.getRandomInstance(bitLength, random));
+	public static ZModPrime getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
+		return new ZModPrime(Prime.getRandomInstance(bitLength, randomGenerator));
 	}
 
 	public static ZModPrime getRandomInstance(int bitLength) {
-		return ZModPrime.getRandomInstance(bitLength, (Random) null);
+		return ZModPrime.getRandomInstance(bitLength, null);
 	}
 
 	@Override

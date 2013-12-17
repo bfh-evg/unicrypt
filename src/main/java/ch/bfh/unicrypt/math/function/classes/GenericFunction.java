@@ -4,11 +4,11 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.Random;
 
 /**
  *
@@ -37,8 +37,8 @@ public class GenericFunction<D extends Set, DE extends Element, C extends Set, C
 	}
 
 	@Override
-	protected CE abstractApply(DE element, Random random) {
-		return (CE) this.function.apply(element, random);
+	protected CE abstractApply(DE element, RandomGenerator randomGenerator) {
+		return (CE) this.function.apply(element, randomGenerator);
 	}
 
 	public static <D extends Set, DE extends Element, C extends Set, CE extends Element> GenericFunction<D, DE, C, CE> getInstance(Function function) {

@@ -4,7 +4,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
-public interface ElementChallengeGenerator
+public interface MultiChallengeGenerator
 	   extends ChallengeGenerator {
 
 	@Override

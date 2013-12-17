@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.NonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageOrProofGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
@@ -59,7 +59,7 @@ public class PreimageOrProofGeneratorTest {
 		Function f5 = this.getPedersonCommitmentFunction();
 
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(ProductFunction.getInstance(functions), this.proverId);
+		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(ProductFunction.getInstance(functions), this.proverId);
 		PreimageOrProofGenerator pg = PreimageOrProofGenerator.getInstance(scg, functions);
 
 		// Default
