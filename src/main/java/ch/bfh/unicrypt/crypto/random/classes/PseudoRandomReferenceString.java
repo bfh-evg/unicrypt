@@ -8,6 +8,7 @@ package ch.bfh.unicrypt.crypto.random.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 /**
  *
@@ -44,6 +45,32 @@ public class PseudoRandomReferenceString
 	@Override
 	public boolean isReset() {
 		return this.counter == 0;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		hash = 83 * hash + (this.algorithmName != null ? this.algorithmName.hashCode() : 0);
+		hash = 83 * hash + Arrays.hashCode(this.seed);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final PseudoRandomReferenceString other = (PseudoRandomReferenceString) obj;
+		if ((this.algorithmName == null) ? (other.algorithmName != null) : !this.algorithmName.equals(other.algorithmName)) {
+			return false;
+		}
+		if (!Arrays.equals(this.seed, other.seed)) {
+			return false;
+		}
+		return true;
 	}
 
 	public static PseudoRandomReferenceString getInstance() {

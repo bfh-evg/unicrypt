@@ -70,6 +70,8 @@ public abstract class AbstractCyclicGroup<E extends Element>
 		}
 		if (randomReferenceString == null) {
 			randomReferenceString = PseudoRandomReferenceString.getInstance();
+		} else {
+			randomReferenceString.reset();
 		}
 		// The following line is necessary for creating a generic array
 		E[] generators = (E[]) Array.newInstance(this.getIdentityElement().getClass(), maxIndex - minIndex + 1);
