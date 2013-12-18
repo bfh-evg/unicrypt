@@ -39,7 +39,6 @@ public class ShuffleProofGenerator
 
 	protected ShuffleProofGenerator(SigmaChallengeGenerator sigmaChallengeGenerator,
 				 MultiChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK, RandomOracle randomOracle) {
-
 		this.sigmaChallengeGenerator = sigmaChallengeGenerator;
 		this.eValuesGenerator = eValuesGenerator;
 		this.cyclicGroup = cyclicGroup;
@@ -114,7 +113,7 @@ public class ShuffleProofGenerator
 		final Tuple sV = (Tuple) privateInput.getSecond();
 		final Tuple rV = (Tuple) privateInput.getThird();
 		final Tuple uPrimeV = (Tuple) publicInput.getThird();
-		final Tuple eV = this.eValuesGenerator.generate(publicInput);
+		final Tuple eV = (Tuple) this.eValuesGenerator.generate(publicInput);
 
 		// Compute private values for sigma proof
 		final Element r = ShuffleProofGenerator.computeInnerProduct(eV, rV);
@@ -124,10 +123,12 @@ public class ShuffleProofGenerator
 
 		// Create sigma proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponceSpace(), this.getCommitmentSpace(), this.randomOracle, uPrimeV, this.encryptionPK);
-		Tuple cV = f.apply(Tuple.getInstance(r, w, ePrimeV, tV));
+		Tuple cV = f.apply(Tuple.getInstance(r, w, ePrimeV, tV));   // [3n+5]
 		PreimageProofGenerator ppg = PreimageProofGenerator.getInstance(this.sigmaChallengeGenerator, f);
 		Triple preimageProof = ppg.generate(Tuple.getInstance(r, w, ePrimeV, tV), cV, randomGenerator);
-
+		//                                                             [3n+5]
+		//                                                           ---------
+		//                                                            [6n+10]
 		return Pair.getInstance(preimageProof, cV);
 	}
 
@@ -140,7 +141,7 @@ public class ShuffleProofGenerator
 		final Tuple cPiV = (Tuple) publicInput.getFirst();
 		final Tuple uV = (Tuple) publicInput.getSecond();
 		final Tuple uPrimeV = (Tuple) publicInput.getThird();
-		final Tuple eV = this.eValuesGenerator.generate(publicInput);
+		final Tuple eV = (Tuple) this.eValuesGenerator.generate(publicInput);
 
 		// 1. Verify preimage proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponceSpace(), this.getCommitmentSpace(), this.randomOracle, uPrimeV, this.encryptionPK);
@@ -181,19 +182,21 @@ public class ShuffleProofGenerator
 	private class PreimageProofFunction
 				 extends AbstractFunction<ProductGroup, Tuple, ProductGroup, Tuple> {
 
-		private final CyclicGroup cyclicGroup;
 		private final int size;
-		private final RandomOracle randomOracle;
 		private final Tuple uPrimeV;
 		private final Element encryptionPK;
+		// Prepare generalized pedersen commitment scheme
+		final GeneralizedPedersenCommitmentScheme gpcs;
+		final Element g;
 
 		protected PreimageProofFunction(CyclicGroup cyclicGroup, int size, ProductGroup domain, ProductGroup coDomain, RandomOracle randomOracle, Tuple uPrimeV, Element encryptionPK) {
 			super(domain, coDomain);
-			this.cyclicGroup = cyclicGroup;
 			this.size = size;
-			this.randomOracle = randomOracle;
 			this.uPrimeV = uPrimeV;
 			this.encryptionPK = encryptionPK;
+			// Prepare generalized pedersen commitment scheme
+			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, this.size, randomOracle.getRandomReferenceString());
+			this.g = cyclicGroup.getIndependentGenerator(0, randomOracle.getRandomReferenceString());
 		}
 
 		@Override
@@ -205,24 +208,21 @@ public class ShuffleProofGenerator
 			final Tuple ePrimeV = (Tuple) element.getAt(2);
 			final Tuple tV = (Tuple) element.getAt(3);
 
-			// Prepare generalized pedersen commitment scheme
-			final GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(this.cyclicGroup, this.size, this.randomOracle.getRandomReferenceString());
-			final Element g = this.cyclicGroup.getIndependentGenerator(0, this.randomOracle.getRandomReferenceString());
-
 			// Result array
 			final Element[] cV = new Element[3];
 
 			// COMPUTE...
-			// - Com(e', w)
+			// - Com(e', w)                              [n+1]
 			cV[0] = gpcs.commit(ePrimeV, w);
 
-			// - (g^t_1, g^t_2) * Prod(u'_i^(e'_i))
+			// - (g^t_1, g^t_2) * Prod(u'_i^(e'_i))     [2n+2]
 			final Tuple bV = Tuple.getInstance(g.selfApply(tV.getAt(0)), g.selfApply(tV.getAt(1)));
 			cV[1] = bV.apply(ShuffleProofGenerator.computeInnerProduct(this.uPrimeV, ePrimeV));
 
-			// - (g^t_1, g^t_2) * Enc(1,r)
+			// - (g^t_1, g^t_2) * Enc(1,r)                 [2]
 			cV[2] = bV.apply(Tuple.getInstance(g.selfApply(r), this.encryptionPK.selfApply(r)));
-
+			//                                        ---------
+			//                                          [3n+5]
 			return Tuple.getInstance(cV);
 		}
 
@@ -246,7 +246,6 @@ public class ShuffleProofGenerator
 																														 space,
 																														 cyclicGroup.getZModOrder(),
 																														 proverId);
-
 	}
 
 	public static NonInteractiveMultiChallengeGenerator createNonInteractiveMultiChallengeGenerator(final CyclicGroup cyclicGroup, final int size) {

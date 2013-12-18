@@ -19,6 +19,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.helper.Permutation;
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -127,6 +128,46 @@ public class PermutationCommitmentProofGeneratorTest {
 		PermutationElement piInvalid = PermutationGroup.getInstance(size).getElement(Permutation.getInstance(new int[]{3, 0, 4, 2, 1}));
 		proof = pcpg.generate(Pair.getInstance(piInvalid, sV), cPiV, randomGenerator);
 		v = pcpg.verify(proof, cPiV);
+		assertTrue(!v.getBoolean());
+	}
+
+	@Test
+	public void testPermutationCommitemntProofGenerator_InvalidPermutation() throws Exception {
+
+		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
+		final ZMod Z_q = G_q.getZModOrder();
+		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomGenerator randomGenerator = PseudoRandomGenerator.getInstance();
+		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+
+		final int size = 5;
+
+		// Permutation
+		Permutation permutation = Permutation.getInstance(new int[]{3, 2, 4, 0, 1});
+		assertTrue(permutation.permute(1) == 2);
+		assertTrue(permutation.permute(2) == 4);
+
+		// Manipulate permutation
+		Field permVectorField = Permutation.class.getDeclaredField("permutationVector");
+		permVectorField.setAccessible(true);
+		permVectorField.set(permutation, new int[]{3, 2, 2, 0, 1});
+		assertTrue(permutation.permute(1) == 2);
+		assertTrue(permutation.permute(2) == 2);
+
+		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7));
+		Tuple cPiV = pcs.commit(pi, sV);
+
+		// Permutation commitment proof generator
+		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
+		MultiChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveMultiChallengeGenerator(G_q, size, ro);
+		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, ro);
+
+		// Proof and verify
+		// Invalid: Modified permutation
+		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
+		BooleanElement v = pcpg.verify(proof, cPiV);
 		assertTrue(!v.getBoolean());
 
 	}

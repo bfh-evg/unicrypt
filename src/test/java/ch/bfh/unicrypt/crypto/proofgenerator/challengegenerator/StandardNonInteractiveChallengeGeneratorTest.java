@@ -3,10 +3,12 @@ package ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.NonInteractiveMultiChallengeGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import org.junit.Test;
 
-public class StandardNonInteractiveElementChallengeGeneratorTest {
+public class StandardNonInteractiveChallengeGeneratorTest {
 
 	@Test
 	public void testStandardNonInteractiveElementChallengeGenerator() {
