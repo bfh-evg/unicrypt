@@ -26,7 +26,7 @@ public class PreimageEqualityProofGenerator
 
 		Set domain = proofFunctions[0].getDomain();
 		for (int i = 1; i < proofFunctions.length; i++) {
-			if (!domain.isEqual(proofFunctions[i].getDomain())) {
+			if (!domain.isEquivalent(proofFunctions[i].getDomain())) {
 				throw new IllegalArgumentException("All proof functions must have the same domain!");
 			}
 		}

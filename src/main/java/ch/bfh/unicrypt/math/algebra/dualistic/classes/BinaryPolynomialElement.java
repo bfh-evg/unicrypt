@@ -72,7 +72,7 @@ public class BinaryPolynomialElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(BinaryPolynomialElement element) {
+	protected boolean standardIsEquivalent(BinaryPolynomialElement element) {
 		return this.coefficients.equals(element.coefficients);
 	}
 

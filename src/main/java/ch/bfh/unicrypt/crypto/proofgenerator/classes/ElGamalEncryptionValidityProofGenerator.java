@@ -39,8 +39,8 @@ public class ElGamalEncryptionValidityProofGenerator
 			throw new IllegalArgumentException();
 		}
 		final Set codomain = ProductGroup.getInstance(elGamalES.getEncryptionFunction().getCoDomain(), plaintexts.getOrder().intValue());
-		if (!codomain.isEqual(challengeGenerator.getPublicInputSpace()) || !codomain.isEqual(challengeGenerator.getCommitmentSpace())
-					 || !elGamalES.getCyclicGroup().getZModOrder().isEqual(challengeGenerator.getChallengeSpace())) {
+		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
+					 || !elGamalES.getCyclicGroup().getZModOrder().isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
 		}
 		return new ElGamalEncryptionValidityProofGenerator(challengeGenerator, elGamalES, publicKey, plaintexts);

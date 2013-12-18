@@ -96,7 +96,7 @@ public class ZStarMod
 	}
 
 	@Override
-	public boolean standardIsEqual(final Set set) {
+	public boolean standardIsEquivalent(final Set set) {
 		final ZStarMod zStarMod = (ZStarMod) set;
 		return this.getModulus().equals(zStarMod.getModulus());
 	}

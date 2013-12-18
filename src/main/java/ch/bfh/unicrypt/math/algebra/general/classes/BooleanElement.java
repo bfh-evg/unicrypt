@@ -34,7 +34,7 @@ public class BooleanElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(BooleanElement element) {
+	protected boolean standardIsEquivalent(BooleanElement element) {
 		return this.getBoolean() == element.getBoolean();
 	}
 

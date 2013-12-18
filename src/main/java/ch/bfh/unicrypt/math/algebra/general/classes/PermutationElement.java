@@ -34,7 +34,7 @@ public class PermutationElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(PermutationElement element) {
+	protected boolean standardIsEquivalent(PermutationElement element) {
 		return this.getPermutation().equals(element.getPermutation());
 	}
 

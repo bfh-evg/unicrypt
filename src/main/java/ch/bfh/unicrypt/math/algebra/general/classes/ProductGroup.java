@@ -116,7 +116,7 @@ public class ProductGroup
 				if (group == null) {
 					throw new IllegalArgumentException();
 				}
-				if (!group.isEqual(first)) {
+				if (!group.isEquivalent(first)) {
 					uniform = false;
 				}
 				isCyclic = isCyclic && group.isCyclic();

@@ -83,7 +83,7 @@ public class PolynomialElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(PolynomialElement element) {
+	protected boolean standardIsEquivalent(PolynomialElement element) {
 		return this.coefficients.equals(element.coefficients);
 	}
 

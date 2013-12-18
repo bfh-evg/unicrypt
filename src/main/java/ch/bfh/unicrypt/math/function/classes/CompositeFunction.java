@@ -62,7 +62,7 @@ public final class CompositeFunction
 			throw new IllegalArgumentException();
 		}
 		for (int i = 1; i < functions.length; i++) {
-			if (functions[i] == null || !(functions[i - 1].getCoDomain().isEqual(functions[i].getDomain()))) {
+			if (functions[i] == null || !(functions[i - 1].getCoDomain().isEquivalent(functions[i].getDomain()))) {
 				throw new IllegalArgumentException();
 			}
 		}
@@ -73,7 +73,7 @@ public final class CompositeFunction
 		if (function == null || arity < 0) {
 			throw new IllegalArgumentException();
 		}
-		if (arity > 1 && !function.getDomain().isEqual(function.getCoDomain())) {
+		if (arity > 1 && !function.getDomain().isEquivalent(function.getCoDomain())) {
 			throw new IllegalArgumentException();
 		}
 		return new CompositeFunction(ProductSet.getInstance(function.getDomain(), arity), ProductSet.getInstance(function.getCoDomain(), arity), function, arity);

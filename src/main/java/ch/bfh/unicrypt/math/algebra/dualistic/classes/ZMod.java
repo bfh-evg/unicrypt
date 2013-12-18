@@ -58,7 +58,7 @@ public class ZMod
 	}
 
 	@Override
-	public boolean standardIsEqual(final Set set) {
+	public boolean standardIsEquivalent(final Set set) {
 		final ZMod zPlusTimesMod = (ZMod) set;
 		return this.getModulus().equals(zPlusTimesMod.getModulus());
 	}

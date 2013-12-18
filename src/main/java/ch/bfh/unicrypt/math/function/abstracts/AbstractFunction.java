@@ -93,7 +93,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 	}
 
 	@Override
-	public final boolean isEqual(final Function function) {
+	public final boolean isEquivalent(final Function function) {
 		if (function == null) {
 			throw new IllegalArgumentException();
 		}
@@ -103,13 +103,13 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 		if (this.getClass() != function.getClass()) {
 			return false;
 		}
-		if (!this.getDomain().isEqual(function.getDomain())) {
+		if (!this.getDomain().isEquivalent(function.getDomain())) {
 			return false;
 		}
-		if (!this.getCoDomain().isEqual(function.getCoDomain())) {
+		if (!this.getCoDomain().isEquivalent(function.getCoDomain())) {
 			return false;
 		}
-		return this.standardIsEqual(function);
+		return this.standardIsEquivalent(function);
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 		return false;
 	}
 
-	protected boolean standardIsEqual(Function function) {
+	protected boolean standardIsEquivalent(Function function) {
 		return true;
 	}
 

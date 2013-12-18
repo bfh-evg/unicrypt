@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.crypto.random.abstracts;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
@@ -10,6 +11,7 @@ import java.math.BigInteger;
  * @version 1.0
  */
 public abstract class AbstractRandomGenerator
+			 extends UniCrypt
 			 implements RandomGenerator {
 
 	protected int counter = 0;

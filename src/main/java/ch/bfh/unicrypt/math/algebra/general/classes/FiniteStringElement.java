@@ -52,7 +52,7 @@ public class FiniteStringElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(FiniteStringElement element) {
+	protected boolean standardIsEquivalent(FiniteStringElement element) {
 		return this.getString().equals(element.getString());
 	}
 

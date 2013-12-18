@@ -35,10 +35,10 @@ public class ECZModPrime
 			if (element2.isIdentity()) {
 				return element1;
 			} else {
-				if (element1.isEqual(element2.invert())) {
+				if (element1.isEquivalent(element2.invert())) {
 					return this.getIdentityElement();
 				} else {
-					if (element1.isEqual(element2)) {
+					if (element1.isEquivalent(element2)) {
 						ZModElement three = (ZModElement) this.getFiniteField().getElement(3);
 						ZModElement two = (ZModElement) this.getFiniteField().getElement(2);
 						s = ((px.power(2).multiply(three)).apply(this.getA())).divide(py.multiply(two));
@@ -70,7 +70,7 @@ public class ECZModPrime
 		y = y.power(2);
 		x = x.power(3).add(x.multiply(this.getA())).add(this.getB());
 
-		return y.isEqual(x);
+		return y.isEquivalent(x);
 	}
 
 	@Override

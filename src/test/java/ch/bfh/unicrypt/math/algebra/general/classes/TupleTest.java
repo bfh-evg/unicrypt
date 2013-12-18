@@ -25,7 +25,7 @@ public class TupleTest {
 		Tuple tuple = Tuple.getInstance(e1, e2, e3);
 		int index = 0;
 		for (Element element : tuple) {
-			Assert.assertTrue(element.isEqual(tuple.getAt(index++)));
+			Assert.assertTrue(element.isEquivalent(tuple.getAt(index++)));
 		}
 	}
 

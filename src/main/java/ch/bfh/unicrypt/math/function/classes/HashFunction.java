@@ -40,7 +40,7 @@ public class HashFunction
 	}
 
 	@Override
-	protected boolean standardIsEqual(Function function) {
+	protected boolean standardIsEquivalent(Function function) {
 		return this.getHashMethod().equals(((HashFunction) function).getHashMethod());
 	}
 

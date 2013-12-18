@@ -279,6 +279,6 @@ public interface Set {
 	 * @param set
 	 * @return
 	 */
-	public boolean isEqual(Set set);
+	public boolean isEquivalent(Set set);
 
 }

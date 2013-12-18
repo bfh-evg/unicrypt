@@ -130,7 +130,7 @@ public class ProductMonoid
 				if (monoid == null) {
 					throw new IllegalArgumentException();
 				}
-				if (!monoid.isEqual(first)) {
+				if (!monoid.isEquivalent(first)) {
 					uniform = false;
 				}
 				isGroup = isGroup && monoid.isGroup();

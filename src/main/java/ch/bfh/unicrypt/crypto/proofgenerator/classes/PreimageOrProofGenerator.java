@@ -150,7 +150,7 @@ public class PreimageOrProofGenerator
 		for (int i = 0; i < challenges.getArity(); i++) {
 			sumOfChallenges = sumOfChallenges.add(challenges.getAt(i));
 		}
-		if (!challenge.isEqual(sumOfChallenges)) {
+		if (!challenge.isEquivalent(sumOfChallenges)) {
 			return BooleanSet.FALSE;
 		}
 
@@ -158,7 +158,7 @@ public class PreimageOrProofGenerator
 		for (int i = 0; i < this.getPreimageProofFunction().getArity(); i++) {
 			Element a = this.getPreimageProofFunction().getAt(i).apply(responses.getAt(i));
 			Element b = commitments.getAt(i).apply(publicInput.getAt(i).selfApply(challenges.getAt(i)));
-			if (!a.isEqual(b)) {
+			if (!a.isEquivalent(b)) {
 				return BooleanSet.FALSE;
 			}
 		}

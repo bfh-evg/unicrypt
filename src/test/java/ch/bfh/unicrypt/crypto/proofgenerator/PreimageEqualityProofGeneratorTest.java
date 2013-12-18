@@ -47,7 +47,7 @@ public class PreimageEqualityProofGeneratorTest {
 			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageEqualityProofGenerator pg = PreimageEqualityProofGenerator.getInstance(scg, f1, f2);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEqual(f1));
+		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
 
 		// Valid proof
 		Element privateInput = f1.getDomain().getElement(3);
@@ -84,7 +84,7 @@ public class PreimageEqualityProofGeneratorTest {
 			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageEqualityProofGenerator pg = PreimageEqualityProofGenerator.getInstance(scg, f1, f2);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEqual(f1));
+		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
 
 		// Invalid proof -> preimages are not equal
 		Element privateInput = f1.getDomain().getElement(3);

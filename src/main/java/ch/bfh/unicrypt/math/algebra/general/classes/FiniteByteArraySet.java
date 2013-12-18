@@ -85,7 +85,7 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	public boolean standardIsEqual(final Set set) {
+	public boolean standardIsEquivalent(final Set set) {
 		final FiniteByteArraySet other = (FiniteByteArraySet) set;
 		return this.getMinLength() == other.getMinLength() && this.getMaxLength() == other.getMaxLength();
 	}

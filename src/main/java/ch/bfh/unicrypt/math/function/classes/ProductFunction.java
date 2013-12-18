@@ -97,7 +97,7 @@ public final class ProductFunction
 				}
 				domains[i] = functions[i].getDomain();
 				coDomains[i] = functions[i].getCoDomain();
-				if (!functions[i].isEqual(first)) {
+				if (!functions[i].isEquivalent(first)) {
 					uniform = false;
 				}
 			}

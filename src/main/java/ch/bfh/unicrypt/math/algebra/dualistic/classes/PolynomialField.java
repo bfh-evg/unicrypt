@@ -60,7 +60,7 @@ public class PolynomialField extends PolynomialRing implements FiniteField {
   // STATIC FACTORY METHODS
   //
   public static PolynomialField getInstance(PrimeField primeField, PolynomialElement irreduciblePolynomial) {
-    if (primeField == null || irreduciblePolynomial == null || !irreduciblePolynomial.getSet().getSemiRing().isEqual(primeField)) {
+    if (primeField == null || irreduciblePolynomial == null || !irreduciblePolynomial.getSet().getSemiRing().isEquivalent(primeField)) {
       throw new IllegalArgumentException();
     }
     return new PolynomialField(primeField);

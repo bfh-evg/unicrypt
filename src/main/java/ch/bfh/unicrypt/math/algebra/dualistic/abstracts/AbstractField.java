@@ -37,7 +37,7 @@ public abstract class AbstractField<E extends DualisticElement, M extends Multip
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		if (element.isEqual(this.getZeroElement())) {
+		if (element.isEquivalent(this.getZeroElement())) {
 			throw new UnsupportedOperationException();
 		}
 		return this.abstractOneOver((E) element);

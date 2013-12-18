@@ -48,7 +48,7 @@ public class StringElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(StringElement element) {
+	protected boolean standardIsEquivalent(StringElement element) {
 		return this.getString().equals(element.getString());
 	}
 

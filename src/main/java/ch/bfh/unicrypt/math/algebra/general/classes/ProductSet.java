@@ -310,14 +310,14 @@ public class ProductSet
 	}
 
 	@Override
-	protected boolean standardIsEqual(Set set) {
+	protected boolean standardIsEquivalent(Set set) {
 		ProductSet other = (ProductSet) set;
 		int arity = this.getArity();
 		if (arity != other.getArity()) {
 			return false;
 		}
 		for (int i = 0; i < arity; i++) {
-			if (!this.getAt(i).isEqual(other.getAt(i))) {
+			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
 				return false;
 			}
 		}
@@ -370,7 +370,7 @@ public class ProductSet
 				if (set == null) {
 					throw new IllegalArgumentException();
 				}
-				if (!set.isEqual(first)) {
+				if (!set.isEquivalent(first)) {
 					uniform = false;
 				}
 				isSemiGroup = set.isSemiGroup() && isSemiGroup;

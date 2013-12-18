@@ -169,24 +169,24 @@ public class PermutationCommitmentProofGenerator
 
 		// 2. Check correctness of cV
 		// 2.1 c_1 == c_pi^1/prod(g_i)
-		boolean v1 = cV.getAt(0).isEqual(PermutationCommitmentProofGenerator.computeInnerProduct(publicInput, oneV).applyInverse(this.cyclicGroup.apply(gV)));
+		boolean v1 = cV.getAt(0).isEquivalent(PermutationCommitmentProofGenerator.computeInnerProduct(publicInput, oneV).applyInverse(this.cyclicGroup.apply(gV)));
 
 		// 2.2 c_2 == c_pi^e
-		boolean v2 = cV.getAt(1).isEqual(PermutationCommitmentProofGenerator.computeInnerProduct(publicInput, eV));
+		boolean v2 = cV.getAt(1).isEquivalent(PermutationCommitmentProofGenerator.computeInnerProduct(publicInput, eV));
 
 		// 2.3 c_(2n+1) = c'_N == g1^(prod(e))
 		Element eProd = eV.getAt(0);
 		for (int i = 1; i < this.size; i++) {
 			eProd = eProd.selfApply(eV.getAt(i));
 		}
-		boolean v3 = cV.getAt(2 * this.size).isEqual(gV[0].selfApply(eProd));
+		boolean v3 = cV.getAt(2 * this.size).isEquivalent(gV[0].selfApply(eProd));
 
 		// 2.4 c_i = c_(i+n) for n+2 < i < 2n
 		boolean v4 = true;
 		int offset1 = this.size + 2;
 		int offset2 = offset1 + this.size - 1;
 		for (int i = 0; i < this.size - 1; i++) {
-			if (!cV.getAt(offset1 + i).isEqual(cV.getAt(offset2 + i))) {
+			if (!cV.getAt(offset1 + i).isEquivalent(cV.getAt(offset2 + i))) {
 				v4 = false;
 				break;
 			}

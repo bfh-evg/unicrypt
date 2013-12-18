@@ -44,7 +44,7 @@ public class PreimageAndProofGeneratorTest {
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, f2);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEqual(f1));
+		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
@@ -71,7 +71,7 @@ public class PreimageAndProofGeneratorTest {
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, f2);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEqual(f1));
+		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
 
 
 		// Invalid proof -> One preimages is wrong

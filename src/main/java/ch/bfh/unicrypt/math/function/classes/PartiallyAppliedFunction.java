@@ -72,10 +72,10 @@ public class PartiallyAppliedFunction
 	}
 
 	@Override
-	protected boolean standardIsEqual(Function function) {
+	protected boolean standardIsEquivalent(Function function) {
 		PartiallyAppliedFunction other = (PartiallyAppliedFunction) function;
-		return this.getParentFunction().isEqual(other.getParentFunction())
-					 && this.getParameter().isEqual(other.getParameter())
+		return this.getParentFunction().isEquivalent(other.getParentFunction())
+					 && this.getParameter().isEquivalent(other.getParameter())
 					 && this.getIndex() == other.getIndex();
 	}
 

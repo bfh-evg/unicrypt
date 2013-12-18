@@ -232,7 +232,7 @@ public abstract class AbstractSet<E extends Element>
 		if (!this.contains(element1) || !this.contains(element2)) {
 			throw new IllegalArgumentException();
 		}
-		return element1.isEqual(element2);
+		return element1.isEquivalent(element2);
 	}
 
 	@Override
@@ -244,7 +244,7 @@ public abstract class AbstractSet<E extends Element>
 	}
 
 	@Override
-	public final boolean isEqual(final Set set) {
+	public final boolean isEquivalent(final Set set) {
 		if (set == null) {
 			throw new IllegalArgumentException();
 		}
@@ -254,7 +254,7 @@ public abstract class AbstractSet<E extends Element>
 		if (!this.isCompatible(set)) {
 			return false;
 		}
-		return this.standardIsEqual(set);
+		return this.standardIsEquivalent(set);
 	}
 
 	@Override
@@ -290,12 +290,12 @@ public abstract class AbstractSet<E extends Element>
 		return this.getClass() == set.getClass();
 	}
 
-	protected boolean standardIsEqual(Set set) {
+	protected boolean standardIsEquivalent(Set set) {
 		return true;
 	}
 
 	protected boolean standardContains(final Element element) {
-		return this.isEqual(element.getSet());
+		return this.isEquivalent(element.getSet());
 	}
 
 	protected Iterator<E> standardIterator() {

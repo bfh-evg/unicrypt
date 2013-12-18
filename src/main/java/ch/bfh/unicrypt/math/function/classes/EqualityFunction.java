@@ -31,7 +31,7 @@ public class EqualityFunction
 		if (arity > 1) {
 			final Element firstElement = element.getFirst();
 			for (Element currentElement : element) {
-				if (!firstElement.isEqual(currentElement)) {
+				if (!firstElement.isEquivalent(currentElement)) {
 					return BooleanSet.FALSE;
 				}
 			}

@@ -66,7 +66,7 @@ public class PedersenCommitmentScheme<CS extends CyclicGroup, CE extends Element
 	}
 
 	public static PedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarModElement firstGenerator, GStarModElement secondGenerator) {
-		if (!firstGenerator.getSet().isEqual(secondGenerator.getSet())) {
+		if (!firstGenerator.getSet().isEquivalent(secondGenerator.getSet())) {
 			throw new IllegalArgumentException();
 		}
 		return new PedersenCommitmentScheme<GStarMod, GStarModElement>(firstGenerator.getSet(), firstGenerator, secondGenerator);

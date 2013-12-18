@@ -112,6 +112,6 @@ public interface Function {
 	 */
 	public PartiallyAppliedFunction partiallyApply(Element element, int index);
 
-	public boolean isEqual(Function function);
+	public boolean isEquivalent(Function function);
 
 }

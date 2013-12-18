@@ -186,7 +186,7 @@ public class ProductSemiGroup
 				if (semiGroup == null) {
 					throw new IllegalArgumentException();
 				}
-				if (!semiGroup.isEqual(first)) {
+				if (!semiGroup.isEquivalent(first)) {
 					uniform = false;
 				}
 				isMonoid = isMonoid && semiGroup.isMonoid();

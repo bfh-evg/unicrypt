@@ -153,11 +153,11 @@ public class ShuffleProofGenerator
 
 		// 2. Check correctness of cV
 		// 2.1 c_1 == c_pi^e
-		boolean v1 = cV.getAt(0).isEqual(ShuffleProofGenerator.computeInnerProduct(cPiV, eV));
+		boolean v1 = cV.getAt(0).isEquivalent(ShuffleProofGenerator.computeInnerProduct(cPiV, eV));
 
 		// 2.2 c_3 = c_2/u
 		Element u = ShuffleProofGenerator.computeInnerProduct(uV, eV);
-		boolean v2 = cV.getAt(2).isEqual(cV.getAt(1).applyInverse(u));
+		boolean v2 = cV.getAt(2).isEquivalent(cV.getAt(1).applyInverse(u));
 
 		return BooleanSet.getInstance().getElement(v1 && v2);
 	}

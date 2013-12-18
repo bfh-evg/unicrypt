@@ -73,9 +73,9 @@ public abstract class AbstractSigmaProofGenerator<PRS extends Set, PRE extends E
 	// Checks space equality of challenge generator and proof function
 	protected static boolean checkSpaceEquality(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction) {
 		return (proofFunction == null || challengeGenerator == null
-			   || !proofFunction.getCoDomain().isEqual(challengeGenerator.getPublicInputSpace())
-			   || !proofFunction.getCoDomain().isEqual(challengeGenerator.getCommitmentSpace())
-			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEqual(challengeGenerator.getChallengeSpace()));
+			   || !proofFunction.getCoDomain().isEquivalent(challengeGenerator.getPublicInputSpace())
+			   || !proofFunction.getCoDomain().isEquivalent(challengeGenerator.getCommitmentSpace())
+			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator.getChallengeSpace()));
 
 	}
 

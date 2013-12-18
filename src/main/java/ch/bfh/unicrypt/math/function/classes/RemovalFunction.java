@@ -30,7 +30,7 @@ public class RemovalFunction
 	}
 
 	@Override
-	protected boolean standardIsEqual(Function function) {
+	protected boolean standardIsEquivalent(Function function) {
 		return this.getIndex() == ((RemovalFunction) function).getIndex();
 	}
 

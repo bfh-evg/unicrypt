@@ -74,7 +74,7 @@ public class PermutationGroup
 	// various super-classes
 	//
 	@Override
-	public boolean standardIsEqual(final Set set) {
+	public boolean standardIsEquivalent(final Set set) {
 		final PermutationGroup other = (PermutationGroup) set;
 		return this.getSize() == other.getSize();
 	}

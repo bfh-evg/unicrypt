@@ -262,7 +262,7 @@ public class BooleanSetTest {
 		ZModPrime result = (ZModPrime) BooleanSet.getInstance().getZModOrder();
 
 		// TODO implement equals methods in sets
-		Assert.assertTrue(expResult.isEqual(result));
+		Assert.assertTrue(expResult.isEquivalent(result));
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class BooleanSetTest {
 		ZStarMod expResult = ZStarMod.getInstance(2);
 		ZStarMod result = BooleanSet.getInstance().getZStarModOrder();
 		// TODO implement equals methods in sets
-		Assert.assertTrue(expResult.isEqual(result));
+		Assert.assertTrue(expResult.isEquivalent(result));
 	}
 
 	/**
@@ -324,19 +324,19 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of isEqual method, of class BooleanSet.
+	 * Test of isEquivalent method, of class BooleanSet.
 	 */
 	@Test
 	public void testEquals() {
 		System.out.println("equals");
-		Assert.assertTrue(BooleanSet.getInstance().isEqual(BooleanSet.getInstance()));
+		Assert.assertTrue(BooleanSet.getInstance().isEquivalent(BooleanSet.getInstance()));
 		{
 			ZMod zmod = ZMod.getInstance(2);
-			Assert.assertTrue(!BooleanSet.getInstance().isEqual(zmod));
+			Assert.assertTrue(!BooleanSet.getInstance().isEquivalent(zmod));
 		}
 		{
 			ZMod zmod = ZMod.getInstance(3);
-			Assert.assertTrue(!BooleanSet.getInstance().isEqual(zmod));
+			Assert.assertTrue(!BooleanSet.getInstance().isEquivalent(zmod));
 		}
 
 	}

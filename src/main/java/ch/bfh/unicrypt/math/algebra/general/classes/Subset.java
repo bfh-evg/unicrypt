@@ -44,9 +44,9 @@ public class Subset
 	}
 
 	@Override
-	protected boolean standardIsEqual(Set set) {
+	protected boolean standardIsEquivalent(Set set) {
 		Subset other = (Subset) set;
-		return this.superSet.isEqual(other.superSet) && this.hashSet.equals(other.hashSet);
+		return this.superSet.isEquivalent(other.superSet) && this.hashSet.equals(other.hashSet);
 	}
 
 	@Override

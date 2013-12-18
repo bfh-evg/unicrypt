@@ -42,7 +42,7 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-		assertTrue(commitment.getAt(0).isEqual(this.G_q.getElement(8)));   // 6^2 *13 = 8
+		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(8)));   // 6^2 *13 = 8
 	}
 
 	@Test
@@ -57,9 +57,9 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-		assertTrue(commitment.getAt(0).isEqual(this.G_q.getElement(12)));  // 6^1 * 2 = 12
-		assertTrue(commitment.getAt(1).isEqual(this.G_q.getElement(3)));   // 6^2 * 2 =  3
-		assertTrue(commitment.getAt(2).isEqual(this.G_q.getElement(2)));   // 6^3 *13 =  2
+		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(12)));  // 6^1 * 2 = 12
+		assertTrue(commitment.getAt(1).isEquivalent(this.G_q.getElement(3)));   // 6^2 * 2 =  3
+		assertTrue(commitment.getAt(2).isEquivalent(this.G_q.getElement(2)));   // 6^3 *13 =  2
 	}
 
 	@Test
@@ -72,10 +72,10 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-		assertTrue(commitment.getAt(0).isEqual(this.G_q.getElement(16)));  // 6^1 *18 = 16
-		assertTrue(commitment.getAt(1).isEqual(this.G_q.getElement(3)));   // 6^2 * 2 =  3
-		assertTrue(commitment.getAt(2).isEqual(this.G_q.getElement(2)));   // 6^3 *13 =  2
-		assertTrue(commitment.getAt(3).isEqual(this.G_q.getElement(16)));  // 6^4 * 2 = 16
+		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(16)));  // 6^1 *18 = 16
+		assertTrue(commitment.getAt(1).isEquivalent(this.G_q.getElement(3)));   // 6^2 * 2 =  3
+		assertTrue(commitment.getAt(2).isEquivalent(this.G_q.getElement(2)));   // 6^3 *13 =  2
+		assertTrue(commitment.getAt(3).isEquivalent(this.G_q.getElement(16)));  // 6^4 * 2 = 16
 	}
 
 }

@@ -78,7 +78,7 @@ public class ElGamalExample {
 	  //decrypt message
 	  Element newMessage=ecs.decrypt(privateKey, cipherText);
 	  System.out.println("New Message: "+newMessage);
-	  System.out.println("Message == New Message: "+message.isEqual(newMessage));
+	  System.out.println("Message == New Message: "+message.isEquivalent(newMessage));
 	  ZModElement plain=enc.decode(newMessage);
 	  System.out.println("Message decoded: "+plain);
 	  

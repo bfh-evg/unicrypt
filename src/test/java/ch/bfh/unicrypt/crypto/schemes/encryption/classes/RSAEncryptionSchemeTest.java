@@ -28,7 +28,7 @@ public class RSAEncryptionSchemeTest {
 		Element message = instance.getMessageSpace().getElement(5);
 		Element encryption = instance.encrypt(puKey, message);
 		Element decryption = instance.decrypt(prKey, message);
-		//	Assert.assertTrue(encryption.isEqual(decryption));
+		//	Assert.assertTrue(encryption.isEquivalent(decryption));
 		System.out.println(Tuple.getInstance(prKey, puKey, message, encryption, decryption));
 	}
 

@@ -53,7 +53,7 @@ public class FiniteByteArrayElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(FiniteByteArrayElement element) {
+	protected boolean standardIsEquivalent(FiniteByteArrayElement element) {
 		return Arrays.equals(this.getByteArray(), element.getByteArray());
 	}
 

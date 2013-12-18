@@ -9,6 +9,7 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.HashMethod;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.math.BigInteger;
 
 /**
@@ -16,6 +17,7 @@ import java.math.BigInteger;
  * @author rolfhaenni
  */
 public abstract class AbstractRandomOracle
+			 extends UniCrypt
 			 implements RandomOracle {
 
 	private final HashMethod hashMethod;

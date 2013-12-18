@@ -90,7 +90,7 @@ public class FiniteStringSet
 	}
 
 	@Override
-	public boolean standardIsEqual(final Set set) {
+	public boolean standardIsEquivalent(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
 		return this.getAlphabet() == other.getAlphabet() && this.getMinLength() == other.getMinLength() && this.getMaxLength() == other.getMaxLength();
 	}

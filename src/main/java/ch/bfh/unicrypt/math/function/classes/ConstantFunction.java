@@ -44,8 +44,8 @@ public class ConstantFunction
 	}
 
 	@Override
-	protected boolean standardIsEqual(Function function) {
-		return this.getElement().isEqual(((ConstantFunction) function).getElement());
+	protected boolean standardIsEquivalent(Function function) {
+		return this.getElement().isEquivalent(((ConstantFunction) function).getElement());
 	}
 
 	@Override

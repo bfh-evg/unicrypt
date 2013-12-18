@@ -70,7 +70,7 @@ public class ShamirSecretSharingSchemeTest {
 
 		// recover message and check whether it is equal with original message
 		ZModElement recoveredMessage = ssss.recover(remainingShares);
-		assertTrue(recoveredMessage.isEqual(message));
+		assertTrue(recoveredMessage.isEquivalent(message));
 	}
 
 }

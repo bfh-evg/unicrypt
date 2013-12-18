@@ -44,7 +44,7 @@ public abstract class AbstractPrimeField<E extends DualisticElement, M extends M
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		if (element.isEqual(this.getZeroElement())) {
+		if (element.isEquivalent(this.getZeroElement())) {
 			throw new UnsupportedOperationException();
 		}
 		return this.abstractOneOver((E) element);

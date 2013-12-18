@@ -54,7 +54,7 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PRE 
 		final Element challenge = this.getChallengeGenerator().generate(publicInput, this.getCommitment(proof));
 		final Element left = this.getPreimageProofFunction().apply(this.getResponse(proof));
 		final Element right = this.getCommitment(proof).apply(publicInput.selfApply(challenge));
-		return BooleanSet.getInstance().getElement(left.isEqual(right));
+		return BooleanSet.getInstance().getElement(left.isEquivalent(right));
 	}
 
 }

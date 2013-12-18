@@ -51,7 +51,7 @@ public class PolynomialSemiRing
 
 	public PolynomialElement getElement(Tuple coefficients) {
 		Map<Integer, DualisticElement> coefficientMap = new HashMap<Integer, DualisticElement>();
-		if (coefficients.isNull() || coefficients.getSet().isUniform() && coefficients.getSet().getFirst().isEqual(this.getSemiRing())) {
+		if (coefficients.isNull() || coefficients.getSet().isUniform() && coefficients.getSet().getFirst().isEquivalent(this.getSemiRing())) {
 			for (int i = 0; i < coefficients.getArity(); i++) {
 				coefficientMap.put(i, (DualisticElement) coefficients.getAt(i));
 			}
@@ -82,9 +82,9 @@ public class PolynomialSemiRing
 	// various super-classes
 	//
 	@Override
-	public boolean standardIsEqual(final Set set) {
+	public boolean standardIsEquivalent(final Set set) {
 		final PolynomialSemiRing other = (PolynomialSemiRing) set;
-		return this.getSemiRing().isEqual(other.getSemiRing());
+		return this.getSemiRing().isEquivalent(other.getSemiRing());
 	}
 
 	@Override

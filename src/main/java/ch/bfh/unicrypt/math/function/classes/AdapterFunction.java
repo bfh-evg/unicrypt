@@ -31,7 +31,7 @@ public class AdapterFunction
 	}
 
 	@Override
-	protected boolean standardIsEqual(Function function) {
+	protected boolean standardIsEquivalent(Function function) {
 		return Arrays.equals(this.getIndices(), ((AdapterFunction) function).getIndices());
 	}
 

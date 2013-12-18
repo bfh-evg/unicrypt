@@ -36,13 +36,13 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3));
 		Element r = Z_q.getElement(2);
 		Element c = gpcs.commit(messages, r);   // c = g1^m1 * g2^m2 * g0^r = 4^1 * 4^3 * 6^2 = 4 * 18 * 13 = 16
-		assertTrue(c.isEqual(this.G_q.getElement(16)));
+		assertTrue(c.isEquivalent(this.G_q.getElement(16)));
 
 		gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 4, rrs);
 		messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5));
 		r = Z_q.getElement(3);
 		c = gpcs.commit(messages, r);   // c = 4^1 * 4^3 * 13^4 * 4^5 * 6^3 = 4 * 18 * 18 * 12 * 9 = 13
-		assertTrue(c.isEqual(this.G_q.getElement(13)));
+		assertTrue(c.isEquivalent(this.G_q.getElement(13)));
 
 	}
 

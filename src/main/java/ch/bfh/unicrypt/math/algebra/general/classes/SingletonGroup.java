@@ -36,7 +36,7 @@ public class SingletonGroup
 	// The following protected methods override the standard implementation from {@code AbstractGroup}
 	//
 	@Override
-	protected boolean standardIsEqual(Set set) {
+	protected boolean standardIsEquivalent(Set set) {
 		return this.getValue().equals(((SingletonGroup) set).getValue());
 	}
 

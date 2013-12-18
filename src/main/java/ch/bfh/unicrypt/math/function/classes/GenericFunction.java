@@ -32,8 +32,8 @@ public class GenericFunction<D extends Set, DE extends Element, C extends Set, C
 	}
 
 	@Override
-	protected boolean standardIsEqual(Function function) {
-		return this.getFunction().isEqual(((GenericFunction) function).getFunction());
+	protected boolean standardIsEquivalent(Function function) {
+		return this.getFunction().isEquivalent(((GenericFunction) function).getFunction());
 	}
 
 	@Override

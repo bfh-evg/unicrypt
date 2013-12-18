@@ -38,8 +38,8 @@ public class PedersenCommitmentValidityProofGenerator
 		}
 
 		final Set codomain = ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(), messages.getOrder().intValue());
-		if (!codomain.isEqual(challengeGenerator.getPublicInputSpace()) || !codomain.isEqual(challengeGenerator.getCommitmentSpace())
-					 || !pedersenCS.getCyclicGroup().getZModOrder().isEqual(challengeGenerator.getChallengeSpace())) {
+		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
+					 || !pedersenCS.getCyclicGroup().getZModOrder().isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
 		}
 		return new PedersenCommitmentValidityProofGenerator(challengeGenerator, pedersenCS, messages);

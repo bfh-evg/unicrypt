@@ -28,7 +28,7 @@ public class ProductFunctionTest {
 		int index = 0;
 		for (Function function : functions) {
 			System.err.println(function);
-			Assert.assertTrue(function.isEqual(functions.getAt(index++)));
+			Assert.assertTrue(function.isEquivalent(functions.getAt(index++)));
 		}
 	}
 

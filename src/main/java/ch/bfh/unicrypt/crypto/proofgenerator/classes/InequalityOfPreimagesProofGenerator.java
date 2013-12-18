@@ -44,15 +44,15 @@ public class InequalityOfPreimagesProofGenerator
 	}
 
 	public static InequalityOfPreimagesProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function firstFunction, final Function secondFunction) {
-		if (challengeGenerator == null || firstFunction == null || secondFunction == null || !firstFunction.getDomain().isEqual(secondFunction.getDomain())
+		if (challengeGenerator == null || firstFunction == null || secondFunction == null || !firstFunction.getDomain().isEquivalent(secondFunction.getDomain())
 					 || !firstFunction.getDomain().isSemiGroup() || !firstFunction.getCoDomain().isCyclic() || !secondFunction.getCoDomain().isCyclic()) {
 			throw new IllegalArgumentException();
 		}
 
 		ProductSet codomain = ProductSet.getInstance(secondFunction.getCoDomain(), firstFunction.getCoDomain());
 		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
-		if (!codomain.isEqual(challengeGenerator.getPublicInputSpace()) || !codomain.isEqual(challengeGenerator.getCommitmentSpace())
-					 || !cs.isEqual(challengeGenerator.getChallengeSpace())) {
+		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
+					 || !cs.isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match proof functions.");
 		}
 		return new InequalityOfPreimagesProofGenerator(challengeGenerator, firstFunction, secondFunction);
@@ -61,7 +61,7 @@ public class InequalityOfPreimagesProofGenerator
 	// Service method to prove inequality fo descrete logarithms
 	// f1(x) = g1^x, f2(x) = g2^x
 	public static InequalityOfPreimagesProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Element firstGenerator, final Element secondGenerator) {
-		if (firstGenerator == null || secondGenerator == null || !firstGenerator.getSet().isEqual(secondGenerator.getSet())
+		if (firstGenerator == null || secondGenerator == null || !firstGenerator.getSet().isEquivalent(secondGenerator.getSet())
 					 || !firstGenerator.getSet().isCyclic() || !firstGenerator.isGenerator() || !secondGenerator.isGenerator()) {
 			throw new IllegalArgumentException();
 		}
@@ -149,7 +149,7 @@ public class InequalityOfPreimagesProofGenerator
 					 Tuple.getInstance(this.getProofCommitment(proof), ((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement()));
 
 		// 2. Check C != 1
-		boolean c = !this.getProofCommitment(proof).isEqual(((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement());
+		boolean c = !this.getProofCommitment(proof).isEquivalent(((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement());
 
 		return BooleanSet.getInstance().getElement(v.getBoolean() && c);
 	}

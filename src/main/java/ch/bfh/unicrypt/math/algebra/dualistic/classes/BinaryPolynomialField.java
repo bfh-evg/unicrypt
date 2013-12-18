@@ -103,7 +103,7 @@ public class BinaryPolynomialField
 	// STATIC FACTORY METHODS
 	//
 	public static BinaryPolynomialField getInstance(PolynomialElement irreduciblePolynomial) {
-		if (irreduciblePolynomial == null || !irreduciblePolynomial.getSet().getSemiRing().isEqual(ZModTwo.getInstance())) {
+		if (irreduciblePolynomial == null || !irreduciblePolynomial.getSet().getSemiRing().isEquivalent(ZModTwo.getInstance())) {
 			throw new IllegalArgumentException();
 		}
 		return new BinaryPolynomialField(irreduciblePolynomial);

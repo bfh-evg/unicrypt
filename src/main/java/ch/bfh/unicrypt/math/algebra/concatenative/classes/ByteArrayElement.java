@@ -49,7 +49,7 @@ public class ByteArrayElement
 	}
 
 	@Override
-	protected boolean standardIsEqual(ByteArrayElement element) {
+	protected boolean standardIsEquivalent(ByteArrayElement element) {
 		return Arrays.equals(this.getByteArray(), element.getByteArray());
 	}
 
