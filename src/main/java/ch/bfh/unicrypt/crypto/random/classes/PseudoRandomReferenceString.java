@@ -18,6 +18,8 @@ public class PseudoRandomReferenceString
 	   extends PseudoRandomGenerator
 	   implements RandomReferenceString {
 
+	public static final byte[] DEFAULT_SEED = new byte[]{};
+
 	private final String algorithmName;
 	private final byte[] seed;
 
@@ -78,7 +80,7 @@ public class PseudoRandomReferenceString
 	}
 
 	public static PseudoRandomReferenceString getInstance(String algorithmName) {
-		return PseudoRandomReferenceString.getInstance(algorithmName, new byte[]{0});
+		return PseudoRandomReferenceString.getInstance(algorithmName, PseudoRandomReferenceString.DEFAULT_SEED);
 	}
 
 	public static PseudoRandomReferenceString getInstance(String algorithmName, byte[] seed) {

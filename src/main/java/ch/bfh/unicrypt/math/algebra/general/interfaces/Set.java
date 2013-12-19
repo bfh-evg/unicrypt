@@ -1,9 +1,15 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
+import ch.bfh.unicrypt.math.helper.Compound;
 import java.math.BigInteger;
 
 /**
@@ -25,7 +31,7 @@ public interface Set {
 	/**
 	 * A constant value that represents an unknown order.
 	 */
-	public static final BigInteger UNKNOWN_ORDER = BigInteger.ZERO;
+	public static final BigInteger UNKNOWN_ORDER = BigInteger.valueOf(-2);
 
 	/**
 	 * Returns {@code true} if this set is an instance of {@link SemiGroup}.
@@ -98,21 +104,21 @@ public interface Set {
 	public boolean isConcatenative();
 
 	/**
-	 * TODO Returns {@code true} if this set is an instance of {@link Compound}.
+	 * TODO Returns {@code true} if this set is an instance of {@link Compound}. This set is a cartesian product
 	 * <p>
 	 * @return {@code true} if this set is compound
 	 */
 	public boolean isProduct();
 
 	/**
-	 * TODO Returns {@code true} if this set is of finite order.
+	 * Returns {@code true} if this set is of finite order.
 	 * <p>
 	 * @return {@code true} if this set is finite
 	 */
 	public boolean isFinite();
 
 	/**
-	 * TODO Returns {@code true} if this set has a known order.
+	 * Returns {@code true} if this set has a known order.
 	 * <p>
 	 * @return {@code true} if this set has a known order
 	 */
@@ -128,39 +134,39 @@ public interface Set {
 	public BigInteger getOrder();
 
 	/**
-	 * TODO Returns a lower bound for the group order in case the exact group order is unknown. The least return value is
-	 * 0. Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
+	 * TODO Returns a lower bound for the group (?)order in case the exact group order is unknown. The least return
+	 * value is 0 (?). Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
 	 * <p>
 	 * @return A lower bound for the group order
 	 */
 	public BigInteger getOrderLowerBound();
 
 	/**
-	 * TODO Returns an upper bound for the group order in case the exact group order is unknown. The heighest return value
-	 * is -1. Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
+	 * TODO Returns an upper bound for the group (?) order in case the exact group order is unknown. The heighest return
+	 * value is -1(?). Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
 	 * <p>
 	 * @return A upper bound for the group order
 	 */
 	public BigInteger getOrderUpperBound();
 
 	/**
-	 * TODO Returns the minimal order. The least value is 0.
+	 * TODO Returns the minimal order of this set(?). entweder order oder min. coumpound (recursive)
 	 * <p>
-	 * @return
+	 * @return The minimal order of this set
 	 */
 	public BigInteger getMinimalOrder();
 
 	/**
 	 * Checks if the set is of order 0.
 	 * <p>
-	 * @return {@literal true} if the order is 0, {@literal false} otherwise
+	 * @return {@code true} if the order is 0
 	 */
 	public boolean isEmpty();
 
 	/**
 	 * Checks if the set is of order 1.
 	 * <p>
-	 * @return {@literal true} if the order is 1, {@literal false} otherwise
+	 * @return {@code true} if the order is 1
 	 */
 	public boolean isSingleton();
 
@@ -174,8 +180,8 @@ public interface Set {
 	public ZMod getZModOrder();
 
 	/**
-	 * Returns an multiplicative integer group of type {@link ZTimesMod} with the same group order. For this to work, the
-	 * group order must be finite and known.
+	 * Returns an multiplicative integer group of type {@link ZTimesMod} with the same group order. For this to work,
+	 * the group order must be finite and known. TODO teilerfremd
 	 * <p>
 	 * @return The resulting multiplicative group.
 	 * @throws UnsupportedOperationException if the group order is infinite or unknown
@@ -183,18 +189,18 @@ public interface Set {
 	public ZStarMod getZStarModOrder();
 
 	/**
-	 * Checks if {@literal this} set contains an element that corresponds to a given integer value.
+	 * Checks if this set contains an element that corresponds to a given integer value.
 	 * <p>
 	 * @param value The given integer value
-	 * @return {@literal true} if such an element exists, {@literal false} otherwise
+	 * @return {@code true} if such an element exists
 	 */
 	public boolean contains(int value);
 
 	/**
-	 * Checks if {@literal this} set contains an element that corresponds to a given BigInteger value.
+	 * Checks if this set contains an element that corresponds to a given BigInteger value.
 	 * <p>
 	 * @param value The given BigInteger value
-	 * @return {@literal true} if such an element exists, {@literal false} otherwise
+	 * @return {@code true} if such an element exists
 	 * @throws IllegalArgumentException if {@literal value} is null
 	 */
 	public boolean contains(BigInteger value);
@@ -203,7 +209,7 @@ public interface Set {
 	 * Checks if a given element belongs to the group.
 	 * <p>
 	 * @param element The given element
-	 * @return {@literal true} if {@literal element} belongs to the group, {@literal false} otherwise
+	 * @return {@code true} if {@literal element} belongs to the group
 	 * @throws IllegalArgumentException if {@literal element} is null
 	 */
 	public boolean contains(Element element);
@@ -218,22 +224,21 @@ public interface Set {
 	public Element getElement(int value);
 
 	/**
-	 * Creates and returns the group element that corresponds to a given BigInteger value (if one exists).
+	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists).
 	 * <p>
 	 * @param value The given BigInteger value
 	 * @return The corresponding group element
-	 * @throws IllegalArgumentException if {@literal value} is null or if no such element exists in {@literal this} group
+	 * @throws IllegalArgumentException if {@literal value} is null or if no such element exists in this group
 	 */
 	public Element getElement(BigInteger value);
 
 	/**
-	 * Creates and returns the group element that corresponds to the integer value of or some other group element (if one
+	 * Creates and returns the element that corresponds to the integer value of or some other group element (if one
 	 * exists).
 	 * <p>
 	 * @param element The given group element
 	 * @return The corresponding group element of this set
-	 * @throws IllegalArgumentException if {@literal element} is null or if no such element exists in {@literal this}
-	 *                                  group
+	 * @throws IllegalArgumentException if {@literal element} is null or if no such element exists in this group
 	 */
 	public Element getElement(Element element);
 
@@ -242,7 +247,7 @@ public interface Set {
 	 * selected uniformly at random. For groups of infinite or unknown order, the underlying probability distribution is
 	 * not further specified.
 	 * <p>
-	 * @return A random group element
+	 * @return A random element from the set
 	 */
 	public Element getRandomElement();
 
@@ -253,7 +258,7 @@ public interface Set {
 	 * not generally specified.
 	 * <p>
 	 * @param randomGenerator Either {@literal null} or a given random generator
-	 * @return A random group element
+	 * @return A random element from the set
 	 */
 	public Element getRandomElement(RandomGenerator randomGenerator);
 
@@ -262,20 +267,23 @@ public interface Set {
 	 * <p>
 	 * @param element1 The first element
 	 * @param element2 The second element
-	 * @return {@literal true} if the elements are equal and belong to the group, {@literal false} otherwise
+	 * @return {@code true} if the elements are equal and belong to the group
 	 * @throws IllegalArgumentException if {@literal element1} or {@literal element2} is null
 	 */
 	public boolean areEqual(Element element1, Element element2);
 
 	/**
-	 *
+	 * TODO
+	 * <p>
 	 * @param set
-	 * @return
+	 * @return {@literal true}
+	 * @throws IllegalArgumentException if {@literal set} is null
 	 */
 	public boolean isCompatible(Set set);
 
 	/**
-	 *
+	 * TODO
+	 * <p>
 	 * @param set
 	 * @return
 	 */

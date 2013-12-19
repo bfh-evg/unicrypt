@@ -5,6 +5,7 @@
  */
 package ch.bfh.unicrypt.crypto.random.abstracts;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -17,8 +18,8 @@ import java.math.BigInteger;
  * @author rolfhaenni
  */
 public abstract class AbstractRandomOracle
-			 extends UniCrypt
-			 implements RandomOracle {
+	   extends UniCrypt
+	   implements RandomOracle {
 
 	private final HashMethod hashMethod;
 
@@ -33,7 +34,7 @@ public abstract class AbstractRandomOracle
 
 	@Override
 	public final RandomReferenceString getRandomReferenceString() {
-		return this.getRandomReferenceString(0);
+		return this.getRandomReferenceString(PseudoRandomReferenceString.DEFAULT_SEED);
 	}
 
 	@Override
