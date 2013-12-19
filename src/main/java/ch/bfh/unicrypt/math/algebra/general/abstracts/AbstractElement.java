@@ -34,203 +34,203 @@ import java.security.MessageDigest;
  * @version 2.0
  */
 public abstract class AbstractElement<S extends Set, E extends Element>
-	extends UniCrypt
-	implements Element {
+			 extends UniCrypt
+			 implements Element {
 
-    private final S set;
-    protected BigInteger value;
+	private final S set;
+	protected BigInteger value;
 
-    protected AbstractElement(final S set) {
-	if (set == null) {
-	    throw new IllegalArgumentException();
+	protected AbstractElement(final S set) {
+		if (set == null) {
+			throw new IllegalArgumentException();
+		}
+		this.set = set;
 	}
-	this.set = set;
-    }
 
-    protected AbstractElement(final S set, final BigInteger value) {
-	this(set);
-	this.value = value;
-    }
-
-    @Override
-    public boolean isAdditive() {
-	return this instanceof AdditiveElement;
-    }
-
-    @Override
-    public boolean isMultiplicative() {
-	return this instanceof MultiplicativeElement;
-    }
-
-    @Override
-    public boolean isConcatenative() {
-	return this instanceof ConcatenativeElement;
-    }
-
-    @Override
-    public boolean isDualistic() {
-	return this instanceof DualisticElement;
-    }
-
-    @Override
-    public final boolean isTuple() {
-	return this instanceof Tuple;
-    }
-
-    /**
-     * Returns the unique {@link Set} to which this element belongs
-     * <p>
-     * @return The element's set
-     */
-    @Override
-    public final S getSet() {
-	return this.set;
-    }
-
-    /**
-     * Returns the positive BigInteger value that corresponds the element.
-     * <p>
-     * @return The corresponding BigInteger value
-     */
-    @Override
-    public final BigInteger getValue() {
-	if (this.value == null) {
-	    this.value = standardGetValue();
+	protected AbstractElement(final S set, final BigInteger value) {
+		this(set);
+		this.value = value;
 	}
-	return this.value;
-    }
 
-    @Override
-    public final FiniteByteArrayElement getHashValue() {
-	return this.getHashValue(HashMethod.DEFAULT);
-    }
-
-    @Override
-    public final FiniteByteArrayElement getHashValue(HashMethod hashMethod) {
-	if (this.isTuple() && hashMethod.isRecursive()) {
-	    Tuple tuple = (Tuple) this;
-	    int arity = tuple.getArity();
-	    ByteArrayElement[] hashValues = new ByteArrayElement[arity];
-	    for (int i = 0; i < arity; i++) {
-		hashValues[i] = tuple.getAt(i).getHashValue(hashMethod).getByteArrayElement();
-	    }
-	    return ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(hashMethod);
+	@Override
+	public boolean isAdditive() {
+		return this instanceof AdditiveElement;
 	}
-	MessageDigest messageDigest = hashMethod.getMessageDigest();
-	messageDigest.reset();
-	return FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getValue().toByteArray()));
-    }
+
+	@Override
+	public boolean isMultiplicative() {
+		return this instanceof MultiplicativeElement;
+	}
+
+	@Override
+	public boolean isConcatenative() {
+		return this instanceof ConcatenativeElement;
+	}
+
+	@Override
+	public boolean isDualistic() {
+		return this instanceof DualisticElement;
+	}
+
+	@Override
+	public final boolean isTuple() {
+		return this instanceof Tuple;
+	}
+
+	/**
+	 * Returns the unique {@link Set} to which this element belongs
+	 * <p>
+	 * @return The element's set
+	 */
+	@Override
+	public final S getSet() {
+		return this.set;
+	}
+
+	/**
+	 * Returns the positive BigInteger value that corresponds the element.
+	 * <p>
+	 * @return The corresponding BigInteger value
+	 */
+	@Override
+	public final BigInteger getValue() {
+		if (this.value == null) {
+			this.value = standardGetValue();
+		}
+		return this.value;
+	}
+
+	@Override
+	public final FiniteByteArrayElement getHashValue() {
+		return this.getHashValue(HashMethod.DEFAULT);
+	}
+
+	@Override
+	public final FiniteByteArrayElement getHashValue(HashMethod hashMethod) {
+		if (this.isTuple() && hashMethod.isRecursive()) {
+			Tuple tuple = (Tuple) this;
+			int arity = tuple.getArity();
+			ByteArrayElement[] hashValues = new ByteArrayElement[arity];
+			for (int i = 0; i < arity; i++) {
+				hashValues[i] = tuple.getAt(i).getHashValue(hashMethod).getByteArrayElement();
+			}
+			return ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(hashMethod);
+		}
+		MessageDigest messageDigest = hashMethod.getMessageDigest();
+		messageDigest.reset();
+		return FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getValue().toByteArray()));
+	}
 
 	//
-    // The following methods are equivalent to corresponding Set methods
-    //
-    /**
-     * @see Group#apply(Element, Element)
-     */
-    @Override
-    public final E apply(final Element element) {
-	if (this.getSet().isSemiGroup()) {
-	    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-	    return (E) semiGroup.apply(this, element);
+	// The following methods are equivalent to corresponding Set methods
+	//
+	/**
+	 * @see Group#apply(Element, Element)
+	 */
+	@Override
+	public final E apply(final Element element) {
+		if (this.getSet().isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+			return (E) semiGroup.apply(this, element);
+		}
+		throw new UnsupportedOperationException();
 	}
-	throw new UnsupportedOperationException();
-    }
 
-    /**
-     * @see Group#applyInverse(Element, Element)
-     */
-    @Override
-    public final E applyInverse(final Element element) {
-	if (this.getSet().isGroup()) {
-	    Group group = ((Group) this.getSet());
-	    return (E) group.applyInverse(this, element);
+	/**
+	 * @see Group#applyInverse(Element, Element)
+	 */
+	@Override
+	public final E applyInverse(final Element element) {
+		if (this.getSet().isGroup()) {
+			Group group = ((Group) this.getSet());
+			return (E) group.applyInverse(this, element);
+		}
+		throw new UnsupportedOperationException();
 	}
-	throw new UnsupportedOperationException();
-    }
 
-    /**
-     * @see Group#selfApply(Element, BigInteger)
-     */
-    @Override
-    public final E selfApply(final BigInteger amount) {
-	if (this.getSet().isSemiGroup()) {
-	    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-	    return (E) semiGroup.selfApply(this, amount);
+	/**
+	 * @see Group#selfApply(Element, BigInteger)
+	 */
+	@Override
+	public final E selfApply(final BigInteger amount) {
+		if (this.getSet().isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+			return (E) semiGroup.selfApply(this, amount);
+		}
+		throw new UnsupportedOperationException();
 	}
-	throw new UnsupportedOperationException();
-    }
 
-    /**
-     * @see Group#selfApply(Element, Element)
-     */
-    @Override
-    public final E selfApply(final Element amount) {
-	if (this.getSet().isSemiGroup()) {
-	    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-	    return (E) semiGroup.selfApply(this, amount);
+	/**
+	 * @see Group#selfApply(Element, Element)
+	 */
+	@Override
+	public final E selfApply(final Element amount) {
+		if (this.getSet().isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+			return (E) semiGroup.selfApply(this, amount);
+		}
+		throw new UnsupportedOperationException();
 	}
-	throw new UnsupportedOperationException();
-    }
 
-    /**
-     * @see Group#selfApply(Element, int)
-     */
-    @Override
-    public final E selfApply(final int amount) {
-	if (this.getSet().isSemiGroup()) {
-	    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-	    return (E) semiGroup.selfApply(this, amount);
+	/**
+	 * @see Group#selfApply(Element, int)
+	 */
+	@Override
+	public final E selfApply(final int amount) {
+		if (this.getSet().isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+			return (E) semiGroup.selfApply(this, amount);
+		}
+		throw new UnsupportedOperationException();
 	}
-	throw new UnsupportedOperationException();
-    }
 
-    /**
-     * @see Group#selfApply(Element)
-     */
-    @Override
-    public final E selfApply() {
-	if (this.getSet().isSemiGroup()) {
-	    SemiGroup semiGroup = ((SemiGroup) this.getSet());
-	    return (E) semiGroup.selfApply(this);
+	/**
+	 * @see Group#selfApply(Element)
+	 */
+	@Override
+	public final E selfApply() {
+		if (this.getSet().isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+			return (E) semiGroup.selfApply(this);
+		}
+		throw new UnsupportedOperationException();
 	}
-	throw new UnsupportedOperationException();
-    }
 
-    /**
-     * @see Group#invert(Element)
-     */
-    @Override
-    public final E invert() {
-	if (this.getSet().isGroup()) {
-	    Group group = ((Group) this.getSet());
-	    return (E) group.invert(this);
+	/**
+	 * @see Group#invert(Element)
+	 */
+	@Override
+	public final E invert() {
+		if (this.getSet().isGroup()) {
+			Group group = ((Group) this.getSet());
+			return (E) group.invert(this);
+		}
+		throw new UnsupportedOperationException();
 	}
-	throw new UnsupportedOperationException();
-    }
 
-    /**
-     * @see Group#isIdentityElement(Element)
-     */
-    @Override
-    public final boolean isIdentity() {
-	if (this.getSet().isMonoid()) {
-	    Monoid monoid = ((Monoid) this.getSet());
-	    return monoid.isIdentityElement(this);
+	/**
+	 * @see Group#isIdentityElement(Element)
+	 */
+	@Override
+	public final boolean isIdentity() {
+		if (this.getSet().isMonoid()) {
+			Monoid monoid = ((Monoid) this.getSet());
+			return monoid.isIdentityElement(this);
+		}
+		throw new UnsupportedOperationException();
 	}
-	throw new UnsupportedOperationException();
-    }
 
-    /**
-     * @see CyclicGroup#isGenerator(Element)
-     */
-    @Override
-    public final boolean isGenerator() {
-	if (this.getSet().isCyclic()) {
-	    CyclicGroup cyclicGroup = ((CyclicGroup) this.getSet());
-	    return cyclicGroup.isGenerator(this);
+	/**
+	 * @see CyclicGroup#isGenerator(Element)
+	 */
+	@Override
+	public final boolean isGenerator() {
+		if (this.getSet().isCyclic()) {
+			CyclicGroup cyclicGroup = ((CyclicGroup) this.getSet());
+			return cyclicGroup.isGenerator(this);
+		}
+		throw new UnsupportedOperationException();
 	}
-	throw new UnsupportedOperationException();
-    }
 
 	//
 	// The standard implementations of the following three methods are
@@ -252,17 +252,6 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		}
 		return this.standardIsEquivalent((E) element);
 	}
-	if (this == element) {
-	    return true;
-	}
-	if (this.getClass() != element.getClass()) {
-	    return false;
-	}
-	if (!this.getSet().isEqual(element.getSet())) {
-	    return false;
-	}
-	return this.standardIsEqual((E) element);
-    }
 
 	//
 	// The following protected methods are standard implementations, which may change in sub-classes
@@ -277,21 +266,21 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		return this.getValue().equals(element.getValue());
 	}
 
-    @Override
-    protected String standardToStringName() {
-	return this.getClass().getSimpleName();
-    }
+	@Override
+	protected String standardToStringName() {
+		return this.getClass().getSimpleName();
+	}
 
-    @Override
-    protected String standardToStringContent() {
-	return this.getValue().toString();
-    }
+	@Override
+	protected String standardToStringContent() {
+		return this.getValue().toString();
+	}
 
-    @Override
-    public int hashCode() {
-	int hash = 3;
-	return hash;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		return hash;
+	}
 
 	// THIS METHOD IS NOT THE FINAL IMPLEMENTATION
 	@Override
