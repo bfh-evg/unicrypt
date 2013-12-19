@@ -23,13 +23,13 @@ public class PermutationCommitmentTest {
 	public PermutationCommitmentTest() {
 		this.G_q = GStarModSafePrime.getInstance(this.P);
 		this.Z_q = G_q.getZModOrder();
-		this.rrs = PseudoRandomReferenceString.getInstance();
+		this.rrs = PseudoRandomReferenceString.getInstance(PseudoRandomReferenceString.DEFAULT_ALGORITHM_NAME, "X".getBytes());
 
-//		System.out.println("g0: " + this.G_q.getRandomGenerator(ro.getRandom(0)));   //  6
-//		System.out.println("g1: " + this.G_q.getRandomGenerator(ro.getRandom(1)));   // 13
-//		System.out.println("g2: " + this.G_q.getRandomGenerator(ro.getRandom(2)));   //  2
-//		System.out.println("g3: " + this.G_q.getRandomGenerator(ro.getRandom(3)));   //  2
-//		System.out.println("g4: " + this.G_q.getRandomGenerator(ro.getRandom(4)));   // 18
+		System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2
+		System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16
+		System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4
+		System.out.println("g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6
+		System.out.println("g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(8)));   // 6^2 *13 = 8
+		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(18)));   // 2^2 * 16 = 18
 	}
 
 	@Test
@@ -57,9 +57,9 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(12)));  // 6^1 * 2 = 12
-		assertTrue(commitment.getAt(1).isEquivalent(this.G_q.getElement(3)));   // 6^2 * 2 =  3
-		assertTrue(commitment.getAt(2).isEquivalent(this.G_q.getElement(2)));   // 6^3 *13 =  2
+		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(8)));    // 2^1 * 4 =  8
+		assertTrue(commitment.getAt(1).isEquivalent(this.G_q.getElement(1)));    // 2^2 * 6 =  1
+		assertTrue(commitment.getAt(2).isEquivalent(this.G_q.getElement(13)));   // 2^3 *16 = 13
 	}
 
 	@Test
@@ -72,10 +72,10 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(16)));  // 6^1 *18 = 16
-		assertTrue(commitment.getAt(1).isEquivalent(this.G_q.getElement(3)));   // 6^2 * 2 =  3
-		assertTrue(commitment.getAt(2).isEquivalent(this.G_q.getElement(2)));   // 6^3 *13 =  2
-		assertTrue(commitment.getAt(3).isEquivalent(this.G_q.getElement(16)));  // 6^4 * 2 = 16
+		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(16)));  // 2^1 * 8 = 16
+		assertTrue(commitment.getAt(1).isEquivalent(this.G_q.getElement(1)));   // 2^2 * 6 =  1
+		assertTrue(commitment.getAt(2).isEquivalent(this.G_q.getElement(13)));  // 2^3 *16 = 13
+		assertTrue(commitment.getAt(3).isEquivalent(this.G_q.getElement(18)));  // 2^4 * 4 = 18
 	}
 
 }

@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.NonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageEqualityProofGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
@@ -43,7 +43,7 @@ public class PreimageEqualityProofGeneratorTest {
 		Function f2 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
-		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageEqualityProofGenerator pg = PreimageEqualityProofGenerator.getInstance(scg, f1, f2);
@@ -80,7 +80,7 @@ public class PreimageEqualityProofGeneratorTest {
 		Function f2 = GeneratorFunction.getInstance(this.G_q2.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
-		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageEqualityProofGenerator pg = PreimageEqualityProofGenerator.getInstance(scg, f1, f2);
@@ -103,7 +103,7 @@ public class PreimageEqualityProofGeneratorTest {
 		Function f2 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		Function f3 = GeneratorFunction.getInstance(this.G_q2.getElement(4));
 		ProductFunction f = ProductFunction.getInstance(f1, f2, f3);
-		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageEqualityProofGenerator pg = PreimageEqualityProofGenerator.getInstance(scg, f1, f2, f3);
 	}
 

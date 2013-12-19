@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.NonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
@@ -40,7 +40,7 @@ public class StandardPreimageProofGeneratorTest {
 
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
@@ -59,7 +59,7 @@ public class StandardPreimageProofGeneratorTest {
 
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q2.getElement(4));
-		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
@@ -78,7 +78,7 @@ public class StandardPreimageProofGeneratorTest {
 
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
 		// Valid proof
@@ -102,7 +102,7 @@ public class StandardPreimageProofGeneratorTest {
 
 		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
 
-		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), (SemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
@@ -128,7 +128,7 @@ public class StandardPreimageProofGeneratorTest {
 
 		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
 
-		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), (SemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
@@ -152,7 +152,7 @@ public class StandardPreimageProofGeneratorTest {
 	public void TestPreimageProof_Exception() {
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		SigmaChallengeGenerator scg = NonInteractiveSigmaChallengeGenerator.getInstance(
+		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);

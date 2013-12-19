@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.abstracts;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.NonInteractiveChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.NonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -13,7 +13,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 public class AbstractNonInteractiveSigmaChallengeGenerator
 			 extends AbstractSigmaChallengeGenerator
-			 implements NonInteractiveChallengeGenerator {
+			 implements NonInteractiveSigmaChallengeGenerator {
 
 	private final RandomOracle randomOracle;
 	private final Element proverID;
@@ -31,15 +31,15 @@ public class AbstractNonInteractiveSigmaChallengeGenerator
 
 	// May return null!
 	@Override
-	public Element getProverID() {
+	public Element getProverId() {
 		return this.proverID;
 	}
 
 	@Override
 	protected ZModElement abstractGenerate(Pair input) {
-		Tuple query = (this.getProverID() == null
+		Tuple query = (this.getProverId() == null
 					 ? input
-					 : Pair.getInstance(input, this.getProverID()));
+					 : Pair.getInstance(input, this.getProverId()));
 		RandomReferenceString randomReferenceString = this.getRandomOracle().getRandomReferenceString(query);
 		return this.getChallengeSpace().getRandomElement(randomReferenceString);
 	}
