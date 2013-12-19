@@ -32,7 +32,7 @@ public interface SigmaProofGenerator
 	public Triple generate(Element privateInput, Element publicInput);
 
 	@Override
-	public Triple generate(Element privateInput, Element publicInput, RandomGenerator randomGeneratorı);
+	public Triple generate(Element privateInput, Element publicInput, RandomGenerator randomGenerator);
 
 	@Override
 	public ProductSet getProofSpace();

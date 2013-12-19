@@ -44,7 +44,6 @@ public class ElGamalValidityProofGeneratorTest {
 
 		Pair publicInput = Pair.getInstance(G_q.getElement(8), G_q.getElement(128));   // (2^3, 4^3*2)
 
-
 		// Valid proof
 		Element secret = G_q.getZModOrder().getElement(3);
 		int index = 1;
@@ -53,7 +52,6 @@ public class ElGamalValidityProofGeneratorTest {
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(v.getBoolean());
-
 
 	}
 
@@ -70,7 +68,6 @@ public class ElGamalValidityProofGeneratorTest {
 			ElGamalEncryptionValidityProofGenerator pg = ElGamalEncryptionValidityProofGenerator.getInstance(scg, elGamalES, publicKey, plaintexts);
 
 			Pair publicInput = Pair.getInstance(G_q.getElement(8), G_q.getElement(128));   // (2^3, 4^3*2)
-
 
 			// Invalid proof -> wrong randomndness
 			Element secret = G_q.getZModOrder().getElement(7);
