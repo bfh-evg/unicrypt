@@ -25,24 +25,25 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 	@Test
 	public void testGeneralizedPedersenCommitment() {
 
-		RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+		RandomReferenceString rrs = PseudoRandomReferenceString.getInstance(PseudoRandomReferenceString.DEFAULT_ALGORITHM_NAME, "X".getBytes());
 
-//		System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  6
-//		System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   //  4
+//		System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2
+//		System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16
 //		System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4
-//		System.out.println("g3: " + this.G_q.getIndependentGenerator(3, rrs));   // 13
-//		System.out.println("g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  4
+//		System.out.println("g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6
+//		System.out.println("g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8
+
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 2, rrs);
 		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3));
 		Element r = Z_q.getElement(2);
-		Element c = gpcs.commit(messages, r);   // c = g1^m1 * g2^m2 * g0^r = 4^1 * 4^3 * 6^2 = 4 * 18 * 13 = 16
-		assertTrue(c.isEquivalent(this.G_q.getElement(16)));
+		Element c = gpcs.commit(messages, r);   // c = g1^m1 * g2^m2 * g0^r = 16^1 * 4^3 * 2^2 = 16 * 18 * 4 = 2
+		assertTrue(c.isEquivalent(this.G_q.getElement(2)));
 
 		gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 4, rrs);
 		messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5));
 		r = Z_q.getElement(3);
-		c = gpcs.commit(messages, r);   // c = 4^1 * 4^3 * 13^4 * 4^5 * 6^3 = 4 * 18 * 18 * 12 * 9 = 13
-		assertTrue(c.isEquivalent(this.G_q.getElement(13)));
+		c = gpcs.commit(messages, r);   // c = 16^1 * 4^3 * 6^4 * 8^5 * 2^3 = 16 * 18 * 8 * 16 * 8 = 6
+		assertTrue(c.isEquivalent(this.G_q.getElement(6)));
 
 	}
 

@@ -386,11 +386,11 @@ public class PermutationCommitmentProofGenerator
 																		 proverId);
 	}
 
-	public static StandardNonInteractiveChallengeGenerator createNonInteractiveMultiChallengeGenerator(final CyclicGroup cyclicGroup, final int size) {
-		return PermutationCommitmentProofGenerator.createNonInteractiveMultiChallengeGenerator(cyclicGroup, size, PseudoRandomOracle.DEFAULT);
+	public static StandardNonInteractiveChallengeGenerator createNonInteractiveChallengeGenerator(final CyclicGroup cyclicGroup, final int size) {
+		return PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(cyclicGroup, size, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static StandardNonInteractiveChallengeGenerator createNonInteractiveMultiChallengeGenerator(final CyclicGroup cyclicGroup, final int size, RandomOracle randomOracle) {
+	public static StandardNonInteractiveChallengeGenerator createNonInteractiveChallengeGenerator(final CyclicGroup cyclicGroup, final int size, RandomOracle randomOracle) {
 		if (cyclicGroup == null || size < 1 || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}

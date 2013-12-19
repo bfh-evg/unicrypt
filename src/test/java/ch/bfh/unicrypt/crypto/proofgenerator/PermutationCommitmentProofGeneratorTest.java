@@ -54,7 +54,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveMultiChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Proof and verify
@@ -83,7 +83,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveMultiChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Proof and verify
@@ -114,7 +114,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveMultiChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Proof and verify
@@ -161,7 +161,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveMultiChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Proof and verify

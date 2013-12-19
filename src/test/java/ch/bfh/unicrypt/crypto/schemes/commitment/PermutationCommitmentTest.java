@@ -25,11 +25,11 @@ public class PermutationCommitmentTest {
 		this.Z_q = G_q.getZModOrder();
 		this.rrs = PseudoRandomReferenceString.getInstance(PseudoRandomReferenceString.DEFAULT_ALGORITHM_NAME, "X".getBytes());
 
-		System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2
-		System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16
-		System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4
-		System.out.println("g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6
-		System.out.println("g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8
+//		System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2
+//		System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16
+//		System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4
+//		System.out.println("g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6
+//		System.out.println("g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8
 	}
 
 	@Test

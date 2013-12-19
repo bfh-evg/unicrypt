@@ -15,8 +15,8 @@ import java.util.Arrays;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class PseudoRandomReferenceString
-			 extends PseudoRandomGenerator
-			 implements RandomReferenceString {
+	   extends PseudoRandomGenerator
+	   implements RandomReferenceString {
 
 	private final String algorithmName;
 	private final byte[] seed;
@@ -78,13 +78,14 @@ public class PseudoRandomReferenceString
 	}
 
 	public static PseudoRandomReferenceString getInstance(String algorithmName) {
-		return PseudoRandomReferenceString.getInstance(algorithmName, new byte[0]);
+		return PseudoRandomReferenceString.getInstance(algorithmName, new byte[]{0});
 	}
 
 	public static PseudoRandomReferenceString getInstance(String algorithmName, byte[] seed) {
 		if (algorithmName == null || seed == null) {
 			throw new IllegalArgumentException();
 		}
+		//System.out.println("Seed: " + Arrays.toString(seed));
 		SecureRandom secureRandom;
 		try {
 			secureRandom = SecureRandom.getInstance(algorithmName);
