@@ -76,11 +76,15 @@ public class PseudoRandomReferenceString
 	}
 
 	public static PseudoRandomReferenceString getInstance() {
-		return PseudoRandomReferenceString.getInstance(PseudoRandomGenerator.DEFAULT_ALGORITHM_NAME);
+		return PseudoRandomReferenceString.getInstance(PseudoRandomGenerator.DEFAULT_ALGORITHM_NAME, PseudoRandomReferenceString.DEFAULT_SEED);
 	}
 
 	public static PseudoRandomReferenceString getInstance(String algorithmName) {
 		return PseudoRandomReferenceString.getInstance(algorithmName, PseudoRandomReferenceString.DEFAULT_SEED);
+	}
+
+	public static PseudoRandomReferenceString getInstance(byte[] seed) {
+		return PseudoRandomReferenceString.getInstance(PseudoRandomGenerator.DEFAULT_ALGORITHM_NAME, seed);
 	}
 
 	public static PseudoRandomReferenceString getInstance(String algorithmName, byte[] seed) {

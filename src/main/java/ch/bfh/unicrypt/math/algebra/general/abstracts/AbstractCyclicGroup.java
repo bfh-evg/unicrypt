@@ -8,14 +8,18 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 public abstract class AbstractCyclicGroup<E extends Element>
-			 extends AbstractGroup<E>
-			 implements CyclicGroup, Iterable<E> {
+	   extends AbstractGroup<E>
+	   implements CyclicGroup, Iterable<E> {
 
 	private E defaultGenerator;
+	private Map<RandomReferenceString, ArrayList<E>> generatorLists = new HashMap<RandomReferenceString, ArrayList<E>>();
 
 	@Override
 	public final E getDefaultGenerator() {
@@ -70,16 +74,25 @@ public abstract class AbstractCyclicGroup<E extends Element>
 		}
 		if (randomReferenceString == null) {
 			randomReferenceString = PseudoRandomReferenceString.getInstance();
-		} else {
+		}
+		ArrayList<E> generatorList = this.generatorLists.get(randomReferenceString);
+		if (generatorList == null) {
+			generatorList = new ArrayList<E>();
+			this.generatorLists.put(randomReferenceString, generatorList);
+		}
+		if (maxIndex >= generatorList.size()) {
 			randomReferenceString.reset();
+			for (int i = 0; i <= maxIndex; i++) {
+				E generator = this.standardGetIndependentGenerator(randomReferenceString);
+				if (i >= generatorList.size()) {
+					generatorList.add(generator);
+				}
+			}
 		}
 		// The following line is necessary for creating a generic array
 		E[] generators = (E[]) Array.newInstance(this.getIdentityElement().getClass(), maxIndex - minIndex + 1);
-		for (int i = 0; i <= maxIndex; i++) {
-			E generator = this.standardGetIndependentGenerator(randomReferenceString);
-			if (i >= minIndex) {
-				generators[i - minIndex] = generator;
-			}
+		for (int i = minIndex; i <= maxIndex; i++) {
+			generators[i - minIndex] = generatorList.get(i);
 		}
 		return generators;
 	}
