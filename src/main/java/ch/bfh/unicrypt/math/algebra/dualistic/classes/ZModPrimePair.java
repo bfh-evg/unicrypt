@@ -9,13 +9,15 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.helper.factorization.PrimePair;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author rolfhaenni
  */
 public class ZModPrimePair
-			 extends ZMod {
+	   extends ZMod {
 
 	PrimePair primePair;
 
@@ -46,11 +48,18 @@ public class ZModPrimePair
 		return ZStarMod.getInstance(this.getPrimePair());
 	}
 
+	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<BigInteger, ZModPrimePair>();
+
 	public static ZModPrimePair getInstance(final PrimePair twoPrimes) {
 		if (twoPrimes == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ZModPrimePair(twoPrimes);
+		ZModPrimePair instance = ZModPrimePair.instances.get(twoPrimes.getValue());
+		if (instance == null) {
+			instance = new ZModPrimePair(twoPrimes);
+			ZModPrimePair.instances.put(twoPrimes.getValue(), instance);
+		}
+		return instance;
 	}
 
 	public static ZModPrimePair getInstance(final int prime1, final int prime2) {
@@ -58,7 +67,7 @@ public class ZModPrimePair
 	}
 
 	public static ZModPrimePair getInstance(BigInteger prime1, BigInteger prime2) {
-		return new ZModPrimePair(PrimePair.getInstance(prime1, prime2));
+		return ZModPrimePair.getInstance(PrimePair.getInstance(prime1, prime2));
 	}
 
 	public static ZModPrimePair getInstance(Prime prime1, Prime prime2) {

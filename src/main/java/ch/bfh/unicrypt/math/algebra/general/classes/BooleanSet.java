@@ -20,7 +20,7 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class BooleanSet
-			 extends AbstractSet<BooleanElement> {
+	   extends AbstractSet<BooleanElement> {
 
 	public static final BooleanElement TRUE = BooleanSet.getInstance().getElement(true);
 	public static final BooleanElement FALSE = BooleanSet.getInstance().getElement(false);

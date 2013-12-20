@@ -6,13 +6,15 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class FixedByteArraySet
-			 extends FiniteByteArraySet {
+	   extends FiniteByteArraySet {
 
 	private FixedByteArraySet(int length) {
 		super(length, length);
@@ -22,11 +24,18 @@ public class FixedByteArraySet
 		return this.getMinLength();
 	}
 
+	private static final Map<Integer, FixedByteArraySet> instances = new HashMap<Integer, FixedByteArraySet>();
+
 	public static FixedByteArraySet getInstance(final int length) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new FixedByteArraySet(length);
+		FixedByteArraySet instance = FixedByteArraySet.instances.get(Integer.valueOf(length));
+		if (instance == null) {
+			instance = new FixedByteArraySet(length);
+			FixedByteArraySet.instances.put(Integer.valueOf(length), instance);
+		}
+		return instance;
 	}
 
 	public static FixedByteArraySet getInstance(final BigInteger minOrder) {
@@ -40,7 +49,7 @@ public class FixedByteArraySet
 			order = order.multiply(size);
 			length++;
 		}
-		return new FixedByteArraySet(length);
+		return FixedByteArraySet.getInstance(length);
 	}
 
 }
