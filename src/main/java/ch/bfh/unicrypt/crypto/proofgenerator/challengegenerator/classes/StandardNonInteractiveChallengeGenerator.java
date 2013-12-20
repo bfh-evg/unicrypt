@@ -8,9 +8,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 public class StandardNonInteractiveChallengeGenerator
-			 extends AbstractNonInteractiveChallengeGenerator<Set, Element, Set, Element> {
+	   extends AbstractNonInteractiveChallengeGenerator<Set, Element, Set, Element> {
 
-	protected StandardNonInteractiveChallengeGenerator(final Set inputSpace, final ProductSet challengeSpace, final RandomOracle randomOracle) {
+	protected StandardNonInteractiveChallengeGenerator(final Set inputSpace, final Set challengeSpace, final RandomOracle randomOracle) {
 		super(inputSpace, challengeSpace, randomOracle);
 	}
 
@@ -25,11 +25,11 @@ public class StandardNonInteractiveChallengeGenerator
 		return StandardNonInteractiveChallengeGenerator.getInstance(inputSpace, ProductSet.getInstance(challengeSet, arity), randomOracle);
 	}
 
-	public static StandardNonInteractiveChallengeGenerator getInstance(final Set inputSpace, final ProductSet challengeSpace) {
+	public static StandardNonInteractiveChallengeGenerator getInstance(final Set inputSpace, final Set challengeSpace) {
 		return StandardNonInteractiveChallengeGenerator.getInstance(inputSpace, challengeSpace, (RandomOracle) null);
 	}
 
-	public static StandardNonInteractiveChallengeGenerator getInstance(final Set inputSpace, final ProductSet challengeSpace, RandomOracle randomOracle) {
+	public static StandardNonInteractiveChallengeGenerator getInstance(final Set inputSpace, final Set challengeSpace, RandomOracle randomOracle) {
 		if (inputSpace == null || challengeSpace == null) {
 			throw new IllegalArgumentException();
 		}

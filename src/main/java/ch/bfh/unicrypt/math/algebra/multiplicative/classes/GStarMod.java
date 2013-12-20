@@ -16,6 +16,7 @@ import java.math.BigInteger;
  * Euler totient function. The order m=|G_m| is the product of all given prime factors of phi(n). If all prime factors
  * of phi(n) are given, which implies m=phi(n), then G_m is the parent group Z*_n.
  * <p>
+ * <p/>
  * @see "Handbook of Applied Cryptography, Fact 2.132"
  * @see "Handbook of Applied Cryptography, Definition 2.100"
  * @see "Handbook of Applied Cryptography, Definition 2.166"
@@ -25,12 +26,16 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class GStarMod
-			 extends AbstractMultiplicativeCyclicGroup<GStarModElement> {
+	   extends AbstractMultiplicativeCyclicGroup<GStarModElement> {
 
 	private final BigInteger modulus;
 	private final SpecialFactorization moduloFactorization;
 	private final Factorization orderFactorization;
 	private ZStarMod superGroup;
+	// Counters for statistics -> performance improvements (just temporarily)
+	public static int modPowCounter_SelfApply = 0;
+	public static int modPowCounter_Contains = 0;
+	public static int modPowCounter_IsGenerator = 0;
 
 	protected GStarMod(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
 		this.modulus = moduloFactorization.getValue();
@@ -41,6 +46,7 @@ public class GStarMod
 	/**
 	 * Returns the modulus if this group.
 	 * <p>
+	 * <p/>
 	 * @return The modulus
 	 */
 	public final BigInteger getModulus() {
@@ -48,9 +54,10 @@ public class GStarMod
 	}
 
 	/**
-	 * Returns a (possibly incomplete) prime factorization the modulus if this group. An incomplete factorization implies
-	 * that the group order is unknown in such a case.
+	 * Returns a (possibly incomplete) prime factorization the modulus if this group. An incomplete factorization
+	 * implies that the group order is unknown in such a case.
 	 * <p>
+	 * <p/>
 	 * @return The prime factorization
 	 */
 	public final SpecialFactorization getModuloFactorization() {
@@ -60,6 +67,7 @@ public class GStarMod
 	/**
 	 * Returns prime factorization of the group order phi(n) of Z*_n.
 	 * <p>
+	 * <p/>
 	 * @return The prime factorization of the group order
 	 */
 	public final Factorization getOrderFactorization() {
@@ -76,6 +84,7 @@ public class GStarMod
 	/**
 	 * Returns the quotient k=phi(n)/m of the orders of the two involved groups.
 	 * <p>
+	 * <p/>
 	 * @return The quotient of the two orders.
 	 */
 	public BigInteger getCoFactor() {
@@ -89,6 +98,7 @@ public class GStarMod
 	@Override
 	protected GStarModElement standardSelfApply(final Element element, final BigInteger amount) {
 		BigInteger newAmount = amount.mod(this.getOrder());
+		GStarMod.modPowCounter_SelfApply++;
 		return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
 	}
 
@@ -136,8 +146,9 @@ public class GStarMod
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
+		GStarMod.modPowCounter_Contains++;
 		return (value.signum() >= 0) && (value.compareTo(this.getModulus()) < 0) && MathUtil.areRelativelyPrime(value, this.getModulus())
-					 && value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE);
+			   && value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE);
 	}
 
 	@Override
@@ -163,6 +174,7 @@ public class GStarMod
 	/**
 	 * See http://en.wikipedia.org/wiki/Schnorr_group
 	 * <p>
+	 * <p/>
 	 * @return
 	 */
 	@Override
@@ -184,6 +196,7 @@ public class GStarMod
 	@Override
 	protected boolean abstractIsGenerator(GStarModElement element) {
 		for (final BigInteger prime : this.getOrderFactorization().getPrimeFactors()) {
+			GStarMod.modPowCounter_IsGenerator++;
 			if (element.selfApply(this.getOrder().divide(prime)).isEquivalent(this.getIdentityElement())) {
 				return false;
 			}
@@ -197,6 +210,7 @@ public class GStarMod
 	/**
 	 * This is the general static factory method for this class.
 	 * <p>
+	 * <p/>
 	 * @param moduloFactorization
 	 * @param orderFactorization
 	 * @return

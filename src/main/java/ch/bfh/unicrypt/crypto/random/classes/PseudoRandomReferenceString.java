@@ -19,7 +19,6 @@ public class PseudoRandomReferenceString
 	   implements RandomReferenceString {
 
 	public static final byte[] DEFAULT_SEED = new byte[]{};
-
 	private final String algorithmName;
 	private final byte[] seed;
 
@@ -91,7 +90,6 @@ public class PseudoRandomReferenceString
 		if (algorithmName == null || seed == null) {
 			throw new IllegalArgumentException();
 		}
-		//System.out.println("Seed: " + Arrays.toString(seed));
 		SecureRandom secureRandom;
 		try {
 			secureRandom = SecureRandom.getInstance(algorithmName);
