@@ -83,20 +83,36 @@ public class PseudoRandomGenerator
 
 	@Override
 	protected int abstractNextInteger(int maxValue) {
-		return 0;
+		//This is a slow implementation.
+		return nextBigInteger(BigInteger.valueOf(maxValue)).intValue();
 	}
 
+	/**
+	 * MSB is always set
+	 * <p>
+	 * @param bitLength
+	 * @return
+	 */
 	@Override
 	protected BigInteger abstractNextBigInteger(int bitLength) {
-		int amountOfBytes = (bitLength / 8) + 1;
+		return internalNextBigInteger(bitLength, true);
+	}
+
+	private BigInteger internalNextBigInteger(int bitLength, boolean isMsbSet) {
+		int amountOfBytes = (int) Math.ceil(bitLength / 8.0);
 		byte[] bytes = nextBytes(amountOfBytes);
 
 		int shift = 8 - (bitLength % 8);
 		if (shift == 8) {
 			shift = 0;
 		}
-		bytes[bytes.length - 1] = (byte) (((bytes[bytes.length - 1] & 0xFF) | 0x70) >> shift);
-		return new BigInteger(bytes);
+		if (isMsbSet) {
+			bytes[0] = (byte) (((bytes[0] & 0xFF) | 0x80) >> shift);
+		} else {
+			bytes[0] = (byte) ((bytes[0] & 0xFF) >> shift);
+
+		}
+		return new BigInteger(1, bytes);
 	}
 
 	@Override
@@ -104,16 +120,22 @@ public class PseudoRandomGenerator
 		BigInteger randomValue;
 		int bitLength = maxValue.bitLength();
 		do {
-			randomValue = nextBigInteger(bitLength);
+			randomValue = internalNextBigInteger(bitLength, false);
 		} while (randomValue.compareTo(maxValue) > 0);
 		return randomValue;
 	}
 
+	/**
+	 * MSB always set
+	 * <p>
+	 * @param bitLength
+	 * @return
+	 */
 	@Override
 	protected BigInteger abstractNextPrime(int bitLength) {
 		BigInteger bigInteger = null;
 		do {
-			bigInteger = nextBigInteger(bitLength);
+			bigInteger = internalNextBigInteger(bitLength, true);
 		} while (!bigInteger.isProbablePrime(MathUtil.NUMBER_OF_PRIME_TESTS));
 		return bigInteger;
 	}
@@ -138,6 +160,32 @@ public class PseudoRandomGenerator
 			throw new IllegalArgumentException();
 		}
 		return new PseudoRandomGenerator(hashMethod, seed);
+	}
+
+	/**
+	 * Originally developed by Raphaël Grosbois and Diego Santa Cruz (Swiss Federal Institute of Technology-EPFL) et al.
+	 * in http://www.java2s.com/Tutorial/Java/0120__Development/Calculatethefloorofthelogbase2.htm Method that
+	 * calculates the floor of the log, base 2, of 'x'. The calculation is performed in integer arithmetic, therefore,
+	 * it is exact.
+	 * <p>
+	 * @param x The value to calculate log2 on.
+	 * <p>
+	 * @return floor(log(x)/log(2)), calculated in an exact way.
+     * */
+	private static int log2Floor(int x) {
+		int y, v;
+		// No log of 0 or negative
+		if (x <= 0) {
+			throw new IllegalArgumentException("" + x + " <= 0");
+		}
+		// Calculate log2 (it's actually floor log2)
+		v = x;
+		y = -1;
+		while (v > 0) {
+			v >>= 1;
+			y++;
+		}
+		return y;
 	}
 
 }
