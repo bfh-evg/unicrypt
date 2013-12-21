@@ -15,7 +15,6 @@ import java.util.HashSet;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -84,19 +83,6 @@ public class PseudoRandomGeneratorTest {
 		counter = instance.getCounter();
 		Assert.assertTrue(1 == counter);
 
-	}
-
-	/**
-	 * Test of setCounter method, of class PseudoRandomGenerator.
-	 */
-	@Test
-	public void testSetCounter() {
-		System.out.println("setCounter");
-		int counter = 0;
-		PseudoRandomGenerator instance = null;
-		instance.setCounter(counter);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -198,8 +184,6 @@ public class PseudoRandomGeneratorTest {
 		System.out.println("abstractNextBytes");
 		int byteArrayLength = HashMethod.DEFAULT.getLength();
 		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
-		Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getByteArray();
-		instance.abstractNextBytes(byteArrayLength);
 		instance.nextBytes(byteArrayLength);
 		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getByteArray();
 		byte[] result = instance.nextBytes(byteArrayLength);

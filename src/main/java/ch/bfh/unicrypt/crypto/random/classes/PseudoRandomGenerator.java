@@ -111,6 +111,9 @@ public class PseudoRandomGenerator
 	}
 
 	private BigInteger internalNextBigInteger(int bitLength, boolean isMsbSet) {
+		if (bitLength < 1) {
+			return BigInteger.ZERO;
+		}
 		int amountOfBytes = (int) Math.ceil(bitLength / 8.0);
 		byte[] bytes = nextBytes(amountOfBytes);
 

@@ -23,7 +23,7 @@ public class PermutationCommitmentTest {
 	public PermutationCommitmentTest() {
 		this.G_q = GStarModSafePrime.getInstance(this.P);
 		this.Z_q = G_q.getZModOrder();
-		this.rrs = PseudoRandomReferenceString.getInstance(PseudoRandomReferenceString.DEFAULT_ALGORITHM_NAME, "X".getBytes());
+		this.rrs = PseudoRandomReferenceString.getInstance("X".getBytes());
 
 //		System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2
 //		System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16

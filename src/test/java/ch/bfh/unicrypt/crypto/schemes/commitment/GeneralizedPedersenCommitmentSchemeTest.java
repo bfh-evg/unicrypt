@@ -25,14 +25,13 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 	@Test
 	public void testGeneralizedPedersenCommitment() {
 
-		RandomReferenceString rrs = PseudoRandomReferenceString.getInstance(PseudoRandomReferenceString.DEFAULT_ALGORITHM_NAME, "X".getBytes());
+		RandomReferenceString rrs = PseudoRandomReferenceString.getInstance("X".getBytes());
 
 //		System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2
 //		System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16
 //		System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4
 //		System.out.println("g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6
 //		System.out.println("g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8
-
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 2, rrs);
 		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3));
 		Element r = Z_q.getElement(2);

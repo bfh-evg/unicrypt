@@ -6,6 +6,7 @@
 package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
@@ -29,6 +30,13 @@ public class PseudoRandomReferenceString
 	@Override
 	public boolean isReset() {
 		return super.isReset();
+	}
+
+	public static PseudoRandomReferenceString getInstance(byte[] query) {
+		if (query == null) {
+			throw new IllegalArgumentException();
+		}
+		return getInstance(ByteArrayMonoid.getInstance().getElement(query));
 	}
 
 	public static PseudoRandomReferenceString getInstance() {
