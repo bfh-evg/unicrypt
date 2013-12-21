@@ -57,7 +57,16 @@ public class PermutationCommitmentTunedProofGenerator
 	public static PermutationCommitmentTunedProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, RandomReferenceString randomReferenceString) {
 
-		// TODO Argument validation
+		if (sigmaChallengeGenerator == null || eValuesGenerator == null || cyclicGroup == null || size < 1 || randomReferenceString == null) {
+			throw new IllegalArgumentException();
+		}
+		if (!sigmaChallengeGenerator.getPublicInputSpace().isEquivalent(PermutationCommitmentTunedProofGenerator.createSigmaChallengeGeneratorPublicInputSpace(cyclicGroup, size))
+			   || !sigmaChallengeGenerator.getCommitmentSpace().isEquivalent(PermutationCommitmentTunedProofGenerator.createCommitmentSpace(cyclicGroup, size))
+			   || !sigmaChallengeGenerator.getChallengeSpace().isEquivalent(PermutationCommitmentTunedProofGenerator.createChallengeSpace(cyclicGroup))
+			   || !eValuesGenerator.getInputSpace().isEquivalent(PermutationCommitmentTunedProofGenerator.createEValuesGeneratorPublicInputSpace(cyclicGroup, size))
+			   || !eValuesGenerator.getChallengeSpace().isEquivalent(PermutationCommitmentTunedProofGenerator.createEValuesGeneratorChallengeSpace(cyclicGroup, size))) {
+			throw new IllegalArgumentException();
+		}
 
 		return new PermutationCommitmentTunedProofGenerator(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, randomReferenceString);
 	}
@@ -75,7 +84,7 @@ public class PermutationCommitmentTunedProofGenerator
 		return ProductGroup.getInstance(this.cyclicGroup, this.size);
 	}
 
-	// Proof:   (SigmaProof-Triple, public inputs for sigma proof cV)
+	// Proof:   (SigmaProof-Triple, Bridging Commitments)
 	@Override
 	protected ProductGroup abstractGetProofSpace() {
 		return ProductGroup.getInstance(this.getPreimageProofSpace(),
@@ -89,11 +98,11 @@ public class PermutationCommitmentTunedProofGenerator
 	}
 
 	public ProductGroup getCommitmentSpace() {
-		return ProductGroup.getInstance(this.cyclicGroup, this.size + 3);
+		return PermutationCommitmentTunedProofGenerator.createCommitmentSpace(this.cyclicGroup, this.size);
 	}
 
 	public ZMod getChallengeSpace() {
-		return this.cyclicGroup.getZModOrder();
+		return PermutationCommitmentTunedProofGenerator.createChallengeSpace(this.cyclicGroup);
 	}
 
 	public ProductGroup getResponseSpace() {
@@ -104,6 +113,34 @@ public class PermutationCommitmentTunedProofGenerator
 										ProductGroup.getInstance(cyclicGroup.getZModOrder(), size));
 	}
 
+	//===================================================================================
+	// Helpers to create spaces
+	//
+	private static ProductGroup createCommitmentSpace(CyclicGroup cyclicGroup, int size) {
+		return ProductGroup.getInstance(cyclicGroup, size + 3);
+	}
+
+	private static ZMod createChallengeSpace(CyclicGroup cyclicGroup) {
+		return cyclicGroup.getZModOrder();
+	}
+
+	private static ProductGroup createSigmaChallengeGeneratorPublicInputSpace(CyclicGroup cyclicGroup, int size) {
+		// (Permutation Commitment, Bridging Commitments)
+		return ProductGroup.getInstance(ProductGroup.getInstance(cyclicGroup, size), 2);
+	}
+
+	private static ProductGroup createEValuesGeneratorPublicInputSpace(CyclicGroup cyclicGroup, int size) {
+		// (Permutation Commitment)
+		return ProductGroup.getInstance(cyclicGroup, size);
+	}
+
+	private static ProductGroup createEValuesGeneratorChallengeSpace(CyclicGroup cyclicGroup, int size) {
+		return ProductGroup.getInstance(cyclicGroup.getZModOrder(), size);
+	}
+
+	//===================================================================================
+	// Generate and Validate
+	//
 	@Override
 	protected Pair abstractGenerate(Pair privateInput, Tuple publicInput, RandomGenerator randomGenerator) {
 
@@ -141,7 +178,7 @@ public class PermutationCommitmentTunedProofGenerator
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, cV);
 		final Element randomElement = this.getResponseSpace().getRandomElement(randomGenerator);
 		final Element commitment = f.apply(randomElement);
-		final Element challenge = this.sigmaChallengeGenerator.generate(publicInput, commitment);
+		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
 		final Element response = randomElement.apply(Tuple.getInstance(v, w, rV, d, ePrimeV).selfApply(challenge));
 		Triple preimageProof = (Triple) Triple.getInstance(commitment, challenge, response);
 
@@ -183,13 +220,15 @@ public class PermutationCommitmentTunedProofGenerator
 
 		// Verify preimage proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, cV);
-		final Element challenge = this.sigmaChallengeGenerator.generate(publicInput, commitment);
+		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
 		final Element left = f.apply(response);
 		final Element right = commitment.apply(pV.selfApply(challenge));
 		return BooleanSet.getInstance().getElement(left.isEquivalent(right));
-
 	}
 
+	//===================================================================================
+	// Private Helpers
+	//
 	// Helper to crate a one-vector
 	private static Tuple createOneVector(Group group, int size) {
 		if (group == null || size < 1) {
@@ -217,7 +256,7 @@ public class PermutationCommitmentTunedProofGenerator
 		return innerProduct;
 	}
 
-	//
+	//===================================================================================
 	// Nested class PreimageProofFunction
 	//
 	private class PreimageProofFunction
@@ -300,25 +339,24 @@ public class PermutationCommitmentTunedProofGenerator
 		if (randomOracle == null) {
 			randomOracle = PseudoRandomOracle.DEFAULT;
 		}
-
-
-		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(ProductGroup.getInstance(cyclicGroup, size),
-																		 ProductGroup.getInstance(cyclicGroup, 3 + size),
-																		 cyclicGroup.getZModOrder(),
+		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(PermutationCommitmentTunedProofGenerator.createSigmaChallengeGeneratorPublicInputSpace(cyclicGroup, size),
+																		 PermutationCommitmentTunedProofGenerator.createCommitmentSpace(cyclicGroup, size),
+																		 PermutationCommitmentTunedProofGenerator.createChallengeSpace(cyclicGroup),
 																		 randomOracle,
 																		 proverId);
-
 	}
 
-	public static StandardNonInteractiveChallengeGenerator createNonInteractiveElementChallengeGenerator(final CyclicGroup cyclicGroup, final int size) {
-		return PermutationCommitmentTunedProofGenerator.createNonInteractiveElementChallengeGenerator(cyclicGroup, size, PseudoRandomOracle.DEFAULT);
+	public static StandardNonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size) {
+		return PermutationCommitmentTunedProofGenerator.createNonInteractiveEValuesGenerator(cyclicGroup, size, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static StandardNonInteractiveChallengeGenerator createNonInteractiveElementChallengeGenerator(final CyclicGroup cyclicGroup, final int size, final RandomOracle randomOracle) {
+	public static StandardNonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size, final RandomOracle randomOracle) {
 		if (cyclicGroup == null || size < 1 || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}
-		return StandardNonInteractiveChallengeGenerator.getInstance(ProductGroup.getInstance(cyclicGroup, size), cyclicGroup.getZModOrder(), size, randomOracle);
+		return StandardNonInteractiveChallengeGenerator.getInstance(PermutationCommitmentTunedProofGenerator.createEValuesGeneratorPublicInputSpace(cyclicGroup, size),
+																	PermutationCommitmentTunedProofGenerator.createEValuesGeneratorChallengeSpace(cyclicGroup, size),
+																	randomOracle);
 	}
 
 }

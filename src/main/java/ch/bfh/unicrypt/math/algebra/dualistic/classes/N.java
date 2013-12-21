@@ -23,7 +23,7 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class N
-			 extends AbstractSemiRing<NElement> {
+	   extends AbstractSemiRing<NElement> {
 
 	//
 	// The following protected methods override the standard implementation from

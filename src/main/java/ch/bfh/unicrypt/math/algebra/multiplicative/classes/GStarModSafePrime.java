@@ -9,13 +9,17 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.helper.factorization.SafePrime;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author rolfhaenni
  */
 public class GStarModSafePrime
-			 extends GStarModPrime {
+	   extends GStarModPrime {
+
+	private final static Map<BigInteger, GStarModSafePrime> instances = new HashMap<BigInteger, GStarModSafePrime>();
 
 	protected GStarModSafePrime(SafePrime modulo) {
 		super(modulo, Prime.getInstance(modulo.getValue().subtract(BigInteger.ONE).divide(BigInteger.valueOf(2))));
@@ -40,7 +44,12 @@ public class GStarModSafePrime
 		if (safePrime == null) {
 			throw new IllegalArgumentException();
 		}
-		return new GStarModSafePrime(safePrime);
+		GStarModSafePrime instance = GStarModSafePrime.instances.get(safePrime.getValue());
+		if (instance == null) {
+			instance = new GStarModSafePrime(safePrime);
+			GStarModSafePrime.instances.put(safePrime.getValue(), instance);
+		}
+		return instance;
 	}
 
 	public static GStarModSafePrime getInstance(final int modulus) {
@@ -48,7 +57,7 @@ public class GStarModSafePrime
 	}
 
 	public static GStarModSafePrime getInstance(final BigInteger modulus) {
-		return new GStarModSafePrime(SafePrime.getInstance(modulus));
+		return GStarModSafePrime.getInstance(SafePrime.getInstance(modulus));
 	}
 
 	public static GStarModSafePrime getRandomInstance(int bitLength) {
@@ -56,7 +65,7 @@ public class GStarModSafePrime
 	}
 
 	public static GStarModSafePrime getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
-		return new GStarModSafePrime(SafePrime.getRandomInstance(bitLength, randomGenerator));
+		return GStarModSafePrime.getInstance(SafePrime.getRandomInstance(bitLength, randomGenerator));
 	}
 
 }

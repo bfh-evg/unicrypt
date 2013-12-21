@@ -19,7 +19,7 @@ import java.util.Map;
  * @author rolfhaenni
  */
 public class ByteArrayMonoid
-			 extends AbstractConcatenativeMonoid<ByteArrayElement> {
+	   extends AbstractConcatenativeMonoid<ByteArrayElement> {
 
 	private final int blockLength;
 

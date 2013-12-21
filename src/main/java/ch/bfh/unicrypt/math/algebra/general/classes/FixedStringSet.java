@@ -13,7 +13,7 @@ import java.math.BigInteger;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class FixedStringSet
-			 extends FiniteStringSet {
+	   extends FiniteStringSet {
 
 	private FixedStringSet(Alphabet alphabet, int length) {
 		super(alphabet, length, length);
@@ -41,7 +41,7 @@ public class FixedStringSet
 			order = order.multiply(size);
 			length++;
 		}
-		return new FixedStringSet(alphabet, length);
+		return FixedStringSet.getInstance(alphabet, length);
 	}
 
 }

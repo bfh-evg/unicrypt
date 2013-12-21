@@ -71,7 +71,7 @@ public class ShuffleProofGeneratorTest {
 
 		// Shuffle Proof Generator
 		SigmaChallengeGenerator scg = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scg, ecg, G_q, size, encryptionPK, rrs);
 
 		// Proof and verify
@@ -116,7 +116,7 @@ public class ShuffleProofGeneratorTest {
 
 		// Shuffle Proof Generator
 		SigmaChallengeGenerator scg = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scg, ecg, G_q, size, encryptionPK, rrs);
 
 		// Proof and verify
@@ -131,7 +131,7 @@ public class ShuffleProofGeneratorTest {
 	@Test
 	public void testShuffleProofGenerator_Invalid() {
 
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
+		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomGenerator randomGenerator = PseudoRandomGenerator.getInstance();
@@ -160,7 +160,7 @@ public class ShuffleProofGeneratorTest {
 
 		// Shuffle Proof Generator
 		SigmaChallengeGenerator scg = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scg, ecg, G_q, size, encryptionPK, rrs);
 
 		// Proof and verify
@@ -200,7 +200,7 @@ public class ShuffleProofGeneratorTest {
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
-		final int size = 100;
+		final int size = 10;
 		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, rrs);
 
@@ -228,13 +228,13 @@ public class ShuffleProofGeneratorTest {
 //		ChallengeGenerator ecgP = PermutationCommitmentProofGenerator.createNonInteractiveMultiChallengeGenerator(G_q, size, ro);
 //		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scgP, ecgP, G_q, size, rrs);
 		SigmaChallengeGenerator scg = PermutationCommitmentTunedProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentTunedProofGenerator.createNonInteractiveElementChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentTunedProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		PermutationCommitmentTunedProofGenerator pcpg = PermutationCommitmentTunedProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 
 		// Shuffle Proof Generator
 		SigmaChallengeGenerator scgS = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionPK, rrs);
 
 		logAndReset();

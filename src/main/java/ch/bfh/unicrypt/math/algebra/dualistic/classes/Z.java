@@ -23,7 +23,7 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class Z
-			 extends AbstractCyclicRing<ZElement> {
+	   extends AbstractCyclicRing<ZElement> {
 
 	//
 	// The following protected methods override the standard implementation from
@@ -104,7 +104,7 @@ public class Z
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static Z instance;
+	private static Z instance = new Z();
 
 	/**
 	 * Returns the singleton object of this class.

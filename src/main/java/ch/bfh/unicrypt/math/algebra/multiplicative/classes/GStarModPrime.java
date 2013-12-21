@@ -6,16 +6,20 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author rolfhaenni
  */
 public class GStarModPrime
-			 extends GStarMod {
+	   extends GStarMod {
 
-	protected GStarModPrime(Prime modulo, Prime orderFactor) {
-		super(modulo, orderFactor);
+	private final static Map<BigInteger, Map<BigInteger, GStarModPrime>> instanceMaps = new HashMap<BigInteger, Map<BigInteger, GStarModPrime>>();
+
+	protected GStarModPrime(Prime modulus, Prime orderFactor) {
+		super(modulus, orderFactor);
 	}
 
 	public static GStarModPrime getInstance(Prime modulus, Prime orderFactor) {
@@ -25,7 +29,17 @@ public class GStarModPrime
 		if (!modulus.getValue().subtract(BigInteger.ONE).mod(orderFactor.getValue()).equals(BigInteger.ZERO)) {
 			throw new IllegalArgumentException();
 		}
-		return new GStarModPrime(modulus, orderFactor);
+		Map<BigInteger, GStarModPrime> instanceMap = GStarModPrime.instanceMaps.get(modulus.getValue());
+		if (instanceMap == null) {
+			instanceMap = new HashMap<BigInteger, GStarModPrime>();
+			GStarModPrime.instanceMaps.put(modulus.getValue(), instanceMap);
+		}
+		GStarModPrime instance = instanceMap.get(orderFactor.getValue());
+		if (instance == null) {
+			instance = new GStarModPrime(modulus, orderFactor);
+			instanceMap.put(orderFactor.getValue(), instance);
+		}
+		return instance;
 	}
 
 	public static GStarModPrime getInstance(final int modulus, final int orderFactor) {

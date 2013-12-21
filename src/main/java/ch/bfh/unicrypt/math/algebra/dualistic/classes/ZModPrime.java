@@ -10,14 +10,16 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author rolfhaenni
  */
 public class ZModPrime
-			 extends ZMod
-			 implements PrimeField {
+	   extends ZMod
+	   implements PrimeField {
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());
@@ -44,16 +46,6 @@ public class ZModPrime
 		return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-	public static ZModPrime getInstance(final Prime prime) {
-		if (prime == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ZModPrime(prime);
-	}
-
 	@Override
 	protected ZModPrime standardGetZModOrder() {
 		return ZModPrime.getInstance(this.getOrder());
@@ -64,16 +56,33 @@ public class ZModPrime
 		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
+	//
+	// STATIC FACTORY METHODS
+	//
+	private static final Map<BigInteger, ZModPrime> instances = new HashMap<BigInteger, ZModPrime>();
+
+	public static ZModPrime getInstance(final Prime modulus) {
+		if (modulus == null) {
+			throw new IllegalArgumentException();
+		}
+		ZModPrime instance = ZModPrime.instances.get(modulus.getValue());
+		if (instance == null) {
+			instance = new ZModPrime(modulus);
+			ZModPrime.instances.put(modulus.getValue(), instance);
+		}
+		return instance;
+	}
+
 	public static ZModPrime getInstance(final int modulus) {
 		return ZModPrime.getInstance(BigInteger.valueOf(modulus));
 	}
 
-	public static ZModPrime getInstance(BigInteger prime) {
-		return new ZModPrime(Prime.getInstance(prime));
+	public static ZModPrime getInstance(BigInteger modulus) {
+		return ZModPrime.getInstance(Prime.getInstance(modulus));
 	}
 
 	public static ZModPrime getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
-		return new ZModPrime(Prime.getRandomInstance(bitLength, randomGenerator));
+		return ZModPrime.getInstance(Prime.getRandomInstance(bitLength, randomGenerator));
 	}
 
 	public static ZModPrime getRandomInstance(int bitLength) {
