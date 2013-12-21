@@ -8,6 +8,7 @@ package ch.bfh.unicrypt.crypto.random.abstracts;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
@@ -51,21 +52,21 @@ public abstract class AbstractRandomOracle
 	}
 
 	@Override
-	public final RandomReferenceString getRandomReferenceString(Element query) {
+	public final RandomReferenceString getRandomReferenceString(byte[] query) {
 		if (query == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.getRandomReferenceString(query.getHashValue(this.hashMethod).getByteArray());
+		return this.getRandomReferenceString(ByteArrayMonoid.getInstance().getElement(query));
 	}
 
 	@Override
-	public final RandomReferenceString getRandomReferenceString(byte[] query) {
+	public final RandomReferenceString getRandomReferenceString(Element query) {
 		if (query == null) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractGetRandomReferenceString(query);
 	}
 
-	protected abstract RandomReferenceString abstractGetRandomReferenceString(byte[] query);
+	protected abstract RandomReferenceString abstractGetRandomReferenceString(Element query);
 
 }

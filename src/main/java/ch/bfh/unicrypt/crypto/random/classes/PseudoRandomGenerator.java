@@ -17,7 +17,7 @@ public class PseudoRandomGenerator
 	   extends AbstractRandomGenerator {
 
 	public static final Element DEFAULT_SEED = Z.getInstance().getElement(0);
-	public static final PseudoRandomGenerator DEFAULT = PseudoRandomGenerator.getInstance(DEFAULT_SEED);
+	public static final PseudoRandomGenerator DEFAULT = getInstance();
 	private final HashMethod hashMethod;
 	private final Element seed;
 	private int counter;
@@ -40,12 +40,24 @@ public class PseudoRandomGenerator
 		this.digestBytesPosition = 0;
 	}
 
+	public HashMethod getHashMethod() {
+		return hashMethod;
+	}
+
 	public Element getSeed() {
 		return this.seed;
 	}
 
 	public int getCounter() {
 		return this.counter;
+	}
+
+	protected void reset() {
+		setCounter(0);
+	}
+
+	protected boolean isReset() {
+		return counter == 0 && this.digestBytesPosition == 0;
 	}
 
 	protected void setCounter(final int counter) {
@@ -138,6 +150,40 @@ public class PseudoRandomGenerator
 			bigInteger = internalNextBigInteger(bitLength, true);
 		} while (!bigInteger.isProbablePrime(MathUtil.NUMBER_OF_PRIME_TESTS));
 		return bigInteger;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 17 * hash + (this.hashMethod != null ? this.hashMethod.hashCode() : 0);
+		hash = 17 * hash + (this.seed != null ? this.seed.hashCode() : 0);
+		hash = 17 * hash + this.counter;
+		hash = 17 * hash + this.digestBytesPosition;
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final PseudoRandomGenerator other = (PseudoRandomGenerator) obj;
+		if (this.hashMethod != other.hashMethod && (this.hashMethod == null || !this.hashMethod.equals(other.hashMethod))) {
+			return false;
+		}
+		if (this.seed != other.seed && (this.seed == null || !this.seed.equals(other.seed))) {
+			return false;
+		}
+		if (this.counter != other.counter) {
+			return false;
+		}
+		if (this.digestBytesPosition != other.digestBytesPosition) {
+			return false;
+		}
+		return true;
 	}
 
 	public static PseudoRandomGenerator getInstance() {

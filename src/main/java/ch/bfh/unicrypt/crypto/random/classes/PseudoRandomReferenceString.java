@@ -6,9 +6,8 @@
 package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Arrays;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 
 /**
  *
@@ -18,42 +17,44 @@ public class PseudoRandomReferenceString
 	   extends PseudoRandomGenerator
 	   implements RandomReferenceString {
 
-	public static final byte[] DEFAULT_SEED = new byte[]{};
-
-	private final String algorithmName;
-	private final byte[] seed;
-
-	public PseudoRandomReferenceString(SecureRandom secureRandom, byte[] seed) {
-		super(secureRandom);
-		this.algorithmName = secureRandom.getAlgorithm();
-		this.seed = seed;
+	public PseudoRandomReferenceString(HashMethod hashMethod, Element seed) {
+		super(hashMethod, seed);
 	}
 
 	@Override
 	public void reset() {
-		if (!isReset()) {
-			SecureRandom secureRandom;
-			try {
-				secureRandom = SecureRandom.getInstance(this.algorithmName);
-			} catch (final NoSuchAlgorithmException exception) {
-				throw new IllegalArgumentException(exception);
-			}
-			secureRandom.setSeed(this.seed);
-			this.random = secureRandom;
-			this.counter = 0;
-		}
+		super.reset();
 	}
 
 	@Override
 	public boolean isReset() {
-		return this.counter == 0;
+		return super.isReset();
+	}
+
+	public static PseudoRandomReferenceString getInstance() {
+		return PseudoRandomReferenceString.getInstance(HashMethod.DEFAULT, PseudoRandomGenerator.DEFAULT_SEED);
+	}
+
+	public static PseudoRandomReferenceString getInstance(Element seed) {
+		return PseudoRandomReferenceString.getInstance(HashMethod.DEFAULT, seed);
+	}
+
+	public static PseudoRandomReferenceString getInstance(HashMethod hashMethod) {
+		return PseudoRandomReferenceString.getInstance(hashMethod, PseudoRandomGenerator.DEFAULT_SEED);
+	}
+
+	public static PseudoRandomReferenceString getInstance(HashMethod hashMethod, Element seed) {
+		if (hashMethod == null || seed == null) {
+			throw new IllegalArgumentException();
+		}
+		return new PseudoRandomReferenceString(hashMethod, seed);
 	}
 
 	@Override
 	public int hashCode() {
-		int hash = 5;
-		hash = 83 * hash + (this.algorithmName != null ? this.algorithmName.hashCode() : 0);
-		hash = 83 * hash + Arrays.hashCode(this.seed);
+		int hash = 7;
+		hash = 17 * hash + getHashMethod().hashCode();
+		hash = 17 * hash + getSeed().hashCode();
 		return hash;
 	}
 
@@ -66,36 +67,14 @@ public class PseudoRandomReferenceString
 			return false;
 		}
 		final PseudoRandomReferenceString other = (PseudoRandomReferenceString) obj;
-		if ((this.algorithmName == null) ? (other.algorithmName != null) : !this.algorithmName.equals(other.algorithmName)) {
+		if (getHashMethod() != getHashMethod() && (!this.getHashMethod().equals(other.getHashMethod()))) {
 			return false;
 		}
-		if (!Arrays.equals(this.seed, other.seed)) {
+
+		if (this.getCounter() != other.getCounter()) {
 			return false;
 		}
 		return true;
-	}
-
-	public static PseudoRandomReferenceString getInstance() {
-		return PseudoRandomReferenceString.getInstance(PseudoRandomGenerator.DEFAULT_ALGORITHM_NAME);
-	}
-
-	public static PseudoRandomReferenceString getInstance(String algorithmName) {
-		return PseudoRandomReferenceString.getInstance(algorithmName, PseudoRandomReferenceString.DEFAULT_SEED);
-	}
-
-	public static PseudoRandomReferenceString getInstance(String algorithmName, byte[] seed) {
-		if (algorithmName == null || seed == null) {
-			throw new IllegalArgumentException();
-		}
-		//System.out.println("Seed: " + Arrays.toString(seed));
-		SecureRandom secureRandom;
-		try {
-			secureRandom = SecureRandom.getInstance(algorithmName);
-		} catch (final NoSuchAlgorithmException exception) {
-			throw new IllegalArgumentException(exception);
-		}
-		secureRandom.setSeed(seed); // initiates the entropy gathering
-		return new PseudoRandomReferenceString(secureRandom, seed);
 	}
 
 }

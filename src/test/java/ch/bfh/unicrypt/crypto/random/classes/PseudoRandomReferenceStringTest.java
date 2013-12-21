@@ -6,6 +6,7 @@
 package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class PseudoRandomReferenceStringTest {
 		rrs.nextBytes(5);
 		rrs.reset();
 		Assert.assertEquals(prime, rrs.nextPrime(10));
-		rrs = PseudoRandomReferenceString.getInstance(PseudoRandomGenerator.DEFAULT_ALGORITHM_NAME, new byte[]{10, 5, 120});
+		rrs = PseudoRandomReferenceString.getInstance(ByteArrayMonoid.getInstance().getElement(new byte[]{10, 5, 120}));
 		prime = rrs.nextPrime(10);
 		rrs.nextBoolean();
 		rrs.nextBytes(5);

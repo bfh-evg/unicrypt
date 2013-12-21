@@ -15,7 +15,6 @@ import java.util.HashSet;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -349,62 +348,6 @@ public class PseudoRandomGeneratorTest {
 			primes.add(result);
 		}
 		Assert.assertTrue("Size: " + primes.size(), primes.size() == 23);
-	}
-
-	/**
-	 * Test of getInstance method, of class PseudoRandomGenerator.
-	 */
-	@Test
-	public void testGetInstance_0args() {
-		System.out.println("getInstance");
-		PseudoRandomGenerator expResult = null;
-		PseudoRandomGenerator result = PseudoRandomGenerator.getInstance();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of getInstance method, of class PseudoRandomGenerator.
-	 */
-	@Test
-	public void testGetInstance_HashMethod() {
-		System.out.println("getInstance");
-		HashMethod hashMethod = null;
-		PseudoRandomGenerator expResult = null;
-		PseudoRandomGenerator result = PseudoRandomGenerator.getInstance(hashMethod);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of getInstance method, of class PseudoRandomGenerator.
-	 */
-	@Test
-	public void testGetInstance_Element() {
-		System.out.println("getInstance");
-		Element seed = null;
-		PseudoRandomGenerator expResult = null;
-		PseudoRandomGenerator result = PseudoRandomGenerator.getInstance(seed);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of getInstance method, of class PseudoRandomGenerator.
-	 */
-	@Test
-	public void testGetInstance_HashMethod_Element() {
-		System.out.println("getInstance");
-		HashMethod hashMethod = null;
-		Element seed = null;
-		PseudoRandomGenerator expResult = null;
-		PseudoRandomGenerator result = PseudoRandomGenerator.getInstance(hashMethod, seed);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 }
