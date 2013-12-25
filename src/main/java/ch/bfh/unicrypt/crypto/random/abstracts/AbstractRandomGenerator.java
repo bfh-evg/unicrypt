@@ -11,20 +11,16 @@ import java.math.BigInteger;
  * @version 1.0
  */
 public abstract class AbstractRandomGenerator
-			 extends UniCrypt
-			 implements RandomGenerator {
-
-	protected int counter = 0;
+	   extends UniCrypt
+	   implements RandomGenerator {
 
 	@Override
 	public final boolean nextBoolean() {
-		this.counter++;
 		return this.abstractNextBoolean();
 	}
 
 	@Override
 	public final byte nextByte() {
-		this.counter++;
 		return this.nextBytes(1)[0];
 	}
 
@@ -33,7 +29,6 @@ public abstract class AbstractRandomGenerator
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		this.counter++;
 		return this.abstractNextBytes(length);
 	}
 
@@ -47,7 +42,6 @@ public abstract class AbstractRandomGenerator
 		if (maxValue < 0) {
 			throw new IllegalArgumentException();
 		}
-		this.counter++;
 		return this.abstractNextInteger(maxValue);
 	}
 
@@ -64,7 +58,6 @@ public abstract class AbstractRandomGenerator
 		if (bitLength == 0) {
 			return BigInteger.ZERO;
 		}
-		this.counter++;
 		return this.abstractNextBigInteger(bitLength);
 	}
 
@@ -73,7 +66,6 @@ public abstract class AbstractRandomGenerator
 		if (maxValue == null || maxValue.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
-		this.counter++;
 		return this.abstractNextBigInteger(maxValue);
 	}
 
@@ -90,7 +82,6 @@ public abstract class AbstractRandomGenerator
 		if (bitLength < 2) {
 			throw new IllegalArgumentException();
 		}
-		this.counter++;
 		return this.abstractNextPrime(bitLength);
 	}
 

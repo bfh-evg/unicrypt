@@ -20,6 +20,7 @@ public class PseudoRandomReferenceString
 
 	public PseudoRandomReferenceString(HashMethod hashMethod, Element seed) {
 		super(hashMethod, seed);
+		reset();
 	}
 
 	@Override
@@ -62,7 +63,7 @@ public class PseudoRandomReferenceString
 	public int hashCode() {
 		int hash = 7;
 		hash = 17 * hash + getHashMethod().hashCode();
-		hash = 17 * hash + getSeed().hashCode();
+		hash = 17 * hash + getSeed().getValue().hashCode();
 		return hash;
 	}
 
@@ -79,7 +80,7 @@ public class PseudoRandomReferenceString
 			return false;
 		}
 
-		if (this.getCounter() != other.getCounter()) {
+		if (this.getSeed().getValue() != other.getSeed().getValue()) {
 			return false;
 		}
 		return true;

@@ -92,6 +92,27 @@ public class PseudoRandomGeneratorTest {
 	public void testAbstractNextBoolean() {
 		System.out.println("abstractNextBoolean");
 		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance();
+
+		for (int i = 0; i < 1000; i++) {
+			if (instance1.nextBoolean()) {
+				for (int j = 0; j < 1000; i++) {
+					if (!instance1.nextBoolean()) {
+						return;
+					}
+
+				}
+			}
+		}
+		Assert.fail();
+	}
+
+	/**
+	 * Test of abstractNextBoolean method, of class PseudoRandomGenerator.
+	 */
+	@Test
+	public void testAbstractNextBooleanSame() {
+		System.out.println("abstractNextBoolean");
+		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance();
 		PseudoRandomGenerator instance2 = PseudoRandomGenerator.getInstance();
 
 		boolean b1 = instance1.nextBoolean();
@@ -104,7 +125,7 @@ public class PseudoRandomGeneratorTest {
 	 * Test of abstractNextBoolean method, of class PseudoRandomGenerator.
 	 */
 	@Test
-	public void testAbstractNextBooleans() {
+	public void testAbstractNextBooleansSame() {
 		System.out.println("abstractNextBoolean");
 		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance();
 		PseudoRandomGenerator instance2 = PseudoRandomGenerator.getInstance();

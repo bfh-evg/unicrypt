@@ -25,7 +25,12 @@ public class BooleanSet
 	public static final BooleanElement TRUE = BooleanSet.getInstance().getElement(true);
 	public static final BooleanElement FALSE = BooleanSet.getInstance().getElement(false);
 
+	private final BooleanElement trueElement;
+	private final BooleanElement falseElement;
+
 	private BooleanSet() {
+		trueElement = new BooleanElement(this, true);
+		falseElement = new BooleanElement(this, false);
 	}
 
 	/**
@@ -35,7 +40,7 @@ public class BooleanSet
 	 * @return The corresponding group element
 	 */
 	public final BooleanElement getElement(final boolean bit) {
-		return new BooleanElement(this, bit);
+		return (bit ? trueElement : falseElement);
 	}
 
 	@Override
