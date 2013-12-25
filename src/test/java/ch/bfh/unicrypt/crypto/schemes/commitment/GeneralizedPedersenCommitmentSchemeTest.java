@@ -27,22 +27,22 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 
 		RandomReferenceString rrs = PseudoRandomReferenceString.getInstance("X".getBytes());
 
-//		System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2
-//		System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16
-//		System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4
-//		System.out.println("g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6
-//		System.out.println("g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8
+		//System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
+		//System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
+		//System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
+		//System.out.println("g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6  8
+		//System.out.println("g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8 18
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 2, rrs);
 		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3));
 		Element r = Z_q.getElement(2);
-		Element c = gpcs.commit(messages, r);   // c = g1^m1 * g2^m2 * g0^r = 16^1 * 4^3 * 2^2 = 16 * 18 * 4 = 2
-		assertTrue(c.isEquivalent(this.G_q.getElement(2)));
+		Element c = gpcs.commit(messages, r);   // c = g1^m1 * g2^m2 * g0^r = 3^1 * 9^3 * 4^2 = 3 * 16 * 16 = 9
+		assertTrue(c.isEquivalent(this.G_q.getElement(9)));
 
 		gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 4, rrs);
 		messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5));
 		r = Z_q.getElement(3);
-		c = gpcs.commit(messages, r);   // c = 16^1 * 4^3 * 6^4 * 8^5 * 2^3 = 16 * 18 * 8 * 16 * 8 = 6
-		assertTrue(c.isEquivalent(this.G_q.getElement(6)));
+		c = gpcs.commit(messages, r);   // c = 3^1 * 9^3 * 8^4 * 18^5 * 4^3 = 3 * 16 * 2 * 3 * 18 = 9
+		assertTrue(c.isEquivalent(this.G_q.getElement(9)));
 
 	}
 
