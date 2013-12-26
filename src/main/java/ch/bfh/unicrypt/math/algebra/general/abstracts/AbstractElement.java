@@ -19,6 +19,7 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.HashMap;
 
 /**
  * This abstract class represents the concept an element in a mathematical group. It allows applying the group operation
@@ -34,8 +35,8 @@ import java.security.MessageDigest;
  * @version 2.0
  */
 public abstract class AbstractElement<S extends Set, E extends Element>
-			 extends UniCrypt
-			 implements Element {
+	   extends UniCrypt
+	   implements Element {
 
 	private final S set;
 	protected BigInteger value;
@@ -45,6 +46,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 			throw new IllegalArgumentException();
 		}
 		this.set = set;
+		hashMap = new HashMap<HashMethod, FiniteByteArrayElement>();
 	}
 
 	protected AbstractElement(final S set, final BigInteger value) {
@@ -105,20 +107,26 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		return this.getHashValue(HashMethod.DEFAULT);
 	}
 
+	private HashMap<HashMethod, FiniteByteArrayElement> hashMap;
+
 	@Override
 	public final FiniteByteArrayElement getHashValue(HashMethod hashMethod) {
-		if (this.isTuple() && hashMethod.isRecursive()) {
-			Tuple tuple = (Tuple) this;
-			int arity = tuple.getArity();
-			ByteArrayElement[] hashValues = new ByteArrayElement[arity];
-			for (int i = 0; i < arity; i++) {
-				hashValues[i] = tuple.getAt(i).getHashValue(hashMethod).getByteArrayElement();
+		if (!hashMap.containsKey(hashMethod)) {
+			if (this.isTuple() && hashMethod.isRecursive()) {
+				Tuple tuple = (Tuple) this;
+				int arity = tuple.getArity();
+				ByteArrayElement[] hashValues = new ByteArrayElement[arity];
+				for (int i = 0; i < arity; i++) {
+					hashValues[i] = tuple.getAt(i).getHashValue(hashMethod).getByteArrayElement();
+				}
+				hashMap.put(hashMethod, ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(hashMethod));
+			} else {
+				MessageDigest messageDigest = hashMethod.getMessageDigest();
+				messageDigest.reset();
+				hashMap.put(hashMethod, FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getValue().toByteArray())));
 			}
-			return ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(hashMethod);
 		}
-		MessageDigest messageDigest = hashMethod.getMessageDigest();
-		messageDigest.reset();
-		return FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getValue().toByteArray()));
+		return hashMap.get(hashMethod);
 	}
 
 	//
