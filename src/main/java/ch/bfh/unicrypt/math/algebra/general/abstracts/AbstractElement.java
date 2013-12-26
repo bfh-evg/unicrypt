@@ -111,6 +111,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 
 	@Override
 	public final FiniteByteArrayElement getHashValue(HashMethod hashMethod) {
+		//TODO: This is a memory-hog!
 		if (!hashMap.containsKey(hashMethod)) {
 			if (this.isTuple() && hashMethod.isRecursive()) {
 				Tuple tuple = (Tuple) this;
@@ -286,8 +287,8 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 
 	@Override
 	public int hashCode() {
-		int hash = 3;
-		return hash;
+		//int hash = getValue().intValue();
+		return 3; //hash;
 	}
 
 	// THIS METHOD IS NOT THE FINAL IMPLEMENTATION
