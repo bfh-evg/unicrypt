@@ -13,7 +13,7 @@ import java.util.Arrays;
  * @author rolfhaenni
  */
 public class ByteArrayElement
-			 extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement> {
+	   extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement> {
 
 	private final byte[] bytes;
 
@@ -23,19 +23,19 @@ public class ByteArrayElement
 	}
 
 	public byte[] getByteArray() {
-		return this.bytes;
+		return this.bytes.clone();
 	}
 
 	@Override
 	public int getLength() {
-		return this.getByteArray().length;
+		return this.bytes.length;
 	}
 
 	@Override
 	protected BigInteger standardGetValue() {
 		BigInteger value1 = BigInteger.ZERO;
 		BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);
-		for (byte b : this.getByteArray()) {
+		for (byte b : this.bytes) {
 			int intValue = b & 0xFF;
 			value1 = value1.multiply(byteSize).add(BigInteger.valueOf(intValue));
 		}
@@ -50,7 +50,7 @@ public class ByteArrayElement
 
 	@Override
 	protected boolean standardIsEquivalent(ByteArrayElement element) {
-		return Arrays.equals(this.getByteArray(), element.getByteArray());
+		return Arrays.equals(this.bytes, element.bytes);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class ByteArrayElement
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.getLength(); i++) {
-			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.getByteArray()[i] & 0xFF));
+			str = str + delimiter + String.format("%02X", BigInteger.valueOf(bytes[i] & 0xFF));
 			if ((i + 1) % this.getSet().getBlockLength() == 0) {
 				delimiter = "|";
 

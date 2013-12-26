@@ -1,14 +1,22 @@
 package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomGenerator;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
+import java.security.MessageDigest;
 
 /**
+ * This PseudoRandomGenerator creates the hash value of the seed and stores this internally as a ByteArrayElement. The
+ * hash will be done according to the given hashMethod. Then the internal counter will be created as another
+ * ByteArrayElement. These two byteArrayElement will be hashed as in @see AbstractElement#getHashValue(HashMethod
+ * hashMethod); The resulting bytes will be used for pseudoRandomness
+ * <p>
+ * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
@@ -20,6 +28,7 @@ public class PseudoRandomGenerator
 	public static final PseudoRandomGenerator DEFAULT = getInstance();
 	private final HashMethod hashMethod;
 	private final Element seed;
+	private final ByteArrayElement hashedSeedElement;
 	private int counter;
 	byte[] digestBytes;
 	int digestBytesPosition;
@@ -28,15 +37,29 @@ public class PseudoRandomGenerator
 	protected PseudoRandomGenerator(HashMethod hashMethod, final Element seed) {
 		this.hashMethod = hashMethod;
 		this.seed = seed;
+		//The following lines are needed in order to speed up calculation of randomBytes. @see#fillRandomByteBuffer
+		this.digestBytes = new byte[hashMethod.getLength()];
+		this.counter = -1;
+		hashedSeedElement = this.seed.getHashValue(hashMethod).getByteArrayElement();
 		this.setCounter(0);
 	}
 
-	private void fillRandomByteBufer() {
-		if (this.digestBytes == null) {
-			this.digestBytes = new byte[hashMethod.getLength()];
+	private void fillRandomByteBuffer(int counter) {
+		//Do not re-calculate the hash if it is only the digestBytesPosition to be reset to 0
+		if (this.counter != counter) {
+			this.counter = counter;
+
+			//Even though the following is the nice way to program it with unicrypt, it is too expensive. Reason: If the first part of a pair is a big tuple, it has to be hashed each time... Reprogram?!
+			//this.digestBytes=Pair.getInstance(seed,Z.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
+			//-->This is, why the following implementation exists.
+			MessageDigest digest = hashMethod.getMessageDigest();
+			digest.reset();
+			this.digestBytes = digest.digest(ByteArrayMonoid.getInstance().apply(hashedSeedElement, ByteArrayMonoid.getInstance().getElement(counter)).getByteArray());
+
+			//this.digestBytes = ByteArrayMonoid.getInstance().apply(hashedSeedElement, Z.getInstance().getElement(counter).getHashValue(hashMethod).getByteArrayElement()).getHashValue(hashMethod).getByteArray();
+			//this.digestBytes = ByteArrayMonoid.getInstance().apply(seedByteArray, ByteArrayMonoid.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
+			//System.out.println("Pair: " + pair + " digestPosition: " + digestBytesPosition + "  " + Arrays.toString(this.digestBytes));
 		}
-		Pair pair = Pair.getInstance(seed, Z.getInstance().getElement(getCounter()));
-		this.digestBytes = pair.getHashValue(hashMethod).getByteArray();
 		this.digestBytesPosition = 0;
 	}
 
@@ -44,6 +67,7 @@ public class PseudoRandomGenerator
 		return hashMethod;
 	}
 
+	//It would be better to only get the seedHash! (Seed should not be stored)
 	public Element getSeed() {
 		return this.seed;
 	}
@@ -61,8 +85,7 @@ public class PseudoRandomGenerator
 	}
 
 	protected void setCounter(final int counter) {
-		this.counter = counter;
-		fillRandomByteBufer();
+		fillRandomByteBuffer(counter);
 	}
 
 	@Override
