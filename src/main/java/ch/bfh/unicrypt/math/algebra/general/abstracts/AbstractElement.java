@@ -40,6 +40,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 
 	private final S set;
 	private BigInteger value;
+	private int javaHashValue;
 
 	protected AbstractElement(final S set) {
 		if (set == null) {
@@ -52,6 +53,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 	protected AbstractElement(final S set, final BigInteger value) {
 		this(set);
 		this.value = value;
+		//Frage: Kann es sein, dass ein Element einen Wert und eine gefüllte HashMap hat?
 	}
 
 	@Override
@@ -287,22 +289,18 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 
 	@Override
 	public int hashCode() {
-		//int hash = getValue().intValue();
-		return 3; //hash;
+		if (this.value != null) {
+			if (this.javaHashValue == 0) {
+				this.javaHashValue = this.getValue().intValue();
+			}
+			return javaHashValue;
+		}
+		return 0; //hash;
 	}
 
 	// THIS METHOD IS NOT THE FINAL IMPLEMENTATION
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
-			return false;
-		}
 		return this.isEquivalent((Element) obj);
 	}
 

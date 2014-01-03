@@ -9,6 +9,7 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.HashMethod;
+import java.util.HashMap;
 
 /**
  *
@@ -18,9 +19,21 @@ public class PseudoRandomReferenceString
 	   extends PseudoRandomGenerator
 	   implements RandomReferenceString {
 
+	private HashMap<Integer, byte[]> randomByteBufferMap;
+	private int javaHashValue;
+
 	public PseudoRandomReferenceString(HashMethod hashMethod, Element seed) {
 		super(hashMethod, seed);
-		reset();
+	}
+
+	protected byte[] getRandomByteBuffer(int counter) {
+		if (randomByteBufferMap == null) {
+			randomByteBufferMap = new HashMap<Integer, byte[]>();
+		}
+		if (!randomByteBufferMap.containsKey(counter)) {
+			randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));
+		}
+		return randomByteBufferMap.get(counter);
 	}
 
 	@Override
@@ -61,10 +74,10 @@ public class PseudoRandomReferenceString
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 17 * hash + getHashMethod().hashCode();
-		hash = 17 * hash + getSeed().getValue().hashCode();
-		return hash;
+		if (javaHashValue == 0) {
+			javaHashValue = getHashMethod().hashCode() + getSeed().getValue().hashCode();
+		}
+		return javaHashValue;
 	}
 
 	@Override

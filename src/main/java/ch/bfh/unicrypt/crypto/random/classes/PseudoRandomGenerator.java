@@ -30,37 +30,31 @@ public class PseudoRandomGenerator
 	private final Element seed;
 	private final ByteArrayElement hashedSeedElement;
 	private int counter;
-	byte[] digestBytes;
-	int digestBytesPosition;
+	private byte[] randomByteBuffer;
+	private int randomByteBufferPosition;
 
 	// Random random;
 	protected PseudoRandomGenerator(HashMethod hashMethod, final Element seed) {
 		this.hashMethod = hashMethod;
 		this.seed = seed;
 		//The following lines are needed in order to speed up calculation of randomBytes. @see#fillRandomByteBuffer
-		this.digestBytes = new byte[hashMethod.getLength()];
+		this.randomByteBuffer = new byte[hashMethod.getLength()];
 		this.counter = -1;
 		hashedSeedElement = this.seed.getHashValue(hashMethod).getByteArrayElement();
-		this.setCounter(0);
+		reset();
 	}
 
-	private void fillRandomByteBuffer(int counter) {
-		//Do not re-calculate the hash if it is only the digestBytesPosition to be reset to 0
-		if (this.counter != counter) {
-			this.counter = counter;
+	protected byte[] getRandomByteBuffer(int counter) {
+		//Even though the following is the nice way to program it with unicrypt, it is too expensive. Reason: If the first part of a pair is a big tuple, it has to be hashed each time... Reprogram?!
+		//this.digestBytes=Pair.getInstance(seed,Z.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
+		//-->This is, why the following implementation exists.
+		MessageDigest digest = hashMethod.getMessageDigest();
+		digest.reset();
+		return digest.digest(ByteArrayMonoid.getInstance().apply(hashedSeedElement, ByteArrayMonoid.getInstance().getElement(counter)).getByteArray());
 
-			//Even though the following is the nice way to program it with unicrypt, it is too expensive. Reason: If the first part of a pair is a big tuple, it has to be hashed each time... Reprogram?!
-			//this.digestBytes=Pair.getInstance(seed,Z.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
-			//-->This is, why the following implementation exists.
-			MessageDigest digest = hashMethod.getMessageDigest();
-			digest.reset();
-			this.digestBytes = digest.digest(ByteArrayMonoid.getInstance().apply(hashedSeedElement, ByteArrayMonoid.getInstance().getElement(counter)).getByteArray());
-
-			//this.digestBytes = ByteArrayMonoid.getInstance().apply(hashedSeedElement, Z.getInstance().getElement(counter).getHashValue(hashMethod).getByteArrayElement()).getHashValue(hashMethod).getByteArray();
-			//this.digestBytes = ByteArrayMonoid.getInstance().apply(seedByteArray, ByteArrayMonoid.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
-			//System.out.println("Pair: " + pair + " digestPosition: " + digestBytesPosition + "  " + Arrays.toString(this.digestBytes));
-		}
-		this.digestBytesPosition = 0;
+		//this.digestBytes = ByteArrayMonoid.getInstance().apply(hashedSeedElement, Z.getInstance().getElement(counter).getHashValue(hashMethod).getByteArrayElement()).getHashValue(hashMethod).getByteArray();
+		//this.digestBytes = ByteArrayMonoid.getInstance().apply(seedByteArray, ByteArrayMonoid.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
+		//System.out.println("Pair: " + pair + " digestPosition: " + digestBytesPosition + "  " + Arrays.toString(this.digestBytes));
 	}
 
 	public HashMethod getHashMethod() {
@@ -81,11 +75,17 @@ public class PseudoRandomGenerator
 	}
 
 	protected boolean isReset() {
-		return counter == 0 && this.digestBytesPosition == 0;
+		return counter == 0 && this.randomByteBufferPosition == 0;
 	}
 
 	protected void setCounter(final int counter) {
-		fillRandomByteBuffer(counter);
+		//Do not re-calculate the hash if it is only the digestBytesPosition to be reset to 0
+		if (this.counter != counter) {
+			this.counter = counter;
+			this.randomByteBuffer = getRandomByteBuffer(counter);
+		}
+		this.randomByteBufferPosition = 0;
+
 	}
 
 	@Override
@@ -105,11 +105,11 @@ public class PseudoRandomGenerator
 		byte[] randomBytes = new byte[length];
 		int randomBytesPosition = 0;
 		while (randomBytesPosition < length) {
-			int amount = Math.min((length - randomBytesPosition), (digestBytes.length - digestBytesPosition));
-			System.arraycopy(digestBytes, digestBytesPosition, randomBytes, randomBytesPosition, amount);
+			int amount = Math.min((length - randomBytesPosition), (randomByteBuffer.length - randomByteBufferPosition));
+			System.arraycopy(randomByteBuffer, randomByteBufferPosition, randomBytes, randomBytesPosition, amount);
 			randomBytesPosition += amount;
-			digestBytesPosition += amount;
-			if (digestBytesPosition == digestBytes.length) {
+			randomByteBufferPosition += amount;
+			if (randomByteBufferPosition == randomByteBuffer.length) {
 				setCounter(getCounter() + 1);
 			}
 		}
@@ -184,7 +184,7 @@ public class PseudoRandomGenerator
 		hash = 17 * hash + (this.hashMethod != null ? this.hashMethod.hashCode() : 0);
 		hash = 17 * hash + (this.seed != null ? this.seed.getValue().hashCode() : 0);
 		hash = 17 * hash + this.counter;
-		hash = 17 * hash + this.digestBytesPosition;
+		hash = 17 * hash + this.randomByteBufferPosition;
 		return hash;
 	}
 
@@ -206,7 +206,7 @@ public class PseudoRandomGenerator
 		if (this.counter != other.counter) {
 			return false;
 		}
-		if (this.digestBytesPosition != other.digestBytesPosition) {
+		if (this.randomByteBufferPosition != other.randomByteBufferPosition) {
 			return false;
 		}
 		return true;
