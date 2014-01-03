@@ -24,8 +24,8 @@ public abstract class AbstractDualisticElement<S extends SemiRing, E extends Dua
 	}
 
 	protected AbstractDualisticElement(final S ring, final BigInteger value) {
-		super(ring);
-		this.value = value;
+		super(ring, value);
+		//this.value = value;
 	}
 
 	@Override

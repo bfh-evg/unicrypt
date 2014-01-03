@@ -39,7 +39,7 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 	   implements Element {
 
 	private final S set;
-	protected BigInteger value;
+	private BigInteger value;
 
 	protected AbstractElement(final S set) {
 		if (set == null) {
@@ -294,6 +294,15 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 	// THIS METHOD IS NOT THE FINAL IMPLEMENTATION
 	@Override
 	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		return this.isEquivalent((Element) obj);
 	}
 

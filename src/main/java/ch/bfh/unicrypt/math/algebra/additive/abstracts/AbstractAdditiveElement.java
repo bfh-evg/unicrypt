@@ -25,8 +25,8 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E ext
 	}
 
 	protected AbstractAdditiveElement(final S semiGroup, final BigInteger value) {
-		super(semiGroup);
-		this.value = value;
+		super(semiGroup, value);
+		//this.value = value;
 	}
 
 	@Override

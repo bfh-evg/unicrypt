@@ -25,8 +25,8 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 	}
 
 	protected AbstractMultiplicativeElement(final S semiGroup, final BigInteger value) {
-		super(semiGroup);
-		this.value = value;
+		super(semiGroup, value);
+		//this.value = value;
 	}
 
 	/**

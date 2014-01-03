@@ -26,8 +26,8 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
 	}
 
 	protected AbstractConcatenativeElement(final S semiGroup, final BigInteger value) {
-		super(semiGroup);
-		this.value = value;
+		super(semiGroup, value);
+		//this.value = value;
 	}
 
 	/**
