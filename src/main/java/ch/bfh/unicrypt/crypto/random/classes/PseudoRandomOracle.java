@@ -32,8 +32,7 @@ public class PseudoRandomOracle
 	//This code will only work when there is a fast 'equals' method ready for Element
 	@Override
 	protected RandomReferenceString abstractGetRandomReferenceString(Element query) {
-		if (referenceStrings.containsKey(query) == false) {
-
+		if (!referenceStrings.containsKey(query)) {
 			referenceStrings.put(query, PseudoRandomReferenceString.getInstance(query));
 		}
 		RandomReferenceString referenceString = referenceStrings.get(query);

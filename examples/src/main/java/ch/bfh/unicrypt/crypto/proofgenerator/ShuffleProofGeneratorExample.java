@@ -46,7 +46,7 @@ public class ShuffleProofGeneratorExample {
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
-		final int size = 1000;
+		final int size = 4000;
 		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, rrs);
 
@@ -115,7 +115,9 @@ public class ShuffleProofGeneratorExample {
 
 	public static void main(String[] args) {
 		ShuffleProofGeneratorExample ex = new ShuffleProofGeneratorExample();
+		long time = System.currentTimeMillis();
 		ex.proofOfShuffle_COMPLETE();
+		System.out.println("Finished after: " + (System.currentTimeMillis() - time) + " MilliSeconds.");
 	}
 
 }

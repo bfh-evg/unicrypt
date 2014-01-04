@@ -182,7 +182,7 @@ public class PseudoRandomGenerator
 	public int hashCode() {
 		int hash = 7;
 		hash = 17 * hash + (this.hashMethod != null ? this.hashMethod.hashCode() : 0);
-		hash = 17 * hash + (this.seed != null ? this.seed.getValue().hashCode() : 0);
+		hash = 17 * hash + (hashedSeedElement != null ? hashedSeedElement.hashCode() : 0);
 		hash = 17 * hash + this.counter;
 		hash = 17 * hash + this.randomByteBufferPosition;
 		return hash;
@@ -200,7 +200,7 @@ public class PseudoRandomGenerator
 		if (this.hashMethod != other.hashMethod && (this.hashMethod == null || !this.hashMethod.equals(other.hashMethod))) {
 			return false;
 		}
-		if (this.seed != other.seed && (this.seed == null || !this.seed.getValue().equals(other.seed.getValue()))) {
+		if (this.hashCode() != other.hashCode()) {
 			return false;
 		}
 		if (this.counter != other.counter) {
