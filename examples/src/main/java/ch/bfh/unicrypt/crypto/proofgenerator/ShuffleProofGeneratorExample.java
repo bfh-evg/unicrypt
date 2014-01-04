@@ -46,7 +46,7 @@ public class ShuffleProofGeneratorExample {
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
-		final int size = 4000;
+		final int size = 1000;
 		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, rrs);
 
