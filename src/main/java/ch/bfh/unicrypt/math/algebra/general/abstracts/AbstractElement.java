@@ -113,7 +113,8 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 
 	@Override
 	public final FiniteByteArrayElement getHashValue(HashMethod hashMethod) {
-		//TODO: This is a memory-hog!
+		//TODO: This is a memory-hog! But a super speed-up
+		//TODO: If this HashMap would become static, it would speed things up again... But would it leak (cryptographically)?
 		if (!hashMap.containsKey(hashMethod)) {
 			if (this.isTuple() && hashMethod.isRecursive()) {
 				Tuple tuple = (Tuple) this;
