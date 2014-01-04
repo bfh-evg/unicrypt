@@ -33,17 +33,20 @@ public class ByteArrayElement
 
 	@Override
 	protected BigInteger standardGetValue() {
+		//TODO: Das muss durch eine ByteArray-Operation ersetzt werden, welche zum Schluss in ein BigInteger verwandelt wird.
+		//
 		BigInteger value1 = BigInteger.ZERO;
-		BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);
+		//BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);
 		for (byte b : this.bytes) {
 			int intValue = b & 0xFF;
-			value1 = value1.multiply(byteSize).add(BigInteger.valueOf(intValue));
+			value1 = value1.shiftLeft(Byte.SIZE).add(BigInteger.valueOf(intValue));
 		}
 		BigInteger value2 = BigInteger.ZERO;
 		int blockLength = this.getSet().getBlockLength();
-		BigInteger blockSize = BigInteger.valueOf(1 << (Byte.SIZE * blockLength));
+		//BigInteger blockSize = BigInteger.valueOf(1 << (Byte.SIZE * blockLength));
+		int blockSize = Byte.SIZE * blockLength;
 		for (int i = 0; i < this.getLength() / blockLength; i++) {
-			value2 = value2.multiply(blockSize).add(BigInteger.ONE);
+			value2 = value2.shiftLeft(blockSize).add(BigInteger.ONE);
 		}
 		return value1.add(value2);
 	}
