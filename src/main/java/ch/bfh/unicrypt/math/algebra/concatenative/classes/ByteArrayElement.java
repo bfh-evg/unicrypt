@@ -33,22 +33,21 @@ public class ByteArrayElement
 
 	@Override
 	protected BigInteger standardGetValue() {
-		//TODO: Das muss durch eine ByteArray-Operation ersetzt werden, welche zum Schluss in ein BigInteger verwandelt wird.
-		//
-//		BigInteger value1 = BigInteger.ZERO;
-//		//BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);
-//		for (byte b : this.bytes) {
-//			int intValue = b & 0xFF;
-//			value1 = value1.shiftLeft(Byte.SIZE).add(BigInteger.valueOf(intValue));
-//		}
-		//This is equivalent to:
+
 		BigInteger value1 = new BigInteger(1, this.bytes);
 		BigInteger value2 = BigInteger.ZERO;
 		int blockLength = this.getSet().getBlockLength();
-		//BigInteger blockSize = BigInteger.valueOf(1 << (Byte.SIZE * blockLength));
-		int blockSize = Byte.SIZE * blockLength;
-		for (int i = 0; i < this.getLength() / blockLength; i++) {
-			value2 = value2.shiftLeft(blockSize).add(BigInteger.ONE);
+
+		//As I do not know what this code really should do, I just tuned it... but the variable names I have chosen ... are stupid.
+		//Futher tuning by removing the for loop and do it mathematically!
+		//TODO: Describe what it does!
+		if (this.getLength() > 0) {
+			byte[] oneOone = new byte[this.getLength()];
+			int amount = oneOone.length / blockLength;
+			for (int i = 0; i < amount; i++) {
+				oneOone[(oneOone.length - 1) - (i * blockLength)] = 1; //It does something like: 100000000100000000100000000 ->MSB
+			}
+			value2 = new BigInteger(1, oneOone);
 		}
 		return value1.add(value2);
 	}
