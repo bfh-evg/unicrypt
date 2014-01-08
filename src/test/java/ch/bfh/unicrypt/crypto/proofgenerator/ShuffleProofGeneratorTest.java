@@ -200,7 +200,7 @@ public class ShuffleProofGeneratorTest {
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
-		final int size = 10;
+		final int size = 100;
 		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, rrs);
 
@@ -212,6 +212,8 @@ public class ShuffleProofGeneratorTest {
 
 		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
 		Tuple cPiV = pcs.commit(pi, sV);
+		System.out.println("Permutation-Commitment");
+		logAndReset();
 
 		// Ciphertexts
 		Tuple rV = ProductGroup.getInstance(Z_q, size).getRandomElement();
@@ -236,6 +238,7 @@ public class ShuffleProofGeneratorTest {
 		ChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionPK, rrs);
 
+		System.out.println("Mixing");
 		logAndReset();
 
 		// Proof
@@ -253,10 +256,13 @@ public class ShuffleProofGeneratorTest {
 		// (Important: If it is not given from the context, check equality of
 		//             the permutation commitments!)
 		BooleanElement vPermutation = pcpg.verify(proofPermutation, cPiV);
-		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput);
-		assertTrue(vPermutation.getBoolean() && vShuffle.getBoolean());
-		System.out.println("Verify");
+		System.out.println("Verify Permutation-Proof");
 		logAndReset();
+		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput);
+		System.out.println("Verify Shuffle Proof");
+		logAndReset();
+		assertTrue(vPermutation.getBoolean() && vShuffle.getBoolean());
+
 	}
 
 	public void logAndReset() {
