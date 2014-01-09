@@ -37,11 +37,15 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import java.math.BigInteger;
+import java.util.Arrays;
+
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArray {
+public class ByteArray
+	   extends UniCrypt {
 
 	private final byte[] bytes;
 
@@ -65,6 +69,36 @@ public class ByteArray {
 		System.arraycopy(this.bytes, 0, result, 0, this.getLength());
 		System.arraycopy(other.bytes, 0, result, this.getLength(), other.getLength());
 		return new ByteArray(result);
+	}
+
+	@Override
+	public String standardToStringContent() {
+		String str = "";
+		String delimiter = "";
+		for (int i = 0; i < this.getLength(); i++) {
+			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.bytes[i] & 0xFF));
+			delimiter = "|";
+		}
+		return "\"" + str + "\"";
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		hash = 17 * hash + Arrays.hashCode(this.bytes);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final ByteArray other = (ByteArray) obj;
+		return Arrays.equals(this.bytes, other.bytes);
 	}
 
 	public static ByteArray getInstance(int length) {

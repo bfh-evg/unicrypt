@@ -5,7 +5,7 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import java.util.Arrays;
 
 public class Permutation
-			 extends UniCrypt {
+	   extends UniCrypt {
 
 	private final int[] permutationVector;
 
@@ -14,8 +14,8 @@ public class Permutation
 	}
 
 	/**
-	 * Returns the size of the permutation element, which is the length of the corresponding permutation vector. The size
-	 * of a permutation element is the same as the size of the corresponding group.
+	 * Returns the size of the permutation element, which is the length of the corresponding permutation vector. The
+	 * size of a permutation element is the same as the size of the corresponding group.
 	 * <p>
 	 * @return The size of the permutation element
 	 */
@@ -101,7 +101,7 @@ public class Permutation
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
 		final Permutation other = (Permutation) obj;
