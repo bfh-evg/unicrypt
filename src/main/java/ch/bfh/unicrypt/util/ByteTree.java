@@ -43,6 +43,7 @@ import java.util.Arrays;
 
 /**
  * This class represents the ... Noch nicht fertig.
+ * http://www.csc.kth.se/utbildning/kth/kurser/SA104X/fkand13/vmnv-1.1.0.pdf
  * <p>
  * Even though NIO is in use {@link ByteBuffer} this class does not (yet) work with direct buffers, as
  * allocation/deallocation handling costs more than indirectly used (See API)
