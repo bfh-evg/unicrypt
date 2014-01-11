@@ -49,4 +49,13 @@ public class ArrayUtil {
 		return bytes;
 	}
 
+	public static boolean contains(Object[] objects, Object object) {
+		for (Object obj : objects) {
+			if (object.equals(obj)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

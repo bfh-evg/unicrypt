@@ -166,7 +166,7 @@ public class PermutationCommitmentTunedProofGenerator
 		ds[0] = rV.getAt(0);
 		for (int i = 0; i < this.size; i++) {
 			Element c_i_1 = i == 0 ? h : cs[i - 1];
-			cs[i] = g.selfApply(rV.getAt(i)).apply(c_i_1.selfApply(ePrimeV.getAt(i)));
+			cs[i] = g.selfApply(rV.getAt(i)).apply(c_i_1.selfApply(ePrimeV.getAt(i)));  //   [2n]
 			if (i > 0) {
 				ds[i] = rV.getAt(i).apply(ePrimeV.getAt(i).selfApply(ds[i - 1]));
 			}
@@ -177,12 +177,12 @@ public class PermutationCommitmentTunedProofGenerator
 		// Create sigma proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, cV);
 		final Element randomElement = this.getResponseSpace().getRandomElement(randomGenerator);
-		final Element commitment = f.apply(randomElement);
+		final Element commitment = f.apply(randomElement);                              // [3n+3]
 		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
 		final Element response = randomElement.apply(Tuple.getInstance(v, w, rV, d, ePrimeV).selfApply(challenge));
 		Triple preimageProof = (Triple) Triple.getInstance(commitment, challenge, response);
-
-		return Pair.getInstance(preimageProof, cV);
+		//                                                                                -------
+		return Pair.getInstance(preimageProof, cV);                                     // [5n+3]
 	}
 
 	@Override
@@ -196,34 +196,33 @@ public class PermutationCommitmentTunedProofGenerator
 
 		// Get additional values
 		final Tuple eV = (Tuple) this.eValuesGenerator.generate(publicInput);
-		final Tuple oneV = PermutationCommitmentTunedProofGenerator.createOneVector(this.cyclicGroup.getZModOrder(), this.size);
 		final Element[] gV = GeneralizedPedersenCommitmentScheme.getInstance(this.cyclicGroup, this.size, this.randomReferenceString).getMessageGenerators();
 
 		// Compute image of preimage proof
 		final Element[] ps = new Element[this.size + 3];
-		// - p_0 = c_pi^1/prod(g_i)
-		ps[0] = PermutationCommitmentTunedProofGenerator.computeInnerProduct(publicInput, oneV).applyInverse(this.cyclicGroup.apply(gV));
-		// - p_1 = c_pi^e
+		// - p_0 = c_pi^1/prod(g_i) = prod(c_pi_i)/prod(g_i)
+		ps[0] = this.cyclicGroup.apply(publicInput.getAll()).applyInverse(this.cyclicGroup.apply(gV));
+		// - p_1 = c_pi^e                                                                     [N]
 		ps[1] = PermutationCommitmentTunedProofGenerator.computeInnerProduct(publicInput, eV);
 		// - p_2...p_(N+2) = c_1 ... c_N
 		for (int i = 0; i < this.size; i++) {
 			ps[i + 2] = cV.getAt(i);
 		}
-		// - p_(N+3) = c_N/h^(prod(e))
+		// - p_(N+3) = c_N/h^(prod(e))                                                        [1]
 		Element eProd = eV.getAt(0);
 		for (int i = 1; i < this.size; i++) {
 			eProd = eProd.selfApply(eV.getAt(i));
 		}
 		ps[this.size + 2] = cV.getAt(this.size - 1).applyInverse(gV[0].selfApply(eProd));
-
 		final Tuple pV = Tuple.getInstance(ps);
 
 		// Verify preimage proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, cV);
 		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
-		final Element left = f.apply(response);
-		final Element right = commitment.apply(pV.selfApply(challenge));
-		return BooleanSet.getInstance().getElement(left.isEquivalent(right));
+		final Element left = f.apply(response);                                         // [3N+3]
+		final Element right = commitment.apply(pV.selfApply(challenge));                //  [N+3]
+		//                                                                                -------
+		return BooleanSet.getInstance().getElement(left.isEquivalent(right));           // [5N+7]
 	}
 
 	//===================================================================================

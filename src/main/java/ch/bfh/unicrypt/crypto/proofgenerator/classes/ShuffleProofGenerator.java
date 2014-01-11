@@ -155,12 +155,12 @@ public class ShuffleProofGenerator
 		// Create sigma proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, uPrimeV, this.encryptionPK);
 		final Element randomElement = this.getResponseSpace().getRandomElement(randomGenerator);
-		final Element commitment = f.apply(randomElement);
+		final Element commitment = f.apply(randomElement);                        // [3N+3]
 		final Element challenge = this.sigmaChallengeGenerator.generate(publicInput, commitment);
 		final Element response = randomElement.apply(Tuple.getInstance(r, w, ePrimeV).selfApply(challenge));
 		Triple preimageProof = (Triple) Triple.getInstance(commitment, challenge, response);
-
-		return preimageProof;
+		//                                                                          --------
+		return preimageProof;                                                     // [3N+3]
 	}
 
 	@Override
@@ -176,19 +176,20 @@ public class ShuffleProofGenerator
 
 		// Compute image of preimage proof
 		final Element[] ps = new Element[2];
-		// - p_1 == c_pi^e
+		// - p_1 == c_pi^e                                                        //    [N]
 		ps[0] = ShuffleProofGenerator.computeInnerProduct(cPiV, eV);
 		// - p_2 = u
-		ps[1] = ShuffleProofGenerator.computeInnerProduct(uV, eV);
+		ps[1] = ShuffleProofGenerator.computeInnerProduct(uV, eV);                //   [2N]
 
 		final Tuple pV = Tuple.getInstance(ps);
 
 		// 1. Verify preimage proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, uPrimeV, this.encryptionPK);
 		final Element challenge = this.sigmaChallengeGenerator.generate(publicInput, commitment);
-		final Element left = f.apply(response);
-		final Element right = commitment.apply(pV.selfApply(challenge));
-		return BooleanSet.getInstance().getElement(left.isEquivalent(right));
+		final Element left = f.apply(response);                                   // [3N+3]
+		final Element right = commitment.apply(pV.selfApply(challenge));          //    [3]
+		//                                                                          --------
+		return BooleanSet.getInstance().getElement(left.isEquivalent(right));     // [6N+6]
 	}
 
 	//===================================================================================

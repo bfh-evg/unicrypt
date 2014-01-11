@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
@@ -25,42 +20,28 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import java.math.BigInteger;
 
-/**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- */
 public class ShuffleProofGeneratorExample {
 
-	final static int P1 = 167;
-	//final static String P2 = "88059184022561109274134540595138392753102891002065208740257707896840303297223"; //256
-	//final static String P2 = "7345427226905070499764889740717053678145447263298168648090208932893269201500094910685938670933846388714280765884795335365679757155747184872890100586114127"; //512
-	final static String P2 = "124839508901459225295131478904766553151715203799479873450319702669888301683936126519033292399204126892064039399466769614858812059914518351605494976695246338946504781671208279483554047133686061305170930849857475703281378907333309894394327830075584429809888154770188970744592711756609335320238222672153149255987"; //1024
-	//final static String P2 = "32317006071311007300714876688669951960444102669715484032130345427524655138867890893197201411522913463688717960921898019494119559150490921095088152386448283120630877367300996091750197750389652106796057638384067568276792218642619756161838094338476170470581645852036305042887575891541065808607552399123930385521914333389668342420684974786564569494856176035326322058077805659331026192708460314150258592864177116725943603718461857357598351152301645904403697613233287231227125684710820209725157101726931323469678542580656697935045997268352998638215525166389437335543602135433229604645318478604952148193555853611059594288367"; //2048
+	// A few safe primes
+	final static String P_256 = "88059184022561109274134540595138392753102891002065208740257707896840303297223"; //256
+	final static String P_512 = "7345427226905070499764889740717053678145447263298168648090208932893269201500094910685938670933846388714280765884795335365679757155747184872890100586114127"; //512
+	final static String P_1024 = "124839508901459225295131478904766553151715203799479873450319702669888301683936126519033292399204126892064039399466769614858812059914518351605494976695246338946504781671208279483554047133686061305170930849857475703281378907333309894394327830075584429809888154770188970744592711756609335320238222672153149255987"; //1024
+	final static String P_2048 = "32317006071311007300714876688669951960444102669715484032130345427524655138867890893197201411522913463688717960921898019494119559150490921095088152386448283120630877367300996091750197750389652106796057638384067568276792218642619756161838094338476170470581645852036305042887575891541065808607552399123930385521914333389668342420684974786564569494856176035326322058077805659331026192708460314150258592864177116725943603718461857357598351152301645904403697613233287231227125684710820209725157101726931323469678542580656697935045997268352998638215525166389437335543602135433229604645318478604952148193555853611059594288367"; //2048
 
-	public void proofOfShuffle_COMPLETE() {
+	// 160/1024
+	final static String Q = "1081119563825030427708677600856959359670713108783";
+	final static String P = "132981118064499312972124229719551507064282251442693318094413647002876359530119444044769383265695686373097209253015503887096288112369989708235068428214124661556800389180762828009952422599372290980806417384771730325122099441368051976156139223257233269955912341167062173607119895128870594055324929155200165347329";
 
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
+	public Triple createCiphertexts(int size, CyclicGroup G_q, Element encryptionPK, PermutationElement pi) {
+
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
-
-		final int size = 1000;
-		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, rrs);
-
-		// Permutation
-		Permutation permutation = Permutation.getRandomInstance(size);
-		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
-
-		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
-
-		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
-		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Ciphertexts
 		Tuple rV = ProductGroup.getInstance(Z_q, size).getRandomElement();
@@ -72,10 +53,23 @@ public class ShuffleProofGeneratorExample {
 		}
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
+		return Triple.getInstance(uV, uPrimeV, rV);
+	}
+
+	public void proofOfShuffle(int size, CyclicGroup G_q, Element encryptionPK, PermutationElement pi, Tuple uV, Tuple uPrimeV, Tuple rV) {
+
+		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+
+		// Permutation commitment
+		logAndResetModPowCounters();
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
+		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
+		Tuple cPiV = pcs.commit(pi, sV);
+		System.out.println("Permutation Commitment");
+		logAndResetModPowCounters();
+
 		// Permutation commitment proof generator
-//		SigmaChallengeGenerator scgP = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-//		ChallengeGenerator ecgP = PermutationCommitmentProofGenerator.createNonInteractiveMultiChallengeGenerator(G_q, size, ro);
-//		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scgP, ecgP, G_q, size, rrs);
 		SigmaChallengeGenerator scg = PermutationCommitmentTunedProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
 		ChallengeGenerator ecg = PermutationCommitmentTunedProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		PermutationCommitmentTunedProofGenerator pcpg = PermutationCommitmentTunedProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
@@ -85,30 +79,25 @@ public class ShuffleProofGeneratorExample {
 		ChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionPK, rrs);
 
-		logAndReset();
-
 		// Proof
 		Pair proofPermutation = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
-		System.out.println("Permutation-Proof");
-		logAndReset();
-
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 		Triple proofShuffle = spg.generate(privateInput, publicInput);
 		System.out.println("Shuffle-Proof");
-		logAndReset();
+		logAndResetModPowCounters();
 
 		// Verify
 		// (Important: If it is not given from the context, check equality of
 		//             the permutation commitments!)
 		BooleanElement vPermutation = pcpg.verify(proofPermutation, cPiV);
 		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput);
-		System.out.println("Shuffle was sucessful: " + (vPermutation.getBoolean() && vShuffle.getBoolean()));
 		System.out.println("Verify");
-		logAndReset();
+		logAndResetModPowCounters();
+		System.out.println("Shuffle was sucessful: " + (vPermutation.getBoolean() && vShuffle.getBoolean()));
 	}
 
-	public void logAndReset() {
+	public void logAndResetModPowCounters() {
 		System.out.println("COUNTER     : " + (GStarMod.modPowCounter_SelfApply - GStarMod.modPowCounter_IsGenerator));
 		System.out.println("COUNTER Cont: " + GStarMod.modPowCounter_Contains);
 		GStarMod.modPowCounter_SelfApply = 0;
@@ -117,11 +106,31 @@ public class ShuffleProofGeneratorExample {
 	}
 
 	public static void main(String[] args) {
-		//BigInteger bigInteger = PseudoRandomGenerator.getInstance().nextSavePrime(512);
-		//System.out.println(bigInteger);
+
+		// Setup
+		final int size = 1000;
+		//final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P_256, 10));
+		final CyclicGroup G_q = GStarModPrime.getInstance(new BigInteger(P, 10), new BigInteger(Q, 10));
+
+		// Create random encryption key
+		final Element encryptionPK = G_q.getRandomElement();
+
+		// Create random permutation
+		final Permutation permutation = Permutation.getRandomInstance(size);
+		final PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
+
+		// Create example instance
 		ShuffleProofGeneratorExample ex = new ShuffleProofGeneratorExample();
+
+		// Create ciphertexts (uV: input, uPrimeV: shuffled output, rV: randomness of re-encryption)
+		final Triple c = ex.createCiphertexts(size, G_q, encryptionPK, pi);
+		final Tuple uV = (Tuple) c.getFirst();
+		final Tuple uPrimeV = (Tuple) c.getSecond();
+		final Tuple rV = (Tuple) c.getThird();
+
+		// Create and verify proof
 		long time = System.currentTimeMillis();
-		ex.proofOfShuffle_COMPLETE();
+		ex.proofOfShuffle(size, G_q, encryptionPK, pi, uV, uPrimeV, rV);
 		System.out.println("Finished after: " + (System.currentTimeMillis() - time) + " MilliSeconds.");
 
 	}
