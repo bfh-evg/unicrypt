@@ -35,15 +35,40 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.util;
+package ch.bfh.unicrypt.bytetree;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 /**
- * This class represents the ... Noch nicht fertig.
+ * This class represents the ByteTree described in Wikstroms Verifier.
  * http://www.csc.kth.se/utbildning/kth/kurser/SA104X/fkand13/vmnv-1.1.0.pdf
+ * <p>
+ * This implementation aims for a possible interchange of Wikstroms library.
+ * <p>
+ * The following description of the ByteTree is mainly adopted from the referenced document:
+ * <p>
+ * "We use a byte-oriented format to represent objects on file and to turn them into arrays of bytes. The goal of this
+ * format is to be as simple as possible."
+ * <p>
+ * A byte tree is either a leaf containing an array of bytes, or a node containing other byte trees.
+ * <p>
+ * We use a 8k-bit two’s-complement representation of n in big endian byte order.
+ * <p>
+ * A byte tree is represented by an array of bytes as follows: • Leaf: Concatenation of 1 byte 01 indicating the leaf 4
+ * bytes indicating the number of data bytes data bytes
+ * <p>
+ *
+ * • Node: Concatenation of 1 byte 00 indicating the node 4 bytes bytes indicating the number of children children
+ * (either Node / Leaf)
+ * <p>
+ * Example: node(node(leaf(1), leaf(23)), leaf(45)) is represented as
+ * <p>
+ * [0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 23, 1, 0, 0, 0, 1, 45]
+ * <p>
+ * node1........(..node2.......(..leaf1.............leaf2.............)leaf3............)
+ * <p>
+ * <p>
  * <p>
  * Even though NIO is in use {@link ByteBuffer} this class does not (yet) work with direct buffers, as
  * allocation/deallocation handling costs more than indirectly used (See API)
@@ -52,8 +77,8 @@ import java.util.Arrays;
  */
 public abstract class ByteTree {
 
-	public final static int BYTES_USED_FOR_IDENTIFIER = 1;
-	public final static int BYTES_USED_FOR_AMOUNT = 4;
+	public final static int BYTES_USED_FOR_IDENTIFIER = Byte.SIZE / 8;
+	public final static int BYTES_USED_FOR_AMOUNT = Integer.SIZE / 8;
 	public final static int BYTES_USED_FOR_PREAMBLE = BYTES_USED_FOR_IDENTIFIER + BYTES_USED_FOR_AMOUNT;
 
 	private byte[] serializedValue;
@@ -166,129 +191,5 @@ public abstract class ByteTree {
 	 * @return
 	 */
 	protected abstract int abstractGetSize();
-
-	private final static class ByteTreeNode
-		   extends ByteTree {
-
-		public static final byte IDENTIFIER = 0;
-		private final ByteTree[] elements;
-
-		private ByteTreeNode(ByteBuffer buffer) {
-			int amountOfElements = buffer.getInt();
-			elements = new ByteTree[amountOfElements];
-
-			for (int i = 0; i < elements.length; i++) {
-				byte identifier = buffer.get();
-				switch (identifier) {
-					case ByteTreeLeaf.IDENTIFIER:
-						elements[i] = new ByteTreeLeaf(buffer);
-						break;
-					case ByteTreeNode.IDENTIFIER:
-						elements[i] = new ByteTreeNode(buffer);
-						break;
-					default:
-						throw new IllegalArgumentException();
-				}
-			}
-		}
-
-		private ByteTreeNode(ByteTree... elements) {
-			if (elements == null) {
-				throw new IllegalArgumentException();
-			}
-			for (ByteTree element : elements) {
-				if (element == null) {
-					throw new IllegalArgumentException();
-				}
-			}
-			this.elements = elements;
-		}
-
-		@Override
-		protected void abstractSerialize(ByteBuffer buffer) {
-			buffer.put(IDENTIFIER);
-			buffer.putInt(this.elements.length);
-			for (ByteTree element : elements) {
-				element.defaultSerialize(buffer);
-			}
-		}
-
-		@Override
-		protected int abstractGetSize() {
-			int size = 0;
-			for (ByteTree element : elements) {
-				size += element.defaultGetSize();
-			}
-			return size;
-
-		}
-
-	}
-
-	private final static class ByteTreeLeaf
-		   extends ByteTree {
-
-		public static final byte IDENTIFIER = 1;
-		private final byte[] bytes;
-
-		private ByteTreeLeaf(ByteBuffer buffer) {
-			int amountOfBytes = buffer.getInt();
-			bytes = new byte[amountOfBytes];
-
-			buffer.get(bytes);
-		}
-
-		private ByteTreeLeaf(byte[] bytes) {
-			this.bytes = bytes;
-		}
-
-		@Override
-		protected void abstractSerialize(ByteBuffer buffer) {
-			buffer.put(IDENTIFIER);
-			buffer.putInt(this.bytes.length);
-			buffer.put(bytes);
-		}
-
-		@Override
-		protected int abstractGetSize() {
-			return this.bytes.length;
-		}
-
-	}
-
-	public static void main(String[] args) {
-		ByteTree b1 = ByteTree.getInstance("Hallo".getBytes());
-		byte[] value1 = b1.getSerializedByteTree();
-		System.out.println(Arrays.toString(value1));
-
-		ByteTree b2 = ByteTree.getInstance("Welt".getBytes());
-		byte[] value2 = b2.getSerializedByteTree();
-		System.out.println(Arrays.toString(value2));
-
-		ByteTree b3 = ByteTree.getInstance(b1, b2);
-
-		byte[] value3 = b3.getSerializedByteTree();
-		System.out.println(Arrays.toString(value3));
-
-		ByteTree b4 = ByteTree.getInstance(".".getBytes());
-		byte[] value4 = b4.getSerializedByteTree();
-		System.out.println(Arrays.toString(value4));
-
-		ByteTree b5 = ByteTree.getInstance(b3, b4);
-
-		byte[] value5 = b5.getSerializedByteTree();
-		System.out.println(Arrays.toString(value5));
-
-		ByteTree b6 = ByteTree.getInstance(b1, b2, b4);
-
-		byte[] value6 = b6.getSerializedByteTree();
-		System.out.println(Arrays.toString(value6));
-
-		ByteTree b7 = ByteTree.getDeserializedInstance(value6);
-
-		byte[] value7 = b7.getSerializedByteTree();
-		System.out.println(Arrays.toString(value7));
-
-	}
 
 }
