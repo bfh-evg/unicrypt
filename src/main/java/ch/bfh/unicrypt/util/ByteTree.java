@@ -56,7 +56,7 @@ public abstract class ByteTree {
 	public final static int BYTES_USED_FOR_AMOUNT = 4;
 	public final static int BYTES_USED_FOR_PREAMBLE = BYTES_USED_FOR_IDENTIFIER + BYTES_USED_FOR_AMOUNT;
 
-	private byte[] value;
+	private byte[] serializedValue;
 
 	/**
 	 * Returns a new instance of a ByteTree given one or more ByteTree-elements.
@@ -116,13 +116,13 @@ public abstract class ByteTree {
 	 * @return Serialized ByteTree
 	 */
 	public byte[] getSerializedByteTree() {
-		if (this.value == null) {
+		if (this.serializedValue == null) {
 			byte[] internalValue = new byte[this.defaultGetSize()];
 			ByteBuffer buffer = ByteBuffer.wrap(internalValue);
 			defaultSerialize(buffer);
-			value = internalValue;
+			serializedValue = internalValue;
 		}
-		return this.value;
+		return this.serializedValue;
 	}
 
 	/**
@@ -137,16 +137,16 @@ public abstract class ByteTree {
 	 * @param buffer The target buffer where the value shall be written to.
 	 */
 	protected void defaultSerialize(ByteBuffer buffer) {
-		if (value != null) {
-			buffer.put(value);
+		if (serializedValue != null) {
+			buffer.put(serializedValue);
 		} else {
 			abstractSerialize(buffer);
 		}
 	}
 
 	protected int defaultGetSize() {
-		if (value != null) {
-			return value.length;
+		if (serializedValue != null) {
+			return serializedValue.length;
 		}
 		int size = BYTES_USED_FOR_PREAMBLE;
 		size += abstractGetSize();
