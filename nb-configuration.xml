@@ -36,7 +36,6 @@
 		<org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.tab-size>4</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.tab-size>
 		<org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.continuationIndentSize>7</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.continuationIndentSize>
 		<org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.expand-tabs>false</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.expand-tabs>
-		<netbeans.hint.licensePath>${project.basedir}/license-header.txt</netbeans.hint.licensePath>
-		<netbeans.hint.license>gpl30</netbeans.hint.license>
+		<netbeans.hint.licensePath>${project.basedir}/license-dualLicense.txt</netbeans.hint.licensePath>
 	</properties>
 </project-shared-configuration>
