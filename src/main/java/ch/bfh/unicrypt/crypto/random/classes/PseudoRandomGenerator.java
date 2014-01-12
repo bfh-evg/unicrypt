@@ -1,10 +1,9 @@
 package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomGenerator;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -26,10 +25,12 @@ public class PseudoRandomGenerator
 
 	public static final Element DEFAULT_SEED = Z.getInstance().getElement(0);
 	public static final PseudoRandomGenerator DEFAULT = getInstance();
+
 	private final HashMethod hashMethod;
 	private final Element seed;
-	private final ByteArrayElement hashedSeedElement;
+	private final ByteArray hashedSeed;
 	private int counter;
+	// TODO: Better with ByteArrayOutputStream
 	private byte[] randomByteBuffer;
 	private int randomByteBufferPosition;
 
@@ -40,7 +41,7 @@ public class PseudoRandomGenerator
 		//The following lines are needed in order to speed up calculation of randomBytes. @see#fillRandomByteBuffer
 		this.randomByteBuffer = new byte[hashMethod.getLength()];
 		this.counter = -1;
-		hashedSeedElement = this.seed.getHashValue(hashMethod).getByteArrayElement();
+		hashedSeed = this.seed.getHashValue(hashMethod).getByteArray();
 		reset();
 	}
 
@@ -50,7 +51,8 @@ public class PseudoRandomGenerator
 		//-->This is, why the following implementation exists.
 		MessageDigest digest = hashMethod.getMessageDigest();
 		digest.reset();
-		return digest.digest(ByteArrayMonoid.getInstance().apply(hashedSeedElement, ByteArrayMonoid.getInstance().getElement(counter)).getByteArray());
+		return digest.digest(hashedSeed.concatenate(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getBytes());
+//		return digest.digest(hashedSeed.concatenate(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getBytes());
 
 		//this.digestBytes = ByteArrayMonoid.getInstance().apply(hashedSeedElement, Z.getInstance().getElement(counter).getHashValue(hashMethod).getByteArrayElement()).getHashValue(hashMethod).getByteArray();
 		//this.digestBytes = ByteArrayMonoid.getInstance().apply(seedByteArray, ByteArrayMonoid.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
@@ -182,7 +184,7 @@ public class PseudoRandomGenerator
 	public int hashCode() {
 		int hash = 7;
 		hash = 17 * hash + (this.hashMethod != null ? this.hashMethod.hashCode() : 0);
-		hash = 17 * hash + (hashedSeedElement != null ? hashedSeedElement.hashCode() : 0);
+		hash = 17 * hash + (hashedSeed != null ? hashedSeed.hashCode() : 0);
 		hash = 17 * hash + this.counter;
 		hash = 17 * hash + this.randomByteBufferPosition;
 		return hash;
@@ -232,32 +234,6 @@ public class PseudoRandomGenerator
 			throw new IllegalArgumentException();
 		}
 		return new PseudoRandomGenerator(hashMethod, seed);
-	}
-
-	/**
-	 * Originally developed by Raphaël Grosbois and Diego Santa Cruz (Swiss Federal Institute of Technology-EPFL) et al.
-	 * in http://www.java2s.com/Tutorial/Java/0120__Development/Calculatethefloorofthelogbase2.htm Method that
-	 * calculates the floor of the log, base 2, of 'x'. The calculation is performed in integer arithmetic, therefore,
-	 * it is exact.
-	 * <p>
-	 * @param x The value to calculate log2 on.
-	 * <p>
-	 * @return floor(log(x)/log(2)), calculated in an exact way.
-     * */
-	private static int log2Floor(int x) {
-		int y, v;
-		// No log of 0 or negative
-		if (x <= 0) {
-			throw new IllegalArgumentException("" + x + " <= 0");
-		}
-		// Calculate log2 (it's actually floor log2)
-		v = x;
-		y = -1;
-		while (v > 0) {
-			v >>= 1;
-			y++;
-		}
-		return y;
 	}
 
 }

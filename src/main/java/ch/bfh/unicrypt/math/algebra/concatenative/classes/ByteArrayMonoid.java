@@ -7,9 +7,9 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -33,10 +33,14 @@ public class ByteArrayMonoid
 	}
 
 	public final ByteArrayElement getElement(final byte[] bytes) {
-		if (bytes == null || bytes.length % this.getBlockLength() != 0) {
+		return this.getElement(ByteArray.getInstance(bytes));
+	}
+
+	public final ByteArrayElement getElement(final ByteArray byteArray) {
+		if (byteArray == null || byteArray.getLength() % this.getBlockLength() != 0) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardGetElement(bytes);
+		return this.standardGetElement(byteArray);
 	}
 
 	@Override
@@ -49,15 +53,11 @@ public class ByteArrayMonoid
 		if (length < 0 || length % this.getBlockLength() != 0) {
 			throw new IllegalArgumentException();
 		}
-		byte[] bytes = new byte[length];
-		for (int i = 0; i < length; i++) {
-			bytes[i] = randomGenerator.nextByte();
-		}
-		return this.standardGetElement(bytes);
+		return this.standardGetElement(ByteArray.getRandomInstance(length, randomGenerator));
 	}
 
-	protected ByteArrayElement standardGetElement(byte[] bytes) {
-		return new ByteArrayElement(this, bytes);
+	protected ByteArrayElement standardGetElement(ByteArray byteArray) {
+		return new ByteArrayElement(this, byteArray);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class ByteArrayMonoid
 			}
 			value = value.divide(blockSize);
 		}
-		return this.standardGetElement(ArrayUtil.byteListToByteArray(byteList));
+		return this.standardGetElement(ByteArray.getInstance(ArrayUtil.byteListToByteArray(byteList)));
 	}
 
 	//
@@ -84,16 +84,12 @@ public class ByteArrayMonoid
 	//
 	@Override
 	protected ByteArrayElement abstractGetIdentityElement() {
-		return this.standardGetElement(new byte[]{});
+		return this.standardGetElement(ByteArray.getInstance());
 	}
 
 	@Override
 	protected ByteArrayElement abstractApply(ByteArrayElement element1, ByteArrayElement element2) {
-		byte[] bytes1 = element1.getByteArray();
-		byte[] bytes2 = element2.getByteArray();
-		byte[] result = Arrays.copyOf(bytes1, bytes1.length + bytes2.length);
-		System.arraycopy(bytes2, 0, result, bytes2.length, bytes2.length);
-		return this.standardGetElement(result);
+		return this.standardGetElement(element1.getByteArray().concatenate(element2.getByteArray()));
 	}
 
 	@Override

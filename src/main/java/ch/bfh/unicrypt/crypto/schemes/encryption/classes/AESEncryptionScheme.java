@@ -131,11 +131,11 @@ public class AESEncryptionScheme
 		protected ByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement message = (ByteArrayElement) element.getSecond();
-			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getByteArray(), NAME);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getByteArray().getBytes(), NAME);
 			byte[] encryptedBytes;
 			try {
 				cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-				encryptedBytes = cipher.doFinal(message.getByteArray());
+				encryptedBytes = cipher.doFinal(message.getByteArray().getBytes());
 			} catch (InvalidKeyException ex) {
 				throw new RuntimeException();
 			} catch (IllegalBlockSizeException ex) {
@@ -159,11 +159,11 @@ public class AESEncryptionScheme
 		protected ByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement encryption = (ByteArrayElement) element.getSecond();
-			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getByteArray(), NAME);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getByteArray().getBytes(), NAME);
 			byte[] message;
 			try {
 				cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
-				message = cipher.doFinal(encryption.getByteArray());
+				message = cipher.doFinal(encryption.getByteArray().getBytes());
 			} catch (InvalidKeyException e) {
 				throw new RuntimeException();
 			} catch (IllegalBlockSizeException e) {

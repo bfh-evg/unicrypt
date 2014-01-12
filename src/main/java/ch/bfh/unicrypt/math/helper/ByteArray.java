@@ -37,6 +37,8 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -61,6 +63,13 @@ public class ByteArray
 		return this.bytes.length;
 	}
 
+	public byte getByte(int index) {
+		if (index < 0 || index >= this.getLength()) {
+			throw new IndexOutOfBoundsException();
+		}
+		return this.bytes[index];
+	}
+
 	public ByteArray concatenate(ByteArray other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
@@ -68,6 +77,17 @@ public class ByteArray
 		byte[] result = new byte[this.getLength() + other.getLength()];
 		System.arraycopy(this.bytes, 0, result, 0, this.getLength());
 		System.arraycopy(other.bytes, 0, result, this.getLength(), other.getLength());
+		return new ByteArray(result);
+	}
+
+	public ByteArray xor(ByteArray other) {
+		int length = Math.max(this.getLength(), other.getLength());
+		byte[] result = new byte[length];
+		for (int i = 0; i < length; i++) {
+			int byte1 = i < this.getLength() ? this.getByte(i) : 0;
+			int byte2 = i < other.getLength() ? other.getByte(i) : 0;
+			result[i] = (byte) (0xff & (byte1 ^ byte2));
+		}
 		return new ByteArray(result);
 	}
 
@@ -101,6 +121,10 @@ public class ByteArray
 		return Arrays.equals(this.bytes, other.bytes);
 	}
 
+	public static ByteArray getInstance() {
+		return ByteArray.getInstance(0);
+	}
+
 	public static ByteArray getInstance(int length) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
@@ -113,6 +137,24 @@ public class ByteArray
 			throw new IllegalArgumentException();
 		}
 		return new ByteArray(bytes.clone());
+	}
+
+	public static ByteArray getRandomInstance(int length) {
+		return ByteArray.getRandomInstance(length, null);
+	}
+
+	public static ByteArray getRandomInstance(int length, RandomGenerator randomGenerator) {
+		if (length < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (randomGenerator == null) {
+			randomGenerator = PseudoRandomGenerator.DEFAULT;
+		}
+		byte[] bytes = new byte[length];
+		for (int i = 0; i < length; i++) {
+			bytes[i] = randomGenerator.nextByte();
+		}
+		return new ByteArray(bytes);
 	}
 
 }
