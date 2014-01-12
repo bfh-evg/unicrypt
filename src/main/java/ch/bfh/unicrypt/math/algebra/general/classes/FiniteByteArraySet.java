@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -53,7 +54,7 @@ import java.util.LinkedList;
  * @author rolfhaenni
  */
 public class FiniteByteArraySet
-			 extends AbstractSet<FiniteByteArrayElement> {
+	   extends AbstractSet<FiniteByteArrayElement> {
 
 	private final int minLength;
 	private final int maxLength;
@@ -76,14 +77,18 @@ public class FiniteByteArraySet
 	}
 
 	public final FiniteByteArrayElement getElement(final byte[] bytes) {
-		if (bytes == null || bytes.length < this.getMinLength() || bytes.length > this.getMaxLength()) {
-			throw new IllegalArgumentException();
-		}
-		return this.standardGetElement(bytes);
+		return this.getElement(ByteArray.getInstance(bytes));
 	}
 
-	protected FiniteByteArrayElement standardGetElement(byte[] bytes) {
-		return new FiniteByteArrayElement(this, bytes);
+	public final FiniteByteArrayElement getElement(final ByteArray byteArray) {
+		if (byteArray == null || byteArray.getLength() < this.getMinLength() || byteArray.getLength() > this.getMaxLength()) {
+			throw new IllegalArgumentException();
+		}
+		return this.standardGetElement(byteArray);
+	}
+
+	protected FiniteByteArrayElement standardGetElement(ByteArray byteArray) {
+		return new FiniteByteArrayElement(this, byteArray);
 	}
 
 	@Override
@@ -98,7 +103,7 @@ public class FiniteByteArraySet
 			byteList.addFirst(value.mod(size).byteValue());
 			value = value.divide(size);
 		}
-		return this.standardGetElement(ArrayUtil.byteListToByteArray(byteList));
+		return this.standardGetElement(ByteArray.getInstance(ArrayUtil.byteListToByteArray(byteList)));
 	}
 
 	@Override

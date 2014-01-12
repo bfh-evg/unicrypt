@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import java.math.BigInteger;
-import java.util.Arrays;
 
 /**
  *
@@ -52,26 +52,25 @@ import java.util.Arrays;
 public class ByteArrayElement
 	   extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement> {
 
-	private final byte[] bytes;
+	private final ByteArray byteArray;
 
-	protected ByteArrayElement(final ByteArrayMonoid monoid, final byte[] bytes) {
+	protected ByteArrayElement(final ByteArrayMonoid monoid, final ByteArray byteArray) {
 		super(monoid);
-		this.bytes = bytes;
+		this.byteArray = byteArray;
 	}
 
-	public byte[] getByteArray() {
-		return this.bytes.clone();
+	public ByteArray getByteArray() {
+		return this.byteArray;
 	}
 
 	@Override
 	public int getLength() {
-		return this.bytes.length;
+		return this.byteArray.getLength();
 	}
 
 	@Override
 	protected BigInteger standardGetValue() {
-
-		BigInteger value1 = new BigInteger(1, this.bytes);
+		BigInteger value1 = new BigInteger(1, this.byteArray.getBytes());
 		BigInteger value2 = BigInteger.ZERO;
 		int blockLength = this.getSet().getBlockLength();
 
@@ -91,23 +90,12 @@ public class ByteArrayElement
 
 	@Override
 	protected boolean standardIsEquivalent(ByteArrayElement element) {
-		return Arrays.equals(this.bytes, element.bytes);
+		return this.byteArray.equals(element.byteArray);
 	}
 
 	@Override
 	public String standardToStringContent() {
-		String str = "";
-		String delimiter = "";
-		for (int i = 0; i < this.getLength(); i++) {
-			str = str + delimiter + String.format("%02X", BigInteger.valueOf(bytes[i] & 0xFF));
-			if ((i + 1) % this.getSet().getBlockLength() == 0) {
-				delimiter = "|";
-
-			} else {
-				delimiter = "-";
-			}
-		}
-		return "\"" + str + "\"";
+		return this.byteArray.toString();
 	}
 
 }

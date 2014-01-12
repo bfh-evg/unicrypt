@@ -45,19 +45,19 @@ import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 
 /**
  *
  * @author rolfhaenni
  */
 public class OneTimePadEncryptionScheme
-			 extends AbstractSymmetricEncryptionScheme<FixedByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FixedByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<FixedByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FixedByteArrayKeyGenerator> {
 
 	private final FixedByteArraySet fixedByteArraySet;
 
@@ -89,24 +89,19 @@ public class OneTimePadEncryptionScheme
 	}
 
 	private class OneTimePadFunction
-				 extends AbstractFunction<ProductSet, Pair, FiniteByteArraySet, FiniteByteArrayElement> {
+		   extends AbstractFunction<ProductSet, Pair, FixedByteArraySet, FiniteByteArrayElement> {
 
-		protected OneTimePadFunction(FiniteByteArraySet finiteByteArraySet) {
-			super(ProductSet.getInstance(finiteByteArraySet, 2), finiteByteArraySet);
+		protected OneTimePadFunction(FixedByteArraySet fixedByteArraySet) {
+			super(ProductSet.getInstance(fixedByteArraySet, 2), fixedByteArraySet);
 		}
 
 		@Override
 		protected FiniteByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
-			int length = this.getCoDomain().getMinLength();
-			byte[] bytes1 = ((FiniteByteArrayElement) element.getFirst()).getByteArray();
-			byte[] bytes2 = ((FiniteByteArrayElement) element.getSecond()).getByteArray();
-			byte[] result = new byte[length];
-			for (int i = 0; i < length; i++) {
-				result[i] = (byte) (0xff & ((int) bytes1[i]) ^ ((int) bytes2[i]));;
-			}
-			return this.getCoDomain().getElement(result);
+			ByteArray byteArray1 = ((FiniteByteArrayElement) element.getFirst()).getByteArray();
+			ByteArray byteArray2 = ((FiniteByteArrayElement) element.getSecond()).getByteArray();
+			return this.getCoDomain().getElement(byteArray1.xor(byteArray2));
 		}
-
+		
 	}
 
 }
