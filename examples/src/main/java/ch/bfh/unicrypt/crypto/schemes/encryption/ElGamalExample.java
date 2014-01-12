@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.encryption;
+package ch.bfh.unicrypt.crypto.schemes.encryption;
 
 import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
