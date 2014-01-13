@@ -65,8 +65,8 @@ public class ECGroupExample {
 		ECZModPrimeElement g1=ec1.getDefaultGenerator();
 		ec1.getRandomElement();
 		BigInteger n2=ec1.getOrder();
-		System.out.println(g1.selfApply(n2));		//Must be Identity (-1,-1)
-		System.out.println(MathUtil.arePrime(n2));	//Must be true
+		System.out.println(g1.selfApply(n2));		//order*generator -> (-1,-1)
+		System.out.println(MathUtil.arePrime(n2));	//order must be prime
 		
 		long t1=System.currentTimeMillis();
 		ECZModPrimeElement w2=ec1.getRandomElement();
@@ -80,15 +80,7 @@ public class ECGroupExample {
 		System.out.println("Computing time for n2*w2= "+t1+" ms");
 		*/
 		
-		
-		/*
-		//Example Tonelli_Skanks
-		BigInteger r2=new BigInteger("659EF8BA043916EEDE8911702B20",16);
-		BigInteger p2=new BigInteger("DB7C2ABF62E35E668076BEAD208B",16);
-		BigInteger result = MathUtil.sqrtModp(r2,p2); // =+-17 mod 41
-		
-		System.out.println("-+ "+result);
-		*/
+
 		
 		
 		/*
@@ -102,14 +94,14 @@ public class ECGroupExample {
 		ECZModPrime ec2=ECZModPrime.getInstance(field2, a2, b2, order2, h2);
 		ECZModPrimeElement gen2=ec2.getDefaultGenerator();
 		System.out.println(gen2);
-		System.out.println(gen2.selfApply(h2).selfApply(order2));
+		System.out.println(gen2.selfApply(h2).selfApply(order2));	//order*h*generator -> (-1,-1)
 		*/
 		
 		/*StandardECZModPrime ec=StandardECZModPrime.getInstance(SECECCParamsFp.secp112r1);
 		BigInteger order=ec.getOrder();
 		ECZModPrimeElement e1=ec.getDefaultGenerator();
-		ECZModPrimeElement e2=e1.selfApply(order.subtract(BigInteger.ONE));
-		e2=e2.apply(e1);
+		ECZModPrimeElement e2=e1.selfApply(order.subtract(BigInteger.ONE)); generator * order-1
+		e2=e2.apply(e1); should be identity (-1,-1)
 		
 		System.out.println(e2);
 		*/
