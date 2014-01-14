@@ -53,6 +53,12 @@ import java.security.SecureRandom;
  */
 public class DistributionSamplerSecureRandom {
 
+	/**
+	 * Shall return a random looking amount of bytes, created outside the context of ? UniCrypt ?
+	 * <p>
+	 * @param amountOfBytes
+	 * @return ByteArrayElement containing the desired amount of 'random' bytes.
+	 */
 	public static Element getDistributionSample(int amountOfBytes) {
 		if (amountOfBytes < 1) {
 			throw new IllegalArgumentException();
