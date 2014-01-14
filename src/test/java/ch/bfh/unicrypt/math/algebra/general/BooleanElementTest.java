@@ -39,31 +39,65 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author reto
  */
-public class ProductGroupTest {
+public class BooleanElementTest {
 
-	@Test
-	public void testIteration() {
-		CyclicGroup g1 = GStarModSafePrime.getInstance(11);
-		CyclicGroup g2 = GStarModSafePrime.getInstance(23);
-		CyclicGroup g3 = GStarModSafePrime.getInstance(5);
-		ProductCyclicGroup pg = ProductCyclicGroup.getInstance(g1, g2, g3);
-		for (CyclicGroup group : pg.makeIterable()) {
-			System.out.println(group.getDefaultGenerator());
-		}
-		for (Tuple tuple : pg) {
-			System.out.println(tuple);
-		}
+    public BooleanElementTest() {
+    }
 
-	}
+    @BeforeClass
+    public static void setUpClass() {
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+    }
+
+    @Before
+    public void setUp() {
+    }
+
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of getBoolean method, of class BooleanElement.
+     */
+    @Test
+    public void testGetBoolean() {
+	//    System.out.println("getBoolean");
+	//    BooleanElement instance = null;
+	//    boolean expResult = false;
+	//    boolean result = instance.getBoolean();
+	//    assertEquals(expResult, result);
+	// TODO review the generated test code and remove the default call to fail.
+	//    fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of standardToStringContent method, of class BooleanElement.
+     */
+    @Test
+    public void testStandardToStringContent() {
+//	System.out.println("standardToStringContent");
+//	BooleanElement instance = null;
+//	String expResult = "";
+//	String result = instance.standardToStringContent();
+//	assertEquals(expResult, result);
+//	// TODO review the generated test code and remove the default call to fail.
+//	fail("The test case is a prototype.");
+    }
 
 }

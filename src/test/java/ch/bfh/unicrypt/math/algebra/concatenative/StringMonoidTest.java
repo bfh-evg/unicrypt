@@ -39,65 +39,29 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.math.algebra.concatenative;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.helper.Alphabet;
+import java.math.BigInteger;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
- * @author reto
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class BooleanElementTest {
+public class StringMonoidTest {
 
-    public BooleanElementTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of getBoolean method, of class BooleanElement.
-     */
-    @Test
-    public void testGetBoolean() {
-	//    System.out.println("getBoolean");
-	//    BooleanElement instance = null;
-	//    boolean expResult = false;
-	//    boolean result = instance.getBoolean();
-	//    assertEquals(expResult, result);
-	// TODO review the generated test code and remove the default call to fail.
-	//    fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of standardToStringContent method, of class BooleanElement.
-     */
-    @Test
-    public void testStandardToStringContent() {
-//	System.out.println("standardToStringContent");
-//	BooleanElement instance = null;
-//	String expResult = "";
-//	String result = instance.standardToStringContent();
-//	assertEquals(expResult, result);
-//	// TODO review the generated test code and remove the default call to fail.
-//	fail("The test case is a prototype.");
-    }
+	@Test
+	public void testGetValue() {
+		StringMonoid sm = StringMonoid.getInstance(Alphabet.BINARY, 4);
+		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(300)) <= 0; i = i.add(BigInteger.ONE)) {
+			StringElement element = sm.getElement(i);
+			Assert.assertEquals(element.getValue(), i);
+//			System.out.println(element);
+		}
+	}
 
 }

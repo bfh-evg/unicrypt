@@ -39,11 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.random.classes;
+package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -51,23 +51,19 @@ import org.junit.Test;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PseudoRandomOracleTest {
+public class TupleTest {
 
 	@Test
-	public void generalTest() {
-		RandomOracle ro = PseudoRandomOracle.getInstance();
-		RandomReferenceString rrs = ro.getRandomReferenceString(0);
-		BigInteger prime = rrs.nextPrime(10);
-		rrs.nextBoolean();
-		rrs.nextBytes(5);
-		rrs.reset();
-		Assert.assertEquals(prime, rrs.nextPrime(10));
-		rrs = ro.getRandomReferenceString(1);
-		prime = rrs.nextPrime(10);
-		rrs.nextBoolean();
-		rrs.nextBytes(5);
-		rrs.reset();
-		Assert.assertEquals(prime, rrs.nextPrime(10));
+	public void tupleTest() {
+		ZMod zMod = ZMod.getInstance(17);
+		Element e1 = zMod.getElement(4);
+		Element e2 = zMod.getElement(2);
+		Element e3 = zMod.getElement(1);
+		Tuple tuple = Tuple.getInstance(e1, e2, e3);
+		int index = 0;
+		for (Element element : tuple) {
+			Assert.assertTrue(element.isEquivalent(tuple.getAt(index++)));
+		}
 	}
 
 }

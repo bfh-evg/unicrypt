@@ -39,10 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.math.algebra.concatenative;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -50,18 +51,15 @@ import org.junit.Test;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class TupleTest {
+public class ByteArrayMonoidTest {
 
 	@Test
-	public void tupleTest() {
-		ZMod zMod = ZMod.getInstance(17);
-		Element e1 = zMod.getElement(4);
-		Element e2 = zMod.getElement(2);
-		Element e3 = zMod.getElement(1);
-		Tuple tuple = Tuple.getInstance(e1, e2, e3);
-		int index = 0;
-		for (Element element : tuple) {
-			Assert.assertTrue(element.isEquivalent(tuple.getAt(index++)));
+	public void testGetValue() {
+		ByteArrayMonoid bam = ByteArrayMonoid.getInstance(2);
+		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(65538)) <= 0; i = i.add(BigInteger.ONE)) {
+			ByteArrayElement element = bam.getElement(i);
+			Assert.assertEquals(i, element.getValue());
+//			System.out.println(element);
 		}
 	}
 

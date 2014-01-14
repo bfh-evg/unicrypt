@@ -39,11 +39,12 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
+package ch.bfh.unicrypt.math.algebra.multiplicative;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import junit.framework.Assert;
 import org.junit.Test;
 

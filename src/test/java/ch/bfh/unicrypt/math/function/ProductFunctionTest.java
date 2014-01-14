@@ -39,10 +39,12 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.concatenative.classes;
+package ch.bfh.unicrypt.math.function;
 
-import ch.bfh.unicrypt.math.helper.Alphabet;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -50,15 +52,21 @@ import org.junit.Test;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringMonoidTest {
+public class ProductFunctionTest {
 
+	/**
+	 * Test of getInstance method, of class Tuple.
+	 */
 	@Test
-	public void testGetValue() {
-		StringMonoid sm = StringMonoid.getInstance(Alphabet.BINARY, 4);
-		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(300)) <= 0; i = i.add(BigInteger.ONE)) {
-			StringElement element = sm.getElement(i);
-			Assert.assertEquals(element.getValue(), i);
-//			System.out.println(element);
+	public void tupleTest() {
+		Function f1 = IdentityFunction.getInstance(ZMod.getInstance(10));
+		Function f2 = IdentityFunction.getInstance(ZMod.getInstance(12));
+		Function f3 = IdentityFunction.getInstance(ZMod.getInstance(15));
+		ProductFunction functions = ProductFunction.getInstance(f1, f2, f3);
+		int index = 0;
+		for (Function function : functions) {
+			System.err.println(function);
+			Assert.assertTrue(function.isEquivalent(functions.getAt(index++)));
 		}
 	}
 

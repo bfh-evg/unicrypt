@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,41 +32,37 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.random.classes;
+package ch.bfh.unicrypt.crypto.schemes.encryption;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import java.math.BigInteger;
-import org.junit.Assert;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.RSAEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import org.junit.Test;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PseudoRandomReferenceStringTest {
+public class RSAEncryptionSchemeTest {
 
 	@Test
-	public void generalTest() {
-		RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
-		BigInteger prime = rrs.nextPrime(10);
-		rrs.nextBoolean();
-		rrs.nextBytes(5);
-		rrs.reset();
-		Assert.assertEquals(prime, rrs.nextPrime(10));
-		rrs = PseudoRandomReferenceString.getInstance(ByteArrayMonoid.getInstance().getElement(new byte[]{10, 5, 120}));
-		prime = rrs.nextPrime(10);
-		rrs.nextBoolean();
-		rrs.nextBytes(5);
-		rrs.reset();
-		Assert.assertEquals(prime, rrs.nextPrime(10));
+	public void EncryptionDecryptionTest() {
+		RSAEncryptionScheme rsa = RSAEncryptionScheme.getInstance(ZModPrimePair.getInstance(3, 5));
+		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
+		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
+		Element message = rsa.getMessageSpace().getElement(5);
+		Element encryption = rsa.encrypt(puKey, message);
+		Element decryption = rsa.decrypt(prKey, message);
+		//	Assert.assertTrue(encryption.isEquivalent(decryption));
+		System.out.println(Tuple.getInstance(prKey, puKey, message, encryption, decryption));
 	}
 
 }

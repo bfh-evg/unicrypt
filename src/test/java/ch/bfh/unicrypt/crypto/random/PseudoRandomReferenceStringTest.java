@@ -39,43 +39,35 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.math.helper.Alphabet;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import java.math.BigInteger;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class FixedStringSetTest {
+public class PseudoRandomReferenceStringTest {
 
-//	@Test
-//	public void testIteration() {
-//		FiniteStringSet set = FiniteStringSet.getInstance(Alphabet.OCTAL, 2, true);
-//		for (Element element : set) {
-//			System.out.println(element);
-//		}
-//		System.out.println(set.getOrder());
-//	}
 	@Test
-	public void testGetValue() {
-		FixedStringSet set = FixedStringSet.getInstance(Alphabet.BINARY, 4);
-		System.out.println(set.getElement("0000").getValue());
-		System.out.println(set.getElement("0001").getValue());
-		System.out.println(set.getElement("0010").getValue());
-		System.out.println(set.getElement("0011").getValue());
-		System.out.println(set.getElement("0100").getValue());
-		System.out.println(set.getElement("0101").getValue());
-		System.out.println(set.getElement("0110").getValue());
-		System.out.println(set.getElement("0111").getValue());
-		System.out.println(set.getElement("1111").getValue());
-		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(15)) <= 0; i = i.add(BigInteger.ONE)) {
-			System.out.println(set.getElement(i));
-		}
-		System.out.println(set.getOrder());
-		System.out.println(FixedStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54)).getOrder());
+	public void generalTest() {
+		RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+		BigInteger prime = rrs.nextPrime(10);
+		rrs.nextBoolean();
+		rrs.nextBytes(5);
+		rrs.reset();
+		Assert.assertEquals(prime, rrs.nextPrime(10));
+		rrs = PseudoRandomReferenceString.getInstance(ByteArrayMonoid.getInstance().getElement(new byte[]{10, 5, 120}));
+		prime = rrs.nextPrime(10);
+		rrs.nextBoolean();
+		rrs.nextBytes(5);
+		rrs.reset();
+		Assert.assertEquals(prime, rrs.nextPrime(10));
 	}
 
 }

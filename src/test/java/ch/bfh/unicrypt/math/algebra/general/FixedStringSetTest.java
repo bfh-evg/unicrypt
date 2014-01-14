@@ -39,33 +39,44 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.function.classes;
+package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-import org.junit.Assert;
+import ch.bfh.unicrypt.math.algebra.general.classes.FixedStringSet;
+import ch.bfh.unicrypt.math.helper.Alphabet;
+import java.math.BigInteger;
 import org.junit.Test;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ProductFunctionTest {
+public class FixedStringSetTest {
 
-	/**
-	 * Test of getInstance method, of class Tuple.
-	 */
+//	@Test
+//	public void testIteration() {
+//		FiniteStringSet set = FiniteStringSet.getInstance(Alphabet.OCTAL, 2, true);
+//		for (Element element : set) {
+//			System.out.println(element);
+//		}
+//		System.out.println(set.getOrder());
+//	}
 	@Test
-	public void tupleTest() {
-		Function f1 = IdentityFunction.getInstance(ZMod.getInstance(10));
-		Function f2 = IdentityFunction.getInstance(ZMod.getInstance(12));
-		Function f3 = IdentityFunction.getInstance(ZMod.getInstance(15));
-		ProductFunction functions = ProductFunction.getInstance(f1, f2, f3);
-		int index = 0;
-		for (Function function : functions) {
-			System.err.println(function);
-			Assert.assertTrue(function.isEquivalent(functions.getAt(index++)));
+	public void testGetValue() {
+		FixedStringSet set = FixedStringSet.getInstance(Alphabet.BINARY, 4);
+		System.out.println(set.getElement("0000").getValue());
+		System.out.println(set.getElement("0001").getValue());
+		System.out.println(set.getElement("0010").getValue());
+		System.out.println(set.getElement("0011").getValue());
+		System.out.println(set.getElement("0100").getValue());
+		System.out.println(set.getElement("0101").getValue());
+		System.out.println(set.getElement("0110").getValue());
+		System.out.println(set.getElement("0111").getValue());
+		System.out.println(set.getElement("1111").getValue());
+		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(15)) <= 0; i = i.add(BigInteger.ONE)) {
+			System.out.println(set.getElement(i));
 		}
+		System.out.println(set.getOrder());
+		System.out.println(FixedStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54)).getOrder());
 	}
 
 }

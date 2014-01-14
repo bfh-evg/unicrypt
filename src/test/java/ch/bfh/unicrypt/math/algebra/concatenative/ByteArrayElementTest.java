@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,17 +32,18 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.concatenative.classes;
+package ch.bfh.unicrypt.math.algebra.concatenative;
 
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.math.BigInteger;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -115,55 +116,6 @@ public class ByteArrayElementTest {
 		ByteArrayElement instance = null;
 		int expResult = 0;
 		int result = instance.getLength();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of standardGetValue method, of class ByteArrayElement.
-	 */
-	@Test
-	@Ignore
-
-	public void testStandardGetValue() {
-		System.out.println("standardGetValue");
-		ByteArrayElement instance = null;
-		BigInteger expResult = null;
-		BigInteger result = instance.standardGetValue();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of standardIsEquivalent method, of class ByteArrayElement.
-	 */
-	@Test
-	@Ignore
-
-	public void testStandardIsEquivalent() {
-		System.out.println("standardIsEquivalent");
-		ByteArrayElement element = null;
-		ByteArrayElement instance = null;
-		boolean expResult = false;
-		boolean result = instance.standardIsEquivalent(element);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of standardToStringContent method, of class ByteArrayElement.
-	 */
-	@Test
-	@Ignore
-
-	public void testStandardToStringContent() {
-		System.out.println("standardToStringContent");
-		ByteArrayElement instance = null;
-		String expResult = "";
-		String result = instance.standardToStringContent();
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");

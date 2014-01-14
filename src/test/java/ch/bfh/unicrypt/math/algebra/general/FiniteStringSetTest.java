@@ -39,49 +39,48 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
+package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
+import ch.bfh.unicrypt.math.helper.Alphabet;
+import java.math.BigInteger;
 import org.junit.Test;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class RSAEncryptionSchemeTest {
+public class FiniteStringSetTest {
 
+//	@Test
+//	public void testIteration() {
+//		FiniteStringSet set = FiniteStringSet.getInstance(Alphabet.OCTAL, 2, true);
+//		for (Element element : set) {
+//			System.out.println(element);
+//		}
+//		System.out.println(set.getOrder());
+//	}
 	@Test
-	public void EncryptionDecryptionTest() {
-		RSAEncryptionScheme instance = RSAEncryptionScheme.getInstance(ZModPrimePair.getInstance(3, 5));
-		Element prKey = instance.abstractGetKeyPairGenerator().generatePrivateKey();
-		Element puKey = instance.abstractGetKeyPairGenerator().generatePublicKey(prKey);
-		Element message = instance.getMessageSpace().getElement(5);
-		Element encryption = instance.encrypt(puKey, message);
-		Element decryption = instance.decrypt(prKey, message);
-		//	Assert.assertTrue(encryption.isEquivalent(decryption));
-		System.out.println(Tuple.getInstance(prKey, puKey, message, encryption, decryption));
-	}
-
-	@BeforeClass
-	public static void setUpClass() {
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-	}
-
-	@Before
-	public void setUp() {
-	}
-
-	@After
-	public void tearDown() {
+	public void testGetValue() {
+		FiniteStringSet set = FiniteStringSet.getInstance(Alphabet.BINARY, 3, 5);
+		System.out.println(set.getElement("000").getValue());
+		System.out.println(set.getElement("001").getValue());
+		System.out.println(set.getElement("111").getValue());
+		System.out.println(set.getElement("0000").getValue());
+		System.out.println(set.getElement("0001").getValue());
+		System.out.println(set.getElement("0010").getValue());
+		System.out.println(set.getElement("0011").getValue());
+		System.out.println(set.getElement("0100").getValue());
+		System.out.println(set.getElement("0101").getValue());
+		System.out.println(set.getElement("0110").getValue());
+		System.out.println(set.getElement("0111").getValue());
+		System.out.println(set.getElement("1111").getValue());
+		System.out.println(set.getElement("00000").getValue());
+		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(24)) <= 0; i = i.add(BigInteger.ONE)) {
+			System.out.println(set.getElement(i));
+		}
+		System.out.println(set.getOrder());
+		System.out.println(FiniteStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54), 3).getOrder());
 	}
 
 }
