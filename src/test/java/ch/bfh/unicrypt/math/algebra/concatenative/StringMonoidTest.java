@@ -39,38 +39,29 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.blinding.classes;
+package ch.bfh.unicrypt.math.algebra.concatenative;
 
-public class StandardBlindingScheme {
-//import ch.bfh.unicrypt.crypto.schemes.blinding.abstracts.AbstractBlindingScheme;
-//import ch.bfh.unicrypt.math.algebra.additive.classes.ZPlusMod;
-//import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-//import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
-//
-//public class StandardBlindingScheme extends AbstractBlindingScheme {
-//
-//    Group blindingSpace;
-//    ZPlusMod blindingValueSpace;
-//    SelfApplyFunction blindingFunction;
-//
-//    public StandardBlindingScheme(final Group blindingSpace) {
-//	if (blindingSpace == null) {
-//	    throw new IllegalArgumentException();
-//	}
-//	this.blindingSpace = blindingSpace;
-//	this.blindingValueSpace = blindingSpace.getZModOrder();
-//	this.blindingFunction = new SelfApplyFunction(this.blindingSpace, this.blindingValueSpace);
-//    }
-//
-//  // @Override
-//    // public Element unblind(final Element value, final AdditiveElement
-//    // blindingValue) {
-//    // if(blindingValue==null)
-//    // throw new IllegalArgumentException();
-//    // return this.blind(value, blindingValue.invert());
-//    // That does not work, as the blindingValue is an element of an additive
-//    // group. Hence blinding again with the
-//    // inverse value always results in 1
-//    // (x^y)^{-y}=x^{y-y}=x^0=1
-//    // }
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.helper.Alphabet;
+import java.math.BigInteger;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class StringMonoidTest {
+
+	@Test
+	public void testGetValue() {
+		StringMonoid sm = StringMonoid.getInstance(Alphabet.BINARY, 4);
+		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(300)) <= 0; i = i.add(BigInteger.ONE)) {
+			StringElement element = sm.getElement(i);
+			Assert.assertEquals(element.getValue(), i);
+//			System.out.println(element);
+		}
+	}
+
 }

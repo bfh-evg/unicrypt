@@ -100,20 +100,19 @@ public class AESEncryptionScheme
 
 	};
 
-	public static final String NAME = "AES";
+	private static final String ALGORITHM_NAME = "AES";
 	public static final KeyLength DEFAULT_KEY_LENGTH = KeyLength.KEY128;
 	public static final Mode DEFAULT_MODE = Mode.ECB;
-	public static final Padding DEFAULT_PADDING = Padding.NONE;
+	public static final Padding DEFAULT_PADDING = Padding.PKCS5;
 
 	public static final int AES_BLOCK_SIZE = 128;
-	public static final ByteArrayMonoid AES_MESSAGE_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
 	public static final ByteArrayMonoid AES_ENCRYPTION_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
 	public static final byte[] DEFAULT_IV = new byte[AES_BLOCK_SIZE / Byte.SIZE];
 
 	private final KeyLength keyLength;
 	private final Mode mode;
 	private final Padding padding;
-	private byte[] initializationVector;
+	private final byte[] initializationVector;
 	private Cipher cipher;
 
 	protected AESEncryptionScheme(KeyLength keyLength, Mode mode, Padding padding, byte[] initializationVector) {
@@ -122,7 +121,7 @@ public class AESEncryptionScheme
 		this.padding = padding;
 		this.initializationVector = initializationVector;
 		try {
-			this.cipher = Cipher.getInstance(NAME + "/" + mode + "/" + padding);
+			this.cipher = Cipher.getInstance(ALGORITHM_NAME + "/" + mode + "/" + padding);
 		} catch (NoSuchAlgorithmException ex) {
 			throw new RuntimeException();
 		} catch (NoSuchPaddingException ex) {
@@ -148,12 +147,24 @@ public class AESEncryptionScheme
 
 	@Override
 	protected Function abstractGetEncryptionFunction() {
-		return new AESEncryptionFunction(this.getKeyGenerator().getKeySpace());
+		ByteArrayMonoid messageSpace;
+		if (this.padding == Padding.NONE) {
+			messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
+		} else {
+			messageSpace = ByteArrayMonoid.getInstance();
+		}
+		return new AESEncryptionFunction(messageSpace, this.getKeyGenerator().getKeySpace());
 	}
 
 	@Override
 	protected Function abstractGetDecryptionFunction() {
-		return new AESDecryptionFunction(this.getKeyGenerator().getKeySpace());
+		ByteArrayMonoid messageSpace;
+		if (this.padding == Padding.NONE) {
+			messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
+		} else {
+			messageSpace = ByteArrayMonoid.getInstance();
+		}
+		return new AESDecryptionFunction(messageSpace, this.getKeyGenerator().getKeySpace());
 	}
 
 	@Override
@@ -164,15 +175,15 @@ public class AESEncryptionScheme
 	private class AESEncryptionFunction
 		   extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
-		protected AESEncryptionFunction(FixedByteArraySet keySpace) {
-			super(ProductSet.getInstance(keySpace, AES_MESSAGE_SPACE), AES_MESSAGE_SPACE);
+		protected AESEncryptionFunction(ByteArrayMonoid messageSpace, FixedByteArraySet keySpace) {
+			super(ProductSet.getInstance(keySpace, messageSpace), messageSpace);
 		}
 
 		@Override
 		protected ByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement message = (ByteArrayElement) element.getSecond();
-			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getByteArray().getBytes(), NAME);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getByteArray().getBytes(), ALGORITHM_NAME);
 			byte[] encryptedBytes;
 			try {
 				cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
@@ -184,7 +195,7 @@ public class AESEncryptionScheme
 			} catch (BadPaddingException ex) {
 				throw new RuntimeException();
 			}
-			return AES_ENCRYPTION_SPACE.getElement(encryptedBytes);
+			return this.getCoDomain().getElement(encryptedBytes);
 		}
 
 	}
@@ -192,15 +203,15 @@ public class AESEncryptionScheme
 	private class AESDecryptionFunction
 		   extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
-		protected AESDecryptionFunction(FixedByteArraySet keySpace) {
-			super(ProductSet.getInstance(keySpace, AES_MESSAGE_SPACE), AES_MESSAGE_SPACE);
+		protected AESDecryptionFunction(ByteArrayMonoid messageSpace, FixedByteArraySet keySpace) {
+			super(ProductSet.getInstance(keySpace, messageSpace), messageSpace);
 		}
 
 		@Override
 		protected ByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement encryption = (ByteArrayElement) element.getSecond();
-			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getByteArray().getBytes(), NAME);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getByteArray().getBytes(), ALGORITHM_NAME);
 			byte[] message;
 			try {
 				cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
@@ -212,7 +223,7 @@ public class AESEncryptionScheme
 			} catch (BadPaddingException e) {
 				throw new RuntimeException();
 			}
-			return AES_MESSAGE_SPACE.getElement(message);
+			return this.getCoDomain().getElement(message);
 		}
 
 	}

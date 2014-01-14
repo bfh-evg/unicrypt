@@ -39,49 +39,36 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
+package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import java.math.BigInteger;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class RSAEncryptionSchemeTest {
+public class PseudoRandomOracleTest {
 
 	@Test
-	public void EncryptionDecryptionTest() {
-		RSAEncryptionScheme instance = RSAEncryptionScheme.getInstance(ZModPrimePair.getInstance(3, 5));
-		Element prKey = instance.abstractGetKeyPairGenerator().generatePrivateKey();
-		Element puKey = instance.abstractGetKeyPairGenerator().generatePublicKey(prKey);
-		Element message = instance.getMessageSpace().getElement(5);
-		Element encryption = instance.encrypt(puKey, message);
-		Element decryption = instance.decrypt(prKey, message);
-		//	Assert.assertTrue(encryption.isEquivalent(decryption));
-		System.out.println(Tuple.getInstance(prKey, puKey, message, encryption, decryption));
-	}
-
-	@BeforeClass
-	public static void setUpClass() {
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-	}
-
-	@Before
-	public void setUp() {
-	}
-
-	@After
-	public void tearDown() {
+	public void generalTest() {
+		RandomOracle ro = PseudoRandomOracle.getInstance();
+		RandomReferenceString rrs = ro.getRandomReferenceString(0);
+		BigInteger prime = rrs.nextPrime(10);
+		rrs.nextBoolean();
+		rrs.nextBytes(5);
+		rrs.reset();
+		Assert.assertEquals(prime, rrs.nextPrime(10));
+		rrs = ro.getRandomReferenceString(1);
+		prime = rrs.nextPrime(10);
+		rrs.nextBoolean();
+		rrs.nextBytes(5);
+		rrs.reset();
+		Assert.assertEquals(prime, rrs.nextPrime(10));
 	}
 
 }

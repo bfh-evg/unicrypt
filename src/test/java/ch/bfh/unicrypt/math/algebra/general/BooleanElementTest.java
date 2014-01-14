@@ -39,43 +39,65 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.math.helper.Alphabet;
-import java.math.BigInteger;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author reto
  */
-public class FixedStringSetTest {
+public class BooleanElementTest {
 
-//	@Test
-//	public void testIteration() {
-//		FiniteStringSet set = FiniteStringSet.getInstance(Alphabet.OCTAL, 2, true);
-//		for (Element element : set) {
-//			System.out.println(element);
-//		}
-//		System.out.println(set.getOrder());
-//	}
-	@Test
-	public void testGetValue() {
-		FixedStringSet set = FixedStringSet.getInstance(Alphabet.BINARY, 4);
-		System.out.println(set.getElement("0000").getValue());
-		System.out.println(set.getElement("0001").getValue());
-		System.out.println(set.getElement("0010").getValue());
-		System.out.println(set.getElement("0011").getValue());
-		System.out.println(set.getElement("0100").getValue());
-		System.out.println(set.getElement("0101").getValue());
-		System.out.println(set.getElement("0110").getValue());
-		System.out.println(set.getElement("0111").getValue());
-		System.out.println(set.getElement("1111").getValue());
-		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(15)) <= 0; i = i.add(BigInteger.ONE)) {
-			System.out.println(set.getElement(i));
-		}
-		System.out.println(set.getOrder());
-		System.out.println(FixedStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54)).getOrder());
-	}
+    public BooleanElementTest() {
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+    }
+
+    @Before
+    public void setUp() {
+    }
+
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of getBoolean method, of class BooleanElement.
+     */
+    @Test
+    public void testGetBoolean() {
+	//    System.out.println("getBoolean");
+	//    BooleanElement instance = null;
+	//    boolean expResult = false;
+	//    boolean result = instance.getBoolean();
+	//    assertEquals(expResult, result);
+	// TODO review the generated test code and remove the default call to fail.
+	//    fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of standardToStringContent method, of class BooleanElement.
+     */
+    @Test
+    public void testStandardToStringContent() {
+//	System.out.println("standardToStringContent");
+//	BooleanElement instance = null;
+//	String expResult = "";
+//	String result = instance.standardToStringContent();
+//	assertEquals(expResult, result);
+//	// TODO review the generated test code and remove the default call to fail.
+//	fail("The test case is a prototype.");
+    }
 
 }

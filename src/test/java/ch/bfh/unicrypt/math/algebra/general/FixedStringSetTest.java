@@ -39,26 +39,44 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.concatenative.classes;
+package ch.bfh.unicrypt.math.algebra.general;
 
+import ch.bfh.unicrypt.math.algebra.general.classes.FixedStringSet;
+import ch.bfh.unicrypt.math.helper.Alphabet;
 import java.math.BigInteger;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArrayMonoidTest {
+public class FixedStringSetTest {
 
+//	@Test
+//	public void testIteration() {
+//		FiniteStringSet set = FiniteStringSet.getInstance(Alphabet.OCTAL, 2, true);
+//		for (Element element : set) {
+//			System.out.println(element);
+//		}
+//		System.out.println(set.getOrder());
+//	}
 	@Test
 	public void testGetValue() {
-		ByteArrayMonoid bam = ByteArrayMonoid.getInstance(2);
-		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(65538)) <= 0; i = i.add(BigInteger.ONE)) {
-			ByteArrayElement element = bam.getElement(i);
-			Assert.assertEquals(i, element.getValue());
-//			System.out.println(element);
+		FixedStringSet set = FixedStringSet.getInstance(Alphabet.BINARY, 4);
+		System.out.println(set.getElement("0000").getValue());
+		System.out.println(set.getElement("0001").getValue());
+		System.out.println(set.getElement("0010").getValue());
+		System.out.println(set.getElement("0011").getValue());
+		System.out.println(set.getElement("0100").getValue());
+		System.out.println(set.getElement("0101").getValue());
+		System.out.println(set.getElement("0110").getValue());
+		System.out.println(set.getElement("0111").getValue());
+		System.out.println(set.getElement("1111").getValue());
+		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(15)) <= 0; i = i.add(BigInteger.ONE)) {
+			System.out.println(set.getElement(i));
 		}
+		System.out.println(set.getOrder());
+		System.out.println(FixedStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54)).getOrder());
 	}
 
 }

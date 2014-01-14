@@ -39,65 +39,28 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.math.algebra.concatenative;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import java.math.BigInteger;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
- * @author reto
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class BooleanElementTest {
+public class ByteArrayMonoidTest {
 
-    public BooleanElementTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of getBoolean method, of class BooleanElement.
-     */
-    @Test
-    public void testGetBoolean() {
-	//    System.out.println("getBoolean");
-	//    BooleanElement instance = null;
-	//    boolean expResult = false;
-	//    boolean result = instance.getBoolean();
-	//    assertEquals(expResult, result);
-	// TODO review the generated test code and remove the default call to fail.
-	//    fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of standardToStringContent method, of class BooleanElement.
-     */
-    @Test
-    public void testStandardToStringContent() {
-//	System.out.println("standardToStringContent");
-//	BooleanElement instance = null;
-//	String expResult = "";
-//	String result = instance.standardToStringContent();
-//	assertEquals(expResult, result);
-//	// TODO review the generated test code and remove the default call to fail.
-//	fail("The test case is a prototype.");
-    }
+	@Test
+	public void testGetValue() {
+		ByteArrayMonoid bam = ByteArrayMonoid.getInstance(2);
+		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(65538)) <= 0; i = i.add(BigInteger.ONE)) {
+			ByteArrayElement element = bam.getElement(i);
+			Assert.assertEquals(i, element.getValue());
+//			System.out.println(element);
+		}
+	}
 
 }
