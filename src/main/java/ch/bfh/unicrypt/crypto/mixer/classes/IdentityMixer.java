@@ -39,39 +39,67 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.mixer.interfaces;
+package ch.bfh.unicrypt.crypto.mixer.classes;
 
+import ch.bfh.unicrypt.crypto.mixer.abstracts.AbstractMixer;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public interface Mixer {
+/**
+ * Calls self-apply on every identity.
+ * <p>
+ * @author philipp
+ */
+public class IdentityMixer
+	   extends AbstractMixer<CyclicGroup, ZMod> {
 
-	// C
-	public Set getShuffleSpace();
+	private final CyclicGroup cyclicGroup;
 
-	// R
-	public Set getRandomizationSpace();
+	private IdentityMixer(CyclicGroup cyclicGroup, int size) {
+		super(size);
+		this.cyclicGroup = cyclicGroup;
+	}
 
-	// C x R -> C
-	public Function getShuffleFunction();
+	public Tuple shuffle(Tuple elements, PermutationElement permuation, Element randomization) {
+		return null;
+	}
 
-	// n
-	public int getSize();
+	public Element generateRandomization() {
+		return this.generateRandomization(null);
+	}
 
-	public PermutationFunction getPermutationFunction();
+	public Element generateRandomization(PseudoRandomGenerator pseudoRandomGenerator) {
+		return this.getRandomizationSpace().getRandomElement(pseudoRandomGenerator);
+	}
 
-	public Tuple shuffle(Tuple elements);
+	public CyclicGroup getCyclicGroup() {
+		return this.cyclicGroup;
+	}
 
-	public Tuple shuffle(Tuple elements, PseudoRandomGenerator pseudoRandomGenerator);
+	public static IdentityMixer getInstance(CyclicGroup cyclicGroup, int size) {
+		// TODO Input validation
+		return new IdentityMixer(cyclicGroup, size);
+	}
 
-	public Tuple shuffle(Tuple elements, PermutationElement permutation, Tuple randomizations);
+	@Override
+	protected Tuple standardGenerateRandomizations(PseudoRandomGenerator pseudoRandomGenerator) {
+		Element r = this.generateRandomization(pseudoRandomGenerator);
+		Element[] randomizations = new Element[this.getSize()];
+		for (int i = 0; i < randomizations.length; i++) {
+			randomizations[i] = r;
+		}
+		return Tuple.getInstance(randomizations);
+	}
 
-	public Tuple generateRandomizations();
-
-	public Tuple generateRandomizations(PseudoRandomGenerator pseudoRandomGenerator);
+	@Override
+	protected Function abstractGetShuffleFunction() {
+		return SelfApplyFunction.getInstance(this.getCyclicGroup());
+	}
 
 }
