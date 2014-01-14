@@ -44,10 +44,8 @@ package ch.bfh.unicrypt.crypto.keygenerator.classes;
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
@@ -56,17 +54,17 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author rolfhaenni
  */
 public class ElGamalKeyPairGenerator
-	   extends AbstractKeyPairGenerator<ZMod, ZModElement, GStarModSafePrime, GStarModElement> {
+	   extends AbstractKeyPairGenerator<ZMod, ZModElement, CyclicGroup, Element> {
 
 	private final Element generator;
 
-	protected ElGamalKeyPairGenerator(GStarModSafePrime publicKeySpace) {
-		super((ZModPrime) publicKeySpace.getZModOrder());
+	protected ElGamalKeyPairGenerator(CyclicGroup publicKeySpace) {
+		super(publicKeySpace.getZModOrder());
 		this.generator = publicKeySpace.getDefaultGenerator();
 	}
 
 	protected ElGamalKeyPairGenerator(Element generator) {
-		super((ZMod) generator.getSet().getZModOrder());
+		super(generator.getSet().getZModOrder());
 		this.generator = generator;
 	}
 
@@ -79,7 +77,7 @@ public class ElGamalKeyPairGenerator
 		return GeneratorFunction.getInstance(this.getGenerator());
 	}
 
-	public static ElGamalKeyPairGenerator getInstance(GStarModSafePrime publicKeySpace) {
+	public static ElGamalKeyPairGenerator getInstance(CyclicGroup publicKeySpace) {
 		if (publicKeySpace == null) {
 			throw new IllegalArgumentException();
 		}

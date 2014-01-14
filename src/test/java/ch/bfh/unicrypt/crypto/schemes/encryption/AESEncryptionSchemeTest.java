@@ -53,7 +53,7 @@ import org.junit.Test;
 public class AESEncryptionSchemeTest {
 
 	@Test
-	public void testEncryption() {
+	public void testEncryptionDecryption() {
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
 
 		Element message = aes.getMessageSpace().getRandomElement(510);
@@ -67,6 +67,15 @@ public class AESEncryptionSchemeTest {
 //		System.out.println(message);
 //		System.out.println(encryptedMessage);
 //		System.out.println(decryptedMessage);
+	}
+
+	@Test
+	public void testEncryptionDecryptionGFSBox() {
+
+// IV = 00000000000000000000000000000000
+// KEY = 00000000000000000000000000000000
+// plaintext f34481ec3cc627bacd5dc3fb08f273e69798c4640bad75c7c3227db910174e7296ab5c2ff612d9dfaae8c31f30c421686a118a874519e64e9963798a503f1d35cb9fceec81286ca3e989bd979b0cb284b26aeb1874e47ca8358ff22378f0914458c8e00b2631686d54eab84b91f0aca1
+// ciphertext 0336763e966d92595a567cc9ce537f5ea9a1631bf4996954ebc093957b234589ff4f8391a6a40ca5b25d23bedd44a597dc43be40be0e53712f7e2bf5ca70720992beedab1895a94faa69b632e5cc47ce459264f4798f6a78bacb89c15ed3d60108a4e2efec8a8e3312ca7460b9040bbf
 	}
 
 }
