@@ -54,14 +54,18 @@ public class AESEncryptionSchemeTest {
 	@Test
 	public void testEncryption() {
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
-		Element message = aes.getMessageSpace().getRandomElement(512);
+
+		Element message = aes.getMessageSpace().getRandomElement(510);
 		Element key = aes.getKeyGenerator().generateKey();
 		Element encryptedMessage = aes.encrypt(key, message);
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
-		System.out.println(message);
-		System.out.println(encryptedMessage);
-		System.out.println(decryptedMessage);
+
 		Assert.assertEquals(message, decryptedMessage);
+
+//		System.out.println(key);
+//		System.out.println(message);
+//		System.out.println(encryptedMessage);
+//		System.out.println(decryptedMessage);
 	}
 
 }
