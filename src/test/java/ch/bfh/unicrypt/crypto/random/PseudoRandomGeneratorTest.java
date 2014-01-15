@@ -109,7 +109,7 @@ public class PseudoRandomGeneratorTest {
 	@Test
 	public void testGetCounter() {
 		System.out.println("getCounter");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, PseudoRandomGenerator.DEFAULT_SEED);
 		int counter = instance.getCounter();
 		Assert.assertTrue(0 == counter);
 		instance.nextBytes(HashMethod.DEFAULT.getLength());
@@ -148,8 +148,8 @@ public class PseudoRandomGeneratorTest {
 	@Test
 	public void testAbstractNextBooleanSame() {
 		System.out.println("abstractNextBoolean");
-		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance();
-		PseudoRandomGenerator instance2 = PseudoRandomGenerator.getInstance();
+		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, PseudoRandomGenerator.DEFAULT_SEED);
+		PseudoRandomGenerator instance2 = PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, PseudoRandomGenerator.DEFAULT_SEED);
 
 		boolean b1 = instance1.nextBoolean();
 		boolean b2 = instance2.nextBoolean();
@@ -163,8 +163,8 @@ public class PseudoRandomGeneratorTest {
 	@Test
 	public void testAbstractNextBooleansSame() {
 		System.out.println("abstractNextBoolean");
-		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance();
-		PseudoRandomGenerator instance2 = PseudoRandomGenerator.getInstance();
+		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, PseudoRandomGenerator.DEFAULT_SEED);
+		PseudoRandomGenerator instance2 = PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, PseudoRandomGenerator.DEFAULT_SEED);
 
 		for (int i = 0; i < 4096; i++) {
 			boolean b1 = instance1.nextBoolean();
@@ -257,7 +257,7 @@ public class PseudoRandomGeneratorTest {
 		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
 		boolean maxReached = false;
 		HashSet<Integer> numbers = new HashSet<Integer>();
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 100000; i++) {
 			int result = instance.nextInteger(1023);
 			numbers.add(result);
 			if (result == 1023) {
@@ -313,7 +313,7 @@ public class PseudoRandomGeneratorTest {
 		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
 		boolean maxReached = false;
 		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			BigInteger result = instance.nextBigInteger(8);
 			numbers.add(result);
 			if (result.intValue() == 255) {
@@ -336,7 +336,7 @@ public class PseudoRandomGeneratorTest {
 		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
 		boolean maxReached = false;
 		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 100000; i++) {
 			BigInteger result = instance.nextBigInteger(BigInteger.valueOf(1023));
 			numbers.add(result);
 

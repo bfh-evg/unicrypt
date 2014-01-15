@@ -65,7 +65,12 @@ public class PseudoRandomGenerator
 	   extends AbstractRandomGenerator {
 
 	public static final Element DEFAULT_SEED = Z.getInstance().getElement(0);
-	public static final PseudoRandomGenerator DEFAULT = getInstance();
+	/**
+	 * This is the DEFAULT pseudoRandomGenerator At each start of the JavaVM this generator will restart
+	 * deterministically. Do not use it for ephemeral keys!
+	 */
+	public static final PseudoRandomGenerator DEFAULT = PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, DEFAULT_SEED);
+	;
 
 	private final HashMethod hashMethod;
 	private Element seed;
@@ -262,8 +267,13 @@ public class PseudoRandomGenerator
 		return true;
 	}
 
+	/**
+	 * This will return the DEFAULT PseudoRandomGenerator.
+	 * <p>
+	 * @return
+	 */
 	public static PseudoRandomGenerator getInstance() {
-		return PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, DEFAULT_SEED);
+		return DEFAULT;
 	}
 
 	public static PseudoRandomGenerator getInstance(HashMethod hashMethod) {

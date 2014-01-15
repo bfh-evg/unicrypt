@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.DistributionSampler;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
@@ -61,10 +62,20 @@ import java.math.BigInteger;
 public class TrueRandomNumberGenerator
 	   extends AbstractRandomGenerator {
 
+	public static final DistributionSampler DEFAULT_DISTRIBUTION_SMAPLER = DistributionSamplerSecureRandom.getInstance();
+	public static final PseudoRandomGenerator DEFAULT_PSEUDO_RANDOM_GENERATOR = PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, PseudoRandomGenerator.DEFAULT_SEED);
+	public static final TrueRandomNumberGenerator DEFAULT = TrueRandomNumberGenerator.getInstance(DEFAULT_DISTRIBUTION_SMAPLER, DEFAULT_PSEUDO_RANDOM_GENERATOR);
 	private final PseudoRandomGenerator pseudoRandomGenerator;
 	private final DistributionSampler distributionSampler;
 	private final ByteArrayMonoid byteArrayMonoid;
 
+	/**
+	 * Creates a new instance of a TrueRandomNumberGenerator.
+	 * <p>
+	 * @param distributionSampler   Channel to the different distributions. This guarantees freshness and thus
+	 *                              (backward-)security
+	 * @param pseudoRandomGenerator provides the possibility to overcome a bad refresh.
+	 */
 	protected TrueRandomNumberGenerator(DistributionSampler distributionSampler, PseudoRandomGenerator pseudoRandomGenerator) {
 		this.pseudoRandomGenerator = pseudoRandomGenerator;
 		this.distributionSampler = distributionSampler;
@@ -72,6 +83,10 @@ public class TrueRandomNumberGenerator
 
 	}
 
+	/**
+	 * This method uses the data provided by the distributionSampler and by itself via feedback and xors this data to a
+	 * fresh internal state.
+	 */
 	public void reseed() {
 
 		byte[] pseudoFeedback = this.pseudoRandomGenerator.nextBytes(byteArrayMonoid.getBlockLength());
@@ -118,9 +133,13 @@ public class TrueRandomNumberGenerator
 		return pseudoRandomGenerator.nextPrime(bitLength);
 	}
 
+	/**
+	 * This will return a new TrueRandomNumberGenerator
+	 * <p>
+	 * @return
+	 */
 	public static TrueRandomNumberGenerator getInstance() {
-		DistributionSampler distributionSampler = DistributionSamplerSecureRandom.getInstance();
-		return getInstance(distributionSampler, PseudoRandomGenerator.getInstance());
+		return DEFAULT;
 	}
 
 	public static TrueRandomNumberGenerator getInstance(DistributionSampler distributionSampler, PseudoRandomGenerator pseudoRandomGenerator) {
