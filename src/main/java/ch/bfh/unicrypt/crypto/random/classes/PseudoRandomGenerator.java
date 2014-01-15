@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -68,8 +68,8 @@ public class PseudoRandomGenerator
 	public static final PseudoRandomGenerator DEFAULT = getInstance();
 
 	private final HashMethod hashMethod;
-	private final Element seed;
-	private final ByteArray hashedSeed;
+	private Element seed;
+	private ByteArray hashedSeed;
 	private int counter;
 	// TODO: Better with ByteArrayOutputStream
 	private byte[] randomByteBuffer;
@@ -78,12 +78,9 @@ public class PseudoRandomGenerator
 	// Random random;
 	protected PseudoRandomGenerator(HashMethod hashMethod, final Element seed) {
 		this.hashMethod = hashMethod;
-		this.seed = seed;
 		//The following lines are needed in order to speed up calculation of randomBytes. @see#fillRandomByteBuffer
 		this.randomByteBuffer = new byte[hashMethod.getLength()];
-		this.counter = -1;
-		hashedSeed = this.seed.getHashValue(hashMethod).getByteArray();
-		reset();
+		setSeed(seed);
 	}
 
 	protected byte[] getRandomByteBuffer(int counter) {
@@ -104,9 +101,18 @@ public class PseudoRandomGenerator
 		return hashMethod;
 	}
 
-	//It would be better to only get the seedHash! (Seed should not be stored)
 	public Element getSeed() {
 		return this.seed;
+	}
+
+	protected void setSeed(Element element) {
+		if (element == null) {
+			throw new IllegalArgumentException();
+		}
+		this.seed = element;
+		hashedSeed = this.seed.getHashValue(hashMethod).getByteArray();
+		this.counter = -1;
+		reset();
 	}
 
 	public int getCounter() {
@@ -115,6 +121,7 @@ public class PseudoRandomGenerator
 
 	protected void reset() {
 		setCounter(0);
+
 	}
 
 	protected boolean isReset() {

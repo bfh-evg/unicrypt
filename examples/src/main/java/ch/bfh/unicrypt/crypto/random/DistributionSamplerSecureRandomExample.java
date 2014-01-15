@@ -42,8 +42,7 @@
 package ch.bfh.unicrypt.crypto.random;
 
 import ch.bfh.unicrypt.crypto.random.classes.DistributionSamplerSecureRandom;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.util.Arrays;
 
 /**
  *
@@ -52,10 +51,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 public class DistributionSamplerSecureRandomExample {
 
 	public static void main(String[] args) {
-		Element element = DistributionSamplerSecureRandom.getDistributionSample(1);
-		System.out.println(element.toString());
-		PseudoRandomGenerator generator = PseudoRandomGenerator.getInstance(element);
-		System.out.println(generator.nextBoolean());
+		DistributionSamplerSecureRandom distributionSampler = DistributionSamplerSecureRandom.getInstance();
+		System.out.println(Arrays.toString(distributionSampler.getDistributionSample(100)));
 	}
 
 }

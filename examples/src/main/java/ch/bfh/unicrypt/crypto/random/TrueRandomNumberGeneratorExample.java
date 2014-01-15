@@ -39,47 +39,30 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.random.classes;
+package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.DistributionSampler;
-import java.security.SecureRandom;
+import ch.bfh.unicrypt.crypto.random.classes.TrueRandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import java.util.Arrays;
 
 /**
- * This class shows the collection of a sample distribution in order to find a seed with many bytes. Entropy is not
- * guaranteed.
- * <p>
- * Please note, that this class needs to be split in two parts (future work): The DistributionSampler ,Distribution.
- * <p>
- * This will lead to the aggregation: A distributionSampler may hold one or more Distributions
- * <p>
- * <p>
- * <p>
+ *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DistributionSamplerSecureRandom
-	   implements DistributionSampler {
+public class TrueRandomNumberGeneratorExample {
 
-	protected DistributionSamplerSecureRandom() {
-	}
+	public static void main(String[] args) {
+		//Get instance of a Default-TrueRandomGenerator
+		RandomGenerator randomGenerator = TrueRandomNumberGenerator.getInstance();
 
-	;
-
-	/**
-	 * Shall return a random looking amount of bytes, created outside the context of ? UniCrypt ?
-	 * <p>
-	 * @param amountOfBytes
-	 * @return ByteArrayElement containing the desired amount of 'random' bytes.
-	 */
-	@Override
-	public byte[] getDistributionSample(int amountOfBytes) {
-		if (amountOfBytes < 1) {
-			throw new IllegalArgumentException();
-		}
-		return SecureRandom.getSeed(amountOfBytes);
-	}
-
-	public static DistributionSamplerSecureRandom getInstance() {
-		return new DistributionSamplerSecureRandom();
+		//The time to wait in order to get the ephemeral key is not bound to the requested amount of randomization
+		//It is bound to the 'entropy-collection' of the DataCollector that happens inside every request of randomization.
+		//This 'guarantees' Forward-Security.
+		System.out.println(Arrays.toString(randomGenerator.nextBytes(256)));
+		System.out.println(randomGenerator.nextBoolean());
+		System.out.println(Arrays.toString(randomGenerator.nextBytes(256)));
+		System.out.println(randomGenerator.nextBoolean());
+		System.out.println(randomGenerator.nextBigInteger(2048));
 	}
 
 }

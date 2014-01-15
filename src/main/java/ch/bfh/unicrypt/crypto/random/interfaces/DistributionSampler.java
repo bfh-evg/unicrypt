@@ -39,47 +39,20 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.random.classes;
-
-import ch.bfh.unicrypt.crypto.random.interfaces.DistributionSampler;
-import java.security.SecureRandom;
+package ch.bfh.unicrypt.crypto.random.interfaces;
 
 /**
- * This class shows the collection of a sample distribution in order to find a seed with many bytes. Entropy is not
- * guaranteed.
- * <p>
- * Please note, that this class needs to be split in two parts (future work): The DistributionSampler ,Distribution.
- * <p>
- * This will lead to the aggregation: A distributionSampler may hold one or more Distributions
- * <p>
- * <p>
- * <p>
+ *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DistributionSamplerSecureRandom
-	   implements DistributionSampler {
-
-	protected DistributionSamplerSecureRandom() {
-	}
-
-	;
+public interface DistributionSampler {
 
 	/**
-	 * Shall return a random looking amount of bytes, created outside the context of ? UniCrypt ?
+	 * Shall return a random looking amount of bytes
 	 * <p>
 	 * @param amountOfBytes
-	 * @return ByteArrayElement containing the desired amount of 'random' bytes.
+	 * @return byte[] containing the desired amount of 'random' bytes.
 	 */
-	@Override
-	public byte[] getDistributionSample(int amountOfBytes) {
-		if (amountOfBytes < 1) {
-			throw new IllegalArgumentException();
-		}
-		return SecureRandom.getSeed(amountOfBytes);
-	}
-
-	public static DistributionSamplerSecureRandom getInstance() {
-		return new DistributionSamplerSecureRandom();
-	}
+	public byte[] getDistributionSample(int amountOfBytes);
 
 }
