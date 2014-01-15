@@ -43,11 +43,14 @@ package ch.bfh.unicrypt.crypto.mixer;
 
 import ch.bfh.unicrypt.crypto.mixer.classes.IdentityMixer;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.helper.Permutation;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -60,7 +63,6 @@ public class IdentityMixerTest {
 	@Test
 	public void testIdentityMixer() {
 
-		//CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
 		CyclicGroup G_q = GStarModSafePrime.getInstance(167);
 		int size = 100;
 
@@ -86,6 +88,48 @@ public class IdentityMixerTest {
 
 		// Verifiy permutation
 		assertTrue(!shuffledMessges.isEquivalent(Tuple.getInstance(shuffledMessages2)));
+	}
+
+	@Test
+	public void testIdentityMixerDeterministic() {
+
+		CyclicGroup G_q = GStarModSafePrime.getInstance(167);
+		int size = 10;
+
+		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
+		int[] pi = new int[]{4, 5, 6, 1, 3, 2, 9, 7, 8, 0};
+		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
+		Element alpha = G_q.getZModOrder().getElement(7);
+
+		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
+		Tuple shuffledMessges = mixer.shuffle(messages, permutation, alpha);
+
+		// Verify shuffle
+		for (int i = 0; i < size; i++) {
+			Element e = messages.getAt(pi[i]).selfApply(alpha);
+			assertTrue(e.isEquivalent(shuffledMessges.getAt(i)));
+		}
+	}
+
+	@Test
+	public void testIdentityMixerSizeOne() {
+
+		CyclicGroup G_q = GStarModSafePrime.getInstance(167);
+		int size = 1;
+
+		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
+		int[] pi = new int[]{0};
+		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
+		Element alpha = G_q.getZModOrder().getElement(7);
+
+		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
+		Tuple shuffledMessges = mixer.shuffle(messages, permutation, alpha);
+
+		// Verify shuffle
+		for (int i = 0; i < size; i++) {
+			Element e = messages.getAt(pi[i]).selfApply(alpha);
+			assertTrue(e.isEquivalent(shuffledMessges.getAt(i)));
+		}
 	}
 
 }

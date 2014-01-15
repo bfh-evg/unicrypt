@@ -39,76 +39,72 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.mixer.classes;
+package ch.bfh.unicrypt.crypto.mixer;
 
-import ch.bfh.unicrypt.crypto.mixer.abstracts.AbstractMixer;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.crypto.mixer.classes.IdentityMixer;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 
 /**
- * Calls self-apply on every identity.
- * <p>
+ *
  * @author philipp
  */
-public class IdentityMixer
-	   extends AbstractMixer<CyclicGroup, ZMod> {
+public class IdentityMixerExample {
 
-	private final CyclicGroup cyclicGroup;
+	public static void IdentityShuffleExample() {
 
-	private IdentityMixer(CyclicGroup cyclicGroup, int size) {
-		super(size);
-		this.cyclicGroup = cyclicGroup;
+		// P R E P A R E
+		//---------------
+		// Create cyclic group
+		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
+
+		// Set size
+		int size = 10;
+
+		// Create messages
+		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
+
+		// S H U F F L E
+		//---------------
+		// Create mixer and shuffle
+		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
+		Tuple shuffledMessges = mixer.shuffle(messages);
 	}
 
-	public Tuple shuffle(Tuple elements, PermutationElement permutation, Element randomization) {
-		if (!this.getRandomizationSpace().contains(randomization)) {
-			throw new IllegalArgumentException();
-		}
-		return this.shuffle(elements, permutation, this.createRandomizationTuple(randomization));
+	public static void IdentityShuffleExample2() {
+
+		// P R E P A R E
+		//---------------
+		// Create cyclic group
+		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
+
+		// Set size
+		int size = 10;
+
+		// Create messages
+		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
+
+		// Create permutation
+		PermutationElement permutation = PermutationGroup.getInstance(size).getRandomElement();
+
+		// Create randomization
+		Element randomization = G_q.getZModOrder().getRandomElement();
+
+		// S H U F F L E
+		//---------------
+		// Create mixer and shuffle
+		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
+		Tuple shuffledMessges = mixer.shuffle(messages, permutation, randomization);
 	}
 
-	public Element generateRandomization() {
-		return this.generateRandomization(null);
-	}
-
-	public Element generateRandomization(PseudoRandomGenerator pseudoRandomGenerator) {
-		return this.getRandomizationSpace().getRandomElement(pseudoRandomGenerator);
-	}
-
-	public CyclicGroup getCyclicGroup() {
-		return this.cyclicGroup;
-	}
-
-	private Tuple createRandomizationTuple(Element r) {
-		Element[] randomizations = new Element[this.getSize()];
-		for (int i = 0; i < randomizations.length; i++) {
-			randomizations[i] = r;
-		}
-		return Tuple.getInstance(randomizations);
-	}
-
-	public static IdentityMixer getInstance(CyclicGroup cyclicGroup, int size) {
-		if (cyclicGroup == null || size < 1) {
-			throw new IllegalArgumentException();
-		}
-		return new IdentityMixer(cyclicGroup, size);
-	}
-
-	@Override
-	protected Tuple standardGenerateRandomizations(PseudoRandomGenerator pseudoRandomGenerator) {
-		Element r = this.generateRandomization(pseudoRandomGenerator);
-		return this.createRandomizationTuple(r);
-	}
-
-	@Override
-	protected Function abstractGetShuffleFunction() {
-		return SelfApplyFunction.getInstance(this.getCyclicGroup());
+	public static void main(String args[]) {
+		IdentityMixerExample.IdentityShuffleExample();
+		IdentityMixerExample.IdentityShuffleExample2();
 	}
 
 }

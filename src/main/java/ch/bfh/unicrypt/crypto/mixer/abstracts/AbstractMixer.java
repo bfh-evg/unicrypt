@@ -116,8 +116,11 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 	@Override
 	public final Tuple shuffle(final Tuple elements, final PermutationElement permutation, final Tuple randomizations) {
 
-		// TODO Input validation
-		//
+		if (!this.getShufflesSpace().contains(elements) || !this.getRandomizationsSpace().contains(randomizations)
+			   || permutation == null || permutation.getPermutation().getSize() != this.getSize()) {
+			throw new IllegalArgumentException();
+		}
+
 		Element[] elementsPrime = new Element[this.getSize()];
 		for (int i = 0; i < this.getSize(); i++) {
 			elementsPrime[i] = this.getShuffleFunction().apply(elements.getAt(i), randomizations.getAt(i));
@@ -136,9 +139,17 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 	}
 
 	protected Tuple standardGenerateRandomizations(PseudoRandomGenerator pseudoRandomGenerator) {
-		return ProductSet.getInstance(this.getRandomizationSpace(), this.getSize()).getRandomElement(pseudoRandomGenerator);
+		return this.getRandomizationsSpace().getRandomElement(pseudoRandomGenerator);
 	}
 
 	protected abstract Function abstractGetShuffleFunction();
+
+	private ProductSet getRandomizationsSpace() {
+		return ProductSet.getInstance(this.getRandomizationSpace(), this.getSize());
+	}
+
+	private ProductSet getShufflesSpace() {
+		return ProductSet.getInstance(this.getShuffleSpace(), this.getSize());
+	}
 
 }
