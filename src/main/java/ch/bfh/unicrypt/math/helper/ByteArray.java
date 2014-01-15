@@ -154,11 +154,7 @@ public class ByteArray
 		if (randomGenerator == null) {
 			randomGenerator = PseudoRandomGenerator.DEFAULT;
 		}
-		byte[] bytes = new byte[length];
-		for (int i = 0; i < length; i++) {
-			bytes[i] = randomGenerator.nextByte();
-		}
-		return new ByteArray(bytes);
+		return new ByteArray(randomGenerator.nextBytes(length));
 	}
 
 }

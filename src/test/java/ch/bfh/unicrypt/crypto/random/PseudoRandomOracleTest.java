@@ -1,16 +1,16 @@
-/*
+/* 
  * UniCrypt
- *
+ * 
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- *
+ * 
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- *
+ * 
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * 
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,63 +32,43 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- *
+ * 
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- *
+ * 
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.keygenerator.classes;
+package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import java.math.BigInteger;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ElGamalKeyPairGenerator
-	   extends AbstractKeyPairGenerator<ZMod, ZModElement, CyclicGroup, Element> {
+public class PseudoRandomOracleTest {
 
-	private final Element generator;
-
-	protected ElGamalKeyPairGenerator(CyclicGroup publicKeySpace) {
-		super(publicKeySpace.getZModOrder());
-		this.generator = publicKeySpace.getDefaultGenerator();
-	}
-
-	protected ElGamalKeyPairGenerator(Element generator) {
-		super(generator.getSet().getZModOrder());
-		this.generator = generator;
-	}
-
-	public Element getGenerator() {
-		return this.generator;
-	}
-
-	@Override
-	protected Function abstractGetPublicKeyGenerationFunction() {
-		return GeneratorFunction.getInstance(this.getGenerator());
-	}
-
-	public static ElGamalKeyPairGenerator getInstance(CyclicGroup publicKeySpace) {
-		if (publicKeySpace == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ElGamalKeyPairGenerator(publicKeySpace);
-	}
-
-	public static ElGamalKeyPairGenerator getInstance(Element generator) {
-		if (generator == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ElGamalKeyPairGenerator(generator);
+	@Test
+	public void generalTest() {
+		RandomOracle ro = PseudoRandomOracle.getInstance();
+		RandomReferenceString rrs = ro.getRandomReferenceString(0);
+		BigInteger prime = rrs.nextPrime(10);
+		rrs.nextBoolean();
+		rrs.nextBytes(5);
+		rrs.reset();
+		Assert.assertEquals(prime, rrs.nextPrime(10));
+		rrs = ro.getRandomReferenceString(1);
+		prime = rrs.nextPrime(10);
+		rrs.nextBoolean();
+		rrs.nextBytes(5);
+		rrs.reset();
+		Assert.assertEquals(prime, rrs.nextPrime(10));
 	}
 
 }

@@ -39,10 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.math.algebra.general;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import org.junit.Assert;
 import org.junit.Test;

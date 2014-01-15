@@ -39,26 +39,35 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.blinding.interfaces;
+package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import java.math.BigInteger;
+import org.junit.Assert;
+import org.junit.Test;
 
-public interface BlindingScheme {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class PseudoRandomReferenceStringTest {
 
-  public Element blind(Element value, Element blindingValue);
-
-  public Element unblind(Element value, Element blindingValue);
-
-  public Set getBlindingValueSpace();
-
-  public Function getBlindingFunction();
-
-  public Function getBlindingFunction(Element value);
-
-  public Function getUnblindingFunction();
-
-  public Function getUnblindingFunction(Element value);
+	@Test
+	public void generalTest() {
+		RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+		BigInteger prime = rrs.nextPrime(10);
+		rrs.nextBoolean();
+		rrs.nextBytes(5);
+		rrs.reset();
+		Assert.assertEquals(prime, rrs.nextPrime(10));
+		rrs = PseudoRandomReferenceString.getInstance(ByteArrayMonoid.getInstance().getElement(new byte[]{10, 5, 120}));
+		prime = rrs.nextPrime(10);
+		rrs.nextBoolean();
+		rrs.nextBytes(5);
+		rrs.reset();
+		Assert.assertEquals(prime, rrs.nextPrime(10));
+	}
 
 }

@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,54 +32,37 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.crypto.schemes.encryption;
 
-import ch.bfh.unicrypt.math.helper.Alphabet;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.RSAEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import org.junit.Test;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class FiniteStringSetTest {
+public class RSAEncryptionSchemeTest {
 
-//	@Test
-//	public void testIteration() {
-//		FiniteStringSet set = FiniteStringSet.getInstance(Alphabet.OCTAL, 2, true);
-//		for (Element element : set) {
-//			System.out.println(element);
-//		}
-//		System.out.println(set.getOrder());
-//	}
 	@Test
-	public void testGetValue() {
-		FiniteStringSet set = FiniteStringSet.getInstance(Alphabet.BINARY, 3, 5);
-		System.out.println(set.getElement("000").getValue());
-		System.out.println(set.getElement("001").getValue());
-		System.out.println(set.getElement("111").getValue());
-		System.out.println(set.getElement("0000").getValue());
-		System.out.println(set.getElement("0001").getValue());
-		System.out.println(set.getElement("0010").getValue());
-		System.out.println(set.getElement("0011").getValue());
-		System.out.println(set.getElement("0100").getValue());
-		System.out.println(set.getElement("0101").getValue());
-		System.out.println(set.getElement("0110").getValue());
-		System.out.println(set.getElement("0111").getValue());
-		System.out.println(set.getElement("1111").getValue());
-		System.out.println(set.getElement("00000").getValue());
-		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(24)) <= 0; i = i.add(BigInteger.ONE)) {
-			System.out.println(set.getElement(i));
-		}
-		System.out.println(set.getOrder());
-		System.out.println(FiniteStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54), 3).getOrder());
+	public void EncryptionDecryptionTest() {
+		RSAEncryptionScheme rsa = RSAEncryptionScheme.getInstance(ZModPrimePair.getInstance(3, 5));
+		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
+		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
+		Element message = rsa.getMessageSpace().getElement(5);
+		Element encryption = rsa.encrypt(puKey, message);
+		Element decryption = rsa.decrypt(prKey, message);
+		//	Assert.assertTrue(encryption.isEquivalent(decryption));
+		System.out.println(Tuple.getInstance(prKey, puKey, message, encryption, decryption));
 	}
 
 }

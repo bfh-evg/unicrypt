@@ -39,9 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.function.classes;
+package ch.bfh.unicrypt.math.function;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import org.junit.Assert;
 import org.junit.Test;
