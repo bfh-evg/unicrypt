@@ -142,7 +142,8 @@ public class ECZModPrime
 
 		ZModElement i4 = (ZModElement) getFiniteField().getElement(4);
 		ZModElement i27 = (ZModElement) getFiniteField().getElement(27);
-		c1 = !getA().power(3).multiply(i4).add(i27.multiply(getB().power(2))).equals(BigInteger.ZERO);
+		ZModElement i0= getFiniteField().getElement(0);
+		c1 = !getA().power(3).multiply(i4).add(i27.multiply(getB().power(2))).equals(i0);
 
 		c2 = contains(this.getDefaultGenerator());
 

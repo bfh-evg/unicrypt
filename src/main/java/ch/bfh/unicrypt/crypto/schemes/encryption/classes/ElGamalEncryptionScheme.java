@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.crypto.keygenerator.classes.ElGamalKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractReEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -70,16 +69,18 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <ME>
  */
 public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
-	   extends AbstractReEncryptionScheme<MS, ME, ProductGroup, Pair, ZModPrime, ZModElement, CyclicGroup, ZModPrime, ElGamalKeyPairGenerator> {
+	   extends AbstractReEncryptionScheme<MS, ME, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup, ZMod, ElGamalKeyPairGenerator> {
 
 	private final MS cyclicGroup;
 	private final ME generator;
+	private final ZMod zMod;
 	private Function encryptionFunctionLeft;
 	private Function encryptionFunctionRight;
 
 	protected ElGamalEncryptionScheme(MS cyclicGroup, ME generator) {
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
+		this.zMod = cyclicGroup.getZModOrder();
 	}
 
 	public final MS getCyclicGroup() {
@@ -92,8 +93,7 @@ public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
 
 	@Override
 	protected Function abstractGetEncryptionFunction() {
-		ZMod zMod = (ZMod) this.getCyclicGroup().getZModOrder();
-		ProductGroup encryptionDomain = ProductGroup.getInstance(this.getCyclicGroup(), this.getCyclicGroup(), zMod);
+		ProductGroup encryptionDomain = ProductGroup.getInstance(this.getCyclicGroup(), this.getCyclicGroup(), this.zMod);
 		return CompositeFunction.getInstance(
 			   MultiIdentityFunction.getInstance(encryptionDomain, 2),
 			   ProductFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(encryptionDomain, 2),
@@ -103,15 +103,14 @@ public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
 
 	@Override
 	protected Function abstractGetDecryptionFunction() {
-		ZMod zMod = (ZMod) this.getCyclicGroup().getZModOrder();
-		ProductGroup decryptionDomain = ProductGroup.getInstance(zMod, ProductGroup.getInstance(this.getCyclicGroup(), 2));
+		ProductGroup decryptionDomain = ProductGroup.getInstance(this.zMod, ProductGroup.getInstance(this.getCyclicGroup(), 2));
 		return CompositeFunction.getInstance(
 			   MultiIdentityFunction.getInstance(decryptionDomain, 2),
 			   ProductFunction.getInstance(SelectionFunction.getInstance(decryptionDomain, 1, 1),
 										   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(decryptionDomain, 2),
 																		 ProductFunction.getInstance(SelectionFunction.getInstance(decryptionDomain, 1, 0),
 																									 SelectionFunction.getInstance(decryptionDomain, 0)),
-																		 SelfApplyFunction.getInstance(this.getCyclicGroup(), zMod))),
+																		 SelfApplyFunction.getInstance(this.getCyclicGroup(), this.zMod))),
 			   ApplyInverseFunction.getInstance(this.getCyclicGroup()));
 	}
 
@@ -129,8 +128,7 @@ public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
 
 	public Function getEncryptionFunctionRight() {
 		if (this.encryptionFunctionRight == null) {
-			ZMod zMod = (ZMod) this.getCyclicGroup().getZModOrder();
-			ProductGroup encryptionDomain = ProductGroup.getInstance(this.getCyclicGroup(), this.getCyclicGroup(), zMod);
+			ProductGroup encryptionDomain = ProductGroup.getInstance(this.getCyclicGroup(), this.getCyclicGroup(), this.zMod);
 			this.encryptionFunctionRight = CompositeFunction.getInstance(
 				   MultiIdentityFunction.getInstance(encryptionDomain, 2),
 				   ProductFunction.getInstance(SelectionFunction.getInstance(encryptionDomain, 1),

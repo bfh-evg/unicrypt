@@ -65,7 +65,7 @@ public abstract class AbstractEC<E extends AbstractECElement, F extends FiniteFi
 		this.finiteField = finiteField;
 		this.generator = this.getElement(gx, gy);
 
-		/* if (!isValid()) { throw new IllegalArgumentException("Curve parameters are not valid"); } */
+		if (!isValid()) { throw new IllegalArgumentException("Curve parameters are not valid"); } 
 	}
 
 	protected AbstractEC(F finitefield, D a, D b, BigInteger order, BigInteger h) {
