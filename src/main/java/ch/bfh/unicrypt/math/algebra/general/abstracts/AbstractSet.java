@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
@@ -263,7 +263,7 @@ public abstract class AbstractSet<E extends Element>
 	@Override
 	public final E getRandomElement(RandomGenerator randomGenerator) {
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGenerator.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
 		}
 		return this.abstractGetRandomElement(randomGenerator);
 	}

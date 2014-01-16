@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.mixer.classes;
 
 import ch.bfh.unicrypt.crypto.mixer.abstracts.AbstractMixer;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -77,7 +77,7 @@ public class IdentityMixer
 		return this.generateRandomization(null);
 	}
 
-	public Element generateRandomization(PseudoRandomGenerator pseudoRandomGenerator) {
+	public Element generateRandomization(PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		return this.getRandomizationSpace().getRandomElement(pseudoRandomGenerator);
 	}
 
@@ -101,7 +101,7 @@ public class IdentityMixer
 	}
 
 	@Override
-	protected Tuple standardGenerateRandomizations(PseudoRandomGenerator pseudoRandomGenerator) {
+	protected Tuple standardGenerateRandomizations(PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		Element r = this.generateRandomization(pseudoRandomGenerator);
 		return this.createRandomizationTuple(r);
 	}

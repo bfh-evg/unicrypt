@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -250,7 +250,7 @@ public class ZStarMod
 			throw new IllegalArgumentException();
 		}
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGenerator.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
 		}
 		return ZStarMod.getInstance(randomGenerator.nextBigInteger(bitLength));
 	}

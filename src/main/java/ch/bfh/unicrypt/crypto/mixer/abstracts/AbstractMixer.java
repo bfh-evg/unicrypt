@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.mixer.abstracts;
 
 import ch.bfh.unicrypt.crypto.mixer.interfaces.Mixer;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -103,11 +103,11 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 
 	@Override
 	public final Tuple shuffle(final Tuple elements) {
-		return this.shuffle(elements, (PseudoRandomGenerator) null);
+		return this.shuffle(elements, (PseudoRandomGeneratorCounterMode) null);
 	}
 
 	@Override
-	public final Tuple shuffle(final Tuple elements, PseudoRandomGenerator pseudoRandomGenerator) {
+	public final Tuple shuffle(final Tuple elements, PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		PermutationElement permutation = PermutationGroup.getInstance(this.getSize()).getRandomElement(pseudoRandomGenerator);
 		Tuple randomizations = this.generateRandomizations(pseudoRandomGenerator);
 		return this.shuffle(elements, permutation, randomizations);
@@ -134,11 +134,11 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 	}
 
 	@Override
-	public final Tuple generateRandomizations(final PseudoRandomGenerator pseudoRandomGenerator) {
+	public final Tuple generateRandomizations(final PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		return this.standardGenerateRandomizations(pseudoRandomGenerator);
 	}
 
-	protected Tuple standardGenerateRandomizations(PseudoRandomGenerator pseudoRandomGenerator) {
+	protected Tuple standardGenerateRandomizations(PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		return this.getRandomizationsSpace().getRandomElement(pseudoRandomGenerator);
 	}
 

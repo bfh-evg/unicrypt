@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -91,7 +91,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 	@Override
 	public final CE apply(final Element element, RandomGenerator randomGenerator) {
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGenerator.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
 		}
 		if (this.getDomain().contains(element)) {
 			return this.abstractApply((DE) element, randomGenerator);

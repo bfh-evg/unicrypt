@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.DistributionSampler;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -52,9 +53,9 @@ import java.math.BigInteger;
 /**
  * This class allows the generation of ephemeral keys. Hence it provides (backward-)security and forward-security to the
  * generated random strings. Its security is based on the quality of the DistributionSampler and on the feedback of the
- * PseudoRandomGenerator. The injection of new random bits into the randomization process allows (backward-)security,
- * whilst The feedback (in this case internally requesting a byte[] which is only used for reseeding) allows
- * forward-security.
+ * PseudoRandomGeneratorCounterMode. The injection of new random bits into the randomization process allows
+ * (backward-)security, whilst The feedback (in this case internally requesting a byte[] which is only used for
+ * reseeding) allows forward-security.
  * <p>
  * <p>
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
@@ -63,9 +64,9 @@ public class TrueRandomNumberGenerator
 	   extends AbstractRandomGenerator {
 
 	public static final DistributionSampler DEFAULT_DISTRIBUTION_SMAPLER = DistributionSamplerSecureRandom.getInstance();
-	public static final PseudoRandomGenerator DEFAULT_PSEUDO_RANDOM_GENERATOR = PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, PseudoRandomGenerator.DEFAULT_SEED);
+	public static final PseudoRandomGeneratorCounterMode DEFAULT_PSEUDO_RANDOM_GENERATOR = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, PseudoRandomGeneratorCounterMode.DEFAULT_SEED);
 	public static final TrueRandomNumberGenerator DEFAULT = TrueRandomNumberGenerator.getInstance(DEFAULT_DISTRIBUTION_SMAPLER, DEFAULT_PSEUDO_RANDOM_GENERATOR);
-	private final PseudoRandomGenerator pseudoRandomGenerator;
+	private final PseudoRandomGeneratorCounterMode pseudoRandomGenerator;
 	private final DistributionSampler distributionSampler;
 	private final ByteArrayMonoid byteArrayMonoid;
 
@@ -76,7 +77,7 @@ public class TrueRandomNumberGenerator
 	 *                              (backward-)security
 	 * @param pseudoRandomGenerator provides the possibility to overcome a bad refresh.
 	 */
-	protected TrueRandomNumberGenerator(DistributionSampler distributionSampler, PseudoRandomGenerator pseudoRandomGenerator) {
+	protected TrueRandomNumberGenerator(DistributionSampler distributionSampler, PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		this.pseudoRandomGenerator = pseudoRandomGenerator;
 		this.distributionSampler = distributionSampler;
 		this.byteArrayMonoid = ByteArrayMonoid.getInstance(this.pseudoRandomGenerator.getHashMethod().getLength());
@@ -87,13 +88,13 @@ public class TrueRandomNumberGenerator
 	 * This method uses the data provided by the distributionSampler and by itself via feedback and xors this data to a
 	 * fresh internal state.
 	 */
-	public void reseed() {
+	public void updateInternalState() {
 
-		byte[] pseudoFeedback = this.pseudoRandomGenerator.nextBytes(byteArrayMonoid.getBlockLength());
+		byte[] pseudoFeedback = ByteArray.getRandomInstance(pseudoRandomGenerator.getHashMethod().getLength(), pseudoRandomGenerator);
 
 		byte[] freshSeed = distributionSampler.getDistributionSample(byteArrayMonoid.getBlockLength());
 		ByteArrayElement freshState = this.byteArrayMonoid.getElement(MathUtil.xor(pseudoFeedback, freshSeed));
-		this.pseudoRandomGenerator.setSeed(freshState);
+		this.pseudoRandomGenerator.updateInternalState(freshState);
 
 	}
 
@@ -142,7 +143,7 @@ public class TrueRandomNumberGenerator
 		return DEFAULT;
 	}
 
-	public static TrueRandomNumberGenerator getInstance(DistributionSampler distributionSampler, PseudoRandomGenerator pseudoRandomGenerator) {
+	public static TrueRandomNumberGenerator getInstance(DistributionSampler distributionSampler, PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		if (distributionSampler == null || pseudoRandomGenerator == null) {
 			throw new IllegalArgumentException();
 		}

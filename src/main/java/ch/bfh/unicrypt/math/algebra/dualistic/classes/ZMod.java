@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -207,7 +207,7 @@ public class ZMod
 			throw new IllegalArgumentException();
 		}
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGenerator.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
 		}
 		return ZMod.getInstance(randomGenerator.nextBigInteger(bitLength));
 	}

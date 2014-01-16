@@ -49,6 +49,7 @@ import java.math.BigInteger;
  */
 public interface RandomGenerator {
 
+	//public static final DEFAULT = HybridRandomGenerator.getInstance();
 	/**
 	 * Generates a random boolean value.
 	 * <p>
