@@ -517,24 +517,4 @@ public final class MathUtil {
 		return r.modPow(p.subtract(BigInteger.ONE).divide(two), p).equals(BigInteger.ONE);
 	}
 
-	// Xors an array of byte arrays.
-	public static byte[] xor(byte[]
-		... byteArrays){
-int outputLength = 0;
-		for (byte[] array : byteArrays) {
-			if (array != null) {
-				outputLength = Math.max(outputLength, array.length);
-			}
-		}
-		byte[] outputArray = new byte[outputLength];
-		for (byte[] array : byteArrays) {
-			if (array != null) {
-				for (int i = 0; i < array.length; i++) {
-					outputArray[i] ^= array[i];
-				}
-			}
-		}
-		return outputArray;
-	}
-
 }

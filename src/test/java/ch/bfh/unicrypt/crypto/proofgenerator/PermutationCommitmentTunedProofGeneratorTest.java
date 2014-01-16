@@ -76,7 +76,7 @@ public class PermutationCommitmentTunedProofGeneratorTest {
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
-		final RandomGenerator randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
+		final RandomGenerator randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
 		final int size = 5;

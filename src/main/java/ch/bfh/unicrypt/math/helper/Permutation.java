@@ -176,7 +176,7 @@ public class Permutation
 			throw new IllegalArgumentException();
 		}
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
 		int[] permutationVector = new int[size];
 		int randomIndex;

@@ -64,17 +64,15 @@ import java.security.MessageDigest;
  * @version 1.0
  */
 public class PseudoRandomGeneratorCounterMode
-
 	   extends AbstractRandomGenerator
 	   implements PseudoRandomGenerator {
 
 	public static final Element DEFAULT_SEED = Z.getInstance().getElement(0);
 	/**
-	 * This is the DEFAULT pseudoRandomGenerator At each start of the JavaVM this generator will restart
-	 * deterministically. Do not use it for ephemeral keys!
+	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE pseudoRandomGenerator At each start of the JavaVM this
+	 * generator will restart deterministically. Do not use it for ephemeral keys!
 	 */
-	public static final PseudoRandomGeneratorCounterMode DEFAULT = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, DEFAULT_SEED);
-	;
+	public static final PseudoRandomGeneratorCounterMode DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, DEFAULT_SEED);
 
 	private final HashMethod hashMethod;
 	private Element seed;
@@ -118,7 +116,8 @@ public class PseudoRandomGeneratorCounterMode
 		if (seed == null) {
 			throw new IllegalArgumentException();
 		}
-		hashedSeed = this.seed.getHashValue(hashMethod).getByteArray();
+		this.seed = seed;
+		this.hashedSeed = seed.getHashValue(hashMethod).getByteArray();
 		this.counter = -1;
 		reset();
 	}
@@ -281,12 +280,12 @@ public class PseudoRandomGeneratorCounterMode
 	}
 
 	/**
-	 * This will return the DEFAULT PseudoRandomGeneratorCounterMode.
+	 * This will return the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE PseudoRandomGeneratorCounterMode.
 	 * <p>
 	 * @return
 	 */
 	public static PseudoRandomGeneratorCounterMode getInstance() {
-		return DEFAULT;
+		return PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 	}
 
 	public static PseudoRandomGeneratorCounterMode getInstance(HashMethod hashMethod) {

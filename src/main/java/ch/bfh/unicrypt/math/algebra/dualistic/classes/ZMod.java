@@ -207,7 +207,7 @@ public class ZMod
 			throw new IllegalArgumentException();
 		}
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
 		return ZMod.getInstance(randomGenerator.nextBigInteger(bitLength));
 	}

@@ -43,11 +43,8 @@ package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.DistributionSampler;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -68,7 +65,7 @@ public class TrueRandomNumberGenerator
 	public static final TrueRandomNumberGenerator DEFAULT = TrueRandomNumberGenerator.getInstance(DEFAULT_DISTRIBUTION_SMAPLER, DEFAULT_PSEUDO_RANDOM_GENERATOR);
 	private final PseudoRandomGeneratorCounterMode pseudoRandomGenerator;
 	private final DistributionSampler distributionSampler;
-	private final ByteArrayMonoid byteArrayMonoid;
+	private final HashMethod hashMethod;
 
 	/**
 	 * Creates a new instance of a TrueRandomNumberGenerator.
@@ -80,7 +77,7 @@ public class TrueRandomNumberGenerator
 	protected TrueRandomNumberGenerator(DistributionSampler distributionSampler, PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		this.pseudoRandomGenerator = pseudoRandomGenerator;
 		this.distributionSampler = distributionSampler;
-		this.byteArrayMonoid = ByteArrayMonoid.getInstance(this.pseudoRandomGenerator.getHashMethod().getLength());
+		this.hashMethod = this.pseudoRandomGenerator.getHashMethod();
 
 	}
 
@@ -90,47 +87,46 @@ public class TrueRandomNumberGenerator
 	 */
 	public void updateInternalState() {
 
-		byte[] pseudoFeedback = ByteArray.getRandomInstance(pseudoRandomGenerator.getHashMethod().getLength(), pseudoRandomGenerator);
+		ByteArray pseudoFeedback = ByteArray.getRandomInstance(pseudoRandomGenerator.getHashMethod().getLength(), pseudoRandomGenerator);
 
-		byte[] freshSeed = distributionSampler.getDistributionSample(byteArrayMonoid.getBlockLength());
-		ByteArrayElement freshState = this.byteArrayMonoid.getElement(MathUtil.xor(pseudoFeedback, freshSeed));
-		this.pseudoRandomGenerator.updateInternalState(freshState);
+		ByteArray freshState = pseudoFeedback.xor(ByteArray.getInstance(distributionSampler.getDistributionSample(hashMethod.getLength())));
+		this.pseudoRandomGenerator.updateInternalState(freshState.getBytes());
 
 	}
 
 	@Override
 	protected boolean abstractNextBoolean() {
-		reseed();
+		this.updateInternalState();
 		return pseudoRandomGenerator.nextBoolean();
 	}
 
 	@Override
 	protected byte[] abstractNextBytes(int length) {
-		reseed();
+		this.updateInternalState();
 		return pseudoRandomGenerator.nextBytes(length);
 	}
 
 	@Override
 	protected int abstractNextInteger(int maxValue) {
-		reseed();
+		this.updateInternalState();
 		return pseudoRandomGenerator.nextInteger(maxValue);
 	}
 
 	@Override
 	protected BigInteger abstractNextBigInteger(int bitLength) {
-		reseed();
+		this.updateInternalState();
 		return pseudoRandomGenerator.nextBigInteger(bitLength);
 	}
 
 	@Override
 	protected BigInteger abstractNextBigInteger(BigInteger maxValue) {
-		reseed();
+		this.updateInternalState();
 		return pseudoRandomGenerator.nextBigInteger(maxValue);
 	}
 
 	@Override
 	protected BigInteger abstractNextPrime(int bitLength) {
-		reseed();
+		this.updateInternalState();
 		return pseudoRandomGenerator.nextPrime(bitLength);
 	}
 

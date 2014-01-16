@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -78,21 +78,33 @@ public class ByteArray
 		if (other == null) {
 			throw new IllegalArgumentException();
 		}
-		byte[] result = new byte[this.getLength() + other.getLength()];
-		System.arraycopy(this.bytes, 0, result, 0, this.getLength());
+		byte[] result = Arrays.copyOf(this.bytes, this.getLength() + other.getLength());
 		System.arraycopy(other.bytes, 0, result, this.getLength(), other.getLength());
 		return new ByteArray(result);
 	}
 
-	public ByteArray xor(ByteArray other) {
-		int length = Math.max(this.getLength(), other.getLength());
-		byte[] result = new byte[length];
-		for (int i = 0; i < length; i++) {
-			int byte1 = i < this.getLength() ? this.getByte(i) : 0;
-			int byte2 = i < other.getLength() ? other.getByte(i) : 0;
-			result[i] = (byte) (0xff & (byte1 ^ byte2));
+	public ByteArray xor(ByteArray... others) {
+
+		//Find and remember the length of the longest ByteArray:
+		int maxLength = this.bytes.length;
+		for (ByteArray array : others) {
+			if (array != null) {
+				maxLength = Math.max(maxLength, array.bytes.length);
+			}
 		}
-		return new ByteArray(result);
+		//Create the xoredBytes with a size similar to the found maxLength
+		//Put the bytes of this ByteArray directly into the new xoredBytes
+		byte[] xoredBytes = Arrays.copyOf(this.bytes, maxLength);
+
+		//Iterate through the other ByteArrays and xor them into the xoredBytes
+		for (ByteArray array : others) {
+			if (array != null) {
+				for (int i = 0; i < array.bytes.length; i++) {
+					xoredBytes[i] ^= array.bytes[i];
+				}
+			}
+		}
+		return new ByteArray(xoredBytes);
 	}
 
 	@Override
@@ -152,7 +164,7 @@ public class ByteArray
 			throw new IllegalArgumentException();
 		}
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
 		return new ByteArray(randomGenerator.nextBytes(length));
 	}

@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.util;
 
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
-import java.util.Arrays;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -261,32 +260,6 @@ public class MathUtilTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testMaxException3() {
 		MathUtil.maxValue(new BigInteger[]{ONE, NULL_VALUE, SEVEN});
-	}
-
-	@Test
-	public void testXor() {
-		byte[] one = {1, 1, 1};
-		byte[] two = {0, 0, 0};
-		byte[] three = MathUtil.xor(one, two);
-		Assert.assertTrue(Arrays.equals(one, three));
-
-		two = new byte[]{1, 1, 1};
-		three = MathUtil.xor(one, two);
-		Assert.assertTrue(Arrays.equals(new byte[]{0, 0, 0}, three));
-
-		two = new byte[]{1, 1, 1};
-		three = MathUtil.xor(one, two, null);
-		Assert.assertTrue(Arrays.equals(new byte[]{0, 0, 0}, three));
-
-		two = new byte[]{1, 1, 1};
-		three = MathUtil.xor(null, one, null, two, null);
-		Assert.assertTrue(Arrays.equals(new byte[]{0, 0, 0}, three));
-
-		three = MathUtil.xor(null, one, one, null, two, two, null);
-		Assert.assertTrue(Arrays.equals(new byte[]{0, 0, 0}, three));
-
-		three = MathUtil.xor(three, one);
-		Assert.assertTrue(Arrays.equals(new byte[]{1, 1, 1}, three));
 	}
 
 }

@@ -57,7 +57,7 @@ public class PseudoRandomReferenceString
 	   implements RandomReferenceString {
 
 	/**
-	 * This is the DEFAULT PseudoRandomReferenceString. It uses the default HashMethod and the default seed of
+	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE PseudoRandomReferenceString. It uses the default HashMethod and the default seed of
 	 * PseudoRandomGeneratorCounterMode.
 	 */
 	public static final PseudoRandomReferenceString DEFAULT = PseudoRandomReferenceString.getInstance(HashMethod.DEFAULT, PseudoRandomGeneratorCounterMode.DEFAULT_SEED);

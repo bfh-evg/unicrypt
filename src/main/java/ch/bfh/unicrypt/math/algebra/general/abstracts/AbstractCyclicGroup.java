@@ -78,7 +78,7 @@ public abstract class AbstractCyclicGroup<E extends Element>
 	@Override
 	public final E getRandomGenerator(RandomGenerator randomGenerator) {
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
 		return this.standardGetRandomGenerator(randomGenerator);
 	}

@@ -74,7 +74,7 @@ public class SafePrime
 
 	public static SafePrime getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
 		return new SafePrime(randomGenerator.nextSavePrime(bitLength));
 	}

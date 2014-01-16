@@ -91,7 +91,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 	@Override
 	public final CE apply(final Element element, RandomGenerator randomGenerator) {
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
 		if (this.getDomain().contains(element)) {
 			return this.abstractApply((DE) element, randomGenerator);

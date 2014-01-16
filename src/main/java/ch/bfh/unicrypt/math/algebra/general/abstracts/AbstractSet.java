@@ -263,7 +263,7 @@ public abstract class AbstractSet<E extends Element>
 	@Override
 	public final E getRandomElement(RandomGenerator randomGenerator) {
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
 		return this.abstractGetRandomElement(randomGenerator);
 	}
