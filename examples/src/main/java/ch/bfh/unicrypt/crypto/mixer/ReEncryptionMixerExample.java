@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.mixer;
 
 import ch.bfh.unicrypt.crypto.mixer.classes.ReEncryptionMixer;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -57,7 +58,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
  */
 public class ReEncryptionMixerExample {
 
-	public static void elGamalShuffleExample() {
+	public static void elGamalShuffleExample1() {
 
 		// P R E P A R E
 		//---------------
@@ -70,8 +71,8 @@ public class ReEncryptionMixerExample {
 
 		// Create ElGamal keys and encryption system
 		ElGamalEncryptionScheme es = ElGamalEncryptionScheme.getInstance(g);
-		Element privateKey = es.getKeyPairGenerator().generatePrivateKey();
-		Element publicKey = es.getKeyPairGenerator().generatePublicKey(privateKey);
+		Pair keys = es.getKeyPairGenerator().generateKeyPair();
+		Element publicKey = keys.getSecond();
 
 		// Create ciphertexts
 		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
@@ -86,6 +87,9 @@ public class ReEncryptionMixerExample {
 		// Create mixer and shuffle
 		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, publicKey, size);
 		Tuple shuffledCiphertexts = mixer.shuffle(ciphertexts);
+
+		System.out.println("Ciphertexts:          " + ciphertexts);
+		System.out.println("Shuffled Ciphertexts: " + shuffledCiphertexts);
 	}
 
 	public static void elGamalShuffleExample2() {
@@ -101,8 +105,8 @@ public class ReEncryptionMixerExample {
 
 		// Create ElGamal keys and encryption system
 		ElGamalEncryptionScheme es = ElGamalEncryptionScheme.getInstance(g);
-		Element privateKey = es.getKeyPairGenerator().generatePrivateKey();
-		Element publicKey = es.getKeyPairGenerator().generatePublicKey(privateKey);
+		Pair keys = es.getKeyPairGenerator().generateKeyPair();
+		Element publicKey = keys.getSecond();
 
 		// Create ciphertexts
 		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
@@ -123,10 +127,17 @@ public class ReEncryptionMixerExample {
 		// Create mixer and shuffle
 		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, publicKey, size);
 		Tuple shuffledCiphertexts = mixer.shuffle(ciphertexts, permutation, randomizations);
+
+		System.out.println("Ciphertexts:          " + ciphertexts);
+		System.out.println("Shuffled Ciphertexts: " + shuffledCiphertexts);
 	}
 
 	public static void main(String args[]) {
-		ReEncryptionMixerExample.elGamalShuffleExample();
+
+		System.out.println("ElGamal Shuffle Example 1:");
+		ReEncryptionMixerExample.elGamalShuffleExample1();
+
+		System.out.println("\nElGamal Shuffle Example 2:");
 		ReEncryptionMixerExample.elGamalShuffleExample2();
 	}
 

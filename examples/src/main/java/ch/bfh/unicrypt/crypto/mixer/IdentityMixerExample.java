@@ -56,7 +56,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
  */
 public class IdentityMixerExample {
 
-	public static void IdentityShuffleExample() {
+	public static void IdentityShuffleExample1() {
 
 		// P R E P A R E
 		//---------------
@@ -73,7 +73,10 @@ public class IdentityMixerExample {
 		//---------------
 		// Create mixer and shuffle
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
-		Tuple shuffledMessges = mixer.shuffle(messages);
+		Tuple shuffledMessages = mixer.shuffle(messages);
+
+		System.out.println("Messages:          " + messages);
+		System.out.println("Shuffled Messages: " + shuffledMessages);
 	}
 
 	public static void IdentityShuffleExample2() {
@@ -99,11 +102,17 @@ public class IdentityMixerExample {
 		//---------------
 		// Create mixer and shuffle
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
-		Tuple shuffledMessges = mixer.shuffle(messages, permutation, randomization);
+		Tuple shuffledMessages = mixer.shuffle(messages, permutation, randomization);
+
+		System.out.println("Messages:          " + messages);
+		System.out.println("Shuffled Messages: " + shuffledMessages);
 	}
 
 	public static void main(String args[]) {
-		IdentityMixerExample.IdentityShuffleExample();
+		System.out.println("Identity Shuffle Example 1:");
+		IdentityMixerExample.IdentityShuffleExample1();
+
+		System.out.println("\nIdentity Shuffle Example 2:");
 		IdentityMixerExample.IdentityShuffleExample2();
 	}
 
