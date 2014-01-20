@@ -53,9 +53,9 @@ import java.util.Arrays;
 public class ByteArray
 	   extends UniCrypt {
 
-	private final byte[] bytes;
+	protected final byte[] bytes;
 
-	private ByteArray(byte[] bytes) {
+	protected ByteArray(byte[] bytes) {
 		this.bytes = bytes;
 	}
 
