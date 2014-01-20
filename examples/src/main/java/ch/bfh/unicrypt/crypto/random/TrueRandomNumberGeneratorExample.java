@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,51 +32,37 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.helper.factorization;
+package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
+import ch.bfh.unicrypt.crypto.random.classes.TrueRandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
-import ch.bfh.unicrypt.math.utility.MathUtil;
-import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  *
- * @author rolfhaenni
+ * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class SafePrime
-			 extends Prime {
+public class TrueRandomNumberGeneratorExample {
 
-	protected SafePrime(BigInteger safePrime) {
-		super(safePrime);
-	}
+	public static void main(String[] args) {
+		//Get instance of a Default-TrueRandomGenerator
+		RandomGenerator randomGenerator = TrueRandomNumberGenerator.getInstance();
 
-	public static SafePrime getInstance(int safePrime) {
-		return SafePrime.getInstance(BigInteger.valueOf(safePrime));
-	}
-
-	public static SafePrime getInstance(BigInteger safePrime) {
-		if (!MathUtil.isSavePrime(safePrime)) {
-			throw new IllegalArgumentException();
-		}
-		return new SafePrime(safePrime);
-	}
-
-	public static SafePrime getRandomInstance(int bitLength) {
-		return SafePrime.getRandomInstance(bitLength, null);
-	}
-
-	public static SafePrime getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
-		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
-		}
-		return new SafePrime(randomGenerator.nextSavePrime(bitLength));
+		//The time to wait in order to get the ephemeral key is not bound to the requested amount of randomization
+		//It is bound to the 'entropy-collection' of the DataCollector that happens inside every request of randomization.
+		//This 'guarantees' Forward-Security.
+		System.out.println(Arrays.toString(randomGenerator.nextBytes(256)));
+		System.out.println(randomGenerator.nextBoolean());
+		System.out.println(Arrays.toString(randomGenerator.nextBytes(256)));
+		System.out.println(randomGenerator.nextBoolean());
+		System.out.println(randomGenerator.nextBigInteger(2048));
 	}
 
 }

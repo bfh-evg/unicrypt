@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.PseudoRandomGenerator;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.ByteArray;
@@ -51,39 +53,41 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 
 /**
- * This PseudoRandomGenerator creates the hash value of the seed and stores this internally as a ByteArrayElement. The
- * hash will be done according to the given hashMethod. Then the internal counter will be created as another
- * ByteArrayElement. These two byteArrayElement will be hashed as in @see AbstractElement#getHashValue(HashMethod
- * hashMethod); The resulting bytes will be used for pseudoRandomness
+ * This PseudoRandomGeneratorCounterMode creates the hash value of the seed and stores this internally as a
+ * ByteArrayElement. The hash will be done according to the given hashMethod. Then the internal counter will be created
+ * as another ByteArrayElement. These two byteArrayElement will be hashed as in @see
+ * AbstractElement#getHashValue(HashMethod hashMethod); The resulting bytes will be used for pseudoRandomness
  * <p>
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PseudoRandomGenerator
-	   extends AbstractRandomGenerator {
+public class PseudoRandomGeneratorCounterMode
+	   extends AbstractRandomGenerator
+	   implements PseudoRandomGenerator {
 
 	public static final Element DEFAULT_SEED = Z.getInstance().getElement(0);
-	public static final PseudoRandomGenerator DEFAULT = getInstance();
+	/**
+	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE pseudoRandomGenerator At each start of the JavaVM this
+	 * generator will restart deterministically. Do not use it for ephemeral keys!
+	 */
+	public static final PseudoRandomGeneratorCounterMode DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, DEFAULT_SEED);
 
 	private final HashMethod hashMethod;
-	private final Element seed;
-	private final ByteArray hashedSeed;
+	private Element seed;
+	private ByteArray hashedSeed;
 	private int counter;
 	// TODO: Better with ByteArrayOutputStream
 	private byte[] randomByteBuffer;
 	private int randomByteBufferPosition;
 
 	// Random random;
-	protected PseudoRandomGenerator(HashMethod hashMethod, final Element seed) {
+	protected PseudoRandomGeneratorCounterMode(HashMethod hashMethod, final Element seed) {
 		this.hashMethod = hashMethod;
-		this.seed = seed;
 		//The following lines are needed in order to speed up calculation of randomBytes. @see#fillRandomByteBuffer
 		this.randomByteBuffer = new byte[hashMethod.getLength()];
-		this.counter = -1;
-		hashedSeed = this.seed.getHashValue(hashMethod).getValue();
-		reset();
+		setSeed(seed);
 	}
 
 	protected byte[] getRandomByteBuffer(int counter) {
@@ -104,9 +108,28 @@ public class PseudoRandomGenerator
 		return hashMethod;
 	}
 
-	//It would be better to only get the seedHash! (Seed should not be stored)
 	public Element getSeed() {
 		return this.seed;
+	}
+
+	private void setSeed(Element seed) {
+		if (seed == null) {
+			throw new IllegalArgumentException();
+		}
+		this.seed = seed;
+		this.hashedSeed = seed.getHashValue(hashMethod).getValue();
+		this.counter = -1;
+		reset();
+	}
+
+	@Override
+	public void updateInternalState(byte[] freshBytes) {
+		ByteArray pseudoFeedback = ByteArray.getRandomInstance(hashMethod.getLength(), this);
+
+		ByteArray freshState = pseudoFeedback.xor(ByteArray.getInstance(freshBytes));
+		this.seed = ByteArrayMonoid.getInstance().getElement(freshState);
+		this.setSeed(seed);
+
 	}
 
 	public int getCounter() {
@@ -115,6 +138,7 @@ public class PseudoRandomGenerator
 
 	protected void reset() {
 		setCounter(0);
+
 	}
 
 	protected boolean isReset() {
@@ -239,7 +263,7 @@ public class PseudoRandomGenerator
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final PseudoRandomGenerator other = (PseudoRandomGenerator) obj;
+		final PseudoRandomGeneratorCounterMode other = (PseudoRandomGeneratorCounterMode) obj;
 		if (this.hashMethod != other.hashMethod && (this.hashMethod == null || !this.hashMethod.equals(other.hashMethod))) {
 			return false;
 		}
@@ -255,26 +279,31 @@ public class PseudoRandomGenerator
 		return true;
 	}
 
-	public static PseudoRandomGenerator getInstance() {
-		return PseudoRandomGenerator.getInstance(HashMethod.DEFAULT, DEFAULT_SEED);
+	/**
+	 * This will return the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE PseudoRandomGeneratorCounterMode.
+	 * <p>
+	 * @return
+	 */
+	public static PseudoRandomGeneratorCounterMode getInstance() {
+		return PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 	}
 
-	public static PseudoRandomGenerator getInstance(HashMethod hashMethod) {
-		return new PseudoRandomGenerator(hashMethod, DEFAULT_SEED);
+	public static PseudoRandomGeneratorCounterMode getInstance(HashMethod hashMethod) {
+		return new PseudoRandomGeneratorCounterMode(hashMethod, DEFAULT_SEED);
 	}
 
-	public static PseudoRandomGenerator getInstance(Element seed) {
-		return new PseudoRandomGenerator(HashMethod.DEFAULT, seed);
+	public static PseudoRandomGeneratorCounterMode getInstance(Element seed) {
+		return new PseudoRandomGeneratorCounterMode(HashMethod.DEFAULT, seed);
 	}
 
-	public static PseudoRandomGenerator getInstance(HashMethod hashMethod, Element seed) {
+	public static PseudoRandomGeneratorCounterMode getInstance(HashMethod hashMethod, Element seed) {
 		if (seed == null) {
 			throw new IllegalArgumentException();
 		}
 		if (hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PseudoRandomGenerator(hashMethod, seed);
+		return new PseudoRandomGeneratorCounterMode(hashMethod, seed);
 	}
 
 }

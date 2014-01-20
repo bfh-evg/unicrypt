@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -53,9 +53,12 @@ import java.util.Arrays;
 public class ByteArray
 	   extends UniCrypt {
 
+	public static final int LEFT = 0;
+	public static final int RIGHT = 1;
+
 	private final byte[] bytes;
 
-	private ByteArray(byte[] bytes) {
+	protected ByteArray(byte[] bytes) {
 		this.bytes = bytes;
 	}
 
@@ -78,21 +81,58 @@ public class ByteArray
 		if (other == null) {
 			throw new IllegalArgumentException();
 		}
-		byte[] result = new byte[this.getLength() + other.getLength()];
-		System.arraycopy(this.bytes, 0, result, 0, this.getLength());
+		byte[] result = Arrays.copyOf(this.bytes, this.getLength() + other.getLength());
 		System.arraycopy(other.bytes, 0, result, this.getLength(), other.getLength());
 		return new ByteArray(result);
 	}
 
-	public ByteArray xor(ByteArray other) {
-		int length = Math.max(this.getLength(), other.getLength());
-		byte[] result = new byte[length];
-		for (int i = 0; i < length; i++) {
-			int byte1 = i < this.getLength() ? this.getByte(i) : 0;
-			int byte2 = i < other.getLength() ? other.getByte(i) : 0;
-			result[i] = (byte) (0xff & (byte1 ^ byte2));
+	public ByteArray xor(ByteArray... others) {
+
+		//Find and remember the length of the longest ByteArray:
+		int maxLength = this.bytes.length;
+		for (ByteArray array : others) {
+			if (array != null) {
+				maxLength = Math.max(maxLength, array.bytes.length);
+			}
 		}
-		return new ByteArray(result);
+		//Create the xoredBytes with a size similar to the found maxLength
+		//Put the bytes of this ByteArray directly into the new xoredBytes
+		byte[] xoredBytes = Arrays.copyOf(this.bytes, maxLength);
+
+		//Iterate through the other ByteArrays and xor them into the xoredBytes
+		for (ByteArray array : others) {
+			if (array != null) {
+				for (int i = 0; i < array.bytes.length; i++) {
+					xoredBytes[i] ^= array.bytes[i];
+				}
+			}
+		}
+		return new ByteArray(xoredBytes);
+	}
+
+	/**
+	 * Splits one ByteArray into two ByteArrays.
+	 * <p>
+	 * @param lengthOfFirstByteArray
+	 * @return Array of ByteArrays containing two ByteArrays, namely the left and the right one.
+	 */
+	public ByteArray[] split(int lengthOfLeftByteArray) {
+		if (lengthOfLeftByteArray < 1 || lengthOfLeftByteArray > bytes.length - 1) {
+			throw new IllegalArgumentException();
+		}
+		ByteArray[] split = new ByteArray[]{new ByteArray(Arrays.copyOf(bytes, lengthOfLeftByteArray)), new ByteArray(Arrays.copyOfRange(bytes, lengthOfLeftByteArray, bytes.length - 1))};
+		return split;
+	}
+
+	public ByteArray getHash() {
+		return getHash(HashMethod.DEFAULT);
+	}
+
+	public ByteArray getHash(HashMethod hashMethod) {
+		if (hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteArray(hashMethod.getMessageDigest().digest(bytes));
 	}
 
 	@Override
@@ -152,7 +192,7 @@ public class ByteArray
 			throw new IllegalArgumentException();
 		}
 		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGenerator.DEFAULT;
+			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
 		return new ByteArray(randomGenerator.nextBytes(length));
 	}

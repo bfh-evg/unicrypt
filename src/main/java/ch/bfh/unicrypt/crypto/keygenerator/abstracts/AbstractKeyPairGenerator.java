@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -57,8 +57,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element>
-			 extends UniCrypt
-			 implements KeyPairGenerator {
+	   extends UniCrypt
+	   implements KeyPairGenerator {
 
 	private final PRS privateKeySpace;
 	private Function privateKeyGenerationFunction;
@@ -128,10 +128,10 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	public final Function getKeyPairGenerationFunction() {
 		if (this.keyPairGenerationFunction == null) {
 			this.keyPairGenerationFunction = CompositeFunction.getInstance(
-						 this.getPrivateKeyGenerationFunction(),
-						 MultiIdentityFunction.getInstance(this.privateKeySpace, 2),
-						 ProductFunction.getInstance(IdentityFunction.getInstance(this.privateKeySpace),
-																				 this.getPublicKeyGenerationFunction()));
+				   this.getPrivateKeyGenerationFunction(),
+				   MultiIdentityFunction.getInstance(this.privateKeySpace, 2),
+				   ProductFunction.getInstance(IdentityFunction.getInstance(this.privateKeySpace),
+											   this.getPublicKeyGenerationFunction()));
 		}
 		return this.keyPairGenerationFunction;
 	}
@@ -143,7 +143,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public Pair generateKeyPair(RandomGenerator randomGenerator) {
-		return (Pair) this.getKeyPairGenerationFunction().apply(randomGenerator);
+		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomGenerator);
 	}
 
 	@Override

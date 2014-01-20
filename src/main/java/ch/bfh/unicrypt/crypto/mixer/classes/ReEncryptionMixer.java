@@ -64,7 +64,9 @@ public class ReEncryptionMixer
 	}
 
 	static public ReEncryptionMixer getInstance(ReEncryptionScheme reEncryptionScheme, Element publicKey, int size) {
-		// TODO Input validation
+		if (reEncryptionScheme == null || !reEncryptionScheme.getEncryptionKeySpace().contains(publicKey) || size < 1) {
+			throw new IllegalArgumentException();
+		}
 		return new ReEncryptionMixer(reEncryptionScheme, publicKey, size);
 	}
 

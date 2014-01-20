@@ -43,11 +43,15 @@ package ch.bfh.unicrypt.crypto.mixer;
 
 import ch.bfh.unicrypt.crypto.mixer.classes.ReEncryptionMixer;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.helper.Permutation;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -107,6 +111,71 @@ public class ReEncryptionMixerTest {
 				}
 			}
 			assertTrue(contains);
+		}
+	}
+
+	@Test
+	public void testReEncryptionMixerDeterministic() {
+
+		CyclicGroup G_q = GStarModSafePrime.getInstance(167);
+		ZMod Z_q = G_q.getZModOrder();
+		Element g = G_q.getDefaultGenerator();
+		Element sk = G_q.getZModOrder().getElement(7);
+		Element pk = g.selfApply(sk);
+		int size = 10;
+
+		ElGamalEncryptionScheme es = ElGamalEncryptionScheme.getInstance(g);
+
+		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
+		Element[] ciphertexts = new Element[size];
+		for (int i = 0; i < size; i++) {
+			ciphertexts[i] = es.encrypt(pk, messages.getAt(i));
+		}
+
+		int[] pi = new int[]{5, 6, 1, 4, 3, 2, 9, 0, 8, 7};
+		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
+		Tuple randomizations = Tuple.getInstance(Z_q.getElement(3), Z_q.getElement(5), Z_q.getElement(8), Z_q.getElement(1), Z_q.getElement(34), Z_q.getElement(31), Z_q.getElement(17), Z_q.getElement(2), Z_q.getElement(9), Z_q.getElement(67));
+
+		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, pk, size);
+		Tuple shuffledCiphertexts = mixer.shuffle(Tuple.getInstance(ciphertexts), permutation, randomizations);
+
+		// Verify shuffle
+		for (int i = 0; i < size; i++) {
+
+			Element e = es.reEncrypt(pk, ciphertexts[pi[i]], randomizations.getAt(pi[i]));
+			assertTrue(e.isEquivalent(shuffledCiphertexts.getAt(i)));
+		}
+	}
+
+	@Test
+	public void testReEncryptionMixerSizeOne() {
+
+		CyclicGroup G_q = GStarModSafePrime.getInstance(167);
+		ZMod Z_q = G_q.getZModOrder();
+		Element g = G_q.getDefaultGenerator();
+		Element sk = G_q.getZModOrder().getElement(7);
+		Element pk = g.selfApply(sk);
+		int size = 1;
+
+		ElGamalEncryptionScheme es = ElGamalEncryptionScheme.getInstance(g);
+
+		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
+		Element[] ciphertexts = new Element[size];
+		for (int i = 0; i < size; i++) {
+			ciphertexts[i] = es.encrypt(pk, messages.getAt(i));
+		}
+
+		int[] pi = new int[]{0};
+		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
+		Tuple randomizations = Tuple.getInstance(Z_q.getElement(3));
+
+		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, pk, size);
+		Tuple shuffledCiphertexts = mixer.shuffle(Tuple.getInstance(ciphertexts), permutation, randomizations);
+
+		// Verify shuffle
+		for (int i = 0; i < size; i++) {
+			Element e = es.reEncrypt(pk, ciphertexts[pi[i]], randomizations.getAt(pi[i]));
+			assertTrue(e.isEquivalent(shuffledCiphertexts.getAt(i)));
 		}
 	}
 

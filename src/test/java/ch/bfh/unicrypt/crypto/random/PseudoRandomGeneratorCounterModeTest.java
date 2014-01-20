@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -59,9 +59,9 @@ import org.junit.Test;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PseudoRandomGeneratorTest {
+public class PseudoRandomGeneratorCounterModeTest {
 
-	public PseudoRandomGeneratorTest() {
+	public PseudoRandomGeneratorCounterModeTest() {
 	}
 
 	@BeforeClass
@@ -81,35 +81,35 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of getSeed method, of class PseudoRandomGenerator.
+	 * Test of getSeed method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testGetDefaultSeed() {
 		System.out.println("getSeed");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		Element seed = instance.getSeed();
-		Assert.assertTrue(seed.isEquivalent(PseudoRandomGenerator.DEFAULT_SEED));
+		Assert.assertTrue(seed.isEquivalent(PseudoRandomGeneratorCounterMode.DEFAULT_SEED));
 	}
 
 	/**
-	 * Test of getSeed method, of class PseudoRandomGenerator.
+	 * Test of getSeed method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testGetSeed() {
 		System.out.println("getSeed");
 		Element expSeed = Z.getInstance().getElement(4711);
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance(expSeed);
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance(expSeed);
 		Element seed = instance.getSeed();
 		Assert.assertTrue(expSeed.isEquivalent(seed));
 	}
 
 	/**
-	 * Test of getCounter method, of class PseudoRandomGenerator.
+	 * Test of getCounter method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testGetCounter() {
 		System.out.println("getCounter");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, PseudoRandomGeneratorCounterMode.DEFAULT_SEED);
 		int counter = instance.getCounter();
 		Assert.assertTrue(0 == counter);
 		instance.nextBytes(HashMethod.DEFAULT.getLength());
@@ -122,12 +122,12 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBoolean method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBoolean method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextBoolean() {
 		System.out.println("abstractNextBoolean");
-		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance1 = PseudoRandomGeneratorCounterMode.getInstance();
 
 		for (int i = 0; i < 1000; i++) {
 			if (instance1.nextBoolean()) {
@@ -143,13 +143,13 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBoolean method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBoolean method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextBooleanSame() {
 		System.out.println("abstractNextBoolean");
-		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance();
-		PseudoRandomGenerator instance2 = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance1 = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, PseudoRandomGeneratorCounterMode.DEFAULT_SEED);
+		PseudoRandomGeneratorCounterMode instance2 = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, PseudoRandomGeneratorCounterMode.DEFAULT_SEED);
 
 		boolean b1 = instance1.nextBoolean();
 		boolean b2 = instance2.nextBoolean();
@@ -158,13 +158,13 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBoolean method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBoolean method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextBooleansSame() {
 		System.out.println("abstractNextBoolean");
-		PseudoRandomGenerator instance1 = PseudoRandomGenerator.getInstance();
-		PseudoRandomGenerator instance2 = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance1 = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, PseudoRandomGeneratorCounterMode.DEFAULT_SEED);
+		PseudoRandomGeneratorCounterMode instance2 = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, PseudoRandomGeneratorCounterMode.DEFAULT_SEED);
 
 		for (int i = 0; i < 4096; i++) {
 			boolean b1 = instance1.nextBoolean();
@@ -174,27 +174,27 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBytes method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBytes method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testNextBytesSingleByteZero() {
 		System.out.println("abstractNextBytes");
 		int byteArrayLength = 1;
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
-		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
+		byte[] expResult = Pair.getInstance(PseudoRandomGeneratorCounterMode.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 		byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:		Assert.assertTrue(expResult[0] == result[0]);
 	}
 
 	/**
-	 * Test of abstractNextBytes method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBytes method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testNextBytesSingleBytes() {
 		System.out.println("abstractNextBytes");
 		int byteArrayLength = 1;
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
-		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
+		byte[] expResult = Pair.getInstance(PseudoRandomGeneratorCounterMode.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 		for (int i = 0; i < expResult.length; i++) {
 			byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:			Assert.assertTrue("Byte no: " + i, expResult[i] == result[0]);
@@ -203,15 +203,15 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBytes method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBytes method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testNextBytesSingleBytesMulti() {
 		System.out.println("abstractNextBytes");
 		int byteArrayLength = 1;
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		for (int j = 0; j < 10; j++) {
-			byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(j)).getHashValue().getValue().getBytes();
+			byte[] expResult = Pair.getInstance(PseudoRandomGeneratorCounterMode.DEFAULT_SEED, Z.getInstance().getElement(j)).getHashValue().getValue().getBytes();
 			for (int i = 0; i < expResult.length; i++) {
 				byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:				Assert.assertTrue("Byte no: " + i, expResult[i] == result[0]);
@@ -221,43 +221,43 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBytes method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBytes method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testNextBytesDigestBytes() {
 		System.out.println("abstractNextBytes");
 		int byteArrayLength = HashMethod.DEFAULT.getLength();
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
-		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
+		byte[] expResult = Pair.getInstance(PseudoRandomGeneratorCounterMode.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 		byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:		Assert.assertTrue(Arrays.equals(expResult, result));
 	}
 
 	/**
-	 * Test of abstractNextBytes method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBytes method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testNextBytesTwiceDigestBytes() {
 		System.out.println("abstractNextBytes");
 		int byteArrayLength = HashMethod.DEFAULT.getLength();
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		instance.nextBytes(byteArrayLength);
-		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getValue().getBytes();
+		byte[] expResult = Pair.getInstance(PseudoRandomGeneratorCounterMode.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getValue().getBytes();
 		byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:		Assert.assertTrue(Arrays.equals(expResult, result));
 
 	}
 
 	/**
-	 * Test of abstractNextInteger method, of class PseudoRandomGenerator.
+	 * Test of abstractNextInteger method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextInteger() {
 		System.out.println("abstractNextInteger");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		boolean maxReached = false;
 		HashSet<Integer> numbers = new HashSet<Integer>();
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 100000; i++) {
 			int result = instance.nextInteger(1023);
 			numbers.add(result);
 			if (result == 1023) {
@@ -270,12 +270,12 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBigInteger method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBigInteger method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextBigInteger_int1() {
 		System.out.println("abstractNextBigInteger");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		for (int i = 0; i < 1000; i++) {
 			BigInteger result = instance.nextBigInteger(1);
 			Assert.assertTrue(result.intValue() == 0 || result.intValue() == 1);
@@ -283,12 +283,12 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBigInteger method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBigInteger method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextBigInteger_int10() {
 		System.out.println("abstractNextBigInteger");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		boolean maxReached = false;
 		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
 		for (int i = 0; i < 10000; i++) {
@@ -305,15 +305,15 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBigInteger method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBigInteger method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextBigInteger_int8() {
 		System.out.println("abstractNextBigInteger");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		boolean maxReached = false;
 		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			BigInteger result = instance.nextBigInteger(8);
 			numbers.add(result);
 			if (result.intValue() == 255) {
@@ -328,15 +328,15 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBigInteger method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBigInteger method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextBigInteger_BigInteger10() {
 		System.out.println("abstractNextBigInteger");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		boolean maxReached = false;
 		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 100000; i++) {
 			BigInteger result = instance.nextBigInteger(BigInteger.valueOf(1023));
 			numbers.add(result);
 
@@ -352,12 +352,12 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextBigInteger method, of class PseudoRandomGenerator.
+	 * Test of abstractNextBigInteger method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextBigInteger_BigInteger8() {
 		System.out.println("abstractNextBigInteger");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		boolean maxReached = false;
 		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
 
@@ -377,12 +377,12 @@ public class PseudoRandomGeneratorTest {
 	}
 
 	/**
-	 * Test of abstractNextPrime method, of class PseudoRandomGenerator.
+	 * Test of abstractNextPrime method, of class PseudoRandomGeneratorCounterMode.
 	 */
 	@Test
 	public void testAbstractNextPrime8() {
 		System.out.println("abstractNextPrime");
-		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
+		PseudoRandomGeneratorCounterMode instance = PseudoRandomGeneratorCounterMode.getInstance();
 		HashSet<BigInteger> primes = new HashSet<BigInteger>();
 		for (int i = 0; i < 10000; i++) {
 			BigInteger result = instance.nextPrime(8);
