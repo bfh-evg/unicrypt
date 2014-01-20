@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -55,13 +55,14 @@ import java.util.LinkedHashSet;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class Subset
-			 extends AbstractSet<Element>
-			 implements Iterable<Element> {
+	   extends AbstractSet<Element, Element>
+	   implements Iterable<Element> {
 
 	private final Set superSet;
 	private final HashSet<Element> hashSet;
 
 	protected Subset(Set superSet, HashSet<Element> elementSet) {
+		super(Element.class);
 		this.superSet = superSet;
 		this.hashSet = elementSet;
 	}
@@ -91,9 +92,9 @@ public class Subset
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
+	protected boolean abstractContains(BigInteger integerValue) {
 		for (Element element : this.hashSet) {
-			if (element.getValue().equals(value)) {
+			if (element.getValue().equals(integerValue)) {
 				return true;
 			}
 		}
@@ -101,8 +102,18 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetElement(BigInteger value) {
-		return this.getSuperset().getElement(value);
+	protected boolean abstractContains(Element value) {
+		return this.hashSet.contains(value);
+	}
+
+	@Override
+	protected Element abstractGetElement(BigInteger integerValue) {
+		return this.getSuperset().getElement(integerValue);
+	}
+
+	@Override
+	protected Element abstractGetElement(Element value) {
+		return value;
 	}
 
 	@Override

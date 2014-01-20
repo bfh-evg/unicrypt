@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -52,51 +52,36 @@ import java.math.BigInteger;
  * @author rolfhaenni
  */
 public class StringMonoid
-			 extends AbstractConcatenativeMonoid<StringElement> {
+	   extends AbstractConcatenativeMonoid<StringElement, String> {
 
 	private final Alphabet alphabet;
-	private final int blockLength;
 
 	private StringMonoid(Alphabet alphabet, int blockLength) {
+		super(String.class, blockLength);
 		this.alphabet = alphabet;
-		this.blockLength = blockLength;
 	}
 
 	public Alphabet getAlphabet() {
 		return this.alphabet;
 	}
 
+	//
+	// The following protected methods implement the abstract methods from
+	// various super-classes
+	//
 	@Override
-	public int getBlockLength() {
-		return this.blockLength;
-	}
-
-	public final StringElement getElement(final String string) {
-		if (string == null || !this.getAlphabet().isValid(string) || string.length() % this.getBlockLength() != 0) {
-			throw new IllegalArgumentException();
-		}
-		return this.standardGetElement(string);
+	protected BigInteger abstractGetOrder() {
+		return Set.INFINITE_ORDER;
 	}
 
 	@Override
-	public final StringElement getRandomElement(int length) {
-		return this.getRandomElement(length, null);
+	protected boolean abstractContains(BigInteger value) {
+		return value.signum() >= 0;
 	}
 
 	@Override
-	public final StringElement getRandomElement(int length, RandomGenerator randomGenerator) {
-		if (length < 0 || length % this.getBlockLength() != 0) {
-			throw new IllegalArgumentException();
-		}
-		char[] chars = new char[length];
-		for (int i = 0; i < length; i++) {
-			chars[i] = this.getAlphabet().getCharacter(randomGenerator.nextInteger(this.getAlphabet().getSize() - 1));
-		}
-		return this.standardGetElement(new String(chars));
-	}
-
-	protected StringElement standardGetElement(String string) {
-		return new StringElement(this, string);
+	protected boolean abstractContains(String value) {
+		return value.length() % this.getBlockLength() == 0 && this.getAlphabet().isValid(value);
 	}
 
 	@Override
@@ -114,26 +99,17 @@ public class StringMonoid
 			}
 			value = value.divide(blockSize);
 		}
-		return this.standardGetElement(strBuilder.reverse().toString());
+		return this.abstractGetElement(strBuilder.reverse().toString());
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
+	@Override
+	protected StringElement abstractGetElement(String value) {
+		return new StringElement(this, value);
+	}
+
 	@Override
 	protected StringElement abstractGetIdentityElement() {
-		return this.standardGetElement("");
-	}
-
-	@Override
-	protected StringElement abstractApply(StringElement element1, StringElement element2) {
-		return this.standardGetElement(element1.getString() + element2.getString());
-	}
-
-	@Override
-	protected BigInteger abstractGetOrder() {
-		return Set.INFINITE_ORDER;
+		return this.abstractGetElement("");
 	}
 
 	@Override
@@ -142,8 +118,17 @@ public class StringMonoid
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return value.signum() >= 0;
+	public final StringElement abstractGetRandomElement(int length, RandomGenerator randomGenerator) {
+		char[] chars = new char[length];
+		for (int i = 0; i < length; i++) {
+			chars[i] = this.getAlphabet().getCharacter(randomGenerator.nextInteger(this.getAlphabet().getSize() - 1));
+		}
+		return this.abstractGetElement(new String(chars));
+	}
+
+	@Override
+	protected StringElement abstractApply(StringElement element1, StringElement element2) {
+		return this.abstractGetElement(element1.getValue() + element2.getValue());
 	}
 
 	//

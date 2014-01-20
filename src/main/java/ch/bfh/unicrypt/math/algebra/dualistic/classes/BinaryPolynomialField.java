@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractFiniteField;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
+import ch.bfh.unicrypt.math.helper.polynomial.BinaryPolynomial;
 import java.math.BigInteger;
 
 /**
@@ -51,12 +52,13 @@ import java.math.BigInteger;
  * @author rolfhaenni
  */
 public class BinaryPolynomialField
-			 extends AbstractFiniteField<BinaryPolynomialElement, MultiplicativeGroup> {
+	   extends AbstractFiniteField<BinaryPolynomialElement, MultiplicativeGroup, BinaryPolynomial> {
 
-	private PolynomialElement irreduciblePolynomial;
+	private BinaryPolynomialElement irreduciblePolynomialElement;
 
-	protected BinaryPolynomialField(PolynomialElement irreduciblePolynomial) {
-		this.irreduciblePolynomial = irreduciblePolynomial;
+	protected BinaryPolynomialField(BinaryPolynomialElement irreduciblePolynomial) {
+		super(BinaryPolynomial.class);
+		this.irreduciblePolynomialElement = irreduciblePolynomial;
 	}
 
 	public ZModTwo getPrimeField() {
@@ -64,7 +66,7 @@ public class BinaryPolynomialField
 	}
 
 	public int getDegree() {
-		return this.irreduciblePolynomial.getDegree() - 1;
+		return this.irreduciblePolynomialElement.getValue().getDegree() - 1;
 	}
 
 	//
@@ -122,8 +124,23 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected BinaryPolynomialElement abstractGetElement(BigInteger value) {
+	protected boolean abstractContains(BigInteger integerValue) {
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	protected boolean abstractContains(BinaryPolynomial value) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected BinaryPolynomialElement abstractGetElement(BigInteger integerValue) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	protected BinaryPolynomialElement abstractGetElement(BinaryPolynomial value) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
@@ -131,19 +148,14 @@ public class BinaryPolynomialField
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	@Override
-	protected boolean abstractContains(BigInteger value) {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static BinaryPolynomialField getInstance(PolynomialElement irreduciblePolynomial) {
-		if (irreduciblePolynomial == null || !irreduciblePolynomial.getSet().getSemiRing().isEquivalent(ZModTwo.getInstance())) {
+	public static BinaryPolynomialField getInstance(BinaryPolynomialElement irreduciblePolynomialElement) {
+		if (irreduciblePolynomialElement == null || !irreduciblePolynomialElement.getSet().getPrimeField().isEquivalent(ZModTwo.getInstance())) {
 			throw new IllegalArgumentException();
 		}
-		return new BinaryPolynomialField(irreduciblePolynomial);
+		return new BinaryPolynomialField(irreduciblePolynomialElement);
 	}
 
 }

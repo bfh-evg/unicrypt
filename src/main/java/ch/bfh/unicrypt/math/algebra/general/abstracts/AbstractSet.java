@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -57,8 +57,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
-import ch.bfh.unicrypt.math.helper.Compound;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
+import ch.bfh.unicrypt.math.helper.compound.Compound;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -67,17 +67,23 @@ import java.util.NoSuchElementException;
  * This abstract class provides a basis implementation for atomic sets.
  * <p>
  * @param <E>
+ * @param <V>
  * @see AbstractElement
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractSet<E extends Element>
-			 extends UniCrypt
-			 implements Set, Iterable<E> {
+public abstract class AbstractSet<E extends Element, V extends Object>
+	   extends UniCrypt
+	   implements Set, Iterable<E> {
 
+	private final Class<? extends Object> valueClass;
 	private BigInteger order, lowerBound, upperBound, minimum;
+
+	protected AbstractSet(Class<? extends Object> valueClass) {
+		this.valueClass = valueClass;
+	}
 
 	@Override
 	public final boolean isSemiGroup() {
@@ -211,16 +217,24 @@ public abstract class AbstractSet<E extends Element>
 	}
 
 	@Override
-	public final boolean contains(final int value) {
-		return this.contains(BigInteger.valueOf(value));
+	public final boolean contains(final int integerValue) {
+		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
 	@Override
-	public final boolean contains(final BigInteger value) {
-		if (value == null) {
+	public final boolean contains(final BigInteger integerValue) {
+		if (integerValue == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractContains(value);
+		return this.abstractContains(integerValue);
+	}
+
+	@Override
+	public final boolean contains(final Object value) {
+		if (value == null || !this.valueClass.isInstance(value)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractContains((V) value);
 	}
 
 	@Override
@@ -232,16 +246,24 @@ public abstract class AbstractSet<E extends Element>
 	}
 
 	@Override
-	public final E getElement(final int value) {
-		return this.getElement(BigInteger.valueOf(value));
+	public final E getElement(final int integerValue) {
+		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
 	@Override
-	public final E getElement(BigInteger value) {
-		if (value == null || !this.contains(value)) {
+	public final E getElement(BigInteger integerValue) {
+		if (!this.contains(integerValue)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetElement(value);
+		return this.abstractGetElement(integerValue);
+	}
+
+	@Override
+	public E getElement(Object value) {
+		if (!this.contains(value)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractGetElement((V) value);
 	}
 
 	@Override
@@ -252,7 +274,7 @@ public abstract class AbstractSet<E extends Element>
 		if (this.contains(element)) {
 			return (E) element;
 		}
-		return this.getElement(element.getValue());
+		return this.getElement(element.getIntegerValue());
 	}
 
 	@Override
@@ -340,7 +362,7 @@ public abstract class AbstractSet<E extends Element>
 	}
 
 	protected Iterator<E> standardIterator() {
-		final AbstractSet<E> set = this;
+		final AbstractSet<E, V> set = this;
 		return new Iterator<E>() {
 
 			BigInteger counter = BigInteger.ZERO;
@@ -354,7 +376,7 @@ public abstract class AbstractSet<E extends Element>
 					}
 					return true;
 				}
-				return false; // the standard iterator does not work for groups of unknonw order
+				return false; // the standard iterator does not work for groups of unknown order
 			}
 
 			@Override
@@ -385,10 +407,14 @@ public abstract class AbstractSet<E extends Element>
 	//
 	protected abstract BigInteger abstractGetOrder();
 
+	protected abstract boolean abstractContains(BigInteger value);
+
+	protected abstract boolean abstractContains(V value);
+
 	protected abstract E abstractGetElement(BigInteger value);
 
-	protected abstract E abstractGetRandomElement(RandomGenerator randomGenerator);
+	protected abstract E abstractGetElement(V value);
 
-	protected abstract boolean abstractContains(BigInteger value);
+	protected abstract E abstractGetRandomElement(RandomGenerator randomGenerator);
 
 }

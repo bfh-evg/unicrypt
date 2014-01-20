@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -181,7 +181,7 @@ public class PseudoRandomGeneratorTest {
 		System.out.println("abstractNextBytes");
 		int byteArrayLength = 1;
 		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
-		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getByteArray().getBytes();
+		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 		byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:		Assert.assertTrue(expResult[0] == result[0]);
 	}
@@ -194,7 +194,7 @@ public class PseudoRandomGeneratorTest {
 		System.out.println("abstractNextBytes");
 		int byteArrayLength = 1;
 		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
-		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getByteArray().getBytes();
+		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 		for (int i = 0; i < expResult.length; i++) {
 			byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:			Assert.assertTrue("Byte no: " + i, expResult[i] == result[0]);
@@ -211,7 +211,7 @@ public class PseudoRandomGeneratorTest {
 		int byteArrayLength = 1;
 		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
 		for (int j = 0; j < 10; j++) {
-			byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(j)).getHashValue().getByteArray().getBytes();
+			byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(j)).getHashValue().getValue().getBytes();
 			for (int i = 0; i < expResult.length; i++) {
 				byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:				Assert.assertTrue("Byte no: " + i, expResult[i] == result[0]);
@@ -228,7 +228,7 @@ public class PseudoRandomGeneratorTest {
 		System.out.println("abstractNextBytes");
 		int byteArrayLength = HashMethod.DEFAULT.getLength();
 		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
-		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getByteArray().getBytes();
+		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 		byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:		Assert.assertTrue(Arrays.equals(expResult, result));
 	}
@@ -242,7 +242,7 @@ public class PseudoRandomGeneratorTest {
 		int byteArrayLength = HashMethod.DEFAULT.getLength();
 		PseudoRandomGenerator instance = PseudoRandomGenerator.getInstance();
 		instance.nextBytes(byteArrayLength);
-		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getByteArray().getBytes();
+		byte[] expResult = Pair.getInstance(PseudoRandomGenerator.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getValue().getBytes();
 		byte[] result = instance.nextBytes(byteArrayLength);
 //TODO:		Assert.assertTrue(Arrays.equals(expResult, result));
 

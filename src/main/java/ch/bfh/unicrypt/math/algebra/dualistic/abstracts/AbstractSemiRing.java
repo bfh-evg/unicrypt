@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -50,12 +50,18 @@ import java.math.BigInteger;
 /**
  *
  * @author rolfhaenni
+ * @param <E>
+ * @param <V>
  */
-public abstract class AbstractSemiRing<E extends DualisticElement>
-			 extends AbstractAdditiveMonoid<E>
-			 implements SemiRing {
+public abstract class AbstractSemiRing<E extends DualisticElement, V extends Object>
+	   extends AbstractAdditiveMonoid<E, V>
+	   implements SemiRing {
 
 	private E one;
+
+	public AbstractSemiRing(Class<? extends Object> valueClass) {
+		super(valueClass);
+	}
 
 	@Override
 	public E multiply(Element element1, Element element2) {
@@ -78,7 +84,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement>
 		if (!this.contains(element) || (amount == null)) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardPower(element, amount);
+		return this.standardPower((E) element, amount);
 	}
 
 	@Override
@@ -86,7 +92,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement>
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.power(element, amount.getValue());
+		return this.power(element, amount.getIntegerValue());
 	}
 
 	@Override
@@ -139,14 +145,14 @@ public abstract class AbstractSemiRing<E extends DualisticElement>
 		return result;
 	}
 
-	protected E standardPower(Element element, BigInteger amount) {
+	protected E standardPower(E element, BigInteger amount) {
 		if (amount.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
 		if (amount.signum() == 0) {
 			return this.getOneElement();
 		}
-		E result = (E) element;
+		E result = element;
 		for (int i = amount.bitLength() - 2; i >= 0; i--) {
 			result = this.square(result);
 			if (amount.testBit(i)) {
@@ -172,7 +178,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement>
 		return BigInteger.valueOf(2);
 	}
 
-  //
+	//
 	// The following protected abstract method must be implemented in every
 	// direct sub-class.
 	//

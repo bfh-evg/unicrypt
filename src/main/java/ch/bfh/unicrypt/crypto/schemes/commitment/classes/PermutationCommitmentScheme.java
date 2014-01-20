@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -66,7 +66,7 @@ import ch.bfh.unicrypt.math.helper.Permutation;
 // -> Permutation commitment is equal to the columnwise commitment to a permutation matrix
 //
 public class PermutationCommitmentScheme
-			 extends AbstractRandomizedCommitmentScheme<PermutationGroup, PermutationElement, ProductGroup, Tuple, ProductGroup> {
+	   extends AbstractRandomizedCommitmentScheme<PermutationGroup, PermutationElement, ProductGroup, Tuple, ProductGroup> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element randomizationGenerator;
@@ -113,15 +113,15 @@ public class PermutationCommitmentScheme
 	}
 
 	private class PermutationCommitmentFunction
-				 extends AbstractFunction<ProductSet, Pair, ProductGroup, Tuple> {
+		   extends AbstractFunction<ProductSet, Pair, ProductGroup, Tuple> {
 
 		private final Element randomizationGenerator;
 		private final Element[] messageGenerators;
 
 		protected PermutationCommitmentFunction(CyclicGroup cyclicGroup, Element randomizationGenerator, Element[] messageGenerators) {
 			super(ProductSet.getInstance(PermutationGroup.getInstance(messageGenerators.length),
-																	 ProductGroup.getInstance(cyclicGroup.getZModOrder(), messageGenerators.length)),
-						ProductGroup.getInstance(cyclicGroup, messageGenerators.length));
+										 ProductGroup.getInstance(cyclicGroup.getZModOrder(), messageGenerators.length)),
+				  ProductGroup.getInstance(cyclicGroup, messageGenerators.length));
 
 			this.randomizationGenerator = randomizationGenerator;
 			this.messageGenerators = messageGenerators;
@@ -129,13 +129,13 @@ public class PermutationCommitmentScheme
 
 		@Override
 		protected Tuple abstractApply(Pair element, RandomGenerator randomGenerator) {
-			final Permutation permutation = ((PermutationElement) element.getFirst()).getPermutation().invert();
+			final Permutation permutation = ((PermutationElement) element.getFirst()).getValue().invert();
 			final Tuple randomizations = (Tuple) element.getSecond();
 			Element[] ret = new Element[this.messageGenerators.length];
 			for (int i = 0; i < this.messageGenerators.length; i++) {
 				ret[i] = this.randomizationGenerator
-							 .selfApply(randomizations.getAt(i))
-							 .apply(this.messageGenerators[permutation.permute(i)]);
+					   .selfApply(randomizations.getAt(i))
+					   .apply(this.messageGenerators[permutation.permute(i)]);
 			}
 
 			return Tuple.getInstance(ret);

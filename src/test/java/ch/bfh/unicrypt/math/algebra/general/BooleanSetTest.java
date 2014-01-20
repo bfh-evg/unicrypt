@@ -92,9 +92,9 @@ public class BooleanSetTest {
 		boolean bit = false;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement result = instance.getElement(bit);
-		assertEquals(false, result.getBoolean());
+		assertEquals(false, result.getValue());
 		BooleanElement result1 = instance.getElement((!bit));
-		assertEquals(true, result1.getBoolean());
+		assertEquals(true, result1.getValue());
 
 	}
 
@@ -107,10 +107,10 @@ public class BooleanSetTest {
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement result = instance.getElement(BigInteger.ZERO);
-		assertEquals(false, result.getBoolean());
+		assertEquals(false, result.getValue());
 
 		result = instance.getElement(BigInteger.ONE);
-		assertEquals(true, result.getBoolean());
+		assertEquals(true, result.getValue());
 
 		try {
 			BooleanElement expResult = result;
@@ -136,11 +136,11 @@ public class BooleanSetTest {
 		ZMod zmod = ZMod.getInstance(5);
 		Element element = zmod.getElement(1);
 		result = instance.getElement(element);
-		assertEquals(true, result.getBoolean());
+		assertEquals(true, result.getValue());
 
 		element = zmod.getElement(0);
 		result = instance.getElement(element);
-		assertEquals(false, result.getBoolean());
+		assertEquals(false, result.getValue());
 
 		element = zmod.getElement(4);
 		try {
@@ -162,7 +162,7 @@ public class BooleanSetTest {
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement expResult = instance.getElement(true);
 		BooleanElement result = instance.getElement(false);
-		Assert.assertNotSame(expResult.getBoolean(), result.getBoolean());
+		Assert.assertNotSame(expResult.getValue(), result.getValue());
 
 	}
 
@@ -248,11 +248,11 @@ public class BooleanSetTest {
 	public void testGetRandomElement() {
 		System.out.println("getRandomElement");
 		int counter = 0;
-		while (BooleanSet.getInstance().getRandomElement().getBoolean() && counter++ < 100);
+		while (BooleanSet.getInstance().getRandomElement().getValue() && counter++ < 100);
 		if (counter >= 100) {
 			Assert.fail();
 		}
-		while (!(BooleanSet.getInstance().getRandomElement().getBoolean()) && counter++ < 100);
+		while (!(BooleanSet.getInstance().getRandomElement().getValue()) && counter++ < 100);
 		if (counter >= 100) {
 			Assert.fail();
 		}
@@ -267,11 +267,11 @@ public class BooleanSetTest {
 		RandomGenerator random = PseudoRandomGenerator.getInstance();
 		System.out.println("getRandomElement");
 		int counter = 0;
-		while (BooleanSet.getInstance().getRandomElement(random).getBoolean() && counter++ < 100);
+		while (BooleanSet.getInstance().getRandomElement(random).getValue() && counter++ < 100);
 		if (counter >= 100) {
 			Assert.fail();
 		}
-		while (!(BooleanSet.getInstance().getRandomElement(random).getBoolean()) && counter++ < 100);
+		while (!(BooleanSet.getInstance().getRandomElement(random).getValue()) && counter++ < 100);
 		if (counter >= 100) {
 			Assert.fail();
 		}

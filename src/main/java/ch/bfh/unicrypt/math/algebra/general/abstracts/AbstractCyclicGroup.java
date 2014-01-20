@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -55,12 +55,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public abstract class AbstractCyclicGroup<E extends Element>
-	   extends AbstractGroup<E>
+public abstract class AbstractCyclicGroup<E extends Element, V extends Object>
+	   extends AbstractGroup<E, V>
 	   implements CyclicGroup, Iterable<E> {
 
 	private E defaultGenerator;
-	private Map<RandomReferenceString, ArrayList<E>> generatorLists = new HashMap<RandomReferenceString, ArrayList<E>>();
+	private final Map<RandomReferenceString, ArrayList<E>> generatorLists;
+
+	public AbstractCyclicGroup(Class<? extends Object> valueClass) {
+		super(valueClass);
+		this.generatorLists = new HashMap<RandomReferenceString, ArrayList<E>>();
+	}
 
 	@Override
 	public final E getDefaultGenerator() {
@@ -161,7 +166,7 @@ public abstract class AbstractCyclicGroup<E extends Element>
 
 	@Override
 	protected Iterator<E> standardIterator() {
-		final AbstractCyclicGroup<E> cyclicGroup = this;
+		final AbstractCyclicGroup<E, V> cyclicGroup = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;
 			E currentElement = cyclicGroup.getIdentityElement();

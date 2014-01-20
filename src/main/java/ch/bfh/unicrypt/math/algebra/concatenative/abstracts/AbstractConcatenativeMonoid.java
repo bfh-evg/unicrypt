@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,67 +32,96 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
-import java.math.BigInteger;
-
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
 
-public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement> extends AbstractMonoid<E> implements ConcatenativeMonoid {
+public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement, V extends Object>
+	   extends AbstractMonoid<E, V>
+	   implements ConcatenativeMonoid {
 
-  @Override
-  public final E concatenate(final Element element1, final Element element2) {
-    return this.apply(element1, element2);
-  }
+	private final int blockLength;
 
-  @Override
-  public final E concatenate(final Element... elements) {
-    return this.apply(elements);
-  }
+	public AbstractConcatenativeMonoid(Class<? extends Object> valueClass, int blockLength) {
+		super(valueClass);
+		this.blockLength = blockLength;
+	}
 
-  @Override
-  public final E selfConcatenate(final Element element, final BigInteger amount) {
-    return this.selfApply(element, amount);
-  }
+	@Override
+	public final int getBlockLength() {
+		return this.blockLength;
+	}
 
-  @Override
-  public final E selfConcatenate(final Element element, final Element amount) {
-    return this.selfApply(element, amount);
-  }
+	@Override
+	public final E getRandomElement(int length) {
+		return this.getRandomElement(length, null);
+	}
 
-  @Override
-  public final E selfConcatenate(final Element element, final int amount) {
-    return this.selfApply(element, amount);
-  }
+	@Override
+	public final E getRandomElement(int length, RandomGenerator randomGenerator) {
+		if (length < 0 || length % this.getBlockLength() != 0) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractGetRandomElement(length, randomGenerator);
+	}
 
-  @Override
-  public E selfConcatenate(Element element) {
-    return this.selfApply(element);
-  }
+	protected abstract E abstractGetRandomElement(int length, RandomGenerator randomGenerator);
 
-  @Override
-  public E multiSelfConcatenate(Element[] elements, BigInteger[] amounts) {
-    return this.multiSelfApply(elements, amounts);
-  }
+	@Override
+	public final E concatenate(final Element element1, final Element element2) {
+		return this.apply(element1, element2);
+	}
 
-  @Override
-  public E getEmptyElement() {
-    return this.getIdentityElement();
-  }
+	@Override
+	public final E concatenate(final Element... elements) {
+		return this.apply(elements);
+	}
 
-  @Override
-  public boolean isEmptyElement(Element element) {
-    return this.isIdentityElement(element);
-  }
+	@Override
+	public final E selfConcatenate(final Element element, final BigInteger amount) {
+		return this.selfApply(element, amount);
+	}
+
+	@Override
+	public final E selfConcatenate(final Element element, final Element amount) {
+		return this.selfApply(element, amount);
+	}
+
+	@Override
+	public final E selfConcatenate(final Element element, final int amount) {
+		return this.selfApply(element, amount);
+	}
+
+	@Override
+	public E selfConcatenate(Element element) {
+		return this.selfApply(element);
+	}
+
+	@Override
+	public E multiSelfConcatenate(Element[] elements, BigInteger[] amounts) {
+		return this.multiSelfApply(elements, amounts);
+	}
+
+	@Override
+	public E getEmptyElement() {
+		return this.getIdentityElement();
+	}
+
+	@Override
+	public boolean isEmptyElement(Element element) {
+		return this.isIdentityElement(element);
+	}
 
 }

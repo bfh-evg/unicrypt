@@ -39,76 +39,23 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
+package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
- * @param <S>
- * @param <E>
- * @param <V>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public abstract class AbstractDualisticElement<S extends SemiRing, E extends DualisticElement, V extends Object>
-	   extends AbstractAdditiveElement<S, E, V>
-	   implements DualisticElement {
+public interface ECElement
+	   extends AdditiveElement {
 
-	protected AbstractDualisticElement(final S ring, final V value) {
-		super(ring, value);
-	}
+	// additional convenience getter method to handle to point of infinity
+	public DualisticElement getX();
 
-	@Override
-	public final E multiply(final Element element) {
-		return (E) this.getSet().multiply(this, element);
-	}
+	// additional convenience getter method to handle to point of infinity
+	public DualisticElement getY();
 
-	@Override
-	public final E power(final BigInteger amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E power(final Element amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E power(final int amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E square() {
-		return (E) this.getSet().square(this);
-	}
-
-	@Override
-	public final E divide(final Element element) {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return (E) field.divide(this, element);
-		}
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public final E oneOver() {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return (E) field.oneOver(this);
-		}
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean isOne() {
-		return this.getSet().isOneElement(this);
-	}
+	public boolean isInfinity();
 
 }

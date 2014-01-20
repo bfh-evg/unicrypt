@@ -39,76 +39,83 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
+package ch.bfh.unicrypt.math.helper.polynomial;
 
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 /**
  *
- * @author rolfhaenni
- * @param <S>
- * @param <E>
- * @param <V>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <C>
  */
-public abstract class AbstractDualisticElement<S extends SemiRing, E extends DualisticElement, V extends Object>
-	   extends AbstractAdditiveElement<S, E, V>
-	   implements DualisticElement {
+public class BinaryPolynomial
+	   extends UniCrypt
+	   implements Polynomial<Boolean> {
 
-	protected AbstractDualisticElement(final S ring, final V value) {
-		super(ring, value);
-	}
+	private final int degree;
+	private final ByteArray coefficients;
 
-	@Override
-	public final E multiply(final Element element) {
-		return (E) this.getSet().multiply(this, element);
-	}
-
-	@Override
-	public final E power(final BigInteger amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E power(final Element amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E power(final int amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E square() {
-		return (E) this.getSet().square(this);
-	}
-
-	@Override
-	public final E divide(final Element element) {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return (E) field.divide(this, element);
+	private BinaryPolynomial(ByteArray coefficients) {
+		this.coefficients = coefficients;
+		int byteIndex = 0;
+		for (int i = 0; i < this.coefficients.getLength(); i++) {
+			if (this.coefficients.getByte(i) > 0) {
+				byteIndex = i;
+			}
 		}
-		throw new UnsupportedOperationException();
+		byte b = this.coefficients.getByte(byteIndex);
+		int bitIndex = Byte.SIZE - Integer.numberOfLeadingZeros(b);
+		this.degree = byteIndex * Byte.SIZE + bitIndex;
 	}
 
 	@Override
-	public final E oneOver() {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return (E) field.oneOver(this);
+	public int getDegree() {
+		return this.degree;
+	}
+
+	@Override
+	public Boolean getCoefficient(int index) {
+		if (index < 0) {
+			throw new IllegalArgumentException();
 		}
-		throw new UnsupportedOperationException();
+		int byteIndex = index / Byte.SIZE;
+		int bitIndex = index % Byte.SIZE;
+		if (byteIndex >= this.coefficients.getLength()) {
+			return false;
+		}
+		return ((this.coefficients.getByte(byteIndex) >> bitIndex) & 1) == 1;
+	}
+
+	public ByteArray getCoefficients() {
+		return this.coefficients;
 	}
 
 	@Override
-	public boolean isOne() {
-		return this.getSet().isOneElement(this);
+	public int hashCode() {
+		int hash = 5;
+		hash = 29 * hash + (this.coefficients != null ? this.coefficients.hashCode() : 0);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final BinaryPolynomial other = (BinaryPolynomial) obj;
+		if (this.coefficients != other.coefficients && (this.coefficients == null || !this.coefficients.equals(other.coefficients))) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String standardToStringContent() {
+		return "f(x)=" + this.coefficients;
 	}
 
 }

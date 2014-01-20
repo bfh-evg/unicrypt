@@ -2,7 +2,8 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) Error: on line 7, column 34 in file:///Users/rolfhaenni/GIT/unicrypt/license-dualLicense.txt
+ The string doesn't match the expected date/time format. The string to parse was: "17-Jan-2014". The expected format was: "MMM d, yyyy". Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,33 +40,66 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
-
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.helper.Permutation;
-import ch.bfh.unicrypt.math.utility.ArrayUtil;
-import ch.bfh.unicrypt.math.utility.MathUtil;
-import java.math.BigInteger;
+package ch.bfh.unicrypt.math.helper;
 
 /**
  *
- * @author rolfhaenni
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <T>
  */
-public class PermutationElement
-	   extends AbstractElement<PermutationGroup, PermutationElement, Permutation> {
+public class Point<T>
+	   extends UniCrypt {
 
-	protected PermutationElement(final PermutationGroup group, final Permutation permutation) {
-		super(group, permutation);
+	private final T x, y;
+
+	protected Point(T x, T y) {
+		this.x = x;
+		this.y = y;
 	}
 
-	public int getSize() {
-		return this.getValue().getSize();
+	public T getX() {
+		return x;
+	}
+
+	public T getY() {
+		return y;
 	}
 
 	@Override
-	protected BigInteger abstractGetIntegerValue() {
-		// better with Lehmer codes
-		return MathUtil.pair(ArrayUtil.intToBigIntegerArray(this.getValue().getPermutationVector()));
+	public int hashCode() {
+		int hash = 5;
+		hash = 59 * hash + (this.x != null ? this.x.hashCode() : 0);
+		hash = 59 * hash + (this.y != null ? this.y.hashCode() : 0);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Point<?> other = (Point<?>) obj;
+		if (this.x != other.x && (this.x == null || !this.x.equals(other.x))) {
+			return false;
+		}
+		if (this.y != other.y && (this.y == null || !this.y.equals(other.y))) {
+			return false;
+		}
+		return true;
+	}
+
+	public static <T> Point<T> getInstance() {
+		return new Point<T>((T) null, (T) null);
+	}
+
+	public static <T> Point<T> getInstance(T x, T y) {
+		if (x == null || y == null) {
+			throw new IllegalArgumentException();
+		}
+		return new Point<T>(x, y);
 	}
 
 }

@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,17 +32,16 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
@@ -67,7 +66,7 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class GStarMod
-	   extends AbstractMultiplicativeCyclicGroup<GStarModElement> {
+	   extends AbstractMultiplicativeCyclicGroup<GStarModElement, BigInteger> {
 
 	private final BigInteger modulus;
 	private final SpecialFactorization moduloFactorization;
@@ -79,6 +78,7 @@ public class GStarMod
 	public static int modPowCounter_IsGenerator = 0;
 
 	protected GStarMod(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
+		super(BigInteger.class);
 		this.modulus = moduloFactorization.getValue();
 		this.moduloFactorization = moduloFactorization;
 		this.orderFactorization = orderFactorization;
@@ -137,7 +137,7 @@ public class GStarMod
 	// various super-classes
 	//
 	@Override
-	protected GStarModElement standardSelfApply(final Element element, final BigInteger amount) {
+	protected GStarModElement standardSelfApply(final GStarModElement element, final BigInteger amount) {
 		BigInteger newAmount = amount.mod(this.getOrder());
 		GStarMod.modPowCounter_SelfApply++;
 		return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
@@ -164,6 +164,13 @@ public class GStarMod
 	// various super-classes
 	//
 	@Override
+	protected boolean abstractContains(final BigInteger value) {
+		GStarMod.modPowCounter_Contains++;
+		return (value.signum() >= 0) && (value.compareTo(this.getModulus()) < 0) && MathUtil.areRelativelyPrime(value, this.getModulus())
+			   && value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE);
+	}
+
+	@Override
 	protected GStarModElement abstractGetElement(BigInteger value) {
 		return new GStarModElement(this, value);
 	}
@@ -180,16 +187,6 @@ public class GStarMod
 //    }
 //    // Method 2
 //    return this.getDefaultGenerator().power(this.getZModOrder().getRandomElement(random));
-	}
-
-	@Override
-	protected boolean abstractContains(final BigInteger value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		GStarMod.modPowCounter_Contains++;
-		return (value.signum() >= 0) && (value.compareTo(this.getModulus()) < 0) && MathUtil.areRelativelyPrime(value, this.getModulus())
-			   && value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE);
 	}
 
 	@Override

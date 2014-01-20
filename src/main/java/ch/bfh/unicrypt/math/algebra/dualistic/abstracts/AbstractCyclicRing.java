@@ -57,12 +57,17 @@ import java.util.NoSuchElementException;
  *
  * @author rolfhaenni
  * @param <E>
+ * @param <V>
  */
-public abstract class AbstractCyclicRing<E extends DualisticElement>
-	   extends AbstractRing<E>
+public abstract class AbstractCyclicRing<E extends DualisticElement, V extends Object>
+	   extends AbstractRing<E, V>
 	   implements CyclicRing, Iterable<E> {
 
 	private E defaultGenerator;
+
+	public AbstractCyclicRing(Class<? extends Object> valueClass) {
+		super(valueClass);
+	}
 
 	@Override
 	public final E getDefaultGenerator() {
@@ -152,7 +157,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement>
 
 	@Override
 	protected Iterator<E> standardIterator() {
-		final AbstractCyclicRing<E> cyclicRing = this;
+		final AbstractCyclicRing<E, V> cyclicRing = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;
 			E currentElement = cyclicRing.getIdentityElement();

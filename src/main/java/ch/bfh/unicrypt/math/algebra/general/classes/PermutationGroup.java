@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -67,7 +67,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class PermutationGroup
-			 extends AbstractGroup<PermutationElement> {
+	   extends AbstractGroup<PermutationElement, Permutation> {
 
 	private final int size;
 
@@ -78,6 +78,7 @@ public class PermutationGroup
 	 * @throws IllegalArgumentException if {@literal size} is negative
 	 */
 	private PermutationGroup(final int size) {
+		super(Permutation.class);
 		this.size = size;
 	}
 
@@ -89,25 +90,6 @@ public class PermutationGroup
 	 */
 	public final int getSize() {
 		return this.size;
-	}
-
-	/**
-	 * Creates and returns a group element for the given permutation (if one exists).
-	 * <p>
-	 * @param permutation The given permutation
-	 * @return The corresponding group element
-	 * @throws IllegalArgumentException if {@literal permutation} is null or if it is not a proper permutation for the
-	 *                                  group's permutation size
-	 */
-	public PermutationElement getElement(final Permutation permutation) {
-		if (permutation == null || permutation.getSize() != this.getSize()) {
-			throw new IllegalArgumentException();
-		}
-		return this.standardGetElement(permutation);
-	}
-
-	protected PermutationElement standardGetElement(Permutation permutation) {
-		return new PermutationElement(this, permutation);
 	}
 
 	//
@@ -131,7 +113,7 @@ public class PermutationGroup
 	//
 	@Override
 	protected PermutationElement abstractGetRandomElement(final RandomGenerator randomGenerator) {
-		return this.standardGetElement(Permutation.getRandomInstance(this.getSize(), randomGenerator));
+		return this.abstractGetElement(Permutation.getRandomInstance(this.getSize(), randomGenerator));
 	}
 
 	@Override
@@ -141,13 +123,29 @@ public class PermutationGroup
 	}
 
 	@Override
+	protected boolean abstractContains(Permutation value) {
+		return value.getSize() == this.getSize();
+	}
+
+	@Override
+	protected PermutationElement abstractGetElement(final BigInteger value) {
+		BigInteger[] values = MathUtil.unpair(value, this.getSize());
+		return this.abstractGetElement(new Permutation(ArrayUtil.bigIntegerToIntArray(values)));
+	}
+
+	@Override
+	protected PermutationElement abstractGetElement(Permutation value) {
+		return new PermutationElement(this, value);
+	}
+
+	@Override
 	protected PermutationElement abstractApply(final PermutationElement element1, final PermutationElement element2) {
-		return this.standardGetElement(element1.getPermutation().compose(element2.getPermutation()));
+		return this.abstractGetElement(element1.getValue().compose(element2.getValue()));
 	}
 
 	@Override
 	protected PermutationElement abstractInvert(final PermutationElement element) {
-		return this.standardGetElement(element.getPermutation().invert());
+		return this.abstractGetElement(element.getValue().invert());
 	}
 
 	@Override
@@ -157,14 +155,9 @@ public class PermutationGroup
 
 	@Override
 	protected PermutationElement abstractGetIdentityElement() {
-		return this.standardGetElement(Permutation.getInstance(this.getSize()));
+		return this.abstractGetElement(Permutation.getInstance(this.getSize()));
 	}
 
-	@Override
-	protected PermutationElement abstractGetElement(final BigInteger value) {
-		BigInteger[] values = MathUtil.unpair(value, this.getSize());
-		return standardGetElement(new Permutation(ArrayUtil.bigIntegerToIntArray(values)));
-	}
 	//
 	// STATIC FACTORY METHODS
 	//

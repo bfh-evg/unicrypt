@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
-import ch.bfh.unicrypt.math.helper.Compound;
+import ch.bfh.unicrypt.math.helper.compound.Compound;
 import java.math.BigInteger;
 
 /**
@@ -232,19 +232,21 @@ public interface Set {
 	/**
 	 * Checks if this set contains an element that corresponds to a given integer value.
 	 * <p>
-	 * @param value The given integer value
+	 * @param integerValue The given integer value
 	 * @return {@code true} if such an element exists
 	 */
-	public boolean contains(int value);
+	public boolean contains(int integerValue);
 
 	/**
 	 * Checks if this set contains an element that corresponds to a given BigInteger value.
 	 * <p>
-	 * @param value The given BigInteger value
+	 * @param integerValue The given BigInteger value
 	 * @return {@code true} if such an element exists
 	 * @throws IllegalArgumentException if {@literal value} is null
 	 */
-	public boolean contains(BigInteger value);
+	public boolean contains(BigInteger integerValue);
+
+	public boolean contains(Object value);
 
 	/**
 	 * Checks if a given element belongs to the group.
@@ -258,20 +260,22 @@ public interface Set {
 	/**
 	 * Creates and returns the element that corresponds to a given integer (if one exists).
 	 * <p>
-	 * @param value The given integer
+	 * @param integerValue The given integer
 	 * @return The corresponding element
 	 * @throws IllegalArgumentException if no such element exists
 	 */
-	public Element getElement(int value);
+	public Element getElement(int integerValue);
 
 	/**
 	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists).
 	 * <p>
-	 * @param value The given BigInteger value
+	 * @param integerValue The given BigInteger value
 	 * @return The corresponding group element
 	 * @throws IllegalArgumentException if {@literal value} is null or if no such element exists in this group
 	 */
-	public Element getElement(BigInteger value);
+	public Element getElement(BigInteger integerValue);
+
+	public Element getElement(Object value);
 
 	/**
 	 * Creates and returns the element that corresponds to the integer value of or some other group element (if one

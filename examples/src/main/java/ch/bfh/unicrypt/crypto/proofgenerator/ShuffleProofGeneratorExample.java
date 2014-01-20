@@ -135,7 +135,7 @@ public class ShuffleProofGeneratorExample {
 		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput);
 		System.out.println("Verify");
 		logAndResetModPowCounters();
-		System.out.println("Shuffle was sucessful: " + (vPermutation.getBoolean() && vShuffle.getBoolean()));
+		System.out.println("Shuffle was sucessful: " + (vPermutation.getValue() && vShuffle.getValue()));
 	}
 
 	public void logAndResetModPowCounters() {

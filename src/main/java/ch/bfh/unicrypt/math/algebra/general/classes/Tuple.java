@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -44,8 +44,9 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
-import ch.bfh.unicrypt.math.helper.CompoundIterator;
+import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.compound.Compound;
+import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -55,24 +56,23 @@ import java.util.Iterator;
  * @author rolfhaenni
  */
 public class Tuple
-			 extends AbstractElement<ProductSet, Tuple>
-			 implements Compound<Tuple, Element>, Iterable<Element> {
+	   extends AbstractElement<ProductSet, Tuple, ImmutableArray<Element>>
+	   implements Compound<Tuple, Element>, Iterable<Element> {
 
-	private final Element[] elements;
 	private final int arity;
 
-	protected Tuple(final ProductSet set, final Element[] elements) {
-		super(set);
-		this.elements = elements.clone();
-		this.arity = elements.length;
+	protected Tuple(final ProductSet set, final ImmutableArray elements) {
+		super(set, elements);
+		this.arity = elements.getLength();
 	}
 
 	@Override
-	protected BigInteger standardGetValue() {
-		int arity = this.getArity();
-		BigInteger[] values = new BigInteger[arity];
-		for (int i = 0; i < arity; i++) {
-			values[i] = this.elements[i].getValue();
+	protected BigInteger abstractGetIntegerValue() {
+		BigInteger[] values = new BigInteger[this.getArity()];
+		int i = 0;
+		for (Element element : this) {
+			values[i] = element.getIntegerValue();
+			i++;
 		}
 		return MathUtil.foldAndPair(values);
 	}
@@ -84,12 +84,12 @@ public class Tuple
 
 	@Override
 	public final boolean isNull() {
-		return this.getArity() == 0;
+		return this.arity == 0;
 	}
 
 	@Override
 	public final boolean isUniform() {
-		return this.elements.length <= 1;
+		return this.arity <= 1;
 	}
 
 	@Override
@@ -104,9 +104,9 @@ public class Tuple
 			throw new IndexOutOfBoundsException();
 		}
 		if (this.isUniform()) {
-			return this.elements[0];
+			return this.getValue().getAt(0);
 		}
-		return this.elements[index];
+		return this.getValue().getAt(index);
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class Tuple
 
 	@Override
 	public Element[] getAll() {
-		return this.elements.clone();
+		return this.getValue().getAll();
 	}
 
 	@Override
@@ -153,21 +153,6 @@ public class Tuple
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Tuple element) {
-		for (int i = 0; i < this.getArity(); i++) {
-			if (!this.getAt(i).isEquivalent(element.getAt(i))) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	protected String standardToStringName() {
-		return this.getSet().getClass().getSimpleName() + "Tuple";
-	}
-
-	@Override
 	protected String standardToStringContent() {
 		String result = "";
 		String separator = "";
@@ -179,8 +164,8 @@ public class Tuple
 	}
 
 	/**
-	 * This is a static factory method to construct a composed element without the need of constructing the corresponding
-	 * product or power group beforehand. The input elements are given as an array.
+	 * This is a static factory method to construct a composed element without the need of constructing the
+	 * corresponding product or power group beforehand. The input elements are given as an array.
 	 * <p>
 	 * <p/>
 	 * @param elements The array of input elements
@@ -200,13 +185,7 @@ public class Tuple
 			}
 			sets[i] = elements[i].getSet();
 		}
-		if (arity == 2) {
-			return new Pair(ProductSet.getInstance(sets), elements);
-		}
-		if (arity == 3) {
-			return new Triple(ProductSet.getInstance(sets), elements);
-		}
-		return new Tuple(ProductSet.getInstance(sets), elements);
+		return ProductSet.getInstance(sets).getElement(elements);
 	}
 
 }

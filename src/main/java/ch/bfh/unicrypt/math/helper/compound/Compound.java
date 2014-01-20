@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.helper;
+package ch.bfh.unicrypt.math.helper.compound;
 
 /**
  *

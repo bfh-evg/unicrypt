@@ -1,16 +1,16 @@
-/*
+/* 
  * UniCrypt
- *
+ * 
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- *
+ * 
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- *
+ * 
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * 
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,83 +32,49 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- *
+ * 
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- *
+ * 
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
+package ch.bfh.unicrypt.math.helper.compound;
 
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  *
- * @author rolfhaenni
- * @param <S>
- * @param <E>
- * @param <V>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <T>
  */
-public abstract class AbstractDualisticElement<S extends SemiRing, E extends DualisticElement, V extends Object>
-	   extends AbstractAdditiveElement<S, E, V>
-	   implements DualisticElement {
+public class CompoundIterator<T>
+			 implements Iterator<T> {
 
-	protected AbstractDualisticElement(final S ring, final V value) {
-		super(ring, value);
+	public CompoundIterator(Compound<?, ?> compound) {
+		this.compound = compound;
+	}
+
+	Compound<?, ?> compound;
+	int currentIndex = 0;
+
+	@Override
+	public boolean hasNext() {
+		return this.currentIndex < this.compound.getArity();
 	}
 
 	@Override
-	public final E multiply(final Element element) {
-		return (E) this.getSet().multiply(this, element);
-	}
-
-	@Override
-	public final E power(final BigInteger amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E power(final Element amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E power(final int amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E square() {
-		return (E) this.getSet().square(this);
-	}
-
-	@Override
-	public final E divide(final Element element) {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return (E) field.divide(this, element);
+	public T next() {
+		if (this.hasNext()) {
+			return (T) compound.getAt(this.currentIndex++);
 		}
-		throw new UnsupportedOperationException();
+		throw new NoSuchElementException();
 	}
 
 	@Override
-	public final E oneOver() {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return (E) field.oneOver(this);
-		}
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean isOne() {
-		return this.getSet().isOneElement(this);
+	public void remove() {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 }

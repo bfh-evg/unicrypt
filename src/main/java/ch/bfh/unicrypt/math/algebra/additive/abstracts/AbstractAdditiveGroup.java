@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -47,63 +47,67 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
-public abstract class AbstractAdditiveGroup<E extends AdditiveElement>
-       extends AbstractGroup<E>
-       implements AdditiveGroup {
+public abstract class AbstractAdditiveGroup<E extends AdditiveElement, V extends Object>
+	   extends AbstractGroup<E, V>
+	   implements AdditiveGroup {
 
-  @Override
-  public final E add(final Element element1, final Element element2) {
-    return this.apply(element1, element2);
-  }
+	public AbstractAdditiveGroup(Class<? extends Object> valueClass) {
+		super(valueClass);
+	}
 
-  @Override
-  public final E add(final Element... elements) {
-    return this.apply(elements);
-  }
+	@Override
+	public final E add(final Element element1, final Element element2) {
+		return this.apply(element1, element2);
+	}
 
-  @Override
-  public final E times(final Element element, final BigInteger amount) {
-    return this.selfApply(element, amount);
-  }
+	@Override
+	public final E add(final Element... elements) {
+		return this.apply(elements);
+	}
 
-  @Override
-  public final E times(final Element element, final Element amount) {
-    return this.selfApply(element, amount);
-  }
+	@Override
+	public final E times(final Element element, final BigInteger amount) {
+		return this.selfApply(element, amount);
+	}
 
-  @Override
-  public final E times(final Element element, final int amount) {
-    return this.selfApply(element, amount);
-  }
+	@Override
+	public final E times(final Element element, final Element amount) {
+		return this.selfApply(element, amount);
+	}
 
-  @Override
-  public final E timesTwo(Element element) {
-    return this.selfApply(element);
-  }
+	@Override
+	public final E times(final Element element, final int amount) {
+		return this.selfApply(element, amount);
+	}
 
-  @Override
-  public final E sumOfProducts(Element[] elements, BigInteger[] amounts) {
-    return this.multiSelfApply(elements, amounts);
-  }
+	@Override
+	public final E timesTwo(Element element) {
+		return this.selfApply(element);
+	}
 
-  @Override
-  public final E subtract(final Element element1, final Element element2) {
-    return this.applyInverse(element1, element2);
-  }
+	@Override
+	public final E sumOfProducts(Element[] elements, BigInteger[] amounts) {
+		return this.multiSelfApply(elements, amounts);
+	}
 
-  @Override
-  public final E minus(final Element element) {
-    return this.invert(element);
-  }
+	@Override
+	public final E subtract(final Element element1, final Element element2) {
+		return this.applyInverse(element1, element2);
+	}
 
-  @Override
-  public final E getZeroElement() {
-    return this.getIdentityElement();
-  }
+	@Override
+	public final E minus(final Element element) {
+		return this.invert(element);
+	}
 
-  @Override
-  public final boolean isZeroElement(Element element) {
-    return this.isIdentityElement(element);
-  }
+	@Override
+	public final E getZeroElement() {
+		return this.getIdentityElement();
+	}
+
+	@Override
+	public final boolean isZeroElement(Element element) {
+		return this.isIdentityElement(element);
+	}
 
 }

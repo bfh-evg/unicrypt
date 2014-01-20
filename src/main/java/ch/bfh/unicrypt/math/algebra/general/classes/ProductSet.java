@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -46,9 +46,9 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Compound;
-import ch.bfh.unicrypt.math.helper.CompoundIterator;
-import ch.bfh.unicrypt.math.utility.ArrayUtil;
+import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.compound.Compound;
+import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
@@ -60,29 +60,38 @@ import java.util.Iterator;
  * @author rolfhaenni
  */
 public class ProductSet
-			 extends AbstractSet<Tuple>
-			 implements Compound<ProductSet, Set> {
+	   extends AbstractSet<Tuple, ImmutableArray<Element>>
+	   implements Compound<ProductSet, Set> {
 
 	private final Set[] sets;
 	private final int arity;
-	private final Class<?> setClass; // this is needed to create arrays of the actual type
+	private final Class<? extends Set> setClass; // this is needed to create arrays of the actual type
 
 	protected ProductSet(Set[] sets) {
+		super(ImmutableArray.class);
 		this.sets = sets.clone();
 		this.arity = sets.length;
-		this.setClass = sets.getClass().getComponentType();
+		this.setClass = (Class<Set>) sets.getClass().getComponentType();
 	}
 
 	protected ProductSet(Set set, int arity) {
+		super(ImmutableArray.class);
 		this.sets = new Set[]{set};
 		this.arity = arity;
 		this.setClass = set.getClass();
 	}
 
-	public final boolean contains(final int... values) {
-		return this.contains(ArrayUtil.intToBigIntegerArray(values));
+	public final boolean contains(Element... elements) {
+		return this.contains(ImmutableArray.getInstance(elements));
 	}
 
+	public final Tuple getElement(final Element... elements) {
+		return this.getElement(ImmutableArray.getInstance(elements));
+	}
+
+//	public final boolean contains(final int... values) {
+//		return this.contains(ArrayUtil.intToBigIntegerArray(values));
+//	}
 	public final boolean contains(BigInteger... values) {
 		int arity = this.getArity();
 		if (values == null || values.length != arity) {
@@ -95,23 +104,10 @@ public class ProductSet
 		}
 		return true;
 	}
-
-	public final boolean contains(Element... elements) {
-		int arity = this.getArity();
-		if (elements == null || elements.length != arity) {
-			throw new IllegalArgumentException();
-		}
-		for (int i = 0; i < arity; i++) {
-			if (!this.getAt(i).contains(elements[i])) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public final Tuple getElement(final int... values) {
-		return this.getElement(ArrayUtil.intToBigIntegerArray(values));
-	}
+//	public final Tuple getElement(final int... values) {
+//		return this.getElement(ArrayUtil.intToBigIntegerArray(values));
+//	}
+//
 
 	public final Tuple getElement(BigInteger[] values) {
 		int arity = this.getArity();
@@ -122,73 +118,7 @@ public class ProductSet
 		for (int i = 0; i < arity; i++) {
 			elements[i] = this.getAt(i).getElement(values[i]);
 		}
-		return this.standardGetElement(elements);
-	}
-
-	public final Tuple getElement(final Element... elements) {
-		int arity = this.getArity();
-		if (elements == null || elements.length != arity) {
-			throw new IllegalArgumentException();
-		}
-		for (int i = 0; i < arity; i++) {
-			if (!this.getAt(i).contains(elements[i])) {
-				throw new IllegalArgumentException();
-			}
-		}
-		return this.standardGetElement(elements);
-	}
-
-	protected Tuple standardGetElement(final Element... elements) {
-		if (this.getArity() == 2) {
-			return new Pair(this, elements);
-		}
-		if (this.getArity() == 3) {
-			return new Triple(this, elements);
-		}
-		return new Tuple(this, elements);
-	}
-
-	@Override
-	protected BigInteger standardGetOrderLowerBound() {
-		if (this.isUniform()) {
-			return this.getFirst().getOrderLowerBound().pow(this.getArity());
-		}
-		BigInteger result = BigInteger.ONE;
-		for (Set set : this.makeIterable()) {
-			result = result.multiply(set.getOrderLowerBound());
-		}
-		return result;
-	}
-
-	@Override
-	protected BigInteger standardGetOrderUpperBound() {
-		if (this.isUniform()) {
-			return this.getFirst().getOrderUpperBound().pow(this.getArity());
-		}
-		BigInteger result = BigInteger.ONE;
-		for (Set set : this.makeIterable()) {
-			if (set.getOrderUpperBound().equals(Set.INFINITE_ORDER)) {
-				return Set.INFINITE_ORDER;
-			}
-			result = result.multiply(set.getOrderUpperBound());
-		}
-		return result;
-	}
-
-	@Override
-	protected BigInteger standardGetMinimalOrder() {
-		if (this.isUniform()) {
-			return this.getFirst().getMinimalOrder();
-		}
-		BigInteger result = null;
-		for (Set set : this.makeIterable()) {
-			if (result == null) {
-				result = set.getMinimalOrder();
-			} else {
-				result = result.min(set.getMinimalOrder());
-			}
-		}
-		return result;
+		return this.abstractGetElement(ImmutableArray.getInstance(elements));
 	}
 
 	//
@@ -226,9 +156,40 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple abstractGetElement(BigInteger value) {
-		BigInteger[] values = MathUtil.unpairAndUnfold(value, this.getArity());
+	protected boolean abstractContains(BigInteger integerValue) {
+		BigInteger[] values = MathUtil.unpairAndUnfold(integerValue, this.getArity());
+		return this.contains(values);
+	}
+
+	@Override
+	protected boolean abstractContains(ImmutableArray<Element> value) {
+		int arity = this.getArity();
+		if (value == null || value.getLength() != arity) {
+			return false;
+		}
+		for (int i = 0; i < arity; i++) {
+			if (!this.getAt(i).contains(value.getAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	protected Tuple abstractGetElement(BigInteger integerValue) {
+		BigInteger[] values = MathUtil.unpairAndUnfold(integerValue, this.getArity());
 		return this.getElement(values);
+	}
+
+	@Override
+	protected Tuple abstractGetElement(ImmutableArray<Element> value) {
+		if (value.getLength() == 2) {
+			return new Pair(this, value);
+		}
+		if (value.getLength() == 3) {
+			return new Triple(this, value);
+		}
+		return new Tuple(this, value);
 	}
 
 	@Override
@@ -238,13 +199,7 @@ public class ProductSet
 		for (int i = 0; i < arity; i++) {
 			randomElements[i] = this.getAt(i).getRandomElement(randomGenerator);
 		}
-		return this.standardGetElement(randomElements);
-	}
-
-	@Override
-	protected boolean abstractContains(BigInteger value) {
-		BigInteger[] values = MathUtil.unpairAndUnfold(value, this.getArity());
-		return this.contains(values);
+		return this.abstractGetElement(ImmutableArray.getInstance(randomElements));
 	}
 
 	@Override
@@ -347,6 +302,49 @@ public class ProductSet
 	}
 
 	@Override
+	protected BigInteger standardGetOrderLowerBound() {
+		if (this.isUniform()) {
+			return this.getFirst().getOrderLowerBound().pow(this.getArity());
+		}
+		BigInteger result = BigInteger.ONE;
+		for (Set set : this.makeIterable()) {
+			result = result.multiply(set.getOrderLowerBound());
+		}
+		return result;
+	}
+
+	@Override
+	protected BigInteger standardGetOrderUpperBound() {
+		if (this.isUniform()) {
+			return this.getFirst().getOrderUpperBound().pow(this.getArity());
+		}
+		BigInteger result = BigInteger.ONE;
+		for (Set set : this.makeIterable()) {
+			if (set.getOrderUpperBound().equals(Set.INFINITE_ORDER)) {
+				return Set.INFINITE_ORDER;
+			}
+			result = result.multiply(set.getOrderUpperBound());
+		}
+		return result;
+	}
+
+	@Override
+	protected BigInteger standardGetMinimalOrder() {
+		if (this.isUniform()) {
+			return this.getFirst().getMinimalOrder();
+		}
+		BigInteger result = null;
+		for (Set set : this.makeIterable()) {
+			if (result == null) {
+				result = set.getMinimalOrder();
+			} else {
+				result = result.min(set.getMinimalOrder());
+			}
+		}
+		return result;
+	}
+
+	@Override
 	protected boolean standardIsEquivalent(Set set) {
 		ProductSet other = (ProductSet) set;
 		int arity = this.getArity();
@@ -387,8 +385,8 @@ public class ProductSet
 	// STATIC FACTORY METHODS
 	//
 	/**
-	 * This is a static factory method to construct a composed set without calling respective constructors. The input sets
-	 * are given as an array.
+	 * This is a static factory method to construct a composed set without calling respective constructors. The input
+	 * sets are given as an array.
 	 * <p>
 	 * <p/>
 	 * @param sets The array of input sets

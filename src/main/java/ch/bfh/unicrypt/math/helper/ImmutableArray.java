@@ -39,76 +39,65 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
+package ch.bfh.unicrypt.math.helper;
 
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  *
- * @author rolfhaenni
- * @param <S>
- * @param <E>
- * @param <V>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <T>
  */
-public abstract class AbstractDualisticElement<S extends SemiRing, E extends DualisticElement, V extends Object>
-	   extends AbstractAdditiveElement<S, E, V>
-	   implements DualisticElement {
+public class ImmutableArray<T>
+	   extends UniCrypt {
 
-	protected AbstractDualisticElement(final S ring, final V value) {
-		super(ring, value);
+	private final T[] array;
+
+	private ImmutableArray(T[] array) {
+		this.array = array.clone();
+	}
+
+	public int getLength() {
+		return this.array.length;
+	}
+
+	public T getAt(int index) {
+		return this.array[index];
+	}
+
+	public T[] getAll() {
+		return this.array.clone();
 	}
 
 	@Override
-	public final E multiply(final Element element) {
-		return (E) this.getSet().multiply(this, element);
+	public int hashCode() {
+		int hash = 7;
+		hash = 41 * hash + Arrays.hashCode(this.array);
+		return hash;
 	}
 
 	@Override
-	public final E power(final BigInteger amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E power(final Element amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E power(final int amount) {
-		return (E) this.getSet().power(this, amount);
-	}
-
-	@Override
-	public final E square() {
-		return (E) this.getSet().square(this);
-	}
-
-	@Override
-	public final E divide(final Element element) {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return (E) field.divide(this, element);
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
 		}
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public final E oneOver() {
-		if (this.getSet().isField()) {
-			Field field = ((Field) this.getSet());
-			return (E) field.oneOver(this);
+		if (getClass() != obj.getClass()) {
+			return false;
 		}
-		throw new UnsupportedOperationException();
+		final ImmutableArray<?> other = (ImmutableArray<?>) obj;
+		return Arrays.equals(this.array, other.array);
 	}
 
-	@Override
-	public boolean isOne() {
-		return this.getSet().isOneElement(this);
+	public static <T> ImmutableArray<T> getInstance(T... array) {
+		if (array == null) {
+			throw new IllegalArgumentException();
+		}
+		for (T value : array) {
+			if (value == null) {
+				throw new IllegalArgumentException();
+			}
+		}
+		return new ImmutableArray<T>(array);
 	}
 
 }

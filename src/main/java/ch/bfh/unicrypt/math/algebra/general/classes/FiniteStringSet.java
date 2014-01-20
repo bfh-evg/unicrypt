@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -52,13 +52,14 @@ import java.math.BigInteger;
  * @author rolfhaenni
  */
 public class FiniteStringSet
-			 extends AbstractSet<FiniteStringElement> {
+	   extends AbstractSet<FiniteStringElement, String> {
 
 	private final Alphabet alphabet;
 	private final int minLength;
 	private final int maxLength;
 
 	protected FiniteStringSet(Alphabet alphabet, int minLength, int maxLength) {
+		super(String.class);
 		this.alphabet = alphabet;
 		this.minLength = minLength;
 		this.maxLength = maxLength;
@@ -80,15 +81,14 @@ public class FiniteStringSet
 		return this.alphabet;
 	}
 
-	public final FiniteStringElement getElement(final String string) {
-		if (string == null || string.length() < this.getMinLength() || string.length() > this.getMaxLength()) {
-			throw new IllegalArgumentException();
-		}
-		return this.standardGetElement(string);
+	@Override
+	protected boolean abstractContains(BigInteger value) {
+		return (value.signum() >= 0) && (value.compareTo(this.getOrder()) < 0);
 	}
 
-	protected FiniteStringElement standardGetElement(String string) {
-		return new FiniteStringElement(this, string);
+	@Override
+	protected boolean abstractContains(String value) {
+		return value.length() >= this.getMinLength() && value.length() <= this.getMaxLength() && this.getAlphabet().isValid(value);
 	}
 
 	@Override
@@ -103,7 +103,12 @@ public class FiniteStringSet
 			strBuilder.append(this.getAlphabet().getCharacter(value.mod(size).intValue()));
 			value = value.divide(size);
 		}
-		return this.standardGetElement(strBuilder.reverse().toString());
+		return this.abstractGetElement(strBuilder.reverse().toString());
+	}
+
+	@Override
+	protected FiniteStringElement abstractGetElement(String value) {
+		return new FiniteStringElement(this, value);
 	}
 
 	@Override
@@ -119,11 +124,6 @@ public class FiniteStringSet
 	@Override
 	protected FiniteStringElement abstractGetRandomElement(RandomGenerator randomGenerator) {
 		return this.abstractGetElement(randomGenerator.nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
-	}
-
-	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return (value.signum() >= 0) && (value.compareTo(this.getOrder()) < 0);
 	}
 
 	@Override

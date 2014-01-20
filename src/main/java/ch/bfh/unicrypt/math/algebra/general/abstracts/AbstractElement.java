@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -69,32 +69,26 @@ import java.util.HashMap;
  * <p>
  * @param <S>
  * @param <E>
+ * @param <V>
  * @see Group
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<S extends Set, E extends Element>
+public abstract class AbstractElement<S extends Set, E extends Element, V extends Object>
 	   extends UniCrypt
 	   implements Element {
 
 	private final S set;
-	private BigInteger value;
-	private int javaHashValue;
+	private final V value;
+	private BigInteger integerValue;
+	private final HashMap<HashMethod, FiniteByteArrayElement> hashValues;
 
-	protected AbstractElement(final S set) {
-		if (set == null) {
-			throw new IllegalArgumentException();
-		}
+	protected AbstractElement(final S set, V value) {
 		this.set = set;
-		hashMap = new HashMap<HashMethod, FiniteByteArrayElement>();
-	}
-
-	protected AbstractElement(final S set, final BigInteger value) {
-		this(set);
 		this.value = value;
-		//Frage: Kann es sein, dass ein Element einen Wert und eine gefüllte HashMap hat?
+		this.hashValues = new HashMap<HashMethod, FiniteByteArrayElement>();
 	}
 
 	@Override
@@ -138,11 +132,16 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 	 * @return The corresponding BigInteger value
 	 */
 	@Override
-	public final BigInteger getValue() {
-		if (this.value == null) {
-			this.value = standardGetValue();
-		}
+	public final V getValue() {
 		return this.value;
+	}
+
+	@Override
+	public BigInteger getIntegerValue() {
+		if (this.integerValue == null) {
+			this.integerValue = this.abstractGetIntegerValue();
+		}
+		return this.integerValue;
 	}
 
 	@Override
@@ -150,28 +149,26 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 		return this.getHashValue(HashMethod.DEFAULT);
 	}
 
-	private HashMap<HashMethod, FiniteByteArrayElement> hashMap;
-
 	@Override
 	public final FiniteByteArrayElement getHashValue(HashMethod hashMethod) {
 		//TODO: This is a memory-hog! But a super speed-up
 		//TODO: If this HashMap would become static, it would speed things up again... But would it leak (cryptographically)?
-		if (!hashMap.containsKey(hashMethod)) {
+		if (!this.hashValues.containsKey(hashMethod)) {
 			if (this.isTuple() && hashMethod.isRecursive()) {
 				Tuple tuple = (Tuple) this;
 				int arity = tuple.getArity();
-				ByteArrayElement[] hashValues = new ByteArrayElement[arity];
+				ByteArrayElement[] hashes = new ByteArrayElement[arity];
 				for (int i = 0; i < arity; i++) {
-					hashValues[i] = tuple.getAt(i).getHashValue(hashMethod).getByteArrayElement();
+					hashes[i] = tuple.getAt(i).getHashValue(hashMethod).getByteArrayElement();
 				}
-				hashMap.put(hashMethod, ByteArrayMonoid.getInstance().apply(hashValues).getHashValue(hashMethod));
+				this.hashValues.put(hashMethod, ByteArrayMonoid.getInstance().apply(hashes).getHashValue(hashMethod));
 			} else {
 				MessageDigest messageDigest = hashMethod.getMessageDigest();
 				messageDigest.reset();
-				hashMap.put(hashMethod, FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getValue().toByteArray())));
+				this.hashValues.put(hashMethod, FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getIntegerValue().toByteArray())));
 			}
 		}
-		return hashMap.get(hashMethod);
+		return this.hashValues.get(hashMethod);
 	}
 
 	//
@@ -290,35 +287,27 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 	// insufficient for elements.
 	//
 	@Override
-	public final boolean isEquivalent(final Element element) {
-		if (element == null) {
+	public final boolean isEquivalent(final Element other) {
+		if (other == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this == element) {
+		if (this.getClass() != other.getClass()) {
+			return false;
+		}
+		if (this == other) {
 			return true;
 		}
-		if (this.getClass() != element.getClass()) {
+		if (!this.set.isEquivalent(other.getSet())) {
 			return false;
 		}
-		if (!this.getSet().isEquivalent(element.getSet())) {
-			return false;
-		}
-		return this.standardIsEquivalent((E) element);
+		return this.value.equals(other.getValue());
 	}
+
+	protected abstract BigInteger abstractGetIntegerValue();
 
 	//
 	// The following protected methods are standard implementations, which may change in sub-classes
 	//
-	//TODO: Das darf nicht sein, dass ein standard eine UnsupportedOperation zurückwirft!
-	//Das muss wohl abstract werden oder aber hier implementiert werden!
-	protected BigInteger standardGetValue() {
-		throw new UnsupportedOperationException();
-	}
-
-	protected boolean standardIsEquivalent(E element) {
-		return this.getValue().equals(element.getValue());
-	}
-
 	@Override
 	protected String standardToStringName() {
 		return this.getClass().getSimpleName();
@@ -331,19 +320,28 @@ public abstract class AbstractElement<S extends Set, E extends Element>
 
 	@Override
 	public int hashCode() {
-		if (this.value != null) {
-			if (this.javaHashValue == 0) {
-				this.javaHashValue = this.getValue().intValue();
-			}
-			return javaHashValue;
-		}
-		return 0; //hash;
+		int hashCode = 7;
+		hashCode = 13 * hashCode + (this.set != null ? this.set.hashCode() : 0);
+		hashCode = 13 * hashCode + (this.value != null ? this.value.hashCode() : 0);
+		return hashCode;
 	}
 
-	// THIS METHOD IS NOT THE FINAL IMPLEMENTATION
 	@Override
-	public boolean equals(Object obj) {
-		return this.isEquivalent((Element) obj);
+	public boolean equals(Object object) {
+		if (object == null) {
+			return false;
+		}
+		if (this.getClass() != object.getClass()) {
+			return false;
+		}
+		final Element other = (Element) object;
+		if (this == other) {
+			return true;
+		}
+		if (!this.set.equals(other.getSet())) {
+			return false;
+		}
+		return this.value.equals(other.getValue());
 	}
 
 }

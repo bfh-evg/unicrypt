@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,105 +32,157 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.helper.Point;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
-public abstract class AbstractEC<E extends AbstractECElement, F extends FiniteField, D extends DualisticElement>
-			 extends AbstractAdditiveCyclicGroup<E> {
+public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D extends DualisticElement>
+	   extends AbstractAdditiveCyclicGroup<E, Point<D>>
+	   implements EC {
 
 	private final F finiteField;
-	private final E generator;
 	private final D a, b;
-	private final BigInteger order, h;
-	protected final D zero = null;
+	private final E givenGenerator;
+	private final BigInteger givenOrder, coFactor;
 
-	protected AbstractEC(F finiteField, D a, D b, D gx, D gy, BigInteger order, BigInteger h) {
-		super();
-		this.a = a;
-		this.b = b;
-		this.order = order;
-		this.h = h;
+	protected AbstractEC(F finiteField, D a, D b, D gx, D gy, BigInteger givenOrder, BigInteger coFactor) {
+		super(Point.class);
 		this.finiteField = finiteField;
-		this.generator = this.getElement(gx, gy);
-
-		/* if (!isValid()) { throw new IllegalArgumentException("Curve parameters are not valid"); } */
-	}
-
-	protected AbstractEC(F finitefield, D a, D b, BigInteger order, BigInteger h) {
-		super();
 		this.a = a;
 		this.b = b;
-		this.order = order;
-		this.h = h;
+		this.givenOrder = givenOrder;
+		this.coFactor = coFactor;
+		this.givenGenerator = this.getElement(gx, gy);
+	}
+
+	protected AbstractEC(F finitefield, D a, D b, BigInteger givenOrder, BigInteger coFactor) {
+		super(Pair.class);
 		this.finiteField = finitefield;
-		this.generator = this.computeGenerator();
-
-		if (!isValid()) {
-			throw new IllegalArgumentException("Curve parameters are not valid");
-		}
+		this.a = a;
+		this.b = b;
+		this.givenOrder = givenOrder;
+		this.coFactor = coFactor;
+		this.givenGenerator = this.computeGenerator();
 	}
 
 	@Override
-	protected E abstractGetDefaultGenerator() {
-		return this.generator;
-	}
-
-	protected E computeGenerator() {
-		E e = (E) this.getRandomElement().selfApply(this.getH());
-		while (!this.isGenerator(e)) {
-			e = this.getRandomElement();
-		}
-		return e;
+	public final F getFiniteField() {
+		return this.finiteField;
 	}
 
 	@Override
-	protected boolean abstractIsGenerator(E element) {
-		E e = (E) element;
-		e = (E) e.selfApply(this.getOrder());
-		return MathUtil.isPrime(this.getOrder()) && e.isZero();
+	public final D getB() {
+		return this.b;
+	}
+
+	@Override
+	public final D getA() {
+		return this.a;
+	}
+
+	@Override
+	public final BigInteger getCoFactor() {
+		return this.coFactor;
+	}
+
+	@Override
+	public final boolean contains(DualisticElement xValue) {
+		if (xValue == null || !this.getFiniteField().contains(xValue)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractContains((D) xValue);
+	}
+
+	protected abstract boolean abstractContains(D xValue);
+
+	@Override
+	public final boolean contains(DualisticElement xValue, DualisticElement yValue) {
+		if (xValue == null || yValue == null || !this.getFiniteField().contains(xValue) || !this.getFiniteField().contains(yValue)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractContains((D) xValue, (D) yValue);
+	}
+
+	protected abstract boolean abstractContains(D xValue, D yValue);
+
+	@Override
+	public final E getElement(DualisticElement xValue, DualisticElement yValue) {
+		if (!this.contains(xValue, yValue)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractGetElement(Point.getInstance((D) xValue, (D) yValue));
 	}
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return this.order;
+		return this.givenOrder;
 	}
 
 	@Override
-	protected E abstractGetElement(BigInteger value) {
-		if (value.equals(zero)) {
-			return this.getIdentityElement();
-		} else {
-			BigInteger[] result = MathUtil.unpair(value);
-			D x = (D) this.getFiniteField().getElement(result[0]);
-			D y = (D) this.getFiniteField().getElement(result[1]);
-
-			return this.getElement(x, y);
-
+	protected boolean abstractContains(BigInteger integerValue) {
+		if (integerValue.signum() < 0) {
+			return false;
 		}
+		if (integerValue.equals(BigInteger.ZERO)) {
+			return true;
+		}
+		BigInteger[] result = MathUtil.unpair(integerValue.subtract(BigInteger.ONE));
+		if (!this.getFiniteField().contains(result[0]) || !this.getFiniteField().contains(result[1])) {
+			return false;
+		}
+		D xValue = (D) this.getFiniteField().getElement(result[0]);
+		D yValue = (D) this.getFiniteField().getElement(result[1]);
+		return this.abstractContains(xValue, yValue);
 	}
 
-	public E getElement(D x, D y) {
-		if (x == zero || y == zero) {
-			throw new IllegalArgumentException("One coordinate is zero");
-		} else {
-			return abstractGetElement(x, y);
-		}
-
+	@Override
+	protected boolean abstractContains(Point<D> value) {
+		return this.abstractContains(value.getX(), value.getY());
 	}
 
-	protected abstract E abstractGetElement(D x, D y);
+	@Override
+	protected E abstractGetElement(BigInteger integerValue) {
+		if (integerValue.equals(BigInteger.ZERO)) {
+			return this.getZeroElement();
+		}
+		BigInteger[] result = MathUtil.unpair(integerValue.subtract(BigInteger.ONE));
+		D xValue = (D) this.getFiniteField().getElement(result[0]);
+		D yValue = (D) this.getFiniteField().getElement(result[1]);
+		return this.abstractGetElement(Point.getInstance(xValue, yValue));
+	}
+
+	@Override
+	protected E abstractGetDefaultGenerator() {
+		return this.givenGenerator;
+	}
+
+	private E computeGenerator() {
+		E element = this.selfApply(this.getRandomElement(), this.getCoFactor());
+		while (!this.isGenerator(element)) {
+			element = this.getRandomElement();
+		}
+		return element;
+	}
+
+	@Override
+	protected boolean abstractIsGenerator(E element) {
+		return MathUtil.isPrime(this.getOrder()) && this.selfApply(element, this.getOrder()).isZero();
+	}
 
 	@Override
 	protected E abstractGetRandomElement(RandomGenerator randomGenerator) {
@@ -140,11 +192,10 @@ public abstract class AbstractEC<E extends AbstractECElement, F extends FiniteFi
 		} else {
 			return this.getRandomElementWithoutGenerator(randomGenerator);
 		}
-
 	}
 
 	/**
-	 * Returns random element without knowing a generator of the group
+	 * Returns random element witcoFactorout knowing a generator of tcoFactore group
 	 * <p>
 	 * @param randomGenerator
 	 * @return
@@ -152,44 +203,8 @@ public abstract class AbstractEC<E extends AbstractECElement, F extends FiniteFi
 	protected abstract E getRandomElementWithoutGenerator(RandomGenerator randomGenerator);
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		BigInteger[] result = MathUtil.unpair(value);
-		D x = (D) this.getFiniteField().getElement(result[0]);
-		D y = (D) this.getFiniteField().getElement(result[1]);
-		return this.contains(x, y);
-	}
-
-	/*
-	 * --- Abstract methods - must be implemented in concrete classes ---
-	 */
-	protected abstract Boolean contains(D x, D y);
-
-	protected abstract Boolean contains(D x);
-
-	protected abstract boolean isValid();
-
-	/*
-	 * --- Getter methods for additional fields ---
-	 */
-	public F getFiniteField() {
-		return this.finiteField;
-	}
-
-	public D getB() {
-		return this.b;
-	}
-
-	public D getA() {
-		return this.a;
-	}
-
-	public BigInteger getH() {
-		return this.h;
-	}
-
-	@Override
 	public String standardToStringContent() {
-		return this.getA().getValue() + "," + getB().getValue();
+		return this.getA().getValue() + "," + this.getB().getValue();
 	}
 
 }

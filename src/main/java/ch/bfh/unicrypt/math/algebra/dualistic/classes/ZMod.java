@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -63,11 +62,12 @@ import java.util.Map;
  * @version 2.0
  */
 public class ZMod
-			 extends AbstractCyclicRing<ZModElement> {
+	   extends AbstractCyclicRing<ZModElement, BigInteger> {
 
 	private BigInteger modulus;
 
 	protected ZMod(final BigInteger modulus) {
+		super(BigInteger.class);
 		this.modulus = modulus;
 	}
 
@@ -85,12 +85,12 @@ public class ZMod
 	// various super-classes
 	//
 	@Override
-	protected ZModElement standardSelfApply(Element element, BigInteger amount) {
+	protected ZModElement standardSelfApply(ZModElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
 	}
 
 	@Override
-	protected ZModElement standardPower(Element element, BigInteger amount) {
+	protected ZModElement standardPower(ZModElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().modPow(amount, this.getModulus()));
 	}
 
@@ -148,6 +148,11 @@ public class ZMod
 	}
 
 	@Override
+	protected boolean abstractContains(BigInteger value) {
+		return value.signum() >= 0 && value.compareTo(this.getModulus()) < 0;
+	}
+
+	@Override
 	protected ZModElement abstractGetElement(BigInteger value) {
 		return new ZModElement(this, value);
 	}
@@ -155,11 +160,6 @@ public class ZMod
 	@Override
 	protected ZModElement abstractGetRandomElement(RandomGenerator randomGenerator) {
 		return this.abstractGetElement(randomGenerator.nextBigInteger(this.getModulus().subtract(BigInteger.ONE)));
-	}
-
-	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return value.signum() >= 0 && value.compareTo(this.getModulus()) < 0;
 	}
 
 	@Override
