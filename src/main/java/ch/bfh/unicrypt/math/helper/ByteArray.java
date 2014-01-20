@@ -107,6 +107,20 @@ public class ByteArray
 		return new ByteArray(xoredBytes);
 	}
 
+	/**
+	 * Splits one ByteArray into two ByteArrays.
+	 * <p>
+	 * @param lengthOfFirstByteArray
+	 * @return Array of ByteArrays containing two ByteArrays.
+	 */
+	public ByteArray[] split(int lengthOfFirstByteArray) {
+		if (lengthOfFirstByteArray < 1 || lengthOfFirstByteArray > bytes.length - 1) {
+			throw new IllegalArgumentException();
+		}
+		ByteArray[] split = new ByteArray[]{new ByteArray(Arrays.copyOf(bytes, lengthOfFirstByteArray)), new ByteArray(Arrays.copyOfRange(bytes, lengthOfFirstByteArray, bytes.length - 1))};
+		return split;
+	}
+
 	public ByteArray getHash() {
 		return getHash(HashMethod.DEFAULT);
 	}
