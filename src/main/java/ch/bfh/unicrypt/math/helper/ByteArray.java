@@ -53,7 +53,7 @@ import java.util.Arrays;
 public class ByteArray
 	   extends UniCrypt {
 
-	protected final byte[] bytes;
+	private final byte[] bytes;
 
 	protected ByteArray(byte[] bytes) {
 		this.bytes = bytes;
@@ -105,6 +105,17 @@ public class ByteArray
 			}
 		}
 		return new ByteArray(xoredBytes);
+	}
+
+	public ByteArray getHash() {
+		return getHash(HashMethod.DEFAULT);
+	}
+
+	public ByteArray getHash(HashMethod hashMethod) {
+		if (hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteArray(hashMethod.getMessageDigest().digest(bytes));
 	}
 
 	@Override
