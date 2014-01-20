@@ -117,7 +117,7 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 	public final Tuple shuffle(final Tuple elements, final PermutationElement permutation, final Tuple randomizations) {
 
 		if (!this.getShufflesSpace().contains(elements) || !this.getRandomizationsSpace().contains(randomizations)
-			   || permutation == null || permutation.getPermutation().getSize() != this.getSize()) {
+			   || permutation == null || permutation.getValue().getSize() != this.getSize()) {
 			throw new IllegalArgumentException();
 		}
 
