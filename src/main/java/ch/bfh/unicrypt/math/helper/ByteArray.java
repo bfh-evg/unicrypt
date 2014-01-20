@@ -53,6 +53,9 @@ import java.util.Arrays;
 public class ByteArray
 	   extends UniCrypt {
 
+	public static final int LEFT = 0;
+	public static final int RIGHT = 1;
+
 	private final byte[] bytes;
 
 	protected ByteArray(byte[] bytes) {
@@ -111,13 +114,13 @@ public class ByteArray
 	 * Splits one ByteArray into two ByteArrays.
 	 * <p>
 	 * @param lengthOfFirstByteArray
-	 * @return Array of ByteArrays containing two ByteArrays.
+	 * @return Array of ByteArrays containing two ByteArrays, namely the left and the right one.
 	 */
-	public ByteArray[] split(int lengthOfFirstByteArray) {
-		if (lengthOfFirstByteArray < 1 || lengthOfFirstByteArray > bytes.length - 1) {
+	public ByteArray[] split(int lengthOfLeftByteArray) {
+		if (lengthOfLeftByteArray < 1 || lengthOfLeftByteArray > bytes.length - 1) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray[] split = new ByteArray[]{new ByteArray(Arrays.copyOf(bytes, lengthOfFirstByteArray)), new ByteArray(Arrays.copyOfRange(bytes, lengthOfFirstByteArray, bytes.length - 1))};
+		ByteArray[] split = new ByteArray[]{new ByteArray(Arrays.copyOf(bytes, lengthOfLeftByteArray)), new ByteArray(Arrays.copyOfRange(bytes, lengthOfLeftByteArray, bytes.length - 1))};
 		return split;
 	}
 
