@@ -52,12 +52,15 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.ByteArray;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESEncryptionScheme
@@ -107,15 +110,15 @@ public class AESEncryptionScheme
 
 	public static final int AES_BLOCK_SIZE = 128;
 	public static final ByteArrayMonoid AES_ENCRYPTION_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-	public static final byte[] DEFAULT_IV = new byte[AES_BLOCK_SIZE / Byte.SIZE];
+	public static final ByteArray DEFAULT_IV = ByteArray.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
 
 	private final KeyLength keyLength;
 	private final Mode mode;
 	private final Padding padding;
-	private final byte[] initializationVector;
+	private final ByteArray initializationVector;
 	private Cipher cipher;
 
-	protected AESEncryptionScheme(KeyLength keyLength, Mode mode, Padding padding, byte[] initializationVector) {
+	protected AESEncryptionScheme(KeyLength keyLength, Mode mode, Padding padding, ByteArray initializationVector) {
 		this.keyLength = keyLength;
 		this.mode = mode;
 		this.padding = padding;
@@ -141,7 +144,7 @@ public class AESEncryptionScheme
 		return this.padding;
 	}
 
-	public byte[] getInitializationVector() {
+	public ByteArray getInitializationVector() {
 		return this.initializationVector;
 	}
 
@@ -186,13 +189,19 @@ public class AESEncryptionScheme
 			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getAll(), ALGORITHM_NAME);
 			byte[] encryptedBytes;
 			try {
-				cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+				if (mode == Mode.CBC) {
+					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getAll()));
+				} else {
+					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+				}
 				encryptedBytes = cipher.doFinal(message.getValue().getAll());
 			} catch (InvalidKeyException ex) {
 				throw new RuntimeException();
 			} catch (IllegalBlockSizeException ex) {
 				throw new RuntimeException();
 			} catch (BadPaddingException ex) {
+				throw new RuntimeException();
+			} catch (InvalidAlgorithmParameterException ex) {
 				throw new RuntimeException();
 			}
 			return this.getCoDomain().getElement(encryptedBytes);
@@ -214,13 +223,19 @@ public class AESEncryptionScheme
 			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getAll(), ALGORITHM_NAME);
 			byte[] message;
 			try {
-				cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+				if (mode == Mode.CBC) {
+					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getAll()));
+				} else {
+					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+				}
 				message = cipher.doFinal(encryption.getValue().getAll());
 			} catch (InvalidKeyException e) {
 				throw new RuntimeException();
 			} catch (IllegalBlockSizeException e) {
 				throw new RuntimeException();
 			} catch (BadPaddingException e) {
+				throw new RuntimeException();
+			} catch (InvalidAlgorithmParameterException ex) {
 				throw new RuntimeException();
 			}
 			return this.getCoDomain().getElement(message);
@@ -232,8 +247,8 @@ public class AESEncryptionScheme
 		return AESEncryptionScheme.getInstance(AESEncryptionScheme.DEFAULT_KEY_LENGTH, AESEncryptionScheme.DEFAULT_MODE, AESEncryptionScheme.DEFAULT_PADDING, AESEncryptionScheme.DEFAULT_IV);
 	}
 
-	public static AESEncryptionScheme getInstance(KeyLength keyLength, Mode mode, Padding padding, byte[] initializationVector) {
-		if (keyLength == null || mode == null || padding == null || initializationVector == null || initializationVector.length != AES_BLOCK_SIZE / Byte.SIZE) {
+	public static AESEncryptionScheme getInstance(KeyLength keyLength, Mode mode, Padding padding, ByteArray initializationVector) {
+		if (keyLength == null || mode == null || padding == null || initializationVector == null || initializationVector.getLength() != AES_BLOCK_SIZE / Byte.SIZE) {
 			throw new IllegalArgumentException();
 		}
 		return new AESEncryptionScheme(keyLength, mode, padding, initializationVector);

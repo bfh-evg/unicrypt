@@ -58,11 +58,11 @@ public class AESEncryptionExample {
 
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
 
-		// a random message (length = 20 bytes)
-		Element message = aes.getMessageSpace().getRandomElement(20);
-
 		// a random key (default length = 16 bytes)
 		Element key = aes.getKeyGenerator().getKeySpace().getRandomElement();
+
+		// a random message (length = 20 bytes)
+		Element message = aes.getMessageSpace().getRandomElement(20);
 
 		// perform the encryption
 		Element encryptedMessage = aes.encrypt(key, message);
@@ -70,10 +70,10 @@ public class AESEncryptionExample {
 		// perform the decryption
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 
-		System.out.println("Message         : " + message);
-		System.out.println("Key             : " + key);
-		System.out.println("Encrypted Mesage: " + encryptedMessage);
-		System.out.println("Decrypted Mesage: " + decryptedMessage);
+		System.out.println("Key              : " + key);
+		System.out.println("Message          : " + message);
+		System.out.println("Encrypted Message: " + encryptedMessage);
+		System.out.println("Decrypted Message: " + decryptedMessage);
 	}
 
 	public static void example2() {
@@ -85,11 +85,42 @@ public class AESEncryptionExample {
 
 		Encoder encoder = StringToByteArrayEncoder.getInstance(stringMonoid);
 
-		// a random message (length = 20 bytes)
-		Element message = aes.getMessageSpace().getRandomElement(20);
-
 		// a random key (default length = 16 bytes)
 		Element key = aes.getKeyGenerator().getKeySpace().getRandomElement();
+
+		// a random message (length = 20 bytes)
+		Element message = stringMonoid.getElement("Hallo");
+		Element encodedMessage = encoder.encode(message);
+
+		// perform the encryption
+		Element encryptedMessage = aes.encrypt(key, encodedMessage);
+
+		// perform the decryption and decoding
+		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
+		Element decodedMessage = encoder.decode(decryptedMessage);
+
+		System.out.println("Key              : " + key);
+		System.out.println("Message          : " + message);
+		System.out.println("EncodedMessage   : " + encodedMessage);
+		System.out.println("Encrypted Message: " + encryptedMessage);
+		System.out.println("Decrypted Message: " + decryptedMessage);
+		System.out.println("DecodedMessage   : " + decodedMessage);
+	}
+
+	public static void example3() {
+
+		AESEncryptionScheme aes = AESEncryptionScheme.getInstance(
+			   // AESEncryptionScheme.KeyLength.KEY192,
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.CBC,
+			   AESEncryptionScheme.Padding.PKCS5,
+			   AESEncryptionScheme.DEFAULT_IV);
+
+		// a random key (length = 24 bytes)
+		Element key = aes.getKeyGenerator().getKeySpace().getRandomElement();
+
+		// a random message (length = 20 bytes)
+		Element message = aes.getMessageSpace().getRandomElement(20);
 
 		// perform the encryption
 		Element encryptedMessage = aes.encrypt(key, message);
@@ -97,15 +128,22 @@ public class AESEncryptionExample {
 		// perform the decryption
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 
-		System.out.println("Message         : " + message);
-		System.out.println("Key             : " + key);
-		System.out.println("Encrypted Mesage: " + encryptedMessage);
-		System.out.println("Decrypted Mesage: " + decryptedMessage);
+		System.out.println("Key              : " + key);
+		System.out.println("Message          : " + message);
+		System.out.println("Encrypted Message: " + encryptedMessage);
+		System.out.println("Decrypted Message: " + decryptedMessage);
 	}
 
 	public static void main(final String[] args) {
+
+		System.out.println("\nAES Encryption Example (plain):");
 		example1();
+
+		System.out.println("\nAES Encryption Example (with string encoding):");
 		example2();
+
+		System.out.println("\nAES Encryption Example (with options):");
+		example3();
 	}
 
 }
