@@ -90,22 +90,23 @@ public class IdentityMixerExample {
 		int size = 10;
 
 		// Create messages
-		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
-
-		// Create permutation
-		PermutationElement permutation = PermutationGroup.getInstance(size).getRandomElement();
-
-		// Create randomization
-		Element randomization = G_q.getZModOrder().getRandomElement();
+		Tuple identities = ProductGroup.getInstance(G_q, size).getRandomElement();
 
 		// S H U F F L E
 		//---------------
 		// Create mixer and shuffle
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
-		Tuple shuffledMessages = mixer.shuffle(messages, permutation, randomization);
 
-		System.out.println("Messages:          " + messages);
-		System.out.println("Shuffled Messages: " + shuffledMessages);
+		// Create permutation
+		PermutationElement permutation = PermutationGroup.getInstance(size).getRandomElement();
+
+		// Create randomization
+		Element randomization = mixer.generateRandomization();
+
+		Tuple shuffledIdentities = mixer.shuffle(identities, permutation, randomization);
+
+		System.out.println("Messages:          " + identities);
+		System.out.println("Shuffled Messages: " + shuffledIdentities);
 	}
 
 	public static void main(String args[]) {

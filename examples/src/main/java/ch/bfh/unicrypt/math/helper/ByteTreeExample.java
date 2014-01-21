@@ -39,8 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.bytetree;
+package ch.bfh.unicrypt.math.helper;
 
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeNode;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 import java.util.Arrays;
 

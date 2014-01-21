@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.group;
+package ch.bfh.unicrypt.math.algebra.additive;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.bytetree;
+package ch.bfh.unicrypt.math.helper.bytetree;
 
 import java.nio.ByteBuffer;
 
@@ -47,37 +47,64 @@ import java.nio.ByteBuffer;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ByteTreeLeaf
+public class ByteTreeNode
 	   extends ByteTree {
 
-	public static final byte IDENTIFIER = 1;
-	private final byte[] bytes;
+	public static final byte IDENTIFIER = 0;
+	private final ByteTree[] elements;
 
-	protected ByteTreeLeaf(ByteBuffer buffer) {
-		int amountOfBytes = buffer.getInt();
-		bytes = new byte[amountOfBytes];
+	protected ByteTreeNode(ByteBuffer buffer) {
+		int amountOfElements = buffer.getInt();
+		elements = new ByteTree[amountOfElements];
 
-		buffer.get(bytes);
+		for (int i = 0; i < elements.length; i++) {
+			byte identifier = buffer.get();
+			switch (identifier) {
+				case ByteTreeLeaf.IDENTIFIER:
+					elements[i] = new ByteTreeLeaf(buffer);
+					break;
+				case ByteTreeNode.IDENTIFIER:
+					elements[i] = new ByteTreeNode(buffer);
+					break;
+				default:
+					throw new IllegalArgumentException();
+			}
+		}
 	}
 
-	protected ByteTreeLeaf(byte[] bytes) {
-		this.bytes = bytes;
+	protected ByteTreeNode(ByteTree... elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		for (ByteTree element : elements) {
+			if (element == null) {
+				throw new IllegalArgumentException();
+			}
+		}
+		this.elements = elements;
 	}
 
-	public byte[] getValue() {
-		return bytes.clone();
+	public ByteTree[] getChildren() {
+		return elements.clone();
 	}
 
 	@Override
 	protected void abstractSerialize(ByteBuffer buffer) {
 		buffer.put(IDENTIFIER);
-		buffer.putInt(this.bytes.length);
-		buffer.put(bytes);
+		buffer.putInt(this.elements.length);
+		for (ByteTree element : elements) {
+			element.defaultSerialize(buffer);
+		}
 	}
 
 	@Override
 	protected int abstractGetSize() {
-		return this.bytes.length;
+		int size = 0;
+		for (ByteTree element : elements) {
+			size += element.defaultGetSize();
+		}
+		return size;
+
 	}
 
 }

@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,79 +32,45 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.bytetree;
-
-import java.nio.ByteBuffer;
+package ch.bfh.unicrypt.math.helper;
 
 /**
  *
- * @author Reto E. Koenig <reto.koenig@bfh.ch>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteTreeNode
-	   extends ByteTree {
+public class ByteArrayExample {
 
-	public static final byte IDENTIFIER = 0;
-	private final ByteTree[] elements;
+	public static void example1() {
+		ByteArray byteArray = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 
-	protected ByteTreeNode(ByteBuffer buffer) {
-		int amountOfElements = buffer.getInt();
-		elements = new ByteTree[amountOfElements];
+		System.out.println(byteArray);
+		System.out.println("Length : " + byteArray.getLength());
+//		for (Byte b: byteArray) {
+		System.out.println("Byte 0 : " + byteArray.getByte(0));
+		System.out.println("Byte 1 : " + byteArray.getByte(1));
+		System.out.println("Byte 2 : " + byteArray.getByte(2));
+		System.out.println("Byte 9 : " + byteArray.getByte(9));
 
-		for (int i = 0; i < elements.length; i++) {
-			byte identifier = buffer.get();
-			switch (identifier) {
-				case ByteTreeLeaf.IDENTIFIER:
-					elements[i] = new ByteTreeLeaf(buffer);
-					break;
-				case ByteTreeNode.IDENTIFIER:
-					elements[i] = new ByteTreeNode(buffer);
-					break;
-				default:
-					throw new IllegalArgumentException();
-			}
+		System.out.println("Extract: " + byteArray.extract(2, 4));
+
+		ByteArray[] byteArrays = byteArray.split(2, 4, 7);
+		System.out.println("Split:  ");
+		for (ByteArray ba : byteArrays) {
+			System.out.println(ba);
 		}
+		System.out.println("Conc: " + byteArray.concatenate(byteArray));
+
 	}
 
-	protected ByteTreeNode(ByteTree... elements) {
-		if (elements == null) {
-			throw new IllegalArgumentException();
-		}
-		for (ByteTree element : elements) {
-			if (element == null) {
-				throw new IllegalArgumentException();
-			}
-		}
-		this.elements = elements;
-	}
-
-	public ByteTree[] getChildren() {
-		return elements.clone();
-	}
-
-	@Override
-	protected void abstractSerialize(ByteBuffer buffer) {
-		buffer.put(IDENTIFIER);
-		buffer.putInt(this.elements.length);
-		for (ByteTree element : elements) {
-			element.defaultSerialize(buffer);
-		}
-	}
-
-	@Override
-	protected int abstractGetSize() {
-		int size = 0;
-		for (ByteTree element : elements) {
-			size += element.defaultGetSize();
-		}
-		return size;
-
+	public static void main(final String[] args) {
+		example1();
 	}
 
 }

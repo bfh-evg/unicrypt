@@ -41,8 +41,12 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption;
 
+import ch.bfh.unicrypt.crypto.encoder.classes.StringToByteArrayEncoder;
+import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.AESEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.helper.Alphabet;
 
 /**
  *
@@ -50,14 +54,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  */
 public class AESEncryptionExample {
 
-	public static void defaultEncryptionDescryption() {
+	public static void example1() {
 
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
 
-		// a random message
-		Element message = aes.getMessageSpace().getRandomElement();
+		// a random message (length = 20 bytes)
+		Element message = aes.getMessageSpace().getRandomElement(20);
 
-		// a random key
+		// a random key (default length = 16 bytes)
 		Element key = aes.getKeyGenerator().getKeySpace().getRandomElement();
 
 		// perform the encryption
@@ -67,13 +71,41 @@ public class AESEncryptionExample {
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 
 		System.out.println("Message         : " + message);
-		System.out.println("Key             : " + message);
+		System.out.println("Key             : " + key);
+		System.out.println("Encrypted Mesage: " + encryptedMessage);
+		System.out.println("Decrypted Mesage: " + decryptedMessage);
+	}
+
+	public static void example2() {
+
+		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
+
+		Alphabet alphabet = Alphabet.ALPHANUMERIC;
+		StringMonoid stringMonoid = StringMonoid.getInstance(alphabet);
+
+		Encoder encoder = StringToByteArrayEncoder.getInstance(stringMonoid);
+
+		// a random message (length = 20 bytes)
+		Element message = aes.getMessageSpace().getRandomElement(20);
+
+		// a random key (default length = 16 bytes)
+		Element key = aes.getKeyGenerator().getKeySpace().getRandomElement();
+
+		// perform the encryption
+		Element encryptedMessage = aes.encrypt(key, message);
+
+		// perform the decryption
+		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
+
+		System.out.println("Message         : " + message);
+		System.out.println("Key             : " + key);
 		System.out.println("Encrypted Mesage: " + encryptedMessage);
 		System.out.println("Decrypted Mesage: " + decryptedMessage);
 	}
 
 	public static void main(final String[] args) {
-		defaultEncryptionDescryption();
+		example1();
+		example2();
 	}
 
 }

@@ -53,79 +53,94 @@ import java.util.Arrays;
 public class ByteArray
 	   extends UniCrypt {
 
-	public static final int LEFT = 0;
-	public static final int RIGHT = 1;
-
 	private final byte[] bytes;
+	private final int offset;
+	private final int length;
 
 	protected ByteArray(byte[] bytes) {
+		this(bytes, 0, bytes.length);
+	}
+
+	protected ByteArray(byte[] bytes, int offset, int length) {
 		this.bytes = bytes;
+		this.offset = offset;
+		this.length = length;
 	}
 
 	public int getLength() {
-		return this.bytes.length;
+		return this.length;
 	}
 
 	public byte[] getBytes() {
-		return this.bytes.clone();
+		return Arrays.copyOfRange(bytes, offset, offset + length);
 	}
 
 	public byte getByte(int index) {
-		if (index < 0 || index >= this.getLength()) {
+		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
-		return this.bytes[index];
+		return this.bytes[this.offset + index];
+	}
+
+	public ByteArray extract(int offset, int length) {
+		if (offset < 0 || length < 0 || offset + length > this.length) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteArray(this.bytes, this.offset + offset, length);
+	}
+
+	public ByteArray[] split(int... indices) {
+		if (indices == null) {
+			throw new IllegalArgumentException();
+		}
+		ByteArray[] result = new ByteArray[indices.length + 1];
+		int lastIndex = 0;
+		for (int i = 0; i < indices.length; i++) {
+			int currentIndex = indices[i];
+			if (currentIndex < lastIndex || currentIndex >= this.length) {
+				throw new IllegalArgumentException();
+			}
+			result[i] = this.extract(lastIndex, currentIndex - lastIndex);
+			lastIndex = currentIndex;
+		}
+		result[indices.length] = this.extract(lastIndex, this.length - lastIndex);
+		return result;
 	}
 
 	public ByteArray concatenate(ByteArray other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
 		}
-		byte[] result = Arrays.copyOf(this.bytes, this.getLength() + other.getLength());
-		System.arraycopy(other.bytes, 0, result, this.getLength(), other.getLength());
+		byte[] result = new byte[this.length + other.length];
+		System.arraycopy(this.bytes, this.offset, result, 0, this.length);
+		System.arraycopy(other.bytes, other.offset, result, this.length, other.length);
 		return new ByteArray(result);
 	}
 
 	public ByteArray xor(ByteArray... others) {
-
-		//Find and remember the length of the longest ByteArray:
-		int maxLength = this.bytes.length;
-		for (ByteArray array : others) {
-			if (array != null) {
-				maxLength = Math.max(maxLength, array.bytes.length);
-			}
-		}
-		//Create the xoredBytes with a size similar to the found maxLength
-		//Put the bytes of this ByteArray directly into the new xoredBytes
-		byte[] xoredBytes = Arrays.copyOf(this.bytes, maxLength);
-
-		//Iterate through the other ByteArrays and xor them into the xoredBytes
-		for (ByteArray array : others) {
-			if (array != null) {
-				for (int i = 0; i < array.bytes.length; i++) {
-					xoredBytes[i] ^= array.bytes[i];
-				}
-			}
-		}
-		return new ByteArray(xoredBytes);
-	}
-
-	/**
-	 * Splits one ByteArray into two ByteArrays.
-	 * <p>
-	 * @param lengthOfFirstByteArray
-	 * @return Array of ByteArrays containing two ByteArrays, namely the left and the right one.
-	 */
-	public ByteArray[] split(int lengthOfLeftByteArray) {
-		if (lengthOfLeftByteArray < 1 || lengthOfLeftByteArray > bytes.length - 1) {
+		if (others == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray[] split = new ByteArray[]{new ByteArray(Arrays.copyOf(bytes, lengthOfLeftByteArray)), new ByteArray(Arrays.copyOfRange(bytes, lengthOfLeftByteArray, bytes.length - 1))};
-		return split;
+		//Find and remember the length of the longest ByteArray:
+		int maxLength = this.length;
+		for (ByteArray other : others) {
+			if (other == null) {
+				throw new IllegalArgumentException();
+			}
+			maxLength = Math.max(maxLength, other.length);
+		}
+		//Iterate through the given ByteArrays and xor them into result
+		byte[] result = Arrays.copyOf(this.bytes, maxLength);
+		for (ByteArray other : others) {
+			for (int i = 0; i < other.length; i++) {
+				result[i] ^= this.getByte(i);
+			}
+		}
+		return new ByteArray(result);
 	}
 
 	public ByteArray getHash() {
-		return getHash(HashMethod.DEFAULT);
+		return this.getHash(HashMethod.DEFAULT);
 	}
 
 	public ByteArray getHash(HashMethod hashMethod) {
@@ -139,8 +154,8 @@ public class ByteArray
 	public String standardToStringContent() {
 		String str = "";
 		String delimiter = "";
-		for (int i = 0; i < this.getLength(); i++) {
-			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.bytes[i] & 0xFF));
+		for (int i = 0; i < this.length; i++) {
+			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.getByte(i) & 0xFF));
 			delimiter = "|";
 		}
 		return "\"" + str + "\"";

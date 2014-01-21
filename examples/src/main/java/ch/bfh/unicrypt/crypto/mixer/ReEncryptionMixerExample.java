@@ -116,16 +116,17 @@ public class ReEncryptionMixerExample {
 		}
 		Tuple ciphertexts = Tuple.getInstance(ciphertextArray);
 
-		// Create permutation
-		PermutationElement permutation = PermutationGroup.getInstance(size).getRandomElement();
-
-		// Create randomizations
-		Tuple randomizations = ProductGroup.getInstance(G_q.getZModOrder(), size).getRandomElement();
-
 		// S H U F F L E
 		//---------------
 		// Create mixer and shuffle
 		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, publicKey, size);
+
+		// Create permutation
+		PermutationElement permutation = PermutationGroup.getInstance(size).getRandomElement();
+
+		// Create randomizations
+		Tuple randomizations = mixer.generateRandomizations();
+
 		Tuple shuffledCiphertexts = mixer.shuffle(ciphertexts, permutation, randomizations);
 
 		System.out.println("Ciphertexts:          " + ciphertexts);
