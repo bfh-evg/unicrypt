@@ -48,7 +48,7 @@ import java.util.Arrays;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ByteTreeExamples {
+public class ByteTreeExample {
 
 	public static void main(String[] args) {
 		ByteTree b1 = ByteTree.getInstance("Hallo".getBytes());
