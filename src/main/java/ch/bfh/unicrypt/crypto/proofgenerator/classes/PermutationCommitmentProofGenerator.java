@@ -1,16 +1,16 @@
-/*
+/* 
  * UniCrypt
- *
+ * 
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- *
+ * 
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- *
+ * 
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * 
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- *
+ * 
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- *
+ * 
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -82,6 +82,7 @@ public class PermutationCommitmentProofGenerator
 
 	protected PermutationCommitmentProofGenerator(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, RandomReferenceString randomReferenceString) {
+
 		this.sigmaChallengeGenerator = sigmaChallengeGenerator;
 		this.eValuesGenerator = eValuesGenerator;
 		this.cyclicGroup = cyclicGroup;
@@ -97,7 +98,17 @@ public class PermutationCommitmentProofGenerator
 	public static PermutationCommitmentProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, RandomReferenceString randomReferenceString) {
 
-		// TODO Argument validation
+		if (sigmaChallengeGenerator == null || eValuesGenerator == null || cyclicGroup == null || size < 1 || randomReferenceString == null) {
+			throw new IllegalArgumentException();
+		}
+		if (!sigmaChallengeGenerator.getPublicInputSpace().isEquivalent(PermutationCommitmentProofGenerator.createSigmaChallengeGeneratorPublicInputSpace(cyclicGroup, size))
+			   || !sigmaChallengeGenerator.getCommitmentSpace().isEquivalent(PermutationCommitmentProofGenerator.createCommitmentSpace(cyclicGroup, size))
+			   || !sigmaChallengeGenerator.getChallengeSpace().isEquivalent(PermutationCommitmentProofGenerator.createChallengeSpace(cyclicGroup))
+			   || !eValuesGenerator.getInputSpace().isEquivalent(PermutationCommitmentProofGenerator.createEValuesGeneratorPublicInputSpace(cyclicGroup, size))
+			   || !eValuesGenerator.getChallengeSpace().isEquivalent(PermutationCommitmentProofGenerator.createEValuesGeneratorChallengeSpace(cyclicGroup, size))) {
+			throw new IllegalArgumentException();
+		}
+
 		return new PermutationCommitmentProofGenerator(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, randomReferenceString);
 	}
 
@@ -114,37 +125,63 @@ public class PermutationCommitmentProofGenerator
 		return ProductGroup.getInstance(this.cyclicGroup, this.size);
 	}
 
-	// Proof:   (SigmaProof-Triple, public inputs for sigma proof cV)
+	// Proof:   (SigmaProof-Triple, Bridging Commitments)
 	@Override
 	protected ProductGroup abstractGetProofSpace() {
 		return ProductGroup.getInstance(this.getPreimageProofSpace(),
-										this.getCommitmentSpace());
+										ProductGroup.getInstance(this.cyclicGroup, this.size));
 	}
 
 	public ProductGroup getPreimageProofSpace() {
 		return ProductGroup.getInstance(this.getCommitmentSpace(),
 										this.getChallengeSpace(),
-										this.getResponceSpace());
+										this.getResponseSpace());
 	}
 
 	public ProductGroup getCommitmentSpace() {
-		return ProductGroup.getInstance(this.cyclicGroup, 3 * this.size);
+		return PermutationCommitmentProofGenerator.createCommitmentSpace(this.cyclicGroup, this.size);
 	}
 
 	public ZMod getChallengeSpace() {
-		return this.cyclicGroup.getZModOrder();
+		return PermutationCommitmentProofGenerator.createChallengeSpace(this.cyclicGroup);
 	}
 
-	public ProductGroup getResponceSpace() {
+	public ProductGroup getResponseSpace() {
 		return ProductGroup.getInstance(cyclicGroup.getZModOrder(),
 										cyclicGroup.getZModOrder(),
-										ProductGroup.getInstance(cyclicGroup.getZModOrder(), size - 1),
 										ProductGroup.getInstance(cyclicGroup.getZModOrder(), size),
-										ProductGroup.getInstance(cyclicGroup.getZModOrder(), size - 1),
-										ProductGroup.getInstance(cyclicGroup.getZModOrder(), size),
+										cyclicGroup.getZModOrder(),
 										ProductGroup.getInstance(cyclicGroup.getZModOrder(), size));
 	}
 
+	//===================================================================================
+	// Helpers to create spaces
+	//
+	private static ProductGroup createCommitmentSpace(CyclicGroup cyclicGroup, int size) {
+		return ProductGroup.getInstance(cyclicGroup, size + 3);
+	}
+
+	private static ZMod createChallengeSpace(CyclicGroup cyclicGroup) {
+		return cyclicGroup.getZModOrder();
+	}
+
+	private static ProductGroup createSigmaChallengeGeneratorPublicInputSpace(CyclicGroup cyclicGroup, int size) {
+		// (Permutation Commitment, Bridging Commitments)
+		return ProductGroup.getInstance(ProductGroup.getInstance(cyclicGroup, size), 2);
+	}
+
+	private static ProductGroup createEValuesGeneratorPublicInputSpace(CyclicGroup cyclicGroup, int size) {
+		// (Permutation Commitment)
+		return ProductGroup.getInstance(cyclicGroup, size);
+	}
+
+	private static ProductGroup createEValuesGeneratorChallengeSpace(CyclicGroup cyclicGroup, int size) {
+		return ProductGroup.getInstance(cyclicGroup.getZModOrder(), size);
+	}
+
+	//===================================================================================
+	// Generate and Validate
+	//
 	@Override
 	protected Pair abstractGenerate(Pair privateInput, Tuple publicInput, RandomGenerator randomGenerator) {
 
@@ -158,32 +195,35 @@ public class PermutationCommitmentProofGenerator
 		final Element v = PermutationCommitmentProofGenerator.computeInnerProduct(oneV, sV);
 		final Element w = PermutationCommitmentProofGenerator.computeInnerProduct(sV, eV);
 		final Tuple ePrimeV = PermutationFunction.getInstance(eV.getSet()).apply(eV, pi);
-		final Tuple rV = ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size - 1).getRandomElement(randomGenerator);
-		final Element[] rPrimes = ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size).getRandomElement(randomGenerator).getAll();
-		// Set r'_N = 0
-		rPrimes[this.size - 1] = this.cyclicGroup.getZModOrder().getIdentityElement();
-		final Tuple rPrimeV = Tuple.getInstance(rPrimes);
-		final Tuple rPPrimeV = PermutationCommitmentProofGenerator.computeRPrimePrime(ePrimeV, rPrimeV);
+		final Tuple rV = ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size).getRandomElement(randomGenerator);
 
-		// Compute commitments c'_i and multiplied e-values e''_i
+		// Compute commitments c_i and d
 		final PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(this.cyclicGroup, this.randomReferenceString);
-		final Element[] cPrimes = new Element[this.size];
-		final Element[] ePPrimes = new Element[this.size];
-		Element eProd = this.cyclicGroup.getZModOrder().getElement(1);
+		final Element g = pcs.getRandomizationGenerator();
+		final Element h = pcs.getMessageGenerator();
+
+		final Element[] cs = new Element[this.size];
+		final Element[] ds = new Element[this.size];
+		ds[0] = rV.getAt(0);
 		for (int i = 0; i < this.size; i++) {
-			eProd = eProd.selfApply(ePrimeV.getAt(i));
-			ePPrimes[i] = eProd;
-			cPrimes[i] = pcs.commit(eProd, rPrimeV.getAt(i));    //   [2n]
+			Element c_i_1 = i == 0 ? h : cs[i - 1];
+			cs[i] = g.selfApply(rV.getAt(i)).apply(c_i_1.selfApply(ePrimeV.getAt(i)));  //   [2n]
+			if (i > 0) {
+				ds[i] = rV.getAt(i).apply(ePrimeV.getAt(i).selfApply(ds[i - 1]));
+			}
 		}
-		final Tuple ePPrimeV = Tuple.getInstance(ePPrimes);
-		final Tuple cPrimeV = Tuple.getInstance(cPrimes);
+		final Tuple cV = Tuple.getInstance(cs);
+		final Element d = ds[ds.length - 1];
 
 		// Create sigma proof
-		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponceSpace(), this.getCommitmentSpace(), this.randomReferenceString, cPrimeV);
-		Tuple cV = f.computePublicValues(v, w, rV, ePrimeV);    //    [3n]
-		PreimageProofGenerator ppg = PreimageProofGenerator.getInstance(this.sigmaChallengeGenerator, f);
-		Triple preimageProof = ppg.generate(Tuple.getInstance(v, w, rV, rPrimeV, rPPrimeV, ePrimeV, ePPrimeV), cV, randomGenerator);
-		return Pair.getInstance(preimageProof, cV);
+		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, cV);
+		final Element randomElement = this.getResponseSpace().getRandomElement(randomGenerator);
+		final Element commitment = f.apply(randomElement);                              // [3n+3]
+		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
+		final Element response = randomElement.apply(Tuple.getInstance(v, w, rV, d, ePrimeV).selfApply(challenge));
+		Triple preimageProof = (Triple) Triple.getInstance(commitment, challenge, response);
+		//                                                                                -------
+		return Pair.getInstance(preimageProof, cV);                                     // [5n+3]
 	}
 
 	@Override
@@ -191,53 +231,44 @@ public class PermutationCommitmentProofGenerator
 
 		// Unfold proof
 		final Triple preimageProof = (Triple) proof.getFirst();
+		final Tuple commitment = (Tuple) preimageProof.getAt(0);
+		final Tuple response = (Tuple) preimageProof.getAt(2);
 		final Tuple cV = (Tuple) proof.getSecond();
-		final Element[] cPrimeV = new Element[this.size];
-		for (int i = 0; i < this.size; i++) {
-			cPrimeV[i] = cV.getAt(i + this.size + 1);
-		}
 
 		// Get additional values
 		final Tuple eV = (Tuple) this.eValuesGenerator.generate(publicInput);
-		final Tuple oneV = PermutationCommitmentProofGenerator.createOneVector(this.cyclicGroup.getZModOrder(), this.size);
 		final Element[] gV = GeneralizedPedersenCommitmentScheme.getInstance(this.cyclicGroup, this.size, this.randomReferenceString).getMessageGenerators();
 
-		// 1. Verify preimage proof
-		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponceSpace(), this.getCommitmentSpace(), this.randomReferenceString, Tuple.getInstance(cPrimeV));
-		PreimageProofGenerator ppg = PreimageProofGenerator.getInstance(this.sigmaChallengeGenerator, f);
-		BooleanElement v = ppg.verify(preimageProof, cV);
-		if (!v.getValue()) {
-			return v;
+		// Compute image of preimage proof
+		final Element[] ps = new Element[this.size + 3];
+		// - p_0 = c_pi^1/prod(g_i) = prod(c_pi_i)/prod(g_i)
+		ps[0] = this.cyclicGroup.apply(publicInput.getAll()).applyInverse(this.cyclicGroup.apply(gV));
+		// - p_1 = c_pi^e                                                                     [N]
+		ps[1] = PermutationCommitmentProofGenerator.computeInnerProduct(publicInput, eV);
+		// - p_2...p_(N+2) = c_1 ... c_N
+		for (int i = 0; i < this.size; i++) {
+			ps[i + 2] = cV.getAt(i);
 		}
-
-		// 2. Check correctness of cV
-		// 2.1 c_1 == c_pi^1/prod(g_i)
-		boolean v1 = cV.getAt(0).isEquivalent(PermutationCommitmentProofGenerator.computeInnerProduct(publicInput, oneV).applyInverse(this.cyclicGroup.apply(gV)));
-
-		// 2.2 c_2 == c_pi^e
-		boolean v2 = cV.getAt(1).isEquivalent(PermutationCommitmentProofGenerator.computeInnerProduct(publicInput, eV));
-
-		// 2.3 c_(2n+1) = c'_N == g1^(prod(e))
+		// - p_(N+3) = c_N/h^(prod(e))                                                        [1]
 		Element eProd = eV.getAt(0);
 		for (int i = 1; i < this.size; i++) {
 			eProd = eProd.selfApply(eV.getAt(i));
 		}
-		boolean v3 = cV.getAt(2 * this.size).isEquivalent(gV[0].selfApply(eProd));
+		ps[this.size + 2] = cV.getAt(this.size - 1).applyInverse(gV[0].selfApply(eProd));
+		final Tuple pV = Tuple.getInstance(ps);
 
-		// 2.4 c_i = c_(i+n) for n+2 < i < 2n
-		boolean v4 = true;
-		int offset1 = this.size + 2;
-		int offset2 = offset1 + this.size - 1;
-		for (int i = 0; i < this.size - 1; i++) {
-			if (!cV.getAt(offset1 + i).isEquivalent(cV.getAt(offset2 + i))) {
-				v4 = false;
-				break;
-			}
-		}
-
-		return BooleanSet.getInstance().getElement(v1 && v2 && v3 && v4);
+		// Verify preimage proof
+		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, cV);
+		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
+		final Element left = f.apply(response);                                         // [3N+3]
+		final Element right = commitment.apply(pV.selfApply(challenge));                //  [N+3]
+		//                                                                                -------
+		return BooleanSet.getInstance().getElement(left.isEquivalent(right));           // [5N+7]
 	}
 
+	//===================================================================================
+	// Private Helpers
+	//
 	// Helper to crate a one-vector
 	private static Tuple createOneVector(Group group, int size) {
 		if (group == null || size < 1) {
@@ -265,38 +296,29 @@ public class PermutationCommitmentProofGenerator
 		return innerProduct;
 	}
 
-	// Helper to compute vector r''
-	// rPPrim_i = rPrime_i+1 - ePrime_i+1 * rPrime_i
-	private static Tuple computeRPrimePrime(Tuple ePrime, Tuple rPrime) {
-		Element[] rPPrime = new Element[rPrime.getArity() - 1];
-		for (int i = 0; i < rPPrime.length; i++) {
-			rPPrime[i] = rPrime.getAt(i + 1).applyInverse(ePrime.getAt(i + 1).selfApply(rPrime.getAt(i)));
-		}
-		return Tuple.getInstance(rPPrime);
-	}
-
-	//
+	//===================================================================================
 	// Nested class PreimageProofFunction
 	//
 	private class PreimageProofFunction
 		   extends AbstractFunction<ProductGroup, Tuple, ProductGroup, Tuple> {
 
 		private final int size;
-		private final Tuple cPrimeV;
+		private final Tuple cV;
 		private final PedersenCommitmentScheme pcs;
 		private final GeneralizedPedersenCommitmentScheme gpcs;
 		private final Element g;
+		private final Element h;
 
-		protected PreimageProofFunction(CyclicGroup cyclicGroup, int size, ProductGroup domain, ProductGroup coDomain, RandomReferenceString randomReferenceString, Tuple cPrimeV) {
+		protected PreimageProofFunction(CyclicGroup cyclicGroup, int size, ProductGroup domain, ProductGroup coDomain, RandomReferenceString randomReferenceString, Tuple cV) {
 			super(domain, coDomain);
 			this.size = size;
-			this.cPrimeV = cPrimeV;
+			this.cV = cV;
 
 			// Prepare commitment schemes
 			this.pcs = PedersenCommitmentScheme.getInstance(cyclicGroup, randomReferenceString);
 			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, size, randomReferenceString);
 			this.g = pcs.getRandomizationGenerator();
-
+			this.h = pcs.getMessageGenerator();
 		}
 
 		@Override
@@ -306,106 +328,40 @@ public class PermutationCommitmentProofGenerator
 			final Element v = element.getAt(0);
 			final Element w = element.getAt(1);
 			final Tuple rV = (Tuple) element.getAt(2);
-			final Tuple rPrimeV = (Tuple) element.getAt(3);
-			final Tuple rPPrimeV = (Tuple) element.getAt(4);
-			final Tuple ePrimeV = (Tuple) element.getAt(5);
-			final Tuple ePPrimeV = (Tuple) element.getAt(6);
+			final Element d = element.getAt(3);
+			final Tuple ePrimeV = (Tuple) element.getAt(4);
 
 			// Result array
-			final Element[] cV = new Element[3 * this.size];
+			final Element[] pV = new Element[this.size + 3];
 
 			// COMPUTE...
 			// - Com(0, v)                          [1]
-			this.computeFirst(cV, v);
+			pV[0] = this.gpcs.getRandomizationGenerator().selfApply(v);
 
 			// - Com(e', w)                       [n+1]
-			this.computeSecond(cV, w, ePrimeV);
+			pV[1] = this.gpcs.commit(ePrimeV, w);
 
-			// - Com(e'_i+1, r_i)                [2n-2]
-			this.computeThird(cV, rV, ePrimeV);
+			// - g^r_i * c_i-1^e'_i                [2n]
+			for (int i = 0; i < this.size; i++) {
+				Element c_i_1 = i == 0 ? this.h : this.cV.getAt(i - 1);
+				pV[i + 2] = g.selfApply(rV.getAt(i)).apply(c_i_1.selfApply(ePrimeV.getAt(i)));
+			}
 
-			// - Com(e''_i, r'_i)                  [2n]
-			this.computeFourth(cV, rPrimeV, ePPrimeV);
+			// - Com(0, d)                          [1]
+			pV[this.size + 2] = this.gpcs.getRandomizationGenerator().selfApply(d);
 
-			// - g^(r''_i) * c'_i^(e'_i+1)       [2n-2]
-			this.computeFifth(cV, rPPrimeV, ePrimeV);
 			//                                 ---------
-			//                                   [7n-2]
-			return Tuple.getInstance(cV);
-		}
-
-		protected Tuple computePublicValues(Element v, Element w, Tuple rV, Tuple ePrimeV) {
-			// Result array
-			final Element[] cV = new Element[3 * this.size];
-
-			// COMPUTE...
-			// - Com(0, v)                          [1]
-			this.computeFirst(cV, v);
-
-			// - Com(e', w)                       [n+1]
-			this.computeSecond(cV, w, ePrimeV);
-
-			// - Com(e'_i+1, r_i)                  [2n]
-			this.computeThird(cV, rV, ePrimeV);
-
-			// - Fill in c'
-			int offset1 = this.size + 1;
-			int offset2 = 2 * this.size;
-			for (int i = 0; i < this.size; i++) {
-				cV[i + offset1] = this.cPrimeV.getAt(i);
-				if (i > 0) {
-					cV[i + offset2] = this.cPrimeV.getAt(i);
-				}
-			}
-			//                                  ---------
-			//                                     [3n]
-			return Tuple.getInstance(cV);
-		}
-
-		// Com(0, v)
-		private void computeFirst(Element[] cV, Element v) {
-			cV[0] = this.gpcs.getRandomizationGenerator().selfApply(v);
-		}
-
-		// Com(e', w)
-		private void computeSecond(Element[] cV, Element w, Tuple ePrimeV) {
-			cV[1] = this.gpcs.commit(ePrimeV, w);
-		}
-
-		// Com(e'_i+1, r_i)
-		private void computeThird(Element[] cV, Tuple rV, Tuple ePrimeV) {
-			int offset = 2;
-			for (int i = 0; i < this.size - 1; i++) {
-				cV[i + offset] = this.pcs.commit(ePrimeV.getAt(i + 1), rV.getAt(i));
-			}
-		}
-
-		// Com(e''_i, r'_i)
-		private void computeFourth(Element[] cV, Tuple rPrimeV, Tuple ePPrimeV) {
-			int offset = this.size + 1;
-			for (int i = 0; i < this.size; i++) {
-				cV[i + offset] = this.pcs.commit(ePPrimeV.getAt(i), rPrimeV.getAt(i));
-			}
-		}
-
-		// g^(r''_i) * c'_i^(e'_i+1)
-		private void computeFifth(Element[] cV, Tuple rPPrimeV, Tuple ePrimeV) {
-			int offset = 2 * this.size + 1;
-			for (int i = 0; i < this.size - 1; i++) {
-				Element a1 = this.g.selfApply(rPPrimeV.getAt(i));
-				Element a2 = this.cPrimeV.getAt(i).selfApply(ePrimeV.getAt(i + 1));
-				cV[i + offset] = a1.apply(a2);
-			}
-
+			//                                   [3n+3]
+			return Tuple.getInstance(pV);
 		}
 
 	}
 
 	//===================================================================================
-	// Service functions to create non-interactive SigmaChallengeGenerator and MultiChallengeGenerator
+	// Service functions to create non-interactive Sigma- and Element-ChallengeGenerator
 	//
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size) {
-		return PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(cyclicGroup, size, PseudoRandomOracle.DEFAULT);
+		return PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(cyclicGroup, size, (RandomOracle) null);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size, final RandomOracle randomOracle) {
@@ -413,29 +369,34 @@ public class PermutationCommitmentProofGenerator
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size, final Element proverId) {
-		return PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(cyclicGroup, size, proverId, PseudoRandomOracle.DEFAULT);
+		return PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(cyclicGroup, size, proverId, (RandomOracle) null);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size, final Element proverId, final RandomOracle randomOracle) {
-		if (cyclicGroup == null || size < 1 || randomOracle == null) {
+	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size, final Element proverId, RandomOracle randomOracle) {
+		if (cyclicGroup == null || size < 1) {
 			throw new IllegalArgumentException();
 		}
-		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(ProductGroup.getInstance(cyclicGroup, 3 * size),
-																		 ProductGroup.getInstance(cyclicGroup, 3 * size),
-																		 cyclicGroup.getZModOrder(),
+		if (randomOracle == null) {
+			randomOracle = PseudoRandomOracle.DEFAULT;
+		}
+		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(PermutationCommitmentProofGenerator.createSigmaChallengeGeneratorPublicInputSpace(cyclicGroup, size),
+																		 PermutationCommitmentProofGenerator.createCommitmentSpace(cyclicGroup, size),
+																		 PermutationCommitmentProofGenerator.createChallengeSpace(cyclicGroup),
 																		 randomOracle,
 																		 proverId);
 	}
 
-	public static StandardNonInteractiveChallengeGenerator createNonInteractiveChallengeGenerator(final CyclicGroup cyclicGroup, final int size) {
-		return PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(cyclicGroup, size, PseudoRandomOracle.DEFAULT);
+	public static StandardNonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size) {
+		return PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(cyclicGroup, size, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static StandardNonInteractiveChallengeGenerator createNonInteractiveChallengeGenerator(final CyclicGroup cyclicGroup, final int size, RandomOracle randomOracle) {
+	public static StandardNonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size, final RandomOracle randomOracle) {
 		if (cyclicGroup == null || size < 1 || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}
-		return StandardNonInteractiveChallengeGenerator.getInstance(ProductGroup.getInstance(cyclicGroup, size), cyclicGroup.getZModOrder(), size, randomOracle);
+		return StandardNonInteractiveChallengeGenerator.getInstance(PermutationCommitmentProofGenerator.createEValuesGeneratorPublicInputSpace(cyclicGroup, size),
+																	PermutationCommitmentProofGenerator.createEValuesGeneratorChallengeSpace(cyclicGroup, size),
+																	randomOracle);
 	}
 
 }

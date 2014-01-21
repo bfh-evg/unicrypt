@@ -70,22 +70,19 @@ public class PermutationCommitmentProofGeneratorTest {
 	final static int P1 = 167;
 	final static String P2 = "88059184022561109274134540595138392753102891002065208740257707896840303297223";
 
-	public PermutationCommitmentProofGeneratorTest() {
-	}
-
 	@Test
 	public void testPermutationCommitemntProofGenerator() {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
-		final RandomGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
+		final RandomGenerator randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
 		final int size = 5;
 
 		// Permutation
-		Permutation permutation = Permutation.getInstance(new int[]{3, 2, 1, 4, 0});  //{3, 2, 1, 4, 0} {3, 1, 4, 0, 2}
+		Permutation permutation = Permutation.getInstance(new int[]{3, 1, 4, 0, 2});  //{3, 2, 1, 4, 0} {3, 1, 4, 0, 2}
 		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
 
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
@@ -95,7 +92,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Proof and verify
@@ -124,7 +121,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Proof and verify
@@ -136,7 +133,7 @@ public class PermutationCommitmentProofGeneratorTest {
 	@Test
 	public void testPermutationCommitemntProofGenerator_Invalid() {
 
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
+		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
@@ -155,7 +152,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Proof and verify
@@ -202,7 +199,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveChallengeGenerator(G_q, size, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Proof and verify
