@@ -84,7 +84,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testGetBytes() {
-		System.out.println("getBytes");
+//		System.out.println("getBytes");
 		ByteArray instance = null;
 		byte[] expResult = null;
 		byte[] result = instance.getAll();
@@ -99,7 +99,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testGetLength() {
-		System.out.println("getLength");
+//		System.out.println("getLength");
 		ByteArray instance = null;
 		int expResult = 0;
 		int result = instance.getLength();
@@ -114,7 +114,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testGetByte() {
-		System.out.println("getByte");
+//		System.out.println("getByte");
 		int index = 0;
 		ByteArray instance = null;
 		byte expResult = 0;
@@ -129,7 +129,7 @@ public class ByteArrayTest {
 	 */
 	@Test
 	public void testConcatenate() {
-		System.out.println("concatenate");
+//		System.out.println("concatenate");
 		ByteArray instance = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6});
 		ByteArray other = ByteArray.getInstance(new byte[]{7, 8, 9, 10});
 		ByteArray expResult = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});;
@@ -152,14 +152,14 @@ public class ByteArrayTest {
 		Assert.assertEquals(two, xored);
 
 		ByteArray four = ByteArray.getInstance(new byte[]{1, 1, 1});
-		xored = one.xor(four, null);
+		xored = one.xor(four);
 		Assert.assertEquals(two, xored);
 
 		ByteArray five = ByteArray.getInstance(new byte[]{1, 1, 1});
-		xored = one.xor(null, null, two, five, null);
+		xored = one.xor(two, five);
 		Assert.assertEquals(two, xored);
 
-		xored = one.xor(null, one, null, two, two, null);
+		xored = one.xor(one, two, two);
 		Assert.assertEquals(two, xored);
 
 		xored = xored.xor(one);
@@ -172,7 +172,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testStandardToStringContent() {
-		System.out.println("standardToStringContent");
+//		System.out.println("standardToStringContent");
 		ByteArray instance = null;
 		String expResult = "";
 		String result = instance.standardToStringContent();
@@ -187,7 +187,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testHashCode() {
-		System.out.println("hashCode");
+//		System.out.println("hashCode");
 		ByteArray instance = null;
 		int expResult = 0;
 		int result = instance.hashCode();
@@ -202,7 +202,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testEquals() {
-		System.out.println("equals");
+//		System.out.println("equals");
 		Object obj = null;
 		ByteArray instance = null;
 		boolean expResult = false;
@@ -218,7 +218,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testGetInstance_0args() {
-		System.out.println("getInstance");
+//		System.out.println("getInstance");
 		ByteArray expResult = null;
 		ByteArray result = ByteArray.getInstance();
 		assertEquals(expResult, result);
@@ -232,7 +232,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testGetInstance_int() {
-		System.out.println("getInstance");
+//		System.out.println("getInstance");
 		int length = 0;
 		ByteArray expResult = null;
 		ByteArray result = ByteArray.getInstance(length);
@@ -247,7 +247,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testGetInstance_byteArr() {
-		System.out.println("getInstance");
+//		System.out.println("getInstance");
 		byte[] bytes = null;
 		ByteArray expResult = null;
 		ByteArray result = ByteArray.getInstance(bytes);
@@ -262,7 +262,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testGetRandomInstance_int() {
-		System.out.println("getRandomInstance");
+//		System.out.println("getRandomInstance");
 		int length = 0;
 		ByteArray expResult = null;
 		ByteArray result = ByteArray.getRandomInstance(length);
@@ -277,7 +277,7 @@ public class ByteArrayTest {
 	@Test
 	@Ignore
 	public void testGetRandomInstance_int_RandomGenerator() {
-		System.out.println("getRandomInstance");
+//		System.out.println("getRandomInstance");
 		int length = 0;
 		RandomGenerator randomGenerator = null;
 		ByteArray expResult = null;

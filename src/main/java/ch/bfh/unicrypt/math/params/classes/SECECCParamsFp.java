@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,23 +32,22 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.math.params.classes;
 
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
 import ch.bfh.unicrypt.math.params.interfaces.StandardECZModParams;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import java.math.BigInteger;
 
 public enum SECECCParamsFp
-			 implements StandardECZModParams {
+	   implements StandardECZModParams {
 
 	secp112r1("db7c2abf62e35e668076bead208b", "db7c2abf62e35e668076bead2088", "659ef8ba043916eede8911702b22", "9487239995a5ee76b55f9c2f098", "a89ce5af8724c0a23e0e0ff77500", "db7c2abf62e35e7628dfac6561c5", "1"),
 	secp160r1("ffffffffffffffffffffffffffffffff7fffffff", "ffffffffffffffffffffffffffffffff7ffffffc", "1c97befc54bd7a8b65acf89f81d4d4adc565fa45", "4a96b5688ef573284664698968c38bb913cbfc82", "23a628553168947d59dcc912042351377ac5fb32", "100000000000000000001f4c8f927aed3ca752257", "1"),
@@ -75,7 +74,7 @@ public enum SECECCParamsFp
 	 * @param h     Co-factor h*order= total order of the curve
 	 */
 	private SECECCParamsFp(String p, String a, String b, String gx, String gy,
-				 String order, String h) {
+		   String order, String h) {
 		this.p = p;
 		this.a = a;
 		this.b = b;
@@ -131,24 +130,23 @@ public enum SECECCParamsFp
 		throw new IllegalArgumentException("No Enum with name: " + s);
 	}
 
-	public static void main(String[] args) {
-
-		for (SECECCParamsFp params : SECECCParamsFp.values()) {
-
-			System.out.println(params.getFiniteField());
-			System.out.println(params.getA());
-			System.out.println(params.getB());
-			System.out.println(params.getGx());
-			System.out.println(params.getGy());
-			System.out.println(params.getOrder());
-			System.out.println(params.getH());
-		}
-
-		for (SECECCParamsFp params : SECECCParamsFp.values()) {
-			System.out.print(params.name() + " ");
-			StandardECZModPrime ec = StandardECZModPrime.getInstance(params);
-			System.out.println(ec);
-		}
-	}
-
+//	public static void main(String[] args) {
+//
+//		for (SECECCParamsFp params : SECECCParamsFp.values()) {
+//
+//			System.out.println(params.getFiniteField());
+//			System.out.println(params.getA());
+//			System.out.println(params.getB());
+//			System.out.println(params.getGx());
+//			System.out.println(params.getGy());
+//			System.out.println(params.getOrder());
+//			System.out.println(params.getH());
+//		}
+//
+//		for (SECECCParamsFp params : SECECCParamsFp.values()) {
+//			System.out.print(params.name() + " ");
+//			StandardECZModPrime ec = StandardECZModPrime.getInstance(params);
+//			System.out.println(ec);
+//		}
+//	}
 }

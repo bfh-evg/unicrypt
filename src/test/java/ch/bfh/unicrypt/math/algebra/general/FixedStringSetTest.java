@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,18 +32,15 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.FixedStringSet;
-import ch.bfh.unicrypt.math.helper.Alphabet;
-import java.math.BigInteger;
 import org.junit.Test;
 
 /**
@@ -62,21 +59,21 @@ public class FixedStringSetTest {
 //	}
 	@Test
 	public void testGetValue() {
-		FixedStringSet set = FixedStringSet.getInstance(Alphabet.BINARY, 4);
-		System.out.println(set.getElement("0000").getValue());
-		System.out.println(set.getElement("0001").getValue());
-		System.out.println(set.getElement("0010").getValue());
-		System.out.println(set.getElement("0011").getValue());
-		System.out.println(set.getElement("0100").getValue());
-		System.out.println(set.getElement("0101").getValue());
-		System.out.println(set.getElement("0110").getValue());
-		System.out.println(set.getElement("0111").getValue());
-		System.out.println(set.getElement("1111").getValue());
-		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(15)) <= 0; i = i.add(BigInteger.ONE)) {
-			System.out.println(set.getElement(i));
-		}
-		System.out.println(set.getOrder());
-		System.out.println(FixedStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54)).getOrder());
+//		FixedStringSet set = FixedStringSet.getInstance(Alphabet.BINARY, 4);
+//		System.out.println(set.getElement("0000").getValue());
+//		System.out.println(set.getElement("0001").getValue());
+//		System.out.println(set.getElement("0010").getValue());
+//		System.out.println(set.getElement("0011").getValue());
+//		System.out.println(set.getElement("0100").getValue());
+//		System.out.println(set.getElement("0101").getValue());
+//		System.out.println(set.getElement("0110").getValue());
+//		System.out.println(set.getElement("0111").getValue());
+//		System.out.println(set.getElement("1111").getValue());
+//		for (BigInteger i = BigInteger.ZERO; i.compareTo(BigInteger.valueOf(15)) <= 0; i = i.add(BigInteger.ONE)) {
+//			System.out.println(set.getElement(i));
+//		}
+//		System.out.println(set.getOrder());
+//		System.out.println(FixedStringSet.getInstance(Alphabet.BINARY, BigInteger.valueOf(54)).getOrder());
 	}
 
 }

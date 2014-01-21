@@ -148,7 +148,7 @@ public class ProductSemiGroup
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.selfApply(element, amount.getIntegerValue());
+		return this.selfApply(element, amount.getBigInteger());
 	}
 
 	@Override

@@ -119,7 +119,7 @@ public class PermutationGroup
 	@Override
 	protected boolean abstractContains(final BigInteger value) {
 		BigInteger[] values = MathUtil.unpair(value, this.getSize());
-		return Permutation.isPermutationVector(ArrayUtil.bigIntegerToIntArray(values));
+		return Permutation.isValid(ArrayUtil.bigIntegerToIntArray(values));
 	}
 
 	@Override

@@ -58,6 +58,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.HashMap;
@@ -83,6 +84,7 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	private final S set;
 	private final V value;
 	private BigInteger integerValue;
+	private ByteTree byteTree;
 	private final HashMap<HashMethod, FiniteByteArrayElement> hashValues;
 
 	protected AbstractElement(final S set, V value) {
@@ -137,11 +139,19 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	}
 
 	@Override
-	public BigInteger getIntegerValue() {
+	public BigInteger getBigInteger() {
 		if (this.integerValue == null) {
-			this.integerValue = this.abstractGetIntegerValue();
+			this.integerValue = this.abstractGetBigInteger();
 		}
 		return this.integerValue;
+	}
+
+	@Override
+	public ByteTree getByteTree() {
+		if (this.byteTree == null) {
+			this.byteTree = this.abstractGetByteTree();
+		}
+		return this.byteTree;
 	}
 
 	@Override
@@ -165,7 +175,7 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 			} else {
 				MessageDigest messageDigest = hashMethod.getMessageDigest();
 				messageDigest.reset();
-				this.hashValues.put(hashMethod, FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getIntegerValue().toByteArray())));
+				this.hashValues.put(hashMethod, FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getBigInteger().toByteArray())));
 			}
 		}
 		return this.hashValues.get(hashMethod);
@@ -303,7 +313,9 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 		return this.value.equals(other.getValue());
 	}
 
-	protected abstract BigInteger abstractGetIntegerValue();
+	protected abstract BigInteger abstractGetBigInteger();
+
+	protected abstract ByteTree abstractGetByteTree();
 
 	//
 	// The following protected methods are standard implementations, which may change in sub-classes

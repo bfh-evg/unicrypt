@@ -105,7 +105,7 @@ public class AESEncryptionScheme
 
 	private static final String ALGORITHM_NAME = "AES";
 	public static final KeyLength DEFAULT_KEY_LENGTH = KeyLength.KEY128;
-	public static final Mode DEFAULT_MODE = Mode.ECB;
+	public static final Mode DEFAULT_MODE = Mode.CBC;
 	public static final Padding DEFAULT_PADDING = Padding.PKCS5;
 
 	public static final int AES_BLOCK_SIZE = 128;
@@ -224,9 +224,9 @@ public class AESEncryptionScheme
 			byte[] message;
 			try {
 				if (mode == Mode.CBC) {
-					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getAll()));
+					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getAll()));
 				} else {
-					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 				}
 				message = cipher.doFinal(encryption.getValue().getAll());
 			} catch (InvalidKeyException e) {

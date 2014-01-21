@@ -84,7 +84,7 @@ public class ByteTreeTest {
 	@Test
 	@Ignore
 	public void testGetInstance_ByteTreeArr() {
-		System.out.println("getInstance");
+//		System.out.println("getInstance");
 		ByteTree[] children = null;
 		ByteTree expResult = null;
 		ByteTree result = ByteTree.getInstance(children);
@@ -99,7 +99,7 @@ public class ByteTreeTest {
 	@Test
 	@Ignore
 	public void testGetInstance_byteArr() {
-		System.out.println("getInstance");
+//		System.out.println("getInstance");
 		byte[] bytes = null;
 		ByteTree expResult = null;
 		ByteTree result = ByteTree.getInstance(bytes);
@@ -115,7 +115,7 @@ public class ByteTreeTest {
 	@Ignore
 
 	public void testGetDeserializedInstance() {
-		System.out.println("getDeserializedInstance");
+//		System.out.println("getDeserializedInstance");
 		byte[] bytes = null;
 		ByteTree expResult = null;
 		ByteTree result = ByteTree.getDeserializedInstance(bytes);
@@ -131,7 +131,7 @@ public class ByteTreeTest {
 	@Ignore
 
 	public void testGetSerializedByteTree() {
-		System.out.println("getSerializedByteTree");
+//		System.out.println("getSerializedByteTree");
 		ByteTree instance = new ByteTreeImpl();
 		byte[] expResult = null;
 		byte[] result = instance.getSerializedByteTree();
@@ -147,7 +147,7 @@ public class ByteTreeTest {
 	@Ignore
 
 	public void testDefaultSerialize() {
-		System.out.println("defaultSerialize");
+//		System.out.println("defaultSerialize");
 		ByteBuffer buffer = null;
 		ByteTree instance = new ByteTreeImpl();
 //		instance.defaultSerialize(buffer);
@@ -162,7 +162,7 @@ public class ByteTreeTest {
 	@Ignore
 
 	public void testDefaultGetSize() {
-		System.out.println("defaultGetSize");
+//		System.out.println("defaultGetSize");
 		ByteTree instance = new ByteTreeImpl();
 		int expResult = 0;
 //		int result = instance.defaultGetSize();
@@ -178,7 +178,7 @@ public class ByteTreeTest {
 	@Ignore
 
 	public void testAbstractSerialize() {
-		System.out.println("abstractSerialize");
+//		System.out.println("abstractSerialize");
 		ByteBuffer buffer = null;
 		ByteTree instance = new ByteTreeImpl();
 //		instance.abstractSerialize(buffer);
@@ -193,7 +193,7 @@ public class ByteTreeTest {
 	@Ignore
 
 	public void testAbstractGetSize() {
-		System.out.println("abstractGetSize");
+//		System.out.println("abstractGetSize");
 		ByteTree instance = new ByteTreeImpl();
 		int expResult = 0;
 //		int result = instance.abstractGetSize();

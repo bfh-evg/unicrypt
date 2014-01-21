@@ -88,7 +88,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetElement() {
-		System.out.println("getElement");
+//		System.out.println("getElement");
 		boolean bit = false;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement result = instance.getElement(bit);
@@ -103,7 +103,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetElementBigInteger() {
-		System.out.println("getElement BigInteger");
+//		System.out.println("getElement BigInteger");
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement result = instance.getElement(BigInteger.ZERO);
@@ -126,7 +126,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetElementElement() {
-		System.out.println("getElement Element");
+//		System.out.println("getElement Element");
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement expResult = instance.getElement(true);
@@ -157,7 +157,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetElementBoolean() {
-		System.out.println("getElement Boolean");
+//		System.out.println("getElement Boolean");
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement expResult = instance.getElement(true);
@@ -171,7 +171,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetElementInt() {
-		System.out.println("getElement int");
+//		System.out.println("getElement int");
 
 		{
 			BooleanSet instance = BooleanSet.getInstance();
@@ -213,7 +213,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetMaxOrder() {
-		System.out.println("getMaxOrder");
+//		System.out.println("getMaxOrder");
 		BigInteger expResult = BigInteger.valueOf(2);
 		BigInteger result = BooleanSet.getInstance().getOrderUpperBound();
 		Assert.assertEquals(expResult, result);
@@ -224,7 +224,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetMinOrder() {
-		System.out.println("getMinOrder");
+//		System.out.println("getMinOrder");
 		BigInteger expResult = BigInteger.valueOf(2);
 		BigInteger result = BooleanSet.getInstance().getOrderLowerBound();
 		Assert.assertEquals(expResult, result);
@@ -235,7 +235,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetOrder() {
-		System.out.println("getOrder");
+//		System.out.println("getOrder");
 		BigInteger expResult = BigInteger.valueOf(2);
 		BigInteger result = BooleanSet.getInstance().getOrder();
 		Assert.assertEquals(expResult, result);
@@ -246,7 +246,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetRandomElement() {
-		System.out.println("getRandomElement");
+//		System.out.println("getRandomElement");
 		int counter = 0;
 		while (BooleanSet.getInstance().getRandomElement().getValue() && counter++ < 100);
 		if (counter >= 100) {
@@ -265,7 +265,7 @@ public class BooleanSetTest {
 	@Test
 	public void testGetRandomElement2() {
 		RandomGenerator random = PseudoRandomGeneratorCounterMode.getInstance();
-		System.out.println("getRandomElement");
+//		System.out.println("getRandomElement");
 		int counter = 0;
 		while (BooleanSet.getInstance().getRandomElement(random).getValue() && counter++ < 100);
 		if (counter >= 100) {
@@ -283,7 +283,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetZModOrder() {
-		System.out.println("getZModOrder");
+//		System.out.println("getZModOrder");
 		ZModPrime expResult = ZModPrime.getInstance(2);
 		ZModPrime result = (ZModPrime) BooleanSet.getInstance().getZModOrder();
 
@@ -296,7 +296,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetZStarModOrder() {
-		System.out.println("getZStarModOrder");
+//		System.out.println("getZStarModOrder");
 		ZStarMod expResult = ZStarMod.getInstance(2);
 		ZStarMod result = BooleanSet.getInstance().getZStarModOrder();
 		// TODO implement equals methods in sets
@@ -308,7 +308,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testAreEqual() {
-		System.out.println("areEqual");
+//		System.out.println("areEqual");
 		BooleanSet expResult = null;
 		Assert.assertTrue((BooleanSet.getInstance().areEqual(BooleanSet.TRUE, BooleanSet.TRUE)));
 		Assert.assertTrue(!(BooleanSet.getInstance().areEqual(BooleanSet.FALSE, BooleanSet.TRUE)));
@@ -319,7 +319,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testContains() {
-		System.out.println("contains");
+//		System.out.println("contains");
 		Assert.assertTrue(BooleanSet.getInstance().contains(BigInteger.ZERO));
 		Assert.assertTrue(BooleanSet.getInstance().contains(BigInteger.ONE));
 		Assert.assertTrue(!BooleanSet.getInstance().contains(BigInteger.TEN));
@@ -331,7 +331,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testContains1() {
-		System.out.println("contains1");
+//		System.out.println("contains1");
 		ZMod zmod = ZMod.getInstance(BigInteger.TEN);
 		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElement(0)));
 		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElement(1)));
@@ -343,7 +343,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testContains2() {
-		System.out.println("contains2");
+//		System.out.println("contains2");
 		Assert.assertTrue(BooleanSet.getInstance().contains(0));
 		Assert.assertTrue(BooleanSet.getInstance().contains(1));
 		Assert.assertTrue(!BooleanSet.getInstance().contains(2));
@@ -354,7 +354,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testEquals() {
-		System.out.println("equals");
+//		System.out.println("equals");
 		Assert.assertTrue(BooleanSet.getInstance().isEquivalent(BooleanSet.getInstance()));
 		{
 			ZMod zmod = ZMod.getInstance(2);
@@ -372,7 +372,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testhasKnownOrder() {
-		System.out.println("hasKnownOrder");
+//		System.out.println("hasKnownOrder");
 		Assert.assertTrue(BooleanSet.getInstance().hasKnownOrder());
 	}
 
@@ -381,7 +381,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsAdditive() {
-		System.out.println("isAdditive");
+//		System.out.println("isAdditive");
 		Assert.assertTrue(!BooleanSet.getInstance().isAdditive());
 	}
 
@@ -390,7 +390,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsCompatible() {
-		System.out.println("isCompatible");
+//		System.out.println("isCompatible");
 		Assert.assertTrue(BooleanSet.getInstance().isCompatible(BooleanSet.getInstance()));
 		Assert.assertTrue(!BooleanSet.getInstance().isCompatible(ZMod.getInstance(2)));
 		Assert.assertTrue(!BooleanSet.getInstance().isCompatible(ZMod.getInstance(3)));
@@ -401,7 +401,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsConcatenative() {
-		System.out.println("isConcatenative");
+//		System.out.println("isConcatenative");
 		Assert.assertTrue(!BooleanSet.getInstance().isConcatenative());
 	}
 
@@ -410,7 +410,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsCyclic() {
-		System.out.println("isCyclic");
+//		System.out.println("isCyclic");
 		Assert.assertTrue(!BooleanSet.getInstance().isCyclic());
 	}
 
@@ -419,7 +419,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsEmpty() {
-		System.out.println("isEmpty");
+//		System.out.println("isEmpty");
 		Assert.assertTrue(!BooleanSet.getInstance().isEmpty());
 	}
 
@@ -428,7 +428,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsField() {
-		System.out.println("isField");
+//		System.out.println("isField");
 		Assert.assertTrue(!BooleanSet.getInstance().isField());
 	}
 
@@ -437,7 +437,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsFinite() {
-		System.out.println("isFinite");
+//		System.out.println("isFinite");
 		Assert.assertTrue(BooleanSet.getInstance().isFinite());
 	}
 
@@ -446,7 +446,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsGroup() {
-		System.out.println("isGroup");
+//		System.out.println("isGroup");
 		Assert.assertTrue(!BooleanSet.getInstance().isGroup());
 	}
 
@@ -455,7 +455,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsMonoid() {
-		System.out.println("isMonoid");
+//		System.out.println("isMonoid");
 		Assert.assertTrue(!BooleanSet.getInstance().isMonoid());
 	}
 
@@ -464,7 +464,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsMultiplicative() {
-		System.out.println("isMultiplicative");
+//		System.out.println("isMultiplicative");
 		Assert.assertTrue(!BooleanSet.getInstance().isMultiplicative());
 	}
 
@@ -473,7 +473,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsProduct() {
-		System.out.println("isProduct");
+//		System.out.println("isProduct");
 		Assert.assertTrue(!BooleanSet.getInstance().isProduct());
 	}
 
@@ -482,7 +482,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsRing() {
-		System.out.println("isRing");
+//		System.out.println("isRing");
 		Assert.assertTrue(!BooleanSet.getInstance().isRing());
 	}
 
@@ -491,7 +491,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsSemiGroup() {
-		System.out.println("isSemiGroup");
+//		System.out.println("isSemiGroup");
 		Assert.assertTrue(!BooleanSet.getInstance().isSemiGroup());
 	}
 
@@ -500,7 +500,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsSemiRing() {
-		System.out.println("isSemiRing");
+//		System.out.println("isSemiRing");
 		Assert.assertTrue(!BooleanSet.getInstance().isSemiRing());
 	}
 
@@ -509,7 +509,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testIsSingleton() {
-		System.out.println("isSingleton");
+//		System.out.println("isSingleton");
 		Assert.assertTrue(!BooleanSet.getInstance().isSingleton());
 	}
 
@@ -518,7 +518,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetInstance() {
-		System.out.println("getInstance");
+//		System.out.println("getInstance");
 		BooleanSet expResult = null;
 		BooleanSet result = BooleanSet.getInstance();
 		Assert.assertNotNull(result);

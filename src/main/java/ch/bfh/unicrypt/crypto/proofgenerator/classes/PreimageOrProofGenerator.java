@@ -125,7 +125,7 @@ public class PreimageOrProofGenerator
 	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, RandomGenerator randomGenerator) {
 
 		// Extract secret input value and index from private input
-		final int index = privateInput.getSecond().getIntegerValue().intValue();
+		final int index = privateInput.getSecond().getBigInteger().intValue();
 		final Element secret = ((Tuple) privateInput.getFirst()).getAt(index);
 
 		final Function[] proofFunctions = this.getPreimageProofFunction().getAll();

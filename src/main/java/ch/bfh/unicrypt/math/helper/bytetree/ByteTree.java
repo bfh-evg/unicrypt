@@ -103,7 +103,7 @@ public abstract class ByteTree {
 	 * @param bytes The byte[] that will be embedded as leaf-element of a ByteTree
 	 * @return new Instance of a ByteTree with exactly one leaf-element.
 	 */
-	public static ByteTree getInstance(byte[] bytes) {
+	public static ByteTreeLeaf getInstance(byte[] bytes) {
 		return new ByteTreeLeaf(bytes);
 	}
 

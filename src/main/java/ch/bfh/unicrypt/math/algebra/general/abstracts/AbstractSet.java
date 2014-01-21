@@ -274,7 +274,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		if (this.contains(element)) {
 			return (E) element;
 		}
-		return this.getElement(element.getIntegerValue());
+		return this.getElement(element.getBigInteger());
 	}
 
 	@Override

@@ -139,7 +139,7 @@ public class ByteArray
 		byte[] result = Arrays.copyOf(this.bytes, maxLength);
 		for (ByteArray other : others) {
 			for (int i = 0; i < other.length; i++) {
-				result[i] ^= this.getAt(i);
+				result[i] ^= other.getAt(i);
 			}
 		}
 		return new ByteArray(result);

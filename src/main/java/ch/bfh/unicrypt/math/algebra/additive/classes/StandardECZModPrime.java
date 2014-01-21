@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.params.classes.SECECCParamsFp;
 import ch.bfh.unicrypt.math.params.interfaces.StandardECZModParams;
 import java.math.BigInteger;
 
@@ -73,13 +72,12 @@ public class StandardECZModPrime
 		return new StandardECZModPrime(field, a, b, gx, gy, order, h);
 	}
 
-	public static void main(String[] args) {
-
-		for (SECECCParamsFp params : SECECCParamsFp.values()) {
-
-			StandardECZModPrime ec = StandardECZModPrime.getInstance(params);
-			System.out.println(params.name() + "(\"" + ec.getFiniteField().getModulus().toString(16) + "\",\"" + ec.getA().getValue().toString(16) + "\",\"" + ec.getB().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getValue().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getCoFactor() + "\"),");
-		}
-	}
-
+//	public static void main(String[] args) {
+//
+//		for (SECECCParamsFp params : SECECCParamsFp.values()) {
+//
+//			StandardECZModPrime ec = StandardECZModPrime.getInstance(params);
+//			System.out.println(params.name() + "(\"" + ec.getFiniteField().getModulus().toString(16) + "\",\"" + ec.getA().getValue().toString(16) + "\",\"" + ec.getB().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getValue().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getCoFactor() + "\"),");
+//		}
+//	}
 }

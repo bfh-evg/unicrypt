@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -44,9 +44,11 @@ package ch.bfh.unicrypt.math.helper;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class Permutation
-	   extends UniCrypt {
+	   extends UniCrypt
+	   implements Iterable<Integer> {
 
 	private final int[] permutationVector;
 
@@ -111,7 +113,7 @@ public class Permutation
 	 * @return {@literal true} if {@literal permutationVector} is a permutation vector, {@literal false} otherwise
 	 * @throws IllegalArgumentException if {@literal permutationVector} is null
 	 */
-	public static boolean isPermutationVector(final int... permutationVector) {
+	public static boolean isValid(final int... permutationVector) {
 		if (permutationVector == null) {
 			throw new IllegalArgumentException();
 		}
@@ -128,6 +130,29 @@ public class Permutation
 	@Override
 	public String standardToStringContent() {
 		return "" + this.getSize();
+	}
+
+	@Override
+	public Iterator<Integer> iterator() {
+		return new Iterator<Integer>() {
+
+			int currentIndex = 0;
+
+			@Override
+			public boolean hasNext() {
+				return currentIndex < permutationVector.length;
+			}
+
+			@Override
+			public Integer next() {
+				return permutationVector[currentIndex++];
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 
 	@Override
@@ -161,10 +186,10 @@ public class Permutation
 	}
 
 	public static Permutation getInstance(int[] permutationVector) {
-		if (!isPermutationVector(permutationVector)) {
+		if (!isValid(permutationVector)) {
 			throw new IllegalArgumentException();
 		}
-		return new Permutation(permutationVector);
+		return new Permutation(permutationVector.clone());
 	}
 
 	public static Permutation getRandomInstance(int size) {

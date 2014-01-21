@@ -112,7 +112,7 @@ public class ByteArrayElementTest {
 	@Test
 	@Ignore
 	public void testGetLength() {
-		System.out.println("getLength");
+//		System.out.println("getLength");
 		ByteArrayElement instance = null;
 		int expResult = 0;
 		int result = instance.getLength();

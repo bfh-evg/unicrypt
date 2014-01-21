@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 
 /**
@@ -66,7 +67,7 @@ public class FiniteStringElement
 	}
 
 	@Override
-	protected BigInteger abstractGetIntegerValue() {
+	protected BigInteger abstractGetBigInteger() {
 		int length = this.getLength();
 		int minLength = this.getSet().getMinLength();
 		BigInteger value = BigInteger.ZERO;
@@ -79,6 +80,11 @@ public class FiniteStringElement
 			value = value.multiply(size).add(BigInteger.valueOf(charIndex));
 		}
 		return value;
+	}
+
+	@Override
+	protected ByteTreeLeaf abstractGetByteTree() {
+		return ByteTreeLeaf.getInstance(this.getBigInteger().toByteArray());
 	}
 
 	@Override

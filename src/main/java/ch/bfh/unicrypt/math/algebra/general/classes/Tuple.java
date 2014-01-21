@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -67,14 +68,24 @@ public class Tuple
 	}
 
 	@Override
-	protected BigInteger abstractGetIntegerValue() {
+	protected BigInteger abstractGetBigInteger() {
 		BigInteger[] values = new BigInteger[this.getArity()];
 		int i = 0;
 		for (Element element : this) {
-			values[i] = element.getIntegerValue();
+			values[i] = element.getBigInteger();
 			i++;
 		}
 		return MathUtil.foldAndPair(values);
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTree() {
+		int arity = this.getArity();
+		ByteTree[] byteTrees = new ByteTree[arity];
+		for (int i = 0; i < arity; i++) {
+			byteTrees[i] = this.getValue().getAt(i).getByteTree();
+		}
+		return ByteTree.getInstance(byteTrees);
 	}
 
 	@Override

@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.params.classes;
 
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECBinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.params.interfaces.StandardECBinaryPolinomialFieldParams;
@@ -119,22 +118,21 @@ public enum SECECCParamsF2m
 		return new BigInteger(h, 16);
 	}
 
-	public static void main(String[] args) {
-		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
-			System.out.println(params.getFiniteField());
-			System.out.println(params.getA());
-			System.out.println(params.getB());
-			System.out.println(params.getGx());
-			System.out.println(params.getGy());
-			System.out.println(params.getOrder());
-			System.out.println(params.getH());
-		}
-
-		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
-			System.out.print(params.name() + " ");
-			StandardECBinaryPolynomialField ec = StandardECBinaryPolynomialField.getInstance(params);
-			System.out.println(ec);
-		}
-	}
-
+//	public static void main(String[] args) {
+//		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
+//			System.out.println(params.getFiniteField());
+//			System.out.println(params.getA());
+//			System.out.println(params.getB());
+//			System.out.println(params.getGx());
+//			System.out.println(params.getGy());
+//			System.out.println(params.getOrder());
+//			System.out.println(params.getH());
+//		}
+//
+//		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
+//			System.out.print(params.name() + " ");
+//			StandardECBinaryPolynomialField ec = StandardECBinaryPolynomialField.getInstance(params);
+//			System.out.println(ec);
+//		}
+//	}
 }

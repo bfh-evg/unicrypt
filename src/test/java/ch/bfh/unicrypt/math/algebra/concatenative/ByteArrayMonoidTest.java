@@ -58,7 +58,7 @@ public class ByteArrayMonoidTest {
 		ByteArrayMonoid bam = ByteArrayMonoid.getInstance(2);
 		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(65538)) <= 0; i = i.add(BigInteger.ONE)) {
 			ByteArrayElement element = bam.getElement(i);
-			Assert.assertEquals(i, element.getIntegerValue());
+			Assert.assertEquals(i, element.getBigInteger());
 //			System.out.println(element);
 		}
 	}

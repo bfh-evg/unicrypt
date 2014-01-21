@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.helper.polynomial.BinaryPolynomial;
 import java.math.BigInteger;
 
@@ -57,8 +58,13 @@ public class BinaryPolynomialElement
 	}
 
 	@Override
-	protected BigInteger abstractGetIntegerValue() {
+	protected BigInteger abstractGetBigInteger() {
 		return new BigInteger(this.getValue().getCoefficients().getAll());
+	}
+
+	@Override
+	protected ByteTreeLeaf abstractGetByteTree() {
+		return ByteTreeLeaf.getInstance(this.getValue().getCoefficients().getAll());
 	}
 
 }

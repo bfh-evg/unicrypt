@@ -93,7 +93,7 @@ public abstract class AbstractSemiGroup<E extends Element, V extends Object>
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.selfApply(element, amount.getIntegerValue());
+		return this.selfApply(element, amount.getBigInteger());
 	}
 
 	@Override

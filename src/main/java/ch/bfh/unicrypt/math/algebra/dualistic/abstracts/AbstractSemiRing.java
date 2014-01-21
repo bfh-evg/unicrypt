@@ -92,7 +92,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement, V extends Obj
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.power(element, amount.getIntegerValue());
+		return this.power(element, amount.getBigInteger());
 	}
 
 	@Override

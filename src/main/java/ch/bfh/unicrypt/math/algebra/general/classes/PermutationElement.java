@@ -43,6 +43,8 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.helper.Permutation;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -63,9 +65,20 @@ public class PermutationElement
 	}
 
 	@Override
-	protected BigInteger abstractGetIntegerValue() {
+	protected BigInteger abstractGetBigInteger() {
 		// better with Lehmer codes
 		return MathUtil.pair(ArrayUtil.intToBigIntegerArray(this.getValue().getPermutationVector()));
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTree() {
+		Permutation permutation = this.getValue();
+		int size = permutation.getSize();
+		ByteTree[] byteTrees = new ByteTree[size];
+		for (int i = 0; i < size; i++) {
+			byteTrees[i] = ByteTreeLeaf.getInstance(BigInteger.valueOf(permutation.permute(i)).toByteArray());
+		}
+		return ByteTree.getInstance(byteTrees);
 	}
 
 }

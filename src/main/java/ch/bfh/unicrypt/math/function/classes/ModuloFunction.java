@@ -81,7 +81,7 @@ public class ModuloFunction
 	//
 	@Override
 	protected ZModElement abstractApply(final Element element, final RandomGenerator randomGenerator) {
-		return this.getCoDomain().getElement(element.getIntegerValue().mod(this.getModulus()));
+		return this.getCoDomain().getElement(element.getBigInteger().mod(this.getModulus()));
 	}
 
 	//

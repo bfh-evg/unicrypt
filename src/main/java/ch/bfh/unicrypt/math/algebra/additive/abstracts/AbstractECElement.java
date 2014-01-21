@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.helper.Point;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
@@ -89,12 +90,17 @@ public abstract class AbstractECElement<E extends AbstractECElement, D extends D
 	}
 
 	@Override
-	protected BigInteger abstractGetIntegerValue() {
+	protected BigInteger abstractGetBigInteger() {
 		if (this.isInfinity) {
 			return BigInteger.ZERO;
 		} else {
-			return MathUtil.pair(this.getX().getIntegerValue(), this.getY().getIntegerValue()).add(BigInteger.ONE);
+			return MathUtil.pair(this.getX().getBigInteger(), this.getY().getBigInteger()).add(BigInteger.ONE);
 		}
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTree() {
+		return ByteTree.getInstance(this.getX().getByteTree(), this.getY().getByteTree());
 	}
 
 	@Override

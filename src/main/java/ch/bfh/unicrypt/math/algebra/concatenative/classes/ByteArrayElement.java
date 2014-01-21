@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
 import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 
 /**
@@ -62,7 +63,7 @@ public class ByteArrayElement
 	}
 
 	@Override
-	protected BigInteger abstractGetIntegerValue() {
+	protected BigInteger abstractGetBigInteger() {
 		BigInteger value1 = new BigInteger(1, this.getValue().getAll());
 		BigInteger value2 = BigInteger.ZERO;
 		int blockLength = this.getSet().getBlockLength();
@@ -79,6 +80,11 @@ public class ByteArrayElement
 			value2 = new BigInteger(1, oneOone);
 		}
 		return value1.add(value2);
+	}
+
+	@Override
+	protected ByteTreeLeaf abstractGetByteTree() {
+		return ByteTreeLeaf.getInstance(this.getValue().getAll());
 	}
 
 }

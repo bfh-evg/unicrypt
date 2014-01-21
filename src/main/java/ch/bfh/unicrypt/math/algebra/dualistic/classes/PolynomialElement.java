@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.polynomial.GenericPolynomial;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -78,13 +79,23 @@ public class PolynomialElement
 	}
 
 	@Override
-	protected BigInteger abstractGetIntegerValue() {
+	protected BigInteger abstractGetBigInteger() {
 		int degree = this.getValue().getDegree();
-		BigInteger values[] = new BigInteger[degree + 1];
+		BigInteger[] values = new BigInteger[degree + 1];
 		for (int i = 0; i <= degree; i++) {
-			values[i] = this.getValue().getCoefficient(i).getIntegerValue();
+			values[i] = this.getValue().getCoefficient(i).getBigInteger();
 		}
 		return MathUtil.pairWithSize(values);
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTree() {
+		int degree = this.getValue().getDegree();
+		ByteTree[] byteTrees = new ByteTree[degree + 1];
+		for (int i = 0; i <= degree; i++) {
+			byteTrees[i] = this.getValue().getCoefficient(i).getByteTree();
+		}
+		return ByteTree.getInstance(byteTrees);
 	}
 
 }
