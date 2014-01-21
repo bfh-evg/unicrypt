@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.helper;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  *
@@ -49,7 +50,8 @@ import java.util.Arrays;
  * @param <T>
  */
 public class ImmutableArray<T>
-	   extends UniCrypt {
+	   extends UniCrypt
+	   implements Iterable<T> {
 
 	private final T[] array;
 
@@ -67,6 +69,29 @@ public class ImmutableArray<T>
 
 	public T[] getAll() {
 		return this.array.clone();
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+
+			int currentIndex = 0;
+
+			@Override
+			public boolean hasNext() {
+				return currentIndex < array.length;
+			}
+
+			@Override
+			public T next() {
+				return getAt(currentIndex++);
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 
 	@Override

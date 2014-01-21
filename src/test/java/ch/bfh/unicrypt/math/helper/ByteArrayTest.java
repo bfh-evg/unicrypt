@@ -79,7 +79,7 @@ public class ByteArrayTest {
 	}
 
 	/**
-	 * Test of getBytes method, of class ByteArray.
+	 * Test of getAts method, of class ByteArray.
 	 */
 	@Test
 	@Ignore
@@ -87,7 +87,7 @@ public class ByteArrayTest {
 		System.out.println("getBytes");
 		ByteArray instance = null;
 		byte[] expResult = null;
-		byte[] result = instance.getBytes();
+		byte[] result = instance.getAll();
 		assertArrayEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -109,7 +109,7 @@ public class ByteArrayTest {
 	}
 
 	/**
-	 * Test of getByte method, of class ByteArray.
+	 * Test of getAt method, of class ByteArray.
 	 */
 	@Test
 	@Ignore
@@ -118,7 +118,7 @@ public class ByteArrayTest {
 		int index = 0;
 		ByteArray instance = null;
 		byte expResult = 0;
-		byte result = instance.getByte(index);
+		byte result = instance.getAt(index);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");

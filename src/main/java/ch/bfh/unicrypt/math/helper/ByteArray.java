@@ -45,13 +45,15 @@ import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ByteArray
-	   extends UniCrypt {
+	   extends UniCrypt
+	   implements Iterable<Byte> {
 
 	private final byte[] bytes;
 	private final int offset;
@@ -71,15 +73,19 @@ public class ByteArray
 		return this.length;
 	}
 
-	public byte[] getBytes() {
+	public byte[] getAll() {
 		return Arrays.copyOfRange(bytes, offset, offset + length);
 	}
 
-	public byte getByte(int index) {
+	public byte getAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
 		return this.bytes[this.offset + index];
+	}
+
+	public ByteArray extract(int length) {
+		return this.extract(0, length);
 	}
 
 	public ByteArray extract(int offset, int length) {
@@ -133,7 +139,7 @@ public class ByteArray
 		byte[] result = Arrays.copyOf(this.bytes, maxLength);
 		for (ByteArray other : others) {
 			for (int i = 0; i < other.length; i++) {
-				result[i] ^= this.getByte(i);
+				result[i] ^= this.getAt(i);
 			}
 		}
 		return new ByteArray(result);
@@ -155,10 +161,33 @@ public class ByteArray
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.length; i++) {
-			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.getByte(i) & 0xFF));
+			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.getAt(i) & 0xFF));
 			delimiter = "|";
 		}
 		return "\"" + str + "\"";
+	}
+
+	@Override
+	public Iterator<Byte> iterator() {
+		return new Iterator<Byte>() {
+
+			int currentIndex = 0;
+
+			@Override
+			public boolean hasNext() {
+				return currentIndex < length;
+			}
+
+			@Override
+			public Byte next() {
+				return getAt(currentIndex++);
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 
 	@Override

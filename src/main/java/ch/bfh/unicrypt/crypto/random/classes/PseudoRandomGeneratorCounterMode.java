@@ -96,8 +96,8 @@ public class PseudoRandomGeneratorCounterMode
 		//-->This is, why the following implementation exists.
 		MessageDigest digest = hashMethod.getMessageDigest();
 		digest.reset();
-		return digest.digest(hashedSeed.concatenate(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getBytes());
-//		return digest.digest(hashedSeed.concatenate(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getBytes());
+		return digest.digest(hashedSeed.concatenate(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getAll());
+//		return digest.digest(hashedSeed.concatenate(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getAll());
 
 		//this.digestBytes = ByteArrayMonoid.getInstance().apply(hashedSeedElement, Z.getInstance().getElement(counter).getHashValue(hashMethod).getByteArrayElement()).getHashValue(hashMethod).getByteArray();
 		//this.digestBytes = ByteArrayMonoid.getInstance().apply(seedByteArray, ByteArrayMonoid.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();

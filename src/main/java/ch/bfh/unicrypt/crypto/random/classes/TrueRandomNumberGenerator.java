@@ -90,7 +90,7 @@ public class TrueRandomNumberGenerator
 		ByteArray pseudoFeedback = ByteArray.getRandomInstance(pseudoRandomGenerator.getHashMethod().getLength(), pseudoRandomGenerator);
 
 		ByteArray freshState = pseudoFeedback.xor(ByteArray.getInstance(distributionSampler.getDistributionSample(hashMethod.getLength())));
-		this.pseudoRandomGenerator.updateInternalState(freshState.getBytes());
+		this.pseudoRandomGenerator.updateInternalState(freshState.getAll());
 
 	}
 

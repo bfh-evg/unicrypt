@@ -58,7 +58,7 @@ public class BinaryPolynomialElement
 
 	@Override
 	protected BigInteger abstractGetIntegerValue() {
-		return new BigInteger(this.getValue().getCoefficients().getBytes());
+		return new BigInteger(this.getValue().getCoefficients().getAll());
 	}
 
 }

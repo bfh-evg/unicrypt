@@ -52,11 +52,11 @@ public class ByteArrayExample {
 
 		System.out.println(byteArray);
 		System.out.println("Length : " + byteArray.getLength());
-//		for (Byte b: byteArray) {
-		System.out.println("Byte 0 : " + byteArray.getByte(0));
-		System.out.println("Byte 1 : " + byteArray.getByte(1));
-		System.out.println("Byte 2 : " + byteArray.getByte(2));
-		System.out.println("Byte 9 : " + byteArray.getByte(9));
+
+		System.out.println("Bytes:");
+		for (Byte b : byteArray) {
+			System.out.println(b);
+		}
 
 		System.out.println("Extract: " + byteArray.extract(2, 4));
 

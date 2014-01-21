@@ -63,7 +63,7 @@ public class ByteArrayElement
 
 	@Override
 	protected BigInteger abstractGetIntegerValue() {
-		BigInteger value1 = new BigInteger(1, this.getValue().getBytes());
+		BigInteger value1 = new BigInteger(1, this.getValue().getAll());
 		BigInteger value2 = BigInteger.ZERO;
 		int blockLength = this.getSet().getBlockLength();
 

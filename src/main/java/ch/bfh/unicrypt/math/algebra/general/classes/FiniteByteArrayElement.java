@@ -73,7 +73,7 @@ public class FiniteByteArrayElement
 		BigInteger value = BigInteger.ZERO;
 		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
 		for (int i = 0; i < length; i++) {
-			int intValue = this.getValue().getByte(i) & 0xFF;
+			int intValue = this.getValue().getAt(i) & 0xFF;
 			if (i < length - minLength) {
 				intValue++;
 			}

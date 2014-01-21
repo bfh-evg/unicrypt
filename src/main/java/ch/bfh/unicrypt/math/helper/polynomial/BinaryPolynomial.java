@@ -60,11 +60,11 @@ public class BinaryPolynomial
 		this.coefficients = coefficients;
 		int byteIndex = 0;
 		for (int i = 0; i < this.coefficients.getLength(); i++) {
-			if (this.coefficients.getByte(i) > 0) {
+			if (this.coefficients.getAt(i) > 0) {
 				byteIndex = i;
 			}
 		}
-		byte b = this.coefficients.getByte(byteIndex);
+		byte b = this.coefficients.getAt(byteIndex);
 		int bitIndex = Byte.SIZE - Integer.numberOfLeadingZeros(b);
 		this.degree = byteIndex * Byte.SIZE + bitIndex;
 	}
@@ -84,7 +84,7 @@ public class BinaryPolynomial
 		if (byteIndex >= this.coefficients.getLength()) {
 			return false;
 		}
-		return ((this.coefficients.getByte(byteIndex) >> bitIndex) & 1) == 1;
+		return ((this.coefficients.getAt(byteIndex) >> bitIndex) & 1) == 1;
 	}
 
 	public ByteArray getCoefficients() {
