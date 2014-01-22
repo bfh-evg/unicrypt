@@ -63,13 +63,6 @@ public class ReEncryptionMixer
 		this.publicKey = publicKey;
 	}
 
-	static public ReEncryptionMixer getInstance(ReEncryptionScheme reEncryptionScheme, Element publicKey, int size) {
-		if (reEncryptionScheme == null || !reEncryptionScheme.getEncryptionKeySpace().contains(publicKey) || size < 1) {
-			throw new IllegalArgumentException();
-		}
-		return new ReEncryptionMixer(reEncryptionScheme, publicKey, size);
-	}
-
 	public ReEncryptionScheme getReEncryptionScheme() {
 		return this.reEncryptionScheme;
 	}
@@ -81,6 +74,13 @@ public class ReEncryptionMixer
 	@Override
 	protected Function abstractGetShuffleFunction() {
 		return this.getReEncryptionScheme().getReEncryptionFunction().partiallyApply(this.getPublicKey(), 0);
+	}
+
+	static public ReEncryptionMixer getInstance(ReEncryptionScheme reEncryptionScheme, Element publicKey, int size) {
+		if (reEncryptionScheme == null || publicKey == null || !reEncryptionScheme.getEncryptionKeySpace().contains(publicKey) || size < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new ReEncryptionMixer(reEncryptionScheme, publicKey, size);
 	}
 
 }

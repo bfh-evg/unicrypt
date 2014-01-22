@@ -49,8 +49,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.ApplyInverseFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -65,29 +63,27 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 /**
  *
  * @author rolfhaenni
- * @param <MS>
- * @param <ME>
  */
-public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
-	   extends AbstractReEncryptionScheme<MS, ME, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup, ZMod, ElGamalKeyPairGenerator> {
+public class ElGamalEncryptionScheme
+	   extends AbstractReEncryptionScheme<CyclicGroup, Element, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup, ZMod, ElGamalKeyPairGenerator> {
 
-	private final MS cyclicGroup;
-	private final ME generator;
+	private final CyclicGroup cyclicGroup;
+	private final Element generator;
 	private final ZMod zMod;
 	private Function encryptionFunctionLeft;
 	private Function encryptionFunctionRight;
 
-	protected ElGamalEncryptionScheme(MS cyclicGroup, ME generator) {
+	protected ElGamalEncryptionScheme(CyclicGroup cyclicGroup, Element generator) {
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
 		this.zMod = cyclicGroup.getZModOrder();
 	}
 
-	public final MS getCyclicGroup() {
+	public final CyclicGroup getCyclicGroup() {
 		return this.cyclicGroup;
 	}
 
-	public final ME getGenerator() {
+	public final Element getGenerator() {
 		return this.generator;
 	}
 
@@ -139,45 +135,18 @@ public class ElGamalEncryptionScheme<MS extends CyclicGroup, ME extends Element>
 		return this.encryptionFunctionRight;
 	}
 
-	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(MS cyclicGroup) {
-		return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(cyclicGroup);
-	}
-
-	public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-		return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod);
-	}
-
-	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInstance(ME generator) {
-		return ElGamalEncryptionScheme.<MS, ME>getInternalInstance(generator);
-	}
-
-	public static ElGamalEncryptionScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
-		return ElGamalEncryptionScheme.<GStarMod, GStarModElement>getInternalInstance(generator);
-	}
-
-	private static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(ME generator) {
-		if (!generator.isGenerator()) {
+	public static ElGamalEncryptionScheme getInstance(CyclicGroup cyclicGroup) {
+		if (cyclicGroup == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ElGamalEncryptionScheme<MS, ME>((MS) generator.getSet(), generator);
+		return new ElGamalEncryptionScheme(cyclicGroup, cyclicGroup.getDefaultGenerator());
 	}
 
-	public static <MS extends CyclicGroup, ME extends Element> ElGamalEncryptionScheme<MS, ME> getInternalInstance(MS cyclicGroup) {
-		return new ElGamalEncryptionScheme<MS, ME>(cyclicGroup, (ME) cyclicGroup.getDefaultGenerator());
+	public static ElGamalEncryptionScheme getInstance(Element generator) {
+		if (generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()) {
+			throw new IllegalArgumentException();
+		}
+		return new ElGamalEncryptionScheme((CyclicGroup) generator.getSet(), generator);
 	}
 
 }
-
-//
-//    // @Override
-//    @Override
-//    public Element partialDecrypt(final Element privateKey, final Element ciphertext) {
-//        return (Element) this.getPartialDecryptionFunction().apply(privateKey, ((Element) ciphertext).getAt(0));
-//    }
-//
-//    // @Override
-//    @Override
-//    public Element combinePartialDecryptions(final Element ciphertext, final Element... partialDecryptions) {
-//        final Element element = ((Element) ciphertext).getAt(1);
-//        return this.ddhGroup.apply(partialDecryptions).apply(element);
-//    }

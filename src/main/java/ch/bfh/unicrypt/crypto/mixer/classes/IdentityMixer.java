@@ -93,13 +93,6 @@ public class IdentityMixer
 		return Tuple.getInstance(randomizations);
 	}
 
-	public static IdentityMixer getInstance(CyclicGroup cyclicGroup, int size) {
-		if (cyclicGroup == null || size < 1) {
-			throw new IllegalArgumentException();
-		}
-		return new IdentityMixer(cyclicGroup, size);
-	}
-
 	@Override
 	protected Tuple standardGenerateRandomizations(PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		Element r = this.generateRandomization(pseudoRandomGenerator);
@@ -109,6 +102,13 @@ public class IdentityMixer
 	@Override
 	protected Function abstractGetShuffleFunction() {
 		return SelfApplyFunction.getInstance(this.getCyclicGroup());
+	}
+
+	public static IdentityMixer getInstance(CyclicGroup cyclicGroup, int size) {
+		if (cyclicGroup == null || size < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new IdentityMixer(cyclicGroup, size);
 	}
 
 }

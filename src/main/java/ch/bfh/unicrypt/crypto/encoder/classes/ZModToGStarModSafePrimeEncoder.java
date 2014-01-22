@@ -52,12 +52,12 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.math.BigInteger;
 
-public class GStarModSafePrimeEncoder
+public class ZModToGStarModSafePrimeEncoder
 			 extends AbstractEncoder<ZModPrime, ZModElement, GStarModSafePrime, GStarModElement> {
 
 	private final GStarModSafePrime gStarModSafePrime;
 
-	protected GStarModSafePrimeEncoder(GStarModSafePrime gStarModSafePrime) {
+	protected ZModToGStarModSafePrimeEncoder(GStarModSafePrime gStarModSafePrime) {
 		this.gStarModSafePrime = gStarModSafePrime;
 	}
 
@@ -75,11 +75,11 @@ public class GStarModSafePrimeEncoder
 		return new DecodingFunction(this.getGStarModSafePrime(), (ZModPrime) this.getGStarModSafePrime().getZModOrder());
 	}
 
-	public static GStarModSafePrimeEncoder getInstance(GStarModSafePrime gStarModSafePrime) {
+	public static ZModToGStarModSafePrimeEncoder getInstance(GStarModSafePrime gStarModSafePrime) {
 		if (gStarModSafePrime == null) {
 			throw new IllegalArgumentException();
 		}
-		return new GStarModSafePrimeEncoder(gStarModSafePrime);
+		return new ZModToGStarModSafePrimeEncoder(gStarModSafePrime);
 	}
 
 	static class EncodingFunction

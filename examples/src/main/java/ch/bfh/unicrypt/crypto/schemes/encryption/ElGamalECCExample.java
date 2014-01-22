@@ -59,8 +59,8 @@ public class ElGamalECCExample {
 
 		// Example Elgamal over ECFp
 		final StandardECZModPrime g_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1); //Possible curves secp{112,160,192,224,256,384,521}r1
-		final ElGamalEncryptionScheme<StandardECZModPrime, ECZModPrimeElement> ecs = ElGamalEncryptionScheme.getInstance(g_q);
-		final KeyPairGenerator keyGen = ecs.getKeyPairGenerator();
+		final ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(g_q);
+		final KeyPairGenerator keyGen = elGamal.getKeyPairGenerator();
 
 		ProbabilisticECGroupFpEncoder enc = ProbabilisticECGroupFpEncoder.getInstance(g_q);
 
@@ -87,14 +87,14 @@ public class ElGamalECCExample {
 
 		//Encrypt message
 		time = System.currentTimeMillis();
-		final Tuple cipherText = ecs.encrypt(publigKey, message);
+		final Tuple cipherText = elGamal.encrypt(publigKey, message);
 		time = System.currentTimeMillis() - time;
 		System.out.println("Cipher Text: " + cipherText);
 		System.out.println("Time for encryption: " + time + " ms");
 
 		//decrypt message
 		time = System.currentTimeMillis();
-		Element newMessage = ecs.decrypt(privateKey, cipherText);
+		Element newMessage = elGamal.decrypt(privateKey, cipherText);
 		time = System.currentTimeMillis() - time;
 		System.out.println("New Message: " + newMessage);
 		System.out.println("Message == New Message: " + message.isEquivalent(newMessage));
