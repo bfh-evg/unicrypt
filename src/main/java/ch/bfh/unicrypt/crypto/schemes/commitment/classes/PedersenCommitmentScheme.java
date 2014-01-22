@@ -48,37 +48,35 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class PedersenCommitmentScheme<CS extends CyclicGroup, CE extends Element>
-	   extends AbstractRandomizedCommitmentScheme<ZMod, ZModElement, CS, CE, ZMod> {
+public class PedersenCommitmentScheme
+	   extends AbstractRandomizedCommitmentScheme<ZMod, ZModElement, CyclicGroup, Element, ZMod> {
 
-	private final CS cyclicGroup;
-	private final CE randomizationGenerator;
-	private final CE messgeGenerator;
+	private final CyclicGroup cyclicGroup;
+	private final Element randomizationGenerator;
+	private final Element messageGenerator;
 
-	protected PedersenCommitmentScheme(CS cyclicGroup, CE randomizationGenerator, CE messageGenerator) {
+	protected PedersenCommitmentScheme(CyclicGroup cyclicGroup, Element randomizationGenerator, Element messageGenerator) {
 		this.cyclicGroup = cyclicGroup;
 		this.randomizationGenerator = randomizationGenerator;
-		this.messgeGenerator = messageGenerator;
+		this.messageGenerator = messageGenerator;
 	}
 
-	public final CS getCyclicGroup() {
+	public final CyclicGroup getCyclicGroup() {
 		return this.cyclicGroup;
 	}
 
-	public final CE getRandomizationGenerator() {
+	public final Element getRandomizationGenerator() {
 		return this.randomizationGenerator;
 	}
 
-	public final CE getMessageGenerator() {
-		return this.messgeGenerator;
+	public final Element getMessageGenerator() {
+		return this.messageGenerator;
 	}
 
 	@Override
@@ -89,39 +87,29 @@ public class PedersenCommitmentScheme<CS extends CyclicGroup, CE extends Element
 			   ApplyFunction.getInstance(this.getCyclicGroup()));
 	}
 
-	public static <CS extends CyclicGroup, CE extends Element> PedersenCommitmentScheme<CS, CE> getInstance(CS cyclicGroup) {
-		return PedersenCommitmentScheme.<CS, CE>getInstance(cyclicGroup, (RandomReferenceString) null);
+	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
+		return PedersenCommitmentScheme.getInstance(cyclicGroup, (RandomReferenceString) null);
 	}
 
-	public static <CS extends CyclicGroup, CE extends Element> PedersenCommitmentScheme<CS, CE> getInstance(CS cyclicGroup, RandomReferenceString randomReferenceString) {
-		return PedersenCommitmentScheme.<CS, CE>getInternalInstance(cyclicGroup, randomReferenceString);
-	}
-
-	public static PedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-		return PedersenCommitmentScheme.<GStarMod, GStarModElement>getInstance(gStarMod, (RandomReferenceString) null);
-	}
-
-	public static PedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod, RandomReferenceString randomReferenceString) {
-		return PedersenCommitmentScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod, randomReferenceString);
-	}
-
-	public static PedersenCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarModElement firstGenerator, GStarModElement secondGenerator) {
-		if (!firstGenerator.getSet().isEquivalent(secondGenerator.getSet())) {
+	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, RandomReferenceString randomReferenceString) {
+		if (cyclicGroup == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PedersenCommitmentScheme<GStarMod, GStarModElement>(firstGenerator.getSet(), firstGenerator, secondGenerator);
-	}
-
-	private static <CS extends CyclicGroup, CE extends Element> PedersenCommitmentScheme<CS, CE> getInternalInstance(CS cyclicGroup, RandomReferenceString randomReferenceString) {
 		if (randomReferenceString == null) {
 			randomReferenceString = PseudoRandomReferenceString.getInstance();
 		} else {
 			randomReferenceString.reset();
 		}
 		Element[] generators = cyclicGroup.getIndependentGenerators(2, randomReferenceString);
-		CE randomizationGenerator = (CE) generators[0];
-		CE messageGenerator = (CE) generators[1];
-		return new PedersenCommitmentScheme<CS, CE>(cyclicGroup, randomizationGenerator, messageGenerator);
+		return new PedersenCommitmentScheme(cyclicGroup, generators[0], generators[1]);
+	}
+
+	public static PedersenCommitmentScheme getInstance(Element generator1, Element generator2) {
+		if (generator1 == null || generator2 == null || !generator1.getSet().isEquivalent(generator2.getSet())
+			   || !generator1.getSet().isCyclic() || !generator1.isGenerator() || !generator2.isGenerator()) {
+			throw new IllegalArgumentException();
+		}
+		return new PedersenCommitmentScheme((CyclicGroup) generator1.getSet(), generator1, generator2);
 	}
 
 }

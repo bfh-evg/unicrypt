@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -46,60 +46,45 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class StandardCommitmentScheme<CS extends CyclicGroup, CE extends Element>
-	extends AbstractDeterministicCommitmentScheme<ZMod, ZModElement, CS, CE> {
+public class StandardCommitmentScheme
+	   extends AbstractDeterministicCommitmentScheme<ZMod, ZModElement, CyclicGroup, Element> {
 
-    private final CS cyclicGroup;
-    private final CE generator;
+	private final CyclicGroup cyclicGroup;
+	private final Element generator;
 
-    protected StandardCommitmentScheme(CS cyclicGroup, CE generator) {
-	this.cyclicGroup = cyclicGroup;
-	this.generator = generator;
-    }
-
-    public final CS getCyclicGroup() {
-	return this.cyclicGroup;
-    }
-
-    public final CE getGenerator() {
-	return this.generator;
-    }
-
-    @Override
-    protected Function abstractGetCommitmentFunction() {
-	return GeneratorFunction.getInstance(this.generator);
-    }
-
-    public static <CS extends CyclicGroup, CE extends Element> StandardCommitmentScheme<CS, CE> getInstance(CS cyclicGroup) {
-	return StandardCommitmentScheme.<CS, CE>getInternalInstance(cyclicGroup);
-    }
-
-    public static <CS extends CyclicGroup, CE extends Element> StandardCommitmentScheme<CS, CE> getInstance(CE generator) {
-	return StandardCommitmentScheme.<CS, CE>getInternalInstance(generator);
-    }
-
-    public static StandardCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarMod gStarMod) {
-	return StandardCommitmentScheme.<GStarMod, GStarModElement>getInternalInstance(gStarMod);
-    }
-
-    public static StandardCommitmentScheme<GStarMod, GStarModElement> getInstance(GStarModElement generator) {
-	return StandardCommitmentScheme.<GStarMod, GStarModElement>getInternalInstance(generator);
-    }
-
-    public static <CS extends CyclicGroup, CE extends Element> StandardCommitmentScheme<CS, CE> getInternalInstance(CS cyclicGroup) {
-	return new StandardCommitmentScheme<CS, CE>(cyclicGroup, (CE) cyclicGroup.getDefaultGenerator());
-    }
-
-    private static <CS extends CyclicGroup, CE extends Element> StandardCommitmentScheme<CS, CE> getInternalInstance(CE generator) {
-	if (!generator.isGenerator()) {
-	    throw new IllegalArgumentException();
+	protected StandardCommitmentScheme(CyclicGroup cyclicGroup, Element generator) {
+		this.cyclicGroup = cyclicGroup;
+		this.generator = generator;
 	}
-	return new StandardCommitmentScheme<CS, CE>((CS) generator.getSet(), generator);
-    }
+
+	public final CyclicGroup getCyclicGroup() {
+		return this.cyclicGroup;
+	}
+
+	public final Element getGenerator() {
+		return this.generator;
+	}
+
+	@Override
+	protected Function abstractGetCommitmentFunction() {
+		return GeneratorFunction.getInstance(this.generator);
+	}
+
+	public static StandardCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
+		if (cyclicGroup == null) {
+			throw new IllegalArgumentException();
+		}
+		return new StandardCommitmentScheme(cyclicGroup, cyclicGroup.getDefaultGenerator());
+	}
+
+	public static StandardCommitmentScheme getInstance(Element generator) {
+		if (generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()) {
+			throw new IllegalArgumentException();
+		}
+		return new StandardCommitmentScheme((CyclicGroup) generator.getSet(), generator);
+	}
 
 }

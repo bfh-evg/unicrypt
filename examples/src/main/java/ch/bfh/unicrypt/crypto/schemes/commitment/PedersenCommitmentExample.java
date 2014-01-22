@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,16 +32,17 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 
@@ -51,24 +52,35 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
  */
 public class PedersenCommitmentExample {
 
-    public static void main(String[] args) {
+	public static void example1() {
 
-	PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(GStarModSafePrime.getInstance(23));
+		// Create cyclic group G_q (modulo 167) and wth generator=98
+		GStarModSafePrime cyclicGroup = GStarModSafePrime.getInstance(167);
 
-	Element message = pcs.getMessageSpace().getElement(2);
-	Element randomization = pcs.getRandomizationSpace().getElement(1);
-	Element commitment = pcs.commit(message, randomization);
-	System.out.println(commitment);
+		// Create commitment scheme to be used
+		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
 
-	{
-	    Element result = pcs.decommit(message, randomization, commitment);
-	    System.out.println(result);
+		// Create message and randomization to commit
+		Element message = commitmentScheme.getMessageSpace().getElement(42);
+		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
+
+		// Create commitment
+		Element commitment = commitmentScheme.commit(message, randomization);
+
+		// Decommit
+		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
+
+		System.out.println("Cylic Group: " + cyclicGroup);
+		System.out.println("Message    : " + message);
+		System.out.println("Message    : " + randomization);
+		System.out.println("Commitment : " + commitment);
+		System.out.println("Result     : " + result);
 	}
-	{
-	    Element wrongMessage = pcs.getMessageSpace().getElement(7);
-	    Element result = pcs.decommit(wrongMessage, randomization, commitment);
-	    System.out.println(result);
+
+	public static void main(String[] args) {
+
+		System.out.println("\nEXAMPLE 1 (plain):");
+		StandardCommitmentExample.example1();
 	}
 
-    }
 }

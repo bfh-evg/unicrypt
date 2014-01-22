@@ -42,11 +42,9 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.StandardCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import java.math.BigInteger;
 
 /**
  *
@@ -54,36 +52,34 @@ import java.math.BigInteger;
  */
 public class StandardCommitmentExample {
 
-	public static void exampleWithExpliciteGenerator() {
-		// All calculations are done within that group
-		GStarModSafePrime cyclicGroup = GStarModSafePrime.getInstance(BigInteger.valueOf(167));
+	public static void example1() {
 
-		// The generator is explicitly given...
-		Element generator = cyclicGroup.getElement(BigInteger.valueOf(98));
+		// Create cyclic group G_q (modulo 167) and wth generator=98
+		GStarModSafePrime cyclicGroup = GStarModSafePrime.getInstance(167);
+		Element generator = cyclicGroup.getElement(98);
 
-		// Test if it really is a ganerator
-		if (!cyclicGroup.isGenerator(generator)) {
-			return;
-		}
+		// Create commitment scheme to be used
+		StandardCommitmentScheme commitmentScheme = StandardCommitmentScheme.getInstance(generator);
 
-		// The commitmentScheme to be used
-		StandardCommitmentScheme<GStarModSafePrime, Element> commitmentScheme = StandardCommitmentScheme.getInstance(generator);
+		// Create message to commit
+		Element message = commitmentScheme.getMessageSpace().getElement(42);
 
-		ZMod additiveGroup = cyclicGroup.getZModOrder();
-
-		//The element to be commited
-		Element message = additiveGroup.getElement(42);
-
+		// Create commitment
 		Element commitment = commitmentScheme.commit(message);
 
-		System.out.println(commitment);
-
+		// Decommit
 		BooleanElement result = commitmentScheme.decommit(message, commitment);
-		System.out.println(result);
+
+		System.out.println("Cylic Group: " + cyclicGroup);
+		System.out.println("Message    : " + message);
+		System.out.println("Commitment : " + commitment);
+		System.out.println("Result     : " + result);
 	}
 
 	public static void main(String[] args) {
-		exampleWithExpliciteGenerator();
+
+		System.out.println("\nEXAMPLE 1 (plain):");
+		StandardCommitmentExample.example1();
 	}
 
 }
