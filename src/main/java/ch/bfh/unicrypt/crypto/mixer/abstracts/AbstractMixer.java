@@ -138,6 +138,11 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 		return this.standardGenerateRandomizations(pseudoRandomGenerator);
 	}
 
+	@Override
+	public PermutationGroup getPermutationGroup() {
+		return PermutationGroup.getInstance(this.size);
+	}
+
 	protected Tuple standardGenerateRandomizations(PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
 		return this.getRandomizationsSpace().getRandomElement(pseudoRandomGenerator);
 	}

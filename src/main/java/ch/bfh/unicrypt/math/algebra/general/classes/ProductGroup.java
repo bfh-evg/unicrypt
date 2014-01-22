@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import java.util.Arrays;
@@ -89,16 +88,6 @@ public class ProductGroup
 	@Override
 	public ProductGroup removeAt(final int index) {
 		return (ProductGroup) super.removeAt(index);
-	}
-
-	@Override
-	protected ProductGroup abstractRemoveAt(Set set, int arity) {
-		return ProductGroup.getInstance((Group) set, arity);
-	}
-
-	@Override
-	protected ProductGroup abstractRemoveAt(Set[] sets) {
-		return ProductGroup.getInstance((Group[]) sets);
 	}
 
 	@Override

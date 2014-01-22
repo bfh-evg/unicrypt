@@ -124,7 +124,7 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger integerValue) {
+	protected boolean abstractContains(BigInteger bigInteger) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -134,7 +134,7 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected BinaryPolynomialElement abstractGetElement(BigInteger integerValue) {
+	protected BinaryPolynomialElement abstractGetElement(BigInteger bigInteger) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

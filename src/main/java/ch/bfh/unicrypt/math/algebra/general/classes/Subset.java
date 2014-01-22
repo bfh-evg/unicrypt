@@ -92,9 +92,9 @@ public class Subset
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger integerValue) {
+	protected boolean abstractContains(BigInteger bigInteger) {
 		for (Element element : this.hashSet) {
-			if (element.getValue().equals(integerValue)) {
+			if (element.getValue().equals(bigInteger)) {
 				return true;
 			}
 		}
@@ -107,8 +107,8 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetElement(BigInteger integerValue) {
-		return this.getSuperset().getElement(integerValue);
+	protected Element abstractGetElement(BigInteger bigInteger) {
+		return this.getSuperset().getElement(bigInteger);
 	}
 
 	@Override

@@ -68,27 +68,6 @@ public class Tuple
 	}
 
 	@Override
-	protected BigInteger abstractGetBigInteger() {
-		BigInteger[] values = new BigInteger[this.getArity()];
-		int i = 0;
-		for (Element element : this) {
-			values[i] = element.getBigInteger();
-			i++;
-		}
-		return MathUtil.foldAndPair(values);
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTree() {
-		int arity = this.getArity();
-		ByteTree[] byteTrees = new ByteTree[arity];
-		for (int i = 0; i < arity; i++) {
-			byteTrees[i] = this.getValue().getAt(i).getByteTree();
-		}
-		return ByteTree.getInstance(byteTrees);
-	}
-
-	@Override
 	public int getArity() {
 		return this.arity;
 	}
@@ -111,7 +90,7 @@ public class Tuple
 
 	@Override
 	public Element getAt(int index) {
-		if (index < 0 || index >= this.getArity()) {
+		if (index < 0 || index >= this.arity) {
 			throw new IndexOutOfBoundsException();
 		}
 		if (this.isUniform()) {
@@ -143,12 +122,11 @@ public class Tuple
 
 	@Override
 	public Tuple removeAt(final int index) {
-		int arity = this.getArity();
-		if (index < 0 || index >= arity) {
+		if (index < 0 || index >= this.arity) {
 			throw new IndexOutOfBoundsException();
 		}
-		final Element[] remainingElements = new Element[arity - 1];
-		for (int i = 0; i < arity - 1; i++) {
+		final Element[] remainingElements = new Element[this.arity - 1];
+		for (int i = 0; i < this.arity - 1; i++) {
 			if (i < index) {
 				remainingElements[i] = this.getAt(i);
 			} else {
@@ -159,8 +137,54 @@ public class Tuple
 	}
 
 	@Override
+	public Tuple insertAt(int index, Element element) {
+		if (index < 0 || index > this.arity) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (element == null) {
+			throw new IllegalArgumentException();
+		}
+		Element[] newElements = new Element[this.arity + 1];
+		for (int i = 0; i < this.arity + 1; i++) {
+			if (i < index) {
+				newElements[i] = this.getAt(i);
+			} else if (i == index) {
+				newElements[i] = element;
+			} else {
+				newElements[i] = this.getAt(i - 1);
+			}
+		}
+		return this.getSet().insertAt(index, element.getSet()).getElement(newElements);
+	}
+
+	@Override
+	public Tuple add(Element object) {
+		return this.insertAt(this.arity, object);
+	}
+
+	@Override
 	public Iterator<Element> iterator() {
 		return new CompoundIterator<Element>(this);
+	}
+
+	@Override
+	protected BigInteger abstractGetBigInteger() {
+		BigInteger[] values = new BigInteger[this.arity];
+		int i = 0;
+		for (Element element : this) {
+			values[i] = element.getBigInteger();
+			i++;
+		}
+		return MathUtil.foldAndPair(values);
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTree() {
+		ByteTree[] byteTrees = new ByteTree[this.arity];
+		for (int i = 0; i < this.arity; i++) {
+			byteTrees[i] = this.getValue().getAt(i).getByteTree();
+		}
+		return ByteTree.getInstance(byteTrees);
 	}
 
 	@Override

@@ -50,6 +50,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import java.math.BigInteger;
 
@@ -232,19 +233,21 @@ public interface Set {
 	/**
 	 * Checks if this set contains an element that corresponds to a given integer value.
 	 * <p>
-	 * @param integerValue The given integer value
+	 * @param integer The given integer value
 	 * @return {@code true} if such an element exists
 	 */
-	public boolean contains(int integerValue);
+	public boolean contains(int integer);
 
 	/**
 	 * Checks if this set contains an element that corresponds to a given BigInteger value.
 	 * <p>
-	 * @param integerValue The given BigInteger value
+	 * @param bigInteger The given BigInteger value
 	 * @return {@code true} if such an element exists
 	 * @throws IllegalArgumentException if {@literal value} is null
 	 */
-	public boolean contains(BigInteger integerValue);
+	public boolean contains(BigInteger bigInteger);
+
+	public boolean contains(ByteTree byteTree);
 
 	public boolean contains(Object value);
 
@@ -260,20 +263,22 @@ public interface Set {
 	/**
 	 * Creates and returns the element that corresponds to a given integer (if one exists).
 	 * <p>
-	 * @param integerValue The given integer
+	 * @param integer The given integer
 	 * @return The corresponding element
 	 * @throws IllegalArgumentException if no such element exists
 	 */
-	public Element getElement(int integerValue);
+	public Element getElement(int integer);
 
 	/**
 	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists).
 	 * <p>
-	 * @param integerValue The given BigInteger value
+	 * @param bigInteger The given BigInteger value
 	 * @return The corresponding group element
 	 * @throws IllegalArgumentException if {@literal value} is null or if no such element exists in this group
 	 */
-	public Element getElement(BigInteger integerValue);
+	public Element getElement(BigInteger bigInteger);
+
+	public Element getElement(ByteTree byteTree);
 
 	public Element getElement(Object value);
 

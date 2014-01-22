@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.crypto.mixer;
 
 import ch.bfh.unicrypt.crypto.mixer.classes.IdentityMixer;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -56,40 +55,40 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
  */
 public class IdentityMixerExample {
 
-	public static void IdentityShuffleExample1() {
+	public static void Example1() {
 
 		// P R E P A R E
 		//---------------
-		// Create cyclic group
-		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
+		// Create cyclic group (modulo 20 bits)
+		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(20);
 
 		// Set size
 		int size = 10;
 
-		// Create messages
-		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
+		// Create identities
+		Tuple identities = ProductGroup.getInstance(G_q, size).getRandomElement();
 
 		// S H U F F L E
 		//---------------
 		// Create mixer and shuffle
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
-		Tuple shuffledMessages = mixer.shuffle(messages);
+		Tuple shuffledIdentities = mixer.shuffle(identities);
 
-		System.out.println("Messages:          " + messages);
-		System.out.println("Shuffled Messages: " + shuffledMessages);
+		System.out.println("Identities:          " + identities);
+		System.out.println("Shuffled Identities: " + shuffledIdentities);
 	}
 
-	public static void IdentityShuffleExample2() {
+	public static void Example2() {
 
 		// P R E P A R E
 		//---------------
-		// Create cyclic group
-		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
+		// Create cyclic group (modulo 20 bits)
+		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(20);
 
 		// Set size
 		int size = 10;
 
-		// Create messages
+		// Create identities
 		Tuple identities = ProductGroup.getInstance(G_q, size).getRandomElement();
 
 		// S H U F F L E
@@ -98,23 +97,24 @@ public class IdentityMixerExample {
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
 
 		// Create permutation
-		PermutationElement permutation = PermutationGroup.getInstance(size).getRandomElement();
+		PermutationElement permutation = mixer.getPermutationGroup().getRandomElement();
 
 		// Create randomization
 		Element randomization = mixer.generateRandomization();
 
 		Tuple shuffledIdentities = mixer.shuffle(identities, permutation, randomization);
 
-		System.out.println("Messages:          " + identities);
-		System.out.println("Shuffled Messages: " + shuffledIdentities);
+		System.out.println("Identities:          " + identities);
+		System.out.println("Shuffled Identities: " + shuffledIdentities);
 	}
 
 	public static void main(String args[]) {
-		System.out.println("Identity Shuffle Example 1:");
-		IdentityMixerExample.IdentityShuffleExample1();
 
-		System.out.println("\nIdentity Shuffle Example 2:");
-		IdentityMixerExample.IdentityShuffleExample2();
+		System.out.println("\nIdentity Shuffle Example 1 (plain):");
+		IdentityMixerExample.Example1();
+
+		System.out.println("\nIdentity Shuffle Example 2 (generate permutation/randomization beforehand):");
+		IdentityMixerExample.Example2();
 	}
 
 }

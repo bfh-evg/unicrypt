@@ -136,13 +136,13 @@ public class AESEncryptionExample {
 
 	public static void main(final String[] args) {
 
-		System.out.println("\nAES Encryption Example (plain):");
+		System.out.println("\nAES Encryption Example 1 (plain):");
 		example1();
 
-		System.out.println("\nAES Encryption Example (with string encoding):");
+		System.out.println("\nAES Encryption Example 2 (with string encoding):");
 		example2();
 
-		System.out.println("\nAES Encryption Example (with options):");
+		System.out.println("\nAES Encryption Example 3 (with options):");
 		example3();
 	}
 

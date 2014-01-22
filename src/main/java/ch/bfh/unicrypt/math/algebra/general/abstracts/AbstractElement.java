@@ -83,7 +83,7 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 
 	private final S set;
 	private final V value;
-	private BigInteger integerValue;
+	private BigInteger bigInteger;
 	private ByteTree byteTree;
 	private final HashMap<HashMethod, FiniteByteArrayElement> hashValues;
 
@@ -140,10 +140,10 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 
 	@Override
 	public BigInteger getBigInteger() {
-		if (this.integerValue == null) {
-			this.integerValue = this.abstractGetBigInteger();
+		if (this.bigInteger == null) {
+			this.bigInteger = this.abstractGetBigInteger();
 		}
-		return this.integerValue;
+		return this.bigInteger;
 	}
 
 	@Override

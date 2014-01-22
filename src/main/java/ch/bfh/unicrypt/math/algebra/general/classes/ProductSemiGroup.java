@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import java.math.BigInteger;
@@ -90,16 +89,6 @@ public class ProductSemiGroup
 	@Override
 	public ProductSemiGroup removeAt(final int index) {
 		return (ProductSemiGroup) super.removeAt(index);
-	}
-
-	@Override
-	protected ProductSemiGroup abstractRemoveAt(Set set, int arity) {
-		return ProductSemiGroup.getInstance((SemiGroup) set, arity);
-	}
-
-	@Override
-	protected ProductSemiGroup abstractRemoveAt(Set[] sets) {
-		return ProductSemiGroup.getInstance((SemiGroup[]) sets);
 	}
 
 	@Override

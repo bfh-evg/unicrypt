@@ -58,6 +58,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -217,16 +218,24 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final boolean contains(final int integerValue) {
-		return this.contains(BigInteger.valueOf(integerValue));
+	public final boolean contains(final int integer) {
+		return this.contains(BigInteger.valueOf(integer));
 	}
 
 	@Override
-	public final boolean contains(final BigInteger integerValue) {
-		if (integerValue == null) {
+	public final boolean contains(final BigInteger bigInteger) {
+		if (bigInteger == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractContains(integerValue);
+		return this.abstractContains(bigInteger);
+	}
+
+	@Override
+	public final boolean contains(final ByteTree byteTree) {
+		if (byteTree == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractContains(byteTree);
 	}
 
 	@Override
@@ -246,16 +255,24 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final E getElement(final int integerValue) {
-		return this.getElement(BigInteger.valueOf(integerValue));
+	public final E getElement(final int integer) {
+		return this.getElement(BigInteger.valueOf(integer));
 	}
 
 	@Override
-	public final E getElement(BigInteger integerValue) {
-		if (!this.contains(integerValue)) {
+	public final E getElement(BigInteger bigInteger) {
+		if (!this.contains(bigInteger)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetElement(integerValue);
+		return this.abstractGetElement(bigInteger);
+	}
+
+	@Override
+	public final E getElement(ByteTree byteTree) {
+		if (!this.contains(byteTree)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractGetElement(byteTree);
 	}
 
 	@Override
@@ -409,9 +426,19 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	protected abstract boolean abstractContains(BigInteger value);
 
+//	protected abstract boolean abstractContains(ByteTree byteTree);
+	protected boolean abstractContains(ByteTree byteTree) {
+		return true;
+	}
+
 	protected abstract boolean abstractContains(V value);
 
 	protected abstract E abstractGetElement(BigInteger value);
+
+//	protected abstract E abstractGetElement(ByteTree byteTree);
+	protected E abstractGetElement(ByteTree byteTree) {
+		return null;
+	}
 
 	protected abstract E abstractGetElement(V value);
 

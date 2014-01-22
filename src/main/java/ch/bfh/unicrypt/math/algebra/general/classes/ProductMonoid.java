@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import java.math.BigInteger;
@@ -92,16 +91,6 @@ public class ProductMonoid
 	@Override
 	public ProductMonoid removeAt(final int index) {
 		return (ProductMonoid) super.removeAt(index);
-	}
-
-	@Override
-	protected ProductMonoid abstractRemoveAt(Set set, int arity) {
-		return ProductMonoid.getInstance((Monoid) set, arity);
-	}
-
-	@Override
-	protected ProductMonoid abstractRemoveAt(Set[] sets) {
-		return ProductMonoid.getInstance((Monoid[]) sets);
 	}
 
 	@Override

@@ -42,10 +42,10 @@
 package ch.bfh.unicrypt.crypto.mixer;
 
 import ch.bfh.unicrypt.crypto.mixer.classes.ReEncryptionMixer;
+import ch.bfh.unicrypt.crypto.mixer.interfaces.Mixer;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -58,88 +58,108 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
  */
 public class ReEncryptionMixerExample {
 
-	public static void elGamalShuffleExample1() {
+	public static void example1() {
 
 		// P R E P A R E
 		//---------------
-		// Create cyclic group and get default generator
-		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
-		Element g = G_q.getDefaultGenerator();
+		// Create cyclic group (modulo 20 bits) and get default generator
+		CyclicGroup cyclicGroup = GStarModSafePrime.getRandomInstance(20);
+		Element generator = cyclicGroup.getDefaultGenerator();
 
 		// Set size
 		int size = 10;
 
-		// Create ElGamal keys and encryption system
-		ElGamalEncryptionScheme es = ElGamalEncryptionScheme.getInstance(g);
-		Pair keys = es.getKeyPairGenerator().generateKeyPair();
-		Element publicKey = keys.getSecond();
+		// Create ElGamal encryption system and keys
+		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
+		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
+		Element privateKey = keyPair.getFirst();
+		Element publicKey = keyPair.getSecond();
 
-		// Create ciphertexts
-		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
-		Element[] ciphertextArray = new Element[size];
+		// Create random encryptions
+		Tuple messages = ProductGroup.getInstance(cyclicGroup, size).getRandomElement();
+		Tuple encryptions = Tuple.getInstance();
 		for (int i = 0; i < size; i++) {
-			ciphertextArray[i] = es.encrypt(publicKey, messages.getAt(i));
+			encryptions = encryptions.add(elGamal.encrypt(publicKey, messages.getAt(i)));
 		}
-		Tuple ciphertexts = Tuple.getInstance(ciphertextArray);
 
 		// S H U F F L E
 		//---------------
 		// Create mixer and shuffle
-		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, publicKey, size);
-		Tuple shuffledCiphertexts = mixer.shuffle(ciphertexts);
+		Mixer mixer = ReEncryptionMixer.getInstance(elGamal, publicKey, size);
+		Tuple shuffledEncyptions = mixer.shuffle(encryptions);
 
-		System.out.println("Ciphertexts:          " + ciphertexts);
-		System.out.println("Shuffled Ciphertexts: " + shuffledCiphertexts);
+		// DECRYPTION
+		//-----------
+		Tuple decryptions = Tuple.getInstance();
+		for (int i = 0; i < size; i++) {
+			decryptions = decryptions.add(elGamal.decrypt(privateKey, shuffledEncyptions.getAt(i)));
+		}
+
+		System.out.println("Cylic Group:         " + cyclicGroup);
+		System.out.println("Messages:            " + messages);
+		System.out.println("Encyptions:          " + encryptions);
+		System.out.println("Shuffled Encyptions: " + shuffledEncyptions);
+		System.out.println("Decyptions:          " + decryptions);
 	}
 
-	public static void elGamalShuffleExample2() {
+	public static void example2() {
 
 		// P R E P A R E
 		//---------------
-		// Create cyclic group and get default generator
-		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
-		Element g = G_q.getDefaultGenerator();
+		// Create cyclic group (modulo 20 bits) and get default generator
+		CyclicGroup cyclicGroup = GStarModSafePrime.getRandomInstance(20);
+		Element generator = cyclicGroup.getDefaultGenerator();
 
 		// Set size
 		int size = 10;
 
-		// Create ElGamal keys and encryption system
-		ElGamalEncryptionScheme es = ElGamalEncryptionScheme.getInstance(g);
-		Pair keys = es.getKeyPairGenerator().generateKeyPair();
-		Element publicKey = keys.getSecond();
+		// Create ElGamal encryption system and keys
+		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
+		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
+		Element privateKey = keyPair.getFirst();
+		Element publicKey = keyPair.getSecond();
 
-		// Create ciphertexts
-		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
-		Element[] ciphertextArray = new Element[size];
+		// Create random encryptions
+		Tuple messages = ProductGroup.getInstance(cyclicGroup, size).getRandomElement();
+		Tuple encryptions = Tuple.getInstance();
 		for (int i = 0; i < size; i++) {
-			ciphertextArray[i] = es.encrypt(publicKey, messages.getAt(i));
+			encryptions = encryptions.add(elGamal.encrypt(publicKey, messages.getAt(i)));
 		}
-		Tuple ciphertexts = Tuple.getInstance(ciphertextArray);
 
 		// S H U F F L E
 		//---------------
 		// Create mixer and shuffle
-		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, publicKey, size);
+		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(elGamal, publicKey, size);
 
 		// Create permutation
-		PermutationElement permutation = PermutationGroup.getInstance(size).getRandomElement();
+		PermutationElement permutation = mixer.getPermutationGroup().getRandomElement();
 
 		// Create randomizations
 		Tuple randomizations = mixer.generateRandomizations();
 
-		Tuple shuffledCiphertexts = mixer.shuffle(ciphertexts, permutation, randomizations);
+		Tuple shuffledEncyptions = mixer.shuffle(encryptions, permutation, randomizations);
 
-		System.out.println("Ciphertexts:          " + ciphertexts);
-		System.out.println("Shuffled Ciphertexts: " + shuffledCiphertexts);
+		// DECRYPTION
+		//-----------
+		Tuple decryptions = Tuple.getInstance();
+		for (int i = 0; i < size; i++) {
+			decryptions = decryptions.add(elGamal.decrypt(privateKey, shuffledEncyptions.getAt(i)));
+		}
+
+		System.out.println("Cylic Group:         " + cyclicGroup);
+		System.out.println("Messages:            " + messages);
+		System.out.println("Encyptions:          " + encryptions);
+		System.out.println("Shuffled Encyptions: " + shuffledEncyptions);
+		System.out.println("Decyptions:          " + decryptions);
 	}
 
 	public static void main(String args[]) {
 
-		System.out.println("ElGamal Shuffle Example 1:");
-		ReEncryptionMixerExample.elGamalShuffleExample1();
+		System.out.println("\nEXAMPLE 1 (plain):");
+		ReEncryptionMixerExample.example1();
 
-		System.out.println("\nElGamal Shuffle Example 2:");
-		ReEncryptionMixerExample.elGamalShuffleExample2();
+		System.out.println("\nEXAMPLE 2 (generate permutation/randomization beforehand):");
+		ReEncryptionMixerExample.example2();
 	}
 
 }

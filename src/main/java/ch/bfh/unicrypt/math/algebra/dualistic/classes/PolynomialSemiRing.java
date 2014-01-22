@@ -136,9 +136,9 @@ public class PolynomialSemiRing
 	// various super-classes
 	//
 	@Override
-	protected boolean abstractContains(BigInteger integerValue) {
-		BigInteger[] integerValues = MathUtil.unpairWithSize(integerValue);
-		for (BigInteger value : integerValues) {
+	protected boolean abstractContains(BigInteger bigInteger) {
+		BigInteger[] bigIntegers = MathUtil.unpairWithSize(bigInteger);
+		for (BigInteger value : bigIntegers) {
 			if (!this.getSemiRing().contains(value)) {
 				return false;
 			}

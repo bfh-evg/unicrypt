@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import ch.bfh.unicrypt.math.utility.MathUtil;
@@ -96,16 +95,6 @@ public class ProductCyclicGroup
 	@Override
 	public ProductCyclicGroup removeAt(final int index) {
 		return (ProductCyclicGroup) super.removeAt(index);
-	}
-
-	@Override
-	protected ProductCyclicGroup abstractRemoveAt(Set set, int arity) {
-		return ProductCyclicGroup.getInstance((CyclicGroup) set, arity);
-	}
-
-	@Override
-	protected ProductCyclicGroup abstractRemoveAt(Set[] sets) {
-		return ProductCyclicGroup.getInstance((CyclicGroup[]) sets);
 	}
 
 	@Override

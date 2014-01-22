@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -47,28 +47,29 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import java.util.Iterator;
 
 public class CompositeEncoder
-			 extends AbstractEncoder<Set, Element, Set, Element>
-			 implements Compound<CompositeEncoder, Encoder>, Iterable<Encoder> {
+	   extends AbstractEncoder<Set, Element, Set, Element>
+	   implements Compound<CompositeEncoder, Encoder>, Iterable<Encoder> {
 
-	private final Encoder[] encoders;
+	private final ImmutableArray<Encoder> encoders;
 
-	protected CompositeEncoder(Encoder[] encoders) {
+	protected CompositeEncoder(ImmutableArray<Encoder> encoders) {
 		this.encoders = encoders;
 	}
 
 	@Override
 	public Encoder[] getAll() {
-		return this.encoders.clone();
+		return this.encoders.getAll();
 	}
 
 	@Override
 	public int getArity() {
-		return this.encoders.length;
+		return this.encoders.getLength();
 	}
 
 	@Override
@@ -76,7 +77,7 @@ public class CompositeEncoder
 		if (index < 0 || index >= this.getArity()) {
 			throw new IndexOutOfBoundsException();
 		}
-		return this.encoders[index];
+		return this.encoders.getAt(index);
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class CompositeEncoder
 
 	@Override
 	public boolean isUniform() {
-		return this.encoders.length <= 1;
+		return this.getArity() <= 1;
 	}
 
 	@Override
@@ -128,26 +129,53 @@ public class CompositeEncoder
 	}
 
 	@Override
+	public CompositeEncoder insertAt(int index, Encoder encoder) {
+		int arity = this.getArity();
+		if (index < 0 || index > arity) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (encoder == null) {
+			throw new IllegalArgumentException();
+		}
+		Encoder[] newEncoders = new Encoder[arity + 1];
+		for (int i = 0; i < arity + 1; i++) {
+			if (i < index) {
+				newEncoders[i] = this.getAt(i);
+			} else if (i == index) {
+				newEncoders[i] = encoder;
+			} else {
+				newEncoders[i] = this.getAt(i - 1);
+			}
+		}
+		return CompositeEncoder.getInstance(newEncoders);
+	}
+
+	@Override
+	public CompositeEncoder add(Encoder encoder) {
+		return this.insertAt(this.getArity(), encoder);
+	}
+
+	@Override
 	public Iterator<Encoder> iterator() {
 		return new CompoundIterator<Encoder>(this);
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		int length = this.encoders.length;
-		Function[] encodingFunctions = new Function[length];
-		for (int i = 0; i < length; i++) {
-			encodingFunctions[i] = this.encoders[i].getEncodingFunction();
+		int arity = this.getArity();
+		Function[] encodingFunctions = new Function[arity];
+		for (int i = 0; i < arity; i++) {
+			encodingFunctions[i] = this.encoders.getAt(i).getEncodingFunction();
 		}
 		return CompositeFunction.getInstance(encodingFunctions);
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		int length = this.encoders.length;
-		Function[] decodingFunctions = new Function[length];
-		for (int i = 0; i < length; i++) {
-			decodingFunctions[length - i - 1] = this.encoders[i].getDecodingFunction();
+		int arity = this.getArity();
+		Function[] decodingFunctions = new Function[arity];
+		for (int i = 0; i < arity; i++) {
+			decodingFunctions[arity - i - 1] = this.encoders.getAt(i).getDecodingFunction();
 		}
 		return CompositeFunction.getInstance(decodingFunctions);
 	}
@@ -161,7 +189,7 @@ public class CompositeEncoder
 				throw new IllegalArgumentException();
 			}
 		}
-		return new CompositeEncoder(encoders);
+		return new CompositeEncoder(ImmutableArray.getInstance(encoders));
 	}
 
 }
