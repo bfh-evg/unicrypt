@@ -128,17 +128,17 @@ public class ByteArray
 			throw new IllegalArgumentException();
 		}
 		//Find and remember the length of the longest ByteArray:
-		int maxLength = this.length;
+		int minLength = this.length;
 		for (ByteArray other : others) {
 			if (other == null) {
 				throw new IllegalArgumentException();
 			}
-			maxLength = Math.max(maxLength, other.length);
+			minLength = Math.min(minLength, other.length);
 		}
 		//Iterate through the given ByteArrays and xor them into result
-		byte[] result = Arrays.copyOf(this.bytes, maxLength);
+		byte[] result = Arrays.copyOf(this.bytes, minLength);
 		for (ByteArray other : others) {
-			for (int i = 0; i < other.length; i++) {
+			for (int i = 0; i < minLength; i++) {
 				result[i] ^= other.getAt(i);
 			}
 		}

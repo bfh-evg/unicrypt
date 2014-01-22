@@ -78,24 +78,23 @@ public class AESEncryptionExample {
 
 	public static void example2() {
 
+		// Create default AES encryption scheme
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
 
+		// Define alphabet, string monoid, and encoder
 		Alphabet alphabet = Alphabet.ALPHANUMERIC;
 		StringMonoid stringMonoid = StringMonoid.getInstance(alphabet);
-
 		Encoder encoder = StringToByteArrayEncoder.getInstance(stringMonoid);
 
-		// a random key (default length = 16 bytes)
+		// Create a random key (default length = 16 bytes)
 		Element key = aes.getKeyGenerator().getKeySpace().getRandomElement();
 
-		// a random message (length = 20 bytes)
-		Element message = stringMonoid.getElement("Hallo");
+		// Create, encode, and encrypt string message
+		Element message = stringMonoid.getElement("HalloWorld");
 		Element encodedMessage = encoder.encode(message);
-
-		// perform the encryption
 		Element encryptedMessage = aes.encrypt(key, encodedMessage);
 
-		// perform the decryption and decoding
+		// Perform the decryption and decoding
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 		Element decodedMessage = encoder.decode(decryptedMessage);
 
