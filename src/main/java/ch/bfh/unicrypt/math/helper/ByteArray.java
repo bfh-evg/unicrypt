@@ -124,10 +124,21 @@ public class ByteArray
 	}
 
 	public ByteArray xor(ByteArray... others) {
+		return this.applyOperand(0, others);
+	}
+
+	public ByteArray and(ByteArray... others) {
+		return this.applyOperand(1, others);
+	}
+
+	public ByteArray or(ByteArray... others) {
+		return this.applyOperand(2, others);
+	}
+
+	private ByteArray applyOperand(int operand, ByteArray... others) {
 		if (others == null) {
 			throw new IllegalArgumentException();
 		}
-		//Find and remember the length of the longest ByteArray:
 		int minLength = this.length;
 		for (ByteArray other : others) {
 			if (other == null) {
@@ -135,12 +146,31 @@ public class ByteArray
 			}
 			minLength = Math.min(minLength, other.length);
 		}
-		//Iterate through the given ByteArrays and xor them into result
 		byte[] result = Arrays.copyOf(this.bytes, minLength);
 		for (ByteArray other : others) {
 			for (int i = 0; i < minLength; i++) {
-				result[i] ^= other.getAt(i);
+				switch (operand) {
+					case 0:
+						result[i] ^= other.getAt(i);
+						break;
+					case 1:
+						result[i] &= other.getAt(i);
+						break;
+					case 2:
+						result[i] |= other.getAt(i);
+						break;
+					default:
+						throw new UnsupportedOperationException();
+				}
 			}
+		}
+		return new ByteArray(result);
+	}
+
+	public ByteArray not() {
+		byte[] result = new byte[this.length];
+		for (int i = 0; i < this.length; i++) {
+			result[i] = (byte) (~this.getAt(i) & 0xff);
 		}
 		return new ByteArray(result);
 	}
@@ -214,8 +244,16 @@ public class ByteArray
 	}
 
 	public static ByteArray getInstance(int length) {
+		return ByteArray.getInstance(length, false);
+	}
+
+	public static ByteArray getInstance(int length, boolean bit) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
+		}
+		byte[] bytes = new byte[length];
+		if (bit) {
+			Arrays.fill(bytes, (byte) 0xff);
 		}
 		return new ByteArray(new byte[length]);
 	}
