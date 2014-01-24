@@ -53,24 +53,84 @@ public class ImmutableArray<T>
 	   extends UniCrypt
 	   implements Iterable<T> {
 
+	// The obects are stored either as an ordinary array (case 1) or as an array
+	// of length 1 together with the full array length (case 2)
 	private final T[] array;
+	private final int length;
 
+	// Case 1
 	private ImmutableArray(T[] array) {
 		this.array = array.clone();
+		this.length = array.length;
+	}
+
+	// Case 2
+	private ImmutableArray(T[] arrayOfLengthOne, int length) {
+		this.array = arrayOfLengthOne;
+		this.length = length;
 	}
 
 	public int getLength() {
-		return this.array.length;
+		return this.length;
 	}
 
 	public T getAt(int index) {
-		return this.array[index];
+		if (index < 0 || index >= this.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (this.array.length == 1) { // Case 2
+			return this.array[0];
+		}
+		return this.array[index]; // Case1
 	}
 
 	public T[] getAll() {
-		return this.array.clone();
+		T[] result = Arrays.copyOf(this.array, this.length);
+		if (this.array.length == 1) { // Case 2
+			Arrays.fill(result, this.array[0]);
+		}
+		return result;
 	}
 
+//		@Override
+//	public ImmutableArray<T> insertAt(int index, T object) {
+//		if (index < 0 || index > this.length) {
+//			throw new IndexOutOfBoundsException();
+//		}
+//		if (object == null) {
+//			throw new IllegalArgumentException();
+//		}
+//		if (this.array.length == 1) { // Case 2
+//			if (this.array[0].equals(object)) {
+//				return ImmutableArray.getInstance(object, this.length+1);
+//			}
+//		}
+//		T[] result = Arrays.copyOf(this.array, this.length + 1);
+//		if (this.array.length == 1) { // Case 2
+//			for (int i=1; i<this.length; i++) {
+//				result.
+//			}
+//		}
+//		result[this.length] = object;
+//		return ImmutableArray.getInstance(result);
+//
+//
+//		Element[] newElements = new Element[this.arity + 1];
+//		for (int i = 0; i < this.arity + 1; i++) {
+//			if (i < index) {
+//				newElements[i] = this.getAt(i);
+//			} else if (i == index) {
+//				newElements[i] = object;
+//			} else {
+//				newElements[i] = this.getAt(i - 1);
+//			}
+//		}
+//		return this.getSet().insertAt(index, object.getSet()).getElement(newElements);
+//	}
+//	@Override
+//	public Tuple add(Element object) {
+//		return this.insertAt(this.arity, object);
+//	}
 	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
@@ -79,7 +139,7 @@ public class ImmutableArray<T>
 
 			@Override
 			public boolean hasNext() {
-				return currentIndex < array.length;
+				return currentIndex < length;
 			}
 
 			@Override
@@ -96,33 +156,54 @@ public class ImmutableArray<T>
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 41 * hash + Arrays.hashCode(this.array);
+		int hash = 5;
+		hash = 43 * hash + Arrays.hashCode(this.array);
+		hash = 43 * hash + this.length;
 		return hash;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
+		if (this == obj) {
+			return true;
 		}
-		if (getClass() != obj.getClass()) {
+		if (obj == null || this.getClass() != obj.getClass()) {
 			return false;
 		}
 		final ImmutableArray<?> other = (ImmutableArray<?>) obj;
-		return Arrays.equals(this.array, other.array);
+		if (this.length != other.length) {
+			return false;
+		}
+		for (int i = 0; i < this.length; i++) {
+			if (!this.getAt(i).equals(other.getAt(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public static <T> ImmutableArray<T> getInstance(T... array) {
 		if (array == null) {
 			throw new IllegalArgumentException();
 		}
-		for (T value : array) {
-			if (value == null) {
+		for (T object : array) {
+			if (object == null) {
 				throw new IllegalArgumentException();
 			}
 		}
 		return new ImmutableArray<T>(array);
+	}
+
+	public static <T> ImmutableArray<T> getInstance(T object, int length) {
+		if (object == null || length < 0) {
+			throw new IllegalArgumentException();
+		}
+		return ImmutableArray.<T>getInstance(length, object);
+	}
+
+	private static <T> ImmutableArray<T> getInstance(int length, T... arrayOfLengthOne) {
+		// the T... parameter helps creating an array of type T
+		return new ImmutableArray<T>(arrayOfLengthOne, length);
 	}
 
 }
