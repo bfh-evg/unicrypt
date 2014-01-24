@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -90,7 +90,7 @@ public class ZModToGStarModSafePrimeEncoder
 		}
 
 		@Override
-		protected GStarModElement abstractApply(final ZModElement element, final RandomGenerator randomGenerator) {
+		protected GStarModElement abstractApply(final ZModElement element, final RandomNumberGenerator randomGenerator) {
 			final BigInteger value = element.getValue().add(BigInteger.ONE);
 			final GStarModSafePrime coDomain = this.getCoDomain();
 			if (coDomain.contains(value)) {
@@ -109,7 +109,7 @@ public class ZModToGStarModSafePrimeEncoder
 		}
 
 		@Override
-		protected ZModElement abstractApply(final GStarModElement element, final RandomGenerator randomGenerator) {
+		protected ZModElement abstractApply(final GStarModElement element, final RandomNumberGenerator randomGenerator) {
 			final BigInteger value = element.getValue();
 			final GStarModSafePrime domain = this.getDomain();
 			if (value.compareTo(domain.getOrder()) <= 0) {

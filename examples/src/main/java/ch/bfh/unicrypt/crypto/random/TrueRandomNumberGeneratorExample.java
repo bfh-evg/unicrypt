@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.random;
 
 import ch.bfh.unicrypt.crypto.random.classes.TrueRandomNumberGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import java.util.Arrays;
 
 /**
@@ -53,7 +53,7 @@ public class TrueRandomNumberGeneratorExample {
 
 	public static void main(String[] args) {
 		//Get instance of a Default-TrueRandomGenerator
-		RandomGenerator randomGenerator = TrueRandomNumberGenerator.getInstance();
+		RandomNumberGenerator randomGenerator = TrueRandomNumberGenerator.getInstance();
 
 		//The time to wait in order to get the ephemeral key is not bound to the requested amount of randomization
 		//It is bound to the 'entropy-collection' of the DataCollector that happens inside every request of randomization.

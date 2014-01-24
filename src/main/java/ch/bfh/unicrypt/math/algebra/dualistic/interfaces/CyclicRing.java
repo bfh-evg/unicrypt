@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveCyclicGroup;
 
@@ -60,7 +60,7 @@ public interface CyclicRing
 	public DualisticElement getRandomGenerator();
 
 	@Override
-	public DualisticElement getRandomGenerator(RandomGenerator randomGenerator);
+	public DualisticElement getRandomGenerator(RandomNumberGenerator randomGenerator);
 
 	@Override
 	public DualisticElement[] getIndependentGenerators(int amount);

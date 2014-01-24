@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.Standard
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
@@ -179,7 +179,7 @@ public class ShuffleProofGenerator
 	// Generate and Validate
 	//
 	@Override
-	protected Triple abstractGenerate(Triple privateInput, Triple publicInput, RandomGenerator randomGenerator) {
+	protected Triple abstractGenerate(Triple privateInput, Triple publicInput, RandomNumberGenerator randomGenerator) {
 
 		// Unfold private and public input
 		final PermutationElement pi = (PermutationElement) privateInput.getFirst();
@@ -274,7 +274,7 @@ public class ShuffleProofGenerator
 		}
 
 		@Override
-		protected Tuple abstractApply(Tuple element, RandomGenerator randomGenerator) {
+		protected Tuple abstractApply(Tuple element, RandomNumberGenerator randomGenerator) {
 
 			// Unfold element
 			final Element r = element.getAt(0);

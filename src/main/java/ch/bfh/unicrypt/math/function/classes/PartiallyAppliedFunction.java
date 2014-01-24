@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -124,7 +124,7 @@ public class PartiallyAppliedFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Element abstractApply(final Tuple element, final RandomGenerator randomGenerator) {
+	protected Element abstractApply(final Tuple element, final RandomNumberGenerator randomGenerator) {
 		int arity = element.getArity();
 		final Element[] allElements = new Element[arity + 1];
 		for (int i = 0; i < arity; i++) {

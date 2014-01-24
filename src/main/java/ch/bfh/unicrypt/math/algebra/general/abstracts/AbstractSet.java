@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -300,7 +300,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final E getRandomElement(RandomGenerator randomGenerator) {
+	public final E getRandomElement(RandomNumberGenerator randomGenerator) {
 		if (randomGenerator == null) {
 			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
@@ -442,6 +442,6 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	protected abstract E abstractGetElement(V value);
 
-	protected abstract E abstractGetRandomElement(RandomGenerator randomGenerator);
+	protected abstract E abstractGetRandomElement(RandomNumberGenerator randomGenerator);
 
 }

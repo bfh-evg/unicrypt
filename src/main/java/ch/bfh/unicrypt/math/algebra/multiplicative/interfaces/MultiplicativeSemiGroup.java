@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
@@ -140,7 +140,7 @@ public interface MultiplicativeSemiGroup
 	public MultiplicativeElement getRandomElement();
 
 	@Override
-	public MultiplicativeElement getRandomElement(RandomGenerator randomGenerator);
+	public MultiplicativeElement getRandomElement(RandomNumberGenerator randomGenerator);
 
 	// The following methods are overridden from SemiGroup with an adapted return type
 	@Override

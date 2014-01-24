@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -83,7 +83,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 	}
 
 	@Override
-	public final E getRandomGenerator(RandomGenerator randomGenerator) {
+	public final E getRandomGenerator(RandomNumberGenerator randomGenerator) {
 		if (randomGenerator == null) {
 			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
@@ -143,7 +143,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected E standardGetRandomGenerator(RandomGenerator randomGenerator) {
+	protected E standardGetRandomGenerator(RandomNumberGenerator randomGenerator) {
 		E element;
 		do {
 			element = this.getRandomElement(randomGenerator);

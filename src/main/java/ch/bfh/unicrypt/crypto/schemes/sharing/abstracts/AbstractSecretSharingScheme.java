@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.SecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -69,11 +69,11 @@ public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Ele
 
 	@Override
 	public final SE[] share(Element message) {
-		return this.share(message, (RandomGenerator) null);
+		return this.share(message, (RandomNumberGenerator) null);
 	}
 
 	@Override
-	public final SE[] share(Element message, RandomGenerator randomGenerator) {
+	public final SE[] share(Element message, RandomNumberGenerator randomGenerator) {
 		if (message == null || !this.getMessageSpace().contains(message)) {
 			throw new IllegalArgumentException();
 		}
@@ -99,7 +99,7 @@ public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Ele
 
 	protected abstract SS abstractGetShareSpace();
 
-	protected abstract SE[] abstractShare(Element message, RandomGenerator randomGenerator);
+	protected abstract SE[] abstractShare(Element message, RandomNumberGenerator randomGenerator);
 
 	protected abstract ME abstractRecover(Element[] shares);
 

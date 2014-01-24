@@ -47,7 +47,7 @@ import java.math.BigInteger;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public interface RandomGenerator {
+public interface RandomNumberGenerator {
 
 	//public static final DEFAULT = HybridRandomGenerator.getInstance();
 	/**

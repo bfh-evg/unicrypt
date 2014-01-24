@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -128,7 +128,7 @@ public class PermutationCommitmentScheme
 		}
 
 		@Override
-		protected Tuple abstractApply(Pair element, RandomGenerator randomGenerator) {
+		protected Tuple abstractApply(Pair element, RandomNumberGenerator randomGenerator) {
 			final Permutation permutation = ((PermutationElement) element.getFirst()).getValue().invert();
 			final Tuple randomizations = (Tuple) element.getSecond();
 			Element[] ret = new Element[this.messageGenerators.length];

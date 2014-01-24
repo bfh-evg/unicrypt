@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -279,7 +279,7 @@ public class ByteArrayTest {
 	public void testGetRandomInstance_int_RandomGenerator() {
 //		System.out.println("getRandomInstance");
 		int length = 0;
-		RandomGenerator randomGenerator = null;
+		RandomNumberGenerator randomGenerator = null;
 		ByteArray expResult = null;
 		ByteArray result = ByteArray.getRandomInstance(length, randomGenerator);
 		assertEquals(expResult, result);

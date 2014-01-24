@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.ProofGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -52,11 +52,11 @@ public abstract class AbstractProofGenerator<PRS extends Set, PRE extends Elemen
 
 	@Override
 	public final PE generate(final Element privateInput, final Element publicInput) {
-		return this.generate(privateInput, publicInput, (RandomGenerator) null);
+		return this.generate(privateInput, publicInput, (RandomNumberGenerator) null);
 	}
 
 	@Override
-	public final PE generate(final Element privateInput, final Element publicInput, final RandomGenerator randomGenerator) {
+	public final PE generate(final Element privateInput, final Element publicInput, final RandomNumberGenerator randomGenerator) {
 		if (!this.getPrivateInputSpace().contains(privateInput) || !this.getPublicInputSpace().contains(publicInput)) {
 			throw new IllegalArgumentException();
 		}
@@ -86,7 +86,7 @@ public abstract class AbstractProofGenerator<PRS extends Set, PRE extends Elemen
 		return this.abstractGetProofSpace();
 	}
 
-	protected abstract PE abstractGenerate(PRE secretInput, PUE publicInput, RandomGenerator randomGenerator);
+	protected abstract PE abstractGenerate(PRE secretInput, PUE publicInput, RandomNumberGenerator randomGenerator);
 
 	protected abstract BooleanElement abstractVerify(PE proof, PUE publicInput);
 

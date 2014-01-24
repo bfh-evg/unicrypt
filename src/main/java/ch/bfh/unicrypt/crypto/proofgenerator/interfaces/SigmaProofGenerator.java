@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.interfaces;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -73,7 +73,7 @@ public interface SigmaProofGenerator
 	public Triple generate(Element privateInput, Element publicInput);
 
 	@Override
-	public Triple generate(Element privateInput, Element publicInput, RandomGenerator randomGenerator);
+	public Triple generate(Element privateInput, Element publicInput, RandomNumberGenerator randomGenerator);
 
 	@Override
 	public ProductSet getProofSpace();

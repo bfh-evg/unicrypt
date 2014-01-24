@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -92,7 +92,7 @@ public final class ProductFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Tuple abstractApply(final Tuple element, final RandomGenerator randomGenerator) {
+	protected Tuple abstractApply(final Tuple element, final RandomNumberGenerator randomGenerator) {
 		int arity = this.getArity();
 		final Element[] elements = new Element[arity];
 		for (int i = 0; i < arity; i++) {

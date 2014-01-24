@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.function.abstracts;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -85,11 +85,11 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 
 	@Override
 	public final CE apply(final Element element) {
-		return this.apply(element, (RandomGenerator) null);
+		return this.apply(element, (RandomNumberGenerator) null);
 	}
 
 	@Override
-	public final CE apply(final Element element, RandomGenerator randomGenerator) {
+	public final CE apply(final Element element, RandomNumberGenerator randomGenerator) {
 		if (randomGenerator == null) {
 			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
@@ -102,11 +102,11 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 
 	@Override
 	public final CE apply(final Element... elements) {
-		return this.apply(elements, (RandomGenerator) null);
+		return this.apply(elements, (RandomNumberGenerator) null);
 	}
 
 	@Override
-	public final CE apply(final Element[] elements, final RandomGenerator randomGenerator) {
+	public final CE apply(final Element[] elements, final RandomNumberGenerator randomGenerator) {
 		if (this.getDomain().isProduct()) {
 			return this.apply(((ProductSet) this.getDomain()).getElement(elements), randomGenerator);
 		}
@@ -114,7 +114,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 	}
 
 	@Override
-	public final CE apply(final RandomGenerator randomGenerator) {
+	public final CE apply(final RandomNumberGenerator randomGenerator) {
 		return this.apply(new Element[]{}, randomGenerator);
 	}
 
@@ -187,6 +187,6 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 	 * @param randomGenerator Either {@literal null} or a given random generator
 	 * @return The resulting output element
 	 */
-	protected abstract CE abstractApply(DE element, RandomGenerator randomGenerator);
+	protected abstract CE abstractApply(DE element, RandomNumberGenerator randomGenerator);
 
 }

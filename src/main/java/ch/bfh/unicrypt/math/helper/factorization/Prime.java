@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.helper.factorization;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import java.math.BigInteger;
 
 /**
@@ -68,7 +68,7 @@ public class Prime
 		return Prime.getRandomInstance(bitLength, null);
 	}
 
-	public static Prime getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
+	public static Prime getRandomInstance(int bitLength, RandomNumberGenerator randomGenerator) {
 		if (randomGenerator == null) {
 			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}

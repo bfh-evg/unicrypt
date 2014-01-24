@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -90,7 +90,7 @@ public class ConstantFunction
 	}
 
 	@Override
-	protected Element abstractApply(SingletonElement element, RandomGenerator randomGenerator) {
+	protected Element abstractApply(SingletonElement element, RandomNumberGenerator randomGenerator) {
 		return this.element;
 	}
 

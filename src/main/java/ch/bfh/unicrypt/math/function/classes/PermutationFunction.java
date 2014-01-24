@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -85,7 +85,7 @@ public class PermutationFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Tuple abstractApply(final Pair element, final RandomGenerator randomGenerator) {
+	protected Tuple abstractApply(final Pair element, final RandomNumberGenerator randomGenerator) {
 		final Tuple elements = (Tuple) element.getFirst();
 		final Permutation permutation = ((PermutationElement) element.getSecond()).getValue();
 		final Element[] result = new Element[elements.getArity()];

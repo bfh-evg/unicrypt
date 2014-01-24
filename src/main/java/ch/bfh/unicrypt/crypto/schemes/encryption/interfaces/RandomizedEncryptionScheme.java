@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
@@ -65,7 +65,7 @@ public interface RandomizedEncryptionScheme
 	 * @param randomGenerator
 	 * @return
 	 */
-	public Element encrypt(Element encryptionKey, Element message, RandomGenerator randomGenerator);
+	public Element encrypt(Element encryptionKey, Element message, RandomNumberGenerator randomGenerator);
 
 	/**
 	 *

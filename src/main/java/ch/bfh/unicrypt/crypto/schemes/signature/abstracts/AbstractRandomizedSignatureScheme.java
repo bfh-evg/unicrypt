@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -56,7 +56,7 @@ public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME exten
 	}
 
 	@Override
-	public SE sign(Element privateKey, Element message, RandomGenerator randomGenerator) {
+	public SE sign(Element privateKey, Element message, RandomNumberGenerator randomGenerator) {
 		return this.sign(privateKey, message, getRandomizationSpace().getRandomElement(randomGenerator));
 	}
 

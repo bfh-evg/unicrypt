@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractFiniteField;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.math.helper.polynomial.BinaryPolynomial;
@@ -144,7 +144,7 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected BinaryPolynomialElement abstractGetRandomElement(RandomGenerator randomGenerator) {
+	protected BinaryPolynomialElement abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

@@ -46,7 +46,7 @@ package ch.bfh.unicrypt.crypto.random.interfaces;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public interface RandomReferenceString
-			 extends RandomGenerator {
+			 extends RandomNumberGenerator {
 
 	public void reset();
 

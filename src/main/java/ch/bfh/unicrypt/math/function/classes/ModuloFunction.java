@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -80,7 +80,7 @@ public class ModuloFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected ZModElement abstractApply(final Element element, final RandomGenerator randomGenerator) {
+	protected ZModElement abstractApply(final Element element, final RandomNumberGenerator randomGenerator) {
 		return this.getCoDomain().getElement(element.getBigInteger().mod(this.getModulus()));
 	}
 

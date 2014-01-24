@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 
@@ -63,7 +63,7 @@ public interface AdditiveCyclicGroup
 	public AdditiveElement getRandomGenerator();
 
 	@Override
-	public AdditiveElement getRandomGenerator(RandomGenerator randomGenerator);
+	public AdditiveElement getRandomGenerator(RandomNumberGenerator randomGenerator);
 
 	@Override
 	public AdditiveElement[] getIndependentGenerators(int amount);

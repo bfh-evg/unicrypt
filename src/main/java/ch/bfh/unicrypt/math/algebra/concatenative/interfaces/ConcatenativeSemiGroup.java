@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
@@ -61,7 +61,7 @@ public interface ConcatenativeSemiGroup
 
 	public ConcatenativeElement getRandomElement(int length);
 
-	public ConcatenativeElement getRandomElement(int length, RandomGenerator randomGenerator);
+	public ConcatenativeElement getRandomElement(int length, RandomNumberGenerator randomGenerator);
 
 	/**
 	 * This method is a synonym for {@link #Group.apply(Element, Element)}.
@@ -150,7 +150,7 @@ public interface ConcatenativeSemiGroup
 	public ConcatenativeElement getRandomElement();
 
 	@Override
-	public ConcatenativeElement getRandomElement(RandomGenerator randomGenerator);
+	public ConcatenativeElement getRandomElement(RandomNumberGenerator randomGenerator);
 
 	// The following methods are overridden from SemiGroup with an adapted return type
 	@Override

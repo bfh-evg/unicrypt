@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -137,7 +137,7 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModPrimeElement getRandomElementWithoutGenerator(RandomGenerator randomGenerator) {
+	protected ECZModPrimeElement getRandomElementWithoutGenerator(RandomNumberGenerator randomGenerator) {
 		BigInteger p = this.getFiniteField().getModulus();
 		ZModElement x = (ZModElement) this.getFiniteField().getRandomElement(randomGenerator);
 		ZModElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());

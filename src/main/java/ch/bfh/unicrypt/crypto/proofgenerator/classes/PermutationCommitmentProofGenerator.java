@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.Chall
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
@@ -183,7 +183,7 @@ public class PermutationCommitmentProofGenerator
 	// Generate and Validate
 	//
 	@Override
-	protected Pair abstractGenerate(Pair privateInput, Tuple publicInput, RandomGenerator randomGenerator) {
+	protected Pair abstractGenerate(Pair privateInput, Tuple publicInput, RandomNumberGenerator randomGenerator) {
 
 		// Unfold privat and public input
 		final PermutationElement pi = (PermutationElement) privateInput.getFirst();
@@ -322,7 +322,7 @@ public class PermutationCommitmentProofGenerator
 		}
 
 		@Override
-		protected Tuple abstractApply(Tuple element, RandomGenerator randomGenerator) {
+		protected Tuple abstractApply(Tuple element, RandomNumberGenerator randomGenerator) {
 
 			// Unfold element
 			final Element v = element.getAt(0);

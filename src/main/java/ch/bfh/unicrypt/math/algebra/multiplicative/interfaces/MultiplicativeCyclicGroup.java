@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 
@@ -64,7 +64,7 @@ public interface MultiplicativeCyclicGroup
 	public MultiplicativeElement getRandomGenerator();
 
 	@Override
-	public MultiplicativeElement getRandomGenerator(RandomGenerator randomGenerator);
+	public MultiplicativeElement getRandomGenerator(RandomNumberGenerator randomGenerator);
 
 	@Override
 	public MultiplicativeElement[] getIndependentGenerators(int amount);

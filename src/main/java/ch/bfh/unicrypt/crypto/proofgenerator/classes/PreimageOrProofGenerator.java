@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -122,7 +122,7 @@ public class PreimageOrProofGenerator
 	}
 
 	@Override
-	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, RandomGenerator randomGenerator) {
+	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, RandomNumberGenerator randomGenerator) {
 
 		// Extract secret input value and index from private input
 		final int index = privateInput.getSecond().getBigInteger().intValue();

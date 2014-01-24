@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofG
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
@@ -76,7 +76,7 @@ public class PermutationCommitmentProofGeneratorTest {
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
-		final RandomGenerator randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
+		final RandomNumberGenerator randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
 		final int size = 5;
@@ -136,7 +136,7 @@ public class PermutationCommitmentProofGeneratorTest {
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
-		final RandomGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
+		final RandomNumberGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
 		final int size = 5;
@@ -175,7 +175,7 @@ public class PermutationCommitmentProofGeneratorTest {
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
-		final RandomGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
+		final RandomNumberGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
 		final int size = 5;

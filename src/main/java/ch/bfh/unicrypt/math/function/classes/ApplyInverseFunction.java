@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -69,7 +69,7 @@ public class ApplyInverseFunction
 	}
 
 	@Override
-	protected Element abstractApply(final Pair element, final RandomGenerator randomGenerator) {
+	protected Element abstractApply(final Pair element, final RandomNumberGenerator randomGenerator) {
 		return this.getCoDomain().applyInverse(element.getFirst(), element.getSecond());
 	}
 

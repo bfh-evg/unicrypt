@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -73,7 +73,7 @@ public class GeneratorFunction
 	}
 
 	@Override
-	protected Element abstractApply(ZModElement element, RandomGenerator randomGenerator) {
+	protected Element abstractApply(ZModElement element, RandomNumberGenerator randomGenerator) {
 		return generator.selfApply(element);
 	}
 

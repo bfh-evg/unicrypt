@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
@@ -114,7 +114,7 @@ public class N
 	}
 
 	@Override
-	protected NElement abstractGetRandomElement(RandomGenerator randomGenerator) {
+	protected NElement abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
 		throw new UnsupportedOperationException();
 	}
 

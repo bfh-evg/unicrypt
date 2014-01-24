@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageOrProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaSetMembershipProofGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -128,7 +128,7 @@ public abstract class AbstractSigmaSetMembershipProofGenerator<PUS extends SemiG
 	}
 
 	@Override
-	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, RandomGenerator randomGenerator) {
+	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, RandomNumberGenerator randomGenerator) {
 		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput), randomGenerator);
 	}
 

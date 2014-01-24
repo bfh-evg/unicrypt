@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -185,7 +185,7 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	}
 
 	@Override
-	protected E abstractGetRandomElement(RandomGenerator randomGenerator) {
+	protected E abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
 		if (this.getDefaultGenerator() != null) {
 			D r = (D) this.getFiniteField().getRandomElement(randomGenerator);
 			return (E) this.getDefaultGenerator().selfApply(r);
@@ -200,7 +200,7 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	 * @param randomGenerator
 	 * @return
 	 */
-	protected abstract E getRandomElementWithoutGenerator(RandomGenerator randomGenerator);
+	protected abstract E getRandomElementWithoutGenerator(RandomNumberGenerator randomGenerator);
 
 	@Override
 	public String standardToStringContent() {

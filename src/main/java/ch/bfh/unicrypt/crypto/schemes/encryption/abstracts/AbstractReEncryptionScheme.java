@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -100,11 +100,11 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 
 	@Override
 	public final EE reEncrypt(final Element publicKey, final Element ciphertext) {
-		return this.reEncrypt(publicKey, ciphertext, (RandomGenerator) null);
+		return this.reEncrypt(publicKey, ciphertext, (RandomNumberGenerator) null);
 	}
 
 	@Override
-	public final EE reEncrypt(final Element publicKey, final Element ciphertext, RandomGenerator randomGenerator) {
+	public final EE reEncrypt(final Element publicKey, final Element ciphertext, RandomNumberGenerator randomGenerator) {
 		return this.reEncrypt(publicKey, ciphertext, this.getRandomizationSpace().getRandomElement(randomGenerator));
 	}
 

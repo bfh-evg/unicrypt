@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -161,7 +161,7 @@ public class ProductCyclicGroup
 	}
 
 	@Override
-	public final Tuple getRandomGenerator(RandomGenerator randomGenerator) {
+	public final Tuple getRandomGenerator(RandomNumberGenerator randomGenerator) {
 		int arity = this.getArity();
 		Element[] randomGenerators = new Element[arity];
 		for (int i = 0; i < arity; i++) {

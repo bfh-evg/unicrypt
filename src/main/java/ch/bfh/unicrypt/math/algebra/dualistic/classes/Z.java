@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
@@ -75,7 +75,7 @@ public class Z
 	}
 
 	@Override
-	protected ZElement standardGetRandomGenerator(final RandomGenerator randomGenerator) {
+	protected ZElement standardGetRandomGenerator(final RandomNumberGenerator randomGenerator) {
 		if (randomGenerator.nextBoolean()) {
 			return this.getDefaultGenerator();
 		}
@@ -127,7 +127,7 @@ public class Z
 	}
 
 	@Override
-	protected ZElement abstractGetRandomElement(RandomGenerator randomGenerator) {
+	protected ZElement abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
 		throw new UnsupportedOperationException();
 	}
 

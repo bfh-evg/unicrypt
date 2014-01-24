@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -310,7 +310,7 @@ public interface Set {
 	 * @param randomGenerator Either {@literal null} or a given random generator
 	 * @return A random element from the set
 	 */
-	public Element getRandomElement(RandomGenerator randomGenerator);
+	public Element getRandomElement(RandomNumberGenerator randomGenerator);
 
 	/**
 	 * Checks if two given elements of this group are equal.

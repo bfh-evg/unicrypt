@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -68,11 +68,11 @@ public abstract class AbstractKeyGenerator<KS extends Set, KE extends Element>
 
 	@Override
 	public KE generateKey() {
-		return this.generateKey((RandomGenerator) null);
+		return this.generateKey((RandomNumberGenerator) null);
 	}
 
 	@Override
-	public KE generateKey(RandomGenerator randomGenerator) {
+	public KE generateKey(RandomNumberGenerator randomGenerator) {
 		return (KE) this.getKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomGenerator);
 	}
 

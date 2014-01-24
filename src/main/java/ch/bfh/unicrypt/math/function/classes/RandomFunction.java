@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -67,7 +67,7 @@ public class RandomFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Element abstractApply(final SingletonElement element, final RandomGenerator randomGenerator) {
+	protected Element abstractApply(final SingletonElement element, final RandomNumberGenerator randomGenerator) {
 		return this.getCoDomain().getRandomElement(randomGenerator);
 	}
 

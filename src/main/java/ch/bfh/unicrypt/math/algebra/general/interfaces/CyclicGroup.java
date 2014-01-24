@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 
 /**
@@ -81,7 +81,7 @@ public interface CyclicGroup
 	 * @param randomGenerator The given random generator
 	 * @return The randomly selected generator
 	 */
-	public Element getRandomGenerator(RandomGenerator randomGenerator);
+	public Element getRandomGenerator(RandomNumberGenerator randomGenerator);
 
 	public Element getIndependentGenerator(int index);
 

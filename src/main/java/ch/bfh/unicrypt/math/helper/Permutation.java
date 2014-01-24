@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.helper;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -196,7 +196,7 @@ public class Permutation
 		return Permutation.getRandomInstance(size, null);
 	}
 
-	public static Permutation getRandomInstance(int size, RandomGenerator randomGenerator) {
+	public static Permutation getRandomInstance(int size, RandomNumberGenerator randomGenerator) {
 		if (size < 0) {
 			throw new IllegalArgumentException();
 		}

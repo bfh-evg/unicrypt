@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
@@ -110,7 +110,7 @@ public class OneTimePadEncryptionScheme
 		}
 
 		@Override
-		protected FiniteByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
+		protected FiniteByteArrayElement abstractApply(Pair element, RandomNumberGenerator randomGenerator) {
 			ByteArray byteArray1 = ((FiniteByteArrayElement) element.getFirst()).getValue();
 			ByteArray byteArray2 = ((FiniteByteArrayElement) element.getSecond()).getValue();
 			return this.getCoDomain().getElement(byteArray1.xor(byteArray2));

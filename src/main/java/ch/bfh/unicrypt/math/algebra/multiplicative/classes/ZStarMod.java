@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
@@ -167,7 +167,7 @@ public class ZStarMod
 	}
 
 	@Override
-	protected ZStarModElement abstractGetRandomElement(final RandomGenerator randomGenerator) {
+	protected ZStarModElement abstractGetRandomElement(final RandomNumberGenerator randomGenerator) {
 		BigInteger randomValue;
 		do {
 			randomValue = randomGenerator.nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
@@ -242,7 +242,7 @@ public class ZStarMod
 		return new ZStarMod(factorization);
 	}
 
-	public static ZStarMod getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
+	public static ZStarMod getRandomInstance(int bitLength, RandomNumberGenerator randomGenerator) {
 		if (bitLength < 1) {
 			throw new IllegalArgumentException();
 		}

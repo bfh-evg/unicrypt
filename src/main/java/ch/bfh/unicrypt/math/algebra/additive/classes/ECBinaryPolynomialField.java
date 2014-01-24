@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
@@ -136,7 +136,7 @@ public class ECBinaryPolynomialField
 	}
 
 	@Override
-	protected ECBinaryPolynomialFieldElement getRandomElementWithoutGenerator(RandomGenerator randomGenerator) {
+	protected ECBinaryPolynomialFieldElement getRandomElementWithoutGenerator(RandomNumberGenerator randomGenerator) {
 		// TODO Auto-generated method stub
 		return null;
 	}

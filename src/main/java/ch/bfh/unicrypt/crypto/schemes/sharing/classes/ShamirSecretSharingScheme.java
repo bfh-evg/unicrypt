@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractThresholdSecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
@@ -88,7 +88,7 @@ public class ShamirSecretSharingScheme
 	}
 
 	@Override
-	protected Pair[] abstractShare(Element message, RandomGenerator randomGenerator) {
+	protected Pair[] abstractShare(Element message, RandomNumberGenerator randomGenerator) {
 
 		// create an array of coefficients with size threshold
 		// the coefficient of degree 0 is fixed (message)

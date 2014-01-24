@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.Standard
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaProofGenerator;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -162,7 +162,7 @@ public class InequalityOfPreimagesProofGenerator
 	}
 
 	@Override
-	protected Pair abstractGenerate(Element privateInput, Pair publicInput, RandomGenerator randomGenerator) {
+	protected Pair abstractGenerate(Element privateInput, Pair publicInput, RandomNumberGenerator randomGenerator) {
 
 		// 1. Create commitment:
 		//    C = (f2(x)/z)^r with random r            |==> C = (h^x/z)^r

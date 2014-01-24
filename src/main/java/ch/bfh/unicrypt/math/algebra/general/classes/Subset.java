@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -122,7 +122,7 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetRandomElement(RandomGenerator randomGenerator) {
+	protected Element abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
 		return this.getElements()[randomGenerator.nextInteger(this.hashSet.size() - 1)];
 	}
 

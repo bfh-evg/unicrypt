@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrimeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -90,7 +90,7 @@ public class ProbabilisticECGroupFpEncoder
 		}
 
 		@Override
-		protected ECZModPrimeElement abstractApply(ZModElement element, RandomGenerator randomGenerator) {
+		protected ECZModPrimeElement abstractApply(ZModElement element, RandomNumberGenerator randomGenerator) {
 			ZModPrime zModPrime = this.getDomain();
 			ECZModPrime ecPrime = this.getCoDomain();
 
@@ -129,7 +129,7 @@ public class ProbabilisticECGroupFpEncoder
 		}
 
 		@Override
-		protected ZModElement abstractApply(ECZModPrimeElement element, RandomGenerator randomGenerator) {
+		protected ZModElement abstractApply(ECZModPrimeElement element, RandomNumberGenerator randomGenerator) {
 			BigInteger x1 = element.getX().getValue();
 			x1 = x1.shiftRight(SHIFT);
 			return this.getCoDomain().getElement(x1);

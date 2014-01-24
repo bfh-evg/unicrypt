@@ -46,7 +46,7 @@ package ch.bfh.unicrypt.crypto.random.interfaces;
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
 public interface PseudoRandomGenerator
-	   extends RandomGenerator {
+	   extends RandomNumberGenerator {
 
 	public void updateInternalState(byte[] freshBytes);
 

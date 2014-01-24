@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
@@ -107,7 +107,7 @@ public class BooleanSet
 	}
 
 	@Override
-	protected BooleanElement abstractGetRandomElement(RandomGenerator randomGenerator) {
+	protected BooleanElement abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
 		return this.getElement(randomGenerator.nextBoolean());
 	}
 

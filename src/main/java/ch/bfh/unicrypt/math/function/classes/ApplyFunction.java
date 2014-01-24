@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -70,7 +70,7 @@ public class ApplyFunction
 	}
 
 	@Override
-	protected Element abstractApply(final Tuple element, final RandomGenerator randomGenerator) {
+	protected Element abstractApply(final Tuple element, final RandomNumberGenerator randomGenerator) {
 		return this.getCoDomain().apply(element.getAll());
 	}
 

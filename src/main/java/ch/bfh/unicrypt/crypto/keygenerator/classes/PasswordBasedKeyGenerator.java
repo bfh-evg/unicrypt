@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 
@@ -59,7 +59,7 @@ public class PasswordBasedKeyGenerator
 	}
 
 	@Override
-	public ZModElement generateKey(RandomGenerator randomGenerator) {
+	public ZModElement generateKey(RandomNumberGenerator randomGenerator) {
 		return null;
 	}
 

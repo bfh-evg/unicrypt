@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
@@ -183,7 +183,7 @@ public class AESEncryptionScheme
 		}
 
 		@Override
-		protected ByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
+		protected ByteArrayElement abstractApply(Pair element, RandomNumberGenerator randomGenerator) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement message = (ByteArrayElement) element.getSecond();
 			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getAll(), ALGORITHM_NAME);
@@ -217,7 +217,7 @@ public class AESEncryptionScheme
 		}
 
 		@Override
-		protected ByteArrayElement abstractApply(Pair element, RandomGenerator randomGenerator) {
+		protected ByteArrayElement abstractApply(Pair element, RandomNumberGenerator randomGenerator) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement encryption = (ByteArrayElement) element.getSecond();
 			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getAll(), ALGORITHM_NAME);

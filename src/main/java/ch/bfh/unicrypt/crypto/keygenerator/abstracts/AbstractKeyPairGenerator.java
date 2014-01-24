@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
@@ -84,11 +84,11 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public final PRE generatePrivateKey() {
-		return this.generatePrivateKey((RandomGenerator) null);
+		return this.generatePrivateKey((RandomNumberGenerator) null);
 	}
 
 	@Override
-	public final PRE generatePrivateKey(RandomGenerator randomGenerator) {
+	public final PRE generatePrivateKey(RandomNumberGenerator randomGenerator) {
 		return (PRE) this.getPrivateKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomGenerator);
 	}
 
@@ -107,11 +107,11 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public final PUE generatePublicKey(Element privateKey) {
-		return this.generatePublicKey(privateKey, (RandomGenerator) null);
+		return this.generatePublicKey(privateKey, (RandomNumberGenerator) null);
 	}
 
 	@Override
-	public final PUE generatePublicKey(Element privateKey, RandomGenerator randomGenerator) {
+	public final PUE generatePublicKey(Element privateKey, RandomNumberGenerator randomGenerator) {
 		if (privateKey == null || !this.getPrivateKeySpace().contains(privateKey)) {
 			throw new IllegalArgumentException();
 		}
@@ -138,11 +138,11 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public Pair generateKeyPair() {
-		return this.generateKeyPair((RandomGenerator) null);
+		return this.generateKeyPair((RandomNumberGenerator) null);
 	}
 
 	@Override
-	public Pair generateKeyPair(RandomGenerator randomGenerator) {
+	public Pair generateKeyPair(RandomNumberGenerator randomGenerator) {
 		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomGenerator);
 	}
 

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -62,7 +62,7 @@ public class ConvertFunction
 	}
 
 	@Override
-	protected Element abstractApply(final Element element, final RandomGenerator randomGenerator) {
+	protected Element abstractApply(final Element element, final RandomNumberGenerator randomGenerator) {
 		return this.getCoDomain().getElement(element);
 	}
 

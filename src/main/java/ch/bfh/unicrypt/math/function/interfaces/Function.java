@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -91,7 +91,7 @@ public interface Function {
 	 * @return The resulting output element
 	 * @throws IllegalArgumentException if {@literal element} is null or not contained in the domain
 	 */
-	public Element apply(Element element, RandomGenerator randomGenerator);
+	public Element apply(Element element, RandomNumberGenerator randomGenerator);
 
 	/**
 	 * This method provides a shortcut for applying a function with multiple input values. The specified elements are used
@@ -122,9 +122,9 @@ public interface Function {
 	 *                                  sub-domains
 	 * @throws IllegalArgumentException if the the length of {@literal elements} is different from {@literal getArityIn()}
 	 */
-	public Element apply(Element[] elements, RandomGenerator randomGenerator);
+	public Element apply(Element[] elements, RandomNumberGenerator randomGenerator);
 
-	public Element apply(RandomGenerator randomGenerator);
+	public Element apply(RandomNumberGenerator randomGenerator);
 
 	/**
 	 * Returns the domain of this function.

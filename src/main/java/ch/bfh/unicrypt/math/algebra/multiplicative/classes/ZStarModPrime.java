@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -81,10 +81,10 @@ public class ZStarModPrime
 	}
 
 	public static ZStarModPrime getRandomInstance(int bitLength) {
-		return ZStarModPrime.getRandomInstance(bitLength, (RandomGenerator) null);
+		return ZStarModPrime.getRandomInstance(bitLength, (RandomNumberGenerator) null);
 	}
 
-	public static ZStarModPrime getRandomInstance(int bitLength, RandomGenerator randomGenerator) {
+	public static ZStarModPrime getRandomInstance(int bitLength, RandomNumberGenerator randomGenerator) {
 		return ZStarModPrime.getInstance(Prime.getRandomInstance(bitLength, randomGenerator));
 	}
 

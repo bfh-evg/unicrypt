@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
@@ -68,7 +68,7 @@ public interface SemiRing
 	public DualisticElement getRandomElement();
 
 	@Override
-	public DualisticElement getRandomElement(RandomGenerator randomGenerator);
+	public DualisticElement getRandomElement(RandomNumberGenerator randomGenerator);
 
 	// The following methods are overridden from SemiGroup with an adapted return type
 	@Override

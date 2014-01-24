@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -74,7 +74,7 @@ public class GenericFunction<D extends Set, DE extends Element, C extends Set, C
 	}
 
 	@Override
-	protected CE abstractApply(DE element, RandomGenerator randomGenerator) {
+	protected CE abstractApply(DE element, RandomNumberGenerator randomGenerator) {
 		return (CE) this.function.apply(element, randomGenerator);
 	}
 

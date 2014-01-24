@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -81,7 +81,7 @@ public abstract class AbstractCyclicGroup<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final E getRandomGenerator(RandomGenerator randomGenerator) {
+	public final E getRandomGenerator(RandomNumberGenerator randomGenerator) {
 		if (randomGenerator == null) {
 			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 		}
@@ -152,7 +152,7 @@ public abstract class AbstractCyclicGroup<E extends Element, V extends Object>
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected E standardGetRandomGenerator(RandomGenerator randomGenerator) {
+	protected E standardGetRandomGenerator(RandomNumberGenerator randomGenerator) {
 		E element;
 		do {
 			element = this.getRandomElement(randomGenerator);
