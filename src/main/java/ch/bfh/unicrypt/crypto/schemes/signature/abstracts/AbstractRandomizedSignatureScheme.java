@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;

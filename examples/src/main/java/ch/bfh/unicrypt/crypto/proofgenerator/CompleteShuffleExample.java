@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.Chall
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.ShuffleProofGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
@@ -74,7 +74,7 @@ public class CompleteShuffleExample {
 		// P R E P A R E
 		//---------------
 		// Create random oracle and random reference string
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomOracle ro = RandomOracle.DEFAULT;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
 		// Create cyclic group and get generator

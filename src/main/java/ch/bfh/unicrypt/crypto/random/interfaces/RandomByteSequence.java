@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.random.interfaces;
 
 import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 
 /**
  *
@@ -49,8 +50,10 @@ import ch.bfh.unicrypt.math.helper.ByteArray;
  */
 public interface RandomByteSequence {
 
+	public HashMethod getHashMethod();
+
 	public byte getNextByte();
 
-	public ByteArray getNextByteArray();
+	public ByteArray getNextByteArray(int length);
 
 }

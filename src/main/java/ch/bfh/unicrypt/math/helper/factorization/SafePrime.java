@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.helper.factorization;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 

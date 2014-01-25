@@ -46,9 +46,9 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.Sigma
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.ShuffleProofGenerator;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
@@ -83,7 +83,7 @@ public class ShuffleProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomOracle ro = RandomOracle.DEFAULT;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 		final RandomNumberGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
 
@@ -129,7 +129,7 @@ public class ShuffleProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomOracle ro = RandomOracle.DEFAULT;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
 		final int size = 10;
@@ -174,7 +174,7 @@ public class ShuffleProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomOracle ro = RandomOracle.DEFAULT;
 		final RandomNumberGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
@@ -238,7 +238,7 @@ public class ShuffleProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomOracle ro = RandomOracle.DEFAULT;
 		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
 
 		final int size = 100;

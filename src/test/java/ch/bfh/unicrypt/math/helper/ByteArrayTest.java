@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

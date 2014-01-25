@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.SecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;

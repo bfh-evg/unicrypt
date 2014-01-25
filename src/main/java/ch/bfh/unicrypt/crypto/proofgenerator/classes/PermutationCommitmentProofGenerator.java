@@ -46,9 +46,9 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.Standard
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
@@ -377,7 +377,7 @@ public class PermutationCommitmentProofGenerator
 			throw new IllegalArgumentException();
 		}
 		if (randomOracle == null) {
-			randomOracle = PseudoRandomOracle.DEFAULT;
+			randomOracle = RandomOracle.DEFAULT;
 		}
 		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(PermutationCommitmentProofGenerator.createSigmaChallengeGeneratorPublicInputSpace(cyclicGroup, size),
 																		 PermutationCommitmentProofGenerator.createCommitmentSpace(cyclicGroup, size),
@@ -387,7 +387,7 @@ public class PermutationCommitmentProofGenerator
 	}
 
 	public static StandardNonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size) {
-		return PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(cyclicGroup, size, PseudoRandomOracle.DEFAULT);
+		return PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(cyclicGroup, size, RandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveChallengeGenerator createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size, final RandomOracle randomOracle) {

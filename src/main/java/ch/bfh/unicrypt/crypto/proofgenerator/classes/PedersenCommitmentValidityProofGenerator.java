@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaSetMembershipProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -105,11 +105,11 @@ public class PedersenCommitmentValidityProofGenerator
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages) {
-		return PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, PseudoRandomOracle.DEFAULT);
+		return PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, RandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages, final Element proverID) {
-		return PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverID, PseudoRandomOracle.DEFAULT);
+		return PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverID, RandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages, final RandomOracle randomOracle) {

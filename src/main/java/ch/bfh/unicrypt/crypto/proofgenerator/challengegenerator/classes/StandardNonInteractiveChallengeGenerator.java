@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.abstracts.AbstractNonInteractiveChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -75,7 +75,7 @@ public class StandardNonInteractiveChallengeGenerator
 			throw new IllegalArgumentException();
 		}
 		if (randomOracle == null) {
-			randomOracle = PseudoRandomOracle.DEFAULT;
+			randomOracle = RandomOracle.DEFAULT;
 		}
 		return new StandardNonInteractiveChallengeGenerator(inputSpace, challengeSpace, randomOracle);
 	}

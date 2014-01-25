@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaSetMembershipProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -108,11 +108,11 @@ public class ElGamalEncryptionValidityProofGenerator
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts) {
-		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, PseudoRandomOracle.DEFAULT);
+		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, RandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverID) {
-		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverID, PseudoRandomOracle.DEFAULT);
+		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverID, RandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final RandomOracle randomOracle) {

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import java.math.BigInteger;
@@ -56,7 +56,7 @@ public class PseudoRandomOracleTest {
 
 	@Test
 	public void generalTest() {
-		RandomOracle ro = PseudoRandomOracle.getInstance();
+		RandomOracle ro = RandomOracle.getInstance();
 		RandomReferenceString rrs = ro.getRandomReferenceString(0);
 		BigInteger prime = rrs.nextPrime(10);
 		rrs.nextBoolean();

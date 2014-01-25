@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.abstracts.AbstractNonInteractiveSigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -74,7 +74,7 @@ public class StandardNonInteractiveSigmaChallengeGenerator
 			throw new IllegalArgumentException();
 		}
 		if (randomOracle == null) {
-			randomOracle = PseudoRandomOracle.DEFAULT;
+			randomOracle = RandomOracle.DEFAULT;
 		}
 		return new StandardNonInteractiveSigmaChallengeGenerator(publicInputSpace, commitmentSpace, challengeSpace, randomOracle, proverID);
 	}
@@ -96,7 +96,7 @@ public class StandardNonInteractiveSigmaChallengeGenerator
 			throw new IllegalArgumentException();
 		}
 		if (randomOracle == null) {
-			randomOracle = PseudoRandomOracle.DEFAULT;
+			randomOracle = RandomOracle.DEFAULT;
 		}
 		return new StandardNonInteractiveSigmaChallengeGenerator(
 					 function.getCoDomain(), (SemiGroup) function.getCoDomain(), ZMod.getInstance(function.getDomain().getMinimalOrder()), randomOracle, proverID);

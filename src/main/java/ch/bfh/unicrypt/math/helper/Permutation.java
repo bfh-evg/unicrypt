@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.helper;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import java.util.Arrays;
 import java.util.Iterator;
 

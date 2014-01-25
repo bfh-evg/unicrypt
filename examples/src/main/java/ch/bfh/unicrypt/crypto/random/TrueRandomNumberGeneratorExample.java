@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.random;
 
 import ch.bfh.unicrypt.crypto.random.classes.TrueRandomNumberGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import java.util.Arrays;
 
 /**
