@@ -222,21 +222,32 @@ public class ByteArray
 
 	@Override
 	public int hashCode() {
-		int hash = 3;
-		hash = 17 * hash + Arrays.hashCode(this.bytes);
+		int hash = 5;
+		hash = 79 * hash + this.length;
+		for (byte b : this) {
+			hash = 79 * hash + b;
+		}
 		return hash;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
+		if (this == obj) {
+			return true;
 		}
-		if (this.getClass() != obj.getClass()) {
+		if (obj == null || this.getClass() != obj.getClass()) {
 			return false;
 		}
 		final ByteArray other = (ByteArray) obj;
-		return Arrays.equals(this.bytes, other.bytes);
+		if (this.length != other.length) {
+			return false;
+		}
+		for (int i = 0; i < this.length; i++) {
+			if (this.getAt(i) != other.getAt(i)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public static ByteArray getInstance() {
@@ -256,6 +267,21 @@ public class ByteArray
 			Arrays.fill(bytes, (byte) 0xff);
 		}
 		return new ByteArray(new byte[length]);
+	}
+
+	public static ByteArray getInstance(int... integers) {
+		if (integers == null) {
+			throw new IllegalArgumentException();
+		}
+		byte[] bytes = new byte[integers.length];
+		int i = 0;
+		for (int integer : integers) {
+			if (integer < 0x00 || integer > 0xff) {
+				throw new IllegalArgumentException();
+			}
+			bytes[i++] = (byte) integer;
+		}
+		return new ByteArray(bytes);
 	}
 
 	public static ByteArray getInstance(byte[] bytes) {

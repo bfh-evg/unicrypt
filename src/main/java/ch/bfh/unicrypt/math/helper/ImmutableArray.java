@@ -92,45 +92,50 @@ public class ImmutableArray<T>
 		return result;
 	}
 
-//		@Override
-//	public ImmutableArray<T> insertAt(int index, T object) {
-//		if (index < 0 || index > this.length) {
-//			throw new IndexOutOfBoundsException();
-//		}
-//		if (object == null) {
-//			throw new IllegalArgumentException();
-//		}
-//		if (this.array.length == 1) { // Case 2
-//			if (this.array[0].equals(object)) {
-//				return ImmutableArray.getInstance(object, this.length+1);
-//			}
-//		}
-//		T[] result = Arrays.copyOf(this.array, this.length + 1);
-//		if (this.array.length == 1) { // Case 2
-//			for (int i=1; i<this.length; i++) {
-//				result.
-//			}
-//		}
-//		result[this.length] = object;
-//		return ImmutableArray.getInstance(result);
-//
-//
-//		Element[] newElements = new Element[this.arity + 1];
-//		for (int i = 0; i < this.arity + 1; i++) {
-//			if (i < index) {
-//				newElements[i] = this.getAt(i);
-//			} else if (i == index) {
-//				newElements[i] = object;
-//			} else {
-//				newElements[i] = this.getAt(i - 1);
-//			}
-//		}
-//		return this.getSet().insertAt(index, object.getSet()).getElement(newElements);
-//	}
-//	@Override
-//	public Tuple add(Element object) {
-//		return this.insertAt(this.arity, object);
-//	}
+	public ImmutableArray<T> removeAt(int index) {
+		if (index < 0 || index >= this.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (this.array.length == 1) { // Case 2
+			return ImmutableArray.getInstance(this.array[0], this.length - 1);
+		}
+		T[] result = Arrays.copyOf(this.array, this.length - 1);
+		for (int i = index; i < this.length - 1; i++) {
+			result[i] = this.array[i + 1];
+		}
+		return ImmutableArray.getInstance(result);
+	}
+
+	public ImmutableArray<T> insertAt(int index, T object) {
+		if (index < 0 || index > this.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.array.length == 1) { // Case 2
+			if (this.array[0].equals(object)) {
+				return ImmutableArray.getInstance(object, this.length + 1);
+			}
+		}
+		T[] result = Arrays.copyOf(this.array, this.length + 1);
+		if (this.array.length == 1) { // Case 2
+			for (int i = 1; i <= this.length; i++) {
+				result[i] = this.array[0];
+			}
+		} else { // Case 1
+			for (int i = index + 1; i <= this.length; i++) {
+				result[i] = this.array[i - 1];
+			}
+		}
+		result[index] = object;
+		return ImmutableArray.getInstance(result);
+	}
+
+	public ImmutableArray<T> add(T object) {
+		return this.insertAt(this.length, object);
+	}
+
 	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
@@ -152,6 +157,17 @@ public class ImmutableArray<T>
 				throw new UnsupportedOperationException();
 			}
 		};
+	}
+
+	@Override
+	public String standardToStringContent() {
+		String str = "";
+		String delimiter = "";
+		for (int i = 0; i < this.length; i++) {
+			str = str + delimiter + this.getAt(i);
+			delimiter = ", ";
+		}
+		return str;
 	}
 
 	@Override
@@ -197,6 +213,9 @@ public class ImmutableArray<T>
 	public static <T> ImmutableArray<T> getInstance(T object, int length) {
 		if (object == null || length < 0) {
 			throw new IllegalArgumentException();
+		}
+		if (length == 0) {
+			return ImmutableArray.<T>getInstance(length);
 		}
 		return ImmutableArray.<T>getInstance(length, object);
 	}
