@@ -54,6 +54,7 @@ import org.junit.Test;
  */
 public class ImmutableArrayTest {
 
+	private static ImmutableArray<String> a0 = ImmutableArray.getInstance();
 	private static ImmutableArray<String> a1 = ImmutableArray.getInstance("s1", "s2", "s3");
 	private static ImmutableArray<String> a2 = ImmutableArray.getInstance("s1", "s1", "s1");
 	private static ImmutableArray<String> a3 = ImmutableArray.getInstance("s1", 3);
@@ -63,6 +64,7 @@ public class ImmutableArrayTest {
 
 	@Test
 	public void testGetLength() {
+		assertEquals(0, a0.getLength());
 		assertEquals(3, a1.getLength());
 		assertEquals(3, a2.getLength());
 		assertEquals(3, a3.getLength());
@@ -83,9 +85,33 @@ public class ImmutableArrayTest {
 
 	@Test
 	public void testGetAll() {
+		assertArrayEquals(new String[]{}, a0.getAll());
 		assertArrayEquals(new String[]{"s1", "s2", "s3"}, a1.getAll());
 		assertArrayEquals(new String[]{"s1", "s1", "s1"}, a2.getAll());
 		assertArrayEquals(new String[]{"s1", "s1", "s1"}, a3.getAll());
+	}
+
+	@Test
+	public void testRemoveAt() {
+		assertEquals(a0, a1.removeAt(2).removeAt(0).removeAt(0));
+		assertEquals(a0, a2.removeAt(1).removeAt(1).removeAt(0));
+		assertEquals(a0, a3.removeAt(0).removeAt(1).removeAt(0));
+		assertEquals(a1.removeAt(1).removeAt(1), a2.removeAt(2).removeAt(0));
+		assertEquals(a1.removeAt(1).removeAt(1), a3.removeAt(2).removeAt(0));
+	}
+
+	@Test
+	public void testInsertAt() {
+		assertEquals(a1, a0.insertAt(0, "s3").insertAt(0, "s2").insertAt(0, "s1"));
+		assertEquals(a1, a0.insertAt(0, "s2").insertAt(1, "s3").insertAt(0, "s1"));
+		assertEquals(a1, a0.insertAt(0, "s1").insertAt(1, "s3").insertAt(1, "s2"));
+	}
+
+	@Test
+	public void testAdd() {
+		assertEquals(a1, a0.add("s1").add("s2").add("s3"));
+		assertEquals(a2, a0.add("s1").add("s1").add("s1"));
+		assertEquals(a3, a0.add("s1").add("s1").add("s1"));
 	}
 
 	@Test
@@ -99,6 +125,10 @@ public class ImmutableArrayTest {
 
 	@Test
 	public void testEquals() {
+		assertTrue(a0.equals(a0));
+		assertFalse(a0.equals(a1));
+		assertFalse(a0.equals(a2));
+		assertFalse(a0.equals(a3));
 		assertTrue(a1.equals(a1));
 		assertFalse(a1.equals(a2));
 		assertFalse(a1.equals(a3));

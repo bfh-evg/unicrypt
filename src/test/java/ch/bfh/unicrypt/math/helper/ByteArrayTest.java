@@ -45,91 +45,55 @@ import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  *
- * @author Reto E. Koenig <reto.koenig@bfh.ch>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ByteArrayTest {
+
+	public static ByteArray a0 = ByteArray.getInstance();
+	public static ByteArray a1 = ByteArray.getInstance(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+	public static ByteArray a2 = ByteArray.getInstance(15);
+	public static ByteArray a3 = ByteArray.getInstance(20, true);
+	public static ByteArray a4 = ByteArray.getInstance(9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
 
 	public ByteArrayTest() {
 	}
 
-	@BeforeClass
-	public static void setUpClass() {
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-	}
-
-	@Before
-	public void setUp() {
-	}
-
-	@After
-	public void tearDown() {
-	}
-
-	/**
-	 * Test of getAts method, of class ByteArray.
-	 */
 	@Test
-	@Ignore
-	public void testGetBytes() {
-//		System.out.println("getBytes");
-		ByteArray instance = null;
-		byte[] expResult = null;
-		byte[] result = instance.getAll();
-		assertArrayEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of getLength method, of class ByteArray.
-	 */
-	@Test
-	@Ignore
 	public void testGetLength() {
-//		System.out.println("getLength");
-		ByteArray instance = null;
-		int expResult = 0;
-		int result = instance.getLength();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		assertEquals(0, a0.getLength());
+		assertEquals(10, a1.getLength());
+		assertEquals(15, a2.getLength());
+		assertEquals(20, a3.getLength());
+		assertEquals(10, a4.getLength());
 	}
 
-	/**
-	 * Test of getAt method, of class ByteArray.
-	 */
 	@Test
-	@Ignore
-	public void testGetByte() {
-//		System.out.println("getByte");
-		int index = 0;
-		ByteArray instance = null;
-		byte expResult = 0;
-		byte result = instance.getAt(index);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+	public void testGetAll() {
 	}
 
-	/**
-	 * Test of concatenate method, of class ByteArray.
-	 */
+	@Test
+	public void testGetAt() {
+	}
+
+	@Test
+	public void testExtract_int() {
+	}
+
+	@Test
+	public void testExtract_int_int() {
+	}
+
+	@Test
+	public void testSplit() {
+	}
+
 	@Test
 	public void testConcatenate() {
-//		System.out.println("concatenate");
 		ByteArray instance = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6});
 		ByteArray other = ByteArray.getInstance(new byte[]{7, 8, 9, 10});
 		ByteArray expResult = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});;
@@ -137,9 +101,6 @@ public class ByteArrayTest {
 		assertEquals(expResult, result);
 	}
 
-	/**
-	 * Test of xor method, of class ByteArray.
-	 */
 	@Test
 	public void testXor() {
 		ByteArray one = ByteArray.getInstance(new byte[]{1, 1, 1});
@@ -166,125 +127,44 @@ public class ByteArrayTest {
 		Assert.assertEquals(one, xored);
 	}
 
-	/**
-	 * Test of standardToStringContent method, of class ByteArray.
-	 */
 	@Test
-	@Ignore
-	public void testStandardToStringContent() {
-//		System.out.println("standardToStringContent");
-		ByteArray instance = null;
-		String expResult = "";
-		String result = instance.standardToStringContent();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+	public void testAnd() {
 	}
 
-	/**
-	 * Test of hashCode method, of class ByteArray.
-	 */
 	@Test
-	@Ignore
-	public void testHashCode() {
-//		System.out.println("hashCode");
-		ByteArray instance = null;
-		int expResult = 0;
-		int result = instance.hashCode();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+	public void testOr() {
 	}
 
-	/**
-	 * Test of equals method, of class ByteArray.
-	 */
 	@Test
-	@Ignore
+	public void testNot() {
+	}
+
+	@Test
+	public void testIterator() {
+	}
+
+	@Test
 	public void testEquals() {
-//		System.out.println("equals");
-		Object obj = null;
-		ByteArray instance = null;
-		boolean expResult = false;
-		boolean result = instance.equals(obj);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
-	/**
-	 * Test of getInstance method, of class ByteArray.
-	 */
 	@Test
-	@Ignore
-	public void testGetInstance_0args() {
-//		System.out.println("getInstance");
-		ByteArray expResult = null;
-		ByteArray result = ByteArray.getInstance();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of getInstance method, of class ByteArray.
-	 */
-	@Test
-	@Ignore
 	public void testGetInstance_int() {
-//		System.out.println("getInstance");
-		int length = 0;
-		ByteArray expResult = null;
-		ByteArray result = ByteArray.getInstance(length);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
-	/**
-	 * Test of getInstance method, of class ByteArray.
-	 */
 	@Test
-	@Ignore
+	public void testGetInstance_int_boolean() {
+	}
+
+	@Test
 	public void testGetInstance_byteArr() {
-//		System.out.println("getInstance");
-		byte[] bytes = null;
-		ByteArray expResult = null;
-		ByteArray result = ByteArray.getInstance(bytes);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
-	/**
-	 * Test of getRandomInstance method, of class ByteArray.
-	 */
 	@Test
-	@Ignore
 	public void testGetRandomInstance_int() {
-//		System.out.println("getRandomInstance");
-		int length = 0;
-		ByteArray expResult = null;
-		ByteArray result = ByteArray.getRandomInstance(length);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
-	/**
-	 * Test of getRandomInstance method, of class ByteArray.
-	 */
 	@Test
-	@Ignore
-	public void testGetRandomInstance_int_RandomGenerator() {
-//		System.out.println("getRandomInstance");
-		int length = 0;
-		RandomNumberGenerator randomGenerator = null;
-		ByteArray expResult = null;
-		ByteArray result = ByteArray.getRandomInstance(length, randomGenerator);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+	public void testGetRandomInstance_int_RandomNumberGenerator() {
 	}
 
 }
