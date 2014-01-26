@@ -87,7 +87,9 @@ public class ReferenceRandomByteSequence
 	}
 
 	public static ReferenceRandomByteSequence getInstance() {
-		return DEFAULT;
+		ReferenceRandomByteSequence sequence = new ReferenceRandomByteSequence(HashMethod.DEFAULT, DEFAULT_SEED);
+		sequence.randomByteBufferMap = DEFAULT.randomByteBufferMap;
+		return sequence;
 	}
 
 	public static ReferenceRandomByteSequence getInstance(ByteArray seed) {
