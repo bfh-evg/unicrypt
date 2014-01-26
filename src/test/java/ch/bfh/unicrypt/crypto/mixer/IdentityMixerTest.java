@@ -42,7 +42,8 @@
 package ch.bfh.unicrypt.crypto.mixer;
 
 import ch.bfh.unicrypt.crypto.mixer.classes.IdentityMixer;
-import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.classes.CounterModeRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -52,7 +53,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -62,7 +62,6 @@ import org.junit.Test;
 public class IdentityMixerTest {
 
 	@Test
-	@Ignore
 	public void testIdentityMixer() {
 
 		CyclicGroup G_q = GStarModSafePrime.getInstance(167);
@@ -71,10 +70,12 @@ public class IdentityMixerTest {
 		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
 
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
-		Tuple shuffledMessges = mixer.shuffle(messages, HybridRandomByteSequence.getInstance());
+		Tuple shuffledMessges = mixer.shuffle(messages, ReferenceRandomByteSequence.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED));
 
 		// Verify shuffle function
-		Element r = G_q.getZModOrder().getElement(52);
+		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED);
+		PermutationGroup.getInstance(size).getRandomElement(rrs);
+		Element r = G_q.getZModOrder().getRandomElement(rrs);
 		Element[] shuffledMessages2 = new Element[size];
 		for (int i = 0; i < size; i++) {
 			boolean contains = false;
