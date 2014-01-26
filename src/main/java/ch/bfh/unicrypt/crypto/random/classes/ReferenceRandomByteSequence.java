@@ -55,7 +55,8 @@ public class ReferenceRandomByteSequence
 
 	/**
 	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE ReferenceRandomByteSequence. It uses the default
-	 * HashMethod and the default seed of PseudoRandomGeneratorCounterMode.
+	 * HashMethod and the default seed of PseudoRandomGeneratorCounterMode. TODO: Break the is-a relationship and make
+	 * it a uses relationship! TODO: Bring in new methods for direct access to a certain position within the sequence!
 	 */
 	public static final ReferenceRandomByteSequence DEFAULT = ReferenceRandomByteSequence.getInstance(HashMethod.DEFAULT, CounterModeRandomByteSequence.DEFAULT_SEED);
 
