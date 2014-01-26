@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -190,10 +190,10 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
+	protected Tuple abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		final Element[] randomElements = new Element[this.arity];
 		for (int i = 0; i < this.arity; i++) {
-			randomElements[i] = this.getAt(i).getRandomElement(randomGenerator);
+			randomElements[i] = this.getAt(i).getRandomElement(randomByteSequence);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(randomElements));
 	}

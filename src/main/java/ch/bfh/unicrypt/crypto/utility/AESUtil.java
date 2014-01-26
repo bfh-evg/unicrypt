@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.crypto.utility;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.spec.KeySpec;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;

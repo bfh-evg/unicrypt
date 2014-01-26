@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -137,14 +137,14 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModPrimeElement getRandomElementWithoutGenerator(RandomNumberGenerator randomGenerator) {
+	protected ECZModPrimeElement getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
 		BigInteger p = this.getFiniteField().getModulus();
-		ZModElement x = (ZModElement) this.getFiniteField().getRandomElement(randomGenerator);
+		ZModElement x = (ZModElement) this.getFiniteField().getRandomElement(randomByteSequence);
 		ZModElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
 		boolean neg = x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
 
 		while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
-			x = (ZModElement) this.getFiniteField().getRandomElement(randomGenerator);
+			x = (ZModElement) this.getFiniteField().getRandomElement(randomByteSequence);
 			y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
 		}
 		//if neg is true return solution 2(p-sqrt) of sqrtModPrime else solution 1

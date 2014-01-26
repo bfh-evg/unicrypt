@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random.classes;
 
+import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.PseudoRandomByteSequence;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
@@ -60,6 +61,7 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
  * @version 1.0
  */
 public class OutputFeedbackRandomByteSequence
+	   extends AbstractRandomByteSequence
 	   implements PseudoRandomByteSequence {
 
 	private final HashMethod hashMethod;

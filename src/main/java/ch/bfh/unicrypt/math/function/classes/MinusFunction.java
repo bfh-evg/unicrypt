@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -70,7 +70,7 @@ public class MinusFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected AdditiveElement abstractApply(final AdditiveElement element, final RandomNumberGenerator randomGenerator) {
+	protected AdditiveElement abstractApply(final AdditiveElement element, final RandomByteSequence randomByteSequence) {
 		return element.minus();
 	}
 

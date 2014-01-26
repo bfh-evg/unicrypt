@@ -41,10 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -79,54 +78,51 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 
 	@Override
 	public final E getRandomGenerator() {
-		return this.getRandomGenerator(null);
+		return this.getRandomGenerator(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
-	public final E getRandomGenerator(RandomNumberGenerator randomGenerator) {
-		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
-		}
-		return this.standardGetRandomGenerator(randomGenerator);
+	public final E getRandomGenerator(RandomByteSequence randomByteSequence) {
+		return this.standardGetRandomGenerator(randomByteSequence);
 	}
 
 	@Override
 	public final E getIndependentGenerator(int index) {
-		return this.getIndependentGenerator(index, (RandomReferenceString) null);
+		return this.getIndependentGenerator(index, (ReferenceRandomByteSequence) null);
 	}
 
 	@Override
-	public final E getIndependentGenerator(int index, RandomReferenceString randomReferenceString) {
-		return this.getIndependentGenerators(index, randomReferenceString)[index];
+	public final E getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
+		return this.getIndependentGenerators(index, referenceRandomByteSequence)[index];
 	}
 
 	@Override
 	public final E[] getIndependentGenerators(int maxIndex) {
-		return this.getIndependentGenerators(maxIndex, (RandomReferenceString) null);
+		return this.getIndependentGenerators(maxIndex, (ReferenceRandomByteSequence) null);
 	}
 
 	@Override
-	public final E[] getIndependentGenerators(int maxIndex, RandomReferenceString randomReferenceString) {
-		return this.getIndependentGenerators(0, maxIndex, randomReferenceString);
+	public final E[] getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
+		return this.getIndependentGenerators(0, maxIndex, referenceRandomByteSequence);
 	}
 
 	@Override
 	public final E[] getIndependentGenerators(int minIndex, int maxIndex) {
-		return this.getIndependentGenerators(minIndex, maxIndex, (RandomReferenceString) null);
+		return this.getIndependentGenerators(minIndex, maxIndex, (ReferenceRandomByteSequence) null);
 	}
 
 	@Override
-	public final E[] getIndependentGenerators(int minIndex, int maxIndex, RandomReferenceString randomReferenceString) {
+	public final E[] getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (minIndex < 0 || maxIndex < minIndex) {
 			throw new IndexOutOfBoundsException();
 		}
-		if (randomReferenceString == null) {
-			randomReferenceString = PseudoRandomReferenceString.getInstance();
+		if (referenceRandomByteSequence == null) {
+			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		}
 		// The following line is necessary for creating a generic array
 		E[] generators = (E[]) Array.newInstance(this.getIdentityElement().getClass(), maxIndex - minIndex + 1);
 		for (int i = 0; i <= maxIndex; i++) {
-			E generator = this.standardGetIndependentGenerator(randomReferenceString);
+			E generator = this.standardGetIndependentGenerator(referenceRandomByteSequence);
 			if (i >= minIndex) {
 				generators[i - minIndex] = generator;
 			}
@@ -143,16 +139,16 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected E standardGetRandomGenerator(RandomNumberGenerator randomGenerator) {
+	protected E standardGetRandomGenerator(RandomByteSequence randomByteSequence) {
 		E element;
 		do {
-			element = this.getRandomElement(randomGenerator);
+			element = this.getRandomElement(randomByteSequence);
 		} while (!this.isGenerator(element));
 		return element;
 	}
 
-	protected E standardGetIndependentGenerator(RandomReferenceString randomReferenceString) {
-		return this.standardGetRandomGenerator(randomReferenceString);
+	protected E standardGetIndependentGenerator(ReferenceRandomByteSequence referenceRandomByteSequence) {
+		return this.standardGetRandomGenerator(referenceRandomByteSequence);
 	}
 
 	@Override

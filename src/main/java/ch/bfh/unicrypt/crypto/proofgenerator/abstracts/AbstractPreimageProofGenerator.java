@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -82,8 +82,8 @@ public abstract class AbstractPreimageProofGenerator<PRS extends SemiGroup, PRE 
 	}
 
 	@Override
-	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput, final RandomNumberGenerator randomGenerator) {
-		final Element randomElement = this.getResponseSpace().getRandomElement(randomGenerator);
+	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput, final RandomByteSequence randomByteSequence) {
+		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
 		final Element commitment = this.getPreimageProofFunction().apply(randomElement);
 		final Element challenge = this.getChallengeGenerator().generate(publicInput, commitment);
 		final Element response = randomElement.apply(secretInput.selfApply(challenge));

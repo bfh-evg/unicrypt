@@ -41,8 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -94,20 +93,20 @@ public class GeneralizedPedersenCommitmentScheme
 	}
 
 	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size) {
-		return GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, size, (RandomReferenceString) null);
+		return GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, size, (ReferenceRandomByteSequence) null);
 	}
 
-	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size, RandomReferenceString randomReferenceString) {
+	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size, ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (cyclicGroup == null || size < 1) {
 			throw new IllegalArgumentException();
 		}
-		if (randomReferenceString == null) {
-			randomReferenceString = PseudoRandomReferenceString.getInstance();
+		if (referenceRandomByteSequence == null) {
+			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		} else {
-			randomReferenceString.reset();
+			referenceRandomByteSequence.reset();
 		}
-		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, randomReferenceString);
-		Element[] messageGenerators = cyclicGroup.getIndependentGenerators(1, size, randomReferenceString);
+		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, referenceRandomByteSequence);
+		Element[] messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
 		return new GeneralizedPedersenCommitmentScheme(cyclicGroup, randomizationGenerator, messageGenerators);
 	}
 

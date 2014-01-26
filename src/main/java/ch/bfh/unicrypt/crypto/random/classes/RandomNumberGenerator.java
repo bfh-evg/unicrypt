@@ -42,13 +42,12 @@
 package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
 /**
- * TODO: Rename this to RandomNumberGenerator
+ * TODO: Rename this to RandomByteSequence
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -56,7 +55,6 @@ import java.math.BigInteger;
  */
 public class RandomNumberGenerator
 	   extends UniCrypt {
-//public static final DEFAULT = HybridRandomGenerator.getInstance();
 
 	private final RandomByteSequence randomByteSequence;
 

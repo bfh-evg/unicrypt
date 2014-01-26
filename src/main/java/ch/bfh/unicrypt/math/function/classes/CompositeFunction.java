@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -70,10 +70,10 @@ public final class CompositeFunction
 	}
 
 	@Override
-	protected final Element abstractApply(final Element element, final RandomNumberGenerator randomGenerator) {
+	protected final Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		Element result = element;
 		for (Function function : this) {
-			result = function.apply(result, randomGenerator);
+			result = function.apply(result, randomByteSequence);
 		}
 		return result;
 	}

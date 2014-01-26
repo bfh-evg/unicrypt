@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
@@ -84,12 +84,12 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public final PRE generatePrivateKey() {
-		return this.generatePrivateKey((RandomNumberGenerator) null);
+		return this.generatePrivateKey((RandomByteSequence) null);
 	}
 
 	@Override
-	public final PRE generatePrivateKey(RandomNumberGenerator randomGenerator) {
-		return (PRE) this.getPrivateKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomGenerator);
+	public final PRE generatePrivateKey(RandomByteSequence randomByteSequence) {
+		return (PRE) this.getPrivateKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
 	}
 
 	@Override
@@ -107,15 +107,15 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public final PUE generatePublicKey(Element privateKey) {
-		return this.generatePublicKey(privateKey, (RandomNumberGenerator) null);
+		return this.generatePublicKey(privateKey, (RandomByteSequence) null);
 	}
 
 	@Override
-	public final PUE generatePublicKey(Element privateKey, RandomNumberGenerator randomGenerator) {
+	public final PUE generatePublicKey(Element privateKey, RandomByteSequence randomByteSequence) {
 		if (privateKey == null || !this.getPrivateKeySpace().contains(privateKey)) {
 			throw new IllegalArgumentException();
 		}
-		return (PUE) this.getPublicKeyGenerationFunction().apply(privateKey, randomGenerator);
+		return (PUE) this.getPublicKeyGenerationFunction().apply(privateKey, randomByteSequence);
 	}
 
 	@Override
@@ -138,12 +138,12 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public Pair generateKeyPair() {
-		return this.generateKeyPair((RandomNumberGenerator) null);
+		return this.generateKeyPair((RandomByteSequence) null);
 	}
 
 	@Override
-	public Pair generateKeyPair(RandomNumberGenerator randomGenerator) {
-		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomGenerator);
+	public Pair generateKeyPair(RandomByteSequence randomByteSequence) {
+		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
 	}
 
 	@Override

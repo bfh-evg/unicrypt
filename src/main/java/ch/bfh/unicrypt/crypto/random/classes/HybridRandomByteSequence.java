@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
  * generated random strings. Its security is based on the quality of the DistributionSamplerCollector and on the
  * feedback of the PseudoRandomNumberGeneratorCounterMode. The injection of new random bits into the randomization
  * process allows (backward-)security, whilst The feedback (in this case internally requesting a byte[] which is only
- * used for reseeding) allows forward-security.
+ * used for re-seeding) allows forward-security.
  * <p>
  * <p>
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
@@ -88,6 +88,9 @@ public class HybridRandomByteSequence
 
 	@Override
 	public void setFreshData(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new IllegalArgumentException();
+		}
 		super.update(byteArray);
 	}
 

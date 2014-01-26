@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.mixer.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -65,13 +65,13 @@ public interface Mixer {
 
 	public Tuple shuffle(Tuple elements);
 
-	public Tuple shuffle(Tuple elements, PseudoRandomGeneratorCounterMode pseudoRandomGenerator);
+	public Tuple shuffle(Tuple elements, RandomByteSequence randomByteSequence);
 
 	public Tuple shuffle(Tuple elements, PermutationElement permutation, Tuple randomizations);
 
 	public Tuple generateRandomizations();
 
-	public Tuple generateRandomizations(PseudoRandomGeneratorCounterMode pseudoRandomGenerator);
+	public Tuple generateRandomizations(RandomByteSequence randomByteSequence);
 
 	public PermutationGroup getPermutationGroup();
 

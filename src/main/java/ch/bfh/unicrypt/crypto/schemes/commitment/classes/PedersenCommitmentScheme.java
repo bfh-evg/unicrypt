@@ -41,8 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -88,19 +87,19 @@ public class PedersenCommitmentScheme
 	}
 
 	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup) {
-		return PedersenCommitmentScheme.getInstance(cyclicGroup, (RandomReferenceString) null);
+		return PedersenCommitmentScheme.getInstance(cyclicGroup, (ReferenceRandomByteSequence) null);
 	}
 
-	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, RandomReferenceString randomReferenceString) {
+	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (cyclicGroup == null) {
 			throw new IllegalArgumentException();
 		}
-		if (randomReferenceString == null) {
-			randomReferenceString = PseudoRandomReferenceString.getInstance();
+		if (referenceRandomByteSequence == null) {
+			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		} else {
-			randomReferenceString.reset();
+			referenceRandomByteSequence.reset();
 		}
-		Element[] generators = cyclicGroup.getIndependentGenerators(2, randomReferenceString);
+		Element[] generators = cyclicGroup.getIndependentGenerators(2, referenceRandomByteSequence);
 		return new PedersenCommitmentScheme(cyclicGroup, generators[0], generators[1]);
 	}
 

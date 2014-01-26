@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -71,7 +71,7 @@ public class MultiplyFunction
 	}
 
 	@Override
-	protected MultiplicativeElement abstractApply(final Tuple element, final RandomNumberGenerator randomGenerator) {
+	protected MultiplicativeElement abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().multiply(element.getAll());
 	}
 

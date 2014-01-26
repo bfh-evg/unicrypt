@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
@@ -75,7 +75,7 @@ public class TimesFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected AdditiveElement abstractApply(final Pair element, final RandomNumberGenerator randomGenerator) {
+	protected AdditiveElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		return ((AdditiveElement) element.getFirst()).times(element.getSecond());
 	}
 

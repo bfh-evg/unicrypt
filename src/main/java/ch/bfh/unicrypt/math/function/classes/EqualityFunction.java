@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -67,7 +67,7 @@ public class EqualityFunction
 	}
 
 	@Override
-	public BooleanElement abstractApply(final Tuple element, final RandomNumberGenerator randomGenerator) {
+	protected BooleanElement abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		int arity = element.getArity();
 		if (arity > 1) {
 			final Element firstElement = element.getFirst();

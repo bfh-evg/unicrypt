@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -80,7 +80,7 @@ public class AdapterFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Tuple abstractApply(final Tuple element, final RandomNumberGenerator randomGenerator) {
+	protected Tuple abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		Element[] elements = new Element[this.getIndices().length];
 		for (int i = 0; i < this.getIndices().length; i++) {
 			elements[i] = element.getAt(this.getIndices()[i]);

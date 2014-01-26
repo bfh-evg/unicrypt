@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -307,10 +307,10 @@ public interface Set {
 	 * selected uniformly at random. For groups of infinite or unknown order, the underlying probability distribution is
 	 * not generally specified.
 	 * <p>
-	 * @param randomGenerator Either {@literal null} or a given random generator
+	 * @param randomByteSequence Either {@literal null} or a given random generator
 	 * @return A random element from the set
 	 */
-	public Element getRandomElement(RandomNumberGenerator randomGenerator);
+	public Element getRandomElement(RandomByteSequence randomByteSequence);
 
 	/**
 	 * Checks if two given elements of this group are equal.

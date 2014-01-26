@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random.interfaces;
 
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 
@@ -49,6 +50,8 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
 public interface RandomByteSequence {
+
+	public RandomNumberGenerator getRandomNumberGenerator();
 
 	public HashMethod getHashMethod();
 

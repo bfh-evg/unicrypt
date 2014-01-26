@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.mixer.abstracts;
 
 import ch.bfh.unicrypt.crypto.mixer.interfaces.Mixer;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -103,13 +103,13 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 
 	@Override
 	public final Tuple shuffle(final Tuple elements) {
-		return this.shuffle(elements, (PseudoRandomGeneratorCounterMode) null);
+		return this.shuffle(elements, (RandomByteSequence) null);
 	}
 
 	@Override
-	public final Tuple shuffle(final Tuple elements, PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
-		PermutationElement permutation = PermutationGroup.getInstance(this.getSize()).getRandomElement(pseudoRandomGenerator);
-		Tuple randomizations = this.generateRandomizations(pseudoRandomGenerator);
+	public final Tuple shuffle(final Tuple elements, RandomByteSequence randomByteSequence) {
+		PermutationElement permutation = PermutationGroup.getInstance(this.getSize()).getRandomElement(randomByteSequence);
+		Tuple randomizations = this.generateRandomizations(randomByteSequence);
 		return this.shuffle(elements, permutation, randomizations);
 	}
 
@@ -134,8 +134,8 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 	}
 
 	@Override
-	public final Tuple generateRandomizations(final PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
-		return this.standardGenerateRandomizations(pseudoRandomGenerator);
+	public final Tuple generateRandomizations(final RandomByteSequence randomByteSequence) {
+		return this.standardGenerateRandomizations(randomByteSequence);
 	}
 
 	@Override
@@ -143,8 +143,8 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 		return PermutationGroup.getInstance(this.size);
 	}
 
-	protected Tuple standardGenerateRandomizations(PseudoRandomGeneratorCounterMode pseudoRandomGenerator) {
-		return this.getRandomizationsSpace().getRandomElement(pseudoRandomGenerator);
+	protected Tuple standardGenerateRandomizations(RandomByteSequence randomByteSequence) {
+		return this.getRandomizationsSpace().getRandomElement(randomByteSequence);
 	}
 
 	protected abstract Function abstractGetShuffleFunction();

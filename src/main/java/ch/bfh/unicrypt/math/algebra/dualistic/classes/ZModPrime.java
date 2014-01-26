@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
@@ -118,8 +118,8 @@ public class ZModPrime
 		return ZModPrime.getInstance(Prime.getInstance(modulus));
 	}
 
-	public static ZModPrime getRandomInstance(int bitLength, RandomNumberGenerator randomGenerator) {
-		return ZModPrime.getInstance(Prime.getRandomInstance(bitLength, randomGenerator));
+	public static ZModPrime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
+		return ZModPrime.getInstance(Prime.getRandomInstance(bitLength, randomByteSequence));
 	}
 
 	public static ZModPrime getRandomInstance(int bitLength) {

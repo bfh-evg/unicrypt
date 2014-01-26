@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -63,9 +63,9 @@ public class FixedByteArraySet
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
+	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		// this imlementation is more efficient than the one from the parent class
-		return this.abstractGetElement(ByteArray.getRandomInstance(this.getLength(), randomGenerator));
+		return this.abstractGetElement(ByteArray.getRandomInstance(this.getLength(), randomByteSequence));
 	}
 
 	private static final Map<Integer, FixedByteArraySet> instances = new HashMap<Integer, FixedByteArraySet>();

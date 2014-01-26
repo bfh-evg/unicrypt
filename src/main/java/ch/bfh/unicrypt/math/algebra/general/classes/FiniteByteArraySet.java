@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
@@ -122,8 +122,8 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
-		return this.abstractGetElement(randomGenerator.nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 
 	@Override

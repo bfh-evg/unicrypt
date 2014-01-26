@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
@@ -70,7 +70,7 @@ public class OneOverFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected MultiplicativeElement abstractApply(final MultiplicativeElement element, final RandomNumberGenerator randomGenerator) {
+	protected MultiplicativeElement abstractApply(final MultiplicativeElement element, final RandomByteSequence randomByteSequence) {
 		return element.oneOver();
 	}
 

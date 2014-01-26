@@ -46,10 +46,9 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.Standard
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -77,27 +76,25 @@ public class ShuffleProofGenerator
 	final private CyclicGroup cyclicGroup;
 	final private int size;
 	final private Element encryptionPK;
-	final private RandomReferenceString randomReferenceString;
+	final private ReferenceRandomByteSequence referenceRandomByteSequence;
 
-	protected ShuffleProofGenerator(SigmaChallengeGenerator sigmaChallengeGenerator,
-		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK, RandomReferenceString randomReferenceString) {
+	protected ShuffleProofGenerator(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK, ReferenceRandomByteSequence referenceRandomByteSequence1) {
 		this.sigmaChallengeGenerator = sigmaChallengeGenerator;
 		this.eValuesGenerator = eValuesGenerator;
 		this.cyclicGroup = cyclicGroup;
 		this.size = size;
 		this.encryptionPK = encryptionPK;
-		this.randomReferenceString = randomReferenceString;
+		this.referenceRandomByteSequence = referenceRandomByteSequence1;
 	}
 
 	public static ShuffleProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK) {
-		return ShuffleProofGenerator.getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, encryptionPK, PseudoRandomReferenceString.getInstance());
+		return ShuffleProofGenerator.getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, encryptionPK, ReferenceRandomByteSequence.getInstance());
 	}
 
-	public static ShuffleProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
-		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK, RandomReferenceString randomReferenceString) {
+	public static ShuffleProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK, ReferenceRandomByteSequence referenceRandomByteSequence1) {
 
-		if (sigmaChallengeGenerator == null || eValuesGenerator == null || cyclicGroup == null || size < 1 || !cyclicGroup.contains(encryptionPK) || randomReferenceString == null) {
+		if (sigmaChallengeGenerator == null || eValuesGenerator == null || cyclicGroup == null || size < 1 || !cyclicGroup.contains(encryptionPK) || referenceRandomByteSequence1 == null) {
 			throw new IllegalArgumentException();
 		}
 		if (!sigmaChallengeGenerator.getPublicInputSpace().isEquivalent(ShuffleProofGenerator.createChallengeGeneratorPublicInputSpace(cyclicGroup, size))
@@ -108,7 +105,7 @@ public class ShuffleProofGenerator
 			throw new IllegalArgumentException();
 		}
 
-		return new ShuffleProofGenerator(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, encryptionPK, randomReferenceString);
+		return new ShuffleProofGenerator(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, encryptionPK, referenceRandomByteSequence1);
 	}
 
 	// Private: (PermutationElement pi, PermutationCommitment-Randomizations sV, ReEncryption-Randomizations rV)
@@ -179,7 +176,7 @@ public class ShuffleProofGenerator
 	// Generate and Validate
 	//
 	@Override
-	protected Triple abstractGenerate(Triple privateInput, Triple publicInput, RandomNumberGenerator randomGenerator) {
+	protected Triple abstractGenerate(Triple privateInput, Triple publicInput, RandomByteSequence randomByteSequence) {
 
 		// Unfold private and public input
 		final PermutationElement pi = (PermutationElement) privateInput.getFirst();
@@ -194,8 +191,8 @@ public class ShuffleProofGenerator
 		final Tuple ePrimeV = PermutationFunction.getInstance(eV.getSet()).apply(eV, pi);
 
 		// Create sigma proof
-		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, uPrimeV, this.encryptionPK);
-		final Element randomElement = this.getResponseSpace().getRandomElement(randomGenerator);
+		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.referenceRandomByteSequence, uPrimeV, this.encryptionPK);
+		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
 		final Element commitment = f.apply(randomElement);                        // [3N+3]
 		final Element challenge = this.sigmaChallengeGenerator.generate(publicInput, commitment);
 		final Element response = randomElement.apply(Tuple.getInstance(r, w, ePrimeV).selfApply(challenge));
@@ -225,7 +222,7 @@ public class ShuffleProofGenerator
 		final Tuple pV = Tuple.getInstance(ps);
 
 		// 1. Verify preimage proof
-		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, uPrimeV, this.encryptionPK);
+		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.referenceRandomByteSequence, uPrimeV, this.encryptionPK);
 		final Element challenge = this.sigmaChallengeGenerator.generate(publicInput, commitment);
 		final Element left = f.apply(response);                                   // [3N+3]
 		final Element right = commitment.apply(pV.selfApply(challenge));          //    [3]
@@ -263,18 +260,18 @@ public class ShuffleProofGenerator
 		final GeneralizedPedersenCommitmentScheme gpcs;
 		final Element g;
 
-		protected PreimageProofFunction(CyclicGroup cyclicGroup, int size, ProductGroup domain, ProductGroup coDomain, RandomReferenceString randomReferenceString, Tuple uPrimeV, Element encryptionPK) {
+		protected PreimageProofFunction(CyclicGroup cyclicGroup, int size, ProductGroup domain, ProductGroup coDomain, ReferenceRandomByteSequence referenceRandomByteSequence1, Tuple uPrimeV, Element encryptionPK) {
 			super(domain, coDomain);
 			this.size = size;
 			this.uPrimeV = uPrimeV;
 			this.encryptionPK = encryptionPK;
 			// Prepare generalized pedersen commitment scheme
-			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, this.size, randomReferenceString);
-			this.g = cyclicGroup.getIndependentGenerator(0, randomReferenceString);
+			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, this.size, referenceRandomByteSequence1);
+			this.g = cyclicGroup.getIndependentGenerator(0, referenceRandomByteSequence1);
 		}
 
 		@Override
-		protected Tuple abstractApply(Tuple element, RandomNumberGenerator randomGenerator) {
+		protected Tuple abstractApply(Tuple element, RandomByteSequence randomByteSequence) {
 
 			// Unfold element
 			final Element r = element.getAt(0);

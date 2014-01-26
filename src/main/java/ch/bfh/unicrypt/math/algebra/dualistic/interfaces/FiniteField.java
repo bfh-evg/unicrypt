@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 import java.math.BigInteger;
 
 /**

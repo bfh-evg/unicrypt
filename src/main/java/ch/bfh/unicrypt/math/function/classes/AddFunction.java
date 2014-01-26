@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
@@ -71,7 +71,7 @@ public class AddFunction
 	}
 
 	@Override
-	protected AdditiveElement abstractApply(final Tuple element, final RandomNumberGenerator randomGenerator) {
+	protected AdditiveElement abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().add(element.getAll());
 	}
 

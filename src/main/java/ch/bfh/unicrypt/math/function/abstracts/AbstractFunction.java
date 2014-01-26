@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,17 +32,17 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -67,8 +67,8 @@ import java.util.Random;
  * @version 2.0
  */
 public abstract class AbstractFunction<D extends Set, DE extends Element, C extends Set, CE extends Element>
-			 extends UniCrypt
-			 implements Function {
+	   extends UniCrypt
+	   implements Function {
 
 	private final D domain;
 	private final C coDomain;
@@ -85,37 +85,37 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 
 	@Override
 	public final CE apply(final Element element) {
-		return this.apply(element, (RandomNumberGenerator) null);
+		return this.apply(element, (RandomByteSequence) null);
 	}
 
 	@Override
-	public final CE apply(final Element element, RandomNumberGenerator randomGenerator) {
-		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
+	public final CE apply(final Element element, RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			randomByteSequence = HybridRandomByteSequence.getInstance();
 		}
 		if (this.getDomain().contains(element)) {
-			return this.abstractApply((DE) element, randomGenerator);
+			return this.abstractApply((DE) element, randomByteSequence);
 		}
 		// This is for increased convenience for a function with a CompoundSet domain of arity 1.
-		return this.apply(new Element[]{element}, randomGenerator);
+		return this.apply(new Element[]{element}, randomByteSequence);
 	}
 
 	@Override
 	public final CE apply(final Element... elements) {
-		return this.apply(elements, (RandomNumberGenerator) null);
+		return this.apply(elements, (RandomByteSequence) null);
 	}
 
 	@Override
-	public final CE apply(final Element[] elements, final RandomNumberGenerator randomGenerator) {
+	public final CE apply(final Element[] elements, final RandomByteSequence randomByteSequence) {
 		if (this.getDomain().isProduct()) {
-			return this.apply(((ProductSet) this.getDomain()).getElement(elements), randomGenerator);
+			return this.apply(((ProductSet) this.getDomain()).getElement(elements), randomByteSequence);
 		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public final CE apply(final RandomNumberGenerator randomGenerator) {
-		return this.apply(new Element[]{}, randomGenerator);
+	public final CE apply(final RandomByteSequence randomByteSequence) {
+		return this.apply(new Element[]{}, randomByteSequence);
 	}
 
 	@Override
@@ -175,18 +175,18 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 	// sub-class
 	//
 	/**
-	 * This abstract method is the main method to implement in each sub-class of {@link AbstractFunction}. The validity of
-	 * the two parameters has already been tested.
+	 * This abstract method is the main method to implement in each sub-class of {@link AbstractFunction}. The validity
+	 * of the two parameters has already been tested.
 	 * <p>
 	 * <p/>
 	 * @see apply(Element, Random)
 	 * @see Group#apply(Element[])
 	 * @see Element#apply(Element)
 	 * <p>
-	 * @param element         The given input element
-	 * @param randomGenerator Either {@literal null} or a given random generator
+	 * @param element            The given input element
+	 * @param randomByteSequence Either {@literal null} or a given random generator
 	 * @return The resulting output element
 	 */
-	protected abstract CE abstractApply(DE element, RandomNumberGenerator randomGenerator);
+	protected abstract CE abstractApply(DE element, RandomByteSequence randomByteSequence);
 
 }

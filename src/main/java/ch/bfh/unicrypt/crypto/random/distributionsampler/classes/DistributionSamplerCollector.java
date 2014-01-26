@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.crypto.random.distributionsampler.classes;
 
-import ch.bfh.unicrypt.crypto.random.distributionsampler.classes.SecureRandomSampler;
 import ch.bfh.unicrypt.crypto.random.distributionsampler.interfaces.DistributionSampler;
 import ch.bfh.unicrypt.crypto.random.interfaces.TrueRandomByteSequence;
 import ch.bfh.unicrypt.math.helper.ByteArray;
@@ -101,11 +100,11 @@ public class DistributionSamplerCollector {
 	}
 
 	public boolean isCollecting() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return this.dataCollector.isCollecting();
 	}
 
 	public void setCollectionStatus(boolean isCollecting) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		this.dataCollector.setCollectionStatus(isCollecting);
 	}
 
 	public void setFreshSamples(ByteArray samples) {

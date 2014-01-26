@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -235,7 +235,7 @@ public class ByteArray
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null || this.getClass() != obj.getClass()) {
+		if (!(obj instanceof ByteArray)) {
 			return false;
 		}
 		final ByteArray other = (ByteArray) obj;
@@ -295,14 +295,14 @@ public class ByteArray
 		return ByteArray.getRandomInstance(length, null);
 	}
 
-	public static ByteArray getRandomInstance(int length, RandomNumberGenerator randomGenerator) {
+	public static ByteArray getRandomInstance(int length, RandomByteSequence randomByteSequence) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
+		if (randomByteSequence == null) {
+			randomByteSequence = HybridRandomByteSequence.DEFAULT;
 		}
-		return new ByteArray(randomGenerator.nextBytes(length));
+		return randomByteSequence.getNextByteArray(length);
 	}
 
 }

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper.bytetree;
 
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
@@ -144,14 +145,18 @@ public abstract class ByteTree {
 	 * <p>
 	 * @return Serialized ByteTree
 	 */
-	public byte[] getSerializedByteTree() {
+	public ByteArray getSerializedByteTree() {
 		if (this.serializedValue == null) {
 			byte[] internalValue = new byte[this.defaultGetSize()];
 			ByteBuffer buffer = ByteBuffer.wrap(internalValue);
 			defaultSerialize(buffer);
 			serializedValue = internalValue;
 		}
-		return this.serializedValue;
+		if (serializedValue == null) {
+			return ByteArray.getInstance();
+		} else {
+			return ByteArray.getInstance(this.serializedValue);
+		}
 	}
 
 	/**

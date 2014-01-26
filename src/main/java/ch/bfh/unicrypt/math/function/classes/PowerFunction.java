@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -75,7 +75,7 @@ public class PowerFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected MultiplicativeElement abstractApply(final Pair element, final RandomNumberGenerator randomGenerator) {
+	protected MultiplicativeElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		return ((MultiplicativeElement) element.getFirst()).power(element.getSecond());
 	}
 

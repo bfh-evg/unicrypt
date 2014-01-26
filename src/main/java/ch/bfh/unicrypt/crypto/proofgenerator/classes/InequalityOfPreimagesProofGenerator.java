@@ -45,8 +45,8 @@ import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaProofGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -162,11 +162,11 @@ public class InequalityOfPreimagesProofGenerator
 	}
 
 	@Override
-	protected Pair abstractGenerate(Element privateInput, Pair publicInput, RandomNumberGenerator randomGenerator) {
+	protected Pair abstractGenerate(Element privateInput, Pair publicInput, RandomByteSequence randomByteSequence) {
 
 		// 1. Create commitment:
 		//    C = (f2(x)/z)^r with random r            |==> C = (h^x/z)^r
-		Element r = this.getSecondFunction().getCoDomain().getZModOrder().getRandomElement(randomGenerator);
+		Element r = this.getSecondFunction().getCoDomain().getZModOrder().getRandomElement(randomByteSequence);
 		Element x = privateInput;
 		Element z = publicInput.getSecond();
 
@@ -179,7 +179,7 @@ public class InequalityOfPreimagesProofGenerator
 		Triple preimageProof = preimageProofGenerator.generate(
 			   Tuple.getInstance(x.selfApply(r), r),
 			   Tuple.getInstance(c, ((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement()),
-			   randomGenerator);
+			   randomByteSequence);
 
 		return Pair.getInstance(preimageProof, c);
 	}
@@ -225,11 +225,11 @@ public class InequalityOfPreimagesProofGenerator
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {
-		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, RandomOracle.DEFAULT);
+		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, PseudoRandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final Element proverID) {
-		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverID, RandomOracle.DEFAULT);
+		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverID, PseudoRandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final RandomOracle randomOracle) {

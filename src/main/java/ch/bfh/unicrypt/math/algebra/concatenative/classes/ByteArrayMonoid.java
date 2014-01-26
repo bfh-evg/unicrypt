@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
@@ -114,13 +114,13 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayElement abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
+	protected ByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	protected ByteArrayElement abstractGetRandomElement(int length, RandomNumberGenerator randomGenerator) {
-		return this.abstractGetElement(ByteArray.getRandomInstance(length, randomGenerator));
+	protected ByteArrayElement abstractGetRandomElement(int length, RandomByteSequence randomByteSequence) {
+		return this.abstractGetElement(ByteArray.getRandomInstance(length, randomByteSequence));
 	}
 
 	@Override

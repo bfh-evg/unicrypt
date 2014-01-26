@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaSetMembershipProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -63,7 +63,7 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class ElGamalEncryptionValidityProofGenerator
-			 extends AbstractSigmaSetMembershipProofGenerator<ProductGroup, Pair> {
+	   extends AbstractSigmaSetMembershipProofGenerator<ProductGroup, Pair> {
 
 	private final ElGamalEncryptionScheme elGamalES;
 	private final Element publicKey;
@@ -76,12 +76,12 @@ public class ElGamalEncryptionValidityProofGenerator
 
 	public static ElGamalEncryptionValidityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
 		if (challengeGenerator == null || elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey)
-					 || plaintexts == null || plaintexts.getOrder().intValue() < 1) {
+			   || plaintexts == null || plaintexts.getOrder().intValue() < 1) {
 			throw new IllegalArgumentException();
 		}
 		final Set codomain = ProductGroup.getInstance(elGamalES.getEncryptionFunction().getCoDomain(), plaintexts.getOrder().intValue());
 		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
-					 || !elGamalES.getCyclicGroup().getZModOrder().isEquivalent(challengeGenerator.getChallengeSpace())) {
+			   || !elGamalES.getCyclicGroup().getZModOrder().isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
 		}
 		return new ElGamalEncryptionValidityProofGenerator(challengeGenerator, elGamalES, publicKey, plaintexts);
@@ -97,22 +97,22 @@ public class ElGamalEncryptionValidityProofGenerator
 		final CyclicGroup elGamalCyclicGroup = this.elGamalES.getCyclicGroup();
 		final ProductSet deltaFunctionDomain = ProductSet.getInstance(elGamalCyclicGroup, this.getSetMembershipProofFunction().getCoDomain());
 		final Function deltaFunction
-					 = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
-																					 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
-																																			 CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
-																																																		 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 1),
-																																																																 CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
-																																																																															 InvertFunction.getInstance(elGamalCyclicGroup))),
-																																																		 ApplyFunction.getInstance(elGamalCyclicGroup))));
+			   = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
+											   ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
+																		   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
+																										 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 1),
+																																	 CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
+																																								   InvertFunction.getInstance(elGamalCyclicGroup))),
+																										 ApplyFunction.getInstance(elGamalCyclicGroup))));
 		return deltaFunction;
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts) {
-		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, RandomOracle.DEFAULT);
+		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, PseudoRandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverID) {
-		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverID, RandomOracle.DEFAULT);
+		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverID, PseudoRandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final RandomOracle randomOracle) {

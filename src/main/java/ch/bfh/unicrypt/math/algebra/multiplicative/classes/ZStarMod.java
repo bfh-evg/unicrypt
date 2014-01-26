@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
@@ -167,10 +167,10 @@ public class ZStarMod
 	}
 
 	@Override
-	protected ZStarModElement abstractGetRandomElement(final RandomNumberGenerator randomGenerator) {
+	protected ZStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
 		BigInteger randomValue;
 		do {
-			randomValue = randomGenerator.nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
+			randomValue = randomByteSequence.getRandomNumberGenerator().nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
 		} while (!this.contains(randomValue));
 		return this.abstractGetElement(randomValue);
 	}
@@ -242,14 +242,14 @@ public class ZStarMod
 		return new ZStarMod(factorization);
 	}
 
-	public static ZStarMod getRandomInstance(int bitLength, RandomNumberGenerator randomGenerator) {
+	public static ZStarMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
 		if (bitLength < 1) {
 			throw new IllegalArgumentException();
 		}
-		if (randomGenerator == null) {
-			randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
+		if (randomByteSequence == null) {
+			randomByteSequence = HybridRandomByteSequence.getInstance();
 		}
-		return ZStarMod.getInstance(randomGenerator.nextBigInteger(bitLength));
+		return ZStarMod.getInstance(randomByteSequence.getRandomNumberGenerator().nextBigInteger(bitLength));
 	}
 
 	public static ZStarMod getRandomInstance(int bitLength) {

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
@@ -70,14 +70,14 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 	}
 
 	@Override
-	public final E getRandomElement(int length, RandomNumberGenerator randomGenerator) {
+	public final E getRandomElement(int length, RandomByteSequence randomByteSequence) {
 		if (length < 0 || length % this.getBlockLength() != 0) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetRandomElement(length, randomGenerator);
+		return this.abstractGetRandomElement(length, randomByteSequence);
 	}
 
-	protected abstract E abstractGetRandomElement(int length, RandomNumberGenerator randomGenerator);
+	protected abstract E abstractGetRandomElement(int length, RandomByteSequence randomByteSequence);
 
 	@Override
 	public final E concatenate(final Element element1, final Element element2) {

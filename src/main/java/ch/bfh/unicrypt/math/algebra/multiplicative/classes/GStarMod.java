@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
@@ -176,8 +176,8 @@ public class GStarMod
 	}
 
 	@Override
-	protected GStarModElement abstractGetRandomElement(final RandomNumberGenerator randomGenerator) {
-		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomGenerator);
+	protected GStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
+		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomByteSequence);
 		return this.getElement(randomElement.power(this.getCoFactor()));
 // VERSION WITH OPTIMIZED EFFICIENCY BUT LACK OF INDEPENDENCE
 //    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method

@@ -39,36 +39,56 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.interfaces;
+package ch.bfh.unicrypt.crypto.random.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomOracle;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
+import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.HashMethod;
+import java.util.HashMap;
 
 /**
- * This interface provides represents an additively written cyclic group. No functionality is added.
- * <p>
- * @author R. Haenni
- * @author R. E. Koenig
- * @version 2.0
+ *
+ * @author rolfhaenni
  */
-public interface AdditiveCyclicGroup
-	   extends CyclicGroup, AdditiveGroup {
+public class PseudoRandomOracle
+	   extends AbstractRandomOracle {
 
-	// The following methods are overridden from Group with an adapted return type
-	@Override
-	public AdditiveElement getDefaultGenerator();
+	HashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
 
-	@Override
-	public AdditiveElement getRandomGenerator();
+	public static final RandomOracle DEFAULT = PseudoRandomOracle.getInstance();
 
-	@Override
-	public AdditiveElement getRandomGenerator(RandomByteSequence randomByteSequence);
+	protected PseudoRandomOracle(HashMethod hashMethod) {
+		super(hashMethod);
+		referenceRandomByteSequence = new HashMap<ByteArray, ReferenceRandomByteSequence>();
 
-	@Override
-	public AdditiveElement[] getIndependentGenerators(int amount);
+	}
 
+	//TODO: Warning, this is a memory-hog!
+	//This code will only work when there is a fast 'equals' method ready for Element
 	@Override
-	public AdditiveElement[] getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
+	protected ReferenceRandomByteSequence abstractGetReferenceRandomByteSequence(ByteArray query) {
+		if (!referenceRandomByteSequence.containsKey(query)) {
+			referenceRandomByteSequence.put(query, ReferenceRandomByteSequence.getInstance(query));
+		}
+		ReferenceRandomByteSequence referenceString = referenceRandomByteSequence.get(query);
+		referenceString.reset();
+		return referenceString;
+	}
+//	@Override
+//	protected RandomReferenceString abstractGetRandomReferenceString(Element query) {
+//		return ReferenceRandomByteSequence.getInstance(query);
+//	}
+
+	public static RandomOracle getInstance() {
+		return PseudoRandomOracle.getInstance(HashMethod.DEFAULT);
+	}
+
+	public static RandomOracle getInstance(HashMethod hashMethod) {
+		if (hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new PseudoRandomOracle(hashMethod);
+	}
 
 }

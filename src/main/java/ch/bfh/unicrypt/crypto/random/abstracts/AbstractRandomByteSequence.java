@@ -39,55 +39,27 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.random.classes;
+package ch.bfh.unicrypt.crypto.random.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomOracle;
-import ch.bfh.unicrypt.math.helper.ByteArray;
-import ch.bfh.unicrypt.math.helper.HashMethod;
-import java.util.HashMap;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class RandomOracle
-	   extends AbstractRandomOracle {
+public abstract class AbstractRandomByteSequence
+	   implements RandomByteSequence {
 
-	HashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
+	public final RandomNumberGenerator randomNumberGenerator;
 
-	public static final RandomOracle DEFAULT = RandomOracle.getInstance();
-
-	protected RandomOracle(HashMethod hashMethod) {
-		super(hashMethod);
-		referenceRandomByteSequence = new HashMap<ByteArray, ReferenceRandomByteSequence>();
-
+	protected AbstractRandomByteSequence() {
+		this.randomNumberGenerator = RandomNumberGenerator.getInstance(this);
 	}
 
-	//TODO: Warning, this is a memory-hog!
-	//This code will only work when there is a fast 'equals' method ready for Element
 	@Override
-	protected ReferenceRandomByteSequence abstractGetReferenceRandomByteSequence(ByteArray query) {
-		if (!referenceRandomByteSequence.containsKey(query)) {
-			referenceRandomByteSequence.put(query, ReferenceRandomByteSequence.getInstance(query));
-		}
-		ReferenceRandomByteSequence referenceString = referenceRandomByteSequence.get(query);
-		referenceString.reset();
-		return referenceString;
-	}
-//	@Override
-//	protected RandomReferenceString abstractGetRandomReferenceString(Element query) {
-//		return ReferenceRandomByteSequence.getInstance(query);
-//	}
-
-	public static RandomOracle getInstance() {
-		return RandomOracle.getInstance(HashMethod.DEFAULT);
-	}
-
-	public static RandomOracle getInstance(HashMethod hashMethod) {
-		if (hashMethod == null) {
-			throw new IllegalArgumentException();
-		}
-		return new RandomOracle(hashMethod);
+	public RandomNumberGenerator getRandomNumberGenerator() {
+		return this.randomNumberGenerator;
 	}
 
 }

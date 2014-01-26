@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random.classes;
 
+import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.PseudoRandomByteSequence;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
@@ -61,6 +62,7 @@ import java.math.BigInteger;
  * @version 1.0
  */
 public class CounterModeRandomByteSequence
+	   extends AbstractRandomByteSequence
 	   implements PseudoRandomByteSequence {
 
 	public static final ByteArray DEFAULT_SEED = ByteArray.getInstance();

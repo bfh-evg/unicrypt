@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,16 +32,16 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.math.function.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -82,20 +82,20 @@ public interface Function {
 	/**
 	 * Applies the function to an input element from the domain and returns the resulting output element from the
 	 * co-domain. In case of a randomized function, a random generator can be given as a second parameter. If no random
-	 * generator is specified, i.e., if {@literal random} is null, then the system-wide random generator is taken. If the
-	 * function is deterministic, then {@literal random} is ignored. This is the main the method to implement for any type
-	 * of function.
+	 * generator is specified, i.e., if {@literal random} is null, then the system-wide random generator is taken. If
+	 * the function is deterministic, then {@literal random} is ignored. This is the main the method to implement for
+	 * any type of function.
 	 * <p>
 	 * @param element         The given input element
 	 * @param randomGenerator Either {@literal null} or a given random generator
 	 * @return The resulting output element
 	 * @throws IllegalArgumentException if {@literal element} is null or not contained in the domain
 	 */
-	public Element apply(Element element, RandomNumberGenerator randomGenerator);
+	public Element apply(Element element, RandomByteSequence randomByteSequence);
 
 	/**
-	 * This method provides a shortcut for applying a function with multiple input values. The specified elements are used
-	 * to create a corresponding tuple element first, which is then used to call the ordinary method
+	 * This method provides a shortcut for applying a function with multiple input values. The specified elements are
+	 * used to create a corresponding tuple element first, which is then used to call the ordinary method
 	 * {@literal apply(Element element)}.
 	 * <p>
 	 * @param elements The given input elements
@@ -103,28 +103,30 @@ public interface Function {
 	 * @throws IllegalArgumentException if {@literal elements} is or contains null
 	 * @throws IllegalArgumentException if the elements in {@literal elements} are not contained in the corresponding
 	 *                                  sub-domains
-	 * @throws IllegalArgumentException if the the length of {@literal elements} is different from {@literal getArityIn()}
+	 * @throws IllegalArgumentException if the the length of {@literal elements} is different from
+	 *                                  {@literal getArityIn()}
 	 */
 	public Element apply(Element... elements);
 
 	/**
-	 * This method provides a shortcut for applying a function with multiple input values. The specified elements are used
-	 * to create a corresponding tuple element first, which is then used to call the ordinary method
-	 * {@literal apply(Element element, Random random)}. In case of a randomized function, a random generator can be given
-	 * as an additional parameter. If no random generator is specified, i.e., if {@literal random} is null, then the
-	 * system-wide random generator is taken. If the function is deterministic, then {@literal random} is ignored.
+	 * This method provides a shortcut for applying a function with multiple input values. The specified elements are
+	 * used to create a corresponding tuple element first, which is then used to call the ordinary method
+	 * {@literal apply(Element element, Random random)}. In case of a randomized function, a random generator can be
+	 * given as an additional parameter. If no random generator is specified, i.e., if {@literal random} is null, then
+	 * the system-wide random generator is taken. If the function is deterministic, then {@literal random} is ignored.
 	 * <p>
-	 * @param elements        The given input elements
-	 * @param randomGenerator Either {@literal null} or a given random generator
+	 * @param elements           The given input elements
+	 * @param randomByteSequence Either {@literal null} or a given random generator
 	 * @return The resulting output element
 	 * @throws IllegalArgumentException if {@literal elements} is or contains null
 	 * @throws IllegalArgumentException if the elements in {@literal elements} are not contained in the corresponding
 	 *                                  sub-domains
-	 * @throws IllegalArgumentException if the the length of {@literal elements} is different from {@literal getArityIn()}
+	 * @throws IllegalArgumentException if the the length of {@literal elements} is different from
+	 *                                  {@literal getArityIn()}
 	 */
-	public Element apply(Element[] elements, RandomNumberGenerator randomGenerator);
+	public Element apply(Element[] elements, RandomByteSequence randomByteSequence);
 
-	public Element apply(RandomNumberGenerator randomGenerator);
+	public Element apply(RandomByteSequence randomByteSequence);
 
 	/**
 	 * Returns the domain of this function.
