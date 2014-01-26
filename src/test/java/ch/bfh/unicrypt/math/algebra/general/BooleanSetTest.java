@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.CounterModeRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -264,7 +264,7 @@ public class BooleanSetTest {
 	 */
 	@Test
 	public void testGetRandomElement2() {
-		RandomNumberGenerator random = PseudoRandomGeneratorCounterMode.getInstance();
+		RandomByteSequence random = CounterModeRandomByteSequence.getInstance();
 //		System.out.println("getRandomElement");
 		int counter = 0;
 		while (BooleanSet.getInstance().getRandomElement(random).getValue() && counter++ < 100);

@@ -44,12 +44,11 @@ package ch.bfh.unicrypt.crypto.proofgenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
-import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.CounterModeRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -75,9 +74,9 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = RandomOracle.DEFAULT;
-		final RandomNumberGenerator randomGenerator = PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
-		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 5;
 
@@ -105,8 +104,8 @@ public class PermutationCommitmentProofGeneratorTest {
 	public void testPermutationCommitemntProofGenerator2() {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
-		final RandomOracle ro = RandomOracle.DEFAULT;
-		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 20;
 
@@ -135,9 +134,9 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = RandomOracle.DEFAULT;
-		final RandomNumberGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
-		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 5;
 
@@ -174,9 +173,9 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = RandomOracle.DEFAULT;
-		final RandomNumberGenerator randomGenerator = PseudoRandomGeneratorCounterMode.getInstance();
-		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 5;
 

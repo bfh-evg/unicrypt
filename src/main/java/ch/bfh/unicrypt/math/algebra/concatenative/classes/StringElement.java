@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 
@@ -80,7 +81,7 @@ public class StringElement
 
 	@Override
 	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(this.getBigInteger().toByteArray());
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(getBigInteger().toByteArray()));
 	}
 
 	@Override

@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import java.nio.ByteBuffer;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Before;
@@ -100,7 +99,7 @@ public class ByteTreeTest {
 	@Ignore
 	public void testGetInstance_byteArr() {
 //		System.out.println("getInstance");
-		byte[] bytes = null;
+		ByteArray bytes = null;
 		ByteTree expResult = null;
 		ByteTree result = ByteTree.getInstance(bytes);
 		assertEquals(expResult, result);
@@ -116,7 +115,7 @@ public class ByteTreeTest {
 
 	public void testGetDeserializedInstance() {
 //		System.out.println("getDeserializedInstance");
-		byte[] bytes = null;
+		ByteArray bytes = null;
 		ByteTree expResult = null;
 		ByteTree result = ByteTree.getDeserializedInstance(bytes);
 		assertEquals(expResult, result);
@@ -133,9 +132,9 @@ public class ByteTreeTest {
 	public void testGetSerializedByteTree() {
 //		System.out.println("getSerializedByteTree");
 		ByteTree instance = new ByteTreeImpl();
-		byte[] expResult = null;
-		byte[] result = instance.getSerializedByteTree();
-		assertArrayEquals(expResult, result);
+		ByteArray expResult = null;
+		ByteArray result = instance.getSerializedByteTree();
+		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
 	}

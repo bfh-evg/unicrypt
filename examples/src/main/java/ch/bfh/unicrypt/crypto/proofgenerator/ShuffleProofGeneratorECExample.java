@@ -45,10 +45,9 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.Chall
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.ShuffleProofGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.RandomOracle;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -77,7 +76,7 @@ public class ShuffleProofGeneratorECExample {
 	public Triple createCiphertexts(int size, CyclicGroup G_q, Element encryptionPK, PermutationElement pi) {
 
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 		final Element g = G_q.getIndependentGenerator(0, rrs);
 
 		// Ciphertexts
@@ -95,8 +94,8 @@ public class ShuffleProofGeneratorECExample {
 
 	public void proofOfShuffle(int size, CyclicGroup G_q, Element encryptionPK, PermutationElement pi, Tuple uV, Tuple uPrimeV, Tuple rV) {
 
-		final RandomOracle ro = RandomOracle.DEFAULT;
-		final RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
+		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		// Permutation commitment
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);

@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.crypto.random.classes.TrueRandomNumberGenerator;
-import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import java.util.Arrays;
 
 /**
@@ -53,16 +53,17 @@ public class TrueRandomNumberGeneratorExample {
 
 	public static void main(String[] args) {
 		//Get instance of a Default-TrueRandomGenerator
-		RandomNumberGenerator randomGenerator = TrueRandomNumberGenerator.getInstance();
+		RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
 
 		//The time to wait in order to get the ephemeral key is not bound to the requested amount of randomization
 		//It is bound to the 'entropy-collection' of the DataCollector that happens inside every request of randomization.
 		//This 'guarantees' Forward-Security.
-		System.out.println(Arrays.toString(randomGenerator.nextBytes(256)));
-		System.out.println(randomGenerator.nextBoolean());
-		System.out.println(Arrays.toString(randomGenerator.nextBytes(256)));
-		System.out.println(randomGenerator.nextBoolean());
-		System.out.println(randomGenerator.nextBigInteger(2048));
+		System.out.println(Arrays.toString(randomGenerator.getRandomNumberGenerator().nextBytes(256)));
+		System.out.println(randomGenerator.getRandomNumberGenerator().nextBoolean());
+		System.out.println(Arrays.toString(randomGenerator.getRandomNumberGenerator().nextBytes(256)));
+		System.out.println(randomGenerator.getRandomNumberGenerator().nextBoolean());
+		System.out.println(randomGenerator.getRandomNumberGenerator().nextBigInteger(2048));
+
 	}
 
 }

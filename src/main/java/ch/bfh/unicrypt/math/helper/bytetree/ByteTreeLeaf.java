@@ -61,8 +61,8 @@ public class ByteTreeLeaf
 		buffer.get(bytes);
 	}
 
-	protected ByteTreeLeaf(byte[] bytes) {
-		this.bytes = bytes;
+	protected ByteTreeLeaf(ByteArray bytes) {
+		this.bytes = bytes.getAll();
 	}
 
 	public ByteArray getValue() {

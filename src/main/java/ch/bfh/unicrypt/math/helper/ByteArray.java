@@ -144,11 +144,11 @@ public class ByteArray
 			if (other == null) {
 				throw new IllegalArgumentException();
 			}
-			minLength = Math.min(minLength, other.length);
+			minLength = Math.max(minLength, other.length);
 		}
 		byte[] result = Arrays.copyOf(this.bytes, minLength);
 		for (ByteArray other : others) {
-			for (int i = 0; i < minLength; i++) {
+			for (int i = 0; i < other.length; i++) {
 				switch (operand) {
 					case 0:
 						result[i] ^= other.getAt(i);

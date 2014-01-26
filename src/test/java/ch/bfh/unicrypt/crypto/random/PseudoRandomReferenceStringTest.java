@@ -41,9 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.random;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,19 +55,19 @@ public class PseudoRandomReferenceStringTest {
 
 	@Test
 	public void generalTest() {
-		RandomReferenceString rrs = PseudoRandomReferenceString.getInstance();
-		BigInteger prime = rrs.nextPrime(10);
-		rrs.nextBoolean();
-		rrs.nextBytes(5);
-		rrs.nextBytes(2048);
+		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		BigInteger prime = rrs.getRandomNumberGenerator().nextPrime(10);
+		rrs.getRandomNumberGenerator().nextBoolean();
+		rrs.getRandomNumberGenerator().nextBytes(5);
+		rrs.getRandomNumberGenerator().nextBytes(2048);
 		rrs.reset();
-		Assert.assertEquals(prime, rrs.nextPrime(10));
-		rrs = PseudoRandomReferenceString.getInstance(ByteArrayMonoid.getInstance().getElement(new byte[]{10, 5, 120}));
-		prime = rrs.nextPrime(10);
-		rrs.nextBoolean();
-		rrs.nextBytes(5);
+		Assert.assertEquals(prime, rrs.getRandomNumberGenerator().nextPrime(10));
+		rrs = ReferenceRandomByteSequence.getInstance(ByteArray.getInstance(new byte[]{10, 5, 120}));
+		prime = rrs.getRandomNumberGenerator().nextPrime(10);
+		rrs.getRandomNumberGenerator().nextBoolean();
+		rrs.getRandomNumberGenerator().nextBytes(5);
 		rrs.reset();
-		Assert.assertEquals(prime, rrs.nextPrime(10));
+		Assert.assertEquals(prime, rrs.getRandomNumberGenerator().nextPrime(10));
 	}
 
 }

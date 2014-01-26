@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 
@@ -63,7 +64,7 @@ public class GStarModElement
 
 	@Override
 	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(this.getValue().toByteArray());
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(this.getValue().toByteArray()));
 	}
 
 }
