@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.random;
 
 import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.Arrays;
 
 /**
@@ -52,8 +53,13 @@ import java.util.Arrays;
 public class TrueRandomNumberGeneratorExample {
 
 	public static void main(String[] args) {
-		//Get instance of a Default-TrueRandomGenerator
-		RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance();
+
+		//Get instance of a Default-TrueRandomGenerator with a forwardSecurity of 64bit and a security of 16bit. (A very bad one)
+		RandomByteSequence randomGenerator = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, 8, 2);
+		System.out.println("Seeded very fast!");
+		//Get instance of a Default-TrueRandomGenerator (forwardSecurity: Half the strength of the HashMethod.DEFAULT and a security of HashMethod.DEFAULT)
+		randomGenerator = HybridRandomByteSequence.getInstance();
+		System.out.println("Seeded very slow");
 
 		//The time to wait in order to get the ephemeral key is not bound to the requested amount of randomization
 		//It is bound to the 'entropy-collection' of the DataCollector that happens inside every request of randomization.
@@ -64,6 +70,8 @@ public class TrueRandomNumberGeneratorExample {
 		System.out.println(randomGenerator.getRandomNumberGenerator().nextBoolean());
 		System.out.println(randomGenerator.getRandomNumberGenerator().nextBigInteger(2048));
 
+		//Stopping the internal Thread which helps in acquiring fresh 'ephemeral' data
+		System.exit(0);
 	}
 
 }
