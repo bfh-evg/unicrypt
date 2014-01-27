@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -86,7 +86,7 @@ public class HashFunction
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractApply(final Element element, final RandomNumberGenerator randomGenerator) {
+	protected FiniteByteArrayElement abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().getElement(element.getHashValue(this.hashMethod).getValue());
 	}
 

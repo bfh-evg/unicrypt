@@ -39,20 +39,27 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.random;
+package ch.bfh.unicrypt.crypto.random.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.classes.DistributionSamplerSecureRandom;
-import java.util.Arrays;
+import ch.bfh.unicrypt.crypto.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DistributionSamplerSecureRandomExample {
+public abstract class AbstractRandomByteSequence
+	   implements RandomByteSequence {
 
-	public static void main(String[] args) {
-		DistributionSamplerSecureRandom distributionSampler = DistributionSamplerSecureRandom.getInstance();
-		System.out.println(Arrays.toString(distributionSampler.getDistributionSample(100)));
+	public final RandomNumberGenerator randomNumberGenerator;
+
+	protected AbstractRandomByteSequence() {
+		this.randomNumberGenerator = RandomNumberGenerator.getInstance(this);
+	}
+
+	@Override
+	public RandomNumberGenerator getRandomNumberGenerator() {
+		return this.randomNumberGenerator;
 	}
 
 }

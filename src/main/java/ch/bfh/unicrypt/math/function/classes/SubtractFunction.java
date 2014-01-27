@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -71,7 +71,7 @@ public class SubtractFunction
 	}
 
 	@Override
-	protected AdditiveElement abstractApply(final Pair element, final RandomNumberGenerator randomGenerator) {
+	protected AdditiveElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().subtract(element.getFirst(), element.getSecond());
 	}
 

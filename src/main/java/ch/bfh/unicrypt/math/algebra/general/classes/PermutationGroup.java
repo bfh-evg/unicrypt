@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Permutation;
@@ -112,8 +112,8 @@ public class PermutationGroup
 	// various super-classes
 	//
 	@Override
-	protected PermutationElement abstractGetRandomElement(final RandomNumberGenerator randomGenerator) {
-		return this.abstractGetElement(Permutation.getRandomInstance(this.getSize(), randomGenerator));
+	protected PermutationElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
+		return this.abstractGetElement(Permutation.getRandomInstance(this.getSize(), randomByteSequence));
 	}
 
 	@Override

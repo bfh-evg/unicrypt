@@ -41,14 +41,8 @@
  */
 package ch.bfh.unicrypt.math.params.interfaces;
 
-import java.math.BigInteger;
-
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 
 /**
  *

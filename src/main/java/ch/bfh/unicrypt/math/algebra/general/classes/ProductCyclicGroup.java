@@ -41,9 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
@@ -161,52 +160,52 @@ public class ProductCyclicGroup
 	}
 
 	@Override
-	public final Tuple getRandomGenerator(RandomNumberGenerator randomGenerator) {
+	public final Tuple getRandomGenerator(RandomByteSequence randomByteSequence) {
 		int arity = this.getArity();
 		Element[] randomGenerators = new Element[arity];
 		for (int i = 0; i < arity; i++) {
-			randomGenerators[i] = this.getAt(i).getRandomGenerator(randomGenerator);
+			randomGenerators[i] = this.getAt(i).getRandomGenerator(randomByteSequence);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(randomGenerators));
 	}
 
 	@Override
 	public final Tuple getIndependentGenerator(int index) {
-		return this.getIndependentGenerator(index, (RandomReferenceString) null);
+		return this.getIndependentGenerator(index, (ReferenceRandomByteSequence) null);
 	}
 
 	@Override
-	public final Tuple getIndependentGenerator(int index, RandomReferenceString randomReferenceString) {
-		return this.getIndependentGenerators(index, randomReferenceString)[index];
+	public final Tuple getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
+		return this.getIndependentGenerators(index, referenceRandomByteSequence)[index];
 	}
 
 	@Override
 	public final Tuple[] getIndependentGenerators(int maxIndex) {
-		return this.getIndependentGenerators(maxIndex, (RandomReferenceString) null);
+		return this.getIndependentGenerators(maxIndex, (ReferenceRandomByteSequence) null);
 	}
 
 	@Override
-	public final Tuple[] getIndependentGenerators(int maxIndex, RandomReferenceString randomReferenceString) {
-		return this.getIndependentGenerators(0, maxIndex, randomReferenceString);
+	public final Tuple[] getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
+		return this.getIndependentGenerators(0, maxIndex, referenceRandomByteSequence);
 	}
 
 	@Override
 	public final Tuple[] getIndependentGenerators(int minIndex, int maxIndex) {
-		return this.getIndependentGenerators(minIndex, maxIndex, (RandomReferenceString) null);
+		return this.getIndependentGenerators(minIndex, maxIndex, (ReferenceRandomByteSequence) null);
 	}
 
 	@Override
-	public final Tuple[] getIndependentGenerators(int minIndex, int maxIndex, RandomReferenceString randomReferenceString) {
+	public final Tuple[] getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (minIndex < 0 || maxIndex < minIndex) {
 			throw new IndexOutOfBoundsException();
 		}
-		if (randomReferenceString == null) {
-			randomReferenceString = PseudoRandomReferenceString.getInstance();
+		if (referenceRandomByteSequence == null) {
+			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		}
 		// The following line is necessary for creating a generic array
 		Tuple[] generators = (Tuple[]) Array.newInstance(this.getIdentityElement().getClass(), maxIndex - minIndex + 1);
 		for (int i = 0; i <= maxIndex; i++) {
-			Tuple generator = this.standardGetIndependentGenerator(randomReferenceString);
+			Tuple generator = this.standardGetIndependentGenerator(referenceRandomByteSequence);
 			if (i >= minIndex) {
 				generators[i - minIndex] = generator;
 			}
@@ -214,8 +213,8 @@ public class ProductCyclicGroup
 		return generators;
 	}
 
-	protected Tuple standardGetIndependentGenerator(RandomReferenceString randomReferenceString) {
-		return this.getRandomGenerator(randomReferenceString);
+	protected Tuple standardGetIndependentGenerator(ReferenceRandomByteSequence referenceRandomByteSequence) {
+		return this.getRandomGenerator(referenceRandomByteSequence);
 	}
 
 	@Override

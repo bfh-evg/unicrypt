@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.Permutation;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
@@ -76,7 +77,7 @@ public class PermutationElement
 		int size = permutation.getSize();
 		ByteTree[] byteTrees = new ByteTree[size];
 		for (int i = 0; i < size; i++) {
-			byteTrees[i] = ByteTreeLeaf.getInstance(BigInteger.valueOf(permutation.permute(i)).toByteArray());
+			byteTrees[i] = ByteTreeLeaf.getInstance(ByteArray.getInstance(BigInteger.valueOf(permutation.permute(i)).toByteArray()));
 		}
 		return ByteTree.getInstance(byteTrees);
 	}

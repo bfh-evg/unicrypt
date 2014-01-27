@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,17 +32,17 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -70,8 +70,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <KG>
  */
 public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends Element, ES extends Monoid, EE extends Element, RS extends Monoid, RE extends Element, EK extends Set, DK extends Set, KG extends KeyPairGenerator>
-			 extends AbstractRandomizedEncryptionScheme<MS, ME, ES, EE, RS, RE, EK, DK, KG>
-			 implements ReEncryptionScheme {
+	   extends AbstractRandomizedEncryptionScheme<MS, ME, ES, EE, RS, RE, EK, DK, KG>
+	   implements ReEncryptionScheme {
 
 	private Function identityEncryptionFunction;
 	private Function reEncryptionFunction;
@@ -89,23 +89,23 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 		if (this.reEncryptionFunction == null) {
 			ProductSet inputSpace = ProductSet.getInstance(this.getEncryptionKeySpace(), this.getEncryptionSpace(), this.getRandomizationSpace());
 			this.reEncryptionFunction = CompositeFunction.getInstance(
-						 MultiIdentityFunction.getInstance(inputSpace, 2),
-						 ProductFunction.getInstance(SelectionFunction.getInstance(inputSpace, 1),
-																				 CompositeFunction.getInstance(RemovalFunction.getInstance(inputSpace, 1),
-																																			 this.getIdentityEncryptionFunction())),
-						 ApplyFunction.getInstance(this.getEncryptionSpace()));
+				   MultiIdentityFunction.getInstance(inputSpace, 2),
+				   ProductFunction.getInstance(SelectionFunction.getInstance(inputSpace, 1),
+											   CompositeFunction.getInstance(RemovalFunction.getInstance(inputSpace, 1),
+																			 this.getIdentityEncryptionFunction())),
+				   ApplyFunction.getInstance(this.getEncryptionSpace()));
 		}
 		return this.reEncryptionFunction;
 	}
 
 	@Override
 	public final EE reEncrypt(final Element publicKey, final Element ciphertext) {
-		return this.reEncrypt(publicKey, ciphertext, (RandomNumberGenerator) null);
+		return this.reEncrypt(publicKey, ciphertext, (RandomByteSequence) null);
 	}
 
 	@Override
-	public final EE reEncrypt(final Element publicKey, final Element ciphertext, RandomNumberGenerator randomGenerator) {
-		return this.reEncrypt(publicKey, ciphertext, this.getRandomizationSpace().getRandomElement(randomGenerator));
+	public final EE reEncrypt(final Element publicKey, final Element ciphertext, RandomByteSequence randomByteSequence) {
+		return this.reEncrypt(publicKey, ciphertext, this.getRandomizationSpace().getRandomElement(randomByteSequence));
 	}
 
 	@Override

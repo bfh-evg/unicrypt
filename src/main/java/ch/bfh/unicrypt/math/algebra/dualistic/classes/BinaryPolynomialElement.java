@@ -64,7 +64,7 @@ public class BinaryPolynomialElement
 
 	@Override
 	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(this.getValue().getCoefficients().getAll());
+		return ByteTreeLeaf.getInstance(this.getValue().getCoefficients());
 	}
 
 }

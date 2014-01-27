@@ -41,10 +41,9 @@
  */
 package ch.bfh.unicrypt.math.params.interfaces;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
+import java.math.BigInteger;
 
 /**
  *

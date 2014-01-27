@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -185,22 +185,22 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	}
 
 	@Override
-	protected E abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
+	protected E abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		if (this.getDefaultGenerator() != null) {
-			D r = (D) this.getFiniteField().getRandomElement(randomGenerator);
+			D r = (D) this.getFiniteField().getRandomElement(randomByteSequence);
 			return (E) this.getDefaultGenerator().selfApply(r);
 		} else {
-			return this.getRandomElementWithoutGenerator(randomGenerator);
+			return this.getRandomElementWithoutGenerator(randomByteSequence);
 		}
 	}
 
 	/**
 	 * Returns random element witcoFactorout knowing a generator of tcoFactore group
 	 * <p>
-	 * @param randomGenerator
+	 * @param randomByteSequence
 	 * @return
 	 */
-	protected abstract E getRandomElementWithoutGenerator(RandomNumberGenerator randomGenerator);
+	protected abstract E getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
 	public String standardToStringContent() {

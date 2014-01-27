@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -47,10 +47,9 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.Standard
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -78,27 +77,25 @@ public class PermutationCommitmentProofGenerator
 	final private ChallengeGenerator eValuesGenerator;
 	final private CyclicGroup cyclicGroup;
 	final private int size;
-	final private RandomReferenceString randomReferenceString;
+	final private ReferenceRandomByteSequence referenceRandomByteSequence;
 
-	protected PermutationCommitmentProofGenerator(SigmaChallengeGenerator sigmaChallengeGenerator,
-		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, RandomReferenceString randomReferenceString) {
+	protected PermutationCommitmentProofGenerator(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, ReferenceRandomByteSequence referenceRandomByteSequence1) {
 
 		this.sigmaChallengeGenerator = sigmaChallengeGenerator;
 		this.eValuesGenerator = eValuesGenerator;
 		this.cyclicGroup = cyclicGroup;
 		this.size = size;
-		this.randomReferenceString = randomReferenceString;
+		this.referenceRandomByteSequence = referenceRandomByteSequence1;
 	}
 
 	public static PermutationCommitmentProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size) {
-		return PermutationCommitmentProofGenerator.getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, PseudoRandomReferenceString.getInstance());
+		return PermutationCommitmentProofGenerator.getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, ReferenceRandomByteSequence.getInstance());
 	}
 
-	public static PermutationCommitmentProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
-		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, RandomReferenceString randomReferenceString) {
+	public static PermutationCommitmentProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, ReferenceRandomByteSequence referenceRandomByteSequence1) {
 
-		if (sigmaChallengeGenerator == null || eValuesGenerator == null || cyclicGroup == null || size < 1 || randomReferenceString == null) {
+		if (sigmaChallengeGenerator == null || eValuesGenerator == null || cyclicGroup == null || size < 1 || referenceRandomByteSequence1 == null) {
 			throw new IllegalArgumentException();
 		}
 		if (!sigmaChallengeGenerator.getPublicInputSpace().isEquivalent(PermutationCommitmentProofGenerator.createSigmaChallengeGeneratorPublicInputSpace(cyclicGroup, size))
@@ -109,7 +106,7 @@ public class PermutationCommitmentProofGenerator
 			throw new IllegalArgumentException();
 		}
 
-		return new PermutationCommitmentProofGenerator(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, randomReferenceString);
+		return new PermutationCommitmentProofGenerator(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, referenceRandomByteSequence1);
 	}
 
 	// Private: (PermutationElement pi, PermutationCommitment-Randomizations sV)
@@ -183,7 +180,7 @@ public class PermutationCommitmentProofGenerator
 	// Generate and Validate
 	//
 	@Override
-	protected Pair abstractGenerate(Pair privateInput, Tuple publicInput, RandomNumberGenerator randomGenerator) {
+	protected Pair abstractGenerate(Pair privateInput, Tuple publicInput, RandomByteSequence randomByteSequence) {
 
 		// Unfold privat and public input
 		final PermutationElement pi = (PermutationElement) privateInput.getFirst();
@@ -195,10 +192,10 @@ public class PermutationCommitmentProofGenerator
 		final Element v = PermutationCommitmentProofGenerator.computeInnerProduct(oneV, sV);
 		final Element w = PermutationCommitmentProofGenerator.computeInnerProduct(sV, eV);
 		final Tuple ePrimeV = PermutationFunction.getInstance(eV.getSet()).apply(eV, pi);
-		final Tuple rV = ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size).getRandomElement(randomGenerator);
+		final Tuple rV = ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size).getRandomElement(randomByteSequence);
 
 		// Compute commitments c_i and d
-		final PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(this.cyclicGroup, this.randomReferenceString);
+		final PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(this.cyclicGroup, this.referenceRandomByteSequence);
 		final Element g = pcs.getRandomizationGenerator();
 		final Element h = pcs.getMessageGenerator();
 
@@ -216,8 +213,8 @@ public class PermutationCommitmentProofGenerator
 		final Element d = ds[ds.length - 1];
 
 		// Create sigma proof
-		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, cV);
-		final Element randomElement = this.getResponseSpace().getRandomElement(randomGenerator);
+		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.referenceRandomByteSequence, cV);
+		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
 		final Element commitment = f.apply(randomElement);                              // [3n+3]
 		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
 		final Element response = randomElement.apply(Tuple.getInstance(v, w, rV, d, ePrimeV).selfApply(challenge));
@@ -237,7 +234,7 @@ public class PermutationCommitmentProofGenerator
 
 		// Get additional values
 		final Tuple eV = (Tuple) this.eValuesGenerator.generate(publicInput);
-		final Element[] gV = GeneralizedPedersenCommitmentScheme.getInstance(this.cyclicGroup, this.size, this.randomReferenceString).getMessageGenerators();
+		final Element[] gV = GeneralizedPedersenCommitmentScheme.getInstance(this.cyclicGroup, this.size, this.referenceRandomByteSequence).getMessageGenerators();
 
 		// Compute image of preimage proof
 		final Element[] ps = new Element[this.size + 3];
@@ -258,7 +255,7 @@ public class PermutationCommitmentProofGenerator
 		final Tuple pV = Tuple.getInstance(ps);
 
 		// Verify preimage proof
-		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.randomReferenceString, cV);
+		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.referenceRandomByteSequence, cV);
 		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
 		final Element left = f.apply(response);                                         // [3N+3]
 		final Element right = commitment.apply(pV.selfApply(challenge));                //  [N+3]
@@ -309,20 +306,20 @@ public class PermutationCommitmentProofGenerator
 		private final Element g;
 		private final Element h;
 
-		protected PreimageProofFunction(CyclicGroup cyclicGroup, int size, ProductGroup domain, ProductGroup coDomain, RandomReferenceString randomReferenceString, Tuple cV) {
+		protected PreimageProofFunction(CyclicGroup cyclicGroup, int size, ProductGroup domain, ProductGroup coDomain, ReferenceRandomByteSequence referenceRandomByteSequence1, Tuple cV) {
 			super(domain, coDomain);
 			this.size = size;
 			this.cV = cV;
 
 			// Prepare commitment schemes
-			this.pcs = PedersenCommitmentScheme.getInstance(cyclicGroup, randomReferenceString);
-			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, size, randomReferenceString);
+			this.pcs = PedersenCommitmentScheme.getInstance(cyclicGroup, referenceRandomByteSequence1);
+			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, size, referenceRandomByteSequence1);
 			this.g = pcs.getRandomizationGenerator();
 			this.h = pcs.getMessageGenerator();
 		}
 
 		@Override
-		protected Tuple abstractApply(Tuple element, RandomNumberGenerator randomGenerator) {
+		protected Tuple abstractApply(Tuple element, RandomByteSequence randomByteSequence) {
 
 			// Unfold element
 			final Element v = element.getAt(0);

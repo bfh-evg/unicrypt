@@ -84,7 +84,7 @@ public class ByteArrayElement
 
 	@Override
 	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(this.getValue().getAll());
+		return ByteTreeLeaf.getInstance(this.getValue());
 	}
 
 }

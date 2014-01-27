@@ -41,9 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.HashMap;
 
@@ -52,20 +50,20 @@ import java.util.HashMap;
  * <p>
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PseudoRandomReferenceString
-	   extends PseudoRandomGeneratorCounterMode
-	   implements RandomReferenceString {
+public class ReferenceRandomByteSequence
+	   extends CounterModeRandomByteSequence {
 
 	/**
-	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE PseudoRandomReferenceString. It uses the default HashMethod and the default seed of
-	 * PseudoRandomGeneratorCounterMode.
+	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE ReferenceRandomByteSequence. It uses the default
+	 * HashMethod and the default seed of PseudoRandomGeneratorCounterMode. TODO: Break the is-a relationship and make
+	 * it a uses relationship! TODO: Bring in new methods for direct access to a certain position within the sequence!
 	 */
-	public static final PseudoRandomReferenceString DEFAULT = PseudoRandomReferenceString.getInstance(HashMethod.DEFAULT, PseudoRandomGeneratorCounterMode.DEFAULT_SEED);
+	public static final ReferenceRandomByteSequence DEFAULT = ReferenceRandomByteSequence.getInstance(HashMethod.DEFAULT, CounterModeRandomByteSequence.DEFAULT_SEED);
 
 	private HashMap<Integer, byte[]> randomByteBufferMap;
 	private int javaHashValue;
 
-	public PseudoRandomReferenceString(HashMethod hashMethod, Element seed) {
+	public ReferenceRandomByteSequence(HashMethod hashMethod, ByteArray seed) {
 		super(hashMethod, seed);
 	}
 
@@ -89,36 +87,31 @@ public class PseudoRandomReferenceString
 		return super.isReset();
 	}
 
-	public static PseudoRandomReferenceString getInstance(byte[] query) {
-		if (query == null) {
-			throw new IllegalArgumentException();
-		}
-		return getInstance(ByteArrayMonoid.getInstance().getElement(query));
+	public static ReferenceRandomByteSequence getInstance() {
+		ReferenceRandomByteSequence sequence = new ReferenceRandomByteSequence(HashMethod.DEFAULT, DEFAULT_SEED);
+		sequence.randomByteBufferMap = DEFAULT.randomByteBufferMap;
+		return sequence;
 	}
 
-	public static PseudoRandomReferenceString getInstance() {
-		return DEFAULT;
+	public static ReferenceRandomByteSequence getInstance(ByteArray seed) {
+		return ReferenceRandomByteSequence.getInstance(HashMethod.DEFAULT, seed);
 	}
 
-	public static PseudoRandomReferenceString getInstance(Element seed) {
-		return PseudoRandomReferenceString.getInstance(HashMethod.DEFAULT, seed);
+	public static ReferenceRandomByteSequence getInstance(HashMethod hashMethod) {
+		return ReferenceRandomByteSequence.getInstance(hashMethod, CounterModeRandomByteSequence.DEFAULT_SEED);
 	}
 
-	public static PseudoRandomReferenceString getInstance(HashMethod hashMethod) {
-		return PseudoRandomReferenceString.getInstance(hashMethod, PseudoRandomGeneratorCounterMode.DEFAULT_SEED);
-	}
-
-	public static PseudoRandomReferenceString getInstance(HashMethod hashMethod, Element seed) {
+	public static ReferenceRandomByteSequence getInstance(HashMethod hashMethod, ByteArray seed) {
 		if (hashMethod == null || seed == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PseudoRandomReferenceString(hashMethod, seed);
+		return new ReferenceRandomByteSequence(hashMethod, seed);
 	}
 
 	@Override
 	public int hashCode() {
 		if (javaHashValue == 0) {
-			javaHashValue = getHashMethod().hashCode() + getSeed().getValue().hashCode();
+			javaHashValue = getHashMethod().hashCode() + getSeed().hashCode();
 		}
 		return javaHashValue;
 	}
@@ -131,12 +124,12 @@ public class PseudoRandomReferenceString
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final PseudoRandomReferenceString other = (PseudoRandomReferenceString) obj;
+		final ReferenceRandomByteSequence other = (ReferenceRandomByteSequence) obj;
 		if (getHashMethod() != getHashMethod() && (!this.getHashMethod().equals(other.getHashMethod()))) {
 			return false;
 		}
 
-		if (this.getSeed().getValue() != other.getSeed().getValue()) {
+		if (!this.getSeed().equals(other.getSeed())) {
 			return false;
 		}
 		return true;

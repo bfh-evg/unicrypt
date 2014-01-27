@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -122,7 +122,7 @@ public class PreimageOrProofGenerator
 	}
 
 	@Override
-	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, RandomNumberGenerator randomGenerator) {
+	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, RandomByteSequence randomByteSequence) {
 
 		// Extract secret input value and index from private input
 		final int index = privateInput.getSecond().getBigInteger().intValue();
@@ -146,9 +146,9 @@ public class PreimageOrProofGenerator
 			}
 
 			// Create random challenge and response
-			ZModElement c = challengeSpace.getRandomElement(randomGenerator);
+			ZModElement c = challengeSpace.getRandomElement(randomByteSequence);
 			Function f = proofFunctions[i];
-			Element s = f.getDomain().getRandomElement(randomGenerator);
+			Element s = f.getDomain().getRandomElement(randomByteSequence);
 
 			sumOfChallenges = sumOfChallenges.add(c);
 			challenges[i] = c;
@@ -160,7 +160,7 @@ public class PreimageOrProofGenerator
 
 		// Create the proof of the known secret (normal preimage-proof, but with a special challange)
 		// - Create random element and calculate commitment
-		final Element randomElement = proofFunctions[index].getDomain().getRandomElement(randomGenerator);
+		final Element randomElement = proofFunctions[index].getDomain().getRandomElement(randomByteSequence);
 		commitments[index] = proofFunctions[index].apply(randomElement);
 
 		// - Create overall proof challenge

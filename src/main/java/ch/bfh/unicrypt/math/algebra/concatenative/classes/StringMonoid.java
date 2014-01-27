@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Alphabet;
@@ -113,15 +113,15 @@ public class StringMonoid
 	}
 
 	@Override
-	protected StringElement abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
+	protected StringElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public final StringElement abstractGetRandomElement(int length, RandomNumberGenerator randomGenerator) {
+	protected final StringElement abstractGetRandomElement(int length, RandomByteSequence randomByteSequence) {
 		char[] chars = new char[length];
 		for (int i = 0; i < length; i++) {
-			chars[i] = this.getAlphabet().getCharacter(randomGenerator.nextInteger(this.getAlphabet().getSize() - 1));
+			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomNumberGenerator().nextInteger(this.getAlphabet().getSize() - 1));
 		}
 		return this.abstractGetElement(new String(chars));
 	}

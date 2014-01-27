@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,16 +32,16 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractThresholdSecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
@@ -58,7 +58,7 @@ import java.math.BigInteger;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ShamirSecretSharingScheme
-			 extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Pair> {
+	   extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Pair> {
 
 	private final ZModPrime zModPrime;
 	private final PolynomialRing polynomialRing;
@@ -88,7 +88,7 @@ public class ShamirSecretSharingScheme
 	}
 
 	@Override
-	protected Pair[] abstractShare(Element message, RandomNumberGenerator randomGenerator) {
+	protected Pair[] abstractShare(Element message, RandomByteSequence randomByteSequence) {
 
 		// create an array of coefficients with size threshold
 		// the coefficient of degree 0 is fixed (message)
@@ -96,7 +96,7 @@ public class ShamirSecretSharingScheme
 		DualisticElement[] coefficients = new DualisticElement[getThreshold()];
 		coefficients[0] = (DualisticElement) message;
 		for (int i = 1; i < getThreshold(); i++) {
-			coefficients[i] = this.getZModPrime().getRandomElement(randomGenerator);
+			coefficients[i] = this.getZModPrime().getRandomElement(randomByteSequence);
 		}
 
 		// create a polynomial out of the coefficients
@@ -152,7 +152,7 @@ public class ShamirSecretSharingScheme
 
 	public static ShamirSecretSharingScheme getInstance(ZModPrime zModPrime, int size, int threshold) {
 		if (zModPrime == null || size < 1 || threshold < 1 || threshold > size
-					 || BigInteger.valueOf(size).compareTo(zModPrime.getOrder()) >= 0) {
+			   || BigInteger.valueOf(size).compareTo(zModPrime.getOrder()) >= 0) {
 			throw new IllegalArgumentException();
 		}
 		return new ShamirSecretSharingScheme(zModPrime, size, threshold);

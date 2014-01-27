@@ -41,13 +41,22 @@
  */
 package ch.bfh.unicrypt.crypto.random.interfaces;
 
+import ch.bfh.unicrypt.math.helper.ByteArray;
+
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public interface PseudoRandomGenerator
-	   extends RandomNumberGenerator {
+public interface DistributionSamplerCollector {
 
-	public void updateInternalState(byte[] freshBytes);
+	public boolean isCollecting();
+
+	public void setCollectionStatus(boolean isCollecting);
+
+	public ByteArray getDistributionSample(int amountOfBytes);
+
+	public void setFreshSamples(ByteArray samples);
+
+	public int getSecurityParameterInBytes();
 
 }

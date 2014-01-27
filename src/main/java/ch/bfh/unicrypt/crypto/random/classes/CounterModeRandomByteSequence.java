@@ -41,49 +41,47 @@
  */
 package ch.bfh.unicrypt.crypto.random.classes;
 
-import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.PseudoRandomGenerator;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.PseudoRandomByteSequence;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
-import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
-import java.security.MessageDigest;
 
 /**
  * This PseudoRandomGeneratorCounterMode creates the hash value of the seed and stores this internally as a
  * ByteArrayElement. The hash will be done according to the given hashMethod. Then the internal counter will be created
  * as another ByteArrayElement. These two byteArrayElement will be hashed as in @see
- * AbstractElement#getHashValue(HashMethod hashMethod); The resulting bytes will be used for pseudoRandomness
+ * AbstractElement#getHashValue(HashMethod hashMethod); The resulting bytes will be used for pseudoRandomness Please
+ * note that this PseudoRandomGenerator does not provide any security at all once the internal state is known. This
+ * includes a total lack of forward security.
+ * <p>
  * <p>
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
  */
-public class PseudoRandomGeneratorCounterMode
-	   extends AbstractRandomGenerator
-	   implements PseudoRandomGenerator {
+public class CounterModeRandomByteSequence
+	   extends AbstractRandomByteSequence
+	   implements PseudoRandomByteSequence {
 
-	public static final Element DEFAULT_SEED = Z.getInstance().getElement(0);
+	public static final ByteArray DEFAULT_SEED = ByteArray.getInstance();
 	/**
 	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE pseudoRandomGenerator At each start of the JavaVM this
 	 * generator will restart deterministically. Do not use it for ephemeral keys!
 	 */
-	public static final PseudoRandomGeneratorCounterMode DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE = PseudoRandomGeneratorCounterMode.getInstance(HashMethod.DEFAULT, DEFAULT_SEED);
+	public static final CounterModeRandomByteSequence DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE = CounterModeRandomByteSequence.getInstance(HashMethod.DEFAULT, DEFAULT_SEED);
 
 	private final HashMethod hashMethod;
-	private Element seed;
+	private ByteArray seed;
 	private ByteArray hashedSeed;
 	private int counter;
-	// TODO: Better with ByteArrayOutputStream
+	// TODO: Change it to ByteArray when it becomes iterable;
 	private byte[] randomByteBuffer;
 	private int randomByteBufferPosition;
 
 	// Random random;
-	protected PseudoRandomGeneratorCounterMode(HashMethod hashMethod, final Element seed) {
+	protected CounterModeRandomByteSequence(HashMethod hashMethod, final ByteArray seed) {
 		this.hashMethod = hashMethod;
 		//The following lines are needed in order to speed up calculation of randomBytes. @see#fillRandomByteBuffer
 		this.randomByteBuffer = new byte[hashMethod.getLength()];
@@ -94,42 +92,28 @@ public class PseudoRandomGeneratorCounterMode
 		//Even though the following is the nice way to program it with unicrypt, it is too expensive. Reason: If the first part of a pair is a big tuple, it has to be hashed each time... Reprogram?!
 		//this.digestBytes=Pair.getInstance(seed,Z.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
 		//-->This is, why the following implementation exists.
-		MessageDigest digest = hashMethod.getMessageDigest();
-		digest.reset();
-		return digest.digest(hashedSeed.concatenate(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getAll());
-//		return digest.digest(hashedSeed.concatenate(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getAll());
-
-		//this.digestBytes = ByteArrayMonoid.getInstance().apply(hashedSeedElement, Z.getInstance().getElement(counter).getHashValue(hashMethod).getByteArrayElement()).getHashValue(hashMethod).getByteArray();
-		//this.digestBytes = ByteArrayMonoid.getInstance().apply(seedByteArray, ByteArrayMonoid.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
-		//System.out.println("Pair: " + pair + " digestPosition: " + digestBytesPosition + "  " + Arrays.toString(this.digestBytes));
+		return hashedSeed.concatenate(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getHash(hashMethod).getAll();
+//		return digest.digest(hashedSeed.concatenate(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getBytes());
 	}
 
+	@Override
 	public HashMethod getHashMethod() {
 		return hashMethod;
 	}
 
-	public Element getSeed() {
+	public ByteArray getSeed() {
 		return this.seed;
 	}
 
-	private void setSeed(Element seed) {
+	@Override
+	public void setSeed(ByteArray seed) {
 		if (seed == null) {
 			throw new IllegalArgumentException();
 		}
 		this.seed = seed;
-		this.hashedSeed = seed.getHashValue(hashMethod).getValue();
+		this.hashedSeed = seed.getHash();
 		this.counter = -1;
 		reset();
-	}
-
-	@Override
-	public void updateInternalState(byte[] freshBytes) {
-		ByteArray pseudoFeedback = ByteArray.getRandomInstance(hashMethod.getLength(), this);
-
-		ByteArray freshState = pseudoFeedback.xor(ByteArray.getInstance(freshBytes));
-		this.seed = ByteArrayMonoid.getInstance().getElement(freshState);
-		this.setSeed(seed);
-
 	}
 
 	public int getCounter() {
@@ -155,20 +139,14 @@ public class PseudoRandomGeneratorCounterMode
 
 	}
 
-	@Override
-	protected boolean abstractNextBoolean() {
-		return nextBytes(1)[0] % 2 == 1;
-	}
-
 	/**
 	 * Counter goes up after digest.length bytes, after initialization with sha256, 32bytes are ready to be read and
 	 * counter is at 0 after having read 32 bytes counter jumps to 1 and another 32 bytes are ready to be read
 	 * <p>
 	 * @param length
-	 * @return
+	 * @return a new byte[] which will not be touched anymore.
 	 */
-	@Override
-	protected byte[] abstractNextBytes(int length) {
+	protected byte[] getNextBytes(int length) {
 		byte[] randomBytes = new byte[length];
 		int randomBytesPosition = 0;
 		while (randomBytesPosition < length) {
@@ -184,65 +162,25 @@ public class PseudoRandomGeneratorCounterMode
 	}
 
 	@Override
-	protected int abstractNextInteger(int maxValue) {
-		//This is a slow implementation.
-		return nextBigInteger(BigInteger.valueOf(maxValue)).intValue();
+	public ByteArray getNextByteArray(int length) {
+		return new InternalByteArray(getNextBytes(length));
 	}
 
 	/**
-	 * MSB is always set
-	 * <p>
-	 * @param bitLength
-	 * @return
+	 * This internal class allows to create a new ByteArray without having to clone the backing byte[]
 	 */
-	@Override
-	protected BigInteger abstractNextBigInteger(int bitLength) {
-		return internalNextBigInteger(bitLength, true);
-	}
+	class InternalByteArray
+		   extends ByteArray {
 
-	private BigInteger internalNextBigInteger(int bitLength, boolean isMsbSet) {
-		if (bitLength < 1) {
-			return BigInteger.ZERO;
+		private InternalByteArray(byte[] bytes) {
+			super(bytes);
 		}
-		int amountOfBytes = (int) Math.ceil(bitLength / 8.0);
-		byte[] bytes = nextBytes(amountOfBytes);
 
-		int shift = 8 - (bitLength % 8);
-		if (shift == 8) {
-			shift = 0;
-		}
-		if (isMsbSet) {
-			bytes[0] = (byte) (((bytes[0] & 0xFF) | 0x80) >> shift);
-		} else {
-			bytes[0] = (byte) ((bytes[0] & 0xFF) >> shift);
-
-		}
-		return new BigInteger(1, bytes);
 	}
 
 	@Override
-	protected BigInteger abstractNextBigInteger(BigInteger maxValue) {
-		BigInteger randomValue;
-		int bitLength = maxValue.bitLength();
-		do {
-			randomValue = internalNextBigInteger(bitLength, false);
-		} while (randomValue.compareTo(maxValue) > 0);
-		return randomValue;
-	}
-
-	/**
-	 * MSB always set
-	 * <p>
-	 * @param bitLength
-	 * @return
-	 */
-	@Override
-	protected BigInteger abstractNextPrime(int bitLength) {
-		BigInteger bigInteger = null;
-		do {
-			bigInteger = internalNextBigInteger(bitLength, true);
-		} while (!bigInteger.isProbablePrime(MathUtil.NUMBER_OF_PRIME_TESTS));
-		return bigInteger;
+	public byte getNextByte() {
+		return getNextBytes(1)[0];
 	}
 
 	@Override
@@ -263,7 +201,7 @@ public class PseudoRandomGeneratorCounterMode
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final PseudoRandomGeneratorCounterMode other = (PseudoRandomGeneratorCounterMode) obj;
+		final CounterModeRandomByteSequence other = (CounterModeRandomByteSequence) obj;
 		if (this.hashMethod != other.hashMethod && (this.hashMethod == null || !this.hashMethod.equals(other.hashMethod))) {
 			return false;
 		}
@@ -284,26 +222,26 @@ public class PseudoRandomGeneratorCounterMode
 	 * <p>
 	 * @return
 	 */
-	public static PseudoRandomGeneratorCounterMode getInstance() {
-		return PseudoRandomGeneratorCounterMode.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
+	public static CounterModeRandomByteSequence getInstance() {
+		return CounterModeRandomByteSequence.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 	}
 
-	public static PseudoRandomGeneratorCounterMode getInstance(HashMethod hashMethod) {
-		return new PseudoRandomGeneratorCounterMode(hashMethod, DEFAULT_SEED);
+	public static CounterModeRandomByteSequence getInstance(HashMethod hashMethod) {
+		return new CounterModeRandomByteSequence(hashMethod, DEFAULT_SEED);
 	}
 
-	public static PseudoRandomGeneratorCounterMode getInstance(Element seed) {
-		return new PseudoRandomGeneratorCounterMode(HashMethod.DEFAULT, seed);
+	public static CounterModeRandomByteSequence getInstance(ByteArray seed) {
+		return new CounterModeRandomByteSequence(HashMethod.DEFAULT, seed);
 	}
 
-	public static PseudoRandomGeneratorCounterMode getInstance(HashMethod hashMethod, Element seed) {
+	public static CounterModeRandomByteSequence getInstance(HashMethod hashMethod, ByteArray seed) {
 		if (seed == null) {
 			throw new IllegalArgumentException();
 		}
 		if (hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PseudoRandomGeneratorCounterMode(hashMethod, seed);
+		return new CounterModeRandomByteSequence(hashMethod, seed);
 	}
 
 }

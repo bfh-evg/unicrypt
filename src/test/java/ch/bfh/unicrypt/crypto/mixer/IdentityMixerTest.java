@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.mixer;
 
 import ch.bfh.unicrypt.crypto.mixer.classes.IdentityMixer;
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomGeneratorCounterMode;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -69,10 +69,12 @@ public class IdentityMixerTest {
 		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
 
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
-		Tuple shuffledMessges = mixer.shuffle(messages, PseudoRandomGeneratorCounterMode.getInstance(PseudoRandomGeneratorCounterMode.DEFAULT_SEED));
+		Tuple shuffledMessges = mixer.shuffle(messages, ReferenceRandomByteSequence.getInstance());
 
 		// Verify shuffle function
-		Element r = G_q.getZModOrder().getElement(52);
+		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		PermutationGroup.getInstance(size).getRandomElement(rrs);
+		Element r = G_q.getZModOrder().getRandomElement(rrs);
 		Element[] shuffledMessages2 = new Element[size];
 		for (int i = 0; i < size; i++) {
 			boolean contains = false;

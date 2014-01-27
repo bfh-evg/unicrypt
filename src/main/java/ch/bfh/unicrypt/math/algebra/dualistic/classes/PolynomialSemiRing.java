@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -102,13 +102,13 @@ public class PolynomialSemiRing
 		return this.getRandomElement(degree, null);
 	}
 
-	public PolynomialElement getRandomElement(int degree, RandomNumberGenerator randomGenerator) {
+	public PolynomialElement getRandomElement(int degree, RandomByteSequence randomByteSequence) {
 		if (degree < 0) {
 			throw new IllegalArgumentException();
 		}
 		Map<Integer, DualisticElement> coefficientMap = new HashMap<Integer, DualisticElement>();
 		for (int i = 0; i <= degree; i++) {
-			DualisticElement coefficient = this.getSemiRing().getRandomElement(randomGenerator);
+			DualisticElement coefficient = this.getSemiRing().getRandomElement(randomByteSequence);
 			if (!coefficient.isZero()) {
 				coefficientMap.put(i, coefficient);
 			}
@@ -167,7 +167,7 @@ public class PolynomialSemiRing
 	}
 
 	@Override
-	protected PolynomialElement abstractGetRandomElement(RandomNumberGenerator randomGenerator) {
+	protected PolynomialElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException("Not possible for infinite order.");
 	}
 

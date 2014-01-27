@@ -41,9 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomReferenceString;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomReferenceString;
+import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -100,15 +99,15 @@ public class PermutationCommitmentScheme
 	}
 
 	public static PermutationCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size) {
-		return PermutationCommitmentScheme.getInstance(cyclicGroup, size, (RandomReferenceString) null);
+		return PermutationCommitmentScheme.getInstance(cyclicGroup, size, (ReferenceRandomByteSequence) null);
 	}
 
-	public static PermutationCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size, RandomReferenceString randomReferenceString) {
-		if (randomReferenceString == null) {
-			randomReferenceString = PseudoRandomReferenceString.getInstance();
+	public static PermutationCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size, ReferenceRandomByteSequence referenceRandomByteSequence) {
+		if (referenceRandomByteSequence == null) {
+			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		}
-		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, randomReferenceString);
-		Element[] messageGenerators = cyclicGroup.getIndependentGenerators(1, size, randomReferenceString);
+		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, referenceRandomByteSequence);
+		Element[] messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
 		return new PermutationCommitmentScheme(cyclicGroup, randomizationGenerator, messageGenerators);
 	}
 
@@ -128,7 +127,7 @@ public class PermutationCommitmentScheme
 		}
 
 		@Override
-		protected Tuple abstractApply(Pair element, RandomNumberGenerator randomGenerator) {
+		protected Tuple abstractApply(Pair element, RandomByteSequence randomByteSequence) {
 			final Permutation permutation = ((PermutationElement) element.getFirst()).getValue().invert();
 			final Tuple randomizations = (Tuple) element.getSecond();
 			Element[] ret = new Element[this.messageGenerators.length];

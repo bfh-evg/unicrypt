@@ -39,20 +39,21 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.random.interfaces;
+package ch.bfh.unicrypt.crypto.random.distributionsampler.interfaces;
+
+import ch.bfh.unicrypt.math.helper.ByteArray;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public interface DistributionSampler {
+public interface DistributionSampler
+	   extends Runnable {
 
-	/**
-	 * Shall return a random looking amount of bytes
-	 * <p>
-	 * @param amountOfBytes
-	 * @return byte[] containing the desired amount of 'random' bytes.
-	 */
-	public byte[] getDistributionSample(int amountOfBytes);
+	public boolean isCollecting();
+
+	public void setCollectionStatus(boolean isCollecting);
+
+	public ByteArray getDistributionSample(int amountOfBytes);
 
 }
