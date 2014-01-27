@@ -44,8 +44,8 @@ package ch.bfh.unicrypt.math.function.abstracts;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
-import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import java.util.Iterator;
 
 /**
@@ -62,50 +62,36 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	   extends AbstractFunction<D, DE, C, CE>
 	   implements Compound<CF, Function>, Iterable<Function> {
 
-	private final Function[] functions;
-	private final int arity;
+	private final ImmutableArray<Function> functions;
 
-	protected AbstractCompoundFunction(D domain, C coDomain, Function[] functions) {
+	protected AbstractCompoundFunction(D domain, C coDomain, ImmutableArray<Function> functions) {
 		super(domain, coDomain);
-		this.functions = functions.clone();
-		this.arity = functions.length;
-	}
-
-	protected AbstractCompoundFunction(D domain, C coDomain, Function function, int arity) {
-		super(domain, coDomain);
-		this.functions = new Function[]{function};
-		this.arity = arity;
+		this.functions = functions;
 	}
 
 	@Override
 	public int getArity() {
-		return this.arity;
+		return this.functions.getLength();
 	}
 
 	@Override
 	public final boolean isNull() {
-		return this.arity == 0;
+		return this.functions.isEmpty();
 	}
 
 	@Override
 	public final boolean isUniform() {
-		return this.functions.length <= 1;
+		return this.functions.isUniform();
 	}
 
 	@Override
 	public Function getFirst() {
-		return this.getAt(0);
+		return this.functions.getFirst();
 	}
 
 	@Override
 	public Function getAt(int index) {
-		if (index < 0 || index >= this.arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (this.isUniform()) {
-			return this.functions[0];
-		}
-		return this.functions[index];
+		return this.functions.getAt(index);
 	}
 
 	@Override
@@ -126,54 +112,27 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 
 	@Override
 	public Function[] getAll() {
-		return this.functions.clone();
+		return this.functions.getAll();
 	}
 
 	@Override
 	public CF removeAt(final int index) {
-		if (index < 0 || index >= this.arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		final Function[] remaining = new Function[this.arity - 1];
-		for (int i = 0; i < this.arity - 1; i++) {
-			if (i < index) {
-				remaining[i] = this.getAt(i);
-			} else {
-				remaining[i] = this.getAt(i + 1);
-			}
-		}
-		return this.abstractGetInstance(remaining);
+		return this.abstractGetInstance(this.functions.removeAt(index));
 	}
 
 	@Override
 	public CF insertAt(int index, Function function) {
-		if (index < 0 || index > this.arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (function == null) {
-			throw new IllegalArgumentException();
-		}
-		Function[] newFunctions = new Function[this.arity + 1];
-		for (int i = 0; i < this.arity + 1; i++) {
-			if (i < index) {
-				newFunctions[i] = this.getAt(i);
-			} else if (i == index) {
-				newFunctions[i] = function;
-			} else {
-				newFunctions[i] = this.getAt(i - 1);
-			}
-		}
-		return this.abstractGetInstance(newFunctions);
+		return this.abstractGetInstance(this.functions.insertAt(index, function));
 	}
 
 	@Override
 	public CF add(Function function) {
-		return this.insertAt(this.getArity(), function);
+		return this.abstractGetInstance(this.functions.add(function));
 	}
 
 	@Override
 	public Iterator<Function> iterator() {
-		return new CompoundIterator<Function>(this);
+		return this.functions.iterator();
 	}
 
 	@Override
@@ -184,10 +143,10 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	@Override
 	protected boolean standardIsEquivalent(Function function) {
 		AbstractCompoundFunction<CF, D, DE, C, CE> other = (AbstractCompoundFunction<CF, D, DE, C, CE>) function;
-		if (this.arity != other.arity) {
+		if (this.getArity() != other.getArity()) {
 			return false;
 		}
-		for (int i = 0; i < this.arity; i++) {
+		for (int i = 0; i < this.getArity(); i++) {
 			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
 				return false;
 			}
@@ -195,6 +154,6 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 		return true;
 	}
 
-	protected abstract CF abstractGetInstance(Function[] functions);
+	protected abstract CF abstractGetInstance(ImmutableArray<Function> functions);
 
 }

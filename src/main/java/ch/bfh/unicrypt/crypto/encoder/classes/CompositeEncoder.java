@@ -49,7 +49,6 @@ import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
-import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import java.util.Iterator;
 
 public class CompositeEncoder
@@ -74,9 +73,6 @@ public class CompositeEncoder
 
 	@Override
 	public Encoder getAt(int index) {
-		if (index < 0 || index >= this.getArity()) {
-			throw new IndexOutOfBoundsException();
-		}
 		return this.encoders.getAt(index);
 	}
 
@@ -98,66 +94,37 @@ public class CompositeEncoder
 
 	@Override
 	public Encoder getFirst() {
-		return this.getAt(0);
+		return this.encoders.getFirst();
 	}
 
 	@Override
 	public boolean isNull() {
-		return this.getArity() == 0;
+		return this.encoders.isEmpty();
 	}
 
 	@Override
 	public boolean isUniform() {
-		return this.getArity() <= 1;
+		return this.encoders.isUniform();
 	}
 
 	@Override
 	public CompositeEncoder removeAt(int index) {
-		int arity = this.getArity();
-		if (index < 0 || index >= arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		final Encoder[] remaining = new Encoder[arity - 1];
-		for (int i = 0; i < arity - 1; i++) {
-			if (i < index) {
-				remaining[i] = this.getAt(i);
-			} else {
-				remaining[i] = this.getAt(i + 1);
-			}
-		}
-		return CompositeEncoder.getInstance(remaining);
+		return new CompositeEncoder(this.encoders.removeAt(index));
 	}
 
 	@Override
 	public CompositeEncoder insertAt(int index, Encoder encoder) {
-		int arity = this.getArity();
-		if (index < 0 || index > arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (encoder == null) {
-			throw new IllegalArgumentException();
-		}
-		Encoder[] newEncoders = new Encoder[arity + 1];
-		for (int i = 0; i < arity + 1; i++) {
-			if (i < index) {
-				newEncoders[i] = this.getAt(i);
-			} else if (i == index) {
-				newEncoders[i] = encoder;
-			} else {
-				newEncoders[i] = this.getAt(i - 1);
-			}
-		}
-		return CompositeEncoder.getInstance(newEncoders);
+		return new CompositeEncoder(this.encoders.insertAt(index, encoder));
 	}
 
 	@Override
 	public CompositeEncoder add(Encoder encoder) {
-		return this.insertAt(this.getArity(), encoder);
+		return new CompositeEncoder(this.encoders.add(encoder));
 	}
 
 	@Override
 	public Iterator<Encoder> iterator() {
-		return new CompoundIterator<Encoder>(this);
+		return this.encoders.iterator();
 	}
 
 	@Override
@@ -180,16 +147,19 @@ public class CompositeEncoder
 		return CompositeFunction.getInstance(decodingFunctions);
 	}
 
-	public static CompositeEncoder getInstance(Encoder... encoders) {
-		if (encoders == null || encoders.length == 0) {
+	public static CompositeEncoder getInstance(ImmutableArray<Encoder> encoders) {
+		if (encoders == null || encoders.getLength() == 0) {
 			throw new IllegalArgumentException();
 		}
-		for (Encoder encoder : encoders) {
-			if (encoder == null) {
-				throw new IllegalArgumentException();
-			}
-		}
-		return new CompositeEncoder(ImmutableArray.getInstance(encoders));
+		return new CompositeEncoder(encoders);
+	}
+
+	public static CompositeEncoder getInstance(Encoder... encoders) {
+		return CompositeEncoder.getInstance(ImmutableArray.getInstance(encoders));
+	}
+
+	public static CompositeEncoder getInstance(Encoder encoder, int arity) {
+		return CompositeEncoder.getInstance(ImmutableArray.getInstance(encoder, arity));
 	}
 
 }

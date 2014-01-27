@@ -180,10 +180,10 @@ public class ProductSet
 
 	@Override
 	protected Tuple abstractGetElement(ImmutableArray<Element> value) {
-		if (value.getLength() == 2) {
+		if (this.arity == 2) {
 			return new Pair(this, value);
 		}
-		if (value.getLength() == 3) {
+		if (this.arity == 3) {
 			return new Triple(this, value);
 		}
 		return new Tuple(this, value);

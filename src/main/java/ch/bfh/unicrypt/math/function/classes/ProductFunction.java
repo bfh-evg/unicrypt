@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.ImmutableArray;
 
 /**
  * This class represents the concept of a product function f:(X_1x...xX_n)->(Y_1x...xY_n). It consists of multiple
@@ -71,21 +72,8 @@ public final class ProductFunction
 	 * @param functions
 	 * @throws IllegalArgumentException if {@literal functions} is null or contains null
 	 */
-	protected ProductFunction(final ProductSet domain, ProductSet coDomain, Function... functions) {
+	protected ProductFunction(final ProductSet domain, ProductSet coDomain, ImmutableArray<Function> functions) {
 		super(domain, coDomain, functions);
-	}
-
-	/**
-	 * This is the general constructor of this class. The first parameter specifies the function to be applied multiple
-	 * times in parallel, and the second parameter defines the number of times it is applied in parallel.
-	 * <p>
-	 * @param function The given function
-	 * @param arity    The number of times the function is applied in parallel
-	 * @throws IllegalArgumentException if {@literal function} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
-	 */
-	protected ProductFunction(ProductSet domain, ProductSet coDomain, Function function, int arity) {
-		super(domain, coDomain, function, arity);
 	}
 
 	//
@@ -102,66 +90,40 @@ public final class ProductFunction
 	}
 
 	@Override
-	protected ProductFunction abstractGetInstance(Function[] functions) {
+	protected ProductFunction abstractGetInstance(ImmutableArray<Function> functions) {
 		return ProductFunction.getInstance(functions);
 	}
 
 	//
 	// STATIC FACTORY METHODS
 	//
-	/**
-	 * This is the general constructor of this class. It takes a list of functions as input and produces the
-	 * corresponding product function.
-	 * <p>
-	 * @param functions
-	 * @return
-	 * @throws IllegalArgumentException if {@literal functions} is null or contains null
-	 */
-	public static ProductFunction getInstance(final Function... functions) {
-		if (functions == null) {
+	public static ProductFunction getInstance(ImmutableArray<Function> functions) {
+		if (functions == null || functions.getLength() == 0) {
 			throw new IllegalArgumentException();
 		}
-		int arity = functions.length;
-		final Set[] domains = new Set[arity];
-		final Set[] coDomains = new Set[arity];
-		if (functions.length > 0) {
-			boolean uniform = true;
-			Function first = functions[0];
-			for (int i = 0; i < arity; i++) {
-				if (functions[i] == null) {
-					throw new IllegalArgumentException();
-				}
-				domains[i] = functions[i].getDomain();
-				coDomains[i] = functions[i].getCoDomain();
-				if (!functions[i].isEquivalent(first)) {
-					uniform = false;
-				}
+		ProductSet domain, coDomain;
+		if (functions.isUniform()) {
+			domain = ProductSet.getInstance(functions.getFirst().getDomain(), functions.getLength());
+			coDomain = ProductSet.getInstance(functions.getFirst().getCoDomain(), functions.getLength());
+		} else {
+			Set[] domains = new Set[functions.getLength()];
+			Set[] coDomains = new Set[functions.getLength()];
+			for (int i = 0; i < functions.getLength(); i++) {
+				domains[i] = functions.getAt(i).getDomain();
+				coDomains[i] = functions.getAt(i).getCoDomain();
 			}
-			if (uniform) {
-				return ProductFunction.getInstance(first, arity);
-			}
+			domain = ProductSet.getInstance(domains);
+			coDomain = ProductSet.getInstance(coDomains);
 		}
-		return new ProductFunction(ProductSet.getInstance(domains), ProductSet.getInstance(coDomains), functions);
+		return new ProductFunction(domain, coDomain, functions);
 	}
 
-	/**
-	 * This is the general constructor of this class. The first parameter specifies the function to be applied multiple
-	 * times in parallel, and the second parameter defines the number of times it is applied in parallel.
-	 * <p>
-	 * @param function The given function
-	 * @param arity    The number of times the function is applied in parallel
-	 * @return
-	 * @throws IllegalArgumentException if {@literal function} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
-	 */
+	public static ProductFunction getInstance(final Function... functions) {
+		return ProductFunction.getInstance(ImmutableArray.getInstance(functions));
+	}
+
 	public static ProductFunction getInstance(final Function function, final int arity) {
-		if (function == null || arity < 0) {
-			throw new IllegalArgumentException();
-		}
-		if (arity == 0) {
-			return new ProductFunction(ProductSet.getInstance(), ProductSet.getInstance());
-		}
-		return new ProductFunction(ProductSet.getInstance(function.getDomain(), arity), ProductSet.getInstance(function.getCoDomain(), arity), function, arity);
+		return ProductFunction.getInstance(ImmutableArray.getInstance(function, arity));
 	}
 
 }

@@ -60,42 +60,32 @@ public class Tuple
 	   extends AbstractElement<ProductSet, Tuple, ImmutableArray<Element>>
 	   implements Compound<Tuple, Element>, Iterable<Element> {
 
-	private final int arity;
-
-	protected Tuple(final ProductSet set, final ImmutableArray elements) {
+	protected Tuple(final ProductSet set, final ImmutableArray<Element> elements) {
 		super(set, elements);
-		this.arity = elements.getLength();
 	}
 
 	@Override
 	public int getArity() {
-		return this.arity;
+		return this.getValue().getLength();
 	}
 
 	@Override
 	public final boolean isNull() {
-		return this.arity == 0;
+		return this.getValue().isEmpty();
 	}
 
 	@Override
 	public final boolean isUniform() {
-		return this.arity <= 1;
+		return this.getValue().isUniform();
 	}
 
 	@Override
 	public Element getFirst() {
-		return this.getAt(0);
-
+		return this.getValue().getFirst();
 	}
 
 	@Override
 	public Element getAt(int index) {
-		if (index < 0 || index >= this.arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (this.isUniform()) {
-			return this.getValue().getAt(0);
-		}
 		return this.getValue().getAt(index);
 	}
 
@@ -122,44 +112,18 @@ public class Tuple
 
 	@Override
 	public Tuple removeAt(final int index) {
-		if (index < 0 || index >= this.arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		final Element[] remainingElements = new Element[this.arity - 1];
-		for (int i = 0; i < this.arity - 1; i++) {
-			if (i < index) {
-				remainingElements[i] = this.getAt(i);
-			} else {
-				remainingElements[i] = this.getAt(i + 1);
-			}
-		}
-		return this.getSet().removeAt(index).getElement(remainingElements);
+		return Tuple.getInstance(this.getSet().removeAt(index), this.getValue().removeAt(index));
 	}
 
 	@Override
 	public Tuple insertAt(int index, Element element) {
-		if (index < 0 || index > this.arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (element == null) {
-			throw new IllegalArgumentException();
-		}
-		Element[] newElements = new Element[this.arity + 1];
-		for (int i = 0; i < this.arity + 1; i++) {
-			if (i < index) {
-				newElements[i] = this.getAt(i);
-			} else if (i == index) {
-				newElements[i] = element;
-			} else {
-				newElements[i] = this.getAt(i - 1);
-			}
-		}
-		return this.getSet().insertAt(index, element.getSet()).getElement(newElements);
+		return Tuple.getInstance(this.getSet().insertAt(index, element.getSet()), this.getValue().insertAt(index, element));
+
 	}
 
 	@Override
-	public Tuple add(Element object) {
-		return this.insertAt(this.arity, object);
+	public Tuple add(Element element) {
+		return this.insertAt(this.getArity(), element);
 	}
 
 	@Override
@@ -169,7 +133,7 @@ public class Tuple
 
 	@Override
 	protected BigInteger abstractGetBigInteger() {
-		BigInteger[] values = new BigInteger[this.arity];
+		BigInteger[] values = new BigInteger[this.getArity()];
 		int i = 0;
 		for (Element element : this) {
 			values[i] = element.getBigInteger();
@@ -180,8 +144,8 @@ public class Tuple
 
 	@Override
 	protected ByteTree abstractGetByteTree() {
-		ByteTree[] byteTrees = new ByteTree[this.arity];
-		for (int i = 0; i < this.arity; i++) {
+		ByteTree[] byteTrees = new ByteTree[this.getArity()];
+		for (int i = 0; i < this.getArity(); i++) {
 			byteTrees[i] = this.getValue().getAt(i).getByteTree();
 		}
 		return ByteTree.getInstance(byteTrees);
@@ -207,20 +171,40 @@ public class Tuple
 	 * @return The corresponding tuple element
 	 * @throws IllegalArgumentException if {@literal elements} is null or contains null
 	 */
-	public static Tuple getInstance(Element... elements) {
-		if (elements == null) {
+	public static Tuple getInstance(ImmutableArray<Element> elements) {
+		if (elements == null || elements.getLength() < 0) {
 			throw new IllegalArgumentException();
 		}
-		int arity = elements.length;
-		final Set[] sets = new Set[arity];
-
-		for (int i = 0; i < arity; i++) {
-			if (elements[i] == null) {
-				throw new IllegalArgumentException();
+		ProductSet productSet;
+		if (elements.isUniform() && !elements.isEmpty()) {
+			productSet = ProductSet.getInstance(elements.getFirst().getSet(), elements.getLength());
+		} else {
+			Set[] sets = new Set[elements.getLength()];
+			for (int i = 0; i < elements.getLength(); i++) {
+				sets[i] = elements.getAt(i).getSet();
 			}
-			sets[i] = elements[i].getSet();
+			productSet = ProductSet.getInstance(sets);
 		}
-		return ProductSet.getInstance(sets).getElement(elements);
+		return Tuple.getInstance(productSet, elements);
+	}
+
+	public static Tuple getInstance(Element... elements) {
+		return Tuple.getInstance(ImmutableArray.getInstance(elements));
+	}
+
+	public static Tuple getInstance(Element element, int arity) {
+		return Tuple.getInstance(ImmutableArray.getInstance(element, arity));
+	}
+
+	// helper method to distinguish between pairs, triples and tuples
+	private static Tuple getInstance(ProductSet productSet, ImmutableArray<Element> elements) {
+		if (elements.getLength() == 2) {
+			return new Pair(productSet, elements);
+		}
+		if (elements.getLength() == 3) {
+			return new Triple(productSet, elements);
+		}
+		return new Tuple(productSet, elements);
 	}
 
 }

@@ -42,11 +42,11 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomNumberGenerator;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.ImmutableArray;
 
 /**
  * This class represents the concept of a composite function f:X_1->Y_n. It consists of multiple internal functions
@@ -61,12 +61,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 public final class CompositeFunction
 	   extends AbstractCompoundFunction<CompositeFunction, Set, Element, Set, Element> {
 
-	private CompositeFunction(final Set domain, final Set coDomain, final Function[] functions) {
+	private CompositeFunction(Set domain, Set coDomain, final ImmutableArray<Function> functions) {
 		super(domain, coDomain, functions);
-	}
-
-	protected CompositeFunction(Set domain, Set coDomain, Function function, int arity) {
-		super(domain, coDomain, function, arity);
 	}
 
 	@Override
@@ -79,7 +75,7 @@ public final class CompositeFunction
 	}
 
 	@Override
-	protected CompositeFunction abstractGetInstance(Function[] functions) {
+	protected CompositeFunction abstractGetInstance(ImmutableArray<Function> functions) {
 		return CompositeFunction.getInstance(functions);
 	}
 
@@ -93,26 +89,31 @@ public final class CompositeFunction
 	 * @throws IllegalArgumentException if the domain of a function is different from the co-domain of the previous
 	 *                                  function
 	 */
-	public static CompositeFunction getInstance(final Function... functions) {
-		if (functions == null || functions.length < 1 || functions[0] == null) {
+	public static CompositeFunction getInstance(final ImmutableArray<Function> functions) {
+		if (functions == null || functions.getLength() == 0) {
 			throw new IllegalArgumentException();
 		}
-		for (int i = 1; i < functions.length; i++) {
-			if (functions[i] == null || !(functions[i - 1].getCoDomain().isEquivalent(functions[i].getDomain()))) {
+		int arity = functions.getLength();
+		if (functions.isUniform()) {
+			if (arity > 1 && !functions.getFirst().getDomain().isEquivalent(functions.getFirst().getCoDomain())) {
 				throw new IllegalArgumentException();
 			}
+		} else {
+			for (int i = 1; i < arity; i++) {
+				if (!(functions.getAt(i - 1).getCoDomain().isEquivalent(functions.getAt(i).getDomain()))) {
+					throw new IllegalArgumentException();
+				}
+			}
 		}
-		return new CompositeFunction(functions[0].getDomain(), functions[functions.length - 1].getCoDomain(), functions);
+		return new CompositeFunction(functions.getFirst().getDomain(), functions.getLast().getCoDomain(), functions);
+	}
+
+	public static CompositeFunction getInstance(final Function... functions) {
+		return CompositeFunction.getInstance(ImmutableArray.getInstance(functions));
 	}
 
 	public static CompositeFunction getInstance(final Function function, final int arity) {
-		if (function == null || arity < 0) {
-			throw new IllegalArgumentException();
-		}
-		if (arity > 1 && !function.getDomain().isEquivalent(function.getCoDomain())) {
-			throw new IllegalArgumentException();
-		}
-		return new CompositeFunction(ProductSet.getInstance(function.getDomain(), arity), ProductSet.getInstance(function.getCoDomain(), arity), function, arity);
+		return CompositeFunction.getInstance(ImmutableArray.getInstance(function, arity));
 	}
 
 }
