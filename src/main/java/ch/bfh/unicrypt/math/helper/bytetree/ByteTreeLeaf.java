@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.helper.bytetree;
 
 import ch.bfh.unicrypt.math.helper.ByteArray;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 
 /**
@@ -49,7 +50,8 @@ import java.nio.ByteBuffer;
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
 public class ByteTreeLeaf
-	   extends ByteTree {
+	   extends ByteTree
+	   implements Serializable {
 
 	public static final byte IDENTIFIER = 1;
 	private final byte[] bytes;

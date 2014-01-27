@@ -166,6 +166,7 @@ public class CompleteShuffleExample {
 		System.out.println("Complete ElGamal Shuffle Example:");
 		CompleteShuffleExample.completetElGamalShuffleExample();
 		System.out.println("Done.");
+		System.exit(0);
 	}
 
 }

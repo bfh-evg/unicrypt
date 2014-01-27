@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.helper.bytetree;
 
 import ch.bfh.unicrypt.math.helper.ByteArray;
+import java.io.Serializable;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
@@ -80,7 +81,8 @@ import java.nio.ByteBuffer;
  * <p>
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public abstract class ByteTree {
+public abstract class ByteTree
+	   implements Serializable {
 
 	public final static int BYTES_USED_FOR_IDENTIFIER = Byte.SIZE / 8;
 	public final static int BYTES_USED_FOR_AMOUNT = Integer.SIZE / 8;

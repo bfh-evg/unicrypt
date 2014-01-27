@@ -60,9 +60,7 @@ public class HybridRandomByteSequence
 	   extends OutputFeedbackRandomByteSequence
 	   implements TrueRandomByteSequence {
 
-	//It would be better if 'DEFAULT' would not be accessible... instead 'getInstance'.
-	//This way, DEFAULT can be instanciated lazy....
-	public static final HybridRandomByteSequence DEFAULT = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, HashMethod.DEFAULT.getLength() / 2, HashMethod.DEFAULT.getLength());
+	private static HybridRandomByteSequence DEFAULT;
 	private final DistributionSamplerCollector distributionSampler;
 	private final int securityParameterInBytes;
 
@@ -107,6 +105,9 @@ public class HybridRandomByteSequence
 	 * @return
 	 */
 	public static HybridRandomByteSequence getInstance() {
+		if (DEFAULT == null) {
+			DEFAULT = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, HashMethod.DEFAULT.getLength() / 2, HashMethod.DEFAULT.getLength());
+		}
 		return DEFAULT;
 	}
 
