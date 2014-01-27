@@ -201,7 +201,7 @@ public class ByteArray
 	public ByteArray not() {
 		byte[] result = new byte[this.length];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = (byte) (~this.getAt(i) & ALL_ONE);
+			result[i] = (byte) (~this.getAt(i) & 0xff);
 		}
 		return new ByteArray(result);
 	}
@@ -222,7 +222,7 @@ public class ByteArray
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.length; i++) {
-			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.getAt(i) & ALL_ONE));
+			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.getAt(i) & 0xff));
 			delimiter = "|";
 		}
 		return "\"" + str + "\"";
