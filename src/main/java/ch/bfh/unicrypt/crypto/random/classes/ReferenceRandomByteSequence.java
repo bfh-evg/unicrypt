@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -51,7 +52,8 @@ import java.util.HashMap;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ReferenceRandomByteSequence
-	   extends CounterModeRandomByteSequence {
+	   extends CounterModeRandomByteSequence
+	   implements Serializable {
 
 	/**
 	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE ReferenceRandomByteSequence. It uses the default
@@ -60,7 +62,7 @@ public class ReferenceRandomByteSequence
 	 */
 	public static final ReferenceRandomByteSequence DEFAULT = ReferenceRandomByteSequence.getInstance(HashMethod.DEFAULT, CounterModeRandomByteSequence.DEFAULT_SEED);
 
-	private HashMap<Integer, byte[]> randomByteBufferMap;
+	private transient HashMap<Integer, byte[]> randomByteBufferMap;
 	private int javaHashValue;
 
 	public ReferenceRandomByteSequence(HashMethod hashMethod, ByteArray seed) {

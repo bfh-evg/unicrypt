@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.PseudoRandomByteSequence;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
+import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
@@ -63,7 +64,7 @@ import java.math.BigInteger;
  */
 public class CounterModeRandomByteSequence
 	   extends AbstractRandomByteSequence
-	   implements PseudoRandomByteSequence {
+	   implements PseudoRandomByteSequence, Serializable {
 
 	public static final ByteArray DEFAULT_SEED = ByteArray.getInstance();
 	/**
