@@ -83,7 +83,7 @@ public class OutputFeedbackRandomByteSequence
 	 */
 	protected void update(ByteArray freshData) {
 		if (freshData != null) {
-			internalState.xor(freshData);
+			internalState.xorFillZero(freshData);
 		}
 		internalState = internalState.getHash(hashMethod);
 	}

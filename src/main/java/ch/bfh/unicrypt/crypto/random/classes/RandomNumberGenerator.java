@@ -47,8 +47,6 @@ import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
 /**
- * TODO: Rename this to RandomByteSequence
- * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 1.0
