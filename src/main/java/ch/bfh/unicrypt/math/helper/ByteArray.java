@@ -92,8 +92,8 @@ public class ByteArray
 		if (offset < 0 || length < 0 || offset + length > this.length) {
 			throw new IllegalArgumentException();
 		}
-		//return new ByteArray(this.bytes, this.offset + offset, length);
-		return new ByteArray(Arrays.copyOfRange(bytes, this.offset + offset, length));
+		return new ByteArray(this.bytes, this.offset + offset, length);
+		//return new ByteArray(Arrays.copyOfRange(bytes, this.offset + offset, length));
 	}
 
 	public ByteArray[] split(int... indices) {

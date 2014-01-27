@@ -310,7 +310,7 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 		if (!this.set.isEquivalent(other.getSet())) {
 			return false;
 		}
-		return this.value.equals(other.getValue());
+		return this.getBigInteger().equals(other.getBigInteger());
 	}
 
 	protected abstract BigInteger abstractGetBigInteger();
