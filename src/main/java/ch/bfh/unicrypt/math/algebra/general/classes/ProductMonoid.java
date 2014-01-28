@@ -118,7 +118,7 @@ public class ProductMonoid
 
 	@Override
 	public boolean isIdentityElement(Element element) {
-		return this.areEqual(element, this.getIdentityElement());
+		return this.areEquivalent(element, this.getIdentityElement());
 	}
 
 	@Override

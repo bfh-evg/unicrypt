@@ -125,15 +125,15 @@ public class SubsetTest {
 //	}
 //
 //	/**
-//	 * Test of standardIsEquivalent method, of class Subset.
+//	 * Test of abstractIsEquivalent method, of class Subset.
 //	 */
 //	@Test
 //	public void testStandardIsEqual() {
-//		System.out.println("standardIsEquivalent");
+//		System.out.println("abstractIsEquivalent");
 //		Set set = null;
 //		Subset instance = null;
 //		boolean expResult = false;
-//		boolean result = instance.standardIsEquivalent(set);
+//		boolean result = instance.abstractIsEquivalent(set);
 //		assertEquals(expResult, result);
 //		// TODO review the generated test code and remove the default call to fail.
 //		fail("The test case is a prototype.");

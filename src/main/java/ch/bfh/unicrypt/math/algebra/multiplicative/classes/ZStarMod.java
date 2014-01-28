@@ -137,17 +137,6 @@ public class ZStarMod
 	}
 
 	@Override
-	public boolean standardIsEquivalent(final Set set) {
-		final ZStarMod zStarMod = (ZStarMod) set;
-		return this.getModulus().equals(zStarMod.getModulus());
-	}
-
-	@Override
-	protected boolean standardIsCompatible(Set set) {
-		return (set instanceof ZStarMod);
-	}
-
-	@Override
 	public String standardToStringContent() {
 		return this.getModulus().toString();
 	}
@@ -199,6 +188,19 @@ public class ZStarMod
 	@Override
 	public ZStarModElement abstractInvert(final ZStarModElement element) {
 		return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
+	}
+
+	@Override
+	protected boolean abstractIsEquivalent(final Set set) {
+		final ZStarMod zStarMod = (ZStarMod) set;
+		return this.getModulus().equals(zStarMod.getModulus());
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.getModulus().hashCode();
+		return hash;
 	}
 
 	//

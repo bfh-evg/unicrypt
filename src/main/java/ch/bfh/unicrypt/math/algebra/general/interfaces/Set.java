@@ -320,16 +320,7 @@ public interface Set {
 	 * @return {@code true} if the elements are equal and belong to the group
 	 * @throws IllegalArgumentException if {@literal element1} or {@literal element2} is null
 	 */
-	public boolean areEqual(Element element1, Element element2);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param set
-	 * @return {@literal true}
-	 * @throws IllegalArgumentException if {@literal set} is null
-	 */
-	public boolean isCompatible(Set set);
+	public boolean areEquivalent(Element element1, Element element2);
 
 	/**
 	 * TODO

@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Point;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -192,6 +193,63 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 		} else {
 			return this.getRandomElementWithoutGenerator(randomByteSequence);
 		}
+	}
+
+	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		AbstractEC<E, F, D> other = (AbstractEC<E, F, D>) set;
+		if (!this.finiteField.isEquivalent(other.finiteField)) {
+			return false;
+		}
+		if (!this.a.isEquivalent(other.a)) {
+			return false;
+		}
+		if (!this.b.isEquivalent(other.b)) {
+			return false;
+		}
+		if (!this.givenOrder.equals(other.givenOrder)) {
+			return false;
+		}
+		if (!this.coFactor.equals(other.coFactor)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.finiteField.hashCode();
+		hash = 47 * hash + this.a.hashCode();
+		hash = 47 * hash + this.b.hashCode();
+		hash = 47 * hash + this.givenOrder.hashCode();
+		hash = 47 * hash + this.coFactor.hashCode();
+		hash = 47 * hash + this.givenGenerator.hashCode();
+		return hash;
+	}
+
+	@Override
+	protected boolean standardEquals(Set set) {
+		AbstractEC<E, F, D> other = (AbstractEC<E, F, D>) set;
+		if (!this.finiteField.isEquivalent(other.finiteField)) {
+			return false;
+		}
+		if (!this.a.equals(other.a)) {
+			return false;
+		}
+		if (!this.b.equals(other.b)) {
+			return false;
+		}
+		if (!this.givenOrder.equals(other.givenOrder)) {
+			return false;
+		}
+		if (!this.coFactor.equals(other.coFactor)) {
+			return false;
+		}
+		if (!this.givenGenerator.equals(other.givenGenerator)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

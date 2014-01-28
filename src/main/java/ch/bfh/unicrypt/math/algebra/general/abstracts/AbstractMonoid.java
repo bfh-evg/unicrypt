@@ -76,7 +76,7 @@ public abstract class AbstractMonoid<E extends Element, V extends Object>
 
 	@Override
 	public final boolean isIdentityElement(final Element element) {
-		return this.areEqual(element, this.getIdentityElement());
+		return this.areEquivalent(element, this.getIdentityElement());
 	}
 
 	//

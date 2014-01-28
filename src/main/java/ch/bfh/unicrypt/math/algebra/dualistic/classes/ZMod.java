@@ -95,17 +95,6 @@ public class ZMod
 	}
 
 	@Override
-	public boolean standardIsEquivalent(final Set set) {
-		final ZMod zPlusTimesMod = (ZMod) set;
-		return this.getModulus().equals(zPlusTimesMod.getModulus());
-	}
-
-	@Override
-	protected boolean standardIsCompatible(Set set) {
-		return (set instanceof ZMod);
-	}
-
-	@Override
 	public String standardToStringContent() {
 		return this.getModulus().toString();
 	}
@@ -174,6 +163,20 @@ public class ZMod
 		}
 		return MathUtil.areRelativelyPrime(element.getValue(), this.getModulus());
 	}
+
+	@Override
+	public boolean abstractIsEquivalent(final Set set) {
+		final ZMod zMod = (ZMod) set;
+		return this.getModulus().equals(zMod.getModulus());
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.getModulus().hashCode();
+		return hash;
+	}
+
 	//
 	// STATIC FACTORY METHODS
 	//

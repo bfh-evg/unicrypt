@@ -308,7 +308,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final boolean areEqual(final Element element1, final Element element2) {
+	public final boolean areEquivalent(final Element element1, final Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
 			throw new IllegalArgumentException();
 		}
@@ -316,25 +316,46 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final boolean isCompatible(Set set) {
-		if (set == null) {
+	public final boolean isEquivalent(final Set other) {
+		if (other == null) {
 			throw new IllegalArgumentException();
 		}
-		return standardIsCompatible(set);
+		if (this == other) {
+			return true;
+		}
+		// Check if this.getClass() is a superclass of other.getClass()
+		if (this.getClass().isAssignableFrom(other.getClass())) {
+			return this.abstractIsEquivalent(other);
+		}
+		// Check if other.getClass() is a superclass of this.getClass()
+		if (other.getClass().isAssignableFrom(this.getClass())) {
+			return other.isEquivalent(this);
+		}
+		return false;
 	}
 
 	@Override
-	public final boolean isEquivalent(final Set set) {
-		if (set == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this == set) {
+	public int hashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.valueClass.hashCode();
+		hash = 47 * hash + this.getClass().hashCode();
+		hash = 47 * hash + this.abstractHashCode();
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (this == other) {
 			return true;
 		}
-		if (!this.isCompatible(set)) {
+		if (other == null || getClass() != other.getClass()) {
 			return false;
 		}
-		return this.standardIsEquivalent(set);
+		return this.standardEquals((Set) other);
+	}
+
+	protected boolean standardEquals(Set set) {
+		return this.abstractIsEquivalent(set);
 	}
 
 	@Override
@@ -364,14 +385,6 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	protected BigInteger standardGetMinimalOrder() {
 		return this.getOrderLowerBound();
-	}
-
-	protected boolean standardIsCompatible(Set set) {
-		return this.getClass() == set.getClass();
-	}
-
-	protected boolean standardIsEquivalent(Set set) {
-		return true;
 	}
 
 	protected boolean standardContains(final Element element) {
@@ -426,7 +439,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	protected abstract boolean abstractContains(BigInteger value);
 
-//	protected abstract boolean abstractContains(ByteTree byteTree);
+//	TODO: protected abstract boolean abstractContains(ByteTree byteTree);
 	protected boolean abstractContains(ByteTree byteTree) {
 		return true;
 	}
@@ -435,7 +448,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	protected abstract E abstractGetElement(BigInteger value);
 
-//	protected abstract E abstractGetElement(ByteTree byteTree);
+//	TODO: protected abstract E abstractGetElement(ByteTree byteTree);
 	protected E abstractGetElement(ByteTree byteTree) {
 		return null;
 	}
@@ -443,5 +456,9 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	protected abstract E abstractGetElement(V value);
 
 	protected abstract E abstractGetRandomElement(RandomByteSequence randomByteSequence);
+
+	protected abstract boolean abstractIsEquivalent(Set set);
+
+	protected abstract int abstractHashCode();
 
 }
