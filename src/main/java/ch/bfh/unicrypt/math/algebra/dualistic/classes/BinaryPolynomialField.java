@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractFiniteField;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.math.helper.polynomial.BinaryPolynomial;
 import java.math.BigInteger;
@@ -145,6 +146,16 @@ public class BinaryPolynomialField
 
 	@Override
 	protected BinaryPolynomialElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	protected int abstractHashCode() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

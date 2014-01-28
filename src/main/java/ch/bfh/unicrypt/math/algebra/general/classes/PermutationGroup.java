@@ -97,12 +97,6 @@ public class PermutationGroup
 	// various super-classes
 	//
 	@Override
-	public boolean standardIsEquivalent(final Set set) {
-		final PermutationGroup other = (PermutationGroup) set;
-		return this.getSize() == other.getSize();
-	}
-
-	@Override
 	public String standardToStringContent() {
 		return "" + this.getSize();
 	}
@@ -156,6 +150,19 @@ public class PermutationGroup
 	@Override
 	protected PermutationElement abstractGetIdentityElement() {
 		return this.abstractGetElement(Permutation.getInstance(this.getSize()));
+	}
+
+	@Override
+	public boolean abstractIsEquivalent(final Set set) {
+		final PermutationGroup other = (PermutationGroup) set;
+		return this.getSize() == other.getSize();
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.getSize();
+		return hash;
 	}
 
 	//

@@ -83,6 +83,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 
 	private final S set;
 	private final V value;
+
+	// the following fields are needed for optimizations
 	private BigInteger bigInteger;
 	private ByteTree byteTree;
 	private final HashMap<HashMethod, FiniteByteArrayElement> hashValues;
@@ -292,34 +294,47 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 		throw new UnsupportedOperationException();
 	}
 
-	//
-	// The standard implementations of the following three methods are
-	// insufficient for elements.
-	//
 	@Override
 	public final boolean isEquivalent(final Element other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.getClass() != other.getClass()) {
-			return false;
-		}
 		if (this == other) {
 			return true;
 		}
-		if (!this.set.isEquivalent(other.getSet())) {
+		if (!this.getSet().isEquivalent(other.getSet())) {
 			return false;
 		}
-		return this.getBigInteger().equals(other.getBigInteger());
+		return this.getValue().equals(other.getValue());
+	}
+
+	@Override
+	public int hashCode() {
+		int hashCode = 7;
+		hashCode = 13 * hashCode + this.set.hashCode();
+		hashCode = 13 * hashCode + this.value.hashCode();
+		return hashCode;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null || this.getClass() != object.getClass()) {
+			return false;
+		}
+		final Element other = (Element) object;
+		if (!this.getSet().equals(other.getSet())) {
+			return false;
+		}
+		return this.getValue().equals(other.getValue());
 	}
 
 	protected abstract BigInteger abstractGetBigInteger();
 
 	protected abstract ByteTree abstractGetByteTree();
 
-	//
-	// The following protected methods are standard implementations, which may change in sub-classes
-	//
 	@Override
 	protected String standardToStringName() {
 		return this.getClass().getSimpleName();
@@ -328,32 +343,6 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	@Override
 	protected String standardToStringContent() {
 		return this.getValue().toString();
-	}
-
-	@Override
-	public int hashCode() {
-		int hashCode = 7;
-		hashCode = 13 * hashCode + (this.set != null ? this.set.hashCode() : 0);
-		hashCode = 13 * hashCode + (this.value != null ? this.value.hashCode() : 0);
-		return hashCode;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (object == null) {
-			return false;
-		}
-		if (this.getClass() != object.getClass()) {
-			return false;
-		}
-		final Element other = (Element) object;
-		if (this == other) {
-			return true;
-		}
-		if (!this.set.equals(other.getSet())) {
-			return false;
-		}
-		return this.value.equals(other.getValue());
 	}
 
 }

@@ -75,11 +75,6 @@ public class SingletonGroup
 	// The following protected methods override the standard implementation from {@code AbstractGroup}
 	//
 	@Override
-	protected boolean standardIsEquivalent(Set set) {
-		return this.getValue().equals(((SingletonGroup) set).getValue());
-	}
-
-	@Override
 	protected String standardToStringContent() {
 		return this.getValue().toString();
 	}
@@ -133,6 +128,19 @@ public class SingletonGroup
 	protected boolean abstractIsGenerator(Element element) {
 		return true;
 	}
+
+	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		return this.getValue().equals(((SingletonGroup) set).getValue());
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.getValue().hashCode();
+		return hash;
+	}
+
 	//
 	// STATIC FACTORY METHODS
 	//

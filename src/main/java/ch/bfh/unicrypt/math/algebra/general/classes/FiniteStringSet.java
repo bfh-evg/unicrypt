@@ -127,9 +127,18 @@ public class FiniteStringSet
 	}
 
 	@Override
-	public boolean standardIsEquivalent(final Set set) {
+	public boolean abstractIsEquivalent(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
 		return this.getAlphabet() == other.getAlphabet() && this.getMinLength() == other.getMinLength() && this.getMaxLength() == other.getMaxLength();
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.getAlphabet().hashCode();
+		hash = 47 * hash + this.getMinLength();
+		hash = 47 * hash + this.getMaxLength();
+		return hash;
 	}
 
 	@Override

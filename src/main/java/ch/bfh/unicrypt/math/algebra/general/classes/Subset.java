@@ -81,12 +81,6 @@ public class Subset
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Set set) {
-		Subset other = (Subset) set;
-		return this.superSet.isEquivalent(other.superSet) && this.hashSet.equals(other.hashSet);
-	}
-
-	@Override
 	protected boolean standardContains(final Element element) {
 		return this.hashSet.contains(element);
 	}
@@ -124,6 +118,20 @@ public class Subset
 	@Override
 	protected Element abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		return this.getElements()[randomByteSequence.getRandomNumberGenerator().nextInteger(this.hashSet.size() - 1)];
+	}
+
+	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		Subset other = (Subset) set;
+		return this.superSet.isEquivalent(other.superSet) && this.hashSet.equals(other.hashSet);
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.superSet.hashCode();
+		hash = 47 * hash + this.hashSet.hashCode();
+		return hash;
 	}
 
 	public static Subset getInstance(Set superSet, Element... elements) {

@@ -123,7 +123,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement, V extends Obj
 
 	@Override
 	public boolean isOneElement(final Element element) {
-		return this.areEqual(element, this.getOneElement());
+		return this.areEquivalent(element, this.getOneElement());
 	}
 
 //

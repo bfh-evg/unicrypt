@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 
 /**
@@ -139,6 +140,16 @@ public class Z
 	@Override
 	protected boolean abstractIsGenerator(final ZElement element) {
 		return element.getValue().abs().equals(BigInteger.ONE);
+	}
+
+	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		return true;
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		return 1;
 	}
 
 	//

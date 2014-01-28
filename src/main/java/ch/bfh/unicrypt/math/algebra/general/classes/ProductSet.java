@@ -199,6 +199,44 @@ public class ProductSet
 	}
 
 	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		ProductSet other = (ProductSet) set;
+		if (this.arity != other.arity) {
+			return false;
+		}
+		for (int i = 0; i < this.arity; i++) {
+			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.arity;
+		for (int i = 0; i < this.arity; i++) {
+			hash = 47 * hash + this.getAt(i).hashCode();
+		}
+		return hash;
+	}
+
+	@Override
+	protected boolean standardEquals(Set set) {
+		ProductSet other = (ProductSet) set;
+		if (this.arity != other.arity) {
+			return false;
+		}
+		for (int i = 0; i < this.arity; i++) {
+			if (!this.getAt(i).equals(other.getAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
 	public int getArity() {
 		return this.arity;
 	}
@@ -350,25 +388,6 @@ public class ProductSet
 			}
 		}
 		return result;
-	}
-
-	@Override
-	protected boolean standardIsEquivalent(Set set) {
-		ProductSet other = (ProductSet) set;
-		if (this.arity != other.arity) {
-			return false;
-		}
-		for (int i = 0; i < this.arity; i++) {
-			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	protected boolean standardIsCompatible(Set set) {
-		return (set instanceof ProductSet);
 	}
 
 	@Override

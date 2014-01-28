@@ -304,14 +304,14 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of areEqual method, of class BooleanSet.
+	 * Test of areEquivalent method, of class BooleanSet.
 	 */
 	@Test
 	public void testAreEqual() {
-//		System.out.println("areEqual");
+//		System.out.println("areEquivalent");
 		BooleanSet expResult = null;
-		Assert.assertTrue((BooleanSet.getInstance().areEqual(BooleanSet.TRUE, BooleanSet.TRUE)));
-		Assert.assertTrue(!(BooleanSet.getInstance().areEqual(BooleanSet.FALSE, BooleanSet.TRUE)));
+		Assert.assertTrue((BooleanSet.getInstance().areEquivalent(BooleanSet.TRUE, BooleanSet.TRUE)));
+		Assert.assertTrue(!(BooleanSet.getInstance().areEquivalent(BooleanSet.FALSE, BooleanSet.TRUE)));
 	}
 
 	/**
@@ -383,17 +383,6 @@ public class BooleanSetTest {
 	public void testIsAdditive() {
 //		System.out.println("isAdditive");
 		Assert.assertTrue(!BooleanSet.getInstance().isAdditive());
-	}
-
-	/**
-	 * Test of isCompatible method, of class BooleanSet.?
-	 */
-	@Test
-	public void testIsCompatible() {
-//		System.out.println("isCompatible");
-		Assert.assertTrue(BooleanSet.getInstance().isCompatible(BooleanSet.getInstance()));
-		Assert.assertTrue(!BooleanSet.getInstance().isCompatible(ZMod.getInstance(2)));
-		Assert.assertTrue(!BooleanSet.getInstance().isCompatible(ZMod.getInstance(3)));
 	}
 
 	/**

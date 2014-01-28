@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 
 /**
@@ -116,6 +117,16 @@ public class N
 	@Override
 	protected NElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		return true;
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		return 1;
 	}
 
 	//

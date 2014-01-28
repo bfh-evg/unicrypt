@@ -128,6 +128,16 @@ public class ByteArrayMonoid
 		return this.abstractGetElement(element1.getValue().concatenate(element2.getValue()));
 	}
 
+	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		return true;
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		return 1;
+	}
+
 	//
 	// STATIC FACTORY METHODS
 	//

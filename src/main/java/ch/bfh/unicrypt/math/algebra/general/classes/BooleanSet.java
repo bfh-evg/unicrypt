@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import java.math.BigInteger;
 
@@ -109,6 +110,16 @@ public class BooleanSet
 	@Override
 	protected BooleanElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		return this.getElement(randomByteSequence.getRandomNumberGenerator().nextBoolean());
+	}
+
+	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		return true;
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		return 1;
 	}
 
 	//

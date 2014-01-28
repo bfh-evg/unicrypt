@@ -121,9 +121,16 @@ public class PolynomialSemiRing
 	// various super-classes
 	//
 	@Override
-	public boolean standardIsEquivalent(final Set set) {
+	public boolean abstractIsEquivalent(final Set set) {
 		final PolynomialSemiRing other = (PolynomialSemiRing) set;
 		return this.getSemiRing().isEquivalent(other.getSemiRing());
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.getSemiRing().hashCode();
+		return hash;
 	}
 
 	@Override

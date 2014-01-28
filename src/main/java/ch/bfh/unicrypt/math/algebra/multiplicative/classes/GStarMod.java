@@ -144,17 +144,6 @@ public class GStarMod
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Set set) {
-		final GStarMod other = (GStarMod) set;
-		return this.getModulus().equals(other.getModulus()) && this.getOrder().equals(other.getOrder());
-	}
-
-	@Override
-	protected boolean standardIsCompatible(Set set) {
-		return (set instanceof GStarMod);
-	}
-
-	@Override
 	public String standardToStringContent() {
 		return this.getModulus().toString() + "," + this.getOrder().toString();
 	}
@@ -240,6 +229,20 @@ public class GStarMod
 			}
 		}
 		return true;
+	}
+
+	@Override
+	protected boolean abstractIsEquivalent(Set set) {
+		final GStarMod other = (GStarMod) set;
+		return this.getModulus().equals(other.getModulus()) && this.getOrder().equals(other.getOrder());
+	}
+
+	@Override
+	protected int abstractHashCode() {
+		int hash = 7;
+		hash = 47 * hash + this.getModulus().hashCode();
+		hash = 47 * hash + this.getOrder().hashCode();
+		return hash;
 	}
 
 	//
