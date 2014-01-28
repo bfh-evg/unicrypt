@@ -86,7 +86,8 @@ public class SecureRandomSampler
 
 	@Override
 	public void run() {
-		distributionSamplerCollector.setFreshSamples(ByteArray.getInstance(secureRandom.generateSeed(distributionSamplerCollector.getSecurityParameterInBytes())));
+		byte[] freshData = secureRandom.generateSeed(distributionSamplerCollector.getSecurityParameterInBytes());
+		distributionSamplerCollector.setFreshSamples(ByteArray.getInstance(freshData));
 		collectorThread = null;
 	}
 

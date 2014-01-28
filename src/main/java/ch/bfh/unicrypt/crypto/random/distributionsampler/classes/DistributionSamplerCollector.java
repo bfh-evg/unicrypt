@@ -60,8 +60,6 @@ import ch.bfh.unicrypt.math.helper.ByteArray;
  */
 public class DistributionSamplerCollector {
 
-	private int securityParameterInBytes;
-	private Thread collectorThread; //Should be a threadpool that will be provided to the different DistributionSamplers... one day...
 	private DistributionSampler dataCollector; //Should be al list of distributionSamplers... one day...
 	private TrueRandomByteSequence sink;
 
@@ -79,7 +77,7 @@ public class DistributionSamplerCollector {
 	}
 
 	public int getSecurityParameterInBytes() {
-		return this.securityParameterInBytes;
+		return sink.getSecurityParameterInBytes();
 	}
 
 	/**
