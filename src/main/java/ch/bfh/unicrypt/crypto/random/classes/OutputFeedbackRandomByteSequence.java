@@ -90,7 +90,7 @@ public class OutputFeedbackRandomByteSequence
 		if (freshData != null) {
 			internalState = internalState.xorFillZero(freshData);
 		}
-		internalState = internalState.getHash(hashMethod);
+		internalState = internalState.xor(internalState.getHash(hashMethod));
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class OutputFeedbackRandomByteSequence
 	 */
 	protected ByteArray update() {
 		ByteArray[] full = internalState.getHash(hashMethod).split(forwardSecurityInBytes);
-		this.internalState = full[0];
+		this.internalState = internalState.xor(full[0]);
 
 		//Careful: Due to the underlying implementation of ByteArray, this would leak information within the internal array.
 		//return full[1];

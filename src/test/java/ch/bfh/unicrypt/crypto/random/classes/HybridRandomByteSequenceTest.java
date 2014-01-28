@@ -83,10 +83,12 @@ public class HybridRandomByteSequenceTest {
 		HybridRandomByteSequence instance = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, 2, 1);
 		int expResult = 1;
 		int result = instance.getSecurityParameterInBytes();
+		System.out.println(instance.getNextByte());
 		assertEquals(expResult, result);
 		instance = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, 2, 33);
 		expResult = 33;
 		result = instance.getSecurityParameterInBytes();
+		System.out.println(instance.getNextByte());
 		assertEquals(expResult, result);
 
 	}
