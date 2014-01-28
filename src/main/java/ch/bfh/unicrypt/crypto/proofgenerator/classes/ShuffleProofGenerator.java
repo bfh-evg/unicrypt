@@ -78,13 +78,20 @@ public class ShuffleProofGenerator
 	final private Element encryptionPK;
 	final private ReferenceRandomByteSequence referenceRandomByteSequence;
 
-	protected ShuffleProofGenerator(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK, ReferenceRandomByteSequence referenceRandomByteSequence1) {
+	protected ShuffleProofGenerator(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK, ReferenceRandomByteSequence referenceRandomByteSequence) {
 		this.sigmaChallengeGenerator = sigmaChallengeGenerator;
 		this.eValuesGenerator = eValuesGenerator;
 		this.cyclicGroup = cyclicGroup;
 		this.size = size;
 		this.encryptionPK = encryptionPK;
-		this.referenceRandomByteSequence = referenceRandomByteSequence1;
+		this.referenceRandomByteSequence = referenceRandomByteSequence;
+	}
+
+	public static ShuffleProofGenerator getInstance(CyclicGroup cyclicGroup, int size, Element encryptionPK) {
+		return ShuffleProofGenerator.getInstance(
+			   ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(cyclicGroup, size),
+			   ShuffleProofGenerator.createNonInteractiveEValuesGenerator(cyclicGroup, size),
+			   cyclicGroup, size, encryptionPK, ReferenceRandomByteSequence.getInstance());
 	}
 
 	public static ShuffleProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
@@ -92,9 +99,9 @@ public class ShuffleProofGenerator
 		return ShuffleProofGenerator.getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, encryptionPK, ReferenceRandomByteSequence.getInstance());
 	}
 
-	public static ShuffleProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK, ReferenceRandomByteSequence referenceRandomByteSequence1) {
+	public static ShuffleProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, Element encryptionPK, ReferenceRandomByteSequence referenceRandomByteSequence) {
 
-		if (sigmaChallengeGenerator == null || eValuesGenerator == null || cyclicGroup == null || size < 1 || !cyclicGroup.contains(encryptionPK) || referenceRandomByteSequence1 == null) {
+		if (sigmaChallengeGenerator == null || eValuesGenerator == null || cyclicGroup == null || size < 1 || !cyclicGroup.contains(encryptionPK) || referenceRandomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
 		if (!sigmaChallengeGenerator.getPublicInputSpace().isEquivalent(ShuffleProofGenerator.createChallengeGeneratorPublicInputSpace(cyclicGroup, size))
@@ -105,7 +112,7 @@ public class ShuffleProofGenerator
 			throw new IllegalArgumentException();
 		}
 
-		return new ShuffleProofGenerator(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, encryptionPK, referenceRandomByteSequence1);
+		return new ShuffleProofGenerator(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, encryptionPK, referenceRandomByteSequence);
 	}
 
 	// Private: (PermutationElement pi, PermutationCommitment-Randomizations sV, ReEncryption-Randomizations rV)
