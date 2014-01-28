@@ -111,7 +111,7 @@ public class OutputFeedbackRandomByteSequence
 
 	@Override
 	public void setSeed(ByteArray seed) {
-		this.internalState = seed;
+		this.internalState = seed.getHash(hashMethod);
 	}
 
 	@Override

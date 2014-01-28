@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.random.interfaces;
+package ch.bfh.unicrypt.crypto.random.distributionsampler.interfaces;
 
 import ch.bfh.unicrypt.math.helper.ByteArray;
 
