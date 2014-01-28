@@ -68,7 +68,95 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
  */
 public class CompleteShuffleExample {
 
-	public static void completetElGamalShuffleExample() {
+	//
+	// As tight as possible!
+	//
+	public static void completetElGamalShuffleExample1() {
+
+		// P R E P A R E
+		//---------------
+		// Create cyclic group and get generator
+		final CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
+		final Element g = G_q.getIndependentGenerator(0, ReferenceRandomByteSequence.getInstance());
+
+		// Set size
+		final int size = 10;
+
+		// Create ElGamal keys and encryption system
+		ElGamalEncryptionScheme es = ElGamalEncryptionScheme.getInstance(g);
+		Pair keys = es.getKeyPairGenerator().generateKeyPair();
+		Element publicKey = keys.getSecond();
+
+		// Create ciphertexts
+		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
+		Element[] ciphertextArray = new Element[size];
+		for (int i = 0; i < size; i++) {
+			ciphertextArray[i] = es.encrypt(publicKey, messages.getAt(i));
+		}
+		Tuple ciphertexts = Tuple.getInstance(ciphertextArray);
+
+		// S H U F F L E
+		//---------------
+		System.out.println("Shuffle...");
+		// Create mixer
+		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, publicKey, size);
+		// Create permutation
+		PermutationElement permutation = PermutationGroup.getInstance(size).getRandomElement();
+		// Create randomizations
+		Tuple randomizations = mixer.generateRandomizations();
+		// Shuffle
+		Tuple shuffledCiphertexts = mixer.shuffle(ciphertexts, permutation, randomizations);
+
+		// P R O O F
+		//-----------
+		//
+		// 1. Permutation Proof
+		//----------------------
+		System.out.println("Permutation Proof...");
+		// Create permutation commitment
+		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size);
+		Tuple permutationCommitmentRandomizations = pcs.getRandomizationSpace().getRandomElement();
+		Tuple permutationCommitment = pcs.commit(permutation, permutationCommitmentRandomizations);
+
+		// Create permutation commitment proof generator
+		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(G_q, size);
+
+		// Create permutation commitment proof
+		Pair proofPermutation = pcpg.generate(Pair.getInstance(permutation, permutationCommitmentRandomizations), permutationCommitment);
+
+		// 2. Shuffle Proof
+		//------------------
+		System.out.println("Shuffle Proof...");
+		// Create shuffle proof generator
+		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(G_q, size, publicKey);
+
+		// Compose private and public input
+		Triple privateInput = Triple.getInstance(permutation, permutationCommitmentRandomizations, randomizations);
+		Triple publicInput = Triple.getInstance(permutationCommitment, ciphertexts, shuffledCiphertexts);
+
+		// Create shuffle proof
+		Triple proofShuffle = spg.generate(privateInput, publicInput);
+
+		// V E R I F Y
+		//-------------
+		System.out.print("Verify... ");
+		// Verify permutation commitment proof
+		BooleanElement vPermutation = pcpg.verify(proofPermutation, permutationCommitment);
+
+		// Verify shuffle proof
+		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput);
+
+		// Verify equality of permutation commitments
+		boolean vPermutationCommitments = permutationCommitment.isEquivalent(publicInput.getFirst());
+
+		if (vPermutation.getValue() && vShuffle.getValue() && vPermutationCommitments) {
+			System.out.println("Proof is valid!");
+		} else {
+			System.out.println("Proof is NOT valid!");
+		}
+	}
+
+	public static void completetElGamalShuffleExample2() {
 
 		// P R E P A R E
 		//---------------
@@ -159,14 +247,16 @@ public class CompleteShuffleExample {
 		} else {
 			System.out.println("Proof is NOT valid!");
 		}
-
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Complete ElGamal Shuffle Example:");
-		CompleteShuffleExample.completetElGamalShuffleExample();
+		System.out.println("Complete ElGamal Shuffle Example 1:");
+		CompleteShuffleExample.completetElGamalShuffleExample1();
 		System.out.println("Done.");
-		System.exit(0);
+
+		System.out.println("\nComplete ElGamal Shuffle Example 2:");
+		CompleteShuffleExample.completetElGamalShuffleExample2();
+		System.out.println("Done.");
 	}
 
 }

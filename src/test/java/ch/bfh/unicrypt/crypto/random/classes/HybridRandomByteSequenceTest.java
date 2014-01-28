@@ -41,13 +41,10 @@
  */
 package ch.bfh.unicrypt.crypto.random.classes;
 
-import ch.bfh.unicrypt.crypto.random.distributionsampler.classes.DistributionSamplerCollector;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -92,64 +89,6 @@ public class HybridRandomByteSequenceTest {
 		result = instance.getSecurityParameterInBytes();
 		assertEquals(expResult, result);
 
-	}
-
-	/**
-	 * Test of getNextBytes method, of class HybridRandomByteSequence.
-	 */
-	@Test
-	public void testGetNextBytes() {
-		System.out.println("getNextBytes");
-		int length = 0;
-		HybridRandomByteSequence instance = null;
-		byte[] expResult = null;
-		byte[] result = instance.getNextBytes(length);
-		assertArrayEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of getInstance method, of class HybridRandomByteSequence.
-	 */
-	@Test
-	public void testGetInstance_0args() {
-		System.out.println("getInstance");
-		HybridRandomByteSequence expResult = null;
-		HybridRandomByteSequence result = HybridRandomByteSequence.getInstance();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of getInstance method, of class HybridRandomByteSequence.
-	 */
-	@Test
-	public void testGetInstance_3args() {
-		System.out.println("getInstance");
-		HashMethod hashMethod = null;
-		int forwardSecurityInBytes = 0;
-		int securityParameterInBytes = 0;
-		HybridRandomByteSequence expResult = null;
-		HybridRandomByteSequence result = HybridRandomByteSequence.getInstance(hashMethod, forwardSecurityInBytes, securityParameterInBytes);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of getDistributionSampler method, of class HybridRandomByteSequence.
-	 */
-	@Test
-	public void testGetDistributionSampler() {
-		System.out.println("getDistributionSampler");
-		HybridRandomByteSequence instance = null;
-		DistributionSamplerCollector expResult = null;
-		DistributionSamplerCollector result = instance.getDistributionSampler();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 }

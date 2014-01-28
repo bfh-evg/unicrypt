@@ -55,6 +55,9 @@ public class ByteArray
 	   extends UniCrypt
 	   implements Iterable<Byte> {
 
+	private static final byte ALL_ZERO = (byte) 0x00;
+	private static final byte ALL_ONE = (byte) 0xff;
+
 	private final byte[] bytes;
 	private final int offset;
 	private final int length;
@@ -74,7 +77,7 @@ public class ByteArray
 	}
 
 	public byte[] getAll() {
-		return Arrays.copyOfRange(bytes, offset, offset + length);
+		return Arrays.copyOfRange(this.bytes, this.offset, this.offset + this.length);
 	}
 
 	public byte getAt(int index) {
@@ -93,7 +96,6 @@ public class ByteArray
 			throw new IllegalArgumentException();
 		}
 		return new ByteArray(this.bytes, this.offset + offset, length);
-		//return new ByteArray(Arrays.copyOfRange(bytes, this.offset + offset, length));
 	}
 
 	public ByteArray[] split(int... indices) {
@@ -125,40 +127,68 @@ public class ByteArray
 	}
 
 	public ByteArray xor(ByteArray... others) {
-		return this.applyOperand(0, others);
+		return this.applyOperand(0, others, false, ALL_ZERO);
 	}
 
 	public ByteArray and(ByteArray... others) {
-		return this.applyOperand(1, others);
+		return this.applyOperand(1, others, false, ALL_ZERO);
 	}
 
 	public ByteArray or(ByteArray... others) {
-		return this.applyOperand(2, others);
+		return this.applyOperand(2, others, false, ALL_ZERO);
 	}
 
-	private ByteArray applyOperand(int operand, ByteArray... others) {
+	public ByteArray xorFillZero(ByteArray... others) {
+		return this.applyOperand(0, others, true, ALL_ZERO);
+	}
+
+	public ByteArray andFillZero(ByteArray... others) {
+		return this.applyOperand(1, others, true, ALL_ZERO);
+	}
+
+	public ByteArray orFillZero(ByteArray... others) {
+		return this.applyOperand(2, others, true, ALL_ZERO);
+	}
+
+	public ByteArray xorFillOne(ByteArray... others) {
+		return this.applyOperand(0, others, true, ALL_ONE);
+	}
+
+	public ByteArray andFillOne(ByteArray... others) {
+		return this.applyOperand(1, others, true, ALL_ONE);
+	}
+
+	public ByteArray orFillOne(ByteArray... others) {
+		return this.applyOperand(2, others, true, ALL_ONE);
+	}
+
+	private ByteArray applyOperand(int operand, ByteArray[] others, boolean maxLength, byte fillByte) {
 		if (others == null) {
 			throw new IllegalArgumentException();
 		}
-		int minLength = this.length;
+		int newLength = this.length;
 		for (ByteArray other : others) {
 			if (other == null) {
 				throw new IllegalArgumentException();
 			}
-			minLength = Math.max(minLength, other.length);
+			newLength = (maxLength) ? Math.max(newLength, other.length) : Math.min(newLength, other.length);
 		}
-		byte[] result = Arrays.copyOf(this.bytes, minLength);
+		byte[] result = new byte[newLength];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = (i < this.length) ? this.getAt(i) : fillByte;
+		}
 		for (ByteArray other : others) {
-			for (int i = 0; i < other.length; i++) {
+			for (int i = 0; i < result.length; i++) {
+				byte b = (i < other.length) ? other.getAt(i) : fillByte;
 				switch (operand) {
 					case 0:
-						result[i] ^= other.getAt(i);
+						result[i] ^= b;
 						break;
 					case 1:
-						result[i] &= other.getAt(i);
+						result[i] &= b;
 						break;
 					case 2:
-						result[i] |= other.getAt(i);
+						result[i] |= b;
 						break;
 					default:
 						throw new UnsupportedOperationException();
@@ -170,7 +200,7 @@ public class ByteArray
 
 	public ByteArray not() {
 		byte[] result = new byte[this.length];
-		for (int i = 0; i < this.length; i++) {
+		for (int i = 0; i < result.length; i++) {
 			result[i] = (byte) (~this.getAt(i) & 0xff);
 		}
 		return new ByteArray(result);
@@ -192,7 +222,7 @@ public class ByteArray
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.length; i++) {
-			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.getAt(i) & 0xFF));
+			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.getAt(i) & 0xff));
 			delimiter = "|";
 		}
 		return "\"" + str + "\"";
@@ -259,17 +289,18 @@ public class ByteArray
 		return ByteArray.getInstance(length, false);
 	}
 
-	public static ByteArray getInstance(int length, boolean bit) {
+	public static ByteArray getInstance(int length, boolean fillbit) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
 		byte[] bytes = new byte[length];
-		if (bit) {
-			Arrays.fill(bytes, (byte) 0xff);
+		if (fillbit) {
+			Arrays.fill(bytes, ALL_ONE);
 		}
 		return new ByteArray(new byte[length]);
 	}
 
+	// convenicene method to avoid casting integers to byte
 	public static ByteArray getInstance(int... integers) {
 		if (integers == null) {
 			throw new IllegalArgumentException();
@@ -277,7 +308,7 @@ public class ByteArray
 		byte[] bytes = new byte[integers.length];
 		int i = 0;
 		for (int integer : integers) {
-			if (integer < 0x00 || integer > 0xff) {
+			if (integer < 0 || integer > 256) {
 				throw new IllegalArgumentException();
 			}
 			bytes[i++] = (byte) integer;

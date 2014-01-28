@@ -88,6 +88,13 @@ public class PermutationCommitmentProofGenerator
 		this.referenceRandomByteSequence = referenceRandomByteSequence1;
 	}
 
+	public static PermutationCommitmentProofGenerator getInstance(CyclicGroup cyclicGroup, int size) {
+		return PermutationCommitmentProofGenerator.getInstance(
+			   PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(cyclicGroup, size),
+			   PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(cyclicGroup, size),
+			   cyclicGroup, size, ReferenceRandomByteSequence.getInstance());
+	}
+
 	public static PermutationCommitmentProofGenerator getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size) {
 		return PermutationCommitmentProofGenerator.getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, ReferenceRandomByteSequence.getInstance());
