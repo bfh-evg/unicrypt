@@ -97,7 +97,9 @@ public class ReferenceRandomByteSequenceTest {
 	@Test
 	public void testReset() {
 		System.out.println("testReset");
-		ReferenceRandomByteSequence instance = ReferenceRandomByteSequence.getInstance(ByteArray.getInstance("testReset".getBytes()));
+		ReferenceRandomByteSequence instance = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("testReset".getBytes()));
+		ReferenceRandomByteSequence instance2 = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("testReset".getBytes()));
+
 		long time = System.currentTimeMillis();
 		ByteArray expResult = instance.getNextByteArray(100000);
 		long expTime = System.currentTimeMillis() - time;
@@ -106,6 +108,7 @@ public class ReferenceRandomByteSequenceTest {
 		ByteArray result = instance.getNextByteArray(100000);
 		long resTime = System.currentTimeMillis() - time;
 		Assert.assertEquals(expResult, result);
+		System.out.println("Timing: " + (expTime - resTime));
 		Assert.assertTrue(expTime > resTime);
 	}
 

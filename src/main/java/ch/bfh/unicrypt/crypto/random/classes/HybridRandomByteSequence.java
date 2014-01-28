@@ -77,8 +77,7 @@ public class HybridRandomByteSequence
 		this.securityParameterInBytes = securityParameterInBytes;
 
 		this.distributionSampler = DistributionSamplerCollector.getInstance(this);
-		super.setSeed(this.distributionSampler.getDistributionSample(securityParameterInBytes));
-		this.distributionSampler.setCollectionStatus(true);
+		super.setSeed(this.distributionSampler.getDistributionSamples(securityParameterInBytes));
 	}
 
 	@Override
@@ -95,8 +94,11 @@ public class HybridRandomByteSequence
 	}
 
 	@Override
-	public ByteArray getNextByteArray(int length) {
-		return super.getNextByteArray(length);
+	protected byte[] getNextBytes(int length) {
+		//This will trigger the DistributionSamplerCollector to inject fresh data.
+		//This data will then be injected to the setFreshData method, as soon as it is ready.
+		this.distributionSampler.collectDistributionSamples();
+		return super.getNextBytes(length);
 	}
 
 	/**

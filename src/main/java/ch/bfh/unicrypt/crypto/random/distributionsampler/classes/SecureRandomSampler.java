@@ -58,6 +58,7 @@ public class SecureRandomSampler
 	private boolean isCollecting;
 	private SecureRandom secureRandom;
 	private DistributionSamplerCollector distributionSamplerCollector;
+	private Thread collectorThread;
 
 	private int securityParameterInBytes;
 
@@ -70,35 +71,23 @@ public class SecureRandomSampler
 		}
 	}
 
-	public synchronized boolean isCollecting() {
-		return this.isCollecting;
+	@Override
+	public boolean isCollecting() {
+		return collectorThread != null;
 	}
 
-	public synchronized void setCollectionStatus(boolean isCollecting) {
-		this.isCollecting = isCollecting;
-		notifyAll();
+	public void collectFreshSamples() {
+		if (collectorThread != null) {
+			return;
+		}
+		collectorThread = new Thread(this);
+		collectorThread.start();
 	}
 
 	@Override
 	public void run() {
-		while (true) {
-			synchronized (this) {
-				while (!isCollecting) {
-					try {
-						wait();
-					} catch (InterruptedException ex) {
-
-					}
-				}
-				distributionSamplerCollector.setFreshSamples(ByteArray.getInstance(secureRandom.generateSeed(distributionSamplerCollector.getSecurityParameterInBytes())));
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException ex) {
-					Logger.getLogger(DistributionSamplerCollector.class.getName()).log(Level.SEVERE, null, ex);
-				}
-			}
-
-		}
+		distributionSamplerCollector.setFreshSamples(ByteArray.getInstance(secureRandom.generateSeed(distributionSamplerCollector.getSecurityParameterInBytes())));
+		collectorThread = null;
 	}
 
 	/**

@@ -45,6 +45,11 @@ import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.PseudoRandomByteSequence;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This PseudoRandomGeneratorOutputFeedbackMode creates is the most conservative pseudo random generator. It updates its
@@ -83,24 +88,24 @@ public class OutputFeedbackRandomByteSequence
 	 */
 	protected void update(ByteArray freshData) {
 		if (freshData != null) {
-			internalState.xor(freshData);
+			internalState = internalState.xor(freshData);
 		}
 		internalState = internalState.getHash(hashMethod);
 	}
 
 	/**
-	 * This implementation takes the resulting cryptographic hash and splits it into two parts: Output: 8bit New
-	 * internal State: hashSize-8bit
+	 * This implementation takes the resulting cryptographic hash and splits it into two parts: Internal State: length
+	 * of forwardSecurityInBytes. Output: remaining
 	 * <p>
 	 * @return
 	 */
 	protected ByteArray update() {
-		ByteArray[] full = internalState.getHash(hashMethod).split(1);
-		this.internalState = full[1];
+		ByteArray[] full = internalState.getHash(hashMethod).split(forwardSecurityInBytes);
+		this.internalState = full[0];
 
 		//Careful: Due to the underlying implementation of ByteArray, this would leak information within the internal array.
-		//return full[0];
-		return ByteArray.getInstance(full[0].getAll());
+		//return full[1];
+		return ByteArray.getInstance(full[1].getAll());
 
 	}
 
@@ -120,12 +125,15 @@ public class OutputFeedbackRandomByteSequence
 	 * @return
 	 */
 	protected byte[] getNextBytes(int length) {
-		byte[] randomBytes = new byte[length];
-		int randomBytesPosition = 0;
-		for (int i = 0; i < randomBytes.length; i++) {
-			randomBytes[i] = update().getAt(0);
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		while (bytes.size() < length) {
+			try {
+				bytes.write(update().getAll());
+			} catch (IOException ex) {
+				Logger.getLogger(OutputFeedbackRandomByteSequence.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
-		return randomBytes;
+		return Arrays.copyOf(bytes.toByteArray(), length);
 	}
 
 	@Override

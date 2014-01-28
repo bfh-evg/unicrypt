@@ -71,8 +71,6 @@ public class DistributionSamplerCollector {
 		}
 		this.sink = sink;
 		this.dataCollector = new SecureRandomSampler(this);
-		collectorThread = new Thread(dataCollector);
-		collectorThread.start();
 	}
 
 	public static DistributionSamplerCollector getInstance(TrueRandomByteSequence sink) {
@@ -91,7 +89,7 @@ public class DistributionSamplerCollector {
 	 * @param amountOfBytes
 	 * @return ByteArrayElement containing the desired amount of 'random' bytes.
 	 */
-	public ByteArray getDistributionSample(int amountOfBytes) {
+	public ByteArray getDistributionSamples(int amountOfBytes) {
 		//This will collect all data received from the different distributionSamplers... one day...
 		if (amountOfBytes < 1) {
 			throw new IllegalArgumentException();
@@ -103,8 +101,8 @@ public class DistributionSamplerCollector {
 		return this.dataCollector.isCollecting();
 	}
 
-	public void setCollectionStatus(boolean isCollecting) {
-		this.dataCollector.setCollectionStatus(isCollecting);
+	public void collectDistributionSamples() {
+		this.dataCollector.collectFreshSamples();
 	}
 
 	public void setFreshSamples(ByteArray samples) {

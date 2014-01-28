@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -66,8 +67,8 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 	@Test
 	public void testGeneralizedPedersenCommitment2() {
 
-		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance(ByteArray.getInstance("X".getBytes()));
-		//rrs.reset();
+		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("X".getBytes()));
+		//rrs.reset()
 
 		System.out.println("-->g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
 		System.out.println("-->g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
@@ -88,7 +89,7 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 	@Test
 	public void testGeneralizedPedersenCommitment4() {
 
-		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance(ByteArray.getInstance("X".getBytes()));
+		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("X".getBytes()));
 //rrs.reset();
 
 		System.out.println("-->g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4

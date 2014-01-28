@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -65,7 +66,7 @@ public class PermutationCommitmentTest {
 	public PermutationCommitmentTest() {
 		this.G_q = GStarModSafePrime.getInstance(this.P);
 		this.Z_q = G_q.getZModOrder();
-		rrs = ReferenceRandomByteSequence.getInstance(ByteArray.getInstance("X".getBytes()));
+		rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("X".getBytes()));
 		System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
 		System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
 		System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9

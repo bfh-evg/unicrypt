@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import java.math.BigInteger;
@@ -62,7 +63,7 @@ public class PseudoRandomReferenceStringTest {
 		rrs.getRandomNumberGenerator().nextBytes(2048);
 		rrs.reset();
 		Assert.assertEquals(prime, rrs.getRandomNumberGenerator().nextPrime(10));
-		rrs = ReferenceRandomByteSequence.getInstance(ByteArray.getInstance(new byte[]{10, 5, 120}));
+		rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance(new byte[]{10, 5, 120}));
 		prime = rrs.getRandomNumberGenerator().nextPrime(10);
 		rrs.getRandomNumberGenerator().nextBoolean();
 		rrs.getRandomNumberGenerator().nextBytes(5);

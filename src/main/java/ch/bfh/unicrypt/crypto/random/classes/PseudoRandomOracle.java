@@ -56,7 +56,7 @@ public class PseudoRandomOracle
 
 	HashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
 
-	public static final RandomOracle DEFAULT = PseudoRandomOracle.getInstance();
+	public static final RandomOracle DEFAULT = PseudoRandomOracle.getInstance(HashMethod.DEFAULT);
 
 	protected PseudoRandomOracle(HashMethod hashMethod) {
 		super(hashMethod);
@@ -65,23 +65,18 @@ public class PseudoRandomOracle
 	}
 
 	//TODO: Warning, this is a memory-hog!
-	//This code will only work when there is a fast 'equals' method ready for Element
 	@Override
 	protected ReferenceRandomByteSequence abstractGetReferenceRandomByteSequence(ByteArray query) {
 		if (!referenceRandomByteSequence.containsKey(query)) {
-			referenceRandomByteSequence.put(query, ReferenceRandomByteSequence.getInstance(query));
+			referenceRandomByteSequence.put(query, ReferenceRandomByteSequence.getInstance(getHashMethod(), query));
 		}
 		ReferenceRandomByteSequence referenceString = referenceRandomByteSequence.get(query);
 		referenceString.reset();
 		return referenceString;
 	}
-//	@Override
-//	protected RandomReferenceString abstractGetRandomReferenceString(Element query) {
-//		return ReferenceRandomByteSequence.getInstance(query);
-//	}
 
 	public static RandomOracle getInstance() {
-		return PseudoRandomOracle.getInstance(HashMethod.DEFAULT);
+		return DEFAULT;
 	}
 
 	public static RandomOracle getInstance(HashMethod hashMethod) {

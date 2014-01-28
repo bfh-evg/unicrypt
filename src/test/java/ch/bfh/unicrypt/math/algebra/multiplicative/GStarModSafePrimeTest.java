@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative;
 
+import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -88,7 +89,7 @@ public class GStarModSafePrimeTest {
 
 	@Test
 	public void testGetIndependentGenerators2() {
-		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance(ByteArray.getInstance(new byte[]{2, 5}));
+		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance(new byte[]{2, 5}));
 		GStarModSafePrime set = GStarModSafePrime.getInstance(23);
 		Element g1 = set.getIndependentGenerator(3, rrs);
 		Element g2 = set.getIndependentGenerator(5, rrs);

@@ -137,4 +137,25 @@ public class ReferenceRandomByteSequence
 		return true;
 	}
 
+	class StatefulCounterModeRandomByteSequence
+		   extends CounterModeRandomByteSequence {
+
+		private transient HashMap<Integer, byte[]> randomByteBufferMap;
+
+		public StatefulCounterModeRandomByteSequence(HashMethod hashMethod, ByteArray seed) {
+			super(hashMethod, seed);
+		}
+
+		protected byte[] getRandomByteBuffer(int counter) {
+			if (randomByteBufferMap == null) {
+				randomByteBufferMap = new HashMap<Integer, byte[]>();
+			}
+			if (!randomByteBufferMap.containsKey(counter)) {
+				randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));
+			}
+			return randomByteBufferMap.get(counter);
+		}
+
+	}
+
 }

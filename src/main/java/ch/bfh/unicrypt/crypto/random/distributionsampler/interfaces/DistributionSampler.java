@@ -52,7 +52,7 @@ public interface DistributionSampler
 
 	public boolean isCollecting();
 
-	public void setCollectionStatus(boolean isCollecting);
+	public void collectFreshSamples();
 
 	public ByteArray getDistributionSample(int amountOfBytes);
 
