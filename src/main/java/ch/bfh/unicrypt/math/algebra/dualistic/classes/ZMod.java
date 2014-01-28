@@ -165,7 +165,7 @@ public class ZMod
 	}
 
 	@Override
-	public boolean abstractIsEquivalent(final Set set) {
+	public boolean abstractEquals(final Set set) {
 		final ZMod zMod = (ZMod) set;
 		return this.getModulus().equals(zMod.getModulus());
 	}

@@ -199,13 +199,13 @@ public class ProductSet
 	}
 
 	@Override
-	protected boolean abstractIsEquivalent(Set set) {
+	protected boolean abstractEquals(Set set) {
 		ProductSet other = (ProductSet) set;
 		if (this.arity != other.arity) {
 			return false;
 		}
 		for (int i = 0; i < this.arity; i++) {
-			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
+			if (!this.getAt(i).equals(other.getAt(i))) {
 				return false;
 			}
 		}
@@ -223,13 +223,13 @@ public class ProductSet
 	}
 
 	@Override
-	protected boolean standardEquals(Set set) {
+	protected boolean standardIsEquivalent(Set set) {
 		ProductSet other = (ProductSet) set;
 		if (this.arity != other.arity) {
 			return false;
 		}
 		for (int i = 0; i < this.arity; i++) {
-			if (!this.getAt(i).equals(other.getAt(i))) {
+			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
 				return false;
 			}
 		}

@@ -127,7 +127,7 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	public boolean abstractIsEquivalent(final Set set) {
+	public boolean abstractEquals(final Set set) {
 		final FiniteByteArraySet other = (FiniteByteArraySet) set;
 		return this.getMinLength() == other.getMinLength() && this.getMaxLength() == other.getMaxLength();
 	}

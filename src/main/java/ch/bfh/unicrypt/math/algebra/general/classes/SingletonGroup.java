@@ -130,7 +130,7 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected boolean abstractIsEquivalent(Set set) {
+	protected boolean abstractEquals(Set set) {
 		return this.getValue().equals(((SingletonGroup) set).getValue());
 	}
 

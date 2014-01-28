@@ -232,7 +232,7 @@ public class GStarMod
 	}
 
 	@Override
-	protected boolean abstractIsEquivalent(Set set) {
+	protected boolean abstractEquals(Set set) {
 		final GStarMod other = (GStarMod) set;
 		return this.getModulus().equals(other.getModulus()) && this.getOrder().equals(other.getOrder());
 	}

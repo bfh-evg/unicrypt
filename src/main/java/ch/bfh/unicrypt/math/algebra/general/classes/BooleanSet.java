@@ -113,7 +113,7 @@ public class BooleanSet
 	}
 
 	@Override
-	protected boolean abstractIsEquivalent(Set set) {
+	protected boolean abstractEquals(Set set) {
 		return true;
 	}
 
