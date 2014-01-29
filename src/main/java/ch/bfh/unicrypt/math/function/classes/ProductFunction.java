@@ -49,6 +49,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.compound.Compound;
 
 /**
  * This class represents the concept of a product function f:(X_1x...xX_n)->(Y_1x...xY_n). It consists of multiple
@@ -87,6 +88,15 @@ public final class ProductFunction
 			elements[i] = this.getAt(i).apply(element.getAt(i), randomByteSequence);
 		}
 		return this.getCoDomain().getElement(elements);
+	}
+
+	@Override
+	public ProductFunction append(Compound<ProductFunction, Function> compound) {
+		if (compound instanceof ProductFunction) {
+			ProductFunction other = (ProductFunction) compound;
+			return ProductFunction.getInstance(this.functions.append(other.functions));
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override

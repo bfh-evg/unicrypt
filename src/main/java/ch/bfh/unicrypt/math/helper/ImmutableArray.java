@@ -179,6 +179,31 @@ public class ImmutableArray<T>
 	}
 
 	@Override
+	public ImmutableArray<T> append(Compound<ImmutableArray<T>, T> compound) {
+		if (compound == null) {
+			throw new IllegalArgumentException();
+		}
+		ImmutableArray<T> other = (ImmutableArray<T>) compound;
+		if (this.isEmpty()) {
+			return other;
+		}
+		if (other.isEmpty()) {
+			return this;
+		}
+		if (this.isUniform() && other.isUniform() && this.getFirst().equals(other.getFirst())) {
+			return new ImmutableArray<T>(this.getFirst(), this.length + other.length);
+		}
+		T[] newArray = (T[]) Array.newInstance(this.array.getClass().getComponentType(), this.length + other.length);
+		for (int i = 0; i < this.length; i++) {
+			newArray[i] = this.getAt(i);
+		}
+		for (int i = 0; i < other.length; i++) {
+			newArray[this.length + i] = other.getAt(i);
+		}
+		return new ImmutableArray<T>(newArray);
+	}
+
+	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
 
@@ -265,16 +290,16 @@ public class ImmutableArray<T>
 		return new ImmutableArray(object, length);
 	}
 
-	// used for casting
-	public static <S extends T, T> ImmutableArray<S> getInstance(ImmutableArray<T> oldArray, Class<S> newType) {
-		if (oldArray.isUniform() && !oldArray.isEmpty()) {
-			return new ImmutableArray((S) oldArray.getFirst(), oldArray.getLength());
-		}
-		S[] newArray = (S[]) Array.newInstance(newType, oldArray.length);
-		for (int i = 0; i < oldArray.length; i++) {
-			newArray[i] = (S) oldArray.getAt(i);
-		}
-		return new ImmutableArray(newArray);
-	}
-
+	// DOES NOT WORK IN JAVA6
+//	// used for casting
+//	public static <S extends T, T> ImmutableArray<S> getInstance(ImmutableArray<T> oldArray, Class<S> newType) {
+//		if (oldArray.isUniform() && !oldArray.isEmpty()) {
+//			return new ImmutableArray((S) oldArray.getFirst(), oldArray.getLength());
+//		}
+//		S[] newArray = (S[]) Array.newInstance(newType, oldArray.length);
+//		for (int i = 0; i < oldArray.length; i++) {
+//			newArray[i] = (S) oldArray.getAt(i);
+//		}
+//		return new ImmutableArray(newArray);
+//	}
 }

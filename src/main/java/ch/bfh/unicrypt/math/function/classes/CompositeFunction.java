@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.compound.Compound;
 
 /**
  * This class represents the concept of a composite function f:X_1->Y_n. It consists of multiple internal functions
@@ -72,6 +73,15 @@ public final class CompositeFunction
 			result = function.apply(result, randomByteSequence);
 		}
 		return result;
+	}
+
+	@Override
+	public CompositeFunction append(Compound<CompositeFunction, Function> compound) {
+		if (compound instanceof CompositeFunction) {
+			CompositeFunction other = (CompositeFunction) compound;
+			return CompositeFunction.getInstance(this.functions.append(other.functions));
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override

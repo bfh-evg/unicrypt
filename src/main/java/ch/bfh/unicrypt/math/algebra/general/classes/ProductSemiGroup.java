@@ -84,6 +84,18 @@ public class ProductSemiGroup
 		return (ProductSemiGroup) super.removeAt(index);
 	}
 
+	public ProductSemiGroup insertAt(final int index, SemiGroup semiGroup) {
+		return (ProductSemiGroup) super.insertAt(index, semiGroup);
+	}
+
+	public ProductSemiGroup add(SemiGroup semiGroup) {
+		return (ProductSemiGroup) super.add(semiGroup);
+	}
+
+	public ProductSemiGroup append(ProductSemiGroup productSemiGroup) {
+		return (ProductSemiGroup) super.append(productSemiGroup);
+	}
+
 	@Override
 	public final Tuple apply(Element element1, Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {

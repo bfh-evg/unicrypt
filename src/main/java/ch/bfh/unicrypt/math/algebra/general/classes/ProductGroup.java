@@ -83,6 +83,18 @@ public class ProductGroup
 		return (ProductGroup) super.removeAt(index);
 	}
 
+	public ProductGroup insertAt(final int index, Group group) {
+		return (ProductGroup) super.insertAt(index, group);
+	}
+
+	public ProductGroup add(Group group) {
+		return (ProductGroup) super.add(group);
+	}
+
+	public ProductGroup append(ProductGroup productGroup) {
+		return (ProductGroup) super.append(productGroup);
+	}
+
 	@Override
 	public final Tuple invert(Element element) {
 		if (!this.contains(element)) {

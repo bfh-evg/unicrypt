@@ -52,7 +52,6 @@ import java.util.Iterator;
 /**
  *
  * @param <CF>
- * @param <F>
  * @param <D>
  * @param <DE>
  * @param <C>
@@ -63,7 +62,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	   extends AbstractFunction<D, DE, C, CE>
 	   implements RecursiveCompound<CF, Function>, Iterable<Function> {
 
-	private final ImmutableArray<Function> functions;
+	protected final ImmutableArray<Function> functions;
 
 	protected AbstractCompoundFunction(D domain, C coDomain, ImmutableArray<Function> functions) {
 		super(domain, coDomain);

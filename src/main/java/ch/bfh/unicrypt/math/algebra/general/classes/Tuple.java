@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.compound.Compound;
 import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -128,6 +129,15 @@ public class Tuple
 	@Override
 	public Tuple add(Element element) {
 		return this.insertAt(this.getArity(), element);
+	}
+
+	@Override
+	public Tuple append(Compound<Tuple, Element> compound) {
+		if (compound instanceof Tuple) {
+			Tuple other = (Tuple) compound;
+			return Tuple.getInstance(this.getSet().append(other.getSet()), this.getValue().append(other.getValue()));
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override

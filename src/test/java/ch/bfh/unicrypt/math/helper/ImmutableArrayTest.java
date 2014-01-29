@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
-import java.math.BigInteger;
 import java.util.Iterator;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -139,14 +138,19 @@ public class ImmutableArrayTest {
 	}
 
 	@Test
-	public void testGetInstance_ImmutableArray() {
-		Number n1 = BigInteger.valueOf(5);
-		Number n2 = BigInteger.valueOf(10);
-		ImmutableArray<Number> ns = ImmutableArray.getInstance(n1, n2);
-		ImmutableArray<BigInteger> bs = ImmutableArray.getInstance(ns, BigInteger.class);
-		assertEquals(ns.getLength(), bs.getLength());
-		assertEquals(ns.getAt(0), bs.getAt(0));
-		assertEquals(ns.getAt(1), bs.getAt(1));
+	public void testAppend() {
+		assertEquals(a0, a0.append(a0));
+		assertEquals(a1, a0.append(a1));
+		assertEquals(a1, a1.append(a0));
+		assertEquals(a2, a0.append(a2));
+		assertEquals(a2, a2.append(a0));
+		assertEquals(a3, a0.append(a3));
+		assertEquals(a3, a3.append(a0));
+		assertEquals(a3, a3.append(a0));
+		assertEquals(6, a1.append(a1).getLength());
+		assertEquals(6, a1.append(a2).getLength());
+		assertEquals(a2.append(a2), a3.append(a3));
+		assertEquals(a2.append(a3), a3.append(a2));
 	}
 
 }

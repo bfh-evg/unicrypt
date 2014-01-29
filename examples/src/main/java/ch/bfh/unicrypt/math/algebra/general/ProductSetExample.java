@@ -63,8 +63,17 @@ public class ProductSetExample {
 		ProductSet s123 = ProductSet.getInstance(s1, s2, s3);
 		System.out.println(s123);
 
-		ProductSet s1111 = ProductSet.getInstance(s1, 4);
-		System.out.println(s1111);
+		ProductSet s123123 = s123.append(s123);
+		System.out.println(s123123);
+
+		ProductSet s111 = ProductSet.getInstance(s1, 3);
+		System.out.println(s111);
+
+		ProductSet s22 = ProductSet.getInstance(s2, 2);
+		System.out.println(s111);
+
+		ProductSet s111_22 = ProductSet.getInstance(s111, s22);
+		System.out.println(s111_22);
 	}
 
 	public static void main(final String[] args) {

@@ -50,6 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.compound.Compound;
 import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -284,6 +285,15 @@ public class ProductSet
 	@Override
 	public ProductSet add(Set set) {
 		return this.insertAt(this.getArity(), set);
+	}
+
+	@Override
+	public ProductSet append(Compound<ProductSet, Set> compound) {
+		if (compound instanceof ProductSet) {
+			ProductSet other = (ProductSet) compound;
+			return ProductSet.getInstance(this.sets.append(other.sets));
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override

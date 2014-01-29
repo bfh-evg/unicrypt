@@ -86,6 +86,18 @@ public class ProductMonoid
 		return (ProductMonoid) super.removeAt(index);
 	}
 
+	public ProductMonoid insertAt(final int index, Monoid monoid) {
+		return (ProductMonoid) super.insertAt(index, monoid);
+	}
+
+	public ProductMonoid add(Monoid monoid) {
+		return (ProductMonoid) super.add(monoid);
+	}
+
+	public ProductMonoid append(ProductMonoid monoid) {
+		return (ProductMonoid) super.append(monoid);
+	}
+
 	@Override
 	public Tuple getIdentityElement() {
 		if (this.identityElement == null) {
