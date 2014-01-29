@@ -136,6 +136,15 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
+	public CF append(Compound<CF, Function> compound) {
+		if (this.getClass().isInstance(compound)) {
+			CF other = (CF) compound;
+			return this.abstractGetInstance(this.functions.append(other.functions));
+		}
+		throw new IllegalArgumentException();
+	}
+
+	@Override
 	public Iterator<Function> iterator() {
 		return this.functions.iterator();
 	}

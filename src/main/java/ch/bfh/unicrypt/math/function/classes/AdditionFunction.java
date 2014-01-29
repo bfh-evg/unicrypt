@@ -42,12 +42,12 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 
 /**
@@ -63,32 +63,37 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class DivideFunction
-			 extends AbstractFunction<ProductGroup, Pair, MultiplicativeGroup, MultiplicativeElement> {
+public class AdditionFunction
+			 extends AbstractFunction<ProductSemiGroup, Tuple, AdditiveSemiGroup, AdditiveElement> {
 
-	private DivideFunction(final ProductGroup domain, final MultiplicativeGroup coDomain) {
+	private AdditionFunction(final ProductSemiGroup domain, final AdditiveSemiGroup coDomain) {
 		super(domain, coDomain);
 	}
 
 	@Override
-	protected MultiplicativeElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().divide(element.getFirst(), element.getSecond());
+	protected AdditiveElement abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
+		return this.getCoDomain().add(element.getAll());
+	}
+
+	public static AdditionFunction getInstance(final AdditiveSemiGroup additiveSemiGroup) {
+		return AdditionFunction.getInstance(additiveSemiGroup, 2);
 	}
 
 	/**
 	 * This is the general factory method of this class. The first parameter is the group on which it operates, and the
 	 * second parameter is the number of input elements.
 	 * <p/>
-	 * @param multiplicativeGroup
+	 * @param additiveSemiGroup The group on which this function operates
+	 * @param arity             The number of input elements
 	 * @return The resulting function
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal arity} is negative
 	 */
-	public static DivideFunction getInstance(final MultiplicativeGroup multiplicativeGroup) {
-		if (multiplicativeGroup == null) {
+	public static AdditionFunction getInstance(final AdditiveSemiGroup additiveSemiGroup, final int arity) {
+		if (additiveSemiGroup == null || arity < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new DivideFunction(ProductGroup.getInstance(multiplicativeGroup, 2), multiplicativeGroup);
+		return new AdditionFunction(ProductSemiGroup.getInstance(additiveSemiGroup, arity), additiveSemiGroup);
 	}
 
 }

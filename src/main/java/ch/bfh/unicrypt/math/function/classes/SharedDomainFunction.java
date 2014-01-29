@@ -60,8 +60,8 @@ import ch.bfh.unicrypt.math.helper.ImmutableArray;
  * @author R. E. Koenig
  * @version 1.0
  */
-public final class ProductFunction
-	   extends AbstractCompoundFunction<ProductFunction, ProductSet, Tuple, ProductSet, Tuple> {
+public final class SharedDomainFunction
+	   extends AbstractCompoundFunction<SharedDomainFunction, Set, Element, ProductSet, Tuple> {
 
 	/**
 	 * This is the general constructor of this class. It takes a list of functions as input and produces the
@@ -72,7 +72,7 @@ public final class ProductFunction
 	 * @param functions
 	 * @throws IllegalArgumentException if {@literal functions} is null or contains null
 	 */
-	protected ProductFunction(final ProductSet domain, ProductSet coDomain, ImmutableArray<Function> functions) {
+	protected SharedDomainFunction(final Set domain, ProductSet coDomain, ImmutableArray<Function> functions) {
 		super(domain, coDomain, functions);
 	}
 
@@ -80,50 +80,55 @@ public final class ProductFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected Tuple abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
+	protected Tuple abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
 		int arity = this.getArity();
 		final Element[] elements = new Element[arity];
 		for (int i = 0; i < arity; i++) {
-			elements[i] = this.getAt(i).apply(element.getAt(i), randomByteSequence);
+			elements[i] = this.getAt(i).apply(element, randomByteSequence);
 		}
 		return this.getCoDomain().getElement(elements);
 	}
 
 	@Override
-	protected ProductFunction abstractGetInstance(ImmutableArray<Function> functions) {
-		return ProductFunction.getInstance(functions);
+	protected SharedDomainFunction abstractGetInstance(ImmutableArray<Function> functions) {
+		return SharedDomainFunction.getInstance(functions);
 	}
 
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static ProductFunction getInstance(ImmutableArray<Function> functions) {
+	public static SharedDomainFunction getInstance(ImmutableArray<Function> functions) {
 		if (functions == null || functions.getLength() == 0) {
 			throw new IllegalArgumentException();
 		}
-		ProductSet domain, coDomain;
+		Set domain;
+		ProductSet coDomain;
 		if (functions.isUniform()) {
-			domain = ProductSet.getInstance(functions.getFirst().getDomain(), functions.getLength());
+			domain = functions.getFirst().getDomain();
 			coDomain = ProductSet.getInstance(functions.getFirst().getCoDomain(), functions.getLength());
 		} else {
-			Set[] domains = new Set[functions.getLength()];
+			domain = null;
 			Set[] coDomains = new Set[functions.getLength()];
 			for (int i = 0; i < functions.getLength(); i++) {
-				domains[i] = functions.getAt(i).getDomain();
+				Set nextDomain = functions.getAt(i).getDomain();
+				if (domain == null) {
+					domain = nextDomain;
+				} else if (!domain.isEquivalent(nextDomain)) {
+					throw new IllegalArgumentException();
+				}
 				coDomains[i] = functions.getAt(i).getCoDomain();
 			}
-			domain = ProductSet.getInstance(domains);
 			coDomain = ProductSet.getInstance(coDomains);
 		}
-		return new ProductFunction(domain, coDomain, functions);
+		return new SharedDomainFunction(domain, coDomain, functions);
 	}
 
-	public static ProductFunction getInstance(final Function... functions) {
-		return ProductFunction.getInstance(ImmutableArray.getInstance(functions));
+	public static SharedDomainFunction getInstance(final Function... functions) {
+		return SharedDomainFunction.getInstance(ImmutableArray.getInstance(functions));
 	}
 
-	public static ProductFunction getInstance(final Function function, final int arity) {
-		return ProductFunction.getInstance(ImmutableArray.getInstance(function, arity));
+	public static SharedDomainFunction getInstance(final Function function, final int arity) {
+		return SharedDomainFunction.getInstance(ImmutableArray.getInstance(function, arity));
 	}
 
 }
