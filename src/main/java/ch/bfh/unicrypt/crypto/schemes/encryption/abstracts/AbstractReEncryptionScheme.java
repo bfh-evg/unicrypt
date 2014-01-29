@@ -50,10 +50,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
-import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.RemovalFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
@@ -89,10 +88,9 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 		if (this.reEncryptionFunction == null) {
 			ProductSet inputSpace = ProductSet.getInstance(this.getEncryptionKeySpace(), this.getEncryptionSpace(), this.getRandomizationSpace());
 			this.reEncryptionFunction = CompositeFunction.getInstance(
-				   MultiIdentityFunction.getInstance(inputSpace, 2),
-				   ProductFunction.getInstance(SelectionFunction.getInstance(inputSpace, 1),
-											   CompositeFunction.getInstance(RemovalFunction.getInstance(inputSpace, 1),
-																			 this.getIdentityEncryptionFunction())),
+				   SharedDomainFunction.getInstance(SelectionFunction.getInstance(inputSpace, 1),
+													CompositeFunction.getInstance(RemovalFunction.getInstance(inputSpace, 1),
+																				  this.getIdentityEncryptionFunction())),
 				   ApplyFunction.getInstance(this.getEncryptionSpace()));
 		}
 		return this.reEncryptionFunction;
