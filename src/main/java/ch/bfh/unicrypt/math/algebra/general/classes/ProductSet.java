@@ -43,17 +43,16 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
-import ch.bfh.unicrypt.math.helper.compound.Compound;
-import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
+import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
-import java.lang.reflect.Array;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Iterator;
 
 /**
  *
@@ -61,24 +60,13 @@ import java.util.Iterator;
  */
 public class ProductSet
 	   extends AbstractSet<Tuple, ImmutableArray<Element>>
-	   implements Compound<ProductSet, Set> {
+	   implements RecursiveCompound<ProductSet, Set> {
 
-	private final Set[] sets;
-	private final int arity;
-	private final Class<? extends Set> setClass; // this is needed to create arrays of the actual type
+	private final ImmutableArray<Set> sets;
 
-	protected ProductSet(Set[] sets) {
+	protected ProductSet(ImmutableArray<Set> sets) {
 		super(ImmutableArray.class);
-		this.sets = sets.clone();
-		this.arity = sets.length;
-		this.setClass = (Class<Set>) sets.getClass().getComponentType();
-	}
-
-	protected ProductSet(Set set, int arity) {
-		super(ImmutableArray.class);
-		this.sets = new Set[]{set};
-		this.arity = arity;
-		this.setClass = set.getClass();
+		this.sets = sets;
 	}
 
 	public final boolean contains(Element... elements) {
@@ -93,10 +81,10 @@ public class ProductSet
 //		return this.contains(ArrayUtil.intToBigIntegerArray(values));
 //	}
 	public final boolean contains(BigInteger... values) {
-		if (values == null || values.length != this.arity) {
+		if (values == null || values.length != this.getArity()) {
 			throw new IllegalArgumentException();
 		}
-		for (int i = 0; i < this.arity; i++) {
+		for (int i = 0; i < this.getArity(); i++) {
 			if (!this.getAt(i).contains(values[i])) {
 				return false;
 			}
@@ -109,11 +97,11 @@ public class ProductSet
 //
 
 	public final Tuple getElement(BigInteger[] values) {
-		if (values == null || values.length != this.arity) {
+		if (values == null || values.length != this.getArity()) {
 			throw new IllegalArgumentException();
 		}
-		Element[] elements = new Element[this.arity];
-		for (int i = 0; i < this.arity; i++) {
+		Element[] elements = new Element[this.getArity()];
+		for (int i = 0; i < this.getArity(); i++) {
 			elements[i] = this.getAt(i).getElement(values[i]);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(elements));
@@ -125,29 +113,25 @@ public class ProductSet
 	//
 	@Override
 	protected BigInteger abstractGetOrder() {
-		if (this.isNull()) {
+		if (this.isEmpty()) {
 			return BigInteger.ONE;
 		}
 		if (this.isUniform()) {
 			Set first = this.getFirst();
 			if (first.isFinite() && first.hasKnownOrder()) {
-				return first.getOrder().pow(this.arity);
+				return first.getOrder().pow(this.getArity());
 			}
 			return first.getOrder();
 		}
 		BigInteger result = BigInteger.ONE;
-		for (Set set : this.makeIterable()) {
-			if (set.isEmpty()) {
-				return BigInteger.ZERO;
+		for (Set set : this.sets) {
+			if (!set.isFinite()) {
+				return Set.INFINITE_ORDER;
 			}
-			if (!set.isFinite() || result.equals(Set.INFINITE_ORDER)) {
-				result = Set.INFINITE_ORDER;
+			if (!set.hasKnownOrder() || result.equals(Set.UNKNOWN_ORDER)) {
+				result = Set.UNKNOWN_ORDER;
 			} else {
-				if (!set.hasKnownOrder() || result.equals(Set.UNKNOWN_ORDER)) {
-					result = Set.UNKNOWN_ORDER;
-				} else {
-					result = result.multiply(set.getOrder());
-				}
+				result = result.multiply(set.getOrder());
 			}
 		}
 		return result;
@@ -155,16 +139,16 @@ public class ProductSet
 
 	@Override
 	protected boolean abstractContains(BigInteger bigInteger) {
-		BigInteger[] values = MathUtil.unpairAndUnfold(bigInteger, this.arity);
+		BigInteger[] values = MathUtil.unpairAndUnfold(bigInteger, this.getArity());
 		return this.contains(values);
 	}
 
 	@Override
 	protected boolean abstractContains(ImmutableArray<Element> value) {
-		if (value == null || value.getLength() != this.arity) {
+		if (value == null || value.getLength() != this.getArity()) {
 			return false;
 		}
-		for (int i = 0; i < this.arity; i++) {
+		for (int i = 0; i < this.getArity(); i++) {
 			if (!this.getAt(i).contains(value.getAt(i))) {
 				return false;
 			}
@@ -174,16 +158,16 @@ public class ProductSet
 
 	@Override
 	protected Tuple abstractGetElement(BigInteger bigInteger) {
-		BigInteger[] values = MathUtil.unpairAndUnfold(bigInteger, this.arity);
+		BigInteger[] values = MathUtil.unpairAndUnfold(bigInteger, this.getArity());
 		return this.getElement(values);
 	}
 
 	@Override
 	protected Tuple abstractGetElement(ImmutableArray<Element> value) {
-		if (this.arity == 2) {
+		if (this.getArity() == 2) {
 			return new Pair(this, value);
 		}
-		if (this.arity == 3) {
+		if (this.getArity() == 3) {
 			return new Triple(this, value);
 		}
 		return new Tuple(this, value);
@@ -191,8 +175,8 @@ public class ProductSet
 
 	@Override
 	protected Tuple abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		final Element[] randomElements = new Element[this.arity];
-		for (int i = 0; i < this.arity; i++) {
+		final Element[] randomElements = new Element[this.getArity()];
+		for (int i = 0; i < this.getArity(); i++) {
 			randomElements[i] = this.getAt(i).getRandomElement(randomByteSequence);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(randomElements));
@@ -201,10 +185,10 @@ public class ProductSet
 	@Override
 	protected boolean abstractEquals(Set set) {
 		ProductSet other = (ProductSet) set;
-		if (this.arity != other.arity) {
+		if (this.getArity() != other.getArity()) {
 			return false;
 		}
-		for (int i = 0; i < this.arity; i++) {
+		for (int i = 0; i < this.getArity(); i++) {
 			if (!this.getAt(i).equals(other.getAt(i))) {
 				return false;
 			}
@@ -215,8 +199,8 @@ public class ProductSet
 	@Override
 	protected int abstractHashCode() {
 		int hash = 7;
-		hash = 47 * hash + this.arity;
-		for (int i = 0; i < this.arity; i++) {
+		hash = 47 * hash + this.getArity();
+		for (int i = 0; i < this.getArity(); i++) {
 			hash = 47 * hash + this.getAt(i).hashCode();
 		}
 		return hash;
@@ -225,10 +209,10 @@ public class ProductSet
 	@Override
 	protected boolean standardIsEquivalent(Set set) {
 		ProductSet other = (ProductSet) set;
-		if (this.arity != other.arity) {
+		if (this.getArity() != other.getArity()) {
 			return false;
 		}
-		for (int i = 0; i < this.arity; i++) {
+		for (int i = 0; i < this.getArity(); i++) {
 			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
 				return false;
 			}
@@ -238,40 +222,36 @@ public class ProductSet
 
 	@Override
 	public int getArity() {
-		return this.arity;
+		return this.sets.getLength();
 	}
 
 	@Override
-	public final boolean isNull() {
-		return this.arity == 0;
+	public final boolean isEmpty() {
+		return this.sets.isEmpty();
 	}
 
 	@Override
 	public final boolean isUniform() {
-		return this.sets.length <= 1;
+		return this.sets.isUniform();
 	}
 
 	@Override
 	public Set getFirst() {
-		return this.getAt(0);
-
+		return this.sets.getFirst();
 	}
 
 	@Override
-	public Set getAt(int index
-	) {
-		if (index < 0 || index >= this.arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (this.isUniform()) {
-			return this.sets[0];
-		}
-		return this.sets[index];
+	public Set getLast() {
+		return this.sets.getLast();
 	}
 
 	@Override
-	public Set getAt(int... indices
-	) {
+	public Set getAt(int index) {
+		return this.sets.getAt(index);
+	}
+
+	@Override
+	public Set getAt(int... indices) {
 		if (indices == null) {
 			throw new IllegalArgumentException();
 		}
@@ -288,72 +268,31 @@ public class ProductSet
 
 	@Override
 	public Set[] getAll() {
-		Set[] result = (Set[]) Array.newInstance(this.setClass, this.arity);
-		for (int i = 0; i < this.arity; i++) {
-			result[i] = this.getAt(i);
-		}
-		return result;
+		return this.sets.getAll();
 	}
 
 	@Override
 	public ProductSet removeAt(final int index) {
-		if (index < 0 || index >= this.arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		Set[] remainingSets = new Set[this.arity - 1];
-		for (int i = 0; i < this.arity - 1; i++) {
-			if (i < index) {
-				remainingSets[i] = this.getAt(i);
-			} else {
-				remainingSets[i] = this.getAt(i + 1);
-			}
-		}
-		return ProductSet.getInstance(remainingSets);
+		return ProductSet.getInstance(this.sets.removeAt(index));
 	}
 
 	@Override
 	public ProductSet insertAt(int index, Set set) {
-		if (index < 0 || index > this.arity) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (set == null) {
-			throw new IllegalArgumentException();
-		}
-		Set[] newSets = new Set[this.arity + 1];
-		for (int i = 0; i < this.arity + 1; i++) {
-			if (i < index) {
-				newSets[i] = this.getAt(i);
-			} else if (i == index) {
-				newSets[i] = set;
-			} else {
-				newSets[i] = this.getAt(i - 1);
-			}
-		}
-		return ProductSet.getInstance(newSets);
+		return ProductSet.getInstance(this.sets.insertAt(index, set));
 	}
 
 	@Override
 	public ProductSet add(Set set) {
-		return this.insertAt(this.arity, set);
-	}
-
-	public Iterable<? extends Set> makeIterable() {
-		final ProductSet productSet = this;
-		return new Iterable<Set>() {
-			@Override
-			public Iterator<Set> iterator() {
-				return new CompoundIterator<Set>(productSet);
-			}
-		};
+		return this.insertAt(this.getArity(), set);
 	}
 
 	@Override
 	protected BigInteger standardGetOrderLowerBound() {
 		if (this.isUniform()) {
-			return this.getFirst().getOrderLowerBound().pow(this.arity);
+			return this.getFirst().getOrderLowerBound().pow(this.getArity());
 		}
 		BigInteger result = BigInteger.ONE;
-		for (Set set : this.makeIterable()) {
+		for (Set set : this.sets) {
 			result = result.multiply(set.getOrderLowerBound());
 		}
 		return result;
@@ -362,10 +301,10 @@ public class ProductSet
 	@Override
 	protected BigInteger standardGetOrderUpperBound() {
 		if (this.isUniform()) {
-			return this.getFirst().getOrderUpperBound().pow(this.arity);
+			return this.getFirst().getOrderUpperBound().pow(this.getArity());
 		}
 		BigInteger result = BigInteger.ONE;
-		for (Set set : this.makeIterable()) {
+		for (Set set : this.sets) {
 			if (set.getOrderUpperBound().equals(Set.INFINITE_ORDER)) {
 				return Set.INFINITE_ORDER;
 			}
@@ -380,7 +319,7 @@ public class ProductSet
 			return this.getFirst().getMinimalOrder();
 		}
 		BigInteger result = null;
-		for (Set set : this.makeIterable()) {
+		for (Set set : this.sets) {
 			if (result == null) {
 				result = set.getMinimalOrder();
 			} else {
@@ -392,15 +331,15 @@ public class ProductSet
 
 	@Override
 	protected String standardToStringContent() {
-		if (this.isNull()) {
+		if (this.isEmpty()) {
 			return "";
 		}
 		if (this.isUniform()) {
-			return this.getFirst().toString() + "^" + this.arity;
+			return this.getFirst().toString() + "^" + this.getArity();
 		}
 		String result = "";
 		String separator = "";
-		for (Set set : this.makeIterable()) {
+		for (Set set : this.sets) {
 			result = result + separator + set.toString();
 			separator = " x ";
 		}
@@ -410,54 +349,73 @@ public class ProductSet
 	//
 	// STATIC FACTORY METHODS
 	//
-	/**
-	 * This is a static factory method to construct a composed set without calling respective constructors. The input
-	 * sets are given as an array.
-	 * <p>
-	 * <p/>
-	 * @param sets The array of input sets
-	 * @return The corresponding product set
-	 * @throws IllegalArgumentException if {@literal sets} is null or contains null
-	 */
-	public static ProductSet getInstance(final Set... sets) {
+	public static ProductSet getInstance(ImmutableArray<Set> sets) {
 		if (sets == null) {
 			throw new IllegalArgumentException();
 		}
 		boolean isSemiGroup = true;
-		if (sets.length > 0) {
-			boolean uniform = true;
-			Set first = sets[0];
-			for (final Set set : sets) {
-				if (set == null) {
-					throw new IllegalArgumentException();
-				}
-				if (!set.isEquivalent(first)) {
-					uniform = false;
-				}
-				isSemiGroup = set.isSemiGroup() && isSemiGroup;
-			}
-			if (uniform) {
-				return ProductSet.getInstance(first, sets.length);
-			}
+		boolean isMonoid = true;
+		boolean isGroup = true;
+		boolean isCyclic = true;
+		for (final Set set : sets) {
+			isSemiGroup = isSemiGroup && set.isSemiGroup();
+			isMonoid = isMonoid && set.isMonoid();
+			isGroup = isGroup && set.isGroup();
+			isCyclic = isCyclic && set.isCyclic();
+		}
+		if (isCyclic) {
+			return new ProductCyclicGroup(sets);
+		}
+		if (isGroup) {
+			return new ProductGroup(sets);
+		}
+		if (isMonoid) {
+			return new ProductMonoid(sets);
 		}
 		if (isSemiGroup) {
-			SemiGroup[] semiGroups = Arrays.copyOf(sets, sets.length, SemiGroup[].class);
-			return ProductSemiGroup.getInstance(semiGroups);
+			return new ProductSemiGroup(sets);
 		}
 		return new ProductSet(sets);
 	}
 
+	public static ProductSet getInstance(final Set... sets) {
+		return ProductSet.getInstance(ImmutableArray.<Set>getInstance(sets));
+	}
+
+	public static ProductSemiGroup getInstance(final SemiGroup... semiGroups) {
+		return (ProductSemiGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(semiGroups));
+	}
+
+	public static ProductMonoid getInstance(final Monoid... monoids) {
+		return (ProductMonoid) ProductSet.getInstance(ImmutableArray.<Set>getInstance(monoids));
+	}
+
+	public static ProductGroup getInstance(final Group... groups) {
+		return (ProductGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(groups));
+	}
+
+	public static ProductCyclicGroup getInstance(final CyclicGroup... cyclicGroups) {
+		return (ProductCyclicGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(cyclicGroups));
+	}
+
 	public static ProductSet getInstance(final Set set, int arity) {
-		if ((set == null) || (arity < 0)) {
-			throw new IllegalArgumentException();
-		}
-		if (set.isSemiGroup()) {
-			return ProductSemiGroup.getInstance((SemiGroup) set, arity);
-		}
-		if (arity == 0) {
-			return new ProductSet(new Set[]{});
-		}
-		return new ProductSet(set, arity);
+		return ProductSet.getInstance(ImmutableArray.<Set>getInstance(set, arity));
+	}
+
+	public static ProductSemiGroup getInstance(final SemiGroup semiGroup, int arity) {
+		return (ProductSemiGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(semiGroup, arity));
+	}
+
+	public static ProductMonoid getInstance(final Monoid monoid, int arity) {
+		return (ProductMonoid) ProductSet.getInstance(ImmutableArray.<Set>getInstance(monoid, arity));
+	}
+
+	public static ProductGroup getInstance(final Group group, int arity) {
+		return (ProductGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(group, arity));
+	}
+
+	public static ProductCyclicGroup getInstance(final CyclicGroup cyclicGroup, int arity) {
+		return (ProductCyclicGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(cyclicGroup, arity));
 	}
 
 }

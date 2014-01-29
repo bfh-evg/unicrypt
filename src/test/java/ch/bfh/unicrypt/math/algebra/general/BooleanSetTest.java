@@ -404,15 +404,6 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of isEmpty method, of class BooleanSet.?
-	 */
-	@Test
-	public void testIsEmpty() {
-//		System.out.println("isEmpty");
-		Assert.assertTrue(!BooleanSet.getInstance().isEmpty());
-	}
-
-	/**
 	 * Test of isField method, of class BooleanSet.?
 	 */
 	@Test

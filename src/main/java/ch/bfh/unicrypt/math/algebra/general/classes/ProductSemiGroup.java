@@ -42,13 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
-import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Iterator;
 
 /**
  *
@@ -58,12 +55,8 @@ public class ProductSemiGroup
 	   extends ProductSet
 	   implements SemiGroup {
 
-	protected ProductSemiGroup(SemiGroup[] semiGroups) {
-		super(semiGroups);
-	}
-
-	protected ProductSemiGroup(SemiGroup semiGroup, int arity) {
-		super(semiGroup, arity);
+	protected ProductSemiGroup(ImmutableArray<Set> sets) {
+		super(sets);
 	}
 
 	@Override
@@ -89,17 +82,6 @@ public class ProductSemiGroup
 	@Override
 	public ProductSemiGroup removeAt(final int index) {
 		return (ProductSemiGroup) super.removeAt(index);
-	}
-
-	@Override
-	public Iterable<? extends SemiGroup> makeIterable() {
-		final ProductSet productSemiGroup = this;
-		return new Iterable<SemiGroup>() {
-			@Override
-			public Iterator<SemiGroup> iterator() {
-				return new CompoundIterator<SemiGroup>(productSemiGroup);
-			}
-		};
 	}
 
 	@Override
@@ -193,53 +175,52 @@ public class ProductSemiGroup
 		return this.apply(results);
 	}
 
-	/**
-	 * This is a static factory method to construct a composed semigroup without calling respective constructors. The
-	 * input semigroups are given as an array.
-	 * <p/>
-	 * @param semiGroups The array of input semigroups
-	 * @return The corresponding product semigroup
-	 * @throws IllegalArgumentException if {@literal semigroups} is null or contains null
-	 */
-	public static ProductSemiGroup getInstance(final SemiGroup... semiGroups) {
-		if (semiGroups == null) {
-			throw new IllegalArgumentException();
-		}
-		boolean isMonoid = true;
-		if (semiGroups.length > 0) {
-			boolean uniform = true;
-			SemiGroup first = semiGroups[0];
-			for (final SemiGroup semiGroup : semiGroups) {
-				if (semiGroup == null) {
-					throw new IllegalArgumentException();
-				}
-				if (!semiGroup.isEquivalent(first)) {
-					uniform = false;
-				}
-				isMonoid = isMonoid && semiGroup.isMonoid();
-			}
-			if (uniform) {
-				return ProductSemiGroup.getInstance(first, semiGroups.length);
-			}
-		}
-		if (isMonoid) {
-			Monoid[] monoids = Arrays.copyOf(semiGroups, semiGroups.length, Monoid[].class);
-			return ProductMonoid.getInstance(monoids);
-		}
-		return new ProductSemiGroup(semiGroups);
-	}
-
-	public static ProductSemiGroup getInstance(final SemiGroup semiGroup, int arity) {
-		if ((semiGroup == null) || (arity < 0)) {
-			throw new IllegalArgumentException();
-		}
-		if (semiGroup.isMonoid()) {
-			return ProductMonoid.getInstance((Monoid) semiGroup, arity);
-		}
-		if (arity == 0) {
-			return new ProductSemiGroup(new SemiGroup[]{});
-		}
-		return new ProductSemiGroup(semiGroup, arity);
-	}
-
+//	/**
+//	 * This is a static factory method to construct a composed semigroup without calling respective constructors. The
+//	 * input semigroups are given as an array.
+//	 * <p/>
+//	 * @param semiGroups The array of input semigroups
+//	 * @return The corresponding product semigroup
+//	 * @throws IllegalArgumentException if {@literal semigroups} is null or contains null
+//	 */
+//	public static ProductSemiGroup getInstance(final SemiGroup... semiGroups) {
+//		if (semiGroups == null) {
+//			throw new IllegalArgumentException();
+//		}
+//		boolean isMonoid = true;
+//		if (semiGroups.length > 0) {
+//			boolean uniform = true;
+//			SemiGroup first = semiGroups[0];
+//			for (final SemiGroup semiGroup : semiGroups) {
+//				if (semiGroup == null) {
+//					throw new IllegalArgumentException();
+//				}
+//				if (!semiGroup.isEquivalent(first)) {
+//					uniform = false;
+//				}
+//				isMonoid = isMonoid && semiGroup.isMonoid();
+//			}
+//			if (uniform) {
+//				return ProductSemiGroup.getInstance(first, semiGroups.length);
+//			}
+//		}
+//		if (isMonoid) {
+//			Monoid[] monoids = Arrays.copyOf(semiGroups, semiGroups.length, Monoid[].class);
+//			return ProductMonoid.getInstance(monoids);
+//		}
+//		return new ProductSemiGroup(semiGroups);
+//	}
+//
+//	public static ProductSemiGroup getInstance(final SemiGroup semiGroup, int arity) {
+//		if ((semiGroup == null) || (arity < 0)) {
+//			throw new IllegalArgumentException();
+//		}
+//		if (semiGroup.isMonoid()) {
+//			return ProductMonoid.getInstance((Monoid) semiGroup, arity);
+//		}
+//		if (arity == 0) {
+//			return new ProductSemiGroup(new SemiGroup[]{});
+//		}
+//		return new ProductSemiGroup(semiGroup, arity);
+//	}
 }

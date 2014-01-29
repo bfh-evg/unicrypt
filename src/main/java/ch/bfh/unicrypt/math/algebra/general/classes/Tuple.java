@@ -46,8 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.helper.compound.Compound;
-import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
+import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -58,7 +57,7 @@ import java.util.Iterator;
  */
 public class Tuple
 	   extends AbstractElement<ProductSet, Tuple, ImmutableArray<Element>>
-	   implements Compound<Tuple, Element>, Iterable<Element> {
+	   implements RecursiveCompound<Tuple, Element>, Iterable<Element> {
 
 	protected Tuple(final ProductSet set, final ImmutableArray<Element> elements) {
 		super(set, elements);
@@ -70,7 +69,7 @@ public class Tuple
 	}
 
 	@Override
-	public final boolean isNull() {
+	public final boolean isEmpty() {
 		return this.getValue().isEmpty();
 	}
 
@@ -82,6 +81,11 @@ public class Tuple
 	@Override
 	public Element getFirst() {
 		return this.getValue().getFirst();
+	}
+
+	@Override
+	public Element getLast() {
+		return this.getValue().getLast();
 	}
 
 	@Override
@@ -128,7 +132,7 @@ public class Tuple
 
 	@Override
 	public Iterator<Element> iterator() {
-		return new CompoundIterator<Element>(this);
+		return this.getValue().iterator();
 	}
 
 	@Override

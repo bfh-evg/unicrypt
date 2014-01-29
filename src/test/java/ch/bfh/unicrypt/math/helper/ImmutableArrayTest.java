@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import java.math.BigInteger;
 import java.util.Iterator;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -135,6 +136,17 @@ public class ImmutableArrayTest {
 		assertTrue(a2.equals(a2));
 		assertTrue(a2.equals(a3));
 		assertTrue(a3.equals(a3));
+	}
+
+	@Test
+	public void testGetInstance_ImmutableArray() {
+		Number n1 = BigInteger.valueOf(5);
+		Number n2 = BigInteger.valueOf(10);
+		ImmutableArray<Number> ns = ImmutableArray.getInstance(n1, n2);
+		ImmutableArray<BigInteger> bs = ImmutableArray.getInstance(ns, BigInteger.class);
+		assertEquals(ns.getLength(), bs.getLength());
+		assertEquals(ns.getAt(0), bs.getAt(0));
+		assertEquals(ns.getAt(1), bs.getAt(1));
 	}
 
 }

@@ -39,70 +39,39 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.helper.compound;
+package ch.bfh.unicrypt.math.algebra.general;
+
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Alphabet;
 
 /**
  *
- * @param <C>
- * @param <T>
- * @author rolfhaenni
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public interface Compound<C extends Compound<C, T>, T> {
+public class ProductSetExample {
 
-	/**
-	 * The arity of a function is the number of functions applied in parallel or in series when calling the function.
-	 * <p>
-	 * @return The function's arity
-	 */
-	public int getArity();
+	public static void example1() {
 
-	public boolean isEmpty();
+		Set s1 = Z.getInstance();
+		Set s2 = N.getInstance();
+		Set s3 = StringMonoid.getInstance(Alphabet.UNARY);
 
-	/**
-	 * Checks if a compound function consists of multiple copies of the same function.
-	 * <p>
-	 * @return {@code true}, if the function is a power function, {@code false} otherwise
-	 */
-	public boolean isUniform();
+		ProductSet s123 = ProductSet.getInstance(s1, s2, s3);
+		System.out.println(s123);
 
-	/**
-	 * Returns the function at index 0.
-	 * <p>
-	 * @return The function at index 0
-	 * @throws UnsupportedOperationException for functions of arity 0
-	 */
-	public T getFirst();
+		ProductSet s1111 = ProductSet.getInstance(s1, 4);
+		System.out.println(s1111);
+	}
 
-	public T getLast();
+	public static void main(final String[] args) {
 
-	/**
-	 * Returns the function at the given index.
-	 * <p>
-	 * @param index The given index
-	 * @return The corresponding function
-	 * @throws IndexOutOfBoundsException if {
-	 * @ode index} is an invalid index
-	 */
-	public T getAt(int index);
+		System.out.println("\nEXAMPLE 1:");
+		ProductSetExample.example1();
 
-	/**
-	 * Returns an array containing all the functions of which {@code this} function is composed of.
-	 * <p>
-	 * @return The corresponding array of functions
-	 */
-	public T[] getAll();
-
-	/**
-	 * Creates a new product set which contains one set less than the given product set.
-	 * <p>
-	 * @param index The index of the set to remove
-	 * @return The resulting product set.
-	 * @throws IndexOutOfBoundsException if {@code index<0} or {@code index>arity-1}
-	 */
-	public Compound<C, T> removeAt(final int index);
-
-	public Compound<C, T> insertAt(final int index, final T object);
-
-	public Compound<C, T> add(final T object);
+	}
 
 }

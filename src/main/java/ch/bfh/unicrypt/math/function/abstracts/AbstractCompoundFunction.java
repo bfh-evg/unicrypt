@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
+import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import java.util.Iterator;
 
 /**
@@ -60,7 +61,7 @@ import java.util.Iterator;
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<D, DE, C, CE>
-	   implements Compound<CF, Function>, Iterable<Function> {
+	   implements RecursiveCompound<CF, Function>, Iterable<Function> {
 
 	private final ImmutableArray<Function> functions;
 
@@ -75,7 +76,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public final boolean isNull() {
+	public final boolean isEmpty() {
 		return this.functions.isEmpty();
 	}
 
@@ -87,6 +88,11 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	@Override
 	public Function getFirst() {
 		return this.functions.getFirst();
+	}
+
+	@Override
+	public Function getLast() {
+		return this.functions.getLast();
 	}
 
 	@Override

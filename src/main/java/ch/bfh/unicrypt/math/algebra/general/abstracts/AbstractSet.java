@@ -192,11 +192,6 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final boolean isEmpty() {
-		return this.getOrder().equals(BigInteger.ZERO);
-	}
-
-	@Override
 	public final boolean isSingleton() {
 		return this.getOrder().equals(BigInteger.ONE);
 	}
