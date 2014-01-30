@@ -88,6 +88,10 @@ public class ProductSemiGroup
 		return (ProductSemiGroup) super.insertAt(index, semiGroup);
 	}
 
+	public ProductSemiGroup replaceAt(final int index, SemiGroup semiGroup) {
+		return (ProductSemiGroup) super.replaceAt(index, semiGroup);
+	}
+
 	public ProductSemiGroup add(SemiGroup semiGroup) {
 		return (ProductSemiGroup) super.add(semiGroup);
 	}

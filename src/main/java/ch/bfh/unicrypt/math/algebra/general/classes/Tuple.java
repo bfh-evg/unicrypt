@@ -123,7 +123,11 @@ public class Tuple
 	@Override
 	public Tuple insertAt(int index, Element element) {
 		return Tuple.getInstance(this.getSet().insertAt(index, element.getSet()), this.getValue().insertAt(index, element));
+	}
 
+	@Override
+	public Tuple replaceAt(int index, Element element) {
+		return Tuple.getInstance(this.getSet().replaceAt(index, element.getSet()), this.getValue().replaceAt(index, element));
 	}
 
 	@Override

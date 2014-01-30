@@ -103,6 +103,8 @@ public interface Compound<C extends Compound<C, T>, T> {
 
 	public Compound<C, T> insertAt(final int index, final T object);
 
+	public Compound<C, T> replaceAt(final int index, final T object);
+
 	public Compound<C, T> add(final T object);
 
 	public Compound<C, T> append(final Compound<C, T> other);

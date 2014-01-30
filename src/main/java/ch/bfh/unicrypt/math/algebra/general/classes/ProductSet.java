@@ -283,6 +283,11 @@ public class ProductSet
 	}
 
 	@Override
+	public ProductSet replaceAt(int index, Set set) {
+		return ProductSet.getInstance(this.sets.replaceAt(index, set));
+	}
+
+	@Override
 	public ProductSet add(Set set) {
 		return this.insertAt(this.getArity(), set);
 	}

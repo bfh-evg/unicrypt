@@ -87,6 +87,10 @@ public class ProductGroup
 		return (ProductGroup) super.insertAt(index, group);
 	}
 
+	public ProductGroup replaceAt(final int index, Group group) {
+		return (ProductGroup) super.replaceAt(index, group);
+	}
+
 	public ProductGroup add(Group group) {
 		return (ProductGroup) super.add(group);
 	}

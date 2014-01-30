@@ -90,6 +90,10 @@ public class ProductMonoid
 		return (ProductMonoid) super.insertAt(index, monoid);
 	}
 
+	public ProductMonoid replaceAt(final int index, Monoid monoid) {
+		return (ProductMonoid) super.replaceAt(index, monoid);
+	}
+
 	public ProductMonoid add(Monoid monoid) {
 		return (ProductMonoid) super.add(monoid);
 	}

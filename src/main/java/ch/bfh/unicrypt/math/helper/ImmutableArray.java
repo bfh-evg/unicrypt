@@ -156,7 +156,7 @@ public class ImmutableArray<T>
 		if (object == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.isUniform()) { // case 2, not empty
+		if (this.isUniform()) { // case 2, possibly empty
 			if (this.isEmpty() || this.array[0].equals(object)) {
 				return new ImmutableArray<T>(object, this.length + 1);
 			}
@@ -168,6 +168,25 @@ public class ImmutableArray<T>
 		T[] result = Arrays.copyOf(this.array, this.length + 1);
 		for (int i = index + 1; i < result.length; i++) {
 			result[i] = this.array[i - 1];
+		}
+		result[index] = object;
+		return new ImmutableArray<T>(result);
+	}
+
+	@Override
+	public ImmutableArray<T> replaceAt(int index, T object) {
+		if (index < 0 || index >= this.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.getAt(index).equals(object)) {
+			return this;
+		}
+		T[] result = Arrays.copyOf(this.array, this.length);
+		if (this.isUniform()) { // case 2, not empty
+			Arrays.fill(result, this.array[0]);
 		}
 		result[index] = object;
 		return new ImmutableArray<T>(result);

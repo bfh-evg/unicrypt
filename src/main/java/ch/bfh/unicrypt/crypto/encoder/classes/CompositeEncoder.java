@@ -124,6 +124,11 @@ public class CompositeEncoder
 	}
 
 	@Override
+	public CompositeEncoder replaceAt(int index, Encoder encoder) {
+		return new CompositeEncoder(this.encoders.replaceAt(index, encoder));
+	}
+
+	@Override
 	public CompositeEncoder add(Encoder encoder) {
 		return new CompositeEncoder(this.encoders.add(encoder));
 	}

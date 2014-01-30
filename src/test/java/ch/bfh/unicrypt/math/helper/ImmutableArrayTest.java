@@ -108,6 +108,11 @@ public class ImmutableArrayTest {
 	}
 
 	@Test
+	public void testReplaceAt() {
+		assertEquals(a2, a1.replaceAt(1, "s1").replaceAt(2, "s1"));
+	}
+
+	@Test
 	public void testAdd() {
 		assertEquals(a1, a0.add("s1").add("s2").add("s3"));
 		assertEquals(a2, a0.add("s1").add("s1").add("s1"));
