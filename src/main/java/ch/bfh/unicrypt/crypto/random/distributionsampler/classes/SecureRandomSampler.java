@@ -57,7 +57,7 @@ public class SecureRandomSampler
 
 	private boolean isCollecting;
 	private SecureRandom secureRandom;
-	private DistributionSamplerCollector distributionSamplerCollector;
+	private final DistributionSamplerCollector distributionSamplerCollector;
 	private Thread collectorThread;
 
 	private int securityParameterInBytes;

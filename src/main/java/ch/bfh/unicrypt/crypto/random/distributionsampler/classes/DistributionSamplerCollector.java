@@ -49,8 +49,10 @@ import ch.bfh.unicrypt.math.helper.ByteArray;
  * This class shows the collection of a sample distribution in order to find a seed with many bytes. Entropy is not
  * guaranteed.
  * <p>
- * Please note, that this class needs to be split in two parts (future work): The DistributionSecureRandomSamplerr
- * ,Distribution(s).
+ * TODO: Please note: This concept needs a complete refactoring: The main idea is to have one Collector collecting
+ * multiple samples form different samplers. The Collector will then fusion the samples in a specified manner... e.g.
+ * Only if Samples from Distribution x AND Samples from Distribution y are ready, the fusion of it will be returned.
+ * This is a project of its own!
  * <p>
  * This will lead to the aggregation: A distributionSecureRandomSamplerr may hold one or more Distributions
  * <p>
