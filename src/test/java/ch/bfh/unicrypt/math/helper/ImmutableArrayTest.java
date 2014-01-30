@@ -108,6 +108,11 @@ public class ImmutableArrayTest {
 	}
 
 	@Test
+	public void testReplaceAt() {
+		assertEquals(a2, a1.replaceAt(1, "s1").replaceAt(2, "s1"));
+	}
+
+	@Test
 	public void testAdd() {
 		assertEquals(a1, a0.add("s1").add("s2").add("s3"));
 		assertEquals(a2, a0.add("s1").add("s1").add("s1"));
@@ -135,6 +140,22 @@ public class ImmutableArrayTest {
 		assertTrue(a2.equals(a2));
 		assertTrue(a2.equals(a3));
 		assertTrue(a3.equals(a3));
+	}
+
+	@Test
+	public void testAppend() {
+		assertEquals(a0, a0.append(a0));
+		assertEquals(a1, a0.append(a1));
+		assertEquals(a1, a1.append(a0));
+		assertEquals(a2, a0.append(a2));
+		assertEquals(a2, a2.append(a0));
+		assertEquals(a3, a0.append(a3));
+		assertEquals(a3, a3.append(a0));
+		assertEquals(a3, a3.append(a0));
+		assertEquals(6, a1.append(a1).getLength());
+		assertEquals(6, a1.append(a2).getLength());
+		assertEquals(a2.append(a2), a3.append(a3));
+		assertEquals(a2.append(a3), a3.append(a2));
 	}
 
 }

@@ -49,11 +49,12 @@ import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
+import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import java.util.Iterator;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
-	   implements Compound<CompositeEncoder, Encoder>, Iterable<Encoder> {
+	   implements RecursiveCompound<CompositeEncoder, Encoder>, Iterable<Encoder> {
 
 	private final ImmutableArray<Encoder> encoders;
 
@@ -98,7 +99,12 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public boolean isNull() {
+	public Encoder getLast() {
+		return this.encoders.getLast();
+	}
+
+	@Override
+	public boolean isEmpty() {
 		return this.encoders.isEmpty();
 	}
 
@@ -118,8 +124,22 @@ public class CompositeEncoder
 	}
 
 	@Override
+	public CompositeEncoder replaceAt(int index, Encoder encoder) {
+		return new CompositeEncoder(this.encoders.replaceAt(index, encoder));
+	}
+
+	@Override
 	public CompositeEncoder add(Encoder encoder) {
 		return new CompositeEncoder(this.encoders.add(encoder));
+	}
+
+	@Override
+	public CompositeEncoder append(Compound<CompositeEncoder, Encoder> compound) {
+		if (compound instanceof CompositeEncoder) {
+			CompositeEncoder other = (CompositeEncoder) compound;
+			return new CompositeEncoder(this.encoders.append(other.encoders));
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import ch.bfh.unicrypt.math.helper.compound.Compound;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -52,7 +53,7 @@ import java.util.Iterator;
  */
 public class ImmutableArray<T>
 	   extends UniCrypt
-	   implements Iterable<T> {
+	   implements Iterable<T>, Compound<ImmutableArray<T>, T> {
 
 	// The obects are stored either as an ordinary, possibly empty array (case 1)
 	// or as an array of length 1 together with the full length of the immutable
@@ -78,18 +79,26 @@ public class ImmutableArray<T>
 		this.length = length;
 	}
 
-	public boolean isUniform() { // case 2 or empty
-		return this.array.length <= 1;
-	}
-
 	public int getLength() {
 		return this.length;
 	}
 
+	@Override
+	public int getArity() {
+		return this.length;
+	}
+
+	@Override
+	public boolean isUniform() { // case 2 or empty
+		return this.array.length <= 1;
+	}
+
+	@Override
 	public boolean isEmpty() {
 		return this.length == 0;
 	}
 
+	@Override
 	public T getAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
@@ -100,14 +109,17 @@ public class ImmutableArray<T>
 		return this.array[index]; // case 1
 	}
 
+	@Override
 	public T getFirst() {
 		return this.getAt(0);
 	}
 
+	@Override
 	public T getLast() {
 		return this.getAt(this.length - 1);
 	}
 
+	@Override
 	public T[] getAll() {
 		T[] result = Arrays.copyOf(this.array, this.length);
 		if (this.isUniform() && !this.isEmpty()) { // case 2, not empty
@@ -116,6 +128,7 @@ public class ImmutableArray<T>
 		return result;
 	}
 
+	@Override
 	public ImmutableArray<T> removeAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
@@ -135,6 +148,7 @@ public class ImmutableArray<T>
 		return ImmutableArray.getInstance(result);
 	}
 
+	@Override
 	public ImmutableArray<T> insertAt(int index, T object) {
 		if (index < 0 || index > this.length) {
 			throw new IndexOutOfBoundsException();
@@ -142,7 +156,7 @@ public class ImmutableArray<T>
 		if (object == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.isUniform()) { // case 2, not empty
+		if (this.isUniform()) { // case 2, possibly empty
 			if (this.isEmpty() || this.array[0].equals(object)) {
 				return new ImmutableArray<T>(object, this.length + 1);
 			}
@@ -159,8 +173,53 @@ public class ImmutableArray<T>
 		return new ImmutableArray<T>(result);
 	}
 
+	@Override
+	public ImmutableArray<T> replaceAt(int index, T object) {
+		if (index < 0 || index >= this.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.getAt(index).equals(object)) {
+			return this;
+		}
+		T[] result = Arrays.copyOf(this.array, this.length);
+		if (this.isUniform()) { // case 2, not empty
+			Arrays.fill(result, this.array[0]);
+		}
+		result[index] = object;
+		return new ImmutableArray<T>(result);
+	}
+
+	@Override
 	public ImmutableArray<T> add(T object) {
 		return this.insertAt(this.length, object);
+	}
+
+	@Override
+	public ImmutableArray<T> append(Compound<ImmutableArray<T>, T> compound) {
+		if (compound == null) {
+			throw new IllegalArgumentException();
+		}
+		ImmutableArray<T> other = (ImmutableArray<T>) compound;
+		if (this.isEmpty()) {
+			return other;
+		}
+		if (other.isEmpty()) {
+			return this;
+		}
+		if (this.isUniform() && other.isUniform() && this.getFirst().equals(other.getFirst())) {
+			return new ImmutableArray<T>(this.getFirst(), this.length + other.length);
+		}
+		T[] newArray = (T[]) Array.newInstance(this.array.getClass().getComponentType(), this.length + other.length);
+		for (int i = 0; i < this.length; i++) {
+			newArray[i] = this.getAt(i);
+		}
+		for (int i = 0; i < other.length; i++) {
+			newArray[this.length + i] = other.getAt(i);
+		}
+		return new ImmutableArray<T>(newArray);
 	}
 
 	@Override
@@ -237,7 +296,7 @@ public class ImmutableArray<T>
 			isUniform = isUniform && object.equals(array[0]);
 		}
 		if (isUniform && array.length != 0) {
-			return new ImmutableArray<T>(array[0], array.length);
+			return new ImmutableArray(array[0], array.length);
 		}
 		// Array.copyOf is necessary to protect external array modification
 		return new ImmutableArray<T>(Arrays.copyOf(array, array.length));
@@ -250,4 +309,16 @@ public class ImmutableArray<T>
 		return new ImmutableArray(object, length);
 	}
 
+	// DOES NOT WORK IN JAVA6
+//	// used for casting
+//	public static <S extends T, T> ImmutableArray<S> getInstance(ImmutableArray<T> oldArray, Class<S> newType) {
+//		if (oldArray.isUniform() && !oldArray.isEmpty()) {
+//			return new ImmutableArray((S) oldArray.getFirst(), oldArray.getLength());
+//		}
+//		S[] newArray = (S[]) Array.newInstance(newType, oldArray.length);
+//		for (int i = 0; i < oldArray.length; i++) {
+//			newArray[i] = (S) oldArray.getAt(i);
+//		}
+//		return new ImmutableArray(newArray);
+//	}
 }

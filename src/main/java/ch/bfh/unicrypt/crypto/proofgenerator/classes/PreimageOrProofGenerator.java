@@ -113,8 +113,8 @@ public class PreimageOrProofGenerator
 		if (index < 0 || index >= this.getPreimageProofFunction().getArity() || !this.getPreimageProofFunction().getAt(index).getDomain().contains(secret)) {
 			throw new IllegalArgumentException();
 		}
-		final Element[] domainElements = ((ProductMonoid) this.getPreimageProofFunction().getDomain()).getIdentityElement().getAll();
-		domainElements[index] = secret;
+		Tuple domainElements = ((ProductMonoid) this.getPreimageProofFunction().getDomain()).getIdentityElement();
+		domainElements = domainElements.replaceAt(index, secret);
 
 		return (Pair) this.getPrivateInputSpace().getElement(
 			   this.getPreimageProofFunction().getDomain().getElement(domainElements),

@@ -39,46 +39,48 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment.abstracts;
+package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.interfaces.DeterministicCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
-import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
-import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
-import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.helper.Alphabet;
 
-public abstract class AbstractDeterministicCommitmentScheme<MS extends Set, ME extends Element, CS extends Set, CE extends Element>
-	   extends AbstractCommitmentScheme<MS, CS>
-	   implements DeterministicCommitmentScheme {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class ProductSetExample {
 
-	@Override
-	public final CE commit(final Element message) {
-		return (CE) this.getCommitmentFunction().apply(message);
+	public static void example1() {
+
+		Set s1 = Z.getInstance();
+		Set s2 = N.getInstance();
+		Set s3 = StringMonoid.getInstance(Alphabet.UNARY);
+
+		ProductSet s123 = ProductSet.getInstance(s1, s2, s3);
+		System.out.println(s123);
+
+		ProductSet s123123 = s123.append(s123);
+		System.out.println(s123123);
+
+		ProductSet s111 = ProductSet.getInstance(s1, 3);
+		System.out.println(s111);
+
+		ProductSet s22 = ProductSet.getInstance(s2, 2);
+		System.out.println(s111);
+
+		ProductSet s111_22 = ProductSet.getInstance(s111, s22);
+		System.out.println(s111_22);
 	}
 
-	@Override
-	public final BooleanElement decommit(final Element message, final Element commitment) {
-		return (BooleanElement) this.getDecommitmentFunction().apply(message, commitment);
-	}
+	public static void main(final String[] args) {
 
-	@Override
-	protected final MS abstractGetMessageSpace() {
-		return (MS) this.getCommitmentFunction().getDomain();
-	}
+		System.out.println("\nEXAMPLE 1:");
+		ProductSetExample.example1();
 
-	@Override
-	protected Function abstractGetDecommitmentFunction() {
-		ProductSet decommitmentDomain = ProductSet.getInstance(this.getMessageSpace(), this.getCommitmentSpace());
-		return CompositeFunction.getInstance(
-			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(decommitmentDomain, 0),
-																			  this.getCommitmentFunction()),
-												SelectionFunction.getInstance(decommitmentDomain, 1)),
-			   EqualityFunction.getInstance(this.getCommitmentSpace()));
 	}
 
 }

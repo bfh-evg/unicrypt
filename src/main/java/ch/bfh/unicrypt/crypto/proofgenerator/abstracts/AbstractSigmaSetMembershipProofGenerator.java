@@ -58,6 +58,7 @@ import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 //
@@ -162,9 +163,8 @@ public abstract class AbstractSigmaSetMembershipProofGenerator<PUS extends SemiG
 
 		// proofFunction = composite( multiIdentity(2), productFunction(selction(0), setMembershipProofFunction), deltaFunction)
 		final ProductSet setMembershipPFDomain = (ProductSet) this.getSetMembershipProofFunction().getDomain();
-		final Function proofFunction = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(setMembershipPFDomain, 2),
-																	 ProductFunction.getInstance(SelectionFunction.getInstance(setMembershipPFDomain, 0),
-																								 this.getSetMembershipProofFunction()),
+		final Function proofFunction = CompositeFunction.getInstance(SharedDomainFunction.getInstance(SelectionFunction.getInstance(setMembershipPFDomain, 0),
+																									  this.getSetMembershipProofFunction()),
 																	 this.getDeltaFunction());
 
 		// proofFunction_x = composite( multiIdentity(1), proofFunction.partiallyApply(x, 0))

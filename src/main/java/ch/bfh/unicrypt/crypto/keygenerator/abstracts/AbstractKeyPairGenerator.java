@@ -50,9 +50,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
-import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 
@@ -129,9 +128,8 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 		if (this.keyPairGenerationFunction == null) {
 			this.keyPairGenerationFunction = CompositeFunction.getInstance(
 				   this.getPrivateKeyGenerationFunction(),
-				   MultiIdentityFunction.getInstance(this.privateKeySpace, 2),
-				   ProductFunction.getInstance(IdentityFunction.getInstance(this.privateKeySpace),
-											   this.getPublicKeyGenerationFunction()));
+				   SharedDomainFunction.getInstance(IdentityFunction.getInstance(this.privateKeySpace),
+													this.getPublicKeyGenerationFunction()));
 		}
 		return this.keyPairGenerationFunction;
 	}

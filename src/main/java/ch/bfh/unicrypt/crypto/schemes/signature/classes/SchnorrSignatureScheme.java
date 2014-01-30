@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -59,14 +59,13 @@ import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
-import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class SchnorrSignatureScheme<MS extends Set, ME extends Element>
-			 extends AbstractRandomizedSignatureScheme<MS, ME, ProductGroup, Pair, ZModPrime> {
+	   extends AbstractRandomizedSignatureScheme<MS, ME, ProductGroup, Pair, ZModPrime> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
@@ -100,23 +99,16 @@ public class SchnorrSignatureScheme<MS extends Set, ME extends Element>
 		ProductSet f3Domain = ProductSet.getInstance(z_q, 3);
 
 		//f3=randomization + f2*fPrivateKey
-		Function f3 = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(f3Domain, 2),
-																								ProductFunction.getInstance(SelectionFunction.getInstance(f3Domain, 0),
-																																						CompositeFunction.getInstance(AdapterFunction.getInstance(f3Domain, 1, 2),
-																																																					SelfApplyFunction.getInstance((SemiGroup) z_q))),
-																								ApplyFunction.getInstance(z_q));
+		Function f3 = CompositeFunction.getInstance(SharedDomainFunction.getInstance(SelectionFunction.getInstance(f3Domain, 0),
+																					 CompositeFunction.getInstance(AdapterFunction.getInstance(f3Domain, 1, 2),
+																												   SelfApplyFunction.getInstance((SemiGroup) z_q))),
+													ApplyFunction.getInstance(z_q));
 
 		//f()=fRandomization + privateKey*f2
-		Function f = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(domain, 3),
-																							 ProductFunction.getInstance(fRandomization,
-																																					 fPrivateKey,
-																																					 CompositeFunction.getInstance(MultiIdentityFunction.getInstance(domain, 2),
-																																																				 ProductFunction.getInstance(fMessage, f1),
-																																																				 CompositeFunction.getInstance(f2,
-																																																																			 ModuloFunction.getInstance(f2.getCoDomain(), z_q)))),
-																							 MultiIdentityFunction.getInstance(f3Domain, 2),
-																							 ProductFunction.getInstance(SelectionFunction.getInstance(f3Domain, 2),
-																																					 f3));
+		Function f = CompositeFunction.getInstance(SharedDomainFunction.getInstance(fRandomization, fPrivateKey,
+																					CompositeFunction.getInstance(SharedDomainFunction.getInstance(fMessage, f1),
+																												  CompositeFunction.getInstance(f2, ModuloFunction.getInstance(f2.getCoDomain(), z_q)))),
+												   SharedDomainFunction.getInstance(SelectionFunction.getInstance(f3Domain, 2), f3));
 
 		return f;
 		//Not yet finished... Must return Tuple (e,s) not only s
@@ -124,7 +116,7 @@ public class SchnorrSignatureScheme<MS extends Set, ME extends Element>
 
 	@Override
 	public Function abstractGetVerificationFunction() {
-	//r_=g^s * y^{-e}
+		//r_=g^s * y^{-e}
 		//e_=H(m||r_)
 		//E_ ?=? E
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

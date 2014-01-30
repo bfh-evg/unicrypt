@@ -42,13 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
-import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Iterator;
 
 /**
  *
@@ -60,12 +57,8 @@ public class ProductMonoid
 
 	private Tuple identityElement;
 
-	protected ProductMonoid(final Monoid[] monoids) {
-		super(monoids);
-	}
-
-	protected ProductMonoid(final Monoid monoid, final int arity) {
-		super(monoid, arity);
+	protected ProductMonoid(ImmutableArray<Set> sets) {
+		super(sets);
 	}
 
 	@Override
@@ -93,15 +86,20 @@ public class ProductMonoid
 		return (ProductMonoid) super.removeAt(index);
 	}
 
-	@Override
-	public Iterable<? extends Monoid> makeIterable() {
-		final ProductSet productMonoid = this;
-		return new Iterable<Monoid>() {
-			@Override
-			public Iterator<Monoid> iterator() {
-				return new CompoundIterator<Monoid>(productMonoid);
-			}
-		};
+	public ProductMonoid insertAt(final int index, Monoid monoid) {
+		return (ProductMonoid) super.insertAt(index, monoid);
+	}
+
+	public ProductMonoid replaceAt(final int index, Monoid monoid) {
+		return (ProductMonoid) super.replaceAt(index, monoid);
+	}
+
+	public ProductMonoid add(Monoid monoid) {
+		return (ProductMonoid) super.add(monoid);
+	}
+
+	public ProductMonoid append(ProductMonoid monoid) {
+		return (ProductMonoid) super.append(monoid);
 	}
 
 	@Override
@@ -137,53 +135,52 @@ public class ProductMonoid
 		return super.standardMultiSelfApply(elements, amounts);
 	}
 
-	/**
-	 * This is a static factory method to construct a composed monoid without calling respective constructors. The input
-	 * monids are given as an array.
-	 * <p/>
-	 * @param monoids The array of input monoids
-	 * @return The corresponding product monoids
-	 * @throws IllegalArgumentException if {@literal monids} is null or contains null
-	 */
-	public static ProductMonoid getInstance(final Monoid... monoids) {
-		if (monoids == null) {
-			throw new IllegalArgumentException();
-		}
-		boolean isGroup = true;
-		if (monoids.length > 0) {
-			boolean uniform = true;
-			Monoid first = monoids[0];
-			for (final Monoid monoid : monoids) {
-				if (monoid == null) {
-					throw new IllegalArgumentException();
-				}
-				if (!monoid.isEquivalent(first)) {
-					uniform = false;
-				}
-				isGroup = isGroup && monoid.isGroup();
-			}
-			if (uniform) {
-				return ProductMonoid.getInstance(first, monoids.length);
-			}
-		}
-		if (isGroup) {
-			Group[] groups = Arrays.copyOf(monoids, monoids.length, Group[].class);
-			return ProductGroup.getInstance(groups);
-		}
-		return new ProductMonoid(monoids);
-	}
-
-	public static ProductMonoid getInstance(final Monoid monoid, int arity) {
-		if ((monoid == null) || (arity < 0)) {
-			throw new IllegalArgumentException();
-		}
-		if (monoid.isGroup()) {
-			return ProductGroup.getInstance((Group) monoid, arity);
-		}
-		if (arity == 0) {
-			return new ProductMonoid(new Monoid[]{});
-		}
-		return new ProductMonoid(monoid, arity);
-	}
-
+//	/**
+//	 * This is a static factory method to construct a composed monoid without calling respective constructors. The input
+//	 * monids are given as an array.
+//	 * <p/>
+//	 * @param monoids The array of input monoids
+//	 * @return The corresponding product monoids
+//	 * @throws IllegalArgumentException if {@literal monids} is null or contains null
+//	 */
+//	public static ProductMonoid getInstance(final Monoid... monoids) {
+//		if (monoids == null) {
+//			throw new IllegalArgumentException();
+//		}
+//		boolean isGroup = true;
+//		if (monoids.length > 0) {
+//			boolean uniform = true;
+//			Monoid first = monoids[0];
+//			for (final Monoid monoid : monoids) {
+//				if (monoid == null) {
+//					throw new IllegalArgumentException();
+//				}
+//				if (!monoid.isEquivalent(first)) {
+//					uniform = false;
+//				}
+//				isGroup = isGroup && monoid.isGroup();
+//			}
+//			if (uniform) {
+//				return ProductMonoid.getInstance(first, monoids.length);
+//			}
+//		}
+//		if (isGroup) {
+//			Group[] groups = Arrays.copyOf(monoids, monoids.length, Group[].class);
+//			return ProductGroup.getInstance(groups);
+//		}
+//		return new ProductMonoid(monoids);
+//	}
+//
+//	public static ProductMonoid getInstance(final Monoid monoid, int arity) {
+//		if ((monoid == null) || (arity < 0)) {
+//			throw new IllegalArgumentException();
+//		}
+//		if (monoid.isGroup()) {
+//			return ProductGroup.getInstance((Group) monoid, arity);
+//		}
+//		if (arity == 0) {
+//			return new ProductMonoid(new Monoid[]{});
+//		}
+//		return new ProductMonoid(monoid, arity);
+//	}
 }

@@ -153,7 +153,7 @@ public class PermutationGroup
 	}
 
 	@Override
-	public boolean abstractIsEquivalent(final Set set) {
+	public boolean abstractEquals(final Set set) {
 		final PermutationGroup other = (PermutationGroup) set;
 		return this.getSize() == other.getSize();
 	}

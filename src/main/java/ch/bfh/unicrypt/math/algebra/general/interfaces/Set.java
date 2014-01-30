@@ -55,8 +55,8 @@ import ch.bfh.unicrypt.math.helper.compound.Compound;
 import java.math.BigInteger;
 
 /**
- * This interface represents the concept a mathematical set of elements. The number of elements in the set is called
- * order. The order may be infinite or unknown. It is assumed that each element of a set corresponds to a unique
+ * This interface represents the concept a non-empty mathematical set of elements. The number of elements in the set is
+ * called order. The order may be infinite or unknown. It is assumed that each element of a set corresponds to a unique
  * BigInteger value. Therefore, the interface provides methods for converting elements into corresponding BigInteger
  * values and back.
  * <p>
@@ -197,13 +197,6 @@ public interface Set {
 	 * @return The minimal order of this set
 	 */
 	public BigInteger getMinimalOrder();
-
-	/**
-	 * Checks if the set is of order 0.
-	 * <p>
-	 * @return {@code true} if the order is 0
-	 */
-	public boolean isEmpty();
 
 	/**
 	 * Checks if the set is of order 1.

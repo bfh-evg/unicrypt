@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
-import ch.bfh.unicrypt.math.helper.compound.CompoundIterator;
+import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -58,7 +58,7 @@ import java.util.Iterator;
  */
 public class Tuple
 	   extends AbstractElement<ProductSet, Tuple, ImmutableArray<Element>>
-	   implements Compound<Tuple, Element>, Iterable<Element> {
+	   implements RecursiveCompound<Tuple, Element>, Iterable<Element> {
 
 	protected Tuple(final ProductSet set, final ImmutableArray<Element> elements) {
 		super(set, elements);
@@ -70,7 +70,7 @@ public class Tuple
 	}
 
 	@Override
-	public final boolean isNull() {
+	public final boolean isEmpty() {
 		return this.getValue().isEmpty();
 	}
 
@@ -82,6 +82,11 @@ public class Tuple
 	@Override
 	public Element getFirst() {
 		return this.getValue().getFirst();
+	}
+
+	@Override
+	public Element getLast() {
+		return this.getValue().getLast();
 	}
 
 	@Override
@@ -118,7 +123,11 @@ public class Tuple
 	@Override
 	public Tuple insertAt(int index, Element element) {
 		return Tuple.getInstance(this.getSet().insertAt(index, element.getSet()), this.getValue().insertAt(index, element));
+	}
 
+	@Override
+	public Tuple replaceAt(int index, Element element) {
+		return Tuple.getInstance(this.getSet().replaceAt(index, element.getSet()), this.getValue().replaceAt(index, element));
 	}
 
 	@Override
@@ -127,8 +136,17 @@ public class Tuple
 	}
 
 	@Override
+	public Tuple append(Compound<Tuple, Element> compound) {
+		if (compound instanceof Tuple) {
+			Tuple other = (Tuple) compound;
+			return Tuple.getInstance(this.getSet().append(other.getSet()), this.getValue().append(other.getValue()));
+		}
+		throw new IllegalArgumentException();
+	}
+
+	@Override
 	public Iterator<Element> iterator() {
-		return new CompoundIterator<Element>(this);
+		return this.getValue().iterator();
 	}
 
 	@Override

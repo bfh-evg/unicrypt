@@ -150,7 +150,7 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected boolean abstractIsEquivalent(Set set) {
+	protected boolean abstractEquals(Set set) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

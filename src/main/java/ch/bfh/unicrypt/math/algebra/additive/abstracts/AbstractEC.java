@@ -196,21 +196,24 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	}
 
 	@Override
-	protected boolean abstractIsEquivalent(Set set) {
+	protected boolean abstractEquals(Set set) {
 		AbstractEC<E, F, D> other = (AbstractEC<E, F, D>) set;
 		if (!this.finiteField.isEquivalent(other.finiteField)) {
 			return false;
 		}
-		if (!this.a.isEquivalent(other.a)) {
+		if (!this.a.equals(other.a)) {
 			return false;
 		}
-		if (!this.b.isEquivalent(other.b)) {
+		if (!this.b.equals(other.b)) {
 			return false;
 		}
 		if (!this.givenOrder.equals(other.givenOrder)) {
 			return false;
 		}
 		if (!this.coFactor.equals(other.coFactor)) {
+			return false;
+		}
+		if (!this.givenGenerator.equals(other.givenGenerator)) {
 			return false;
 		}
 		return true;
@@ -229,24 +232,21 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	}
 
 	@Override
-	protected boolean standardEquals(Set set) {
+	protected boolean standardIsEquivalent(Set set) {
 		AbstractEC<E, F, D> other = (AbstractEC<E, F, D>) set;
 		if (!this.finiteField.isEquivalent(other.finiteField)) {
 			return false;
 		}
-		if (!this.a.equals(other.a)) {
+		if (!this.a.isEquivalent(other.a)) {
 			return false;
 		}
-		if (!this.b.equals(other.b)) {
+		if (!this.b.isEquivalent(other.b)) {
 			return false;
 		}
 		if (!this.givenOrder.equals(other.givenOrder)) {
 			return false;
 		}
 		if (!this.coFactor.equals(other.coFactor)) {
-			return false;
-		}
-		if (!this.givenGenerator.equals(other.givenGenerator)) {
 			return false;
 		}
 		return true;

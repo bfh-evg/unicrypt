@@ -127,7 +127,7 @@ public class FiniteStringSet
 	}
 
 	@Override
-	public boolean abstractIsEquivalent(final Set set) {
+	public boolean abstractEquals(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
 		return this.getAlphabet() == other.getAlphabet() && this.getMinLength() == other.getMinLength() && this.getMaxLength() == other.getMaxLength();
 	}

@@ -56,7 +56,7 @@ public interface Compound<C extends Compound<C, T>, T> {
 	 */
 	public int getArity();
 
-	public boolean isNull();
+	public boolean isEmpty();
 
 	/**
 	 * Checks if a compound function consists of multiple copies of the same function.
@@ -73,6 +73,8 @@ public interface Compound<C extends Compound<C, T>, T> {
 	 */
 	public T getFirst();
 
+	public T getLast();
+
 	/**
 	 * Returns the function at the given index.
 	 * <p>
@@ -82,20 +84,6 @@ public interface Compound<C extends Compound<C, T>, T> {
 	 * @ode index} is an invalid index
 	 */
 	public T getAt(int index);
-
-	/**
-	 * Select and returns in a hierarchy of compound functions the function that corresponds to a given sequence of
-	 * indices. (e.g., 0,3,2 for the third function in the fourth compound function of the first compound function).
-	 * Returns {@code this} function if {@code indices} is empty.
-	 * <p>
-	 * @param indices The given sequence of indices
-	 * @return The corresponding function
-	 * @throws IllegalArgumentException  if {
-	 * @ode indices} is null or if its length exceeds the hierarchy's depth
-	 * @throws IndexOutOfBoundsException if {
-	 * @ode indices} contains an out-of-bounds index
-	 */
-	public T getAt(int... indices);
 
 	/**
 	 * Returns an array containing all the functions of which {@code this} function is composed of.
@@ -115,6 +103,10 @@ public interface Compound<C extends Compound<C, T>, T> {
 
 	public Compound<C, T> insertAt(final int index, final T object);
 
+	public Compound<C, T> replaceAt(final int index, final T object);
+
 	public Compound<C, T> add(final T object);
+
+	public Compound<C, T> append(final Compound<C, T> other);
 
 }

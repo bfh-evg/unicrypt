@@ -46,12 +46,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
+import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import java.util.Iterator;
 
 /**
  *
  * @param <CF>
- * @param <F>
  * @param <D>
  * @param <DE>
  * @param <C>
@@ -60,9 +60,9 @@ import java.util.Iterator;
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<D, DE, C, CE>
-	   implements Compound<CF, Function>, Iterable<Function> {
+	   implements RecursiveCompound<CF, Function>, Iterable<Function> {
 
-	private final ImmutableArray<Function> functions;
+	protected final ImmutableArray<Function> functions;
 
 	protected AbstractCompoundFunction(D domain, C coDomain, ImmutableArray<Function> functions) {
 		super(domain, coDomain);
@@ -75,7 +75,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public final boolean isNull() {
+	public final boolean isEmpty() {
 		return this.functions.isEmpty();
 	}
 
@@ -87,6 +87,11 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	@Override
 	public Function getFirst() {
 		return this.functions.getFirst();
+	}
+
+	@Override
+	public Function getLast() {
+		return this.functions.getLast();
 	}
 
 	@Override
@@ -126,8 +131,22 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
+	public CF replaceAt(int index, Function function) {
+		return this.abstractGetInstance(this.functions.replaceAt(index, function));
+	}
+
+	@Override
 	public CF add(Function function) {
 		return this.abstractGetInstance(this.functions.add(function));
+	}
+
+	@Override
+	public CF append(Compound<CF, Function> compound) {
+		if (this.getClass().isInstance(compound)) {
+			CF other = (CF) compound;
+			return this.abstractGetInstance(this.functions.append(other.functions));
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override

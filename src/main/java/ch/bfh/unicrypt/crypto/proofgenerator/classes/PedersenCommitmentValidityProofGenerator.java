@@ -58,9 +58,8 @@ import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.InvertFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
-import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class PedersenCommitmentValidityProofGenerator
@@ -94,13 +93,12 @@ public class PedersenCommitmentValidityProofGenerator
 	@Override
 	protected Function abstractGetDeltaFunction() {
 		final ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(), this.getSetMembershipProofFunction().getCoDomain());
-		final Function deltaFunction
-			   = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
-											   ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1),
-																		   CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
-																										 GeneratorFunction.getInstance(this.pedersenCS.getMessageGenerator()),
-																										 InvertFunction.getInstance(this.pedersenCS.getCyclicGroup()))),
-											   ApplyFunction.getInstance(this.pedersenCS.getCyclicGroup()));
+		final Function deltaFunction = CompositeFunction.getInstance(
+			   SharedDomainFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1),
+												CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
+																			  GeneratorFunction.getInstance(this.pedersenCS.getMessageGenerator()),
+																			  InvertFunction.getInstance(this.pedersenCS.getCyclicGroup()))),
+			   ApplyFunction.getInstance(this.pedersenCS.getCyclicGroup()));
 		return deltaFunction;
 	}
 

@@ -192,11 +192,6 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final boolean isEmpty() {
-		return this.getOrder().equals(BigInteger.ZERO);
-	}
-
-	@Override
 	public final boolean isSingleton() {
 		return this.getOrder().equals(BigInteger.ONE);
 	}
@@ -325,13 +320,17 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		}
 		// Check if this.getClass() is a superclass of other.getClass()
 		if (this.getClass().isAssignableFrom(other.getClass())) {
-			return this.abstractIsEquivalent(other);
+			return this.standardIsEquivalent(other);
 		}
-		// Check if other.getClass() is a superclass of this.getClass()
+		// Vice versa
 		if (other.getClass().isAssignableFrom(this.getClass())) {
 			return other.isEquivalent(this);
 		}
 		return false;
+	}
+
+	protected boolean standardIsEquivalent(Set set) {
+		return this.abstractEquals(set);
 	}
 
 	@Override
@@ -351,11 +350,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		if (other == null || getClass() != other.getClass()) {
 			return false;
 		}
-		return this.standardEquals((Set) other);
-	}
-
-	protected boolean standardEquals(Set set) {
-		return this.abstractIsEquivalent(set);
+		return this.abstractEquals((Set) other);
 	}
 
 	@Override
@@ -457,7 +452,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	protected abstract E abstractGetRandomElement(RandomByteSequence randomByteSequence);
 
-	protected abstract boolean abstractIsEquivalent(Set set);
+	protected abstract boolean abstractEquals(Set set);
 
 	protected abstract int abstractHashCode();
 
