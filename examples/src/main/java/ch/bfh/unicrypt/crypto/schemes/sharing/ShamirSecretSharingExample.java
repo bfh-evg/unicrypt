@@ -73,9 +73,12 @@ public class ShamirSecretSharingExample {
 		System.out.println(someShares);
 
 		// Recover message
-		Element recvoceredMessage = sss.recover(someShares);
-		System.out.println(recvoceredMessage);
+		Element recoveredMessage1 = sss.recover(someShares);
+		System.out.println(recoveredMessage1);
 
+		// Recover message differently
+		Element recvoceredMessage2 = sss.recover(shares.getAt(1), shares.getAt(2), shares.getAt(3));
+		System.out.println(recvoceredMessage2);
 	}
 
 	public static void main(final String[] args) {
