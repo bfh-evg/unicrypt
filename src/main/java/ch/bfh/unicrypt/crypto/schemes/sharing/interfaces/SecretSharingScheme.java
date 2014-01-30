@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.schemes.sharing.interfaces;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
@@ -53,9 +54,11 @@ public interface SecretSharingScheme
 
 	public int getSize();
 
-	public Element[] share(Element message);
+	public Tuple share(Element message);
 
-	public Element[] share(Element message, RandomByteSequence randomByteSequence);
+	public Tuple share(Element message, RandomByteSequence randomByteSequence);
+
+	public Element recover(Tuple shares);
 
 	public Element recover(Element... shares);
 

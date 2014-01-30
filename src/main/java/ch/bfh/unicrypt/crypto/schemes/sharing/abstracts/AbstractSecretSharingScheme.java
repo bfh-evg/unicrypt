@@ -44,6 +44,8 @@ package ch.bfh.unicrypt.crypto.schemes.sharing.abstracts;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.SecretSharingScheme;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
@@ -68,12 +70,12 @@ public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Ele
 	}
 
 	@Override
-	public final SE[] share(Element message) {
+	public final Tuple share(Element message) {
 		return this.share(message, (RandomByteSequence) null);
 	}
 
 	@Override
-	public final SE[] share(Element message, RandomByteSequence randomByteSequence) {
+	public final Tuple share(Element message, RandomByteSequence randomByteSequence) {
 		if (message == null || !this.getMessageSpace().contains(message)) {
 			throw new IllegalArgumentException();
 		}
@@ -82,25 +84,27 @@ public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Ele
 
 	@Override
 	public final ME recover(Element... shares) {
-		if (shares == null || shares.length < this.getThreshold() || shares.length > this.getSize()) {
-			throw new IllegalArgumentException();
-		}
-		for (Element share : shares) {
-			if (share == null || !this.getShareSpace().contains(share)) {
-				throw new IllegalArgumentException();
-			}
-		}
-		return this.abstractRecover(shares);
+		return this.recover(Tuple.getInstance(shares));
 	}
 
-	protected int getThreshold() { // this method is not really needed here, but it simplifies the method recover
+	@Override
+	public final ME recover(Tuple shares) {
+		if (shares == null || shares.getArity() < this.getThreshold() || shares.getArity() > this.getSize()
+			   || !ProductSet.getInstance(this.getShareSpace(), shares.getArity()).contains(shares)) {
+			throw new IllegalArgumentException();
+		}
+		return abstractRecover(shares);
+	}
+
+	// this method is not really needed here, but it simplifies the method recover
+	protected int getThreshold() {
 		return this.getSize();
 	}
 
 	protected abstract SS abstractGetShareSpace();
 
-	protected abstract SE[] abstractShare(Element message, RandomByteSequence randomByteSequence);
+	protected abstract Tuple abstractShare(Element message, RandomByteSequence randomByteSequence);
 
-	protected abstract ME abstractRecover(Element[] shares);
+	protected abstract ME abstractRecover(Tuple shares);
 
 }

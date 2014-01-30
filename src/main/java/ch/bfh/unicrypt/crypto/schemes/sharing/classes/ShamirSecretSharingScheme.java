@@ -50,6 +50,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
@@ -88,7 +89,7 @@ public class ShamirSecretSharingScheme
 	}
 
 	@Override
-	protected Pair[] abstractShare(Element message, RandomByteSequence randomByteSequence) {
+	protected Tuple abstractShare(Element message, RandomByteSequence randomByteSequence) {
 
 		// create an array of coefficients with size threshold
 		// the coefficient of degree 0 is fixed (message)
@@ -111,24 +112,20 @@ public class ShamirSecretSharingScheme
 			xVal = this.getZModPrime().getElement(BigInteger.valueOf(i + 1));
 			shares[i] = polynomial.getPoint(xVal);
 		}
-
-		return shares;
+		return Tuple.getInstance(shares);
 	}
 
 	@Override
-	protected ZModElement abstractRecover(Element[] shares) {
-
-		Pair[] pairs = (Pair[]) shares;
-		int length = shares.length;
-
+	protected ZModElement abstractRecover(Tuple shares) {
+		int length = shares.getArity();
 		// Calculating the lagrange coefficients for each point we got
 		DualisticElement product;
 		DualisticElement[] lagrangeCoefficients = new DualisticElement[length];
 		for (int j = 0; j < length; j++) {
 			product = null;
-			DualisticElement elementJ = (DualisticElement) pairs[j].getFirst();
+			DualisticElement elementJ = (DualisticElement) shares.getAt(j, 0);
 			for (int l = 0; l < length; l++) {
-				DualisticElement elementL = (DualisticElement) pairs[l].getFirst();
+				DualisticElement elementL = (DualisticElement) shares.getAt(l, 0);
 				if (!elementJ.equals(elementL)) {
 					if (product == null) {
 						product = elementL.divide(elementL.subtract(elementJ));
@@ -139,14 +136,12 @@ public class ShamirSecretSharingScheme
 			}
 			lagrangeCoefficients[j] = product;
 		}
-
 		// multiply the y-value of the point with the lagrange coefficient and sum everything up
 		ZModElement result = this.getZModPrime().getIdentityElement();
 		for (int j = 0; j < length; j++) {
-			DualisticElement value = (DualisticElement) pairs[j].getSecond();
+			DualisticElement value = (DualisticElement) shares.getAt(j, 1);
 			result = result.add(value.multiply(lagrangeCoefficients[j]));
 		}
-
 		return result;
 	}
 

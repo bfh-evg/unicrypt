@@ -2,7 +2,8 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) Error: on line 7, column 34 in file:///Users/rolfhaenni/GIT/unicrypt/examples/license-dualLicense.txt
+ The string doesn't match the expected date/time format. The string to parse was: "30-Jan-2014". The expected format was: "MMM d, yyyy". Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,60 +40,49 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
+package ch.bfh.unicrypt.crypto.schemes.sharing;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractSecretSharingScheme;
+import ch.bfh.unicrypt.crypto.schemes.sharing.classes.ShamirSecretSharingScheme;
+import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.SecretSharingScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class SimpleSecretSharingScheme
-	   extends AbstractSecretSharingScheme<Group, Element, Group, Element> {
+public class ShamirSecretSharingExample {
 
-	private final Group group;
+	public static void example1() {
 
-	protected SimpleSecretSharingScheme(Group group, int size) {
-		super(size);
-		this.group = group;
+		// Define underlying prime field and create (5,3)-threshold sharing scheme
+		ZModPrime z29 = ZModPrime.getInstance(29);
+		SecretSharingScheme sss = ShamirSecretSharingScheme.getInstance(z29, 5, 3);
+
+		// Create message m=25
+		Element message = sss.getMessageSpace().getElement(5);
+		System.out.println(message);
+
+		// Compute shares
+		Tuple shares = sss.share(message);
+		System.out.println(shares);
+
+		// Select subset of shares
+		Tuple someShares = shares.removeAt(1).removeAt(3);
+		System.out.println(someShares);
+
+		// Recover message
+		Element recvoceredMessage = sss.recover(someShares);
+		System.out.println(recvoceredMessage);
+
 	}
 
-	@Override
-	protected Group abstractGetMessageSpace() {
-		return this.group;
-	}
+	public static void main(final String[] args) {
 
-	@Override
-	protected Group abstractGetShareSpace() {
-		return this.group;
-	}
+		System.out.println("\nEXAMPLE 1 (plain):");
+		example1();
 
-	@Override
-	protected Tuple abstractShare(Element message, RandomByteSequence randomByteSequence) {
-		Element[] shares = new Element[this.getSize()];
-		Element total = this.group.getIdentityElement();
-		for (int i = 1; i < shares.length; i++) {
-			shares[i] = this.group.getRandomElement(randomByteSequence);
-			total = total.apply(shares[i]);
-		}
-		shares[0] = message.applyInverse(total);
-		return Tuple.getInstance(shares);
-	}
-
-	@Override
-	protected Element abstractRecover(Tuple shares) {
-		return this.group.apply(shares);
-	}
-
-	public static SimpleSecretSharingScheme getInstance(Group group, int size) {
-		if (group == null || size < 1) {
-			throw new IllegalArgumentException();
-		}
-		return new SimpleSecretSharingScheme(group, size);
 	}
 
 }
