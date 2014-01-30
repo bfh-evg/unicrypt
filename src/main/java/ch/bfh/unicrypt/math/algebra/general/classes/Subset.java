@@ -123,6 +123,12 @@ public class Subset
 	@Override
 	protected boolean abstractEquals(Set set) {
 		Subset other = (Subset) set;
+		return this.superSet.equals(other.superSet) && this.hashSet.equals(other.hashSet);
+	}
+
+	@Override
+	protected boolean standardIsEquivalent(Set set) {
+		Subset other = (Subset) set;
 		return this.superSet.isEquivalent(other.superSet) && this.hashSet.equals(other.hashSet);
 	}
 
