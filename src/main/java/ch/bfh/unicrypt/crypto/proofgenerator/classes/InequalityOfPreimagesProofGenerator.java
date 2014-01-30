@@ -65,10 +65,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyInverseFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
-import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
-import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 //
@@ -215,13 +213,11 @@ public class InequalityOfPreimagesProofGenerator
 
 	// f(a,b) = f(a)/y^b                               |==> f(a,b) = g1^a/g2^b
 	private Function createSinglePreimageProofFunction(ProductSet domain, Function f, Element y) {
-		return CompositeFunction.getInstance(MultiIdentityFunction.getInstance(domain, 2),
-											 ProductFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(domain, 0),
-																									   f),
-																		 CompositeFunction.getInstance(SelectionFunction.getInstance(domain, 1),
-																									   MultiIdentityFunction.getInstance(domain.getAt(1), 1),
-																									   SelfApplyFunction.getInstance((Group) y.getSet()).partiallyApply(y, 0))),
-											 ApplyInverseFunction.getInstance((Group) f.getCoDomain()));
+		return CompositeFunction.getInstance(
+			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(domain, 0), f),
+												CompositeFunction.getInstance(SelectionFunction.getInstance(domain, 1),
+																			  GeneratorFunction.getInstance(y))),
+			   ApplyInverseFunction.getInstance((Group) f.getCoDomain()));
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {

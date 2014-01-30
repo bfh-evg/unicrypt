@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -61,15 +61,15 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @version 2.0
  */
 public class PartiallyAppliedFunction
-			 extends AbstractFunction<ProductSet, Tuple, Set, Element> {
+	   extends AbstractFunction<ProductSet, Tuple, Set, Element> {
 
 	private final Function parentFunction;
 	private final Element parameter;
 	private final int index;
 
 	/**
-	 * This is the standard constructor of this class. It derives from a given function a new function, in which one input
-	 * element is fixed to a given element and thus expects one input element less.
+	 * This is the standard constructor of this class. It derives from a given function a new function, in which one
+	 * input element is fixed to a given element and thus expects one input element less.
 	 * <p>
 	 * @param parentFunction The given function
 	 * @param parameter      The given parameter to fix
@@ -104,7 +104,8 @@ public class PartiallyAppliedFunction
 	}
 
 	/**
-	 * Returns the index of the parameter that has been fixed to derive {@literal this} function from the parent function.
+	 * Returns the index of the parameter that has been fixed to derive {@literal this} function from the parent
+	 * function.
 	 * <p>
 	 * @return The index of the input element
 	 */
@@ -116,8 +117,8 @@ public class PartiallyAppliedFunction
 	protected boolean standardIsEquivalent(Function function) {
 		PartiallyAppliedFunction other = (PartiallyAppliedFunction) function;
 		return this.getParentFunction().isEquivalent(other.getParentFunction())
-					 && this.getParameter().isEquivalent(other.getParameter())
-					 && this.getIndex() == other.getIndex();
+			   && this.getParameter().isEquivalent(other.getParameter())
+			   && this.getIndex() == other.getIndex();
 	}
 
 	//
@@ -142,28 +143,26 @@ public class PartiallyAppliedFunction
 	// STATIC FACTORY METHODS
 	//
 	/**
-	 * This is the standard constructor of this class. It derives from a given function a new function, in which one input
-	 * element is fixed to a given element and thus expects one input element less.
+	 * This is the standard constructor of this class. It derives from a given function a new function, in which one
+	 * input element is fixed to a given element and thus expects one input element less.
 	 * <p>
-	 * @param parentfunction The given function
+	 * @param parentFunction
 	 * @param element        The given parameter to fix
 	 * @param index          The index of the parameter to fix
+	 * @return
 	 * @throws IllegalArgumentException  if the {@literal function} is null or not a ProductGroup
 	 * @throws IndexOutOfBoundsException if the {@literal index} is negative or > the arity of the function's domain
 	 * @throws IllegalArgumentException  if the {@literal element} is not an element of the corresponding group
 	 */
 	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element, final int index) {
-		if (parentFunction == null) {
+		if (parentFunction == null || !parentFunction.getDomain().isProduct()) {
 			throw new IllegalArgumentException();
 		}
-		if (parentFunction.getDomain().isProduct()) {
-			ProductSet domain = (ProductSet) parentFunction.getDomain();
-			if (!domain.getAt(index).contains(element)) {
-				throw new IllegalArgumentException();
-			}
-			return new PartiallyAppliedFunction(domain.removeAt(index), parentFunction.getCoDomain(), parentFunction, element, index);
+		ProductSet domain = (ProductSet) parentFunction.getDomain();
+		if (!domain.getAt(index).contains(element)) {
+			throw new IllegalArgumentException();
 		}
-		throw new IllegalArgumentException();
+		return new PartiallyAppliedFunction(domain.removeAt(index), parentFunction.getCoDomain(), parentFunction, element, index);
 	}
 
 }

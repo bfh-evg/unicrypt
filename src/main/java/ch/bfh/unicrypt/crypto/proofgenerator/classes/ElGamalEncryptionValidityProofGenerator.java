@@ -57,9 +57,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.InvertFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
-import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class ElGamalEncryptionValidityProofGenerator
@@ -96,15 +95,11 @@ public class ElGamalEncryptionValidityProofGenerator
 	protected Function abstractGetDeltaFunction() {
 		final CyclicGroup elGamalCyclicGroup = this.elGamalES.getCyclicGroup();
 		final ProductSet deltaFunctionDomain = ProductSet.getInstance(elGamalCyclicGroup, this.getSetMembershipProofFunction().getCoDomain());
-		final Function deltaFunction
-			   = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
-											   ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
-																		   CompositeFunction.getInstance(MultiIdentityFunction.getInstance(deltaFunctionDomain, 2),
-																										 ProductFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 1),
-																																	 CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
-																																								   InvertFunction.getInstance(elGamalCyclicGroup))),
-																										 ApplyFunction.getInstance(elGamalCyclicGroup))));
-		return deltaFunction;
+		return SharedDomainFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
+												CompositeFunction.getInstance(SharedDomainFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 1),
+																											   CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
+																																			 InvertFunction.getInstance(elGamalCyclicGroup))),
+																			  ApplyFunction.getInstance(elGamalCyclicGroup)));
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts) {
