@@ -75,19 +75,19 @@ public class HybridRandomByteSequenceTest {
 	}
 
 	/**
-	 * Test of getSecurityParameterInBytes method, of class HybridRandomByteSequence.
+	 * Test of getBackwardSecurityInBytes method, of class HybridRandomByteSequence.
 	 */
 	@Test
 	public void testGetSecurityParameterInBytes() {
 		System.out.println("getSecurityParameterInBytes");
 		HybridRandomByteSequence instance = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, 2, 1);
 		int expResult = 1;
-		int result = instance.getSecurityParameterInBytes();
+		int result = instance.getBackwardSecurityInBytes();
 		System.out.println(instance.getNextByte());
 		assertEquals(expResult, result);
 		instance = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, 2, 33);
 		expResult = 33;
-		result = instance.getSecurityParameterInBytes();
+		result = instance.getBackwardSecurityInBytes();
 		System.out.println(instance.getNextByte());
 		assertEquals(expResult, result);
 

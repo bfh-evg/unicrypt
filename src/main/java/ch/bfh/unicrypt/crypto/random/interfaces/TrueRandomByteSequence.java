@@ -53,7 +53,9 @@ public interface TrueRandomByteSequence
 
 	public void setFreshData(ByteArray byteArray);
 
-	public int getSecurityParameterInBytes();
+	public int getBackwardSecurityInBytes();
+
+	public int getForwardSecurityInBytes();
 
 	public DistributionSamplerCollector getDistributionSampler();
 

@@ -103,10 +103,14 @@ public class OutputFeedbackRandomByteSequence
 		ByteArray[] full = internalState.getHash(hashMethod).split(forwardSecurityInBytes);
 		this.internalState = internalState.xorFillZero(full[0]);
 
-		//Careful: Due to the underlying implementation of ByteArray, this would leak information within the internal array.
-		//return full[1];
-		return ByteArray.getInstance(full[1].getAll());
+		//Careful: Due to the underlying implementation of ByteArray, this  leaks information within the internal array.
+		return full[1];
+		//return ByteArray.getInstance(full[1].getAll());
 
+	}
+
+	public int getForwardSecurityInBytes() {
+		return forwardSecurityInBytes;
 	}
 
 	@Override

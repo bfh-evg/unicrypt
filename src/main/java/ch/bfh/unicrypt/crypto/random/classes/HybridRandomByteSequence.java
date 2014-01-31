@@ -48,10 +48,10 @@ import ch.bfh.unicrypt.math.helper.HashMethod;
 
 /**
  * This class allows the generation of ephemeral keys. Hence it provides (backward-)security and forward-security to the
- * generated random strings. Its security is based on the quality of the DistributionSamplerCollector and on the
+ * generated random sequences. Its security is based on the quality of the DistributionSamplerCollector and on the
  * feedback of the PseudoRandomNumberGeneratorCounterMode. The injection of new random bits into the randomization
  * process allows (backward-)security, whilst The feedback (in this case internally requesting a byte[] which is only
- * used for re-seeding) allows forward-security.
+ * used for re-fresh of the internal state) provides forward-security.
  * <p>
  * <p>
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
@@ -62,27 +62,26 @@ public class HybridRandomByteSequence
 
 	private static HybridRandomByteSequence DEFAULT;
 	private final DistributionSamplerCollector distributionSampler;
-	private final int securityParameterInBytes;
+	private final int backwardSecurityInBytes;
 
 	/**
 	 *
-	 * Creates a new instance of a TrueRandomNumberGenerator.
-	 * <p>
-	 * @param distributionSampler Channel to the different distributions. This guarantees freshness and thus
-	 *                            (backward-)security
+	 * @param hashMethod
+	 * @param forwardSecurityInBytes
+	 * @param backwardSecurityInBytes
 	 */
-	protected HybridRandomByteSequence(HashMethod hashMethod, int forwardSecurityInBytes, int securityParameterInBytes) {
+	protected HybridRandomByteSequence(HashMethod hashMethod, int forwardSecurityInBytes, int backwardSecurityInBytes) {
 		super(hashMethod, forwardSecurityInBytes, ByteArray.getInstance());
 
-		this.securityParameterInBytes = securityParameterInBytes;
+		this.backwardSecurityInBytes = backwardSecurityInBytes;
 
 		this.distributionSampler = DistributionSamplerCollector.getInstance(this);
-		super.setSeed(this.distributionSampler.getDistributionSamples(securityParameterInBytes));
+		super.setSeed(this.distributionSampler.getDistributionSamples(backwardSecurityInBytes));
 	}
 
 	@Override
-	public int getSecurityParameterInBytes() {
-		return this.securityParameterInBytes;
+	public int getBackwardSecurityInBytes() {
+		return this.backwardSecurityInBytes;
 	}
 
 	@Override

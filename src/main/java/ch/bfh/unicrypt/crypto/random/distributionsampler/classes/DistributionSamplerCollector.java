@@ -79,7 +79,7 @@ public class DistributionSamplerCollector {
 	}
 
 	public int getSecurityParameterInBytes() {
-		return sink.getSecurityParameterInBytes();
+		return sink.getBackwardSecurityInBytes();
 	}
 
 	/**
