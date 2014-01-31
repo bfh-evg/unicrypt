@@ -97,21 +97,22 @@ public class ShamirSecretSharingScheme
 		DualisticElement[] coefficients = new DualisticElement[getThreshold()];
 		coefficients[0] = (DualisticElement) message;
 		for (int i = 1; i < getThreshold(); i++) {
-			coefficients[i] = this.getZModPrime().getRandomElement(randomByteSequence);
+			coefficients[i] = this.zModPrime.getRandomElement(randomByteSequence);
 		}
 
 		// create a polynomial out of the coefficients
-		final PolynomialElement polynomial = this.getPolynomialRing().getElement(coefficients);
+		final PolynomialElement polynomial = this.polynomialRing.getElement(coefficients);
 
 		// create a tuple which stores the shares
-		Pair[] shares = new Pair[getSize()];
+		Pair[] shares = new Pair[this.getSize()];
 		DualisticElement xVal;
 
 		// populate the tuple array with tuples of x and y values
-		for (int i = 0; i < getSize(); i++) {
-			xVal = this.getZModPrime().getElement(BigInteger.valueOf(i + 1));
+		for (int i = 0; i < this.getSize(); i++) {
+			xVal = this.zModPrime.getElement(BigInteger.valueOf(i + 1));
 			shares[i] = polynomial.getPoint(xVal);
 		}
+		// the following line is more efficient than Tuple.getInstance(shares)
 		return Tuple.getInstance(shares);
 	}
 
@@ -137,7 +138,7 @@ public class ShamirSecretSharingScheme
 			lagrangeCoefficients[j] = product;
 		}
 		// multiply the y-value of the point with the lagrange coefficient and sum everything up
-		ZModElement result = this.getZModPrime().getIdentityElement();
+		ZModElement result = this.zModPrime.getIdentityElement();
 		for (int j = 0; j < length; j++) {
 			DualisticElement value = (DualisticElement) shares.getAt(j, 1);
 			result = result.add(value.multiply(lagrangeCoefficients[j]));
