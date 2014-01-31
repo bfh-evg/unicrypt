@@ -86,7 +86,7 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayElement abstractGetElement(BigInteger value) {
+	protected ByteArrayElement abstractGetElementFrom(BigInteger value) {
 		int blockLength = this.getBlockLength();
 		LinkedList<Byte> byteList = new LinkedList<Byte>();
 		BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);

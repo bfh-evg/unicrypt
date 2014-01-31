@@ -80,7 +80,7 @@ public class PermutationCommitmentTest {
 		Permutation pi = new Permutation(new int[]{0});
 
 		PermutationElement permutation = PermutationGroup.getInstance(pi.getSize()).getElement(pi);
-		Tuple randomizations = Tuple.getInstance(this.Z_q.getElement(2));
+		Tuple randomizations = Tuple.getInstance(this.Z_q.getElementFrom(2));
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
@@ -97,7 +97,7 @@ public class PermutationCommitmentTest {
 		assertTrue(pi.permute(0) == 2);
 
 		PermutationElement permutation = PermutationGroup.getInstance(pi.getSize()).getElement(pi);
-		Tuple randomizations = Tuple.getInstance(this.Z_q.getElement(1), this.Z_q.getElement(2), this.Z_q.getElement(3));
+		Tuple randomizations = Tuple.getInstance(this.Z_q.getElementFrom(1), this.Z_q.getElementFrom(2), this.Z_q.getElementFrom(3));
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
@@ -119,14 +119,14 @@ public class PermutationCommitmentTest {
 		Permutation pi = new Permutation(new int[]{2, 3, 1, 0});  // invert: [3, 2, 0, 1]
 
 		PermutationElement permutation = PermutationGroup.getInstance(pi.getSize()).getElement(pi);
-		Tuple randomizations = Tuple.getInstance(this.Z_q.getElement(1), this.Z_q.getElement(2), this.Z_q.getElement(3), this.Z_q.getElement(4));
+		Tuple randomizations = Tuple.getInstance(this.Z_q.getElementFrom(1), this.Z_q.getElementFrom(2), this.Z_q.getElementFrom(3), this.Z_q.getElementFrom(4));
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-//TODO:		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(3)));  // 4^1 * 18 =  3
-//TODO:		assertTrue(commitment.getAt(1).isEquivalent(this.G_q.getElement(13))); // 4^2 *  8 = 13
-//TODO:		assertTrue(commitment.getAt(2).isEquivalent(this.G_q.getElement(8)));  // 4^3 *  3 =  8
-//TODO:		assertTrue(commitment.getAt(3).isEquivalent(this.G_q.getElement(4)));  // 4^4 *  9 =  4
+//TODO:		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElementFrom(3)));  // 4^1 * 18 =  3
+//TODO:		assertTrue(commitment.getAt(1).isEquivalent(this.G_q.getElementFrom(13))); // 4^2 *  8 = 13
+//TODO:		assertTrue(commitment.getAt(2).isEquivalent(this.G_q.getElementFrom(8)));  // 4^3 *  3 =  8
+//TODO:		assertTrue(commitment.getAt(3).isEquivalent(this.G_q.getElementFrom(4)));  // 4^4 *  9 =  4
 	}
 
 }

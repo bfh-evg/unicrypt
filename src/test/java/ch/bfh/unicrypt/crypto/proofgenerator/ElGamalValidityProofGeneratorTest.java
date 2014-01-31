@@ -76,17 +76,17 @@ public class ElGamalValidityProofGeneratorTest {
 	public void TestElGamalValidityProof() {
 
 		GStarMod G_q = this.G_q1;
-		ElGamalEncryptionScheme elGamalES = ElGamalEncryptionScheme.getInstance(G_q.getElement(2));
-		Subset plaintexts = Subset.getInstance(G_q, new Element[]{G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)});
-		Element publicKey = G_q.getElement(4);
+		ElGamalEncryptionScheme elGamalES = ElGamalEncryptionScheme.getInstance(G_q.getElementFrom(2));
+		Subset plaintexts = Subset.getInstance(G_q, new Element[]{G_q.getElementFrom(4), G_q.getElementFrom(2), G_q.getElementFrom(8), G_q.getElementFrom(16)});
+		Element publicKey = G_q.getElementFrom(4);
 
 		SigmaChallengeGenerator scg = ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, plaintexts.getOrder().intValue(), proverId);
 		ElGamalEncryptionValidityProofGenerator pg = ElGamalEncryptionValidityProofGenerator.getInstance(scg, elGamalES, publicKey, plaintexts);
 
-		Pair publicInput = Pair.getInstance(G_q.getElement(8), G_q.getElement(128));   // (2^3, 4^3*2)
+		Pair publicInput = Pair.getInstance(G_q.getElementFrom(8), G_q.getElementFrom(128));   // (2^3, 4^3*2)
 
 		// Valid proof
-		Element secret = G_q.getZModOrder().getElement(3);
+		Element secret = G_q.getZModOrder().getElementFrom(3);
 		int index = 1;
 		Pair privateInput = pg.createPrivateInput(secret, index);
 
@@ -101,17 +101,17 @@ public class ElGamalValidityProofGeneratorTest {
 
 		GStarMod G_q = this.G_q2;
 		for (int i = 0; i < 10; i++) {
-			ElGamalEncryptionScheme elGamalES = ElGamalEncryptionScheme.getInstance(G_q.getElement(2));
-			Subset plaintexts = Subset.getInstance(G_q, new Element[]{G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)});
-			Element publicKey = G_q.getElement(4);
+			ElGamalEncryptionScheme elGamalES = ElGamalEncryptionScheme.getInstance(G_q.getElementFrom(2));
+			Subset plaintexts = Subset.getInstance(G_q, new Element[]{G_q.getElementFrom(4), G_q.getElementFrom(2), G_q.getElementFrom(8), G_q.getElementFrom(16)});
+			Element publicKey = G_q.getElementFrom(4);
 
 			SigmaChallengeGenerator scg = ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, plaintexts.getOrder().intValue(), proverId);
 			ElGamalEncryptionValidityProofGenerator pg = ElGamalEncryptionValidityProofGenerator.getInstance(scg, elGamalES, publicKey, plaintexts);
 
-			Pair publicInput = Pair.getInstance(G_q.getElement(8), G_q.getElement(128));   // (2^3, 4^3*2)
+			Pair publicInput = Pair.getInstance(G_q.getElementFrom(8), G_q.getElementFrom(128));   // (2^3, 4^3*2)
 
 			// Invalid proof -> wrong randomndness
-			Element secret = G_q.getZModOrder().getElement(7);
+			Element secret = G_q.getZModOrder().getElementFrom(7);
 			int index = 1;
 			Pair privateInput = pg.createPrivateInput(secret, index);
 
@@ -120,7 +120,7 @@ public class ElGamalValidityProofGeneratorTest {
 			assertTrue(!v.getValue());
 
 			// Invalid proof -> wrong index
-			secret = G_q.getZModOrder().getElement(3);
+			secret = G_q.getZModOrder().getElementFrom(3);
 			index = 2;
 			privateInput = pg.createPrivateInput(secret, index);
 

@@ -270,7 +270,7 @@ public class SchnorrSignatureScheme<MS extends Set, ME extends Element>
 //      final AtomicElement concatElement = this.concatFunction.apply(message, this.generator.selfApply(randomization));
 //      final Element left = this.hashFunction.apply(concatElement);
 //      final Element right = randomization.apply(left.selfApply(privateKey).invert());
-//      return this.getCoDomain().getElement(left, right);
+//      return this.getCoDomain().getElementFrom(left, right);
 //    }
 //
 //    private static ProductGroup createDomain(final ZPlusMod zPlusMod) {
@@ -314,7 +314,7 @@ public class SchnorrSignatureScheme<MS extends Set, ME extends Element>
 //      final AtomicElement right = (AtomicElement) tuple.getElementAt(2, 1);
 //      final AtomicElement concatElement = this.concatFunction.apply(message, this.generator.selfApply(right).apply(publicKey.selfApply(left)));
 //      final Element result = this.hashFunction.apply(concatElement);
-//      return this.getCoDomain().getElement(left.equals(result));
+//      return this.getCoDomaigetElementFromment(left.equals(result));
 //    }
 //
 //    private static ProductGroup createDomain(final ZPlusMod zPlusMod, final DDHGroup ddhGroup) {

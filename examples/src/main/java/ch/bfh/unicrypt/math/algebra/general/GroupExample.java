@@ -69,8 +69,8 @@ public class GroupExample {
 		for (int i = 1; i <= 3; i++) {
 			System.out.println(group1.getRandomGenerator());
 		}
-		a1 = group1.getElement(BigInteger.valueOf(3));
-		a2 = group1.getElement(BigInteger.valueOf(-5));
+		a1 = group1.getElementFrom(BigInteger.valueOf(3));
+		a2 = group1.getElementFrom(BigInteger.valueOf(-5));
 		System.out.println(group1.invert(a1));
 		System.out.println(group1.invert(a2));
 		System.out.println(group1.apply(a1, a2));
@@ -85,8 +85,8 @@ public class GroupExample {
 		System.out.println(group_n.getIdentityElement());
 		System.out.println(group_n.getOrder());
 
-		a1 = group_n.getElement(BigInteger.valueOf(3));
-		a2 = group_n.getElement(BigInteger.valueOf(5));
+		a1 = group_n.getElementFrom(BigInteger.valueOf(3));
+		a2 = group_n.getElementFrom(BigInteger.valueOf(5));
 
 		System.out.println(group_n.apply(a1, a2));
 		System.out.println(group_n.add(a1, a2));
@@ -103,8 +103,8 @@ public class GroupExample {
 		for (int i = 1; i <= 3; i++) {
 			System.out.println(group2.getRandomGenerator());
 		}
-		a1 = group2.getElement(BigInteger.valueOf(3));
-		a2 = group2.getElement(BigInteger.valueOf(5));
+		a1 = group2.getElementFrom(BigInteger.valueOf(3));
+		a2 = group2.getElementFrom(BigInteger.valueOf(5));
 		System.out.println(group2.invert(a1));
 		System.out.println(group2.invert(a2));
 		System.out.println(group2.apply(a1, a2));
@@ -119,8 +119,8 @@ public class GroupExample {
 		final ZStarMod group3 = ZStarMod.getInstance(BigInteger.valueOf(10));
 		System.out.println(group3.getIdentityElement());
 		System.out.println(group3.getOrder());
-		m1 = group3.getElement(BigInteger.valueOf(3));
-		m2 = group3.getElement(BigInteger.valueOf(7));
+		m1 = group3.getElementFrom(BigInteger.valueOf(3));
+		m2 = group3.getElementFrom(BigInteger.valueOf(7));
 		System.out.println(group3.invert(m1));
 		System.out.println(group3.invert(m2));
 		System.out.println(group3.apply(m1, m2));
@@ -134,8 +134,8 @@ public class GroupExample {
 		final ZStarMod group4 = ZStarModPrime.getInstance(Factorization.getInstance(BigInteger.valueOf(2), BigInteger.valueOf(2), BigInteger.valueOf(5)));
 		System.out.println(group4.getIdentityElement());
 		System.out.println(group4.getOrder()); // 8
-		m1 = group4.getElement(BigInteger.valueOf(3));
-		m2 = group4.getElement(BigInteger.valueOf(11));
+		m1 = group4.getElementFrom(BigInteger.valueOf(3));
+		m2 = group4.getElementFrom(BigInteger.valueOf(11));
 		System.out.println(group4.invert(m1));
 		System.out.println(group4.invert(m2));
 		System.out.println(group4.apply(m1, m2));
@@ -146,9 +146,9 @@ public class GroupExample {
 		System.out.println();
 
 		// TEST MULTISELFAPPLY IN ADDITIVE GROUP
-		final Element e1 = group1.getElement(2);
-		final Element e2 = group1.getElement(3);
-		final Element e3 = group1.getElement(5);
+		final Element e1 = group1.getElementFrom(2);
+		final Element e2 = group1.getElementFrom(3);
+		final Element e3 = group1.getElementFrom(5);
 		final BigInteger i1 = BigInteger.valueOf(3);
 		final BigInteger i2 = BigInteger.valueOf(2);
 		final BigInteger i3 = BigInteger.valueOf(1);

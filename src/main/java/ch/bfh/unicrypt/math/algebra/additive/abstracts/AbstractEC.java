@@ -146,8 +146,8 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 		if (!this.getFiniteField().contains(result[0]) || !this.getFiniteField().contains(result[1])) {
 			return false;
 		}
-		D xValue = (D) this.getFiniteField().getElement(result[0]);
-		D yValue = (D) this.getFiniteField().getElement(result[1]);
+		D xValue = (D) this.getFiniteField().getElementFrom(result[0]);
+		D yValue = (D) this.getFiniteField().getElementFrom(result[1]);
 		return this.abstractContains(xValue, yValue);
 	}
 
@@ -157,13 +157,13 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	}
 
 	@Override
-	protected E abstractGetElement(BigInteger bigInteger) {
+	protected E abstractGetElementFrom(BigInteger bigInteger) {
 		if (bigInteger.equals(BigInteger.ZERO)) {
 			return this.getZeroElement();
 		}
 		BigInteger[] result = MathUtil.unpair(bigInteger.subtract(BigInteger.ONE));
-		D xValue = (D) this.getFiniteField().getElement(result[0]);
-		D yValue = (D) this.getFiniteField().getElement(result[1]);
+		D xValue = (D) this.getFiniteField().getElementFrom(result[0]);
+		D yValue = (D) this.getFiniteField().getElementFrom(result[1]);
 		return this.abstractGetElement(Point.getInstance(xValue, yValue));
 	}
 

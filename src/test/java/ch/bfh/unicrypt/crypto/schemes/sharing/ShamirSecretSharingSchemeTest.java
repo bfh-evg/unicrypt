@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -45,6 +45,8 @@ import ch.bfh.unicrypt.crypto.schemes.sharing.classes.ShamirSecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,14 +72,15 @@ public class ShamirSecretSharingSchemeTest {
 		ZModElement message = field.getRandomElement();
 
 		// Share the message
-		Pair[] shares = ssss.share(message);
+		Tuple shares = ssss.share(message);
 
-		assertTrue(shares.length == size);
+		assertTrue(shares.getArity() == size);
 
-		for (Pair share : shares) {
-			assertTrue(share.getArity() == 2);
-			assertTrue(field.contains(share.getFirst()));
-			assertTrue(field.contains(share.getSecond()));
+		for (Element share : shares) {
+			Pair pair = (Pair) share;
+			assertTrue(pair.getArity() == 2);
+			assertTrue(field.contains(pair.getFirst()));
+			assertTrue(field.contains(pair.getSecond()));
 		}
 	}
 
@@ -91,9 +94,9 @@ public class ShamirSecretSharingSchemeTest {
 		ZModElement message = field.getRandomElement();
 
 		// Share the message
-		Pair[] shares = ssss.share(message);
+		Tuple shares = ssss.share(message);
 
-		List<Pair> sharesList = Arrays.asList(shares);
+		List<Element> sharesList = Arrays.asList(shares.getAll());
 
 		// Shuffle the list of shares
 		Collections.shuffle(sharesList);

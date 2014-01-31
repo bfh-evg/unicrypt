@@ -39,47 +39,50 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.StandardCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.DiscreteSet;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
  *
- *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StandardCommitmentExample {
+public class DiscreteSetTest {
 
-	public static void example1() {
+	private static DiscreteSet<String> ds = DiscreteSet.getInstance("John", "Mary", "Bob");
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		GStarModSafePrime cyclicGroup = GStarModSafePrime.getInstance(167);
-		Element generator = cyclicGroup.getElementFrom(98);
-
-		// Create commitment scheme to be used
-		StandardCommitmentScheme commitmentScheme = StandardCommitmentScheme.getInstance(generator);
-
-		// Create message to commit
-		Element message = commitmentScheme.getMessageSpace().getElementFrom(42);
-
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message);
-
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, commitment);
-
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
+	@Test
+	public void testStandardToStringContent() {
+		System.out.println(ds);
 	}
 
-	public static void main(String[] args) {
+	@Test
+	public void testContains() {
+		assertTrue(ds.contains("John"));
+		assertTrue(ds.contains("Mary"));
+		assertTrue(ds.contains("Bob"));
+		assertFalse(ds.contains("Paul"));
+		assertFalse(ds.contains(""));
+	}
 
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+	@Test
+	public void testGetOrder() {
+		assertEquals(3, ds.getOrder().intValue());
+	}
+
+	@Test
+	public void testGetElement() {
+		assertEquals("John", ds.getElement("John").getValue());
+		assertEquals("Bob", ds.getElement("Bob").getValue());
+	}
+
+	@Test
+	public void testGetBigInteger() {
+		assertEquals("John", ds.getElementFrom(ds.getElement("John").getBigInteger()).getValue());
 	}
 
 }

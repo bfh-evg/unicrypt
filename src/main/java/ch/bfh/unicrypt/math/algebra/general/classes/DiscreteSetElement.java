@@ -39,47 +39,32 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.StandardCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import java.math.BigInteger;
 
 /**
  *
- *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class StandardCommitmentExample {
+public class DiscreteSetElement<V extends Object>
+	   extends AbstractElement<DiscreteSet<V>, DiscreteSetElement<V>, V> {
 
-	public static void example1() {
-
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		GStarModSafePrime cyclicGroup = GStarModSafePrime.getInstance(167);
-		Element generator = cyclicGroup.getElementFrom(98);
-
-		// Create commitment scheme to be used
-		StandardCommitmentScheme commitmentScheme = StandardCommitmentScheme.getInstance(generator);
-
-		// Create message to commit
-		Element message = commitmentScheme.getMessageSpace().getElementFrom(42);
-
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message);
-
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, commitment);
-
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
+	protected DiscreteSetElement(DiscreteSet<V> set, V value) {
+		super(set, value);
 	}
 
-	public static void main(String[] args) {
+	@Override
+	protected BigInteger abstractGetBigInteger() {
+		return BigInteger.valueOf(this.getSet().indexMap.get(this.getValue()));
+	}
 
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+	@Override
+	protected ByteTree abstractGetByteTree() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

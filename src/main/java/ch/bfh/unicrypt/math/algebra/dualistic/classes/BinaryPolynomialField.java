@@ -135,7 +135,7 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected BinaryPolynomialElement abstractGetElement(BigInteger bigInteger) {
+	protected BinaryPolynomialElement abstractGetElementFrom(BigInteger bigInteger) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

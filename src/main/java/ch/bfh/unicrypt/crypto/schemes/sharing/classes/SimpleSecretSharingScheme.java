@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractSecretSharingScheme;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
@@ -71,7 +72,7 @@ public class SimpleSecretSharingScheme
 	}
 
 	@Override
-	protected Element[] abstractShare(Element message, RandomByteSequence randomByteSequence) {
+	protected Tuple abstractShare(Element message, RandomByteSequence randomByteSequence) {
 		Element[] shares = new Element[this.getSize()];
 		Element total = this.group.getIdentityElement();
 		for (int i = 1; i < shares.length; i++) {
@@ -79,11 +80,11 @@ public class SimpleSecretSharingScheme
 			total = total.apply(shares[i]);
 		}
 		shares[0] = message.applyInverse(total);
-		return shares;
+		return Tuple.getInstance(shares);
 	}
 
 	@Override
-	protected Element abstractRecover(Element[] shares) {
+	protected Element abstractRecover(Tuple shares) {
 		return this.group.apply(shares);
 	}
 

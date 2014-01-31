@@ -63,12 +63,12 @@ public class SubsetTest {
 	@Test
 	public void testSubset() {
 		ZMod zMod = ZMod.getInstance(15);
-		ZModElement e1 = zMod.getElement(4);
-		ZModElement e2 = zMod.getElement(5);
-		ZModElement e3 = zMod.getElement(7);
-		ZModElement e4 = zMod.getElement(7);
-		ZModElement e5 = zMod.getElement(7);
-		ZModElement e6 = zMod.getElement(9);
+		ZModElement e1 = zMod.getElementFrom(4);
+		ZModElement e2 = zMod.getElementFrom(5);
+		ZModElement e3 = zMod.getElementFrom(7);
+		ZModElement e4 = zMod.getElementFrom(7);
+		ZModElement e5 = zMod.getElementFrom(7);
+		ZModElement e6 = zMod.getElementFrom(9);
 		Subset subset = Subset.getInstance(zMod, new Element[]{e1, e2, e3, e3, e4});
 		Assert.assertTrue(subset.contains(e1));
 		Assert.assertTrue(subset.contains(e2));
@@ -170,15 +170,15 @@ public class SubsetTest {
 //	}
 //
 //	/**
-//	 * Test of abstractGetElement method, of class Subset.
+//	 * Test of abstractGetElementFrom method, of class Subset.
 //	 */
 //	@Test
 //	public void testAbstractGetElement() {
-//		System.out.println("abstractGetElement");
+//		System.out.println("abstractGetElementFrom");
 //		BigInteger value = null;
 //		Subset instance = null;
 //		Element expResult = null;
-//		Element result = instance.abstractGetElement(value);
+//		Element result = instance.abstractGetElementFrom(value);
 //		assertEquals(expResult, result);
 //		// TODO review the generated test code and remove the default call to fail.
 //		fail("The test case is a prototype.");

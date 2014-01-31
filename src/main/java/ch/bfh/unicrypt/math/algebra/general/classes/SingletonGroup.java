@@ -90,6 +90,11 @@ public class SingletonGroup
 	}
 
 	@Override
+	protected Element abstractGetElementFrom(final BigInteger value) {
+		return this.element;
+	}
+
+	@Override
 	protected Element standardSelfApply(Element element, BigInteger amount) {
 		return this.element;
 	}

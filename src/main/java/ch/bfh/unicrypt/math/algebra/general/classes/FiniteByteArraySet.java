@@ -92,7 +92,7 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetElement(BigInteger value) {
+	protected FiniteByteArrayElement abstractGetElementFrom(BigInteger value) {
 		int minLength = this.getMinLength();
 		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
 		LinkedList<Byte> byteList = new LinkedList<Byte>();
@@ -123,7 +123,7 @@ public class FiniteByteArraySet
 
 	@Override
 	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+		return this.abstractGetElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 
 	@Override

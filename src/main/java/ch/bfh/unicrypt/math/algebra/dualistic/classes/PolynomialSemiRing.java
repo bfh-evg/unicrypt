@@ -159,7 +159,7 @@ public class PolynomialSemiRing
 	}
 
 	@Override
-	protected PolynomialElement abstractGetElement(BigInteger value) {
+	protected PolynomialElement abstractGetElementFrom(BigInteger value) {
 		BigInteger[] values = MathUtil.unpairWithSize(value);
 		return this.getElement(values);
 	}

@@ -128,10 +128,10 @@ public interface AdditiveSemiGroup
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public AdditiveElement getElement(int value);
+	public AdditiveElement getElementFrom(int value);
 
 	@Override
-	public AdditiveElement getElement(BigInteger value);
+	public AdditiveElement getElementFrom(BigInteger value);
 
 	@Override
 	public AdditiveElement getElement(Element element);

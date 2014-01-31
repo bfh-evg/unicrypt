@@ -131,10 +131,10 @@ public class ShuffleProofGeneratorECExample {
 		// Setup
 		final int size = 100;
 		ZModPrime f = ZModPrime.getInstance(29);
-		ZModElement a = f.getElement(4);
-		ZModElement b = f.getElement(20);
-		ZModElement gx = f.getElement(1);
-		ZModElement gy = f.getElement(5);
+		ZModElement a = f.getElementFrom(4);
+		ZModElement b = f.getElementFrom(20);
+		ZModElement gx = f.getElementFrom(1);
+		ZModElement gy = f.getElementFrom(5);
 		BigInteger order = BigInteger.valueOf(37);
 		BigInteger h = BigInteger.ONE;
 		//final ECZModPrime G_q = ECZModPrime.getInstance(f, a, b, gx, gy, order, h);

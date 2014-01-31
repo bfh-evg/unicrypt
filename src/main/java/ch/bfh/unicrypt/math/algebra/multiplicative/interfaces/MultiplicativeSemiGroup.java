@@ -128,10 +128,10 @@ public interface MultiplicativeSemiGroup
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public MultiplicativeElement getElement(int value);
+	public MultiplicativeElement getElementFrom(int value);
 
 	@Override
-	public MultiplicativeElement getElement(BigInteger value);
+	public MultiplicativeElement getElementFrom(BigInteger value);
 
 	@Override
 	public MultiplicativeElement getElement(Element element);

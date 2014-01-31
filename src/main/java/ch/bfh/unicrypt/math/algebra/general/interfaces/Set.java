@@ -256,22 +256,22 @@ public interface Set {
 	/**
 	 * Creates and returns the element that corresponds to a given integer (if one exists).
 	 * <p>
-	 * @param integer The given integer
+	 * @param integerValue The given integer
 	 * @return The corresponding element
 	 * @throws IllegalArgumentException if no such element exists
 	 */
-	public Element getElement(int integer);
+	public Element getElementFrom(int integerValue);
 
 	/**
 	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists).
 	 * <p>
-	 * @param bigInteger The given BigInteger value
+	 * @param integerValue The given BigInteger value
 	 * @return The corresponding group element
 	 * @throws IllegalArgumentException if {@literal value} is null or if no such element exists in this group
 	 */
-	public Element getElement(BigInteger bigInteger);
+	public Element getElementFrom(BigInteger integerValue);
 
-	public Element getElement(ByteTree byteTree);
+	public Element getElementFrom(ByteTree byteTree);
 
 	public Element getElement(Object value);
 

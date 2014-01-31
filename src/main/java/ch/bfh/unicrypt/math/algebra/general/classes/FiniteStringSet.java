@@ -92,7 +92,7 @@ public class FiniteStringSet
 	}
 
 	@Override
-	protected FiniteStringElement abstractGetElement(BigInteger value) {
+	protected FiniteStringElement abstractGetElementFrom(BigInteger value) {
 		int minLength = this.getMinLength();
 		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
 		StringBuilder strBuilder = new StringBuilder(this.getMaxLength());
@@ -123,7 +123,7 @@ public class FiniteStringSet
 
 	@Override
 	protected FiniteStringElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+		return this.abstractGetElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 
 	@Override

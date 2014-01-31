@@ -157,7 +157,7 @@ public class Tuple
 			values[i] = element.getBigInteger();
 			i++;
 		}
-		return MathUtil.foldAndPair(values);
+		return MathUtil.pair(values);
 	}
 
 	@Override

@@ -2,7 +2,8 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) Error: on line 7, column 34 in file:///Users/rolfhaenni/GIT/unicrypt/examples/license-dualLicense.txt
+ The string doesn't match the expected date/time format. The string to parse was: "30-Jan-2014". The expected format was: "MMM d, yyyy". Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,47 +40,52 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.crypto.schemes.sharing;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.StandardCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.crypto.schemes.sharing.classes.ShamirSecretSharingScheme;
+import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.SecretSharingScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 
 /**
  *
- *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StandardCommitmentExample {
+public class ShamirSecretSharingExample {
 
 	public static void example1() {
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		GStarModSafePrime cyclicGroup = GStarModSafePrime.getInstance(167);
-		Element generator = cyclicGroup.getElementFrom(98);
+		// Define underlying prime field and create (5,3)-threshold sharing scheme
+		ZModPrime z29 = ZModPrime.getInstance(29);
+		SecretSharingScheme sss = ShamirSecretSharingScheme.getInstance(z29, 5, 3);
 
-		// Create commitment scheme to be used
-		StandardCommitmentScheme commitmentScheme = StandardCommitmentScheme.getInstance(generator);
+		// Create message m=25
+		Element message = sss.getMessageSpace().getElementFrom(5);
+		System.out.println(message);
 
-		// Create message to commit
-		Element message = commitmentScheme.getMessageSpace().getElementFrom(42);
+		// Compute shares
+		Tuple shares = sss.share(message);
+		System.out.println(shares);
 
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message);
+		// Select subset of shares
+		Tuple someShares = shares.removeAt(1).removeAt(3);
+		System.out.println(someShares);
 
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, commitment);
+		// Recover message
+		Element recoveredMessage1 = sss.recover(someShares);
+		System.out.println(recoveredMessage1);
 
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
+		// Recover message differently
+		Element recvoceredMessage2 = sss.recover(shares.getAt(1), shares.getAt(2), shares.getAt(3));
+		System.out.println(recvoceredMessage2);
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
 		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+		example1();
+
 	}
 
 }

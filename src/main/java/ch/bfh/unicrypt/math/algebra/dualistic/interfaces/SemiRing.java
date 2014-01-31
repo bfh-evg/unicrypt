@@ -56,10 +56,10 @@ public interface SemiRing
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public DualisticElement getElement(int value);
+	public DualisticElement getElementFrom(int value);
 
 	@Override
-	public DualisticElement getElement(BigInteger value);
+	public DualisticElement getElementFrom(BigInteger value);
 
 	@Override
 	public DualisticElement getElement(Element element);
