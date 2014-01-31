@@ -99,7 +99,7 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of abstractGetElementFrom method, of class BooleanSet.
+	 * Test of abstractGetElementFromFrom method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElementBigInteger() {
@@ -122,7 +122,7 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * TestabstractGetElementFromment method, of class BooleanSet.
+	 * TestabstractGetElementFromFromment method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElementElement() {
@@ -153,7 +153,7 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * abstractGetElementFromtElement method, of class BooleanSet.
+	 * abstractGetElementFromFromtElement method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElementBoolean() {
@@ -167,7 +167,7 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * abstractGetElementFromctGetElement method, of class BooleanSet.
+	 * abstractGetElementFromFromctGetElement method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElementInt() {

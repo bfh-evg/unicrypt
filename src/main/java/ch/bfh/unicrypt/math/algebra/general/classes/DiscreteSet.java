@@ -81,7 +81,7 @@ public class DiscreteSet<V extends Object>
 	}
 
 	@Override
-	protected DiscreteSetElement<V> abstractGetElement(BigInteger integerValue) {
+	protected DiscreteSetElement<V> abstractGetElementFrom(BigInteger integerValue) {
 		return abstractGetElement(this.valueMap.get(integerValue.intValue()));
 	}
 

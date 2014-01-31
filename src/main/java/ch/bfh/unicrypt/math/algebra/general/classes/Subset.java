@@ -101,7 +101,7 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetElement(BigInteger bigInteger) {
+	protected Element abstractGetElementFrom(BigInteger bigInteger) {
 		return this.getSuperset().getElementFrom(bigInteger);
 	}
 

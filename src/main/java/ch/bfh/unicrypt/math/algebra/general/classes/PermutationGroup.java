@@ -122,7 +122,7 @@ public class PermutationGroup
 	}
 
 	@Override
-	protected PermutationElement abstractGetElement(final BigInteger value) {
+	protected PermutationElement abstractGetElementFrom(final BigInteger value) {
 		BigInteger[] values = MathUtil.unpair(value, this.getSize());
 		return this.abstractGetElement(new Permutation(ArrayUtil.bigIntegerToIntArray(values)));
 	}

@@ -98,7 +98,7 @@ public class BooleanSet
 	}
 
 	@Override
-	protected BooleanElement abstractGetElement(BigInteger value) {
+	protected BooleanElement abstractGetElementFrom(BigInteger value) {
 		return this.getElement(value.equals(BigInteger.ONE));
 	}
 

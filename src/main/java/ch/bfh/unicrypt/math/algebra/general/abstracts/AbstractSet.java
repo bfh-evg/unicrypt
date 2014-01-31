@@ -262,7 +262,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		if (!this.contains(bigInteger)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetElement(bigInteger);
+		return this.abstractGetElementFrom(bigInteger);
 	}
 
 	@Override
@@ -416,7 +416,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 					while (!set.contains(currentValue)) {
 						this.currentValue = this.currentValue.add(BigInteger.ONE);
 					}
-					E element = set.abstractGetElement(currentValue);
+					E element = set.abstractGetElementFrom(currentValue);
 					this.counter = this.counter.add(BigInteger.ONE);
 					this.currentValue = this.currentValue.add(BigInteger.ONE);
 					return element;
@@ -447,7 +447,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	protected abstract boolean abstractContains(V value);
 
-	protected abstract E abstractGetElement(BigInteger value);
+	protected abstract E abstractGetElementFrom(BigInteger value);
 
 //	TODO: protected abstract E abstractGetElementFrom(ByteTree byteTree);
 	protected E abstractGetElementFrom(ByteTree byteTree) {

@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -72,7 +73,7 @@ public class Z
 	//
 	@Override
 	protected ZElement standardSelfApply(ZElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(amount));
+		return this.abstractGetElementFrom(element.getValue().multiply(amount));
 	}
 
 	@Override
@@ -89,27 +90,27 @@ public class Z
 	//
 	@Override
 	protected ZElement abstractApply(ZElement element1, ZElement element2) {
-		return this.abstractGetElement(element1.getValue().add(element2.getValue()));
+		return this.abstractGetElementFrom(element1.getValue().add(element2.getValue()));
 	}
 
 	@Override
 	protected ZElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElementFrom(BigInteger.ZERO);
 	}
 
 	@Override
 	protected ZElement abstractInvert(ZElement element) {
-		return this.abstractGetElement(element.getValue().negate());
+		return this.abstractGetElementFrom(element.getValue().negate());
 	}
 
 	@Override
 	protected ZElement abstractMultiply(ZElement element1, ZElement element2) {
-		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
+		return this.abstractGetElementFrom(element1.getValue().multiply(element2.getValue()));
 	}
 
 	@Override
 	protected ZElement abstractGetOne() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElementFrom(BigInteger.ONE);
 	}
 
 	@Override
@@ -128,13 +129,18 @@ public class Z
 	}
 
 	@Override
+	protected ZElement abstractGetElementFrom(BigInteger value) {
+		return new ZElement(this, MathUtil.unfold(value));
+	}
+
+	@Override
 	protected ZElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	protected ZElement abstractGetDefaultGenerator() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElementFrom(BigInteger.ONE);
 	}
 
 	@Override

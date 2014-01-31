@@ -85,7 +85,7 @@ public class StringMonoid
 	}
 
 	@Override
-	protected StringElement abstractGetElement(BigInteger value) {
+	protected StringElement abstractGetElementFrom(BigInteger value) {
 		int blockLength = this.getBlockLength();
 		StringBuilder strBuilder = new StringBuilder();
 		BigInteger alphabetSize = BigInteger.valueOf(this.getAlphabet().getSize());

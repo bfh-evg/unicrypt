@@ -157,7 +157,7 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	}
 
 	@Override
-	protected E abstractGetElement(BigInteger bigInteger) {
+	protected E abstractGetElementFrom(BigInteger bigInteger) {
 		if (bigInteger.equals(BigInteger.ZERO)) {
 			return this.getZeroElement();
 		}

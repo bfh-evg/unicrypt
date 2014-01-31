@@ -128,7 +128,7 @@ public class ZStarMod
 		if (this.hasKnownOrder()) {
 			newAmount = amount.mod(order);
 		}
-		return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
+		return this.abstractGetElementFrom(element.getValue().modPow(newAmount, this.getModulus()));
 	}
 
 	@Override
@@ -156,12 +156,17 @@ public class ZStarMod
 	}
 
 	@Override
+	protected ZStarModElement abstractGetElementFrom(BigInteger value) {
+		return new ZStarModElement(this, value);
+	}
+
+	@Override
 	protected ZStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
 		BigInteger randomValue;
 		do {
 			randomValue = randomByteSequence.getRandomNumberGenerator().nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
 		} while (!this.contains(randomValue));
-		return this.abstractGetElement(randomValue);
+		return this.abstractGetElementFrom(randomValue);
 	}
 
 	@Override
@@ -175,19 +180,19 @@ public class ZStarMod
 	@Override
 	protected ZStarModElement abstractGetIdentityElement() {
 		if (this.getModulus().equals(BigInteger.ONE)) {
-			return this.abstractGetElement(BigInteger.ZERO);
+			return this.abstractGetElementFrom(BigInteger.ZERO);
 		}
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElementFrom(BigInteger.ONE);
 	}
 
 	@Override
 	protected ZStarModElement abstractApply(final ZStarModElement element1, final ZStarModElement element2) {
-		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+		return this.abstractGetElementFrom(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
 	}
 
 	@Override
 	public ZStarModElement abstractInvert(final ZStarModElement element) {
-		return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
+		return this.abstractGetElementFrom(element.getValue().modInverse(this.getModulus()));
 	}
 
 	@Override

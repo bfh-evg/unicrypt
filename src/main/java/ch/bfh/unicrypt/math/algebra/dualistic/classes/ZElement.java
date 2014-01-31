@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -59,7 +60,7 @@ public class ZElement
 
 	@Override
 	protected BigInteger abstractGetBigInteger() {
-		return this.getValue();
+		return MathUtil.fold(this.getValue());
 	}
 
 	@Override

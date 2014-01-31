@@ -140,7 +140,7 @@ public class GStarMod
 	protected GStarModElement standardSelfApply(final GStarModElement element, final BigInteger amount) {
 		BigInteger newAmount = amount.mod(this.getOrder());
 		GStarMod.modPowCounter_SelfApply++;
-		return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
+		return this.abstractGetElementFrom(element.getValue().modPow(newAmount, this.getModulus()));
 	}
 
 	@Override
@@ -165,6 +165,11 @@ public class GStarMod
 	}
 
 	@Override
+	protected GStarModElement abstractGetElementFrom(BigInteger value) {
+		return new GStarModElement(this, value);
+	}
+
+	@Override
 	protected GStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
 		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomByteSequence);
 		return this.getElement(randomElement.power(this.getCoFactor()));
@@ -185,17 +190,17 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElementFrom(BigInteger.ONE);
 	}
 
 	@Override
 	protected GStarModElement abstractApply(final GStarModElement element1, final GStarModElement element2) {
-		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+		return this.abstractGetElementFrom(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
 	}
 
 	@Override
 	protected GStarModElement abstractInvert(final GStarModElement element) {
-		return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
+		return this.abstractGetElementFrom(element.getValue().modInverse(this.getModulus()));
 	}
 
 	/**
@@ -212,7 +217,7 @@ public class GStarMod
 			do {
 				alpha = alpha.add(BigInteger.ONE);
 			} while (!MathUtil.areRelativelyPrime(alpha, this.getModulus()));
-			element = this.abstractGetElement(alpha.modPow(this.getCoFactor(), this.getModulus()));
+			element = this.abstractGetElementFrom(alpha.modPow(this.getCoFactor(), this.getModulus()));
 		} while (!this.isGenerator(element)); // this test could be skipped for a prime order
 		return element;
 	}

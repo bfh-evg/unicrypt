@@ -86,12 +86,12 @@ public class ZMod
 	//
 	@Override
 	protected ZModElement standardSelfApply(ZModElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
+		return this.abstractGetElementFrom(element.getValue().multiply(amount).mod(this.getModulus()));
 	}
 
 	@Override
 	protected ZModElement standardPower(ZModElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().modPow(amount, this.getModulus()));
+		return this.abstractGetElementFrom(element.getValue().modPow(amount, this.getModulus()));
 	}
 
 	@Override
@@ -105,30 +105,30 @@ public class ZMod
 	//
 	@Override
 	protected ZModElement abstractApply(ZModElement element1, ZModElement element2) {
-		return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
+		return this.abstractGetElementFrom(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
 	}
 
 	@Override
 	protected ZModElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElementFrom(BigInteger.ZERO);
 	}
 
 	@Override
 	protected ZModElement abstractInvert(ZModElement element) {
-		return this.abstractGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
+		return this.abstractGetElementFrom(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
 	}
 
 	@Override
 	protected ZModElement abstractMultiply(ZModElement element1, ZModElement element2) {
-		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+		return this.abstractGetElementFrom(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
 	}
 
 	@Override
 	protected ZModElement abstractGetOne() {
 		if (this.getModulus().equals(BigInteger.ONE)) {
-			return this.abstractGetElement(BigInteger.ZERO);
+			return this.abstractGetElementFrom(BigInteger.ZERO);
 		}
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElementFrom(BigInteger.ONE);
 	}
 
 	@Override
@@ -147,13 +147,18 @@ public class ZMod
 	}
 
 	@Override
+	protected ZModElement abstractGetElementFrom(BigInteger value) {
+		return new ZModElement(this, value);
+	}
+
+	@Override
 	protected ZModElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getModulus().subtract(BigInteger.ONE)));
+		return this.abstractGetElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getModulus().subtract(BigInteger.ONE)));
 	}
 
 	@Override
 	protected ZModElement abstractGetDefaultGenerator() {
-		return this.abstractGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
+		return this.abstractGetElementFrom(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
 	}
 
 	@Override
