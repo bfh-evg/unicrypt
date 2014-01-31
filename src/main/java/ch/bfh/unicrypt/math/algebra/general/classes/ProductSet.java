@@ -92,8 +92,8 @@ public class ProductSet
 		}
 		return true;
 	}
-//	public final Tuple getElement(final int... values) {
-//		return this.getElement(ArrayUtil.intToBigIntegerArray(values));
+//	public final Tuple getElementFrom(final int... values) {
+//		return this.getElementFrom(ArrayUtil.intToBigIntegerArray(values));
 //	}
 //
 
@@ -103,7 +103,7 @@ public class ProductSet
 		}
 		Element[] elements = new Element[this.getArity()];
 		for (int i = 0; i < this.getArity(); i++) {
-			elements[i] = this.getAt(i).getElement(values[i]);
+			elements[i] = this.getAt(i).getElementFrom(values[i]);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(elements));
 	}

@@ -95,7 +95,7 @@ public class PreimageOrProofGeneratorTest {
 		// y5 = f5(x1, x2) = g^x1 * h^x2
 		Function f1 = GeneratorFunction.getInstance(this.G_q.getRandomGenerator());
 		Function f2 = GeneratorFunction.getInstance(this.G_q2.getRandomGenerator());
-		Function f3 = GeneratorFunction.getInstance(this.G_q.getElement(4));
+		Function f3 = GeneratorFunction.getInstance(this.G_q.getElementFrom(4));
 		Function f4 = GeneratorFunction.getInstance(this.G_q.getRandomGenerator());
 		Function f5 = this.getPedersonCommitmentFunction();
 
@@ -104,18 +104,18 @@ public class PreimageOrProofGeneratorTest {
 		PreimageOrProofGenerator pg = PreimageOrProofGenerator.getInstance(scg, functions);
 
 		// Default
-		Element secret = this.Z_q.getElement(3);
+		Element secret = this.Z_q.getElementFrom(3);
 		if (index == 4) {
-			secret = Tuple.getInstance(this.Z_q.getElement(2), this.Z_q.getElement(1));
+			secret = Tuple.getInstance(this.Z_q.getElementFrom(2), this.Z_q.getElementFrom(1));
 		}
 
 		Pair privateInput = pg.createPrivateInput(secret, index);
 		Tuple publicInput = Tuple.getInstance(
 			   this.G_q.getRandomElement(),
 			   this.G_q2.getRandomElement(),
-			   this.G_q.getElement(64),
+			   this.G_q.getElementFrom(64),
 			   this.G_q.getRandomElement(),
-			   this.G_q.getElement(96));
+			   this.G_q.getElementFrom(96));
 
 		// Generate
 		Triple proof = pg.generate(privateInput, publicInput);
@@ -126,8 +126,8 @@ public class PreimageOrProofGeneratorTest {
 	}
 
 	public Function getPedersonCommitmentFunction() {
-		Element g = this.G_q.getElement(4);
-		Element h = this.G_q.getElement(6);
+		Element g = this.G_q.getElementFrom(4);
+		Element h = this.G_q.getElementFrom(6);
 
 		Function f = CompositeFunction.getInstance(
 			   ProductFunction.getInstance(GeneratorFunction.getInstance(g), GeneratorFunction.getInstance(h)),

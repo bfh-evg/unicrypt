@@ -56,9 +56,9 @@ public class Schnorr {
 
 	public static void SchnorrExample() {
 		GStarModSafePrime g_q = GStarModSafePrime.getInstance(23);
-		GStarModElement g = g_q.getElement(4);
-		Element randomization = g_q.getZModOrder().getElement(3);
-		Element privateKey = g_q.getZModOrder().getElement(5);
+		GStarModElement g = g_q.getElementFrom(4);
+		Element randomization = g_q.getZModOrder().getElementFrom(3);
+		Element privateKey = g_q.getZModOrder().getElementFrom(5);
 		StringElement message = StringMonoid.getInstance(Alphabet.BASE64).getElement("MessageXX");
 //		SchnorrSignatureScheme<StringMonoid, StringElement> schnorr = SchnorrSignatureScheme.getInstance(message.getSet(), g_q, g);
 //		Function ssF = schnorr.getSignatureFunction();

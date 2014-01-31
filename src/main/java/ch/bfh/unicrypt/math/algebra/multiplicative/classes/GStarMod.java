@@ -172,7 +172,7 @@ public class GStarMod
 //    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
 //      // Method 1
 //      ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
-//      return this.getElement(randomElement.power(this.getCoFactor()));
+//      return this.getElementFrom(randomElement.power(this.getCoFactor()));
 //    }
 //    // Method 2
 //    return this.getDefaultGenerator().power(this.getZModOrder().getRandomElement(random));

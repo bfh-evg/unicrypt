@@ -138,10 +138,10 @@ public interface ConcatenativeSemiGroup
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public ConcatenativeElement getElement(int value);
+	public ConcatenativeElement getElementFrom(int value);
 
 	@Override
-	public ConcatenativeElement getElement(BigInteger value);
+	public ConcatenativeElement getElementFrom(BigInteger value);
 
 	@Override
 	public ConcatenativeElement getElement(Element element);

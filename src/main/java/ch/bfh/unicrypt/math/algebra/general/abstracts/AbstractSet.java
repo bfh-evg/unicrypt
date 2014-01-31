@@ -235,8 +235,11 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	@Override
 	public final boolean contains(final Object value) {
-		if (value == null || !this.valueClass.isInstance(value)) {
+		if (value == null) {
 			throw new IllegalArgumentException();
+		}
+		if (!this.valueClass.isInstance(value)) {
+			return false;
 		}
 		return this.abstractContains((V) value);
 	}
@@ -250,12 +253,12 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final E getElement(final int integer) {
-		return this.getElement(BigInteger.valueOf(integer));
+	public final E getElementFrom(final int integer) {
+		return this.getElementFrom(BigInteger.valueOf(integer));
 	}
 
 	@Override
-	public final E getElement(BigInteger bigInteger) {
+	public final E getElementFrom(BigInteger bigInteger) {
 		if (!this.contains(bigInteger)) {
 			throw new IllegalArgumentException();
 		}
@@ -263,11 +266,11 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final E getElement(ByteTree byteTree) {
+	public final E getElementFrom(ByteTree byteTree) {
 		if (!this.contains(byteTree)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetElement(byteTree);
+		return this.abstractGetElementFrom(byteTree);
 	}
 
 	@Override
@@ -286,7 +289,10 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		if (this.contains(element)) {
 			return (E) element;
 		}
-		return this.getElement(element.getBigInteger());
+		if (this.contains(element.getValue())) {
+			return this.getElement(element.getValue());
+		}
+		return this.getElementFrom(element.getBigInteger());
 	}
 
 	@Override
@@ -443,8 +449,8 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	protected abstract E abstractGetElement(BigInteger value);
 
-//	TODO: protected abstract E abstractGetElement(ByteTree byteTree);
-	protected E abstractGetElement(ByteTree byteTree) {
+//	TODO: protected abstract E abstractGetElementFrom(ByteTree byteTree);
+	protected E abstractGetElementFrom(ByteTree byteTree) {
 		return null;
 	}
 

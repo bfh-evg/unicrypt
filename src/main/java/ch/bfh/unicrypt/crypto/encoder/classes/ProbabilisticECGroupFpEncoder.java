@@ -102,7 +102,7 @@ public class ProbabilisticECGroupFpEncoder
 			}
 
 			ZModElement x = zModPrime.getElement(e);
-			final ZModElement ONE = zModPrime.getElement(1);
+			final ZModElement ONE = zModPrime.getElementFrom(1);
 
 			int count = 0;
 			while (!ecPrime.contains(x)) {
@@ -112,10 +112,8 @@ public class ProbabilisticECGroupFpEncoder
 				x = x.add(ONE);
 				count++;
 			}
-			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x))
-				   .add(ecPrime.getB());
-			ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(
-				   y1.getValue(), zModPrime.getModulus()));
+			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
+			ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
 			return ecPrime.getElement(x, y);
 		}
 

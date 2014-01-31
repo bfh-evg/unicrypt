@@ -56,9 +56,9 @@ public class TupleTest {
 	@Test
 	public void tupleTest() {
 		ZMod zMod = ZMod.getInstance(17);
-		Element e1 = zMod.getElement(4);
-		Element e2 = zMod.getElement(2);
-		Element e3 = zMod.getElement(1);
+		Element e1 = zMod.getElementFrom(4);
+		Element e2 = zMod.getElementFrom(2);
+		Element e3 = zMod.getElementFrom(1);
 		Tuple tuple = Tuple.getInstance(e1, e2, e3);
 		int index = 0;
 		for (Element element : tuple) {

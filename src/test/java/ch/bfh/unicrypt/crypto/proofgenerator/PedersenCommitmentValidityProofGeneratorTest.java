@@ -79,16 +79,16 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		GStarMod G_q = this.G_q1;
 		ZMod Z_q = G_q.getZModOrder();
 
-		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElement(4), G_q.getElement(2));
-		Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
+		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElementFrom(4), G_q.getElementFrom(2));
+		Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElementFrom(2), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5)});
 
 		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
 		PedersenCommitmentValidityProofGenerator pg = PedersenCommitmentValidityProofGenerator.getInstance(scg, pedersenCS, messages);
 
-		Element publicInput = G_q.getElement(128);   // 4^2*2^3 = 128
+		Element publicInput = G_q.getElementFrom(128);   // 4^2*2^3 = 128
 
 		// Valid proof
-		Element secret = Z_q.getElement(2);
+		Element secret = Z_q.getElementFrom(2);
 		int index = 1;
 		Tuple privateInput = pg.createPrivateInput(secret, index);
 
@@ -103,14 +103,14 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		GStarMod G_q = this.G_q1;
 		ZMod Z_q = G_q.getZModOrder();
 
-		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElement(2), G_q.getElement(4));
-		Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
+		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElementFrom(2), G_q.getElementFrom(4));
+		Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElementFrom(2), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5)});
 
 		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
 		PedersenCommitmentValidityProofGenerator pg = PedersenCommitmentValidityProofGenerator.getInstance(scg, pedersenCS, messages);
 
 		int index = 3;
-		Element r = Z_q.getElement(5);
+		Element r = Z_q.getElementFrom(5);
 
 		Tuple privateInput = pg.createPrivateInput(r, index);
 		Element publicInput = pedersenCS.commit(messages.getElements()[index], r);
@@ -128,16 +128,16 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 			GStarMod G_q = this.G_q2;
 			ZMod Z_q = G_q.getZModOrder();
 
-			PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElement(4), G_q.getElement(2));
-			Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
+			PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElementFrom(4), G_q.getElementFrom(2));
+			Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElementFrom(2), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5)});
 
 			SigmaChallengeGenerator scg = PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
 			PedersenCommitmentValidityProofGenerator pg = PedersenCommitmentValidityProofGenerator.getInstance(scg, pedersenCS, messages);
 
-			Element publicInput = G_q.getElement(128);   // 4^2*2^3 = 128
+			Element publicInput = G_q.getElementFrom(128);   // 4^2*2^3 = 128
 
 			// Invalid proof-> wrong randomndness
-			Element secret = Z_q.getElement(7);
+			Element secret = Z_q.getElementFrom(7);
 			int index = 1;
 			Tuple privateInput = pg.createPrivateInput(secret, index);
 
@@ -146,7 +146,7 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 			assertTrue(!v.getValue());
 
 			// Invalid proof -> wrong index
-			secret = Z_q.getElement(2);
+			secret = Z_q.getElementFrom(2);
 			index = 2;
 			privateInput = pg.createPrivateInput(secret, index);
 

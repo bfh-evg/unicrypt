@@ -115,8 +115,8 @@ public class ECZModPrime
 		ZModElement qx = element2.getX();
 		ZModElement qy = element2.getY();
 		if (element1.isEquivalent(element2)) {
-			ZModElement three = (ZModElement) this.getFiniteField().getElement(3);
-			ZModElement two = (ZModElement) this.getFiniteField().getElement(2);
+			ZModElement three = (ZModElement) this.getFiniteField().getElementFrom(3);
+			ZModElement two = (ZModElement) this.getFiniteField().getElementFrom(2);
 			s = ((px.power(2).multiply(three)).apply(this.getA())).divide(py.multiply(two));
 			rx = s.power(2).apply(px.multiply(two).invert());
 			ry = s.multiply(px.subtract(rx)).apply(py.invert());
@@ -139,27 +139,27 @@ public class ECZModPrime
 	@Override
 	protected ECZModPrimeElement getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
 		BigInteger p = this.getFiniteField().getModulus();
-		ZModElement x = (ZModElement) this.getFiniteField().getRandomElement(randomByteSequence);
+		ZModElement x = this.getFiniteField().getRandomElement(randomByteSequence);
 		ZModElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
 		boolean neg = x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
 
 		while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
-			x = (ZModElement) this.getFiniteField().getRandomElement(randomByteSequence);
+			x = this.getFiniteField().getRandomElement(randomByteSequence);
 			y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
 		}
 		//if neg is true return solution 2(p-sqrt) of sqrtModPrime else solution 1
 		if (neg) {
-			y = (ZModElement) this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue(), p)));
+			y = this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue(), p)));
 		} else {
-			y = (ZModElement) this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue(), p));
+			y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue(), p));
 		}
 		return this.abstractGetElement(Point.getInstance(x, y));
 	}
 
 	private boolean isValid() {
 		boolean c1, c2, c3, c4, c5, c61, c62;
-		ZModElement i4 = (ZModElement) getFiniteField().getElement(4);
-		ZModElement i27 = (ZModElement) getFiniteField().getElement(27);
+		ZModElement i4 = (ZModElement) getFiniteField().getElementFrom(4);
+		ZModElement i27 = (ZModElement) getFiniteField().getElementFrom(27);
 		c1 = !getA().power(3).multiply(i4).add(i27.multiply(getB().power(2))).isZero();
 		c2 = contains(this.getDefaultGenerator());
 		c3 = MathUtil.arePrime(getOrder());

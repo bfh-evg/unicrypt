@@ -76,12 +76,12 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 		System.out.println("-->g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6  8
 		System.out.println("-->g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8 18
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 2, rrs);
-		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3));
-		Element r = Z_q.getElement(2);
+		Tuple messages = Tuple.getInstance(Z_q.getElementFrom(1), Z_q.getElementFrom(3));
+		Element r = Z_q.getElementFrom(2);
 		Element c = gpcs.commit(messages, r);   // c = g1^m1 * g2^m2 * g0^r = 3^1 * 9^3 * 4^2 = 3 * 16 * 16 = 9
-		Element verification = G_q.getIndependentGenerator(1, rrs).selfApply(Z_q.getElement(1)).apply(
-			   G_q.getIndependentGenerator(2, rrs).selfApply(Z_q.getElement(3))).apply(
-					  G_q.getIndependentGenerator(0, rrs).selfApply(Z_q.getElement(2)));
+		Element verification = G_q.getIndependentGenerator(1, rrs).selfApply(Z_q.getElementFrom(1)).apply(
+			   G_q.getIndependentGenerator(2, rrs).selfApply(Z_q.getElementFrom(3))).apply(
+					  G_q.getIndependentGenerator(0, rrs).selfApply(Z_q.getElementFrom(2)));
 		assertTrue(c.isEquivalent(verification));
 
 	}
@@ -100,14 +100,14 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 2, rrs);
 
 		gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 4, rrs);
-		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5));
-		Element r = Z_q.getElement(3);
+		Tuple messages = Tuple.getInstance(Z_q.getElementFrom(1), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5));
+		Element r = Z_q.getElementFrom(3);
 		Element c = gpcs.commit(messages, r); // c = 3^1 * 9^3 * 8^4 * 18^5 * 4^3 = 3 * 16 * 2 * 3 * 18 = 9
-		Element verification = G_q.getIndependentGenerator(1, rrs).selfApply(Z_q.getElement(1)).apply(
-			   G_q.getIndependentGenerator(2, rrs).selfApply(Z_q.getElement(3))).apply(
-					  G_q.getIndependentGenerator(3, rrs).selfApply(Z_q.getElement(4))).apply(
-					  G_q.getIndependentGenerator(4, rrs).selfApply(Z_q.getElement(5))).apply(
-					  G_q.getIndependentGenerator(0, rrs).selfApply(Z_q.getElement(3)));
+		Element verification = G_q.getIndependentGenerator(1, rrs).selfApply(Z_q.getElementFrom(1)).apply(
+			   G_q.getIndependentGenerator(2, rrs).selfApply(Z_q.getElementFrom(3))).apply(
+					  G_q.getIndependentGenerator(3, rrs).selfApply(Z_q.getElementFrom(4))).apply(
+					  G_q.getIndependentGenerator(4, rrs).selfApply(Z_q.getElementFrom(5))).apply(
+					  G_q.getIndependentGenerator(0, rrs).selfApply(Z_q.getElementFrom(3)));
 		assertTrue(c.isEquivalent(verification));
 
 	}
@@ -116,8 +116,8 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 	public void testGeneralizedPedersenCommitment_Exception() {
 		// Commitment size does not match with number of messages
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 3);
-		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3));
-		Element r = Z_q.getElement(2);
+		Tuple messages = Tuple.getInstance(Z_q.getElementFrom(1), Z_q.getElementFrom(3));
+		Element r = Z_q.getElementFrom(2);
 		Element c = gpcs.commit(messages, r);
 
 	}

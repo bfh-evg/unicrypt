@@ -84,11 +84,11 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of getElement method, of class BooleanSet.
+	 * Test of getElementFromFromFrom method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElement() {
-//		System.out.println("getElement");
+//		System.out.printgetElementFromment");
 		boolean bit = false;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement result = instance.getElement(bit);
@@ -99,22 +99,22 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of abstractGetElement method, of class BooleanSet.
+	 * Test of abstractGetElementFrom method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElementBigInteger() {
-//		System.out.println("getElement BigInteger");
+//		System.out.pgetElementFromtElement BigInteger");
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
-		BooleanElement result = instance.getElement(BigInteger.ZERO);
+		BooleanElement result = instance.getElementFrom(BigInteger.ZERO);
 		assertEquals(false, result.getValue());
 
-		result = instance.getElement(BigInteger.ONE);
+		result = instance.getElementFrom(BigInteger.ONE);
 		assertEquals(true, result.getValue());
 
 		try {
 			BooleanElement expResult = result;
-			result = instance.getElement(BigInteger.TEN);
+			instance.getElement(BigInteger.TEN);
 			Assert.fail();
 		} catch (IllegalArgumentException ex) {
 			//ok
@@ -122,11 +122,11 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of abstractGetElement method, of class BooleanSet.
+	 * TestabstractGetElementFromment method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElementElement() {
-//		System.out.println("getElement Element");
+//		System.ogetElementFromFrom("getElementFrom Element");
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement expResult = instance.getElement(true);
@@ -134,15 +134,15 @@ public class BooleanSetTest {
 		assertEquals(expResult, result);
 
 		ZMod zmod = ZMod.getInstance(5);
-		Element element = zmod.getElement(1);
+		Element element = zmod.getElementFrom(1);
 		result = instance.getElement(element);
 		assertEquals(true, result.getValue());
 
-		element = zmod.getElement(0);
+		element = zmod.getElementFrom(0);
 		result = instance.getElement(element);
 		assertEquals(false, result.getValue());
 
-		element = zmod.getElement(4);
+		element = zmod.getElementFrom(4);
 		try {
 			result = instance.getElement(element);
 			Assert.fail();
@@ -153,11 +153,11 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of abstractGetElement method, of class BooleanSet.
+	 * abstractGetElementFromtElement method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElementBoolean() {
-//		System.out.println("getElement Boolean");
+//		SystgetElementFromFromntln("getElementFrom Boolean");
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement expResult = instance.getElement(true);
@@ -167,29 +167,29 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of abstractGetElement method, of class BooleanSet.
+	 * abstractGetElementFromctGetElement method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElementInt() {
-//		System.out.println("getElement int");
+//		getElementFromFrom.println("getElementFrom int");
 
 		{
 			BooleanSet instance = BooleanSet.getInstance();
 			BooleanElement expResult = instance.getElement(true);
-			BooleanElement result = instance.getElement(1);
+			BooleanElement result = instance.getElementFrom(1);
 			//          assertEquals(expResult, result);
 		}
 		{
 			BooleanSet instance = BooleanSet.getInstance();
 			BooleanElement expResult = instance.getElement(false);
-			BooleanElement result = instance.getElement(0);
+			BooleanElement result = instance.getElementFrom(0);
 			//          assertEquals(expResult, result);
 		}
 
 		{
 			BooleanSet instance = BooleanSet.getInstance();
 			try {
-				BooleanElement result = instance.getElement(2);
+				BooleanElement result = instance.getElementFrom(2);
 				Assert.fail();
 			} catch (IllegalArgumentException ex) {
 				//ok
@@ -199,7 +199,7 @@ public class BooleanSetTest {
 		{
 			BooleanSet instance = BooleanSet.getInstance();
 			try {
-				BooleanElement result = instance.getElement(-1);
+				BooleanElement result = instance.getElementFrom(-1);
 				Assert.fail();
 			} catch (IllegalArgumentException ex) {
 				//ok
@@ -333,9 +333,9 @@ public class BooleanSetTest {
 	public void testContains1() {
 //		System.out.println("contains1");
 		ZMod zmod = ZMod.getInstance(BigInteger.TEN);
-		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElement(0)));
-		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElement(1)));
-		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElement(2)));
+		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElementFrom(0)));
+		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElementFrom(1)));
+		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElementFrom(2)));
 	}
 
 	/**

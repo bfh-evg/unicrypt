@@ -112,13 +112,13 @@ public class ECBinaryPolynomialField
 		BinaryPolynomialElement qx = element2.getX();
 		BinaryPolynomialElement qy = element2.getY();
 		if (element1.equals(element2)) {
-			final DualisticElement one = this.getFiniteField().getElement(1);
+			final DualisticElement one = this.getFiniteField().getElementFrom(1);
 			s = px.add(py.divide(px));
 			rx = s.power(2).add(s).add(this.getA());
 			ry = px.power(2).add((s.add(one)).multiply(rx));
 		} else {
 			// TODO: Why is two not used???
-			DualisticElement two = this.getFiniteField().getElement(2);
+			DualisticElement two = this.getFiniteField().getElementFrom(2);
 			s = py.add(qy).divide(px.add(qx));
 			rx = s.power(2).add(s).add(px).add(qx).add(this.getA());
 			ry = s.multiply(px.add(rx)).add(rx).add(py);

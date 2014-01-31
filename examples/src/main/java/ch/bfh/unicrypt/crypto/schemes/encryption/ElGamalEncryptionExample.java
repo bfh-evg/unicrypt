@@ -103,7 +103,7 @@ public class ElGamalEncryptionExample {
 		Element publicKey = keyPair.getSecond();
 
 		// Create, encode, and encrypt message m=66
-		Element message = encoder.getDomain().getElement(66);
+		Element message = encoder.getDomain().getElementFrom(66);
 		Element encodedMessage = encoder.encode(message);
 		Element encryption = elGamal.encrypt(publicKey, encodedMessage);
 
@@ -135,8 +135,8 @@ public class ElGamalEncryptionExample {
 		Element publicKey = keyPair.getSecond();
 
 		// Create messages m1=3, m2=6, and m12=m1*m2=18
-		Element message1 = elGamal.getMessageSpace().getElement(3);
-		Element message2 = elGamal.getMessageSpace().getElement(6);
+		Element message1 = elGamal.getMessageSpace().getElementFrom(3);
+		Element message2 = elGamal.getMessageSpace().getElementFrom(6);
 		Element message12 = elGamal.getMessageSpace().apply(message1, message2);
 
 		// Encryption

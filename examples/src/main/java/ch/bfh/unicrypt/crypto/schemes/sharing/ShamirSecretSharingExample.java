@@ -61,7 +61,7 @@ public class ShamirSecretSharingExample {
 		SecretSharingScheme sss = ShamirSecretSharingScheme.getInstance(z29, 5, 3);
 
 		// Create message m=25
-		Element message = sss.getMessageSpace().getElement(5);
+		Element message = sss.getMessageSpace().getElementFrom(5);
 		System.out.println(message);
 
 		// Compute shares

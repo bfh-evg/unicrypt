@@ -51,8 +51,8 @@ import ch.bfh.unicrypt.math.helper.factorization.Prime;
 public class ZModTwo
 	   extends ZModPrime {
 
-	public static final ZModElement ZERO = ZModTwo.getInstance().getElement(0);
-	public static final ZModElement ONE = ZModTwo.getInstance().getElement(1);
+	public static final ZModElement ZERO = ZModTwo.getInstance().getElementFrom(0);
+	public static final ZModElement ONE = ZModTwo.getInstance().getElementFrom(1);
 
 	protected ZModTwo() {
 		super(Prime.getInstance(2));

@@ -58,7 +58,7 @@ public class StringMonoidTest {
 	public void testGetValue() {
 		StringMonoid sm = StringMonoid.getInstance(Alphabet.BINARY, 4);
 		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(300)) <= 0; i = i.add(BigInteger.ONE)) {
-			StringElement element = sm.getElement(i);
+			StringElement element = sm.getElementFrom(i);
 			Assert.assertEquals(element.getBigInteger(), i);
 //			System.out.println(element);
 		}

@@ -56,13 +56,13 @@ public class StandardCommitmentExample {
 
 		// Create cyclic group G_q (modulo 167) and wth generator=98
 		GStarModSafePrime cyclicGroup = GStarModSafePrime.getInstance(167);
-		Element generator = cyclicGroup.getElement(98);
+		Element generator = cyclicGroup.getElementFrom(98);
 
 		// Create commitment scheme to be used
 		StandardCommitmentScheme commitmentScheme = StandardCommitmentScheme.getInstance(generator);
 
 		// Create message to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
+		Element message = commitmentScheme.getMessageSpace().getElementFrom(42);
 
 		// Create commitment
 		Element commitment = commitmentScheme.commit(message);

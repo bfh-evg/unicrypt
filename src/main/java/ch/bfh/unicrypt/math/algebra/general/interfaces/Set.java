@@ -260,7 +260,7 @@ public interface Set {
 	 * @return The corresponding element
 	 * @throws IllegalArgumentException if no such element exists
 	 */
-	public Element getElement(int integer);
+	public Element getElementFrom(int integer);
 
 	/**
 	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists).
@@ -269,9 +269,9 @@ public interface Set {
 	 * @return The corresponding group element
 	 * @throws IllegalArgumentException if {@literal value} is null or if no such element exists in this group
 	 */
-	public Element getElement(BigInteger bigInteger);
+	public Element getElementFrom(BigInteger bigInteger);
 
-	public Element getElement(ByteTree byteTree);
+	public Element getElementFrom(ByteTree byteTree);
 
 	public Element getElement(Object value);
 

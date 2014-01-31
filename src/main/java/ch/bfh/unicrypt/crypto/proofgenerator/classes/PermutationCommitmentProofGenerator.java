@@ -278,7 +278,7 @@ public class PermutationCommitmentProofGenerator
 		if (group == null || size < 1) {
 			throw new IllegalArgumentException();
 		}
-		final Element one = group.getElement(1);
+		final Element one = group.getElementFrom(1);
 		final Element[] vector = new Element[size];
 		for (int i = 0; i < size; i++) {
 			vector[i] = one;

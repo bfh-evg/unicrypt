@@ -82,7 +82,7 @@ public class DiscreteSetTest {
 
 	@Test
 	public void testGetBigInteger() {
-		assertEquals("John", ds.getElement(ds.getElement("John").getBigInteger()).getValue());
+		assertEquals("John", ds.getElementFrom(ds.getElement("John").getBigInteger()).getValue());
 	}
 
 }
