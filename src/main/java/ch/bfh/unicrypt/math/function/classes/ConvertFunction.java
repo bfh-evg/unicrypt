@@ -63,7 +63,7 @@ public class ConvertFunction
 
 	@Override
 	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().getElement(element);
+		return this.getCoDomain().getElementFrom(element);
 	}
 
 	/**

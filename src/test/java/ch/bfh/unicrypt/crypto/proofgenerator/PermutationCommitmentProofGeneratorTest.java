@@ -86,7 +86,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
 
-		Tuple sV = Tuple.getInstance(Z_q.getElementFrom(2), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5), Z_q.getElementFrom(7)); //pcs.getRandomizationSpace().getRandomElement(random);
+		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7)); //pcs.getRandomizationSpace().getRandomElement(random);
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Permutation commitment proof generator
@@ -146,7 +146,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
 
-		Tuple sV = Tuple.getInstance(Z_q.getElementFrom(2), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5), Z_q.getElementFrom(7));
+		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7));
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Permutation commitment proof generator
@@ -156,7 +156,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Proof and verify
 		// Invalid: Wrong sV
-		Tuple sVInvalid = Tuple.getInstance(Z_q.getElementFrom(2), Z_q.getElementFrom(12), Z_q.getElementFrom(4), Z_q.getElementFrom(5), Z_q.getElementFrom(7));
+		Tuple sVInvalid = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(12), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7));
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sVInvalid), cPiV, randomGenerator);
 		BooleanElement v = pcpg.verify(proof, cPiV);
 		assertTrue(!v.getValue());
@@ -193,7 +193,7 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
-		Tuple sV = Tuple.getInstance(Z_q.getElementFrom(2), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5), Z_q.getElementFrom(7));
+		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7));
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Permutation commitment proof generator

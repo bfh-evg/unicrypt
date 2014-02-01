@@ -134,7 +134,7 @@ public interface MultiplicativeSemiGroup
 	public MultiplicativeElement getElementFrom(BigInteger value);
 
 	@Override
-	public MultiplicativeElement getElement(Element element);
+	public MultiplicativeElement getElementFrom(Element element);
 
 	@Override
 	public MultiplicativeElement getRandomElement();

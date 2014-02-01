@@ -86,23 +86,18 @@ public class Subset
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger bigInteger) {
-		for (Element element : this.hashSet) {
-			if (element.getValue().equals(bigInteger)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
 	protected boolean abstractContains(Element value) {
 		return this.hashSet.contains(value);
 	}
 
 	@Override
 	protected Element abstractGetElementFrom(BigInteger bigInteger) {
-		return this.getSuperset().getElementFrom(bigInteger);
+		for (Element element : this.hashSet) {
+			if (element.getValue().equals(bigInteger)) {
+				return this.getSuperset().getElementFrom(bigInteger);
+			}
+		}
+		return null; // no such element
 	}
 
 	@Override

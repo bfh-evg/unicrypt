@@ -88,23 +88,24 @@ public class BooleanSet
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return value.equals(BigInteger.ZERO) || value.equals(BigInteger.ONE);
-	}
-
-	@Override
 	protected boolean abstractContains(Boolean value) {
 		return true;
 	}
 
 	@Override
-	protected BooleanElement abstractGetElementFrom(BigInteger value) {
-		return this.getElement(value.equals(BigInteger.ONE));
+	protected BooleanElement abstractGetElement(Boolean value) {
+		return (value ? trueElement : falseElement);
 	}
 
 	@Override
-	protected BooleanElement abstractGetElement(Boolean value) {
-		return (value ? trueElement : falseElement);
+	protected BooleanElement abstractGetElementFrom(BigInteger bigInteger) {
+		if (bigInteger.equals(BigInteger.ZERO)) {
+			return BooleanSet.FALSE;
+		}
+		if (bigInteger.equals(BigInteger.ONE)) {
+			return BooleanSet.TRUE;
+		}
+		return null; // no such element
 	}
 
 	@Override

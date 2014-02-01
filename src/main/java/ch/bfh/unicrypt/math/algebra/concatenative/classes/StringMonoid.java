@@ -75,13 +75,13 @@ public class StringMonoid
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return value.signum() >= 0;
+	protected boolean abstractContains(String value) {
+		return value.length() % this.getBlockLength() == 0 && this.getAlphabet().isValid(value);
 	}
 
 	@Override
-	protected boolean abstractContains(String value) {
-		return value.length() % this.getBlockLength() == 0 && this.getAlphabet().isValid(value);
+	protected StringElement abstractGetElement(String value) {
+		return new StringElement(this, value);
 	}
 
 	@Override
@@ -100,11 +100,6 @@ public class StringMonoid
 			value = value.divide(blockSize);
 		}
 		return this.abstractGetElement(strBuilder.reverse().toString());
-	}
-
-	@Override
-	protected StringElement abstractGetElement(String value) {
-		return new StringElement(this, value);
 	}
 
 	@Override

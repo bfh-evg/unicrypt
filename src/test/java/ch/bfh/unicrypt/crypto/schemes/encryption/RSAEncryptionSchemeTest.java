@@ -57,7 +57,7 @@ public class RSAEncryptionSchemeTest {
 		RSAEncryptionScheme rsa = RSAEncryptionScheme.getInstance(ZModPrimePair.getInstance(3, 5));
 		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
 		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
-		Element message = rsa.getMessageSpace().getElementFrom(5);
+		Element message = rsa.getMessageSpace().getElement(5);
 		Element encryption = rsa.encrypt(puKey, message);
 		Element decryption = rsa.decrypt(prKey, message);
 		//	Assert.assertTrue(encryption.isEquivalent(decryption));

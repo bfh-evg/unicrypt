@@ -134,7 +134,7 @@ public interface AdditiveSemiGroup
 	public AdditiveElement getElementFrom(BigInteger value);
 
 	@Override
-	public AdditiveElement getElement(Element element);
+	public AdditiveElement getElementFrom(Element element);
 
 	@Override
 	public AdditiveElement getRandomElement();

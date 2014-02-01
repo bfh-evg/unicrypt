@@ -71,23 +71,21 @@ public class DiscreteSet<V extends Object>
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return value.signum() >= 0 || value.compareTo(this.getOrder()) < 0;
-	}
-
-	@Override
 	protected boolean abstractContains(V value) {
 		return this.indexMap.containsKey(value);
 	}
 
 	@Override
-	protected DiscreteSetElement<V> abstractGetElementFrom(BigInteger integerValue) {
-		return abstractGetElement(this.valueMap.get(integerValue.intValue()));
+	protected DiscreteSetElement<V> abstractGetElement(V value) {
+		return new DiscreteSetElement<V>(this, value);
 	}
 
 	@Override
-	protected DiscreteSetElement<V> abstractGetElement(V value) {
-		return new DiscreteSetElement<V>(this, value);
+	protected DiscreteSetElement<V> abstractGetElementFrom(BigInteger integerValue) {
+		if (integerValue.compareTo(this.getOrder()) >= 0) {
+			return null; // no such element
+		}
+		return abstractGetElement(this.valueMap.get(integerValue.intValue()));
 	}
 
 	@Override

@@ -155,7 +155,7 @@ public class GStarMod
 	@Override
 	protected boolean abstractContains(final BigInteger value) {
 		GStarMod.modPowCounter_Contains++;
-		return (value.signum() >= 0) && (value.compareTo(this.getModulus()) < 0) && MathUtil.areRelativelyPrime(value, this.getModulus())
+		return value.signum() > 0 && value.compareTo(this.getModulus()) < 0 && MathUtil.areRelativelyPrime(value, this.getModulus())
 			   && value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE);
 	}
 
@@ -166,13 +166,17 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement abstractGetElementFrom(BigInteger value) {
+		if (value.signum() == 0 || value.compareTo(this.getModulus()) >= 0 || !MathUtil.areRelativelyPrime(value, this.getModulus())
+			   || !value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE)) {
+			return null; // no such element
+		}
 		return new GStarModElement(this, value);
 	}
 
 	@Override
 	protected GStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
 		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomByteSequence);
-		return this.getElement(randomElement.power(this.getCoFactor()));
+		return this.getElementFrom(randomElement.power(this.getCoFactor()));
 // VERSION WITH OPTIMIZED EFFICIENCY BUT LACK OF INDEPENDENCE
 //    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
 //      // Method 1

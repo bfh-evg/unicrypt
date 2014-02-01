@@ -62,7 +62,7 @@ public interface SemiRing
 	public DualisticElement getElementFrom(BigInteger value);
 
 	@Override
-	public DualisticElement getElement(Element element);
+	public DualisticElement getElementFrom(Element element);
 
 	@Override
 	public DualisticElement getRandomElement();

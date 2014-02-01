@@ -78,7 +78,7 @@ public class PolynomialSemiRing
 		if (values == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.getElement(ProductSet.getInstance(this.getSemiRing(), values.length).getElement(values));
+		return this.getElement(ProductSet.getInstance(this.getSemiRing(), values.length).getElementFrom(values));
 	}
 
 	public PolynomialElement getElement(DualisticElement... elements) {
@@ -143,30 +143,25 @@ public class PolynomialSemiRing
 	// various super-classes
 	//
 	@Override
-	protected boolean abstractContains(BigInteger bigInteger) {
-		BigInteger[] bigIntegers = MathUtil.unpairWithSize(bigInteger);
-		for (BigInteger value : bigIntegers) {
-			if (!this.getSemiRing().contains(value)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
 	protected boolean abstractContains(GenericPolynomial value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	protected PolynomialElement abstractGetElementFrom(BigInteger value) {
-		BigInteger[] values = MathUtil.unpairWithSize(value);
-		return this.getElement(values);
+		// TODO
+		return true;
 	}
 
 	@Override
 	protected PolynomialElement abstractGetElement(GenericPolynomial value) {
 		return new PolynomialElement(this, value);
+	}
+
+	@Override
+	protected PolynomialElement abstractGetElementFrom(BigInteger integerValue) {
+		BigInteger[] bigIntegers = MathUtil.unpairWithSize(integerValue);
+		for (BigInteger bigInteger : bigIntegers) {
+			if (!this.getSemiRing().contains(bigInteger)) {
+				return null; // no such elements
+			}
+		}
+		return this.getElement(bigIntegers);
 	}
 
 	protected PolynomialElement getElement(Map<Integer, DualisticElement> coefficientMap) {

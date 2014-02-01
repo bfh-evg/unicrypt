@@ -80,8 +80,8 @@ public class PreimageAndProofGeneratorTest {
 		GStarMod G_q = this.G_q1;
 
 		// Proof generator
-		Function f1 = GeneratorFunction.getInstance(G_q.getElementFrom(4));
-		Function f2 = GeneratorFunction.getInstance(G_q.getElementFrom(2));
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
+		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, f2);
@@ -89,11 +89,11 @@ public class PreimageAndProofGeneratorTest {
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
-			   f1.getDomain().getElementFrom(3),
-			   f2.getDomain().getElementFrom(4));
+			   f1.getDomain().getElement(3),
+			   f2.getDomain().getElement(4));
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElementFrom(64),
-			   f2.getCoDomain().getElementFrom(16));
+			   f1.getCoDomain().getElement(64),
+			   f2.getCoDomain().getElement(16));
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -107,8 +107,8 @@ public class PreimageAndProofGeneratorTest {
 		GStarMod G_q = this.G_q2;
 
 		// Proof generator
-		Function f1 = GeneratorFunction.getInstance(G_q.getElementFrom(4));
-		Function f2 = GeneratorFunction.getInstance(G_q.getElementFrom(2));
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
+		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, f2);
@@ -116,11 +116,11 @@ public class PreimageAndProofGeneratorTest {
 
 		// Invalid proof -> One preimages is wrong
 		Element privateInput = Tuple.getInstance(
-			   f1.getDomain().getElementFrom(3),
-			   f2.getDomain().getElementFrom(4));
+			   f1.getDomain().getElement(3),
+			   f2.getDomain().getElement(4));
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElementFrom(64),
-			   f2.getCoDomain().getElementFrom(32));    // Preimage = 5
+			   f1.getCoDomain().getElement(64),
+			   f2.getCoDomain().getElement(32));    // Preimage = 5
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(!v.getValue());
@@ -131,20 +131,20 @@ public class PreimageAndProofGeneratorTest {
 	public void testPreimageAndProof_WithArity() {
 
 		// Proof generator
-		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElementFrom(2));
+		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, 3);
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, 3);
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
-			   f1.getDomain().getElementFrom(2),
-			   f1.getDomain().getElementFrom(3),
-			   f1.getDomain().getElementFrom(4));
+			   f1.getDomain().getElement(2),
+			   f1.getDomain().getElement(3),
+			   f1.getDomain().getElement(4));
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElementFrom(4),
-			   f1.getCoDomain().getElementFrom(8),
-			   f1.getCoDomain().getElementFrom(16));
+			   f1.getCoDomain().getElement(4),
+			   f1.getCoDomain().getElement(8),
+			   f1.getCoDomain().getElement(16));
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -155,13 +155,13 @@ public class PreimageAndProofGeneratorTest {
 	public void testPreimageAndProof_SingleFunction() {
 
 		// Proof generator
-		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElementFrom(2));
+		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1);
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, 1);
 
-		Element privateInput = Tuple.getInstance(f1.getDomain().getElementFrom(2));
-		Element publicInput = Tuple.getInstance(f1.getCoDomain().getElementFrom(4));
+		Element privateInput = Tuple.getInstance(f1.getDomain().getElement(2));
+		Element publicInput = Tuple.getInstance(f1.getCoDomain().getElement(4));
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -171,14 +171,14 @@ public class PreimageAndProofGeneratorTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testPreimageAndProof_Exception() {
-		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElementFrom(2));
+		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f1, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testPreimageAndProof_ExceptionWithArity() {
-		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElementFrom(2));
+		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f1, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, 0);
 	}

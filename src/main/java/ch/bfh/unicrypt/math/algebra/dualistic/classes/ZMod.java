@@ -148,6 +148,9 @@ public class ZMod
 
 	@Override
 	protected ZModElement abstractGetElementFrom(BigInteger value) {
+		if (value.compareTo(this.getModulus()) >= 0) {
+			return null; // no such element
+		}
 		return new ZModElement(this, value);
 	}
 

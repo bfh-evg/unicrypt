@@ -97,13 +97,16 @@ public class ProductSet
 //	}
 //
 
-	public final Tuple getElement(BigInteger[] values) {
+	public final Tuple getElementFrom(BigInteger[] values) {
 		if (values == null || values.length != this.getArity()) {
 			throw new IllegalArgumentException();
 		}
 		Element[] elements = new Element[this.getArity()];
 		for (int i = 0; i < this.getArity(); i++) {
 			elements[i] = this.getAt(i).getElementFrom(values[i]);
+			if (elements[i] == null) {
+				return null; // no such element
+			}
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(elements));
 	}
@@ -139,12 +142,6 @@ public class ProductSet
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger bigInteger) {
-		BigInteger[] values = MathUtil.unpair(bigInteger, this.getArity());
-		return this.contains(values);
-	}
-
-	@Override
 	protected boolean abstractContains(ImmutableArray<Element> value) {
 		if (value == null || value.getLength() != this.getArity()) {
 			return false;
@@ -171,7 +168,7 @@ public class ProductSet
 	@Override
 	protected Tuple abstractGetElementFrom(BigInteger integerValue) {
 		BigInteger[] values = MathUtil.unpair(integerValue, this.getArity());
-		return this.getElement(values);
+		return this.getElementFrom(values);
 	}
 
 	@Override

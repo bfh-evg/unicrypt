@@ -117,7 +117,7 @@ public class PreimageOrProofGenerator
 		domainElements = domainElements.replaceAt(index, secret);
 
 		return (Pair) this.getPrivateInputSpace().getElement(
-			   this.getPreimageProofFunction().getDomain().getElement(domainElements),
+			   this.getPreimageProofFunction().getDomain().getElementFrom(domainElements),
 			   ZMod.getInstance(this.getPreimageProofFunction().getArity()).getElementFrom(index));
 	}
 

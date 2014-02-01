@@ -147,7 +147,7 @@ public class ZStarMod
 	//
 	@Override
 	protected boolean abstractContains(final BigInteger value) {
-		return value.signum() >= 0 && value.compareTo(this.getModulus()) < 0 && MathUtil.areRelativelyPrime(value, this.getModulus());
+		return value.signum() > 0 && value.compareTo(this.getModulus()) < 0 && MathUtil.areRelativelyPrime(value, this.getModulus());
 	}
 
 	@Override
@@ -157,6 +157,9 @@ public class ZStarMod
 
 	@Override
 	protected ZStarModElement abstractGetElementFrom(BigInteger value) {
+		if (value.signum() == 0 || value.compareTo(this.getModulus()) >= 0 || !MathUtil.areRelativelyPrime(value, this.getModulus())) {
+			return null; // no such element
+		}
 		return new ZStarModElement(this, value);
 	}
 

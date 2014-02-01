@@ -135,35 +135,22 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger bigInteger) {
-		if (bigInteger.signum() < 0) {
-			return false;
-		}
-		if (bigInteger.equals(BigInteger.ZERO)) {
-			return true;
-		}
-		BigInteger[] result = MathUtil.unpair(bigInteger.subtract(BigInteger.ONE));
-		if (!this.getFiniteField().contains(result[0]) || !this.getFiniteField().contains(result[1])) {
-			return false;
-		}
-		D xValue = (D) this.getFiniteField().getElementFrom(result[0]);
-		D yValue = (D) this.getFiniteField().getElementFrom(result[1]);
-		return this.abstractContains(xValue, yValue);
-	}
-
-	@Override
 	protected boolean abstractContains(Point<D> value) {
 		return this.abstractContains(value.getX(), value.getY());
 	}
 
 	@Override
-	protected E abstractGetElementFrom(BigInteger bigInteger) {
-		if (bigInteger.equals(BigInteger.ZERO)) {
+	protected E abstractGetElementFrom(BigInteger integerValue) {
+		if (integerValue.equals(BigInteger.ZERO)) {
 			return this.getZeroElement();
 		}
-		BigInteger[] result = MathUtil.unpair(bigInteger.subtract(BigInteger.ONE));
+		BigInteger[] result = MathUtil.unpair(integerValue.subtract(BigInteger.ONE));
 		D xValue = (D) this.getFiniteField().getElementFrom(result[0]);
 		D yValue = (D) this.getFiniteField().getElementFrom(result[1]);
+		if (xValue == null || yValue == null) {
+			return null; // no such element
+		}
+		// TODO: check if point is on the curve!!!
 		return this.abstractGetElement(Point.getInstance(xValue, yValue));
 	}
 

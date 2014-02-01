@@ -101,7 +101,7 @@ public class IdentityMixerTest {
 		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
 		int[] pi = new int[]{4, 5, 6, 1, 3, 2, 9, 7, 8, 0};
 		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
-		Element alpha = G_q.getZModOrder().getElementFrom(7);
+		Element alpha = G_q.getZModOrder().getElement(7);
 
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
 		Tuple shuffledMessges = mixer.shuffle(messages, permutation, alpha);
@@ -122,7 +122,7 @@ public class IdentityMixerTest {
 		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
 		int[] pi = new int[]{0};
 		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
-		Element alpha = G_q.getZModOrder().getElementFrom(7);
+		Element alpha = G_q.getZModOrder().getElement(7);
 
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
 		Tuple shuffledMessges = mixer.shuffle(messages, permutation, alpha);

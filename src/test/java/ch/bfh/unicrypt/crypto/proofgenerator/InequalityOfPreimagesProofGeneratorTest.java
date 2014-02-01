@@ -78,11 +78,11 @@ public class InequalityOfPreimagesProofGeneratorTest {
 		CyclicGroup G_q = this.G_q2;
 		ZMod Z_q = G_q.getZModOrder();
 		Element g = G_q.getElementFrom(4);
-		Element h = G_q.getElementFrom(8);
+		Element h = G_q.getElement(8);
 
-		Element y = G_q.getElementFrom(16);
-		Element z = G_q.getElementFrom(32);
-		Element x = Z_q.getElementFrom(2);
+		Element y = G_q.getElement(16);
+		Element z = G_q.getElement(32);
+		Element x = Z_q.getElement(2);
 
 		Function f1 = GeneratorFunction.getInstance(g);
 		Function f2 = GeneratorFunction.getInstance(h);
@@ -97,13 +97,13 @@ public class InequalityOfPreimagesProofGeneratorTest {
 		assertTrue(v.getValue());
 
 		// Invalid proof -> wrong x
-		Element xx = Z_q.getElementFrom(3);
+		Element xx = Z_q.getElement(3);
 		proof = pg.generate(xx, Pair.getInstance(y, z));
 		v = pg.verify(proof, Pair.getInstance(y, z));
 		assertTrue(!v.getValue());
 
 		// Invalid proof -> equal descrete logs
-		Element zz = G_q.getElementFrom(64);
+		Element zz = G_q.getElement(64);
 		proof = pg.generate(x, Pair.getInstance(y, zz));
 		v = pg.verify(proof, Pair.getInstance(y, zz));
 		assertTrue(!v.getValue());

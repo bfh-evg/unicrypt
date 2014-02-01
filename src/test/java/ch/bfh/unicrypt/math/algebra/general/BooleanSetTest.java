@@ -54,6 +54,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -84,11 +85,10 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of getElementFromFromFrom method, of class BooleanSet.
+	 * Test of getElementFromFromFromFrom method, of class BooleanSet.
 	 */
 	@Test
 	public void testGetElement() {
-//		System.out.printgetElementFromment");
 		boolean bit = false;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement result = instance.getElement(bit);
@@ -98,12 +98,8 @@ public class BooleanSetTest {
 
 	}
 
-	/**
-	 * Test of abstractGetElementFromFrom method, of class BooleanSet.
-	 */
 	@Test
 	public void testGetElementBigInteger() {
-//		System.out.pgetElementFromtElement BigInteger");
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement result = instance.getElementFrom(BigInteger.ZERO);
@@ -121,43 +117,31 @@ public class BooleanSetTest {
 		}
 	}
 
-	/**
-	 * TestabstractGetElementFromFromment method, of class BooleanSet.
-	 */
 	@Test
 	public void testGetElementElement() {
-//		System.ogetElementFromFrom("getElementFrom Element");
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement expResult = instance.getElement(true);
-		BooleanElement result = instance.getElement(expResult);
+		BooleanElement result = instance.getElementFrom(expResult);
 		assertEquals(expResult, result);
 
 		ZMod zmod = ZMod.getInstance(5);
-		Element element = zmod.getElementFrom(1);
-		result = instance.getElement(element);
+		Element element = zmod.getElement(1);
+		result = instance.getElementFrom(element);
 		assertEquals(true, result.getValue());
 
-		element = zmod.getElementFrom(0);
-		result = instance.getElement(element);
+		element = zmod.getElement(0);
+		result = instance.getElementFrom(element);
 		assertEquals(false, result.getValue());
 
-		element = zmod.getElementFrom(4);
-		try {
-			result = instance.getElement(element);
-			Assert.fail();
-		} catch (IllegalArgumentException ex) {
-			//ok
-		}
+		element = zmod.getElement(4);
+		result = instance.getElementFrom(element);
+		assertNull(result);
 
 	}
 
-	/**
-	 * abstractGetElementFromFromtElement method, of class BooleanSet.
-	 */
 	@Test
 	public void testGetElementBoolean() {
-//		SystgetElementFromFromntln("getElementFrom Boolean");
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement expResult = instance.getElement(true);
@@ -166,12 +150,8 @@ public class BooleanSetTest {
 
 	}
 
-	/**
-	 * abstractGetElementFromFromctGetElement method, of class BooleanSet.
-	 */
 	@Test
 	public void testGetElementInt() {
-//		getElementFromFrom.println("getElementFrom int");
 
 		{
 			BooleanSet instance = BooleanSet.getInstance();
@@ -188,22 +168,14 @@ public class BooleanSetTest {
 
 		{
 			BooleanSet instance = BooleanSet.getInstance();
-			try {
-				BooleanElement result = instance.getElementFrom(2);
-				Assert.fail();
-			} catch (IllegalArgumentException ex) {
-				//ok
-			}
+			BooleanElement result = instance.getElementFrom(2);
+			assertNull(result);
 
 		}
 		{
 			BooleanSet instance = BooleanSet.getInstance();
-			try {
-				BooleanElement result = instance.getElementFrom(-1);
-				Assert.fail();
-			} catch (IllegalArgumentException ex) {
-				//ok
-			}
+			BooleanElement result = instance.getElementFrom(-1);
+			assertNull(result);
 
 		}
 	}
@@ -320,33 +292,9 @@ public class BooleanSetTest {
 	@Test
 	public void testContains() {
 //		System.out.println("contains");
-		Assert.assertTrue(BooleanSet.getInstance().contains(BigInteger.ZERO));
-		Assert.assertTrue(BooleanSet.getInstance().contains(BigInteger.ONE));
-		Assert.assertTrue(!BooleanSet.getInstance().contains(BigInteger.TEN));
+		Assert.assertTrue(BooleanSet.getInstance().contains(true));
+		Assert.assertTrue(BooleanSet.getInstance().contains(false));
 
-	}
-
-	/**
-	 * Test of contains method, of class BooleanSet.
-	 */
-	@Test
-	public void testContains1() {
-//		System.out.println("contains1");
-		ZMod zmod = ZMod.getInstance(BigInteger.TEN);
-		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElementFrom(0)));
-		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElementFrom(1)));
-		Assert.assertTrue(!BooleanSet.getInstance().contains(zmod.getElementFrom(2)));
-	}
-
-	/**
-	 * Test of contains method, of class BooleanSet.
-	 */
-	@Test
-	public void testContains2() {
-//		System.out.println("contains2");
-		Assert.assertTrue(BooleanSet.getInstance().contains(0));
-		Assert.assertTrue(BooleanSet.getInstance().contains(1));
-		Assert.assertTrue(!BooleanSet.getInstance().contains(2));
 	}
 
 	/**

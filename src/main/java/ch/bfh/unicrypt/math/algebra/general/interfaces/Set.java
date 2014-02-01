@@ -224,27 +224,6 @@ public interface Set {
 	public ZStarMod getZStarModOrder();
 
 	/**
-	 * Checks if this set contains an element that corresponds to a given integer value.
-	 * <p>
-	 * @param integer The given integer value
-	 * @return {@code true} if such an element exists
-	 */
-	public boolean contains(int integer);
-
-	/**
-	 * Checks if this set contains an element that corresponds to a given BigInteger value.
-	 * <p>
-	 * @param bigInteger The given BigInteger value
-	 * @return {@code true} if such an element exists
-	 * @throws IllegalArgumentException if {@literal value} is null
-	 */
-	public boolean contains(BigInteger bigInteger);
-
-	public boolean contains(ByteTree byteTree);
-
-	public boolean contains(Object value);
-
-	/**
 	 * Checks if a given element belongs to the group.
 	 * <p>
 	 * @param element The given element
@@ -254,36 +233,74 @@ public interface Set {
 	public boolean contains(Element element);
 
 	/**
-	 * Creates and returns the element that corresponds to a given integer (if one exists).
+	 * TODO
 	 * <p>
-	 * @param integerValue The given integer
-	 * @return The corresponding element
-	 * @throws IllegalArgumentException if no such element exists
+	 * @param value
+	 * @return
+	 */
+	public boolean contains(Object value);
+
+	/**
+	 * TODO
+	 * <p>
+	 * @param value
+	 * @return
+	 */
+	public Element getElement(Object value);
+
+	/**
+	 * TODO: Convenience method
+	 * <p>
+	 * @param value
+	 * @return
+	 */
+	public boolean contains(int integerValue);
+
+	/**
+	 * TODO: Convenience method
+	 * <p>
+	 * @param value
+	 * @return
+	 */
+	public Element getElement(int integerValue);
+
+	/**
+	 * Creates and returns the element that corresponds to a given integer (if one exists). Returns {@literal null}
+	 * otherwise.
+	 * <p>
+	 * @param integerValue The given integer value
+	 * @return The corresponding element, or {@literal null} if no such element exists
+	 * @throws IllegalArgumentException if {@literal integerValue} is null
 	 */
 	public Element getElementFrom(int integerValue);
 
 	/**
-	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists).
+	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists). Returns
+	 * {@literal null} otherwise.
 	 * <p>
 	 * @param integerValue The given BigInteger value
-	 * @return The corresponding group element
-	 * @throws IllegalArgumentException if {@literal value} is null or if no such element exists in this group
+	 * @return The corresponding element, or {@literal null} if no such element exists
+	 * @throws IllegalArgumentException if {@literal integerValue} is null
 	 */
 	public Element getElementFrom(BigInteger integerValue);
 
+	/**
+	 * TODO
+	 * <p>
+	 * @param byteTree
+	 * @return
+	 */
 	public Element getElementFrom(ByteTree byteTree);
 
-	public Element getElement(Object value);
-
 	/**
-	 * Creates and returns the element that corresponds to the integer value of or some other group element (if one
-	 * exists).
+	 * Creates and returns the element that corresponds to the integer value of some other element (if one exists).
+	 * Returns {@literal null} otherwise.
 	 * <p>
-	 * @param element The given group element
-	 * @return The corresponding group element of this set
-	 * @throws IllegalArgumentException if {@literal element} is null or if no such element exists in this group
+	 * @param element The given element of this or another set
+	 * @return The corresponding element of this set, or {@literal null} if no such element exists
+	 * @throws IllegalArgumentException if {@literal element} is null
 	 */
-	public Element getElement(Element element);
+	public Element getElementFrom(Element element);
 
 	/**
 	 * Selects and returns a random group element using the default random generator. For finite order group, it is

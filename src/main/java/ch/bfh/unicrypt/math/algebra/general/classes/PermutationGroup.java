@@ -111,25 +111,22 @@ public class PermutationGroup
 	}
 
 	@Override
-	protected boolean abstractContains(final BigInteger value) {
-		BigInteger[] values = MathUtil.unpair(value, this.getSize());
-		return Permutation.isValid(ArrayUtil.bigIntegerToIntArray(values));
-	}
-
-	@Override
 	protected boolean abstractContains(Permutation value) {
 		return value.getSize() == this.getSize();
 	}
 
 	@Override
-	protected PermutationElement abstractGetElementFrom(final BigInteger value) {
-		BigInteger[] values = MathUtil.unpair(value, this.getSize());
-		return this.abstractGetElement(new Permutation(ArrayUtil.bigIntegerToIntArray(values)));
+	protected PermutationElement abstractGetElement(Permutation value) {
+		return new PermutationElement(this, value);
 	}
 
 	@Override
-	protected PermutationElement abstractGetElement(Permutation value) {
-		return new PermutationElement(this, value);
+	protected PermutationElement abstractGetElementFrom(final BigInteger value) {
+		BigInteger[] values = MathUtil.unpair(value, this.getSize());
+		if (!Permutation.isValid(ArrayUtil.bigIntegerToIntArray(values))) {
+			return null; // no such element
+		}
+		return this.abstractGetElement(new Permutation(ArrayUtil.bigIntegerToIntArray(values)));
 	}
 
 	@Override

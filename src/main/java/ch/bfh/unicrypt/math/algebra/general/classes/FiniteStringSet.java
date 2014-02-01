@@ -82,17 +82,20 @@ public class FiniteStringSet
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return (value.signum() >= 0) && (value.compareTo(this.getOrder()) < 0);
-	}
-
-	@Override
 	protected boolean abstractContains(String value) {
 		return value.length() >= this.getMinLength() && value.length() <= this.getMaxLength() && this.getAlphabet().isValid(value);
 	}
 
 	@Override
+	protected FiniteStringElement abstractGetElement(String value) {
+		return new FiniteStringElement(this, value);
+	}
+
+	@Override
 	protected FiniteStringElement abstractGetElementFrom(BigInteger value) {
+		if (value.compareTo(this.getOrder()) >= 0) {
+			return null; // no such element
+		}
 		int minLength = this.getMinLength();
 		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
 		StringBuilder strBuilder = new StringBuilder(this.getMaxLength());
@@ -104,11 +107,6 @@ public class FiniteStringSet
 			value = value.divide(size);
 		}
 		return this.abstractGetElement(strBuilder.reverse().toString());
-	}
-
-	@Override
-	protected FiniteStringElement abstractGetElement(String value) {
-		return new FiniteStringElement(this, value);
 	}
 
 	@Override

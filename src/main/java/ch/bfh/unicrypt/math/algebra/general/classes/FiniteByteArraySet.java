@@ -82,17 +82,20 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return (value.signum() >= 0) && (value.compareTo(this.getOrder()) < 0);
-	}
-
-	@Override
 	protected boolean abstractContains(ByteArray value) {
 		return value.getLength() >= this.getMinLength() && value.getLength() <= this.getMaxLength();
 	}
 
 	@Override
+	protected FiniteByteArrayElement abstractGetElement(ByteArray value) {
+		return new FiniteByteArrayElement(this, value);
+	}
+
+	@Override
 	protected FiniteByteArrayElement abstractGetElementFrom(BigInteger value) {
+		if (value.compareTo(this.getOrder()) >= 0) {
+			return null; // no such element
+		}
 		int minLength = this.getMinLength();
 		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
 		LinkedList<Byte> byteList = new LinkedList<Byte>();
@@ -104,11 +107,6 @@ public class FiniteByteArraySet
 			value = value.divide(size);
 		}
 		return this.abstractGetElement(ByteArray.getInstance(ArrayUtil.byteListToByteArray(byteList)));
-	}
-
-	@Override
-	protected FiniteByteArrayElement abstractGetElement(ByteArray value) {
-		return new FiniteByteArrayElement(this, value);
 	}
 
 	@Override

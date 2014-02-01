@@ -62,7 +62,6 @@ import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import java.math.BigInteger;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * This abstract class provides a basis implementation for atomic sets.
@@ -122,17 +121,17 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public boolean isAdditive() {
+	public final boolean isAdditive() {
 		return this instanceof AdditiveSemiGroup;
 	}
 
 	@Override
-	public boolean isMultiplicative() {
+	public final boolean isMultiplicative() {
 		return this instanceof MultiplicativeSemiGroup;
 	}
 
 	@Override
-	public boolean isConcatenative() {
+	public final boolean isConcatenative() {
 		return this instanceof ConcatenativeSemiGroup;
 	}
 
@@ -213,27 +212,6 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final boolean contains(final int integer) {
-		return this.contains(BigInteger.valueOf(integer));
-	}
-
-	@Override
-	public final boolean contains(final BigInteger bigInteger) {
-		if (bigInteger == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractContains(bigInteger);
-	}
-
-	@Override
-	public final boolean contains(final ByteTree byteTree) {
-		if (byteTree == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractContains(byteTree);
-	}
-
-	@Override
 	public final boolean contains(final Object value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
@@ -245,6 +223,24 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
+	public final E getElement(Object value) {
+		if (!this.contains(value)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractGetElement((V) value);
+	}
+
+	@Override
+	public final boolean contains(final int integerValue) {
+		return this.contains(BigInteger.valueOf(integerValue));
+	}
+
+	@Override
+	public final E getElement(int integerValue) {
+		return this.getElement(BigInteger.valueOf(integerValue));
+	}
+
+	@Override
 	public final boolean contains(final Element element) {
 		if (element == null) {
 			throw new IllegalArgumentException();
@@ -253,36 +249,31 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public final E getElementFrom(final int integer) {
-		return this.getElementFrom(BigInteger.valueOf(integer));
+	public final E getElementFrom(final int integerValue) {
+		return this.getElementFrom(BigInteger.valueOf(integerValue));
 	}
 
 	@Override
-	public final E getElementFrom(BigInteger bigInteger) {
-		if (!this.contains(bigInteger)) {
+	public final E getElementFrom(BigInteger integerValue) {
+		if (integerValue == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetElementFrom(bigInteger);
+		if (integerValue.signum() < 0) {
+			return null; // no such element
+		}
+		return this.abstractGetElementFrom(integerValue);
 	}
 
 	@Override
 	public final E getElementFrom(ByteTree byteTree) {
-		if (!this.contains(byteTree)) {
+		if (byteTree == null) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractGetElementFrom(byteTree);
 	}
 
 	@Override
-	public E getElement(Object value) {
-		if (!this.contains(value)) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractGetElement((V) value);
-	}
-
-	@Override
-	public final E getElement(final Element element) {
+	public final E getElementFrom(final Element element) {
 		if (element == null) {
 			throw new IllegalArgumentException();
 		}
@@ -340,7 +331,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		int hash = 7;
 		hash = 47 * hash + this.valueClass.hashCode();
 		hash = 47 * hash + this.getClass().hashCode();
@@ -349,7 +340,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	}
 
 	@Override
-	public boolean equals(Object other) {
+	public final boolean equals(Object other) {
 		if (this == other) {
 			return true;
 		}
@@ -412,16 +403,14 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 			@Override
 			public E next() {
-				if (this.hasNext()) {
-					while (!set.contains(currentValue)) {
-						this.currentValue = this.currentValue.add(BigInteger.ONE);
-					}
-					E element = set.abstractGetElementFrom(currentValue);
-					this.counter = this.counter.add(BigInteger.ONE);
+				E element = set.abstractGetElementFrom(this.currentValue);
+				while (element == null) {
 					this.currentValue = this.currentValue.add(BigInteger.ONE);
-					return element;
+					element = set.abstractGetElementFrom(this.currentValue);
 				}
-				throw new NoSuchElementException();
+				this.counter = this.counter.add(BigInteger.ONE);
+				this.currentValue = this.currentValue.add(BigInteger.ONE);
+				return element;
 			}
 
 			@Override
@@ -437,13 +426,6 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	// sub-class.
 	//
 	protected abstract BigInteger abstractGetOrder();
-
-	protected abstract boolean abstractContains(BigInteger value);
-
-//	TODO: protected abstract boolean abstractContains(ByteTree byteTree);
-	protected boolean abstractContains(ByteTree byteTree) {
-		return true;
-	}
 
 	protected abstract boolean abstractContains(V value);
 

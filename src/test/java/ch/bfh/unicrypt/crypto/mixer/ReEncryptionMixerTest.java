@@ -66,7 +66,7 @@ public class ReEncryptionMixerTest {
 
 		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
 		Element g = G_q.getDefaultGenerator();
-		Element sk = G_q.getZModOrder().getElementFrom(7);
+		Element sk = G_q.getZModOrder().getElement(7);
 		Element pk = g.selfApply(sk);
 		int size = 10;
 
@@ -120,7 +120,7 @@ public class ReEncryptionMixerTest {
 		CyclicGroup G_q = GStarModSafePrime.getInstance(167);
 		ZMod Z_q = G_q.getZModOrder();
 		Element g = G_q.getDefaultGenerator();
-		Element sk = G_q.getZModOrder().getElementFrom(7);
+		Element sk = G_q.getZModOrder().getElement(7);
 		Element pk = g.selfApply(sk);
 		int size = 10;
 
@@ -134,7 +134,7 @@ public class ReEncryptionMixerTest {
 
 		int[] pi = new int[]{5, 6, 1, 4, 3, 2, 9, 0, 8, 7};
 		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
-		Tuple randomizations = Tuple.getInstance(Z_q.getElementFrom(3), Z_q.getElementFrom(5), Z_q.getElementFrom(8), Z_q.getElementFrom(1), Z_q.getElementFrom(34), Z_q.getElementFrom(31), Z_q.getElementFrom(17), Z_q.getElementFrom(2), Z_q.getElementFrom(9), Z_q.getElementFrom(67));
+		Tuple randomizations = Tuple.getInstance(Z_q.getElement(3), Z_q.getElement(5), Z_q.getElement(8), Z_q.getElement(1), Z_q.getElement(34), Z_q.getElement(31), Z_q.getElement(17), Z_q.getElement(2), Z_q.getElement(9), Z_q.getElement(67));
 
 		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, pk, size);
 		Tuple shuffledCiphertexts = mixer.shuffle(Tuple.getInstance(ciphertexts), permutation, randomizations);
@@ -153,7 +153,7 @@ public class ReEncryptionMixerTest {
 		CyclicGroup G_q = GStarModSafePrime.getInstance(167);
 		ZMod Z_q = G_q.getZModOrder();
 		Element g = G_q.getDefaultGenerator();
-		Element sk = G_q.getZModOrder().getElementFrom(7);
+		Element sk = G_q.getZModOrder().getElement(7);
 		Element pk = g.selfApply(sk);
 		int size = 1;
 
@@ -167,7 +167,7 @@ public class ReEncryptionMixerTest {
 
 		int[] pi = new int[]{0};
 		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
-		Tuple randomizations = Tuple.getInstance(Z_q.getElementFrom(3));
+		Tuple randomizations = Tuple.getInstance(Z_q.getElement(3));
 
 		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, pk, size);
 		Tuple shuffledCiphertexts = mixer.shuffle(Tuple.getInstance(ciphertexts), permutation, randomizations);

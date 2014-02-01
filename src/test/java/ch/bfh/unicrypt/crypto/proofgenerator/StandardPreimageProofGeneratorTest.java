@@ -80,15 +80,15 @@ public class StandardPreimageProofGeneratorTest {
 	public void testPreimageProof() {
 
 		// Proof generator
-		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElementFrom(4));
+		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
 		// Valid proof
-		Element privateInput = f.getDomain().getElementFrom(3);
-		Element publicInput = f.getCoDomain().getElementFrom(64);
+		Element privateInput = f.getDomain().getElement(3);
+		Element publicInput = f.getCoDomain().getElement(64);
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -99,15 +99,15 @@ public class StandardPreimageProofGeneratorTest {
 	public void testPreimageProof_Invalid() {
 
 		// Proof generator
-		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q2.getElementFrom(4));
+		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q2.getElement(4));
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
 		// Invalid proof -> wrong private value
-		Element privateInput = f.getDomain().getElementFrom(4);
-		Element publicInput = f.getCoDomain().getElementFrom(64);
+		Element privateInput = f.getDomain().getElement(4);
+		Element publicInput = f.getCoDomain().getElement(64);
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -118,13 +118,13 @@ public class StandardPreimageProofGeneratorTest {
 	public void testPreimageProof2() {
 
 		// Proof generator
-		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElementFrom(4));
+		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
 		// Valid proof
-		Element privateInput = f.getDomain().getElementFrom(3);
-		Element publicInput = f.getCoDomain().getElementFrom(64);
+		Element privateInput = f.getDomain().getElement(3);
+		Element publicInput = f.getCoDomain().getElement(64);
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -136,10 +136,10 @@ public class StandardPreimageProofGeneratorTest {
 
 		GStarMod G_q = this.G_q1;
 		// f_pk(m,r) = (g^r, h^r*m)
-		ElGamalEncryptionScheme elgamal = ElGamalEncryptionScheme.getInstance(G_q.getElementFrom(4));
-		Element pk = G_q.getElementFrom(2);
-		Element m = G_q.getElementFrom(2);
-		Element r = G_q.getZModOrder().getElementFrom(2);
+		ElGamalEncryptionScheme elgamal = ElGamalEncryptionScheme.getInstance(G_q.getElement(4));
+		Element pk = G_q.getElement(2);
+		Element m = G_q.getElement(2);
+		Element r = G_q.getZModOrder().getElement(2);
 
 		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
 
@@ -149,7 +149,7 @@ public class StandardPreimageProofGeneratorTest {
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(m, r);
-		Element publicInput = Tuple.getInstance(G_q.getElementFrom(16), G_q.getElementFrom(8));
+		Element publicInput = Tuple.getInstance(G_q.getElement(16), G_q.getElement(8));
 		System.out.println("" + privateInput + "," + publicInput);
 
 		Tuple proof = pg.generate(privateInput, publicInput);
@@ -163,10 +163,10 @@ public class StandardPreimageProofGeneratorTest {
 
 		GStarMod G_q = this.G_q2;
 		// f_pk(m,r) = (g^r, h^r*m)
-		ElGamalEncryptionScheme elgamal = ElGamalEncryptionScheme.getInstance(G_q.getElementFrom(4));
-		Element pk = G_q.getElementFrom(2);
-		Element m = G_q.getElementFrom(2);
-		Element r = G_q.getZModOrder().getElementFrom(2);
+		ElGamalEncryptionScheme elgamal = ElGamalEncryptionScheme.getInstance(G_q.getElement(4));
+		Element pk = G_q.getElement(2);
+		Element m = G_q.getElement(2);
+		Element r = G_q.getZModOrder().getElement(2);
 
 		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
 
@@ -175,14 +175,14 @@ public class StandardPreimageProofGeneratorTest {
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
 		// Invalid proof  => wrong r
-		Element privateInput = Tuple.getInstance(m, G_q.getZModOrder().getElementFrom(7));
-		Element publicInput = Tuple.getInstance(G_q.getElementFrom(16), G_q.getElementFrom(8));
+		Element privateInput = Tuple.getInstance(m, G_q.getZModOrder().getElement(7));
+		Element publicInput = Tuple.getInstance(G_q.getElement(16), G_q.getElement(8));
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(!v.getValue());
 
 		// Invalid proof  => wrong m
-		privateInput = Tuple.getInstance(G_q.getElementFrom(8), r);
+		privateInput = Tuple.getInstance(G_q.getElement(8), r);
 
 		proof = pg.generate(privateInput, publicInput);
 		v = pg.verify(proof, publicInput);
@@ -192,7 +192,7 @@ public class StandardPreimageProofGeneratorTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void TestPreimageProof_Exception() {
 		// Proof generator
-		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElementFrom(4));
+		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
 			   f.getDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 

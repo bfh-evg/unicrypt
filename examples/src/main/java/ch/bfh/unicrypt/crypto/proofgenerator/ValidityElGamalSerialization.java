@@ -51,10 +51,10 @@ public class ValidityElGamalSerialization {
 		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme
 			   .getInstance(gQ);
 
-		possibleMessages[0] = gQ.getElement(((GStarModElement) gQ.getDefaultGenerator()).power(0));
-		possibleMessages[1] = gQ.getElement(((GStarModElement) gQ.getDefaultGenerator()).power(1));
-		possibleMessages[2] = gQ.getElement(((GStarModElement) gQ.getDefaultGenerator()).power(2));
-		possibleMessages[3] = gQ.getElement(((GStarModElement) gQ.getDefaultGenerator()).power(3));
+		possibleMessages[0] = gQ.getElementFrom(((GStarModElement) gQ.getDefaultGenerator()).power(0));
+		possibleMessages[1] = gQ.getElementFrom(((GStarModElement) gQ.getDefaultGenerator()).power(1));
+		possibleMessages[2] = gQ.getElementFrom(((GStarModElement) gQ.getDefaultGenerator()).power(2));
+		possibleMessages[3] = gQ.getElementFrom(((GStarModElement) gQ.getDefaultGenerator()).power(3));
 
 		SigmaChallengeGenerator scg = ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamal, possibleMessages.length, proverId, r1);
 

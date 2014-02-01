@@ -87,7 +87,7 @@ public class ShuffleProofGeneratorTest {
 		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
 
 		final int size = 5;
-		final Element encryptionPK = G_q.getElementFrom(4);
+		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, rrs);
 
 		// Permutation
@@ -96,11 +96,11 @@ public class ShuffleProofGeneratorTest {
 
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
 
-		Tuple sV = Tuple.getInstance(Z_q.getElementFrom(2), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5), Z_q.getElementFrom(6)); //pcs.getRandomizationSpace().getRandomElement(random);
+		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(6)); //pcs.getRandomizationSpace().getRandomElement(random);
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Ciphertexts
-		Tuple rV = Tuple.getInstance(Z_q.getElementFrom(7), Z_q.getElementFrom(8), Z_q.getElementFrom(9), Z_q.getElementFrom(10), Z_q.getElementFrom(11));
+		Tuple rV = Tuple.getInstance(Z_q.getElement(7), Z_q.getElement(8), Z_q.getElement(9), Z_q.getElement(10), Z_q.getElement(11));
 		ProductGroup uVSpace = ProductGroup.getInstance(ProductGroup.getInstance(G_q, 2), size);
 		Tuple uV = uVSpace.getRandomElement(randomGenerator);
 		Element[] uPrimes = new Element[size];
@@ -132,7 +132,7 @@ public class ShuffleProofGeneratorTest {
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 10;
-		final Element encryptionPK = G_q.getElementFrom(4);
+		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, rrs);
 
 		// Permutation
@@ -178,18 +178,18 @@ public class ShuffleProofGeneratorTest {
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 5;
-		final Element encryptionPK = G_q.getElementFrom(4);
+		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, rrs);
 
 		// Permutation
 		Permutation permutation = Permutation.getInstance(new int[]{3, 2, 1, 4, 0});
 		PermutationElement pi = PermutationGroup.getInstance(size).getElement(permutation);
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
-		Tuple sV = Tuple.getInstance(Z_q.getElementFrom(2), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5), Z_q.getElementFrom(6)); //pcs.getRandomizationSpace().getRandomElement(random);
+		Tuple sV = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(6)); //pcs.getRandomizationSpace().getRandomElement(random);
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Ciphertexts
-		Tuple rV = Tuple.getInstance(Z_q.getElementFrom(7), Z_q.getElementFrom(8), Z_q.getElementFrom(9), Z_q.getElementFrom(10), Z_q.getElementFrom(11));
+		Tuple rV = Tuple.getInstance(Z_q.getElement(7), Z_q.getElement(8), Z_q.getElement(9), Z_q.getElement(10), Z_q.getElement(11));
 		ProductGroup uVSpace = ProductGroup.getInstance(ProductGroup.getInstance(G_q, 2), size);
 		Tuple uV = uVSpace.getRandomElement(randomGenerator);
 		Element[] uPrimes = new Element[size];
@@ -214,7 +214,7 @@ public class ShuffleProofGeneratorTest {
 		assertTrue(!v.getValue());
 
 		// Invalid: Wrong sV values
-		Tuple sVInvalid = Tuple.getInstance(Z_q.getElementFrom(23), Z_q.getElementFrom(3), Z_q.getElementFrom(4), Z_q.getElementFrom(5), Z_q.getElementFrom(6));
+		Tuple sVInvalid = Tuple.getInstance(Z_q.getElement(23), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(6));
 		privateInput = Tuple.getInstance(pi, sVInvalid, rV);
 		publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
@@ -223,7 +223,7 @@ public class ShuffleProofGeneratorTest {
 		assertTrue(!v.getValue());
 
 		// Invalid: Wrong rV values
-		Tuple rVInvalid = Tuple.getInstance(Z_q.getElementFrom(7), Z_q.getElementFrom(18), Z_q.getElementFrom(9), Z_q.getElementFrom(10), Z_q.getElementFrom(11));
+		Tuple rVInvalid = Tuple.getInstance(Z_q.getElement(7), Z_q.getElement(18), Z_q.getElement(9), Z_q.getElement(10), Z_q.getElement(11));
 		privateInput = Tuple.getInstance(pi, sV, rVInvalid);
 		publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
@@ -241,7 +241,7 @@ public class ShuffleProofGeneratorTest {
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 100;
-		final Element encryptionPK = G_q.getElementFrom(4);
+		final Element encryptionPK = G_q.getElement(4);
 		final Element g = G_q.getIndependentGenerator(0, rrs);
 
 		// Permutation

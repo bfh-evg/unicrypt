@@ -144,7 +144,7 @@ public interface ConcatenativeSemiGroup
 	public ConcatenativeElement getElementFrom(BigInteger value);
 
 	@Override
-	public ConcatenativeElement getElement(Element element);
+	public ConcatenativeElement getElementFrom(Element element);
 
 	@Override
 	public ConcatenativeElement getRandomElement();

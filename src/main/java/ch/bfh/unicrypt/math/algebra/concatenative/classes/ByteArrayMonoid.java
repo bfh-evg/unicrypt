@@ -76,13 +76,13 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return value.signum() >= 0;
+	protected boolean abstractContains(ByteArray value) {
+		return value.getLength() % this.getBlockLength() == 0;
 	}
 
 	@Override
-	protected boolean abstractContains(ByteArray value) {
-		return value.getLength() % this.getBlockLength() == 0;
+	protected ByteArrayElement abstractGetElement(ByteArray value) {
+		return new ByteArrayElement(this, value);
 	}
 
 	@Override
@@ -101,11 +101,6 @@ public class ByteArrayMonoid
 			value = value.divide(blockSize);
 		}
 		return this.abstractGetElement(ByteArray.getInstance(ArrayUtil.byteListToByteArray(byteList)));
-	}
-
-	@Override
-	protected ByteArrayElement abstractGetElement(ByteArray value) {
-		return new ByteArrayElement(this, value);
 	}
 
 	@Override
