@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 
 /**
  *
@@ -63,9 +64,9 @@ public interface CyclicRing
 	public DualisticElement getRandomGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
-	public DualisticElement[] getIndependentGenerators(int amount);
+	public Tuple getIndependentGenerators(int amount);
 
 	@Override
-	public DualisticElement[] getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

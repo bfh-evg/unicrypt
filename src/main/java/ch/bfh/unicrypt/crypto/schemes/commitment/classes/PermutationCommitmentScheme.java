@@ -69,17 +69,19 @@ public class PermutationCommitmentScheme
 
 	private final CyclicGroup cyclicGroup;
 	private final Element randomizationGenerator;
-	private final Element[] messageGenerators;
+	private final Tuple messageGenerators;
+	private final int size;
 
-	protected PermutationCommitmentScheme(CyclicGroup cyclicGroup, Element randomizationGenerator, Element[] messageGenerators) {
+	protected PermutationCommitmentScheme(CyclicGroup cyclicGroup, Element randomizationGenerator, Tuple messageGenerators) {
 		this.cyclicGroup = cyclicGroup;
 		this.randomizationGenerator = randomizationGenerator;
 		this.messageGenerators = messageGenerators;
+		this.size = messageGenerators.getArity();
 	}
 
 	@Override
 	protected Function abstractGetCommitmentFunction() {
-		return new PermutationCommitmentFunction(this.cyclicGroup, this.randomizationGenerator, this.messageGenerators);
+		return new PermutationCommitmentFunction(this.cyclicGroup, this.size, this.randomizationGenerator, this.messageGenerators);
 	}
 
 	public CyclicGroup getCyclicGroup() {
@@ -87,15 +89,15 @@ public class PermutationCommitmentScheme
 	}
 
 	public int getSize() {
-		return this.messageGenerators.length;
+		return this.size;
 	}
 
 	public Element getRandomizationGenerator() {
 		return this.randomizationGenerator;
 	}
 
-	public Element[] getMessageGenerators() {
-		return this.messageGenerators.clone();
+	public Tuple getMessageGenerators() {
+		return this.messageGenerators;
 	}
 
 	public static PermutationCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size) {
@@ -107,7 +109,7 @@ public class PermutationCommitmentScheme
 			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		}
 		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, referenceRandomByteSequence);
-		Element[] messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
+		Tuple messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
 		return new PermutationCommitmentScheme(cyclicGroup, randomizationGenerator, messageGenerators);
 	}
 
@@ -115,26 +117,24 @@ public class PermutationCommitmentScheme
 		   extends AbstractFunction<ProductSet, Pair, ProductGroup, Tuple> {
 
 		private final Element randomizationGenerator;
-		private final Element[] messageGenerators;
+		private final Tuple messageGenerators;
+		private final int size;
 
-		protected PermutationCommitmentFunction(CyclicGroup cyclicGroup, Element randomizationGenerator, Element[] messageGenerators) {
-			super(ProductSet.getInstance(PermutationGroup.getInstance(messageGenerators.length),
-										 ProductGroup.getInstance(cyclicGroup.getZModOrder(), messageGenerators.length)),
-				  ProductGroup.getInstance(cyclicGroup, messageGenerators.length));
-
+		protected PermutationCommitmentFunction(CyclicGroup cyclicGroup, int size, Element randomizationGenerator, Tuple messageGenerators) {
+			super(ProductSet.getInstance(PermutationGroup.getInstance(size), ProductGroup.getInstance(cyclicGroup.getZModOrder(), size)),
+				  ProductGroup.getInstance(cyclicGroup, size));
 			this.randomizationGenerator = randomizationGenerator;
 			this.messageGenerators = messageGenerators;
+			this.size = size;
 		}
 
 		@Override
 		protected Tuple abstractApply(Pair element, RandomByteSequence randomByteSequence) {
 			final Permutation permutation = ((PermutationElement) element.getFirst()).getValue().invert();
 			final Tuple randomizations = (Tuple) element.getSecond();
-			Element[] ret = new Element[this.messageGenerators.length];
-			for (int i = 0; i < this.messageGenerators.length; i++) {
-				ret[i] = this.randomizationGenerator
-					   .selfApply(randomizations.getAt(i))
-					   .apply(this.messageGenerators[permutation.permute(i)]);
+			Element[] ret = new Element[size];
+			for (int i = 0; i < size; i++) {
+				ret[i] = this.randomizationGenerator.selfApply(randomizations.getAt(i)).apply(this.messageGenerators.getAt(permutation.permute(i)));
 			}
 
 			return Tuple.getInstance(ret);

@@ -241,12 +241,12 @@ public class PermutationCommitmentProofGenerator
 
 		// Get additional values
 		final Tuple eV = (Tuple) this.eValuesGenerator.generate(publicInput);
-		final Element[] gV = GeneralizedPedersenCommitmentScheme.getInstance(this.cyclicGroup, this.size, this.referenceRandomByteSequence).getMessageGenerators();
+		final Tuple gV = GeneralizedPedersenCommitmentScheme.getInstance(this.cyclicGroup, this.size, this.referenceRandomByteSequence).getMessageGenerators();
 
 		// Compute image of preimage proof
 		final Element[] ps = new Element[this.size + 3];
 		// - p_0 = c_pi^1/prod(g_i) = prod(c_pi_i)/prod(g_i)
-		ps[0] = this.cyclicGroup.apply(publicInput.getAll()).applyInverse(this.cyclicGroup.apply(gV));
+		ps[0] = this.cyclicGroup.apply(publicInput.getAll()).applyInverse(this.cyclicGroup.apply(gV.getAll()));
 		// - p_1 = c_pi^e                                                                     [N]
 		ps[1] = PermutationCommitmentProofGenerator.computeInnerProduct(publicInput, eV);
 		// - p_2...p_(N+2) = c_1 ... c_N
@@ -258,7 +258,7 @@ public class PermutationCommitmentProofGenerator
 		for (int i = 1; i < this.size; i++) {
 			eProd = eProd.selfApply(eV.getAt(i));
 		}
-		ps[this.size + 2] = cV.getAt(this.size - 1).applyInverse(gV[0].selfApply(eProd));
+		ps[this.size + 2] = cV.getAt(this.size - 1).applyInverse(gV.getAt(0).selfApply(eProd));
 		final Tuple pV = Tuple.getInstance(ps);
 
 		// Verify preimage proof

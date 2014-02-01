@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
@@ -58,12 +59,14 @@ public class GeneralizedPedersenCommitmentScheme
 
 	private final CyclicGroup cyclicGroup;
 	private final Element randomizationGenerator;
-	private final Element[] messageGenerators;
+	private final Tuple messageGenerators;
+	private final int size;
 
-	protected GeneralizedPedersenCommitmentScheme(CyclicGroup cyclicGroup, Element randomizationGenerator, Element[] messageGenerators) {
+	protected GeneralizedPedersenCommitmentScheme(CyclicGroup cyclicGroup, Element randomizationGenerator, Tuple messageGenerators) {
 		this.cyclicGroup = cyclicGroup;
 		this.randomizationGenerator = randomizationGenerator;
 		this.messageGenerators = messageGenerators;
+		this.size = messageGenerators.getArity();
 	}
 
 	public final CyclicGroup getCyclicGroup() {
@@ -74,20 +77,24 @@ public class GeneralizedPedersenCommitmentScheme
 		return this.randomizationGenerator;
 	}
 
-	public final Element[] getMessageGenerators() {
-		return this.messageGenerators.clone();
+	public final Tuple getMessageGenerators() {
+		return this.messageGenerators;
+	}
+
+	public int getSize() {
+		return this.size;
 	}
 
 	@Override
 	protected Function abstractGetCommitmentFunction() {
-		final Function[] generatorFunctions = new Function[this.messageGenerators.length];
-		for (int i = 0; i < this.messageGenerators.length; i++) {
-			generatorFunctions[i] = GeneratorFunction.getInstance(this.messageGenerators[i]);
+		final Function[] generatorFunctions = new Function[this.size];
+		for (int i = 0; i < this.size; i++) {
+			generatorFunctions[i] = GeneratorFunction.getInstance(this.messageGenerators.getAt(i));
 		}
 		return CompositeFunction.getInstance(
 			   ProductFunction.getInstance(
 					  CompositeFunction.getInstance(ProductFunction.getInstance(generatorFunctions),
-													ApplyFunction.getInstance(cyclicGroup, this.messageGenerators.length)),
+													ApplyFunction.getInstance(cyclicGroup, this.size)),
 					  GeneratorFunction.getInstance(this.getRandomizationGenerator())),
 			   ApplyFunction.getInstance(this.getCyclicGroup()));
 	}
@@ -106,7 +113,7 @@ public class GeneralizedPedersenCommitmentScheme
 			referenceRandomByteSequence.reset();
 		}
 		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, referenceRandomByteSequence);
-		Element[] messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
+		Tuple messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
 		return new GeneralizedPedersenCommitmentScheme(cyclicGroup, randomizationGenerator, messageGenerators);
 	}
 

@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 
 /**
@@ -66,9 +67,9 @@ public interface AdditiveCyclicGroup
 	public AdditiveElement getRandomGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
-	public AdditiveElement[] getIndependentGenerators(int amount);
+	public Tuple getIndependentGenerators(int amount);
 
 	@Override
-	public AdditiveElement[] getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

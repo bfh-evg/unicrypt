@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 
 /**
  * This interface represents the concept a cyclic atomic group. Every element of a cyclic group can be written as a
@@ -87,13 +88,13 @@ public interface CyclicGroup
 
 	public Element getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
 
-	public Element[] getIndependentGenerators(int maxIndex);
+	public Tuple getIndependentGenerators(int maxIndex);
 
-	public Element[] getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
 
-	public Element[] getIndependentGenerators(int minIndex, int maxIndex);
+	public Tuple getIndependentGenerators(int minIndex, int maxIndex);
 
-	public Element[] getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 	/**
 	 * Checks if a given element is a generator of the group.

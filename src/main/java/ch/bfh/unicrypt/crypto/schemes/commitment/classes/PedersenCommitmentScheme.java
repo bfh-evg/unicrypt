@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
@@ -99,8 +100,8 @@ public class PedersenCommitmentScheme
 		} else {
 			referenceRandomByteSequence.reset();
 		}
-		Element[] generators = cyclicGroup.getIndependentGenerators(2, referenceRandomByteSequence);
-		return new PedersenCommitmentScheme(cyclicGroup, generators[0], generators[1]);
+		Tuple generators = cyclicGroup.getIndependentGenerators(2, referenceRandomByteSequence);
+		return new PedersenCommitmentScheme(cyclicGroup, generators.getAt(0), generators.getAt(1));
 	}
 
 	public static PedersenCommitmentScheme getInstance(Element generator1, Element generator2) {

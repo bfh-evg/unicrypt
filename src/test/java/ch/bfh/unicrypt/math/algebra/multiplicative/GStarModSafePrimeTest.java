@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative;
 
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.helper.ByteArray;
@@ -70,14 +71,14 @@ public class GStarModSafePrimeTest {
 		Element g1 = set.getIndependentGenerator(3, rrs);
 		Element g2 = set.getIndependentGenerator(5, rrs);
 		Element g3 = set.getIndependentGenerator(2, rrs);
-		Element[] gs1 = set.getIndependentGenerators(20, rrs);
-		Assert.assertTrue(gs1[3].isEquivalent(g1));
-		Assert.assertTrue(gs1[5].isEquivalent(g2));
-		Assert.assertTrue(gs1[2].isEquivalent(g3));
-		Element[] gs2 = set.getIndependentGenerators(2, 10, rrs);
-		Assert.assertTrue(gs2[1].isEquivalent(g1));
-		Assert.assertTrue(gs2[3].isEquivalent(g2));
-		Assert.assertTrue(gs2[0].isEquivalent(g3));
+		Tuple gs1 = set.getIndependentGenerators(20, rrs);
+		Assert.assertTrue(gs1.getAt(3).isEquivalent(g1));
+		Assert.assertTrue(gs1.getAt(5).isEquivalent(g2));
+		Assert.assertTrue(gs1.getAt(2).isEquivalent(g3));
+		Tuple gs2 = set.getIndependentGenerators(2, 10, rrs);
+		Assert.assertTrue(gs2.getAt(1).isEquivalent(g1));
+		Assert.assertTrue(gs2.getAt(3).isEquivalent(g2));
+		Assert.assertTrue(gs2.getAt(0).isEquivalent(g3));
 //		System.out.println(g1);
 //		System.out.println(g2);
 //		System.out.println(g3);
@@ -94,14 +95,14 @@ public class GStarModSafePrimeTest {
 		Element g1 = set.getIndependentGenerator(3, rrs);
 		Element g2 = set.getIndependentGenerator(5, rrs);
 		Element g3 = set.getIndependentGenerator(2, rrs);
-		Element[] gs1 = set.getIndependentGenerators(20, rrs);
-		Assert.assertTrue(gs1[3].isEquivalent(g1));
-		Assert.assertTrue(gs1[5].isEquivalent(g2));
-		Assert.assertTrue(gs1[2].isEquivalent(g3));
-		Element[] gs2 = set.getIndependentGenerators(2, 10, rrs);
-		Assert.assertTrue(gs2[1].isEquivalent(g1));
-		Assert.assertTrue(gs2[3].isEquivalent(g2));
-		Assert.assertTrue(gs2[0].isEquivalent(g3));
+		Tuple gs1 = set.getIndependentGenerators(20, rrs);
+		Assert.assertTrue(gs1.getAt(3).isEquivalent(g1));
+		Assert.assertTrue(gs1.getAt(5).isEquivalent(g2));
+		Assert.assertTrue(gs1.getAt(2).isEquivalent(g3));
+		Tuple gs2 = set.getIndependentGenerators(2, 10, rrs);
+		Assert.assertTrue(gs2.getAt(1).isEquivalent(g1));
+		Assert.assertTrue(gs2.getAt(3).isEquivalent(g2));
+		Assert.assertTrue(gs2.getAt(0).isEquivalent(g3));
 	}
 
 }

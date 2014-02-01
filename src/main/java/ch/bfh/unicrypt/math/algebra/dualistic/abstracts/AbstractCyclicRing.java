@@ -46,8 +46,9 @@ import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -93,26 +94,26 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 
 	@Override
 	public final E getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return this.getIndependentGenerators(index, referenceRandomByteSequence)[index];
+		return (E) this.getIndependentGenerators(index, referenceRandomByteSequence).getAt(index);
 	}
 
 	@Override
-	public final E[] getIndependentGenerators(int maxIndex) {
+	public final Tuple getIndependentGenerators(int maxIndex) {
 		return this.getIndependentGenerators(maxIndex, (ReferenceRandomByteSequence) null);
 	}
 
 	@Override
-	public final E[] getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
+	public final Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
 		return this.getIndependentGenerators(0, maxIndex, referenceRandomByteSequence);
 	}
 
 	@Override
-	public final E[] getIndependentGenerators(int minIndex, int maxIndex) {
+	public final Tuple getIndependentGenerators(int minIndex, int maxIndex) {
 		return this.getIndependentGenerators(minIndex, maxIndex, (ReferenceRandomByteSequence) null);
 	}
 
 	@Override
-	public final E[] getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
+	public final Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (minIndex < 0 || maxIndex < minIndex) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -120,14 +121,14 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		}
 		// The following line is necessary for creating a generic array
-		E[] generators = (E[]) Array.newInstance(this.getIdentityElement().getClass(), maxIndex - minIndex + 1);
+		Element[] generators = new Element[maxIndex - minIndex + 1];
 		for (int i = 0; i <= maxIndex; i++) {
 			E generator = this.defaultGetIndependentGenerator(referenceRandomByteSequence);
 			if (i >= minIndex) {
 				generators[i - minIndex] = generator;
 			}
 		}
-		return generators;
+		return ProductSet.getInstance(this, generators.length).getElement(generators);
 	}
 
 	@Override
