@@ -80,7 +80,7 @@ public class ZModPrime
 		if (element.isEquivalent(this.getZeroElement())) {
 			throw new UnsupportedOperationException();
 		}
-		return this.abstractGetElementFrom(((ZModElement) element).getValue().modInverse(this.getModulus()));
+		return this.abstractGetElement(((ZModElement) element).getValue().modInverse(this.getModulus()));
 	}
 
 	@Override

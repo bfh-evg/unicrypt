@@ -102,7 +102,7 @@ public class ProbabilisticECGroupFpEncoder
 			}
 
 			ZModElement x = zModPrime.getElement(e);
-			final ZModElement ONE = zModPrime.getElementFrom(1);
+			final ZModElement ONE = zModPrime.getOneElement();
 
 			int count = 0;
 			while (!ecPrime.contains(x)) {

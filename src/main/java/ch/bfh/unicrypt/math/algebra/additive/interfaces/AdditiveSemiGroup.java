@@ -137,6 +137,9 @@ public interface AdditiveSemiGroup
 	public AdditiveElement getElementFrom(Element element);
 
 	@Override
+	public AdditiveElement getElement(int value);
+
+	@Override
 	public AdditiveElement getRandomElement();
 
 	@Override

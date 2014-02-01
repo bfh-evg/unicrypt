@@ -140,6 +140,9 @@ public interface MultiplicativeSemiGroup
 	public MultiplicativeElement getRandomElement();
 
 	@Override
+	public MultiplicativeElement getElement(int value);
+
+	@Override
 	public MultiplicativeElement getRandomElement(RandomByteSequence randomByteSequence);
 
 	// The following methods are overridden from SemiGroup with an adapted return type

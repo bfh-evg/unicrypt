@@ -140,7 +140,7 @@ public class GStarMod
 	protected GStarModElement standardSelfApply(final GStarModElement element, final BigInteger amount) {
 		BigInteger newAmount = amount.mod(this.getOrder());
 		GStarMod.modPowCounter_SelfApply++;
-		return this.abstractGetElementFrom(element.getValue().modPow(newAmount, this.getModulus()));
+		return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
 	}
 
 	@Override
@@ -176,12 +176,12 @@ public class GStarMod
 	@Override
 	protected GStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
 		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomByteSequence);
-		return this.getElementFrom(randomElement.power(this.getCoFactor()));
+		return this.getElement(randomElement.power(this.getCoFactor()).getBigInteger());
 // VERSION WITH OPTIMIZED EFFICIENCY BUT LACK OF INDEPENDENCE
 //    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
 //      // Method 1
 //      ZStarModElement randomElement = this.getZStarMod().getRandomElement(random);
-//      return this.getElementFrom(randomElement.power(this.getCoFactor()));
+//      return this.getElement(randomElement.power(this.getCoFactor()));
 //    }
 //    // Method 2
 //    return this.getDefaultGenerator().power(this.getZModOrder().getRandomElement(random));
@@ -194,17 +194,17 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement abstractGetIdentityElement() {
-		return this.abstractGetElementFrom(BigInteger.ONE);
+		return this.abstractGetElement(BigInteger.ONE);
 	}
 
 	@Override
 	protected GStarModElement abstractApply(final GStarModElement element1, final GStarModElement element2) {
-		return this.abstractGetElementFrom(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
 	}
 
 	@Override
 	protected GStarModElement abstractInvert(final GStarModElement element) {
-		return this.abstractGetElementFrom(element.getValue().modInverse(this.getModulus()));
+		return this.abstractGetElement(element.getValue().modInverse(this.getModulus()));
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class GStarMod
 			do {
 				alpha = alpha.add(BigInteger.ONE);
 			} while (!MathUtil.areRelativelyPrime(alpha, this.getModulus()));
-			element = this.abstractGetElementFrom(alpha.modPow(this.getCoFactor(), this.getModulus()));
+			element = this.abstractGetElement(alpha.modPow(this.getCoFactor(), this.getModulus()));
 		} while (!this.isGenerator(element)); // this test could be skipped for a prime order
 		return element;
 	}

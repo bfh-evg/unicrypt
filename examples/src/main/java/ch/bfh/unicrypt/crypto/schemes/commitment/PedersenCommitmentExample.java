@@ -61,7 +61,7 @@ public class PedersenCommitmentExample {
 		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
 
 		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElementFrom(42);
+		Element message = commitmentScheme.getMessageSpace().getElement(42);
 		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
 
 		// Create commitment

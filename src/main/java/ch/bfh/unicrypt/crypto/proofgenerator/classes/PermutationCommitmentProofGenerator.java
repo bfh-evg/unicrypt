@@ -274,11 +274,11 @@ public class PermutationCommitmentProofGenerator
 	// Private Helpers
 	//
 	// Helper to crate a one-vector
-	private static Tuple createOneVector(Group group, int size) {
+	private static Tuple createOneVector(ZMod group, int size) {
 		if (group == null || size < 1) {
 			throw new IllegalArgumentException();
 		}
-		final Element one = group.getElementFrom(1);
+		final Element one = group.getOneElement();
 		final Element[] vector = new Element[size];
 		for (int i = 0; i < size; i++) {
 			vector[i] = one;

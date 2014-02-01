@@ -77,7 +77,7 @@ public class InequalityOfPreimagesProofGeneratorTest {
 
 		CyclicGroup G_q = this.G_q2;
 		ZMod Z_q = G_q.getZModOrder();
-		Element g = G_q.getElementFrom(4);
+		Element g = G_q.getElement(4);
 		Element h = G_q.getElement(8);
 
 		Element y = G_q.getElement(16);

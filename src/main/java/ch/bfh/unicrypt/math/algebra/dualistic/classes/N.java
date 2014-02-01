@@ -72,7 +72,7 @@ public class N
 	//
 	@Override
 	protected NElement standardSelfApply(NElement element, BigInteger amount) {
-		return this.abstractGetElementFrom(element.getValue().multiply(amount));
+		return this.abstractGetElement(element.getValue().multiply(amount));
 	}
 
 	//
@@ -81,22 +81,22 @@ public class N
 	//
 	@Override
 	protected NElement abstractApply(NElement element1, NElement element2) {
-		return this.abstractGetElementFrom(element1.getValue().add(element2.getValue()));
+		return this.abstractGetElement(element1.getValue().add(element2.getValue()));
 	}
 
 	@Override
 	protected NElement abstractGetIdentityElement() {
-		return this.abstractGetElementFrom(BigInteger.ZERO);
+		return this.abstractGetElement(BigInteger.ZERO);
 	}
 
 	@Override
 	protected NElement abstractMultiply(NElement element1, NElement element2) {
-		return this.abstractGetElementFrom(element1.getValue().multiply(element2.getValue()));
+		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
 	}
 
 	@Override
 	protected NElement abstractGetOne() {
-		return this.abstractGetElementFrom(BigInteger.ONE);
+		return this.abstractGetElement(BigInteger.ONE);
 	}
 
 	@Override

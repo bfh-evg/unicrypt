@@ -150,6 +150,9 @@ public interface ConcatenativeSemiGroup
 	public ConcatenativeElement getRandomElement();
 
 	@Override
+	public ConcatenativeElement getElement(int value);
+
+	@Override
 	public ConcatenativeElement getRandomElement(RandomByteSequence randomByteSequence);
 
 	// The following methods are overridden from SemiGroup with an adapted return type

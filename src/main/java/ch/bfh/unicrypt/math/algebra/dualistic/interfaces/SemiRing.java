@@ -68,6 +68,9 @@ public interface SemiRing
 	public DualisticElement getRandomElement();
 
 	@Override
+	public DualisticElement getElement(int value);
+
+	@Override
 	public DualisticElement getRandomElement(RandomByteSequence randomByteSequence);
 
 	// The following methods are overridden from SemiGroup with an adapted return type

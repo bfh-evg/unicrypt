@@ -77,7 +77,7 @@ public class ElGamalECCExample {
 
 		//encoding
 		FiniteField f = g_q.getFiniteField();
-		DualisticElement m = f.getElementFrom(123456789);
+		DualisticElement m = f.getElement(123456789);
 		time = System.currentTimeMillis();
 		ECZModPrimeElement message = enc.encode(m);
 		time = System.currentTimeMillis() - time;

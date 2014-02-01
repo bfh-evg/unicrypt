@@ -79,7 +79,7 @@ public class PedersenCommitmentValidityProofGeneratorTest {
 		GStarMod G_q = this.G_q1;
 		ZMod Z_q = G_q.getZModOrder();
 
-		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElementFrom(4), G_q.getElement(2));
+		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElement(4), G_q.getElement(2));
 		Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
 
 		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofGenerator.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);

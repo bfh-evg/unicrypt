@@ -73,7 +73,7 @@ public class Z
 	//
 	@Override
 	protected ZElement standardSelfApply(ZElement element, BigInteger amount) {
-		return this.abstractGetElementFrom(element.getValue().multiply(amount));
+		return this.abstractGetElement(element.getValue().multiply(amount));
 	}
 
 	@Override
@@ -90,27 +90,27 @@ public class Z
 	//
 	@Override
 	protected ZElement abstractApply(ZElement element1, ZElement element2) {
-		return this.abstractGetElementFrom(element1.getValue().add(element2.getValue()));
+		return this.abstractGetElement(element1.getValue().add(element2.getValue()));
 	}
 
 	@Override
 	protected ZElement abstractGetIdentityElement() {
-		return this.abstractGetElementFrom(BigInteger.ZERO);
+		return this.abstractGetElement(BigInteger.ZERO);
 	}
 
 	@Override
 	protected ZElement abstractInvert(ZElement element) {
-		return this.abstractGetElementFrom(element.getValue().negate());
+		return this.abstractGetElement(element.getValue().negate());
 	}
 
 	@Override
 	protected ZElement abstractMultiply(ZElement element1, ZElement element2) {
-		return this.abstractGetElementFrom(element1.getValue().multiply(element2.getValue()));
+		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
 	}
 
 	@Override
 	protected ZElement abstractGetOne() {
-		return this.abstractGetElementFrom(BigInteger.ONE);
+		return this.abstractGetElement(BigInteger.ONE);
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetDefaultGenerator() {
-		return this.abstractGetElementFrom(BigInteger.ONE);
+		return this.abstractGetElement(BigInteger.ONE);
 	}
 
 	@Override
