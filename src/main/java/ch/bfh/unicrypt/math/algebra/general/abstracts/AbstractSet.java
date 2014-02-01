@@ -164,7 +164,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 			if (this.hasKnownOrder()) {
 				this.lowerBound = this.getOrder();
 			} else {
-				this.lowerBound = this.standardGetOrderLowerBound();
+				this.lowerBound = this.defaultGetOrderLowerBound();
 			}
 		}
 		return this.lowerBound;
@@ -176,7 +176,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 			if (this.hasKnownOrder()) {
 				this.upperBound = this.getOrder();
 			} else {
-				this.upperBound = this.standardGetOrderUpperBound();
+				this.upperBound = this.defaultGetOrderUpperBound();
 			}
 		}
 		return this.upperBound;
@@ -185,7 +185,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	@Override
 	public final BigInteger getMinimalOrder() {
 		if (this.minimum == null) {
-			this.minimum = this.standardGetMinimalOrder();
+			this.minimum = this.defaultGetMinimalOrder();
 		}
 		return this.minimum;
 	}
@@ -200,7 +200,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		if (!(this.isFinite() && this.hasKnownOrder())) {
 			throw new UnsupportedOperationException();
 		}
-		return this.standardGetZModOrder();
+		return this.defaultGetZModOrder();
 	}
 
 	@Override
@@ -208,7 +208,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		if (!(this.isFinite() && this.hasKnownOrder())) {
 			throw new UnsupportedOperationException();
 		}
-		return this.standardGetZStarModOrder();
+		return this.defaultGetZStarModOrder();
 	}
 
 	@Override
@@ -245,7 +245,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		if (element == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardContains(element);
+		return this.defaultContains(element);
 	}
 
 	@Override
@@ -317,7 +317,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		}
 		// Check if this.getClass() is a superclass of other.getClass()
 		if (this.getClass().isAssignableFrom(other.getClass())) {
-			return this.standardIsEquivalent(other);
+			return this.defaultIsEquivalent(other);
 		}
 		// Vice versa
 		if (other.getClass().isAssignableFrom(this.getClass())) {
@@ -326,7 +326,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		return false;
 	}
 
-	protected boolean standardIsEquivalent(Set set) {
+	protected boolean defaultIsEquivalent(Set set) {
 		return this.abstractEquals(set);
 	}
 
@@ -352,38 +352,38 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	@Override
 	public final Iterator<E> iterator() {
-		return this.standardIterator();
+		return this.defaultIterator();
 	}
 
 	//
-	// The following protected methods are standard implementations for sets.
+	// The following protected methods are default implementations for sets.
 	// They may need to be changed in certain sub-classes.
 	//
-	protected ZMod standardGetZModOrder() {
+	protected ZMod defaultGetZModOrder() {
 		return ZMod.getInstance(this.getOrder());
 	}
 
-	protected ZStarMod standardGetZStarModOrder() {
+	protected ZStarMod defaultGetZStarModOrder() {
 		return ZStarMod.getInstance(this.getOrder());
 	}
 
-	protected BigInteger standardGetOrderLowerBound() {
+	protected BigInteger defaultGetOrderLowerBound() {
 		return BigInteger.ZERO;
 	}
 
-	protected BigInteger standardGetOrderUpperBound() {
+	protected BigInteger defaultGetOrderUpperBound() {
 		return Set.INFINITE_ORDER;
 	}
 
-	protected BigInteger standardGetMinimalOrder() {
+	protected BigInteger defaultGetMinimalOrder() {
 		return this.getOrderLowerBound();
 	}
 
-	protected boolean standardContains(final Element element) {
+	protected boolean defaultContains(final Element element) {
 		return this.isEquivalent(element.getSet());
 	}
 
-	protected Iterator<E> standardIterator() {
+	protected Iterator<E> defaultIterator() {
 		final AbstractSet<E, V> set = this;
 		return new Iterator<E>() {
 
@@ -398,7 +398,7 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 					}
 					return true;
 				}
-				return false; // the standard iterator does not work for groups of unknown order
+				return false; // the defult iterator does not work for groups of unknown order
 			}
 
 			@Override

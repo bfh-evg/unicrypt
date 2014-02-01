@@ -56,18 +56,18 @@ public abstract class UniCrypt implements Serializable {
 
 	@Override
 	public final String toString() {
-		String str = this.standardToStringContent();
+		String str = this.defaultToStringValue();
 		if (str.length() == 0) {
-			return this.standardToStringName();
+			return this.defaultToStringName();
 		}
-		return this.standardToStringName() + "[" + str + "]";
+		return this.defaultToStringName() + "[" + str + "]";
 	}
 
-	protected String standardToStringName() {
+	protected String defaultToStringName() {
 		return this.getClass().getSimpleName();
 	}
 
-	protected String standardToStringContent() {
+	protected String defaultToStringValue() {
 		return "";
 	}
 

@@ -80,36 +80,36 @@ public abstract class AbstractMonoid<E extends Element, V extends Object>
 	}
 
 	//
-	// The following protected methods override the standard implementation from
+	// The following protected methods override the default implementation from
 	// various super-classes
 	//
 	@Override
-	protected BigInteger standardGetOrderLowerBound() {
+	protected BigInteger defaultGetOrderLowerBound() {
 		return BigInteger.ONE;
 	}
 
 	@Override
-	public E standardApply(final Element[] elements) {
+	public E defaultApply(final Element[] elements) {
 		if (elements.length == 0) {
 			return this.getIdentityElement();
 		}
-		return super.standardApply(elements);
+		return super.defaultApply(elements);
 	}
 
 	@Override
-	protected E standardSelfApply(E element, BigInteger amount) {
+	protected E defaultSelfApply(E element, BigInteger amount) {
 		if (amount.signum() == 0) {
 			return this.getIdentityElement();
 		}
-		return super.standardSelfApply(element, amount);
+		return super.defaultSelfApply(element, amount);
 	}
 
 	@Override
-	protected E standardMultiSelfApply(final Element[] elements, BigInteger[] amounts) {
+	protected E defaultMultiSelfApply(final Element[] elements, BigInteger[] amounts) {
 		if (elements.length == 0) {
 			return this.getIdentityElement();
 		}
-		return super.standardMultiSelfApply(elements, amounts);
+		return super.defaultMultiSelfApply(elements, amounts);
 	}
 
 	//

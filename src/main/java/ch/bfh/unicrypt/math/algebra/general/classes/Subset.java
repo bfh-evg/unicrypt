@@ -76,12 +76,12 @@ public class Subset
 	}
 
 	@Override
-	protected Iterator<Element> standardIterator() {
+	protected Iterator<Element> defaultIterator() {
 		return this.hashSet.iterator();
 	}
 
 	@Override
-	protected boolean standardContains(final Element element) {
+	protected boolean defaultContains(final Element element) {
 		return this.hashSet.contains(element);
 	}
 
@@ -122,7 +122,7 @@ public class Subset
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Set set) {
+	protected boolean defaultIsEquivalent(Set set) {
 		Subset other = (Subset) set;
 		return this.superSet.isEquivalent(other.superSet) && this.hashSet.equals(other.hashSet);
 	}

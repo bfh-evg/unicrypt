@@ -77,7 +77,7 @@ public abstract class AbstractSemiGroup<E extends Element, V extends Object>
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardApply(elements);
+		return this.defaultApply(elements);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public abstract class AbstractSemiGroup<E extends Element, V extends Object>
 		if (!this.contains(element) || (amount == null)) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardSelfApply((E) element, amount);
+		return this.defaultSelfApply((E) element, amount);
 	}
 
 	@Override
@@ -111,14 +111,14 @@ public abstract class AbstractSemiGroup<E extends Element, V extends Object>
 		if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardMultiSelfApply(elements, amounts);
+		return this.defaultMultiSelfApply(elements, amounts);
 	}
 
 	//
-	// The following protected methods are standard implementations for sets.
+	// The following protected methods are default implementations for sets.
 	// They may need to be changed in certain sub-classes.
 	//
-	protected E standardApply(final Element... elements) {
+	protected E defaultApply(final Element... elements) {
 		if (elements.length == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -133,7 +133,7 @@ public abstract class AbstractSemiGroup<E extends Element, V extends Object>
 		return result;
 	}
 
-	protected E standardSelfApply(E element, BigInteger amount) {
+	protected E defaultSelfApply(E element, BigInteger amount) {
 		if (amount.signum() <= 0) {
 			throw new IllegalArgumentException();
 		}
@@ -147,7 +147,7 @@ public abstract class AbstractSemiGroup<E extends Element, V extends Object>
 		return (E) result;
 	}
 
-	protected E standardMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {
+	protected E defaultMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {
 		if (elements.length == 0) {
 			throw new IllegalArgumentException();
 		}

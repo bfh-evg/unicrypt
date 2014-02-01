@@ -113,7 +113,7 @@ public class ProductSemiGroup
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardApply(elements);
+		return this.defaultApply(elements);
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class ProductSemiGroup
 		if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardMultiSelfApply(elements, amounts);
+		return this.defaultMultiSelfApply(elements, amounts);
 	}
 
 	protected Tuple abstractApply(Tuple tuple1, Tuple tuple2) {
@@ -165,7 +165,7 @@ public class ProductSemiGroup
 		return this.abstractGetElement(ImmutableArray.getInstance(results));
 	}
 
-	protected Tuple standardApply(final Element... elements) {
+	protected Tuple defaultApply(final Element... elements) {
 		if (elements.length == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -180,7 +180,7 @@ public class ProductSemiGroup
 		return (Tuple) result;
 	}
 
-	protected Tuple standardMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {
+	protected Tuple defaultMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {
 		if (elements.length == 0) {
 			throw new IllegalArgumentException();
 		}

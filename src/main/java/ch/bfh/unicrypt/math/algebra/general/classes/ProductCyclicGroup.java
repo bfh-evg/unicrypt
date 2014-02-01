@@ -91,12 +91,8 @@ public class ProductCyclicGroup
 		return (ProductCyclicGroup) super.removeAt(index);
 	}
 
-	protected boolean standardCyclicGroup() {
-		return true;
-	}
-
 	@Override
-	protected Iterator<Tuple> standardIterator() {
+	protected Iterator<Tuple> defaultIterator() {
 		final ProductCyclicGroup productCyclicGroup = this;
 		return new Iterator<Tuple>() {
 			BigInteger counter = BigInteger.ZERO;
@@ -189,16 +185,12 @@ public class ProductCyclicGroup
 		// The following line is necessary for creating a generic array
 		Tuple[] generators = (Tuple[]) Array.newInstance(this.getIdentityElement().getClass(), maxIndex - minIndex + 1);
 		for (int i = 0; i <= maxIndex; i++) {
-			Tuple generator = this.standardGetIndependentGenerator(referenceRandomByteSequence);
+			Tuple generator = this.getRandomGenerator(referenceRandomByteSequence);
 			if (i >= minIndex) {
 				generators[i - minIndex] = generator;
 			}
 		}
 		return generators;
-	}
-
-	protected Tuple standardGetIndependentGenerator(ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return this.getRandomGenerator(referenceRandomByteSequence);
 	}
 
 	@Override

@@ -65,7 +65,7 @@ public abstract class AbstractScheme<MS extends Set>
 	}
 
 	@Override
-	protected String standardToStringContent() {
+	protected String defaultToStringValue() {
 		return this.getMessageSpace().toString();
 	}
 

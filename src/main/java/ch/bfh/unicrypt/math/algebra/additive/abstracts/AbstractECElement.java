@@ -104,7 +104,7 @@ public abstract class AbstractECElement<E extends AbstractECElement, D extends D
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		if (this.isInfinity) {
 			return "Infinity";
 		} else {

@@ -218,7 +218,7 @@ public class ByteArray
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.length; i++) {

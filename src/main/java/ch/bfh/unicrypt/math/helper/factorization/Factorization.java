@@ -72,7 +72,7 @@ public class Factorization
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return "" + this.getValue();
 	}
 

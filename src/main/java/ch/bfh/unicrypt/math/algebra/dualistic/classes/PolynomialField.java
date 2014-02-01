@@ -71,7 +71,7 @@ public class PolynomialField
 	}
 
 	//
-	// The following protected methods override the standard implementation from
+	// The following protected methods override the default implementation from
 	// various super-classes
 	//
 	@Override

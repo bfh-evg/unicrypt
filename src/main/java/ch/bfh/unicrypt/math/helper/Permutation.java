@@ -128,7 +128,7 @@ public class Permutation
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return "" + this.getSize();
 	}
 

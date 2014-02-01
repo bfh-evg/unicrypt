@@ -140,15 +140,15 @@ public class SubsetTest {
 //	}
 //
 //	/**
-//	 * Test of standardContains method, of class Subset.
+//	 * Test of defaultContains method, of class Subset.
 //	 */
 //	@Test
 //	public void testStandardContains() {
-//		System.out.println("standardContains");
+//		System.out.println("defaultContains");
 //		Element element = null;
 //		Subset instance = null;
 //		boolean expResult = false;
-//		boolean result = instance.standardContains(element);
+//		boolean result = instance.defaultContains(element);
 //		assertEquals(expResult, result);
 //		// TODO review the generated test code and remove the default call to fail.
 //		fail("The test case is a prototype.");

@@ -85,7 +85,7 @@ public class StringElement
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return "\"" + this.getValue() + "\"";
 	}
 

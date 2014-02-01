@@ -84,7 +84,7 @@ public abstract class AbstractCyclicGroup<E extends Element, V extends Object>
 		if (randomByteSequence == null) {
 			randomByteSequence = HybridRandomByteSequence.getInstance();
 		}
-		return this.standardGetRandomGenerator(randomByteSequence);
+		return this.defaultGetRandomGenerator(randomByteSequence);
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public abstract class AbstractCyclicGroup<E extends Element, V extends Object>
 		if (maxIndex >= generatorList.size()) {
 			referenceRandomByteSequence.reset();
 			for (int i = 0; i <= maxIndex; i++) {
-				E generator = this.standardGetIndependentGenerator(referenceRandomByteSequence);
+				E generator = this.defaultGetIndependentGenerator(referenceRandomByteSequence);
 				if (i >= generatorList.size()) {
 					generatorList.add(generator);
 				}
@@ -151,7 +151,7 @@ public abstract class AbstractCyclicGroup<E extends Element, V extends Object>
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected E standardGetRandomGenerator(RandomByteSequence randomByteSequence) {
+	protected E defaultGetRandomGenerator(RandomByteSequence randomByteSequence) {
 		E element;
 		do {
 			element = this.getRandomElement(randomByteSequence);
@@ -159,12 +159,12 @@ public abstract class AbstractCyclicGroup<E extends Element, V extends Object>
 		return element;
 	}
 
-	protected E standardGetIndependentGenerator(ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return this.standardGetRandomGenerator(referenceRandomByteSequence);
+	protected E defaultGetIndependentGenerator(ReferenceRandomByteSequence referenceRandomByteSequence) {
+		return this.defaultGetRandomGenerator(referenceRandomByteSequence);
 	}
 
 	@Override
-	protected Iterator<E> standardIterator() {
+	protected Iterator<E> defaultIterator() {
 		final AbstractCyclicGroup<E, V> cyclicGroup = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;

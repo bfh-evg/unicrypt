@@ -139,7 +139,7 @@ public class FiniteStringSet
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return this.getAlphabet().toString() + "^{" + this.minLength + "..." + this.maxLength + "}";
 	}
 

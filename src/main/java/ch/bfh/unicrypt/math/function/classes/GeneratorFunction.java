@@ -68,7 +68,7 @@ public class GeneratorFunction
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Function function) {
+	protected boolean defaultIsEquivalent(Function function) {
 		return this.getGenerator().isEquivalent(((GeneratorFunction) function).getGenerator());
 	}
 

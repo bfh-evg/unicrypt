@@ -117,7 +117,7 @@ public class PolynomialSemiRing
 	}
 
 	//
-	// The following protected methods override the standard implementation from
+	// The following protected methods override the default implementation from
 	// various super-classes
 	//
 	@Override
@@ -134,12 +134,12 @@ public class PolynomialSemiRing
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return this.getSemiRing().toString();
 	}
 
 	//
-	// The following protected methods override the standard implementation from
+	// The following protected methods override the default implementation from
 	// various super-classes
 	//
 	@Override

@@ -68,7 +68,7 @@ public class PartiallyAppliedFunction
 	private final int index;
 
 	/**
-	 * This is the standard constructor of this class. It derives from a given function a new function, in which one
+	 * This is the default constructor of this class. It derives from a given function a new function, in which one
 	 * input element is fixed to a given element and thus expects one input element less.
 	 * <p>
 	 * @param parentFunction The given function
@@ -114,7 +114,7 @@ public class PartiallyAppliedFunction
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Function function) {
+	protected boolean defaultIsEquivalent(Function function) {
 		PartiallyAppliedFunction other = (PartiallyAppliedFunction) function;
 		return this.getParentFunction().isEquivalent(other.getParentFunction())
 			   && this.getParameter().isEquivalent(other.getParameter())
@@ -143,7 +143,7 @@ public class PartiallyAppliedFunction
 	// STATIC FACTORY METHODS
 	//
 	/**
-	 * This is the standard constructor of this class. It derives from a given function a new function, in which one
+	 * This is the default constructor of this class. It derives from a given function a new function, in which one
 	 * input element is fixed to a given element and thus expects one input element less.
 	 * <p>
 	 * @param parentFunction

@@ -170,7 +170,7 @@ public class Tuple
 	}
 
 	@Override
-	protected String standardToStringContent() {
+	protected String defaultToStringValue() {
 		String result = "";
 		String separator = "";
 		for (Element element : this) {

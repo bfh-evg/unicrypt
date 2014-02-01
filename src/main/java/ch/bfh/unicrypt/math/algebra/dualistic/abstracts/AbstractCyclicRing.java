@@ -83,7 +83,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 
 	@Override
 	public final E getRandomGenerator(RandomByteSequence randomByteSequence) {
-		return this.standardGetRandomGenerator(randomByteSequence);
+		return this.defaultGetRandomGenerator(randomByteSequence);
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 		// The following line is necessary for creating a generic array
 		E[] generators = (E[]) Array.newInstance(this.getIdentityElement().getClass(), maxIndex - minIndex + 1);
 		for (int i = 0; i <= maxIndex; i++) {
-			E generator = this.standardGetIndependentGenerator(referenceRandomByteSequence);
+			E generator = this.defaultGetIndependentGenerator(referenceRandomByteSequence);
 			if (i >= minIndex) {
 				generators[i - minIndex] = generator;
 			}
@@ -139,7 +139,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 	}
 
 	// see Handbook of Applied Cryptography, Algorithm 4.80 and Note 4.81
-	protected E standardGetRandomGenerator(RandomByteSequence randomByteSequence) {
+	protected E defaultGetRandomGenerator(RandomByteSequence randomByteSequence) {
 		E element;
 		do {
 			element = this.getRandomElement(randomByteSequence);
@@ -147,12 +147,12 @@ public abstract class AbstractCyclicRing<E extends DualisticElement, V extends O
 		return element;
 	}
 
-	protected E standardGetIndependentGenerator(ReferenceRandomByteSequence referenceRandomByteSequence) {
-		return this.standardGetRandomGenerator(referenceRandomByteSequence);
+	protected E defaultGetIndependentGenerator(ReferenceRandomByteSequence referenceRandomByteSequence) {
+		return this.defaultGetRandomGenerator(referenceRandomByteSequence);
 	}
 
 	@Override
-	protected Iterator<E> standardIterator() {
+	protected Iterator<E> defaultIterator() {
 		final AbstractCyclicRing<E, V> cyclicRing = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;

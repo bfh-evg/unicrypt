@@ -76,7 +76,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	@Override
 	public final Function getPrivateKeyGenerationFunction() {
 		if (this.privateKeyGenerationFunction == null) {
-			this.privateKeyGenerationFunction = this.standardGetPrivateKeyGenerationFunction();
+			this.privateKeyGenerationFunction = this.defaultGetPrivateKeyGenerationFunction();
 		}
 		return this.privateKeyGenerationFunction;
 	}
@@ -145,11 +145,11 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	}
 
 	@Override
-	protected String standardToStringContent() {
+	protected String defaultToStringValue() {
 		return this.getPrivateKeySpace().toString() + ", " + this.getPublicKeySpace().toString();
 	}
 
-	protected Function standardGetPrivateKeyGenerationFunction() {
+	protected Function defaultGetPrivateKeyGenerationFunction() {
 		return RandomFunction.getInstance(this.getPrivateKeySpace());
 	}
 

@@ -86,7 +86,7 @@ public class HashMethod
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		if (this.isRecursive()) {
 			return this.algorithmName + ",recursive";
 		}

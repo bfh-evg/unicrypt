@@ -191,7 +191,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Set set) {
+	protected boolean defaultIsEquivalent(Set set) {
 		ProductSet other = (ProductSet) set;
 		if (this.getArity() != other.getArity()) {
 			return false;
@@ -285,7 +285,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected BigInteger standardGetOrderLowerBound() {
+	protected BigInteger defaultGetOrderLowerBound() {
 		if (this.isUniform()) {
 			return this.getFirst().getOrderLowerBound().pow(this.getArity());
 		}
@@ -297,7 +297,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected BigInteger standardGetOrderUpperBound() {
+	protected BigInteger defaultGetOrderUpperBound() {
 		if (this.isUniform()) {
 			return this.getFirst().getOrderUpperBound().pow(this.getArity());
 		}
@@ -312,7 +312,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected BigInteger standardGetMinimalOrder() {
+	protected BigInteger defaultGetMinimalOrder() {
 		if (this.isUniform()) {
 			return this.getFirst().getMinimalOrder();
 		}
@@ -328,7 +328,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected String standardToStringContent() {
+	protected String defaultToStringValue() {
 		if (this.isEmpty()) {
 			return "";
 		}

@@ -79,17 +79,17 @@ public abstract class AbstractKeyGenerator<KS extends Set, KE extends Element>
 	@Override
 	public Function getKeyGenerationFunction() {
 		if (this.keyGenerationFunction == null) {
-			this.keyGenerationFunction = this.standardGetKeyGenerationFunction();
+			this.keyGenerationFunction = this.defaultGetKeyGenerationFunction();
 		}
 		return this.keyGenerationFunction;
 	}
 
-	protected Function standardGetKeyGenerationFunction() {
+	protected Function defaultGetKeyGenerationFunction() {
 		return RandomFunction.getInstance(this.getKeySpace());
 	}
 
 	@Override
-	protected String standardToStringContent() {
+	protected String defaultToStringValue() {
 		return this.getKeySpace().toString();
 	}
 

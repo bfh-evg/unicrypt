@@ -89,7 +89,7 @@ public class FiniteStringElement
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return "\"" + this.getValue() + "\"";
 	}
 

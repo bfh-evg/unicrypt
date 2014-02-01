@@ -336,12 +336,12 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	protected abstract ByteTree abstractGetByteTree();
 
 	@Override
-	protected String standardToStringName() {
+	protected String defaultToStringName() {
 		return this.getClass().getSimpleName();
 	}
 
 	@Override
-	protected String standardToStringContent() {
+	protected String defaultToStringValue() {
 		return this.getValue().toString();
 	}
 

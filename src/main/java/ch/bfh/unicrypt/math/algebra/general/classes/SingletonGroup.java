@@ -72,10 +72,10 @@ public class SingletonGroup
 	}
 
 	//
-	// The following protected methods override the standard implementation from {@code AbstractGroup}
+	// The following protected methods override the default implementation from {@code AbstractGroup}
 	//
 	@Override
-	protected String standardToStringContent() {
+	protected String defaultToStringValue() {
 		return this.getValue().toString();
 	}
 
@@ -95,7 +95,7 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected Element standardSelfApply(Element element, BigInteger amount) {
+	protected Element defaultSelfApply(Element element, BigInteger amount) {
 		return this.element;
 	}
 

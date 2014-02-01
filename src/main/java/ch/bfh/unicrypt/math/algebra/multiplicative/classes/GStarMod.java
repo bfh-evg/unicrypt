@@ -133,18 +133,18 @@ public class GStarMod
 	}
 
 	//
-	// The following protected methods override the standard implementation from
+	// The following protected methods override the default implementation from
 	// various super-classes
 	//
 	@Override
-	protected GStarModElement standardSelfApply(final GStarModElement element, final BigInteger amount) {
+	protected GStarModElement defaultSelfApply(final GStarModElement element, final BigInteger amount) {
 		BigInteger newAmount = amount.mod(this.getOrder());
 		GStarMod.modPowCounter_SelfApply++;
 		return this.abstractGetElement(element.getValue().modPow(newAmount, this.getModulus()));
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return this.getModulus().toString() + "," + this.getOrder().toString();
 	}
 

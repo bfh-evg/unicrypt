@@ -118,11 +118,11 @@ public class ZStarMod
 	}
 
 	//
-	// The following protected methods override the standard implementation from
+	// The following protected methods override the default implementation from
 	// various super-classes
 	//
 	@Override
-	protected ZStarModElement standardSelfApply(final ZStarModElement element, final BigInteger amount) {
+	protected ZStarModElement defaultSelfApply(final ZStarModElement element, final BigInteger amount) {
 		BigInteger newAmount = amount;
 		final BigInteger order = this.getOrder();
 		if (this.hasKnownOrder()) {
@@ -132,12 +132,12 @@ public class ZStarMod
 	}
 
 	@Override
-	protected BigInteger standardGetOrderUpperBound() {
+	protected BigInteger defaultGetOrderUpperBound() {
 		return this.getModulus().subtract(BigInteger.ONE);
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return this.getModulus().toString();
 	}
 

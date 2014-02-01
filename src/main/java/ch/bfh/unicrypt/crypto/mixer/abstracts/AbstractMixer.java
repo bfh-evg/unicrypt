@@ -135,7 +135,7 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 
 	@Override
 	public final Tuple generateRandomizations(final RandomByteSequence randomByteSequence) {
-		return this.standardGenerateRandomizations(randomByteSequence);
+		return this.defaultGenerateRandomizations(randomByteSequence);
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 		return PermutationGroup.getInstance(this.size);
 	}
 
-	protected Tuple standardGenerateRandomizations(RandomByteSequence randomByteSequence) {
+	protected Tuple defaultGenerateRandomizations(RandomByteSequence randomByteSequence) {
 		return this.getRandomizationsSpace().getRandomElement(randomByteSequence);
 	}
 

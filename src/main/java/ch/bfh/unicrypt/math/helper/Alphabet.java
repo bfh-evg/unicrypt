@@ -179,7 +179,7 @@ public class Alphabet
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		if (this.characters == null) {
 			return this.minChar + "..." + this.maxChar;
 		}

@@ -81,7 +81,7 @@ public class HashFunction
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Function function) {
+	protected boolean defaultIsEquivalent(Function function) {
 		return this.getHashMethod().equals(((HashFunction) function).getHashMethod());
 	}
 
@@ -91,7 +91,7 @@ public class HashFunction
 	}
 
 	/**
-	 * This constructor generates a standard SHA-256 hash function. The order of the co-domain is 2^256.
+	 * This constructor generates a default SHA-256 hash function. The order of the co-domain is 2^256.
 	 * <p>
 	 * @param domain
 	 * @return
@@ -101,7 +101,7 @@ public class HashFunction
 	}
 
 	/**
-	 * This constructor generates a standard hash function for a given hash algorithm name. The co-domain is chosen
+	 * This constructor generates a default hash function for a given hash algorithm name. The co-domain is chosen
 	 * accordingly.
 	 * <p>
 	 * @param domain

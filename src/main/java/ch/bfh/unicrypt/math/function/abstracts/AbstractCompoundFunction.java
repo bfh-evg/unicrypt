@@ -155,12 +155,12 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	protected boolean standardIsCompound() {
+	protected boolean defaultIsCompound() {
 		return true;
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Function function) {
+	protected boolean defaultIsEquivalent(Function function) {
 		AbstractCompoundFunction<CF, D, DE, C, CE> other = (AbstractCompoundFunction<CF, D, DE, C, CE>) function;
 		if (this.getArity() != other.getArity()) {
 			return false;

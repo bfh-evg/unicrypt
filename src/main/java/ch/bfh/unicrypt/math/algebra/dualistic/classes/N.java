@@ -67,11 +67,11 @@ public class N
 	}
 
 	//
-	// The following protected methods override the standard implementation from
+	// The following protected methods override the default implementation from
 	// various super-classes
 	//
 	@Override
-	protected NElement standardSelfApply(NElement element, BigInteger amount) {
+	protected NElement defaultSelfApply(NElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().multiply(amount));
 	}
 

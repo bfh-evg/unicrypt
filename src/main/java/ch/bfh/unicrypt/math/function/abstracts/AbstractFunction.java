@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.util.Random;
 
 /**
- * This abstract class contains standard implementations for most methods of type {@link Function}. For most classes
+ * This abstract class contains default implementations for most methods of type {@link Function}. For most classes
  * implementing {@link Function}, it is sufficient to inherit from {@link AbstractFunction} and to implement the single
  * abstract method {@link abstractApply(Element element, Random random)}.
  * <p>
@@ -80,7 +80,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 
 	@Override
 	public final boolean isCompound() {
-		return this.standardIsCompound();
+		return this.defaultIsCompound();
 	}
 
 	@Override
@@ -150,23 +150,23 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 		if (!this.getCoDomain().isEquivalent(function.getCoDomain())) {
 			return false;
 		}
-		return this.standardIsEquivalent(function);
+		return this.defaultIsEquivalent(function);
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return "[" + this.getDomain() + " => " + this.getCoDomain() + "]";
 	}
 
 	//
-	// The following protected methods are standard implementations for sets.
+	// The following protected methods are default implementations for sets.
 	// They may need to be changed in certain sub-classes.
 	//
-	protected boolean standardIsCompound() {
+	protected boolean defaultIsCompound() {
 		return false;
 	}
 
-	protected boolean standardIsEquivalent(Function function) {
+	protected boolean defaultIsEquivalent(Function function) {
 		return true;
 	}
 

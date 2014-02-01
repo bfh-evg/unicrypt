@@ -76,7 +76,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement, V extends Obj
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardMultiply(elements);
+		return this.defaultMultiply(elements);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement, V extends Obj
 		if (!this.contains(element) || (amount == null)) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardPower((E) element, amount);
+		return this.defaultPower((E) element, amount);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement, V extends Obj
 		if ((elements == null) || (amounts == null) || (elements.length != amounts.length)) {
 			throw new IllegalArgumentException();
 		}
-		return this.standardProductOfPowers(elements, amounts);
+		return this.defaultProductOfPowers(elements, amounts);
 	}
 
 	@Override
@@ -127,10 +127,10 @@ public abstract class AbstractSemiRing<E extends DualisticElement, V extends Obj
 	}
 
 //
-// The following protected methods are standard implementations for sets.
+// The following protected methods are default implementations for sets.
 // They may need to be changed in certain sub-classes.
 //
-	protected E standardMultiply(final Element... elements) {
+	protected E defaultMultiply(final Element... elements) {
 		if (elements.length == 0) {
 			return this.getOneElement();
 		}
@@ -145,7 +145,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement, V extends Obj
 		return result;
 	}
 
-	protected E standardPower(E element, BigInteger amount) {
+	protected E defaultPower(E element, BigInteger amount) {
 		if (amount.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -162,7 +162,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement, V extends Obj
 		return result;
 	}
 
-	protected E standardProductOfPowers(final Element[] elements, final BigInteger[] amounts) {
+	protected E defaultProductOfPowers(final Element[] elements, final BigInteger[] amounts) {
 		if (elements.length == 0) {
 			return this.getOneElement();
 		}
@@ -174,7 +174,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement, V extends Obj
 	}
 
 	@Override
-	protected BigInteger standardGetOrderLowerBound() {
+	protected BigInteger defaultGetOrderLowerBound() {
 		return BigInteger.valueOf(2);
 	}
 

@@ -93,7 +93,7 @@ public class GenericPolynomial<C extends Object>
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		String result = "f(x)=";
 		if (this.getDegree() == 0) {
 			return result + this.zeroCoefficient.toString();

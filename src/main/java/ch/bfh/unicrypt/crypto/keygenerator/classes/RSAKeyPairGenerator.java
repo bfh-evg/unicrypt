@@ -73,7 +73,7 @@ public class RSAKeyPairGenerator
 	}
 
 	@Override
-	protected Function standardGetPrivateKeyGenerationFunction() {
+	protected Function defaultGetPrivateKeyGenerationFunction() {
 		return CompositeFunction.getInstance(
 					 RandomFunction.getInstance(this.zStarMod),
 					 ConvertFunction.getInstance(this.zStarMod, this.zModPrimes));

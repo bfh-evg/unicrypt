@@ -114,7 +114,7 @@ public class BinaryPolynomial
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return "f(x)=" + this.coefficients;
 	}
 

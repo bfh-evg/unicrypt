@@ -73,7 +73,7 @@ public class SelectionFunction
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Function function) {
+	protected boolean defaultIsEquivalent(Function function) {
 		return Arrays.equals(this.getIndices(), ((SelectionFunction) function).getIndices());
 	}
 

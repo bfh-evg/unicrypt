@@ -84,12 +84,12 @@ public class ZModPrime
 	}
 
 	@Override
-	protected ZModPrime standardGetZModOrder() {
+	protected ZModPrime defaultGetZModOrder() {
 		return ZModPrime.getInstance(this.getOrder());
 	}
 
 	@Override
-	protected ZStarModPrime standardGetZStarModOrder() {
+	protected ZStarModPrime defaultGetZStarModOrder() {
 		return ZStarModPrime.getInstance(this.getOrder());
 	}
 

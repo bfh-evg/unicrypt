@@ -68,16 +68,16 @@ public class Z
 	}
 
 	//
-	// The following protected methods override the standard implementation from
+	// The following protected methods override the default implementation from
 	// various super-classes
 	//
 	@Override
-	protected ZElement standardSelfApply(ZElement element, BigInteger amount) {
+	protected ZElement defaultSelfApply(ZElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().multiply(amount));
 	}
 
 	@Override
-	protected ZElement standardGetRandomGenerator(final RandomByteSequence randomByteSequence) {
+	protected ZElement defaultGetRandomGenerator(final RandomByteSequence randomByteSequence) {
 		if (randomByteSequence.getRandomNumberGenerator().nextBoolean()) {
 			return this.getDefaultGenerator();
 		}

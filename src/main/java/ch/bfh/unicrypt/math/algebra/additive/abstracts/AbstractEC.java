@@ -219,7 +219,7 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Set set) {
+	protected boolean defaultIsEquivalent(Set set) {
 		AbstractEC<E, F, D> other = (AbstractEC<E, F, D>) set;
 		if (!this.finiteField.isEquivalent(other.finiteField)) {
 			return false;
@@ -248,7 +248,7 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	protected abstract E getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return this.getA().getValue() + "," + this.getB().getValue();
 	}
 

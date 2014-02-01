@@ -94,7 +94,7 @@ public class IdentityMixer
 	}
 
 	@Override
-	protected Tuple standardGenerateRandomizations(RandomByteSequence randomByteSequence) {
+	protected Tuple defaultGenerateRandomizations(RandomByteSequence randomByteSequence) {
 		Element r = this.generateRandomization(randomByteSequence);
 		return this.createRandomizationTuple(r);
 	}

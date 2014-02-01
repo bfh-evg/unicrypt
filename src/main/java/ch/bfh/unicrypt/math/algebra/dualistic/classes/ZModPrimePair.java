@@ -76,12 +76,12 @@ public class ZModPrimePair
 	}
 
 	@Override
-	protected ZModPrimePair standardGetZModOrder() {
+	protected ZModPrimePair defaultGetZModOrder() {
 		return ZModPrimePair.getInstance(this.getPrimePair());
 	}
 
 	@Override
-	protected ZStarMod standardGetZStarModOrder() {
+	protected ZStarMod defaultGetZStarModOrder() {
 		return ZStarMod.getInstance(this.getPrimePair());
 	}
 

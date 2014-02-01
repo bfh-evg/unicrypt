@@ -72,7 +72,7 @@ public class AdapterFunction
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Function function) {
+	protected boolean defaultIsEquivalent(Function function) {
 		return Arrays.equals(this.getIndices(), ((AdapterFunction) function).getIndices());
 	}
 

@@ -72,7 +72,7 @@ public class ModuloFunction
 	}
 
 	@Override
-	protected boolean standardIsEquivalent(Function function) {
+	protected boolean defaultIsEquivalent(Function function) {
 		return this.getModulus().equals(((ModuloFunction) function).getModulus());
 	}
 
@@ -88,7 +88,7 @@ public class ModuloFunction
 	// STATIC FACTORY METHODS
 	//
 	/**
-	 * This is the standard constructor for this class. It creates an identity function for a given group.
+	 * This is the default constructor for this class. It creates an identity function for a given group.
 	 * <p>
 	 * @param domain  The given Group
 	 * @param modulus

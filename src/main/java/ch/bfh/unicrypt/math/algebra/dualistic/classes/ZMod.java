@@ -81,21 +81,21 @@ public class ZMod
 	}
 
 	//
-	// The following protected methods override the standard implementation from
+	// The following protected methods override the default implementation from
 	// various super-classes
 	//
 	@Override
-	protected ZModElement standardSelfApply(ZModElement element, BigInteger amount) {
+	protected ZModElement defaultSelfApply(ZModElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
 	}
 
 	@Override
-	protected ZModElement standardPower(ZModElement element, BigInteger amount) {
+	protected ZModElement defaultPower(ZModElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().modPow(amount, this.getModulus()));
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		return this.getModulus().toString();
 	}
 

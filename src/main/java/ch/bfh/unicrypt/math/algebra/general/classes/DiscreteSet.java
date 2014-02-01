@@ -106,7 +106,7 @@ public class DiscreteSet<V extends Object>
 	}
 
 	@Override
-	public String standardToStringContent() {
+	public String defaultToStringValue() {
 		String str = this.valueMap.values().toString();
 		return str.substring(1, str.length() - 1);
 	}
