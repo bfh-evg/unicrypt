@@ -121,6 +121,7 @@ public class FiniteByteArraySet
 
 	@Override
 	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+		// this seems to be unnecessarly complicated, but is needed to generate shorer byte arrays with equal probability
 		return this.abstractGetElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 

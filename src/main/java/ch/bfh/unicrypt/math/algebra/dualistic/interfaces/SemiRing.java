@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import java.math.BigInteger;
 
 /**
@@ -60,6 +61,9 @@ public interface SemiRing
 
 	@Override
 	public DualisticElement getElementFrom(BigInteger value);
+
+	@Override
+	public DualisticElement getElementFrom(ByteTree byteTree);
 
 	@Override
 	public DualisticElement getElementFrom(Element element);

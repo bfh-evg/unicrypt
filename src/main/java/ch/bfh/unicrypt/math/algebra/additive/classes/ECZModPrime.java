@@ -83,7 +83,7 @@ public class ECZModPrime
 
 	@Override
 	protected boolean abstractContains(ZModElement x, ZModElement y) {
-		ZModElement left = y.power(2);
+		ZModElement left = y.square();
 		ZModElement right = x.power(3).add(x.multiply(this.getA())).add(this.getB());
 		return left.isEquivalent(right);
 	}
@@ -115,14 +115,14 @@ public class ECZModPrime
 		ZModElement qx = element2.getX();
 		ZModElement qy = element2.getY();
 		if (element1.isEquivalent(element2)) {
-			ZModElement three = (ZModElement) this.getFiniteField().getElementFrom(3);
-			ZModElement two = (ZModElement) this.getFiniteField().getElementFrom(2);
-			s = ((px.power(2).multiply(three)).apply(this.getA())).divide(py.multiply(two));
-			rx = s.power(2).apply(px.multiply(two).invert());
+			ZModElement three = this.getFiniteField().getElement(3);
+			ZModElement two = this.getFiniteField().getElement(2);
+			s = ((px.square().multiply(three)).apply(this.getA())).divide(py.multiply(two));
+			rx = s.square().apply(px.multiply(two).invert());
 			ry = s.multiply(px.subtract(rx)).apply(py.invert());
 		} else {
 			s = py.apply(qy.invert()).divide(px.apply(qx.invert()));
-			rx = (s.power(2).apply(px.invert()).apply(qx.invert()));
+			rx = (s.square().apply(px.invert()).apply(qx.invert()));
 			ry = py.invert().add(s.multiply(px.apply(rx.invert())));
 		}
 		return this.abstractGetElement(Point.getInstance(rx, ry));
@@ -158,9 +158,9 @@ public class ECZModPrime
 
 	private boolean isValid() {
 		boolean c1, c2, c3, c4, c5, c61, c62;
-		ZModElement i4 = (ZModElement) getFiniteField().getElementFrom(4);
-		ZModElement i27 = (ZModElement) getFiniteField().getElementFrom(27);
-		c1 = !getA().power(3).multiply(i4).add(i27.multiply(getB().power(2))).isZero();
+		ZModElement i4 = getFiniteField().getElement(4);
+		ZModElement i27 = getFiniteField().getElement(27);
+		c1 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
 		c2 = contains(this.getDefaultGenerator());
 		c3 = MathUtil.arePrime(getOrder());
 		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));

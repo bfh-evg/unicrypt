@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import java.math.BigInteger;
 
 /**
@@ -142,6 +143,9 @@ public interface ConcatenativeSemiGroup
 
 	@Override
 	public ConcatenativeElement getElementFrom(BigInteger value);
+
+	@Override
+	public ConcatenativeElement getElementFrom(ByteTree byteTree);
 
 	@Override
 	public ConcatenativeElement getElementFrom(Element element);

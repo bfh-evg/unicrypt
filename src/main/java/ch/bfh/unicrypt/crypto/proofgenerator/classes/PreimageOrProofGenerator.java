@@ -116,9 +116,8 @@ public class PreimageOrProofGenerator
 		Tuple domainElements = ((ProductMonoid) this.getPreimageProofFunction().getDomain()).getIdentityElement();
 		domainElements = domainElements.replaceAt(index, secret);
 
-		return (Pair) this.getPrivateInputSpace().getElement(
-			   this.getPreimageProofFunction().getDomain().getElementFrom(domainElements),
-			   ZMod.getInstance(this.getPreimageProofFunction().getArity()).getElement(index));
+		return (Pair) this.getPrivateInputSpace().getElement(domainElements,
+															 ZMod.getInstance(this.getPreimageProofFunction().getArity()).getElement(index));
 	}
 
 	@Override

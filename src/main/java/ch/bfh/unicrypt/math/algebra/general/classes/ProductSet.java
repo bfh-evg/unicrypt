@@ -52,6 +52,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
@@ -78,26 +79,11 @@ public class ProductSet
 		return this.getElement(ImmutableArray.getInstance(elements));
 	}
 
-//	public final boolean contains(final int... values) {
-//		return this.contains(ArrayUtil.intToBigIntegerArray(values));
-//	}
-	public final boolean contains(BigInteger... values) {
-		if (values == null || values.length != this.getArity()) {
-			throw new IllegalArgumentException();
-		}
-		for (int i = 0; i < this.getArity(); i++) {
-			if (!this.getAt(i).contains(values[i])) {
-				return false;
-			}
-		}
-		return true;
+	public final Tuple getElementFrom(final int... values) {
+		return this.getElementFrom(ArrayUtil.intToBigIntegerArray(values));
 	}
-//	public final Tuple getElementFrom(final int... values) {
-//		return this.getElementFrom(ArrayUtil.intToBigIntegerArray(values));
-//	}
-//
 
-	public final Tuple getElementFrom(BigInteger[] values) {
+	public final Tuple getElementFrom(BigInteger... values) {
 		if (values == null || values.length != this.getArity()) {
 			throw new IllegalArgumentException();
 		}

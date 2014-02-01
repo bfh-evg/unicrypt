@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import java.math.BigInteger;
 
 /**
@@ -132,6 +133,9 @@ public interface AdditiveSemiGroup
 
 	@Override
 	public AdditiveElement getElementFrom(BigInteger value);
+
+	@Override
+	public AdditiveElement getElementFrom(ByteTree byteTree);
 
 	@Override
 	public AdditiveElement getElementFrom(Element element);

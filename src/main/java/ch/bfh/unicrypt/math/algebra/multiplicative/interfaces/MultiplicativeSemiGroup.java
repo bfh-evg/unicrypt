@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import java.math.BigInteger;
 
 /**
@@ -132,6 +133,9 @@ public interface MultiplicativeSemiGroup
 
 	@Override
 	public MultiplicativeElement getElementFrom(BigInteger value);
+
+	@Override
+	public MultiplicativeElement getElementFrom(ByteTree byteTree);
 
 	@Override
 	public MultiplicativeElement getElementFrom(Element element);

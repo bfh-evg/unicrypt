@@ -156,12 +156,18 @@ public class PolynomialSemiRing
 	@Override
 	protected PolynomialElement abstractGetElementFrom(BigInteger integerValue) {
 		BigInteger[] bigIntegers = MathUtil.unpairWithSize(integerValue);
+		DualisticElement[] elements = new DualisticElement[bigIntegers.length];
+		int i = 0;
 		for (BigInteger bigInteger : bigIntegers) {
-			if (!this.getSemiRing().contains(bigInteger)) {
+			DualisticElement element = this.getSemiRing().getElementFrom(bigInteger);
+			if (element == null) {
 				return null; // no such elements
 			}
+			elements[i] = element;
+			i++;
 		}
-		return this.getElement(bigIntegers);
+		GenericPolynomial<DualisticElement> polynomial = GenericPolynomial.getInstance(elements, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement());
+		return new PolynomialElement(this, polynomial);
 	}
 
 	protected PolynomialElement getElement(Map<Integer, DualisticElement> coefficientMap) {

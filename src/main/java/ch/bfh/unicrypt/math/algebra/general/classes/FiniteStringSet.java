@@ -74,7 +74,7 @@ public class FiniteStringSet
 	}
 
 	public boolean fixedLength() {
-		return this.getMinLength() == this.getMaxLength();
+		return this.minLength == this.maxLength;
 	}
 
 	public Alphabet getAlphabet() {
@@ -83,7 +83,7 @@ public class FiniteStringSet
 
 	@Override
 	protected boolean abstractContains(String value) {
-		return value.length() >= this.getMinLength() && value.length() <= this.getMaxLength() && this.getAlphabet().isValid(value);
+		return value.length() >= this.minLength && value.length() <= this.maxLength && this.getAlphabet().isValid(value);
 	}
 
 	@Override
@@ -96,11 +96,10 @@ public class FiniteStringSet
 		if (value.compareTo(this.getOrder()) >= 0) {
 			return null; // no such element
 		}
-		int minLength = this.getMinLength();
 		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
-		StringBuilder strBuilder = new StringBuilder(this.getMaxLength());
-		while (!value.equals(BigInteger.ZERO) || strBuilder.length() < minLength) {
-			if (strBuilder.length() >= minLength) {
+		StringBuilder strBuilder = new StringBuilder(this.maxLength);
+		while (!value.equals(BigInteger.ZERO) || strBuilder.length() < this.minLength) {
+			if (strBuilder.length() >= this.minLength) {
 				value = value.subtract(BigInteger.ONE);
 			}
 			strBuilder.append(this.getAlphabet().getCharacter(value.mod(size).intValue()));
@@ -113,10 +112,10 @@ public class FiniteStringSet
 	protected BigInteger abstractGetOrder() {
 		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
 		BigInteger order = BigInteger.ONE;
-		for (int i = 0; i < this.getMaxLength() - this.getMinLength(); i++) {
+		for (int i = 0; i < this.maxLength - this.minLength; i++) {
 			order = order.multiply(size).add(BigInteger.ONE);
 		}
-		return order.multiply(size.pow(this.getMinLength()));
+		return order.multiply(size.pow(this.minLength));
 	}
 
 	@Override
@@ -127,21 +126,21 @@ public class FiniteStringSet
 	@Override
 	public boolean abstractEquals(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
-		return this.getAlphabet() == other.getAlphabet() && this.getMinLength() == other.getMinLength() && this.getMaxLength() == other.getMaxLength();
+		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength && this.maxLength == other.maxLength;
 	}
 
 	@Override
 	protected int abstractHashCode() {
 		int hash = 7;
 		hash = 47 * hash + this.getAlphabet().hashCode();
-		hash = 47 * hash + this.getMinLength();
-		hash = 47 * hash + this.getMaxLength();
+		hash = 47 * hash + this.minLength;
+		hash = 47 * hash + this.minLength;
 		return hash;
 	}
 
 	@Override
 	public String standardToStringContent() {
-		return this.getAlphabet().toString() + "^{" + this.getMinLength() + "..." + this.getMaxLength() + "}";
+		return this.getAlphabet().toString() + "^{" + this.minLength + "..." + this.maxLength + "}";
 	}
 
 	//
