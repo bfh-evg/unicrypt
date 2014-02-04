@@ -45,6 +45,8 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -101,6 +103,36 @@ public class ByteArrayMonoid
 			value = value.divide(blockSize);
 		}
 		return this.abstractGetElement(ByteArray.getInstance(ArrayUtil.byteListToByteArray(byteList)));
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(ByteArray value) {
+		BigInteger value1 = new BigInteger(1, value.getAll());
+		BigInteger value2 = BigInteger.ZERO;
+		int blockLength = this.getBlockLength();
+
+		//As I do not know what this code really should do, I just tuned it... but the variable names I have chosen ... are stupid.
+		//Futher tuning by removing the for loop and do it mathematically!
+		//TODO: Describe what it does!
+		if (value.getLength() > 0) {
+			byte[] oneOone = new byte[value.getLength()];
+			int amount = oneOone.length / blockLength;
+			for (int i = 0; i < amount; i++) {
+				oneOone[(oneOone.length - 1) - (i * blockLength)] = 1; //It does something like: 100000000100000000100000000 ->MSB
+			}
+			value2 = new BigInteger(1, oneOone);
+		}
+		return value1.add(value2);
+	}
+
+	@Override
+	protected ByteArrayElement abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(ByteArray value) {
+		return ByteTreeLeaf.getInstance(value);
 	}
 
 	@Override

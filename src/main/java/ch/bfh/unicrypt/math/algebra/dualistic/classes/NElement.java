@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
-import ch.bfh.unicrypt.math.helper.ByteArray;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 
 /**
@@ -55,16 +53,6 @@ public class NElement
 
 	protected NElement(final N n, final BigInteger value) {
 		super(n, value);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigInteger() {
-		return this.getValue();
-	}
-
-	@Override
-	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(this.getValue().toByteArray()));
 	}
 
 }

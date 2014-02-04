@@ -45,6 +45,8 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -107,6 +109,32 @@ public class FiniteByteArraySet
 			value = value.divide(size);
 		}
 		return this.abstractGetElement(ByteArray.getInstance(ArrayUtil.byteListToByteArray(byteList)));
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(ByteArray value) {
+		int length = value.getLength();
+		int minLength = this.getMinLength();
+		BigInteger result = BigInteger.ZERO;
+		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		for (int i = 0; i < length; i++) {
+			int intValue = value.getAt(i) & 0xFF;
+			if (i < length - minLength) {
+				intValue++;
+			}
+			result = result.multiply(size).add(BigInteger.valueOf(intValue));
+		}
+		return result;
+	}
+
+	@Override
+	protected FiniteByteArrayElement abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(ByteArray value) {
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.getAll()));
 	}
 
 	@Override

@@ -44,6 +44,9 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,6 +89,21 @@ public class DiscreteSet<V extends Object>
 			return null; // no such element
 		}
 		return abstractGetElement(this.valueMap.get(integerValue.intValue()));
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(V value) {
+		return BigInteger.valueOf(this.indexMap.get(value));
+	}
+
+	@Override
+	protected DiscreteSetElement<V> abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(V value) {
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(abstractGetBigIntegerFrom(value).toByteArray()));
 	}
 
 	@Override

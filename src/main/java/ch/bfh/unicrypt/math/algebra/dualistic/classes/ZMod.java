@@ -45,6 +45,9 @@ import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -152,6 +155,21 @@ public class ZMod
 			return null; // no such element
 		}
 		return new ZModElement(this, value);
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(BigInteger value) {
+		return value;
+	}
+
+	@Override
+	protected ZModElement abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(BigInteger value) {
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.toByteArray()));
 	}
 
 	@Override

@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.helper.ByteArray;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 
 /**
@@ -55,16 +53,6 @@ public class SingletonElement
 
 	protected SingletonElement(final SingletonGroup group, BigInteger value) {
 		super(group, value);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigInteger() {
-		return this.getValue();
-	}
-
-	@Override
-	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(this.getValue().toByteArray()));
 	}
 
 }

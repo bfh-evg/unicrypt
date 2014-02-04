@@ -143,7 +143,7 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	@Override
 	public BigInteger getBigInteger() {
 		if (this.bigInteger == null) {
-			this.bigInteger = this.abstractGetBigInteger();
+			this.bigInteger = this.set.getBigIntegerFrom(this);
 		}
 		return this.bigInteger;
 	}
@@ -151,7 +151,7 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	@Override
 	public ByteTree getByteTree() {
 		if (this.byteTree == null) {
-			this.byteTree = this.abstractGetByteTree();
+			this.byteTree = this.set.getByteTreeFrom(this);
 		}
 		return this.byteTree;
 	}
@@ -191,8 +191,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	 */
 	@Override
 	public final E apply(final Element element) {
-		if (this.getSet().isSemiGroup()) {
-			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+		if (this.set.isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.apply(this, element);
 		}
 		throw new UnsupportedOperationException();
@@ -203,8 +203,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	 */
 	@Override
 	public final E applyInverse(final Element element) {
-		if (this.getSet().isGroup()) {
-			Group group = ((Group) this.getSet());
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
 			return (E) group.applyInverse(this, element);
 		}
 		throw new UnsupportedOperationException();
@@ -215,8 +215,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	 */
 	@Override
 	public final E selfApply(final BigInteger amount) {
-		if (this.getSet().isSemiGroup()) {
-			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+		if (this.set.isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
 		}
 		throw new UnsupportedOperationException();
@@ -227,8 +227,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	 */
 	@Override
 	public final E selfApply(final Element amount) {
-		if (this.getSet().isSemiGroup()) {
-			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+		if (this.set.isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
 		}
 		throw new UnsupportedOperationException();
@@ -239,8 +239,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	 */
 	@Override
 	public final E selfApply(final int amount) {
-		if (this.getSet().isSemiGroup()) {
-			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+		if (this.set.isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
 		}
 		throw new UnsupportedOperationException();
@@ -251,8 +251,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	 */
 	@Override
 	public final E selfApply() {
-		if (this.getSet().isSemiGroup()) {
-			SemiGroup semiGroup = ((SemiGroup) this.getSet());
+		if (this.set.isSemiGroup()) {
+			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this);
 		}
 		throw new UnsupportedOperationException();
@@ -263,8 +263,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	 */
 	@Override
 	public final E invert() {
-		if (this.getSet().isGroup()) {
-			Group group = ((Group) this.getSet());
+		if (this.set.isGroup()) {
+			Group group = ((Group) this.set);
 			return (E) group.invert(this);
 		}
 		throw new UnsupportedOperationException();
@@ -275,8 +275,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	 */
 	@Override
 	public final boolean isIdentity() {
-		if (this.getSet().isMonoid()) {
-			Monoid monoid = ((Monoid) this.getSet());
+		if (this.set.isMonoid()) {
+			Monoid monoid = ((Monoid) this.set);
 			return monoid.isIdentityElement(this);
 		}
 		throw new UnsupportedOperationException();
@@ -287,8 +287,8 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 	 */
 	@Override
 	public final boolean isGenerator() {
-		if (this.getSet().isCyclic()) {
-			CyclicGroup cyclicGroup = ((CyclicGroup) this.getSet());
+		if (this.set.isCyclic()) {
+			CyclicGroup cyclicGroup = ((CyclicGroup) this.set);
 			return cyclicGroup.isGenerator(this);
 		}
 		throw new UnsupportedOperationException();
@@ -302,7 +302,7 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 		if (this == other) {
 			return true;
 		}
-		if (!this.getSet().isEquivalent(other.getSet())) {
+		if (!this.set.isEquivalent(other.getSet())) {
 			return false;
 		}
 		return this.getValue().equals(other.getValue());
@@ -330,10 +330,6 @@ public abstract class AbstractElement<S extends Set, E extends Element, V extend
 		}
 		return this.getValue().equals(other.getValue());
 	}
-
-	protected abstract BigInteger abstractGetBigInteger();
-
-	protected abstract ByteTree abstractGetByteTree();
 
 	@Override
 	protected String defaultToStringName() {

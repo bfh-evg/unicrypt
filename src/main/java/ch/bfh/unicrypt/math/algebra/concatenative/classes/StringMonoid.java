@@ -45,6 +45,9 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Alphabet;
+import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 
 /**
@@ -100,6 +103,33 @@ public class StringMonoid
 			value = value.divide(blockSize);
 		}
 		return this.abstractGetElement(strBuilder.reverse().toString());
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(String value) {
+		BigInteger value1 = BigInteger.ZERO;
+		BigInteger alphabetSize = BigInteger.valueOf(this.getAlphabet().getSize());
+		for (int i = 0; i < value.length(); i++) {
+			int charIndex = this.getAlphabet().getIndex(value.charAt(i));
+			value1 = value1.multiply(alphabetSize).add(BigInteger.valueOf(charIndex));
+		}
+		BigInteger value2 = BigInteger.ZERO;
+		int blockLength = this.getBlockLength();
+		BigInteger blockSize = alphabetSize.pow(blockLength);
+		for (int i = 0; i < value.length() / blockLength; i++) {
+			value2 = value2.multiply(blockSize).add(BigInteger.ONE);
+		}
+		return value1.add(value2);
+	}
+
+	@Override
+	protected StringElement abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(String value) {
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(abstractGetBigIntegerFrom(value).toByteArray()));
 	}
 
 	@Override

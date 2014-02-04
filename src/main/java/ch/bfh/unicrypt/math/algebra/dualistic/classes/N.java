@@ -45,6 +45,9 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 
 /**
@@ -117,6 +120,21 @@ public class N
 	@Override
 	protected NElement abstractGetElementFrom(BigInteger value) {
 		return new NElement(this, value);
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(BigInteger value) {
+		return value;
+	}
+
+	@Override
+	protected NElement abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(BigInteger value) {
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.toByteArray()));
 	}
 
 	@Override

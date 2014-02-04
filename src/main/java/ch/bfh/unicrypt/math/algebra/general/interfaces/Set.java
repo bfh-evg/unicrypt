@@ -251,7 +251,7 @@ public interface Set {
 	/**
 	 * TODO: Convenience method
 	 * <p>
-	 * @param value
+	 * @param integerValue
 	 * @return
 	 */
 	public boolean contains(int integerValue);
@@ -259,7 +259,7 @@ public interface Set {
 	/**
 	 * TODO: Convenience method
 	 * <p>
-	 * @param value
+	 * @param integerValue
 	 * @return
 	 */
 	public Element getElement(int integerValue);
@@ -339,5 +339,9 @@ public interface Set {
 	 * @return
 	 */
 	public boolean isEquivalent(Set set);
+
+	public BigInteger getBigIntegerFrom(Element element);
+
+	public ByteTree getByteTreeFrom(Element element);
 
 }

@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.polynomial.GenericPolynomial;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -153,6 +154,10 @@ public class PolynomialSemiRing
 		return new PolynomialElement(this, value);
 	}
 
+	protected PolynomialElement getElement(Map<Integer, DualisticElement> coefficientMap) {
+		return abstractGetElement(GenericPolynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
+	}
+
 	@Override
 	protected PolynomialElement abstractGetElementFrom(BigInteger integerValue) {
 		BigInteger[] bigIntegers = MathUtil.unpairWithSize(integerValue);
@@ -170,8 +175,29 @@ public class PolynomialSemiRing
 		return new PolynomialElement(this, polynomial);
 	}
 
-	protected PolynomialElement getElement(Map<Integer, DualisticElement> coefficientMap) {
-		return abstractGetElement(GenericPolynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(GenericPolynomial<DualisticElement> value) {
+		int degree = value.getDegree();
+		BigInteger[] values = new BigInteger[degree + 1];
+		for (int i = 0; i <= degree; i++) {
+			values[i] = value.getCoefficient(i).getBigInteger();
+		}
+		return MathUtil.pairWithSize(values);
+	}
+
+	@Override
+	protected PolynomialElement abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(GenericPolynomial<DualisticElement> value) {
+		int degree = value.getDegree();
+		ByteTree[] byteTrees = new ByteTree[degree + 1];
+		for (int i = 0; i <= degree; i++) {
+			byteTrees[i] = value.getCoefficient(i).getByteTree();
+		}
+		return ByteTree.getInstance(byteTrees);
 	}
 
 	@Override

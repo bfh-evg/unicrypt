@@ -43,8 +43,6 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
 import ch.bfh.unicrypt.math.helper.ByteArray;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
-import java.math.BigInteger;
 
 /**
  *
@@ -60,31 +58,6 @@ public class ByteArrayElement
 	@Override
 	public int getLength() {
 		return this.getValue().getLength();
-	}
-
-	@Override
-	protected BigInteger abstractGetBigInteger() {
-		BigInteger value1 = new BigInteger(1, this.getValue().getAll());
-		BigInteger value2 = BigInteger.ZERO;
-		int blockLength = this.getSet().getBlockLength();
-
-		//As I do not know what this code really should do, I just tuned it... but the variable names I have chosen ... are stupid.
-		//Futher tuning by removing the for loop and do it mathematically!
-		//TODO: Describe what it does!
-		if (this.getLength() > 0) {
-			byte[] oneOone = new byte[this.getLength()];
-			int amount = oneOone.length / blockLength;
-			for (int i = 0; i < amount; i++) {
-				oneOone[(oneOone.length - 1) - (i * blockLength)] = 1; //It does something like: 100000000100000000100000000 ->MSB
-			}
-			value2 = new BigInteger(1, oneOone);
-		}
-		return value1.add(value2);
-	}
-
-	@Override
-	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(this.getValue());
 	}
 
 }

@@ -326,10 +326,6 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		return false;
 	}
 
-	protected boolean defaultIsEquivalent(Set set) {
-		return this.abstractEquals(set);
-	}
-
 	@Override
 	public final int hashCode() {
 		int hash = 7;
@@ -353,6 +349,22 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 	@Override
 	public final Iterator<E> iterator() {
 		return this.defaultIterator();
+	}
+
+	@Override
+	public BigInteger getBigIntegerFrom(Element element) {
+		if (element == null || !this.contains(element)) {
+			throw new IllegalArgumentException();
+		}
+		return abstractGetBigIntegerFrom((V) element.getValue());
+	}
+
+	@Override
+	public ByteTree getByteTreeFrom(Element element) {
+		if (element == null) {
+			throw new IllegalArgumentException();
+		}
+		return abstractGetByteTreeFrom((V) element.getValue());
 	}
 
 	//
@@ -421,6 +433,10 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		};
 	}
 
+	protected boolean defaultIsEquivalent(Set set) {
+		return this.abstractEquals(set);
+	}
+
 	//
 	// The following protected abstract method must be implemented in every direct
 	// sub-class.
@@ -429,14 +445,15 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 
 	protected abstract boolean abstractContains(V value);
 
-	protected abstract E abstractGetElementFrom(BigInteger value);
-
-//	TODO: protected abstract E abstractGetElementFrom(ByteTree byteTree);
-	protected E abstractGetElementFrom(ByteTree byteTree) {
-		return null;
-	}
-
 	protected abstract E abstractGetElement(V value);
+
+	protected abstract E abstractGetElementFrom(BigInteger integerValue);
+
+	protected abstract BigInteger abstractGetBigIntegerFrom(V value);
+
+	protected abstract E abstractGetElementFrom(ByteTree bytTree);
+
+	protected abstract ByteTree abstractGetByteTreeFrom(V value);
 
 	protected abstract E abstractGetRandomElement(RandomByteSequence randomByteSequence);
 

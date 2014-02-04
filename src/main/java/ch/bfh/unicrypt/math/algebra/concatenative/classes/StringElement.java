@@ -42,9 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
-import ch.bfh.unicrypt.math.helper.ByteArray;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
-import java.math.BigInteger;
 
 /**
  *
@@ -60,28 +57,6 @@ public class StringElement
 	@Override
 	public int getLength() {
 		return this.getValue().length();
-	}
-
-	@Override
-	protected BigInteger abstractGetBigInteger() {
-		BigInteger value1 = BigInteger.ZERO;
-		BigInteger alphabetSize = BigInteger.valueOf(this.getSet().getAlphabet().getSize());
-		for (int i = 0; i < this.getLength(); i++) {
-			int charIndex = this.getSet().getAlphabet().getIndex(this.getValue().charAt(i));
-			value1 = value1.multiply(alphabetSize).add(BigInteger.valueOf(charIndex));
-		}
-		BigInteger value2 = BigInteger.ZERO;
-		int blockLength = this.getSet().getBlockLength();
-		BigInteger blockSize = alphabetSize.pow(blockLength);
-		for (int i = 0; i < this.getLength() / blockLength; i++) {
-			value2 = value2.multiply(blockSize).add(BigInteger.ONE);
-		}
-		return value1.add(value2);
-	}
-
-	@Override
-	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(getBigInteger().toByteArray()));
 	}
 
 	@Override

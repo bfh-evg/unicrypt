@@ -44,37 +44,30 @@ package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.helper.Point;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.utility.MathUtil;
-import java.math.BigInteger;
 
 public abstract class AbstractECElement<E extends AbstractECElement, D extends DualisticElement>
 	   extends AbstractAdditiveElement<AbstractEC, E, Point<D>>
 	   implements ECElement {
 
-	private final boolean isInfinity;
-
 	// the main constructor
 	protected AbstractECElement(AbstractEC ecGroup, Point<D> value) {
 		super(ecGroup, value);
-		this.isInfinity = false;
 	}
 
 	// special constructor is necessary for the additional point of infinity
 	protected AbstractECElement(AbstractEC ecGroup) {
-		super(ecGroup, Point.<D>getInstance());
-		this.isInfinity = true;
+		super(ecGroup, ecGroup.getInfinityPoint());
 	}
 
 	@Override
 	public boolean isInfinity() {
-		return this.isInfinity;
+		return this.getValue().equals(this.getSet().getInfinityPoint());
 	}
 
 	// additional convenience getter method to handle to point of infinity
 	@Override
 	public D getX() {
-		if (this.isInfinity) {
+		if (this.isInfinity()) {
 			throw new UnsupportedOperationException();
 		}
 		return this.getValue().getX();
@@ -83,29 +76,15 @@ public abstract class AbstractECElement<E extends AbstractECElement, D extends D
 	// additional convenience getter method to handle to point of infinity
 	@Override
 	public D getY() {
-		if (this.isInfinity) {
+		if (this.isInfinity()) {
 			throw new UnsupportedOperationException();
 		}
 		return this.getValue().getY();
 	}
 
 	@Override
-	protected BigInteger abstractGetBigInteger() {
-		if (this.isInfinity) {
-			return BigInteger.ZERO;
-		} else {
-			return MathUtil.pair(this.getX().getBigInteger(), this.getY().getBigInteger()).add(BigInteger.ONE);
-		}
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTree() {
-		return ByteTree.getInstance(this.getX().getByteTree(), this.getY().getByteTree());
-	}
-
-	@Override
 	public String defaultToStringValue() {
-		if (this.isInfinity) {
+		if (this.isInfinity()) {
 			return "Infinity";
 		} else {
 			return "(" + this.getX().getValue() + "," + this.getY().getValue() + ")";

@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import java.math.BigInteger;
 
 /**
  *
@@ -55,16 +53,6 @@ public class DiscreteSetElement<V extends Object>
 
 	protected DiscreteSetElement(DiscreteSet<V> set, V value) {
 		super(set, value);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigInteger() {
-		return BigInteger.valueOf(this.getSet().indexMap.get(this.getValue()));
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTree() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

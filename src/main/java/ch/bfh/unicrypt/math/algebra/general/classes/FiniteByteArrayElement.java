@@ -45,8 +45,6 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.helper.ByteArray;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
-import java.math.BigInteger;
 
 /**
  *
@@ -65,27 +63,6 @@ public class FiniteByteArrayElement
 
 	public ByteArrayElement getByteArrayElement() {
 		return ByteArrayMonoid.getInstance().getElement(this.getValue());
-	}
-
-	@Override
-	protected BigInteger abstractGetBigInteger() {
-		int length = this.getLength();
-		int minLength = this.getSet().getMinLength();
-		BigInteger value = BigInteger.ZERO;
-		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
-		for (int i = 0; i < length; i++) {
-			int intValue = this.getValue().getAt(i) & 0xFF;
-			if (i < length - minLength) {
-				intValue++;
-			}
-			value = value.multiply(size).add(BigInteger.valueOf(intValue));
-		}
-		return value;
-	}
-
-	@Override
-	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(this.getValue().getAll()));
 	}
 
 }

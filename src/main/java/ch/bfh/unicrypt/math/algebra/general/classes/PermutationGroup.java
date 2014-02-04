@@ -44,7 +44,10 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.Permutation;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -127,6 +130,27 @@ public class PermutationGroup
 			return null; // no such element
 		}
 		return this.abstractGetElement(new Permutation(ArrayUtil.bigIntegerToIntArray(values)));
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(Permutation value) {
+		// better with Lehmer codes
+		return MathUtil.pair(ArrayUtil.intToBigIntegerArray(value.getPermutationVector()));
+	}
+
+	@Override
+	protected PermutationElement abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(Permutation value) {
+		int size = value.getSize();
+		ByteTree[] byteTrees = new ByteTree[size];
+		for (int i = 0; i < size; i++) {
+			byteTrees[i] = ByteTreeLeaf.getInstance(ByteArray.getInstance(BigInteger.valueOf(value.permute(i)).toByteArray()));
+		}
+		return ByteTree.getInstance(byteTrees);
 	}
 
 	@Override

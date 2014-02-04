@@ -46,6 +46,9 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
+import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -161,6 +164,21 @@ public class ZStarMod
 			return null; // no such element
 		}
 		return new ZStarModElement(this, value);
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(BigInteger value) {
+		return value;
+	}
+
+	@Override
+	protected ZStarModElement abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(BigInteger value) {
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.toByteArray()));
 	}
 
 	@Override

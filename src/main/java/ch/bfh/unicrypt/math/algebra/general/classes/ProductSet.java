@@ -50,6 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
@@ -155,6 +156,29 @@ public class ProductSet
 	protected Tuple abstractGetElementFrom(BigInteger integerValue) {
 		BigInteger[] values = MathUtil.unpair(integerValue, this.getArity());
 		return this.getElementFrom(values);
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(ImmutableArray<Element> value) {
+		BigInteger[] integerValues = new BigInteger[this.getArity()];
+		for (int i = 0; i < this.getArity(); i++) {
+			integerValues[i] = value.getAt(i).getBigInteger();
+		}
+		return MathUtil.pair(integerValues);
+	}
+
+	@Override
+	protected Tuple abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(ImmutableArray<Element> value) {
+		ByteTree[] byteTrees = new ByteTree[this.getArity()];
+		for (int i = 0; i < this.getArity(); i++) {
+			byteTrees[i] = value.getAt(i).getByteTree();
+		}
+		return ByteTree.getInstance(byteTrees);
 	}
 
 	@Override

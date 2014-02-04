@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -91,6 +92,11 @@ public class Subset
 	}
 
 	@Override
+	protected Element abstractGetElement(Element value) {
+		return value;
+	}
+
+	@Override
 	protected Element abstractGetElementFrom(BigInteger bigInteger) {
 		for (Element element : this.hashSet) {
 			if (element.getValue().equals(bigInteger)) {
@@ -101,8 +107,18 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetElement(Element value) {
-		return value;
+	protected BigInteger abstractGetBigIntegerFrom(Element value) {
+		return this.superSet.getBigIntegerFrom(value);
+	}
+
+	@Override
+	protected Element abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(Element value) {
+		return this.superSet.getByteTreeFrom(value);
 	}
 
 	@Override

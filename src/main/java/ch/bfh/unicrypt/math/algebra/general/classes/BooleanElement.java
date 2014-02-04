@@ -42,9 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.helper.ByteArray;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
-import java.math.BigInteger;
 
 /**
  *
@@ -55,19 +52,6 @@ public class BooleanElement
 
 	protected BooleanElement(final BooleanSet set, final Boolean bit) {
 		super(set, bit);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigInteger() {
-		if (this.getValue()) {
-			return BigInteger.ONE;
-		}
-		return BigInteger.ZERO;
-	}
-
-	@Override
-	protected ByteTreeLeaf abstractGetByteTree() {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(this.getBigInteger().toByteArray()));
 	}
 
 }

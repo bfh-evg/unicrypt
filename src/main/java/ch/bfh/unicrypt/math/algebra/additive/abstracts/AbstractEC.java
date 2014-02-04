@@ -48,7 +48,9 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.Point;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
@@ -60,6 +62,7 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 	private final D a, b;
 	private final E givenGenerator;
 	private final BigInteger givenOrder, coFactor;
+	private final Point<D> infinityPoint = Point.<D>getInstance();
 
 	protected AbstractEC(F finiteField, D a, D b, D gx, D gy, BigInteger givenOrder, BigInteger coFactor) {
 		super(Point.class);
@@ -79,6 +82,10 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 		this.givenOrder = givenOrder;
 		this.coFactor = coFactor;
 		this.givenGenerator = this.computeGenerator();
+	}
+
+	public Point<D> getInfinityPoint() {
+		return this.infinityPoint;
 	}
 
 	@Override
@@ -152,6 +159,27 @@ public abstract class AbstractEC<E extends ECElement, F extends FiniteField, D e
 		}
 		// TODO: check if point is on the curve!!!
 		return this.abstractGetElement(Point.getInstance(xValue, yValue));
+	}
+
+	@Override
+	protected BigInteger abstractGetBigIntegerFrom(Point<D> value) {
+		if (value.equals(this.infinityPoint)) {
+			return BigInteger.ZERO;
+		}
+		return MathUtil.pair(value.getX().getBigInteger(), value.getY().getBigInteger()).add(BigInteger.ONE);
+	}
+
+	@Override
+	protected E abstractGetElementFrom(ByteTree bytTree) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected ByteTree abstractGetByteTreeFrom(Point<D> value) {
+		if (value.equals(this.infinityPoint)) {
+			return ByteTree.getInstance(ByteArray.getInstance());
+		}
+		return ByteTree.getInstance(value.getX().getByteTree(), value.getY().getByteTree());
 	}
 
 	@Override
