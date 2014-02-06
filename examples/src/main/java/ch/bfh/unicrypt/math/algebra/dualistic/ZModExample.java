@@ -39,49 +39,39 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.math.algebra.dualistic;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.helper.Alphabet;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PedersenCommitmentExample {
+public class ZModExample {
 
-	public static void example1() {
+	public static void main(final String[] args) {
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
+// Generate 3 atomic sets
+		Set s1 = Z.getInstance();
+		Set s2 = N.getInstance();
+		Set s3 = StringMonoid.getInstance(Alphabet.LOWER_CASE);
 
-		// Create commitment scheme to be used
-		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
+// Generate s1 x s2, (s1 x s2)^3 and (s1 x s2)^3 x s3
+		ProductSet s4 = ProductSet.getInstance(s1, s2);
+		ProductSet s5 = ProductSet.getInstance(s4, 3);
+		ProductSet s6 = s5.add(s3);
 
-		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
-		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
+// Select random tuple t1 = (e1,e2) from s4
+		Tuple t1 = s4.getRandomElement();
+// Generate tuple t2 = (-5,"hello") from s1 x s3
 
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message, randomization);
-
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
-
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
-	}
-
-	public static void main(String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+		Tuple t2 = Tuple.getInstance(s1.getElement(-5), s3.getElement("hello"));
 	}
 
 }

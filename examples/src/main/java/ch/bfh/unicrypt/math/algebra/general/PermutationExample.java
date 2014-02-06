@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,55 +32,35 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
+
 public class PermutationExample {
 
-  public static void main(final String[] args) {
+	public static void main(final String[] args) {
 
-    // PermutationGroup group0 = new PermutationGroupClass(0);
-    // PermutationElement p0 = group0.getIdentityElement();
-    // System.out.println(p0.getString());
-    // System.out.println();
-    //
-    // PermutationGroup group = new PermutationGroupClass(6);
-    // PermutationElement p1 = group.getIdentityElement();
-    // System.out.println(p1.getString());
-    // System.out.println(p1.invert().getString());
-    // System.out.println();
-    //
-    // PermutationElement p2 = group.createRandomElement();
-    // System.out.println(p2.getString());
-    // System.out.println(p2.invert().getString());
-    // System.out.println(p2.apply(p2.invert()).getString());
-    // System.out.println(p2.invert().apply(p2).invert().getString());
-    // System.out.println(p2.apply(p2).apply(p2).getString());
-    // System.out.println(p2.selfApply(3).getString());
-    // System.out.println();
-    //
-    // System.out.println(group.invert(p2).getString());
-    // System.out.println(group.apply(p2, p2.invert()).getString());
-    // System.out.println(group.apply(p2.invert(), p2).getString());
-    // System.out.println();
-    //
-    // PermutationElement p3 = group.createElement(3, 4, 0, 2, 5, 1);
-    // System.out.println(p3.getString());
-    // PermutationElement p4 = group.createElement(1, 5, 4, 2, 3, 0);
-    // System.out.println(p4.getString());
-    // System.out.println(p3.apply(p4).getString());
-    // System.out.println(group.apply(p3,p4).getString());
-    // System.out.println(p4.apply(p3).getString());
-    // System.out.println(group.apply(p4,p3).getString());
-    // System.out.println();
-    //
-    // System.out.println(group.getOrder());
-  }
+		PermutationGroup pg = PermutationGroup.getInstance(5);
+
+		// Compute order |pq| = 5! = 120
+		BigInteger order = pg.getOrder();
+
+		// Pick random permutation and invert it
+		Element p1 = pg.getRandomElement();
+		Element p2 = pg.invert(p1);
+
+		// Combine p1 and p2 into p12 = (0,1,2,3,4)
+		Element p12 = pg.apply(p1, p2);
+
+	}
 
 }

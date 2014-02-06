@@ -39,49 +39,39 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.math.function;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PedersenCommitmentExample {
+public class PermutationFunctionExample {
 
-	public static void example1() {
+	public static void main(final String[] args) {
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
+		// Generate random permutation of size 10
+		Group group = PermutationGroup.getInstance(10);
+		Element permutation = group.getRandomElement();
 
-		// Create commitment scheme to be used
-		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
+		// Define permutation function Z_23^10 -> Z_23^10
+		Group z23 = ZModPrime.getInstance(23);
+		PermutationFunction function = PermutationFunction.getInstance(z23, 10);
 
-		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
-		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
+		// Pick random domain element from Z_23^10 and permute it
+		Tuple tuple = ProductSet.getInstance(z23, 10).getRandomElement();
+		Tuple permutedTuple = function.apply(tuple, permutation);
 
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message, randomization);
-
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
-
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
-	}
-
-	public static void main(String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+		System.out.println(tuple);
+		System.out.println(permutedTuple);
+		System.out.println(permutation);
 	}
 
 }

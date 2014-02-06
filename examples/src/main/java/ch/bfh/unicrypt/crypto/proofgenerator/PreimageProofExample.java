@@ -39,49 +39,47 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.crypto.proofgenerator;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageProofGenerator;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PedersenCommitmentExample {
+public class PreimageProofExample {
 
-	public static void example1() {
+	public static void main(final String[] args) {
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
+		// Create cyclic group G_q (modulo 20 bits) and get default generator
+		CyclicGroup cyclicGroup = GStarModSafePrime.getRandomInstance(20);
+		Element generator = cyclicGroup.getDefaultGenerator();
 
-		// Create commitment scheme to be used
-		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
+		// Create ElGamal encryption scheme
+		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
 
-		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
-		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
+		// Generate keys
+		KeyPairGenerator kpg = elGamal.getKeyPairGenerator();
+		Element privateKey = kpg.generatePrivateKey();
+		Element publicKey = kpg.generatePublicKey(privateKey);
 
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message, randomization);
+		// Generate proof generator
+		Function function = kpg.getPublicKeyGenerationFunction();
+		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(function);
 
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
+		// Generate and verify proof
+		Triple proof = pg.generate(privateKey, publicKey);
+		Element result = pg.verify(proof, publicKey);
 
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
-	}
-
-	public static void main(String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+		System.out.println(proof);
+		System.out.println(result);
 	}
 
 }

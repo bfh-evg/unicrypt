@@ -39,49 +39,40 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.crypto.encoder;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.crypto.encoder.classes.CompositeEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.FiniteStringToZModEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToGStarModSafePrimeEncoder;
+import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.helper.Alphabet;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PedersenCommitmentExample {
+public class EncoderExample {
 
-	public static void example1() {
+	public static void main(String args[]) {
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
+		// Define underlying groups
+		GStarModSafePrime group = GStarModSafePrime.getRandomInstance(256);
+		ZMod zMod = group.getZModOrder();
 
-		// Create commitment scheme to be used
-		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
+		// Create encoders
+		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(zMod, Alphabet.BASE64);
+		Encoder encoder2 = ZModToGStarModSafePrimeEncoder.getInstance(group);
 
-		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
-		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
+		// Create composite encoder
+		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);
 
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message, randomization);
-
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
-
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
-	}
-
-	public static void main(String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+		// Encode and decode message
+		Element message = encoder12.getDomain().getElement("hello");
+		Element encodedMessage = encoder12.encode(message);
+		Element decodedMessage = encoder12.decode(encodedMessage);
 	}
 
 }

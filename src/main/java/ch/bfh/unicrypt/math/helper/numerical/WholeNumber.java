@@ -39,49 +39,50 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.math.helper.numerical;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PedersenCommitmentExample {
+public class WholeNumber
+	   extends Numerical<WholeNumber> {
 
-	public static void example1() {
-
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
-
-		// Create commitment scheme to be used
-		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
-
-		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
-		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
-
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message, randomization);
-
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
-
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
+	protected WholeNumber(BigInteger bigInteger) {
+		super(bigInteger);
 	}
 
-	public static void main(String[] args) {
+	@Override
+	protected boolean abstractIsCompatible(WholeNumber other) {
+		return true;
+	}
 
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+	@Override
+	protected WholeNumber abstractAdd(WholeNumber other) {
+		return new WholeNumber(this.bigInteger.add(other.bigInteger));
+	}
+
+	@Override
+	protected WholeNumber abstractMultiply(WholeNumber other) {
+		return new WholeNumber(this.bigInteger.multiply(other.bigInteger));
+	}
+
+	@Override
+	protected WholeNumber abstractPower(WholeNumber other) {
+		// this implementation is not correct for large exponents!
+		return new WholeNumber(this.bigInteger.pow(other.bigInteger.intValue()));
+	}
+
+	@Override
+	protected WholeNumber abstractSubtract(WholeNumber other) {
+		return new WholeNumber(this.bigInteger.subtract(other.bigInteger));
+	}
+
+	@Override
+	protected WholeNumber abstractMinus() {
+		return new WholeNumber(this.bigInteger.negate());
 	}
 
 }

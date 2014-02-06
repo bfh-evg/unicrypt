@@ -39,49 +39,31 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.math.algebra.concatenative;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.helper.Alphabet;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PedersenCommitmentExample {
+public class StringMonoidExample {
 
-	public static void example1() {
+	public static void main(final String[] args) {
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
+		Alphabet alphabet = Alphabet.getInstance("ADEHLORW-");
+		StringMonoid sm = StringMonoid.getInstance(alphabet);
 
-		// Create commitment scheme to be used
-		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
+		// Generate "HELLO-WORLD" from 3 strings
+		Element s1 = sm.getElement("HELLO");
+		Element s2 = sm.getElement("-");
+		Element s3 = sm.getElement("WORLD");
+		Element s123 = sm.concatenate(s1, s2, s3);
 
-		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
-		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
-
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message, randomization);
-
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
-
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
-	}
-
-	public static void main(String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+		// Generate random string of length 10
+		Element s = sm.getRandomElement(10);
 	}
 
 }

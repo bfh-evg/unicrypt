@@ -58,22 +58,25 @@ public class ProductSetExample {
 
 		Set s1 = Z.getInstance();
 		Set s2 = N.getInstance();
-		Set s3 = StringMonoid.getInstance(Alphabet.UNARY);
+		Set s3 = StringMonoid.getInstance(Alphabet.LOWER_CASE);
 
-		ProductSet s123 = ProductSet.getInstance(s1, s2, s3);
+		ProductSet s12 = ProductSet.getInstance(s1, s2);
+		System.out.println(s12);
+
+		ProductSet s123 = s12.add(s3);
 		System.out.println(s123);
 
 		ProductSet s123123 = s123.append(s123);
 		System.out.println(s123123);
 
-		ProductSet s111 = ProductSet.getInstance(s1, 3);
-		System.out.println(s111);
+		ProductSet s1212 = ProductSet.getInstance(s12, 2);
+		System.out.println(s1212);
 
 		ProductSet s22 = ProductSet.getInstance(s2, 2);
-		System.out.println(s111);
+		System.out.println(s22);
 
-		ProductSet s111_22 = ProductSet.getInstance(s111, s22);
-		System.out.println(s111_22);
+		ProductSet s12_22 = ProductSet.getInstance(s12, s22);
+		System.out.println(s12_22);
 	}
 
 	public static void main(final String[] args) {

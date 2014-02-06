@@ -2,7 +2,8 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) Error: on line 7, column 34 in file:///Users/rolfhaenni/GIT/unicrypt/examples/license-dualLicense.txt
+ The string doesn't match the expected date/time format. The string to parse was: "05-Feb-2014". The expected format was: "MMM d, yyyy". Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,49 +40,36 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.math.function;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.function.classes.HashFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PedersenCommitmentExample {
+public class HashFunctionExample {
 
-	public static void example1() {
+	public static void main(final String[] args) {
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
+		// Generate product group Z23^10 and random element
+		Group z23 = ZModPrime.getInstance(23);
+		ProductGroup pg = ProductGroup.getInstance(z23, 10);
+		Tuple tuple = pg.getRandomElement();
 
-		// Create commitment scheme to be used
-		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
+		// Define hash function Z23^10 -> {0,1}^256 (default SHA256)
+		Function function = HashFunction.getInstance(pg);
 
-		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
-		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
+		// Apply hash function to tuple (return finite byte array)
+		Element hashValue = function.apply(tuple);
 
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message, randomization);
-
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
-
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
-	}
-
-	public static void main(String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+		System.out.println(hashValue);
 	}
 
 }

@@ -129,7 +129,8 @@ public class Permutation
 
 	@Override
 	public String defaultToStringValue() {
-		return "" + this.getSize();
+		String str = Arrays.toString(this.permutationVector);
+		return "" + str.substring(1, str.length() - 1);
 	}
 
 	@Override

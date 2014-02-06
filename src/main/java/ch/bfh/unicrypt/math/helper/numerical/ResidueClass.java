@@ -39,49 +39,56 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.math.helper.numerical;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PedersenCommitmentExample {
+public class ResidueClass
+	   extends Numerical<ResidueClass> {
 
-	public static void example1() {
+	private BigInteger modulus;
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
-
-		// Create commitment scheme to be used
-		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
-
-		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
-		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
-
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message, randomization);
-
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
-
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
+	protected ResidueClass(BigInteger bigInteger, BigInteger modulus) {
+		super(bigInteger);
+		this.modulus = modulus;
 	}
 
-	public static void main(String[] args) {
+	public BigInteger getModulus() {
+		return this.modulus;
+	}
 
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+	@Override
+	protected boolean abstractIsCompatible(ResidueClass other) {
+		return this.modulus.equals(other.modulus);
+	}
+
+	@Override
+	protected ResidueClass abstractAdd(ResidueClass other) {
+		return new ResidueClass(this.bigInteger.add(other.bigInteger).mod(this.modulus), this.modulus);
+	}
+
+	@Override
+	protected ResidueClass abstractMultiply(ResidueClass other) {
+		return new ResidueClass(this.bigInteger.multiply(other.bigInteger).mod(this.modulus), this.modulus);
+	}
+
+	@Override
+	protected ResidueClass abstractPower(ResidueClass other) {
+		return new ResidueClass(this.bigInteger.modPow(other.bigInteger, this.modulus), this.modulus);
+	}
+
+	@Override
+	protected ResidueClass abstractSubtract(ResidueClass other) {
+		return new ResidueClass(this.bigInteger.subtract(other.bigInteger).mod(this.modulus), this.modulus);
+	}
+
+	@Override
+	protected ResidueClass abstractMinus() {
+		return new ResidueClass(this.modulus.subtract(this.bigInteger), this.modulus);
 	}
 
 }

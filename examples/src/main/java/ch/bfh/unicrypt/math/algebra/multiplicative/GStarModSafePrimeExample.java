@@ -39,49 +39,39 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.commitment;
+package ch.bfh.unicrypt.math.algebra.multiplicative;
 
-import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PedersenCommitmentExample {
+public class GStarModSafePrimeExample {
 
-	public static void example1() {
+	public static void main(final String[] args) {
 
-		// Create cyclic group G_q (modulo 167) and wth generator=98
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
+		MultiplicativeCyclicGroup g11 = GStarModSafePrime.getInstance(23);
 
-		// Create commitment scheme to be used
-		PedersenCommitmentScheme commitmentScheme = PedersenCommitmentScheme.getInstance(cyclicGroup);
+		// Compute order (23-1)/2 = 11
+		BigInteger order = g11.getOrder();
 
-		// Create message and randomization to commit
-		Element message = commitmentScheme.getMessageSpace().getElement(42);
-		Element randomization = commitmentScheme.getRandomizationSpace().getRandomElement();
+		// Multiply two group elements: 3*9 mod 23 = 4
+		Element e1 = g11.getElement(3);
+		Element e2 = g11.getElement(9);
+		Element e12 = g11.multiply(e1, e2);
 
-		// Create commitment
-		Element commitment = commitmentScheme.commit(message, randomization);
+		// Select and apply default generator
+		Element generator = g11.getDefaultGenerator();
+		Element result = g11.power(generator, 5);
 
-		// Decommit
-		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
+		for (Element element : (GStarModSafePrime) g11) {
+			System.out.println(element);
+		}
 
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
-	}
-
-	public static void main(String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
 	}
 
 }
