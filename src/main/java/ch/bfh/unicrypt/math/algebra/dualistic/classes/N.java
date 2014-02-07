@@ -67,11 +67,23 @@ public class N
 	   extends AbstractSemiRing<NElement, NaturalNumber> {
 
 	public N() {
-		super(BigInteger.class);
+		super(NaturalNumber.class);
 	}
 
-	public final NElement getElement(BigInteger bigInteger) {
-		return this.getElement(NaturalNumber.getInstance(bigInteger));
+	public final boolean contains(BigInteger integerValue) {
+		return this.contains(NaturalNumber.getInstance(integerValue));
+	}
+
+	public final boolean contains(int integerValue) {
+		return this.contains(NaturalNumber.getInstance(integerValue));
+	}
+
+	public final NElement getElement(int integerValue) {
+		return this.getElement(NaturalNumber.getInstance(integerValue));
+	}
+
+	public final NElement getElement(BigInteger integerValue) {
+		return this.getElement(NaturalNumber.getInstance(integerValue));
 	}
 
 	//

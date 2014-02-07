@@ -79,9 +79,12 @@ public class PreimageEqualityProofGeneratorTest {
 	@Test
 	public void testPreimageEqualityProof() {
 
+		GStarMod G_q = this.G_q1;
+		ZMod Z_q = this.G_q1.getZModOrder();
+
 		// Proof generator
-		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		Function f2 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
+		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
@@ -91,10 +94,10 @@ public class PreimageEqualityProofGeneratorTest {
 		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
 
 		// Valid proof
-		Element privateInput = f1.getDomain().getElement(3);
+		Element privateInput = Z_q.getElement(3);
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(64),
-			   f2.getCoDomain().getElement(8));
+			   G_q.getElement(64),
+			   G_q.getElement(8));
 
 		Triple proof = pg.generate(privateInput, publicInput);
 
@@ -102,10 +105,10 @@ public class PreimageEqualityProofGeneratorTest {
 		assertTrue(v.getValue());
 
 		// Invalid proof -> preimages are not equal
-		privateInput = f1.getDomain().getElement(3);
+		privateInput = Z_q.getElement(3);
 		publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(64), // Preimage = 3
-			   f2.getCoDomain().getElement(16));    // Preimage = 4
+			   G_q.getElement(64), // Preimage = 3
+			   G_q.getElement(16));    // Preimage = 4
 		proof = pg.generate(privateInput, publicInput);
 		v = pg.verify(proof, publicInput);
 		assertTrue(!v.getValue());
@@ -115,9 +118,12 @@ public class PreimageEqualityProofGeneratorTest {
 	@Test
 	public void testPreimageEqualityProof_Invalid() {
 
+		GStarMod G_q = this.G_q2;
+		ZMod Z_q = this.G_q2.getZModOrder();
+
 		// Proof generator
-		Function f1 = GeneratorFunction.getInstance(this.G_q2.getElement(4));
-		Function f2 = GeneratorFunction.getInstance(this.G_q2.getElement(2));
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
+		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
@@ -127,10 +133,10 @@ public class PreimageEqualityProofGeneratorTest {
 		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
 
 		// Invalid proof -> preimages are not equal
-		Element privateInput = f1.getDomain().getElement(3);
+		Element privateInput = Z_q.getElement(3);
 		Tuple publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(64), // Preimage = 3
-			   f2.getCoDomain().getElement(16));    // Preimage = 4
+			   G_q.getElement(64), // Preimage = 3
+			   G_q.getElement(16));    // Preimage = 4
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(!v.getValue());

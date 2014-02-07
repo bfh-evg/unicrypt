@@ -52,8 +52,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
@@ -67,8 +67,8 @@ public class PreimageOrProofGeneratorTest {
 
 	final static int P = 167;
 	final static int P2 = 23;
-	final private MultiplicativeCyclicGroup G_q;
-	final private MultiplicativeCyclicGroup G_q2;
+	final private GStarMod G_q;
+	final private GStarMod G_q2;
 	final private ZModPrime Z_q;
 	final private StringElement proverId;
 

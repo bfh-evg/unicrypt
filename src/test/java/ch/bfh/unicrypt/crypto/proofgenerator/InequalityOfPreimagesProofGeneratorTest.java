@@ -48,8 +48,8 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -62,8 +62,8 @@ public class InequalityOfPreimagesProofGeneratorTest {
 
 	final static int P = 167;
 	final static String P2 = "88059184022561109274134540595138392753102891002065208740257707896840303297223";
-	final private CyclicGroup G_q1;
-	final private CyclicGroup G_q2;
+	final private GStarMod G_q1;
+	final private GStarMod G_q2;
 	final private StringElement proverId;
 
 	public InequalityOfPreimagesProofGeneratorTest() {
@@ -75,7 +75,7 @@ public class InequalityOfPreimagesProofGeneratorTest {
 	@Test
 	public void testInequlityProof2() {
 
-		CyclicGroup G_q = this.G_q2;
+		GStarMod G_q = this.G_q2;
 		ZMod Z_q = G_q.getZModOrder();
 		Element g = G_q.getElement(4);
 		Element h = G_q.getElement(8);

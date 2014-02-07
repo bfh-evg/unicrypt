@@ -143,9 +143,8 @@ public interface MultiplicativeSemiGroup
 	@Override
 	public MultiplicativeElement getRandomElement();
 
-	@Override
-	public MultiplicativeElement getElement(int value);
-
+//	@Override
+//	public MultiplicativeElement getElement(int value);
 	@Override
 	public MultiplicativeElement getRandomElement(RandomByteSequence randomByteSequence);
 

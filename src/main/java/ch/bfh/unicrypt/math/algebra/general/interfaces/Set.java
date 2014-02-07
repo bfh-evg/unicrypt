@@ -248,22 +248,13 @@ public interface Set {
 	 */
 	public Element getElement(Object value);
 
-	/**
-	 * TODO: Convenience method
-	 * <p>
-	 * @param integerValue
-	 * @return
-	 */
-	public boolean contains(int integerValue);
-
-	/**
-	 * TODO: Convenience method
-	 * <p>
-	 * @param integerValue
-	 * @return
-	 */
-	public Element getElement(int integerValue);
-
+//	/**
+//	 * TODO: Convenience method
+//	 * <p>
+//	 * @param integerValue
+//	 * @return
+//	 */
+//	public Element getElement(int integerValue);
 	/**
 	 * Creates and returns the element that corresponds to a given integer (if one exists). Returns {@literal null}
 	 * otherwise.

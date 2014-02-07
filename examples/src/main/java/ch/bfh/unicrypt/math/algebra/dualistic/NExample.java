@@ -41,36 +41,25 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.helper.Alphabet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ZModExample {
+public class NExample {
 
 	public static void main(final String[] args) {
 
-// Generate 3 atomic sets
-		Z s1 = Z.getInstance();
-		N s2 = N.getInstance();
-		StringMonoid s3 = StringMonoid.getInstance(Alphabet.LOWER_CASE);
+		N naturalNumbers = N.getInstance();
+		Element n0 = naturalNumbers.getZeroElement();
+		Element n1 = naturalNumbers.getElement(5);
+		Element n2 = naturalNumbers.getElement(10);
 
-// Generate s1 x s2, (s1 x s2)^3 and (s1 x s2)^3 x s3
-		ProductSet s4 = ProductSet.getInstance(s1, s2);
-		ProductSet s5 = ProductSet.getInstance(s4, 3);
-		ProductSet s6 = s5.add(s3);
+		Element sum = naturalNumbers.add(n0, n1, n2);
 
-// Select random tuple t1 = (e1,e2) from s4
-		Tuple t1 = s4.getRandomElement();
-// Generate tuple t2 = (-5,"hello") from s1 x s3
-
-		Tuple t2 = Tuple.getInstance(s1.getElement(-5), s3.getElement("hello"));
+		System.out.println(sum);
 	}
 
 }

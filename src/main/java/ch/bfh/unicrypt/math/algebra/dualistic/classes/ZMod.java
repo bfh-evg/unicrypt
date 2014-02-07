@@ -83,6 +83,14 @@ public class ZMod
 		return this.modulus;
 	}
 
+	public final boolean contains(int integerValue) {
+		return this.contains(BigInteger.valueOf(integerValue));
+	}
+
+	public final ZModElement getElement(int integerValue) {
+		return this.getElement(BigInteger.valueOf(integerValue));
+	}
+
 	//
 	// The following protected methods override the default implementation from
 	// various super-classes

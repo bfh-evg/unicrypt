@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.Sigma
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageAndProofGenerator;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -78,6 +79,7 @@ public class PreimageAndProofGeneratorTest {
 	public void testPreimageAndProof() {
 
 		GStarMod G_q = this.G_q1;
+		ZMod Z_q = this.G_q1.getZModOrder();
 
 		// Proof generator
 		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
@@ -89,11 +91,11 @@ public class PreimageAndProofGeneratorTest {
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
-			   f1.getDomain().getElement(3),
-			   f2.getDomain().getElement(4));
+			   Z_q.getZModOrder().getElement(3),
+			   Z_q.getElement(4));
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(64),
-			   f2.getCoDomain().getElement(16));
+			   G_q.getElement(64),
+			   G_q.getElement(16));
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -105,6 +107,7 @@ public class PreimageAndProofGeneratorTest {
 	public void testPreimageAndProof_Invalid() {
 
 		GStarMod G_q = this.G_q2;
+		ZMod Z_q = this.G_q2.getZModOrder();
 
 		// Proof generator
 		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
@@ -116,11 +119,11 @@ public class PreimageAndProofGeneratorTest {
 
 		// Invalid proof -> One preimages is wrong
 		Element privateInput = Tuple.getInstance(
-			   f1.getDomain().getElement(3),
-			   f2.getDomain().getElement(4));
+			   Z_q.getElement(3),
+			   Z_q.getElement(4));
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(64),
-			   f2.getCoDomain().getElement(32));    // Preimage = 5
+			   G_q.getElement(64),
+			   G_q.getElement(32));    // Preimage = 5
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(!v.getValue());
@@ -130,21 +133,24 @@ public class PreimageAndProofGeneratorTest {
 	@Test
 	public void testPreimageAndProof_WithArity() {
 
+		GStarMod G_q = this.G_q2;
+		ZMod Z_q = this.G_q2.getZModOrder();
+
 		// Proof generator
-		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, 3);
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, 3);
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
-			   f1.getDomain().getElement(2),
-			   f1.getDomain().getElement(3),
-			   f1.getDomain().getElement(4));
+			   Z_q.getElement(2),
+			   Z_q.getElement(3),
+			   Z_q.getElement(4));
 		Element publicInput = Tuple.getInstance(
-			   f1.getCoDomain().getElement(4),
-			   f1.getCoDomain().getElement(8),
-			   f1.getCoDomain().getElement(16));
+			   G_q.getElement(4),
+			   G_q.getElement(8),
+			   G_q.getElement(16));
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -154,14 +160,17 @@ public class PreimageAndProofGeneratorTest {
 	@Test
 	public void testPreimageAndProof_SingleFunction() {
 
+		GStarMod G_q = this.G_q2;
+		ZMod Z_q = this.G_q2.getZModOrder();
+
 		// Proof generator
-		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1);
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofGenerator pg = PreimageAndProofGenerator.getInstance(scg, f1, 1);
 
-		Element privateInput = Tuple.getInstance(f1.getDomain().getElement(2));
-		Element publicInput = Tuple.getInstance(f1.getCoDomain().getElement(4));
+		Element privateInput = Tuple.getInstance(Z_q.getElement(2));
+		Element publicInput = Tuple.getInstance(G_q.getElement(4));
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);

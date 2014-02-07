@@ -71,9 +71,8 @@ public interface SemiRing
 	@Override
 	public DualisticElement getRandomElement();
 
-	@Override
-	public DualisticElement getElement(int value);
-
+//	@Override
+//	public DualisticElement getElement(int value);
 	@Override
 	public DualisticElement getRandomElement(RandomByteSequence randomByteSequence);
 

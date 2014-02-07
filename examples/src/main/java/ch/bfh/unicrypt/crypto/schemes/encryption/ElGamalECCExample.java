@@ -41,72 +41,59 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption;
 
-import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrimeElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.params.classes.SECECCParamsFp;
-
 public class ElGamalECCExample {
 
-	public static void main(final String[] args) {
-
-		// Example Elgamal over ECFp
-		final StandardECZModPrime g_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1); //Possible curves secp{112,160,192,224,256,384,521}r1
-		final ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(g_q);
-		final KeyPairGenerator keyGen = elGamal.getKeyPairGenerator();
-
-		ProbabilisticECGroupFpEncoder enc = ProbabilisticECGroupFpEncoder.getInstance(g_q);
-
-		// Generate private key
-		final Element privateKey = keyGen.generatePrivateKey();
-		System.out.println("Private Key: " + privateKey);
-
-		//Generate pubilc key
-		long time = System.currentTimeMillis();
-		Element publigKey = keyGen.generatePublicKey(privateKey);
-		time = System.currentTimeMillis() - time;
-		System.out.println("Public Key: " + publigKey);
-		System.out.println("Time for public key: " + time + " ms");
-
-		//encoding
-		FiniteField f = g_q.getFiniteField();
-		DualisticElement m = f.getElement(123456789);
-		time = System.currentTimeMillis();
-		ECZModPrimeElement message = enc.encode(m);
-		time = System.currentTimeMillis() - time;
-		System.out.println("Message: " + m);
-		System.out.println("Message encoded: " + message);
-		System.out.println("Time for encoding: " + time + " ms");
-
-		//Encrypt message
-		time = System.currentTimeMillis();
-		final Tuple cipherText = elGamal.encrypt(publigKey, message);
-		time = System.currentTimeMillis() - time;
-		System.out.println("Cipher Text: " + cipherText);
-		System.out.println("Time for encryption: " + time + " ms");
-
-		//decrypt message
-		time = System.currentTimeMillis();
-		Element newMessage = elGamal.decrypt(privateKey, cipherText);
-		time = System.currentTimeMillis() - time;
-		System.out.println("New Message: " + newMessage);
-		System.out.println("Message == New Message: " + message.isEquivalent(newMessage));
-		System.out.println("Time for decryption: " + time + " ms");
-
-		//decode message
-		time = System.currentTimeMillis();
-		ZModElement plain = enc.decode(newMessage);
-		time = System.currentTimeMillis() - time;
-		System.out.println("Message decoded: " + plain);
-		System.out.println("Time for decoding: " + time + " ms");
-
-	}
-
+//	public static void main(final String[] args) {
+//
+//		// Example Elgamal over ECFp
+//		final StandardECZModPrime g_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1); //Possible curves secp{112,160,192,224,256,384,521}r1
+//		final ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(g_q);
+//		final KeyPairGenerator keyGen = elGamal.getKeyPairGenerator();
+//
+//		ProbabilisticECGroupFpEncoder enc = ProbabilisticECGroupFpEncoder.getInstance(g_q);
+//
+//		// Generate private key
+//		final Element privateKey = keyGen.generatePrivateKey();
+//		System.out.println("Private Key: " + privateKey);
+//
+//		//Generate pubilc key
+//		long time = System.currentTimeMillis();
+//		Element publigKey = keyGen.generatePublicKey(privateKey);
+//		time = System.currentTimeMillis() - time;
+//		System.out.println("Public Key: " + publigKey);
+//		System.out.println("Time for public key: " + time + " ms");
+//
+//		//encoding
+//		FiniteField f = g_q.getFiniteField();
+//		DualisticElement m = f.getElement(123456789);
+//		time = System.currentTimeMillis();
+//		ECZModPrimeElement message = enc.encode(m);
+//		time = System.currentTimeMillis() - time;
+//		System.out.println("Message: " + m);
+//		System.out.println("Message encoded: " + message);
+//		System.out.println("Time for encoding: " + time + " ms");
+//
+//		//Encrypt message
+//		time = System.currentTimeMillis();
+//		final Tuple cipherText = elGamal.encrypt(publigKey, message);
+//		time = System.currentTimeMillis() - time;
+//		System.out.println("Cipher Text: " + cipherText);
+//		System.out.println("Time for encryption: " + time + " ms");
+//
+//		//decrypt message
+//		time = System.currentTimeMillis();
+//		Element newMessage = elGamal.decrypt(privateKey, cipherText);
+//		time = System.currentTimeMillis() - time;
+//		System.out.println("New Message: " + newMessage);
+//		System.out.println("Message == New Message: " + message.isEquivalent(newMessage));
+//		System.out.println("Time for decryption: " + time + " ms");
+//
+//		//decode message
+//		time = System.currentTimeMillis();
+//		ZModElement plain = enc.decode(newMessage);
+//		time = System.currentTimeMillis() - time;
+//		System.out.println("Message decoded: " + plain);
+//		System.out.println("Time for decoding: " + time + " ms");
+//
+//	}
 }

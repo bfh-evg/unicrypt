@@ -140,9 +140,8 @@ public interface AdditiveSemiGroup
 	@Override
 	public AdditiveElement getElementFrom(Element element);
 
-	@Override
-	public AdditiveElement getElement(int value);
-
+//	@Override
+//	public AdditiveElement getElement(int value);
 	@Override
 	public AdditiveElement getRandomElement();
 

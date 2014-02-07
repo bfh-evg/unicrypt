@@ -230,16 +230,10 @@ public abstract class AbstractSet<E extends Element, V extends Object>
 		return this.abstractGetElement((V) value);
 	}
 
-	@Override
-	public final boolean contains(final int integerValue) {
-		return this.contains(BigInteger.valueOf(integerValue));
-	}
-
-	@Override
-	public final E getElement(int integerValue) {
-		return this.getElement(BigInteger.valueOf(integerValue));
-	}
-
+//	@Override
+//	public final E getElement(int integerValue) {
+//		return this.getElement(BigInteger.valueOf(integerValue));
+//	}
 	@Override
 	public final boolean contains(final Element element) {
 		if (element == null) {

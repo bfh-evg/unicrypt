@@ -59,7 +59,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -80,7 +79,7 @@ public class ShuffleProofGeneratorTest {
 	@Test
 	public void testShuffleProofGenerator() {
 
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
+		final GStarMod G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
@@ -126,7 +125,7 @@ public class ShuffleProofGeneratorTest {
 	@Test
 	public void testShuffleProofGenerator2() {
 
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
+		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
@@ -171,7 +170,7 @@ public class ShuffleProofGeneratorTest {
 	@Test
 	public void testShuffleProofGenerator_Invalid() {
 
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
+		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.getInstance();
 		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
@@ -235,7 +234,7 @@ public class ShuffleProofGeneratorTest {
 	@Test
 	public void testProofOfShuffle_COMPLETE() {
 
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
+		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();

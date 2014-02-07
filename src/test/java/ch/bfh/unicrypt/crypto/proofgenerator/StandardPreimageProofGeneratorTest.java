@@ -87,8 +87,8 @@ public class StandardPreimageProofGeneratorTest {
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
 		// Valid proof
-		Element privateInput = f.getDomain().getElement(3);
-		Element publicInput = f.getCoDomain().getElement(64);
+		Element privateInput = this.G_q1.getZModOrder().getElement(3);
+		Element publicInput = this.G_q1.getElement(64);
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -106,8 +106,8 @@ public class StandardPreimageProofGeneratorTest {
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
 		// Invalid proof -> wrong private value
-		Element privateInput = f.getDomain().getElement(4);
-		Element publicInput = f.getCoDomain().getElement(64);
+		Element privateInput = this.G_q2.getZModOrder().getElement(4);
+		Element publicInput = this.G_q2.getElement(64);
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);
@@ -123,8 +123,8 @@ public class StandardPreimageProofGeneratorTest {
 		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
 
 		// Valid proof
-		Element privateInput = f.getDomain().getElement(3);
-		Element publicInput = f.getCoDomain().getElement(64);
+		Element privateInput = this.G_q1.getZModOrder().getElement(3);
+		Element publicInput = this.G_q1.getElement(64);
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		BooleanElement v = pg.verify(proof, publicInput);

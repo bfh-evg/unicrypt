@@ -120,6 +120,14 @@ public class ZStarMod
 		return this.moduloFactorization;
 	}
 
+	public final boolean contains(int integerValue) {
+		return this.contains(BigInteger.valueOf(integerValue));
+	}
+
+	public final ZStarModElement getElement(int integerValue) {
+		return this.getElement(BigInteger.valueOf(integerValue));
+	}
+
 	//
 	// The following protected methods override the default implementation from
 	// various super-classes

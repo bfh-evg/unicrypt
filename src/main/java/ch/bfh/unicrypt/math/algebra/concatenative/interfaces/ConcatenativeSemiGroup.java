@@ -153,9 +153,8 @@ public interface ConcatenativeSemiGroup
 	@Override
 	public ConcatenativeElement getRandomElement();
 
-	@Override
-	public ConcatenativeElement getElement(int value);
-
+//	@Override
+//	public ConcatenativeElement getElement(int value);
 	@Override
 	public ConcatenativeElement getRandomElement(RandomByteSequence randomByteSequence);
 

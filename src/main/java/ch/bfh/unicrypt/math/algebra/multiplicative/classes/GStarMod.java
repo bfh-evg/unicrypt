@@ -125,6 +125,14 @@ public class GStarMod
 		return this.superGroup;
 	}
 
+	public final boolean contains(int integerValue) {
+		return this.contains(BigInteger.valueOf(integerValue));
+	}
+
+	public final GStarModElement getElement(int integerValue) {
+		return this.getElement(BigInteger.valueOf(integerValue));
+	}
+
 	/**
 	 * Returns the quotient k=phi(n)/m of the orders of the two involved groups.
 	 * <p>
