@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.interfaces.SecretKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.SymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -54,9 +54,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  * @param <ES>
  * @param <EE>
  * @param <KS>
+ * @param <KE>
  * @param <KG>
  */
-public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, KS extends Set, KG extends KeyGenerator>
+public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, KS extends Set, KE extends Element, KG extends SecretKeyGenerator>
 	   extends AbstractEncryptionScheme<MS, ME, ES, EE>
 	   implements SymmetricEncryptionScheme {
 
@@ -72,12 +73,17 @@ public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME exten
 
 	@Override
 	public final KS getEncryptionKeySpace() {
-		return (KS) this.getKeyGenerator().getKeySpace();
+		return (KS) this.getKeyGenerator().getSecretKeySpace();
 	}
 
 	@Override
 	public final KS getDecryptionKeySpace() {
-		return (KS) this.getKeyGenerator().getKeySpace();
+		return (KS) this.getKeyGenerator().getSecretKeySpace();
+	}
+
+	@Override
+	public final KE generateKey() {
+		return (KE) this.getKeyGenerator().generateSecretKey();
 	}
 
 	protected abstract KG abstractGetKeyGenerator();

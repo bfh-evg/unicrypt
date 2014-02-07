@@ -42,55 +42,14 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.classes.RandomFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 
-public abstract class AbstractKeyGenerator<KS extends Set, KE extends Element>
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class AbstractKeyGenerator
 	   extends UniCrypt
 	   implements KeyGenerator {
-
-	private final KS keySpace;
-	private Function keyGenerationFunction; // with singleton domain
-
-	protected AbstractKeyGenerator(final KS keySpace) {
-		this.keySpace = keySpace;
-	}
-
-	@Override
-	public final KS getKeySpace() {
-		return this.keySpace;
-	}
-
-	@Override
-	public KE generateKey() {
-		return this.generateKey((RandomByteSequence) null);
-	}
-
-	@Override
-	public KE generateKey(RandomByteSequence randomByteSequence) {
-		return (KE) this.getKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
-	}
-
-	@Override
-	public Function getKeyGenerationFunction() {
-		if (this.keyGenerationFunction == null) {
-			this.keyGenerationFunction = this.defaultGetKeyGenerationFunction();
-		}
-		return this.keyGenerationFunction;
-	}
-
-	protected Function defaultGetKeyGenerationFunction() {
-		return RandomFunction.getInstance(this.getKeySpace());
-	}
-
-	@Override
-	protected String defaultToStringValue() {
-		return this.getKeySpace().toString();
-	}
 
 }

@@ -58,7 +58,7 @@ import ch.bfh.unicrypt.math.helper.ByteArray;
  * @author rolfhaenni
  */
 public class OneTimePadEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FixedByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, FixedByteArrayKeyGenerator> {
 
 	private final FiniteByteArraySet finiteByteArraySet;
 	private final FixedByteArraySet fixedByteArraySet;

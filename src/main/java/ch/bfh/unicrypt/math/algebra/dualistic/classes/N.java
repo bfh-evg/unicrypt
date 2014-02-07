@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.math.helper.numerical.NaturalNumber;
 import java.math.BigInteger;
 
 /**
@@ -63,10 +64,14 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class N
-	   extends AbstractSemiRing<NElement, BigInteger> {
+	   extends AbstractSemiRing<NElement, NaturalNumber> {
 
 	public N() {
 		super(BigInteger.class);
+	}
+
+	public final NElement getElement(BigInteger bigInteger) {
+		return this.getElement(NaturalNumber.getInstance(bigInteger));
 	}
 
 	//
@@ -75,7 +80,7 @@ public class N
 	//
 	@Override
 	protected NElement defaultSelfApply(NElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(amount));
+		return this.abstractGetElement(element.getValue().multiply(NaturalNumber.getInstance(amount)));
 	}
 
 	//
@@ -89,7 +94,7 @@ public class N
 
 	@Override
 	protected NElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElement(NaturalNumber.ZERO);
 	}
 
 	@Override
@@ -99,7 +104,7 @@ public class N
 
 	@Override
 	protected NElement abstractGetOne() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(NaturalNumber.ONE);
 	}
 
 	@Override
@@ -108,23 +113,23 @@ public class N
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return value.signum() >= 0;
+	protected boolean abstractContains(NaturalNumber value) {
+		return true;
 	}
 
 	@Override
-	protected NElement abstractGetElement(BigInteger value) {
+	protected NElement abstractGetElement(NaturalNumber value) {
 		return new NElement(this, value);
 	}
 
 	@Override
 	protected NElement abstractGetElementFrom(BigInteger value) {
-		return new NElement(this, value);
+		return new NElement(this, NaturalNumber.getInstance(value));
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(BigInteger value) {
-		return value;
+	protected BigInteger abstractGetBigIntegerFrom(NaturalNumber value) {
+		return value.getBigInteger();
 	}
 
 	@Override
@@ -133,8 +138,8 @@ public class N
 	}
 
 	@Override
-	protected ByteTree abstractGetByteTreeFrom(BigInteger value) {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.toByteArray()));
+	protected ByteTree abstractGetByteTreeFrom(NaturalNumber value) {
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.getBigInteger().toByteArray()));
 	}
 
 	@Override

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractSecretKeyGenerator;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
  * @author reto
  */
 public class PasswordBasedKeyGenerator
-	   extends AbstractKeyGenerator<ZMod, ZModElement> {
+	   extends AbstractSecretKeyGenerator<ZMod, ZModElement> {
 
 	//TODO: Implement
 	public PasswordBasedKeyGenerator(ZMod keySpace) {
@@ -59,12 +59,12 @@ public class PasswordBasedKeyGenerator
 	}
 
 	@Override
-	public ZModElement generateKey(RandomByteSequence randomByteSequence) {
+	public ZModElement generateSecretKey(RandomByteSequence randomByteSequence) {
 		return null;
 	}
 
 	@Override
-	public ZModElement generateKey() {
+	public ZModElement generateSecretKey() {
 		return null;
 	}
 
@@ -114,11 +114,11 @@ public class PasswordBasedKeyGenerator
 //    this.keyGenerationFunction = new KeyGenerationFunction(iterationAmount);
 //  }
 //
-//  public Element generateKey(String password) {
-//    return this.generateKey(password, new byte[]{});
+//  public Element generateSecretKey(String password) {
+//    return this.generateSecretKey(password, new byte[]{});
 //  }
 //
-//  public Element generateKey(String password, byte[] salt) {
+//  public Element generateSecretKey(String password, byte[] salt) {
 //    ExternalDataMapper mapper = new ExternalDataMapperClass();
 //    Element passwordElement = mapper.getEncodedElement(password);
 //    Element saltElement = mapper.getEncodedElement(salt);
@@ -132,7 +132,7 @@ public class PasswordBasedKeyGenerator
 //    private final int iterationAmount;
 //
 //    public KeyGenerationFunction(int iterationAmount) {
-//      super(new ProductGroup(ZPlus.Factory.getInstance(), ZPlus.Factory.getInstance()), PasswordBasedKeyGenerator.this.getKeySpace());
+//      super(new ProductGroup(ZPlus.Factory.getInstance(), ZPlus.Factory.getInstance()), PasswordBasedKeyGenerator.this.getSecretKeySpace());
 //      if (iterationAmount <= 0) {
 //        throw new IllegalArgumentException();
 //      }
@@ -149,7 +149,7 @@ public class PasswordBasedKeyGenerator
 //      Key key = null;
 //      try {
 //        int keySizeInBits = ((int) Math.ceil((this.getCoDomain().getZModOrder().getModulus().bitLength() + 1) / 8)) * 8;
-//        key = AESUtil.generateKey(password, salt, this.iterationAmount, keySizeInBits);
+//        key = AESUtil.generateSecretKey(password, salt, this.iterationAmount, keySizeInBits);
 //      } catch (Exception e) {
 //        throw new IllegalArgumentException();
 //      }
@@ -178,7 +178,7 @@ public class PasswordBasedKeyGenerator
 //  // * @return the cryptographic (secret)key
 //  // * @throws Exception
 //  // */
-//  // protected static Key generateKey(char[] password,byte[] salt, int
+//  // protected static Key generateSecretKey(char[] password,byte[] salt, int
 //  // iterationCount,int keyLength) throws Exception {
 //  // SecretKeyFactory factory = SecretKeyFactory
 //  // .getInstance("PBKDF2WithHmacSHA1");

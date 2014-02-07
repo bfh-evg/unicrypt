@@ -64,7 +64,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FixedByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, FixedByteArrayKeyGenerator> {
 
 	public enum KeyLength {
 
@@ -156,7 +156,7 @@ public class AESEncryptionScheme
 		} else {
 			messageSpace = ByteArrayMonoid.getInstance();
 		}
-		return new AESEncryptionFunction(messageSpace, this.getKeyGenerator().getKeySpace());
+		return new AESEncryptionFunction(messageSpace, this.getKeyGenerator().getSecretKeySpace());
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public class AESEncryptionScheme
 		} else {
 			messageSpace = ByteArrayMonoid.getInstance();
 		}
-		return new AESDecryptionFunction(messageSpace, this.getKeyGenerator().getKeySpace());
+		return new AESDecryptionFunction(messageSpace, this.getKeyGenerator().getSecretKeySpace());
 	}
 
 	@Override

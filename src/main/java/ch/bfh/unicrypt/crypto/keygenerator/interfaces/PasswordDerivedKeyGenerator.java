@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  *
  * @author rolfhaenni
  */
-public interface PasswordDerivedKeyGenerator extends KeyGenerator {
+public interface PasswordDerivedKeyGenerator extends SecretKeyGenerator {
 
   public Element generateKey(String password);
 

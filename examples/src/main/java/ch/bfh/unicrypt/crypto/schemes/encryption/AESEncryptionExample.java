@@ -59,7 +59,7 @@ public class AESEncryptionExample {
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
 
 		// a random key (default length = 16 bytes)
-		Element key = aes.getKeyGenerator().generateKey();
+		Element key = aes.getKeyGenerator().generateSecretKey();
 
 		// a random message (length = 20 bytes)
 		Element message = aes.getMessageSpace().getRandomElement(20);
@@ -87,7 +87,7 @@ public class AESEncryptionExample {
 		Encoder encoder = StringToByteArrayEncoder.getInstance(stringMonoid);
 
 		// Create a random key (default length = 16 bytes)
-		Element key = aes.getKeyGenerator().generateKey();
+		Element key = aes.generateKey();
 
 		// Create, encode, and encrypt string message
 		Element message = stringMonoid.getElement("HalloWorld");
@@ -116,7 +116,7 @@ public class AESEncryptionExample {
 			   AESEncryptionScheme.DEFAULT_IV);
 
 		// a random key (length = 24 bytes)
-		Element key = aes.getKeyGenerator().generateKey();
+		Element key = aes.generateKey();
 
 		// a random message (length = 20 bytes)
 		Element message = aes.getMessageSpace().getRandomElement(20);

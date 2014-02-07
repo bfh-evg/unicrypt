@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
  * @author rolfhaenni
  */
 public interface PasswordDerivedKeyPairGenerator
-			 extends KeyGenerator {
+			 extends SecretKeyGenerator {
 
 	public Pair generateKeyPair(String password);
 

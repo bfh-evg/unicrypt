@@ -53,10 +53,9 @@ import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element>
-	   extends UniCrypt
+	   extends AbstractKeyGenerator
 	   implements KeyPairGenerator {
 
 	private final PRS privateKeySpace;

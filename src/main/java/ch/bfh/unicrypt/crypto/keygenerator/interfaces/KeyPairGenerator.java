@@ -52,7 +52,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  *
  * @author rolfhaenni
  */
-public interface KeyPairGenerator {
+public interface KeyPairGenerator
+	   extends KeyGenerator {
 
 	Element generatePrivateKey();
 

@@ -41,23 +41,10 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-
 /**
  *
- * @author rolfhaenni
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public interface KeyGenerator {
-
-	Element generateKey();
-
-	Element generateKey(RandomByteSequence randomByteSequence);
-
-	Function getKeyGenerationFunction();
-
-	Set getKeySpace();
 
 }
