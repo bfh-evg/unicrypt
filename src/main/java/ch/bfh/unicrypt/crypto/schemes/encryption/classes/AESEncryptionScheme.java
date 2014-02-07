@@ -156,7 +156,7 @@ public class AESEncryptionScheme
 		} else {
 			messageSpace = ByteArrayMonoid.getInstance();
 		}
-		return new AESEncryptionFunction(messageSpace, this.getKeyGenerator().getSecretKeySpace());
+		return new AESEncryptionFunction(messageSpace, this.getSecretKeyGenerator().getSecretKeySpace());
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public class AESEncryptionScheme
 		} else {
 			messageSpace = ByteArrayMonoid.getInstance();
 		}
-		return new AESDecryptionFunction(messageSpace, this.getKeyGenerator().getSecretKeySpace());
+		return new AESDecryptionFunction(messageSpace, this.getSecretKeyGenerator().getSecretKeySpace());
 	}
 
 	@Override

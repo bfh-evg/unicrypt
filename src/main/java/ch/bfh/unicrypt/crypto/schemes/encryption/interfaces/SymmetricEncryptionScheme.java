@@ -55,8 +55,8 @@ public interface SymmetricEncryptionScheme
 	 *
 	 * @return
 	 */
-	public SecretKeyGenerator getKeyGenerator();
+	public SecretKeyGenerator getSecretKeyGenerator();
 
-	public Element generateKey();
+	public Element generateSecretKey();
 
 }

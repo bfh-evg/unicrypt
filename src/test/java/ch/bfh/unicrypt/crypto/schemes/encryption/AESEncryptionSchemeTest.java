@@ -57,7 +57,7 @@ public class AESEncryptionSchemeTest {
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
 
 		Element message = aes.getMessageSpace().getRandomElement(510);
-		Element key = aes.getKeyGenerator().generateSecretKey();
+		Element key = aes.getSecretKeyGenerator().generateSecretKey();
 		Element encryptedMessage = aes.encrypt(key, message);
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 

@@ -64,7 +64,7 @@ public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME exten
 	private KG keyGenerator;
 
 	@Override
-	public final KG getKeyGenerator() {
+	public final KG getSecretKeyGenerator() {
 		if (this.keyGenerator == null) {
 			this.keyGenerator = this.abstractGetKeyGenerator();
 		}
@@ -73,17 +73,17 @@ public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME exten
 
 	@Override
 	public final KS getEncryptionKeySpace() {
-		return (KS) this.getKeyGenerator().getSecretKeySpace();
+		return (KS) this.getSecretKeyGenerator().getSecretKeySpace();
 	}
 
 	@Override
 	public final KS getDecryptionKeySpace() {
-		return (KS) this.getKeyGenerator().getSecretKeySpace();
+		return (KS) this.getSecretKeyGenerator().getSecretKeySpace();
 	}
 
 	@Override
-	public final KE generateKey() {
-		return (KE) this.getKeyGenerator().generateSecretKey();
+	public final KE generateSecretKey() {
+		return (KE) this.getSecretKeyGenerator().generateSecretKey();
 	}
 
 	protected abstract KG abstractGetKeyGenerator();

@@ -59,7 +59,7 @@ public class OneTimePadEncryptionExample {
 		OneTimePadEncryptionScheme oneTimePad = OneTimePadEncryptionScheme.getInstance(20);
 
 		// Create random key (length = 20 bytes)
-		Element key = oneTimePad.getKeyGenerator().generateSecretKey();
+		Element key = oneTimePad.getSecretKeyGenerator().generateSecretKey();
 
 		// Create random message (length = 20 bytes)
 		Element message = oneTimePad.getMessageSpace().getRandomElement();
@@ -87,7 +87,7 @@ public class OneTimePadEncryptionExample {
 		OneTimePadEncryptionScheme oneTimePad = OneTimePadEncryptionScheme.getInstance(encoder.getFiniteByteArraySet());
 
 		// Create random key (length = 20 bytes)
-		Element key = oneTimePad.getKeyGenerator().generateSecretKey();
+		Element key = oneTimePad.getSecretKeyGenerator().generateSecretKey();
 
 		// Create, encode, and encrypt message
 		Element message = stringSet.getElement("HalloWorld");
