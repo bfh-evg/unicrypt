@@ -54,4 +54,43 @@ public class NaturalNumber
 		super(bigInteger);
 	}
 
+	public NaturalNumber add(NaturalNumber other) {
+		return (NaturalNumber) super.add(other);
+	}
+
+	public NaturalNumber multiply(NaturalNumber other) {
+		return (NaturalNumber) super.multiply(other);
+	}
+
+	@Override
+	public NaturalNumber power(int exponent) {
+		return (NaturalNumber) super.power(exponent);
+	}
+
+	@Override
+	public NaturalNumber power(BigInteger exponent) {
+		return (NaturalNumber) super.power(exponent);
+	}
+
+	@Override
+	public NaturalNumber power(NaturalNumber exponent) {
+		return (NaturalNumber) super.power(exponent);
+	}
+
+	@Override
+	public NaturalNumber square() {
+		return (NaturalNumber) super.square();
+	}
+
+	public static NaturalNumber getInstance(int integer) {
+		return NaturalNumber.getInstance(BigInteger.valueOf(integer));
+	}
+
+	public static NaturalNumber getInstance(BigInteger integer) {
+		if (integer == null || integer.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new NaturalNumber(integer);
+	}
+
 }

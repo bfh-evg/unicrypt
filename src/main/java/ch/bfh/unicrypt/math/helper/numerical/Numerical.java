@@ -63,27 +63,20 @@ public abstract class Numerical<N extends Numerical<N>>
 	}
 
 	public N add(N other) {
-		if (!isCompatible(other)) {
+		if (!this.isCompatible(other)) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractAdd(other);
 	}
 
 	public N multiply(N other) {
-		if (!isCompatible(other)) {
+		if (!this.isCompatible(other)) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractMultiply(other);
 	}
 
-	public N power(N other) {
-		if (!isCompatible(other)) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractPower(other);
-	}
-
-	public N square(N other) {
+	public N square() {
 		return this.multiply((N) this);
 	}
 
@@ -92,10 +85,28 @@ public abstract class Numerical<N extends Numerical<N>>
 	}
 
 	public N subtract(N other) {
-		if (!isCompatible(other)) {
+		if (!this.isCompatible(other)) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractSubtract(other);
+	}
+
+	public N power(int exponent) {
+		return this.power(BigInteger.valueOf(exponent));
+	}
+
+	public N power(BigInteger exponent) {
+		if (exponent == null || exponent.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractPower(exponent);
+	}
+
+	public N power(NaturalNumber exponent) {
+		if (exponent == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractPower(exponent.getBigInteger());
 	}
 
 	public final boolean isCompatible(N other) {
@@ -107,24 +118,34 @@ public abstract class Numerical<N extends Numerical<N>>
 	}
 
 	public final boolean isGreaterThan(N other) {
-		if (!isCompatible(other)) {
+		if (!this.isCompatible(other)) {
 			throw new IllegalArgumentException();
 		}
 		return this.bigInteger.compareTo(other.bigInteger) > 0;
 	}
 
 	public final boolean isSmallerThan(N other) {
-		if (!isCompatible(other)) {
+		if (!this.isCompatible(other)) {
 			throw new IllegalArgumentException();
 		}
 		return this.bigInteger.compareTo(other.bigInteger) < 0;
 	}
 
-	public final boolean isEquals(N other) {
-		if (!isCompatible(other)) {
+	public final boolean isEqual(N other) {
+		if (!this.isCompatible(other)) {
 			throw new IllegalArgumentException();
 		}
 		return this.bigInteger.equals(other.bigInteger);
+	}
+
+	@Override
+	protected String defaultToStringName() {
+		return "";
+	}
+
+	@Override
+	protected String defaultToStringValue() {
+		return this.bigInteger.toString();
 	}
 
 	protected abstract boolean abstractIsCompatible(N other);
@@ -133,10 +154,10 @@ public abstract class Numerical<N extends Numerical<N>>
 
 	protected abstract N abstractMultiply(N other);
 
-	protected abstract N abstractPower(N other);
-
 	protected abstract N abstractSubtract(N other);
 
 	protected abstract N abstractMinus();
+
+	protected abstract N abstractPower(BigInteger exponent);
 
 }

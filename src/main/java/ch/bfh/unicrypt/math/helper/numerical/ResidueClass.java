@@ -62,6 +62,23 @@ public class ResidueClass
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		ResidueClass other = (ResidueClass) obj;
+		return this.bigInteger.equals(other.bigInteger) && this.modulus.equals(other.modulus);
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 17;
+		hash = 17 * hash + this.bigInteger.hashCode();
+		hash = 17 * hash + this.modulus.hashCode();
+		return hash;
+	}
+
+	@Override
 	protected boolean abstractIsCompatible(ResidueClass other) {
 		return this.modulus.equals(other.modulus);
 	}
@@ -77,18 +94,29 @@ public class ResidueClass
 	}
 
 	@Override
-	protected ResidueClass abstractPower(ResidueClass other) {
-		return new ResidueClass(this.bigInteger.modPow(other.bigInteger, this.modulus), this.modulus);
-	}
-
-	@Override
 	protected ResidueClass abstractSubtract(ResidueClass other) {
 		return new ResidueClass(this.bigInteger.subtract(other.bigInteger).mod(this.modulus), this.modulus);
 	}
 
 	@Override
 	protected ResidueClass abstractMinus() {
-		return new ResidueClass(this.modulus.subtract(this.bigInteger), this.modulus);
+		return new ResidueClass(this.modulus.subtract(this.bigInteger).mod(this.modulus), this.modulus);
+	}
+
+	@Override
+	protected ResidueClass abstractPower(BigInteger exponent) {
+		return new ResidueClass(this.bigInteger.modPow(exponent, this.modulus), this.modulus);
+	}
+
+	public static ResidueClass getInstance(int integer, int modulus) {
+		return ResidueClass.getInstance(BigInteger.valueOf(integer), BigInteger.valueOf(modulus));
+	}
+
+	public static ResidueClass getInstance(BigInteger integer, BigInteger modulus) {
+		if (integer == null || modulus == null || modulus.signum() <= 0) {
+			throw new IllegalArgumentException();
+		}
+		return new ResidueClass(integer.mod(modulus), modulus);
 	}
 
 }

@@ -50,6 +50,11 @@ import java.math.BigInteger;
 public class WholeNumber
 	   extends Numerical<WholeNumber> {
 
+	public static final NaturalNumber ZERO = new NaturalNumber(BigInteger.ZERO);
+	public static final NaturalNumber ONE = new NaturalNumber(BigInteger.ONE);
+
+	private static final BigInteger MAX_INTEGER = BigInteger.valueOf(Integer.MAX_VALUE);
+
 	protected WholeNumber(BigInteger bigInteger) {
 		super(bigInteger);
 	}
@@ -61,28 +66,71 @@ public class WholeNumber
 
 	@Override
 	protected WholeNumber abstractAdd(WholeNumber other) {
-		return new WholeNumber(this.bigInteger.add(other.bigInteger));
+		return WholeNumber.getInstance(this.bigInteger.add(other.bigInteger));
 	}
 
 	@Override
 	protected WholeNumber abstractMultiply(WholeNumber other) {
-		return new WholeNumber(this.bigInteger.multiply(other.bigInteger));
-	}
-
-	@Override
-	protected WholeNumber abstractPower(WholeNumber other) {
-		// this implementation is not correct for large exponents!
-		return new WholeNumber(this.bigInteger.pow(other.bigInteger.intValue()));
+		return WholeNumber.getInstance(this.bigInteger.multiply(other.bigInteger));
 	}
 
 	@Override
 	protected WholeNumber abstractSubtract(WholeNumber other) {
-		return new WholeNumber(this.bigInteger.subtract(other.bigInteger));
+		return WholeNumber.getInstance(this.bigInteger.subtract(other.bigInteger));
 	}
 
 	@Override
 	protected WholeNumber abstractMinus() {
-		return new WholeNumber(this.bigInteger.negate());
+		return WholeNumber.getInstance(this.bigInteger.negate());
+	}
+
+	@Override
+	protected WholeNumber abstractPower(BigInteger exponent) {
+		if (exponent.compareTo(MAX_INTEGER) <= 0) {
+			return WholeNumber.getInstance(this.bigInteger.pow(exponent.intValue()));
+		}
+		if (this.bigInteger.equals(BigInteger.ZERO) || this.bigInteger.equals(BigInteger.ONE)) {
+			return this;
+		}
+		if (this.bigInteger.equals(BigInteger.valueOf(-1))) {
+			if (exponent.testBit(0)) {
+				return this;
+			}
+			return ONE;
+		}
+		// TODO: Implement square and multiply!
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		WholeNumber other = (WholeNumber) obj;
+		return this.bigInteger.equals(other.bigInteger);
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 17;
+		hash = 17 * hash + this.getClass().hashCode();
+		hash = 17 * hash + this.bigInteger.hashCode();
+		return hash;
+	}
+
+	public static WholeNumber getInstance(int integer) {
+		return WholeNumber.getInstance(BigInteger.valueOf(integer));
+	}
+
+	public static WholeNumber getInstance(BigInteger integer) {
+		if (integer == null) {
+			throw new IllegalArgumentException();
+		}
+		if (integer.signum() >= 0) {
+			return new NaturalNumber(integer);
+		}
+		return new WholeNumber(integer);
 	}
 
 }
