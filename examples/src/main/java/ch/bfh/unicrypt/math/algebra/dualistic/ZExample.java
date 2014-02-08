@@ -39,20 +39,28 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.dualistic.classes;
+package ch.bfh.unicrypt.math.algebra.dualistic;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
-import ch.bfh.unicrypt.math.helper.numerical.WholeNumber;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @author rolfhaenni
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ZElement
-	   extends AbstractDualisticElement<Z, ZElement, WholeNumber> {
+public class ZExample {
 
-	protected ZElement(final Z z, final WholeNumber value) {
-		super(z, value);
+	public static void main(final String[] args) {
+
+		Z wholeNumbers = Z.getInstance();
+		Element z0 = wholeNumbers.getZeroElement();
+		Element z1 = wholeNumbers.getElement(5);
+		Element z2 = wholeNumbers.getElement(10);
+		Element z3 = wholeNumbers.getElement(-3);
+
+		Element sum = wholeNumbers.add(z0, z1, z2, z3);
+
+		System.out.println(sum);
 	}
 
 }

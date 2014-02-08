@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.math.helper.numerical.WholeNumber;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
@@ -64,18 +65,26 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class Z
-	   extends AbstractCyclicRing<ZElement, BigInteger> {
+	   extends AbstractCyclicRing<ZElement, WholeNumber> {
 
 	public Z() {
-		super(BigInteger.class);
+		super(WholeNumber.class);
 	}
 
 	public final boolean contains(int integerValue) {
-		return this.contains(BigInteger.valueOf(integerValue));
+		return this.contains(WholeNumber.getInstance(integerValue));
+	}
+
+	public final boolean contains(BigInteger integerValue) {
+		return this.contains(WholeNumber.getInstance(integerValue));
 	}
 
 	public final ZElement getElement(int integerValue) {
-		return this.getElement(BigInteger.valueOf(integerValue));
+		return this.getElement(WholeNumber.getInstance(integerValue));
+	}
+
+	public final ZElement getElement(BigInteger integerValue) {
+		return this.getElement(WholeNumber.getInstance(integerValue));
 	}
 
 	//
@@ -84,7 +93,7 @@ public class Z
 	//
 	@Override
 	protected ZElement defaultSelfApply(ZElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(amount));
+		return this.abstractGetElement(element.getValue().multiply(WholeNumber.getInstance(amount)));
 	}
 
 	@Override
@@ -106,12 +115,12 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElement(WholeNumber.ZERO.ZERO);
 	}
 
 	@Override
 	protected ZElement abstractInvert(ZElement element) {
-		return this.abstractGetElement(element.getValue().negate());
+		return this.abstractGetElement(element.getValue().minus());
 	}
 
 	@Override
@@ -121,7 +130,7 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetOne() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(WholeNumber.ONE);
 	}
 
 	@Override
@@ -130,23 +139,23 @@ public class Z
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
+	protected boolean abstractContains(WholeNumber value) {
 		return true;
 	}
 
 	@Override
-	protected ZElement abstractGetElement(BigInteger value) {
+	protected ZElement abstractGetElement(WholeNumber value) {
 		return new ZElement(this, value);
 	}
 
 	@Override
 	protected ZElement abstractGetElementFrom(BigInteger value) {
-		return new ZElement(this, MathUtil.unfold(value));
+		return new ZElement(this, WholeNumber.getInstance(MathUtil.unfold(value)));
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(BigInteger value) {
-		return MathUtil.fold(value);
+	protected BigInteger abstractGetBigIntegerFrom(WholeNumber value) {
+		return MathUtil.fold(value.getBigInteger());
 	}
 
 	@Override
@@ -155,8 +164,8 @@ public class Z
 	}
 
 	@Override
-	protected ByteTree abstractGetByteTreeFrom(BigInteger value) {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.toByteArray()));
+	protected ByteTree abstractGetByteTreeFrom(WholeNumber value) {
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.getBigInteger().toByteArray()));
 	}
 
 	@Override
@@ -166,12 +175,12 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetDefaultGenerator() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(WholeNumber.ONE);
 	}
 
 	@Override
 	protected boolean abstractIsGenerator(final ZElement element) {
-		return element.getValue().abs().equals(BigInteger.ONE);
+		return element.getValue().getBigInteger().abs().equals(BigInteger.ONE);
 	}
 
 	@Override
