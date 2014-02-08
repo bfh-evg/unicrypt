@@ -80,8 +80,13 @@ public class WholeNumber
 	}
 
 	@Override
-	protected WholeNumber abstractMinus() {
+	protected WholeNumber abstractNegate() {
 		return WholeNumber.getInstance(this.bigInteger.negate());
+	}
+
+	@Override
+	protected WholeNumber abstractTimes(BigInteger factor) {
+		return WholeNumber.getInstance(this.bigInteger.multiply(factor));
 	}
 
 	@Override

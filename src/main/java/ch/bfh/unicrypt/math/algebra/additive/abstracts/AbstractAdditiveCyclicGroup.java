@@ -96,7 +96,7 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement, V e
 	}
 
 	@Override
-	public final E minus(final Element element) {
+	public final E negate(final Element element) {
 		return this.invert(element);
 	}
 

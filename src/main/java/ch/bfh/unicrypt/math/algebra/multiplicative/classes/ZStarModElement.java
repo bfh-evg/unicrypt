@@ -42,16 +42,16 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
 
 /**
  *
  * @author rolfhaenni
  */
 public class ZStarModElement
-	   extends AbstractMultiplicativeElement<ZStarMod, ZStarModElement, BigInteger> {
+	   extends AbstractMultiplicativeElement<ZStarMod, ZStarModElement, ResidueClass> {
 
-	protected ZStarModElement(final ZStarMod zStarMod, final BigInteger value) {
+	protected ZStarModElement(final ZStarMod zStarMod, final ResidueClass value) {
 		super(zStarMod, value);
 	}
 

@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.helper.numerical;
 
-import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -97,27 +96,30 @@ public class NaturalNumberTest {
 
 	@Test
 	public void testPower() {
-		assertEquals(1, n0.power(0).getBigInteger().intValue());
-		assertEquals(0, n0.power(1).getBigInteger().intValue());
-		assertEquals(0, n0.power(1).getBigInteger().intValue());
-		assertEquals(1, n1.power(0).getBigInteger().intValue());
-		assertEquals(1, n1.power(1).getBigInteger().intValue());
-		assertEquals(1, n1.power(1).getBigInteger().intValue());
-		assertEquals(1, n2.power(0).getBigInteger().intValue());
-		assertEquals(2, n2.power(1).getBigInteger().intValue());
-		assertEquals(4, n2.power(2).getBigInteger().intValue());
-		assertEquals(8, n2.power(3).getBigInteger().intValue());
-		assertEquals(8, n2.power(BigInteger.valueOf(3)).getBigInteger().intValue());
+		NaturalNumber e0 = NaturalNumber.getInstance(0);
+		NaturalNumber e1 = NaturalNumber.getInstance(1);
+		NaturalNumber e2 = NaturalNumber.getInstance(2);
+		NaturalNumber e3 = NaturalNumber.getInstance(3);
+		assertEquals(1, n0.power(e0).getBigInteger().intValue());
+		assertEquals(0, n0.power(e1).getBigInteger().intValue());
+		assertEquals(0, n0.power(e1).getBigInteger().intValue());
+		assertEquals(1, n1.power(e0).getBigInteger().intValue());
+		assertEquals(1, n1.power(e1).getBigInteger().intValue());
+		assertEquals(1, n1.power(e1).getBigInteger().intValue());
+		assertEquals(1, n2.power(e0).getBigInteger().intValue());
+		assertEquals(2, n2.power(e1).getBigInteger().intValue());
+		assertEquals(4, n2.power(e2).getBigInteger().intValue());
+		assertEquals(8, n2.power(e3).getBigInteger().intValue());
 		assertEquals(8, n2.power(NaturalNumber.getInstance(3)).getBigInteger().intValue());
 	}
 
 	@Test
 	public void testMinus() {
-		assertEquals(0, n0.minus().getBigInteger().intValue());
-		assertEquals(-1, n1.minus().getBigInteger().intValue());
-		assertEquals(-2, n2.minus().getBigInteger().intValue());
-		assertEquals(NaturalNumber.class, n0.minus().getClass());
-		assertEquals(WholeNumber.class, n2.minus().getClass());
+		assertEquals(0, n0.negate().getBigInteger().intValue());
+		assertEquals(-1, n1.negate().getBigInteger().intValue());
+		assertEquals(-2, n2.negate().getBigInteger().intValue());
+		assertEquals(NaturalNumber.class, n0.negate().getClass());
+		assertEquals(WholeNumber.class, n2.negate().getClass());
 	}
 
 	@Test

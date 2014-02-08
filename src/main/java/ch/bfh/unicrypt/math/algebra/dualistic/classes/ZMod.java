@@ -48,6 +48,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.math.helper.numerical.NaturalNumber;
+import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -65,12 +67,12 @@ import java.util.Map;
  * @version 2.0
  */
 public class ZMod
-	   extends AbstractCyclicRing<ZModElement, BigInteger> {
+	   extends AbstractCyclicRing<ZModElement, ResidueClass> {
 
-	private BigInteger modulus;
+	protected final BigInteger modulus;
 
 	protected ZMod(final BigInteger modulus) {
-		super(BigInteger.class);
+		super(ResidueClass.class);
 		this.modulus = modulus;
 	}
 
@@ -84,11 +86,19 @@ public class ZMod
 	}
 
 	public final boolean contains(int integerValue) {
-		return this.contains(BigInteger.valueOf(integerValue));
+		return this.contains(ResidueClass.getInstance(BigInteger.valueOf(integerValue), this.modulus));
+	}
+
+	public final boolean contains(BigInteger integerValue) {
+		return this.contains(ResidueClass.getInstance(integerValue, this.modulus));
 	}
 
 	public final ZModElement getElement(int integerValue) {
-		return this.getElement(BigInteger.valueOf(integerValue));
+		return this.getElement(ResidueClass.getInstance(BigInteger.valueOf(integerValue), this.modulus));
+	}
+
+	public final ZModElement getElement(BigInteger integerValue) {
+		return this.getElement(ResidueClass.getInstance(integerValue, this.modulus));
 	}
 
 	//
@@ -97,17 +107,17 @@ public class ZMod
 	//
 	@Override
 	protected ZModElement defaultSelfApply(ZModElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(amount).mod(this.getModulus()));
+		return this.abstractGetElement(element.getValue().multiply(ResidueClass.getInstance(amount, this.modulus)));
 	}
 
 	@Override
 	protected ZModElement defaultPower(ZModElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().modPow(amount, this.getModulus()));
+		return this.abstractGetElement(element.getValue().power(NaturalNumber.getInstance(amount)));
 	}
 
 	@Override
 	public String defaultToStringValue() {
-		return this.getModulus().toString();
+		return this.modulus.toString();
 	}
 
 	//
@@ -116,58 +126,56 @@ public class ZMod
 	//
 	@Override
 	protected ZModElement abstractApply(ZModElement element1, ZModElement element2) {
-		return this.abstractGetElement(element1.getValue().add(element2.getValue()).mod(this.getModulus()));
+		return this.abstractGetElement(element1.getValue().add(element2.getValue()));
 	}
 
 	@Override
 	protected ZModElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElement(ResidueClass.getInstance(BigInteger.ZERO, this.modulus));
 	}
 
 	@Override
 	protected ZModElement abstractInvert(ZModElement element) {
-		return this.abstractGetElement(this.getModulus().subtract(element.getValue()).mod(this.getModulus()));
+		return this.abstractGetElement(element.getValue().negate());
 	}
 
 	@Override
 	protected ZModElement abstractMultiply(ZModElement element1, ZModElement element2) {
-		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.getModulus()));
+		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
 	}
 
 	@Override
 	protected ZModElement abstractGetOne() {
-		if (this.getModulus().equals(BigInteger.ONE)) {
-			return this.abstractGetElement(BigInteger.ZERO);
-		}
-		return this.abstractGetElement(BigInteger.ONE);
+		// mod is necessary for the trivial group Z_1
+		return this.abstractGetElement(ResidueClass.getInstance(BigInteger.ONE.mod(this.modulus), this.modulus));
 	}
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return this.getModulus();
+		return this.modulus;
 	}
 
 	@Override
-	protected boolean abstractContains(BigInteger value) {
-		return value.signum() >= 0 && value.compareTo(this.getModulus()) < 0;
+	protected boolean abstractContains(ResidueClass value) {
+		return this.modulus.equals(value.getModulus());
 	}
 
 	@Override
-	protected ZModElement abstractGetElement(BigInteger value) {
+	protected ZModElement abstractGetElement(ResidueClass value) {
 		return new ZModElement(this, value);
 	}
 
 	@Override
 	protected ZModElement abstractGetElementFrom(BigInteger value) {
-		if (value.compareTo(this.getModulus()) >= 0) {
+		if (value.compareTo(this.modulus) >= 0) {
 			return null; // no such element
 		}
-		return new ZModElement(this, value);
+		return new ZModElement(this, ResidueClass.getInstance(value, this.modulus));
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(BigInteger value) {
-		return value;
+	protected BigInteger abstractGetBigIntegerFrom(ResidueClass value) {
+		return value.getBigInteger();
 	}
 
 	@Override
@@ -176,38 +184,39 @@ public class ZMod
 	}
 
 	@Override
-	protected ByteTree abstractGetByteTreeFrom(BigInteger value) {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.toByteArray()));
+	protected ByteTree abstractGetByteTreeFrom(ResidueClass value) {
+		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.getBigInteger().toByteArray()));
 	}
 
 	@Override
 	protected ZModElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getModulus().subtract(BigInteger.ONE)));
+		return this.abstractGetElement(ResidueClass.getInstance(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.modulus.subtract(BigInteger.ONE)), this.modulus));
 	}
 
 	@Override
 	protected ZModElement abstractGetDefaultGenerator() {
-		return this.abstractGetElement(BigInteger.ONE.mod(this.getModulus())); // mod is necessary for the trivial group Z_1
+		// mod is necessary for the trivial group Z_1
+		return this.abstractGetElement(ResidueClass.getInstance(BigInteger.ONE.mod(this.modulus), this.modulus));
 	}
 
 	@Override
 	protected boolean abstractIsGenerator(ZModElement element) {
-		if (this.getModulus().equals(BigInteger.ONE)) {
+		if (this.modulus.equals(BigInteger.ONE)) {
 			return true;
 		}
-		return MathUtil.areRelativelyPrime(element.getValue(), this.getModulus());
+		return MathUtil.areRelativelyPrime(element.getValue().getBigInteger(), this.modulus);
 	}
 
 	@Override
 	public boolean abstractEquals(final Set set) {
 		final ZMod zMod = (ZMod) set;
-		return this.getModulus().equals(zMod.getModulus());
+		return this.modulus.equals(zMod.modulus);
 	}
 
 	@Override
 	protected int abstractHashCode() {
 		int hash = 7;
-		hash = 47 * hash + this.getModulus().hashCode();
+		hash = 47 * hash + this.modulus.hashCode();
 		return hash;
 	}
 

@@ -42,16 +42,16 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
 
 /**
  *
  * @author rolfhaenni
  */
 public class ZModElement
-	   extends AbstractDualisticElement<ZMod, ZModElement, BigInteger> {
+	   extends AbstractDualisticElement<ZMod, ZModElement, ResidueClass> {
 
-	protected ZModElement(final ZMod zMod, final BigInteger value) {
+	protected ZModElement(final ZMod zMod, final ResidueClass value) {
 		super(zMod, value);
 	}
 

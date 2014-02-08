@@ -65,7 +65,7 @@ public interface AdditiveGroup extends Group, AdditiveMonoid {
    */
   public AdditiveElement subtract(Element element1, Element element2);
 
-  public AdditiveElement minus(Element element);
+  public AdditiveElement negate(Element element);
 
   // The following methods are overridden from Monoid with an adapted return type
   @Override

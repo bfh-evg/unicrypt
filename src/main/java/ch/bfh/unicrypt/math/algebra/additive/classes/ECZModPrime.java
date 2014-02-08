@@ -72,8 +72,8 @@ public class ECZModPrime
 	public boolean abstractContains(ZModElement x) {
 		BigInteger p = this.getFiniteField().getModulus();
 		ZModElement right = x.power(3).add(getA().multiply(x)).add(getB());
-		if (MathUtil.hasSqrtModPrime(right.getValue(), p)) {
-			BigInteger y1 = MathUtil.sqrtModPrime(right.getValue(), p);
+		if (MathUtil.hasSqrtModPrime(right.getValue().getBigInteger(), p)) {
+			BigInteger y1 = MathUtil.sqrtModPrime(right.getValue().getBigInteger(), p);
 			ZModElement y = this.getFiniteField().getElement(y1);
 			return this.abstractContains(x, y);
 		} else {
@@ -141,17 +141,17 @@ public class ECZModPrime
 		BigInteger p = this.getFiniteField().getModulus();
 		ZModElement x = this.getFiniteField().getRandomElement(randomByteSequence);
 		ZModElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
-		boolean neg = x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
+		boolean neg = x.getValue().getBigInteger().mod(new BigInteger("2")).equals(BigInteger.ONE);
 
-		while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
+		while (!MathUtil.hasSqrtModPrime(y.getValue().getBigInteger(), p)) {
 			x = this.getFiniteField().getRandomElement(randomByteSequence);
 			y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
 		}
 		//if neg is true return solution 2(p-sqrt) of sqrtModPrime else solution 1
 		if (neg) {
-			y = this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue(), p)));
+			y = this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue().getBigInteger(), p)));
 		} else {
-			y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue(), p));
+			y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue().getBigInteger(), p));
 		}
 		return this.abstractGetElement(Point.getInstance(x, y));
 	}

@@ -71,7 +71,7 @@ public class MinusFunction
 	//
 	@Override
 	protected AdditiveElement abstractApply(final AdditiveElement element, final RandomByteSequence randomByteSequence) {
-		return element.minus();
+		return element.negate();
 	}
 
 	//

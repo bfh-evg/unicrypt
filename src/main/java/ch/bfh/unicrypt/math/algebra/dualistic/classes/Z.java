@@ -120,7 +120,7 @@ public class Z
 
 	@Override
 	protected ZElement abstractInvert(ZElement element) {
-		return this.abstractGetElement(element.getValue().minus());
+		return this.abstractGetElement(element.getValue().negate());
 	}
 
 	@Override

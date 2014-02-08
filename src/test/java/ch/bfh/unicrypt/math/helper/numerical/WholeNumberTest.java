@@ -98,31 +98,38 @@ public class WholeNumberTest {
 
 	@Test
 	public void testPower() {
-		assertEquals(1, w0.power(0).getBigInteger().intValue());
-		assertEquals(0, w0.power(1).getBigInteger().intValue());
-		assertEquals(0, w0.power(1).getBigInteger().intValue());
-		assertEquals(1, w1.power(0).getBigInteger().intValue());
-		assertEquals(1, w1.power(1).getBigInteger().intValue());
-		assertEquals(1, w1.power(1).getBigInteger().intValue());
-		assertEquals(1, w2.power(0).getBigInteger().intValue());
-		assertEquals(2, w2.power(1).getBigInteger().intValue());
-		assertEquals(4, w2.power(2).getBigInteger().intValue());
-		assertEquals(8, w2.power(3).getBigInteger().intValue());
-		assertEquals(0, w0.power(new BigInteger("10000000000000")).getBigInteger().intValue());
-		assertEquals(1, w1.power(new BigInteger("10000000000000")).getBigInteger().intValue());
-		assertEquals(1, w_1.power(new BigInteger("10000000000000")).getBigInteger().intValue());
-		assertEquals(-1, w_1.power(new BigInteger("100000000000001")).getBigInteger().intValue());
-		assertEquals(8, w2.power(BigInteger.valueOf(3)).getBigInteger().intValue());
+		NaturalNumber e0 = NaturalNumber.getInstance(0);
+		NaturalNumber e1 = NaturalNumber.getInstance(1);
+		NaturalNumber e2 = NaturalNumber.getInstance(2);
+		NaturalNumber e3 = NaturalNumber.getInstance(3);
+		NaturalNumber e_big1 = NaturalNumber.getInstance(new BigInteger("10000000000000"));
+		NaturalNumber e_big2 = NaturalNumber.getInstance(new BigInteger("100000000000001"));
+
+		assertEquals(1, w0.power(e0).getBigInteger().intValue());
+		assertEquals(0, w0.power(e1).getBigInteger().intValue());
+		assertEquals(0, w0.power(e1).getBigInteger().intValue());
+		assertEquals(1, w1.power(e0).getBigInteger().intValue());
+		assertEquals(1, w1.power(e1).getBigInteger().intValue());
+		assertEquals(1, w1.power(e1).getBigInteger().intValue());
+		assertEquals(1, w2.power(e0).getBigInteger().intValue());
+		assertEquals(2, w2.power(e1).getBigInteger().intValue());
+		assertEquals(4, w2.power(e2).getBigInteger().intValue());
+		assertEquals(8, w2.power(e3).getBigInteger().intValue());
+		assertEquals(0, w0.power(e_big1).getBigInteger().intValue());
+		assertEquals(1, w1.power(e_big1).getBigInteger().intValue());
+		assertEquals(1, w_1.power(e_big1).getBigInteger().intValue());
+		assertEquals(-1, w_1.power(e_big2).getBigInteger().intValue());
+		assertEquals(8, w2.power(e3).getBigInteger().intValue());
 		assertEquals(8, w2.power(NaturalNumber.getInstance(3)).getBigInteger().intValue());
 	}
 
 	@Test
 	public void testMinus() {
-		assertEquals(0, w0.minus().getBigInteger().intValue());
-		assertEquals(-1, w1.minus().getBigInteger().intValue());
-		assertEquals(-2, w2.minus().getBigInteger().intValue());
-		assertEquals(NaturalNumber.class, w0.minus().getClass());
-		assertEquals(WholeNumber.class, w2.minus().getClass());
+		assertEquals(0, w0.negate().getBigInteger().intValue());
+		assertEquals(-1, w1.negate().getBigInteger().intValue());
+		assertEquals(-2, w2.negate().getBigInteger().intValue());
+		assertEquals(NaturalNumber.class, w0.negate().getClass());
+		assertEquals(WholeNumber.class, w2.negate().getClass());
 	}
 
 	@Test

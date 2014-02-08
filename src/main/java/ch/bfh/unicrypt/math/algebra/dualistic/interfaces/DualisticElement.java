@@ -97,7 +97,7 @@ public interface DualisticElement extends AdditiveElement, MultiplicativeElement
   public DualisticElement timesTwo();
 
   @Override
-  public DualisticElement minus();
+  public DualisticElement negate();
 
   // The following methods are overridden from MultiplicativeElement with an adapted return type
   @Override

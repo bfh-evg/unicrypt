@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper.numerical;
 
+import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -59,6 +60,10 @@ public class ResidueClass
 
 	public BigInteger getModulus() {
 		return this.modulus;
+	}
+
+	public boolean isRelativelyPrime() {
+		return MathUtil.areRelativelyPrime(this.bigInteger, this.modulus);
 	}
 
 	@Override
@@ -102,8 +107,13 @@ public class ResidueClass
 	}
 
 	@Override
-	protected ResidueClass abstractMinus() {
+	protected ResidueClass abstractNegate() {
 		return new ResidueClass(this.modulus.subtract(this.bigInteger).mod(this.modulus), this.modulus);
+	}
+
+	@Override
+	protected ResidueClass abstractTimes(BigInteger factor) {
+		return new ResidueClass(this.bigInteger.multiply(factor).mod(this.modulus), this.modulus);
 	}
 
 	@Override

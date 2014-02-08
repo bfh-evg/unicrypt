@@ -55,6 +55,6 @@ public interface Ring extends SemiRing, AdditiveGroup {
   public DualisticElement subtract(Element element1, Element element2);
 
   @Override
-  public DualisticElement minus(Element element);
+  public DualisticElement negate(Element element);
 
 }

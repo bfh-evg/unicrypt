@@ -67,7 +67,7 @@ public class ZModTwo
 	}
 
 	public ZModElement not(Element element) {
-		return this.minus(element);
+		return this.negate(element);
 	}
 	//
 	// STATIC FACTORY METHODS

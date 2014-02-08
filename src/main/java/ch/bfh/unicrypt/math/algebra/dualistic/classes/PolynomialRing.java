@@ -73,7 +73,7 @@ public class PolynomialRing
 		Map<Integer, DualisticElement> coefficientMap = new HashMap<Integer, DualisticElement>();
 		GenericPolynomial<DualisticElement> polynomial = ((PolynomialElement) element).getValue();
 		for (Integer i : polynomial.getIndices()) {
-			coefficientMap.put(i, polynomial.getCoefficient(i).minus());
+			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
 		}
 		return this.getElement(coefficientMap);
 	}
@@ -89,7 +89,7 @@ public class PolynomialRing
 	}
 
 	@Override
-	public PolynomialElement minus(Element element) {
+	public PolynomialElement negate(Element element) {
 		return this.invert(element);
 	}
 

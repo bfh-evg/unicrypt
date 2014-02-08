@@ -63,23 +63,13 @@ public class NaturalNumber
 	}
 
 	@Override
-	public NaturalNumber power(int exponent) {
-		return (NaturalNumber) super.power(exponent);
-	}
-
-	@Override
-	public NaturalNumber power(BigInteger exponent) {
-		return (NaturalNumber) super.power(exponent);
-	}
-
-	@Override
-	public NaturalNumber power(NaturalNumber exponent) {
-		return (NaturalNumber) super.power(exponent);
-	}
-
-	@Override
 	public NaturalNumber square() {
 		return (NaturalNumber) super.square();
+	}
+
+	@Override
+	public NaturalNumber power(NaturalNumber other) {
+		return (NaturalNumber) super.power(other);
 	}
 
 	public static NaturalNumber getInstance(int integer) {

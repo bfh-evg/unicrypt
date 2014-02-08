@@ -79,7 +79,7 @@ public abstract class AbstractRing<E extends DualisticElement, V extends Object>
 	}
 
 	@Override
-	public final E minus(final Element element) {
+	public final E negate(final Element element) {
 		return this.invert(element);
 	}
 

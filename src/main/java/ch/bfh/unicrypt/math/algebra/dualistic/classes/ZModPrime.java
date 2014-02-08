@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
+import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class ZModPrime
 
 	@Override
 	public ZStarModPrime getMultiplicativeGroup() {
-		return ZStarModPrime.getInstance(this.getModulus());
+		return ZStarModPrime.getInstance(this.modulus);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class ZModPrime
 		if (element.isEquivalent(this.getZeroElement())) {
 			throw new UnsupportedOperationException();
 		}
-		return this.abstractGetElement(((ZModElement) element).getValue().modInverse(this.getModulus()));
+		return this.abstractGetElement(ResidueClass.getInstance(((ZModElement) element).getValue().getBigInteger().modInverse(this.modulus), this.modulus));
 	}
 
 	@Override

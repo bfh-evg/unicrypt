@@ -94,7 +94,7 @@ public class ProbabilisticECGroupFpEncoder
 			ZModPrime zModPrime = this.getDomain();
 			ECZModPrime ecPrime = this.getCoDomain();
 
-			BigInteger e = element.getValue();
+			BigInteger e = element.getValue().getBigInteger();
 			e = e.shiftLeft(SHIFT);
 
 			if (!zModPrime.contains(e)) {
@@ -113,7 +113,7 @@ public class ProbabilisticECGroupFpEncoder
 				count++;
 			}
 			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
-			ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
+			ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue().getBigInteger(), zModPrime.getModulus()));
 			return ecPrime.getElement(x, y);
 		}
 
@@ -128,7 +128,7 @@ public class ProbabilisticECGroupFpEncoder
 
 		@Override
 		protected ZModElement abstractApply(ECZModPrimeElement element, RandomByteSequence randomByteSequence) {
-			BigInteger x1 = element.getX().getValue();
+			BigInteger x1 = element.getX().getValue().getBigInteger();
 			x1 = x1.shiftRight(SHIFT);
 			return this.getCoDomain().getElement(x1);
 		}

@@ -128,24 +128,26 @@ public class ResidueClassTest {
 
 	@Test
 	public void testMinus() {
-		assertEquals(0, r1.minus().getBigInteger().intValue());
-		assertEquals(20, r23_1.minus().getBigInteger().intValue());
-		assertEquals(10, r23_2.minus().getBigInteger().intValue());
-		assertEquals(5, r23_3.minus().getBigInteger().intValue());
-		assertEquals(0, r23_4.minus().getBigInteger().intValue());
+		assertEquals(0, r1.negate().getBigInteger().intValue());
+		assertEquals(20, r23_1.negate().getBigInteger().intValue());
+		assertEquals(10, r23_2.negate().getBigInteger().intValue());
+		assertEquals(5, r23_3.negate().getBigInteger().intValue());
+		assertEquals(0, r23_4.negate().getBigInteger().intValue());
 	}
 
 	@Test
 	public void testPower() {
-		assertEquals(0, r1.power(0).getBigInteger().intValue());
-		assertEquals(0, r1.power(1).getBigInteger().intValue());
-		assertEquals(0, r1.power(2).getBigInteger().intValue());
-		assertEquals(1, r23_1.power(0).getBigInteger().intValue());
-		assertEquals(3, r23_1.power(1).getBigInteger().intValue());
-		assertEquals(9, r23_1.power(2).getBigInteger().intValue());
-		assertEquals(4, r23_1.power(3).getBigInteger().intValue());
-		assertEquals(4, r23_1.power(BigInteger.valueOf(3)).getBigInteger().intValue());
-		assertEquals(4, r23_1.power(BigInteger.valueOf(3)).getBigInteger().intValue());
+		NaturalNumber e0 = NaturalNumber.getInstance(0);
+		NaturalNumber e1 = NaturalNumber.getInstance(1);
+		NaturalNumber e2 = NaturalNumber.getInstance(2);
+		NaturalNumber e3 = NaturalNumber.getInstance(3);
+		assertEquals(0, r1.power(e0).getBigInteger().intValue());
+		assertEquals(0, r1.power(e1).getBigInteger().intValue());
+		assertEquals(0, r1.power(e2).getBigInteger().intValue());
+		assertEquals(1, r23_1.power(e0).getBigInteger().intValue());
+		assertEquals(3, r23_1.power(e1).getBigInteger().intValue());
+		assertEquals(9, r23_1.power(e2).getBigInteger().intValue());
+		assertEquals(4, r23_1.power(e3).getBigInteger().intValue());
 	}
 
 	@Test

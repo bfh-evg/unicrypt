@@ -80,8 +80,8 @@ public abstract class Numerical<N extends Numerical<N>>
 		return this.multiply((N) this);
 	}
 
-	public N minus() {
-		return this.abstractMinus();
+	public N negate() {
+		return this.abstractNegate();
 	}
 
 	public N subtract(N other) {
@@ -91,22 +91,11 @@ public abstract class Numerical<N extends Numerical<N>>
 		return this.abstractSubtract(other);
 	}
 
-	public N power(int exponent) {
-		return this.power(BigInteger.valueOf(exponent));
-	}
-
-	public N power(BigInteger exponent) {
-		if (exponent == null || exponent.signum() < 0) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractPower(exponent);
-	}
-
 	public N power(NaturalNumber exponent) {
 		if (exponent == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractPower(exponent.getBigInteger());
+		return this.abstractPower(exponent.bigInteger);
 	}
 
 	public final boolean isCompatible(N other) {
@@ -156,7 +145,9 @@ public abstract class Numerical<N extends Numerical<N>>
 
 	protected abstract N abstractSubtract(N other);
 
-	protected abstract N abstractMinus();
+	protected abstract N abstractNegate();
+
+	protected abstract N abstractTimes(BigInteger factor);
 
 	protected abstract N abstractPower(BigInteger exponent);
 

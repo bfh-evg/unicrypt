@@ -96,7 +96,7 @@ public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E ext
 	}
 
 	@Override
-	public final E minus() {
+	public final E negate() {
 		if (this.getSet().isGroup()) {
 			AdditiveGroup group = ((AdditiveGroup) this.getSet());
 			return (E) group.invert(this);

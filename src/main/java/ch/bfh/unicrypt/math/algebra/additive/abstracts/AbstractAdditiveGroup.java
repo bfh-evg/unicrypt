@@ -96,7 +96,7 @@ public abstract class AbstractAdditiveGroup<E extends AdditiveElement, V extends
 	}
 
 	@Override
-	public final E minus(final Element element) {
+	public final E negate(final Element element) {
 		return this.invert(element);
 	}
 
