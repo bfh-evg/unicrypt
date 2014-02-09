@@ -117,7 +117,12 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 
 	@Override
 	public Function[] getAll() {
-		return this.functions.getAll();
+		Function[] result = new Function[this.getArity()];
+		int i = 0;
+		for (Function function : this.functions) {
+			result[i++] = function;
+		}
+		return result;
 	}
 
 	@Override

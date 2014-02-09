@@ -64,7 +64,12 @@ public class CompositeEncoder
 
 	@Override
 	public Encoder[] getAll() {
-		return this.encoders.getAll();
+		Encoder[] result = new Encoder[this.getArity()];
+		int i = 0;
+		for (Encoder encoder : this.encoders) {
+			result[i++] = encoder;
+		}
+		return result;
 	}
 
 	@Override

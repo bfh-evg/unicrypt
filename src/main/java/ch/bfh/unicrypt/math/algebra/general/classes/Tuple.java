@@ -109,7 +109,12 @@ public class Tuple
 
 	@Override
 	public Element[] getAll() {
-		return this.getValue().getAll();
+		Element[] result = new Element[this.getArity()];
+		int i = 0;
+		for (Element element : this.getValue()) {
+			result[i++] = element;
+		}
+		return result;
 	}
 
 	@Override

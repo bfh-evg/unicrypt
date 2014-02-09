@@ -90,7 +90,7 @@ public interface Compound<C extends Compound<C, T>, T> {
 	 * <p>
 	 * @return The corresponding array of functions
 	 */
-	public T[] getAll();
+	public Object[] getAll();
 
 	/**
 	 * Creates a new product set which contains one set less than the given product set.

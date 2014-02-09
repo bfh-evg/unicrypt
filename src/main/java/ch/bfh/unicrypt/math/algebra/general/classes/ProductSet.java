@@ -276,7 +276,12 @@ public class ProductSet
 
 	@Override
 	public Set[] getAll() {
-		return this.sets.getAll();
+		Set[] result = new Set[this.getArity()];
+		int i = 0;
+		for (Set set : this.sets) {
+			result[i++] = set;
+		}
+		return result;
 	}
 
 	@Override

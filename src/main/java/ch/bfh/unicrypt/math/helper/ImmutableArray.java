@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.helper;
 
 import ch.bfh.unicrypt.math.helper.compound.Compound;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -58,24 +57,29 @@ public class ImmutableArray<T>
 	// The obects are stored either as an ordinary, possibly empty array (case 1)
 	// or as an array of length 1 together with the full length of the immutable
 	// array (case 2, all elements are equal)
-	private final T[] array;
+	private final Object[] array;
 	private final int length;
 
+	// Empty
+	private ImmutableArray() {
+		this.array = new Object[0];
+		this.length = 0;
+	}
+
 	// Case 1: General case
-	private ImmutableArray(T[] array) {
+	private ImmutableArray(Object[] array) {
 		this.array = array;
 		this.length = array.length;
 	}
 
 	// Case 2: Special constructor for array of length 1
-	private ImmutableArray(T object) {
+	private ImmutableArray(Object object) {
 		this(object, 1);
 	}
 
 	// Case 2: General case
-	private ImmutableArray(T object, int length) {
-		this.array = (T[]) Array.newInstance(object.getClass(), 1);
-		this.array[0] = object;
+	private ImmutableArray(Object object, int length) {
+		this.array = new Object[]{object};
 		this.length = length;
 	}
 
@@ -104,9 +108,9 @@ public class ImmutableArray<T>
 			throw new IndexOutOfBoundsException();
 		}
 		if (this.isUniform()) { // case 2, not empty
-			return this.array[0];
+			return (T) this.array[0];
 		}
-		return this.array[index]; // case 1
+		return (T) this.array[index]; // case 1
 	}
 
 	@Override
@@ -120,10 +124,10 @@ public class ImmutableArray<T>
 	}
 
 	@Override
-	public T[] getAll() {
-		T[] result = Arrays.copyOf(this.array, this.length);
-		if (this.isUniform() && !this.isEmpty()) { // case 2, not empty
-			Arrays.fill(result, this.array[0]);
+	public Object[] getAll() {
+		Object[] result = new Object[this.length];
+		for (int i = 0; i < this.length; i++) {
+			result[i] = this.getAt(i);
 		}
 		return result;
 	}
@@ -135,60 +139,62 @@ public class ImmutableArray<T>
 		}
 		if (this.isUniform()) { // case 2, not empty
 			if (this.length == 1) {
-				return new ImmutableArray<T>(Arrays.copyOf(this.array, 0));
-			} else {
-				return new ImmutableArray<T>(this.array[0], this.length - 1);
+				return new ImmutableArray<T>();
 			}
+			return new ImmutableArray<T>(this.array[0], this.length - 1);
 		}
-		T[] result = Arrays.copyOf(this.array, this.length - 1);
-		for (int i = index; i < this.length - 1; i++) {
-			result[i] = this.array[i + 1];
+		boolean isUniform = true;
+		Object[] result = new Object[this.length - 1];
+		for (int i = 0; i < result.length; i++) {
+			Object object = (i < index) ? this.getAt(i) : this.getAt(i + 1);
+			result[i] = object;
+			isUniform = isUniform && object.equals(result[0]);
 		}
-		// calling getInstance is necessary to check whether the new array is uniform
-		return ImmutableArray.getInstance(result);
-	}
-
-	@Override
-	public ImmutableArray<T> insertAt(int index, T object) {
-		if (index < 0 || index > this.length) {
-			throw new IndexOutOfBoundsException();
+		if (isUniform) {
+			return new ImmutableArray<T>(result[0], result.length);
 		}
-		if (object == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this.isUniform()) { // case 2, possibly empty
-			if (this.isEmpty() || this.array[0].equals(object)) {
-				return new ImmutableArray<T>(object, this.length + 1);
-			}
-			T[] result = Arrays.copyOf(this.array, this.length + 1);
-			Arrays.fill(result, this.array[0]);
-			result[index] = object;
-			return new ImmutableArray<T>(result);
-		}
-		T[] result = Arrays.copyOf(this.array, this.length + 1);
-		for (int i = index + 1; i < result.length; i++) {
-			result[i] = this.array[i - 1];
-		}
-		result[index] = object;
 		return new ImmutableArray<T>(result);
 	}
 
 	@Override
-	public ImmutableArray<T> replaceAt(int index, T object) {
+	public ImmutableArray<T> insertAt(int index, T newObject) {
+		if (index < 0 || index > this.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (newObject == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.isUniform()) { // case 2, possibly empty
+			if (this.isEmpty() || this.array[0].equals(newObject)) {
+				return new ImmutableArray<T>(newObject, this.length + 1);
+			}
+		}
+		Object[] result = new Object[this.length + 1];
+		for (int i = 0; i < result.length; i++) {
+			if (i != index) {
+				result[i] = (i < index) ? this.getAt(i) : this.getAt(i - 1);
+			}
+		}
+		result[index] = newObject;
+		return new ImmutableArray<T>(result);
+	}
+
+	@Override
+	public ImmutableArray<T> replaceAt(int index, T newObject) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
-		if (object == null) {
+		if (newObject == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.getAt(index).equals(object)) {
+		if (this.getAt(index).equals(newObject)) {
 			return this;
 		}
-		T[] result = Arrays.copyOf(this.array, this.length);
-		if (this.isUniform()) { // case 2, not empty
-			Arrays.fill(result, this.array[0]);
+		Object[] result = new Object[this.length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = this.getAt(i);
 		}
-		result[index] = object;
+		result[index] = newObject;
 		return new ImmutableArray<T>(result);
 	}
 
@@ -212,14 +218,14 @@ public class ImmutableArray<T>
 		if (this.isUniform() && other.isUniform() && this.getFirst().equals(other.getFirst())) {
 			return new ImmutableArray<T>(this.getFirst(), this.length + other.length);
 		}
-		T[] newArray = (T[]) Array.newInstance(this.array.getClass().getComponentType(), this.length + other.length);
+		Object[] result = new Object[this.length + other.length];
 		for (int i = 0; i < this.length; i++) {
-			newArray[i] = this.getAt(i);
+			result[i] = this.getAt(i);
 		}
 		for (int i = 0; i < other.length; i++) {
-			newArray[this.length + i] = other.getAt(i);
+			result[this.length + i] = other.getAt(i);
 		}
-		return new ImmutableArray<T>(newArray);
+		return new ImmutableArray<T>(result);
 	}
 
 	@Override
