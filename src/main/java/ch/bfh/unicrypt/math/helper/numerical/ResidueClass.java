@@ -51,7 +51,7 @@ import java.math.BigInteger;
 public class ResidueClass
 	   extends Numerical<ResidueClass> {
 
-	private BigInteger modulus;
+	private final BigInteger modulus;
 
 	protected ResidueClass(BigInteger bigInteger, BigInteger modulus) {
 		super(bigInteger);
@@ -64,6 +64,11 @@ public class ResidueClass
 
 	public boolean isRelativelyPrime() {
 		return MathUtil.areRelativelyPrime(this.bigInteger, this.modulus);
+	}
+
+	public ResidueClass invert() {
+		// test for relative primality is included in modInverse
+		return new ResidueClass(this.bigInteger.modInverse(this.modulus), this.modulus);
 	}
 
 	@Override

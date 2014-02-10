@@ -240,7 +240,7 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement abstractInvert(final GStarModElement element) {
-		return this.abstractGetElement(ResidueClass.getInstance(element.getValue().getBigInteger().modInverse(this.modulus), this.modulus));
+		return this.abstractGetElement(element.getValue().invert());
 	}
 
 	/**
