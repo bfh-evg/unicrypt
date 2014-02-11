@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
-public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement, V extends Object>
+public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements AdditiveSemiGroup {
 

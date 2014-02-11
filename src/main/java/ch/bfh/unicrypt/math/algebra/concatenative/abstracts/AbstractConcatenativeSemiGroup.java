@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
-public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement, V extends Object>
+public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements ConcatenativeSemiGroup {
 

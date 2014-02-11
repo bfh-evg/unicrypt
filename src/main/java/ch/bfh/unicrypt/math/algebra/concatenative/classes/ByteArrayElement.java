@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 
 /**
@@ -49,7 +50,8 @@ import ch.bfh.unicrypt.math.helper.ByteArray;
  * @author rolfhaenni
  */
 public class ByteArrayElement
-	   extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement, ByteArray> {
+	   extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement, ByteArray>
+	   implements ConcatenativeElement<ByteArray> {
 
 	protected ByteArrayElement(final ByteArrayMonoid monoid, final ByteArray byteArray) {
 		super(monoid, byteArray);

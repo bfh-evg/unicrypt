@@ -59,7 +59,7 @@ import java.util.NoSuchElementException;
  * @param <E>
  * @param <V>
  */
-public abstract class AbstractCyclicRing<E extends DualisticElement, V extends Object>
+public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractRing<E, V>
 	   implements CyclicRing, Iterable<E> {
 

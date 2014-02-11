@@ -51,13 +51,14 @@ import java.math.BigInteger;
  * and other methods from a {@link Group} in a convenient way. Most methods provided by {@link Element} have an
  * equivalent method in {@link Group}.
  * <p>
+ * @param <V>
  * @see Group
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface Element {
+public interface Element<V extends Object> {
 
 	public boolean isAdditive();
 
@@ -80,7 +81,7 @@ public interface Element {
 	 * <p>
 	 * @return The corresponding BigInteger value
 	 */
-	public Object getValue();
+	public V getValue();
 
 	public BigInteger getBigInteger();
 
@@ -104,37 +105,37 @@ public interface Element {
 	/**
 	 * @see Group#apply(Element, Element)
 	 */
-	public Element apply(Element element);
+	public Element<V> apply(Element element);
 
 	/**
 	 * @see Group#applyInverse(Element, Element)
 	 */
-	public Element applyInverse(Element element);
+	public Element<V> applyInverse(Element element);
 
 	/**
 	 * @see Group#selfApply(Element, BigInteger)
 	 */
-	public Element selfApply(BigInteger amount);
+	public Element<V> selfApply(BigInteger amount);
 
 	/**
 	 * @see Group#selfApply(Element, Element)
 	 */
-	public Element selfApply(Element amount);
+	public Element<V> selfApply(Element amount);
 
 	/**
 	 * @see Group#selfApply(Element, int)
 	 */
-	public Element selfApply(int amount);
+	public Element<V> selfApply(int amount);
 
 	/**
 	 * @see Group#selfApply(Element)
 	 */
-	public Element selfApply();
+	public Element<V> selfApply();
 
 	/**
 	 * @see Group#invert(Element)
 	 */
-	public Element invert();
+	public Element<V> invert();
 
 	/**
 	 * @see Group#isIdentityElement(Element)

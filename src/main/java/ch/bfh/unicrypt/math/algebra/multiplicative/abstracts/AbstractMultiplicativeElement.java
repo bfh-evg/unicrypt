@@ -56,9 +56,9 @@ import java.math.BigInteger;
  * @param <E>
  * @param <V>
  */
-public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup, E extends MultiplicativeElement, V extends Object>
+public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup, E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractElement<S, E, V>
-	   implements MultiplicativeElement {
+	   implements MultiplicativeElement<V> {
 
 	protected AbstractMultiplicativeElement(final S semiGroup, final V value) {
 		super(semiGroup, value);

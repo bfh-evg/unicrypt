@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
-public abstract class AbstractAdditiveGroup<E extends AdditiveElement, V extends Object>
+public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractGroup<E, V>
 	   implements AdditiveGroup {
 

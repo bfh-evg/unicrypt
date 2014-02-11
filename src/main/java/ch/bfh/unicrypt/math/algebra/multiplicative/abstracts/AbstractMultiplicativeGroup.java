@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import java.math.BigInteger;
 
-public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement, V extends Object>
+public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractGroup<E, V>
 	   implements MultiplicativeGroup {
 

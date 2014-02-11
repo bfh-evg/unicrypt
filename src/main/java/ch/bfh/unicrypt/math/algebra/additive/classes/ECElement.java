@@ -41,20 +41,56 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
+import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.helper.Point;
 
-public class ECBinaryPolynomialFieldElement
-	   extends AbstractECElement<ECBinaryPolynomialFieldElement, BinaryPolynomialElement> {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
+ */
+public class ECElement<V extends Object>
+	   extends AbstractAdditiveElement<EC, ECElement<V>, Point<DualisticElement<V>>> {
 
-	public ECBinaryPolynomialFieldElement(AbstractEC ecGroup) {
-		super(ecGroup);
+	private final boolean infinity;
+
+	// the main constructor
+	protected ECElement(EC ecGroup, Point<DualisticElement<V>> value) {
+		super(ecGroup, value);
+		this.infinity = false;
 	}
 
-	public ECBinaryPolynomialFieldElement(AbstractEC ecGroup, Point<BinaryPolynomialElement> value) {
-		super(ecGroup, value);
+	// special constructor is necessary for the additional point of infinity
+	protected ECElement(EC ecGroup) {
+		super(ecGroup, Point.<DualisticElement<V>>getInstance());
+		this.infinity = true;
+	}
+
+	// additional convenience getter method to handle to point of infinity
+	public DualisticElement<V> getX() {
+		if (this.infinity) {
+			throw new UnsupportedOperationException();
+		}
+		return this.getValue().getX();
+	}
+
+	// additional convenience getter method to handle to point of infinity
+	public DualisticElement<V> getY() {
+		if (this.infinity) {
+			throw new UnsupportedOperationException();
+		}
+		return this.getValue().getY();
+	}
+
+	@Override
+	public String defaultToStringValue() {
+		if (this.infinity) {
+			return "Infinity";
+		} else {
+			return "(" + this.getX().getValue() + "," + this.getY().getValue() + ")";
+		}
 	}
 
 }

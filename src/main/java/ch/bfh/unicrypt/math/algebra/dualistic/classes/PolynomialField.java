@@ -51,11 +51,11 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public class PolynomialField
-	   extends PolynomialRing
+public class PolynomialField<V extends Object>
+	   extends PolynomialRing<V>
 	   implements FiniteField {
 
-	private PolynomialElement irreduciblePolynomial;
+	private PolynomialElement<V> irreduciblePolynomial;
 	private int degree;
 
 	protected PolynomialField(PrimeField primeField) {
@@ -85,19 +85,19 @@ public class PolynomialField
 	}
 
 	@Override
-	public PolynomialElement divide(Element element1, Element element2) {
+	public PolynomialElement<V> divide(Element element1, Element element2) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public PolynomialElement oneOver(Element element) {
+	public PolynomialElement<V> oneOver(Element element) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static PolynomialField getInstance(PrimeField primeField, PolynomialElement irreduciblePolynomialElement) {
+	public static <V extends Object> PolynomialField getInstance(PrimeField primeField, PolynomialElement<V> irreduciblePolynomialElement) {
 		if (primeField == null || irreduciblePolynomialElement == null || !irreduciblePolynomialElement.getSet().getSemiRing().isEquivalent(primeField)) {
 			throw new IllegalArgumentException();
 		}

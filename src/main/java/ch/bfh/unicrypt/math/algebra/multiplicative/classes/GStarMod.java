@@ -191,7 +191,7 @@ public class GStarMod
 			   || !value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE)) {
 			return null; // no such element
 		}
-		return new GStarModElement(this, ResidueClass.getInstance(value, this.modulus));
+		return this.abstractGetElement(ResidueClass.getInstance(value, this.modulus));
 	}
 
 	@Override

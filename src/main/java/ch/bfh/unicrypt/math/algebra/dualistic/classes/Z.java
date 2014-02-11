@@ -150,7 +150,7 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetElementFrom(BigInteger value) {
-		return new ZElement(this, WholeNumber.getInstance(MathUtil.unfold(value)));
+		return this.abstractGetElement(WholeNumber.getInstance(MathUtil.unfold(value)));
 	}
 
 	@Override

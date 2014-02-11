@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
-public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement, V extends Object>
+public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
 	   implements ConcatenativeMonoid {
 

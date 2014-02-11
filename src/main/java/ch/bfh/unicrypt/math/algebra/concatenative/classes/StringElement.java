@@ -42,13 +42,15 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 
 /**
  *
  * @author rolfhaenni
  */
 public class StringElement
-	   extends AbstractConcatenativeElement<StringMonoid, StringElement, String> {
+	   extends AbstractConcatenativeElement<StringMonoid, StringElement, String>
+	   implements ConcatenativeElement<String> {
 
 	protected StringElement(final StringMonoid monoid, final String string) {
 		super(monoid, string);

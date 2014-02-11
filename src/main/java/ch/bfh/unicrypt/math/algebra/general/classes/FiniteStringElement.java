@@ -44,13 +44,15 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
  * @author rolfhaenni
  */
 public class FiniteStringElement
-	   extends AbstractElement<FiniteStringSet, FiniteStringElement, String> {
+	   extends AbstractElement<FiniteStringSet, FiniteStringElement, String>
+	   implements Element<String> {
 
 	protected FiniteStringElement(final FiniteStringSet set, final String string) {
 		super(set, string);

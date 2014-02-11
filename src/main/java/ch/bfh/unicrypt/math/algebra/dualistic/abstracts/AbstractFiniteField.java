@@ -53,7 +53,7 @@ import java.math.BigInteger;
  * @param <M>
  * @param <V>
  */
-public abstract class AbstractFiniteField<E extends DualisticElement, M extends MultiplicativeGroup, V extends Object>
+public abstract class AbstractFiniteField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V extends Object>
 	   extends AbstractField<E, M, V>
 	   implements FiniteField {
 

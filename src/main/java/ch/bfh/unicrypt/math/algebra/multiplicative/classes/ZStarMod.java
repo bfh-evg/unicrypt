@@ -180,7 +180,7 @@ public class ZStarMod
 		if (value.signum() == 0 || value.compareTo(this.getModulus()) >= 0 || !MathUtil.areRelativelyPrime(value, this.getModulus())) {
 			return null; // no such element
 		}
-		return new ZStarModElement(this, ResidueClass.getInstance(value, this.modulus));
+		return this.abstractGetElement(ResidueClass.getInstance(value, this.modulus));
 	}
 
 	@Override

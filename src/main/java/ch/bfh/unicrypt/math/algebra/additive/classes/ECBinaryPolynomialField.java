@@ -47,14 +47,15 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.helper.Point;
+import ch.bfh.unicrypt.math.helper.polynomial.BinaryPolynomial;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
 public class ECBinaryPolynomialField
-	   extends AbstractEC<ECBinaryPolynomialFieldElement, BinaryPolynomialField, BinaryPolynomialElement> {
+	   extends AbstractEC<BinaryPolynomialField, BinaryPolynomial> {
 
-	public ECBinaryPolynomialField(BinaryPolynomialField finiteField, BinaryPolynomialElement a,
-		   BinaryPolynomialElement b, BinaryPolynomialElement gx, BinaryPolynomialElement gy,
+	public ECBinaryPolynomialField(BinaryPolynomialField finiteField, DualisticElement<BinaryPolynomial> a,
+		   DualisticElement<BinaryPolynomial> b, DualisticElement<BinaryPolynomial> gx, DualisticElement<BinaryPolynomial> gy,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
 		// this test should be moved to getInstance
@@ -73,30 +74,30 @@ public class ECBinaryPolynomialField
 	}
 
 	@Override
-	protected boolean abstractContains(BinaryPolynomialElement x) {
+	protected boolean abstractContains(DualisticElement<BinaryPolynomial> x) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	protected boolean abstractContains(BinaryPolynomialElement x, BinaryPolynomialElement y) {
-		BinaryPolynomialElement left = y.power(2).add(x.multiply(getA()));
-		BinaryPolynomialElement right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
+	protected boolean abstractContains(DualisticElement<BinaryPolynomial> x, DualisticElement<BinaryPolynomial> y) {
+		DualisticElement<BinaryPolynomial> left = y.power(2).add(x.multiply(getA()));
+		DualisticElement<BinaryPolynomial> right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
 		return left.isEquivalent(right);
 	}
 
 	@Override
-	protected ECBinaryPolynomialFieldElement abstractGetElement(Point<BinaryPolynomialElement> value) {
-		return new ECBinaryPolynomialFieldElement(this, value);
+	protected ECElement<BinaryPolynomial> abstractGetElement(Point<DualisticElement<BinaryPolynomial>> value) {
+		return new ECElement<BinaryPolynomial>(this, value);
 	}
 
 	@Override
-	protected ECBinaryPolynomialFieldElement abstractGetIdentityElement() {
-		return new ECBinaryPolynomialFieldElement(this);
+	protected ECElement<BinaryPolynomial> abstractGetIdentityElement() {
+		return new ECElement<BinaryPolynomial>(this);
 	}
 
 	@Override
-	protected ECBinaryPolynomialFieldElement abstractApply(ECBinaryPolynomialFieldElement element1, ECBinaryPolynomialFieldElement element2) {
+	protected ECElement<BinaryPolynomial> abstractApply(ECElement<BinaryPolynomial> element1, ECElement<BinaryPolynomial> element2) {
 		if (element1.isZero()) {
 			return element2;
 		}
@@ -106,11 +107,11 @@ public class ECBinaryPolynomialField
 		if (element1.equals(element2.invert())) {
 			return this.getIdentityElement();
 		}
-		BinaryPolynomialElement s, rx, ry;
-		BinaryPolynomialElement px = element1.getX();
-		BinaryPolynomialElement py = element1.getY();
-		BinaryPolynomialElement qx = element2.getX();
-		BinaryPolynomialElement qy = element2.getY();
+		DualisticElement<BinaryPolynomial> s, rx, ry;
+		DualisticElement<BinaryPolynomial> px = element1.getX();
+		DualisticElement<BinaryPolynomial> py = element1.getY();
+		DualisticElement<BinaryPolynomial> qx = element2.getX();
+		DualisticElement<BinaryPolynomial> qy = element2.getY();
 		if (element1.equals(element2)) {
 			final DualisticElement one = this.getFiniteField().getOneElement();
 			s = px.add(py.divide(px));
@@ -125,7 +126,7 @@ public class ECBinaryPolynomialField
 	}
 
 	@Override
-	protected ECBinaryPolynomialFieldElement abstractInvert(ECBinaryPolynomialFieldElement element) {
+	protected ECElement<BinaryPolynomial> abstractInvert(ECElement<BinaryPolynomial> element) {
 		if (element.isZero()) {
 			return this.getZeroElement();
 		}
@@ -134,7 +135,7 @@ public class ECBinaryPolynomialField
 	}
 
 	@Override
-	protected ECBinaryPolynomialFieldElement getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
+	protected ECElement<BinaryPolynomial> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -190,7 +191,7 @@ public class ECBinaryPolynomialField
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
 	 */
-	public static ECBinaryPolynomialField getInstance(BinaryPolynomialField f, BinaryPolynomialElement a, BinaryPolynomialElement b, BinaryPolynomialElement gx, BinaryPolynomialElement gy, BigInteger givenOrder, BigInteger coFactor) {
+	public static ECBinaryPolynomialField getInstance(BinaryPolynomialField f, DualisticElement<BinaryPolynomial> a, DualisticElement<BinaryPolynomial> b, DualisticElement<BinaryPolynomial> gx, DualisticElement<BinaryPolynomial> gy, BigInteger givenOrder, BigInteger coFactor) {
 		return new ECBinaryPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
 	}
 

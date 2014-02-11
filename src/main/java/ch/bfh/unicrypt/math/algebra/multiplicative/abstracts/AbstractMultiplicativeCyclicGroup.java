@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCycl
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import java.math.BigInteger;
 
-public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement, V extends Object>
+public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractCyclicGroup<E, V>
 	   implements MultiplicativeCyclicGroup {
 

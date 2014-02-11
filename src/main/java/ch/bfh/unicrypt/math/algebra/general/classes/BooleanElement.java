@@ -42,13 +42,16 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
  * @author rolfhaenni
  */
 public class BooleanElement
-	   extends AbstractElement<BooleanSet, BooleanElement, Boolean> {
+	   extends AbstractElement<BooleanSet, BooleanElement, Boolean>
+
+	   implements Element<Boolean> {
 
 	protected BooleanElement(final BooleanSet set, final Boolean bit) {
 		super(set, bit);

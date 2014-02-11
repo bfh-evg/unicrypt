@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.helper.numerical.WholeNumber;
 
 /**
@@ -49,7 +50,8 @@ import ch.bfh.unicrypt.math.helper.numerical.WholeNumber;
  * @author rolfhaenni
  */
 public class ZElement
-	   extends AbstractDualisticElement<Z, ZElement, WholeNumber> {
+	   extends AbstractDualisticElement<Z, ZElement, WholeNumber>
+	   implements DualisticElement<WholeNumber> {
 
 	protected ZElement(final Z z, final WholeNumber value) {
 		super(z, value);

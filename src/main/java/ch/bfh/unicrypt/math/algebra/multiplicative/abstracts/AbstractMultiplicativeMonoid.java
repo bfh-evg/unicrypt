@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 import java.math.BigInteger;
 
-public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement, V extends Object>
+public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
 	   implements MultiplicativeMonoid {
 

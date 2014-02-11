@@ -51,9 +51,10 @@ import java.util.Map;
 /**
  *
  * @author rolfhaenni
+ * @param <V>
  */
-public class PolynomialRing
-	   extends PolynomialSemiRing
+public class PolynomialRing<V extends Object>
+	   extends PolynomialSemiRing<V>
 	   implements Ring {
 
 	protected PolynomialRing(Ring ring) {
@@ -69,9 +70,9 @@ public class PolynomialRing
 	// various super-classes
 	//
 	@Override
-	public PolynomialElement invert(Element element) {
-		Map<Integer, DualisticElement> coefficientMap = new HashMap<Integer, DualisticElement>();
-		GenericPolynomial<DualisticElement> polynomial = ((PolynomialElement) element).getValue();
+	public PolynomialElement<V> invert(Element element) {
+		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap<Integer, DualisticElement<V>>();
+		GenericPolynomial<DualisticElement<V>> polynomial = ((PolynomialElement<V>) element).getValue();
 		for (Integer i : polynomial.getIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
 		}
@@ -79,17 +80,17 @@ public class PolynomialRing
 	}
 
 	@Override
-	public PolynomialElement applyInverse(Element element1, Element element2) {
+	public PolynomialElement<V> applyInverse(Element element1, Element element2) {
 		return this.apply(element1, this.invert(element2));
 	}
 
 	@Override
-	public PolynomialElement subtract(Element element1, Element element2) {
+	public PolynomialElement<V> subtract(Element element1, Element element2) {
 		return this.applyInverse(element1, element2);
 	}
 
 	@Override
-	public PolynomialElement negate(Element element) {
+	public PolynomialElement<V> negate(Element element) {
 		return this.invert(element);
 	}
 

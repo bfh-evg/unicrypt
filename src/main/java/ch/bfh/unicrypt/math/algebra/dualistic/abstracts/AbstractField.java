@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGrou
  * @param <M>
  * @param <V>
  */
-public abstract class AbstractField<E extends DualisticElement, M extends MultiplicativeGroup, V extends Object>
+public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V extends Object>
 	   extends AbstractRing<E, V>
 	   implements Field {
 

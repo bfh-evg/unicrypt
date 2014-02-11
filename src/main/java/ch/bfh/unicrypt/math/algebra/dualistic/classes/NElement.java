@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.helper.numerical.NaturalNumber;
 
 /**
@@ -49,7 +50,8 @@ import ch.bfh.unicrypt.math.helper.numerical.NaturalNumber;
  * @author rolfhaenni
  */
 public class NElement
-	   extends AbstractDualisticElement<N, NElement, NaturalNumber> {
+	   extends AbstractDualisticElement<N, NElement, NaturalNumber>
+	   implements DualisticElement<NaturalNumber> {
 
 	protected NElement(final N n, final NaturalNumber value) {
 		super(n, value);

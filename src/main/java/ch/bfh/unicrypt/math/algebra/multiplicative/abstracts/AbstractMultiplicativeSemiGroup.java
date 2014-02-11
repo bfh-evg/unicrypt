@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import java.math.BigInteger;
 
-public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement, V extends Object>
+public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements MultiplicativeSemiGroup {
 

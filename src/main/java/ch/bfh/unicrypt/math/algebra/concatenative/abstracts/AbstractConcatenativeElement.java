@@ -51,12 +51,14 @@ import java.math.BigInteger;
 
 /**
  *
+ * @param <S>
  * @param <E>
+ * @param <V>
  * @author rolfhaenni
  */
-public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement, V extends Object>
+public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractElement<S, E, V>
-	   implements ConcatenativeElement {
+	   implements ConcatenativeElement<V> {
 
 	protected AbstractConcatenativeElement(final S semiGroup, final V value) {
 		super(semiGroup, value);

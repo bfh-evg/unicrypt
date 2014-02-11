@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.Permutation;
 
 /**
@@ -49,7 +50,8 @@ import ch.bfh.unicrypt.math.helper.Permutation;
  * @author rolfhaenni
  */
 public class PermutationElement
-	   extends AbstractElement<PermutationGroup, PermutationElement, Permutation> {
+	   extends AbstractElement<PermutationGroup, PermutationElement, Permutation>
+	   implements Element<Permutation> {
 
 	protected PermutationElement(final PermutationGroup group, final Permutation permutation) {
 		super(group, permutation);

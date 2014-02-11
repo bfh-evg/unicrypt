@@ -45,14 +45,16 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.helper.Point;
+import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
 public class ECZModPrime
-	   extends AbstractEC<ECZModPrimeElement, ZModPrime, ZModElement> {
+	   extends AbstractEC<ZModPrime, ResidueClass> {
 
-	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger givenOrder, BigInteger coFactor) {
+	protected ECZModPrime(ZModPrime finiteField, DualisticElement<ResidueClass> a, DualisticElement<ResidueClass> b, DualisticElement<ResidueClass> gx, DualisticElement<ResidueClass> gy, BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
 		// this test should be moved to getInstance
 		if (!isValid()) {
@@ -69,9 +71,9 @@ public class ECZModPrime
 	}
 
 	@Override
-	public boolean abstractContains(ZModElement x) {
+	public boolean abstractContains(DualisticElement<ResidueClass> x) {
 		BigInteger p = this.getFiniteField().getModulus();
-		ZModElement right = x.power(3).add(getA().multiply(x)).add(getB());
+		DualisticElement<ResidueClass> right = x.power(3).add(getA().multiply(x)).add(getB());
 		if (MathUtil.hasSqrtModPrime(right.getValue().getBigInteger(), p)) {
 			BigInteger y1 = MathUtil.sqrtModPrime(right.getValue().getBigInteger(), p);
 			ZModElement y = this.getFiniteField().getElement(y1);
@@ -82,24 +84,24 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected boolean abstractContains(ZModElement x, ZModElement y) {
-		ZModElement left = y.square();
-		ZModElement right = x.power(3).add(x.multiply(this.getA())).add(this.getB());
+	protected boolean abstractContains(DualisticElement<ResidueClass> x, DualisticElement<ResidueClass> y) {
+		DualisticElement<ResidueClass> left = y.square();
+		DualisticElement<ResidueClass> right = x.power(3).add(x.multiply(this.getA())).add(this.getB());
 		return left.isEquivalent(right);
 	}
 
 	@Override
-	protected ECZModPrimeElement abstractGetElement(Point<ZModElement> value) {
-		return new ECZModPrimeElement(this, value);
+	protected ECElement<ResidueClass> abstractGetElement(Point<DualisticElement<ResidueClass>> value) {
+		return new ECElement<ResidueClass>(this, value);
 	}
 
 	@Override
-	protected ECZModPrimeElement abstractGetIdentityElement() {
-		return new ECZModPrimeElement(this);
+	protected ECElement<ResidueClass> abstractGetIdentityElement() {
+		return new ECElement<ResidueClass>(this);
 	}
 
 	@Override
-	protected ECZModPrimeElement abstractApply(ECZModPrimeElement element1, ECZModPrimeElement element2) {
+	protected ECElement<ResidueClass> abstractApply(ECElement<ResidueClass> element1, ECElement<ResidueClass> element2) {
 		if (element1.isZero()) {
 			return element2;
 		}
@@ -109,14 +111,14 @@ public class ECZModPrime
 		if (element1.isEquivalent(element2.invert())) {
 			return this.getZeroElement();
 		}
-		ZModElement s, rx, ry;
-		ZModElement px = element1.getX();
-		ZModElement py = element1.getY();
-		ZModElement qx = element2.getX();
-		ZModElement qy = element2.getY();
+		DualisticElement<ResidueClass> s, rx, ry;
+		DualisticElement<ResidueClass> px = element1.getX();
+		DualisticElement<ResidueClass> py = element1.getY();
+		DualisticElement<ResidueClass> qx = element2.getX();
+		DualisticElement<ResidueClass> qy = element2.getY();
 		if (element1.isEquivalent(element2)) {
-			ZModElement three = this.getFiniteField().getElement(3);
-			ZModElement two = this.getFiniteField().getElement(2);
+			DualisticElement<ResidueClass> three = this.getFiniteField().getElement(3);
+			DualisticElement<ResidueClass> two = this.getFiniteField().getElement(2);
 			s = ((px.square().multiply(three)).apply(this.getA())).divide(py.multiply(two));
 			rx = s.square().apply(px.multiply(two).invert());
 			ry = s.multiply(px.subtract(rx)).apply(py.invert());
@@ -129,7 +131,7 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModPrimeElement abstractInvert(ECZModPrimeElement element) {
+	protected ECElement<ResidueClass> abstractInvert(ECElement<ResidueClass> element) {
 		if (element.isZero()) {
 			return this.getZeroElement();
 		}
@@ -137,10 +139,10 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECZModPrimeElement getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
+	protected ECElement<ResidueClass> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
 		BigInteger p = this.getFiniteField().getModulus();
-		ZModElement x = this.getFiniteField().getRandomElement(randomByteSequence);
-		ZModElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
+		DualisticElement<ResidueClass> x = this.getFiniteField().getRandomElement(randomByteSequence);
+		DualisticElement<ResidueClass> y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
 		boolean neg = x.getValue().getBigInteger().mod(new BigInteger("2")).equals(BigInteger.ONE);
 
 		while (!MathUtil.hasSqrtModPrime(y.getValue().getBigInteger(), p)) {
@@ -158,8 +160,8 @@ public class ECZModPrime
 
 	private boolean isValid() {
 		boolean c1, c2, c3, c4, c5, c61, c62;
-		ZModElement i4 = getFiniteField().getElement(4);
-		ZModElement i27 = getFiniteField().getElement(27);
+		DualisticElement<ResidueClass> i4 = getFiniteField().getElement(4);
+		DualisticElement<ResidueClass> i27 = getFiniteField().getElement(27);
 		c1 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
 		c2 = contains(this.getDefaultGenerator());
 		c3 = MathUtil.arePrime(getOrder());
@@ -200,7 +202,7 @@ public class ECZModPrime
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger givenOrder, BigInteger coFactor) {
+	public static ECZModPrime getInstance(ZModPrime f, DualisticElement<ResidueClass> a, DualisticElement<ResidueClass> b, DualisticElement<ResidueClass> gx, DualisticElement<ResidueClass> gy, BigInteger givenOrder, BigInteger coFactor) {
 		// isValid() test should come here!!
 		return new ECZModPrime(f, a, b, gx, gy, givenOrder, coFactor);
 	}

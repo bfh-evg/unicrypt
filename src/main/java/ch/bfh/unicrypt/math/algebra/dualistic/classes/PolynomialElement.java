@@ -49,19 +49,21 @@ import ch.bfh.unicrypt.math.helper.polynomial.GenericPolynomial;
 /**
  *
  * @author rolfhaenni
+ * @param <V>
  */
-public class PolynomialElement
-	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement, GenericPolynomial<DualisticElement>> {
+public class PolynomialElement<V extends Object>
+	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement<V>, GenericPolynomial<DualisticElement<V>>>
+	   implements DualisticElement<GenericPolynomial<DualisticElement<V>>> {
 
-	protected PolynomialElement(final PolynomialSemiRing semiRing, GenericPolynomial<DualisticElement> polynomial) {
+	protected PolynomialElement(final PolynomialSemiRing semiRing, GenericPolynomial<DualisticElement<V>> polynomial) {
 		super(semiRing, polynomial);
 	}
 
-	public DualisticElement evaluate(DualisticElement element) {
+	public DualisticElement<V> evaluate(DualisticElement element) {
 		if (element == null || !this.getSet().getSemiRing().contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		DualisticElement result = this.getSet().getSemiRing().getZeroElement();
+		DualisticElement<V> result = this.getSet().getSemiRing().getZeroElement();
 		for (Integer index : this.getValue().getIndices()) {
 			result = result.add(this.getValue().getCoefficient(index).multiply(element.power(index)));
 		}

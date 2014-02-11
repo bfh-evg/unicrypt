@@ -77,9 +77,9 @@ import java.util.HashMap;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<S extends Set, E extends Element, V extends Object>
+public abstract class AbstractElement<S extends Set, E extends Element<V>, V extends Object>
 	   extends UniCrypt
-	   implements Element {
+	   implements Element<V> {
 
 	private final S set;
 	private final V value;

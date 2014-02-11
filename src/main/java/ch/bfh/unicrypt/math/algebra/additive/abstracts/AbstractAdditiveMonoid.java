@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
-public abstract class AbstractAdditiveMonoid<E extends AdditiveElement, V extends Object>
+public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
 	   implements AdditiveMonoid {
 

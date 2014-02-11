@@ -55,7 +55,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public abstract class AbstractCyclicGroup<E extends Element, V extends Object>
+public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object>
 	   extends AbstractGroup<E, V>
 	   implements CyclicGroup, Iterable<E> {
 

@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
@@ -49,7 +50,8 @@ import java.math.BigInteger;
  * @author rolfhaenni
  */
 public class SingletonElement
-	   extends AbstractElement<SingletonGroup, SingletonElement, BigInteger> {
+	   extends AbstractElement<SingletonGroup, SingletonElement, BigInteger>
+	   implements Element<BigInteger> {
 
 	protected SingletonElement(final SingletonGroup group, BigInteger value) {
 		super(group, value);

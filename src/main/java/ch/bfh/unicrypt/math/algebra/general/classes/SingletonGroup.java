@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
@@ -57,7 +56,7 @@ import java.util.Map;
  * <p>
  */
 public class SingletonGroup
-	   extends AbstractCyclicGroup<Element, BigInteger> {
+	   extends AbstractCyclicGroup<SingletonElement, BigInteger> {
 
 	private final SingletonElement element;
 
@@ -88,12 +87,12 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected Element abstractGetElement(final BigInteger value) {
+	protected SingletonElement abstractGetElement(final BigInteger value) {
 		return this.element;
 	}
 
 	@Override
-	protected Element abstractGetElementFrom(final BigInteger value) {
+	protected SingletonElement abstractGetElementFrom(final BigInteger value) {
 		return this.element;
 	}
 
@@ -103,7 +102,7 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected Element abstractGetElementFrom(ByteTree bytTree) {
+	protected SingletonElement abstractGetElementFrom(ByteTree bytTree) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
@@ -113,12 +112,12 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected Element defaultSelfApply(Element element, BigInteger amount) {
+	protected SingletonElement defaultSelfApply(SingletonElement element, BigInteger amount) {
 		return this.element;
 	}
 
 	@Override
-	protected Element abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected SingletonElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		return this.element;
 	}
 
@@ -128,27 +127,27 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected Element abstractGetIdentityElement() {
+	protected SingletonElement abstractGetIdentityElement() {
 		return this.element;
 	}
 
 	@Override
-	protected Element abstractApply(Element element1, Element element2) {
+	protected SingletonElement abstractApply(SingletonElement element1, SingletonElement element2) {
 		return this.element;
 	}
 
 	@Override
-	protected Element abstractInvert(Element element) {
+	protected SingletonElement abstractInvert(SingletonElement element) {
 		return this.element;
 	}
 
 	@Override
-	protected Element abstractGetDefaultGenerator() {
+	protected SingletonElement abstractGetDefaultGenerator() {
 		return this.element;
 	}
 
 	@Override
-	protected boolean abstractIsGenerator(Element element) {
+	protected boolean abstractIsGenerator(SingletonElement element) {
 		return true;
 	}
 

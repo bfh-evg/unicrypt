@@ -49,43 +49,43 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public interface AdditiveElement
-	   extends Element {
+public interface AdditiveElement<V>
+	   extends Element<V> {
 
 	/**
 	 * @see Group#apply(Element, Element)
 	 */
-	public AdditiveElement add(Element element);
+	public AdditiveElement<V> add(Element element);
 
 	/**
 	 * @see Group#applyInverse(Element, Element)
 	 */
-	public AdditiveElement subtract(Element element);
+	public AdditiveElement<V> subtract(Element element);
 
 	/**
 	 * @see Group#selfApply(Element, BigInteger)
 	 */
-	public AdditiveElement times(BigInteger amount);
+	public AdditiveElement<V> times(BigInteger amount);
 
 	/**
 	 * @see Group#selfApply(Element, Element)
 	 */
-	public AdditiveElement times(Element amount);
+	public AdditiveElement<V> times(Element amount);
 
 	/**
 	 * @see Group#selfApply(Element, int)
 	 */
-	public AdditiveElement times(int amount);
+	public AdditiveElement<V> times(int amount);
 
 	/**
 	 * @see Group#selfApply(Element)
 	 */
-	public AdditiveElement timesTwo();
+	public AdditiveElement<V> timesTwo();
 
 	/**
 	 * @see Group#negate(Element)
 	 */
-	public AdditiveElement negate();
+	public AdditiveElement<V> negate();
 
 	public boolean isZero();
 
@@ -94,24 +94,24 @@ public interface AdditiveElement
 	public AdditiveSemiGroup getSet();
 
 	@Override
-	public AdditiveElement apply(Element element);
+	public AdditiveElement<V> apply(Element element);
 
 	@Override
-	public AdditiveElement applyInverse(Element element);
+	public AdditiveElement<V> applyInverse(Element element);
 
 	@Override
-	public AdditiveElement selfApply(BigInteger amount);
+	public AdditiveElement<V> selfApply(BigInteger amount);
 
 	@Override
-	public AdditiveElement selfApply(Element amount);
+	public AdditiveElement<V> selfApply(Element amount);
 
 	@Override
-	public AdditiveElement selfApply(int amount);
+	public AdditiveElement<V> selfApply(int amount);
 
 	@Override
-	public AdditiveElement selfApply();
+	public AdditiveElement<V> selfApply();
 
 	@Override
-	public AdditiveElement invert();
+	public AdditiveElement<V> invert();
 
 }

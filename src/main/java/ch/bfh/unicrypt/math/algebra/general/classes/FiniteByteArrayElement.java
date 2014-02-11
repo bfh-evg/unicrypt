@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 
 /**
@@ -51,7 +52,8 @@ import ch.bfh.unicrypt.math.helper.ByteArray;
  * @author rolfhaenni
  */
 public class FiniteByteArrayElement
-	   extends AbstractElement<FiniteByteArraySet, FiniteByteArrayElement, ByteArray> {
+	   extends AbstractElement<FiniteByteArraySet, FiniteByteArrayElement, ByteArray>
+	   implements Element<ByteArray> {
 
 	protected FiniteByteArrayElement(final FiniteByteArraySet set, final ByteArray byteArray) {
 		super(set, byteArray);

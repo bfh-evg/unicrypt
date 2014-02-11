@@ -56,16 +56,16 @@ import java.util.LinkedHashSet;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class Subset
-	   extends AbstractSet<Element, Element>
-	   implements Iterable<Element> {
+	   extends AbstractSet<Element<Object>, Object>
+	   implements Iterable<Element<Object>> {
 
 	private final Set superSet;
-	private final HashSet<Element> hashSet;
+	private final HashSet<Element<Object>> elements;
 
-	protected Subset(Set superSet, HashSet<Element> elementSet) {
+	protected Subset(Set superSet, HashSet<Element<Object>> elements) {
 		super(Element.class);
 		this.superSet = superSet;
-		this.hashSet = elementSet;
+		this.elements = elements;
 	}
 
 	public Set getSuperset() {
@@ -73,42 +73,52 @@ public class Subset
 	}
 
 	public Element[] getElements() {
-		return this.hashSet.toArray(new Element[]{});
+		return this.elements.toArray(new Element[]{});
 	}
 
 	@Override
-	protected Iterator<Element> defaultIterator() {
-		return this.hashSet.iterator();
+	protected Iterator<Element<Object>> defaultIterator() {
+		return this.elements.iterator();
 	}
 
 	@Override
 	protected boolean defaultContains(final Element element) {
-		return this.hashSet.contains(element);
+		return this.elements.contains(element);
 	}
 
 	@Override
-	protected boolean abstractContains(Element value) {
-		return this.hashSet.contains(value);
+	protected boolean abstractContains(Object value) {
+		for (Element element : this.elements) {
+			if (element.getValue().equals(value)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
-	protected Element abstractGetElement(Element value) {
-		return value;
+	protected Element abstractGetElement(Object value) {
+		for (Element element : this.elements) {
+			if (element.getValue().equals(value)) {
+				return element;
+			}
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override
 	protected Element abstractGetElementFrom(BigInteger bigInteger) {
-		for (Element element : this.hashSet) {
-			if (element.getValue().equals(bigInteger)) {
-				return this.getSuperset().getElementFrom(bigInteger);
+		for (Element element : this.elements) {
+			if (element.getBigInteger().equals(bigInteger)) {
+				return element;
 			}
 		}
 		return null; // no such element
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(Element value) {
-		return this.superSet.getBigIntegerFrom(value);
+	protected BigInteger abstractGetBigIntegerFrom(Object value) {
+		return this.abstractGetElement(value).getBigInteger();
 	}
 
 	@Override
@@ -117,37 +127,37 @@ public class Subset
 	}
 
 	@Override
-	protected ByteTree abstractGetByteTreeFrom(Element value) {
-		return this.superSet.getByteTreeFrom(value);
+	protected ByteTree abstractGetByteTreeFrom(Object value) {
+		return this.abstractGetElement(value).getByteTree();
 	}
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return BigInteger.valueOf(this.hashSet.size());
+		return BigInteger.valueOf(this.elements.size());
 	}
 
 	@Override
 	protected Element abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.getElements()[randomByteSequence.getRandomNumberGenerator().nextInteger(this.hashSet.size() - 1)];
+		return this.getElements()[randomByteSequence.getRandomNumberGenerator().nextInteger(this.elements.size() - 1)];
 	}
 
 	@Override
 	protected boolean abstractEquals(Set set) {
 		Subset other = (Subset) set;
-		return this.superSet.equals(other.superSet) && this.hashSet.equals(other.hashSet);
+		return this.superSet.equals(other.superSet) && this.elements.equals(other.elements);
 	}
 
 	@Override
 	protected boolean defaultIsEquivalent(Set set) {
 		Subset other = (Subset) set;
-		return this.superSet.isEquivalent(other.superSet) && this.hashSet.equals(other.hashSet);
+		return this.superSet.isEquivalent(other.superSet) && this.elements.equals(other.elements);
 	}
 
 	@Override
 	protected int abstractHashCode() {
 		int hash = 7;
 		hash = 47 * hash + this.superSet.hashCode();
-		hash = 47 * hash + this.hashSet.hashCode();
+		hash = 47 * hash + this.elements.hashCode();
 		return hash;
 	}
 
@@ -156,7 +166,7 @@ public class Subset
 			throw new IllegalArgumentException();
 		}
 		// A LinkedHashSet retains the order
-		HashSet<Element> hashSet = new LinkedHashSet<Element>();
+		HashSet<Element<Object>> hashSet = new LinkedHashSet<Element<Object>>();
 		for (Element element : elements) {
 			if (element == null || !superSet.contains(element)) {
 				throw new IllegalArgumentException();

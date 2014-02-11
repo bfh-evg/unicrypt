@@ -170,7 +170,7 @@ public class ZMod
 		if (value.compareTo(this.modulus) >= 0) {
 			return null; // no such element
 		}
-		return new ZModElement(this, ResidueClass.getInstance(value, this.modulus));
+		return this.abstractGetElement(ResidueClass.getInstance(value, this.modulus));
 	}
 
 	@Override

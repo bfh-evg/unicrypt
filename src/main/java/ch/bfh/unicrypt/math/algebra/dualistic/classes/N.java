@@ -136,7 +136,7 @@ public class N
 
 	@Override
 	protected NElement abstractGetElementFrom(BigInteger value) {
-		return new NElement(this, NaturalNumber.getInstance(value));
+		return this.abstractGetElement(NaturalNumber.getInstance(value));
 	}
 
 	@Override
