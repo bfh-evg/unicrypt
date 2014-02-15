@@ -132,11 +132,6 @@ public abstract class Numerical<N extends Numerical<N>>
 		return "";
 	}
 
-	@Override
-	protected String defaultToStringValue() {
-		return this.bigInteger.toString();
-	}
-
 	protected abstract boolean abstractIsCompatible(N other);
 
 	protected abstract N abstractAdd(N other);

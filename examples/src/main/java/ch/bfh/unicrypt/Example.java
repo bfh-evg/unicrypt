@@ -39,33 +39,69 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.helper;
+package ch.bfh.unicrypt;
 
-import ch.bfh.unicrypt.Example;
+import java.io.PrintStream;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArrayExample {
+public class Example {
 
-	public static void example1() {
-		ByteArray byteArray = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+	private static final PrintStream OUT = System.out;
+	private static final String LABEL_SEP = ": ";
+	private static final String ITEM_SEP = ", ";
 
-		Example.printLine(byteArray);
-		Example.printLine("Length ", byteArray.getLength());
-		Example.printLine("Bytes  ", byteArray);
-
-		Example.printLine("Extract", byteArray.extract(2, 4));
-
-		Object[] byteArrays = byteArray.split(2, 4, 7);
-		Example.printLine("Split  ", byteArrays);
-		Example.printLine("Conc   ", byteArray.concatenate(byteArray));
-
+	public static void print(Object object) {
+		OUT.print(object);
 	}
 
-	public static void main(final String[] args) {
-		example1();
+	public static void printLine() {
+		OUT.println();
+	}
+
+	public static void printTitle(String title) {
+		Example.printLine(title);
+		for (int i = 0; i < title.length(); i++) {
+			Example.print("-");
+		}
+		Example.printLine();
+	}
+
+	public static void printLine(Object object) {
+		Example.print(object);
+		Example.printLine();
+	}
+
+	public static void printLine(String label, Object object) {
+		Example.print(label + Example.LABEL_SEP);
+		Example.printLine(object);
+	}
+
+	public static void printLine(Object... objects) {
+		String sep = "";
+		for (Object object : objects) {
+			Example.print(sep + object);
+			sep = Example.ITEM_SEP;
+		}
+		Example.printLine();
+	}
+
+	public static void printLine(String label, Object... objects) {
+		Example.print(label + Example.LABEL_SEP);
+		Example.printLine(objects);
+	}
+
+	public static void printLines(Object... objects) {
+		for (Object object : objects) {
+			Example.printLine(object);
+		}
+	}
+
+	public static void printLines(String label, Object... objects) {
+		Example.printLine(label + Example.LABEL_SEP);
+		Example.printLines(objects);
 	}
 
 }

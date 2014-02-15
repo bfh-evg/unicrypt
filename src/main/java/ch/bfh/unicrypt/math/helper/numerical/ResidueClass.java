@@ -92,6 +92,11 @@ public class ResidueClass
 	}
 
 	@Override
+	protected String defaultToStringValue() {
+		return this.bigInteger.toString() + "mod" + this.modulus.toString();
+	}
+
+	@Override
 	protected boolean abstractIsCompatible(ResidueClass other) {
 		return this.modulus.equals(other.modulus);
 	}

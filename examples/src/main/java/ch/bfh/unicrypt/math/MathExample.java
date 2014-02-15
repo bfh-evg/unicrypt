@@ -39,28 +39,53 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.helper;
+package ch.bfh.unicrypt.math;
 
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.helper.Alphabet;
+import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArrayExample {
+public class MathExample {
 
 	public static void example1() {
-		ByteArray byteArray = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+		ZMod zMod = ZMod.getInstance(23);
 
-		Example.printLine(byteArray);
-		Example.printLine("Length ", byteArray.getLength());
-		Example.printLine("Bytes  ", byteArray);
+		Element e1 = zMod.getElement(5);
+		ResidueClass v1 = (ResidueClass) e1.getValue();
+		BigInteger b1 = v1.getBigInteger();
+		BigInteger m1 = v1.getModulus();
+		Example.printLine(e1, v1, b1, m1);
 
-		Example.printLine("Extract", byteArray.extract(2, 4));
+		Element<ResidueClass> e2 = zMod.getElement(7);
+		ResidueClass v2 = e2.getValue();
+		BigInteger b2 = v2.getBigInteger();
+		BigInteger m2 = v2.getModulus();
+		Example.printLine(e2, v2, b2, m2);
 
-		Object[] byteArrays = byteArray.split(2, 4, 7);
-		Example.printLine("Split  ", byteArrays);
-		Example.printLine("Conc   ", byteArray.concatenate(byteArray));
+		ZModElement e3 = zMod.getElement(7);
+		ResidueClass v3 = e3.getValue();
+		BigInteger b3 = v3.getBigInteger();
+		BigInteger m3 = v3.getModulus();
+		Example.printLine(e3, v3, b3, m3);
+
+		StringMonoid strM = StringMonoid.getInstance(Alphabet.DECIMAL);
+		Element f1 = strM.getElement("1234");
+		String str1 = (String) f1.getValue();
+		Element<String> f2 = strM.getElement("1234");
+		String str2 = f2.getValue();
+		StringElement f3 = strM.getElement("1234");
+		String str3 = f3.getValue();
+		Example.printLine(f1, f2, f3);
 
 	}
 
