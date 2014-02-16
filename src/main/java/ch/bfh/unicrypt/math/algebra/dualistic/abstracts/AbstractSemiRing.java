@@ -55,7 +55,7 @@ import java.math.BigInteger;
  */
 public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractAdditiveMonoid<E, V>
-	   implements SemiRing {
+	   implements SemiRing<V> {
 
 	private E one;
 

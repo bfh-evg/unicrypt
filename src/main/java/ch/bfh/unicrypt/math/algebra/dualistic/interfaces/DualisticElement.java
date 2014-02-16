@@ -49,13 +49,14 @@ import java.math.BigInteger;
 /**
  *
  * @author rolfhaenni
+ * @param <V>
  */
 public interface DualisticElement<V extends Object>
 	   extends AdditiveElement<V>, MultiplicativeElement<V> {
 
 	// The following methods are overridden from Element with an adapted return type
 	@Override
-	public SemiRing getSet();
+	public SemiRing<V> getSet();
 
 	@Override
 	public DualisticElement<V> apply(Element element);

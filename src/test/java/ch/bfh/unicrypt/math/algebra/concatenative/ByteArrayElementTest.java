@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -85,8 +86,8 @@ public class ByteArrayElementTest {
 	@Test
 	public void testGetByteArray() {
 		ByteArrayMonoid bam = ByteArrayMonoid.getInstance(3);
-		Element element = bam.getElement(new byte[]{(byte) -1, (byte) 2, (byte) 3});
-		Element element2 = bam.getElement(element.getValue());
+		Element<ByteArray> element = bam.getElement(new byte[]{(byte) -1, (byte) 2, (byte) 3});
+		Element<ByteArray> element2 = bam.getElement(element.getValue());
 		Assert.assertEquals("Should be: " + element, element, element2);
 //		System.out.println("getByteArray");
 //		ByteArrayElement instance = null;

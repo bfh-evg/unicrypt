@@ -52,8 +52,7 @@ import ch.bfh.unicrypt.math.helper.polynomial.GenericPolynomial;
  * @param <V>
  */
 public class PolynomialElement<V extends Object>
-	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement<V>, GenericPolynomial<DualisticElement<V>>>
-	   implements DualisticElement<GenericPolynomial<DualisticElement<V>>> {
+	   extends AbstractDualisticElement<PolynomialSemiRing<V>, PolynomialElement<V>, GenericPolynomial<DualisticElement<V>>> {
 
 	protected PolynomialElement(final PolynomialSemiRing semiRing, GenericPolynomial<DualisticElement<V>> polynomial) {
 		super(semiRing, polynomial);

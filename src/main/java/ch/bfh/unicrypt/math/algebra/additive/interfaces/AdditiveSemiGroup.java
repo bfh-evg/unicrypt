@@ -54,9 +54,10 @@ import java.math.BigInteger;
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
+ * @param <V>
  */
-public interface AdditiveSemiGroup
-	   extends SemiGroup {
+public interface AdditiveSemiGroup<V extends Object>
+	   extends SemiGroup<V> {
 
 	/**
 	 * This method is a synonym for {@link #Group.apply(Element, Element)}.
@@ -65,7 +66,7 @@ public interface AdditiveSemiGroup
 	 * @param element2 the same as in {@link #Group.apply(Element, Element)}
 	 * @return the same as in {@link #Group.apply(Element, Element)}
 	 */
-	public AdditiveElement add(Element element1, Element element2);
+	public AdditiveElement<V> add(Element element1, Element element2);
 
 	/**
 	 * This method is a synonym for {@link #Group.apply(Element...)}.
@@ -73,7 +74,7 @@ public interface AdditiveSemiGroup
 	 * @param elements the same as in {@link #Group.apply(Element...)}
 	 * @return the same as in {@link #Group.apply(Element...)}
 	 */
-	public AdditiveElement add(Element... elements);
+	public AdditiveElement<V> add(Element... elements);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
@@ -82,7 +83,7 @@ public interface AdditiveSemiGroup
 	 * @param amount  the same as in {@link #Group.selfApply(Element, BigInteger)}
 	 * @return the same as in {@link #Group.selfApply(Element, BigInteger)}
 	 */
-	public AdditiveElement times(Element element, BigInteger amount);
+	public AdditiveElement<V> times(Element element, BigInteger amount);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, Element)}.
@@ -91,7 +92,7 @@ public interface AdditiveSemiGroup
 	 * @param amount  the same as in {@link #Group.selfApply(Element, Element)}
 	 * @return the same as in {@link #Group.selfApply(Element, Element)}
 	 */
-	public AdditiveElement times(Element element, Element amount);
+	public AdditiveElement<V> times(Element element, Element amount);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
@@ -100,7 +101,7 @@ public interface AdditiveSemiGroup
 	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
 	 * @return the same as in {@link #Group.selfApply(Element, int)}
 	 */
-	public AdditiveElement times(Element element, int amount);
+	public AdditiveElement<V> times(Element element, int amount);
 
 	/**
 	 * Applies the group operation to two instances of a given group element. This is equivalent to
@@ -110,7 +111,7 @@ public interface AdditiveSemiGroup
 	 * @return The result of applying the group operation to the input element
 	 * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
 	 */
-	public AdditiveElement timesTwo(Element element);
+	public AdditiveElement<V> timesTwo(Element element);
 
 	/**
 	 * Applies the binary operation pair-wise sequentially to the results of computing
@@ -125,49 +126,47 @@ public interface AdditiveSemiGroup
 	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
 	 * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
 	 */
-	public AdditiveElement sumOfProducts(Element[] elements, BigInteger[] amounts);
+	public AdditiveElement<V> sumOfProducts(Element[] elements, BigInteger[] amounts);
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public AdditiveElement getElementFrom(int value);
+	public AdditiveElement<V> getElementFrom(int value);
 
 	@Override
-	public AdditiveElement getElementFrom(BigInteger value);
+	public AdditiveElement<V> getElementFrom(BigInteger value);
 
 	@Override
-	public AdditiveElement getElementFrom(ByteTree byteTree);
+	public AdditiveElement<V> getElementFrom(ByteTree byteTree);
 
 	@Override
-	public AdditiveElement getElementFrom(Element element);
-
-//	@Override
-//	public AdditiveElement getElement(int value);
-	@Override
-	public AdditiveElement getRandomElement();
+	public AdditiveElement<V> getElementFrom(Element element);
 
 	@Override
-	public AdditiveElement getRandomElement(RandomByteSequence randomByteSequence);
+	public AdditiveElement<V> getRandomElement();
+
+	@Override
+	public AdditiveElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 
 	// The following methods are overridden from SemiGroup with an adapted return type
 	@Override
-	public AdditiveElement apply(Element element1, Element element2);
+	public AdditiveElement<V> apply(Element element1, Element element2);
 
 	@Override
-	public AdditiveElement apply(Element... elements);
+	public AdditiveElement<V> apply(Element... elements);
 
 	@Override
-	public AdditiveElement selfApply(Element element, BigInteger amount);
+	public AdditiveElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
-	public AdditiveElement selfApply(Element element, Element amount);
+	public AdditiveElement<V> selfApply(Element element, Element amount);
 
 	@Override
-	public AdditiveElement selfApply(Element element, int amount);
+	public AdditiveElement<V> selfApply(Element element, int amount);
 
 	@Override
-	public AdditiveElement selfApply(Element element);
+	public AdditiveElement<V> selfApply(Element element);
 
 	@Override
-	public AdditiveElement multiSelfApply(Element[] elements, BigInteger[] amounts);
+	public AdditiveElement<V> multiSelfApply(Element[] elements, BigInteger[] amounts);
 
 }

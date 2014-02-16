@@ -91,7 +91,7 @@ public interface MultiplicativeElement<V extends Object>
 
 	// The following methods are overridden from Element with an adapted return type
 	@Override
-	public MultiplicativeSemiGroup getSet();
+	public MultiplicativeSemiGroup<V> getSet();
 
 	@Override
 	public MultiplicativeElement<V> apply(Element element);

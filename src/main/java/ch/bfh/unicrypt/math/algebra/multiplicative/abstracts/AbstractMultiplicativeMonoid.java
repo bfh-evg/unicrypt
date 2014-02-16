@@ -49,7 +49,7 @@ import java.math.BigInteger;
 
 public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
-	   implements MultiplicativeMonoid {
+	   implements MultiplicativeMonoid<V> {
 
 	public AbstractMultiplicativeMonoid(Class<? extends Object> valueClass) {
 		super(valueClass);

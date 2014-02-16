@@ -53,7 +53,7 @@ import java.math.BigInteger;
  */
 public class ProductMonoid
 	   extends ProductSemiGroup
-	   implements Monoid {
+	   implements Monoid<ImmutableArray<Element>> {
 
 	private Tuple identityElement;
 

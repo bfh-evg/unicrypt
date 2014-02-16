@@ -58,7 +58,7 @@ import java.math.BigInteger;
  */
 public abstract class AbstractGroup<E extends Element<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
-	   implements Group {
+	   implements Group<V> {
 
 	public AbstractGroup(Class<? extends Object> valueClass) {
 		super(valueClass);

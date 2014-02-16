@@ -58,7 +58,7 @@ import java.math.BigInteger;
  */
 public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
-	   implements Monoid {
+	   implements Monoid<V> {
 
 	private E identityElement;
 

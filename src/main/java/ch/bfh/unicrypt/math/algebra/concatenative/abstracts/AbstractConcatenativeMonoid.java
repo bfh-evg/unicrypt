@@ -50,7 +50,7 @@ import java.math.BigInteger;
 
 public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
-	   implements ConcatenativeMonoid {
+	   implements ConcatenativeMonoid<V> {
 
 	private final int blockLength;
 

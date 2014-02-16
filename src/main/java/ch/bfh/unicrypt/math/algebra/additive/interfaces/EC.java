@@ -44,20 +44,22 @@ package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
+import ch.bfh.unicrypt.math.helper.Point;
 import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public interface EC
-	   extends AdditiveCyclicGroup {
+public interface EC<V extends Object>
+	   extends AdditiveCyclicGroup<Point<DualisticElement<V>>> {
 
-	public FiniteField getFiniteField();
+	public FiniteField<V> getFiniteField();
 
-	public DualisticElement getA();
+	public DualisticElement<V> getA();
 
-	public DualisticElement getB();
+	public DualisticElement<V> getB();
 
 	public BigInteger getCoFactor();
 
@@ -65,6 +67,6 @@ public interface EC
 
 	public boolean contains(DualisticElement xValue, DualisticElement yValue);
 
-	public ECElement getElement(DualisticElement xValue, DualisticElement yValue);
+	public ECElement<V> getElement(DualisticElement xValue, DualisticElement yValue);
 
 }

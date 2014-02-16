@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.math.helper.ImmutableArray;
  */
 public class ProductGroup
 	   extends ProductMonoid
-	   implements Group {
+	   implements Group<ImmutableArray<Element>> {
 
 	protected ProductGroup(ImmutableArray<Set> sets) {
 		super(sets);

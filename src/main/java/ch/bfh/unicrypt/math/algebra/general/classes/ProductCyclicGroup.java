@@ -57,7 +57,7 @@ import java.util.NoSuchElementException;
  */
 public class ProductCyclicGroup
 	   extends ProductGroup
-	   implements CyclicGroup {
+	   implements CyclicGroup<ImmutableArray<Element>> {
 
 	private Tuple defaultGenerator;
 

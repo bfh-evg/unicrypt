@@ -53,7 +53,7 @@ import java.math.BigInteger;
  */
 public class ProductSemiGroup
 	   extends ProductSet
-	   implements SemiGroup {
+	   implements SemiGroup<ImmutableArray<Element>> {
 
 	protected ProductSemiGroup(ImmutableArray<Set> sets) {
 		super(sets);

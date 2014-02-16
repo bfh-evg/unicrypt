@@ -90,22 +90,22 @@ public enum SECECCParamsF2m
 
 	@Override
 	public BinaryPolynomialElement getA() {
-		return getFiniteField().getElement(new BigInteger(a, 16));
+		return getFiniteField().getElementFrom(new BigInteger(a, 16));
 	}
 
 	@Override
 	public BinaryPolynomialElement getB() {
-		return getFiniteField().getElement(new BigInteger(b, 16));
+		return getFiniteField().getElementFrom(new BigInteger(b, 16));
 	}
 
 	@Override
 	public BinaryPolynomialElement getGx() {
-		return getFiniteField().getElement(new BigInteger(gx, 16));
+		return getFiniteField().getElementFrom(new BigInteger(gx, 16));
 	}
 
 	@Override
 	public BinaryPolynomialElement getGy() {
-		return getFiniteField().getElement(new BigInteger(gy, 16));
+		return getFiniteField().getElementFrom(new BigInteger(gy, 16));
 	}
 
 	@Override

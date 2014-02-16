@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 
 /**
@@ -53,24 +52,25 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
+ * @param <V>
  */
-public interface MultiplicativeCyclicGroup
-	   extends CyclicGroup, MultiplicativeGroup {
+public interface MultiplicativeCyclicGroup<V extends Object>
+	   extends CyclicGroup<V>, MultiplicativeGroup<V> {
 
 	// The following methods are overridden from Group with an adapted return type
 	@Override
-	public MultiplicativeElement getDefaultGenerator();
+	public MultiplicativeElement<V> getDefaultGenerator();
 
 	@Override
-	public MultiplicativeElement getRandomGenerator();
+	public MultiplicativeElement<V> getRandomGenerator();
 
 	@Override
-	public MultiplicativeElement getRandomGenerator(RandomByteSequence randomByteSequence);
+	public MultiplicativeElement<V> getRandomGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
-	public Tuple getIndependentGenerators(int amount);
+	public MultiplicativeElement<V> getIndependentGenerator(int index);
 
 	@Override
-	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public MultiplicativeElement<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

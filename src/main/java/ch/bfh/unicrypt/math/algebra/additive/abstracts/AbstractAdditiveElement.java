@@ -53,7 +53,7 @@ import java.math.BigInteger;
  *
  * @author rolfhaenni
  */
-public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup, E extends AdditiveElement<V>, V extends Object>
+public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractElement<S, E, V>
 	   implements AdditiveElement<V> {
 

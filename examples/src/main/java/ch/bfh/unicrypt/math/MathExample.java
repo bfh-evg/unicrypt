@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Alphabet;
 import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
 import java.math.BigInteger;
@@ -58,39 +59,89 @@ import java.math.BigInteger;
 public class MathExample {
 
 	public static void example1() {
+		// Generate Z_23 (specific type)
 		ZMod zMod = ZMod.getInstance(23);
 
+		// Option 1: Non-Generic Type (casting required)
 		Element e1 = zMod.getElement(5);
 		ResidueClass v1 = (ResidueClass) e1.getValue();
 		BigInteger b1 = v1.getBigInteger();
 		BigInteger m1 = v1.getModulus();
 		Example.printLine(e1, v1, b1, m1);
 
+		// Option 2: Generic Type
 		Element<ResidueClass> e2 = zMod.getElement(7);
 		ResidueClass v2 = e2.getValue();
 		BigInteger b2 = v2.getBigInteger();
 		BigInteger m2 = v2.getModulus();
 		Example.printLine(e2, v2, b2, m2);
 
-		ZModElement e3 = zMod.getElement(7);
+		// Option 3: Specific Type
+		ZModElement e3 = zMod.getElement(9);
 		ResidueClass v3 = e3.getValue();
 		BigInteger b3 = v3.getBigInteger();
 		BigInteger m3 = v3.getModulus();
 		Example.printLine(e3, v3, b3, m3);
+	}
 
-		StringMonoid strM = StringMonoid.getInstance(Alphabet.DECIMAL);
-		Element f1 = strM.getElement("1234");
-		String str1 = (String) f1.getValue();
-		Element<String> f2 = strM.getElement("1234");
-		String str2 = f2.getValue();
-		StringElement f3 = strM.getElement("1234");
-		String str3 = f3.getValue();
-		Example.printLine(f1, f2, f3);
+	public static void example2() {
+		// Generate String Monoid (specific type)
+		StringMonoid strMonoid = StringMonoid.getInstance(Alphabet.DECIMAL);
 
+		// Option 1: Non-Generic Type (casting required)
+		Element e1 = strMonoid.getElement("123");
+		String str1 = (String) e1.getValue();
+		Example.printLine(e1, str1);
+
+		// Option 2: Generic Type
+		Element<String> e2 = strMonoid.getElement("1234");
+		String str2 = e2.getValue();
+		Example.printLine(e2, str2);
+
+		// Option 3: Specific Type
+		StringElement e3 = strMonoid.getElement("12345");
+		String str3 = e3.getValue();
+		Example.printLine(e3, str3);
+	}
+
+	public static void example3() {
+		// Generate Z_23 (non-generic type)
+		Set zMod = ZMod.getInstance(23);
+
+		// Option 1: Non-Generic Type
+		Element e1 = zMod.getElementFrom(5);
+		Example.printLine(e1);
+
+		// Option 2: Generic Type
+		Element<ResidueClass> e2 = zMod.getElementFrom(7);
+		Example.printLine(e2);
+
+		// Option 3: Specific Type (casting required)
+		ZModElement e3 = (ZModElement) zMod.getElementFrom(9);
+		Example.printLine(e3);
+	}
+
+	public static void example4() {
+		// Generate Z_23 (generic type)
+		Set<ResidueClass> zMod = ZMod.getInstance(23);
+
+		// Option 1: Non-Generic Type
+		Element e1 = zMod.getElementFrom(5);
+		Example.printLine(e1);
+
+		// Option 2: Generic Type
+		Element<ResidueClass> e2 = zMod.getElementFrom(7);
+		Example.printLine(e2);
+
+		// Option 3: Specific Type (casting required)
+		ZModElement e3 = (ZModElement) zMod.getElementFrom(9);
+		Example.printLine(e3);
 	}
 
 	public static void main(final String[] args) {
 		example1();
+		example2();
+		example3();
 	}
 
 }

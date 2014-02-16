@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.math.helper.Point;
  * @param <V>
  */
 public class ECElement<V extends Object>
-	   extends AbstractAdditiveElement<EC, ECElement<V>, Point<DualisticElement<V>>> {
+	   extends AbstractAdditiveElement<EC<V>, ECElement<V>, Point<DualisticElement<V>>> {
 
 	private final boolean infinity;
 

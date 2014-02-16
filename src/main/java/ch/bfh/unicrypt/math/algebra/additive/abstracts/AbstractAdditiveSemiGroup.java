@@ -49,7 +49,7 @@ import java.math.BigInteger;
 
 public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
-	   implements AdditiveSemiGroup {
+	   implements AdditiveSemiGroup<V> {
 
 	public AbstractAdditiveSemiGroup(Class<? extends Object> valueClass) {
 		super(valueClass);

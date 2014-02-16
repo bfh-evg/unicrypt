@@ -61,7 +61,7 @@ import java.util.NoSuchElementException;
  */
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractRing<E, V>
-	   implements CyclicRing, Iterable<E> {
+	   implements CyclicRing<V>, Iterable<E> {
 
 	private E defaultGenerator;
 

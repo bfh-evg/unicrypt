@@ -44,29 +44,28 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveCyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 
 /**
  *
  * @author rolfhaenni
  */
-public interface CyclicRing
-	   extends Ring, AdditiveCyclicGroup {
+public interface CyclicRing<V extends Object>
+	   extends Ring<V>, AdditiveCyclicGroup<V> {
 
 	// The following methods are overridden from AdditiveCyclicGroup with an adapted return type
 	@Override
-	public DualisticElement getDefaultGenerator();
+	public DualisticElement<V> getDefaultGenerator();
 
 	@Override
-	public DualisticElement getRandomGenerator();
+	public DualisticElement<V> getRandomGenerator();
 
 	@Override
-	public DualisticElement getRandomGenerator(RandomByteSequence randomByteSequence);
+	public DualisticElement<V> getRandomGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
-	public Tuple getIndependentGenerators(int amount);
+	public DualisticElement<V> getIndependentGenerator(int index);
 
 	@Override
-	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public DualisticElement<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

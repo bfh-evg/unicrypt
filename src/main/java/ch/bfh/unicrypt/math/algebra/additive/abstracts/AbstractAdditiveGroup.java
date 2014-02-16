@@ -49,7 +49,7 @@ import java.math.BigInteger;
 
 public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractGroup<E, V>
-	   implements AdditiveGroup {
+	   implements AdditiveGroup<V> {
 
 	public AbstractAdditiveGroup(Class<? extends Object> valueClass) {
 		super(valueClass);

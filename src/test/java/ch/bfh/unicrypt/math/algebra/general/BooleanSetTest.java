@@ -99,7 +99,7 @@ public class BooleanSetTest {
 	}
 
 	@Test
-	public void testGetElementBigInteger() {
+	public void testGetElementFromBigInteger() {
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
 		BooleanElement result = instance.getElementFrom(BigInteger.ZERO);
@@ -108,13 +108,6 @@ public class BooleanSetTest {
 		result = instance.getElementFrom(BigInteger.ONE);
 		assertEquals(true, result.getValue());
 
-		try {
-			BooleanElement expResult = result;
-			instance.getElement(BigInteger.TEN);
-			Assert.fail();
-		} catch (IllegalArgumentException ex) {
-			//ok
-		}
 	}
 
 	@Test

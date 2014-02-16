@@ -54,7 +54,7 @@ import java.math.BigInteger;
  */
 public abstract class AbstractRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractSemiRing<E, V>
-	   implements Ring {
+	   implements Ring<V> {
 
 	public AbstractRing(Class<? extends Object> valueClass) {
 		super(valueClass);

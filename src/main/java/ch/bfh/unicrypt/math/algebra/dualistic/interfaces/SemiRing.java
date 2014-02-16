@@ -51,107 +51,108 @@ import java.math.BigInteger;
 /**
  *
  * @author rolfhaenni
+ * @param <V>
  */
-public interface SemiRing
-	   extends AdditiveMonoid, MultiplicativeMonoid {
+public interface SemiRing<V extends Object>
+	   extends AdditiveMonoid<V>, MultiplicativeMonoid<V> {
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public DualisticElement getElementFrom(int value);
+	public DualisticElement<V> getElementFrom(int value);
 
 	@Override
-	public DualisticElement getElementFrom(BigInteger value);
+	public DualisticElement<V> getElementFrom(BigInteger value);
 
 	@Override
-	public DualisticElement getElementFrom(ByteTree byteTree);
+	public DualisticElement<V> getElementFrom(ByteTree byteTree);
 
 	@Override
-	public DualisticElement getElementFrom(Element element);
+	public DualisticElement<V> getElementFrom(Element element);
 
 	@Override
-	public DualisticElement getRandomElement();
+	public DualisticElement<V> getRandomElement();
 
 //	@Override
 //	public DualisticElement getElement(int value);
 	@Override
-	public DualisticElement getRandomElement(RandomByteSequence randomByteSequence);
+	public DualisticElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 
 	// The following methods are overridden from SemiGroup with an adapted return type
 	@Override
-	public DualisticElement apply(Element element1, Element element2);
+	public DualisticElement<V> apply(Element element1, Element element2);
 
 	@Override
-	public DualisticElement apply(Element... elements);
+	public DualisticElement<V> apply(Element... elements);
 
 	@Override
-	public DualisticElement selfApply(Element element, BigInteger amount);
+	public DualisticElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement selfApply(Element element, Element amount);
+	public DualisticElement<V> selfApply(Element element, Element amount);
 
 	@Override
-	public DualisticElement selfApply(Element element, int amount);
+	public DualisticElement<V> selfApply(Element element, int amount);
 
 	@Override
-	public DualisticElement selfApply(Element element);
+	public DualisticElement<V> selfApply(Element element);
 
 	@Override
-	public DualisticElement multiSelfApply(Element[] elements, BigInteger[] amounts);
+	public DualisticElement<V> multiSelfApply(Element[] elements, BigInteger[] amounts);
 
 	// The following methods are overridden from Monoid with an adapted return type
 	@Override
-	public DualisticElement getIdentityElement();
+	public DualisticElement<V> getIdentityElement();
 
 	// The following methods are overridden from AdditiveSemiGroup with an adapted return type
 	@Override
-	public DualisticElement add(Element element1, Element element2);
+	public DualisticElement<V> add(Element element1, Element element2);
 
 	@Override
-	public DualisticElement add(Element... elements);
+	public DualisticElement<V> add(Element... elements);
 
 	@Override
-	public DualisticElement times(Element element, BigInteger amount);
+	public DualisticElement<V> times(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement times(Element element, Element amount);
+	public DualisticElement<V> times(Element element, Element amount);
 
 	@Override
-	public DualisticElement times(Element element, int amount);
+	public DualisticElement<V> times(Element element, int amount);
 
 	@Override
-	public DualisticElement timesTwo(Element element);
+	public DualisticElement<V> timesTwo(Element element);
 
 	@Override
-	public DualisticElement sumOfProducts(Element[] elements, BigInteger[] amounts);
+	public DualisticElement<V> sumOfProducts(Element[] elements, BigInteger[] amounts);
 
 	// The following methods are overridden from AdditiveMonoid with an adapted return type
 	@Override
-	public DualisticElement getZeroElement();
+	public DualisticElement<V> getZeroElement();
 
 	// The following methods are overridden from MultiplicativeSemiGroup with an adapted return type
 	@Override
-	public DualisticElement multiply(Element element1, Element element2);
+	public DualisticElement<V> multiply(Element element1, Element element2);
 
 	@Override
-	public DualisticElement multiply(Element... elements);
+	public DualisticElement<V> multiply(Element... elements);
 
 	@Override
-	public DualisticElement power(Element element, BigInteger amount);
+	public DualisticElement<V> power(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement power(Element element, Element amount);
+	public DualisticElement<V> power(Element element, Element amount);
 
 	@Override
-	public DualisticElement power(Element element, int amount);
+	public DualisticElement<V> power(Element element, int amount);
 
 	@Override
-	public DualisticElement square(Element element);
+	public DualisticElement<V> square(Element element);
 
 	@Override
-	public DualisticElement productOfPowers(Element[] elements, BigInteger[] amounts);
+	public DualisticElement<V> productOfPowers(Element[] elements, BigInteger[] amounts);
 
 	// The following methods are overridden from MultiplicativeMonoid with an adapted return type
 	@Override
-	public DualisticElement getOneElement();
+	public DualisticElement<V> getOneElement();
 
 }

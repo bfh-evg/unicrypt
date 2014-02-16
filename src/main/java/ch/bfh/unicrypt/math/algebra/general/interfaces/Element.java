@@ -74,7 +74,7 @@ public interface Element<V extends Object> {
 	 *
 	 * @return
 	 */
-	public Set getSet();
+	public Set<V> getSet();
 
 	/**
 	 * Returns the positive BigInteger value that corresponds the element.

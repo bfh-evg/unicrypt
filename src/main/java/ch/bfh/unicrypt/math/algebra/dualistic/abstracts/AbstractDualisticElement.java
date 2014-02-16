@@ -55,7 +55,7 @@ import java.math.BigInteger;
  * @param <E>
  * @param <V>
  */
-public abstract class AbstractDualisticElement<S extends SemiRing, E extends DualisticElement<V>, V extends Object>
+public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends DualisticElement<V>, V extends Object>
 	   extends AbstractAdditiveElement<S, E, V>
 	   implements DualisticElement<V> {
 

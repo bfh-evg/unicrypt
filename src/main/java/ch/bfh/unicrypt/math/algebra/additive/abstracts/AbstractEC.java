@@ -54,9 +54,9 @@ import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
 
-public abstract class AbstractEC<F extends FiniteField, V extends Object>
+public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 	   extends AbstractAdditiveCyclicGroup<ECElement<V>, Point<DualisticElement<V>>>
-	   implements EC {
+	   implements EC<V> {
 
 	private final F finiteField;
 	private final DualisticElement<V> a, b;

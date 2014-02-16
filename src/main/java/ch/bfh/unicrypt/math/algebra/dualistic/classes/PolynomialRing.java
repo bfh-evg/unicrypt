@@ -55,14 +55,14 @@ import java.util.Map;
  */
 public class PolynomialRing<V extends Object>
 	   extends PolynomialSemiRing<V>
-	   implements Ring {
+	   implements Ring<GenericPolynomial<DualisticElement<V>>> {
 
 	protected PolynomialRing(Ring ring) {
 		super(ring);
 	}
 
-	public Ring getRing() {
-		return (Ring) super.getSemiRing();
+	public Ring<V> getRing() {
+		return (Ring<V>) super.getSemiRing();
 	}
 
 	//

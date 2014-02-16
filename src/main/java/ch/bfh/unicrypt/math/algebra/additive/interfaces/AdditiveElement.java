@@ -91,7 +91,7 @@ public interface AdditiveElement<V>
 
 	// The following methods are overridden from Element with an adapted return type
 	@Override
-	public AdditiveSemiGroup getSet();
+	public AdditiveSemiGroup<V> getSet();
 
 	@Override
 	public AdditiveElement<V> apply(Element element);

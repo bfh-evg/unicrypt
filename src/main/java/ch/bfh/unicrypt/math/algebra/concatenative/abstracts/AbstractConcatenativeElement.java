@@ -56,7 +56,7 @@ import java.math.BigInteger;
  * @param <V>
  * @author rolfhaenni
  */
-public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement<V>, V extends Object>
+public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>, E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractElement<S, E, V>
 	   implements ConcatenativeElement<V> {
 

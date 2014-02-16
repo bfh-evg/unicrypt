@@ -59,34 +59,34 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface CyclicGroup
-	   extends Group {
+public interface CyclicGroup<V extends Object>
+	   extends Group<V> {
 
 	/**
 	 * Returns a default generator of this group.
 	 * <p>
 	 * @return The default generator
 	 */
-	public Element getDefaultGenerator();
+	public Element<V> getDefaultGenerator();
 
 	/**
 	 * Returns a randomly selected generator of this group using the default random generator.
 	 * <p>
 	 * @return The randomly selected generator
 	 */
-	public Element getRandomGenerator();
+	public Element<V> getRandomGenerator();
 
 	/**
 	 * Returns a randomly selected generator of this group using a given random generator.
 	 * <p>
-	 * @param randomGenerator The given random generator
+	 * @param randomByteSequence
 	 * @return The randomly selected generator
 	 */
-	public Element getRandomGenerator(RandomByteSequence randomByteSequence);
+	public Element<V> getRandomGenerator(RandomByteSequence randomByteSequence);
 
-	public Element getIndependentGenerator(int index);
+	public Element<V> getIndependentGenerator(int index);
 
-	public Element getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Element<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 	public Tuple getIndependentGenerators(int maxIndex);
 

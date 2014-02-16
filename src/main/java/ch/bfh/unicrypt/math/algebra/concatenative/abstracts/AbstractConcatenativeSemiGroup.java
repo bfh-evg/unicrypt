@@ -50,7 +50,7 @@ import java.math.BigInteger;
 
 public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
-	   implements ConcatenativeSemiGroup {
+	   implements ConcatenativeSemiGroup<V> {
 
 	private final int blockLength;
 

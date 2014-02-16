@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
+import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +57,7 @@ import java.util.Map;
  */
 public class ZModPrime
 	   extends ZMod
-	   implements PrimeField {
+	   implements PrimeField<ResidueClass> {
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());

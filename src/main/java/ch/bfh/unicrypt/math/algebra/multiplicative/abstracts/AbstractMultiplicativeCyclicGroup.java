@@ -49,7 +49,7 @@ import java.math.BigInteger;
 
 public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractCyclicGroup<E, V>
-	   implements MultiplicativeCyclicGroup {
+	   implements MultiplicativeCyclicGroup<V> {
 
 	public AbstractMultiplicativeCyclicGroup(Class<? extends Object> valueClass) {
 		super(valueClass);

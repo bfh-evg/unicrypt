@@ -76,7 +76,7 @@ import java.util.Iterator;
  */
 public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	   extends UniCrypt
-	   implements Set, Iterable<E> {
+	   implements Set<V>, Iterable<E> {
 
 	private final Class<? extends Object> valueClass;
 	private BigInteger order, lowerBound, upperBound, minimum;
@@ -223,7 +223,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E getElement(Object value) {
+	public final E getElement(V value) {
 		if (!this.contains(value)) {
 			throw new IllegalArgumentException();
 		}
@@ -275,7 +275,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 			return (E) element;
 		}
 		if (this.contains(element.getValue())) {
-			return this.getElement(element.getValue());
+			return this.getElement((V) element.getValue());
 		}
 		return this.getElementFrom(element.getBigInteger());
 	}

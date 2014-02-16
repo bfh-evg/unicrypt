@@ -57,7 +57,7 @@ import java.util.NoSuchElementException;
 
 public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object>
 	   extends AbstractGroup<E, V>
-	   implements CyclicGroup, Iterable<E> {
+	   implements CyclicGroup<V>, Iterable<E> {
 
 	private E defaultGenerator;
 	private final Map<ReferenceRandomByteSequence, ArrayList<E>> generatorLists;

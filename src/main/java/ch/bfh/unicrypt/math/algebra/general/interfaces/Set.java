@@ -63,8 +63,9 @@ import java.math.BigInteger;
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
+ * @param <V>
  */
-public interface Set {
+public interface Set<V extends Object> {
 
 	/**
 	 * A constant value that represents an infinite order.
@@ -246,7 +247,7 @@ public interface Set {
 	 * @param value
 	 * @return
 	 */
-	public Element getElement(Object value);
+	public Element<V> getElement(V value);
 
 //	/**
 //	 * TODO: Convenience method
@@ -263,7 +264,7 @@ public interface Set {
 	 * @return The corresponding element, or {@literal null} if no such element exists
 	 * @throws IllegalArgumentException if {@literal integerValue} is null
 	 */
-	public Element getElementFrom(int integerValue);
+	public Element<V> getElementFrom(int integerValue);
 
 	/**
 	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists). Returns
@@ -273,7 +274,7 @@ public interface Set {
 	 * @return The corresponding element, or {@literal null} if no such element exists
 	 * @throws IllegalArgumentException if {@literal integerValue} is null
 	 */
-	public Element getElementFrom(BigInteger integerValue);
+	public Element<V> getElementFrom(BigInteger integerValue);
 
 	/**
 	 * TODO
@@ -281,7 +282,7 @@ public interface Set {
 	 * @param byteTree
 	 * @return
 	 */
-	public Element getElementFrom(ByteTree byteTree);
+	public Element<V> getElementFrom(ByteTree byteTree);
 
 	/**
 	 * Creates and returns the element that corresponds to the integer value of some other element (if one exists).
@@ -291,7 +292,7 @@ public interface Set {
 	 * @return The corresponding element of this set, or {@literal null} if no such element exists
 	 * @throws IllegalArgumentException if {@literal element} is null
 	 */
-	public Element getElementFrom(Element element);
+	public Element<V> getElementFrom(Element element);
 
 	/**
 	 * Selects and returns a random group element using the default random generator. For finite order group, it is
@@ -300,7 +301,7 @@ public interface Set {
 	 * <p>
 	 * @return A random element from the set
 	 */
-	public Element getRandomElement();
+	public Element<V> getRandomElement();
 
 	/**
 	 * Selects and returns a random group element using a given random generator. If no random generator is specified,
@@ -311,7 +312,7 @@ public interface Set {
 	 * @param randomByteSequence Either {@literal null} or a given random generator
 	 * @return A random element from the set
 	 */
-	public Element getRandomElement(RandomByteSequence randomByteSequence);
+	public Element<V> getRandomElement(RandomByteSequence randomByteSequence);
 
 	/**
 	 * Checks if two given elements of this group are equal.

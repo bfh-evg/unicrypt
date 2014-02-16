@@ -58,7 +58,7 @@ import java.math.BigInteger;
  */
 public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	   extends AbstractSet<E, V>
-	   implements SemiGroup {
+	   implements SemiGroup<V> {
 
 	public AbstractSemiGroup(Class<? extends Object> valueClass) {
 		super(valueClass);

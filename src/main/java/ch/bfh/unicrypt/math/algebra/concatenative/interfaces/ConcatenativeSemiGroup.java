@@ -54,15 +54,16 @@ import java.math.BigInteger;
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
+ * @param <V>
  */
-public interface ConcatenativeSemiGroup
-	   extends SemiGroup {
+public interface ConcatenativeSemiGroup<V extends Object>
+	   extends SemiGroup<V> {
 
 	public int getBlockLength();
 
-	public ConcatenativeElement getRandomElement(int length);
+	public ConcatenativeElement<V> getRandomElement(int length);
 
-	public ConcatenativeElement getRandomElement(int length, RandomByteSequence randomByteSequence);
+	public ConcatenativeElement<V> getRandomElement(int length, RandomByteSequence randomByteSequence);
 
 	/**
 	 * This method is a synonym for {@link #Group.apply(Element, Element)}.
@@ -71,7 +72,7 @@ public interface ConcatenativeSemiGroup
 	 * @param element2 the same as in {@link #Group.apply(Element, Element)}
 	 * @return the same as in {@link #Group.apply(Element, Element)}
 	 */
-	public ConcatenativeElement concatenate(Element element1, Element element2);
+	public ConcatenativeElement<V> concatenate(Element element1, Element element2);
 
 	/**
 	 * This method is a synonym for {@link #Group.apply(Element...)}.
@@ -79,7 +80,7 @@ public interface ConcatenativeSemiGroup
 	 * @param elements the same as in {@link #Group.apply(Element...)}
 	 * @return the same as in {@link #Group.apply(Element...)}
 	 */
-	public ConcatenativeElement concatenate(Element... elements);
+	public ConcatenativeElement<V> concatenate(Element... elements);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
@@ -88,7 +89,7 @@ public interface ConcatenativeSemiGroup
 	 * @param amount  the same as in {@link #Group.selfApply(Element, BigInteger)}
 	 * @return the same as in {@link #Group.selfApply(Element, BigInteger)}
 	 */
-	public ConcatenativeElement selfConcatenate(Element element, BigInteger amount);
+	public ConcatenativeElement<V> selfConcatenate(Element element, BigInteger amount);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, Element)}.
@@ -97,7 +98,7 @@ public interface ConcatenativeSemiGroup
 	 * @param amount  the same as in {@link #Group.selfApply(Element, Element)}
 	 * @return the same as in {@link #Group.selfApply(Element, Element)}
 	 */
-	public ConcatenativeElement selfConcatenate(Element element, Element amount);
+	public ConcatenativeElement<V> selfConcatenate(Element element, Element amount);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
@@ -106,7 +107,7 @@ public interface ConcatenativeSemiGroup
 	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
 	 * @return the same as in {@link #Group.selfApply(Element, int)}
 	 */
-	public ConcatenativeElement selfConcatenate(Element element, int amount);
+	public ConcatenativeElement<V> selfConcatenate(Element element, int amount);
 
 	/**
 	 * Applies the group operation to two instances of a given group element. This is equivalent to
@@ -116,7 +117,7 @@ public interface ConcatenativeSemiGroup
 	 * @return The result of applying the group operation to the input element
 	 * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
 	 */
-	public ConcatenativeElement selfConcatenate(Element element);
+	public ConcatenativeElement<V> selfConcatenate(Element element);
 
 	/**
 	 * Applies the binary operation pair-wise sequentially to the results of computing
@@ -131,53 +132,51 @@ public interface ConcatenativeSemiGroup
 	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
 	 * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
 	 */
-	public ConcatenativeElement multiSelfConcatenate(Element[] elements, BigInteger[] amounts);
+	public ConcatenativeElement<V> multiSelfConcatenate(Element[] elements, BigInteger[] amounts);
 
-	public ConcatenativeElement getEmptyElement();
+	public ConcatenativeElement<V> getEmptyElement();
 
 	public boolean isEmptyElement(Element element);
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public ConcatenativeElement getElementFrom(int value);
+	public ConcatenativeElement<V> getElementFrom(int value);
 
 	@Override
-	public ConcatenativeElement getElementFrom(BigInteger value);
+	public ConcatenativeElement<V> getElementFrom(BigInteger value);
 
 	@Override
-	public ConcatenativeElement getElementFrom(ByteTree byteTree);
+	public ConcatenativeElement<V> getElementFrom(ByteTree byteTree);
 
 	@Override
-	public ConcatenativeElement getElementFrom(Element element);
+	public ConcatenativeElement<V> getElementFrom(Element element);
 
 	@Override
-	public ConcatenativeElement getRandomElement();
+	public ConcatenativeElement<V> getRandomElement();
 
-//	@Override
-//	public ConcatenativeElement getElement(int value);
 	@Override
-	public ConcatenativeElement getRandomElement(RandomByteSequence randomByteSequence);
+	public ConcatenativeElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 
 	// The following methods are overridden from SemiGroup with an adapted return type
 	@Override
-	public ConcatenativeElement apply(Element element1, Element element2);
+	public ConcatenativeElement<V> apply(Element element1, Element element2);
 
 	@Override
-	public ConcatenativeElement apply(Element... elements);
+	public ConcatenativeElement<V> apply(Element... elements);
 
 	@Override
-	public ConcatenativeElement selfApply(Element element, BigInteger amount);
+	public ConcatenativeElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
-	public ConcatenativeElement selfApply(Element element, Element amount);
+	public ConcatenativeElement<V> selfApply(Element element, Element amount);
 
 	@Override
-	public ConcatenativeElement selfApply(Element element, int amount);
+	public ConcatenativeElement<V> selfApply(Element element, int amount);
 
 	@Override
-	public ConcatenativeElement selfApply(Element element);
+	public ConcatenativeElement<V> selfApply(Element element);
 
 	@Override
-	public ConcatenativeElement multiSelfApply(Element[] elements, BigInteger[] amounts);
+	public ConcatenativeElement<V> multiSelfApply(Element[] elements, BigInteger[] amounts);
 
 }
