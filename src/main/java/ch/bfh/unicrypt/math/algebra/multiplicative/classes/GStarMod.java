@@ -44,9 +44,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.helper.factorization.SpecialFactorization;
 import ch.bfh.unicrypt.math.helper.numerical.NaturalNumber;
@@ -206,7 +204,7 @@ public class GStarMod
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(ResidueClass value) {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.getBigInteger().toByteArray()));
+		return ByteTree.getInstance(value.getBigInteger().toByteArray());
 	}
 
 	@Override

@@ -81,7 +81,7 @@ public class AbstractNonInteractiveSigmaChallengeGenerator
 		Tuple query = (this.getProverId() == null
 			   ? input
 			   : Pair.getInstance(input, this.getProverId()));
-		ReferenceRandomByteSequence randomReferenceString = this.getRandomOracle().getReferenceRandomByteSequence(query.getByteTree().getSerializedByteTree());
+		ReferenceRandomByteSequence randomReferenceString = this.getRandomOracle().getReferenceRandomByteSequence(query.getByteTree().getByteArray());
 		return this.getChallengeSpace().getRandomElement(randomReferenceString);
 	}
 

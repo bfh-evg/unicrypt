@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativ
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -132,7 +131,7 @@ public class ByteArrayMonoid
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(ByteArray value) {
-		return ByteTreeLeaf.getInstance(value);
+		return ByteTree.getInstance(value);
 	}
 
 	@Override

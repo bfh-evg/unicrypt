@@ -42,9 +42,11 @@
 package ch.bfh.unicrypt.math.helper.bytetree;
 
 import ch.bfh.unicrypt.math.helper.ByteArray;
-import java.io.Serializable;
-import java.nio.BufferUnderflowException;
+import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 
 /**
  * This class represents the ByteTree described in Wikstroms Verifier.
@@ -62,11 +64,10 @@ import java.nio.ByteBuffer;
  * We use a 8k-bit two’s-complement representation of n in big endian byte order.
  * <p>
  * A byte tree is represented by an array of bytes as follows: • Leaf: Concatenation of 1 byte 01 indicating the leaf 4
- * bytes indicating the number of data bytes data bytes
+ * bytes indicating the number of data bytes
  * <p>
- *
- * • Node: Concatenation of 1 byte 00 indicating the node 4 bytes bytes indicating the number of children children
- * (either Node / Leaf)
+ * • Node: Concatenation of 1 byte 00 indicating the node 4 bytes bytes indicating the number of children (either Node /
+ * Leaf)
  * <p>
  * Example: node(node(leaf(1), leaf(23)), leaf(45)) is represented as
  * <p>
@@ -74,72 +75,26 @@ import java.nio.ByteBuffer;
  * <p>
  * node1........(..node2.......(..leaf1.............leaf2.............)leaf3............)
  * <p>
- * <p>
- * <p>
  * Even though NIO is in use {@link ByteBuffer} this class does not (yet) work with direct buffers, as
  * allocation/deallocation handling costs more than indirectly used (See API)
  * <p>
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
 public abstract class ByteTree
-	   implements Serializable {
+	   extends UniCrypt {
 
-	public final static int BYTES_USED_FOR_IDENTIFIER = Byte.SIZE / 8;
-	public final static int BYTES_USED_FOR_AMOUNT = Integer.SIZE / 8;
-	public final static int BYTES_USED_FOR_PREAMBLE = BYTES_USED_FOR_IDENTIFIER + BYTES_USED_FOR_AMOUNT;
+	public final static int SIZE_OF_AMOUNT = Integer.SIZE / Byte.SIZE;
+	public final static int SIZE_OF_PREAMBLE = SIZE_OF_AMOUNT + 1;
 
-	private byte[] serializedValue;
+	private ByteArray byteArray;
+	private int size = 0;
 
-	/**
-	 * Returns a new instance of a ByteTree given one or more ByteTree-elements.
-	 * <p>
-	 * @param children ByteTree-elements that will be connected as children to the new instance of ByteTree
-	 * @return new Instance of a ByteTree with at least one node-element and one leaf-element.
-	 */
-	public static ByteTree getInstance(ByteTree... children) {
-		return new ByteTreeNode(children);
+	protected ByteTree() {
 	}
 
-	/**
-	 * Returns a new instance of a ByteTree given a byte[].
-	 * <p>
-	 * @param bytes The byte[] that will be embedded as leaf-element of a ByteTree
-	 * @return new Instance of a ByteTree with exactly one leaf-element.
-	 */
-	public static ByteTreeLeaf getInstance(ByteArray bytes) {
-		return new ByteTreeLeaf(bytes);
-	}
-
-	/**
-	 * Returns the ByteTree representation of a given serialized ByteTree.
-	 * <p>
-	 * @param bytes the serialized ByteTree
-	 * @return ByteTree representation
-	 */
-	public static ByteTree getDeserializedInstance(ByteArray bytes) {
-		if (bytes == null || bytes.getLength() < BYTES_USED_FOR_PREAMBLE) {
-			throw new IllegalArgumentException();
-		}
-		ByteBuffer buffer = ByteBuffer.wrap(bytes.getAll());
-		ByteTree byteTree = null;
-		if (buffer.hasRemaining()) {
-			try {
-				byte identifier = buffer.get();
-				switch (identifier) {
-					case ByteTreeLeaf.IDENTIFIER:
-						byteTree = new ByteTreeLeaf(buffer);
-						break;
-					case ByteTreeNode.IDENTIFIER:
-						byteTree = new ByteTreeNode(buffer);
-						break;
-					default:
-						throw new IllegalArgumentException();
-				}
-			} catch (BufferUnderflowException ex) {
-				throw new IllegalArgumentException();
-			}
-		}
-		return byteTree;
+	protected ByteTree(ByteArray byteArray) {
+		this.byteArray = byteArray;
+		this.size = byteArray.getLength();
 	}
 
 	/**
@@ -147,60 +102,140 @@ public abstract class ByteTree
 	 * <p>
 	 * @return Serialized ByteTree
 	 */
-	public ByteArray getSerializedByteTree() {
-		if (this.serializedValue == null) {
-			byte[] internalValue = new byte[this.defaultGetSize()];
-			ByteBuffer buffer = ByteBuffer.wrap(internalValue);
-			defaultSerialize(buffer);
-			serializedValue = internalValue;
+	public final ByteArray getByteArray() {
+		if (this.byteArray == null) {
+			ByteBuffer buffer = ByteBuffer.allocate(this.getSize());
+			this.abstractGetByteArray(buffer);
+			this.byteArray = ByteArray.getInstance(buffer.array());
 		}
-		if (serializedValue == null) {
-			return ByteArray.getInstance();
+		return this.byteArray;
+	}
+
+	public final int getSize() {
+		if (this.size == 0) {
+			this.size = SIZE_OF_PREAMBLE + this.abstractGetSize();
+		}
+		return this.size;
+	}
+
+	/**
+	 * Returns a new instance of a ByteTreeLeaf for some binary data.
+	 * <p>
+	 * @param binaryData The binary data that will be embedded in a ByteTreeLeaf
+	 * @return new Instance of a ByteTree with exactly one leaf.
+	 */
+	public static ByteTreeLeaf getInstance(byte[] binaryData) {
+		return new ByteTreeLeaf(ByteArray.getInstance(binaryData));
+	}
+
+	public static ByteTreeLeaf getInstance(ByteArray binaryData) {
+		if (binaryData == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteTreeLeaf(binaryData);
+	}
+
+	/**
+	 * Returns a new instance of ByteTree given one or more ByteTree instances.
+	 * <p>
+	 * @param byteTrees The ByteTree instances that will be connected as children to the new instance of ByteTree
+	 * @return new instance of a ByteTree with at least one node-element and one leaf-element.
+	 */
+	public static ByteTree getInstance(ByteTree... byteTrees) {
+		return new ByteTreeNode(ImmutableArray.getInstance(byteTrees));
+	}
+
+	/**
+	 * Returns the ByteTree representation of a given ByteArray.
+	 * <p>
+	 * @param byteArray the serialized ByteTree
+	 * @return ByteTree representation
+	 */
+	public static ByteTree getInstanceFrom(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new IllegalArgumentException();
+		}
+		Iterator<ByteArray> iterator = ByteTree.getByteArrayIterator(byteArray);
+		ByteTree result = ByteTree.getInstanceFrom(iterator);
+		if (iterator.hasNext()) {
+			throw new IllegalArgumentException();
+		}
+		return result;
+	}
+
+	private static ByteTree getInstanceFrom(Iterator<ByteArray> iterator) {
+		ByteArray byteArray = iterator.next();
+		if (ByteTree.getIdentifier(byteArray) == ByteTreeLeaf.IDENTIFIER) {
+			ByteArray binaryData = ByteTree.getBinaryData(byteArray);
+			return new ByteTreeLeaf(binaryData, byteArray);
+		}
+		int amount = ByteTree.getAmount(byteArray);
+		ByteTree[] byteTrees = new ByteTree[amount];
+		for (int i = 0; i < amount; i++) {
+			byteTrees[i] = getInstanceFrom(iterator);
+		}
+		return new ByteTreeNode(ImmutableArray.getInstance(byteTrees));
+	}
+
+	private static byte getIdentifier(ByteArray byteArray) {
+		return byteArray.getAt(0);
+	}
+
+	private static int getAmount(ByteArray byteArray) {
+		return new BigInteger(1, byteArray.extract(1, SIZE_OF_AMOUNT).getAll()).intValue();
+	}
+
+	private static ByteArray getBinaryData(ByteArray byteArray) {
+		return byteArray.extract(SIZE_OF_PREAMBLE, byteArray.getLength() - SIZE_OF_PREAMBLE);
+	}
+
+	private static Iterator<ByteArray> getByteArrayIterator(final ByteArray byteArray) {
+		return new Iterator<ByteArray>() {
+
+			ByteArray currentByteArray = byteArray;
+
+			@Override
+			public boolean hasNext() {
+				return this.currentByteArray.getLength() > 0;
+			}
+
+			@Override
+			public ByteArray next() {
+				if (this.currentByteArray.getLength() < SIZE_OF_PREAMBLE) {
+					throw new IllegalStateException();
+				}
+				int nextLength;
+				byte identifier = ByteTree.getIdentifier(this.currentByteArray);
+				if (identifier == ByteTreeLeaf.IDENTIFIER) {
+					nextLength = SIZE_OF_PREAMBLE + ByteTree.getAmount(this.currentByteArray);
+				} else if (identifier == ByteTreeNode.IDENTIFIER) {
+					nextLength = SIZE_OF_PREAMBLE;
+				} else {
+					throw new IllegalArgumentException();
+				}
+				ByteArray[] splitByteArrays = this.currentByteArray.split(nextLength);
+				this.currentByteArray = splitByteArrays[1];
+				return splitByteArrays[0];
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+			}
+
+		};
+	}
+
+	protected final void getByteArray(ByteBuffer buffer) {
+		if (this.byteArray == null) {
+			this.abstractGetByteArray(buffer);
 		} else {
-			return ByteArray.getInstance(this.serializedValue);
+			buffer.put(this.byteArray.getAll());
 		}
 	}
 
-	/**
-	 * Only called by a parent node via {@link ByteTree#getDeserializedInstance(byte[]) }. This method calculates the
-	 * value for this sub-ByteTree. If this value is already known (If this Element one was a root-node), the known
-	 * value will be written to the buffer for getSerializedByteTree and will be sent back. If the value of this Element
-	 * is unknown, it will be propagated via {@link ByteTree#abstractSerialize(java.nio.ByteBuffer) } to the subclasses
-	 * for further calculation.
-	 * <p>
-	 * Remark: The value calculated here will not be stored as it does not render a good 'time / memory' ratio.
-	 * <p>
-	 * @param buffer The target buffer where the value shall be written to.
-	 */
-	protected void defaultSerialize(ByteBuffer buffer) {
-		if (serializedValue != null) {
-			buffer.put(serializedValue);
-		} else {
-			abstractSerialize(buffer);
-		}
-	}
+	protected abstract void abstractGetByteArray(ByteBuffer buffer);
 
-	protected int defaultGetSize() {
-		if (serializedValue != null) {
-			return serializedValue.length;
-		}
-		int size = BYTES_USED_FOR_PREAMBLE;
-		size += abstractGetSize();
-		return size;
-	}
-
-	/**
-	 * Only called by {@link ByteTree#defaultSerialize(java.nio.ByteBuffer) ) in order to calculate the value of the ByteTree
-	 * <p>
-	 * @param buffer
-	 */
-	protected abstract void abstractSerialize(ByteBuffer buffer);
-
-	/**
-	 * Returns the true length of the byte[] that represents this ByteTree.
-	 * <p>
-	 * @return
-	 */
 	protected abstract int abstractGetSize();
 
 }

@@ -106,7 +106,7 @@ public class ByteArray
 		int lastIndex = 0;
 		for (int i = 0; i < indices.length; i++) {
 			int currentIndex = indices[i];
-			if (currentIndex < lastIndex || currentIndex >= this.length) {
+			if (currentIndex < lastIndex || currentIndex > this.length) {
 				throw new IllegalArgumentException();
 			}
 			result[i] = this.extract(lastIndex, currentIndex - lastIndex);

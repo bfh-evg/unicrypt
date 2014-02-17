@@ -41,9 +41,11 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeNode;
 import java.math.BigInteger;
 
 /**
@@ -52,90 +54,173 @@ import java.math.BigInteger;
  */
 public class ByteTreeExample {
 
+	public static void example1() {
+
+		// Define multiple byte tree leaves
+		ByteTree b1 = ByteTree.getInstance(BigInteger.valueOf(1).toByteArray());
+		ByteTree b2 = ByteTree.getInstance(BigInteger.valueOf(2).toByteArray());
+		ByteTree b3 = ByteTree.getInstance(BigInteger.valueOf(3).toByteArray());
+		ByteTree b4 = ByteTree.getInstance(BigInteger.valueOf(4).toByteArray());
+		ByteTree b5 = ByteTree.getInstance(BigInteger.valueOf(256).toByteArray());
+
+		// Combine b1 to b3
+		ByteTree b123 = ByteTree.getInstance(b1, b2, b3);
+		Example.printLine(b123);
+		Example.printLine(b123.getByteArray());
+
+		// Combine b4 and b5
+		ByteTree b45 = ByteTree.getInstance(b4, b5);
+		Example.printLine(b45);
+		Example.printLine(b45.getByteArray());
+
+		// Combine b123 and b45
+		ByteTree b123_45 = ByteTree.getInstance(b123, b45);
+		Example.printLine(b123_45);
+		Example.printLine(b123_45.getByteArray());
+	}
+
+	public static void example2() {
+
+		// The same as Example 1, but using UniCrypt elements
+		N naturalNumber = N.getInstance();
+
+		// Define multiple natural numbers
+		Element e1 = naturalNumber.getElement(1);
+		Element e2 = naturalNumber.getElement(2);
+		Element e3 = naturalNumber.getElement(3);
+		Element e4 = naturalNumber.getElement(4);
+		Element e5 = naturalNumber.getElement(256);
+
+		// Combine e1 to e3
+		Tuple t123 = Tuple.getInstance(e1, e2, e3);
+		ByteTree b123 = t123.getByteTree();
+		Example.printLine(b123);
+		Example.printLine(b123.getByteArray());
+
+		// Combine e4 and e5
+		Tuple t45 = Tuple.getInstance(e4, e5);
+		ByteTree b45 = t45.getByteTree();
+		Example.printLine(b45);
+		Example.printLine(b45.getByteArray());
+
+		// Combine t123 and t45
+		Tuple t123_45 = Tuple.getInstance(t123, t45);
+		ByteTree b123_45 = t123_45.getByteTree();
+		Example.printLine(b123_45);
+		Example.printLine(b123_45.getByteArray());
+	}
+
+	public static void example3() {
+
+		// Same as Example 1
+		ByteTree b1 = ByteTree.getInstance(BigInteger.valueOf(1).toByteArray());
+		ByteTree b2 = ByteTree.getInstance(BigInteger.valueOf(2).toByteArray());
+		ByteTree b3 = ByteTree.getInstance(BigInteger.valueOf(3).toByteArray());
+		ByteTree b4 = ByteTree.getInstance(BigInteger.valueOf(4).toByteArray());
+		ByteTree b5 = ByteTree.getInstance(BigInteger.valueOf(256).toByteArray());
+		ByteTree b123 = ByteTree.getInstance(b1, b2, b3);
+		ByteTree b45 = ByteTree.getInstance(b4, b5);
+		ByteTree b123_45 = ByteTree.getInstance(b123, b45);
+		Example.printLine(b123_45);
+
+		// Generate byte array from byte tree
+		ByteArray byteArray = b123_45.getByteArray();
+		Example.printLine(byteArray);
+
+		// Reconstruct byte tree from byte array
+		ByteTree c123_45 = ByteTree.getInstanceFrom(byteArray);
+		Example.printLine(c123_45);
+	}
+
 	public static void main(String[] args) {
-		ByteTree b1 = ByteTree.getInstance(ByteArray.getInstance("Hallo".getBytes()));
-		ByteArray value1 = b1.getSerializedByteTree();
-		System.out.println((value1));
-		ByteTree bb1 = ByteTree.getDeserializedInstance(value1);
-		ByteArray value11 = ((ByteTreeLeaf) bb1).getValue();
-		System.out.println(new String(value11.getAll()));
 
-		System.out.println("----");
+		example1();
+		example2();
+		example3();
 
-		ByteTree b2 = ByteTree.getInstance(ByteArray.getInstance("Welt".getBytes()));
-		ByteArray value2 = b2.getSerializedByteTree();
-		System.out.println(value2);
-
-		System.out.println("----");
-
-		ByteTree b3 = ByteTree.getInstance(b1, b2);
-
-		ByteArray value3 = b3.getSerializedByteTree();
-		System.out.println(value3);
-		ByteTree value31 = ByteTree.getDeserializedInstance(value3);
-		ByteTree[] byteTrees = ((ByteTreeNode) value31).getChildren();
-
-		ByteArray value32 = ((ByteTreeLeaf) byteTrees[0]).getValue();
-		ByteArray value33 = ((ByteTreeLeaf) byteTrees[1]).getValue();
-
-		System.out.println(new String(value32.getAll()) + " " + new String(value33.getAll()));
-
-		System.out.println("----");
-
-		ByteTree b4 = ByteTree.getInstance(ByteArray.getInstance(".".getBytes()));
-		ByteArray value4 = b4.getSerializedByteTree();
-		System.out.println(value4);
-
-		System.out.println("----");
-
-		ByteTree b5 = ByteTree.getInstance(b3, b4);
-
-		ByteArray value5 = b5.getSerializedByteTree();
-		System.out.println(value5);
-
-		ByteTree byteTree5 = ByteTree.getDeserializedInstance(value5);
-		ByteTree[] byteTrees51 = ((ByteTreeNode) byteTree5).getChildren();
-
-		ByteTree[] byteTrees52 = ((ByteTreeNode) byteTrees51[0]).getChildren();
-
-		ByteArray value51 = ((ByteTreeLeaf) byteTrees52[0]).getValue();
-		ByteArray value52 = ((ByteTreeLeaf) byteTrees52[1]).getValue();
-
-		ByteArray value53 = ((ByteTreeLeaf) byteTrees51[1]).getValue();
-
-		System.out.println(new String(value51.getAll()) + " " + new String(value52.getAll()) + new String(value53.getAll()));
-
-		System.out.println("----");
-
-		ByteTree b6 = ByteTree.getInstance(b1, b2, b4);
-
-		ByteArray value6 = b6.getSerializedByteTree();
-		System.out.println(value6);
-
-		ByteTree byteTree6 = ByteTree.getDeserializedInstance(value6);
-		ByteTree[] byteTrees6 = ((ByteTreeNode) byteTree6).getChildren();
-
-		ByteArray value61 = ((ByteTreeLeaf) byteTrees6[0]).getValue();
-		ByteArray value62 = ((ByteTreeLeaf) byteTrees6[1]).getValue();
-		ByteArray value63 = ((ByteTreeLeaf) byteTrees6[2]).getValue();
-
-		System.out.println(new String(value61.getAll()) + " " + new String(value62.getAll()) + new String(value63.getAll()));
-
-		System.out.println("----");
-
-		ByteTree b7 = ByteTree.getDeserializedInstance(value6);
-
-		ByteArray value7 = b7.getSerializedByteTree();
-		System.out.println(value7);
-
-		System.out.println("----");
-
-		ByteTree example = ByteTree.getInstance(
-			   ByteTree.getInstance(
-					  ByteTree.getInstance(ByteArray.getInstance(BigInteger.valueOf(1).toByteArray())), ByteTree.getInstance(ByteArray.getInstance(BigInteger.valueOf(23).toByteArray()))
-			   ), ByteTree.getInstance(ByteArray.getInstance(BigInteger.valueOf(45).toByteArray())));
-
-		System.out.println(example.getSerializedByteTree());
+//		ByteTree b1 = ByteTree.getInstance(ByteArray.getInstance("Hallo".getBytes()));
+//		ByteArray value1 = b1.getByteArray();
+//		System.out.println((value1));
+//		ByteTree bb1 = ByteTree.getInstanceFrom(value1);
+//		ByteArray value11 = ((ByteTreeLeaf) bb1).getValue();
+//		System.out.println(new String(value11.getAll()));
+//
+//		System.out.println("----");
+//
+//		ByteTree b2 = ByteTree.getInstance(ByteArray.getInstance("Welt".getBytes()));
+//		ByteArray value2 = b2.getByteArray();
+//		System.out.println(value2);
+//
+//		System.out.println("----");
+//
+//		ByteTree b3 = ByteTree.getInstance(b1, b2);
+//
+//		ByteArray value3 = b3.getByteArray();
+//		System.out.println(value3);
+//		ByteTree value31 = ByteTree.getInstanceFrom(value3);
+//		ByteTree[] byteTrees = ((ByteTreeNode) value31).getChildren();
+//
+//		ByteArray value32 = ((ByteTreeLeaf) byteTrees[0]).getValue();
+//		ByteArray value33 = ((ByteTreeLeaf) byteTrees[1]).getValue();
+//
+//		System.out.println(new String(value32.getAll()) + " " + new String(value33.getAll()));
+//
+//		System.out.println("----");
+//
+//		ByteTree b4 = ByteTree.getInstance(ByteArray.getInstance(".".getBytes()));
+//		ByteArray value4 = b4.getByteArray();
+//		System.out.println(value4);
+//
+//		System.out.println("----");
+//
+//		ByteTree b5 = ByteTree.getInstance(b3, b4);
+//
+//		ByteArray value5 = b5.getByteArray();
+//		System.out.println(value5);
+//
+//		ByteTree byteTree5 = ByteTree.getInstanceFrom(value5);
+//		ByteTree[] byteTrees51 = ((ByteTreeNode) byteTree5).getChildren();
+//
+//		ByteTree[] byteTrees52 = ((ByteTreeNode) byteTrees51[0]).getChildren();
+//
+//		ByteArray value51 = ((ByteTreeLeaf) byteTrees52[0]).getValue();
+//		ByteArray value52 = ((ByteTreeLeaf) byteTrees52[1]).getValue();
+//
+//		ByteArray value53 = ((ByteTreeLeaf) byteTrees51[1]).getValue();
+//
+//		System.out.println(new String(value51.getAll()) + " " + new String(value52.getAll()) + new String(value53.getAll()));
+//
+//		System.out.println("----");
+//
+//		ByteTree b6 = ByteTree.getInstance(b1, b2, b4);
+//
+//		ByteArray value6 = b6.getByteArray();
+//		System.out.println(value6);
+//
+//		ByteTree byteTree6 = ByteTree.getInstanceFrom(value6);
+//		ByteTree[] byteTrees6 = ((ByteTreeNode) byteTree6).getChildren();
+//
+//		ByteArray value61 = ((ByteTreeLeaf) byteTrees6[0]).getValue();
+//		ByteArray value62 = ((ByteTreeLeaf) byteTrees6[1]).getValue();
+//		ByteArray value63 = ((ByteTreeLeaf) byteTrees6[2]).getValue();
+//
+//		System.out.println(new String(value61.getAll()) + " " + new String(value62.getAll()) + new String(value63.getAll()));
+//
+//		System.out.println("----");
+//
+//		ByteTree b7 = ByteTree.getInstanceFrom(value6);
+//
+//		ByteArray value7 = b7.getByteArray();
+//		System.out.println(value7);
+//
+//		System.out.println("----");
+//
+//		ByteTree example = ByteTree.getInstance(
+//			   ByteTree.getInstance(
+//					  ByteTree.getInstance(ByteArray.getInstance(BigInteger.valueOf(1).toByteArray())), ByteTree.getInstance(ByteArray.getInstance(BigInteger.valueOf(23).toByteArray()))
+//			   ), ByteTree.getInstance(ByteArray.getInstance(BigInteger.valueOf(45).toByteArray())));
+//
+//		System.out.println(example.getByteArray());
 	}
 
 }

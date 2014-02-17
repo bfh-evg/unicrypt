@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.helper.bytetree;
 
 import ch.bfh.unicrypt.math.helper.ByteArray;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 
 /**
@@ -50,37 +49,43 @@ import java.nio.ByteBuffer;
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
 public class ByteTreeLeaf
-	   extends ByteTree
-	   implements Serializable {
+	   extends ByteTree {
 
 	public static final byte IDENTIFIER = 1;
-	private final byte[] bytes;
 
-	protected ByteTreeLeaf(ByteBuffer buffer) {
-		int amountOfBytes = buffer.getInt();
-		bytes = new byte[amountOfBytes];
+	private final ByteArray binaryData;
 
-		buffer.get(bytes);
+	protected ByteTreeLeaf(ByteArray binaryData) {
+		super();
+		this.binaryData = binaryData;
 	}
 
-	protected ByteTreeLeaf(ByteArray bytes) {
-		this.bytes = bytes.getAll();
+	protected ByteTreeLeaf(ByteArray binaryData, ByteArray byteArray) {
+		super(byteArray);
+		this.binaryData = binaryData;
 	}
 
-	public ByteArray getValue() {
-		return ByteArray.getInstance(bytes);
+	public ByteArray getBinaryData() {
+		return this.binaryData;
 	}
 
 	@Override
-	protected void abstractSerialize(ByteBuffer buffer) {
+	public String defaultToStringValue() {
+		return this.binaryData.toString();
+	}
+
+	@Override
+	protected void abstractGetByteArray(ByteBuffer buffer) {
 		buffer.put(IDENTIFIER);
-		buffer.putInt(this.bytes.length);
-		buffer.put(bytes);
+		buffer.putInt(this.abstractGetSize());
+		for (byte b : this.binaryData) {
+			buffer.put(b);
+		}
 	}
 
 	@Override
 	protected int abstractGetSize() {
-		return this.bytes.length;
+		return this.binaryData.getLength();
 	}
 
 }

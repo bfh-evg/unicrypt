@@ -65,7 +65,7 @@ public abstract class AbstractNonInteractiveChallengeGenerator<IS extends Set, I
 
 	@Override
 	protected CE abstractGenerate(IE input) {
-		ReferenceRandomByteSequence randomReferenceString = this.getRandomOracle().getReferenceRandomByteSequence(input.getByteTree().getSerializedByteTree());
+		ReferenceRandomByteSequence randomReferenceString = this.getRandomOracle().getReferenceRandomByteSequence(input.getByteTree().getByteArray());
 		return (CE) this.getChallengeSpace().getRandomElement(randomReferenceString);
 	}
 

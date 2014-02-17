@@ -41,8 +41,10 @@
  */
 package ch.bfh.unicrypt.math.helper.bytetree;
 
-import java.io.Serializable;
+import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 
 /**
  *
@@ -50,63 +52,53 @@ import java.nio.ByteBuffer;
  */
 public class ByteTreeNode
 	   extends ByteTree
-	   implements Serializable {
+	   implements Iterable<ByteTree> {
 
 	public static final byte IDENTIFIER = 0;
-	private final ByteTree[] elements;
 
-	protected ByteTreeNode(ByteBuffer buffer) {
-		int amountOfElements = buffer.getInt();
-		elements = new ByteTree[amountOfElements];
+	private final ImmutableArray<ByteTree> byteTrees;
 
-		for (int i = 0; i < elements.length; i++) {
-			byte identifier = buffer.get();
-			switch (identifier) {
-				case ByteTreeLeaf.IDENTIFIER:
-					elements[i] = new ByteTreeLeaf(buffer);
-					break;
-				case ByteTreeNode.IDENTIFIER:
-					elements[i] = new ByteTreeNode(buffer);
-					break;
-				default:
-					throw new IllegalArgumentException();
-			}
-		}
+	protected ByteTreeNode(ImmutableArray<ByteTree> byteTrees) {
+		super();
+		this.byteTrees = byteTrees;
 	}
 
-	protected ByteTreeNode(ByteTree... elements) {
-		if (elements == null) {
-			throw new IllegalArgumentException();
-		}
-		for (ByteTree element : elements) {
-			if (element == null) {
-				throw new IllegalArgumentException();
-			}
-		}
-		this.elements = elements;
+	protected ByteTreeNode(ImmutableArray<ByteTree> byteTrees, ByteArray byteArray) {
+		super(byteArray);
+		this.byteTrees = byteTrees;
 	}
 
-	public ByteTree[] getChildren() {
-		return elements.clone();
+	public ImmutableArray<ByteTree> getByteTrees() {
+		return byteTrees;
 	}
 
 	@Override
-	protected void abstractSerialize(ByteBuffer buffer) {
+	protected String defaultToStringValue() {
+		return this.byteTrees.defaultToStringValue();
+	}
+
+	@Override
+	protected void abstractGetByteArray(ByteBuffer buffer) {
 		buffer.put(IDENTIFIER);
-		buffer.putInt(this.elements.length);
-		for (ByteTree element : elements) {
-			element.defaultSerialize(buffer);
+		buffer.putInt(this.byteTrees.getLength());
+		for (ByteTree byteTree : this) {
+			byteTree.getByteArray(buffer);
 		}
 	}
 
 	@Override
 	protected int abstractGetSize() {
 		int size = 0;
-		for (ByteTree element : elements) {
-			size += element.defaultGetSize();
+		for (ByteTree bytetTree : this) {
+			size += bytetTree.getSize();
 		}
 		return size;
 
+	}
+
+	@Override
+	public Iterator<ByteTree> iterator() {
+		return this.byteTrees.iterator();
 	}
 
 }
