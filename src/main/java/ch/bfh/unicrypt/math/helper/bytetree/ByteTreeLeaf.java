@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.helper.bytetree;
 
 import ch.bfh.unicrypt.math.helper.ByteArray;
-import java.io.Serializable;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 /**
@@ -50,37 +50,55 @@ import java.nio.ByteBuffer;
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
 public class ByteTreeLeaf
-	   extends ByteTree
-	   implements Serializable {
+	   extends ByteTree {
 
 	public static final byte IDENTIFIER = 1;
-	private final byte[] bytes;
 
-	protected ByteTreeLeaf(ByteBuffer buffer) {
-		int amountOfBytes = buffer.getInt();
-		bytes = new byte[amountOfBytes];
+	// either byteTree (from super class) or binaryData is initialized
+	private byte[] binaryData = null;
 
-		buffer.get(bytes);
+	protected ByteTreeLeaf(byte[] binaryData) {
+		this.binaryData = binaryData;
+		this.length = LENGTH_OF_PREAMBLE + binaryData.length;
 	}
 
-	protected ByteTreeLeaf(ByteArray bytes) {
-		this.bytes = bytes.getAll();
+	protected ByteTreeLeaf(ByteArray byteArray) {
+		this.byteArray = byteArray;
+		this.length = byteArray.getLength();
 	}
 
-	public ByteArray getValue() {
-		return ByteArray.getInstance(bytes);
+	protected byte[] getBinaryData() {
+		if (this.binaryData == null) {
+			this.binaryData = this.byteArray.extract(LENGTH_OF_PREAMBLE, this.length - LENGTH_OF_PREAMBLE).getAll();
+		}
+		return this.binaryData;
+	}
+
+	public BigInteger convertToBigInteger() {
+		return new BigInteger(this.getBinaryData());
+	}
+
+	public String convertToString() {
+		return new String(this.getBinaryData());
+	}
+
+	public ByteArray convertToByteArray() {
+		if (this.byteArray == null) {
+			return ByteArray.getInstance(this.binaryData);
+		}
+		return this.byteArray.extract(LENGTH_OF_PREAMBLE, this.length - LENGTH_OF_PREAMBLE);
 	}
 
 	@Override
-	protected void abstractSerialize(ByteBuffer buffer) {
+	public String defaultToStringValue() {
+		return this.convertToByteArray().defaultToStringValue();
+	}
+
+	@Override
+	protected void abstractGetByteArray(ByteBuffer buffer) {
 		buffer.put(IDENTIFIER);
-		buffer.putInt(this.bytes.length);
-		buffer.put(bytes);
-	}
-
-	@Override
-	protected int abstractGetSize() {
-		return this.bytes.length;
+		buffer.putInt(this.binaryData.length);
+		buffer.put(this.binaryData);
 	}
 
 }

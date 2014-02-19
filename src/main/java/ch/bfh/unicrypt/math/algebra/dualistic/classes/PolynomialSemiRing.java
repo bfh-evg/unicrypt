@@ -187,7 +187,7 @@ public class PolynomialSemiRing<V extends Object>
 	}
 
 	@Override
-	protected PolynomialElement abstractGetElementFrom(ByteTree bytTree) {
+	protected PolynomialElement abstractGetElementFrom(ByteTree byteTree) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

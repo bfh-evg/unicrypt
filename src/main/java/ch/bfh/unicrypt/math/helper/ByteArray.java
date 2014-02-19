@@ -106,7 +106,7 @@ public class ByteArray
 		int lastIndex = 0;
 		for (int i = 0; i < indices.length; i++) {
 			int currentIndex = indices[i];
-			if (currentIndex < lastIndex || currentIndex >= this.length) {
+			if (currentIndex < lastIndex || currentIndex > this.length) {
 				throw new IllegalArgumentException();
 			}
 			result[i] = this.extract(lastIndex, currentIndex - lastIndex);
@@ -282,11 +282,7 @@ public class ByteArray
 	}
 
 	public static ByteArray getInstance() {
-		return ByteArray.getInstance(0);
-	}
-
-	public static ByteArray getInstance(int length) {
-		return ByteArray.getInstance(length, false);
+		return new ByteArray(new byte[0]);
 	}
 
 	public static ByteArray getInstance(int length, boolean fillbit) {
@@ -298,6 +294,13 @@ public class ByteArray
 			Arrays.fill(bytes, ALL_ONE);
 		}
 		return new ByteArray(new byte[length]);
+	}
+
+	public static ByteArray getInstance(byte... bytes) {
+		if (bytes == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteArray(bytes.clone());
 	}
 
 	// convenicene method to avoid casting integers to byte
@@ -316,11 +319,25 @@ public class ByteArray
 		return new ByteArray(bytes);
 	}
 
-	public static ByteArray getInstance(byte[] bytes) {
-		if (bytes == null) {
+	// convenience method to construct byte arrays by hex strings (e.g. "03|A2|29|FF|96")
+	public static ByteArray getInstance(String hexString) {
+		if (hexString == null || (hexString.length() > 0 && hexString.length() % 3 != 2)) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArray(bytes.clone());
+		for (int i = 2; i < hexString.length(); i = i + 3) {
+			if (hexString.charAt(i) != '|') {
+				throw new IllegalArgumentException();
+			}
+		}
+		byte[] bytes = new byte[(hexString.length() + 1) / 3];
+		for (int i = 0; i < bytes.length; i++) {
+			String string = hexString.substring(i * 3, i * 3 + 2);
+			if (!string.matches("[0-9A-F]{2}")) {
+				throw new IllegalArgumentException();
+			}
+			bytes[i] = (byte) Integer.parseInt(string, 16);
+		}
+		return new ByteArray(bytes);
 	}
 
 	public static ByteArray getRandomInstance(int length) {

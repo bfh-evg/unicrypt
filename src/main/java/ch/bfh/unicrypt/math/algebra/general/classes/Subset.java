@@ -122,8 +122,13 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected Element abstractGetElementFrom(ByteTree byteTree) {
+		Element element = this.getSuperset().getElementFrom(byteTree);
+		if (element != null && this.contains(element)) {
+			return element;
+		}
+		// no such element
+		return null;
 	}
 
 	@Override

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
@@ -50,7 +51,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  */
 public class NExample {
 
-	public static void main(final String[] args) {
+	public static void example1() {
 
 		N naturalNumbers = N.getInstance();
 		Element n0 = naturalNumbers.getZeroElement();
@@ -59,7 +60,11 @@ public class NExample {
 
 		Element sum = naturalNumbers.add(n0, n1, n2);
 
-		System.out.println(sum);
+		Example.printLines(naturalNumbers, n0, n1, n2, sum);
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

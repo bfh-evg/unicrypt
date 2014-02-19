@@ -110,7 +110,7 @@ public class AESEncryptionScheme
 
 	public static final int AES_BLOCK_SIZE = 128;
 	public static final ByteArrayMonoid AES_ENCRYPTION_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-	public static final ByteArray DEFAULT_IV = ByteArray.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
+	public static final ByteArray DEFAULT_IV = ByteArray.getInstance(AES_BLOCK_SIZE / Byte.SIZE, false);
 
 	private final KeyLength keyLength;
 	private final Mode mode;

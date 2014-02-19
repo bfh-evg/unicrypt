@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractFiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.helper.polynomial.BinaryPolynomial;
@@ -147,22 +148,32 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected BinaryPolynomialElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected BinaryPolynomialElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			ByteArray byteArray = ((ByteTreeLeaf) byteTree).convertToByteArray();
+			if (this.contains(byteArray)) {
+				return this.abstractGetElement(BinaryPolynomial.getInstance(byteArray));
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
-	protected ByteTree abstractGetByteTreeFrom(BinaryPolynomial value) {
-		return ByteTreeLeaf.getInstance(value.getCoefficients());
+	protected ByteTree abstractGetByteTreeFrom(BinaryPolynomial value
+	) {
+		return ByteTree.getInstance(value.getCoefficients());
 	}
 
 	@Override
-	protected BinaryPolynomialElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected BinaryPolynomialElement abstractGetRandomElement(RandomByteSequence randomByteSequence
+	) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	protected boolean abstractEquals(Set set) {
+	protected boolean abstractEquals(Set set
+	) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 

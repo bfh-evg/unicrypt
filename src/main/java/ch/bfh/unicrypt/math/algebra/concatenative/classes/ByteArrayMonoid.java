@@ -126,13 +126,20 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected ByteArrayElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			ByteArray byteArray = ((ByteTreeLeaf) byteTree).convertToByteArray();
+			if (this.contains(byteArray)) {
+				return this.abstractGetElement(byteArray);
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(ByteArray value) {
-		return ByteTreeLeaf.getInstance(value);
+		return ByteTree.getInstance(value);
 	}
 
 	@Override

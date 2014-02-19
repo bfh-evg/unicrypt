@@ -1,7 +1,7 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  UniCrypt(tm) Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
@@ -12,7 +12,7 @@
  *  2. Commercial license
  *
  *
- *  1. This program is free software: you can redistribute it and/or modify
+ *  1. This program is free softwareyou can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
@@ -34,13 +34,14 @@
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
  *
  *
- *   For further information contact <e-mail: unicrypt@bfh.ch>
+ *   For further information contact <e-mailunicrypt@bfh.ch>
  *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.ZModToGStarModSafePrimeEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
@@ -78,11 +79,12 @@ public class ElGamalEncryptionExample {
 		// Decryption
 		Element decryption = elGamal.decrypt(privateKey, encryption);
 
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Key Pair:    " + keyPair);
-		System.out.println("Message:     " + message);
-		System.out.println("Encyption:   " + encryption);
-		System.out.println("Decyption:   " + decryption);
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLine("Key Pair", keyPair);
+		Example.printLine("Message", message);
+		Example.printLine("Encrypted Message", encryption);
+		Example.printLine("Decrypted Message", decryption);
 	}
 
 	public static void example2() {
@@ -103,7 +105,7 @@ public class ElGamalEncryptionExample {
 		Element publicKey = keyPair.getSecond();
 
 		// Create, encode, and encrypt message m=66
-		Element message = encoder.getDomain().getElement(66);
+		Element message = encoder.getDomain().getElementFrom(66);
 		Element encodedMessage = encoder.encode(message);
 		Element encryption = elGamal.encrypt(publicKey, encodedMessage);
 
@@ -111,13 +113,15 @@ public class ElGamalEncryptionExample {
 		Element decryption = elGamal.decrypt(privateKey, encryption);
 		Element decodedMessage = encoder.decode(decryption);
 
-		System.out.println("Cylic Group:     " + cyclicGroup);
-		System.out.println("Key Pair:        " + keyPair);
-		System.out.println("Message:         " + message);
-		System.out.println("Encoded Message: " + encodedMessage);
-		System.out.println("Encyption:       " + encryption);
-		System.out.println("Decyption:       " + decryption);
-		System.out.println("Decoded Message: " + decodedMessage);
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLine("Key Pair", keyPair);
+		Example.printLine("Encoder", encoder);
+		Example.printLine("Message", message);
+		Example.printLine("Encoded Message", encodedMessage);
+		Example.printLine("Encrypted Message", encryption);
+		Example.printLine("Decrypted Message", decryption);
+		Example.printLine("Decoded Message", decodedMessage);
 	}
 
 	public static void example3() {
@@ -135,8 +139,8 @@ public class ElGamalEncryptionExample {
 		Element publicKey = keyPair.getSecond();
 
 		// Create messages m1=3, m2=6, and m12=m1*m2=18
-		Element message1 = elGamal.getMessageSpace().getElement(3);
-		Element message2 = elGamal.getMessageSpace().getElement(6);
+		Element message1 = elGamal.getMessageSpace().getElementFrom(3);
+		Element message2 = elGamal.getMessageSpace().getElementFrom(6);
 		Element message12 = elGamal.getMessageSpace().apply(message1, message2);
 
 		// Encryption
@@ -149,29 +153,22 @@ public class ElGamalEncryptionExample {
 		Element decryption2 = elGamal.decrypt(privateKey, encryption2);
 		Element decryption12 = elGamal.decrypt(privateKey, encryption12);
 
-		System.out.println("Cylic Group:  " + cyclicGroup);
-		System.out.println("Key Pair:     " + keyPair);
-		System.out.println("Message 1:    " + message1);
-		System.out.println("Message 2:    " + message2);
-		System.out.println("Message 12:   " + message12);
-		System.out.println("Encyption 1:  " + encryption1);
-		System.out.println("Encyption 2:  " + encryption2);
-		System.out.println("Encyption 12: " + encryption12);
-		System.out.println("Decyption 1:  " + decryption1);
-		System.out.println("Decyption 2:  " + decryption2);
-		System.out.println("Decyption 12: " + decryption12);
+		Example.setLabelLength("Decyption12");
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLine("Key Pair", keyPair);
+		Example.printLine("Message1", message1);
+		Example.printLine("Message2", message2);
+		Example.printLine("Message12", message12);
+		Example.printLine("Encyption1", encryption1);
+		Example.printLine("Encyption2", encryption2);
+		Example.printLine("Encyption12", encryption12);
+		Example.printLine("Decyption1", decryption1);
+		Example.printLine("Decyption2", decryption2);
+		Example.printLine("Decyption12", decryption12);
 	}
 
 	public static void main(final String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		ElGamalEncryptionExample.example1();
-
-		System.out.println("\nEXAMPLE 2 (with encoding):");
-		ElGamalEncryptionExample.example2();
-
-		System.out.println("\nEXAMPLE 3 (homomorphic property):");
-		ElGamalEncryptionExample.example3();
+		Example.runExamples();
 	}
 
 }

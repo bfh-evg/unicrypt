@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.Alphabet;
-import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
@@ -123,13 +122,20 @@ public class StringMonoid
 	}
 
 	@Override
-	protected StringElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected StringElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			String string = ((ByteTreeLeaf) byteTree).convertToString();
+			if (this.contains(string)) {
+				return this.abstractGetElement(string);
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(String value) {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(abstractGetBigIntegerFrom(value).toByteArray()));
+		return ByteTree.getInstance(value);
 	}
 
 	@Override

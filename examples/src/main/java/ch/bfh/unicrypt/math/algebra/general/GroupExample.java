@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
@@ -54,7 +55,7 @@ import java.math.BigInteger;
 
 public class GroupExample {
 
-	public static void main(final String[] args) {
+	public static void example1() {
 
 		AdditiveElement a1;
 		AdditiveElement a2;
@@ -154,6 +155,10 @@ public class GroupExample {
 		final BigInteger i3 = BigInteger.valueOf(1);
 		System.out.println(group1.multiSelfApply(new Element[]{e1, e2, e3}, new BigInteger[]{i1, i2, i3}));
 
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

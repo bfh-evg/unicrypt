@@ -41,9 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive;
 
+import ch.bfh.unicrypt.Example;
+
 public class ECGroupExample {
 
-	public static void main(String[] args) {
+	public static void example1() {
 
 		//Example 1
 		/*
@@ -58,6 +60,9 @@ public class ECGroupExample {
 		 * t1=System.currentTimeMillis()-t1; System.out.println(w2);	//Must be Identity (-1,-1) if h=1
 		 * System.out.println("Computing time for n2*w2= "+t1+" ms");
 		 */
+	}
+
+	public static void example2() {
 		/*
 		 * //Example 2 with "own" ECGroupFp ZModPrime field2=ZModPrime.getInstance(new
 		 * BigInteger("DB7C2ABF62E35E668076BEAD208B",16)); ZModElement a2=field2.getElement(new
@@ -75,6 +80,10 @@ public class ECGroupExample {
 		 *
 		 * System.out.println(e2);
 		 */
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

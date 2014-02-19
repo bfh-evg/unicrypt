@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
@@ -164,14 +165,8 @@ public class RandomOracleExample {
 		}
 	}
 
-	public static void main(String[] args) {
-		example1();
-		System.out.println("");
-		example2();
-		System.out.println("");
-		example3();
-		System.out.println("");
-
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

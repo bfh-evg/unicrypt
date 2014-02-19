@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.mixer.classes.ReEncryptionMixer;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
@@ -71,7 +72,7 @@ public class CompleteShuffleExample {
 	//
 	// As tight as possible!
 	//
-	public static void completetElGamalShuffleExample1() {
+	public static void example1() {
 
 		// P R E P A R E
 		//---------------
@@ -156,7 +157,7 @@ public class CompleteShuffleExample {
 		}
 	}
 
-	public static void completetElGamalShuffleExample2() {
+	public static void example2() {
 
 		// P R E P A R E
 		//---------------
@@ -249,14 +250,8 @@ public class CompleteShuffleExample {
 		}
 	}
 
-	public static void main(String[] args) {
-		System.out.println("Complete ElGamal Shuffle Example 1:");
-		CompleteShuffleExample.completetElGamalShuffleExample1();
-		System.out.println("Done.");
-
-		System.out.println("\nComplete ElGamal Shuffle Example 2:");
-		CompleteShuffleExample.completetElGamalShuffleExample2();
-		System.out.println("Done.");
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

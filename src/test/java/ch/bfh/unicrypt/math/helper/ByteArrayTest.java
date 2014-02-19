@@ -53,7 +53,7 @@ public class ByteArrayTest {
 
 	public static ByteArray a0 = ByteArray.getInstance();
 	public static ByteArray a1 = ByteArray.getInstance(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-	public static ByteArray a2 = ByteArray.getInstance(15);
+	public static ByteArray a2 = ByteArray.getInstance(15, false);
 	public static ByteArray a3 = ByteArray.getInstance(20, true);
 	public static ByteArray a4 = ByteArray.getInstance(9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
 

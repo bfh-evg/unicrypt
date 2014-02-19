@@ -128,13 +128,20 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected FiniteByteArrayElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			ByteArray byteArray = ((ByteTreeLeaf) byteTree).convertToByteArray();
+			if (this.contains(byteArray)) {
+				return this.abstractGetElement(byteArray);
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(ByteArray value) {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.getAll()));
+		return ByteTree.getInstance(value);
 	}
 
 	@Override

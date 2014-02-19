@@ -42,6 +42,7 @@
  */
 package ch.bfh.unicrypt.math.function;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -56,8 +57,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  */
 public class HashFunctionExample {
 
-	public static void main(final String[] args) {
-
+	public static void example1() {
 		// Generate product group Z23^10 and random element
 		Group z23 = ZModPrime.getInstance(23);
 		ProductGroup pg = ProductGroup.getInstance(z23, 10);
@@ -69,7 +69,12 @@ public class HashFunctionExample {
 		// Apply hash function to tuple (return finite byte array)
 		Element hashValue = function.apply(tuple);
 
-		System.out.println(hashValue);
+		Example.printLine("Function", function);
+		Example.printLines("Value and Hash Value", tuple, hashValue);
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

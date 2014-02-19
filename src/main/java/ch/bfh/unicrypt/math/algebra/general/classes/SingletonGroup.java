@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
@@ -102,13 +101,20 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected SingletonElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected SingletonElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			BigInteger bigInteger = ((ByteTreeLeaf) byteTree).convertToBigInteger();
+			if (this.contains(bigInteger)) {
+				return this.abstractGetElement(bigInteger);
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(BigInteger value) {
-		return ByteTreeLeaf.getInstance(ByteArray.getInstance(value.toByteArray()));
+		return ByteTree.getInstance(value);
 	}
 
 	@Override

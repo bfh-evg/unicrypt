@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.encoder;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.CompositeEncoder;
 import ch.bfh.unicrypt.crypto.encoder.classes.FiniteStringToZModEncoder;
 import ch.bfh.unicrypt.crypto.encoder.classes.ZModToGStarModSafePrimeEncoder;
@@ -56,14 +57,14 @@ import ch.bfh.unicrypt.math.helper.Alphabet;
  */
 public class EncoderExample {
 
-	public static void main(String args[]) {
+	public static void example1() {
 
 		// Define underlying groups
-		GStarModSafePrime group = GStarModSafePrime.getRandomInstance(256);
+		GStarModSafePrime group = GStarModSafePrime.getRandomInstance(64);
 		ZMod zMod = group.getZModOrder();
 
 		// Create encoders
-		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(zMod, Alphabet.BASE64);
+		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(zMod, Alphabet.LOWER_CASE);
 		Encoder encoder2 = ZModToGStarModSafePrimeEncoder.getInstance(group);
 
 		// Create composite encoder
@@ -73,6 +74,14 @@ public class EncoderExample {
 		Element message = encoder12.getDomain().getElement("hello");
 		Element encodedMessage = encoder12.encode(message);
 		Element decodedMessage = encoder12.decode(encodedMessage);
+
+		Example.printLines("Groups", group, zMod);
+		Example.printLines("Encoders", encoder1, encoder2, encoder12);
+		Example.printLines("Messages", message, encodedMessage, decodedMessage);
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

@@ -177,7 +177,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 
 			@Override
 			public void remove() {
-				throw new UnsupportedOperationException("Not supported yet.");
+				throw new UnsupportedOperationException();
 			}
 		};
 	}

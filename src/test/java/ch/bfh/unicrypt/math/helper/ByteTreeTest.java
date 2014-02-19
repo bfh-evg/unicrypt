@@ -95,61 +95,58 @@ public class ByteTreeTest {
 	/**
 	 * Test of getInstance method, of class ByteTree.
 	 */
-	@Test
-	@Ignore
-	public void testGetInstance_byteArr() {
-//		System.out.println("getInstance");
-		ByteArray bytes = null;
-		ByteTree expResult = null;
-		ByteTree result = ByteTree.getInstance(bytes);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
+//	@Test
+//	@Ignore
+//	public void testGetInstance_byteArr() {
+////		System.out.println("getInstance");
+//		ByteArray bytes = null;
+//		ByteTree expResult = null;
+//		ByteTree result = ByteTree.getInstance(bytes);
+//		assertEquals(expResult, result);
+//		// TODO review the generated test code and remove the default call to fail.
+//		fail("The test case is a prototype.");
+//	}
+//	/**
+//	 * Test of getInstanceFrom method, of class ByteTree.
+//	 */
+//	@Test
+//	@Ignore
+//
+//	public void testGetDeserializedInstance() {
+////		System.out.println("getInstanceFrom");
+//		ByteArray bytes = null;
+//		ByteTree expResult = null;
+//		ByteTree result = ByteTree.getInstanceFrom(bytes);
+//		assertEquals(expResult, result);
+//		// TODO review the generated test code and remove the default call to fail.
+//		fail("The test case is a prototype.");
+//	}
 	/**
-	 * Test of getDeserializedInstance method, of class ByteTree.
+	 * Test of getByteArray method, of class ByteTree.
 	 */
 	@Test
 	@Ignore
-
-	public void testGetDeserializedInstance() {
-//		System.out.println("getDeserializedInstance");
-		ByteArray bytes = null;
-		ByteTree expResult = null;
-		ByteTree result = ByteTree.getDeserializedInstance(bytes);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of getSerializedByteTree method, of class ByteTree.
-	 */
-	@Test
-	@Ignore
-
 	public void testGetSerializedByteTree() {
-//		System.out.println("getSerializedByteTree");
+//		System.out.println("getByteArray");
 		ByteTree instance = new ByteTreeImpl();
 		ByteArray expResult = null;
-		ByteArray result = instance.getSerializedByteTree();
+		ByteArray result = instance.getByteArray();
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
 	}
 
 	/**
-	 * Test of defaultSerialize method, of class ByteTree.
+	 * Test of defaultGetByteArray method, of class ByteTree.
 	 */
 	@Test
 	@Ignore
 
 	public void testDefaultSerialize() {
-//		System.out.println("defaultSerialize");
+//		System.out.println("defaultGetByteArray");
 		ByteBuffer buffer = null;
 		ByteTree instance = new ByteTreeImpl();
-//		instance.defaultSerialize(buffer);
+//		instance.defaultGetByteArray(buffer);
 //		// TODO review the generated test code and remove the default call to fail.
 //		fail("The test case is a prototype.");
 	}
@@ -171,31 +168,31 @@ public class ByteTreeTest {
 	}
 
 	/**
-	 * Test of abstractSerialize method, of class ByteTree.
+	 * Test of abstractGetByteArray method, of class ByteTree.
 	 */
 	@Test
 	@Ignore
 
 	public void testAbstractSerialize() {
-//		System.out.println("abstractSerialize");
+//		System.out.println("abstractGetByteArray");
 		ByteBuffer buffer = null;
 		ByteTree instance = new ByteTreeImpl();
-//		instance.abstractSerialize(buffer);
+//		instance.abstractGetByteArray(buffer);
 //		// TODO review the generated test code and remove the default call to fail.
 //		fail("The test case is a prototype.");
 	}
 
 	/**
-	 * Test of abstractGetSize method, of class ByteTree.
+	 * Test of abstractGetLength method, of class ByteTree.
 	 */
 	@Test
 	@Ignore
 
 	public void testAbstractGetSize() {
-//		System.out.println("abstractGetSize");
+//		System.out.println("abstractGetLength");
 		ByteTree instance = new ByteTreeImpl();
 		int expResult = 0;
-//		int result = instance.abstractGetSize();
+//		int result = instance.abstractGetLength();
 //		assertEquals(expResult, result);
 //		// TODO review the generated test code and remove the default call to fail.
 //		fail("The test case is a prototype.");
@@ -204,10 +201,10 @@ public class ByteTreeTest {
 	public class ByteTreeImpl
 		   extends ByteTree {
 
-		public void abstractSerialize(ByteBuffer buffer) {
+		public void abstractGetByteArray(ByteBuffer buffer) {
 		}
 
-		public int abstractGetSize() {
+		public int abstractGetLength() {
 			return 0;
 		}
 

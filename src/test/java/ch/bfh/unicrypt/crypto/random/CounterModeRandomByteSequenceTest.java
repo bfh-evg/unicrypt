@@ -97,7 +97,7 @@ public class CounterModeRandomByteSequenceTest {
 	@Test
 	public void testGetSeed() {
 		System.out.println("getSeed");
-		ByteArray expSeed = Z.getInstance().getElement(4711).getByteTree().getSerializedByteTree();
+		ByteArray expSeed = Z.getInstance().getElement(4711).getByteTree().getByteArray();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance(expSeed);
 		ByteArray seed = instance.getSeed();
 		Assert.assertTrue(expSeed.equals(seed));

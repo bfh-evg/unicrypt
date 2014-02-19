@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.StringToByteArrayEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.AESEncryptionScheme;
@@ -70,10 +71,11 @@ public class AESEncryptionExample {
 		// perform the decryption
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 
-		System.out.println("Key              : " + key);
-		System.out.println("Message          : " + message);
-		System.out.println("Encrypted Message: " + encryptedMessage);
-		System.out.println("Decrypted Message: " + decryptedMessage);
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Key", key);
+		Example.printLine("Message", message);
+		Example.printLine("Encrypted Message", encryptedMessage);
+		Example.printLine("Decrypted Message", decryptedMessage);
 	}
 
 	public static void example2() {
@@ -98,12 +100,13 @@ public class AESEncryptionExample {
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 		Element decodedMessage = encoder.decode(decryptedMessage);
 
-		System.out.println("Key              : " + key);
-		System.out.println("Message          : " + message);
-		System.out.println("EncodedMessage   : " + encodedMessage);
-		System.out.println("Encrypted Message: " + encryptedMessage);
-		System.out.println("Decrypted Message: " + decryptedMessage);
-		System.out.println("DecodedMessage   : " + decodedMessage);
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Key", key);
+		Example.printLine("Message", message);
+		Example.printLine("EncodedMessage", encodedMessage);
+		Example.printLine("Encrypted Message", encryptedMessage);
+		Example.printLine("Decrypted Message", decryptedMessage);
+		Example.printLine("DecodedMessage", decodedMessage);
 	}
 
 	public static void example3() {
@@ -127,22 +130,15 @@ public class AESEncryptionExample {
 		// perform the decryption
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 
-		System.out.println("Key              : " + key);
-		System.out.println("Message          : " + message);
-		System.out.println("Encrypted Message: " + encryptedMessage);
-		System.out.println("Decrypted Message: " + decryptedMessage);
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Key", key);
+		Example.printLine("Message", message);
+		Example.printLine("Encrypted Message", encryptedMessage);
+		Example.printLine("Decrypted Message", decryptedMessage);
 	}
 
 	public static void main(final String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		AESEncryptionExample.example1();
-
-		System.out.println("\nEXAMPLE 2 (with string encoding):");
-		AESEncryptionExample.example2();
-
-		System.out.println("\nEXAMPLE 3 (with options):");
-		AESEncryptionExample.example3();
+		Example.runExamples();
 	}
 
 }
