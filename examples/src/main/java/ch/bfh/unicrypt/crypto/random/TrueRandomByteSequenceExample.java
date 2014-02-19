@@ -64,6 +64,9 @@ public class TrueRandomByteSequenceExample {
 		System.out.println("Get a boolean via RandomNumberGenerator " + random.getRandomNumberGenerator().nextBoolean());
 		System.out.println("Get a BigInteger via RandomNumberGenerator " + random.getRandomNumberGenerator().nextBigInteger(42));
 		System.out.println("Get a savePrime via RandomNumberGenerator " + random.getRandomNumberGenerator().nextSavePrime(10));
+		random = null;
+		System.gc();
+
 	}
 
 	public static void example2() {
@@ -79,7 +82,8 @@ public class TrueRandomByteSequenceExample {
 		System.out.println("Get a boolean via RandomNumberGenerator " + random.getRandomNumberGenerator().nextBoolean());
 		System.out.println("Get a BigInteger via RandomNumberGenerator " + random.getRandomNumberGenerator().nextBigInteger(42));
 		System.out.println("Get a savePrime via RandomNumberGenerator " + random.getRandomNumberGenerator().nextSavePrime(10));
-
+		random = null;
+		System.gc();
 	}
 
 	public static void example3() {
@@ -95,7 +99,8 @@ public class TrueRandomByteSequenceExample {
 		System.out.println("Get a boolean via RandomNumberGenerator " + random.getRandomNumberGenerator().nextBoolean());
 		System.out.println("Get a BigInteger via RandomNumberGenerator " + random.getRandomNumberGenerator().nextBigInteger(42));
 		System.out.println("Get a savePrime via RandomNumberGenerator " + random.getRandomNumberGenerator().nextSavePrime(10));
-
+		random = null;
+		System.gc();
 	}
 
 	public static void main(String[] args) {

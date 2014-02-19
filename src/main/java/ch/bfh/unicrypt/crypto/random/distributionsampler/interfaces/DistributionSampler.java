@@ -47,13 +47,12 @@ import ch.bfh.unicrypt.math.helper.ByteArray;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public interface DistributionSampler
-	   extends Runnable {
-
-	public boolean isCollecting();
-
-	public void collectFreshSamples();
+public interface DistributionSampler {
 
 	public ByteArray getDistributionSample(int amountOfBytes);
+
+	public void setSamplingState(boolean isSampling);
+
+	public boolean isSampling();
 
 }

@@ -49,10 +49,6 @@ import ch.bfh.unicrypt.math.helper.ByteArray;
  */
 public interface DistributionSamplerCollector {
 
-	public boolean isCollecting();
-
-	public void setCollectionStatus(boolean isCollecting);
-
 	public ByteArray getDistributionSample(int amountOfBytes);
 
 	public void setFreshSamples(ByteArray samples);

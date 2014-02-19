@@ -45,6 +45,8 @@ import ch.bfh.unicrypt.crypto.random.distributionsampler.interfaces.Distribution
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,42 +55,69 @@ import java.util.logging.Logger;
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
 public class SecureRandomSampler
-	   implements Runnable, DistributionSampler {
+	   implements DistributionSampler {
 
-	private boolean isCollecting;
 	private SecureRandom secureRandom;
-	private final DistributionSamplerCollector distributionSamplerCollector;
-	private Thread collectorThread;
+	private DistributionSamplerCollector distributionSamplerCollector;
+	private Timer collectorThread;
+	private TimerTask sampler;
+	private int minimumUpdateInMilliseconds;
 
 	private int securityParameterInBytes;
 
-	public SecureRandomSampler(DistributionSamplerCollector distributionSamplerCollector1) {
+	public SecureRandomSampler(DistributionSamplerCollector distributionSamplerCollector1, int minimumUpdateInMilliseconds) {
+		if (distributionSamplerCollector1 == null) {
+			throw new IllegalArgumentException();
+		}
+		if (minimumUpdateInMilliseconds < 1) {
+			throw new IllegalArgumentException();
+		}
 		this.distributionSamplerCollector = distributionSamplerCollector1;
+		this.minimumUpdateInMilliseconds = minimumUpdateInMilliseconds;
 		try {
 			secureRandom = SecureRandom.getInstance("SHA1PRNG");
+			collectorThread = new Timer(true);
+			this.setSamplingState(true);
 		} catch (NoSuchAlgorithmException ex) {
 			Logger.getLogger(DistributionSamplerCollector.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
-	@Override
-	public boolean isCollecting() {
-		return collectorThread != null;
+	public int getMinimumUpdateInMilliseconds() {
+		return minimumUpdateInMilliseconds;
 	}
 
-	public void collectFreshSamples() {
-		if (collectorThread != null) {
+	@Override
+	public void setSamplingState(boolean isSampling) {
+		if (isSampling && sampler != null) {
 			return;
 		}
-		collectorThread = new Thread(this);
-		collectorThread.start();
+		if (!isSampling && sampler == null) {
+			return;
+		}
+
+		if (isSampling) {
+			this.sampler = new Sampler();
+			this.collectorThread.schedule(sampler, 0, getMinimumUpdateInMilliseconds());
+		} else {
+			this.sampler.cancel();
+		}
 	}
 
 	@Override
-	public void run() {
-		byte[] freshData = secureRandom.generateSeed(distributionSamplerCollector.getSecurityParameterInBytes());
-		distributionSamplerCollector.setFreshSamples(ByteArray.getInstance(freshData));
-		collectorThread = null;
+	public boolean isSampling() {
+		return this.sampler != null;
+	}
+
+	class Sampler
+		   extends TimerTask {
+
+		@Override
+		public void run() {
+			byte[] freshData = secureRandom.generateSeed(distributionSamplerCollector.getSecurityParameterInBytes());
+			distributionSamplerCollector.setFreshSamples(ByteArray.getInstance(freshData));
+		}
+
 	}
 
 	/**

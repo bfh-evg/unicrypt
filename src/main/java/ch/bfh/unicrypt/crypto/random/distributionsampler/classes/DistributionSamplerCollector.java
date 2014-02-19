@@ -70,7 +70,7 @@ public class DistributionSamplerCollector {
 			throw new IllegalArgumentException();
 		}
 		this.sink = sink;
-		this.dataCollector = new SecureRandomSampler(this);
+		this.dataCollector = new SecureRandomSampler(this, 1000);
 	}
 
 	public static DistributionSamplerCollector getInstance(TrueRandomByteSequence sink) {
@@ -97,17 +97,15 @@ public class DistributionSamplerCollector {
 		return dataCollector.getDistributionSample(amountOfBytes);
 	}
 
-	public boolean isCollecting() {
-		return this.dataCollector.isCollecting();
-	}
-
-	public void collectDistributionSamples() {
-		this.dataCollector.collectFreshSamples();
-	}
-
 	public void setFreshSamples(ByteArray samples) {
 		//This will collect all data received from the different distributionSamplers... one day...
 		this.sink.setFreshData(samples);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		this.dataCollector.setSamplingState(false);
+		super.finalize();
 	}
 
 }
