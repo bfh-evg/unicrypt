@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.helper.Alphabet;
@@ -51,7 +52,7 @@ import ch.bfh.unicrypt.math.helper.Alphabet;
  */
 public class StringMonoidExample {
 
-	public static void main(final String[] args) {
+	public static void example1() {
 
 		Alphabet alphabet = Alphabet.getInstance("ADEHLORW-");
 		StringMonoid sm = StringMonoid.getInstance(alphabet);
@@ -64,6 +65,13 @@ public class StringMonoidExample {
 
 		// Generate random string of length 10
 		Element s = sm.getRandomElement(10);
+
+		Example.printLines(sm, s1, s2, s3, s123, s);
+
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

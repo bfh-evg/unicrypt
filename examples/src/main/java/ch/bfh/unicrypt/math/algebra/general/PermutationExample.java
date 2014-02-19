@@ -41,13 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 public class PermutationExample {
 
-	public static void main(final String[] args) {
+	public static void example1() {
 
 		PermutationGroup pg = PermutationGroup.getInstance(5);
 
@@ -61,6 +62,11 @@ public class PermutationExample {
 		// Combine p1 and p2 into p12 = (0,1,2,3,4)
 		Element p12 = pg.apply(p1, p2);
 
+		Example.printLines(pg, order, p1, p2, p12);
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

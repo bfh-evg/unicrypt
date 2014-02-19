@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
@@ -61,29 +62,26 @@ public class ProductSetExample {
 		Set s3 = StringMonoid.getInstance(Alphabet.LOWER_CASE);
 
 		ProductSet s12 = ProductSet.getInstance(s1, s2);
-		System.out.println(s12);
+		Example.printLine(s12);
 
 		ProductSet s123 = s12.add(s3);
-		System.out.println(s123);
+		Example.printLine(s123);
 
 		ProductSet s123123 = s123.append(s123);
-		System.out.println(s123123);
+		Example.printLine(s123123);
 
 		ProductSet s1212 = ProductSet.getInstance(s12, 2);
-		System.out.println(s1212);
+		Example.printLine(s1212);
 
 		ProductSet s22 = ProductSet.getInstance(s2, 2);
-		System.out.println(s22);
+		Example.printLine(s22);
 
 		ProductSet s12_22 = ProductSet.getInstance(s12, s22);
-		System.out.println(s12_22);
+		Example.printLine(s12_22);
 	}
 
 	public static void main(final String[] args) {
-
-		System.out.println("\nEXAMPLE 1:");
-		ProductSetExample.example1();
-
+		Example.runExamples();
 	}
 
 }

@@ -157,11 +157,10 @@ public class ByteTreeExample {
 	}
 
 	public static void main(String[] args) {
+		Example.runExamples();
+	}
 
-//		example1();
-//		example2();
-//		example3();
-		example4();
+}
 
 //		ByteTree b1 = ByteTree.getInstance(ByteArray.getInstance("Hallo".getBytes()));
 //		ByteArray value1 = b1.getByteArray();
@@ -246,6 +245,3 @@ public class ByteTreeExample {
 //			   ), ByteTree.getInstance(ByteArray.getInstance(BigInteger.valueOf(45).toByteArray())));
 //
 //		System.out.println(example.getByteArray());
-	}
-
-}

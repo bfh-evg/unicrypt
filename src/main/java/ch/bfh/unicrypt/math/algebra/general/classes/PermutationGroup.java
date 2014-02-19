@@ -145,7 +145,7 @@ public class PermutationGroup
 	protected ByteTree abstractGetByteTreeFrom(Permutation value) {
 		ByteTree[] byteTrees = new ByteTree[this.size];
 		for (int i = 0; i < this.size; i++) {
-			//byteTrees[i] = ByteTree.getInstance(BigInteger.valueOf(value.permute(i)).toByteArray());
+			byteTrees[i] = ByteTree.getInstance(BigInteger.valueOf(value.permute(i)));
 		}
 		return ByteTree.getInstance(byteTrees);
 	}

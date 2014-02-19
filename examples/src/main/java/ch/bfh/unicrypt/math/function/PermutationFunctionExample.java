@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -55,7 +56,7 @@ import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
  */
 public class PermutationFunctionExample {
 
-	public static void main(final String[] args) {
+	public static void example1() {
 
 		// Generate random permutation of size 10
 		Group group = PermutationGroup.getInstance(10);
@@ -69,9 +70,13 @@ public class PermutationFunctionExample {
 		Tuple tuple = ProductSet.getInstance(z23, 10).getRandomElement();
 		Tuple permutedTuple = function.apply(tuple, permutation);
 
-		System.out.println(tuple);
-		System.out.println(permutedTuple);
-		System.out.println(permutation);
+		Example.printLine(tuple);
+		Example.printLine(permutedTuple);
+		Example.printLine(permutation);
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

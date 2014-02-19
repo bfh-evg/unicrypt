@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
@@ -50,7 +51,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  */
 public class ZExample {
 
-	public static void main(final String[] args) {
+	public static void example1() {
 
 		Z wholeNumbers = Z.getInstance();
 		Element z0 = wholeNumbers.getZeroElement();
@@ -60,7 +61,11 @@ public class ZExample {
 
 		Element sum = wholeNumbers.add(z0, z1, z2, z3);
 
-		System.out.println(sum);
+		Example.printLines(wholeNumbers, z0, z1, z2, z3, sum);
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

@@ -118,4 +118,11 @@ public class BinaryPolynomial
 		return "f(x)=" + this.coefficients;
 	}
 
+	public static BinaryPolynomial getInstance(ByteArray coefficients) {
+		if (coefficients == null) {
+			throw new IllegalArgumentException();
+		}
+		return new BinaryPolynomial(coefficients);
+	}
+
 }

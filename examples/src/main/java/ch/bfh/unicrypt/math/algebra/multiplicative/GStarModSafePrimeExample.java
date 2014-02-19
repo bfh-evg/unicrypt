@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 import java.math.BigInteger;
 
 /**
@@ -52,26 +52,31 @@ import java.math.BigInteger;
  */
 public class GStarModSafePrimeExample {
 
-	public static void main(final String[] args) {
+	public static void example1() {
 
-		MultiplicativeCyclicGroup g11 = GStarModSafePrime.getInstance(23);
+		GStarModSafePrime g11 = GStarModSafePrime.getInstance(23);
+		Example.printLine(g11);
+		Example.printLines(g11);
 
 		// Compute order (23-1)/2 = 11
 		BigInteger order = g11.getOrder();
+		Example.printLine(order);
 
 		// Multiply two group elements: 3*9 mod 23 = 4
 		Element e1 = g11.getElement(3);
 		Element e2 = g11.getElement(9);
 		Element e12 = g11.multiply(e1, e2);
+		Example.printLines(e1, e2, e12);
 
 		// Select and apply default generator
 		Element generator = g11.getDefaultGenerator();
 		Element result = g11.power(generator, 5);
+		Example.printLines(generator, result);
 
-		for (Element element : (GStarModSafePrime) g11) {
-			System.out.println(element);
-		}
+	}
 
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

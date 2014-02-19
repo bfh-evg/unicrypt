@@ -80,8 +80,7 @@ public class ByteArrayExample {
 	}
 
 	public static void main(final String[] args) {
-		example1();
-		example2();
+		Example.runExamples();
 	}
 
 }

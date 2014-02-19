@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt;
 
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  *
@@ -52,6 +54,31 @@ public class Example {
 	private static final PrintStream OUT = System.out;
 	private static final String LABEL_SEP = ": ";
 	private static final String ITEM_SEP = ", ";
+	private static final String UNDERLINE = "=";
+
+	public static void runExamples() {
+		// Calling method is at index 2 on current stack trace
+		String className = Thread.currentThread().getStackTrace()[2].getClassName();
+		Class<?> classType = null;
+		try {
+			classType = Class.forName(className);
+		} catch (ClassNotFoundException ex) {
+		}
+		if (classType != null) {
+			Method[] methods = classType.getDeclaredMethods();
+			for (Method method : methods) {
+				// test necessary to exclude the method "main"
+				if (method.getParameterTypes().length == 0) {
+					Example.printTitle(method.getName().toUpperCase());
+					try {
+						method.invoke(null);
+					} catch (IllegalAccessException | InvocationTargetException ex) {
+					}
+					Example.printLine();
+				}
+			}
+		}
+	}
 
 	public static void print(Object object) {
 		OUT.print(object);
@@ -64,7 +91,7 @@ public class Example {
 	public static void printTitle(String title) {
 		Example.printLine(title);
 		for (int i = 0; i < title.length(); i++) {
-			Example.print("-");
+			Example.print(Example.UNDERLINE);
 		}
 		Example.printLine();
 	}
@@ -100,6 +127,17 @@ public class Example {
 	}
 
 	public static void printLines(String label, Object... objects) {
+		Example.printLine(label + Example.LABEL_SEP);
+		Example.printLines(objects);
+	}
+
+	public static void printLines(Iterable<?> objects) {
+		for (Object object : objects) {
+			Example.printLine(object);
+		}
+	}
+
+	public static void printLines(String label, Iterable<?> objects) {
 		Example.printLine(label + Example.LABEL_SEP);
 		Example.printLines(objects);
 	}

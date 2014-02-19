@@ -115,7 +115,7 @@ public class ProductCyclicGroup
 
 			@Override
 			public void remove() {
-				throw new UnsupportedOperationException("Not supported yet.");
+				throw new UnsupportedOperationException();
 			}
 		};
 	}

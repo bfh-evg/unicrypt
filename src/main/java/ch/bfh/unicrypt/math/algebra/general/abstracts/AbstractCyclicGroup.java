@@ -188,7 +188,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 			@Override
 			public void remove() {
-				throw new UnsupportedOperationException("Not supported yet.");
+				throw new UnsupportedOperationException();
 			}
 		};
 	}
