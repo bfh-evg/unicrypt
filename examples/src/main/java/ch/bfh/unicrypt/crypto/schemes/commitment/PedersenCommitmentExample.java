@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -71,17 +72,15 @@ public class PedersenCommitmentExample {
 		// Decommit
 		BooleanElement result = commitmentScheme.decommit(message, randomization, commitment);
 
-		System.out.println("Cylic Group: " + cyclicGroup);
-		System.out.println("Message    : " + message);
-		System.out.println("Message    : " + randomization);
-		System.out.println("Commitment : " + commitment);
-		System.out.println("Result     : " + result);
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLine("Message", message);
+		Example.printLine("Randomization", randomization);
+		Example.printLine("Commitment", commitment);
+		Example.printLine("Result", result);
 	}
 
-	public static void main(String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		StandardCommitmentExample.example1();
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

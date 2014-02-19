@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.proofgenerator;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
@@ -56,7 +57,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  */
 public class PreimageProofExample {
 
-	public static void main(final String[] args) {
+	public static void example1() {
 
 		// Create cyclic group G_q (modulo 20 bits) and get default generator
 		CyclicGroup cyclicGroup = GStarModSafePrime.getRandomInstance(20);
@@ -78,8 +79,15 @@ public class PreimageProofExample {
 		Triple proof = pg.generate(privateKey, publicKey);
 		Element result = pg.verify(proof, publicKey);
 
-		System.out.println(proof);
-		System.out.println(result);
+		Example.printLine("Cyclic Group", cyclicGroup);
+		Example.printLine("Generator", generator);
+		Example.printLines("Keys", privateKey, publicKey);
+		Example.printLine("Proof", proof);
+		Example.printLine("Check", result);
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

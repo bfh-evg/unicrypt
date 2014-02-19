@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.TrueRandomByteSequence;
 import ch.bfh.unicrypt.math.helper.HashMethod;
@@ -98,15 +99,11 @@ public class TrueRandomByteSequenceExample {
 
 	}
 
-	public static void main(String[] args) {
-		System.out.println("The actual true random 'generator' is seeded and refreshed via a distribution sampler which gets its sample from /dev/random.");
-		System.out.println("Other sensors will be accessed for distribution sampling in the near future.");
-		example1();
-		System.out.println("");
-		example2();
-		System.out.println("");
-		example3();
-		System.out.println("If it is blocking now, an internal refresh of the random instance is in progress... Please be patient or do some WebSurfing!");
+	public static void main(final String[] args) {
+		Example.runExamples();
+//		System.out.println("The actual true random 'generator' is seeded and refreshed via a distribution sampler which gets its sample from /dev/random.");
+//		System.out.println("Other sensors will be accessed for distribution sampling in the near future.");
+//		System.out.println("If Example 3 is blocking now, an internal refresh of the random instance is in progress... Please be patient or do some WebSurfing!");
 	}
 
 }

@@ -13,34 +13,35 @@
  *
  *
  *  1. This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Affero General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
+ *it under the terms of the GNU Affero General Public License as published by
+ *the Free Software Foundation, either version 3 of the License, or
+ *(at your option) any later version.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Affero General Public License for more details.
+ *This program is distributed in the hope that it will be useful,
+ *but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *GNU Affero General Public License for more details.
  *
- *   You should have received a copy of the GNU Affero General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *You should have received a copy of the GNU Affero General Public License
+ *along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
- *   accordance with the commercial license agreement provided with the
- *   Software or, alternatively, in accordance with the terms contained in
- *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
- *   Security in the Information Society (RISIS), E-Voting Group (EVG)
- *   Quellgasse 21, CH-2501 Biel, Switzerland.
+ *accordance with the commercial license agreement provided with the
+ *Software or, alternatively, in accordance with the terms contained in
+ *a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
+ *Security in the Information Society (RISIS), E-Voting Group (EVG)
+ *Quellgasse 21, CH-2501 Biel, Switzerland.
  *
  *
- *   For further information contact <e-mail: unicrypt@bfh.ch>
+ *For further information contact <e-mail: unicrypt@bfh.ch>
  *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.FiniteStringToFiniteByteArrayEncoder;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.OneTimePadEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
@@ -70,10 +71,10 @@ public class OneTimePadEncryptionExample {
 		// Perform the decryption
 		Element decryptedMessage = oneTimePad.decrypt(key, encryptedMessage);
 
-		System.out.println("Key               : " + key);
-		System.out.println("Message           : " + message);
-		System.out.println("Encrypted Message : " + encryptedMessage);
-		System.out.println("Decrypted Message : " + decryptedMessage);
+		Example.printLine("Key", key);
+		Example.printLine("Message", message);
+		Example.printLine("Encrypted Message", encryptedMessage);
+		Example.printLine("Decrypted Message", decryptedMessage);
 	}
 
 	public static void example2() {
@@ -98,22 +99,17 @@ public class OneTimePadEncryptionExample {
 		Element decryptedMessage = oneTimePad.decrypt(key, encryptedMessage);
 		Element decodedMessage = encoder.decode(decryptedMessage);
 
-		System.out.println("Key               : " + key);
-		System.out.println("Message           : " + message);
-		System.out.println("Encoded Message   : " + encodedMessage);
-		System.out.println("Encrypted Message : " + encryptedMessage);
-		System.out.println("Decrypted Message : " + decryptedMessage);
-		System.out.println("Decoded Message   : " + decodedMessage);
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Key", key);
+		Example.printLine("Message", message);
+		Example.printLine("Encoded Message", encodedMessage);
+		Example.printLine("Encrypted Message", encryptedMessage);
+		Example.printLine("Decrypted Message", decryptedMessage);
+		Example.printLine("Decoded Message", decodedMessage);
 	}
 
 	public static void main(final String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		OneTimePadEncryptionExample.example1();
-
-		System.out.println("\nEXAMPLE 2 (with string encoding):");
-		OneTimePadEncryptionExample.example2();
-
+		Example.runExamples();
 	}
 
 }

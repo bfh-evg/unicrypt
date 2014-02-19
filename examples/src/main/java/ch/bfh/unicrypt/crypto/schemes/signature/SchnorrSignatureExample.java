@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.signature;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -52,9 +53,9 @@ import ch.bfh.unicrypt.math.helper.Alphabet;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class Schnorr {
+public class SchnorrSignatureExample {
 
-	public static void SchnorrExample() {
+	public static void example1() {
 		GStarModSafePrime g_q = GStarModSafePrime.getInstance(23);
 		GStarModElement g = g_q.getElement(4);
 		Element randomization = g_q.getZModOrder().getElement(3);
@@ -66,8 +67,8 @@ public class Schnorr {
 //		System.out.println("s: " + s);
 	}
 
-	public static void main(String[] args) {
-		SchnorrExample();
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

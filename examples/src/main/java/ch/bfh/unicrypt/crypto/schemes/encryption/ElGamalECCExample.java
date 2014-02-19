@@ -41,9 +41,11 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption;
 
+import ch.bfh.unicrypt.Example;
+
 public class ElGamalECCExample {
 
-//	public static void main(final String[] args) {
+//	public static void example1() {
 //
 //		// Example Elgamal over ECFp
 //		final StandardECZModPrime g_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1); //Possible curves secp{112,160,192,224,256,384,521}r1
@@ -96,4 +98,8 @@ public class ElGamalECCExample {
 //		System.out.println("Time for decoding: " + time + " ms");
 //
 //	}
+	public static void main(final String[] args) {
+		Example.runExamples();
+	}
+
 }

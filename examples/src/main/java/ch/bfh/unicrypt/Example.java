@@ -52,9 +52,12 @@ import java.lang.reflect.Method;
 public class Example {
 
 	private static final PrintStream OUT = System.out;
-	private static final String LABEL_SEP = ": ";
+	private static final String LABEL_SEP = " : ";
 	private static final String ITEM_SEP = ", ";
 	private static final String UNDERLINE = "=";
+	private static final String INDENT = "  ";
+	private static int indentLevel = 0;
+	private static int labelLength = 0;
 
 	public static void runExamples() {
 		// Calling method is at index 2 on current stack trace
@@ -67,6 +70,8 @@ public class Example {
 		if (classType != null) {
 			Method[] methods = classType.getDeclaredMethods();
 			for (Method method : methods) {
+				Example.resetindentLevel();
+				Example.resetLabelLength();
 				// test necessary to exclude the method "main"
 				if (method.getParameterTypes().length == 0) {
 					Example.printTitle(method.getName().toUpperCase());
@@ -80,12 +85,55 @@ public class Example {
 		}
 	}
 
+	public static void increaseIndentLevel() {
+		Example.indentLevel++;
+	}
+
+	public static void decreaseIndentLevel() {
+		Example.indentLevel--;
+	}
+
+	public static void resetindentLevel() {
+		Example.indentLevel = 0;
+	}
+
+	public static void setLabelLength(String string) {
+		Example.labelLength = string.length();
+	}
+
+	public static void setLabelLength(int length) {
+		Example.labelLength = length;
+	}
+
+	public static void resetLabelLength() {
+		Example.labelLength = 0;
+	}
+
 	public static void print(Object object) {
 		OUT.print(object);
 	}
 
 	public static void printLine() {
 		OUT.println();
+	}
+
+	public static void printIndent() {
+		for (int i = 0; i < Example.indentLevel; i++) {
+			Example.print(Example.INDENT);
+		}
+	}
+
+	public static void printLabel(String label) {
+		Example.print(label);
+		for (int i = 0; i < Example.labelLength - label.length(); i++) {
+			Example.print(" ");
+		}
+		Example.print(Example.LABEL_SEP);
+	}
+
+	public static void printLabelLine(String label) {
+		Example.print(label);
+		Example.printLine(Example.LABEL_SEP);
 	}
 
 	public static void printTitle(String title) {
@@ -97,16 +145,19 @@ public class Example {
 	}
 
 	public static void printLine(Object object) {
+		Example.printIndent();
 		Example.print(object);
 		Example.printLine();
 	}
 
 	public static void printLine(String label, Object object) {
-		Example.print(label + Example.LABEL_SEP);
+		Example.printIndent();
+		Example.printLabel(label);
 		Example.printLine(object);
 	}
 
 	public static void printLine(Object... objects) {
+		Example.printIndent();
 		String sep = "";
 		for (Object object : objects) {
 			Example.print(sep + object);
@@ -116,7 +167,8 @@ public class Example {
 	}
 
 	public static void printLine(String label, Object... objects) {
-		Example.print(label + Example.LABEL_SEP);
+		Example.printIndent();
+		Example.printLabel(label);
 		Example.printLine(objects);
 	}
 
@@ -127,8 +179,10 @@ public class Example {
 	}
 
 	public static void printLines(String label, Object... objects) {
-		Example.printLine(label + Example.LABEL_SEP);
+		Example.printLabelLine(label);
+		Example.increaseIndentLevel();
 		Example.printLines(objects);
+		Example.decreaseIndentLevel();
 	}
 
 	public static void printLines(Iterable<?> objects) {
@@ -138,8 +192,10 @@ public class Example {
 	}
 
 	public static void printLines(String label, Iterable<?> objects) {
-		Example.printLine(label + Example.LABEL_SEP);
+		Example.printLabelLine(label);
+		Example.increaseIndentLevel();
 		Example.printLines(objects);
+		Example.decreaseIndentLevel();
 	}
 
 }

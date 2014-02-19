@@ -69,7 +69,8 @@ public class HashFunctionExample {
 		// Apply hash function to tuple (return finite byte array)
 		Element hashValue = function.apply(tuple);
 
-		Example.printLine(hashValue);
+		Example.printLine("Function", function);
+		Example.printLines("Value and Hash Value", tuple, hashValue);
 	}
 
 	public static void main(final String[] args) {

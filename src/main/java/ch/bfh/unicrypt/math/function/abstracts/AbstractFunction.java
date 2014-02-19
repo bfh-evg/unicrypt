@@ -155,7 +155,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 
 	@Override
 	public String defaultToStringValue() {
-		return "[" + this.getDomain() + " => " + this.getCoDomain() + "]";
+		return this.getDomain() + " => " + this.getCoDomain();
 	}
 
 	//

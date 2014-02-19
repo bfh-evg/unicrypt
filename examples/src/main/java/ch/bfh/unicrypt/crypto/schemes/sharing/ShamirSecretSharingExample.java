@@ -42,6 +42,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.schemes.sharing.classes.ShamirSecretSharingScheme;
 import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.SecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -61,31 +62,30 @@ public class ShamirSecretSharingExample {
 		SecretSharingScheme sss = ShamirSecretSharingScheme.getInstance(z29, 5, 3);
 
 		// Create message m=25
-		Element message = sss.getMessageSpace().getElement(5);
-		System.out.println(message);
+		Element message = sss.getMessageSpace().getElementFrom(5);
 
 		// Compute shares
 		Tuple shares = sss.share(message);
-		System.out.println(shares);
 
 		// Select subset of shares
 		Tuple someShares = shares.removeAt(1).removeAt(3);
-		System.out.println(someShares);
 
 		// Recover message
 		Element recoveredMessage1 = sss.recover(someShares);
-		System.out.println(recoveredMessage1);
 
 		// Recover message differently
-		Element recvoceredMessage2 = sss.recover(shares.getAt(1), shares.getAt(2), shares.getAt(3));
-		System.out.println(recvoceredMessage2);
+		Element recoveredMessage2 = sss.recover(shares.getAt(1), shares.getAt(2), shares.getAt(3));
+
+		Example.printLine("Message", message);
+		Example.printLines("Shares", shares);
+		Example.printLines("Some Shares", someShares);
+		Example.printLine("Recovered Message", recoveredMessage1);
+		Example.printLine("Recovered Message", recoveredMessage2);
+
 	}
 
 	public static void main(final String[] args) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		example1();
-
+		Example.runExamples();
 	}
 
 }

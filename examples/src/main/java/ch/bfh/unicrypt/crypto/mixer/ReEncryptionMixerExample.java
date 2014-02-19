@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.mixer;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.mixer.classes.ReEncryptionMixer;
 import ch.bfh.unicrypt.crypto.mixer.interfaces.Mixer;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
@@ -95,11 +96,11 @@ public class ReEncryptionMixerExample {
 			decryptions = decryptions.add(elGamal.decrypt(privateKey, shuffledEncyptions.getAt(i)));
 		}
 
-		System.out.println("Cylic Group:         " + cyclicGroup);
-		System.out.println("Messages:            " + messages);
-		System.out.println("Encyptions:          " + encryptions);
-		System.out.println("Shuffled Encyptions: " + shuffledEncyptions);
-		System.out.println("Decyptions:          " + decryptions);
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLines("Messages", messages);
+		Example.printLines("Encyptions", encryptions);
+		Example.printLines("Shuffled Encyptions", shuffledEncyptions);
+		Example.printLines("Decyptions", decryptions);
 	}
 
 	public static void example2() {
@@ -146,20 +147,15 @@ public class ReEncryptionMixerExample {
 			decryptions = decryptions.add(elGamal.decrypt(privateKey, shuffledEncyptions.getAt(i)));
 		}
 
-		System.out.println("Cylic Group:         " + cyclicGroup);
-		System.out.println("Messages:            " + messages);
-		System.out.println("Encyptions:          " + encryptions);
-		System.out.println("Shuffled Encyptions: " + shuffledEncyptions);
-		System.out.println("Decyptions:          " + decryptions);
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLines("Messages", messages);
+		Example.printLines("Encyptions", encryptions);
+		Example.printLines("Shuffled Encyptions", shuffledEncyptions);
+		Example.printLines("Decyptions", decryptions);
 	}
 
-	public static void main(String args[]) {
-
-		System.out.println("\nEXAMPLE 1 (plain):");
-		ReEncryptionMixerExample.example1();
-
-		System.out.println("\nEXAMPLE 2 (generate permutation/randomization beforehand):");
-		ReEncryptionMixerExample.example2();
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

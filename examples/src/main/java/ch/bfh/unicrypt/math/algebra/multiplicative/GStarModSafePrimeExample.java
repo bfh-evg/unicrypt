@@ -55,23 +55,24 @@ public class GStarModSafePrimeExample {
 	public static void example1() {
 
 		GStarModSafePrime g11 = GStarModSafePrime.getInstance(23);
-		Example.printLine(g11);
-		Example.printLines(g11);
 
 		// Compute order (23-1)/2 = 11
 		BigInteger order = g11.getOrder();
-		Example.printLine(order);
 
 		// Multiply two group elements: 3*9 mod 23 = 4
 		Element e1 = g11.getElement(3);
 		Element e2 = g11.getElement(9);
 		Element e12 = g11.multiply(e1, e2);
-		Example.printLines(e1, e2, e12);
 
 		// Select and apply default generator
 		Element generator = g11.getDefaultGenerator();
 		Element result = g11.power(generator, 5);
-		Example.printLines(generator, result);
+
+		Example.printLine("Group", g11);
+		Example.printLine("Order", order);
+		Example.printLines("All Elements", g11);
+		Example.printLines("Elements 3, 9, 3*9", e1, e2, e12);
+		Example.printLines("Generator and power", generator, result);
 
 	}
 

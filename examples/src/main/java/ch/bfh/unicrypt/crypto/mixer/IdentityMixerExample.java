@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.mixer;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.mixer.classes.IdentityMixer;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -55,10 +56,8 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
  */
 public class IdentityMixerExample {
 
-	public static void Example1() {
+	public static void example1() {
 
-		// P R E P A R E
-		//---------------
 		// Create cyclic group (modulo 20 bits)
 		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(20);
 
@@ -68,20 +67,16 @@ public class IdentityMixerExample {
 		// Create identities
 		Tuple identities = ProductGroup.getInstance(G_q, size).getRandomElement();
 
-		// S H U F F L E
-		//---------------
-		// Create mixer and shuffle
+		// Create mixer and perform shuffle
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
 		Tuple shuffledIdentities = mixer.shuffle(identities);
 
-		System.out.println("Identities:          " + identities);
-		System.out.println("Shuffled Identities: " + shuffledIdentities);
+		Example.printLines("Identities", identities);
+		Example.printLines("Shuffled Identities", shuffledIdentities);
 	}
 
-	public static void Example2() {
+	public static void example2() {
 
-		// P R E P A R E
-		//---------------
 		// Create cyclic group (modulo 20 bits)
 		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(20);
 
@@ -91,8 +86,6 @@ public class IdentityMixerExample {
 		// Create identities
 		Tuple identities = ProductGroup.getInstance(G_q, size).getRandomElement();
 
-		// S H U F F L E
-		//---------------
 		// Create mixer and shuffle
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
 
@@ -102,19 +95,15 @@ public class IdentityMixerExample {
 		// Create randomization
 		Element randomization = mixer.generateRandomization();
 
+		// Perfom shuffle
 		Tuple shuffledIdentities = mixer.shuffle(identities, permutation, randomization);
 
-		System.out.println("Identities:          " + identities);
-		System.out.println("Shuffled Identities: " + shuffledIdentities);
+		Example.printLines("Identities", identities);
+		Example.printLines("Shuffled Identities", shuffledIdentities);
 	}
 
-	public static void main(String args[]) {
-
-		System.out.println("\nIdentity Shuffle Example 1 (plain):");
-		IdentityMixerExample.Example1();
-
-		System.out.println("\nIdentity Shuffle Example 2 (generate permutation/randomization beforehand):");
-		IdentityMixerExample.Example2();
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }
