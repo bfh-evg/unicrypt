@@ -94,9 +94,6 @@ public class HybridRandomByteSequence
 
 	@Override
 	protected byte[] getNextBytes(int length) {
-		//This will trigger the DistributionSamplerCollector to inject fresh data.
-		//This data will then be injected to the setFreshData method, as soon as it is ready.
-		this.distributionSampler.collectDistributionSamples();
 		return super.getNextBytes(length);
 	}
 
