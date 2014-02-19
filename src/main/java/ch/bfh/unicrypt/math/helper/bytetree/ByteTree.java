@@ -83,19 +83,11 @@ import java.util.Iterator;
 public abstract class ByteTree
 	   extends UniCrypt {
 
-	public final static int SIZE_OF_AMOUNT = Integer.SIZE / Byte.SIZE;
-	public final static int SIZE_OF_PREAMBLE = SIZE_OF_AMOUNT + 1;
+	public final static int LENGTH_OF_AMOUNT = Integer.SIZE / Byte.SIZE;
+	public final static int LENGTH_OF_PREAMBLE = LENGTH_OF_AMOUNT + 1;
 
-	private ByteArray byteArray;
-	private int size = 0;
-
-	protected ByteTree() {
-	}
-
-	protected ByteTree(ByteArray byteArray) {
-		this.byteArray = byteArray;
-		this.size = byteArray.getLength();
-	}
+	protected ByteArray byteArray;
+	protected int length;
 
 	/**
 	 * Calculates the serialized version of a ByteTree.
@@ -104,35 +96,48 @@ public abstract class ByteTree
 	 */
 	public final ByteArray getByteArray() {
 		if (this.byteArray == null) {
-			ByteBuffer buffer = ByteBuffer.allocate(this.getSize());
+			ByteBuffer buffer = ByteBuffer.allocate(this.length);
 			this.abstractGetByteArray(buffer);
 			this.byteArray = ByteArray.getInstance(buffer.array());
 		}
 		return this.byteArray;
 	}
 
-	public final int getSize() {
-		if (this.size == 0) {
-			this.size = SIZE_OF_PREAMBLE + this.abstractGetSize();
-		}
-		return this.size;
+	public final int getLength() {
+		return this.length;
 	}
 
-	/**
-	 * Returns a new instance of a ByteTreeLeaf for some binary data.
-	 * <p>
-	 * @param binaryData The binary data that will be embedded in a ByteTreeLeaf
-	 * @return new Instance of a ByteTree with exactly one leaf.
-	 */
-	public static ByteTreeLeaf getInstance(byte[] binaryData) {
-		return new ByteTreeLeaf(ByteArray.getInstance(binaryData));
+	public final boolean isLeaf() {
+		return this instanceof ByteTreeLeaf;
 	}
 
-	public static ByteTreeLeaf getInstance(ByteArray binaryData) {
-		if (binaryData == null) {
+	public static ByteTreeLeaf getInstance(int integer) {
+		return ByteTree.getInstance(BigInteger.valueOf(integer));
+	}
+
+	public static ByteTreeLeaf getInstance(BigInteger bigInteger) {
+		if (bigInteger == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteTreeLeaf(binaryData);
+		return new ByteTreeLeaf(bigInteger.toByteArray());
+	}
+
+	public static ByteTreeLeaf getInstance(String string) {
+		if (string == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteTreeLeaf(string.getBytes());
+	}
+
+	public static ByteTreeLeaf getInstance(boolean bit) {
+		return new ByteTreeLeaf(new byte[]{bit ? (byte) 1 : (byte) 0});
+	}
+
+	public static ByteTreeLeaf getInstance(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteTreeLeaf(byteArray.getAll());
 	}
 
 	/**
@@ -165,11 +170,10 @@ public abstract class ByteTree
 
 	private static ByteTree getInstanceFrom(Iterator<ByteArray> iterator) {
 		ByteArray byteArray = iterator.next();
-		if (ByteTree.getIdentifier(byteArray) == ByteTreeLeaf.IDENTIFIER) {
-			ByteArray binaryData = ByteTree.getBinaryData(byteArray);
-			return new ByteTreeLeaf(binaryData, byteArray);
+		if (ByteTree.extractIdentifier(byteArray) == ByteTreeLeaf.IDENTIFIER) {
+			return new ByteTreeLeaf(byteArray);
 		}
-		int amount = ByteTree.getAmount(byteArray);
+		int amount = ByteTree.extractAmount(byteArray);
 		ByteTree[] byteTrees = new ByteTree[amount];
 		for (int i = 0; i < amount; i++) {
 			byteTrees[i] = getInstanceFrom(iterator);
@@ -177,16 +181,12 @@ public abstract class ByteTree
 		return new ByteTreeNode(ImmutableArray.getInstance(byteTrees));
 	}
 
-	private static byte getIdentifier(ByteArray byteArray) {
+	private static byte extractIdentifier(ByteArray byteArray) {
 		return byteArray.getAt(0);
 	}
 
-	private static int getAmount(ByteArray byteArray) {
-		return new BigInteger(1, byteArray.extract(1, SIZE_OF_AMOUNT).getAll()).intValue();
-	}
-
-	private static ByteArray getBinaryData(ByteArray byteArray) {
-		return byteArray.extract(SIZE_OF_PREAMBLE, byteArray.getLength() - SIZE_OF_PREAMBLE);
+	private static int extractAmount(ByteArray byteArray) {
+		return new BigInteger(1, byteArray.extract(1, LENGTH_OF_AMOUNT).getAll()).intValue();
 	}
 
 	private static Iterator<ByteArray> getByteArrayIterator(final ByteArray byteArray) {
@@ -201,15 +201,15 @@ public abstract class ByteTree
 
 			@Override
 			public ByteArray next() {
-				if (this.currentByteArray.getLength() < SIZE_OF_PREAMBLE) {
+				if (this.currentByteArray.getLength() < LENGTH_OF_PREAMBLE) {
 					throw new IllegalStateException();
 				}
 				int nextLength;
-				byte identifier = ByteTree.getIdentifier(this.currentByteArray);
+				byte identifier = ByteTree.extractIdentifier(this.currentByteArray);
 				if (identifier == ByteTreeLeaf.IDENTIFIER) {
-					nextLength = SIZE_OF_PREAMBLE + ByteTree.getAmount(this.currentByteArray);
+					nextLength = LENGTH_OF_PREAMBLE + ByteTree.extractAmount(this.currentByteArray);
 				} else if (identifier == ByteTreeNode.IDENTIFIER) {
-					nextLength = SIZE_OF_PREAMBLE;
+					nextLength = LENGTH_OF_PREAMBLE;
 				} else {
 					throw new IllegalArgumentException();
 				}
@@ -235,7 +235,5 @@ public abstract class ByteTree
 	}
 
 	protected abstract void abstractGetByteArray(ByteBuffer buffer);
-
-	protected abstract int abstractGetSize();
 
 }

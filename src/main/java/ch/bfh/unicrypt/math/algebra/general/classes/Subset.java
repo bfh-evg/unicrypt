@@ -122,7 +122,7 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetElementFrom(ByteTree bytTree) {
+	protected Element abstractGetElementFrom(ByteTree byteTree) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

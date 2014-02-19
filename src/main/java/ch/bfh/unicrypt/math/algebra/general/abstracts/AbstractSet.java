@@ -445,7 +445,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	protected abstract BigInteger abstractGetBigIntegerFrom(V value);
 
-	protected abstract E abstractGetElementFrom(ByteTree bytTree);
+	protected abstract E abstractGetElementFrom(ByteTree byteTree);
 
 	protected abstract ByteTree abstractGetByteTreeFrom(V value);
 

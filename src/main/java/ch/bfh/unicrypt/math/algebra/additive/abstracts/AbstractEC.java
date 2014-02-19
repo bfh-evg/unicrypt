@@ -166,7 +166,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 	}
 
 	@Override
-	protected ECElement<V> abstractGetElementFrom(ByteTree bytTree) {
+	protected ECElement<V> abstractGetElementFrom(ByteTree byteTree) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -127,8 +128,15 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected FiniteByteArrayElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			ByteArray byteArray = ((ByteTreeLeaf) byteTree).convertToByteArray();
+			if (this.contains(byteArray)) {
+				return this.abstractGetElement(byteArray);
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override

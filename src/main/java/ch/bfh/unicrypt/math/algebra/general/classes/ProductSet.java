@@ -51,6 +51,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeNode;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
@@ -168,8 +169,24 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected Tuple abstractGetElementFrom(ByteTree byteTree) {
+		if (!byteTree.isLeaf()) {
+			int arity = this.getArity();
+			ImmutableArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
+			if (byteTrees.getLength() == arity) {
+				Element[] elements = new Element[arity];
+				for (int i = 0; i < arity; i++) {
+					elements[i] = this.getAt(i).getElementFrom(byteTrees.getAt(i));
+					if (elements[i] == null) {
+						// no such element
+						return null;
+					}
+				}
+				return this.abstractGetElement(ImmutableArray.getInstance(elements));
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override

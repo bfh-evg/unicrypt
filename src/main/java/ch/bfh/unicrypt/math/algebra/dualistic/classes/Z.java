@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.helper.numerical.WholeNumber;
 import ch.bfh.unicrypt.math.utility.MathUtil;
 import java.math.BigInteger;
@@ -157,13 +158,20 @@ public class Z
 	}
 
 	@Override
-	protected ZElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected ZElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			BigInteger bigInteger = ((ByteTreeLeaf) byteTree).convertToBigInteger();
+			if (this.contains(bigInteger)) {
+				return this.abstractGetElement(WholeNumber.getInstance(bigInteger));
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(WholeNumber value) {
-		return ByteTree.getInstance(value.getBigInteger().toByteArray());
+		return ByteTree.getInstance(value.getBigInteger());
 	}
 
 	@Override

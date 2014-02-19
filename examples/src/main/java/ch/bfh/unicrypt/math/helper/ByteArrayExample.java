@@ -64,8 +64,24 @@ public class ByteArrayExample {
 
 	}
 
+	public static void example2() {
+		ByteArray byteArray = ByteArray.getInstance("01|02|03|04|05|06|07|08|09|0A");
+
+		Example.printLine(byteArray);
+		Example.printLine("Length ", byteArray.getLength());
+		Example.printLine("Bytes  ", byteArray);
+
+		Example.printLine("Extract", byteArray.extract(2, 4));
+
+		Object[] byteArrays = byteArray.split(2, 4, 7);
+		Example.printLine("Split  ", byteArrays);
+		Example.printLine("Conc   ", byteArray.concatenate(byteArray));
+
+	}
+
 	public static void main(final String[] args) {
 		example1();
+		example2();
 	}
 
 }

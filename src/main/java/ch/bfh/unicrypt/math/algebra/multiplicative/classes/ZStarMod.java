@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.helper.numerical.NaturalNumber;
 import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
@@ -187,13 +188,20 @@ public class ZStarMod
 	}
 
 	@Override
-	protected ZStarModElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected ZStarModElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			BigInteger bigInteger = ((ByteTreeLeaf) byteTree).convertToBigInteger();
+			if (this.contains(bigInteger)) {
+				return this.abstractGetElement(ResidueClass.getInstance(bigInteger, this.modulus));
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(ResidueClass value) {
-		return ByteTree.getInstance(value.getBigInteger().toByteArray());
+		return ByteTree.getInstance(value.getBigInteger());
 	}
 
 	@Override

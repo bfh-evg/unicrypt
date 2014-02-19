@@ -146,7 +146,7 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected BinaryPolynomialElement abstractGetElementFrom(ByteTree bytTree) {
+	protected BinaryPolynomialElement abstractGetElementFrom(ByteTree byteTree) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

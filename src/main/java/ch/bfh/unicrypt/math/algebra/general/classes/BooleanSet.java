@@ -46,7 +46,9 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
+import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 
 /**
@@ -118,13 +120,25 @@ public class BooleanSet
 	}
 
 	@Override
-	protected BooleanElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected BooleanElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			ByteArray byteArray = ((ByteTreeLeaf) byteTree).convertToByteArray();
+			if (byteArray.getLength() == 1) {
+				if (byteArray.getAt(0) == 0) {
+					return this.abstractGetElement(false);
+				}
+				if (byteArray.getAt(0) == 1) {
+					return this.abstractGetElement(true);
+				}
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(Boolean value) {
-		return ByteTree.getInstance(this.abstractGetBigIntegerFrom(value).toByteArray());
+		return ByteTree.getInstance(value);
 	}
 
 	@Override

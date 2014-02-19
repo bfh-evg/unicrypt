@@ -45,8 +45,8 @@ import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import java.math.BigInteger;
 
 /**
  *
@@ -57,11 +57,11 @@ public class ByteTreeExample {
 	public static void example1() {
 
 		// Define multiple byte tree leaves
-		ByteTree b1 = ByteTree.getInstance(BigInteger.valueOf(1).toByteArray());
-		ByteTree b2 = ByteTree.getInstance(BigInteger.valueOf(2).toByteArray());
-		ByteTree b3 = ByteTree.getInstance(BigInteger.valueOf(3).toByteArray());
-		ByteTree b4 = ByteTree.getInstance(BigInteger.valueOf(4).toByteArray());
-		ByteTree b5 = ByteTree.getInstance(BigInteger.valueOf(256).toByteArray());
+		ByteTree b1 = ByteTree.getInstance(1);
+		ByteTree b2 = ByteTree.getInstance(2);
+		ByteTree b3 = ByteTree.getInstance(3);
+		ByteTree b4 = ByteTree.getInstance(4);
+		ByteTree b5 = ByteTree.getInstance(256);
 
 		// Combine b1 to b3
 		ByteTree b123 = ByteTree.getInstance(b1, b2, b3);
@@ -113,11 +113,11 @@ public class ByteTreeExample {
 	public static void example3() {
 
 		// Same as Example 1
-		ByteTree b1 = ByteTree.getInstance(BigInteger.valueOf(1).toByteArray());
-		ByteTree b2 = ByteTree.getInstance(BigInteger.valueOf(2).toByteArray());
-		ByteTree b3 = ByteTree.getInstance(BigInteger.valueOf(3).toByteArray());
-		ByteTree b4 = ByteTree.getInstance(BigInteger.valueOf(4).toByteArray());
-		ByteTree b5 = ByteTree.getInstance(BigInteger.valueOf(256).toByteArray());
+		ByteTree b1 = ByteTree.getInstance(1);
+		ByteTree b2 = ByteTree.getInstance(2);
+		ByteTree b3 = ByteTree.getInstance(3);
+		ByteTree b4 = ByteTree.getInstance(4);
+		ByteTree b5 = ByteTree.getInstance(256);
 		ByteTree b123 = ByteTree.getInstance(b1, b2, b3);
 		ByteTree b45 = ByteTree.getInstance(b4, b5);
 		ByteTree b123_45 = ByteTree.getInstance(b123, b45);
@@ -128,15 +128,40 @@ public class ByteTreeExample {
 		Example.printLine(byteArray);
 
 		// Reconstruct byte tree from byte array
-		ByteTree c123_45 = ByteTree.getInstanceFrom(byteArray);
-		Example.printLine(c123_45);
+		ByteTree reconstructedTree = ByteTree.getInstanceFrom(byteArray);
+		Example.printLine(reconstructedTree);
+	}
+
+	public static void example4() {
+
+		// Same as Example 1
+		N naturalNumber = N.getInstance();
+		Element e1 = naturalNumber.getElement(1);
+		Element e2 = naturalNumber.getElement(2);
+		Element e3 = naturalNumber.getElement(3);
+		Element e4 = naturalNumber.getElement(4);
+		Element e5 = naturalNumber.getElement(256);
+		Tuple t123 = Tuple.getInstance(e1, e2, e3);
+		Tuple t45 = Tuple.getInstance(e4, e5);
+		Tuple t123_45 = Tuple.getInstance(t123, t45);
+		Set set = t123_45.getSet();
+
+		// Generate byte array from tuple
+		ByteArray byteArray = t123_45.getByteTree().getByteArray();
+		Example.printLine(byteArray);
+
+		// Reconstruct tuple from byte array
+		ByteTree reconstructedTree = ByteTree.getInstanceFrom(byteArray);
+		Element reconstructedElement = set.getElementFrom(reconstructedTree);
+		Example.printLine(reconstructedElement);
 	}
 
 	public static void main(String[] args) {
 
-		example1();
-		example2();
-		example3();
+//		example1();
+//		example2();
+//		example3();
+		example4();
 
 //		ByteTree b1 = ByteTree.getInstance(ByteArray.getInstance("Hallo".getBytes()));
 //		ByteArray value1 = b1.getByteArray();

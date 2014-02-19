@@ -137,7 +137,7 @@ public class PermutationGroup
 	}
 
 	@Override
-	protected PermutationElement abstractGetElementFrom(ByteTree bytTree) {
+	protected PermutationElement abstractGetElementFrom(ByteTree byteTree) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
@@ -145,7 +145,7 @@ public class PermutationGroup
 	protected ByteTree abstractGetByteTreeFrom(Permutation value) {
 		ByteTree[] byteTrees = new ByteTree[this.size];
 		for (int i = 0; i < this.size; i++) {
-			byteTrees[i] = ByteTree.getInstance(BigInteger.valueOf(value.permute(i)).toByteArray());
+			//byteTrees[i] = ByteTree.getInstance(BigInteger.valueOf(value.permute(i)).toByteArray());
 		}
 		return ByteTree.getInstance(byteTrees);
 	}

@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.helper.bytetree;
 
 import ch.bfh.unicrypt.math.helper.ByteArray;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 /**
@@ -53,39 +54,51 @@ public class ByteTreeLeaf
 
 	public static final byte IDENTIFIER = 1;
 
-	private final ByteArray binaryData;
+	// either byteTree (from super class) or binaryData is initialized
+	private byte[] binaryData = null;
 
-	protected ByteTreeLeaf(ByteArray binaryData) {
-		super();
+	protected ByteTreeLeaf(byte[] binaryData) {
 		this.binaryData = binaryData;
+		this.length = LENGTH_OF_PREAMBLE + binaryData.length;
 	}
 
-	protected ByteTreeLeaf(ByteArray binaryData, ByteArray byteArray) {
-		super(byteArray);
-		this.binaryData = binaryData;
+	protected ByteTreeLeaf(ByteArray byteArray) {
+		this.byteArray = byteArray;
+		this.length = byteArray.getLength();
 	}
 
-	public ByteArray getBinaryData() {
+	protected byte[] getBinaryData() {
+		if (this.binaryData == null) {
+			this.binaryData = this.byteArray.extract(LENGTH_OF_PREAMBLE, this.length - LENGTH_OF_PREAMBLE).getAll();
+		}
 		return this.binaryData;
+	}
+
+	public BigInteger convertToBigInteger() {
+		return new BigInteger(this.getBinaryData());
+	}
+
+	public String convertToString() {
+		return new String(this.getBinaryData());
+	}
+
+	public ByteArray convertToByteArray() {
+		if (this.byteArray == null) {
+			return ByteArray.getInstance(this.binaryData);
+		}
+		return this.byteArray.extract(LENGTH_OF_PREAMBLE, this.length - LENGTH_OF_PREAMBLE);
 	}
 
 	@Override
 	public String defaultToStringValue() {
-		return this.binaryData.toString();
+		return this.convertToByteArray().defaultToStringValue();
 	}
 
 	@Override
 	protected void abstractGetByteArray(ByteBuffer buffer) {
 		buffer.put(IDENTIFIER);
-		buffer.putInt(this.abstractGetSize());
-		for (byte b : this.binaryData) {
-			buffer.put(b);
-		}
-	}
-
-	@Override
-	protected int abstractGetSize() {
-		return this.binaryData.getLength();
+		buffer.putInt(this.binaryData.length);
+		buffer.put(this.binaryData);
 	}
 
 }

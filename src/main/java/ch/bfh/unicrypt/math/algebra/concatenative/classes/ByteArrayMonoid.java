@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativ
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.helper.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.utility.ArrayUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -125,8 +126,15 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayElement abstractGetElementFrom(ByteTree bytTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected ByteArrayElement abstractGetElementFrom(ByteTree byteTree) {
+		if (byteTree.isLeaf()) {
+			ByteArray byteArray = ((ByteTreeLeaf) byteTree).convertToByteArray();
+			if (this.contains(byteArray)) {
+				return this.abstractGetElement(byteArray);
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override

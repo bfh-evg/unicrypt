@@ -183,16 +183,16 @@ public class ByteTreeTest {
 	}
 
 	/**
-	 * Test of abstractGetSize method, of class ByteTree.
+	 * Test of abstractGetLength method, of class ByteTree.
 	 */
 	@Test
 	@Ignore
 
 	public void testAbstractGetSize() {
-//		System.out.println("abstractGetSize");
+//		System.out.println("abstractGetLength");
 		ByteTree instance = new ByteTreeImpl();
 		int expResult = 0;
-//		int result = instance.abstractGetSize();
+//		int result = instance.abstractGetLength();
 //		assertEquals(expResult, result);
 //		// TODO review the generated test code and remove the default call to fail.
 //		fail("The test case is a prototype.");
@@ -204,7 +204,7 @@ public class ByteTreeTest {
 		public void abstractGetByteArray(ByteBuffer buffer) {
 		}
 
-		public int abstractGetSize() {
+		public int abstractGetLength() {
 			return 0;
 		}
 
