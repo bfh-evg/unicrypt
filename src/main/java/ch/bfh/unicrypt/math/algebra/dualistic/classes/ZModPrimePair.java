@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
-import ch.bfh.unicrypt.math.helper.factorization.Prime;
-import ch.bfh.unicrypt.math.helper.factorization.PrimePair;
+import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.factorization.PrimePair;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;

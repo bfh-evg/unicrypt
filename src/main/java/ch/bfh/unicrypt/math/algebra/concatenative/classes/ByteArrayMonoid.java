@@ -41,13 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.array.ByteArray;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
-import ch.bfh.unicrypt.math.utility.ArrayUtil;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -102,7 +101,7 @@ public class ByteArrayMonoid
 			}
 			value = value.divide(blockSize);
 		}
-		return this.abstractGetElement(ByteArray.getInstance(ArrayUtil.byteListToByteArray(byteList)));
+		return this.abstractGetElement(ByteArray.getInstance(byteList));
 	}
 
 	@Override

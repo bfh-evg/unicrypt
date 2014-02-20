@@ -41,17 +41,17 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeLeaf;
-import ch.bfh.unicrypt.math.helper.factorization.Factorization;
-import ch.bfh.unicrypt.math.helper.numerical.NaturalNumber;
-import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
-import ch.bfh.unicrypt.math.utility.MathUtil;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.helper.factorization.Factorization;
+import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
+import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
 
 /**

@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
-import ch.bfh.unicrypt.math.helper.polynomial.GenericPolynomial;
+import ch.bfh.unicrypt.helper.polynomial.GenericPolynomial;
 import java.math.BigInteger;
 
 /**

@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import junit.framework.Assert;
 import org.junit.Test;
 

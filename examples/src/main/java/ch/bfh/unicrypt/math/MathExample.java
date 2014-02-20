@@ -42,14 +42,14 @@
 package ch.bfh.unicrypt.math;
 
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Alphabet;
-import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
 import java.math.BigInteger;
 
 /**
@@ -139,9 +139,7 @@ public class MathExample {
 	}
 
 	public static void main(final String[] args) {
-		example1();
-		example2();
-		example3();
+		Example.runExamples();
 	}
 
 }

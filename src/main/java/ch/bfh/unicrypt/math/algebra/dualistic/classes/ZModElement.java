@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 
 /**
  *

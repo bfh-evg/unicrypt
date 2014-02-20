@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
-import ch.bfh.unicrypt.math.helper.polynomial.BinaryPolynomial;
+import ch.bfh.unicrypt.helper.polynomial.BinaryPolynomial;
 
 /**
  *

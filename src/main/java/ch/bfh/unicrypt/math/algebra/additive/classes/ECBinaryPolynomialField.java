@@ -41,14 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.helper.Point;
-import ch.bfh.unicrypt.math.helper.polynomial.BinaryPolynomial;
-import ch.bfh.unicrypt.math.utility.MathUtil;
+import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.polynomial.BinaryPolynomial;
+import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
 
 public class ECBinaryPolynomialField

@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.helper.polynomial.GenericPolynomial;
+import ch.bfh.unicrypt.helper.polynomial.GenericPolynomial;
 import java.util.HashMap;
 import java.util.Map;
 

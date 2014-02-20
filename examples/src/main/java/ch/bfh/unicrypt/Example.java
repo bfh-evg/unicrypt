@@ -44,6 +44,8 @@ package ch.bfh.unicrypt;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  *
@@ -69,11 +71,19 @@ public class Example {
 		}
 		if (classType != null) {
 			Method[] methods = classType.getDeclaredMethods();
+			Comparator<Method> comparator = new Comparator<Method>() {
+				@Override
+				public int compare(Method m1, Method m2) {
+					return m1.getName().compareTo(m2.getName());
+				}
+			};
+			// methods are not automatically sorted according to their appearance
+			Arrays.sort(methods, comparator);
 			for (Method method : methods) {
 				Example.resetindentLevel();
 				Example.resetLabelLength();
 				// test necessary to exclude the method "main"
-				if (method.getParameterTypes().length == 0) {
+				if (!method.getName().equals("main")) {
 					Example.printTitle(method.getName().toUpperCase());
 					try {
 						method.invoke(null);

@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.helper.Permutation;
+import ch.bfh.unicrypt.helper.Permutation;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -133,7 +133,7 @@ public class ReEncryptionMixerTest {
 		}
 
 		int[] pi = new int[]{5, 6, 1, 4, 3, 2, 9, 0, 8, 7};
-		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
+		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(Permutation.getInstance(pi));
 		Tuple randomizations = Tuple.getInstance(Z_q.getElement(3), Z_q.getElement(5), Z_q.getElement(8), Z_q.getElement(1), Z_q.getElement(34), Z_q.getElement(31), Z_q.getElement(17), Z_q.getElement(2), Z_q.getElement(9), Z_q.getElement(67));
 
 		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, pk, size);
@@ -166,7 +166,7 @@ public class ReEncryptionMixerTest {
 		}
 
 		int[] pi = new int[]{0};
-		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
+		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(Permutation.getInstance(pi));
 		Tuple randomizations = Tuple.getInstance(Z_q.getElement(3));
 
 		ReEncryptionMixer mixer = ReEncryptionMixer.getInstance(es, pk, size);

@@ -11,7 +11,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.helper.Alphabet;
+import ch.bfh.unicrypt.helper.Alphabet;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;

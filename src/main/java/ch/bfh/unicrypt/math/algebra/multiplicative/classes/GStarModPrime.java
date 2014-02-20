@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.math.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.factorization.Prime;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;

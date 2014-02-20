@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import java.math.BigInteger;
 
 /**

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.factorization.Prime;
 
 /**
  *

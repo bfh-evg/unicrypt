@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -49,13 +49,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTreeNode;
-import ch.bfh.unicrypt.math.helper.compound.Compound;
-import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
-import ch.bfh.unicrypt.math.utility.ArrayUtil;
-import ch.bfh.unicrypt.math.utility.MathUtil;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
+import ch.bfh.unicrypt.helper.compound.Compound;
+import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -82,7 +81,14 @@ public class ProductSet
 	}
 
 	public final Tuple getElementFrom(final int... values) {
-		return this.getElementFrom(ArrayUtil.intToBigIntegerArray(values));
+		if (values == null) {
+			throw new IllegalArgumentException();
+		}
+		BigInteger[] bigIntegers = new BigInteger[values.length];
+		for (int i = 0; i < values.length; i++) {
+			bigIntegers[i] = BigInteger.valueOf(values[i]);
+		}
+		return this.getElementFrom(bigIntegers);
 	}
 
 	public final Tuple getElementFrom(BigInteger... values) {

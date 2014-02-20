@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractSecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;

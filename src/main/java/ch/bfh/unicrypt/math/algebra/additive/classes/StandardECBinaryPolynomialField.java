@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
-import ch.bfh.unicrypt.math.params.interfaces.StandardECBinaryPolinomialFieldParams;
+import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECBinaryPolinomialFieldParams;
 import java.math.BigInteger;
 
 public class StandardECBinaryPolynomialField

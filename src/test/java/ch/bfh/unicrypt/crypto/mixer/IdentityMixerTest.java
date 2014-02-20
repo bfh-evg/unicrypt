@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.mixer;
 
 import ch.bfh.unicrypt.crypto.mixer.classes.IdentityMixer;
-import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.helper.Permutation;
+import ch.bfh.unicrypt.helper.Permutation;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -100,7 +100,7 @@ public class IdentityMixerTest {
 
 		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
 		int[] pi = new int[]{4, 5, 6, 1, 3, 2, 9, 7, 8, 0};
-		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
+		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(Permutation.getInstance(pi));
 		Element alpha = G_q.getZModOrder().getElement(7);
 
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);
@@ -121,7 +121,7 @@ public class IdentityMixerTest {
 
 		Tuple messages = ProductGroup.getInstance(G_q, size).getRandomElement();
 		int[] pi = new int[]{0};
-		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(new Permutation(pi));
+		PermutationElement permutation = PermutationGroup.getInstance(size).getElement(Permutation.getInstance(pi));
 		Element alpha = G_q.getZModOrder().getElement(7);
 
 		IdentityMixer mixer = IdentityMixer.getInstance(G_q, size);

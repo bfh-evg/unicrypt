@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import java.math.BigInteger;
 
 /**

@@ -41,13 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.Permutation;
-import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.utility.ArrayUtil;
-import ch.bfh.unicrypt.math.utility.MathUtil;
+import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -124,16 +123,23 @@ public class PermutationGroup
 	@Override
 	protected PermutationElement abstractGetElementFrom(final BigInteger value) {
 		BigInteger[] values = MathUtil.unpair(value, this.getSize());
-		if (!Permutation.isValid(ArrayUtil.bigIntegerToIntArray(values))) {
+		int[] intValues = new int[values.length];
+		for (int i = 0; i < values.length; i++) {
+			if (values[i] == null) {
+				throw new IllegalArgumentException();
+			}
+			intValues[i] = values[i].intValue();
+		}
+		if (!Permutation.isValid(intValues)) {
 			return null; // no such element
 		}
-		return this.abstractGetElement(new Permutation(ArrayUtil.bigIntegerToIntArray(values)));
+		return this.abstractGetElement(Permutation.getInstance(intValues));
 	}
 
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(Permutation value) {
 		// better with Lehmer codes
-		return MathUtil.pair(ArrayUtil.intToBigIntegerArray(value.getPermutationVector()));
+		return MathUtil.pair(value.getPermutationVector());
 	}
 
 	@Override

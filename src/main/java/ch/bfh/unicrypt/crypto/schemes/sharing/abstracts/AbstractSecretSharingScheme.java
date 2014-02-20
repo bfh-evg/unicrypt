@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.abstracts;
 
-import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.SecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;

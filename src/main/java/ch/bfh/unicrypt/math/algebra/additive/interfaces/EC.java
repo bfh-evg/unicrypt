@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
-import ch.bfh.unicrypt.math.helper.Point;
+import ch.bfh.unicrypt.helper.Point;
 import java.math.BigInteger;
 
 /**

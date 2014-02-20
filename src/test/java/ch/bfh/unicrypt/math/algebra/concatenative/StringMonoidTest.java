@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.helper.Alphabet;
+import ch.bfh.unicrypt.helper.Alphabet;
 import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;

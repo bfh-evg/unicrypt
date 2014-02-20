@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
-import ch.bfh.unicrypt.math.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 
 /**
  *

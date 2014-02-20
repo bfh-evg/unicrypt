@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.math.helper.numerical.ResidueClass;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 
 /**
  *

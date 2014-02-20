@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.math.helper.factorization.Factorization;
+import ch.bfh.unicrypt.helper.factorization.Factorization;
 import java.math.BigInteger;
 
 public class GroupExample {

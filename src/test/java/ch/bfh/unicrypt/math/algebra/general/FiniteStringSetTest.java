@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general;
 
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
-import ch.bfh.unicrypt.math.helper.Alphabet;
+import ch.bfh.unicrypt.helper.Alphabet;
 import org.junit.Test;
 
 /**

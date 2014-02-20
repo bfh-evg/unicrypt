@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.params.interfaces.StandardECZModParams;
+import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
 import java.math.BigInteger;
 
 public class StandardECZModPrime

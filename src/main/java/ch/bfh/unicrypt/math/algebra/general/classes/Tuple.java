@@ -44,9 +44,9 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.math.helper.compound.Compound;
-import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.compound.Compound;
+import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
 import java.util.Iterator;
 
 /**

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 public interface NonInteractiveChallengeGenerator
 			 extends ChallengeGenerator {

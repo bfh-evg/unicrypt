@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
-import ch.bfh.unicrypt.crypto.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -51,8 +51,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.helper.array.ByteArray;
-import ch.bfh.unicrypt.math.helper.Permutation;
+import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -77,7 +77,7 @@ public class PermutationCommitmentTest {
 	@Test
 	public void testPermuationCommitment1() {
 
-		Permutation pi = new Permutation(new int[]{0});
+		Permutation pi = Permutation.getInstance(new int[]{0});
 
 		PermutationElement permutation = PermutationGroup.getInstance(pi.getSize()).getElement(pi);
 		Tuple randomizations = Tuple.getInstance(this.Z_q.getElement(2));
@@ -92,7 +92,7 @@ public class PermutationCommitmentTest {
 	@Test
 	public void testPermuationCommitment3() {
 
-		Permutation pi = new Permutation(new int[]{2, 0, 1});   // invert: [1, 2, 0]
+		Permutation pi = Permutation.getInstance(new int[]{2, 0, 1});   // invert: [1, 2, 0]
 		assertTrue(pi.permute(1) == 0);
 		assertTrue(pi.permute(0) == 2);
 
@@ -116,7 +116,7 @@ public class PermutationCommitmentTest {
 	@Test
 	public void testPermuationCommitment4() {
 
-		Permutation pi = new Permutation(new int[]{2, 3, 1, 0});  // invert: [3, 2, 0, 1]
+		Permutation pi = Permutation.getInstance(new int[]{2, 3, 1, 0});  // invert: [3, 2, 0, 1]
 
 		PermutationElement permutation = PermutationGroup.getInstance(pi.getSize()).getElement(pi);
 		Tuple randomizations = Tuple.getInstance(this.Z_q.getElement(1), this.Z_q.getElement(2), this.Z_q.getElement(3), this.Z_q.getElement(4));
