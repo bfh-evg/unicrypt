@@ -41,17 +41,20 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.Point;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
@@ -153,8 +156,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 		if (xValue == null || yValue == null) {
 			return null; // no such element
 		}
-		// TODO: check if point is on the curve!!!
-		return this.abstractGetElement(Point.<DualisticElement<V>>getInstance(xValue, yValue));
+		return this.getElement(xValue, yValue);
 	}
 
 	@Override
@@ -167,7 +169,23 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 
 	@Override
 	protected ECElement<V> abstractGetElementFrom(ByteTree byteTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		if (byteTree.isLeaf()) {
+			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getBinaryData();
+			if (byteArray.getLength() == 0) {
+				return this.getIdentityElement();
+			}
+		} else {
+			ImmutableArray<ByteTree> nodes = ((ByteTreeNode) byteTree).getByteTrees();
+			if (nodes.getArity() == 2) {
+				DualisticElement<V> xValue = this.getFiniteField().getElementFrom(nodes.getAt(0));
+				DualisticElement<V> yValue = this.getFiniteField().getElementFrom(nodes.getAt(1));
+				if (xValue != null && yValue != null) {
+					return this.getElement(xValue, yValue);
+				}
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override

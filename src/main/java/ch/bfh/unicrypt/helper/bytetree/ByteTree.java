@@ -83,8 +83,8 @@ import java.util.Iterator;
 public abstract class ByteTree
 	   extends UniCrypt {
 
-	public final static int LENGTH_OF_AMOUNT = Integer.SIZE / Byte.SIZE;
-	public final static int LENGTH_OF_PREAMBLE = LENGTH_OF_AMOUNT + 1;
+	public final static int LENGTH_OF_INTEGER = Integer.SIZE / Byte.SIZE;
+	public final static int LENGTH_OF_PREAMBLE = LENGTH_OF_INTEGER + 1;
 
 	protected ByteArray byteArray;
 	protected int length;
@@ -126,8 +126,15 @@ public abstract class ByteTree
 		return this instanceof ByteTreeLeaf;
 	}
 
-	public final static ByteTreeLeaf getInstance(int integer) {
-		return ByteTree.getInstance(BigInteger.valueOf(integer));
+	public final static ByteTreeLeaf getInstance(int... integers) {
+		if (integers == null) {
+			throw new IllegalArgumentException();
+		}
+		ByteBuffer byteBuffer = ByteBuffer.allocate(integers.length * LENGTH_OF_INTEGER);
+		for (int integer : integers) {
+			byteBuffer.putInt(integer);
+		}
+		return new ByteTreeLeaf(new SafeByteArray(byteBuffer.array()));
 	}
 
 	public final static ByteTreeLeaf getInstance(BigInteger bigInteger) {
@@ -202,7 +209,7 @@ public abstract class ByteTree
 	}
 
 	private static int extractAmount(ByteArray byteArray) {
-		return new BigInteger(1, byteArray.extract(1, LENGTH_OF_AMOUNT).getAll()).intValue();
+		return new BigInteger(1, byteArray.extract(1, LENGTH_OF_INTEGER).getAll()).intValue();
 	}
 
 	private static ByteArray extractBinaryData(ByteArray byteArray) {

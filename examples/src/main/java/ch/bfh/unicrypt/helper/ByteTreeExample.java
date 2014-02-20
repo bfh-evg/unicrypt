@@ -42,12 +42,14 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 
 /**
  *
@@ -149,8 +151,31 @@ public class ByteTreeExample {
 		ProductSet set = tuple.getSet();
 		ByteTree recByteTree = ByteTree.getInstanceFrom(byteArray);
 		Tuple recTuple = set.getElementFrom(recByteTree);
+
 		Example.printLines("Tuples", tuple, recTuple);
 		Example.printLines("ByteTrees", byteTree, recByteTree);
+	}
+
+	public static void example5() {
+
+		// Construct two permutation elements
+		PermutationGroup group = PermutationGroup.getInstance(5);
+		Element p1 = group.getRandomElement();
+		Element p2 = group.getRandomElement();
+
+		// Construct pair (p1,p2) and convert to byte tree
+		Pair pair = Pair.getInstance(p1, p2);
+		ByteTree byteTree = pair.getByteTree();
+		ByteArray byteArray = byteTree.getByteArray();
+
+		// Reconstruct tuple from byte array
+		ProductSet set = pair.getSet();
+		ByteTree recByteTree = ByteTree.getInstanceFrom(byteArray);
+		Tuple recPair = set.getElementFrom(recByteTree);
+
+		Example.printLine("Pair", pair);
+		Example.printLines("ByteTree/ByteArray", byteTree, byteArray);
+		Example.printLines("Recovered ByteTree/Pair", recByteTree, recPair);
 	}
 
 	public static void main(String[] args) {

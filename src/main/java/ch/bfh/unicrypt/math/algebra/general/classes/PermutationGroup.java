@@ -41,12 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -144,16 +145,22 @@ public class PermutationGroup
 
 	@Override
 	protected PermutationElement abstractGetElementFrom(ByteTree byteTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		if (byteTree.isLeaf()) {
+			int[] permutationVector = ((ByteTreeLeaf) byteTree).convertToIntArray();
+			if (permutationVector != null && Permutation.isValid(permutationVector)) {
+				Permutation permutation = Permutation.getInstance(permutationVector);
+				if (this.contains(permutation)) {
+					return this.abstractGetElement(permutation);
+				}
+			}
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(Permutation value) {
-		ByteTree[] byteTrees = new ByteTree[this.size];
-		for (int i = 0; i < this.size; i++) {
-			byteTrees[i] = ByteTree.getInstance(BigInteger.valueOf(value.permute(i)));
-		}
-		return ByteTree.getInstance(byteTrees);
+		return ByteTree.getInstance(value.getPermutationVector());
 	}
 
 	@Override
@@ -198,6 +205,7 @@ public class PermutationGroup
 	 * Returns a the unique instance of this class for a given non-negative permutation size.
 	 * <p>
 	 * @param size The size of the permutation
+	 * @return
 	 * @throws IllegalArgumentException if {@literal modulus} is null, zero, or negative
 	 */
 	public static PermutationGroup getInstance(final int size) {

@@ -41,17 +41,17 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.polynomial.GenericPolynomial;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.polynomial.GenericPolynomial;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -189,11 +189,13 @@ public class PolynomialSemiRing<V extends Object>
 
 	@Override
 	protected PolynomialElement abstractGetElementFrom(ByteTree byteTree) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		// TODO: See below
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	protected ByteTree abstractGetByteTreeFrom(GenericPolynomial<DualisticElement<V>> value) {
+		// TODO: this is not optimal (maybe it can be generalized to ImmutableArray
 		int degree = value.getDegree();
 		ByteTree[] byteTrees = new ByteTree[degree + 1];
 		for (int i = 0; i <= degree; i++) {
