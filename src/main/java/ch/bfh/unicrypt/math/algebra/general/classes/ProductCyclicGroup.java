@@ -41,12 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.array.ImmutableArray;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -135,7 +136,7 @@ public class ProductCyclicGroup
 
 	@Override
 	public final Tuple getRandomGenerator() {
-		return this.getRandomGenerator(null);
+		return this.getRandomGenerator(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override

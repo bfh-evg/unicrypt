@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper.polynomial;
 
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
 
 /**

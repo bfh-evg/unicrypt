@@ -255,17 +255,14 @@ public class ZMod
 	}
 
 	public static ZMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		if (bitLength < 2) {
+		if (bitLength < 2 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
-		}
-		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
 		}
 		return ZMod.getInstance(randomByteSequence.getRandomNumberGenerator().nextBigInteger(bitLength));
 	}
 
 	public static ZMod getRandomInstance(int bitLength) {
-		return ZMod.getRandomInstance(bitLength, null);
+		return ZMod.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 }

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.helper.factorization.Prime;
@@ -98,7 +99,7 @@ public class GStarModSafePrime
 	}
 
 	public static GStarModSafePrime getRandomInstance(int bitLength) {
-		return GStarModSafePrime.getRandomInstance(bitLength, null);
+		return GStarModSafePrime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 	public static GStarModSafePrime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {

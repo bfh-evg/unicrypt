@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import ch.bfh.unicrypt.Example;
 
 /**

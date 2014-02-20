@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 

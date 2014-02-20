@@ -79,11 +79,14 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 
 	@Override
 	public final E getRandomGenerator() {
-		return this.getRandomGenerator(HybridRandomByteSequence.getInstance());
+		return this.defaultGetRandomGenerator(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final E getRandomGenerator(RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
 		return this.defaultGetRandomGenerator(randomByteSequence);
 	}
 

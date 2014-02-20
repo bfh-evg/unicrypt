@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.helper.bytetree;
 
-import ch.bfh.unicrypt.math.helper.ByteArray;
-import ch.bfh.unicrypt.math.helper.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.UniCrypt;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ImmutableArray;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -97,11 +97,23 @@ public abstract class ByteTree
 	public final ByteArray getByteArray() {
 		if (this.byteArray == null) {
 			ByteBuffer buffer = ByteBuffer.allocate(this.length);
-			this.abstractGetByteArray(buffer);
-			this.byteArray = ByteArray.getInstance(buffer.array());
+			ByteArray byteArray = new SafeByteArray(buffer.array());
+			this.constructByteArray(buffer, byteArray);
 		}
 		return this.byteArray;
 	}
+
+	public final void constructByteArray(ByteBuffer buffer, ByteArray byteArray) {
+		if (this.byteArray == null) {
+			int offset = buffer.position();
+			this.abstractConstructByteArray(buffer, byteArray);
+			this.byteArray = byteArray.extract(offset, this.length);
+		} else {
+			buffer.put(this.byteArray.getAll());
+		}
+	}
+
+	protected abstract void abstractConstructByteArray(ByteBuffer buffer, ByteArray byteArray);
 
 	public final int getLength() {
 		return this.length;
@@ -137,7 +149,7 @@ public abstract class ByteTree
 		if (byteArray == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteTreeLeaf(byteArray.getAll());
+		return new ByteTreeLeaf(byteArray);
 	}
 
 	/**
@@ -171,7 +183,7 @@ public abstract class ByteTree
 	private static ByteTree getInstanceFrom(Iterator<ByteArray> iterator) {
 		ByteArray byteArray = iterator.next();
 		if (ByteTree.extractIdentifier(byteArray) == ByteTreeLeaf.IDENTIFIER) {
-			return new ByteTreeLeaf(byteArray);
+			return new ByteTreeLeaf(byteArray.extractSuffix(byteArray.getLength() - LENGTH_OF_PREAMBLE), byteArray);
 		}
 		int amount = ByteTree.extractAmount(byteArray);
 		ByteTree[] byteTrees = new ByteTree[amount];
@@ -226,14 +238,22 @@ public abstract class ByteTree
 		};
 	}
 
-	protected final void getByteArray(ByteBuffer buffer) {
-		if (this.byteArray == null) {
-			this.abstractGetByteArray(buffer);
-		} else {
-			buffer.put(this.byteArray.getAll());
-		}
-	}
+	// this local class allows creating instances of ByteArray without copying the array
+	protected class SafeByteArray
+		   extends ByteArray {
 
-	protected abstract void abstractGetByteArray(ByteBuffer buffer);
+		protected SafeByteArray(byte[] bytes) {
+			super(bytes);
+		}
+
+		@Override
+		public byte[] getAll() {
+			if (this.getLength() == this.bytes.length) {
+				return this.bytes;
+			}
+			return super.getAll();
+		}
+
+	}
 
 }

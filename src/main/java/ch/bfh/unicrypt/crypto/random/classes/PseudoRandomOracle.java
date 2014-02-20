@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomOracle;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.util.HashMap;
 

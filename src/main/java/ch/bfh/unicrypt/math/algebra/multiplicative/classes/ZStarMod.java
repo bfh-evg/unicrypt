@@ -291,17 +291,14 @@ public class ZStarMod
 	}
 
 	public static ZStarMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		if (bitLength < 1) {
+		if (bitLength < 1 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
-		}
-		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
 		}
 		return ZStarMod.getInstance(randomByteSequence.getRandomNumberGenerator().nextBigInteger(bitLength));
 	}
 
 	public static ZStarMod getRandomInstance(int bitLength) {
-		return ZStarMod.getRandomInstance(bitLength, null);
+		return ZStarMod.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 }

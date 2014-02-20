@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.helper;
+package ch.bfh.unicrypt.math.helper.array;
 
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import java.util.Arrays;
 import java.util.Iterator;

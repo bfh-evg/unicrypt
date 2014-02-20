@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.mixer.abstracts;
 
 import ch.bfh.unicrypt.crypto.mixer.interfaces.Mixer;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -103,7 +104,7 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 
 	@Override
 	public final Tuple shuffle(final Tuple elements) {
-		return this.shuffle(elements, (RandomByteSequence) null);
+		return this.shuffle(elements, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
@@ -115,12 +116,10 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 
 	@Override
 	public final Tuple shuffle(final Tuple elements, final PermutationElement permutation, final Tuple randomizations) {
-
 		if (!this.getShufflesSpace().contains(elements) || !this.getRandomizationsSpace().contains(randomizations)
 			   || permutation == null || permutation.getValue().getSize() != this.getSize()) {
 			throw new IllegalArgumentException();
 		}
-
 		Element[] elementsPrime = new Element[this.getSize()];
 		for (int i = 0; i < this.getSize(); i++) {
 			elementsPrime[i] = this.getShuffleFunction().apply(elements.getAt(i), randomizations.getAt(i));
@@ -130,11 +129,14 @@ public abstract class AbstractMixer<C extends Set, R extends Set>
 
 	@Override
 	public final Tuple generateRandomizations() {
-		return this.generateRandomizations(null);
+		return this.generateRandomizations(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final Tuple generateRandomizations(final RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
 		return this.defaultGenerateRandomizations(randomByteSequence);
 	}
 

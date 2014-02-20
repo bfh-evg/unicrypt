@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper.bytetree;
 
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
@@ -54,51 +54,49 @@ public class ByteTreeLeaf
 
 	public static final byte IDENTIFIER = 1;
 
-	// either byteTree (from super class) or binaryData is initialized
-	private byte[] binaryData = null;
+	private final ByteArray binaryData;
 
 	protected ByteTreeLeaf(byte[] binaryData) {
-		this.binaryData = binaryData;
+		this.binaryData = new SafeByteArray(binaryData);
 		this.length = LENGTH_OF_PREAMBLE + binaryData.length;
 	}
 
-	protected ByteTreeLeaf(ByteArray byteArray) {
-		this.byteArray = byteArray;
-		this.length = byteArray.getLength();
+	protected ByteTreeLeaf(ByteArray binaryData) {
+		this.binaryData = binaryData;
+		this.length = LENGTH_OF_PREAMBLE + binaryData.getLength();
 	}
 
-	protected byte[] getBinaryData() {
-		if (this.binaryData == null) {
-			this.binaryData = this.byteArray.extract(LENGTH_OF_PREAMBLE, this.length - LENGTH_OF_PREAMBLE).getAll();
-		}
+	protected ByteTreeLeaf(ByteArray binaryData, ByteArray byteArray) {
+		this(binaryData);
+		this.byteArray = byteArray;
+	}
+
+	public ByteArray getBinaryData() {
 		return this.binaryData;
 	}
 
 	public BigInteger convertToBigInteger() {
-		return new BigInteger(this.getBinaryData());
+		return new BigInteger(this.binaryData.getAll());
 	}
 
 	public String convertToString() {
-		return new String(this.getBinaryData());
+		return new String(this.binaryData.getAll());
 	}
 
 	public ByteArray convertToByteArray() {
-		if (this.byteArray == null) {
-			return ByteArray.getInstance(this.binaryData);
-		}
-		return this.byteArray.extract(LENGTH_OF_PREAMBLE, this.length - LENGTH_OF_PREAMBLE);
+		return this.binaryData;
 	}
 
 	@Override
 	public String defaultToStringValue() {
-		return this.convertToByteArray().defaultToStringValue();
+		return this.binaryData.defaultToStringValue();
 	}
 
 	@Override
-	protected void abstractGetByteArray(ByteBuffer buffer) {
+	protected void abstractConstructByteArray(ByteBuffer buffer, ByteArray byteArray) {
 		buffer.put(IDENTIFIER);
-		buffer.putInt(this.binaryData.length);
-		buffer.put(this.binaryData);
+		buffer.putInt(this.binaryData.getLength());
+		buffer.put(this.binaryData.getAll());
 	}
 
 }

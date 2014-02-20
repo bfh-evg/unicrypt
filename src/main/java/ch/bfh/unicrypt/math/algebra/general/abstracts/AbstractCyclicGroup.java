@@ -77,13 +77,13 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 	@Override
 	public final E getRandomGenerator() {
-		return this.getRandomGenerator(null);
+		return this.defaultGetRandomGenerator(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final E getRandomGenerator(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
+			throw new IllegalArgumentException();
 		}
 		return this.defaultGetRandomGenerator(randomByteSequence);
 	}

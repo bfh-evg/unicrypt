@@ -85,13 +85,13 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 
 	@Override
 	public final CE apply(final Element element) {
-		return this.apply(element, (RandomByteSequence) null);
+		return this.apply(element, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final CE apply(final Element element, RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
+			throw new IllegalArgumentException();
 		}
 		if (this.getDomain().contains(element)) {
 			return this.abstractApply((DE) element, randomByteSequence);
@@ -102,7 +102,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 
 	@Override
 	public final CE apply(final Element... elements) {
-		return this.apply(elements, (RandomByteSequence) null);
+		return this.apply(elements, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override

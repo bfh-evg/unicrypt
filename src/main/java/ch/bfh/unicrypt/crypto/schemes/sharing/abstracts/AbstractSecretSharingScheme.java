@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.abstracts;
 
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.SecretSharingScheme;
@@ -71,12 +72,12 @@ public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Ele
 
 	@Override
 	public final Tuple share(Element message) {
-		return this.share(message, (RandomByteSequence) null);
+		return this.share(message, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final Tuple share(Element message, RandomByteSequence randomByteSequence) {
-		if (message == null || !this.getMessageSpace().contains(message)) {
+		if (message == null || !this.getMessageSpace().contains(message) || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractShare(message, randomByteSequence);

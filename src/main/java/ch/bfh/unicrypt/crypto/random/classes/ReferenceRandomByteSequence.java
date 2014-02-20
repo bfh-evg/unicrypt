@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.random.classes;
 
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.io.Serializable;
 import java.util.HashMap;

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.random.distributionsampler.classes;
 
 import ch.bfh.unicrypt.crypto.random.distributionsampler.interfaces.DistributionSampler;
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Timer;

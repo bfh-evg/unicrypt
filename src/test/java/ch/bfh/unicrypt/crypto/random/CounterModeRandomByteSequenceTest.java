@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.random;
 
 import ch.bfh.unicrypt.crypto.random.classes.CounterModeRandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.math.BigInteger;
 import java.util.HashSet;

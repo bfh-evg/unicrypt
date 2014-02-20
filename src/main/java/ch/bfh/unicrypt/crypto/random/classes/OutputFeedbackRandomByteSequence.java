@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.random.classes;
 
 import ch.bfh.unicrypt.crypto.random.abstracts.AbstractRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.PseudoRandomByteSequence;
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -142,12 +142,12 @@ public class OutputFeedbackRandomByteSequence
 
 	@Override
 	public ByteArray getNextByteArray(int length) {
-		return new RandomizedByteArray(getNextBytes(length));
+		return new RandomizedByteArray(this.getNextBytes(length));
 	}
 
 	@Override
 	public byte getNextByte() {
-		return getNextBytes(1)[0];
+		return this.getNextBytes(1)[0];
 	}
 
 	/**

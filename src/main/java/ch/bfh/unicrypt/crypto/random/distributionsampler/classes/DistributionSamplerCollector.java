@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.random.distributionsampler.classes;
 
 import ch.bfh.unicrypt.crypto.random.distributionsampler.interfaces.DistributionSampler;
 import ch.bfh.unicrypt.crypto.random.interfaces.TrueRandomByteSequence;
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 
 /**
  * This class shows the collection of a sample distribution in order to find a seed with many bytes. Entropy is not

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
@@ -66,12 +67,12 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
 
 	@Override
 	public final E getRandomElement(int length) {
-		return this.getRandomElement(length, null);
+		return this.getRandomElement(length, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final E getRandomElement(int length, RandomByteSequence randomByteSequence) {
-		if (length < 0 || length % this.getBlockLength() != 0) {
+		if (length < 0 || length % this.getBlockLength() != 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractGetRandomElement(length, randomByteSequence);

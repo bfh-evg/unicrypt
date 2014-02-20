@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -82,7 +83,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public final PRE generatePrivateKey() {
-		return this.generatePrivateKey((RandomByteSequence) null);
+		return this.generatePrivateKey(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
@@ -105,7 +106,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public final PUE generatePublicKey(Element privateKey) {
-		return this.generatePublicKey(privateKey, (RandomByteSequence) null);
+		return this.generatePublicKey(privateKey, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
@@ -135,7 +136,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 
 	@Override
 	public Pair generateKeyPair() {
-		return this.generateKeyPair((RandomByteSequence) null);
+		return this.generateKeyPair(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override

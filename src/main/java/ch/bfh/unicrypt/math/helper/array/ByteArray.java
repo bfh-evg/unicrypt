@@ -39,10 +39,12 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.helper;
+package ch.bfh.unicrypt.math.helper.array;
 
 import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.math.helper.HashMethod;
+import ch.bfh.unicrypt.math.helper.UniCrypt;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -58,7 +60,7 @@ public class ByteArray
 	private static final byte ALL_ZERO = (byte) 0x00;
 	private static final byte ALL_ONE = (byte) 0xff;
 
-	private final byte[] bytes;
+	protected final byte[] bytes;
 	private final int offset;
 	private final int length;
 
@@ -87,8 +89,12 @@ public class ByteArray
 		return this.bytes[this.offset + index];
 	}
 
-	public ByteArray extract(int length) {
+	public ByteArray extractPrefix(int length) {
 		return this.extract(0, length);
+	}
+
+	public ByteArray extractSuffix(int length) {
+		return this.extract(this.length - length, length);
 	}
 
 	public ByteArray extract(int offset, int length) {
@@ -341,15 +347,12 @@ public class ByteArray
 	}
 
 	public static ByteArray getRandomInstance(int length) {
-		return ByteArray.getRandomInstance(length, null);
+		return ByteArray.getRandomInstance(length, HybridRandomByteSequence.getInstance());
 	}
 
 	public static ByteArray getRandomInstance(int length, RandomByteSequence randomByteSequence) {
-		if (length < 0) {
+		if (length < 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
-		}
-		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
 		}
 		return randomByteSequence.getNextByteArray(length);
 	}

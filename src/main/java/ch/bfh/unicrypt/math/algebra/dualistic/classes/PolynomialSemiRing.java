@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -101,11 +102,11 @@ public class PolynomialSemiRing<V extends Object>
 	}
 
 	public PolynomialElement<V> getRandomElement(int degree) {
-		return this.getRandomElement(degree, null);
+		return this.getRandomElement(degree, HybridRandomByteSequence.getInstance());
 	}
 
 	public PolynomialElement<V> getRandomElement(int degree, RandomByteSequence randomByteSequence) {
-		if (degree < 0) {
+		if (degree < 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
 		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap<Integer, DualisticElement<V>>();

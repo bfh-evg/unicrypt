@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.SecretKeyGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -67,7 +68,7 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 
 	@Override
 	public KE generateSecretKey() {
-		return this.generateSecretKey((RandomByteSequence) null);
+		return this.generateSecretKey(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override

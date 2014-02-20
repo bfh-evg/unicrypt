@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.helper.bytetree.ByteTree;
 import java.nio.ByteBuffer;
 import org.junit.After;
@@ -168,16 +169,16 @@ public class ByteTreeTest {
 	}
 
 	/**
-	 * Test of abstractGetByteArray method, of class ByteTree.
+	 * Test of abstractConstructByteArray method, of class ByteTree.
 	 */
 	@Test
 	@Ignore
 
 	public void testAbstractSerialize() {
-//		System.out.println("abstractGetByteArray");
+//		System.out.println("abstractConstructByteArray");
 		ByteBuffer buffer = null;
 		ByteTree instance = new ByteTreeImpl();
-//		instance.abstractGetByteArray(buffer);
+//		instance.abstractConstructByteArray(buffer);
 //		// TODO review the generated test code and remove the default call to fail.
 //		fail("The test case is a prototype.");
 	}
@@ -201,7 +202,7 @@ public class ByteTreeTest {
 	public class ByteTreeImpl
 		   extends ByteTree {
 
-		public void abstractGetByteArray(ByteBuffer buffer) {
+		public void abstractConstructByteArray(ByteBuffer buffer, ByteArray byteArray) {
 		}
 
 		public int abstractGetLength() {

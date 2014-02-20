@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.array.ImmutableArray;
 import ch.bfh.unicrypt.math.helper.compound.Compound;
 import ch.bfh.unicrypt.math.helper.compound.RecursiveCompound;
 import java.util.Iterator;

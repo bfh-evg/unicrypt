@@ -282,13 +282,13 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final E getRandomElement() {
-		return this.getRandomElement(null);
+		return this.abstractGetRandomElement(HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final E getRandomElement(RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
+			throw new IllegalArgumentException();
 		}
 		return this.abstractGetRandomElement(randomByteSequence);
 	}

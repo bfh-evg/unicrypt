@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.RandomizedEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -72,7 +73,7 @@ public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME exte
 
 	@Override
 	public final EE encrypt(Element encryptionKey, Element message) {
-		return this.encrypt(encryptionKey, message, (RandomByteSequence) null);
+		return this.encrypt(encryptionKey, message, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override

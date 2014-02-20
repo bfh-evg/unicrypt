@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -124,7 +125,7 @@ public class ZModPrime
 	}
 
 	public static ZModPrime getRandomInstance(int bitLength) {
-		return ZModPrime.getRandomInstance(bitLength, null);
+		return ZModPrime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper.factorization;
 
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
@@ -79,7 +80,7 @@ public class PrimePair
 	}
 
 	public static PrimePair getRandomInstance(int bitLength) {
-		return PrimePair.getRandomInstance(bitLength, null);
+		return PrimePair.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 	public static PrimePair getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.helper;
 
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

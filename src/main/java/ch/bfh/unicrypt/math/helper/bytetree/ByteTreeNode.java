@@ -41,7 +41,8 @@
  */
 package ch.bfh.unicrypt.math.helper.bytetree;
 
-import ch.bfh.unicrypt.math.helper.ImmutableArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ImmutableArray;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
@@ -75,11 +76,11 @@ public class ByteTreeNode
 	}
 
 	@Override
-	protected void abstractGetByteArray(ByteBuffer buffer) {
+	protected void abstractConstructByteArray(ByteBuffer buffer, ByteArray byteArray) {
 		buffer.put(IDENTIFIER);
 		buffer.putInt(this.byteTrees.getLength());
 		for (ByteTree byteTree : this) {
-			byteTree.getByteArray(buffer);
+			byteTree.constructByteArray(buffer, byteArray);
 		}
 	}
 

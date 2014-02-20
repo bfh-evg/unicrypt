@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;

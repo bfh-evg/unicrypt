@@ -194,15 +194,12 @@ public class Permutation
 	}
 
 	public static Permutation getRandomInstance(int size) {
-		return Permutation.getRandomInstance(size, null);
+		return Permutation.getRandomInstance(size, HybridRandomByteSequence.getInstance());
 	}
 
 	public static Permutation getRandomInstance(int size, RandomByteSequence randomByteSequence) {
-		if (size < 0) {
+		if (size < 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
-		}
-		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
 		}
 		int[] permutationVector = new int[size];
 		int randomIndex;

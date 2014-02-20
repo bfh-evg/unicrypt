@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.random.interfaces;
 
 import ch.bfh.unicrypt.crypto.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.math.helper.ByteArray;
+import ch.bfh.unicrypt.math.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.helper.HashMethod;
 import java.math.BigInteger;
 

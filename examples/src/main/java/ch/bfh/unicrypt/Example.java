@@ -52,10 +52,10 @@ import java.lang.reflect.Method;
 public class Example {
 
 	private static final PrintStream OUT = System.out;
-	private static final String LABEL_SEP = " : ";
+	private static final String LABEL_SEP = ": ";
 	private static final String ITEM_SEP = ", ";
 	private static final String UNDERLINE = "=";
-	private static final String INDENT = "  ";
+	private static final String INDENT = "   ";
 	private static int indentLevel = 0;
 	private static int labelLength = 0;
 

@@ -67,16 +67,13 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 
 	@Override
 	public final E getRandomElement(int length) {
-		return this.getRandomElement(length, null);
+		return this.getRandomElement(length, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final E getRandomElement(int length, RandomByteSequence randomByteSequence) {
-		if (length < 0 || length % this.getBlockLength() != 0) {
+		if (length < 0 || length % this.getBlockLength() != 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
-		}
-		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
 		}
 		return this.abstractGetRandomElement(length, randomByteSequence);
 	}

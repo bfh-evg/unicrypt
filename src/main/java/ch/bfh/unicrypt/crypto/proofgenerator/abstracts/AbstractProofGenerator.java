@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.ProofGenerator;
+import ch.bfh.unicrypt.crypto.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -52,12 +53,12 @@ public abstract class AbstractProofGenerator<PRS extends Set, PRE extends Elemen
 
 	@Override
 	public final PE generate(final Element privateInput, final Element publicInput) {
-		return this.generate(privateInput, publicInput, (RandomByteSequence) null);
+		return this.generate(privateInput, publicInput, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final PE generate(final Element privateInput, final Element publicInput, final RandomByteSequence randomByteSequence) {
-		if (!this.getPrivateInputSpace().contains(privateInput) || !this.getPublicInputSpace().contains(publicInput)) {
+		if (!this.getPrivateInputSpace().contains(privateInput) || !this.getPublicInputSpace().contains(publicInput) || randomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractGenerate((PRE) privateInput, (PUE) publicInput, randomByteSequence);

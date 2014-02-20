@@ -69,12 +69,12 @@ public class SafePrime
 	}
 
 	public static SafePrime getRandomInstance(int bitLength) {
-		return SafePrime.getRandomInstance(bitLength, null);
+		return SafePrime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 	public static SafePrime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
+			throw new IllegalArgumentException();
 		}
 		return new SafePrime(randomByteSequence.getRandomNumberGenerator().nextSavePrime(bitLength));
 	}

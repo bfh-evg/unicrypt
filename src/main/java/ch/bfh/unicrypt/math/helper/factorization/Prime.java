@@ -65,12 +65,12 @@ public class Prime
 	}
 
 	public static Prime getRandomInstance(int bitLength) {
-		return Prime.getRandomInstance(bitLength, null);
+		return Prime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 	public static Prime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
-			randomByteSequence = HybridRandomByteSequence.getInstance();
+			throw new IllegalArgumentException();
 		}
 		return Prime.getInstance(randomByteSequence.getRandomNumberGenerator().nextPrime(bitLength));
 	}
