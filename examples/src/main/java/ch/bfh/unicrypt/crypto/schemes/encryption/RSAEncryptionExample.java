@@ -39,51 +39,48 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.helper.factorization;
+package ch.bfh.unicrypt.crypto.schemes.encryption;
 
-import ch.bfh.unicrypt.crypto.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.RSAEncryptionScheme;
+import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.AsymmetricEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @author rolfhaenni
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PrimePair
-	   extends Factorization {
+public class RSAEncryptionExample {
 
-	protected PrimePair(Prime prime1, Prime prime2) {
-		this(prime1.getValue(), prime2.getValue());
+	public static void example1() {
+		// Create random underlying group for n = pq = 53*61
+		ZModPrimePair zMod = ZModPrimePair.getInstance(53, 61);
+
+		// Crete RSA encryption scheme
+		AsymmetricEncryptionScheme rsa = RSAEncryptionScheme.getInstance(zMod);
+
+		// Generate key pair
+		Pair keyPair = rsa.getKeyPairGenerator().generateKeyPair();
+		Element privateKey = keyPair.getFirst();
+		Element publicKey = keyPair.getSecond();
+
+		// Select random message
+		Element message = rsa.getMessageSpace().getRandomElement();
+
+		// Encrypt and decrypt message
+		Element encryptedMessage = rsa.encrypt(publicKey, message);
+		Element decryptedMessage = rsa.decrypt(privateKey, encryptedMessage);
+
+		Example.printLine(rsa);
+		Example.printLines("Keys", privateKey, publicKey);
+		Example.printLines("Message", message, encryptedMessage, decryptedMessage);
+
 	}
 
-	protected PrimePair(BigInteger prime1, BigInteger prime2) {
-		super(prime1.multiply(prime2), new BigInteger[]{prime1, prime2}, new int[]{1, 1});
-	}
-
-	public BigInteger getFirstPrime() {
-		return this.getPrimeFactors()[0];
-	}
-
-	public BigInteger getSecondPrime() {
-		return this.getPrimeFactors()[1];
-	}
-
-	public static PrimePair getInstance(BigInteger prime1, BigInteger prime2) {
-		if (prime1.equals(prime2)) {
-			throw new IllegalArgumentException();
-		}
-		return new PrimePair(prime1, prime2);
-	}
-
-	public static PrimePair getInstance(Prime prime1, Prime prime2) {
-		return new PrimePair(prime1, prime2);
-	}
-
-	public static PrimePair getRandomInstance(int bitLength) {
-		return PrimePair.getRandomInstance(bitLength, null);
-	}
-
-	public static PrimePair getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		return PrimePair.getInstance(Prime.getRandomInstance(bitLength, randomByteSequence), Prime.getRandomInstance(bitLength, randomByteSequence));
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }
