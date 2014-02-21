@@ -91,7 +91,7 @@ public abstract class AbstractByteArrayPaddingScheme
 		int minPaddingLength = (separator == null ? 0 : 1) + (this.abstractEndsWithLength() ? 1 : 0);
 		int paddingLength = (this.getBlockLength() - message.getLength() % this.getBlockLength()) % this.getBlockLength();
 		if (paddingLength < minPaddingLength) {
-			return this.getBlockLength() + paddingLength - minPaddingLength;
+			return this.getBlockLength() + paddingLength;
 		}
 		return paddingLength;
 	}

@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.crypto.schemes.padding.interfaces.ReversiblePaddingScheme
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -73,7 +73,7 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 	}
 
 	@Override
-	public ByteArrayElement unpad(final ConcatenativeElement element) {
+	public ByteArrayElement unpad(final Element element) {
 		return (ByteArrayElement) this.getUnpaddingFunction().apply(element);
 	}
 

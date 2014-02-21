@@ -60,7 +60,7 @@ public class PKCSPaddingScheme
 
 	@Override
 	protected boolean abstractEndsWithLength() {
-		return false;
+		return true;
 	}
 
 	public static PKCSPaddingScheme getInstance(ByteArrayMonoid byteArrayMonoid) {

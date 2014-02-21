@@ -71,6 +71,7 @@ public class PaddingExample {
 		ByteArrayElement e3 = ps.getMessageSpace().getRandomElement(13);
 		ByteArrayElement p3 = ps.pad(e3);
 
+		Example.printLines(ps);
 		Example.printLines("Padding of e1", e1, p1);
 		Example.printLines("Padding of e2", e2, p2);
 		Example.printLines("Padding of e3", e3, p3);
@@ -96,6 +97,7 @@ public class PaddingExample {
 		ByteArrayElement p3 = ps.pad(e3);
 		ByteArrayElement u3 = ps.unpad(p3);
 
+		Example.printLines(ps);
 		Example.printLines("Padding of e1", e1, p1, u1);
 		Example.printLines("Padding of e2", e2, p2, u2);
 		Example.printLines("Padding of e3", e3, p3, u3);
@@ -121,6 +123,7 @@ public class PaddingExample {
 		ByteArrayElement p3 = ps.pad(e3);
 		ByteArrayElement u3 = ps.unpad(p3);
 
+		Example.printLines(ps);
 		Example.printLines("Padding of e1", e1, p1, u1);
 		Example.printLines("Padding of e2", e2, p2, u2);
 		Example.printLines("Padding of e3", e3, p3, u3);
@@ -146,6 +149,7 @@ public class PaddingExample {
 		ByteArrayElement p3 = ps.pad(e3);
 		ByteArrayElement u3 = ps.unpad(p3);
 
+		Example.printLines(ps);
 		Example.printLines("Padding of e1", e1, p1, u1);
 		Example.printLines("Padding of e2", e2, p2, u2);
 		Example.printLines("Padding of e3", e3, p3, u3);
@@ -171,6 +175,7 @@ public class PaddingExample {
 		ByteArrayElement p3 = ps.pad(e3);
 		ByteArrayElement u3 = ps.unpad(p3);
 
+		Example.printLines(ps);
 		Example.printLines("Padding of e1", e1, p1, u1);
 		Example.printLines("Padding of e2", e2, p2, u2);
 		Example.printLines("Padding of e3", e3, p3, u3);

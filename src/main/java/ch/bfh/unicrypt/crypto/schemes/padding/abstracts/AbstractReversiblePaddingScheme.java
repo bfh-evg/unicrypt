@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.schemes.padding.abstracts;
 import ch.bfh.unicrypt.crypto.schemes.padding.interfaces.ReversiblePaddingScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
@@ -67,7 +68,7 @@ public abstract class AbstractReversiblePaddingScheme<S extends ConcatenativeSem
 	}
 
 	@Override
-	public E unpad(final ConcatenativeElement element) {
+	public E unpad(final Element element) {
 		return (E) this.getUnpaddingFunction().apply(element);
 	}
 

@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.schemes.padding.interfaces;
 import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public interface PaddingScheme
@@ -55,7 +56,7 @@ public interface PaddingScheme
 
 	public Function getPaddingFunction();
 
-	public ConcatenativeElement pad(ConcatenativeElement element);
+	public ConcatenativeElement pad(Element element);
 
 	@Override
 	public ConcatenativeSemiGroup getMessageSpace();

@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -87,26 +87,9 @@ public class AESEncryptionScheme
 
 	};
 
-	public enum Padding {
-
-		NONE("NoPadding"), PKCS5("PKCS5Padding");
-		private final String name;
-
-		private Padding(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String toString() {
-			return this.name;
-		}
-
-	};
-
 	private static final String ALGORITHM_NAME = "AES";
 	public static final KeyLength DEFAULT_KEY_LENGTH = KeyLength.KEY128;
 	public static final Mode DEFAULT_MODE = Mode.CBC;
-	public static final Padding DEFAULT_PADDING = Padding.PKCS5;
 
 	public static final int AES_BLOCK_SIZE = 128;
 	public static final ByteArrayMonoid AES_ENCRYPTION_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
@@ -114,17 +97,15 @@ public class AESEncryptionScheme
 
 	private final KeyLength keyLength;
 	private final Mode mode;
-	private final Padding padding;
 	private final ByteArray initializationVector;
 	private Cipher cipher;
 
-	protected AESEncryptionScheme(KeyLength keyLength, Mode mode, Padding padding, ByteArray initializationVector) {
+	protected AESEncryptionScheme(KeyLength keyLength, Mode mode, ByteArray initializationVector) {
 		this.keyLength = keyLength;
 		this.mode = mode;
-		this.padding = padding;
 		this.initializationVector = initializationVector;
 		try {
-			this.cipher = Cipher.getInstance(ALGORITHM_NAME + "/" + mode + "/" + padding);
+			this.cipher = Cipher.getInstance(ALGORITHM_NAME + "/" + mode + "/NoPadding");
 		} catch (NoSuchAlgorithmException ex) {
 			throw new RuntimeException();
 		} catch (NoSuchPaddingException ex) {
@@ -140,33 +121,19 @@ public class AESEncryptionScheme
 		return this.mode;
 	}
 
-	public Padding getPadding() {
-		return this.padding;
-	}
-
 	public ByteArray getInitializationVector() {
 		return this.initializationVector;
 	}
 
 	@Override
 	protected Function abstractGetEncryptionFunction() {
-		ByteArrayMonoid messageSpace;
-		if (this.padding == Padding.NONE) {
-			messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-		} else {
-			messageSpace = ByteArrayMonoid.getInstance();
-		}
+		ByteArrayMonoid messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
 		return new AESEncryptionFunction(messageSpace, this.getSecretKeyGenerator().getSecretKeySpace());
 	}
 
 	@Override
 	protected Function abstractGetDecryptionFunction() {
-		ByteArrayMonoid messageSpace;
-		if (this.padding == Padding.NONE) {
-			messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-		} else {
-			messageSpace = ByteArrayMonoid.getInstance();
-		}
+		ByteArrayMonoid messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
 		return new AESDecryptionFunction(messageSpace, this.getSecretKeyGenerator().getSecretKeySpace());
 	}
 
@@ -244,14 +211,14 @@ public class AESEncryptionScheme
 	}
 
 	public static AESEncryptionScheme getInstance() {
-		return AESEncryptionScheme.getInstance(AESEncryptionScheme.DEFAULT_KEY_LENGTH, AESEncryptionScheme.DEFAULT_MODE, AESEncryptionScheme.DEFAULT_PADDING, AESEncryptionScheme.DEFAULT_IV);
+		return AESEncryptionScheme.getInstance(AESEncryptionScheme.DEFAULT_KEY_LENGTH, AESEncryptionScheme.DEFAULT_MODE, AESEncryptionScheme.DEFAULT_IV);
 	}
 
-	public static AESEncryptionScheme getInstance(KeyLength keyLength, Mode mode, Padding padding, ByteArray initializationVector) {
-		if (keyLength == null || mode == null || padding == null || initializationVector == null || initializationVector.getLength() != AES_BLOCK_SIZE / Byte.SIZE) {
+	public static AESEncryptionScheme getInstance(KeyLength keyLength, Mode mode, ByteArray initializationVector) {
+		if (keyLength == null || mode == null || initializationVector == null || initializationVector.getLength() != AES_BLOCK_SIZE / Byte.SIZE) {
 			throw new IllegalArgumentException();
 		}
-		return new AESEncryptionScheme(keyLength, mode, padding, initializationVector);
+		return new AESEncryptionScheme(keyLength, mode, initializationVector);
 	}
 
 }

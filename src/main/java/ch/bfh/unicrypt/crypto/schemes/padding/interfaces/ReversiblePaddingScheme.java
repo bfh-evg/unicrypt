@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.padding.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
@@ -53,6 +54,6 @@ public interface ReversiblePaddingScheme
 
 	public Function getUnpaddingFunction();
 
-	public ConcatenativeElement unpad(ConcatenativeElement element);
+	public ConcatenativeElement unpad(Element element);
 
 }
