@@ -82,6 +82,11 @@ public class FiniteByteArraySet
 		return this.getElement(ByteArray.getInstance(bytes));
 	}
 
+	// for strings of the form "00|95|2B|9B|E2|FD|30|89"
+	public final FiniteByteArrayElement getElement(String string) {
+		return this.getElement(ByteArray.getInstance(string));
+	}
+
 	@Override
 	protected boolean abstractContains(ByteArray value) {
 		return value.getLength() >= this.getMinLength() && value.getLength() <= this.getMaxLength();

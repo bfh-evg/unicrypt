@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.StringToByteArrayEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.AESEncryptionScheme;
+import ch.bfh.unicrypt.crypto.schemes.padding.classes.ANSIPaddingScheme;
 import ch.bfh.unicrypt.crypto.schemes.padding.classes.PKCSPaddingScheme;
 import ch.bfh.unicrypt.crypto.schemes.padding.interfaces.ReversiblePaddingScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
@@ -62,16 +63,14 @@ public class AESEncryptionExample {
 
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
 
-		// a random key (default length = 16 bytes)
+		// Random key (default length = 16 bytes)
 		Element key = aes.generateSecretKey();
 
-		// a random message (length = 32 bytes = multiple of block length)
+		// Random message (length = 32 bytes = multiple of block length)
 		Element message = aes.getMessageSpace().getRandomElement(32);
 
-		// perform the encryption
+		// Perform the encryption and decryption
 		Element encryptedMessage = aes.encrypt(key, message);
-
-		// perform the decryption
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 
 		Example.setLabelLength("Encrypted Message");
@@ -83,23 +82,22 @@ public class AESEncryptionExample {
 
 	public static void example2() {
 
-		// Random message (length = 20 bytes)
-		Element message = ByteArrayMonoid.getInstance().getRandomElement(20);
+		// Given message (length = 8 bytes)
+		Element message = ByteArrayMonoid.getInstance().getElement("00|95|2B|9B|E2|FD|30|89");
 
-		// Apply padding scheme (increase length to 32 bytes)
+		// Apply padding scheme (increase length to block size = 16 bytes)
 		ReversiblePaddingScheme pkcs = PKCSPaddingScheme.getInstance(16);
 		Element paddedMessage = pkcs.pad(message);
 
-		// Perform the encryption
+		// Perform the encryption and decryption
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
 		Element key = aes.generateSecretKey();
 		Element encryptedMessage = aes.encrypt(key, paddedMessage);
-
-		// Perform the decryption
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 
-		// Apply padding scheme (decrease length to 20 bytes)
+		// Apply padding scheme (decrease length to 8 bytes)
 		Element unpaddedMessage = pkcs.unpad(decryptedMessage);
+
 		Example.setLabelLength("Encrypted Message");
 		Example.printLine("Key", key);
 		Example.printLine("Message", message);
@@ -111,33 +109,38 @@ public class AESEncryptionExample {
 
 	public static void example3() {
 
-		// Create default AES encryption scheme
-		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
-
-		// Define alphabet, string monoid, and encoder
+		// Define alphabet, string monoid, encoder, padding
 		Alphabet alphabet = Alphabet.ALPHANUMERIC;
 		StringMonoid stringMonoid = StringMonoid.getInstance(alphabet);
 		Encoder encoder = StringToByteArrayEncoder.getInstance(stringMonoid);
+		ReversiblePaddingScheme ansi = ANSIPaddingScheme.getInstance(16);
 
-		// Create a random key (default length = 16 bytes)
+		// Define encryption scheme and key
+		AESEncryptionScheme aes = AESEncryptionScheme.getInstance();
 		Element key = aes.generateSecretKey();
 
-		// Create, encode, and encrypt string message
+		// Define string message to encrypt
 		Element message = stringMonoid.getElement("HalloWorld");
-		Element encodedMessage = encoder.encode(message);
-		Element encryptedMessage = aes.encrypt(key, encodedMessage);
 
-		// Perform the decryption and decoding
+		// Perform the encoding, padding, and encryption
+		Element encodedMessage = encoder.encode(message);
+		Element paddedMessage = ansi.pad(encodedMessage);
+		Element encryptedMessage = aes.encrypt(key, paddedMessage);
+
+		// Perform the decryption, decoding an unpadding
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
-		Element decodedMessage = encoder.decode(decryptedMessage);
+		Element unpaddedMessage = ansi.unpad(decryptedMessage);
+		Element decodedMessage = encoder.decode(unpaddedMessage);
 
 		Example.setLabelLength("Encrypted Message");
 		Example.printLine("Key", key);
 		Example.printLine("Message", message);
-		Example.printLine("EncodedMessage", encodedMessage);
+		Example.printLine("Encoded Message", encodedMessage);
+		Example.printLine("Padded Message", paddedMessage);
 		Example.printLine("Encrypted Message", encryptedMessage);
 		Example.printLine("Decrypted Message", decryptedMessage);
-		Example.printLine("DecodedMessage", decodedMessage);
+		Example.printLine("UnpaddedMessage", unpaddedMessage);
+		Example.printLine("Decoded Message", decodedMessage);
 	}
 
 	public static void example4() {
@@ -148,16 +151,12 @@ public class AESEncryptionExample {
 			   AESEncryptionScheme.Mode.CBC,
 			   AESEncryptionScheme.DEFAULT_IV);
 
-		// a random key (length = 16 bytes)
+		// Random key (16 bytes) and message (32 bytes)
 		Element key = aes.generateSecretKey();
-
-		// a random message (length = 32 bytes)
 		Element message = aes.getMessageSpace().getRandomElement(32);
 
-		// perform the encryption
+		// perform the encryption and decryption
 		Element encryptedMessage = aes.encrypt(key, message);
-
-		// perform the decryption
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
 
 		Example.setLabelLength("Encrypted Message");

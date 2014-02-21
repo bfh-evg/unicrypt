@@ -67,6 +67,11 @@ public class ByteArrayMonoid
 		return this.getElement(ByteArray.getInstance(bytes));
 	}
 
+	// for strings of the form "00|95|2B|9B|E2|FD|30|89"
+	public final ByteArrayElement getElement(String string) {
+		return this.getElement(ByteArray.getInstance(string));
+	}
+
 	//
 	// The following protected methods implement the abstract methods from
 	// various super-classes
