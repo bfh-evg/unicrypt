@@ -65,35 +65,43 @@ public abstract class AbstractByteArrayPaddingScheme
 		return new AbstractFunction<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(ByteArrayMonoid.getInstance(), this.byteArrayMonoid) {
 			@Override
 			protected ByteArrayElement abstractApply(ByteArrayElement element, RandomByteSequence randomByteSequence) {
-				Byte separator = abstractGetSeparator(element);
-				Byte endMarker = abstractGetEndMarker(element);
-				int minPaddingLength = (separator == null ? 0 : 1) + (endMarker == null ? 0 : 1);
-				int paddingLength = (getBlockLength() - (element.getLength() + minPaddingLength) % getBlockLength()) % getBlockLength();
-				byte[] bytes = new byte[paddingLength];
+				int paddingLength = getPaddingLength(element);
+				byte[] paddingBytes = new byte[paddingLength];
 				int minIndex = 0;
+				int maxIndex = paddingLength - 1;
+				Byte separator = abstractGetSeparator();
 				if (separator != null) {
-					bytes[minIndex] = separator;
+					paddingBytes[minIndex] = separator;
 					minIndex++;
 				}
-				int maxIndex = paddingLength - 1;
-				if (endMarker != null) {
-					bytes[maxIndex] = endMarker;
+				if (abstractEndsWithLength()) {
+					paddingBytes[maxIndex] = (byte) paddingLength;
 					maxIndex--;
 				}
 				for (int i = minIndex; i <= maxIndex; i++) {
-					bytes[i] = abstractGetFiller(element, randomByteSequence);
+					paddingBytes[i] = abstractGetFiller(paddingLength, randomByteSequence);
 				}
-				return element.concatenate(ByteArrayMonoid.getInstance().getElement(bytes));
+				return element.concatenate(ByteArrayMonoid.getInstance().getElement(paddingBytes));
 			}
 		};
 	}
 
+	protected int getPaddingLength(ByteArrayElement message) {
+		Byte separator = this.abstractGetSeparator();
+		int minPaddingLength = (separator == null ? 0 : 1) + (this.abstractEndsWithLength() ? 1 : 0);
+		int paddingLength = (this.getBlockLength() - message.getLength() % this.getBlockLength()) % this.getBlockLength();
+		if (paddingLength < minPaddingLength) {
+			return this.getBlockLength() + paddingLength - minPaddingLength;
+		}
+		return paddingLength;
+	}
+
 	// returns null if no separator exists
-	protected abstract Byte abstractGetSeparator(ByteArrayElement message);
+	protected abstract Byte abstractGetSeparator();
 
-	protected abstract byte abstractGetFiller(ByteArrayElement message, RandomByteSequence randomByteSequence);
+	protected abstract byte abstractGetFiller(int paddingLength, RandomByteSequence randomByteSequence);
 
-	// returns null if the last byte is not a special end marker
-	protected abstract Byte abstractGetEndMarker(ByteArrayElement message);
+	// returns true if the last padding byte is the padding length
+	protected abstract boolean abstractEndsWithLength();
 
 }

@@ -42,6 +42,10 @@
 package ch.bfh.unicrypt.crypto.schemes.padding;
 
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.crypto.schemes.padding.classes.ANSIPaddingScheme;
+import ch.bfh.unicrypt.crypto.schemes.padding.classes.IECPaddingScheme;
+import ch.bfh.unicrypt.crypto.schemes.padding.classes.ISOPaddingScheme;
+import ch.bfh.unicrypt.crypto.schemes.padding.classes.PKCSPaddingScheme;
 import ch.bfh.unicrypt.crypto.schemes.padding.classes.ZeroPaddingScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 
@@ -53,23 +57,123 @@ public class PaddingExample {
 
 	public static void example1() {
 		// Create padding scheme
-		ZeroPaddingScheme zpd = ZeroPaddingScheme.getInstance(10);
+		ZeroPaddingScheme ps = ZeroPaddingScheme.getInstance(10);
 
 		// Padding of first random message
-		ByteArrayElement e1 = zpd.getMessageSpace().getRandomElement(6);
-		ByteArrayElement p1 = zpd.pad(e1);
+		ByteArrayElement e1 = ps.getMessageSpace().getRandomElement(6);
+		ByteArrayElement p1 = ps.pad(e1);
 
 		// Padding of second random message
-		ByteArrayElement e2 = zpd.getMessageSpace().getRandomElement(10);
-		ByteArrayElement p2 = zpd.pad(e2);
+		ByteArrayElement e2 = ps.getMessageSpace().getRandomElement(10);
+		ByteArrayElement p2 = ps.pad(e2);
 
 		// Padding of third random message
-		ByteArrayElement e3 = zpd.getMessageSpace().getRandomElement(13);
-		ByteArrayElement p3 = zpd.pad(e3);
+		ByteArrayElement e3 = ps.getMessageSpace().getRandomElement(13);
+		ByteArrayElement p3 = ps.pad(e3);
 
 		Example.printLines("Padding of e1", e1, p1);
 		Example.printLines("Padding of e2", e2, p2);
 		Example.printLines("Padding of e3", e3, p3);
+
+	}
+
+	public static void example2() {
+		// Create padding scheme
+		ANSIPaddingScheme ps = ANSIPaddingScheme.getInstance(10);
+
+		// Padding/unpadding of first random message
+		ByteArrayElement e1 = ps.getMessageSpace().getRandomElement(6);
+		ByteArrayElement p1 = ps.pad(e1);
+		ByteArrayElement u1 = ps.unpad(p1);
+
+		// Padding/unpadding of second random message
+		ByteArrayElement e2 = ps.getMessageSpace().getRandomElement(10);
+		ByteArrayElement p2 = ps.pad(e2);
+		ByteArrayElement u2 = ps.unpad(p2);
+
+		// Padding/unpadding of third random message
+		ByteArrayElement e3 = ps.getMessageSpace().getRandomElement(13);
+		ByteArrayElement p3 = ps.pad(e3);
+		ByteArrayElement u3 = ps.unpad(p3);
+
+		Example.printLines("Padding of e1", e1, p1, u1);
+		Example.printLines("Padding of e2", e2, p2, u2);
+		Example.printLines("Padding of e3", e3, p3, u3);
+
+	}
+
+	public static void example3() {
+		// Create padding scheme
+		PKCSPaddingScheme ps = PKCSPaddingScheme.getInstance(10);
+
+		// Padding/unpadding of first random message
+		ByteArrayElement e1 = ps.getMessageSpace().getRandomElement(6);
+		ByteArrayElement p1 = ps.pad(e1);
+		ByteArrayElement u1 = ps.unpad(p1);
+
+		// Padding/unpadding of second random message
+		ByteArrayElement e2 = ps.getMessageSpace().getRandomElement(10);
+		ByteArrayElement p2 = ps.pad(e2);
+		ByteArrayElement u2 = ps.unpad(p2);
+
+		// Padding/unpadding of third random message
+		ByteArrayElement e3 = ps.getMessageSpace().getRandomElement(13);
+		ByteArrayElement p3 = ps.pad(e3);
+		ByteArrayElement u3 = ps.unpad(p3);
+
+		Example.printLines("Padding of e1", e1, p1, u1);
+		Example.printLines("Padding of e2", e2, p2, u2);
+		Example.printLines("Padding of e3", e3, p3, u3);
+
+	}
+
+	public static void example4() {
+		// Create padding scheme
+		ISOPaddingScheme ps = ISOPaddingScheme.getInstance(10);
+
+		// Padding/unpadding of first random message
+		ByteArrayElement e1 = ps.getMessageSpace().getRandomElement(6);
+		ByteArrayElement p1 = ps.pad(e1);
+		ByteArrayElement u1 = ps.unpad(p1);
+
+		// Padding/unpadding of second random message
+		ByteArrayElement e2 = ps.getMessageSpace().getRandomElement(10);
+		ByteArrayElement p2 = ps.pad(e2);
+		ByteArrayElement u2 = ps.unpad(p2);
+
+		// Padding/unpadding of third random message
+		ByteArrayElement e3 = ps.getMessageSpace().getRandomElement(13);
+		ByteArrayElement p3 = ps.pad(e3);
+		ByteArrayElement u3 = ps.unpad(p3);
+
+		Example.printLines("Padding of e1", e1, p1, u1);
+		Example.printLines("Padding of e2", e2, p2, u2);
+		Example.printLines("Padding of e3", e3, p3, u3);
+
+	}
+
+	public static void example5() {
+		// Create padding scheme
+		IECPaddingScheme ps = IECPaddingScheme.getInstance(10);
+
+		// Padding/unpadding of first random message
+		ByteArrayElement e1 = ps.getMessageSpace().getRandomElement(6);
+		ByteArrayElement p1 = ps.pad(e1);
+		ByteArrayElement u1 = ps.unpad(p1);
+
+		// Padding/unpadding of second random message
+		ByteArrayElement e2 = ps.getMessageSpace().getRandomElement(10);
+		ByteArrayElement p2 = ps.pad(e2);
+		ByteArrayElement u2 = ps.unpad(p2);
+
+		// Padding/unpadding of third random message
+		ByteArrayElement e3 = ps.getMessageSpace().getRandomElement(13);
+		ByteArrayElement p3 = ps.pad(e3);
+		ByteArrayElement u3 = ps.unpad(p3);
+
+		Example.printLines("Padding of e1", e1, p1, u1);
+		Example.printLines("Padding of e2", e2, p2, u2);
+		Example.printLines("Padding of e3", e3, p3, u3);
 
 	}
 

@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.crypto.schemes.padding.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.padding.abstracts.AbstractByteArrayPaddingScheme;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
@@ -58,18 +57,18 @@ public class ZeroPaddingScheme
 	}
 
 	@Override
-	protected Byte abstractGetSeparator(ByteArrayElement message) {
+	protected Byte abstractGetSeparator() {
 		return null;
 	}
 
 	@Override
-	protected byte abstractGetFiller(ByteArrayElement message, RandomByteSequence randomByteSequence) {
+	protected byte abstractGetFiller(int paddingLength, RandomByteSequence randomByteSequence) {
 		return 0;
 	}
 
 	@Override
-	protected Byte abstractGetEndMarker(ByteArrayElement message) {
-		return null;
+	protected boolean abstractEndsWithLength() {
+		return false;
 	}
 
 	public static ZeroPaddingScheme getInstance(ByteArrayMonoid byteArrayMonoid) {

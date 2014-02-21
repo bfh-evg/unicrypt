@@ -42,8 +42,10 @@
 package ch.bfh.unicrypt.crypto.schemes.padding.abstracts;
 
 import ch.bfh.unicrypt.crypto.schemes.padding.interfaces.ReversiblePaddingScheme;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -70,13 +72,35 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 		return this.unpaddingFunction;
 	}
 
+	@Override
+	public ByteArrayElement unpad(final ConcatenativeElement element) {
+		return (ByteArrayElement) this.getUnpaddingFunction().apply(element);
+	}
+
 	protected Function abstractGetUnpaddingFunction() {
 		return new AbstractFunction<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(this.byteArrayMonoid, ByteArrayMonoid.getInstance()) {
 			@Override
 			protected ByteArrayElement abstractApply(ByteArrayElement element, RandomByteSequence randomByteSequence) {
-				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+				ByteArray byteArray = element.getValue();
+				ByteArray result = byteArray.extractPrefix(byteArray.getLength() - getUnpaddingLength(byteArray));
+				return ByteArrayMonoid.getInstance().getElement(result);
 			}
 		};
+	}
+
+	private int getUnpaddingLength(ByteArray byteArray) {
+		if (this.abstractEndsWithLength()) {
+			return byteArray.getAt(byteArray.getLength() - 1);
+		}
+		Byte separator = this.abstractGetSeparator();
+		if (separator != null) {
+			int i = byteArray.getLength() - 1;
+			while (byteArray.getAt(i) != separator) {
+				i--;
+			}
+			return byteArray.getLength() - i;
+		}
+		throw new UnsupportedOperationException();
 	}
 
 }
