@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
+import ch.bfh.unicrypt.helper.HashMethod;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.random.abstracts.AbstractRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.PseudoRandomByteSequence;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.HashMethod;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -159,6 +159,11 @@ public class OutputFeedbackRandomByteSequence
 
 		private RandomizedByteArray(byte[] randomBytes) {
 			super(randomBytes);
+		}
+
+		@Override
+		protected String defaultToStringName() {
+			return this.getClass().getSuperclass().getSimpleName();
 		}
 
 	}

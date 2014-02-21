@@ -271,4 +271,9 @@ class SafeByteArray
 		return super.getAll();
 	}
 
+	@Override
+	protected String defaultToStringName() {
+		return this.getClass().getSuperclass().getSimpleName();
+	}
+
 }
