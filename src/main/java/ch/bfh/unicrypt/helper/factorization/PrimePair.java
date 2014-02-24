@@ -60,22 +60,24 @@ public class PrimePair
 		super(prime1.multiply(prime2), new BigInteger[]{prime1, prime2}, new int[]{1, 1});
 	}
 
-	public BigInteger getFirstPrime() {
+	public BigInteger getFirst() {
 		return this.getPrimeFactors()[0];
 	}
 
-	public BigInteger getSecondPrime() {
+	public BigInteger getSecond() {
 		return this.getPrimeFactors()[1];
 	}
 
 	public static PrimePair getInstance(BigInteger prime1, BigInteger prime2) {
-		if (prime1.equals(prime2)) {
-			throw new IllegalArgumentException();
-		}
-		return new PrimePair(prime1, prime2);
+		Prime pr1 = Prime.getInstance(prime1);
+		Prime pr2 = Prime.getInstance(prime2);
+		return PrimePair.getInstance(pr1, pr2);
 	}
 
 	public static PrimePair getInstance(Prime prime1, Prime prime2) {
+		if (prime1 == null || prime2 == null || prime1.equals(prime2)) {
+			throw new IllegalArgumentException();
+		}
 		return new PrimePair(prime1, prime2);
 	}
 

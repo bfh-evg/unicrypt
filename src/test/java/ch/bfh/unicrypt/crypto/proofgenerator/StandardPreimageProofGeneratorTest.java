@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.Standard
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -57,7 +58,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.Alphabet;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -150,10 +150,10 @@ public class StandardPreimageProofGeneratorTest {
 		// Valid proof
 		Element privateInput = Tuple.getInstance(m, r);
 		Element publicInput = Tuple.getInstance(G_q.getElement(16), G_q.getElement(8));
-		System.out.println("" + privateInput + "," + publicInput);
+		// System.out.println("" + privateInput + "," + publicInput);
 
 		Tuple proof = pg.generate(privateInput, publicInput);
-		System.out.println("" + proof);
+		// System.out.println("" + proof);
 		BooleanElement v = pg.verify(proof, publicInput);
 		assertTrue(v.getValue());
 	}

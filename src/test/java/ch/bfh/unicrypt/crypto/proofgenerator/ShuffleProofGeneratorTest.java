@@ -45,12 +45,8 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.Chall
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.ShuffleProofGenerator;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
+import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -63,7 +59,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -251,7 +251,7 @@ public class ShuffleProofGeneratorTest {
 
 		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
 		Tuple cPiV = pcs.commit(pi, sV);
-		System.out.println("Permutation-Commitment");
+		// System.out.println("Permutation-Commitment");
 		logAndReset();
 
 		// Ciphertexts
@@ -277,36 +277,36 @@ public class ShuffleProofGeneratorTest {
 		ChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
 		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionPK, rrs);
 
-		System.out.println("Mixing");
+		// System.out.println("Mixing");
 		logAndReset();
 
 		// Proof
 		Pair proofPermutation = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
-		System.out.println("Permutation-Proof");
+		// System.out.println("Permutation-Proof");
 		logAndReset();
 
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 		Triple proofShuffle = spg.generate(privateInput, publicInput);
-		System.out.println("Shuffle-Proof");
+		// System.out.println("Shuffle-Proof");
 		logAndReset();
 
 		// Verify
 		// (Important: If it is not given from the context, check equality of
 		//             the permutation commitments!)
 		BooleanElement vPermutation = pcpg.verify(proofPermutation, cPiV);
-		System.out.println("Verify Permutation-Proof");
+		// System.out.println("Verify Permutation-Proof");
 		logAndReset();
 		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput);
-		System.out.println("Verify Shuffle Proof");
+		// System.out.println("Verify Shuffle Proof");
 		logAndReset();
 		assertTrue(vPermutation.getValue() && vShuffle.getValue());
 
 	}
 
 	public void logAndReset() {
-		System.out.println("COUNTER     : " + (GStarMod.modPowCounter_SelfApply - GStarMod.modPowCounter_IsGenerator));
-		System.out.println("COUNTER Cont: " + GStarMod.modPowCounter_Contains);
+		// System.out.println("COUNTER     : " + (GStarMod.modPowCounter_SelfApply - GStarMod.modPowCounter_IsGenerator));
+		// System.out.println("COUNTER Cont: " + GStarMod.modPowCounter_Contains);
 		GStarMod.modPowCounter_SelfApply = 0;
 		GStarMod.modPowCounter_Contains = 0;
 		GStarMod.modPowCounter_IsGenerator = 0;

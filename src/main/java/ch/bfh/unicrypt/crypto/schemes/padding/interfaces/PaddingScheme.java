@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElemen
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public interface PaddingScheme
 	   extends Scheme {
@@ -57,6 +58,8 @@ public interface PaddingScheme
 	public Function getPaddingFunction();
 
 	public ConcatenativeElement pad(Element element);
+
+	public ConcatenativeElement pad(Element element, RandomByteSequence randomByteSequence);
 
 	@Override
 	public ConcatenativeSemiGroup getMessageSpace();

@@ -39,24 +39,45 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator;
+package ch.bfh.unicrypt.crypto.schemes.padding;
 
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.crypto.schemes.padding.classes.ANSIPaddingScheme;
+import ch.bfh.unicrypt.crypto.schemes.padding.classes.IECPaddingScheme;
+import ch.bfh.unicrypt.crypto.schemes.padding.classes.ISOPaddingScheme;
+import ch.bfh.unicrypt.crypto.schemes.padding.classes.PKCSPaddingScheme;
+import ch.bfh.unicrypt.crypto.schemes.padding.interfaces.ReversiblePaddingScheme;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class StandardNonInteractiveChallengeGeneratorTest {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class PaddingSchemeTest {
 
 	@Test
-	public void testStandardNonInteractiveElementChallengeGenerator() {
+	public void testReversiblePaddingScheme() {
 
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
-		StandardNonInteractiveChallengeGenerator cg = StandardNonInteractiveChallengeGenerator.getInstance(cyclicGroup, cyclicGroup, 10);
-		Tuple elements = (Tuple) cg.generate(cyclicGroup.getRandomElement());
-
-		// System.out.println(elements);
+		for (int blockLength = 1; blockLength < 10; blockLength++) {
+			ReversiblePaddingScheme[] schemes = new ReversiblePaddingScheme[]{
+				ANSIPaddingScheme.getInstance(blockLength),
+				IECPaddingScheme.getInstance(blockLength),
+				ISOPaddingScheme.getInstance(blockLength),
+				PKCSPaddingScheme.getInstance(blockLength)
+			};
+			for (ReversiblePaddingScheme scheme : schemes) {
+				Element<ByteArray> message, paddedMessage, unpaddedMessage;
+				for (int i = 0; i < 100; i++) {
+					message = scheme.getMessageSpace().getRandomElement(i);
+					paddedMessage = scheme.pad(message);
+					unpaddedMessage = scheme.unpad(paddedMessage);
+					assertEquals(0, paddedMessage.getValue().getLength() % blockLength);
+					assertEquals(message, unpaddedMessage);
+				}
+			}
+		}
 	}
 
 }

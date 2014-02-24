@@ -69,11 +69,11 @@ public class ZModPrimePair
 	}
 
 	public BigInteger getFirstPrime() {
-		return this.getPrimePair().getFirstPrime();
+		return this.getPrimePair().getFirst();
 	}
 
 	public BigInteger getSecondPrime() {
-		return this.getPrimePair().getSecondPrime();
+		return this.getPrimePair().getSecond();
 	}
 
 	@Override

@@ -41,14 +41,15 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.helper.HashMethod;
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -338,7 +339,7 @@ public class ByteArray
 		}
 		byte[] bytes = new byte[(hexString.length() + 1) / 3];
 		for (int i = 0; i < bytes.length; i++) {
-			String string = hexString.substring(i * 3, i * 3 + 2);
+			String string = hexString.substring(i * 3, i * 3 + 2).toUpperCase(Locale.ENGLISH);
 			if (!string.matches("[0-9A-F]{2}")) {
 				throw new IllegalArgumentException();
 			}

@@ -41,15 +41,15 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment;
 
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -70,11 +70,11 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("X".getBytes()));
 		//rrs.reset()
 
-		System.out.println("-->g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
-		System.out.println("-->g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
-		System.out.println("-->g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
-		System.out.println("-->g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6  8
-		System.out.println("-->g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8 18
+		// System.out.println("-->g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
+		// System.out.println("-->g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
+		// System.out.println("-->g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
+		// System.out.println("-->g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6  8
+		// System.out.println("-->g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8 18
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 2, rrs);
 		Tuple messages = Tuple.getInstance(Z_q.getElement(1), Z_q.getElement(3));
 		Element r = Z_q.getElement(2);
@@ -92,11 +92,11 @@ public class GeneralizedPedersenCommitmentSchemeTest {
 		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("X".getBytes()));
 //rrs.reset();
 
-		System.out.println("-->g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
-		System.out.println("-->g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
-		System.out.println("-->g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
-		System.out.println("-->g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6  8
-		System.out.println("-->g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8 18
+		// System.out.println("-->g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
+		// System.out.println("-->g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
+		// System.out.println("-->g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
+		// System.out.println("-->g3: " + this.G_q.getIndependentGenerator(3, rrs));   //  6  8
+		// System.out.println("-->g4: " + this.G_q.getIndependentGenerator(4, rrs));   //  8 18
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 2, rrs);
 
 		gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, 4, rrs);

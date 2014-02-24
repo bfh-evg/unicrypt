@@ -47,6 +47,8 @@ import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElemen
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -80,7 +82,12 @@ public abstract class AbstractPaddingScheme<S extends ConcatenativeSemiGroup, E 
 
 	@Override
 	public E pad(final Element element) {
-		return (E) this.getPaddingFunction().apply(element);
+		return this.pad(element, HybridRandomByteSequence.getInstance());
+	}
+
+	@Override
+	public E pad(final Element element, RandomByteSequence randomByteSequence) {
+		return (E) this.getPaddingFunction().apply(element, randomByteSequence);
 	}
 
 	@Override

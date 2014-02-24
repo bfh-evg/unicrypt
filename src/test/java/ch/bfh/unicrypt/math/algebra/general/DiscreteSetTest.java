@@ -57,7 +57,7 @@ public class DiscreteSetTest {
 
 	@Test
 	public void testStandardToStringContent() {
-		System.out.println(ds);
+		// System.out.println(ds);
 	}
 
 	@Test

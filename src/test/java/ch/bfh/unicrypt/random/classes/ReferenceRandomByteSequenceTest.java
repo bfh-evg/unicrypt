@@ -41,10 +41,8 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.HashMethod;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -83,7 +81,7 @@ public class ReferenceRandomByteSequenceTest {
 	 */
 	@Test
 	public void testGetRandomByteBuffer() {
-		System.out.println("getDefault");
+		// System.out.println("getDefault");
 		ReferenceRandomByteSequence instance = ReferenceRandomByteSequence.getInstance();
 		ByteArray expResult = instance.getNextByteArray(10);
 		ReferenceRandomByteSequence instance2 = ReferenceRandomByteSequence.getInstance();
@@ -98,7 +96,7 @@ public class ReferenceRandomByteSequenceTest {
 	 */
 	@Test
 	public void testReset() {
-		System.out.println("testReset");
+		// System.out.println("testReset");
 		ReferenceRandomByteSequence instance = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("testReset".getBytes()));
 		ReferenceRandomByteSequence instance2 = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("testReset".getBytes()));
 
@@ -110,7 +108,7 @@ public class ReferenceRandomByteSequenceTest {
 		ByteArray result = instance.getNextByteArray(100000);
 		long resTime = System.currentTimeMillis() - time;
 		Assert.assertEquals(expResult, result);
-		System.out.println("Timing: " + (expTime - resTime));
+		// System.out.println("Timing: " + (expTime - resTime));
 		Assert.assertTrue(expTime > resTime);
 	}
 
@@ -119,7 +117,7 @@ public class ReferenceRandomByteSequenceTest {
 	 */
 	@Test
 	public void testIsReset() {
-		System.out.println("isReset");
+		// System.out.println("isReset");
 		ReferenceRandomByteSequence instance = ReferenceRandomByteSequence.getInstance();
 		instance.reset();
 		Assert.assertTrue(instance.isReset());
@@ -135,7 +133,7 @@ public class ReferenceRandomByteSequenceTest {
 	 */
 	@Test
 	public void testGetInstance_ByteArray() {
-		System.out.println("getInstance");
+		// System.out.println("getInstance");
 		ByteArray seed = ByteArray.getInstance("testGetInstance_ByteArray".getBytes());
 		ReferenceRandomByteSequence instance = ReferenceRandomByteSequence.getInstance(seed);
 		ReferenceRandomByteSequence instance2 = ReferenceRandomByteSequence.getInstance(seed);
@@ -157,7 +155,7 @@ public class ReferenceRandomByteSequenceTest {
 	 */
 	@Test
 	public void testGetInstance_HashMethod() {
-		System.out.println("getInstance");
+		// System.out.println("getInstance");
 		HashMethod hashMethod = HashMethod.DEFAULT;
 		HashMethod expResult = hashMethod;
 		HashMethod result = ReferenceRandomByteSequence.getInstance(hashMethod).getHashMethod();
@@ -170,7 +168,7 @@ public class ReferenceRandomByteSequenceTest {
 	 */
 	@Test
 	public void testHashCode() {
-		System.out.println("hashCode");
+		// System.out.println("hashCode");
 		ReferenceRandomByteSequence instance = ReferenceRandomByteSequence.getInstance();
 		ReferenceRandomByteSequence instance2 = ReferenceRandomByteSequence.getInstance();
 		assertEquals(instance.hashCode(), instance2.hashCode());
@@ -185,7 +183,7 @@ public class ReferenceRandomByteSequenceTest {
 	 */
 	@Test
 	public void testEquals() {
-		System.out.println("equals");
+		// System.out.println("equals");
 		ReferenceRandomByteSequence instance = ReferenceRandomByteSequence.getInstance();
 		ReferenceRandomByteSequence instance2 = ReferenceRandomByteSequence.getInstance();
 		assertEquals(instance, instance2);

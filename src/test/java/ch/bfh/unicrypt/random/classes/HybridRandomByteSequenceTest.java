@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.helper.HashMethod;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -80,16 +79,16 @@ public class HybridRandomByteSequenceTest {
 	 */
 	@Test
 	public void testGetSecurityParameterInBytes() {
-		System.out.println("getSecurityParameterInBytes");
+		// System.out.println("getSecurityParameterInBytes");
 		HybridRandomByteSequence instance = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, 2, 1);
 		int expResult = 1;
 		int result = instance.getBackwardSecurityInBytes();
-		System.out.println(instance.getNextByte());
+		// System.out.println(instance.getNextByte());
 		assertEquals(expResult, result);
 		instance = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, 2, 33);
 		expResult = 33;
 		result = instance.getBackwardSecurityInBytes();
-		System.out.println(instance.getNextByte());
+		// System.out.println(instance.getNextByte());
 		assertEquals(expResult, result);
 
 	}
