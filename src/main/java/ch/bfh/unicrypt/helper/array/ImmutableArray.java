@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.array;
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.compound.Compound;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -307,6 +308,27 @@ public class ImmutableArray<T>
 		}
 		// Array.copyOf is necessary to protect external array modification
 		return new ImmutableArray<T>(Arrays.copyOf(array, array.length));
+	}
+
+	public static <T> ImmutableArray<T> getInstance(Collection<T> collection) {
+		if (collection == null || collection.contains(null)) {
+			throw new IllegalArgumentException();
+		}
+		boolean isUniform = true;
+		T first = null;
+		Iterator<T> iterator = collection.iterator();
+		while (isUniform && iterator.hasNext()) {
+			T object = iterator.next();
+			if (first == null) {
+				first = object;
+			} else {
+				isUniform = isUniform && object.equals(first);
+			}
+		}
+		if (isUniform && !collection.isEmpty()) {
+			return new ImmutableArray(first, collection.size());
+		}
+		return new ImmutableArray<T>(collection.toArray());
 	}
 
 	public static <T> ImmutableArray<T> getInstance(T object, int length) {

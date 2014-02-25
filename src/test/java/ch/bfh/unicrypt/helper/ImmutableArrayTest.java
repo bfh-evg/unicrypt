@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import java.util.ArrayList;
 import java.util.Iterator;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -59,8 +60,21 @@ public class ImmutableArrayTest {
 	private static ImmutableArray<String> a1 = ImmutableArray.getInstance("s1", "s2", "s3");
 	private static ImmutableArray<String> a2 = ImmutableArray.getInstance("s1", "s1", "s1");
 	private static ImmutableArray<String> a3 = ImmutableArray.getInstance("s1", 3);
+	private static ImmutableArray<String> a4;
+	private static ImmutableArray<String> a5;
 
 	public ImmutableArrayTest() {
+		ArrayList list1 = new ArrayList();
+		list1.add("s1");
+		list1.add("s2");
+		list1.add("s3");
+		a4 = ImmutableArray.getInstance(list1);
+
+		ArrayList list2 = new ArrayList();
+		list2.add("s1");
+		list2.add("s1");
+		list2.add("s1");
+		a5 = ImmutableArray.getInstance(list2);
 	}
 
 	@Test
@@ -69,6 +83,8 @@ public class ImmutableArrayTest {
 		assertEquals(3, a1.getLength());
 		assertEquals(3, a2.getLength());
 		assertEquals(3, a3.getLength());
+		assertEquals(3, a4.getLength());
+		assertEquals(3, a5.getLength());
 	}
 
 	@Test
@@ -82,6 +98,11 @@ public class ImmutableArrayTest {
 		assertEquals("s1", a3.getAt(0));
 		assertEquals("s1", a3.getAt(1));
 		assertEquals("s1", a3.getAt(2));
+		assertEquals("s1", a4.getAt(0));
+		assertEquals("s2", a4.getAt(1));
+		assertEquals("s3", a4.getAt(2));
+		assertEquals("s1", a5.getAt(0));
+		assertEquals("s1", a5.getAt(2));
 	}
 
 	@Test
@@ -141,6 +162,10 @@ public class ImmutableArrayTest {
 		assertTrue(a2.equals(a2));
 		assertTrue(a2.equals(a3));
 		assertTrue(a3.equals(a3));
+		assertTrue(a1.equals(a4));
+		assertTrue(a2.equals(a5));
+		assertTrue(a3.equals(a5));
+
 	}
 
 	@Test
@@ -157,6 +182,15 @@ public class ImmutableArrayTest {
 		assertEquals(6, a1.append(a2).getLength());
 		assertEquals(a2.append(a2), a3.append(a3));
 		assertEquals(a2.append(a3), a3.append(a2));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetInstanceByCollectionException() {
+		ArrayList list1 = new ArrayList();
+		list1.add("s1");
+		list1.add(null);
+		list1.add("s3");
+		ImmutableArray a = ImmutableArray.getInstance(list1);
 	}
 
 }
