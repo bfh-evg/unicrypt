@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.helper.HashMethod;
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.abstracts.AbstractRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.PseudoRandomByteSequence;
 import java.io.ByteArrayOutputStream;
@@ -69,13 +69,13 @@ public class OutputFeedbackRandomByteSequence
 	   extends AbstractRandomByteSequence
 	   implements PseudoRandomByteSequence {
 
-	private final HashMethod hashMethod;
+	private final HashAlgorithm hashAlgorithm;
 	private ByteArray internalState;
 	private final int forwardSecurityInBytes;
 
 	// Random random;
-	protected OutputFeedbackRandomByteSequence(HashMethod hashMethod, int forwardSecurityInBytes, final ByteArray seed) {
-		this.hashMethod = hashMethod;
+	protected OutputFeedbackRandomByteSequence(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, final ByteArray seed) {
+		this.hashAlgorithm = hashAlgorithm;
 		this.forwardSecurityInBytes = forwardSecurityInBytes;
 		this.setSeed(seed);
 	}
@@ -90,7 +90,7 @@ public class OutputFeedbackRandomByteSequence
 		if (freshData != null) {
 			internalState = internalState.xorFillZero(freshData);
 		}
-		internalState = internalState.xorFillZero(internalState.getHash(hashMethod));
+		internalState = internalState.xorFillZero(internalState.getHashValue(this.hashAlgorithm));
 	}
 
 	/**
@@ -100,8 +100,8 @@ public class OutputFeedbackRandomByteSequence
 	 * @return
 	 */
 	protected ByteArray update() {
-		ByteArray[] full = internalState.getHash(hashMethod).split(forwardSecurityInBytes);
-		this.internalState = internalState.xorFillZero(full[0]);
+		ByteArray[] full = internalState.getHashValue(this.hashAlgorithm).split(this.forwardSecurityInBytes);
+		this.internalState = this.internalState.xorFillZero(full[0]);
 
 		//Careful: Due to the underlying implementation of ByteArray, this  leaks information within the internal array.
 		return full[1];
@@ -110,17 +110,17 @@ public class OutputFeedbackRandomByteSequence
 	}
 
 	public int getForwardSecurityInBytes() {
-		return forwardSecurityInBytes;
+		return this.forwardSecurityInBytes;
 	}
 
 	@Override
 	public void setSeed(ByteArray seed) {
-		this.internalState = seed.getHash(hashMethod);
+		this.internalState = seed.getHashValue(this.hashAlgorithm);
 	}
 
 	@Override
-	public HashMethod getHashMethod() {
-		return hashMethod;
+	public HashAlgorithm getHashAlgorithm() {
+		return this.hashAlgorithm;
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class OutputFeedbackRandomByteSequence
 	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 17 * hash + (this.hashMethod != null ? this.hashMethod.hashCode() : 0);
+		hash = 17 * hash + (this.hashAlgorithm != null ? this.hashAlgorithm.hashCode() : 0);
 		return hash;
 	}
 
@@ -184,7 +184,7 @@ public class OutputFeedbackRandomByteSequence
 			return false;
 		}
 		final OutputFeedbackRandomByteSequence other = (OutputFeedbackRandomByteSequence) obj;
-		if (this.hashMethod != other.hashMethod && (this.hashMethod == null || !this.hashMethod.equals(other.hashMethod))) {
+		if (this.hashAlgorithm != other.hashAlgorithm && (this.hashAlgorithm == null || !this.hashAlgorithm.equals(other.hashAlgorithm))) {
 			return false;
 		}
 		if (this.hashCode() != other.hashCode()) {
@@ -197,24 +197,24 @@ public class OutputFeedbackRandomByteSequence
 	}
 
 	public static OutputFeedbackRandomByteSequence getInstance(ByteArray seed) {
-		return OutputFeedbackRandomByteSequence.getInstance(HashMethod.DEFAULT, seed);
+		return OutputFeedbackRandomByteSequence.getInstance(HashAlgorithm.getInstance(), seed);
 	}
 
-	public static OutputFeedbackRandomByteSequence getInstance(HashMethod hashMethod, ByteArray seed) {
-		return OutputFeedbackRandomByteSequence.getInstance(HashMethod.DEFAULT, HashMethod.DEFAULT.getLength() / 2, seed);
+	public static OutputFeedbackRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, ByteArray seed) {
+		return OutputFeedbackRandomByteSequence.getInstance(HashAlgorithm.getInstance(), HashAlgorithm.getInstance().getHashLength() / 2, seed);
 	}
 
-	public static OutputFeedbackRandomByteSequence getInstance(HashMethod hashMethod, int forwardSecurityInBytes, ByteArray seed) {
+	public static OutputFeedbackRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, ByteArray seed) {
 		if (seed == null) {
 			throw new IllegalArgumentException();
 		}
-		if (hashMethod == null) {
+		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		if (forwardSecurityInBytes < 0 || forwardSecurityInBytes > hashMethod.getLength() - 1) {
+		if (forwardSecurityInBytes < 0 || forwardSecurityInBytes > hashAlgorithm.getHashLength() - 1) {
 			throw new IllegalArgumentException();
 		}
-		return new OutputFeedbackRandomByteSequence(hashMethod, forwardSecurityInBytes, seed);
+		return new OutputFeedbackRandomByteSequence(hashAlgorithm, forwardSecurityInBytes, seed);
 	}
 
 }

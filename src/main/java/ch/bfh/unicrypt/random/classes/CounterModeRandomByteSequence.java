@@ -41,20 +41,20 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.abstracts.AbstractRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.PseudoRandomByteSequence;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.HashMethod;
 import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
  * This PseudoRandomGeneratorCounterMode creates the hash value of the seed and stores this internally as a
- * ByteArrayElement. The hash will be done according to the given hashMethod. Then the internal counter will be created
- * as another ByteArrayElement. These two byteArrayElement will be hashed as in @see
- * AbstractElement#getHashValue(HashMethod hashMethod); The resulting bytes will be used for pseudoRandomness Please
- * note that this PseudoRandomGenerator does not provide any security at all once the internal state is known. This
- * includes a total lack of forward security.
+ * ByteArrayElement. The hash will be done according to the given hashAlgorithm. Then the internal counter will be
+ * created as another ByteArrayElement. These two byteArrayElement will be hashed as in @see
+ * AbstractElement#getHashValueValueValue(HashAlgorithm hashAlgorithm); The resulting bytes will be used for
+ * pseudoRandomness Please note that this PseudoRandomGenerator does not provide any security at all once the internal
+ * state is known. This includes a total lack of forward security.
  * <p>
  * <p>
  * <p>
@@ -71,9 +71,9 @@ public class CounterModeRandomByteSequence
 	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE pseudoRandomGenerator At each start of the JavaVM this
 	 * generator will restart deterministically. Do not use it for ephemeral keys!
 	 */
-	public static final CounterModeRandomByteSequence DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE = CounterModeRandomByteSequence.getInstance(HashMethod.DEFAULT, DEFAULT_SEED);
+	public static final CounterModeRandomByteSequence DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), DEFAULT_SEED);
 
-	private final HashMethod hashMethod;
+	private final HashAlgorithm hashAlgorithm;
 	private ByteArray seed;
 	private ByteArray hashedSeed;
 	private int counter;
@@ -82,24 +82,24 @@ public class CounterModeRandomByteSequence
 	private int randomByteBufferPosition;
 
 	// Random random;
-	protected CounterModeRandomByteSequence(HashMethod hashMethod, final ByteArray seed) {
-		this.hashMethod = hashMethod;
+	protected CounterModeRandomByteSequence(HashAlgorithm hashAlgorithm, final ByteArray seed) {
+		this.hashAlgorithm = hashAlgorithm;
 		//The following lines are needed in order to speed up calculation of randomBytes. @see#fillRandomByteBuffer
-		this.randomByteBuffer = new byte[hashMethod.getLength()];
+		this.randomByteBuffer = new byte[hashAlgorithm.getHashLength()];
 		setSeed(seed);
 	}
 
 	protected byte[] getRandomByteBuffer(int counter) {
 		//Even though the following is the nice way to program it with unicrypt, it is too expensive. Reason: If the first part of a pair is a big tuple, it has to be hashed each time... Reprogram?!
-		//this.digestBytes=Pair.getInstance(seed,Z.getInstance().getElement(counter)).getHashValue(hashMethod).getByteArray();
+		//this.digestBytes=Pair.getInstance(seed,Z.getInstance().getElement(counter)).getHashValue(hashAlgorithm).getByteArray();
 		//-->This is, why the following implementation exists.
-		return hashedSeed.concatenate(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getHash(hashMethod).getAll();
+		return hashedSeed.concatenate(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getHashValue(this.hashAlgorithm).getAll();
 //		return digest.digest(hashedSeed.concatenate(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getBytes());
 	}
 
 	@Override
-	public HashMethod getHashMethod() {
-		return hashMethod;
+	public HashAlgorithm getHashAlgorithm() {
+		return hashAlgorithm;
 	}
 
 	public ByteArray getSeed() {
@@ -112,7 +112,7 @@ public class CounterModeRandomByteSequence
 			throw new IllegalArgumentException();
 		}
 		this.seed = seed;
-		this.hashedSeed = seed.getHash();
+		this.hashedSeed = seed.getHashValue();
 		this.counter = -1;
 		reset();
 	}
@@ -187,7 +187,7 @@ public class CounterModeRandomByteSequence
 	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 17 * hash + (this.hashMethod != null ? this.hashMethod.hashCode() : 0);
+		hash = 17 * hash + (this.hashAlgorithm != null ? this.hashAlgorithm.hashCode() : 0);
 		hash = 17 * hash + (hashedSeed != null ? hashedSeed.hashCode() : 0);
 		hash = 17 * hash + this.counter;
 		hash = 17 * hash + this.randomByteBufferPosition;
@@ -203,7 +203,7 @@ public class CounterModeRandomByteSequence
 			return false;
 		}
 		final CounterModeRandomByteSequence other = (CounterModeRandomByteSequence) obj;
-		if (this.hashMethod != other.hashMethod && (this.hashMethod == null || !this.hashMethod.equals(other.hashMethod))) {
+		if (this.hashAlgorithm != other.hashAlgorithm && (this.hashAlgorithm == null || !this.hashAlgorithm.equals(other.hashAlgorithm))) {
 			return false;
 		}
 		if (this.hashCode() != other.hashCode()) {
@@ -227,22 +227,22 @@ public class CounterModeRandomByteSequence
 		return CounterModeRandomByteSequence.DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE;
 	}
 
-	public static CounterModeRandomByteSequence getInstance(HashMethod hashMethod) {
-		return new CounterModeRandomByteSequence(hashMethod, DEFAULT_SEED);
+	public static CounterModeRandomByteSequence getInstance(HashAlgorithm hashAlgorithm) {
+		return new CounterModeRandomByteSequence(hashAlgorithm, DEFAULT_SEED);
 	}
 
 	public static CounterModeRandomByteSequence getInstance(ByteArray seed) {
-		return new CounterModeRandomByteSequence(HashMethod.DEFAULT, seed);
+		return new CounterModeRandomByteSequence(HashAlgorithm.getInstance(), seed);
 	}
 
-	public static CounterModeRandomByteSequence getInstance(HashMethod hashMethod, ByteArray seed) {
+	public static CounterModeRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, ByteArray seed) {
 		if (seed == null) {
 			throw new IllegalArgumentException();
 		}
-		if (hashMethod == null) {
+		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		return new CounterModeRandomByteSequence(hashMethod, seed);
+		return new CounterModeRandomByteSequence(hashAlgorithm, seed);
 	}
 
 }

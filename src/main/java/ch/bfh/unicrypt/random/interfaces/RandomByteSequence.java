@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.random.interfaces;
 
-import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.HashMethod;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 
 /**
  *
@@ -53,7 +53,7 @@ public interface RandomByteSequence {
 
 	public RandomNumberGenerator getRandomNumberGenerator();
 
-	public HashMethod getHashMethod();
+	public HashAlgorithm getHashAlgorithm();
 
 	public byte getNextByte();
 

@@ -41,6 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
@@ -56,11 +60,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.helper.HashMethod;
-import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.util.HashMap;
 
 /**
@@ -158,14 +158,15 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	public final FiniteByteArrayElement getHashValue() {
-		return this.getHashValue(HashMethod.DEFAULT);
+		return this.getHashValue(HashMethod.getInstance());
 	}
 
 	@Override
 	public final FiniteByteArrayElement getHashValue(HashMethod hashMethod) {
 		//TODO: This is a memory-hog! But a super speed-up
 		//TODO: If this HashMap would become static, it would speed things up again... But would it leak (cryptographically)?
-		if (!this.hashValues.containsKey(hashMethod)) {
+		FiniteByteArrayElement result = this.hashValues.get(hashMethod);
+		if (result == null) {
 			if (this.isTuple() && hashMethod.isRecursive()) {
 				Tuple tuple = (Tuple) this;
 				int arity = tuple.getArity();
@@ -173,14 +174,15 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 				for (int i = 0; i < arity; i++) {
 					hashes[i] = tuple.getAt(i).getHashValue(hashMethod).getByteArrayElement();
 				}
-				this.hashValues.put(hashMethod, ByteArrayMonoid.getInstance().apply(hashes).getHashValue(hashMethod));
+				result = ByteArrayMonoid.getInstance().apply(hashes).getHashValue(hashMethod);
 			} else {
-				MessageDigest messageDigest = hashMethod.getMessageDigest();
-				messageDigest.reset();
-				this.hashValues.put(hashMethod, FixedByteArraySet.getInstance(hashMethod.getLength()).getElement(messageDigest.digest(this.getBigInteger().toByteArray())));
+				HashAlgorithm hashAlgorithm = hashMethod.getHashAlgorithm();
+				FixedByteArraySet byteArraySet = FixedByteArraySet.getInstance(hashAlgorithm.getHashLength());
+				result = byteArraySet.getElement(hashAlgorithm.getHashValue(this.getBigInteger().toByteArray()));
 			}
+			this.hashValues.put(hashMethod, result);
 		}
-		return this.hashValues.get(hashMethod);
+		return result;
 	}
 
 	//

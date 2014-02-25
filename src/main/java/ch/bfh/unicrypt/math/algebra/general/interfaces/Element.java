@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.helper.HashMethod;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import java.math.BigInteger;
 

@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.helper.HashMethod;
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -154,11 +154,11 @@ public class ReferenceRandomByteSequenceTest {
 	 * Test of getInstance method, of class ReferenceRandomByteSequence.
 	 */
 	@Test
-	public void testGetInstance_HashMethod() {
+	public void testGetInstance_HashAlgorithm() {
 		// System.out.println("getInstance");
-		HashMethod hashMethod = HashMethod.DEFAULT;
-		HashMethod expResult = hashMethod;
-		HashMethod result = ReferenceRandomByteSequence.getInstance(hashMethod).getHashMethod();
+		HashAlgorithm hashAlgorithm = HashAlgorithm.getInstance();
+		HashAlgorithm expResult = hashAlgorithm;
+		HashAlgorithm result = ReferenceRandomByteSequence.getInstance(hashAlgorithm).getHashAlgorithm();
 		assertEquals(expResult, result);
 
 	}

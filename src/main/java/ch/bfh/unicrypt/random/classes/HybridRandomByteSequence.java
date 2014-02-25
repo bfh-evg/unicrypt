@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.distributionsampler.classes.DistributionSamplerCollector;
 import ch.bfh.unicrypt.random.interfaces.TrueRandomByteSequence;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.HashMethod;
 
 /**
  * This class allows the generation of ephemeral keys. Hence it provides (backward-)security and forward-security to the
@@ -66,12 +66,12 @@ public class HybridRandomByteSequence
 
 	/**
 	 *
-	 * @param hashMethod
+	 * @param hashAlgorithm
 	 * @param forwardSecurityInBytes
 	 * @param backwardSecurityInBytes
 	 */
-	protected HybridRandomByteSequence(HashMethod hashMethod, int forwardSecurityInBytes, int backwardSecurityInBytes) {
-		super(hashMethod, forwardSecurityInBytes, ByteArray.getInstance());
+	protected HybridRandomByteSequence(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, int backwardSecurityInBytes) {
+		super(hashAlgorithm, forwardSecurityInBytes, ByteArray.getInstance());
 
 		this.backwardSecurityInBytes = backwardSecurityInBytes;
 
@@ -104,22 +104,23 @@ public class HybridRandomByteSequence
 	 */
 	public static HybridRandomByteSequence getInstance() {
 		if (DEFAULT == null) {
-			DEFAULT = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, HashMethod.DEFAULT.getLength() / 2, HashMethod.DEFAULT.getLength());
+			HashAlgorithm defaultHashAlgorithm = HashAlgorithm.getInstance();
+			DEFAULT = HybridRandomByteSequence.getInstance(defaultHashAlgorithm, defaultHashAlgorithm.getHashLength() / 2, defaultHashAlgorithm.getHashLength());
 		}
 		return DEFAULT;
 	}
 
-	public static HybridRandomByteSequence getInstance(HashMethod hashMethod, int forwardSecurityInBytes, int securityParameterInBytes) {
-		if (hashMethod == null) {
+	public static HybridRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, int securityParameterInBytes) {
+		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		if (forwardSecurityInBytes < 0 || forwardSecurityInBytes > hashMethod.getLength() - 1) {
+		if (forwardSecurityInBytes < 0 || forwardSecurityInBytes > hashAlgorithm.getHashLength() - 1) {
 			throw new IllegalArgumentException();
 		}
 		if (securityParameterInBytes < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new HybridRandomByteSequence(hashMethod, forwardSecurityInBytes, securityParameterInBytes);
+		return new HybridRandomByteSequence(hashAlgorithm, forwardSecurityInBytes, securityParameterInBytes);
 	}
 
 	@Override

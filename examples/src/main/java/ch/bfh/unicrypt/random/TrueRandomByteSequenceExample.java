@@ -42,9 +42,9 @@
 package ch.bfh.unicrypt.random;
 
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.TrueRandomByteSequence;
-import ch.bfh.unicrypt.helper.HashMethod;
 
 /**
  *
@@ -73,7 +73,7 @@ public class TrueRandomByteSequenceExample {
 	public static void example2() {
 		System.out.println("Use a weakest true random 'generator' for ephemeral keys.");
 		System.out.println("The initial seeding is a blocking method");
-		TrueRandomByteSequence random = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, 1, 1);
+		TrueRandomByteSequence random = HybridRandomByteSequence.getInstance(HashAlgorithm.getInstance(), 1, 1);
 
 		System.out.println("The refresh of the internal state is non-blocking");
 		System.out.println("Security (Backward) in bits: " + random.getBackwardSecurityInBytes() * 8);
@@ -90,7 +90,7 @@ public class TrueRandomByteSequenceExample {
 	public static void example3() {
 		System.out.println("Use a strongest (in relation to the used cryptographic hash function) true random 'generator' for ephemeral keys.");
 		System.out.println("The initial seeding is a blocking method");
-		TrueRandomByteSequence random = HybridRandomByteSequence.getInstance(HashMethod.DEFAULT, HashMethod.DEFAULT.getLength() - 1, HashMethod.DEFAULT.getLength());
+		TrueRandomByteSequence random = HybridRandomByteSequence.getInstance(HashAlgorithm.getInstance(), HashAlgorithm.getInstance().getHashLength() - 1, HashAlgorithm.getInstance().getHashLength());
 
 		System.out.println("The refresh of the internal state is non-blocking");
 		System.out.println("Security (Backward) in bits: " + random.getBackwardSecurityInBytes() * 8);

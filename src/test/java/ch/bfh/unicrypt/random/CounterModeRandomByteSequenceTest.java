@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.random;
 
-import ch.bfh.unicrypt.helper.HashMethod;
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
 import java.math.BigInteger;
@@ -109,10 +109,10 @@ public class CounterModeRandomByteSequenceTest {
 	@Test
 	public void testGetCounter() {
 		// System.out.println("getCounter");
-		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance(HashMethod.DEFAULT, CounterModeRandomByteSequence.DEFAULT_SEED);
+		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
 		int counter = instance.getCounter();
 		Assert.assertTrue(0 == counter);
-		instance.getNextByteArray(HashMethod.DEFAULT.getLength());
+		instance.getNextByteArray(HashAlgorithm.getInstance().getHashLength());
 		counter = instance.getCounter();
 		Assert.assertTrue(1 == counter);
 		instance.getNextByteArray(1);
@@ -148,8 +148,8 @@ public class CounterModeRandomByteSequenceTest {
 	@Test
 	public void testAbstractNextBooleanSame() {
 		// System.out.println("abstractNextBoolean");
-		CounterModeRandomByteSequence instance1 = CounterModeRandomByteSequence.getInstance(HashMethod.DEFAULT, CounterModeRandomByteSequence.DEFAULT_SEED);
-		CounterModeRandomByteSequence instance2 = CounterModeRandomByteSequence.getInstance(HashMethod.DEFAULT, CounterModeRandomByteSequence.DEFAULT_SEED);
+		CounterModeRandomByteSequence instance1 = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
+		CounterModeRandomByteSequence instance2 = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
 
 		boolean b1 = instance1.getRandomNumberGenerator().nextBoolean();
 		boolean b2 = instance2.getRandomNumberGenerator().nextBoolean();
@@ -163,9 +163,8 @@ public class CounterModeRandomByteSequenceTest {
 	@Test
 	public void testAbstractNextBooleansSame() {
 		// System.out.println("abstractNextBoolean");
-		CounterModeRandomByteSequence instance1 = CounterModeRandomByteSequence.getInstance(HashMethod.DEFAULT, CounterModeRandomByteSequence.DEFAULT_SEED);
-		CounterModeRandomByteSequence instance2 = CounterModeRandomByteSequence.getInstance(HashMethod.DEFAULT, CounterModeRandomByteSequence.DEFAULT_SEED);
-
+		CounterModeRandomByteSequence instance1 = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
+		CounterModeRandomByteSequence instance2 = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
 		for (int i = 0; i < 4096; i++) {
 			boolean b1 = instance1.getRandomNumberGenerator().nextBoolean();
 			boolean b2 = instance2.getRandomNumberGenerator().nextBoolean();
@@ -230,7 +229,7 @@ public class CounterModeRandomByteSequenceTest {
 	@Ignore
 	public void testNextBytesDigestBytes() {
 		// System.out.println("abstractNextBytes");
-		int byteArrayLength = HashMethod.DEFAULT.getLength();
+		int byteArrayLength = HashAlgorithm.getInstance().getHashLength();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 //		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getAll();
 //		byte[] result = instance.getNextByteArray(byteArrayLength);
@@ -244,7 +243,7 @@ public class CounterModeRandomByteSequenceTest {
 	@Ignore
 	public void testNextBytesTwiceDigestBytes() {
 		// System.out.println("abstractNextBytes");
-		int byteArrayLength = HashMethod.DEFAULT.getLength();
+		int byteArrayLength = HashAlgorithm.getInstance().getHashLength();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		instance.getNextByteArray(byteArrayLength);
 //		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getValue().getAll();

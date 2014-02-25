@@ -41,11 +41,10 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
-import ch.bfh.unicrypt.helper.HashMethod;
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -59,8 +58,10 @@ public class ByteArray
 	   extends UniCrypt
 	   implements Iterable<Byte> {
 
-	private static final byte ALL_ZERO = (byte) 0x00;
-	private static final byte ALL_ONE = (byte) 0xff;
+	public static final int BYTE_ORDER = 1 << Byte.SIZE;
+	private static final int BYTE_MASK = BYTE_ORDER - 1;
+	private static final byte ALL_ZERO = 0;
+	private static final byte ALL_ONE = (byte) BYTE_MASK;
 
 	protected final byte[] bytes;
 	private final int offset;
@@ -89,6 +90,10 @@ public class ByteArray
 			throw new IndexOutOfBoundsException();
 		}
 		return this.bytes[this.offset + index];
+	}
+
+	public int getIntAt(int index) {
+		return this.getAt(index) & BYTE_MASK;
 	}
 
 	public ByteArray extractPrefix(int length) {
@@ -190,13 +195,13 @@ public class ByteArray
 				byte b = (i < other.length) ? other.getAt(i) : fillByte;
 				switch (operand) {
 					case 0:
-						result[i] ^= b;
+						result[i] = ByteArray.logicalXOR(result[i], b);
 						break;
 					case 1:
-						result[i] &= b;
+						result[i] = ByteArray.logicalAND(result[i], b);
 						break;
 					case 2:
-						result[i] |= b;
+						result[i] = ByteArray.logicalOR(result[i], b);
 						break;
 					default:
 						throw new UnsupportedOperationException();
@@ -209,20 +214,20 @@ public class ByteArray
 	public ByteArray not() {
 		byte[] result = new byte[this.length];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = (byte) (~this.getAt(i) & 0xff);
+			result[i] = ByteArray.logicalNOT(this.getAt(i));
 		}
 		return new ByteArray(result);
 	}
 
-	public ByteArray getHash() {
-		return this.getHash(HashMethod.DEFAULT);
+	public ByteArray getHashValue() {
+		return this.getHashValue(HashAlgorithm.getInstance());
 	}
 
-	public ByteArray getHash(HashMethod hashMethod) {
-		if (hashMethod == null) {
+	public ByteArray getHashValue(HashAlgorithm hashAlgorithm) {
+		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArray(hashMethod.getMessageDigest().digest(bytes));
+		return new ByteArray(hashAlgorithm.getHashValue(this.bytes, this.offset, this.length));
 	}
 
 	@Override
@@ -230,7 +235,7 @@ public class ByteArray
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.length; i++) {
-			str = str + delimiter + String.format("%02X", BigInteger.valueOf(this.getAt(i) & 0xff));
+			str = str + delimiter + String.format("%02X", this.getIntAt(i));
 			delimiter = "|";
 		}
 		return "\"" + str + "\"";
@@ -319,7 +324,7 @@ public class ByteArray
 		byte[] bytes = new byte[integers.length];
 		int i = 0;
 		for (int integer : integers) {
-			if (integer < 0 || integer > 256) {
+			if (integer < 0 || integer >= (1 << Byte.SIZE)) {
 				throw new IllegalArgumentException();
 			}
 			bytes[i++] = (byte) integer;
@@ -370,6 +375,22 @@ public class ByteArray
 			throw new IllegalArgumentException();
 		}
 		return randomByteSequence.getNextByteArray(length);
+	}
+
+	private static byte logicalXOR(byte b1, byte b2) {
+		return (byte) (b1 ^ b2);
+	}
+
+	private static byte logicalAND(byte b1, byte b2) {
+		return (byte) (b1 & b2);
+	}
+
+	private static byte logicalOR(byte b1, byte b2) {
+		return (byte) (b1 | b2);
+	}
+
+	private static byte logicalNOT(byte b) {
+		return (byte) ~b;
 	}
 
 }

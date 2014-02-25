@@ -452,6 +452,10 @@ public final class MathUtil {
 		return result;
 	}
 
+	public static BigInteger powerOfTwo(int exponent) {
+		return BigInteger.ONE.shiftLeft(exponent);
+	}
+
 	// This is a private helper method to compute the integer square root of a BigInteger value.
 	public static BigInteger sqrt(BigInteger n) {
 		BigInteger a = BigInteger.ONE;

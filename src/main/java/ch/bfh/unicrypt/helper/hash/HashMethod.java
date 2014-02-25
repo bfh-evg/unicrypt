@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,73 +32,53 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.hash;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import ch.bfh.unicrypt.helper.UniCrypt;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class HashMethod
-			 extends UniCrypt {
+	   extends UniCrypt {
 
-	public static final HashMethod DEFAULT = HashMethod.getInstance("SHA-256", true);
-
-	private final String algorithmName;
+	private final HashAlgorithm hashAlgorithm;
 	private final boolean recursive;
-	private final int length;
 
-	protected HashMethod(String algorithmName, boolean recursive, int length) {
-		this.algorithmName = algorithmName;
+	protected HashMethod(HashAlgorithm hashAlgorithm, boolean recursive) {
+		this.hashAlgorithm = hashAlgorithm;
 		this.recursive = recursive;
-		this.length = length;
 	}
 
-	public MessageDigest getMessageDigest() {
-		MessageDigest messageDigest;
-		try {
-			messageDigest = MessageDigest.getInstance(this.algorithmName);
-		} catch (final NoSuchAlgorithmException e) {
-			throw new IllegalArgumentException();
-		}
-		return messageDigest;
+	public HashAlgorithm getHashAlgorithm() {
+		return this.hashAlgorithm;
 	}
 
 	public boolean isRecursive() {
 		return this.recursive;
 	}
 
-	public String getAlgortihmName() {
-		return this.algorithmName;
-	}
-
-	public int getLength() {
-		return this.length;
-	}
-
 	@Override
 	public String defaultToStringValue() {
 		if (this.isRecursive()) {
-			return this.algorithmName + ",recursive";
+			return this.hashAlgorithm.toString() + ",recursive";
 		}
-		return this.algorithmName;
+		return this.hashAlgorithm.toString();
 	}
 
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		hash = 97 * hash + (this.algorithmName != null ? this.algorithmName.hashCode() : 0);
+		hash = 97 * hash + (this.hashAlgorithm != null ? this.hashAlgorithm.hashCode() : 0);
 		hash = 97 * hash + (this.recursive ? 1 : 0);
-		hash = 97 * hash + this.length;
 		return hash;
 	}
 
@@ -111,30 +91,22 @@ public class HashMethod
 			return false;
 		}
 		final HashMethod other = (HashMethod) obj;
-		if ((this.algorithmName == null) ? (other.algorithmName != null) : !this.algorithmName.equals(other.algorithmName)) {
-			return false;
-		}
-		if (this.recursive != other.recursive) {
-			return false;
-		}
-		return this.length == other.length;
+		return this.hashAlgorithm.equals(other.hashAlgorithm) && this.recursive == other.recursive;
 	}
 
-	public static HashMethod getInstance(String algorithmName) {
-		return HashMethod.getInstance(algorithmName, true);
+	public static HashMethod getInstance() {
+		return HashMethod.getInstance(HashAlgorithm.SHA256, true);
 	}
 
-	public static HashMethod getInstance(String algorithmName, boolean recursive) {
-		if (algorithmName == null) {
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm) {
+		return HashMethod.getInstance(hashAlgorithm, true);
+	}
+
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, boolean recursive) {
+		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		MessageDigest messageDigest;
-		try {
-			messageDigest = MessageDigest.getInstance(algorithmName);
-		} catch (final NoSuchAlgorithmException e) {
-			throw new IllegalArgumentException();
-		}
-		return new HashMethod(algorithmName, recursive, messageDigest.getDigestLength());
+		return new HashMethod(hashAlgorithm, recursive);
 	}
 
 }

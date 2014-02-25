@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.random.classes;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.HashMethod;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -57,26 +57,28 @@ public class ReferenceRandomByteSequence
 
 	/**
 	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE ReferenceRandomByteSequence. It uses the default
-	 * HashMethod and the default seed of PseudoRandomGeneratorCounterMode. TODO: Break the is-a relationship and make
-	 * it a uses relationship! TODO: Bring in new methods for direct access to a certain position within the sequence!
+	 * HashAlgorithm and the default seed of PseudoRandomGeneratorCounterMode. TODO: Break the is-a relationship and
+	 * make it a uses relationship! TODO: Bring in new methods for direct access to a certain position within the
+	 * sequence!
 	 */
-	public static final ReferenceRandomByteSequence DEFAULT = ReferenceRandomByteSequence.getInstance(HashMethod.DEFAULT, CounterModeRandomByteSequence.DEFAULT_SEED);
+	public static final ReferenceRandomByteSequence DEFAULT = ReferenceRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
 
 	private transient HashMap<Integer, byte[]> randomByteBufferMap;
 	private int javaHashValue;
 
-	public ReferenceRandomByteSequence(HashMethod hashMethod, ByteArray seed) {
-		super(hashMethod, seed);
+	public ReferenceRandomByteSequence(HashAlgorithm hashAlgorithm, ByteArray seed) {
+		super(hashAlgorithm, seed);
 	}
 
+	@Override
 	protected byte[] getRandomByteBuffer(int counter) {
-		if (randomByteBufferMap == null) {
-			randomByteBufferMap = new HashMap<Integer, byte[]>();
+		if (this.randomByteBufferMap == null) {
+			this.randomByteBufferMap = new HashMap<Integer, byte[]>();
 		}
-		if (!randomByteBufferMap.containsKey(counter)) {
-			randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));
+		if (!this.randomByteBufferMap.containsKey(counter)) {
+			this.randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));
 		}
-		return randomByteBufferMap.get(counter);
+		return this.randomByteBufferMap.get(counter);
 	}
 
 	@Override
@@ -90,32 +92,32 @@ public class ReferenceRandomByteSequence
 	}
 
 	public static ReferenceRandomByteSequence getInstance() {
-		ReferenceRandomByteSequence sequence = new ReferenceRandomByteSequence(HashMethod.DEFAULT, DEFAULT_SEED);
+		ReferenceRandomByteSequence sequence = new ReferenceRandomByteSequence(HashAlgorithm.getInstance(), DEFAULT_SEED);
 		sequence.randomByteBufferMap = DEFAULT.randomByteBufferMap;
 		return sequence;
 	}
 
 	public static ReferenceRandomByteSequence getInstance(ByteArray seed) {
-		return ReferenceRandomByteSequence.getInstance(HashMethod.DEFAULT, seed);
+		return ReferenceRandomByteSequence.getInstance(HashAlgorithm.getInstance(), seed);
 	}
 
-	public static ReferenceRandomByteSequence getInstance(HashMethod hashMethod) {
-		return ReferenceRandomByteSequence.getInstance(hashMethod, CounterModeRandomByteSequence.DEFAULT_SEED);
+	public static ReferenceRandomByteSequence getInstance(HashAlgorithm hashAlgorithm) {
+		return ReferenceRandomByteSequence.getInstance(hashAlgorithm, CounterModeRandomByteSequence.DEFAULT_SEED);
 	}
 
-	public static ReferenceRandomByteSequence getInstance(HashMethod hashMethod, ByteArray seed) {
-		if (hashMethod == null || seed == null) {
+	public static ReferenceRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, ByteArray seed) {
+		if (hashAlgorithm == null || seed == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ReferenceRandomByteSequence(hashMethod, seed);
+		return new ReferenceRandomByteSequence(hashAlgorithm, seed);
 	}
 
 	@Override
 	public int hashCode() {
-		if (javaHashValue == 0) {
-			javaHashValue = getHashMethod().hashCode() + getSeed().hashCode();
+		if (this.javaHashValue == 0) {
+			this.javaHashValue = getHashAlgorithm().hashCode() + getSeed().hashCode();
 		}
-		return javaHashValue;
+		return this.javaHashValue;
 	}
 
 	@Override
@@ -127,14 +129,10 @@ public class ReferenceRandomByteSequence
 			return false;
 		}
 		final ReferenceRandomByteSequence other = (ReferenceRandomByteSequence) obj;
-		if (getHashMethod() != getHashMethod() && (!this.getHashMethod().equals(other.getHashMethod()))) {
+		if (getHashAlgorithm() != getHashAlgorithm() && (!this.getHashAlgorithm().equals(other.getHashAlgorithm()))) {
 			return false;
 		}
-
-		if (!this.getSeed().equals(other.getSeed())) {
-			return false;
-		}
-		return true;
+		return this.getSeed().equals(other.getSeed());
 	}
 
 	class StatefulCounterModeRandomByteSequence
@@ -142,18 +140,19 @@ public class ReferenceRandomByteSequence
 
 		private transient HashMap<Integer, byte[]> randomByteBufferMap;
 
-		public StatefulCounterModeRandomByteSequence(HashMethod hashMethod, ByteArray seed) {
-			super(hashMethod, seed);
+		public StatefulCounterModeRandomByteSequence(HashAlgorithm hashAlgorithm, ByteArray seed) {
+			super(hashAlgorithm, seed);
 		}
 
+		@Override
 		protected byte[] getRandomByteBuffer(int counter) {
-			if (randomByteBufferMap == null) {
-				randomByteBufferMap = new HashMap<Integer, byte[]>();
+			if (this.randomByteBufferMap == null) {
+				this.randomByteBufferMap = new HashMap<Integer, byte[]>();
 			}
-			if (!randomByteBufferMap.containsKey(counter)) {
-				randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));
+			if (!this.randomByteBufferMap.containsKey(counter)) {
+				this.randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));
 			}
-			return randomByteBufferMap.get(counter);
+			return this.randomByteBufferMap.get(counter);
 		}
 
 	}

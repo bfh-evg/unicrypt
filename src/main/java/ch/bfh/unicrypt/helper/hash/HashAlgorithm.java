@@ -39,62 +39,58 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.helper.hash;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.math.MathUtil;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
+import ch.bfh.unicrypt.helper.UniCrypt;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class FixedByteArraySet
-	   extends FiniteByteArraySet {
+public class HashAlgorithm
+	   extends UniCrypt {
 
-	private FixedByteArraySet(int length) {
-		super(length, length);
-	}
+	public static HashAlgorithm MD2 = new HashAlgorithm("MD2");
+	public static HashAlgorithm MD5 = new HashAlgorithm("MD5");
+	public static HashAlgorithm SHA1 = new HashAlgorithm("SHA-1");
+	public static HashAlgorithm SHA256 = new HashAlgorithm("SHA-256");
+	public static HashAlgorithm SHA384 = new HashAlgorithm("SHA-384");
+	public static HashAlgorithm SHA512 = new HashAlgorithm("SHA-512");
 
-	public int getLength() {
-		return this.getMinLength();
-	}
+	private final MessageDigest messageDigest;
 
-	@Override
-	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		// this imlementation is more efficient than the one from the parent class
-		return this.abstractGetElement(ByteArray.getRandomInstance(this.getLength(), randomByteSequence));
-	}
-
-	private static final Map<Integer, FixedByteArraySet> instances = new HashMap<Integer, FixedByteArraySet>();
-
-	public static FixedByteArraySet getInstance(final int length) {
-		if (length < 0) {
+	private HashAlgorithm(String algorithmName) {
+		try {
+			this.messageDigest = MessageDigest.getInstance(algorithmName);
+		} catch (final NoSuchAlgorithmException e) {
 			throw new IllegalArgumentException();
 		}
-		FixedByteArraySet instance = FixedByteArraySet.instances.get(Integer.valueOf(length));
-		if (instance == null) {
-			instance = new FixedByteArraySet(length);
-			FixedByteArraySet.instances.put(Integer.valueOf(length), instance);
-		}
-		return instance;
 	}
 
-	public static FixedByteArraySet getInstance(final BigInteger minOrder) {
-		if (minOrder == null || minOrder.signum() < 0) {
+	public byte[] getHashValue(byte[] bytes) {
+		if (bytes == null) {
 			throw new IllegalArgumentException();
 		}
-		int length = 0;
-		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger order = BigInteger.ONE;
-		while (order.compareTo(minOrder) < 0) {
-			order = order.multiply(size);
-			length++;
+		return this.messageDigest.digest(bytes);
+	}
+
+	public byte[] getHashValue(byte[] bytes, int offset, int length) {
+		if (bytes == null || offset < 0 || offset + length > bytes.length) {
+			throw new IllegalArgumentException();
 		}
-		return FixedByteArraySet.getInstance(length);
+		this.messageDigest.update(bytes, offset, length);
+		return this.messageDigest.digest();
+	}
+
+	// length of hash values in bytes
+	public int getHashLength() {
+		return this.messageDigest.getDigestLength();
+	}
+
+	public static HashAlgorithm getInstance() {
+		return HashAlgorithm.SHA256;
 	}
 
 }

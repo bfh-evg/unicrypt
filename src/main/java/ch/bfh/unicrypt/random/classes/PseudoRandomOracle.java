@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.abstracts.AbstractRandomOracle;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.HashMethod;
 import java.util.HashMap;
 
 /**
@@ -56,34 +56,34 @@ public class PseudoRandomOracle
 
 	HashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
 
-	public static final RandomOracle DEFAULT = PseudoRandomOracle.getInstance(HashMethod.DEFAULT);
+	public static final RandomOracle DEFAULT = PseudoRandomOracle.getInstance(HashAlgorithm.getInstance());
 
-	protected PseudoRandomOracle(HashMethod hashMethod) {
-		super(hashMethod);
-		referenceRandomByteSequence = new HashMap<ByteArray, ReferenceRandomByteSequence>();
+	protected PseudoRandomOracle(HashAlgorithm hashAlgorithm) {
+		super(hashAlgorithm);
+		this.referenceRandomByteSequence = new HashMap<ByteArray, ReferenceRandomByteSequence>();
 
 	}
 
 	//TODO: Warning, this is a memory-hog!
 	@Override
 	protected ReferenceRandomByteSequence abstractGetReferenceRandomByteSequence(ByteArray query) {
-		if (!referenceRandomByteSequence.containsKey(query)) {
-			referenceRandomByteSequence.put(query, ReferenceRandomByteSequence.getInstance(getHashMethod(), query));
+		if (!this.referenceRandomByteSequence.containsKey(query)) {
+			this.referenceRandomByteSequence.put(query, ReferenceRandomByteSequence.getInstance(getHashAlgorithm(), query));
 		}
-		ReferenceRandomByteSequence referenceString = referenceRandomByteSequence.get(query);
+		ReferenceRandomByteSequence referenceString = this.referenceRandomByteSequence.get(query);
 		referenceString.reset();
 		return referenceString;
 	}
 
 	public static RandomOracle getInstance() {
-		return DEFAULT;
+		return PseudoRandomOracle.DEFAULT;
 	}
 
-	public static RandomOracle getInstance(HashMethod hashMethod) {
-		if (hashMethod == null) {
+	public static RandomOracle getInstance(HashAlgorithm hashAlgorithm) {
+		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PseudoRandomOracle(hashMethod);
+		return new PseudoRandomOracle(hashAlgorithm);
 	}
 
 }

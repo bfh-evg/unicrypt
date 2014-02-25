@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -95,8 +96,8 @@ public class ByteArrayMonoid
 	protected ByteArrayElement abstractGetElementFrom(BigInteger value) {
 		int blockLength = this.getBlockLength();
 		LinkedList<Byte> byteList = new LinkedList<Byte>();
-		BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);
-		BigInteger blockSize = BigInteger.valueOf(1 << (Byte.SIZE * blockLength));
+		BigInteger byteSize = MathUtil.powerOfTwo(Byte.SIZE);
+		BigInteger blockSize = MathUtil.powerOfTwo(Byte.SIZE * blockLength);
 		while (!value.equals(BigInteger.ZERO)) {
 			value = value.subtract(BigInteger.ONE);
 			BigInteger remainder = value.mod(blockSize);

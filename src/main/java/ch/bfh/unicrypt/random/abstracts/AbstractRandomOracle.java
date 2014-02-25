@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.random.abstracts;
 
+import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.HashMethod;
-import ch.bfh.unicrypt.helper.UniCrypt;
 import java.math.BigInteger;
 
 /**
@@ -56,15 +56,15 @@ public abstract class AbstractRandomOracle
 	   extends UniCrypt
 	   implements RandomOracle {
 
-	private final HashMethod hashMethod;
+	private final HashAlgorithm hashAlgorithm;
 
-	protected AbstractRandomOracle(HashMethod hashMethod) {
-		this.hashMethod = hashMethod;
+	protected AbstractRandomOracle(HashAlgorithm hashAlgorithm) {
+		this.hashAlgorithm = hashAlgorithm;
 	}
 
 	@Override
-	public final HashMethod getHashMethod() {
-		return this.hashMethod;
+	public final HashAlgorithm getHashAlgorithm() {
+		return this.hashAlgorithm;
 	}
 
 	@Override

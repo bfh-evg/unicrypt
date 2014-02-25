@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.HashMethod;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 
 public class StandardHashScheme
 			 extends AbstractHashScheme<ByteArrayMonoid, ByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement> {

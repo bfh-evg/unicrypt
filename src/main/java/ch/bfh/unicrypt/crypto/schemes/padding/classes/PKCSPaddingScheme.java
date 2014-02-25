@@ -1,6 +1,7 @@
 package ch.bfh.unicrypt.crypto.schemes.padding.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.padding.abstracts.AbstractReversibleByteArrayPaddingScheme;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
@@ -64,14 +65,14 @@ public class PKCSPaddingScheme
 	}
 
 	public static PKCSPaddingScheme getInstance(ByteArrayMonoid byteArrayMonoid) {
-		if (byteArrayMonoid == null) {
+		if (byteArrayMonoid == null || byteArrayMonoid.getBlockLength() >= ByteArray.BYTE_ORDER) {
 			throw new IllegalArgumentException();
 		}
 		return new PKCSPaddingScheme(byteArrayMonoid);
 	}
 
 	public static PKCSPaddingScheme getInstance(int blockLength) {
-		return new PKCSPaddingScheme(ByteArrayMonoid.getInstance(blockLength));
+		return PKCSPaddingScheme.getInstance(ByteArrayMonoid.getInstance(blockLength));
 	}
 
 }

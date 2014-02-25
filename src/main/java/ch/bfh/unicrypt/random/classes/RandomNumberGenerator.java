@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -97,7 +97,7 @@ public class RandomNumberGenerator
 	 * @return The random int
 	 */
 	public final int nextInteger() {
-		return nextInteger(Integer.MAX_VALUE);
+		return this.nextInteger(Integer.MAX_VALUE);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class RandomNumberGenerator
 		if (maxValue < 0) {
 			throw new IllegalArgumentException();
 		}//This is a slow implementation.
-		return nextBigInteger(BigInteger.valueOf(maxValue)).intValue();
+		return this.nextBigInteger(BigInteger.valueOf(maxValue)).intValue();
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class RandomNumberGenerator
 		if (bitLength == 0) {
 			return BigInteger.ZERO;
 		}
-		return internalNextBigInteger(bitLength, true);
+		return this.internalNextBigInteger(bitLength, true);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class RandomNumberGenerator
 		BigInteger randomValue;
 		int bitLength = maxValue.bitLength();
 		do {
-			randomValue = internalNextBigInteger(bitLength, false);
+			randomValue = this.internalNextBigInteger(bitLength, false);
 		} while (randomValue.compareTo(maxValue) > 0);
 		return randomValue;
 	}
@@ -189,11 +189,11 @@ public class RandomNumberGenerator
 		if (bitLength < 2) {
 			throw new IllegalArgumentException();
 		}
-		BigInteger bigInteger = null;
+		BigInteger prime;
 		do {
-			bigInteger = internalNextBigInteger(bitLength, true);
-		} while (!bigInteger.isProbablePrime(MathUtil.NUMBER_OF_PRIME_TESTS));
-		return bigInteger;
+			prime = this.internalNextBigInteger(bitLength, true);
+		} while (!MathUtil.isPrime(prime));
+		return prime;
 	}
 
 	/**
@@ -232,8 +232,8 @@ public class RandomNumberGenerator
 		BigInteger minValue, maxValue;
 		do {
 			prime2 = this.nextPrime(bitLength2);
-			minValue = BigInteger.ONE.shiftLeft(bitLength1 - 1);
-			maxValue = BigInteger.ONE.shiftLeft(bitLength1).subtract(BigInteger.ONE);
+			minValue = MathUtil.powerOfTwo(bitLength1 - 1);
+			maxValue = MathUtil.powerOfTwo(bitLength1).subtract(BigInteger.ONE);
 			k = this.nextBigInteger(minValue.divide(prime2).add(BigInteger.ONE), maxValue.divide(prime2));
 			prime1 = prime2.multiply(k).add(BigInteger.ONE);
 		} while (!MathUtil.isPrime(prime1));
@@ -245,7 +245,7 @@ public class RandomNumberGenerator
 			return BigInteger.ZERO;
 		}
 		int amountOfBytes = (int) Math.ceil(bitLength / 8.0);
-		byte[] bytes = nextBytes(amountOfBytes);
+		byte[] bytes = this.nextBytes(amountOfBytes);
 
 		int shift = 8 - (bitLength % 8);
 		if (shift == 8) {

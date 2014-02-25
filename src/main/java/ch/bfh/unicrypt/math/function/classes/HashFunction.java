@@ -41,15 +41,15 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.HashMethod;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a hash function, which maps an arbitrarily long input element into an element of
@@ -97,7 +97,7 @@ public class HashFunction
 	 * @return
 	 */
 	public static HashFunction getInstance(Set domain) {
-		return HashFunction.getInstance(domain, HashMethod.DEFAULT);
+		return HashFunction.getInstance(domain, HashMethod.getInstance());
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class HashFunction
 		if (domain == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new HashFunction(domain, FiniteByteArraySet.getInstance(hashMethod.getLength()), hashMethod);
+		return new HashFunction(domain, FiniteByteArraySet.getInstance(hashMethod.getHashAlgorithm().getHashLength()), hashMethod);
 	}
 
 }

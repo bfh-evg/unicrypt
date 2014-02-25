@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -103,7 +104,7 @@ public class FiniteByteArraySet
 			return null; // no such element
 		}
 		int minLength = this.getMinLength();
-		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
 		LinkedList<Byte> byteList = new LinkedList<Byte>();
 		while (!value.equals(BigInteger.ZERO) || byteList.size() < minLength) {
 			if (byteList.size() >= minLength) {
@@ -120,9 +121,9 @@ public class FiniteByteArraySet
 		int length = value.getLength();
 		int minLength = this.getMinLength();
 		BigInteger result = BigInteger.ZERO;
-		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
 		for (int i = 0; i < length; i++) {
-			int intValue = value.getAt(i) & 0xFF;
+			int intValue = value.getIntAt(i);
 			if (i < length - minLength) {
 				intValue++;
 			}
@@ -150,7 +151,7 @@ public class FiniteByteArraySet
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
 		BigInteger order = BigInteger.ONE;
 		for (int i = 0; i < this.getMaxLength() - this.getMinLength(); i++) {
 			order = order.multiply(size).add(BigInteger.ONE);
@@ -201,7 +202,7 @@ public class FiniteByteArraySet
 			throw new IllegalArgumentException();
 		}
 		int maxLength = minLength;
-		BigInteger size = BigInteger.valueOf(1 << Byte.SIZE);
+		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
 		BigInteger order1 = size.pow(minLength);
 		BigInteger order2 = BigInteger.ONE;
 		while (order1.multiply(order2).compareTo(minOrder) < 0) {
