@@ -41,14 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.numerical.WholeNumber;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
-import ch.bfh.unicrypt.helper.numerical.WholeNumber;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -153,25 +151,8 @@ public class Z
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(WholeNumber value) {
-		return MathUtil.fold(value.getBigInteger());
-	}
-
-	@Override
-	protected ZElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			BigInteger bigInteger = ((ByteTreeLeaf) byteTree).convertToBigInteger();
-			if (this.contains(bigInteger)) {
-				return this.abstractGetElement(WholeNumber.getInstance(bigInteger));
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(WholeNumber value) {
-		return ByteTree.getInstance(value.getBigInteger());
+	protected BigInteger abstractGetBigIntegerFrom(ZElement element) {
+		return MathUtil.fold(element.getValue().getBigInteger());
 	}
 
 	@Override

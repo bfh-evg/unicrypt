@@ -41,11 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -117,23 +116,8 @@ public class Subset
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(Object value) {
-		return this.abstractGetElement(value).getBigInteger();
-	}
-
-	@Override
-	protected Element abstractGetElementFrom(ByteTree byteTree) {
-		Element element = this.getSuperset().getElementFrom(byteTree);
-		if (element != null && this.contains(element)) {
-			return element;
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(Object value) {
-		return this.abstractGetElement(value).getByteTree();
+	protected BigInteger abstractGetBigIntegerFrom(Element element) {
+		return this.superSet.getBigIntegerFrom(element);
 	}
 
 	@Override

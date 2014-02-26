@@ -41,7 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.compound.Compound;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -50,8 +52,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.compound.Compound;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -260,21 +261,23 @@ public interface Set<V extends Object> {
 	 * Creates and returns the element that corresponds to a given integer (if one exists). Returns {@literal null}
 	 * otherwise.
 	 * <p>
-	 * @param integerValue The given integer value
+	 * @param integer The given integer value
 	 * @return The corresponding element, or {@literal null} if no such element exists
 	 * @throws IllegalArgumentException if {@literal integerValue} is null
 	 */
-	public Element<V> getElementFrom(int integerValue);
+	public Element<V> getElementFrom(int integer);
 
 	/**
 	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists). Returns
 	 * {@literal null} otherwise.
 	 * <p>
-	 * @param integerValue The given BigInteger value
+	 * @param bigInteger The given BigInteger value
 	 * @return The corresponding element, or {@literal null} if no such element exists
 	 * @throws IllegalArgumentException if {@literal integerValue} is null
 	 */
-	public Element<V> getElementFrom(BigInteger integerValue);
+	public Element<V> getElementFrom(BigInteger bigInteger);
+
+	public Element<V> getElementFrom(ByteArray byteArray);
 
 	/**
 	 * TODO
@@ -333,6 +336,8 @@ public interface Set<V extends Object> {
 	public boolean isEquivalent(Set set);
 
 	public BigInteger getBigIntegerFrom(Element element);
+
+	public ByteArray getByteArrayFrom(Element element);
 
 	public ByteTree getByteTreeFrom(Element element);
 

@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.polynomial.BinaryPolynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractFiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -143,26 +141,13 @@ public class BinaryPolynomialField
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(BinaryPolynomial value) {
-		return new BigInteger(value.getCoefficients().getAll());
+	protected BigInteger abstractGetBigIntegerFrom(BinaryPolynomialElement element) {
+		return new BigInteger(this.defaultGetByteArrayFrom(element).getAll());
 	}
 
 	@Override
-	protected BinaryPolynomialElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getBinaryData();
-			if (this.contains(byteArray)) {
-				return this.abstractGetElement(BinaryPolynomial.getInstance(byteArray));
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(BinaryPolynomial value
-	) {
-		return ByteTree.getInstance(value.getCoefficients());
+	protected ByteArray defaultGetByteArrayFrom(BinaryPolynomialElement element) {
+		return element.getValue().getCoefficients();
 	}
 
 	@Override

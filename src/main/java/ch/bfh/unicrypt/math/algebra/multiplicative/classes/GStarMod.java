@@ -41,16 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
 import ch.bfh.unicrypt.helper.factorization.SpecialFactorization;
 import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
 import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -194,25 +192,8 @@ public class GStarMod
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ResidueClass value) {
-		return value.getBigInteger();
-	}
-
-	@Override
-	protected GStarModElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			BigInteger bigInteger = ((ByteTreeLeaf) byteTree).convertToBigInteger();
-			if (this.contains(bigInteger)) {
-				return this.abstractGetElement(ResidueClass.getInstance(bigInteger, this.modulus));
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(ResidueClass value) {
-		return ByteTree.getInstance(value.getBigInteger());
+	protected BigInteger abstractGetBigIntegerFrom(GStarModElement element) {
+		return element.getValue().getBigInteger();
 	}
 
 	@Override

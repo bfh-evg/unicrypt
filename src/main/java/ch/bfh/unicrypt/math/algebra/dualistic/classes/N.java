@@ -41,13 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
-import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -139,25 +137,8 @@ public class N
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(NaturalNumber value) {
-		return value.getBigInteger();
-	}
-
-	@Override
-	protected NElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			BigInteger bigInteger = ((ByteTreeLeaf) byteTree).convertToBigInteger();
-			if (this.contains(bigInteger)) {
-				return this.abstractGetElement(NaturalNumber.getInstance(bigInteger));
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(NaturalNumber value) {
-		return ByteTree.getInstance(value.getBigInteger());
+	protected BigInteger abstractGetBigIntegerFrom(NElement element) {
+		return element.getValue().getBigInteger();
 	}
 
 	@Override

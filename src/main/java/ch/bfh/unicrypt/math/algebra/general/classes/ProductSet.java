@@ -41,7 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
+import ch.bfh.unicrypt.helper.compound.Compound;
+import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -49,12 +54,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
-import ch.bfh.unicrypt.helper.compound.Compound;
-import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -166,16 +166,17 @@ public class ProductSet
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ImmutableArray<Element> value) {
-		BigInteger[] integerValues = new BigInteger[this.getArity()];
-		for (int i = 0; i < this.getArity(); i++) {
-			integerValues[i] = value.getAt(i).getBigInteger();
+	protected BigInteger abstractGetBigIntegerFrom(Tuple tuple) {
+		BigInteger[] bigIntegers = new BigInteger[this.getArity()];
+		int i = 0;
+		for (Element element : tuple.getValue()) {
+			bigIntegers[i++] = element.getBigInteger();
 		}
-		return MathUtil.pair(integerValues);
+		return MathUtil.pair(bigIntegers);
 	}
 
 	@Override
-	protected Tuple abstractGetElementFrom(ByteTree byteTree) {
+	protected Tuple defaultGetElementFrom(ByteTree byteTree) {
 		if (!byteTree.isLeaf()) {
 			int arity = this.getArity();
 			ImmutableArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
@@ -196,10 +197,11 @@ public class ProductSet
 	}
 
 	@Override
-	protected ByteTree abstractGetByteTreeFrom(ImmutableArray<Element> value) {
+	protected ByteTree defaultGetByteTreeFrom(Tuple tuple) {
 		ByteTree[] byteTrees = new ByteTree[this.getArity()];
-		for (int i = 0; i < this.getArity(); i++) {
-			byteTrees[i] = value.getAt(i).getByteTree();
+		int i = 0;
+		for (Element element : tuple.getValue()) {
+			byteTrees[i++] = element.getByteTree();
 		}
 		return ByteTree.getInstance(byteTrees);
 	}

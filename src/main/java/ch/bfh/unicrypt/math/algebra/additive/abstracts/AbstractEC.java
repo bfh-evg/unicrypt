@@ -42,11 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
 import ch.bfh.unicrypt.helper.Point;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
@@ -160,40 +155,12 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(Point<DualisticElement<V>> value) {
-		if (value.equals(this.infinityPoint)) {
+	protected BigInteger abstractGetBigIntegerFrom(ECElement<V> element) {
+		Point<DualisticElement<V>> point = element.getValue();
+		if (point.equals(this.infinityPoint)) {
 			return BigInteger.ZERO;
 		}
-		return MathUtil.pair(value.getX().getBigInteger(), value.getY().getBigInteger()).add(BigInteger.ONE);
-	}
-
-	@Override
-	protected ECElement<V> abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getBinaryData();
-			if (byteArray.getLength() == 0) {
-				return this.getIdentityElement();
-			}
-		} else {
-			ImmutableArray<ByteTree> nodes = ((ByteTreeNode) byteTree).getByteTrees();
-			if (nodes.getArity() == 2) {
-				DualisticElement<V> xValue = this.getFiniteField().getElementFrom(nodes.getAt(0));
-				DualisticElement<V> yValue = this.getFiniteField().getElementFrom(nodes.getAt(1));
-				if (xValue != null && yValue != null) {
-					return this.getElement(xValue, yValue);
-				}
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(Point<DualisticElement<V>> value) {
-		if (value.equals(this.infinityPoint)) {
-			return ByteTree.getInstance(ByteArray.getInstance());
-		}
-		return ByteTree.getInstance(value.getX().getByteTree(), value.getY().getByteTree());
+		return MathUtil.pair(point.getX().getBigInteger(), point.getY().getBigInteger()).add(BigInteger.ONE);
 	}
 
 	@Override

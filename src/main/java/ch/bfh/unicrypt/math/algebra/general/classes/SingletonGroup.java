@@ -41,11 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -96,25 +94,8 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(BigInteger value) {
-		return value;
-	}
-
-	@Override
-	protected SingletonElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			BigInteger bigInteger = ((ByteTreeLeaf) byteTree).convertToBigInteger();
-			if (this.contains(bigInteger)) {
-				return this.abstractGetElement(bigInteger);
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(BigInteger value) {
-		return ByteTree.getInstance(value);
+	protected BigInteger abstractGetBigIntegerFrom(SingletonElement element) {
+		return element.getValue();
 	}
 
 	@Override

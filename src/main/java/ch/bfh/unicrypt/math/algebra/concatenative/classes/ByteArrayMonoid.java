@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -111,40 +109,20 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ByteArray value) {
+	protected BigInteger abstractGetBigIntegerFrom(ByteArrayElement element) {
+		ByteArray value = element.getValue();
 		BigInteger value1 = new BigInteger(1, value.getAll());
 		BigInteger value2 = BigInteger.ZERO;
 		int blockLength = this.getBlockLength();
-
-		//As I do not know what this code really should do, I just tuned it... but the variable names I have chosen ... are stupid.
-		//Futher tuning by removing the for loop and do it mathematically!
-		//TODO: Describe what it does!
 		if (value.getLength() > 0) {
-			byte[] oneOone = new byte[value.getLength()];
-			int amount = oneOone.length / blockLength;
+			byte[] bytes = new byte[value.getLength()];
+			int amount = bytes.length / blockLength;
 			for (int i = 0; i < amount; i++) {
-				oneOone[(oneOone.length - 1) - (i * blockLength)] = 1; //It does something like: 100000000100000000100000000 ->MSB
+				bytes[(bytes.length - 1) - (i * blockLength)] = 1;
 			}
-			value2 = new BigInteger(1, oneOone);
+			value2 = new BigInteger(1, bytes);
 		}
 		return value1.add(value2);
-	}
-
-	@Override
-	protected ByteArrayElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getBinaryData();
-			if (this.contains(byteArray)) {
-				return this.abstractGetElement(byteArray);
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(ByteArray value) {
-		return ByteTree.getInstance(value);
 	}
 
 	@Override

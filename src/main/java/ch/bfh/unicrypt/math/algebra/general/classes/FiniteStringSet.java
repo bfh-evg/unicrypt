@@ -41,12 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -111,36 +109,19 @@ public class FiniteStringSet
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(String value) {
+	protected BigInteger abstractGetBigIntegerFrom(FiniteStringElement element) {
+		String value = element.getValue();
 		int length = value.length();
-		int minLength = this.getMinLength();
 		BigInteger result = BigInteger.ZERO;
 		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
 		for (int i = 0; i < length; i++) {
 			int charIndex = this.getAlphabet().getIndex(value.charAt(i));
-			if (i < length - minLength) {
+			if (i < length - this.minLength) {
 				charIndex++;
 			}
 			result = result.multiply(size).add(BigInteger.valueOf(charIndex));
 		}
 		return result;
-	}
-
-	@Override
-	protected FiniteStringElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			String string = ((ByteTreeLeaf) byteTree).convertToString();
-			if (this.contains(string)) {
-				return this.abstractGetElement(string);
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(String value) {
-		return ByteTree.getInstance(value);
 	}
 
 	@Override

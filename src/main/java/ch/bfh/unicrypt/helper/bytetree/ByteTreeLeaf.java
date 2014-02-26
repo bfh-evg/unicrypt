@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.bytetree;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 /**
@@ -69,27 +68,6 @@ public class ByteTreeLeaf
 
 	public ByteArray getBinaryData() {
 		return this.binaryData;
-	}
-
-	public int[] convertToIntArray() {
-		if (this.binaryData.getLength() % LENGTH_OF_INTEGER != 0) {
-			// not possible
-			return null;
-		}
-		int amount = this.binaryData.getLength() / LENGTH_OF_INTEGER;
-		int[] integers = new int[amount];
-		for (int i = 0; i < amount; i++) {
-			integers[i] = new BigInteger(this.binaryData.extract(i * LENGTH_OF_INTEGER, LENGTH_OF_INTEGER).getAll()).intValue();
-		}
-		return integers;
-	}
-
-	public BigInteger convertToBigInteger() {
-		return new BigInteger(this.binaryData.getAll());
-	}
-
-	public String convertToString() {
-		return new String(this.binaryData.getAll());
 	}
 
 	@Override

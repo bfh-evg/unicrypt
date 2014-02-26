@@ -151,35 +151,6 @@ public abstract class ByteTree
 		return this instanceof ByteTreeLeaf;
 	}
 
-	public final static ByteTreeLeaf getInstance(int... integers) {
-		if (integers == null) {
-			throw new IllegalArgumentException();
-		}
-		ByteBuffer byteBuffer = ByteBuffer.allocate(integers.length * LENGTH_OF_INTEGER);
-		for (int integer : integers) {
-			byteBuffer.putInt(integer);
-		}
-		return new ByteTreeLeaf(new SafeByteArray(byteBuffer.array()));
-	}
-
-	public final static ByteTreeLeaf getInstance(BigInteger bigInteger) {
-		if (bigInteger == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ByteTreeLeaf(new SafeByteArray(bigInteger.toByteArray()));
-	}
-
-	public final static ByteTreeLeaf getInstance(String string) {
-		if (string == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ByteTreeLeaf(new SafeByteArray(string.getBytes()));
-	}
-
-	public final static ByteTreeLeaf getInstance(boolean bit) {
-		return new ByteTreeLeaf(new SafeByteArray(new byte[]{bit ? (byte) 1 : (byte) 0}));
-	}
-
 	public final static ByteTreeLeaf getInstance(ByteArray byteArray) {
 		if (byteArray == null) {
 			throw new IllegalArgumentException();

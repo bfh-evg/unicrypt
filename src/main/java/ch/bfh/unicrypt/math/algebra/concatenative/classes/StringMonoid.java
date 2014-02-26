@@ -41,12 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -105,7 +103,8 @@ public class StringMonoid
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(String value) {
+	protected BigInteger abstractGetBigIntegerFrom(StringElement element) {
+		String value = element.getValue();
 		BigInteger value1 = BigInteger.ZERO;
 		BigInteger alphabetSize = BigInteger.valueOf(this.getAlphabet().getSize());
 		for (int i = 0; i < value.length(); i++) {
@@ -119,23 +118,6 @@ public class StringMonoid
 			value2 = value2.multiply(blockSize).add(BigInteger.ONE);
 		}
 		return value1.add(value2);
-	}
-
-	@Override
-	protected StringElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			String string = ((ByteTreeLeaf) byteTree).convertToString();
-			if (this.contains(string)) {
-				return this.abstractGetElement(string);
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(String value) {
-		return ByteTree.getInstance(value);
 	}
 
 	@Override

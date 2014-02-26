@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.polynomial.GenericPolynomial;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
@@ -178,30 +177,13 @@ public class PolynomialSemiRing<V extends Object>
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(GenericPolynomial<DualisticElement<V>> value) {
-		int degree = value.getDegree();
+	protected BigInteger abstractGetBigIntegerFrom(PolynomialElement<V> element) {
+		int degree = element.getValue().getDegree();
 		BigInteger[] values = new BigInteger[degree + 1];
 		for (int i = 0; i <= degree; i++) {
-			values[i] = value.getCoefficient(i).getBigInteger();
+			values[i] = element.getValue().getCoefficient(i).getBigInteger();
 		}
 		return MathUtil.pairWithSize(values);
-	}
-
-	@Override
-	protected PolynomialElement abstractGetElementFrom(ByteTree byteTree) {
-		// TODO: See below
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(GenericPolynomial<DualisticElement<V>> value) {
-		// TODO: this is not optimal (maybe it can be generalized to ImmutableArray
-		int degree = value.getDegree();
-		ByteTree[] byteTrees = new ByteTree[degree + 1];
-		for (int i = 0; i <= degree; i++) {
-			byteTrees[i] = value.getCoefficient(i).getByteTree();
-		}
-		return ByteTree.getInstance(byteTrees);
 	}
 
 	@Override

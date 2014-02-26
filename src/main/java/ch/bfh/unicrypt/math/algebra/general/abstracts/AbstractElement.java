@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
@@ -86,6 +87,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	// the following fields are needed for optimizations
 	private BigInteger bigInteger;
+	private ByteArray byteArray;
 	private ByteTree byteTree;
 	private final HashMap<HashMethod, FiniteByteArrayElement> hashValues;
 
@@ -146,6 +148,14 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 			this.bigInteger = this.set.getBigIntegerFrom(this);
 		}
 		return this.bigInteger;
+	}
+
+	@Override
+	public ByteArray getByteArray() {
+		if (this.byteArray == null) {
+			this.byteArray = this.set.getByteArrayFrom(this);
+		}
+		return this.byteArray;
 	}
 
 	@Override

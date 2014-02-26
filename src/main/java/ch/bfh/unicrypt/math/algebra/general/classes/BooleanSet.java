@@ -41,9 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -112,33 +109,11 @@ public class BooleanSet
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(Boolean value) {
-		if (value) {
+	protected BigInteger abstractGetBigIntegerFrom(BooleanElement element) {
+		if (element.getValue()) {
 			return BigInteger.ONE;
 		}
 		return BigInteger.ZERO;
-	}
-
-	@Override
-	protected BooleanElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getBinaryData();
-			if (byteArray.getLength() == 1) {
-				if (byteArray.getAt(0) == 0) {
-					return this.abstractGetElement(false);
-				}
-				if (byteArray.getAt(0) == 1) {
-					return this.abstractGetElement(true);
-				}
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(Boolean value) {
-		return ByteTree.getInstance(value);
 	}
 
 	@Override

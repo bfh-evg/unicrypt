@@ -41,9 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import java.math.BigInteger;
 
 /**
@@ -84,6 +85,8 @@ public interface Element<V extends Object> {
 	public V getValue();
 
 	public BigInteger getBigInteger();
+
+	public ByteArray getByteArray();
 
 	public ByteTree getByteTree();
 

@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.Permutation;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -138,29 +136,9 @@ public class PermutationGroup
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(Permutation value) {
+	protected BigInteger abstractGetBigIntegerFrom(PermutationElement element) {
 		// better with Lehmer codes
-		return MathUtil.pair(value.getPermutationVector());
-	}
-
-	@Override
-	protected PermutationElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			int[] permutationVector = ((ByteTreeLeaf) byteTree).convertToIntArray();
-			if (permutationVector != null && Permutation.isValid(permutationVector)) {
-				Permutation permutation = Permutation.getInstance(permutationVector);
-				if (this.contains(permutation)) {
-					return this.abstractGetElement(permutation);
-				}
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(Permutation value) {
-		return ByteTree.getInstance(value.getPermutationVector());
+		return MathUtil.pair(element.getValue().getPermutationVector());
 	}
 
 	@Override

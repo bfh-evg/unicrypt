@@ -41,15 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
 import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -173,25 +171,8 @@ public class ZMod
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ResidueClass value) {
-		return value.getBigInteger();
-	}
-
-	@Override
-	protected ZModElement abstractGetElementFrom(ByteTree byteTree) {
-		if (byteTree.isLeaf()) {
-			BigInteger bigInteger = ((ByteTreeLeaf) byteTree).convertToBigInteger();
-			if (this.contains(bigInteger)) {
-				return this.abstractGetElement(ResidueClass.getInstance(bigInteger, this.modulus));
-			}
-		}
-		// no such element
-		return null;
-	}
-
-	@Override
-	protected ByteTree abstractGetByteTreeFrom(ResidueClass value) {
-		return ByteTree.getInstance(value.getBigInteger());
+	protected BigInteger abstractGetBigIntegerFrom(ZModElement element) {
+		return element.getValue().getBigInteger();
 	}
 
 	@Override
