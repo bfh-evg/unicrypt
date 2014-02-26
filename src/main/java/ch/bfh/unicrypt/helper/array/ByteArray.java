@@ -96,6 +96,44 @@ public class ByteArray
 		return this.getAt(index) & BYTE_MASK;
 	}
 
+	public boolean getBitAt(int bitIndex) {
+		int byteIndex = bitIndex / Byte.SIZE;
+		byte b = this.getAt(byteIndex);
+		return (b & (1 << (bitIndex % Byte.SIZE))) != 0;
+	}
+
+	public int countLeadingZeros() {
+		int result = 0;
+		for (int i = 0; i < this.length * Byte.SIZE; i++) {
+			if (this.getBitAt(i)) {
+				return result;
+			}
+			result++;
+		}
+		return result;
+	}
+
+	public int countTrailingZeros() {
+		int result = 0;
+		for (int i = this.length * Byte.SIZE - 1; i >= 0; i--) {
+			if (this.getBitAt(i)) {
+				return result;
+			}
+			result++;
+		}
+		return result;
+	}
+
+	public int countBits() {
+		int result = 0;
+		for (int i = 0; i < this.length * Byte.SIZE; i++) {
+			if (this.getBitAt(i)) {
+				result++;
+			}
+		}
+		return result;
+	}
+
 	public ByteArray extractPrefix(int length) {
 		return this.extract(0, length);
 	}
@@ -306,7 +344,7 @@ public class ByteArray
 		if (fillbit) {
 			Arrays.fill(bytes, ALL_ONE);
 		}
-		return new ByteArray(new byte[length]);
+		return new ByteArray(bytes);
 	}
 
 	public static ByteArray getInstance(byte... bytes) {

@@ -44,6 +44,8 @@ package ch.bfh.unicrypt.helper;
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -59,6 +61,35 @@ public class ByteArrayTest {
 	public static ByteArray a4 = ByteArray.getInstance(9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
 
 	public ByteArrayTest() {
+	}
+
+	@Test
+	public void testGetBitOperations() {
+		ByteArray b = ByteArray.getInstance("12|34"); // 00010010|00110100
+		assertTrue(b.getBitAt(1));
+		assertTrue(b.getBitAt(4));
+		assertTrue(b.getBitAt(10));
+		assertTrue(b.getBitAt(12));
+		assertTrue(b.getBitAt(13));
+		assertFalse(b.getBitAt(0));
+		assertFalse(b.getBitAt(2));
+		assertFalse(b.getBitAt(3));
+		assertFalse(b.getBitAt(5));
+		assertFalse(b.getBitAt(6));
+		assertFalse(b.getBitAt(7));
+		assertFalse(b.getBitAt(8));
+		assertFalse(b.getBitAt(9));
+		assertFalse(b.getBitAt(11));
+		assertFalse(b.getBitAt(14));
+		assertFalse(b.getBitAt(15));
+		assertEquals(1, b.countLeadingZeros());
+		assertEquals(2, b.countTrailingZeros());
+		assertEquals(5, b.countBits());
+		assertEquals(0, a0.countBits());
+		assertEquals(15, a1.countBits());
+		assertEquals(0, a2.countBits());
+		assertEquals(160, a3.countBits());
+		assertEquals(15, a4.countBits());
 	}
 
 	@Test

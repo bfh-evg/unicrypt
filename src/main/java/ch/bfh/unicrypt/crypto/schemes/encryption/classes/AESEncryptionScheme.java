@@ -68,7 +68,7 @@ public class AESEncryptionScheme
 
 	public enum KeyLength {
 
-		KEY128(128), KEY192(192), KEY256(226); // bits
+		KEY128(128), KEY192(192), KEY256(256); // bits
 		private final int length;
 
 		private KeyLength(int length) {

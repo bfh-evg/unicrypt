@@ -95,7 +95,7 @@ public class HashMethod
 	}
 
 	public static HashMethod getInstance() {
-		return HashMethod.getInstance(HashAlgorithm.SHA256, true);
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), true);
 	}
 
 	public static HashMethod getInstance(HashAlgorithm hashAlgorithm) {
