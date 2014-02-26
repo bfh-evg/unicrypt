@@ -54,14 +54,16 @@ import java.util.TreeSet;
  * @author philipp
  * @param <C>
  */
-public class Polynomial<C extends Object>
+public class Polynomial<C>
 	   extends UniCrypt {
+
+	public static final int ZERO_POLYNOMIAL_DEGREE = -1;
 
 	/** Polynomial's degree. */
 	private final int degree;
-	/** Holds the coefficients. It might be null if the polynomial is binary. */
+	/** Holds the coefficients. Might be null if the polynomial is binary. */
 	private final Map<Integer, C> coefficients;
-	/** Holds the coefficients of binary polynomials. It is null if the polynomial is not binary. */
+	/** Holds the coefficients of binary polynomials. Is null if the polynomial is not binary. */
 	private final ByteArray binaryCoefficients;
 
 	/** Polynomial's zero coefficient. */
@@ -83,37 +85,51 @@ public class Polynomial<C extends Object>
 			maxIndex = Math.max(maxIndex, index);
 			isBinary = this.oneCoefficient.equals(coefficients.get(index)) && isBinary;
 		}
-		this.degree = maxIndex;
+		if (maxIndex == 0) {
+			C c = coefficients.get(0);
+			this.degree = c == null || zeroCoefficient.equals(c) ? ZERO_POLYNOMIAL_DEGREE : maxIndex;
+		} else {
+			this.degree = maxIndex;
+		}
 
 		if (isBinary) {
-			byte[] bytes = new byte[(int) Math.ceil((this.degree + 1) / 8.0)];
-			Arrays.fill(bytes, (byte) 0x00);
-			for (Integer index : coefficients.keySet()) {
-				int byteIndex = index / Byte.SIZE;
-				int bitIndex = index % Byte.SIZE;
-				bytes[byteIndex] = (byte) (bytes[byteIndex] | (0x01 << bitIndex));
+			if (this.degree == ZERO_POLYNOMIAL_DEGREE) {
+				this.binaryCoefficients = ByteArray.getInstance();
+			} else {
+				byte[] bytes = new byte[(int) Math.ceil((this.degree + 1) / 8.0)];
+				Arrays.fill(bytes, (byte) 0x00);
+				for (Integer index : coefficients.keySet()) {
+					int byteIndex = index / Byte.SIZE;
+					int bitIndex = index % Byte.SIZE;
+					bytes[byteIndex] = (byte) (bytes[byteIndex] | (0x01 << bitIndex));
+				}
+				this.binaryCoefficients = ByteArray.getInstance(bytes);
 			}
-			this.binaryCoefficients = ByteArray.getInstance(bytes);
 		} else {
 			this.binaryCoefficients = null;
 		}
 	}
 
-	private Polynomial(ByteArray coefficients) {
+	private Polynomial(ByteArray coefficients, C zeroCoefficient, C oneCoefficient) {
 		this.coefficients = null;
 		this.binaryCoefficients = coefficients;
-		this.zeroCoefficient = (C) Boolean.FALSE;
-		this.oneCoefficient = (C) Boolean.TRUE;
+		this.zeroCoefficient = zeroCoefficient;
+		this.oneCoefficient = oneCoefficient;
 
-		int byteIndex = 0;
-		for (int i = 0; i < this.binaryCoefficients.getLength(); i++) {
-			if (this.binaryCoefficients.getAt(i) != 0) {
-				byteIndex = i;
+		if (coefficients.getLength() == 0) {
+			this.degree = ZERO_POLYNOMIAL_DEGREE;
+		} else {
+			int byteIndex = 0;
+			for (int i = 0; i < this.binaryCoefficients.getLength(); i++) {
+				if (this.binaryCoefficients.getAt(i) != 0) {
+					byteIndex = i;
+				}
 			}
+			byte b = coefficients.getAt(byteIndex);
+			int bitIndex = Integer.SIZE - Integer.numberOfLeadingZeros(b & 0xff);
+			int d = byteIndex * Byte.SIZE + bitIndex - 1;
+			this.degree = d < 0 ? ZERO_POLYNOMIAL_DEGREE : d;
 		}
-		byte b = coefficients.getLength() > 0 ? coefficients.getAt(byteIndex) : 0;
-		int bitIndex = Integer.SIZE - Integer.numberOfLeadingZeros(b & 0xff);
-		this.degree = Math.max(0, byteIndex * Byte.SIZE + bitIndex - 1);
 	}
 
 	public int getDegree() {
@@ -122,6 +138,14 @@ public class Polynomial<C extends Object>
 
 	public boolean isBinary() {
 		return this.binaryCoefficients != null;
+	}
+
+	public boolean isZeroPolynomial() {
+		return this.degree == ZERO_POLYNOMIAL_DEGREE;
+	}
+
+	public boolean isMonic() {
+		return !this.isZeroPolynomial() && this.oneCoefficient.equals(this.getCoefficient(this.degree));
 	}
 
 	public C getCoefficient(int index) {
@@ -260,11 +284,11 @@ public class Polynomial<C extends Object>
 		return new Polynomial<C>(result, zeroCoefficient, oneCoefficient);
 	}
 
-	public static Polynomial<Boolean> getInstance(ByteArray coefficients) {
-		if (coefficients == null) {
+	public static <C> Polynomial<C> getInstance(ByteArray coefficients, C zeroCoefficient, C oneCoefficient) {
+		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Polynomial<Boolean>(coefficients.getLength() == 0 ? ByteArray.getInstance(0x00) : coefficients);
+		return new Polynomial<C>(coefficients, zeroCoefficient, oneCoefficient);
 	}
 
 }

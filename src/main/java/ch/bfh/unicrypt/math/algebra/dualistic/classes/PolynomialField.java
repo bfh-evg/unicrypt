@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
-import ch.bfh.unicrypt.helper.polynomial.GenericPolynomial;
 import java.math.BigInteger;
 
 /**
@@ -56,7 +56,7 @@ import java.math.BigInteger;
  */
 public class PolynomialField<V extends Object>
 	   extends PolynomialRing<V>
-	   implements FiniteField<GenericPolynomial<DualisticElement<V>>> {
+	   implements FiniteField<Polynomial<DualisticElement<V>>> {
 
 	private PolynomialElement<V> irreduciblePolynomial;
 	private int degree;
@@ -83,7 +83,7 @@ public class PolynomialField<V extends Object>
 	}
 
 	@Override
-	public MultiplicativeGroup<GenericPolynomial<DualisticElement<V>>> getMultiplicativeGroup() {
+	public MultiplicativeGroup<Polynomial<DualisticElement<V>>> getMultiplicativeGroup() {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.helper.polynomial.GenericPolynomial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,9 +53,9 @@ import java.util.Map;
  * @author rolfhaenni
  * @param <V>
  */
-public class PolynomialRing<V extends Object>
+public class PolynomialRing<V>
 	   extends PolynomialSemiRing<V>
-	   implements Ring<GenericPolynomial<DualisticElement<V>>> {
+	   implements Ring<Polynomial<DualisticElement<V>>> {
 
 	protected PolynomialRing(Ring ring) {
 		super(ring);
@@ -72,7 +72,7 @@ public class PolynomialRing<V extends Object>
 	@Override
 	public PolynomialElement<V> invert(Element element) {
 		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap<Integer, DualisticElement<V>>();
-		GenericPolynomial<DualisticElement<V>> polynomial = ((PolynomialElement<V>) element).getValue();
+		Polynomial<DualisticElement<V>> polynomial = ((PolynomialElement<V>) element).getValue();
 		for (Integer i : polynomial.getIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
 		}

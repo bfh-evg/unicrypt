@@ -41,20 +41,20 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.helper.polynomial.GenericPolynomial;
 
 /**
  *
  * @author rolfhaenni
  * @param <V>
  */
-public class PolynomialElement<V extends Object>
-	   extends AbstractDualisticElement<PolynomialSemiRing<V>, PolynomialElement<V>, GenericPolynomial<DualisticElement<V>>> {
+public class PolynomialElement<V>
+	   extends AbstractDualisticElement<PolynomialSemiRing<V>, PolynomialElement<V>, Polynomial<DualisticElement<V>>> {
 
-	protected PolynomialElement(final PolynomialSemiRing semiRing, GenericPolynomial<DualisticElement<V>> polynomial) {
+	protected PolynomialElement(final PolynomialSemiRing semiRing, Polynomial<DualisticElement<V>> polynomial) {
 		super(semiRing, polynomial);
 	}
 
@@ -62,6 +62,11 @@ public class PolynomialElement<V extends Object>
 		if (element == null || !this.getSet().getSemiRing().contains(element)) {
 			throw new IllegalArgumentException();
 		}
+
+		// TODO Use Horner-Scheme if:
+		//
+		// n*x^2 < q*x^3    with x = log(modulus), n = order of poly and q = number of non-zero terms in poly
+		//
 		DualisticElement<V> result = this.getSet().getSemiRing().getZeroElement();
 		for (Integer index : this.getValue().getIndices()) {
 			result = result.add(this.getValue().getCoefficient(index).multiply(element.power(index)));
