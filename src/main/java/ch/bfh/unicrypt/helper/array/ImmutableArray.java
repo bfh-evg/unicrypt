@@ -311,14 +311,15 @@ public class ImmutableArray<T>
 	}
 
 	public static <T> ImmutableArray<T> getInstance(Collection<T> collection) {
-		if (collection == null || collection.contains(null)) {
+		if (collection == null) {
 			throw new IllegalArgumentException();
 		}
 		boolean isUniform = true;
 		T first = null;
-		Iterator<T> iterator = collection.iterator();
-		while (isUniform && iterator.hasNext()) {
-			T object = iterator.next();
+		for (T object : collection) {
+			if (object == null) {
+				throw new IllegalArgumentException();
+			}
 			if (first == null) {
 				first = object;
 			} else {
