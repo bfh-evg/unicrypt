@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -402,6 +403,24 @@ public class ByteArray
 			i++;
 		}
 		return new ByteArray(bytes);
+	}
+
+	public static ByteArray getInstance(ByteArray... byteArrays) {
+		if (byteArrays == null) {
+			throw new IllegalArgumentException();
+		}
+		int length = 0;
+		for (ByteArray byteArray : byteArrays) {
+			if (byteArray == null) {
+				throw new IllegalArgumentException();
+			}
+			length = length + byteArray.getLength();
+		}
+		ByteBuffer byteBuffer = ByteBuffer.allocate(length);
+		for (ByteArray byteArray : byteArrays) {
+			byteBuffer.put(byteArray.bytes, byteArray.offset, byteArray.length);
+		}
+		return new ByteArray(byteBuffer.array());
 	}
 
 	public static ByteArray getRandomInstance(int length) {

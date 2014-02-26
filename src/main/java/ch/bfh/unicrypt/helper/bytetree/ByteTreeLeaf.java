@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.bytetree;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
@@ -97,10 +98,34 @@ public class ByteTreeLeaf
 	}
 
 	@Override
+	protected ByteArray abstractGetRecursiveHashValue(HashAlgorithm hashAlgorithm) {
+		return this.binaryData.getHashValue(hashAlgorithm);
+	}
+
+	@Override
 	protected void abstractConstructByteArray(ByteBuffer buffer, ByteArray byteArray) {
 		buffer.put(IDENTIFIER);
 		buffer.putInt(this.binaryData.getLength());
 		buffer.put(this.binaryData.getAll());
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		hash = 17 * hash + this.binaryData.hashCode();
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final ByteTreeLeaf other = (ByteTreeLeaf) obj;
+		return this.binaryData.equals(other.binaryData);
 	}
 
 }

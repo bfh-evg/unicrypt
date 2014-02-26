@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.bytetree;
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -102,6 +103,30 @@ public abstract class ByteTree
 		}
 		return this.byteArray;
 	}
+
+	public final ByteArray getHashValue() {
+		return this.getHashValue(HashAlgorithm.getInstance());
+	}
+
+	public final ByteArray getHashValue(HashAlgorithm hashAlgorithm) {
+		if (hashAlgorithm == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.getByteArray().getHashValue(hashAlgorithm);
+	}
+
+	public final ByteArray getRecursiveHashValue() {
+		return this.getRecursiveHashValue(HashAlgorithm.getInstance());
+	}
+
+	public final ByteArray getRecursiveHashValue(HashAlgorithm hashAlgorithm) {
+		if (hashAlgorithm == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractGetRecursiveHashValue(hashAlgorithm);
+	}
+
+	protected abstract ByteArray abstractGetRecursiveHashValue(HashAlgorithm hashAlgorithm);
 
 	// fills up the buffer and (if necessary) sets the byte arrays recursively
 	protected final void constructByteArray(ByteBuffer buffer, ByteArray byteArray) {

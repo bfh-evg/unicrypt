@@ -43,14 +43,7 @@ package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import java.nio.ByteBuffer;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -59,156 +52,38 @@ import org.junit.Test;
  */
 public class ByteTreeTest {
 
+	public static ByteTree b0 = ByteTree.getInstance(ByteArray.getInstance("00|00"));
+	public static ByteTree b1 = ByteTree.getInstance(ByteArray.getInstance("12|34"));
+	public static ByteTree b2 = ByteTree.getInstance(ByteArray.getInstance("56|78|90"));
+	public static ByteTree b12 = ByteTree.getInstance(b1, b2);
+	public static ByteTree b012 = ByteTree.getInstance(b0, b12);
+
 	public ByteTreeTest() {
 	}
 
-	@BeforeClass
-	public static void setUpClass() {
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-	}
-
-	@Before
-	public void setUp() {
-	}
-
-	@After
-	public void tearDown() {
-	}
-
-	/**
-	 * Test of getInstance method, of class ByteTree.
-	 */
 	@Test
-	@Ignore
-	public void testGetInstance_ByteTreeArr() {
-//		System.out.println("getInstance");
-		ByteTree[] children = null;
-		ByteTree expResult = null;
-		ByteTree result = ByteTree.getInstance(children);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+	public void testGetByteArray() {
+		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|02|00|00"), b0.getByteArray());
+		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|02|12|34"), b1.getByteArray());
+		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|03|56|78|90"), b2.getByteArray());
+		Assert.assertEquals(ByteArray.getInstance("00|00|00|00|02|01|00|00|00|02|12|34|01|00|00|00|03|56|78|90"), b12.getByteArray());
+		Assert.assertEquals(ByteArray.getInstance("00|00|00|00|02|01|00|00|00|02|00|00|00|00|00|00|02|01|00|00|00|02|12|34|01|00|00|00|03|56|78|90"), b012.getByteArray());
 	}
 
-	/**
-	 * Test of getInstance method, of class ByteTree.
-	 */
-//	@Test
-//	@Ignore
-//	public void testGetInstance_byteArr() {
-////		System.out.println("getInstance");
-//		ByteArray bytes = null;
-//		ByteTree expResult = null;
-//		ByteTree result = ByteTree.getInstance(bytes);
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-//	}
-//	/**
-//	 * Test of getInstanceFrom method, of class ByteTree.
-//	 */
-//	@Test
-//	@Ignore
-//
-//	public void testGetDeserializedInstance() {
-////		System.out.println("getInstanceFrom");
-//		ByteArray bytes = null;
-//		ByteTree expResult = null;
-//		ByteTree result = ByteTree.getInstanceFrom(bytes);
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-//	}
-	/**
-	 * Test of getByteArray method, of class ByteTree.
-	 */
 	@Test
-	@Ignore
-	public void testGetSerializedByteTree() {
-//		System.out.println("getByteArray");
-		ByteTree instance = new ByteTreeImpl();
-		ByteArray expResult = null;
-		ByteArray result = instance.getByteArray();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+	public void testGetInstance_ByteArray() {
+		Assert.assertEquals(b0, ByteTree.getInstanceFrom(b0.getByteArray()));
+		Assert.assertEquals(b1, ByteTree.getInstanceFrom(b1.getByteArray()));
+		Assert.assertEquals(b2, ByteTree.getInstanceFrom(b2.getByteArray()));
+		Assert.assertEquals(b12, ByteTree.getInstanceFrom(b12.getByteArray()));
+		Assert.assertEquals(b012, ByteTree.getInstanceFrom(b012.getByteArray()));
 	}
 
-	/**
-	 * Test of defaultGetByteArray method, of class ByteTree.
-	 */
 	@Test
-	@Ignore
-
-	public void testDefaultSerialize() {
-//		System.out.println("defaultGetByteArray");
-		ByteBuffer buffer = null;
-		ByteTree instance = new ByteTreeImpl();
-//		instance.defaultGetByteArray(buffer);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of defaultGetSize method, of class ByteTree.
-	 */
-	@Test
-	@Ignore
-
-	public void testDefaultGetSize() {
-//		System.out.println("defaultGetSize");
-		ByteTree instance = new ByteTreeImpl();
-		int expResult = 0;
-//		int result = instance.defaultGetSize();
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of abstractConstructByteArray method, of class ByteTree.
-	 */
-	@Test
-	@Ignore
-
-	public void testAbstractSerialize() {
-//		System.out.println("abstractConstructByteArray");
-		ByteBuffer buffer = null;
-		ByteTree instance = new ByteTreeImpl();
-//		instance.abstractConstructByteArray(buffer);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-	}
-
-	/**
-	 * Test of abstractGetLength method, of class ByteTree.
-	 */
-	@Test
-	@Ignore
-
-	public void testAbstractGetSize() {
-//		System.out.println("abstractGetLength");
-		ByteTree instance = new ByteTreeImpl();
-		int expResult = 0;
-//		int result = instance.abstractGetLength();
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-	}
-
-	public class ByteTreeImpl
-		   extends ByteTree {
-
-		public void abstractConstructByteArray(ByteBuffer buffer, ByteArray byteArray) {
-		}
-
-		public int abstractGetLength() {
-			return 0;
-		}
-
+	public void testGetInstance_GetHashValue() {
+		ByteArray h0 = b0.getRecursiveHashValue();
+		ByteArray h12 = b12.getRecursiveHashValue();
+		Assert.assertEquals(h0.concatenate(h12).getHashValue(), b012.getRecursiveHashValue());
 	}
 
 }
