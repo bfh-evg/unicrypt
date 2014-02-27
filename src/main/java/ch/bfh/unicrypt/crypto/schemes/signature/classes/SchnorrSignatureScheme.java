@@ -44,90 +44,32 @@ package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 import ch.bfh.unicrypt.crypto.keygenerator.classes.SchnorrSignatureKeyPairGenerator;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
-import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
-import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
-import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
-import ch.bfh.unicrypt.math.function.classes.HashFunction;
-import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
-import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
-import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
-import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class SchnorrSignatureScheme
 	   extends AbstractRandomizedSignatureScheme<ByteArrayMonoid, ByteArrayElement, ProductGroup, Pair, ZModPrime> {
 
-	private final ByteArrayMonoid byteArrayMonoid;
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
-	// HashMethod? HashAlgorithm?
+	private final HashMethod hashMethod; // HashAlgorithm?
 
-	protected SchnorrSignatureScheme(ByteArrayMonoid byteArrayMonoid, CyclicGroup cyclicGroup, Element generator) {
-		this.byteArrayMonoid = byteArrayMonoid;
+	protected SchnorrSignatureScheme(CyclicGroup cyclicGroup, Element generator, HashMethod hashMethod) {
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
+		this.hashMethod = hashMethod;
 	}
 
 	@Override
 	protected KeyPairGenerator abstractGetKeyPairGenerator() {
 		return SchnorrSignatureKeyPairGenerator.getInstance(this.generator);
-	}
-
-	@Override
-	public Function abstractGetSignatureFunction() {
-
-		// TODO: not correct
-		ZMod zMod = this.cyclicGroup.getZModOrder();
-		ProductSet domain = ProductSet.getInstance(zMod, this.byteArrayMonoid, zMod);    // (prvateKeky,message,randomization)
-		Function privateKeySelector = SelectionFunction.getInstance(domain, 0);
-		Function messageSelector = SelectionFunction.getInstance(domain, 1);
-		Function randomizationSelector = SelectionFunction.getInstance(domain, 2);
-
-		// r = g^{randomization}
-		Function r = GeneratorFunction.getInstance(this.generator);
-
-		// e = h(message||r)
-		Function e = HashFunction.getInstance(ProductSet.getInstance(this.byteArrayMonoid, r.getCoDomain()));
-
-		ProductSet sDomain = ProductSet.getInstance(zMod, 3);
-
-		// s = randomization + e*privateKey
-		Function f3 = CompositeFunction.getInstance(SharedDomainFunction.getInstance(SelectionFunction.getInstance(sDomain, 0),
-																					 CompositeFunction.getInstance(AdapterFunction.getInstance(sDomain, 1, 2),
-																												   SelfApplyFunction.getInstance((SemiGroup) zMod))),
-													ApplyFunction.getInstance(zMod));
-
-		//result = randomization + privateKey*f2
-		Function s = CompositeFunction.getInstance(SharedDomainFunction.getInstance(randomizationSelector, privateKeySelector,
-																					CompositeFunction.getInstance(SharedDomainFunction.getInstance(messageSelector, r),
-																												  CompositeFunction.getInstance(e, ModuloFunction.getInstance(e.getCoDomain(), zMod)))),
-												   SharedDomainFunction.getInstance(SelectionFunction.getInstance(sDomain, 2), f3));
-
-		return s;
-		//Not yet finished... Must return Tuple (e,s) not only s
-	}
-
-	@Override
-	public Function abstractGetVerificationFunction() {
-		//r_=g^s * y^{-e}
-		//e_=H(m||r_)
-		//E_ ?=? E
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	public final ByteArrayMonoid getByteArrayMonoid() {
-		return this.byteArrayMonoid;
 	}
 
 	public final CyclicGroup getCyclicGroup() {
@@ -138,4 +80,60 @@ public class SchnorrSignatureScheme
 		return this.generator;
 	}
 
+	public final HashMethod getHashMethod() {
+		return this.hashMethod;
+	}
+
+	@Override
+	protected Function abstractGetSignatureFunction() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected Function abstractGetVerificationFunction() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 }
+
+//	@Override
+//	public Function abstractGetSignatureFunction() {
+//
+//		// TODO: not correct
+//		ZMod zMod = this.cyclicGroup.getZModOrder();
+//		ProductSet domain = ProductSet.getInstance(zMod, this.byteArrayMonoid, zMod);    // (prvateKeky,message,randomization)
+//		Function privateKeySelector = SelectionFunction.getInstance(domain, 0);
+//		Function messageSelector = SelectionFunction.getInstance(domain, 1);
+//		Function randomizationSelector = SelectionFunction.getInstance(domain, 2);
+//
+//		// r = g^{randomization}
+//		Function r = GeneratorFunction.getInstance(this.generator);
+//
+//		// e = h(message||r)
+//		Function e = HashFunction.getInstance(ProductSet.getInstance(this.byteArrayMonoid, r.getCoDomain()));
+//
+//		ProductSet sDomain = ProductSet.getInstance(zMod, 3);
+//
+//		// s = randomization + e*privateKey
+//		Function f3 = CompositeFunction.getInstance(SharedDomainFunction.getInstance(SelectionFunction.getInstance(sDomain, 0),
+//																					 CompositeFunction.getInstance(AdapterFunction.getInstance(sDomain, 1, 2),
+//																												   SelfApplyFunction.getInstance((SemiGroup) zMod))),
+//													ApplyFunction.getInstance(zMod));
+//
+//		//result = randomization + privateKey*f2
+//		Function s = CompositeFunction.getInstance(SharedDomainFunction.getInstance(randomizationSelector, privateKeySelector,
+//																					CompositeFunction.getInstance(SharedDomainFunction.getInstance(messageSelector, r),
+//																												  CompositeFunction.getInstance(e, ModuloFunction.getInstance(e.getCoDomain(), zMod)))),
+//												   SharedDomainFunction.getInstance(SelectionFunction.getInstance(sDomain, 2), f3));
+//
+//		return s;
+//		//Not yet finished... Must return Tuple (e,s) not only s
+//	}
+//
+//	@Override
+//	public Function abstractGetVerificationFunction() {
+//		//r_=g^s * y^{-e}
+//		//e_=H(m||r_)
+//		//E_ ?=? E
+//		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//	}
