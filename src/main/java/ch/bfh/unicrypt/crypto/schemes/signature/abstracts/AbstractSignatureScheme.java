@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,10 +32,10 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
@@ -45,14 +45,14 @@ import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.SignatureScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element>
-			 extends AbstractScheme<MS>
-			 implements SignatureScheme {
+	   extends AbstractScheme<MS>
+	   implements SignatureScheme {
 
 	private Function signatureFunction;
 	private Function verificationFunction;
@@ -65,7 +65,7 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 
 	@Override
 	public BooleanElement verify(final Element publicKey, final Element message, final Element signature) {
-		return BooleanSet.getInstance().getElement(this.getVerificationFunction().apply(publicKey, message, signature).isEquivalent(BooleanSet.TRUE));
+		return (BooleanElement) this.getVerificationFunction().apply(publicKey, message, signature);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 
 	@Override
 	protected MS abstractGetMessageSpace() {
-		return (MS) this.getSignatureFunction().getDomain();
+		return (MS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(1);
 	}
 
 	protected abstract KeyPairGenerator abstractGetKeyPairGenerator();

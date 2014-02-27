@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a function, which is derived from another function with a product (or power)
@@ -61,7 +61,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @version 2.0
  */
 public class PartiallyAppliedFunction
-	   extends AbstractFunction<ProductSet, Tuple, Set, Element> {
+	   extends AbstractFunction<PartiallyAppliedFunction, ProductSet, Tuple, Set, Element> {
 
 	private final Function parentFunction;
 	private final Element parameter;
@@ -114,8 +114,7 @@ public class PartiallyAppliedFunction
 	}
 
 	@Override
-	protected boolean defaultIsEquivalent(Function function) {
-		PartiallyAppliedFunction other = (PartiallyAppliedFunction) function;
+	protected boolean defaultIsEquivalent(PartiallyAppliedFunction other) {
 		return this.getParentFunction().isEquivalent(other.getParentFunction())
 			   && this.getParameter().isEquivalent(other.getParameter())
 			   && this.getIndex() == other.getIndex();

@@ -46,10 +46,6 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.Standard
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -66,6 +62,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 //
 // @see [TW10] Protocol 1: Permutation Matrix
@@ -304,7 +304,7 @@ public class PermutationCommitmentProofGenerator
 	// Nested class PreimageProofFunction
 	//
 	private class PreimageProofFunction
-		   extends AbstractFunction<ProductGroup, Tuple, ProductGroup, Tuple> {
+		   extends AbstractFunction<PreimageProofFunction, ProductGroup, Tuple, ProductGroup, Tuple> {
 
 		private final int size;
 		private final Tuple cV;

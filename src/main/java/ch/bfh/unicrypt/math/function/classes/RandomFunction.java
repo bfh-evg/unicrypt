@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a randomized function with no input. When the function is called, it selects an
@@ -57,7 +57,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @version 1.0
  */
 public class RandomFunction
-	   extends AbstractFunction<SingletonGroup, SingletonElement, Set, Element> {
+	   extends AbstractFunction<RandomFunction, SingletonGroup, SingletonElement, Set, Element> {
 
 	private RandomFunction(final Set coDomain) {
 		super(SingletonGroup.getInstance(), coDomain);

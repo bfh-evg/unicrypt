@@ -78,7 +78,7 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 	}
 
 	protected Function abstractGetUnpaddingFunction() {
-		return new AbstractFunction<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(this.byteArrayMonoid, ByteArrayMonoid.getInstance()) {
+		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(this.byteArrayMonoid, ByteArrayMonoid.getInstance()) {
 			@Override
 			protected ByteArrayElement abstractApply(ByteArrayElement element, RandomByteSequence randomByteSequence) {
 				ByteArray byteArray = element.getValue();

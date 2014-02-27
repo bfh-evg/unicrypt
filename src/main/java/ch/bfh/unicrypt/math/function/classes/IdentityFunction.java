@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a generalized identity function f:X->X^n with f(x)=(x,...,x) for all elements x
@@ -55,7 +55,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @version 1.0
  */
 public class IdentityFunction
-	   extends AbstractFunction<Set, Element, Set, Element> {
+	   extends AbstractFunction<IdentityFunction, Set, Element, Set, Element> {
 
 	private IdentityFunction(final Set set) {
 		super(set, set);

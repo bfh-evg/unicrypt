@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import ch.bfh.unicrypt.helper.compound.Compound;
 import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Iterator;
 
 /**
@@ -59,7 +59,7 @@ import java.util.Iterator;
  * @author rolfhaenni
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
-	   extends AbstractFunction<D, DE, C, CE>
+	   extends AbstractFunction<CF, D, DE, C, CE>
 	   implements RecursiveCompound<CF, Function>, Iterable<Function> {
 
 	protected final ImmutableArray<Function> functions;
@@ -165,8 +165,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	protected boolean defaultIsEquivalent(Function function) {
-		AbstractCompoundFunction<CF, D, DE, C, CE> other = (AbstractCompoundFunction<CF, D, DE, C, CE>) function;
+	protected boolean defaultIsEquivalent(CF other) {
 		if (this.getArity() != other.getArity()) {
 			return false;
 		}

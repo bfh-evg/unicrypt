@@ -41,13 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Arrays;
 
 /**
@@ -59,7 +58,7 @@ import java.util.Arrays;
  * @version 1.0
  */
 public class SelectionFunction
-	   extends AbstractFunction<ProductSet, Tuple, Set, Element> {
+	   extends AbstractFunction<SelectionFunction, ProductSet, Tuple, Set, Element> {
 
 	private final int[] indices;
 
@@ -73,8 +72,8 @@ public class SelectionFunction
 	}
 
 	@Override
-	protected boolean defaultIsEquivalent(Function function) {
-		return Arrays.equals(this.getIndices(), ((SelectionFunction) function).getIndices());
+	protected boolean defaultIsEquivalent(SelectionFunction other) {
+		return Arrays.equals(this.getIndices(), other.getIndices());
 	}
 
 	//

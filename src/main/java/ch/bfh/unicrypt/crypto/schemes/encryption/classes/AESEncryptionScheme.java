@@ -143,7 +143,7 @@ public class AESEncryptionScheme
 	}
 
 	private class AESEncryptionFunction
-		   extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
+		   extends AbstractFunction<AESEncryptionFunction, ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
 		protected AESEncryptionFunction(ByteArrayMonoid messageSpace, FixedByteArraySet keySpace) {
 			super(ProductSet.getInstance(keySpace, messageSpace), messageSpace);
@@ -177,7 +177,7 @@ public class AESEncryptionScheme
 	}
 
 	private class AESDecryptionFunction
-		   extends AbstractFunction<ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
+		   extends AbstractFunction<AESDecryptionFunction, ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
 		protected AESDecryptionFunction(ByteArrayMonoid messageSpace, FixedByteArraySet keySpace) {
 			super(ProductSet.getInstance(keySpace, messageSpace), messageSpace);

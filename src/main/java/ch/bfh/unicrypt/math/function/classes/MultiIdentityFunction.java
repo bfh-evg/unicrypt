@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Arrays;
 
 /**
@@ -58,7 +58,7 @@ import java.util.Arrays;
  * @version 1.0
  */
 public class MultiIdentityFunction
-	   extends AbstractFunction<Set, Element, ProductSet, Tuple> {
+	   extends AbstractFunction<MultiIdentityFunction, Set, Element, ProductSet, Tuple> {
 
 	private MultiIdentityFunction(final Set domain, final ProductSet coDomain) {
 		super(domain, coDomain);

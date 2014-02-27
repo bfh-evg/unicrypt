@@ -62,7 +62,7 @@ public abstract class AbstractByteArrayPaddingScheme
 
 	@Override
 	protected Function abstractGetPaddingFunction() {
-		return new AbstractFunction<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(ByteArrayMonoid.getInstance(), this.byteArrayMonoid) {
+		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(ByteArrayMonoid.getInstance(), this.byteArrayMonoid) {
 			@Override
 			protected ByteArrayElement abstractApply(ByteArrayElement element, RandomByteSequence randomByteSequence) {
 				int paddingLength = getPaddingLength(element);

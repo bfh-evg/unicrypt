@@ -65,9 +65,9 @@ public class ByteArrayConverterTest {
 		BigInteger b3 = BigInteger.valueOf(300);
 		for (ByteArrayConverter converter : new ByteArrayConverter[]{c1, c2, c3, c4}) {
 			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
-				ByteArray ba = converter.convertToByteArray(bigInteger);
+				ByteArray ba = converter.integerToByteArray(bigInteger);
 				Assert.assertTrue(ba.getLength() >= converter.getMinLength());
-				Assert.assertEquals(bigInteger, converter.convertToBigInteger(ba));
+				Assert.assertEquals(bigInteger, converter.byteArrayToInteger(ba));
 			}
 
 		}

@@ -69,11 +69,12 @@ public class ByteArrayConverter
 		return minLength;
 	}
 
-	public ByteArray convertToByteArray(int integer) {
-		return this.convertToByteArray(BigInteger.valueOf(integer));
+	public ByteArray integerToByteArray(int integer) {
+		return this.integerToByteArray(BigInteger.valueOf(integer));
 	}
 
-	public ByteArray convertToByteArray(BigInteger posBigInteger) {
+	public ByteArray integerToByteArray(BigInteger posBigInteger) {
+		// negative integers not allowed
 		if (posBigInteger.signum() == -1) {
 			throw new IllegalArgumentException();
 		}
@@ -89,20 +90,20 @@ public class ByteArrayConverter
 			bytes = expandedBytes;
 		}
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
-			ByteArrayConverter.reverse(bytes);
+			ByteArrayConverter.reverseBytes(bytes);
 		}
 		return ByteArray.getInstance(bytes);
 	}
 
-	public BigInteger convertToBigInteger(ByteArray byteArray) {
+	public BigInteger byteArrayToInteger(ByteArray byteArray) {
 		byte[] bytes = byteArray.getAll();
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
-			ByteArrayConverter.reverse(bytes);
+			ByteArrayConverter.reverseBytes(bytes);
 		}
 		return new BigInteger(1, bytes);
 	}
 
-	private static void reverse(byte[] bytes) {
+	private static void reverseBytes(byte[] bytes) {
 		int length = bytes.length;
 		for (int i = 0; i < length / 2; i++) {
 			byte b = bytes[i];

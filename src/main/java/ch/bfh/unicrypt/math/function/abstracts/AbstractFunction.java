@@ -41,15 +41,15 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Random;
 
 /**
@@ -58,6 +58,7 @@ import java.util.Random;
  * abstract method {@link abstractApply(Element element, Random random)}.
  * <p>
  * <p/>
+ * @param <F>
  * @param <D>
  * @param <DE>
  * @param <CE>
@@ -66,7 +67,7 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction<D extends Set, DE extends Element, C extends Set, CE extends Element>
+public abstract class AbstractFunction<F extends Function, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends UniCrypt
 	   implements Function {
 
@@ -150,7 +151,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 		if (!this.getCoDomain().isEquivalent(function.getCoDomain())) {
 			return false;
 		}
-		return this.defaultIsEquivalent(function);
+		return this.defaultIsEquivalent((F) function);
 	}
 
 	@Override
@@ -166,7 +167,7 @@ public abstract class AbstractFunction<D extends Set, DE extends Element, C exte
 		return false;
 	}
 
-	protected boolean defaultIsEquivalent(Function function) {
+	protected boolean defaultIsEquivalent(F function) {
 		return true;
 	}
 

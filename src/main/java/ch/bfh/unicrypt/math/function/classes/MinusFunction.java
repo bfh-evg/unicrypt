@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the the concept of a function f:X->X, which computes the inverse of the given input
@@ -60,7 +60,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @version 1.0
  */
 public class MinusFunction
-	   extends AbstractFunction<AdditiveGroup, AdditiveElement, AdditiveGroup, AdditiveElement> {
+	   extends AbstractFunction<MinusFunction, AdditiveGroup, AdditiveElement, AdditiveGroup, AdditiveElement> {
 
 	private MinusFunction(final AdditiveGroup domain, AdditiveGroup coDomain) {
 		super(domain, coDomain);

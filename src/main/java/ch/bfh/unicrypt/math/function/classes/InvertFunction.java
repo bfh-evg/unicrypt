@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the the concept of a function f:X->X, which computes the inverse of the given input
@@ -58,7 +58,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
  * @version 1.0
  */
 public class InvertFunction
-	   extends AbstractFunction<Group, Element, Group, Element> {
+	   extends AbstractFunction<InvertFunction, Group, Element, Group, Element> {
 
 	private InvertFunction(final Group domain, Group coDomain) {
 		super(domain, coDomain);

@@ -425,11 +425,11 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	protected E defaultGetElementFrom(ByteArray byteArray, ByteArrayConverter converter) {
-		return this.getElementFrom(converter.convertToBigInteger(byteArray));
+		return this.getElementFrom(converter.byteArrayToInteger(byteArray));
 	}
 
 	protected ByteArray defaultGetByteArrayFrom(E element, ByteArrayConverter converter) {
-		return ByteArray.getInstance(converter.convertToByteArray(this.abstractGetBigIntegerFrom(element)));
+		return ByteArray.getInstance(converter.integerToByteArray(this.abstractGetBigIntegerFrom(element)));
 	}
 
 	protected E defaultGetElementFrom(ByteTree byteTree, ByteArrayConverter converter) {

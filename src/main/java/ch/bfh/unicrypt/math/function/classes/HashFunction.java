@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
@@ -67,9 +66,9 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @version 2.0
  */
 public class HashFunction
-	   extends AbstractFunction<Set, Element, FiniteByteArraySet, FiniteByteArrayElement> {
+	   extends AbstractFunction<HashFunction, Set, Element, FiniteByteArraySet, FiniteByteArrayElement> {
 
-	private HashMethod hashMethod;
+	private final HashMethod hashMethod;
 
 	private HashFunction(Set domain, FiniteByteArraySet coDomain, HashMethod hashMethod) {
 		super(domain, coDomain);
@@ -81,8 +80,8 @@ public class HashFunction
 	}
 
 	@Override
-	protected boolean defaultIsEquivalent(Function function) {
-		return this.getHashMethod().equals(((HashFunction) function).getHashMethod());
+	protected boolean defaultIsEquivalent(HashFunction other) {
+		return this.getHashMethod().equals(other.getHashMethod());
 	}
 
 	@Override

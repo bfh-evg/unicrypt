@@ -44,15 +44,15 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public class ProbabilisticECGroupFpEncoder
@@ -84,7 +84,7 @@ public class ProbabilisticECGroupFpEncoder
 	}
 
 	static class ECEncodingFunction
-		   extends AbstractFunction<ZModPrime, ZModElement, ECZModPrime, ECElement<ResidueClass>> {
+		   extends AbstractFunction<ECEncodingFunction, ZModPrime, ZModElement, ECZModPrime, ECElement<ResidueClass>> {
 
 		protected ECEncodingFunction(ZModPrime domain, ECZModPrime coDomain) {
 			super(domain, coDomain);
@@ -121,7 +121,7 @@ public class ProbabilisticECGroupFpEncoder
 	}
 
 	static class ECDecodingFunction
-		   extends AbstractFunction<ECZModPrime, ECElement<ResidueClass>, ZModPrime, ZModElement> {
+		   extends AbstractFunction<ECDecodingFunction, ECZModPrime, ECElement<ResidueClass>, ZModPrime, ZModElement> {
 
 		protected ECDecodingFunction(ECZModPrime domain, ZModPrime coDomain) {
 			super(domain, coDomain);

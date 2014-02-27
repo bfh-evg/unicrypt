@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -50,6 +49,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public class ZModToGStarModSafePrimeEncoder
@@ -83,7 +83,7 @@ public class ZModToGStarModSafePrimeEncoder
 	}
 
 	static class EncodingFunction
-		   extends AbstractFunction<ZModPrime, ZModElement, GStarModSafePrime, GStarModElement> {
+		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, GStarModSafePrime, GStarModElement> {
 
 		protected EncodingFunction(final ZModPrime domain, final GStarMod coDomain) {
 			super(domain, coDomain);
@@ -102,7 +102,7 @@ public class ZModToGStarModSafePrimeEncoder
 	}
 
 	static class DecodingFunction
-		   extends AbstractFunction<GStarModSafePrime, GStarModElement, ZModPrime, ZModElement> {
+		   extends AbstractFunction<DecodingFunction, GStarModSafePrime, GStarModElement, ZModPrime, ZModElement> {
 
 		protected DecodingFunction(final GStarMod domain, final ZModPrime coDomain) {
 			super(domain, coDomain);

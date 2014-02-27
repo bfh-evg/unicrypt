@@ -41,10 +41,11 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set>
 	   extends AbstractSignatureScheme<MS, ME, SS, SE>
@@ -52,7 +53,7 @@ public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME exten
 
 	@Override
 	public RS getRandomizationSpace() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return (RS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(2);
 	}
 
 	@Override
@@ -62,9 +63,6 @@ public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME exten
 
 	@Override
 	public SE sign(Element privateKey, Element message, Element randomization) {
-		if (!this.getSignatureSpace().contains(privateKey) || !this.getMessageSpace().contains(message) || !this.getRandomizationSpace().contains(randomization)) {
-			throw new IllegalArgumentException();
-		}
 		return (SE) this.getSignatureFunction().apply(privateKey, message, randomization);
 	}
 

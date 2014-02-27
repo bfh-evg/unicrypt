@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -103,7 +103,7 @@ public class OneTimePadEncryptionScheme
 	}
 
 	private class OneTimePadFunction
-		   extends AbstractFunction<ProductSet, Pair, FiniteByteArraySet, FiniteByteArrayElement> {
+		   extends AbstractFunction<OneTimePadFunction, ProductSet, Pair, FiniteByteArraySet, FiniteByteArrayElement> {
 
 		protected OneTimePadFunction() {
 			super(ProductSet.getInstance(fixedByteArraySet, finiteByteArraySet), finiteByteArraySet);

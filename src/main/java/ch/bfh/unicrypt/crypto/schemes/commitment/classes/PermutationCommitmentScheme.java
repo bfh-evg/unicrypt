@@ -41,9 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
+import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -54,7 +53,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 //
 //
@@ -114,7 +114,7 @@ public class PermutationCommitmentScheme
 	}
 
 	private class PermutationCommitmentFunction
-		   extends AbstractFunction<ProductSet, Pair, ProductGroup, Tuple> {
+		   extends AbstractFunction<PermutationCommitmentFunction, ProductSet, Pair, ProductGroup, Tuple> {
 
 		private final Element randomizationGenerator;
 		private final Tuple messageGenerators;
