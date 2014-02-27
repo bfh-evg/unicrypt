@@ -43,16 +43,12 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -87,14 +83,16 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	// the following fields are needed for optimizations
 	private BigInteger bigInteger;
-	private ByteArray byteArray;
-	private ByteTree byteTree;
-	private final HashMap<HashMethod, FiniteByteArrayElement> hashValues;
+	private final HashMap<ByteArrayConverter, ByteArray> byteArrays;
+	private final HashMap<ByteArrayConverter, ByteTree> byteTrees;
+	private final HashMap<HashMethod, ByteArray> hashValues;
 
 	protected AbstractElement(final S set, V value) {
 		this.set = set;
 		this.value = value;
-		this.hashValues = new HashMap<HashMethod, FiniteByteArrayElement>();
+		this.byteArrays = new HashMap<ByteArrayConverter, ByteArray>();
+		this.byteTrees = new HashMap<ByteArrayConverter, ByteTree>();
+		this.hashValues = new HashMap<HashMethod, ByteArray>();
 	}
 
 	@Override
@@ -152,47 +150,68 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	public ByteArray getByteArray() {
-		if (this.byteArray == null) {
-			this.byteArray = this.set.getByteArrayFrom(this);
+		return this.getByteArray(ByteArrayConverter.getInstance());
+	}
+
+	@Override
+	public ByteArray getByteArray(ByteArrayConverter converter) {
+		if (converter == null) {
+			throw new IllegalArgumentException();
 		}
-		return this.byteArray;
+		ByteArray byteArray = this.byteArrays.get(converter);
+		if (byteArray == null) {
+			byteArray = this.set.getByteArrayFrom(this, converter);
+			this.byteArrays.put(converter, byteArray);
+		}
+		return byteArray;
 	}
 
 	@Override
 	public ByteTree getByteTree() {
-		if (this.byteTree == null) {
-			this.byteTree = this.set.getByteTreeFrom(this);
-		}
-		return this.byteTree;
+		return this.getByteTree(ByteArrayConverter.getInstance());
 	}
 
 	@Override
-	public final FiniteByteArrayElement getHashValue() {
+	public ByteTree getByteTree(ByteArrayConverter converter) {
+		if (converter == null) {
+			throw new IllegalArgumentException();
+		}
+		ByteTree byteTree = this.byteTrees.get(converter);
+		if (byteTree == null) {
+			byteTree = this.set.getByteTreeFrom(this, converter);
+			this.byteTrees.put(converter, byteTree);
+		}
+		return byteTree;
+	}
+
+	@Override
+	public final ByteArray getHashValue() {
 		return this.getHashValue(HashMethod.getInstance());
 	}
 
 	@Override
-	public final FiniteByteArrayElement getHashValue(HashMethod hashMethod) {
-		//TODO: This is a memory-hog! But a super speed-up
-		//TODO: If this HashMap would become static, it would speed things up again... But would it leak (cryptographically)?
-		FiniteByteArrayElement result = this.hashValues.get(hashMethod);
-		if (result == null) {
-			if (this.isTuple() && hashMethod.isRecursive()) {
-				Tuple tuple = (Tuple) this;
-				int arity = tuple.getArity();
-				ByteArrayElement[] hashes = new ByteArrayElement[arity];
-				for (int i = 0; i < arity; i++) {
-					hashes[i] = tuple.getAt(i).getHashValue(hashMethod).getByteArrayElement();
-				}
-				result = ByteArrayMonoid.getInstance().apply(hashes).getHashValue(hashMethod);
-			} else {
-				HashAlgorithm hashAlgorithm = hashMethod.getHashAlgorithm();
-				FixedByteArraySet byteArraySet = FixedByteArraySet.getInstance(hashAlgorithm.getHashLength());
-				result = byteArraySet.getElement(hashAlgorithm.getHashValue(this.getBigInteger().toByteArray()));
-			}
-			this.hashValues.put(hashMethod, result);
+	public final ByteArray getHashValue(HashMethod hashMethod) {
+		if (hashMethod == null) {
+			throw new IllegalArgumentException();
 		}
-		return result;
+		ByteArray hashValue = this.hashValues.get(hashMethod);
+		if (hashValue == null) {
+			switch (hashMethod.getMode()) {
+				case BYTEARRAY:
+					hashValue = this.getByteArray().getHashValue(hashMethod.getHashAlgorithm());
+					break;
+				case BYTETREE:
+					hashValue = this.getByteTree(hashMethod.getByteArrayConverter()).getHashValue(hashMethod.getHashAlgorithm());
+					break;
+				case RECURSIVE:
+					hashValue = this.getByteTree(hashMethod.getByteArrayConverter()).getRecursiveHashValue(hashMethod.getHashAlgorithm());
+					break;
+				default:
+					throw new UnsupportedOperationException();
+			}
+			this.hashValues.put(hashMethod, hashValue);
+		}
+		return hashValue;
 	}
 
 	//

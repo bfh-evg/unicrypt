@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper.hash;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-import java.nio.ByteOrder;
+import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 
 /**
  *
@@ -51,43 +51,45 @@ import java.nio.ByteOrder;
 public class HashMethod
 	   extends UniCrypt {
 
-	private final HashAlgorithm hashAlgorithm;
-	private final ByteOrder byteOrder;
-	private final boolean recursive;
+	public enum Mode {
 
-	protected HashMethod(HashAlgorithm hashAlgorithm, ByteOrder byteOrder, boolean recursive) {
+		BYTEARRAY, BYTETREE, RECURSIVE;
+
+	};
+
+	private final HashAlgorithm hashAlgorithm;
+	private final ByteArrayConverter converter;
+	private final Mode mode;
+
+	protected HashMethod(HashAlgorithm hashAlgorithm, ByteArrayConverter converter, Mode mode) {
 		this.hashAlgorithm = hashAlgorithm;
-		this.byteOrder = byteOrder;
-		this.recursive = recursive;
+		this.converter = converter;
+		this.mode = mode;
 	}
 
 	public HashAlgorithm getHashAlgorithm() {
 		return this.hashAlgorithm;
 	}
 
-	public ByteOrder getByteOrder() {
-		return this.byteOrder;
+	public ByteArrayConverter getByteArrayConverter() {
+		return this.converter;
 	}
 
-	public boolean isRecursive() {
-		return this.recursive;
+	public Mode getMode() {
+		return this.mode;
 	}
 
 	@Override
 	public String defaultToStringValue() {
-		String str = this.hashAlgorithm.toString() + "," + this.byteOrder;
-		if (this.isRecursive()) {
-			str = str + ",recursive";
-		}
-		return str;
+		return this.hashAlgorithm.toString() + "," + this.converter.toString() + "," + this.mode.toString();
 	}
 
 	@Override
 	public int hashCode() {
 		int hash = 3;
 		hash = 97 * hash + this.hashAlgorithm.hashCode();
-		hash = 97 * hash + this.byteOrder.hashCode();
-		hash = 97 * hash + (this.recursive ? 1 : 0);
+		hash = 97 * hash + this.converter.hashCode();
+		hash = 97 * hash + this.mode.hashCode();
 		return hash;
 	}
 
@@ -100,22 +102,22 @@ public class HashMethod
 			return false;
 		}
 		final HashMethod other = (HashMethod) obj;
-		return this.hashAlgorithm.equals(other.hashAlgorithm) && this.byteOrder.equals(other.byteOrder) && this.recursive == other.recursive;
+		return this.hashAlgorithm.equals(other.hashAlgorithm) && this.converter.equals(other.converter) && this.mode.equals(other.mode);
 	}
 
 	public static HashMethod getInstance() {
-		return HashMethod.getInstance(HashAlgorithm.getInstance(), ByteOrder.BIG_ENDIAN, true);
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), ByteArrayConverter.getInstance(), Mode.RECURSIVE);
 	}
 
 	public static HashMethod getInstance(HashAlgorithm hashAlgorithm) {
-		return HashMethod.getInstance(hashAlgorithm, ByteOrder.BIG_ENDIAN, true);
+		return HashMethod.getInstance(hashAlgorithm, ByteArrayConverter.getInstance(), Mode.RECURSIVE);
 	}
 
-	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ByteOrder byteOrder, boolean recursive) {
-		if (hashAlgorithm == null || byteOrder == null) {
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ByteArrayConverter converter, Mode mode) {
+		if (hashAlgorithm == null || converter == null || mode == null) {
 			throw new IllegalArgumentException();
 		}
-		return new HashMethod(hashAlgorithm, byteOrder, recursive);
+		return new HashMethod(hashAlgorithm, converter, mode);
 	}
 
 }

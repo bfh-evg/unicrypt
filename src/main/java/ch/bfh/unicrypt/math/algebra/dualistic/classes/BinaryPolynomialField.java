@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.polynomial.BinaryPolynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractFiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -142,12 +141,7 @@ public class BinaryPolynomialField
 
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(BinaryPolynomialElement element) {
-		return new BigInteger(this.defaultGetByteArrayFrom(element).getAll());
-	}
-
-	@Override
-	protected ByteArray defaultGetByteArrayFrom(BinaryPolynomialElement element) {
-		return element.getValue().getCoefficients();
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override

@@ -42,9 +42,9 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import java.math.BigInteger;
 
 /**
@@ -88,11 +88,15 @@ public interface Element<V extends Object> {
 
 	public ByteArray getByteArray();
 
+	public ByteArray getByteArray(ByteArrayConverter converter);
+
 	public ByteTree getByteTree();
 
-	public FiniteByteArrayElement getHashValue();
+	public ByteTree getByteTree(ByteArrayConverter converter);
 
-	public FiniteByteArrayElement getHashValue(HashMethod hashMethod);
+	public ByteArray getHashValue();
+
+	public ByteArray getHashValue(HashMethod hashMethod);
 
 	/**
 	 * Checks if this element is mathematically equivalent to the given element. For this, they need to belong to the

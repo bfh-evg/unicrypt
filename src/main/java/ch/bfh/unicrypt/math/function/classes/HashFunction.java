@@ -87,7 +87,7 @@ public class HashFunction
 
 	@Override
 	protected FiniteByteArrayElement abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().getElement(element.getHashValue(this.hashMethod).getValue());
+		return this.getCoDomain().getElement(element.getHashValue(this.hashMethod));
 	}
 
 	/**

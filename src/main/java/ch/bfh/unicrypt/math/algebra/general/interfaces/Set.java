@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.compound.Compound;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -279,6 +280,8 @@ public interface Set<V extends Object> {
 
 	public Element<V> getElementFrom(ByteArray byteArray);
 
+	public Element<V> getElementFrom(ByteArray byteArray, ByteArrayConverter converter);
+
 	/**
 	 * TODO
 	 * <p>
@@ -286,6 +289,8 @@ public interface Set<V extends Object> {
 	 * @return
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree);
+
+	public Element<V> getElementFrom(ByteTree byteTree, ByteArrayConverter converter);
 
 	/**
 	 * Creates and returns the element that corresponds to the integer value of some other element (if one exists).
@@ -339,6 +344,10 @@ public interface Set<V extends Object> {
 
 	public ByteArray getByteArrayFrom(Element element);
 
+	public ByteArray getByteArrayFrom(Element element, ByteArrayConverter converter);
+
 	public ByteTree getByteTreeFrom(Element element);
+
+	public ByteTree getByteTreeFrom(Element element, ByteArrayConverter converter);
 
 }

@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.compound.Compound;
@@ -266,34 +267,54 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final E getElementFrom(ByteArray byteArray) {
+		return this.getElementFrom(byteArray, ByteArrayConverter.getInstance());
+	}
+
+	@Override
+	public final E getElementFrom(ByteArray byteArray, ByteArrayConverter converter) {
 		if (byteArray == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetElementFrom(byteArray);
+		return this.defaultGetElementFrom(byteArray, converter);
 	}
 
 	@Override
 	public ByteArray getByteArrayFrom(Element element) {
+		return this.getByteArrayFrom(element, ByteArrayConverter.getInstance());
+	}
+
+	@Override
+	public ByteArray getByteArrayFrom(Element element, ByteArrayConverter converter) {
 		if (element == null || !this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetByteArrayFrom((E) element);
+		return this.defaultGetByteArrayFrom((E) element, converter);
 	}
 
 	@Override
 	public final E getElementFrom(ByteTree byteTree) {
+		return this.getElementFrom(byteTree, ByteArrayConverter.getInstance());
+	}
+
+	@Override
+	public final E getElementFrom(ByteTree byteTree, ByteArrayConverter converter) {
 		if (byteTree == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetElementFrom(byteTree);
+		return this.defaultGetElementFrom(byteTree, converter);
 	}
 
 	@Override
 	public ByteTree getByteTreeFrom(Element element) {
+		return this.getByteTreeFrom(element, ByteArrayConverter.getInstance());
+	}
+
+	@Override
+	public ByteTree getByteTreeFrom(Element element, ByteArrayConverter converter) {
 		if (element == null || !this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetByteTreeFrom((E) element);
+		return this.defaultGetByteTreeFrom((E) element, converter);
 	}
 
 	@Override
@@ -403,25 +424,25 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.isEquivalent(element.getSet());
 	}
 
-	protected E defaultGetElementFrom(ByteArray byteArray) {
-		return this.getElementFrom(new BigInteger(1, byteArray.getAll()));
+	protected E defaultGetElementFrom(ByteArray byteArray, ByteArrayConverter converter) {
+		return this.getElementFrom(converter.convertToBigInteger(byteArray));
 	}
 
-	protected ByteArray defaultGetByteArrayFrom(E element) {
-		return ByteArray.getInstance(this.abstractGetBigIntegerFrom(element).toByteArray());
+	protected ByteArray defaultGetByteArrayFrom(E element, ByteArrayConverter converter) {
+		return ByteArray.getInstance(converter.convertToByteArray(this.abstractGetBigIntegerFrom(element)));
 	}
 
-	protected E defaultGetElementFrom(ByteTree byteTree) {
+	protected E defaultGetElementFrom(ByteTree byteTree, ByteArrayConverter converter) {
 		if (byteTree.isLeaf()) {
 			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getBinaryData();
-			return this.defaultGetElementFrom(byteArray);
+			return this.defaultGetElementFrom(byteArray, converter);
 		}
 		// no such element
 		return null;
 	}
 
-	protected ByteTree defaultGetByteTreeFrom(E element) {
-		return ByteTree.getInstance(this.defaultGetByteArrayFrom(element));
+	protected ByteTree defaultGetByteTreeFrom(E element, ByteArrayConverter converter) {
+		return ByteTree.getInstance(this.defaultGetByteArrayFrom(element, converter));
 	}
 
 	protected boolean defaultIsEquivalent(Set set) {

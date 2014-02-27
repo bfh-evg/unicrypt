@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
@@ -176,14 +177,14 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple defaultGetElementFrom(ByteTree byteTree) {
+	protected Tuple defaultGetElementFrom(ByteTree byteTree, ByteArrayConverter converter) {
 		if (!byteTree.isLeaf()) {
 			int arity = this.getArity();
 			ImmutableArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
 			if (byteTrees.getLength() == arity) {
 				Element[] elements = new Element[arity];
 				for (int i = 0; i < arity; i++) {
-					elements[i] = this.getAt(i).getElementFrom(byteTrees.getAt(i));
+					elements[i] = this.getAt(i).getElementFrom(byteTrees.getAt(i), converter);
 					if (elements[i] == null) {
 						// no such element
 						return null;
@@ -197,11 +198,11 @@ public class ProductSet
 	}
 
 	@Override
-	protected ByteTree defaultGetByteTreeFrom(Tuple tuple) {
+	protected ByteTree defaultGetByteTreeFrom(Tuple tuple, ByteArrayConverter converter) {
 		ByteTree[] byteTrees = new ByteTree[this.getArity()];
 		int i = 0;
 		for (Element element : tuple.getValue()) {
-			byteTrees[i++] = element.getByteTree();
+			byteTrees[i++] = element.getByteTree(converter);
 		}
 		return ByteTree.getInstance(byteTrees);
 	}
