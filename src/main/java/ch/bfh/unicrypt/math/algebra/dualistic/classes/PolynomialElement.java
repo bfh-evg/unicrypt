@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 
 /**
@@ -54,7 +55,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 public class PolynomialElement<V>
 	   extends AbstractDualisticElement<PolynomialSemiRing<V>, PolynomialElement<V>, Polynomial<DualisticElement<V>>> {
 
-	protected PolynomialElement(final PolynomialSemiRing semiRing, Polynomial<DualisticElement<V>> polynomial) {
+	protected PolynomialElement(final PolynomialSemiRing<V> semiRing, Polynomial<DualisticElement<V>> polynomial) {
 		super(semiRing, polynomial);
 	}
 
@@ -63,15 +64,35 @@ public class PolynomialElement<V>
 			throw new IllegalArgumentException();
 		}
 
-		// TODO Use Horner-Scheme if:
-		//
-		// n*x^2 < q*x^3    with x = log(modulus), n = order of poly and q = number of non-zero terms in poly
-		//
-		DualisticElement<V> result = this.getSet().getSemiRing().getZeroElement();
-		for (Integer index : this.getValue().getIndices()) {
-			result = result.add(this.getValue().getCoefficient(index).multiply(element.power(index)));
+		if (this.getSet().isBinray()) {
+			SemiRing semiRing = this.getSet().getSemiRing();
+			if (semiRing.getZeroElement().isEquivalent(element)) {
+				return this.getValue().getCoefficient(0);
+			} else {
+				return (this.getValue().getIndices().getLength() % 2) == 0 ? semiRing.getZeroElement() : semiRing.getOneElement();
+			}
 		}
-		return result;
+
+		// TBD! (n*x^2 < q*x^3    with x = log(modulus), n = order of poly and q = number of non-zero terms in poly)
+		int n = this.getValue().getDegree();
+		int q = this.getValue().getIndices().getLength();
+		if (n > 0 && ((double) q / n) < 0.01) {
+			DualisticElement<V> result = this.getSet().getSemiRing().getZeroElement();
+			for (Integer index : this.getValue().getIndices()) {
+				result = result.add(this.getValue().getCoefficient(index).multiply(element.power(index)));
+			}
+			return result;
+		} else {
+			// Horner
+			DualisticElement<V> r = this.getSet().getSemiRing().getZeroElement();
+			for (int i = this.getValue().getDegree(); i >= 0; i--) {
+				r = r.add(this.getValue().getCoefficient(i));
+				if (i > 0) {
+					r = r.multiply(element);
+				}
+			}
+			return r;
+		}
 	}
 
 	public Pair getPoint(DualisticElement element) {

@@ -139,7 +139,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 			if (result == null) {
 				result = (E) element;
 			} else {
-				result = this.apply(result, element);
+				result = this.multiply(result, element);
 			}
 		}
 		return result;

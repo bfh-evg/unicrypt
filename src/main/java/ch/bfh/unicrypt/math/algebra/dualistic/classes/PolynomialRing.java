@@ -71,6 +71,10 @@ public class PolynomialRing<V>
 	//
 	@Override
 	public PolynomialElement<V> invert(Element element) {
+		if (this.isBinray()) {
+			return (PolynomialElement<V>) element;
+		}
+
 		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap<Integer, DualisticElement<V>>();
 		Polynomial<DualisticElement<V>> polynomial = ((PolynomialElement<V>) element).getValue();
 		for (Integer i : polynomial.getIndices()) {

@@ -210,6 +210,10 @@ public class Polynomial<C>
 		}
 		final Polynomial<C> other = (Polynomial<C>) obj;
 
+		if (this.getDegree() == ZERO_POLYNOMIAL_DEGREE && other.getDegree() == ZERO_POLYNOMIAL_DEGREE) {
+			return true;
+		}
+
 		if (this.isBinary()) {
 			return this.binaryCoefficients == other.binaryCoefficients || this.binaryCoefficients.equals(other.binaryCoefficients);
 		} else {
