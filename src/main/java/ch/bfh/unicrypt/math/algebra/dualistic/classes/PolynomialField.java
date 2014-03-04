@@ -45,32 +45,40 @@ import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import java.math.BigInteger;
+import java.util.HashMap;
 
 /**
  *
  * @author rolfhaenni
  * @param <V>
  */
-public class PolynomialField<V extends Object>
+public class PolynomialField<V>
 	   extends PolynomialRing<V>
 	   implements FiniteField<Polynomial<DualisticElement<V>>> {
 
-	private PolynomialElement<V> irreduciblePolynomial;
-	private int degree;
+	private final PolynomialElement<V> irreduciblePolynomial;
 
-	protected PolynomialField(PrimeField primeField) {
+	protected PolynomialField(PrimeField primeField, PolynomialElement<V> irreduciblePolynomial) {
 		super(primeField);
+		this.irreduciblePolynomial = irreduciblePolynomial;
 	}
 
 	public PrimeField<V> getPrimeField() {
 		return (PrimeField<V>) super.getRing();
 	}
 
+	public PolynomialElement<V> getIrreduciblePolynomial() {
+		return this.irreduciblePolynomial;
+	}
+
 	public int getDegree() {
-		return this.degree;
+		return this.irreduciblePolynomial.getValue().getDegree();
 	}
 
 	//
@@ -78,33 +86,186 @@ public class PolynomialField<V extends Object>
 	// various super-classes
 	//
 	@Override
+	protected BigInteger abstractGetOrder() {
+		// p^m
+		return this.getCharacteristic().pow(this.getDegree());
+	}
+
+	@Override
+	protected PolynomialElement<V> abstractGetElement(Polynomial value) {
+		PolynomialElement<V> e = super.abstractGetElement(value);
+		return new PolynomialElement<V>(this, this.mod(e).getValue());
+	}
+
+	@Override
 	public BigInteger getCharacteristic() {
 		return this.getPrimeField().getOrder();
 	}
 
 	@Override
 	public MultiplicativeGroup<Polynomial<DualisticElement<V>>> getMultiplicativeGroup() {
+		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact 2.229/2.230)
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected PolynomialElement<V> abstractMultiply(PolynomialElement<V> element1, PolynomialElement<V> element2) {
+		PolynomialElement<V> poly = super.abstractMultiply(element1, element2);
+		return this.getElement(poly.getValue());
 	}
 
 	@Override
 	public PolynomialElement<V> divide(Element element1, Element element2) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return this.multiply(element1, this.oneOver(element2));
 	}
 
+	/**
+	 *
+	 * TODO Compute using extended Euclidean algorithm for polynomial (Algorithm 2.226)
+	 * <p>
+	 * @param element
+	 * @return
+	 */
 	@Override
 	public PolynomialElement<V> oneOver(Element element) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+		if (!this.contains(element)) {
+			throw new IllegalArgumentException();
+		}
+
+		if (element.isEquivalent(this.getZeroElement())) {
+			throw new UnsupportedOperationException();
+		}
+
+		Triple euclid = PolynomialField.<V>extendedEuclidean((PolynomialElement<V>) element, this.irreduciblePolynomial);
+		return (PolynomialElement<V>) euclid.getSecond();
+
+	}
+
+	private PolynomialElement<V> mod(PolynomialElement<V> poly) {
+		if (poly.getValue().getDegree() < this.getDegree()) {
+			return poly;
+		}
+		Pair longDiv = PolynomialField.<V>longDivision(poly, this.irreduciblePolynomial);
+		return (PolynomialElement<V>) longDiv.getSecond();
 	}
 
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static <V extends Object> PolynomialField getInstance(PrimeField primeField, PolynomialElement<V> irreduciblePolynomialElement) {
+	public static <V> PolynomialElement<V> findIrreduciblePolynomial(PrimeField primeField, int degree) {
+		if (primeField == null || degree < 1) {
+			throw new IllegalArgumentException();
+		}
+		// TODO Find irreducible polynomial (Fact 2.224, §4.5.1)
+		return null;
+	}
+
+	public static <V> boolean isIrreduciblePolynomial(PolynomialElement<V> poly) {
+		if (poly == null) {
+			throw new IllegalArgumentException();
+		}
+		// TODO Find irreducible polynomial (Fact 2.224, §4.5.1)
+		return true;
+	}
+
+	/**
+	 * GCD. d(x) = gcd(g(x),h(x)) and d(x) = s(x)g(x) + t(x)h(x)
+	 * <p>
+	 * See Algorithm 2.221 Extended Euclidean for polynomials
+	 * <p>
+	 * @param <V>
+	 * @param g   g(x)
+	 * @param h   h(x)
+	 * @return (d(x), s(x), t(x))
+	 */
+	public static <V> Triple extendedEuclidean(PolynomialElement<V> g, PolynomialElement<V> h) {
+		if (g == null || h == null || !g.getSet().getSemiRing().isField() || !g.getSet().getSemiRing().isEquivalent(h.getSet().getSemiRing())) {
+			throw new IllegalArgumentException();
+		}
+		final PolynomialElement<V> zero = g.getSet().getZeroElement();
+		final PolynomialElement<V> one = g.getSet().getOneElement();
+
+		// 1.
+		if (h.isEquivalent(zero)) {
+			return Triple.getInstance(g, one, zero);
+		}
+		// 2.
+		PolynomialElement<V> s2 = one;
+		PolynomialElement<V> s1 = zero;
+		PolynomialElement<V> t2 = zero;
+		PolynomialElement<V> t1 = one;
+		PolynomialElement<V> q, r, s, t;
+		// 3.
+		while (!h.isEquivalent(zero)) {
+
+			// 3.1
+			Pair div = PolynomialField.<V>longDivision(g, h);
+			q = (PolynomialElement<V>) div.getFirst();
+			r = (PolynomialElement<V>) div.getSecond();
+			// 3.2
+			s = s2.subtract(q.multiply(s1));
+			t = t2.subtract(q.multiply(t1));
+			// 3.3
+			g = h;
+			h = r;
+			// 3.4
+			s2 = s1;
+			s1 = s;
+			t2 = t1;
+			t1 = t;
+		}
+		// 4./5.
+		return Triple.getInstance(g, s2, t2);
+	}
+
+	/**
+	 * Polynomial long devision. g(x) = h(x)q(x) + r(x)
+	 * <p>
+	 * @param <V>
+	 * @param g   g(x)
+	 * @param h   h(x)
+	 * @return (q(x), r(x))
+	 */
+	public static <V> Pair longDivision(PolynomialElement<V> g, PolynomialElement<V> h) {
+		if (g == null || h == null || !g.getSet().getSemiRing().isField() || !g.getSet().getSemiRing().isEquivalent(h.getSet().getSemiRing())
+			   || h.isEquivalent(h.getSet().getZeroElement())) {
+			throw new IllegalArgumentException();
+		}
+
+		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) g.getSet().getSemiRing());
+		final PolynomialElement<V> zero = ring.getZeroElement();
+
+		PolynomialElement<V> q = zero;
+		PolynomialElement<V> r = ring.getElement(g.getValue());
+		PolynomialElement<V> t;
+		while (!r.isEquivalent(zero) && r.getValue().getDegree() >= h.getValue().getDegree()) {
+			DualisticElement<V> c = r.getValue().getCoefficient(r.getValue().getDegree()).divide(h.getValue().getCoefficient(h.getValue().getDegree()));
+			int i = r.getValue().getDegree() - h.getValue().getDegree();
+			HashMap map = new HashMap(1);
+			map.put(i, c);
+			t = ring.getElement(map);
+			q = t.add(q);
+			r = r.subtract(t.multiply(h));
+		}
+		return Pair.getInstance(q, r);
+	}
+
+	public static <V> PolynomialField getInstance(PrimeField primeField, int degree) {
+		if (primeField == null || degree < 1) {
+			throw new IllegalArgumentException();
+		}
+
+		PolynomialElement<V> irreduciblePolynomialElement = PolynomialField.<V>findIrreduciblePolynomial(primeField, degree);
+		return new PolynomialField(primeField, irreduciblePolynomialElement);
+	}
+
+	public static <V> PolynomialField getInstance(PrimeField primeField, PolynomialElement<V> irreduciblePolynomialElement) {
 		if (primeField == null || irreduciblePolynomialElement == null || !irreduciblePolynomialElement.getSet().getSemiRing().isEquivalent(primeField)) {
 			throw new IllegalArgumentException();
 		}
-		return new PolynomialField(primeField);
+		// TODO Check whether irreduciblePolynomial is really a irreducible polynomial!
+		return new PolynomialField(primeField, irreduciblePolynomialElement);
 	}
 
 }

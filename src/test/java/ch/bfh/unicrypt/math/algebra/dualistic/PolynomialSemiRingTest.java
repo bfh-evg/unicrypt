@@ -234,6 +234,27 @@ public class PolynomialSemiRingTest {
 		assertEquals(1, e6.getValue().getCoefficient(4).getValue().getBigInteger().intValue());
 		assertEquals(1, e6.getValue().getCoefficient(5).getValue().getBigInteger().intValue());
 		assertEquals(1, e6.getValue().getCoefficient(6).getValue().getBigInteger().intValue());
+
+		zmod = (ZMod) ring2.getSemiRing();
+		poly1 = Polynomial.getInstance(new ZModElement[]{zmod.getElement(1), zmod.getElement(1), zmod.getElement(0), zmod.getElement(0), zmod.getElement(1)},
+									   zmod.getIdentityElement(), zmod.getOneElement());
+		poly2 = Polynomial.getInstance(new ZModElement[]{zmod.getElement(0), zmod.getElement(0), zmod.getElement(0), zmod.getElement(0), zmod.getElement(0), zmod.getElement(0), zmod.getElement(1)},
+									   zmod.getIdentityElement(), zmod.getOneElement());
+		e4 = ring2.getElement(poly1);
+		e5 = ring2.getElement(poly2);
+		e6 = (PolynomialElement) e4.multiply(e5);
+
+		assertEquals(0, e6.getValue().getCoefficient(0).getValue().getBigInteger().intValue());
+		assertEquals(0, e6.getValue().getCoefficient(1).getValue().getBigInteger().intValue());
+		assertEquals(0, e6.getValue().getCoefficient(2).getValue().getBigInteger().intValue());
+		assertEquals(0, e6.getValue().getCoefficient(3).getValue().getBigInteger().intValue());
+		assertEquals(0, e6.getValue().getCoefficient(4).getValue().getBigInteger().intValue());
+		assertEquals(0, e6.getValue().getCoefficient(5).getValue().getBigInteger().intValue());
+		assertEquals(1, e6.getValue().getCoefficient(6).getValue().getBigInteger().intValue());
+		assertEquals(1, e6.getValue().getCoefficient(7).getValue().getBigInteger().intValue());
+		assertEquals(0, e6.getValue().getCoefficient(8).getValue().getBigInteger().intValue());
+		assertEquals(0, e6.getValue().getCoefficient(9).getValue().getBigInteger().intValue());
+		assertEquals(1, e6.getValue().getCoefficient(10).getValue().getBigInteger().intValue());
 	}
 
 }

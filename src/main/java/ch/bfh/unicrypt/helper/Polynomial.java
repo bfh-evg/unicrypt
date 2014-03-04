@@ -193,6 +193,15 @@ public class Polynomial<C>
 		return this.indices;
 	}
 
+	public final Polynomial<C> getTerm(int index) {
+		if (index < 0) {
+			throw new IllegalArgumentException();
+		}
+		HashMap map = new HashMap(1);
+		map.put(index, this.getCoefficient(index));
+		return new Polynomial(map, this.zeroCoefficient, this.oneCoefficient);
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 7;
@@ -292,7 +301,7 @@ public class Polynomial<C>
 		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Polynomial<C>(coefficients, zeroCoefficient, oneCoefficient);
+		return new Polynomial<C>(coefficients.stripTrailingZeroBytes(), zeroCoefficient, oneCoefficient);
 	}
 
 }

@@ -247,24 +247,28 @@ public class PolynomialSemiRing<V>
 		Polynomial<DualisticElement<V>> polynomial1 = element1.getValue();
 		Polynomial<DualisticElement<V>> polynomial2 = element2.getValue();
 
+		if (element1.isEquivalent(this.getZeroElement()) || element2.isEquivalent(this.getZeroElement())) {
+			return this.getZeroElement();
+		}
+
 		if (this.isBinray()) {
-			BigInteger p1 = new BigInteger(polynomial1.getCoefficients().getAll());
-			BigInteger p2 = new BigInteger(polynomial2.getCoefficients().getAll());
+			ByteArray p1 = polynomial1.getCoefficients();
+			ByteArray p2 = polynomial2.getCoefficients();
 			if (polynomial2.getDegree() > polynomial1.getDegree()) {
-				BigInteger tmp = p1;
+				ByteArray tmp = p1;
 				p1 = p2;
 				p2 = tmp;
 			}
-
-			BigInteger result = BigInteger.ZERO;
-			while (!p2.equals(BigInteger.ZERO)) {
-				if (p2.testBit(0)) {
-					result = result.xor(p1);
+			ByteArray zero = ByteArray.getInstance(new byte[0]);
+			ByteArray result = zero;
+			while (!p2.equals(zero)) {
+				if (p2.getBitAt(0)) {
+					result = result.xorFillZero(p1);
 				}
 				p1 = p1.shiftLeft(1);
 				p2 = p2.shiftRight(1);
 			}
-			return this.getElement(ByteArray.getInstance(result.toByteArray()));
+			return this.getElement(result);
 
 		} else {
 			Map<Integer, DualisticElement<V>> coefficientMap = new HashMap();
