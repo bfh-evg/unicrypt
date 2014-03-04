@@ -45,13 +45,11 @@ import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import java.math.BigInteger;
-import java.util.HashMap;
 
 /**
  *
@@ -120,8 +118,9 @@ public class PolynomialField<V>
 	}
 
 	/**
-	 *
-	 * TODO Compute using extended Euclidean algorithm for polynomial (Algorithm 2.226)
+	 * oneOver.
+	 * <p>
+	 * Compute using extended Euclidean algorithm for polynomial (Algorithm 2.226)
 	 * <p>
 	 * @param element
 	 * @return
@@ -137,16 +136,24 @@ public class PolynomialField<V>
 			throw new UnsupportedOperationException();
 		}
 
-		Triple euclid = PolynomialField.<V>extendedEuclidean((PolynomialElement<V>) element, this.irreduciblePolynomial);
-		return (PolynomialElement<V>) euclid.getSecond();
+		Triple euclid = this.extendedEuclidean((PolynomialElement<V>) element, this.irreduciblePolynomial);
+		return this.getElement(((PolynomialElement<V>) euclid.getSecond()).getValue());
 
 	}
 
-	private PolynomialElement<V> mod(PolynomialElement<V> poly) {
-		if (poly.getValue().getDegree() < this.getDegree()) {
-			return poly;
+	/**
+	 * Mod. g(x) mod irreduciblePolynomial = h(x)
+	 * <p>
+	 * Z_p must be a field.
+	 * <p>
+	 * @param g g(x) in Z_p[x]
+	 * @return h(x) in Z_p[x]
+	 */
+	private PolynomialElement<V> mod(PolynomialElement<V> g) {
+		if (g.getValue().getDegree() < this.getDegree()) {
+			return g;
 		}
-		Pair longDiv = PolynomialField.<V>longDivision(poly, this.irreduciblePolynomial);
+		Pair longDiv = this.longDivision(g, this.irreduciblePolynomial);
 		return (PolynomialElement<V>) longDiv.getSecond();
 	}
 
@@ -159,96 +166,6 @@ public class PolynomialField<V>
 		}
 		// TODO Find irreducible polynomial (Fact 2.224, §4.5.1)
 		return null;
-	}
-
-	public static <V> boolean isIrreduciblePolynomial(PolynomialElement<V> poly) {
-		if (poly == null) {
-			throw new IllegalArgumentException();
-		}
-		// TODO Find irreducible polynomial (Fact 2.224, §4.5.1)
-		return true;
-	}
-
-	/**
-	 * GCD. d(x) = gcd(g(x),h(x)) and d(x) = s(x)g(x) + t(x)h(x)
-	 * <p>
-	 * See Algorithm 2.221 Extended Euclidean for polynomials
-	 * <p>
-	 * @param <V>
-	 * @param g   g(x)
-	 * @param h   h(x)
-	 * @return (d(x), s(x), t(x))
-	 */
-	public static <V> Triple extendedEuclidean(PolynomialElement<V> g, PolynomialElement<V> h) {
-		if (g == null || h == null || !g.getSet().getSemiRing().isField() || !g.getSet().getSemiRing().isEquivalent(h.getSet().getSemiRing())) {
-			throw new IllegalArgumentException();
-		}
-		final PolynomialElement<V> zero = g.getSet().getZeroElement();
-		final PolynomialElement<V> one = g.getSet().getOneElement();
-
-		// 1.
-		if (h.isEquivalent(zero)) {
-			return Triple.getInstance(g, one, zero);
-		}
-		// 2.
-		PolynomialElement<V> s2 = one;
-		PolynomialElement<V> s1 = zero;
-		PolynomialElement<V> t2 = zero;
-		PolynomialElement<V> t1 = one;
-		PolynomialElement<V> q, r, s, t;
-		// 3.
-		while (!h.isEquivalent(zero)) {
-
-			// 3.1
-			Pair div = PolynomialField.<V>longDivision(g, h);
-			q = (PolynomialElement<V>) div.getFirst();
-			r = (PolynomialElement<V>) div.getSecond();
-			// 3.2
-			s = s2.subtract(q.multiply(s1));
-			t = t2.subtract(q.multiply(t1));
-			// 3.3
-			g = h;
-			h = r;
-			// 3.4
-			s2 = s1;
-			s1 = s;
-			t2 = t1;
-			t1 = t;
-		}
-		// 4./5.
-		return Triple.getInstance(g, s2, t2);
-	}
-
-	/**
-	 * Polynomial long devision. g(x) = h(x)q(x) + r(x)
-	 * <p>
-	 * @param <V>
-	 * @param g   g(x)
-	 * @param h   h(x)
-	 * @return (q(x), r(x))
-	 */
-	public static <V> Pair longDivision(PolynomialElement<V> g, PolynomialElement<V> h) {
-		if (g == null || h == null || !g.getSet().getSemiRing().isField() || !g.getSet().getSemiRing().isEquivalent(h.getSet().getSemiRing())
-			   || h.isEquivalent(h.getSet().getZeroElement())) {
-			throw new IllegalArgumentException();
-		}
-
-		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) g.getSet().getSemiRing());
-		final PolynomialElement<V> zero = ring.getZeroElement();
-
-		PolynomialElement<V> q = zero;
-		PolynomialElement<V> r = ring.getElement(g.getValue());
-		PolynomialElement<V> t;
-		while (!r.isEquivalent(zero) && r.getValue().getDegree() >= h.getValue().getDegree()) {
-			DualisticElement<V> c = r.getValue().getCoefficient(r.getValue().getDegree()).divide(h.getValue().getCoefficient(h.getValue().getDegree()));
-			int i = r.getValue().getDegree() - h.getValue().getDegree();
-			HashMap map = new HashMap(1);
-			map.put(i, c);
-			t = ring.getElement(map);
-			q = t.add(q);
-			r = r.subtract(t.multiply(h));
-		}
-		return Pair.getInstance(q, r);
 	}
 
 	public static <V> PolynomialField getInstance(PrimeField primeField, int degree) {

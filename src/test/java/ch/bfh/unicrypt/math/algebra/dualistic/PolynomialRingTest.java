@@ -47,7 +47,10 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -64,7 +67,7 @@ public class PolynomialRingTest {
 	public PolynomialRingTest() {
 		ring0 = PolynomialRing.getInstance(Z.getInstance());
 		ring1 = PolynomialRing.getInstance(ZMod.getInstance(7));
-		ring2 = PolynomialRing.getInstance(ZMod.getInstance(2));
+		ring2 = PolynomialRing.getInstance(ZModPrime.getInstance(2));
 	}
 
 	@Test
@@ -80,6 +83,23 @@ public class PolynomialRingTest {
 		zmod = (ZMod) ring2.getSemiRing();
 		PolynomialElement<ResidueClass> p2 = ring2.getElement(Tuple.getInstance(zmod.getElement(0), zmod.getElement(1), zmod.getElement(1), zmod.getElement(1)));
 		assertEquals(ring2.getZeroElement(), p2.add(p2.invert()));
+	}
+
+	@Test
+	public void testExtendedEuclidean() {
+		BigInteger zero = BigInteger.valueOf(0);
+		BigInteger one = BigInteger.valueOf(1);
+
+		PolynomialElement<ResidueClass> p1 = ring2.getElement(one, zero, zero, zero, one, one, one, zero, one, one, one);
+		PolynomialElement<ResidueClass> p2 = ring2.getElement(one, zero, one, one, zero, one, one, zero, zero, one, zero);
+
+		Triple euclid = ring2.extendedEuclidean(p1, p2);
+		PolynomialElement<ResidueClass> gcd = ring2.getElement(one, one, zero, one);
+		PolynomialElement<ResidueClass> s = ring2.getElement(zero, zero, zero, zero, one);
+		PolynomialElement<ResidueClass> t = ring2.getElement(one, one, one, one, one, one);
+		assertEquals(gcd, euclid.getFirst());
+		assertEquals(s, euclid.getSecond());
+		assertEquals(t, euclid.getThird());
 	}
 
 }

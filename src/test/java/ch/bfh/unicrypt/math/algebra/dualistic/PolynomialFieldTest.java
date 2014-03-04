@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -62,6 +61,9 @@ public class PolynomialFieldTest {
 	//private static PolynomialField<ResidueClass> field1;  // ZMod
 	private static PolynomialRing<ResidueClass> ring2;  // ZMod Binary
 	private static PolynomialField<ResidueClass> field2;  // ZMod Binary
+
+	private static BigInteger zero = BigInteger.valueOf(0);
+	private static BigInteger one = BigInteger.valueOf(1);
 
 	public PolynomialFieldTest() {
 		//field1 = PolynomialField.getInstance(ZModPrime.getInstance(7), 4);
@@ -109,6 +111,7 @@ public class PolynomialFieldTest {
 		p3 = p1.multiply(p2);
 		//System.out.println(p3);
 		assertTrue(p3.isEquivalent(field2.getOneElement()));
+		assertTrue(p3.getSet().isField());
 	}
 
 	@Test
@@ -122,26 +125,23 @@ public class PolynomialFieldTest {
 		assertEquals(zmod.getZeroElement(), p2.getValue().getCoefficient(1));
 		assertEquals(zmod.getOneElement(), p2.getValue().getCoefficient(2));
 		assertEquals(zmod.getZeroElement(), p2.getValue().getCoefficient(3));
+		assertTrue(p2.getSet().isField());
 
 		PolynomialElement<ResidueClass> p3 = p1.multiply(p2);
 		assertTrue(p3.isEquivalent(field2.getOneElement()));
 	}
 
 	@Test
-	public void testExtendedEuclidean() {
-		BigInteger zero = BigInteger.valueOf(0);
-		BigInteger one = BigInteger.valueOf(1);
-
-		PolynomialElement<ResidueClass> p1 = ring2.getElement(one, zero, zero, zero, one, one, one, zero, one, one, one);
-		PolynomialElement<ResidueClass> p2 = ring2.getElement(one, zero, one, one, zero, one, one, zero, zero, one, zero);
-
-		Triple euclid = PolynomialField.<ResidueClass>extendedEuclidean(p1, p2);
-		PolynomialElement<ResidueClass> gcd = ring2.getElement(one, one, zero, one);
-		PolynomialElement<ResidueClass> s = ring2.getElement(zero, zero, zero, zero, one);
-		PolynomialElement<ResidueClass> t = ring2.getElement(one, one, one, one, one, one);
-		assertEquals(gcd, euclid.getFirst());
-		assertEquals(s, euclid.getSecond());
-		assertEquals(t, euclid.getThird());
+	public void testDivide() {
+		// p1 = 1 + x^2 + x^3
+		PolynomialElement<ResidueClass> p1 = field2.getElement(one, zero, one, one);
+		// p2 = 1 + x + x^2 + x^3
+		PolynomialElement<ResidueClass> p2 = field2.getElement(one, one, one, one);
+		// p2 / p1 = 1 + x^3
+		PolynomialElement<ResidueClass> p3 = p2.divide(p1);
+		//System.out.println(p3);
+		assertEquals(field2.getElement(one, zero, zero, one), p3);
+		assertTrue(p3.getSet().isField());
 	}
 
 }
