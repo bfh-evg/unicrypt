@@ -258,6 +258,54 @@ public class ByteArray
 		return new ByteArray(result);
 	}
 
+	public ByteArray shiftRight(int n) {
+		if (n == 0) {
+			return this;
+		}
+		if (n < 0) {
+			return this.shiftLeft(-n);
+		}
+		int nBytes = n / Byte.SIZE;
+		int nBits = n % Byte.SIZE;
+		int nBits2 = Byte.SIZE - nBits;
+		int newBitLength = (this.length * Byte.SIZE - countTrailingZeros() - n);
+		if (newBitLength <= 0) {
+			return new ByteArray(new byte[0]);
+		}
+		byte[] result = new byte[(int) Math.ceil(newBitLength / (double) Byte.SIZE)];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = (byte) (((bytes[i + nBytes] & 0xff) >>> nBits) | (i + nBytes + 1 < this.length ? (bytes[i + nBytes + 1] << nBits2) : 0));
+		}
+		return new ByteArray(result);
+	}
+
+	public ByteArray shiftLeft(int n) {
+		if (n <= 0) {
+			return this.shiftRight(-n);
+		}
+		int nBytes = n / Byte.SIZE;
+		int nBits = n % Byte.SIZE;
+		int nBits2 = Byte.SIZE - nBits;
+		int newBitLength = (this.length * Byte.SIZE - countTrailingZeros() + n);
+		byte[] result = new byte[(int) Math.ceil(newBitLength / (double) Byte.SIZE)];
+		for (int i = 0; i < result.length; i++) {
+			if (i < nBytes) {
+				result[i] = 0;
+			} else {
+				result[i] = (byte) (((i - nBytes < this.length ? (bytes[i - nBytes] << nBits) : 0) | (i - nBytes - 1 >= 0 ? ((bytes[i - nBytes - 1] & 0xff) >>> nBits2) : 0)));
+			}
+		}
+		return new ByteArray(result);
+	}
+
+	public ByteArray stripTrailingZeroBytes() {
+		int n = this.countTrailingZeros() / Byte.SIZE;
+		if (n > 0) {
+			return extractPrefix(n);
+		}
+		return this;
+	}
+
 	public ByteArray getHashValue() {
 		return this.getHashValue(HashAlgorithm.getInstance());
 	}
