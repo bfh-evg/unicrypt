@@ -48,10 +48,12 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -60,25 +62,28 @@ import org.junit.Test;
  */
 public class PolynomialRingTest {
 
-	private static PolynomialRing<WholeNumber> ring0;  // Z
-	private static PolynomialRing<ResidueClass> ring1;  // ZMod
-	private static PolynomialRing<ResidueClass> ring2;  // ZMod Binary
+	private static final Z z = Z.getInstance();
+	private static final ZModPrime zmod2 = ZModPrime.getInstance(2);
+	private static final ZModPrime zmod5 = ZModPrime.getInstance(5);
+	private static final ZModPrime zmod7 = ZModPrime.getInstance(7);
 
-	public PolynomialRingTest() {
-		ring0 = PolynomialRing.getInstance(Z.getInstance());
-		ring1 = PolynomialRing.getInstance(ZMod.getInstance(7));
-		ring2 = PolynomialRing.getInstance(ZModPrime.getInstance(2));
-	}
+	private static final PolynomialRing<WholeNumber> ring0 = PolynomialRing.getInstance(z);   // Z
+	private static final PolynomialRing<ResidueClass> ring2 = PolynomialRing.getInstance(zmod2);  // ZMod Binary
+	private static final PolynomialRing<ResidueClass> ring5 = PolynomialRing.getInstance(zmod5);  // ZMod
+	private static final PolynomialRing<ResidueClass> ring7 = PolynomialRing.getInstance(zmod7);  // ZMod
+
+	private static final BigInteger zero = BigInteger.valueOf(0);
+	private static final BigInteger one = BigInteger.valueOf(1);
 
 	@Test
 	public void testInvert() {
-		Z z = Z.getInstance();
+
 		PolynomialElement<WholeNumber> p = ring0.getElement(Tuple.getInstance(z.getElement(0), z.getElement(1), z.getElement(2), z.getElement(3)));
 		assertEquals(ring0.getZeroElement(), p.add(p.invert()));
 
-		ZMod zmod = (ZMod) ring1.getSemiRing();
-		PolynomialElement<ResidueClass> p1 = ring1.getElement(Tuple.getInstance(zmod.getElement(5), zmod.getElement(0), zmod.getElement(6), zmod.getElement(3)));
-		assertEquals(ring1.getZeroElement(), p1.add(p1.invert()));
+		ZMod zmod = (ZMod) ring7.getSemiRing();
+		PolynomialElement<ResidueClass> p1 = ring7.getElement(Tuple.getInstance(zmod.getElement(5), zmod.getElement(0), zmod.getElement(6), zmod.getElement(3)));
+		assertEquals(ring7.getZeroElement(), p1.add(p1.invert()));
 
 		zmod = (ZMod) ring2.getSemiRing();
 		PolynomialElement<ResidueClass> p2 = ring2.getElement(Tuple.getInstance(zmod.getElement(0), zmod.getElement(1), zmod.getElement(1), zmod.getElement(1)));
@@ -86,20 +91,76 @@ public class PolynomialRingTest {
 	}
 
 	@Test
+	public void testLongDivision() {
+		PolynomialElement<ResidueClass> f = ring5.getElement(Tuple.getInstance(zmod5.getZeroElement(), zmod5.getZeroElement(), zmod5.getElement(3), zmod5.getElement(2), zmod5.getElement(4), zmod5.getOneElement()));
+		PolynomialElement<ResidueClass> g = ring5.getElement(Tuple.getInstance(zmod5.getElement(3), zmod5.getZeroElement(), zmod5.getOneElement()));
+
+		Pair div = ring5.longDivision(f, g);
+		assertEquals(div.getFirst(), ring5.getElement(Tuple.getInstance(zmod5.getOneElement(), zmod5.getElement(4), zmod5.getElement(4), zmod5.getOneElement())));
+		assertEquals(div.getSecond(), ring5.getElement(Tuple.getInstance(zmod5.getElement(2), zmod5.getElement(3))));
+	}
+
+	@Test
+	public void testEuclidean() {
+		PolynomialElement<ResidueClass> p1 = ring2.getElement(one, zero, zero, zero, one, one, one, zero, one, one, one);
+		PolynomialElement<ResidueClass> p2 = ring2.getElement(one, zero, one, one, zero, one, one, zero, zero, one, zero);
+
+		PolynomialElement<ResidueClass> gcd = ring2.euclidean(p1, p2);
+		assertEquals(ring2.getElement(one, one, zero, one), gcd);
+	}
+
+	@Test
 	public void testExtendedEuclidean() {
-		BigInteger zero = BigInteger.valueOf(0);
-		BigInteger one = BigInteger.valueOf(1);
 
 		PolynomialElement<ResidueClass> p1 = ring2.getElement(one, zero, zero, zero, one, one, one, zero, one, one, one);
 		PolynomialElement<ResidueClass> p2 = ring2.getElement(one, zero, one, one, zero, one, one, zero, zero, one, zero);
 
 		Triple euclid = ring2.extendedEuclidean(p1, p2);
-		PolynomialElement<ResidueClass> gcd = ring2.getElement(one, one, zero, one);
+		PolynomialElement<ResidueClass> d = ring2.getElement(one, one, zero, one);
 		PolynomialElement<ResidueClass> s = ring2.getElement(zero, zero, zero, zero, one);
 		PolynomialElement<ResidueClass> t = ring2.getElement(one, one, one, one, one, one);
-		assertEquals(gcd, euclid.getFirst());
+		assertEquals(d, euclid.getFirst());
 		assertEquals(s, euclid.getSecond());
 		assertEquals(t, euclid.getThird());
+		assertEquals(d, p1.multiply(s).add(p2.multiply(t)));
+
+		// gcd(1+2x^2, 1+4x+x^2+x^3) = 4 => 1
+		p1 = ring5.getElement(one, zero, BigInteger.valueOf(2));
+		p2 = ring5.getElement(one, BigInteger.valueOf(4), one, one);
+		euclid = ring5.extendedEuclidean(p1, p2);
+		d = (PolynomialElement<ResidueClass>) euclid.getFirst();
+		s = (PolynomialElement<ResidueClass>) euclid.getSecond();
+		t = (PolynomialElement<ResidueClass>) euclid.getThird();
+		assertTrue(d.isOne());
+		assertEquals(d, p1.multiply(s).add(p2.multiply(t)));
+	}
+
+	@Test
+	public void testIsIrreduciblePolynomial() {
+		PolynomialElement<ResidueClass> p = ring2.getElement(one, one, zero, zero, one);
+		assertTrue(ring2.isIrreduciblePolynomial(p));
+
+		ZModPrime zmod3 = ZModPrime.getInstance(3);
+		PolynomialRing ring3 = PolynomialRing.getInstance(zmod3);
+		p = ring3.getElement(zero, one);
+		assertTrue(p.isIrreducible());
+
+		p = ring3.getElement(one, zero, BigInteger.valueOf(2), one);
+		assertTrue(p.isIrreducible());
+		p = ring3.getElement(one, BigInteger.valueOf(2), zero, one);
+		assertTrue(p.isIrreducible());
+		p = ring3.getElement(one, one, BigInteger.valueOf(2), one);
+		assertTrue(p.isIrreducible());
+		p = ring3.getElement(BigInteger.valueOf(2), BigInteger.valueOf(2), BigInteger.valueOf(2), one);
+		assertTrue(p.isIrreducible());
+
+	}
+
+	@Test
+	public void testFindIrreduciblePolynomial() {
+		PolynomialElement<ResidueClass> p = ring2.findIrreduciblePolynomial(4);
+		assertTrue(ring2.isIrreduciblePolynomial(p));
+		assertEquals(4, p.getValue().getDegree());
 	}
 
 }

@@ -47,6 +47,8 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,20 +104,41 @@ public class PolynomialRing<V>
 	}
 
 	/**
-	 * GCD.
+	 * GCD. d(x) = gcd(g(x),h(x)). The unique monic gcd is returned.
+	 * <p>
+	 * Z_p must be a field.
 	 * <p>
 	 * See Algorithm 2.218 Euclidean algorithm for Z_p[x]
 	 * <p>
-	 * @param g
-	 * @param h
-	 * @return
+	 * @param g g(x) in Z_p[x]
+	 * @param h h(x) in Z_p[x]
+	 * @return d(x) in Z_p[x]
 	 */
 	public PolynomialElement<V> euclidean(PolynomialElement<V> g, PolynomialElement<V> h) {
-		return null;
+		if (!this.getSemiRing().isField()) {
+			throw new UnsupportedOperationException();
+		}
+		if (!this.contains(g) || !this.contains(h)) {
+			throw new IllegalArgumentException();
+		}
+		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
+
+		while (!h.isEquivalent(ring.getZeroElement())) {
+			Pair div = longDivision(g, h);
+			g = h;
+			h = (PolynomialElement<V>) div.getSecond();
+		}
+
+		// Reduce g to be monic
+		if (!g.getValue().isMonic()) {
+			DualisticElement<V> a = g.getValue().getCoefficient(g.getValue().getDegree());
+			g = g.reduce(a);
+		}
+		return g;
 	}
 
 	/**
-	 * GCD. d(x) = gcd(g(x),h(x)) and d(x) = s(x)g(x) + t(x)h(x)
+	 * GCD. d(x) = gcd(g(x),h(x)) and d(x) = s(x)g(x) + t(x)h(x). The unique monic gcd is returned.
 	 * <p>
 	 * Z_p must be a field, so p must be prime.
 	 * <p>
@@ -140,15 +163,13 @@ public class PolynomialRing<V>
 		if (h.isEquivalent(zero)) {
 			return Triple.getInstance(ring.getElement(g.getValue()), one, zero);
 		}
+
 		// 2.
-		PolynomialElement<V> s2 = one;
-		PolynomialElement<V> s1 = zero;
-		PolynomialElement<V> t2 = zero;
-		PolynomialElement<V> t1 = one;
+		PolynomialElement<V> s2 = one, s1 = zero, t2 = zero, t1 = one;
 		PolynomialElement<V> q, r, s, t;
+
 		// 3.
 		while (!h.isEquivalent(zero)) {
-
 			// 3.1
 			Pair div = longDivision(g, h);
 			q = (PolynomialElement<V>) div.getFirst();
@@ -166,11 +187,18 @@ public class PolynomialRing<V>
 			t1 = t;
 		}
 		// 4./5.
+		// Reduce gcd to be monic
+		if (!g.getValue().isMonic()) {
+			DualisticElement<V> a = g.getValue().getCoefficient(g.getValue().getDegree());
+			g = g.reduce(a);
+			s2 = s2.reduce(a);
+			t2 = t2.reduce(a);
+		}
 		return Triple.getInstance(g, s2, t2);
 	}
 
 	/**
-	 * Polynomial long devision. g(x) = h(x)q(x) + r(x)
+	 * Polynomial long division. g(x) = h(x)q(x) + r(x)
 	 * <p>
 	 * Z_p must be a field, so p must be prime.
 	 * <p>
@@ -186,8 +214,7 @@ public class PolynomialRing<V>
 			throw new IllegalArgumentException();
 		}
 
-		// Don't use 'this' as 'this' might be a PolynomialField
-		// -> getElement() in t = ring.getElement(map) would result in an endless loop
+		// Create explicitly a ring to work in (the instance might be a field).
 		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
 		final PolynomialElement<V> zero = ring.getZeroElement();
 
@@ -227,7 +254,7 @@ public class PolynomialRing<V>
 		PolynomialElement<V> d;
 		int m = f.getValue().getDegree();
 		BigInteger p = this.getSemiRing().getOrder();
-		for (int i = 1; i < m / 2; i++) {
+		for (int i = 1; i <= (m / 2); i++) {
 			u = squareAndMultiply(u, p, f);
 			d = euclidean(f, u.subtract(x));
 			if (!d.isEquivalent(ring.getOneElement())) {
@@ -238,6 +265,41 @@ public class PolynomialRing<V>
 	}
 
 	/**
+	 * Finds irreducible polynomial.
+	 * <p>
+	 * See Algorithm 4.70 Generating a random monic irreducible polynomial over Z_p<br>
+	 * See Fact 4.75
+	 * <p>
+	 * @param degree
+	 * @param randomByteSequence
+	 * @return f(x) in Z_p[x] irreducible over Z_p
+	 */
+	public PolynomialElement<V> findIrreduciblePolynomial(int degree, RandomByteSequence randomByteSequence) {
+		if (!this.getSemiRing().isField()) {
+			throw new UnsupportedOperationException();
+		}
+		if (degree < 1 || randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		//
+		// TODO Search for irreducible trinomials if set is binary.
+		//      -> see Fact 4.75
+		//
+
+		PolynomialElement<V> f;
+		do {
+			f = this.getRandomMonicElement(degree, true, randomByteSequence);
+		} while (!f.isIrreducible());
+		return f;
+	}
+
+	public PolynomialElement<V> findIrreduciblePolynomial(int degree) {
+		return this.findIrreduciblePolynomial(degree, HybridRandomByteSequence.getInstance());
+	}
+
+	/**
+	 * Returns g(x)^k mod f(x) where g(x), f(x) in Z_p[x].
+	 * <p>
 	 * See Algorithm 2.227 Repeated square-and-multiply algorithm for exponentiation
 	 * <p>
 	 * @param g
@@ -246,7 +308,26 @@ public class PolynomialRing<V>
 	 * @return
 	 */
 	private PolynomialElement<V> squareAndMultiply(PolynomialElement<V> g, BigInteger k, PolynomialElement<V> f) {
-		return null;
+		if (k.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
+		PolynomialElement<V> s = ring.getOneElement();
+
+		if (k.signum() == 0) {
+			return s;
+		}
+		PolynomialElement<V> t = ring.getElement(g.getValue());
+		if (k.testBit(0)) {
+			s = t;
+		}
+		for (int i = 1; i <= k.bitLength(); i++) {
+			t = (PolynomialElement<V>) this.longDivision(t.square(), f).getSecond();
+			if (k.testBit(i)) {
+				s = (PolynomialElement<V>) this.longDivision(t.multiply(s), f).getSecond();
+			}
+		}
+		return s;
 	}
 
 	//

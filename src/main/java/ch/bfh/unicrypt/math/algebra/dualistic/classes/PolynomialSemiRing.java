@@ -105,7 +105,7 @@ public class PolynomialSemiRing<V>
 	}
 
 	public PolynomialElement<V> getElement(Tuple coefficients) {
-		if (!coefficients.isEmpty() && (!coefficients.getSet().isUniform() || !coefficients.getSet().getFirst().isEquivalent(this.getSemiRing()))) {
+		if (coefficients == null || !coefficients.isEmpty() && (!coefficients.getSet().isUniform() || !coefficients.getSet().getFirst().isEquivalent(this.getSemiRing()))) {
 			throw new IllegalArgumentException();
 		}
 
@@ -131,6 +131,29 @@ public class PolynomialSemiRing<V>
 				coefficientMap.put(i, coefficient);
 			}
 		}
+		return getElement(coefficientMap);
+	}
+
+	public PolynomialElement<V> getRandomMonicElement(int degree, boolean a0NotZero) {
+		return this.getRandomMonicElement(degree, a0NotZero, HybridRandomByteSequence.getInstance());
+	}
+
+	public PolynomialElement<V> getRandomMonicElement(int degree, boolean a0NotZero, RandomByteSequence randomByteSequence) {
+		if (degree < 0 || randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap<Integer, DualisticElement<V>>();
+		for (int i = 0; i <= degree - 1; i++) {
+			DualisticElement<V> coefficient = this.getSemiRing().getRandomElement(randomByteSequence);
+			while (i == 0 && a0NotZero && coefficient.isZero()) {
+				coefficient = this.getSemiRing().getRandomElement(randomByteSequence);
+			}
+			if (!coefficient.isZero()) {
+				coefficientMap.put(i, coefficient);
+			}
+		}
+		coefficientMap.put(degree, this.getSemiRing().getOneElement());
+
 		return getElement(coefficientMap);
 	}
 

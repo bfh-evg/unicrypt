@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -62,20 +62,14 @@ import org.junit.Test;
  */
 public class PolynomialElementTest {
 
-	private static PolynomialSemiRing<WholeNumber> ring0;  // Z
-	private static PolynomialSemiRing<ResidueClass> ring1;  // ZMod
-	private static PolynomialSemiRing<ResidueClass> ring2;  // ZMod Binary
+	private static final Z z = Z.getInstance();
+	private static final ZModPrime zmod2 = ZModPrime.getInstance(2);
 
-	public PolynomialElementTest() {
-		ring0 = PolynomialSemiRing.getInstance(Z.getInstance());
-		ring1 = PolynomialSemiRing.getInstance(ZMod.getInstance(7));
-		ring2 = PolynomialSemiRing.getInstance(ZMod.getInstance(2));
-	}
+	private static final PolynomialSemiRing<WholeNumber> ring0 = PolynomialSemiRing.getInstance(z);
+	private static final PolynomialSemiRing<ResidueClass> ring2 = PolynomialSemiRing.getInstance(zmod2);
 
 	@Test
 	public void testEvaluate() {
-
-		Z z = Z.getInstance();
 		PolynomialElement<WholeNumber> p = ring0.getElement(Tuple.getInstance(z.getElement(-1), z.getElement(2), z.getElement(-6), z.getElement(2)));
 		assertEquals(z.getElement(5), p.evaluate(z.getElement(3)));
 
@@ -94,22 +88,21 @@ public class PolynomialElementTest {
 		p = ring0.getElement(Polynomial.getInstance(map, z.getZeroElement(), z.getOneElement()));
 		assertEquals(BigInteger.valueOf(3).pow(1001).multiply(BigInteger.valueOf(48)).add(BigInteger.ONE), p.evaluate(z.getElement(3)).getValue().getBigInteger());
 
-		ZMod zmod = (ZMod) ring2.getSemiRing();
-		PolynomialElement<ResidueClass> p2 = ring2.getElement(Tuple.getInstance(zmod.getElement(0), zmod.getElement(1), zmod.getElement(1), zmod.getElement(1)));
-		assertEquals(zmod.getZeroElement(), p2.evaluate(zmod.getElement(0)));
-		assertEquals(zmod.getOneElement(), p2.evaluate(zmod.getElement(1)));
+		PolynomialElement<ResidueClass> p2 = ring2.getElement(Tuple.getInstance(zmod2.getElement(0), zmod2.getElement(1), zmod2.getElement(1), zmod2.getElement(1)));
+		assertEquals(zmod2.getZeroElement(), p2.evaluate(zmod2.getElement(0)));
+		assertEquals(zmod2.getOneElement(), p2.evaluate(zmod2.getElement(1)));
 
-		p2 = ring2.getElement(Tuple.getInstance(zmod.getElement(1), zmod.getElement(1), zmod.getElement(1), zmod.getElement(1)));
-		assertEquals(zmod.getOneElement(), p2.evaluate(zmod.getElement(0)));
-		assertEquals(zmod.getZeroElement(), p2.evaluate(zmod.getElement(1)));
+		p2 = ring2.getElement(Tuple.getInstance(zmod2.getElement(1), zmod2.getElement(1), zmod2.getElement(1), zmod2.getElement(1)));
+		assertEquals(zmod2.getOneElement(), p2.evaluate(zmod2.getElement(0)));
+		assertEquals(zmod2.getZeroElement(), p2.evaluate(zmod2.getElement(1)));
 
-		p2 = ring2.getElement(Tuple.getInstance(zmod.getElement(1), zmod.getElement(0), zmod.getElement(1), zmod.getElement(1)));
-		assertEquals(zmod.getOneElement(), p2.evaluate(zmod.getElement(0)));
-		assertEquals(zmod.getOneElement(), p2.evaluate(zmod.getElement(1)));
+		p2 = ring2.getElement(Tuple.getInstance(zmod2.getElement(1), zmod2.getElement(0), zmod2.getElement(1), zmod2.getElement(1)));
+		assertEquals(zmod2.getOneElement(), p2.evaluate(zmod2.getElement(0)));
+		assertEquals(zmod2.getOneElement(), p2.evaluate(zmod2.getElement(1)));
 
-		p2 = ring2.getElement(Polynomial.getInstance(ByteArray.getInstance(), zmod.getZeroElement(), zmod.getOneElement()));
-		assertEquals(zmod.getZeroElement(), p2.evaluate(zmod.getElement(0)));
-		assertEquals(zmod.getZeroElement(), p2.evaluate(zmod.getElement(1)));
+		p2 = ring2.getElement(Polynomial.getInstance(ByteArray.getInstance(), zmod2.getZeroElement(), zmod2.getOneElement()));
+		assertEquals(zmod2.getZeroElement(), p2.evaluate(zmod2.getElement(0)));
+		assertEquals(zmod2.getZeroElement(), p2.evaluate(zmod2.getElement(1)));
 
 	}
 

@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import java.util.HashMap;
 
 /**
  *
@@ -100,6 +101,30 @@ public class PolynomialElement<V>
 			throw new IllegalArgumentException();
 		}
 		return Pair.getInstance(element, this.evaluate(element));
+	}
+
+	public boolean isIrreducible() {
+		if (!this.getSet().isRing()) {
+			throw new UnsupportedOperationException();
+		}
+		return ((PolynomialRing<V>) this.getSet()).isIrreduciblePolynomial(this);
+	}
+
+	public PolynomialElement<V> reduce(DualisticElement<V> value) {
+		if (!this.getSet().getSemiRing().isField()) {
+			throw new UnsupportedOperationException();
+		}
+		if (value == null || !this.getSet().getSemiRing().contains(value)) {
+			throw new IllegalArgumentException();
+		}
+		HashMap map = new HashMap();
+		for (int i = 0; i <= this.getValue().getDegree(); i++) {
+			DualisticElement<V> c = this.getValue().getCoefficient(i);
+			if (!c.isZero()) {
+				map.put(i, c.divide(value));
+			}
+		}
+		return this.getSet().getElement(map);
 	}
 
 }

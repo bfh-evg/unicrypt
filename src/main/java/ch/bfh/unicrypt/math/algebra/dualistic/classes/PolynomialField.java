@@ -49,6 +49,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -160,29 +162,26 @@ public class PolynomialField<V>
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static <V> PolynomialElement<V> findIrreduciblePolynomial(PrimeField primeField, int degree) {
-		if (primeField == null || degree < 1) {
-			throw new IllegalArgumentException();
-		}
-		// TODO Find irreducible polynomial (Fact 2.224, §4.5.1)
-		return null;
-	}
-
 	public static <V> PolynomialField getInstance(PrimeField primeField, int degree) {
+		return getInstance(primeField, degree, HybridRandomByteSequence.getInstance());
+	}
+
+	public static <V> PolynomialField getInstance(PrimeField primeField, int degree, RandomByteSequence randomByteSequence) {
 		if (primeField == null || degree < 1) {
 			throw new IllegalArgumentException();
 		}
-
-		PolynomialElement<V> irreduciblePolynomialElement = PolynomialField.<V>findIrreduciblePolynomial(primeField, degree);
-		return new PolynomialField(primeField, irreduciblePolynomialElement);
+		PolynomialRing<V> ring = PolynomialRing.getInstance(primeField);
+		PolynomialElement<V> irreduciblePolynomial = ring.findIrreduciblePolynomial(degree, randomByteSequence);
+		return new PolynomialField(primeField, irreduciblePolynomial);
 	}
 
-	public static <V> PolynomialField getInstance(PrimeField primeField, PolynomialElement<V> irreduciblePolynomialElement) {
-		if (primeField == null || irreduciblePolynomialElement == null || !irreduciblePolynomialElement.getSet().getSemiRing().isEquivalent(primeField)) {
+	public static <V> PolynomialField getInstance(PrimeField primeField, PolynomialElement<V> irreduciblePolynomial) {
+		if (primeField == null || irreduciblePolynomial == null
+			   || !irreduciblePolynomial.getSet().getSemiRing().isEquivalent(primeField)
+			   || !irreduciblePolynomial.isIrreducible()) {
 			throw new IllegalArgumentException();
 		}
-		// TODO Check whether irreduciblePolynomial is really a irreducible polynomial!
-		return new PolynomialField(primeField, irreduciblePolynomialElement);
+		return new PolynomialField(primeField, irreduciblePolynomial);
 	}
 
 }
