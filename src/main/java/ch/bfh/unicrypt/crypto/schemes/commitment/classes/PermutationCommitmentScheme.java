@@ -72,8 +72,8 @@ public class PermutationCommitmentScheme
 	private final Tuple messageGenerators;
 	private final int size;
 
-	protected PermutationCommitmentScheme(CyclicGroup cyclicGroup, Element randomizationGenerator, Tuple messageGenerators) {
-		this.cyclicGroup = cyclicGroup;
+	protected PermutationCommitmentScheme(Element randomizationGenerator, Tuple messageGenerators) {
+		this.cyclicGroup = (CyclicGroup) randomizationGenerator.getSet();
 		this.randomizationGenerator = randomizationGenerator;
 		this.messageGenerators = messageGenerators;
 		this.size = messageGenerators.getArity();
@@ -105,12 +105,20 @@ public class PermutationCommitmentScheme
 	}
 
 	public static PermutationCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		if (referenceRandomByteSequence == null) {
+		if (cyclicGroup == null || size < 1 || referenceRandomByteSequence == null) {
 			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		}
 		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, referenceRandomByteSequence);
 		Tuple messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
-		return new PermutationCommitmentScheme(cyclicGroup, randomizationGenerator, messageGenerators);
+		return new PermutationCommitmentScheme(randomizationGenerator, messageGenerators);
+	}
+
+	public static PermutationCommitmentScheme getInstance(final Element randomizationGenerator, final Tuple messageGenerators) {
+		if (randomizationGenerator == null || messageGenerators == null || !randomizationGenerator.getSet().isCyclic()
+			   || messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform() || !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
+			throw new IllegalArgumentException();
+		}
+		return new PermutationCommitmentScheme(randomizationGenerator, messageGenerators);
 	}
 
 	private class PermutationCommitmentFunction

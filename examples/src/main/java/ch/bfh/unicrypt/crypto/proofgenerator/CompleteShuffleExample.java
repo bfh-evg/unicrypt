@@ -46,10 +46,7 @@ import ch.bfh.unicrypt.crypto.mixer.classes.ReEncryptionMixer;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.ShuffleProofGenerator;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.ReEncryptionShuffleProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -62,6 +59,9 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 /**
  *
@@ -129,7 +129,7 @@ public class CompleteShuffleExample {
 		//------------------
 		System.out.println("Shuffle Proof...");
 		// Create shuffle proof generator
-		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(G_q, size, publicKey);
+		ReEncryptionShuffleProofGenerator spg = ReEncryptionShuffleProofGenerator.getInstance(G_q, size, es, publicKey);
 
 		// Compose private and public input
 		Triple privateInput = Triple.getInstance(permutation, permutationCommitmentRandomizations, randomizations);
@@ -220,9 +220,9 @@ public class CompleteShuffleExample {
 		//------------------
 		System.out.println("Shuffle Proof...");
 		// Create shuffle proof generator
-		SigmaChallengeGenerator scgS = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
-		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, publicKey, rrs);
+		SigmaChallengeGenerator scgS = ReEncryptionShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
+		ChallengeGenerator ecgS = ReEncryptionShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
+		ReEncryptionShuffleProofGenerator spg = ReEncryptionShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, es, publicKey, rrs);
 
 		// Compose private and public input
 		Triple privateInput = Triple.getInstance(permutation, permutationCommitmentRandomizations, randomizations);

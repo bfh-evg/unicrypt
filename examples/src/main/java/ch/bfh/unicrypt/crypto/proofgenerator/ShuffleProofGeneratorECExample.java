@@ -44,11 +44,11 @@ package ch.bfh.unicrypt.crypto.proofgenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.ShuffleProofGenerator;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.ReEncryptionShuffleProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
+import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -62,9 +62,11 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
-import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
+import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import java.math.BigInteger;
 
 /**
@@ -73,11 +75,9 @@ import java.math.BigInteger;
  */
 public class ShuffleProofGeneratorECExample {
 
-	public Triple createCiphertexts(int size, CyclicGroup G_q, Element encryptionPK, PermutationElement pi) {
+	public Triple createCiphertexts(int size, CyclicGroup G_q, ReEncryptionScheme encryptionScheme, Element encryptionPK, PermutationElement pi) {
 
 		final ZMod Z_q = G_q.getZModOrder();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
-		final Element g = G_q.getIndependentGenerator(0, rrs);
 
 		// Ciphertexts
 		Tuple rV = ProductGroup.getInstance(Z_q, size).getRandomElement();
@@ -85,14 +85,14 @@ public class ShuffleProofGeneratorECExample {
 		Tuple uV = uVSpace.getRandomElement();
 		Element[] uPrimes = new Element[size];
 		for (int i = 0; i < size; i++) {
-			uPrimes[i] = uV.getAt(i).apply(Tuple.getInstance(g.selfApply(rV.getAt(i)), encryptionPK.selfApply(rV.getAt(i))));
+			uPrimes[i] = encryptionScheme.reEncrypt(encryptionPK, uV.getAt(i), rV.getAt(i));
 		}
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
 		return Triple.getInstance(uV, uPrimeV, rV);
 	}
 
-	public void proofOfShuffle(int size, CyclicGroup G_q, Element encryptionPK, PermutationElement pi, Tuple uV, Tuple uPrimeV, Tuple rV) {
+	public void proofOfShuffle(int size, CyclicGroup G_q, ReEncryptionScheme encryptionScheme, Element encryptionPK, PermutationElement pi, Tuple uV, Tuple uPrimeV, Tuple rV) {
 
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
@@ -108,9 +108,9 @@ public class ShuffleProofGeneratorECExample {
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Shuffle Proof Generator
-		SigmaChallengeGenerator scgS = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
-		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionPK, rrs);
+		SigmaChallengeGenerator scgS = ReEncryptionShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
+		ChallengeGenerator ecgS = ReEncryptionShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
+		ReEncryptionShuffleProofGenerator spg = ReEncryptionShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionScheme, encryptionPK, rrs);
 
 		// Proof
 		Pair proofPermutation = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
@@ -141,7 +141,10 @@ public class ShuffleProofGeneratorECExample {
 
 		final StandardECZModPrime G_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp160r1); //Possible curves secp{112,160,192,224,256,384,521}r1
 
-		// Create random encryption key
+		// Create encryption scheme and key
+		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final Element g = G_q.getIndependentGenerator(0, rrs);
+		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
 		final Element encryptionPK = G_q.getRandomElement();
 
 		// Create random permutation
@@ -152,14 +155,14 @@ public class ShuffleProofGeneratorECExample {
 		ShuffleProofGeneratorECExample ex = new ShuffleProofGeneratorECExample();
 
 		// Create ciphertexts (uV: input, uPrimeV: shuffled output, rV: randomness of re-encryption)
-		final Triple c = ex.createCiphertexts(size, G_q, encryptionPK, pi);
+		final Triple c = ex.createCiphertexts(size, G_q, encryptionScheme, encryptionPK, pi);
 		final Tuple uV = (Tuple) c.getFirst();
 		final Tuple uPrimeV = (Tuple) c.getSecond();
 		final Tuple rV = (Tuple) c.getThird();
 
 		// Create and verify proof
 		long time = System.currentTimeMillis();
-		ex.proofOfShuffle(size, G_q, encryptionPK, pi, uV, uPrimeV, rV);
+		ex.proofOfShuffle(size, G_q, encryptionScheme, encryptionPK, pi, uV, uPrimeV, rV);
 		System.out.println("Finished after: " + (System.currentTimeMillis() - time) + " MilliSeconds.");
 
 	}

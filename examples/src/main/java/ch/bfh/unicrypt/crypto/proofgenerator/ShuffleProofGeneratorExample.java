@@ -44,11 +44,11 @@ package ch.bfh.unicrypt.crypto.proofgenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.ShuffleProofGenerator;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
+import ch.bfh.unicrypt.crypto.proofgenerator.classes.ReEncryptionShuffleProofGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
+import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -62,7 +62,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import java.math.BigInteger;
 
 public class ShuffleProofGeneratorExample {
@@ -77,11 +79,9 @@ public class ShuffleProofGeneratorExample {
 	final static String Q = "1081119563825030427708677600856959359670713108783";
 	final static String P = "132981118064499312972124229719551507064282251442693318094413647002876359530119444044769383265695686373097209253015503887096288112369989708235068428214124661556800389180762828009952422599372290980806417384771730325122099441368051976156139223257233269955912341167062173607119895128870594055324929155200165347329";
 
-	public Triple createCiphertexts(int size, CyclicGroup G_q, Element encryptionPK, PermutationElement pi) {
+	public Triple createCiphertexts(int size, CyclicGroup G_q, ReEncryptionScheme encryptionScheme, Element encryptionPK, PermutationElement pi) {
 
 		final ZMod Z_q = G_q.getZModOrder();
-		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
-		final Element g = G_q.getIndependentGenerator(0, rrs);
 
 		// Ciphertexts
 		Tuple rV = ProductGroup.getInstance(Z_q, size).getRandomElement();
@@ -89,14 +89,14 @@ public class ShuffleProofGeneratorExample {
 		Tuple uV = uVSpace.getRandomElement();
 		Element[] uPrimes = new Element[size];
 		for (int i = 0; i < size; i++) {
-			uPrimes[i] = uV.getAt(i).apply(Tuple.getInstance(g.selfApply(rV.getAt(i)), encryptionPK.selfApply(rV.getAt(i))));
+			uPrimes[i] = encryptionScheme.reEncrypt(encryptionPK, uV.getAt(i), rV.getAt(i));
 		}
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
 		return Triple.getInstance(uV, uPrimeV, rV);
 	}
 
-	public void proofOfShuffle(int size, CyclicGroup G_q, Element encryptionPK, PermutationElement pi, Tuple uV, Tuple uPrimeV, Tuple rV) {
+	public void proofOfShuffle(int size, CyclicGroup G_q, ReEncryptionScheme encryptionScheme, Element encryptionPK, PermutationElement pi, Tuple uV, Tuple uPrimeV, Tuple rV) {
 
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
@@ -115,9 +115,9 @@ public class ShuffleProofGeneratorExample {
 		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
 
 		// Shuffle Proof Generator
-		SigmaChallengeGenerator scgS = ShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecgS = ShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
-		ShuffleProofGenerator spg = ShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionPK, rrs);
+		SigmaChallengeGenerator scgS = ReEncryptionShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
+		ChallengeGenerator ecgS = ReEncryptionShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
+		ReEncryptionShuffleProofGenerator spg = ReEncryptionShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionScheme, encryptionPK, rrs);
 
 		// Proof
 		Pair proofPermutation = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
@@ -152,7 +152,10 @@ public class ShuffleProofGeneratorExample {
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P_1024, 10));
 		//final CyclicGroup G_q = GStarModPrime.getInstance(new BigInteger(P, 10), new BigInteger(Q, 10));
 
-		// Create random encryption key
+		// Create encryption scheme and key
+		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final Element g = G_q.getIndependentGenerator(0, rrs);
+		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
 		final Element encryptionPK = G_q.getRandomElement();
 
 		// Create random permutation
@@ -163,14 +166,14 @@ public class ShuffleProofGeneratorExample {
 		ShuffleProofGeneratorExample ex = new ShuffleProofGeneratorExample();
 
 		// Create ciphertexts (uV: input, uPrimeV: shuffled output, rV: randomness of re-encryption)
-		final Triple c = ex.createCiphertexts(size, G_q, encryptionPK, pi);
+		final Triple c = ex.createCiphertexts(size, G_q, encryptionScheme, encryptionPK, pi);
 		final Tuple uV = (Tuple) c.getFirst();
 		final Tuple uPrimeV = (Tuple) c.getSecond();
 		final Tuple rV = (Tuple) c.getThird();
 
 		// Create and verify proof
 		long time = System.currentTimeMillis();
-		ex.proofOfShuffle(size, G_q, encryptionPK, pi, uV, uPrimeV, rV);
+		ex.proofOfShuffle(size, G_q, encryptionScheme, encryptionPK, pi, uV, uPrimeV, rV);
 		System.out.println("Finished after: " + (System.currentTimeMillis() - time) + " MilliSeconds.");
 
 	}
