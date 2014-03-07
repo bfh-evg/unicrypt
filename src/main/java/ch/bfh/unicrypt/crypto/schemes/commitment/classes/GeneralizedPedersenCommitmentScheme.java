@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -53,6 +52,7 @@ import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 
 public class GeneralizedPedersenCommitmentScheme
 	   extends AbstractRandomizedCommitmentScheme<ZMod, ZModElement, CyclicGroup, Element, ZMod> {
@@ -62,10 +62,10 @@ public class GeneralizedPedersenCommitmentScheme
 	private final Tuple messageGenerators;
 	private final int size;
 
-	protected GeneralizedPedersenCommitmentScheme(CyclicGroup cyclicGroup, Element randomizationGenerator, Tuple messageGenerators) {
-		this.cyclicGroup = cyclicGroup;
+	protected GeneralizedPedersenCommitmentScheme(Element randomizationGenerator, Tuple messageGenerators) {
 		this.randomizationGenerator = randomizationGenerator;
 		this.messageGenerators = messageGenerators;
+		this.cyclicGroup = (CyclicGroup) randomizationGenerator.getSet();
 		this.size = messageGenerators.getArity();
 	}
 
@@ -114,7 +114,24 @@ public class GeneralizedPedersenCommitmentScheme
 		}
 		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, referenceRandomByteSequence);
 		Tuple messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
-		return new GeneralizedPedersenCommitmentScheme(cyclicGroup, randomizationGenerator, messageGenerators);
+		return new GeneralizedPedersenCommitmentScheme(randomizationGenerator, messageGenerators);
+	}
+
+	/**
+	 * It is not explicitely checked, whether the passed generators are indeed generators (and independent)! It is
+	 * assumed that this is given from the context.
+	 * <p>
+	 * @param randomizationGenerator
+	 * @param messageGenerators
+	 * @return
+	 */
+	public static GeneralizedPedersenCommitmentScheme getInstance(final Element randomizationGenerator, final Tuple messageGenerators) {
+		if (randomizationGenerator == null || messageGenerators == null || !randomizationGenerator.getSet().isCyclic()
+			   || messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform() || !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
+			throw new IllegalArgumentException();
+		}
+
+		return new GeneralizedPedersenCommitmentScheme(randomizationGenerator, messageGenerators);
 	}
 
 }

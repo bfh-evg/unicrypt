@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import ch.bfh.unicrypt.helper.compound.Compound;
 import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Iterator;
 
 /**
@@ -113,6 +113,17 @@ public class Tuple
 		int i = 0;
 		for (Element element : this.getValue()) {
 			result[i++] = element;
+		}
+		return result;
+	}
+
+	public Element[] getRange(int fromIndex, int toIndex) {
+		if (fromIndex < 0 || toIndex >= this.getArity() || toIndex < fromIndex) {
+			throw new IllegalArgumentException();
+		}
+		Element[] result = new Element[toIndex - fromIndex + 1];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = this.getAt(i + fromIndex);
 		}
 		return result;
 	}
