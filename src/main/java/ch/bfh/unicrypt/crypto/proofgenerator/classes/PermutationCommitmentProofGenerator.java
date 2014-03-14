@@ -266,7 +266,7 @@ public class PermutationCommitmentProofGenerator
 
 		// Get additional values
 		final Tuple eV = (Tuple) this.eValuesGenerator.generate(publicInput);
-		final Tuple gV = Tuple.getInstance(this.independentGenerators.getRange(1, size));
+		final Tuple gV = this.independentGenerators.extract(1, this.size);
 
 		// Compute image of preimage proof
 		final Element[] ps = new Element[this.size + 3];
@@ -344,7 +344,7 @@ public class PermutationCommitmentProofGenerator
 			this.g = independentGenerators.getAt(0);
 			this.h = independentGenerators.getAt(1);
 
-			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(g, Tuple.getInstance(independentGenerators.getRange(1, size)));
+			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(g, independentGenerators.extract(1, size));
 		}
 
 		@Override

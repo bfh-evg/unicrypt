@@ -311,6 +311,26 @@ public class ProductSet
 	}
 
 	@Override
+	public ProductSet extractPrefix(int length) {
+		return this.extract(0, length);
+	}
+
+	@Override
+	public ProductSet extractSuffix(int length) {
+		return this.extract(this.getArity() - length, length);
+	}
+
+	@Override
+	public ProductSet extractRange(int fromIndex, int toIndex) {
+		return this.extract(fromIndex, toIndex - fromIndex + 1);
+	}
+
+	@Override
+	public ProductSet extract(int offset, int length) {
+		return ProductSet.getInstance(this.sets.extract(offset, length));
+	}
+
+	@Override
 	public ProductSet removeAt(final int index) {
 		return ProductSet.getInstance(this.sets.removeAt(index));
 	}

@@ -302,7 +302,7 @@ public class ReEncryptionShuffleProofGenerator
 			this.uPrimeV = uPrimeV;
 			this.encryptionScheme = encryptionScheme;
 			this.encryptionPK = encryptionPK;
-			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(independentGenerators.getAt(0), Tuple.getInstance(independentGenerators.getRange(1, size)));
+			this.gpcs = GeneralizedPedersenCommitmentScheme.getInstance(independentGenerators.getAt(0), independentGenerators.extract(1, size));
 		}
 
 		@Override
