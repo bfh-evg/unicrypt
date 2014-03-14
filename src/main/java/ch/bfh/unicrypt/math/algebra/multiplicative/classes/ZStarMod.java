@@ -68,7 +68,7 @@ public class ZStarMod
 	   extends AbstractMultiplicativeGroup<ZStarModElement, ResidueClass> {
 
 	private final BigInteger modulus;
-	private final Factorization moduloFactorization;
+	private final Factorization modulusFactorization;
 
 	/**
 	 * This is a private constructor of this class. It is called by the static factory methods.
@@ -97,7 +97,7 @@ public class ZStarMod
 	protected ZStarMod(final BigInteger modulus, final Factorization factorization) {
 		super(ResidueClass.class);
 		this.modulus = modulus;
-		this.moduloFactorization = factorization;
+		this.modulusFactorization = factorization;
 	}
 
 	/**
@@ -115,8 +115,8 @@ public class ZStarMod
 	 * <p>
 	 * @return The prime factorization
 	 */
-	public final Factorization getModuloFactorization() {
-		return this.moduloFactorization;
+	public final Factorization getModulusFactorization() {
+		return this.modulusFactorization;
 	}
 
 	public final boolean contains(int integerValue) {
@@ -196,10 +196,10 @@ public class ZStarMod
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		if (!this.getModuloFactorization().getValue().equals(this.getModulus())) {
+		if (!this.getModulusFactorization().getValue().equals(this.getModulus())) {
 			return Group.UNKNOWN_ORDER;
 		}
-		return MathUtil.eulerFunction(this.getModulus(), this.getModuloFactorization().getPrimeFactors());
+		return MathUtil.eulerFunction(this.getModulus(), this.getModulusFactorization().getPrimeFactors());
 	}
 
 	@Override
