@@ -82,22 +82,22 @@ public class ZStarMod
 	/**
 	 * This is a private constructor of this class. It is called by the static factory methods.
 	 * <p>
-	 * @param factorization The given factorization
+	 * @param modulusFactorization The given factorization
 	 */
-	protected ZStarMod(final Factorization factorization) {
-		this(factorization.getValue(), factorization);
+	protected ZStarMod(final Factorization modulusFactorization) {
+		this(modulusFactorization.getValue(), modulusFactorization);
 	}
 
 	/**
 	 * This is a private constructor of this class. It is called by the static factory methods.
 	 * <p>
-	 * @param modulus       The given modulus
-	 * @param factorization The given factorization
+	 * @param modulus              The given modulus
+	 * @param modulusFactorization The given factorization
 	 */
-	protected ZStarMod(final BigInteger modulus, final Factorization factorization) {
+	protected ZStarMod(final BigInteger modulus, final Factorization modulusFactorization) {
 		super(ResidueClass.class);
 		this.modulus = modulus;
-		this.modulusFactorization = factorization;
+		this.modulusFactorization = modulusFactorization;
 	}
 
 	/**
@@ -259,16 +259,16 @@ public class ZStarMod
 	 * This is a static factory method to construct a new instance of this class, where the group's modulus is value of
 	 * the given prime factorization. This always leads to a group of known order.
 	 * <p>
-	 * @param factorization The given prime factorization
+	 * @param modulusFactorization The given prime factorization
 	 * @return
 	 * @throws IllegalArgumentException if {@literal primeFactorization} is null
 	 * @throws IllegalArgumentException if {@literal primeFactorization.getValue()} is 1
 	 */
-	public static ZStarMod getInstance(final Factorization factorization) {
-		if (factorization == null || factorization.getValue().compareTo(BigInteger.ONE) <= 0) {
+	public static ZStarMod getInstance(final Factorization modulusFactorization) {
+		if (modulusFactorization == null || modulusFactorization.getValue().compareTo(BigInteger.ONE) <= 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ZStarMod(factorization);
+		return new ZStarMod(modulusFactorization);
 	}
 
 	public static ZStarMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
