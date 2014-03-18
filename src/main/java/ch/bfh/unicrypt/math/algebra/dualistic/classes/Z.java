@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.distribution.Distribution;
+import ch.bfh.unicrypt.helper.distribution.InfiniteDistribution;
 import ch.bfh.unicrypt.helper.numerical.WholeNumber;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
@@ -48,6 +50,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * /**
@@ -64,8 +68,15 @@ import java.math.BigInteger;
 public class Z
 	   extends AbstractCyclicRing<ZElement, WholeNumber> {
 
-	public Z() {
+	private final Distribution distribution;
+
+	private Z(final Distribution distribution) {
 		super(WholeNumber.class);
+		this.distribution = distribution;
+	}
+
+	public Distribution getDistribution() {
+		return this.distribution;
 	}
 
 	public final boolean contains(int integerValue) {
@@ -157,7 +168,7 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException();
+		return this.getElement(this.distribution.getBigInteger(randomByteSequence));
 	}
 
 	@Override
@@ -172,18 +183,19 @@ public class Z
 
 	@Override
 	protected boolean abstractEquals(Set set) {
-		return true;
+		Z other = (Z) set;
+		return this.distribution.equals(other.distribution);
 	}
 
 	@Override
 	protected int abstractHashCode() {
-		return 1;
+		return this.distribution.hashCode();
 	}
 
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static Z instance = new Z();
+	private static final Map<Distribution, Z> instances = new HashMap<Distribution, Z>();
 
 	/**
 	 * Returns the singleton object of this class.
@@ -191,10 +203,19 @@ public class Z
 	 * @return The singleton object of this class
 	 */
 	public static Z getInstance() {
-		if (Z.instance == null) {
-			Z.instance = new Z();
+		return Z.getInstance(InfiniteDistribution.getInstance());
+	}
+
+	public static Z getInstance(Distribution distribution) {
+		if (distribution == null) {
+			throw new IllegalArgumentException();
 		}
-		return Z.instance;
+		Z instance = Z.instances.get(distribution);
+		if (instance == null) {
+			instance = new Z(distribution);
+			Z.instances.put(distribution, instance);
+		}
+		return instance;
 	}
 
 }
