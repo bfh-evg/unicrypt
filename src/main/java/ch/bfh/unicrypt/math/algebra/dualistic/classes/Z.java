@@ -112,6 +112,11 @@ public class Z
 		return this.getDefaultGenerator().invert();
 	}
 
+	@Override
+	protected boolean defaultIsEquivalent(Set set) {
+		return true;
+	}
+
 	//
 	// The following protected methods implement the abstract methods from
 	// various super-classes
