@@ -43,13 +43,13 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.compound.Compound;
+import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.compound.Compound;
-import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
 import java.util.Iterator;
 
 public class CompositeEncoder
@@ -116,6 +116,26 @@ public class CompositeEncoder
 	@Override
 	public boolean isUniform() {
 		return this.encoders.isUniform();
+	}
+
+	@Override
+	public CompositeEncoder extractPrefix(int length) {
+		return this.extract(0, length);
+	}
+
+	@Override
+	public CompositeEncoder extractSuffix(int length) {
+		return this.extract(this.getArity() - length, length);
+	}
+
+	@Override
+	public CompositeEncoder extractRange(int fromIndex, int toIndex) {
+		return this.extract(fromIndex, toIndex - fromIndex + 1);
+	}
+
+	@Override
+	public CompositeEncoder extract(int offset, int length) {
+		return new CompositeEncoder(this.encoders.extract(offset, length));
 	}
 
 	@Override

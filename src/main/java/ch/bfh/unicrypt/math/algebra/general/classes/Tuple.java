@@ -117,15 +117,34 @@ public class Tuple
 		return result;
 	}
 
-	public Element[] getRange(int fromIndex, int toIndex) {
-		if (fromIndex < 0 || toIndex >= this.getArity() || toIndex < fromIndex) {
-			throw new IllegalArgumentException();
-		}
-		Element[] result = new Element[toIndex - fromIndex + 1];
-		for (int i = 0; i < result.length; i++) {
-			result[i] = this.getAt(i + fromIndex);
-		}
-		return result;
+//	public Element[] getRange(int fromIndex, int toIndex) {
+//		if (fromIndex < 0 || toIndex >= this.getArity() || toIndex < fromIndex) {
+//			throw new IllegalArgumentException();
+//		}
+//		Element[] result = new Element[toIndex - fromIndex + 1];
+//		for (int i = 0; i < result.length; i++) {
+//			result[i] = this.getAt(i + fromIndex);
+//		}
+//		return result;
+//	}
+	@Override
+	public Tuple extractPrefix(int length) {
+		return this.extract(0, length);
+	}
+
+	@Override
+	public Tuple extractSuffix(int length) {
+		return this.extract(this.getArity() - length, length);
+	}
+
+	@Override
+	public Tuple extractRange(int fromIndex, int toIndex) {
+		return this.extract(fromIndex, toIndex - fromIndex + 1);
+	}
+
+	@Override
+	public Tuple extract(int offset, int length) {
+		return Tuple.getInstance(this.getSet().extract(offset, length), this.getValue().extract(offset, length));
 	}
 
 	@Override

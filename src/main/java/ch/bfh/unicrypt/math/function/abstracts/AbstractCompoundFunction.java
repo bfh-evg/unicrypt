@@ -126,6 +126,26 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
+	public CF extractPrefix(int length) {
+		return this.extract(0, length);
+	}
+
+	@Override
+	public CF extractSuffix(int length) {
+		return this.extract(this.getArity() - length, length);
+	}
+
+	@Override
+	public CF extractRange(int fromIndex, int toIndex) {
+		return this.extract(fromIndex, toIndex - fromIndex + 1);
+	}
+
+	@Override
+	public CF extract(int offset, int length) {
+		return this.abstractGetInstance(this.functions.extract(offset, length));
+	}
+
+	@Override
 	public CF removeAt(final int index) {
 		return this.abstractGetInstance(this.functions.removeAt(index));
 	}
