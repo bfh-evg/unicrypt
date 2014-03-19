@@ -42,12 +42,15 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractPreimageProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
@@ -56,6 +59,26 @@ public class PreimageEqualityProofGenerator
 
 	protected PreimageEqualityProofGenerator(final SigmaChallengeGenerator challengeGenerator, final SharedDomainFunction proofFunction) {
 		super(challengeGenerator, proofFunction);
+	}
+
+	public static PreimageEqualityProofGenerator getInstance(final ProductFunction function) {
+		return PreimageEqualityProofGenerator.getInstance(function, (Element) null);
+	}
+
+	public static PreimageEqualityProofGenerator getInstance(final ProductFunction function, final Element proverId) {
+		if (function == null || !function.getCoDomain().isSemiGroup()) {
+			throw new IllegalArgumentException();
+		}
+		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
+			   function.getCoDomain(), (ProductSemiGroup) function.getCoDomain(), Z.getInstance(function.getDomain().getMinimalOrder()), proverId);
+		return PreimageEqualityProofGenerator.getInstance(challengeGenerator, function.getAll());
+	}
+
+	public static PreimageEqualityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction function) {
+		if (function == null) {
+			throw new IllegalArgumentException();
+		}
+		return PreimageEqualityProofGenerator.getInstance(challengeGenerator, function.getAll());
 	}
 
 	public static PreimageEqualityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
@@ -77,7 +100,7 @@ public class PreimageEqualityProofGenerator
 		}
 
 		if (PreimageEqualityProofGenerator.checkSpaceEquality(challengeGenerator, proofFunction)) {
-			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
+			throw new IllegalArgumentException("Spaces of challenge generator and proof function are unequal.");
 		}
 		return new PreimageEqualityProofGenerator(challengeGenerator, proofFunction);
 	}

@@ -55,20 +55,24 @@ public class PreimageProofGenerator
 		super(challengeGenerator, function);
 	}
 
+	public static PreimageProofGenerator getInstance(final Function proofFunction) {
+		return PreimageProofGenerator.getInstance(proofFunction, (Element) null);
+	}
+
+	public static PreimageProofGenerator getInstance(final Function proofFunction, final Element proverId) {
+		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		return PreimageProofGenerator.getInstance(challengeGenerator, proofFunction);
+	}
+
 	public static PreimageProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction) {
 		if (challengeGenerator == null || proofFunction == null || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
 		if (PreimageProofGenerator.checkSpaceEquality(challengeGenerator, proofFunction)) {
-			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
+			throw new IllegalArgumentException("Spaces of challenge generator and proof function are unequal.");
 		}
 
 		return new PreimageProofGenerator(challengeGenerator, proofFunction);
-	}
-
-	public static PreimageProofGenerator getInstance(final Function proofFunction) {
-		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(proofFunction);
-		return PreimageProofGenerator.getInstance(challengeGenerator, proofFunction);
 	}
 
 }

@@ -44,8 +44,10 @@ package ch.bfh.unicrypt.crypto.proofgenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageEqualityProofGenerator;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
@@ -57,7 +59,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.Alphabet;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -87,10 +88,7 @@ public class PreimageEqualityProofGeneratorTest {
 		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
-
-		PreimageEqualityProofGenerator pg = PreimageEqualityProofGenerator.getInstance(scg, f1, f2);
+		PreimageEqualityProofGenerator pg = PreimageEqualityProofGenerator.getInstance(f, this.proverId);
 		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
 
 		// Valid proof
@@ -127,7 +125,7 @@ public class PreimageEqualityProofGeneratorTest {
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), Z.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageEqualityProofGenerator pg = PreimageEqualityProofGenerator.getInstance(scg, f1, f2);
 		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));

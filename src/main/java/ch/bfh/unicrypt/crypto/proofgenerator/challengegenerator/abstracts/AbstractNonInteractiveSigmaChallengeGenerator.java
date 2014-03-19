@@ -42,27 +42,27 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.NonInteractiveSigmaChallengeGenerator;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 public class AbstractNonInteractiveSigmaChallengeGenerator
 	   extends AbstractSigmaChallengeGenerator
 	   implements NonInteractiveSigmaChallengeGenerator {
 
 	private final RandomOracle randomOracle;
-	private final Element proverID;
+	private final Element proverId;
 
-	protected AbstractNonInteractiveSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, RandomOracle randomOracle, Element proverID) {
+	protected AbstractNonInteractiveSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, Z challengeSpace, RandomOracle randomOracle, Element proverId) {
 		super(publicInputSpace, commitmentSpace, challengeSpace);
 		this.randomOracle = randomOracle;
-		this.proverID = proverID;
+		this.proverId = proverId;
 	}
 
 	@Override
@@ -73,11 +73,11 @@ public class AbstractNonInteractiveSigmaChallengeGenerator
 	// May return null!
 	@Override
 	public Element getProverId() {
-		return this.proverID;
+		return this.proverId;
 	}
 
 	@Override
-	protected ZModElement abstractGenerate(Pair input) {
+	protected ZElement abstractGenerate(Pair input) {
 		Tuple query = (this.getProverId() == null
 			   ? input
 			   : Pair.getInstance(input, this.getProverId()));

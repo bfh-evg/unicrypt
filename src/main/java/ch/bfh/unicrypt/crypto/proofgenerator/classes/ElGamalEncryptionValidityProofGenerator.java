@@ -44,9 +44,8 @@ package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaSetMembershipProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -60,6 +59,8 @@ import ch.bfh.unicrypt.math.function.classes.InvertFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 public class ElGamalEncryptionValidityProofGenerator
 	   extends AbstractSigmaSetMembershipProofGenerator<ProductGroup, Pair> {
@@ -73,6 +74,15 @@ public class ElGamalEncryptionValidityProofGenerator
 		this.publicKey = publicKey;
 	}
 
+	public static ElGamalEncryptionValidityProofGenerator getInstance(final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
+		return ElGamalEncryptionValidityProofGenerator.getInstance(elGamalES, publicKey, plaintexts, (Element) null);
+	}
+
+	public static ElGamalEncryptionValidityProofGenerator getInstance(final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts, final Element proverId) {
+		SigmaChallengeGenerator challengeGenerator = ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, plaintexts.getOrder().intValue(), proverId);
+		return ElGamalEncryptionValidityProofGenerator.getInstance(challengeGenerator, elGamalES, publicKey, plaintexts);
+	}
+
 	public static ElGamalEncryptionValidityProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
 		if (challengeGenerator == null || elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey)
 			   || plaintexts == null || plaintexts.getOrder().intValue() < 1) {
@@ -80,7 +90,7 @@ public class ElGamalEncryptionValidityProofGenerator
 		}
 		final Set codomain = ProductGroup.getInstance(elGamalES.getEncryptionFunction().getCoDomain(), plaintexts.getOrder().intValue());
 		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
-			   || !elGamalES.getCyclicGroup().getZModOrder().isEquivalent(challengeGenerator.getChallengeSpace())) {
+			   || !Z.getInstance(elGamalES.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
 		}
 		return new ElGamalEncryptionValidityProofGenerator(challengeGenerator, elGamalES, publicKey, plaintexts);
@@ -106,20 +116,20 @@ public class ElGamalEncryptionValidityProofGenerator
 		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverID) {
-		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverID, PseudoRandomOracle.DEFAULT);
+	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId) {
+		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverId, PseudoRandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final RandomOracle randomOracle) {
 		return ElGamalEncryptionValidityProofGenerator.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, (Element) null, randomOracle);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverID, final RandomOracle randomOracle) {
+	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId, final RandomOracle randomOracle) {
 		if (elGamalES == null || numberOfPlaintexts < 1 || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}
 		final ProductGroup codomain = ProductGroup.getInstance((ProductGroup) elGamalES.getEncryptionFunction().getCoDomain(), numberOfPlaintexts);
-		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(codomain, codomain, elGamalES.getCyclicGroup().getZModOrder(), randomOracle, proverID);
+		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(codomain, codomain, Z.getInstance(elGamalES.getCyclicGroup().getOrder()), randomOracle, proverId);
 	}
 
 }

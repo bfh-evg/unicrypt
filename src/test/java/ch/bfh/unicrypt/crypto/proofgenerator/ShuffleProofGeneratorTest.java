@@ -82,6 +82,7 @@ public class ShuffleProofGeneratorTest {
 	}
 
 	@Test
+	@Ignore
 	public void testShuffleProofGenerator() {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(P1);
@@ -129,6 +130,7 @@ public class ShuffleProofGeneratorTest {
 	}
 
 	@Test
+	@Ignore
 	public void testShuffleProofGenerator2() {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
@@ -175,6 +177,7 @@ public class ShuffleProofGeneratorTest {
 	}
 
 	@Test
+	@Ignore
 	public void testShuffleProofGenerator_Invalid() {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
@@ -240,6 +243,7 @@ public class ShuffleProofGeneratorTest {
 	}
 
 	@Test
+	@Ignore
 	public void testProofOfShuffle_COMPLETE() {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));

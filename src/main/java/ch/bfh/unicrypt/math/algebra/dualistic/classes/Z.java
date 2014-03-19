@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.distribution.Distribution;
 import ch.bfh.unicrypt.helper.distribution.InfiniteDistribution;
+import ch.bfh.unicrypt.helper.distribution.UniformDistribution;
 import ch.bfh.unicrypt.helper.numerical.WholeNumber;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
@@ -203,14 +204,49 @@ public class Z
 	private static final Map<Distribution, Z> instances = new HashMap<Distribution, Z>();
 
 	/**
-	 * Returns the singleton object of this class.
+	 * Returns the unique instance of this class for an infinite distribution.
 	 * <p>
-	 * @return The singleton object of this class
+	 * @return An instance of this class.
 	 */
 	public static Z getInstance() {
 		return Z.getInstance(InfiniteDistribution.getInstance());
 	}
 
+	/**
+	 * Returns the unique instance of this class for a uniform distribution over the interval [0,2^{@literal b}-1].
+	 * <p>
+	 * @param b The bit length of the interval of the uniform distribution.
+	 * @return An instance of this class.
+	 * @throws IllegalArgumentException if {@literal b} is negative.
+	 */
+	public static Z getInstance(int b) {
+		if (b < 0) {
+			throw new IllegalArgumentException();
+		}
+		return Z.getInstance(UniformDistribution.getInstance(b));
+	}
+
+	/**
+	 * Returns the unique instance of this class for a uniform distribution over the interval [0,{@literal b}-1].
+	 * <p>
+	 * @param b The upper bound (exclusive) of the interval of the uniform distribution.
+	 * @return An instance of this class.
+	 * @throws IllegalArgumentException if {@literal b} is smaller than one.
+	 */
+	public static Z getInstance(BigInteger b) {
+		if (b == null || b.compareTo(BigInteger.ZERO) < 1) {
+			throw new IllegalArgumentException();
+		}
+		return Z.getInstance(UniformDistribution.getInstance(b.subtract(BigInteger.ONE)));
+	}
+
+	/**
+	 * Returns the unique instance of this class for a given distribution.
+	 * <p>
+	 * @param distribution The distribution for random elements.
+	 * @return An instance of this class.
+	 * @throws IllegalArgumentException if {@literal distribution} is null.
+	 */
 	public static Z getInstance(Distribution distribution) {
 		if (distribution == null) {
 			throw new IllegalArgumentException();

@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.Standard
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
@@ -172,7 +173,7 @@ public class PermutationCommitmentProofGenerator
 		return PermutationCommitmentProofGenerator.createCommitmentSpace(this.cyclicGroup, this.size);
 	}
 
-	public ZMod getChallengeSpace() {
+	public Z getChallengeSpace() {
 		return PermutationCommitmentProofGenerator.createChallengeSpace(this.cyclicGroup);
 	}
 
@@ -191,8 +192,8 @@ public class PermutationCommitmentProofGenerator
 		return ProductGroup.getInstance(cyclicGroup, size + 3);
 	}
 
-	private static ZMod createChallengeSpace(CyclicGroup cyclicGroup) {
-		return cyclicGroup.getZModOrder();
+	private static Z createChallengeSpace(CyclicGroup cyclicGroup) {
+		return Z.getInstance(cyclicGroup.getOrder());
 	}
 
 	private static ProductGroup createSigmaChallengeGeneratorPublicInputSpace(CyclicGroup cyclicGroup, int size) {

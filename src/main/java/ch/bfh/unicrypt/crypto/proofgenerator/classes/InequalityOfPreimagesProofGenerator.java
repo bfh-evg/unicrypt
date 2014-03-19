@@ -45,10 +45,7 @@ import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractProofGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.interfaces.SigmaProofGenerator;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -68,6 +65,9 @@ import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 //
 // @see [cs03] Camenisch, J. & Shoup, V., 2003. Practical verifiable encryption and decryption of discrete logarithms.
@@ -86,6 +86,15 @@ public class InequalityOfPreimagesProofGenerator
 		this.secondFunction = secondFunction;
 	}
 
+	public static InequalityOfPreimagesProofGenerator getInstance(final Function firstFunction, final Function secondFunction) {
+		return InequalityOfPreimagesProofGenerator.getInstance(firstFunction, secondFunction, (Element) null);
+	}
+
+	public static InequalityOfPreimagesProofGenerator getInstance(final Function firstFunction, final Function secondFunction, final Element proverId) {
+		SigmaChallengeGenerator challengeGenerator = InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
+		return InequalityOfPreimagesProofGenerator.getInstance(challengeGenerator, firstFunction, secondFunction);
+	}
+
 	public static InequalityOfPreimagesProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function firstFunction, final Function secondFunction) {
 		if (challengeGenerator == null || firstFunction == null || secondFunction == null || !firstFunction.getDomain().isEquivalent(secondFunction.getDomain())
 			   || !firstFunction.getDomain().isSemiGroup() || !firstFunction.getCoDomain().isCyclic() || !secondFunction.getCoDomain().isCyclic()) {
@@ -93,7 +102,7 @@ public class InequalityOfPreimagesProofGenerator
 		}
 
 		ProductSet codomain = ProductSet.getInstance(secondFunction.getCoDomain(), firstFunction.getCoDomain());
-		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
+		Z cs = Z.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
 		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
 			   || !cs.isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match proof functions.");
@@ -129,8 +138,8 @@ public class InequalityOfPreimagesProofGenerator
 		return ProductSet.getInstance(this.getPreimageProofSpace(), this.getSecondFunction().getCoDomain());
 	}
 
-	public ZMod getChallengeSpace() {
-		return this.getFirstFunction().getDomain().getZModOrder();
+	public Z getChallengeSpace() {
+		return Z.getInstance(this.getFirstFunction().getDomain().getOrder());
 	}
 
 	public ProductSet getPreimageProofSpace() {
@@ -224,22 +233,22 @@ public class InequalityOfPreimagesProofGenerator
 		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final Element proverID) {
-		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverID, PseudoRandomOracle.DEFAULT);
+	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final Element proverId) {
+		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId, PseudoRandomOracle.DEFAULT);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final RandomOracle randomOracle) {
 		return InequalityOfPreimagesProofGenerator.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, (Element) null, randomOracle);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final Element proverID, final RandomOracle randomOracle) {
+	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final Element proverId, final RandomOracle randomOracle) {
 		if (firstFunction == null || secondFunction == null || randomOracle == null
 			   || !firstFunction.getCoDomain().isSemiGroup() || !secondFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
 		ProductSemiGroup codomain = ProductSemiGroup.getInstance((SemiGroup) secondFunction.getCoDomain(), (SemiGroup) firstFunction.getCoDomain());
-		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
-		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(codomain, codomain, cs, randomOracle, proverID);
+		Z cs = Z.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
+		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(codomain, codomain, cs, randomOracle, proverId);
 
 	}
 
