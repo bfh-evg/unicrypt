@@ -185,7 +185,9 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 	protected ECElement<V> abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		if (this.getDefaultGenerator() != null) {
 			DualisticElement<V> r = this.getFiniteField().getRandomElement(randomByteSequence);
-			return this.getDefaultGenerator().selfApply(r);
+			// TODO ?!?
+			//return this.getDefaultGenerator().selfApply(r);
+			return this.getDefaultGenerator().selfApply(r.getBigInteger());
 		} else {
 			return this.getRandomElementWithoutGenerator(randomByteSequence);
 		}

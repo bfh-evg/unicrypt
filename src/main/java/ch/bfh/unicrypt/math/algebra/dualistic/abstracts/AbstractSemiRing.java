@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -88,11 +89,11 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 	}
 
 	@Override
-	public E power(Element element, Element amount) {
+	public E power(Element element, Element<Numerical> amount) {
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.power(element, amount.getBigInteger());
+		return this.power(element, amount.getValue().getBigInteger());
 	}
 
 	@Override

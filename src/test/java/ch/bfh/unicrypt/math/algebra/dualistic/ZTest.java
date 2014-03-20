@@ -73,6 +73,12 @@ public class ZTest {
 			assertTrue(e.getValue().getBigInteger().intValue() >= 0 && e.getValue().getBigInteger().intValue() <= 10);
 		}
 
+		z = Z.getInstance(BigInteger.valueOf(11));
+		for (int i = 0; i < 100; i++) {
+			ZElement e = z.getRandomElement();
+			assertTrue(e.getValue().getBigInteger().intValue() >= 0 && e.getValue().getBigInteger().intValue() <= 10);
+		}
+
 		z = Z.getInstance(UniformDistribution.getInstance(BigInteger.valueOf(-10), BigInteger.valueOf(10)));
 		for (int i = 0; i < 100; i++) {
 			ZElement e = z.getRandomElement();

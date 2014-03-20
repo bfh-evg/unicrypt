@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
@@ -70,7 +71,7 @@ public interface MultiplicativeElement<V extends Object>
 	/**
 	 * @see Group#selfApply(Element, Element)
 	 */
-	public MultiplicativeElement<V> power(Element amount);
+	public MultiplicativeElement<V> power(Element<Numerical> amount);
 
 	/**
 	 * @see Group#selfApply(Element, int)
@@ -103,7 +104,7 @@ public interface MultiplicativeElement<V extends Object>
 	public MultiplicativeElement<V> selfApply(BigInteger amount);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(Element amount);
+	public MultiplicativeElement<V> selfApply(Element<Numerical> amount);
 
 	@Override
 	public MultiplicativeElement<V> selfApply(int amount);

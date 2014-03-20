@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import java.math.BigInteger;
 
 /**
@@ -127,7 +128,7 @@ public interface Element<V extends Object> {
 	/**
 	 * @see Group#selfApply(Element, Element)
 	 */
-	public Element<V> selfApply(Element amount);
+	public Element<V> selfApply(Element<Numerical> amount);
 
 	/**
 	 * @see Group#selfApply(Element, int)

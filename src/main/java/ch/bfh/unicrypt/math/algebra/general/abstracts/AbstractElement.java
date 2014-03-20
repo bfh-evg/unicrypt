@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -257,7 +258,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	 * @see Group#selfApply(Element, Element)
 	 */
 	@Override
-	public final E selfApply(final Element amount) {
+	public final E selfApply(final Element<Numerical> amount) {
 		if (this.set.isSemiGroup()) {
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import java.math.BigInteger;
 
 /**
@@ -105,7 +106,7 @@ public interface SemiGroup<V extends Object>
 	 * @throws IllegalArgumentException if {@code element} or {@code amount} is null
 	 * @throws IllegalArgumentException if {@code element} does not belong to the group
 	 */
-	public Element<V> selfApply(Element element, Element amount);
+	public Element<V> selfApply(Element element, Element<Numerical> amount);
 
 	/**
 	 * Same as {@link #Group.selfApply(Element, BigInteger)}, except that the amount is given as an {@code int} value.
