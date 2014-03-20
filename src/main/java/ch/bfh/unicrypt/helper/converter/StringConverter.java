@@ -39,39 +39,47 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
-import java.math.BigInteger;
-import java.nio.ByteOrder;
-import org.junit.Assert;
-import org.junit.Test;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import java.nio.charset.Charset;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArrayConverterTest {
+public class StringConverter
+	   extends Converter<String> {
 
-	public static BigIntegerConverter c1 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
-	public static BigIntegerConverter c2 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 0);
-	public static BigIntegerConverter c3 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 10);
-	public static BigIntegerConverter c4 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
+	private final Charset charset;
 
-	@Test
-	public void testByteArrayConverter() {
-		BigInteger b0 = BigInteger.valueOf(0);
-		BigInteger b1 = BigInteger.valueOf(9);
-		BigInteger b2 = BigInteger.valueOf(200);
-		BigInteger b3 = BigInteger.valueOf(300);
-		for (BigIntegerConverter converter : new BigIntegerConverter[]{c1, c2, c3, c4}) {
-			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
-				ByteArray ba = converter.convertToByteArray(bigInteger);
-				Assert.assertTrue(ba.getLength() >= converter.getMinLength());
-				Assert.assertEquals(bigInteger, converter.convertFromByteArray(ba));
-			}
+	private StringConverter(Charset charset) {
+		this.charset = charset;
+	}
 
+	public Charset getCharset() {
+		return this.charset;
+	}
+
+	@Override
+	protected ByteArray abstractConvertToByteArray(String string) {
+		return ByteArray.getInstance(string.getBytes(this.charset));
+	}
+
+	@Override
+	protected String abstractConvertFromByteArray(ByteArray byteArray) {
+		return new String(byteArray.getAll(), charset);
+	}
+
+	public static StringConverter getInstance() {
+		return new StringConverter(Charset.defaultCharset());
+	}
+
+	public static StringConverter getInstance(Charset charset) {
+		if (charset == null) {
+			throw new IllegalArgumentException();
 		}
+		return new StringConverter(charset);
 	}
 
 }

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.numerical.Numerical;
@@ -89,11 +89,11 @@ public interface Element<V extends Object> {
 
 	public ByteArray getByteArray();
 
-	public ByteArray getByteArray(ByteArrayConverter converter);
+	public ByteArray getByteArray(BigIntegerConverter converter);
 
 	public ByteTree getByteTree();
 
-	public ByteTree getByteTree(ByteArrayConverter converter);
+	public ByteTree getByteTree(BigIntegerConverter converter);
 
 	public ByteArray getHashValue();
 

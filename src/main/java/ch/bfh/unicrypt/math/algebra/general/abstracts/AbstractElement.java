@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.numerical.Numerical;
@@ -84,15 +84,15 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	// the following fields are needed for optimizations
 	private BigInteger bigInteger;
-	private final HashMap<ByteArrayConverter, ByteArray> byteArrays;
-	private final HashMap<ByteArrayConverter, ByteTree> byteTrees;
+	private final HashMap<BigIntegerConverter, ByteArray> byteArrays;
+	private final HashMap<BigIntegerConverter, ByteTree> byteTrees;
 	private final HashMap<HashMethod, ByteArray> hashValues;
 
 	protected AbstractElement(final S set, V value) {
 		this.set = set;
 		this.value = value;
-		this.byteArrays = new HashMap<ByteArrayConverter, ByteArray>();
-		this.byteTrees = new HashMap<ByteArrayConverter, ByteTree>();
+		this.byteArrays = new HashMap<BigIntegerConverter, ByteArray>();
+		this.byteTrees = new HashMap<BigIntegerConverter, ByteTree>();
 		this.hashValues = new HashMap<HashMethod, ByteArray>();
 	}
 
@@ -151,11 +151,11 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	public ByteArray getByteArray() {
-		return this.getByteArray(ByteArrayConverter.getInstance());
+		return this.getByteArray(BigIntegerConverter.getInstance());
 	}
 
 	@Override
-	public ByteArray getByteArray(ByteArrayConverter converter) {
+	public ByteArray getByteArray(BigIntegerConverter converter) {
 		if (converter == null) {
 			throw new IllegalArgumentException();
 		}
@@ -169,11 +169,11 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	public ByteTree getByteTree() {
-		return this.getByteTree(ByteArrayConverter.getInstance());
+		return this.getByteTree(BigIntegerConverter.getInstance());
 	}
 
 	@Override
-	public ByteTree getByteTree(ByteArrayConverter converter) {
+	public ByteTree getByteTree(BigIntegerConverter converter) {
 		if (converter == null) {
 			throw new IllegalArgumentException();
 		}

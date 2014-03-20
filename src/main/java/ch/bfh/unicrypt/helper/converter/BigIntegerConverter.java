@@ -39,9 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 import java.math.BigInteger;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -50,13 +50,13 @@ import java.util.Arrays;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArrayConverter
-	   extends UniCrypt {
+public class BigIntegerConverter
+	   extends Converter<BigInteger> {
 
 	private final ByteOrder byteOrder;
 	private final int minLength;
 
-	protected ByteArrayConverter(ByteOrder byteOrder, int minLength) {
+	protected BigIntegerConverter(ByteOrder byteOrder, int minLength) {
 		this.byteOrder = byteOrder;
 		this.minLength = minLength;
 	}
@@ -69,12 +69,13 @@ public class ByteArrayConverter
 		return minLength;
 	}
 
-	public ByteArray integerToByteArray(int integer) {
-		return this.integerToByteArray(BigInteger.valueOf(integer));
+	public ByteArray convertToByteArray(int integer) {
+		return this.abstractConvertToByteArray(BigInteger.valueOf(integer));
 	}
 
-	public ByteArray integerToByteArray(BigInteger posBigInteger) {
-		// negative integers not allowed
+	@Override
+	public ByteArray abstractConvertToByteArray(BigInteger posBigInteger) {
+		// TODO: negative integers not allowed
 		if (posBigInteger.signum() == -1) {
 			throw new IllegalArgumentException();
 		}
@@ -90,15 +91,16 @@ public class ByteArrayConverter
 			bytes = expandedBytes;
 		}
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
-			ByteArrayConverter.reverseBytes(bytes);
+			BigIntegerConverter.reverseBytes(bytes);
 		}
 		return ByteArray.getInstance(bytes);
 	}
 
-	public BigInteger byteArrayToInteger(ByteArray byteArray) {
+	@Override
+	public BigInteger abstractConvertFromByteArray(ByteArray byteArray) {
 		byte[] bytes = byteArray.getAll();
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
-			ByteArrayConverter.reverseBytes(bytes);
+			BigIntegerConverter.reverseBytes(bytes);
 		}
 		return new BigInteger(1, bytes);
 	}
@@ -112,23 +114,23 @@ public class ByteArrayConverter
 		}
 	}
 
-	public static ByteArrayConverter getInstance() {
-		return ByteArrayConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
+	public static BigIntegerConverter getInstance() {
+		return BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
 	}
 
-	public static ByteArrayConverter getInstance(ByteOrder byteOrder) {
-		return ByteArrayConverter.getInstance(byteOrder, 0);
+	public static BigIntegerConverter getInstance(ByteOrder byteOrder) {
+		return BigIntegerConverter.getInstance(byteOrder, 0);
 	}
 
-	public static ByteArrayConverter getInstance(int minLength) {
-		return ByteArrayConverter.getInstance(ByteOrder.BIG_ENDIAN, minLength);
+	public static BigIntegerConverter getInstance(int minLength) {
+		return BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, minLength);
 	}
 
-	public static ByteArrayConverter getInstance(ByteOrder byteOrder, int minLength) {
+	public static BigIntegerConverter getInstance(ByteOrder byteOrder, int minLength) {
 		if (byteOrder == null || minLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArrayConverter(byteOrder, minLength);
+		return new BigIntegerConverter(byteOrder, minLength);
 	}
 
 }
