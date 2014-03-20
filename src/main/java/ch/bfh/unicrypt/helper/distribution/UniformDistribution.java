@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.distribution;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
@@ -110,16 +111,17 @@ public class UniformDistribution
 		return new UniformDistribution(a, b);
 	}
 
-	public static UniformDistribution getInstance(final int b) {
-		return UniformDistribution.getInstance(0, b);
+	public static UniformDistribution getInstance(final int maxBits) {
+		return UniformDistribution.getInstance(0, maxBits);
 	}
 
-	public static UniformDistribution getInstance(final int a, final int b) {
-		if (a < 0 || b < a) {
+	public static UniformDistribution getInstance(final int minBits, final int maxBits) {
+		if (minBits < 0 || maxBits < minBits) {
 			throw new IllegalArgumentException();
 		}
-		return UniformDistribution.getInstance(BigInteger.ONE.shiftLeft(a).subtract(BigInteger.ONE),
-											   BigInteger.ONE.shiftLeft(b).subtract(BigInteger.ONE));
+		BigInteger a = (minBits == 0) ? BigInteger.ZERO : MathUtil.powerOfTwo(minBits - 1);
+		BigInteger b = MathUtil.powerOfTwo(maxBits).subtract(BigInteger.ONE);
+		return UniformDistribution.getInstance(a, b);
 	}
 
 }
