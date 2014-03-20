@@ -75,7 +75,7 @@ public class BigIntegerConverter
 
 	@Override
 	public ByteArray abstractConvertToByteArray(BigInteger posBigInteger) {
-		// negative integers not allowed
+		// TODO: negative integers not allowed
 		if (posBigInteger.signum() == -1) {
 			throw new IllegalArgumentException();
 		}
