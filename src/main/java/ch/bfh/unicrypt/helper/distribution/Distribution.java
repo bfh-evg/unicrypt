@@ -50,6 +50,12 @@ import java.math.BigInteger;
  */
 public interface Distribution {
 
+	public final BigInteger INFINITE_BOUND = null;
+
+	public BigInteger getLowerBound();
+
+	public BigInteger getUpperBound();
+
 	public BigInteger getBigInteger(RandomByteSequence randomByteSequence);
 
 }

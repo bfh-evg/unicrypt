@@ -64,16 +64,18 @@ public class UniformDistribution
 	}
 
 	@Override
-	public BigInteger getBigInteger(RandomByteSequence randomByteSequence) {
-		return randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.a, this.b);
-	}
-
-	public BigInteger getA() {
+	public BigInteger getLowerBound() {
 		return this.a;
 	}
 
-	public BigInteger getB() {
+	@Override
+	public BigInteger getUpperBound() {
 		return this.b;
+	}
+
+	@Override
+	public BigInteger getBigInteger(RandomByteSequence randomByteSequence) {
+		return randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.a, this.b);
 	}
 
 	@Override

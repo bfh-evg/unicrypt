@@ -57,6 +57,16 @@ public class InfiniteDistribution
 	}
 
 	@Override
+	public BigInteger getLowerBound() {
+		return Distribution.INFINITE_BOUND;
+	}
+
+	@Override
+	public BigInteger getUpperBound() {
+		return Distribution.INFINITE_BOUND;
+	}
+
+	@Override
 	public BigInteger getBigInteger(RandomByteSequence randomByteSequence) {
 		throw new UnsupportedOperationException();
 	}
