@@ -91,7 +91,7 @@ public class ZTest {
 			assertTrue(e.getValue().getBigInteger().intValue() >= 0 && e.getValue().getBigInteger().intValue() <= 15);
 		}
 
-		z = Z.getInstance(UniformDistribution.getInstance(4, 5));
+		z = Z.getInstance(UniformDistribution.getInstance(5, 5));
 		for (int i = 0; i < 100; i++) {
 			ZElement e = z.getRandomElement();
 			assertTrue(e.getValue().getBigInteger().intValue() >= 15 && e.getValue().getBigInteger().intValue() <= 31);
