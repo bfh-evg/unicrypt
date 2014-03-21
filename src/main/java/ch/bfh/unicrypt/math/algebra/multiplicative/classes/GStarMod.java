@@ -74,10 +74,6 @@ public class GStarMod
 	private final SpecialFactorization moduloFactorization;
 	private final Factorization orderFactorization;
 	private ZStarMod superGroup;
-	// Counters for statistics -> performance improvements (just temporarily)
-	public static int modPowCounter_SelfApply = 0;
-	public static int modPowCounter_Contains = 0;
-	public static int modPowCounter_IsGenerator = 0;
 
 	protected GStarMod(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
 		super(ResidueClass.class);
@@ -157,7 +153,6 @@ public class GStarMod
 	@Override
 	protected GStarModElement defaultSelfApply(final GStarModElement element, final BigInteger amount) {
 		BigInteger newAmount = amount.mod(this.getOrder());
-		GStarMod.modPowCounter_SelfApply++;
 		return this.abstractGetElement(element.getValue().power(NaturalNumber.getInstance(newAmount)));
 	}
 
@@ -172,7 +167,6 @@ public class GStarMod
 	//
 	@Override
 	protected boolean abstractContains(final ResidueClass value) {
-		GStarMod.modPowCounter_Contains++;
 		return this.modulus.equals(value.getModulus()) && value.isRelativelyPrime()
 			   && value.power(NaturalNumber.getInstance(this.getOrder())).getBigInteger().equals(BigInteger.ONE);
 	}
@@ -255,7 +249,6 @@ public class GStarMod
 	@Override
 	protected boolean abstractIsGenerator(GStarModElement element) {
 		for (final BigInteger prime : this.getOrderFactorization().getPrimeFactors()) {
-			GStarMod.modPowCounter_IsGenerator++;
 			if (element.selfApply(this.getOrder().divide(prime)).isEquivalent(this.getIdentityElement())) {
 				return false;
 			}

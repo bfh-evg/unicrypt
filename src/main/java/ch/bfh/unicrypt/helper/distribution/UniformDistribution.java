@@ -119,7 +119,7 @@ public class UniformDistribution
 		if (minBits < 0 || maxBits < minBits) {
 			throw new IllegalArgumentException();
 		}
-		BigInteger a = (minBits == 0) ? BigInteger.ZERO : MathUtil.powerOfTwo(minBits - 1);
+		BigInteger a = MathUtil.powerOfTwo(minBits).subtract(BigInteger.ONE);
 		BigInteger b = MathUtil.powerOfTwo(maxBits).subtract(BigInteger.ONE);
 		return UniformDistribution.getInstance(a, b);
 	}

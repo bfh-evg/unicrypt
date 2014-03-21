@@ -61,7 +61,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
@@ -109,12 +108,10 @@ public class ShuffleProofGeneratorExample {
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		// Permutation commitment
-		logAndResetModPowCounters();
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
 		Tuple sV = pcs.getRandomizationSpace().getRandomElement();
 		Tuple cPiV = pcs.commit(pi, sV);
 		System.out.println("Permutation Commitment");
-		logAndResetModPowCounters();
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size, kc, proverId, ro);
@@ -132,7 +129,6 @@ public class ShuffleProofGeneratorExample {
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 		Triple proofShuffle = spg.generate(privateInput, publicInput);
 		System.out.println("Shuffle-Proof");
-		logAndResetModPowCounters();
 
 		// Verify
 		// (Important: If it is not given from the context, check equality of
@@ -140,16 +136,7 @@ public class ShuffleProofGeneratorExample {
 		BooleanElement vPermutation = pcpg.verify(proofPermutation, cPiV);
 		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput);
 		System.out.println("Verify");
-		logAndResetModPowCounters();
 		System.out.println("Shuffle was sucessful: " + (vPermutation.getValue() && vShuffle.getValue()));
-	}
-
-	public void logAndResetModPowCounters() {
-		System.out.println("COUNTER     : " + (GStarMod.modPowCounter_SelfApply - GStarMod.modPowCounter_IsGenerator));
-		System.out.println("COUNTER Cont: " + GStarMod.modPowCounter_Contains);
-		GStarMod.modPowCounter_SelfApply = 0;
-		GStarMod.modPowCounter_Contains = 0;
-		GStarMod.modPowCounter_IsGenerator = 0;
 	}
 
 	public static void main(String[] args) {
