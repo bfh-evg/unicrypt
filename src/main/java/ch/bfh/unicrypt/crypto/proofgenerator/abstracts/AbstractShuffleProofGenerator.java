@@ -41,14 +41,136 @@
  */
 package ch.bfh.unicrypt.crypto.proofgenerator.abstracts;
 
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
  *
  * @author philipp
  */
 public abstract class AbstractShuffleProofGenerator
-	   extends AbstractProofGenerator<ProductGroup, Triple, ProductGroup, Triple, ProductGroup, Triple> {
+	   extends AbstractProofGenerator<ProductGroup, Triple, ProductGroup, Tuple, ProductGroup, Triple> {
+
+	final public static int DEFAULT_KR = 20;
+
+	final private SigmaChallengeGenerator sigmaChallengeGenerator;
+	final private ChallengeGenerator eValuesGenerator;
+	final private CyclicGroup cyclicGroup;
+	final private int size;
+	final private int ke;
+	final private int kc;
+	final private int kr;
+	final private Tuple independentGenerators;
+
+	protected AbstractShuffleProofGenerator(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator,
+		   CyclicGroup cyclicGroup, int size, int kr, Tuple independentGenerators) {
+		this.sigmaChallengeGenerator = sigmaChallengeGenerator;
+		this.eValuesGenerator = eValuesGenerator;
+		this.cyclicGroup = cyclicGroup;
+		this.size = size;
+		this.kr = kr;
+		this.independentGenerators = independentGenerators;
+
+		this.ke = ((Z) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getDistribution().getUpperBound().bitLength();
+		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getDistribution().getUpperBound().bitLength();
+	}
+
+	//===================================================================================
+	// Public Interface
+	//
+	// Proof:   (SigmaProof-Triple, public inputs for sigma proof cV)
+	@Override
+	protected ProductGroup abstractGetProofSpace() {
+		return this.getPreimageProofSpace();
+	}
+
+	// PreimageProof: (t,c,s)
+	public ProductGroup getPreimageProofSpace() {
+		return ProductGroup.getInstance(this.getCommitmentSpace(),
+										this.getChallengeSpace(),
+										this.getResponseSpace());
+	}
+
+	// c: [0,...,2^kc - 1]
+	public Z getChallengeSpace() {
+		return this.getSigmaChallengeGenerator().getChallengeSpace();
+	}
+
+	public SigmaChallengeGenerator getSigmaChallengeGenerator() {
+		return this.sigmaChallengeGenerator;
+	}
+
+	public ChallengeGenerator getEValuesGenerator() {
+		return this.eValuesGenerator;
+	}
+
+	public CyclicGroup getCyclicGroup() {
+		return this.cyclicGroup;
+	}
+
+	public int getSize() {
+		return this.size;
+	}
+
+	public int getKe() {
+		return this.ke;
+	}
+
+	public int getKc() {
+		return this.kc;
+	}
+
+	public int getKr() {
+		return this.kr;
+	}
+
+	public Tuple getIndependentGenerators() {
+		return this.independentGenerators;
+	}
+
+	//===================================================================================
+	// Helpers
+	//
+	// Helper to compute the inner product
+	// - Additive:       Sum(t1_i*t2_i)
+	// - Multiplicative: Prod(t1_i^(t2_i))
+	protected static Element computeInnerProduct(Tuple t1, Tuple t2) {
+		if (!t1.getSet().isGroup() || t1.getArity() < 1) {
+			throw new IllegalArgumentException();
+		}
+		Element innerProduct = ((Group) t1.getSet().getAt(0)).getIdentityElement();
+		for (int i = 0; i < t1.getArity(); i++) {
+			innerProduct = innerProduct.apply(t1.getAt(i).selfApply(t2.getAt(i)));
+		}
+		return innerProduct;
+	}
+
+	//===================================================================================
+	// Helpers to create spaces
+	//
+	// [0,...,2^kc - 1] \subseteq Z
+	protected static Z createChallengeSpace(int kc) {
+		return Z.getInstance(kc);
+	}
+
+	// [0,...,2^ke - 1]^N \subseteq Z^N
+	protected static ProductGroup createEValuesGeneratorChallengeSpace(int ke, int size) {
+		return ProductGroup.getInstance(Z.getInstance(ke), size);
+	}
+
+	//===================================================================================
+	// Abstract Methods
+	//
+	abstract public ProductGroup getCommitmentSpace();
+
+	abstract public ProductGroup getResponseSpace();
 
 }
