@@ -41,8 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.params.classes;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECBinaryPolinomialFieldParams;
 import java.math.BigInteger;
 
@@ -78,9 +79,9 @@ public enum SECECCParamsF2m
 	}
 
 	@Override
-	public BinaryPolynomialField getFiniteField() {
-		BinaryPolynomialElement irreduciblePolynomialElement = null; // TODO!!!!
-		return BinaryPolynomialField.getInstance(irreduciblePolynomialElement);
+	public PolynomialField getFiniteField() {
+		PolynomialElement irreduciblePolynomialElement = null; // TODO!!!!
+		return PolynomialField.getInstance(ZModTwo.getInstance(), irreduciblePolynomialElement);
 	}
 
 	@Override
@@ -89,23 +90,23 @@ public enum SECECCParamsF2m
 	}
 
 	@Override
-	public BinaryPolynomialElement getA() {
-		return getFiniteField().getElementFrom(new BigInteger(a, 16));
+	public PolynomialElement getA() {
+		return (PolynomialElement) getFiniteField().getElementFrom(new BigInteger(a, 16));
 	}
 
 	@Override
-	public BinaryPolynomialElement getB() {
-		return getFiniteField().getElementFrom(new BigInteger(b, 16));
+	public PolynomialElement getB() {
+		return (PolynomialElement) getFiniteField().getElementFrom(new BigInteger(b, 16));
 	}
 
 	@Override
-	public BinaryPolynomialElement getGx() {
-		return getFiniteField().getElementFrom(new BigInteger(gx, 16));
+	public PolynomialElement getGx() {
+		return (PolynomialElement) getFiniteField().getElementFrom(new BigInteger(gx, 16));
 	}
 
 	@Override
-	public BinaryPolynomialElement getGy() {
-		return getFiniteField().getElementFrom(new BigInteger(gy, 16));
+	public PolynomialElement getGy() {
+		return (PolynomialElement) getFiniteField().getElementFrom(new BigInteger(gy, 16));
 	}
 
 	@Override

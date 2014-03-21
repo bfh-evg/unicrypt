@@ -41,23 +41,23 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECBinaryPolinomialFieldParams;
 import java.math.BigInteger;
 
 public class StandardECBinaryPolynomialField
 	   extends ECBinaryPolynomialField {
 
-	public StandardECBinaryPolynomialField(BinaryPolynomialField finiteField, BinaryPolynomialElement a,
-		   BinaryPolynomialElement b, BinaryPolynomialElement gx, BinaryPolynomialElement gy,
+	public StandardECBinaryPolynomialField(PolynomialField finiteField, PolynomialElement a,
+		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
 		   BigInteger order, BigInteger h) {
 		super(finiteField, a, b, gx, gy, order, h);
 	}
 
 	public static StandardECBinaryPolynomialField getInstance(final StandardECBinaryPolinomialFieldParams params) {
-		BinaryPolynomialField field;
-		BinaryPolynomialElement a, b, gx, gy;
+		PolynomialField field;
+		PolynomialElement a, b, gx, gy;
 		BigInteger order, h;
 
 		field = params.getFiniteField();

@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
-public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
+public abstract class AbstractEC<F extends FiniteField, V extends Object>
 	   extends AbstractAdditiveCyclicGroup<ECElement<V>, Point<DualisticElement<V>>>
 	   implements EC<V> {
 
