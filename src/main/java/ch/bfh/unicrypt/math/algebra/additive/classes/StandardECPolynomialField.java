@@ -39,16 +39,44 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.params.interfaces;
+package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
+import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
+import java.math.BigInteger;
 
-/**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- */
-public interface StandardECBinaryPolinomialFieldParams
-	   extends StandardECParams<PolynomialField, PolynomialElement> {
+public class StandardECPolynomialField
+	   extends ECPolynomialField {
 
+	public StandardECPolynomialField(PolynomialField finiteField, PolynomialElement a,
+		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
+		   BigInteger order, BigInteger h) {
+		super(finiteField, a, b, gx, gy, order, h);
+	}
+
+	public static StandardECPolynomialField getInstance(final StandardECPolynomialFieldParams params) {
+		PolynomialField field;
+		PolynomialElement a, b, gx, gy;
+		BigInteger order, h;
+
+		field = params.getFiniteField();
+		a = params.getA();
+		b = params.getB();
+		gx = params.getGx();
+		gy = params.getGy();
+		order = params.getOrder();
+		h = params.getH();
+
+		return new StandardECPolynomialField(field, a, b, gx, gy, order, h);
+	}
+
+//	public static void main(String[] args) {
+//
+//		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
+//
+//			StandardECPolynomialField ec = StandardECPolynomialField.getInstance(params);
+//			System.out.println(params.name() + "(\"" + ec.getA().getBigInteger().toString(16) + "\",\"" + ec.getB().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getBigInteger().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getCoFactor() + "\"),");
+//		}
+//	}
 }

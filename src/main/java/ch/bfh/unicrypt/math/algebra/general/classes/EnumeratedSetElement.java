@@ -39,44 +39,20 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.classes;
+package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
-import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECBinaryPolinomialFieldParams;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 
-public class StandardECBinaryPolynomialField
-	   extends ECBinaryPolynomialField {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
+ */
+public class EnumeratedSetElement<V extends Object>
+	   extends AbstractElement<EnumeratedSet<V>, EnumeratedSetElement<V>, V> {
 
-	public StandardECBinaryPolynomialField(PolynomialField finiteField, PolynomialElement a,
-		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
-		   BigInteger order, BigInteger h) {
-		super(finiteField, a, b, gx, gy, order, h);
+	protected EnumeratedSetElement(EnumeratedSet<V> set, V value) {
+		super(set, value);
 	}
 
-	public static StandardECBinaryPolynomialField getInstance(final StandardECBinaryPolinomialFieldParams params) {
-		PolynomialField field;
-		PolynomialElement a, b, gx, gy;
-		BigInteger order, h;
-
-		field = params.getFiniteField();
-		a = params.getA();
-		b = params.getB();
-		gx = params.getGx();
-		gy = params.getGy();
-		order = params.getOrder();
-		h = params.getH();
-
-		return new StandardECBinaryPolynomialField(field, a, b, gx, gy, order, h);
-	}
-
-//	public static void main(String[] args) {
-//
-//		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
-//
-//			StandardECBinaryPolynomialField ec = StandardECBinaryPolynomialField.getInstance(params);
-//			System.out.println(params.name() + "(\"" + ec.getA().getBigInteger().toString(16) + "\",\"" + ec.getB().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getBigInteger().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getCoFactor() + "\"),");
-//		}
-//	}
 }

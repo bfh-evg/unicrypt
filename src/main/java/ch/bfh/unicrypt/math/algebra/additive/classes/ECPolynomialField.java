@@ -51,10 +51,10 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
-public class ECBinaryPolynomialField
+public class ECPolynomialField
 	   extends AbstractEC<PolynomialField, Polynomial> {
 
-	public ECBinaryPolynomialField(PolynomialField finiteField, DualisticElement<Polynomial> a,
+	public ECPolynomialField(PolynomialField finiteField, DualisticElement<Polynomial> a,
 		   DualisticElement<Polynomial> b, DualisticElement<Polynomial> gx, DualisticElement<Polynomial> gy,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
@@ -64,7 +64,7 @@ public class ECBinaryPolynomialField
 		}
 	}
 
-	public ECBinaryPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
+	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, givenOrder, coFactor);
 		// this test should be moved to getInstance
@@ -175,8 +175,8 @@ public class ECBinaryPolynomialField
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
 	 */
-	public static ECBinaryPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger givenOrder, BigInteger coFactor) {
-		return new ECBinaryPolynomialField(f, a, b, givenOrder, coFactor);
+	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger givenOrder, BigInteger coFactor) {
+		return new ECPolynomialField(f, a, b, givenOrder, coFactor);
 	}
 
 	/**
@@ -191,8 +191,8 @@ public class ECBinaryPolynomialField
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
 	 */
-	public static ECBinaryPolynomialField getInstance(PolynomialField f, DualisticElement<Polynomial> a, DualisticElement<Polynomial> b, DualisticElement<Polynomial> gx, DualisticElement<Polynomial> gy, BigInteger givenOrder, BigInteger coFactor) {
-		return new ECBinaryPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
+	public static ECPolynomialField getInstance(PolynomialField f, DualisticElement<Polynomial> a, DualisticElement<Polynomial> b, DualisticElement<Polynomial> gx, DualisticElement<Polynomial> gy, BigInteger givenOrder, BigInteger coFactor) {
+		return new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
 	}
 
 }

@@ -39,20 +39,16 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.math.algebra.params.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
  */
-public class DiscreteSetElement<V extends Object>
-	   extends AbstractElement<DiscreteSet<V>, DiscreteSetElement<V>, V> {
-
-	protected DiscreteSetElement(DiscreteSet<V> set, V value) {
-		super(set, value);
-	}
+public interface StandardECPolynomialFieldParams
+	   extends StandardECParams<PolynomialField, PolynomialElement> {
 
 }
