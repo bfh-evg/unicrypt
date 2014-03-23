@@ -68,6 +68,7 @@ public class HelperExample {
 		ByteArray b7 = b1.getHashValue();
 		ByteArray b8 = b1.getHashValue(HashAlgorithm.MD5);
 
+		// Print results
 		Example.printLines("ByteArrays", b1, b2, b3);
 		Example.printLine("Extract", b4);
 		Example.printLine("Concatenate", b5);
@@ -96,6 +97,7 @@ public class HelperExample {
 		// Convert ByteArray to ByteTree
 		ByteTree recoveredByteTree = ByteTree.getInstanceFrom(byteArray);
 
+		// Print results
 		Example.printLines("Nodes", bt1, bt2, bt3, bt4, bt5);
 		Example.printLine("ByteTree ", byteTree);
 		Example.printLine("ByteArray", byteArray);

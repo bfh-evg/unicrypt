@@ -292,7 +292,12 @@ public class ImmutableArray<T>
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringName() {
+		return "";
+	}
+
+	@Override
+	protected String defaultToStringValue() {
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.length; i++) {

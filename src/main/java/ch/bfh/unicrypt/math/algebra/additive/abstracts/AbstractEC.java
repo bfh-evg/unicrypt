@@ -259,7 +259,7 @@ public abstract class AbstractEC<F extends FiniteField, V extends Object>
 	protected abstract ECElement<V> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.getA().getValue() + "," + this.getB().getValue();
 	}
 

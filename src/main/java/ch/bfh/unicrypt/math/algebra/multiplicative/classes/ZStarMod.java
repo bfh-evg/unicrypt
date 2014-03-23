@@ -154,7 +154,7 @@ public class ZStarMod
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.getModulus().toString();
 	}
 

@@ -113,7 +113,7 @@ public class ZMod
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.modulus.toString();
 	}
 

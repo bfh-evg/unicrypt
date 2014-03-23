@@ -96,7 +96,7 @@ public class PermutationGroup
 	// various super-classes
 	//
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return "" + this.getSize();
 	}
 

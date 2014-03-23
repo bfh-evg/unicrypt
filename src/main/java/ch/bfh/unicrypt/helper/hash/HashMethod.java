@@ -80,7 +80,7 @@ public class HashMethod
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.hashAlgorithm.toString() + "," + this.converter.toString() + "," + this.mode.toString();
 	}
 

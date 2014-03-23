@@ -231,7 +231,7 @@ public class Polynomial<C>
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		String result = "f(x)=";
 
 		String separator = "";

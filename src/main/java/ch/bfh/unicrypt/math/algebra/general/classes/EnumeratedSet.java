@@ -111,7 +111,7 @@ public class EnumeratedSet<V extends Object>
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		String str = this.valueMap.values().toString();
 		return str.substring(1, str.length() - 1);
 	}

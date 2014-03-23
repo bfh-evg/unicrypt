@@ -91,7 +91,7 @@ public abstract class AbstractPaddingScheme<S extends ConcatenativeSemiGroup, E 
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return "" + this.getBlockLength();
 	}
 

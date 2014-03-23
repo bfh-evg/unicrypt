@@ -155,7 +155,7 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.getDomain() + " => " + this.getCoDomain();
 	}
 

@@ -67,7 +67,7 @@ public interface Group<V extends Object>
 	 * @return The inverse element of the input element
 	 * @throws IllegalArgumentException if {@code element} is null or does belong to the group
 	 */
-	public Element invert(Element element);
+	public Element<V> invert(Element element);
 
 	/**
 	 * Applies the binary group operation to the first and the inverse of the second given group element.
@@ -78,6 +78,6 @@ public interface Group<V extends Object>
 	 * @throws IllegalArgumentException if {@code element1} or {@code element2} is null
 	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
    * */
-	public Element applyInverse(Element element1, Element element2);
+	public Element<V> applyInverse(Element element1, Element element2);
 
 }

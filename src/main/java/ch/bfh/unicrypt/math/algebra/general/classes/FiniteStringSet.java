@@ -140,7 +140,7 @@ public class FiniteStringSet
 	}
 
 	@Override
-	public boolean abstractEquals(final Set set) {
+	protected boolean abstractEquals(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
 		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength && this.maxLength == other.maxLength;
 	}
@@ -155,7 +155,7 @@ public class FiniteStringSet
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.getAlphabet().toString() + "^{" + this.minLength + "..." + this.maxLength + "}";
 	}
 
