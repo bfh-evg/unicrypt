@@ -183,6 +183,22 @@ public class Example {
 		Example.printLine(objects);
 	}
 
+	public static void printLines(Object object) {
+		if (object instanceof Iterable) {
+			Example.printLines((Iterable) object);
+		} else {
+			Example.printLines(new Object[]{object});
+		}
+	}
+
+	public static void printLines(String label, Object object) {
+		if (object instanceof Iterable) {
+			Example.printLines(label, (Iterable) object);
+		} else {
+			Example.printLines(label, new Object[]{object});
+		}
+	}
+
 	public static void printLines(Object... objects) {
 		for (Object object : objects) {
 			Example.printLine(object);

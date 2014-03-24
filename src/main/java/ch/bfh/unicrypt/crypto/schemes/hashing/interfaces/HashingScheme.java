@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.hash.interfaces;
+package ch.bfh.unicrypt.crypto.schemes.hashing.interfaces;
 
 import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  *
  * @author rolfhaenni
  */
-public interface HashScheme
+public interface HashingScheme
 			 extends Scheme {
 
 	/**

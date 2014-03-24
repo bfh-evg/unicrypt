@@ -39,9 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.hash.classes;
+package ch.bfh.unicrypt.crypto.schemes.hashing.classes;
 
-import ch.bfh.unicrypt.crypto.schemes.hash.abstracts.AbstractHashScheme;
+import ch.bfh.unicrypt.crypto.schemes.hashing.abstracts.AbstractHashingScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
@@ -50,12 +50,12 @@ import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 
-public class StandardHashScheme
-			 extends AbstractHashScheme<ByteArrayMonoid, ByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement> {
+public class StandardHashingScheme
+			 extends AbstractHashingScheme<ByteArrayMonoid, ByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement> {
 
 	private final HashMethod hashMethod;
 
-	protected StandardHashScheme(HashMethod hashMethod) {
+	protected StandardHashingScheme(HashMethod hashMethod) {
 		this.hashMethod = hashMethod;
 	}
 
@@ -68,11 +68,11 @@ public class StandardHashScheme
 		return HashFunction.getInstance(ByteArrayMonoid.getInstance(), this.getHashMethod());
 	}
 
-	public static StandardHashScheme getInstance(HashMethod hashMethod) {
+	public static StandardHashingScheme getInstance(HashMethod hashMethod) {
 		if (hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new StandardHashScheme(hashMethod);
+		return new StandardHashingScheme(hashMethod);
 	}
 
 }

@@ -45,22 +45,33 @@ import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
+import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
+import ch.bfh.unicrypt.math.function.classes.HashFunction;
+import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class AlgebraExample {
+public class MathExample {
 
 	public static void example1() {
 
@@ -73,7 +84,7 @@ public class AlgebraExample {
 		Element<String> e2 = fss.getElement("world");
 		FiniteStringElement e3 = fss.getRandomElement();
 
-		// Compute hash values
+		// Compute BigInteger, byte array, hash value, byte tree
 		String v = e1.getValue();
 		BigInteger i = e1.getBigInteger();
 		ByteArray a = e1.getByteArray();
@@ -89,6 +100,7 @@ public class AlgebraExample {
 		Example.printLine("ByteArray", a);
 		Example.printLine("Hash", h);
 		Example.printLine("ByteTree", t);
+		Example.printLine("ByteTreeArray", t.getByteArray());
 	}
 
 	public static void example2() {
@@ -154,6 +166,69 @@ public class AlgebraExample {
 		Example.printLine("Order", order);
 		Example.printLines("Elements", e1, e2, e3);
 		Example.printLines("Results", e4, e5, e6);
+	}
+
+	public static void example4() {
+		// Generate 3 atomic sets
+		Z s1 = Z.getInstance();
+		N s2 = N.getInstance();
+		StringMonoid s3 = StringMonoid.getInstance(Alphabet.LOWER_CASE);
+
+		// Generate s1 x s2, (s1 x s2)^3 and (s1 x s2)^3 x s3
+		ProductSet s4 = ProductSet.getInstance(s1, s2);
+		ProductSet s5 = ProductSet.getInstance(s4, 3);
+		ProductSet s6 = s5.add(s3);
+
+		// Define tuples for s4
+		Tuple t4_1 = Tuple.getInstance(s1.getElement(10), s2.getElement(5));
+		Tuple t4_2 = s4.getElement(s1.getElement(10), s2.getElement(5));
+
+		// Define tuples for s5
+		Tuple t5_1 = Tuple.getInstance(t4_1, 3);
+		Tuple t5_2 = s5.getElement(t4_1, t4_1, t4_1);
+
+		// Generate tuple for s6 and convert it
+		Tuple t6 = t5_1.add(s3.getElement("hello"));
+		BigInteger i = t6.getBigInteger();
+		ByteArray a = t6.getByteArray();
+		ByteArray h = t6.getHashValue();
+		ByteTree t = t6.getByteTree();
+
+		// Print results
+		Example.printLines("Atomic sets", s1, s2, s3);
+		Example.printLines("Product sets", s4, s5, s6);
+		Example.printLines("Tuples", t4_1, t4_2, t5_1, t5_2, t6);
+		Example.printLine("BigInteger", i);
+		Example.printLine("ByteArray", a);
+		Example.printLine("Hash", h);
+		Example.printLine("ByteTree", t);
+		Example.printLine("ByteTreeArray", t.getByteArray());
+	}
+
+	public static void example5() {
+
+		// Generate random permutation of size 5
+		Group group = PermutationGroup.getInstance(5);
+		Element permutation = group.getRandomElement();
+
+		// Define permutation function Z_23^5 -> Z_23^5
+		Group z23 = ZModPrime.getInstance(23);
+		PermutationFunction p = PermutationFunction.getInstance(z23, 5);
+
+		// Pick random domain element from Z_23^10 and permute it
+		Tuple tuple = ProductSet.getInstance(z23, 5).getRandomElement();
+		Tuple permutedTuple = p.apply(tuple, permutation);
+
+		// Create and append hash function
+		HashFunction h = HashFunction.getInstance(z23);
+		CompositeFunction ph = CompositeFunction.getInstance(p, ProductFunction.getInstance(h, 5));
+		Element hashedTuple = ph.apply(tuple, permutation);
+
+		// Print results
+		Example.printLine("Permutation", permutation);
+		Example.printLines("Input Tuple", tuple);
+		Example.printLines("Permuted Tuple", permutedTuple);
+		Example.printLines("Hashed Tuple", hashedTuple);
 	}
 
 	public static void main(final String[] args) {

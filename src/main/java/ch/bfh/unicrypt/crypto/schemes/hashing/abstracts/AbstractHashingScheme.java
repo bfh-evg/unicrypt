@@ -39,9 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.hash.abstracts;
+package ch.bfh.unicrypt.crypto.schemes.hashing.abstracts;
 
-import ch.bfh.unicrypt.crypto.schemes.hash.interfaces.HashScheme;
+import ch.bfh.unicrypt.crypto.schemes.hashing.interfaces.HashingScheme;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -53,9 +53,9 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractHashScheme<MS extends Set, ME extends Element, HS extends Set, HE extends Element>
+public abstract class AbstractHashingScheme<MS extends Set, ME extends Element, HS extends Set, HE extends Element>
 	   extends AbstractScheme<MS>
-	   implements HashScheme {
+	   implements HashingScheme {
 
 	protected Function hashFunction;
 	protected Function checkFunction;
