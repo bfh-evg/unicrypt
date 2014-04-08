@@ -44,8 +44,8 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 import java.math.BigInteger;
 
 /**
- * This interface represents the mathematical concept a semigroup. It defines a set of elements and an associative (but
- * not necessarily commutative) binary operation. Applying the operation to elements yields another element. It is
+ * This interface represents the mathematical concept of a semigroup. It defines a set of elements and an associative
+ * (but not necessarily commutative) binary operation. Applying the operation to elements yields another element. It is
  * implemented as a specialization of {@link Set}.
  * <p>
  * @param <V>
@@ -64,7 +64,7 @@ public interface SemiGroup<V extends Object>
 	 * @param element1 The first group element
 	 * @param element2 The second group element
 	 * @return The result of applying the group operation to the two input elements
-	 * @throws IllegalArgumentException if {@code element1} or {@code element2} is null
+	 * @throws IllegalArgumentException if {@code element1} or {@code element2} is null TODO
 	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
    * */
 	public Element<V> apply(Element element1, Element element2);
@@ -75,7 +75,7 @@ public interface SemiGroup<V extends Object>
 	 * <p>
 	 * @param elements A given array of elements
 	 * @return The result of applying the operation to the input elements
-	 * @throws IllegalArgumentException if {@code elements} or one of its elements is null
+	 * @throws IllegalArgumentException if {@code elements} or one of its elements is null TODO
 	 * @throws IllegalArgumentException if one of the elements in {@code elements} does not belong to the group
 	 */
 	public Element<V> apply(Element... elements);
@@ -101,7 +101,7 @@ public interface SemiGroup<V extends Object>
 	 * <p>
 	 * @param element A given group element
 	 * @param amount  The number of instances of the input element given as an {@link Element} object
-	 * @return The result of applying the group operation multiple times to the input element
+	 * @return The result of applying the group operation multiple times to the input element TODO
 	 * @throws IllegalArgumentException if {@code element} or {@code amount} is null
 	 * @throws IllegalArgumentException if {@code element} does not belong to the group
 	 */
@@ -112,7 +112,7 @@ public interface SemiGroup<V extends Object>
 	 * <p>
 	 * @param element A given group element
 	 * @param amount  The number of instances of the input element
-	 * @return The result of applying the operation multiple times to the input element
+	 * @return The result of applying the operation multiple times to the input element TODO
 	 * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
 	 */
 	public Element<V> selfApply(Element element, int amount);
@@ -122,7 +122,7 @@ public interface SemiGroup<V extends Object>
 	 * {@code selfApply(element, 2)}.
 	 * <p>
 	 * @param element A given group element
-	 * @return The result of applying the group operation to the input element
+	 * @return The result of applying the group operation to the input element TODO
 	 * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
 	 */
 	public Element<V> selfApply(Element element);

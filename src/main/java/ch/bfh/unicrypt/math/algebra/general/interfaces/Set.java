@@ -170,32 +170,32 @@ public interface Set<V extends Object> {
 	public boolean hasKnownOrder();
 
 	/**
-	 * Returns the group order. If the group order is unknown, {@link #UNKNOWN_ORDER} is returned. If the group order is
+	 * Returns the set order. If the set order is unknown, {@link #UNKNOWN_ORDER} is returned. If the set order is
 	 * infinite, {@link #INFINITE_ORDER} is returned.
 	 * <p>
 	 * @see "Handbook of Applied Cryptography, Definition 2.163"
-	 * @return The group order
+	 * @return The set order
 	 */
 	public BigInteger getOrder();
 
 	/**
-	 * TODO Returns a lower bound for the group (?)order in case the exact group order is unknown. The least return
-	 * value is 0 (?). Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
+	 * TODO Returns a lower bound for the set order in case the exact set order is unknown. The least return value is 0
+	 * (?). Otherwise, if the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
-	 * @return A lower bound for the group order
+	 * @return A lower bound for the set order
 	 */
 	public BigInteger getOrderLowerBound();
 
 	/**
-	 * TODO Returns an upper bound for the group (?) order in case the exact group order is unknown. The heighest return
-	 * value is -1(?). Otherwise, if the exact group order is known (or infinite), the exact group order is returned.
+	 * TODO Returns an upper bound for the set order in case the exact group order is unknown. The heighest return value
+	 * is -1. Otherwise, if the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
-	 * @return A upper bound for the group order
+	 * @return A upper bound for the set order
 	 */
 	public BigInteger getOrderUpperBound();
 
 	/**
-	 * TODO Returns the minimal order of this set(?). entweder order oder min. coumpound (recursive)
+	 * TODO Returns the minimal order of this set. entweder order oder min. coumpound (recursive)
 	 * <p>
 	 * @return The minimal order of this set
 	 */
@@ -209,8 +209,8 @@ public interface Set<V extends Object> {
 	public boolean isSingleton();
 
 	/**
-	 * Returns an additive integer group of type {@link ZPlusMod} with the same group order. For this to work, the group
-	 * order must be finite and known.
+	 * TODO Returns an additive integer group of type {@link ZPlusMod} with the same group order. For this to work, the
+	 * group order must be finite and known.
 	 * <p>
 	 * @return The resulting additive group.
 	 * @throws UnsupportedOperationException if the group order is infinite or unknown
@@ -227,27 +227,29 @@ public interface Set<V extends Object> {
 	public ZStarMod getZStarModOrder();
 
 	/**
-	 * Checks if a given element belongs to the group.
+	 * Checks if a given element belongs to this set.
 	 * <p>
 	 * @param element The given element
-	 * @return {@code true} if {@literal element} belongs to the group
+	 * @return {@code true} if {@literal element} belongs to this set
 	 * @throws IllegalArgumentException if {@literal element} is null
 	 */
 	public boolean contains(Element element);
 
 	/**
-	 * TODO
+	 * TODO Checks if a given value belongs to this set.
 	 * <p>
-	 * @param value
-	 * @return
+	 * @param value The given value
+	 * @return {@code true} if {@literal value} belongs to this set
+	 * @throws IllegalArgumentException if {@literal value} is null
 	 */
 	public boolean contains(Object value);
 
 	/**
-	 * TODO
+	 * TODO Returns the corresponding {@link Element} for the given {@literal value}.
 	 * <p>
-	 * @param value
-	 * @return
+	 * @param value The given value
+	 * @return the corresponding element for the given value
+	 * @throws IllegalArgumentException if this set does not contain {@literal value}
 	 */
 	public Element<V> getElement(V value);
 
@@ -264,7 +266,6 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param integer The given integer value
 	 * @return The corresponding element, or {@literal null} if no such element exists
-	 * @throws IllegalArgumentException if {@literal integerValue} is null
 	 */
 	public Element<V> getElementFrom(int integer);
 
@@ -274,22 +275,43 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param bigInteger The given BigInteger value
 	 * @return The corresponding element, or {@literal null} if no such element exists
-	 * @throws IllegalArgumentException if {@literal integerValue} is null
+	 * @throws IllegalArgumentException if {@literal bigInteger} is null
 	 */
 	public Element<V> getElementFrom(BigInteger bigInteger);
 
+	/**
+	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray}.
+	 * <p>
+	 * @param byteArray The given ByteArray
+	 * @return the corresponding element
+	 */
 	public Element<V> getElementFrom(ByteArray byteArray);
 
+	/**
+	 *
+	 * @param byteArray
+	 * @param converter
+	 * @return
+	 * @throws IllegalArgumentException if {@literal byteArray} is null
+	 */
 	public Element<V> getElementFrom(ByteArray byteArray, ByteArrayConverter converter);
 
 	/**
-	 * TODO
+	 * TODO Returns the corresponding {@link Element} for the given {@link ByteTree}.
 	 * <p>
-	 * @param byteTree
-	 * @return
+	 * @param byteTree The given ByteTree
+	 * @return the corresponding element
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree);
 
+	/**
+	 * <p>
+	 * <p>
+	 * @param byteTree
+	 * @param converter
+	 * @return
+	 * @throws IllegalArgumentException if {@literal byteTree} is null
+	 */
 	public Element<V> getElementFrom(ByteTree byteTree, ByteArrayConverter converter);
 
 	/**
@@ -319,6 +341,7 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param randomByteSequence Either {@literal null} or a given random generator
 	 * @return A random element from the set
+	 * @throws IllegalArgumentException if {@literal randomByteSequence} is null
 	 */
 	public Element<V> getRandomElement(RandomByteSequence randomByteSequence);
 
@@ -333,21 +356,59 @@ public interface Set<V extends Object> {
 	public boolean areEquivalent(Element element1, Element element2);
 
 	/**
-	 * TODO
+	 * TODO Returns {
 	 * <p>
-	 * @param set
-	 * @return
+	 * @true} if this set is equal to a given Set.
+	 * <p>
+	 * @param set The given Set.
+	 * @return {@code true} if this set is equal
+	 * @throws IllegalArgumentException if {@literal set} is null
 	 */
 	public boolean isEquivalent(Set set);
 
+	/**
+	 * TODO Returns the positive BigInteger value that corresponds the element.
+	 * <p>
+	 * @param element
+	 * @return the corresponding BigInteger value
+	 * @throws IllegalArgumentException if {@literal element} is null
+	 */
 	public BigInteger getBigIntegerFrom(Element element);
 
+	/**
+	 * TODO Returns the corresponding {@link ByteArray} for a given {@link Element}.
+	 * <p>
+	 * @param element The given Element
+	 * @return the corresponding ByteArray
+	 * @throws IllegalArgumentException if {@literal element} is null or this set does not contain the
+	 *                                  {@literal element}
+	 */
 	public ByteArray getByteArrayFrom(Element element);
 
+	/**
+	 * TODO
+	 * <p>
+	 * @param element
+	 * @param converter
+	 * @return
+	 */
 	public ByteArray getByteArrayFrom(Element element, ByteArrayConverter converter);
 
+	/**
+	 * TODO Returns the corresponding {@link ByteTree} for a given {@link Element}.
+	 * <p>
+	 * @param element The given Element
+	 * @return the corresponding ByteTree
+	 */
 	public ByteTree getByteTreeFrom(Element element);
 
+	/**
+	 * TODO
+	 * <p>
+	 * @param element
+	 * @param converter
+	 * @return
+	 */
 	public ByteTree getByteTreeFrom(Element element, ByteArrayConverter converter);
 
 }

@@ -48,9 +48,9 @@ import ch.bfh.unicrypt.helper.hash.HashMethod;
 import java.math.BigInteger;
 
 /**
- * This abstract class represents the concept an element in a mathematical group. It allows applying the group operation
- * and other methods from a {@link Group} in a convenient way. Most methods provided by {@link Element} have an
- * equivalent method in {@link Group}.
+ * This abstract class represents the concept of an element in a mathematical group. It allows applying the group
+ * operation and other methods from a {@link Group} in a convenient way. Most methods provided by {@link Element} have
+ * an equivalent method in {@link Group}.
  * <p>
  * @param <V>
  * @see Group
@@ -61,96 +61,174 @@ import java.math.BigInteger;
  */
 public interface Element<V extends Object> {
 
+	/**
+	 * Returns {@code true} if this element is an {@link AdditiveElement}.
+	 * <p>
+	 * @return {
+	 * @true} if this element is an AdditiveElement
+	 */
 	public boolean isAdditive();
 
+	/**
+	 * Returns {@code true} if this element is a {@link MultiplicativeElement}.
+	 * <p>
+	 * @return {
+	 * @true} if this element is a MultiplicativeElement
+	 */
 	public boolean isMultiplicative();
 
+	/**
+	 * Returns {@code true} if this element is a {@link ConcatenativeElement}.
+	 * <p>
+	 * @return {
+	 * @true} if this element is a ConcatenativeElement
+	 */
 	public boolean isConcatenative();
 
+	/**
+	 * Returns {@code true} if this element is a {@link DualisticElement}.
+	 * <p>
+	 * @return {@code true} if this element is a DualisticElement
+	 */
 	public boolean isDualistic();
 
+	/**
+	 * Returns {@code true} if this element is a {@link Tuple}.
+	 * <p>
+	 * @return {@code true} if this element is a Tuple
+	 */
 	public boolean isTuple();
 
 	/**
-	 *
-	 * @return
+	 * Returns the unique {@link Set} to which this element belongs.
+	 * <p>
+	 * @return The element's set
 	 */
 	public Set<V> getSet();
 
 	/**
-	 * Returns the positive BigInteger value that corresponds the element.
+	 * Returns the positive BigInteger value that corresponds this element.
 	 * <p>
 	 * @return The corresponding BigInteger value
 	 */
 	public V getValue();
 
+	/**
+	 * TODO Returns the positive BigInteger value that corresponds this element.
+	 * <p>
+	 * @return The corresponding BigInteger value
+	 */
 	public BigInteger getBigInteger();
 
+	/**
+	 * TODO Returns the corresponding {@link ByteArray} of this element.
+	 * <p>
+	 * @return The corresponding ByteArray
+	 */
 	public ByteArray getByteArray();
 
+	/**
+	 * TODO Returns the corresponding {@link ByteArray} of this Element after converting the corresponding ByteTree with
+	 * the help of a a given {@link ByteArrayConverter}.
+	 * <p>
+	 * @param converter
+	 * @return
+	 */
 	public ByteArray getByteArray(ByteArrayConverter converter);
 
+	/**
+	 * TODO Returns the corresponding {@link ByteTree} of this Element.
+	 * <p>
+	 * @return The corresponding ByteTree
+	 */
 	public ByteTree getByteTree();
 
+	/**
+	 * TODO Returns the corresponding {@link ByteTree} of this Element after converting the corresponding ByteArray with
+	 * with the help of a given {@link ByteArrayConverter}.
+	 * <p>
+	 * @param converter
+	 * @return The corresponding ByteTree
+	 */
 	public ByteTree getByteTree(ByteArrayConverter converter);
 
+	/**
+	 * TODO
+	 * <p>
+	 * @return
+	 */
 	public ByteArray getHashValue();
 
+	/**
+	 * TODO
+	 * <p>
+	 * @param hashMethod
+	 * @return
+	 */
 	public ByteArray getHashValue(HashMethod hashMethod);
 
 	/**
 	 * Checks if this element is mathematically equivalent to the given element. For this, they need to belong to the
 	 * same set.
 	 * <p>
-	 * @param element
-	 * @return
+	 * @param element The given Element
+	 * @return {@code true} if the element is equivalent to the given element
 	 */
 	public boolean isEquivalent(Element element);
 
 	// The following methods are equivalent to corresponding Set methods
-	//
 	/**
+	 * @param element
+	 * @return
 	 * @see Group#apply(Element, Element)
 	 */
 	public Element<V> apply(Element element);
 
 	/**
+	 * @param element
+	 * @return
 	 * @see Group#applyInverse(Element, Element)
 	 */
 	public Element<V> applyInverse(Element element);
 
 	/**
+	 * @param amount
+	 * @return
 	 * @see Group#selfApply(Element, BigInteger)
 	 */
 	public Element<V> selfApply(BigInteger amount);
 
 	/**
+	 * @param amount
+	 * @return
 	 * @see Group#selfApply(Element, Element)
 	 */
 	public Element<V> selfApply(Element amount);
 
 	/**
+	 * @param amount
+	 * @return
 	 * @see Group#selfApply(Element, int)
 	 */
 	public Element<V> selfApply(int amount);
 
 	/**
-	 * @see Group#selfApply(Element)
+	 * @return @see Group#selfApply(Element)
 	 */
 	public Element<V> selfApply();
 
 	/**
-	 * @see Group#invert(Element)
+	 * @return @see Group#invert(Element)
 	 */
 	public Element<V> invert();
 
 	/**
-	 * @see Group#isIdentityElement(Element)
+	 * @return @see Group#isIdentityElement(Element)
 	 */
 	public boolean isIdentity();
 
 	/**
-	 * @see CyclicGroup#isGenerator(Element)
+	 * @return @see CyclicGroup#isGenerator(Element)
 	 */
 	public boolean isGenerator();
 
