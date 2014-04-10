@@ -49,7 +49,6 @@ import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -90,8 +89,8 @@ public class PreimageProofSystemTest {
 		Element publicInput = this.G_q1.getElement(64);
 
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	@Test
@@ -109,8 +108,8 @@ public class PreimageProofSystemTest {
 		Element publicInput = this.G_q2.getElement(64);
 
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(!v);
 	}
 
 	@Test
@@ -126,8 +125,8 @@ public class PreimageProofSystemTest {
 		Element publicInput = this.G_q1.getElement(64);
 
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	@Test
@@ -151,8 +150,8 @@ public class PreimageProofSystemTest {
 
 		Tuple proof = pg.generate(privateInput, publicInput);
 		// System.out.println("" + proof);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	@Test
@@ -172,15 +171,15 @@ public class PreimageProofSystemTest {
 		Element privateInput = Tuple.getInstance(m, G_q.getZModOrder().getElement(7));
 		Element publicInput = Tuple.getInstance(G_q.getElement(16), G_q.getElement(8));
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(!v);
 
 		// Invalid proof  => wrong m
 		privateInput = Tuple.getInstance(G_q.getElement(8), r);
 
 		proof = pg.generate(privateInput, publicInput);
 		v = pg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		assertTrue(!v);
 	}
 
 	@Test(expected = IllegalArgumentException.class)

@@ -53,7 +53,6 @@ import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -126,8 +125,8 @@ public class ShuffleProofSystemTest {
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
 		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
-		BooleanElement v = spg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = spg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	@Test
@@ -168,8 +167,8 @@ public class ShuffleProofSystemTest {
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
 		Triple proof = spg.generate(privateInput, publicInput);
-		BooleanElement v = spg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = spg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	@Test
@@ -215,8 +214,8 @@ public class ShuffleProofSystemTest {
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeVInvalid);
 
 		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
-		BooleanElement v = spg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		boolean v = spg.verify(proof, publicInput);
+		assertTrue(!v);
 
 		// Invalid: Wrong sV values
 		Tuple sVInvalid = Tuple.getInstance(Z_q.getElement(23), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(6));
@@ -225,7 +224,7 @@ public class ShuffleProofSystemTest {
 
 		proof = spg.generate(privateInput, publicInput, randomGenerator);
 		v = spg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		assertTrue(!v);
 
 		// Invalid: Wrong rV values
 		Tuple rVInvalid = Tuple.getInstance(Z_q.getElement(7), Z_q.getElement(18), Z_q.getElement(9), Z_q.getElement(10), Z_q.getElement(11));
@@ -234,7 +233,7 @@ public class ShuffleProofSystemTest {
 
 		proof = spg.generate(privateInput, publicInput, randomGenerator);
 		v = spg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		assertTrue(!v);
 	}
 
 	@Test
@@ -289,11 +288,11 @@ public class ShuffleProofSystemTest {
 		// Verify
 		// (Important: If it is not given from the context, check equality of
 		//             the permutation commitments!)
-		BooleanElement vPermutation = pcpg.verify(proofPermutation, cPiV);
+		boolean vPermutation = pcpg.verify(proofPermutation, cPiV);
 
-		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput);
+		boolean vShuffle = spg.verify(proofShuffle, publicInput);
 
-		assertTrue(vPermutation.getValue() && vShuffle.getValue());
+		assertTrue(vPermutation && vShuffle);
 
 	}
 
@@ -341,8 +340,8 @@ public class ShuffleProofSystemTest {
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
 		Triple proof = spg.generate(privateInput, publicInput);
-		BooleanElement v = spg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = spg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 }

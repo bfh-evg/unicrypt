@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.ElGamalEncryptionValidityProof
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -91,8 +90,8 @@ public class ElGamalValidityProofSystemTest {
 		Pair privateInput = pg.createPrivateInput(secret, index);
 
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 
 	}
 
@@ -116,8 +115,8 @@ public class ElGamalValidityProofSystemTest {
 			Pair privateInput = pg.createPrivateInput(secret, index);
 
 			Triple proof = pg.generate(privateInput, publicInput);
-			BooleanElement v = pg.verify(proof, publicInput);
-			assertTrue(!v.getValue());
+			boolean v = pg.verify(proof, publicInput);
+			assertTrue(!v);
 
 			// Invalid proof -> wrong index
 			secret = G_q.getZModOrder().getElement(3);
@@ -126,7 +125,7 @@ public class ElGamalValidityProofSystemTest {
 
 			proof = pg.generate(privateInput, publicInput);
 			v = pg.verify(proof, publicInput);
-			assertTrue(!v.getValue());
+			assertTrue(!v);
 		}
 	}
 

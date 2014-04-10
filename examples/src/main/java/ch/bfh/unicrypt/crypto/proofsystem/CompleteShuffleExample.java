@@ -51,7 +51,6 @@ import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentSc
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -144,15 +143,15 @@ public class CompleteShuffleExample {
 		//-------------
 		System.out.print("Verify... ");
 		// Verify permutation commitment proof
-		BooleanElement vPermutation = pcps.verify(proofPermutation, permutationCommitment);
+		boolean vPermutation = pcps.verify(proofPermutation, permutationCommitment);
 
 		// Verify shuffle proof
-		BooleanElement vShuffle = sps.verify(proofShuffle, publicInput);
+		boolean vShuffle = sps.verify(proofShuffle, publicInput);
 
 		// Verify equality of permutation commitments
 		boolean vPermutationCommitments = permutationCommitment.isEquivalent(publicInput.getFirst());
 
-		if (vPermutation.getValue() && vShuffle.getValue() && vPermutationCommitments) {
+		if (vPermutation && vShuffle && vPermutationCommitments) {
 			System.out.println("Proof is valid!");
 		} else {
 			System.out.println("Proof is NOT valid!");
@@ -241,15 +240,15 @@ public class CompleteShuffleExample {
 		//-------------
 		System.out.print("Verify... ");
 		// Verify permutation commitment proof
-		BooleanElement vPermutation = pcps.verify(proofPermutation, permutationCommitment);
+		boolean vPermutation = pcps.verify(proofPermutation, permutationCommitment);
 
 		// Verify shuffle proof
-		BooleanElement vShuffle = sps.verify(proofShuffle, publicInput);
+		boolean vShuffle = sps.verify(proofShuffle, publicInput);
 
 		// Verify equality of permutation commitments
 		boolean vPermutationCommitments = permutationCommitment.isEquivalent(publicInput.getFirst());
 
-		if (vPermutation.getValue() && vShuffle.getValue() && vPermutationCommitments) {
+		if (vPermutation && vShuffle && vPermutationCommitments) {
 			System.out.println("Proof is valid!");
 		} else {
 			System.out.println("Proof is NOT valid!");

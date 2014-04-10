@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaCha
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageOrProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaSetMembershipProofSystem;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
@@ -134,7 +133,7 @@ public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGrou
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Triple proof, PUE publicInput) {
+	protected boolean abstractVerify(Triple proof, PUE publicInput) {
 		return this.getOrProofGenerator().verify(proof, this.createProofImages(publicInput));
 	}
 

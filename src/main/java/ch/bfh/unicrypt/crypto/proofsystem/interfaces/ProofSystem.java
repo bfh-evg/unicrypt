@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.crypto.proofsystem.interfaces;
 
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
@@ -52,7 +51,7 @@ public interface ProofSystem {
 
 	public Element generate(Element privateInput, Element publicInput, RandomByteSequence randomByteSequence);
 
-	public BooleanElement verify(Element proof, Element publicInput);
+	public boolean verify(Element proof, Element publicInput);
 
 	public Set getPrivateInputSpace();
 

@@ -6,7 +6,6 @@ import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
@@ -71,7 +70,7 @@ public class ValidityElGamalDeSerialization {
 		ElGamalEncryptionValidityProofSystem pg = ElGamalEncryptionValidityProofSystem
 			   .getInstance(scg, elGamal, publicKey, plaintexts);
 
-		BooleanElement v = pg.verify(proof, cipherText);
+		boolean v = pg.verify(proof, cipherText);
 
 		System.out.println("Proof valid: " + v);
 

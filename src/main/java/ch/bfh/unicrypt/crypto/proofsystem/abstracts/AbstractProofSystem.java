@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.ProofSystem;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
@@ -65,7 +64,7 @@ public abstract class AbstractProofSystem<PRS extends Set, PRE extends Element, 
 	}
 
 	@Override
-	public final BooleanElement verify(Element proof, Element publicInput) {
+	public final boolean verify(Element proof, Element publicInput) {
 		if (!this.getProofSpace().contains(proof) || !this.getPublicInputSpace().contains(publicInput)) {
 			throw new IllegalArgumentException();
 		}
@@ -89,7 +88,7 @@ public abstract class AbstractProofSystem<PRS extends Set, PRE extends Element, 
 
 	protected abstract PE abstractGenerate(PRE secretInput, PUE publicInput, RandomByteSequence randomByteSequence);
 
-	protected abstract BooleanElement abstractVerify(PE proof, PUE publicInput);
+	protected abstract boolean abstractVerify(PE proof, PUE publicInput);
 
 	protected abstract PRS abstractGetPrivateInputSpace();
 

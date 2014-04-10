@@ -46,8 +46,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNon
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaProofSystem;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
@@ -192,18 +190,18 @@ public class InequalityOfPreimagesProofSystem
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Pair proof, Pair publicInput) {
+	protected boolean abstractVerify(Pair proof, Pair publicInput) {
 
 		// 1. Verify preimage proof
 		SigmaProofSystem preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
-		BooleanElement v = preimageProofGenerator.verify(
+		boolean v = preimageProofGenerator.verify(
 			   this.getPreimageProof(proof),
 			   Tuple.getInstance(this.getProofCommitment(proof), ((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement()));
 
 		// 2. Check C != 1
 		boolean c = !this.getProofCommitment(proof).isEquivalent(((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement());
 
-		return BooleanSet.getInstance().getElement(v.getValue() && c);
+		return v && c;
 	}
 
 	// f(a,b) = (f2(a)/z^b, f1(a)/y^b)                 |==> f(a,b) = (h^a/z^b, g^a/y^b)

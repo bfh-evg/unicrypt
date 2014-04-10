@@ -47,8 +47,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaCha
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductMonoid;
@@ -188,7 +186,7 @@ public class PreimageOrProofSystem
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Triple proof, Tuple publicInput) {
+	protected boolean abstractVerify(Triple proof, Tuple publicInput) {
 
 		// Extract (t, c, s)
 		final Tuple commitments = this.getCommitment(proof);
@@ -202,7 +200,7 @@ public class PreimageOrProofSystem
 			sumOfChallenges = sumOfChallenges.add(challenges.getAt(i));
 		}
 		if (!challenge.isEquivalent(sumOfChallenges)) {
-			return BooleanSet.FALSE;
+			return false;
 		}
 
 		// 2. Verify all subproofs
@@ -210,12 +208,12 @@ public class PreimageOrProofSystem
 			Element a = this.getPreimageProofFunction().getAt(i).apply(responses.getAt(i));
 			Element b = commitments.getAt(i).apply(publicInput.getAt(i).selfApply(challenges.getAt(i)));
 			if (!a.isEquivalent(b)) {
-				return BooleanSet.FALSE;
+				return false;
 			}
 		}
 
 		// Proof is valid!
-		return BooleanSet.TRUE;
+		return true;
 	}
 
 }

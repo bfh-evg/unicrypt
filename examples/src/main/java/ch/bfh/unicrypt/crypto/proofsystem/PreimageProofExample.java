@@ -77,7 +77,7 @@ public class PreimageProofExample {
 
 		// Generate and verify proof
 		Triple proof = pg.generate(privateKey, publicKey);
-		Element result = pg.verify(proof, publicKey);
+		boolean result = pg.verify(proof, publicKey);
 
 		Example.printLine("Cyclic Group", cyclicGroup);
 		Example.printLine("Generator", generator);

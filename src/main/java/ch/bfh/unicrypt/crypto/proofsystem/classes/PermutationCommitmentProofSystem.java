@@ -51,8 +51,6 @@ import ch.bfh.unicrypt.helper.distribution.Distribution;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -225,7 +223,7 @@ public class PermutationCommitmentProofSystem
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Pair proof, Tuple publicInput) {
+	protected boolean abstractVerify(Pair proof, Tuple publicInput) {
 
 		// Unfold proof
 		final Triple preimageProof = (Triple) proof.getFirst();
@@ -261,7 +259,7 @@ public class PermutationCommitmentProofSystem
 		final Element left = f.apply(response);                                         // [3N+3]
 		final Element right = commitment.apply(pV.selfApply(challenge));                //  [N+3]
 		//                                                                                -------
-		return BooleanSet.getInstance().getElement(left.isEquivalent(right));           // [5N+7]
+		return left.isEquivalent(right);                                                // [5N+7]
 	}
 
 	//===================================================================================

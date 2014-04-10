@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageOrProofSystem;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -121,8 +120,8 @@ public class PreimageOrProofSystemTest {
 		Triple proof = pg.generate(privateInput, publicInput);
 
 		// Verify
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	public Function getPedersonCommitmentFunction() {

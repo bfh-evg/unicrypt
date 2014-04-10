@@ -57,7 +57,6 @@ import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -141,7 +140,7 @@ public class MixAndProofExample {
 		Triple proof = pg.generate(privateInput, publicInput);
 
 		// Verify proof
-		BooleanElement v = pg.verify(proof, publicInput);
+		boolean v = pg.verify(proof, publicInput);
 		Example.printLine("Proof is valid", v);
 	}
 
@@ -178,7 +177,7 @@ public class MixAndProofExample {
 		Triple proof = pg.generate(privateInput, publicInput);
 
 		// Verify proof
-		BooleanElement v = pg.verify(proof, publicInput);
+		boolean v = pg.verify(proof, publicInput);
 		Example.printLine("Proof is valid", v);
 	}
 
@@ -279,15 +278,15 @@ public class MixAndProofExample {
 		// V E R I F Y
 		//-------------
 		// Verify permutation commitment proof
-		BooleanElement vPermutation = pcpg.verify(proofPermutation, publicInput1);
+		boolean vPermutation = pcpg.verify(proofPermutation, publicInput1);
 
 		// Verify shuffle proof
-		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput2);
+		boolean vShuffle = spg.verify(proofShuffle, publicInput2);
 
 		// Verify equality of permutation commitments
 		boolean vPermutationCommitments = publicInput1.isEquivalent(publicInput2.getFirst());
 
-		if (vPermutation.getValue() && vShuffle.getValue() && vPermutationCommitments) {
+		if (vPermutation && vShuffle && vPermutationCommitments) {
 			Example.printLine("Proof is valid!");
 		} else {
 			Example.printLine("Proof is NOT valid!");
@@ -376,15 +375,15 @@ public class MixAndProofExample {
 		// V E R I F Y
 		//-------------
 		// Verify permutation commitment proof
-		BooleanElement vPermutation = pcpg.verify(proofPermutation, publicInput1);
+		boolean vPermutation = pcpg.verify(proofPermutation, publicInput1);
 
 		// Verify shuffle proof
-		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput2);
+		boolean vShuffle = spg.verify(proofShuffle, publicInput2);
 
 		// Verify equality of permutation commitments
 		boolean vPermutationCommitments = publicInput1.isEquivalent(publicInput2.getFirst());
 
-		if (vPermutation.getValue() && vShuffle.getValue() && vPermutationCommitments) {
+		if (vPermutation && vShuffle && vPermutationCommitments) {
 			Example.printLine("Proof is valid!");
 		} else {
 			Example.printLine("Proof is NOT valid!");

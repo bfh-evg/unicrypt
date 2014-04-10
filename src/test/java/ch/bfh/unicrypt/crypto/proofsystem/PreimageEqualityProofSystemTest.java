@@ -49,7 +49,6 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -99,8 +98,8 @@ public class PreimageEqualityProofSystemTest {
 
 		Triple proof = pg.generate(privateInput, publicInput);
 
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 
 		// Invalid proof -> preimages are not equal
 		privateInput = Z_q.getElement(3);
@@ -109,7 +108,7 @@ public class PreimageEqualityProofSystemTest {
 			   G_q.getElement(16));    // Preimage = 4
 		proof = pg.generate(privateInput, publicInput);
 		v = pg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		assertTrue(!v);
 
 	}
 
@@ -136,8 +135,8 @@ public class PreimageEqualityProofSystemTest {
 			   G_q.getElement(64), // Preimage = 3
 			   G_q.getElement(16));    // Preimage = 4
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(!v);
 
 	}
 

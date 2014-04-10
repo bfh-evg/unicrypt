@@ -52,7 +52,6 @@ import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -133,10 +132,10 @@ public class ShuffleProofSystemExample {
 		// Verify
 		// (Important: If it is not given from the context, check equality of
 		//             the permutation commitments!)
-		BooleanElement vPermutation = pcps.verify(proofPermutation, cPiV);
-		BooleanElement vShuffle = sps.verify(proofShuffle, publicInput);
+		boolean vPermutation = pcps.verify(proofPermutation, cPiV);
+		boolean vShuffle = sps.verify(proofShuffle, publicInput);
 		System.out.println("Verify");
-		System.out.println("Shuffle was sucessful: " + (vPermutation.getValue() && vShuffle.getValue()));
+		System.out.println("Shuffle was sucessful: " + (vPermutation && vShuffle));
 	}
 
 	public static void main(String[] args) {

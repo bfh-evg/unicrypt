@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentSchem
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -93,8 +92,8 @@ public class PedersenCommitmentValidityProofSystemTest {
 		Tuple privateInput = pg.createPrivateInput(secret, index);
 
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	@Test
@@ -116,8 +115,8 @@ public class PedersenCommitmentValidityProofSystemTest {
 		Element publicInput = pedersenCS.commit(messages.getElements()[index], r);
 
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 
 	}
 
@@ -142,8 +141,8 @@ public class PedersenCommitmentValidityProofSystemTest {
 			Tuple privateInput = pg.createPrivateInput(secret, index);
 
 			Triple proof = pg.generate(privateInput, publicInput);
-			BooleanElement v = pg.verify(proof, publicInput);
-			assertTrue(!v.getValue());
+			boolean v = pg.verify(proof, publicInput);
+			assertTrue(!v);
 
 			// Invalid proof -> wrong index
 			secret = Z_q.getElement(2);
@@ -152,7 +151,7 @@ public class PedersenCommitmentValidityProofSystemTest {
 
 			proof = pg.generate(privateInput, publicInput);
 			v = pg.verify(proof, publicInput);
-			assertTrue(!v.getValue());
+			assertTrue(!v);
 		}
 	}
 

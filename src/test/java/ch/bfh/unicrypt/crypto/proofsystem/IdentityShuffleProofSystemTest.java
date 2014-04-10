@@ -50,7 +50,6 @@ import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.helper.factorization.SafePrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -116,8 +115,8 @@ public class IdentityShuffleProofSystemTest {
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV, gK_1, gK);
 
 		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
-		BooleanElement v = spg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = spg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	@Test
@@ -154,8 +153,8 @@ public class IdentityShuffleProofSystemTest {
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV, gK_1, gK);
 
 		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
-		BooleanElement v = spg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = spg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	@Test
@@ -193,8 +192,8 @@ public class IdentityShuffleProofSystemTest {
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV, gK_1, gK);
 
 		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
-		BooleanElement v = spg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		boolean v = spg.verify(proof, publicInput);
+		assertTrue(!v);
 
 		// -> differnt alpha for gk and identities
 		privateInput = Tuple.getInstance(pi, sV, alpha);
@@ -202,7 +201,7 @@ public class IdentityShuffleProofSystemTest {
 
 		proof = spg.generate(privateInput, publicInput, randomGenerator);
 		v = spg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		assertTrue(!v);
 
 		// -> differnt alpha for gk and identities
 		privateInput = Tuple.getInstance(pi, pcs.getRandomizationSpace().getRandomElement(), alpha);
@@ -210,7 +209,7 @@ public class IdentityShuffleProofSystemTest {
 
 		proof = spg.generate(privateInput, publicInput, randomGenerator);
 		v = spg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		assertTrue(!v);
 	}
 
 	@Test
@@ -248,8 +247,8 @@ public class IdentityShuffleProofSystemTest {
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV, gK_1, gK);
 
 		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
-		BooleanElement v = spg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = spg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 }

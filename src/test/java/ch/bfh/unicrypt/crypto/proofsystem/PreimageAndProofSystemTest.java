@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageAndProofSystem;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -98,8 +97,8 @@ public class PreimageAndProofSystemTest {
 			   G_q.getElement(16));
 
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 
 	}
 
@@ -125,8 +124,8 @@ public class PreimageAndProofSystemTest {
 			   G_q.getElement(64),
 			   G_q.getElement(32));    // Preimage = 5
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(!v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(!v);
 
 	}
 
@@ -153,8 +152,8 @@ public class PreimageAndProofSystemTest {
 			   G_q.getElement(16));
 
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 	}
 
 	@Test
@@ -173,8 +172,8 @@ public class PreimageAndProofSystemTest {
 		Element publicInput = Tuple.getInstance(G_q.getElement(4));
 
 		Triple proof = pg.generate(privateInput, publicInput);
-		BooleanElement v = pg.verify(proof, publicInput);
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
 
 	}
 

@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -91,11 +89,11 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	}
 
 	@Override
-	protected final BooleanElement abstractVerify(final Triple proof, final Element publicInput) {
+	protected final boolean abstractVerify(final Triple proof, final Element publicInput) {
 		final Element challenge = this.getChallengeGenerator().generate(publicInput, this.getCommitment(proof));
 		final Element left = this.getPreimageProofFunction().apply(this.getResponse(proof));
 		final Element right = this.getCommitment(proof).apply(publicInput.selfApply(challenge));
-		return BooleanSet.getInstance().getElement(left.isEquivalent(right));
+		return left.isEquivalent(right);
 	}
 
 }

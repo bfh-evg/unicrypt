@@ -51,8 +51,6 @@ import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenComm
 import ch.bfh.unicrypt.helper.distribution.Distribution;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -175,7 +173,7 @@ public class IdentityShuffleProofSystem
 	}
 
 	@Override
-	protected BooleanElement abstractVerify(Triple proof, Tuple publicInput) {
+	protected boolean abstractVerify(Triple proof, Tuple publicInput) {
 
 		// Unfold proof and public input
 		final Tuple commitment = (Tuple) proof.getAt(0);
@@ -207,7 +205,7 @@ public class IdentityShuffleProofSystem
 		final Element left = f.apply(response);                                   // [2N+3]
 		final Element right = commitment.apply(pV.selfApply(challenge));          //    [3]
 		//                                                                          --------
-		return BooleanSet.getInstance().getElement(left.isEquivalent(right));     // [4N+6]
+		return left.isEquivalent(right);                                          // [4N+6]
 	}
 
 	//===================================================================================

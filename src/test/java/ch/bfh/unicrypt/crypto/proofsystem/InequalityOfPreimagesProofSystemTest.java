@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.InequalityOfPreimagesProofSyst
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -93,20 +92,20 @@ public class InequalityOfPreimagesProofSystemTest {
 		// Valid proof
 		Pair proof = pg.generate(x, Pair.getInstance(y, z));
 
-		BooleanElement v = pg.verify(proof, Pair.getInstance(y, z));
-		assertTrue(v.getValue());
+		boolean v = pg.verify(proof, Pair.getInstance(y, z));
+		assertTrue(v);
 
 		// Invalid proof -> wrong x
 		Element xx = Z_q.getElement(3);
 		proof = pg.generate(xx, Pair.getInstance(y, z));
 		v = pg.verify(proof, Pair.getInstance(y, z));
-		assertTrue(!v.getValue());
+		assertTrue(!v);
 
 		// Invalid proof -> equal descrete logs
 		Element zz = G_q.getElement(64);
 		proof = pg.generate(x, Pair.getInstance(y, zz));
 		v = pg.verify(proof, Pair.getInstance(y, zz));
-		assertTrue(!v.getValue());
+		assertTrue(!v);
 
 	}
 

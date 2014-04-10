@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSyst
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -95,8 +94,8 @@ public class PermutationCommitmentProofSystemTest {
 
 		// Proof and verify
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
-		BooleanElement v = pcpg.verify(proof, cPiV);
-		assertTrue(v.getValue());
+		boolean v = pcpg.verify(proof, cPiV);
+		assertTrue(v);
 	}
 
 	@Test
@@ -124,8 +123,8 @@ public class PermutationCommitmentProofSystemTest {
 
 		// Proof and verify
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
-		BooleanElement v = pcpg.verify(proof, cPiV);
-		assertTrue(v.getValue());
+		boolean v = pcpg.verify(proof, cPiV);
+		assertTrue(v);
 	}
 
 	@Test
@@ -154,14 +153,14 @@ public class PermutationCommitmentProofSystemTest {
 		// Invalid: Wrong sV
 		Tuple sVInvalid = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(12), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7));
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sVInvalid), cPiV, randomGenerator);
-		BooleanElement v = pcpg.verify(proof, cPiV);
-		assertTrue(!v.getValue());
+		boolean v = pcpg.verify(proof, cPiV);
+		assertTrue(!v);
 
 		// Invalid: Wrong pi
 		PermutationElement piInvalid = PermutationGroup.getInstance(size).getElement(Permutation.getInstance(new int[]{3, 0, 4, 2, 1}));
 		proof = pcpg.generate(Pair.getInstance(piInvalid, sV), cPiV, randomGenerator);
 		v = pcpg.verify(proof, cPiV);
-		assertTrue(!v.getValue());
+		assertTrue(!v);
 	}
 
 	@Test
@@ -197,8 +196,8 @@ public class PermutationCommitmentProofSystemTest {
 		// Proof and verify
 		// Invalid: Modified permutation
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
-		BooleanElement v = pcpg.verify(proof, cPiV);
-		assertTrue(!v.getValue());
+		boolean v = pcpg.verify(proof, cPiV);
+		assertTrue(!v);
 
 	}
 
