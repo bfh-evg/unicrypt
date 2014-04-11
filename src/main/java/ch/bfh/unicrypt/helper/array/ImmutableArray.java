@@ -135,6 +135,44 @@ public class ImmutableArray<T>
 	}
 
 	@Override
+	public ImmutableArray<T> extractPrefix(int length) {
+		return this.extract(0, length);
+	}
+
+	@Override
+	public ImmutableArray<T> extractSuffix(int length) {
+		return this.extract(this.length - length, length);
+	}
+
+	@Override
+	public ImmutableArray<T> extractRange(int fromIndex, int toIndex) {
+		return this.extract(fromIndex, toIndex - fromIndex + 1);
+	}
+
+	@Override
+	public ImmutableArray<T> extract(int offset, int length) {
+		if (offset < 0 || length < 0 || offset + length > this.length) {
+			throw new IllegalArgumentException();
+		}
+		if (length == 0) {
+			return new ImmutableArray<T>();
+		}
+		if (this.isUniform()) { // case 2, not empty
+			return new ImmutableArray<T>(this.array[0], length);
+		}
+		boolean isUniform = true;
+		Object[] result = new Object[length];
+		for (int i = 0; i < length; i++) {
+			result[i] = this.getAt(offset + i);
+			isUniform = isUniform && result[i].equals(result[0]);
+		}
+		if (isUniform) {
+			return new ImmutableArray<T>(result[0], length);
+		}
+		return new ImmutableArray<T>(result);
+	}
+
+	@Override
 	public ImmutableArray<T> removeAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
@@ -254,7 +292,12 @@ public class ImmutableArray<T>
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringName() {
+		return "";
+	}
+
+	@Override
+	protected String defaultToStringValue() {
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.length; i++) {
@@ -339,16 +382,4 @@ public class ImmutableArray<T>
 		return new ImmutableArray(object, length);
 	}
 
-	// DOES NOT WORK IN JAVA6
-//	// used for casting
-//	public static <S extends T, T> ImmutableArray<S> getInstance(ImmutableArray<T> oldArray, Class<S> newType) {
-//		if (oldArray.isUniform() && !oldArray.isEmpty()) {
-//			return new ImmutableArray((S) oldArray.getFirst(), oldArray.getLength());
-//		}
-//		S[] newArray = (S[]) Array.newInstance(newType, oldArray.length);
-//		for (int i = 0; i < oldArray.length; i++) {
-//			newArray[i] = (S) oldArray.getAt(i);
-//		}
-//		return new ImmutableArray(newArray);
-//	}
 }

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
@@ -71,7 +72,7 @@ public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V 
 	}
 
 	@Override
-	public final E times(final Element element, final Element amount) {
+	public final E times(final Element element, final Element<Numerical> amount) {
 		return this.selfApply(element, amount);
 	}
 

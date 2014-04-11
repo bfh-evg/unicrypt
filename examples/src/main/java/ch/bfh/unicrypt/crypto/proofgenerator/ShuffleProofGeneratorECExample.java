@@ -48,8 +48,10 @@ import ch.bfh.unicrypt.crypto.proofgenerator.classes.ReEncryptionShuffleProofGen
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -96,6 +98,10 @@ public class ShuffleProofGeneratorECExample {
 
 		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
+		final Element proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Shuffler");
+		final int ke = 60;
+		final int kc = 60;
+		final int kr = 20;
 
 		// Permutation commitment
 		PermutationCommitmentScheme pcs = PermutationCommitmentScheme.getInstance(G_q, size, rrs);
@@ -103,14 +109,14 @@ public class ShuffleProofGeneratorECExample {
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Permutation commitment proof generator
-		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
-		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
+		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size, kc, proverId, ro);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ke, ro);
+		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, kr, rrs);
 
 		// Shuffle Proof Generator
-		SigmaChallengeGenerator scgS = ReEncryptionShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecgS = ReEncryptionShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
-		ReEncryptionShuffleProofGenerator spg = ReEncryptionShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionScheme, encryptionPK, rrs);
+		SigmaChallengeGenerator scgS = ReEncryptionShuffleProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, encryptionScheme, size, kc, proverId, ro);
+		ChallengeGenerator ecgS = ReEncryptionShuffleProofGenerator.createNonInteractiveEValuesGenerator(G_q, encryptionScheme, size, ke, ro);
+		ReEncryptionShuffleProofGenerator spg = ReEncryptionShuffleProofGenerator.getInstance(scgS, ecgS, G_q, size, encryptionScheme, encryptionPK, kr, rrs);
 
 		// Proof
 		Pair proofPermutation = pcpg.generate(Pair.getInstance(pi, sV), cPiV);

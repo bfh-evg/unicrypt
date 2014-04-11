@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.DiscreteSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.EnumeratedSet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -53,7 +53,7 @@ import org.junit.Test;
  */
 public class DiscreteSetTest {
 
-	private static DiscreteSet<String> ds = DiscreteSet.getInstance("John", "Mary", "Bob");
+	private static EnumeratedSet<String> ds = EnumeratedSet.getInstance("John", "Mary", "Bob");
 
 	@Test
 	public void testStandardToStringContent() {

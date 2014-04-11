@@ -42,10 +42,11 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.abstracts.AbstractSigmaProofGenerator;
+import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -57,6 +58,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public class PreimageOrProofGenerator
 	   extends AbstractSigmaProofGenerator<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
@@ -66,6 +68,15 @@ public class PreimageOrProofGenerator
 	protected PreimageOrProofGenerator(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
 		super(challengeGenerator);
 		this.preimageProofFunction = proofFunction;
+	}
+
+	public static PreimageOrProofGenerator getInstance(final ProductFunction proofFunction) {
+		return PreimageOrProofGenerator.getInstance(proofFunction, (Element) null);
+	}
+
+	public static PreimageOrProofGenerator getInstance(final ProductFunction proofFunction, final Element proverId) {
+		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		return PreimageOrProofGenerator.getInstance(challengeGenerator, proofFunction);
 	}
 
 	public static PreimageOrProofGenerator getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
@@ -135,8 +146,8 @@ public class PreimageOrProofGenerator
 		final Element[] responses = new Element[proofFunctions.length];
 
 		// Get challenge space and initialze the summation of the challenges
-		final ZMod challengeSpace = this.getChallengeSpace();
-		ZModElement sumOfChallenges = challengeSpace.getIdentityElement();
+		final Z challengeSpace = this.getChallengeSpace();
+		ZElement sumOfChallenges = challengeSpace.getIdentityElement();
 		int z = challengeSpace.getOrder().intValue();
 		// Create proof elements (simulate proof) for all but the known secret
 		for (int i = 0; i < proofFunctions.length; i++) {
@@ -145,7 +156,7 @@ public class PreimageOrProofGenerator
 			}
 
 			// Create random challenge and response
-			ZModElement c = challengeSpace.getRandomElement(randomByteSequence);
+			ZElement c = challengeSpace.getRandomElement(randomByteSequence);
 			Function f = proofFunctions[i];
 			Element s = f.getDomain().getRandomElement(randomByteSequence);
 
@@ -163,7 +174,7 @@ public class PreimageOrProofGenerator
 		commitments[index] = proofFunctions[index].apply(randomElement);
 
 		// - Create overall proof challenge
-		final ZModElement challenge = this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
+		final ZElement challenge = this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
 		// - Calculate challenge based on the overall challenge and the chosen challenges for the simulated proofs
 		challenges[index] = challenge.subtract(sumOfChallenges);
 		// - finally compute response element
@@ -185,8 +196,8 @@ public class PreimageOrProofGenerator
 		final Tuple responses = this.getResponse(proof);
 
 		// 1. Check whether challenges sum up to the overall challenge
-		final ZModElement challenge = this.getChallengeGenerator().generate(publicInput, commitments);
-		ZModElement sumOfChallenges = this.getChallengeSpace().getIdentityElement();
+		final ZElement challenge = this.getChallengeGenerator().generate(publicInput, commitments);
+		ZElement sumOfChallenges = this.getChallengeSpace().getIdentityElement();
 		for (int i = 0; i < challenges.getArity(); i++) {
 			sumOfChallenges = sumOfChallenges.add(challenges.getAt(i));
 		}

@@ -143,6 +143,10 @@ public class ByteArray
 		return this.extract(this.length - length, length);
 	}
 
+	public ByteArray extractRange(int fromIndex, int toIndex) {
+		return this.extract(fromIndex, toIndex - fromIndex + 1);
+	}
+
 	public ByteArray extract(int offset, int length) {
 		if (offset < 0 || length < 0 || offset + length > this.length) {
 			throw new IllegalArgumentException();
@@ -318,7 +322,12 @@ public class ByteArray
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringName() {
+		return "";
+	}
+
+	@Override
+	protected String defaultToStringValue() {
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.length; i++) {

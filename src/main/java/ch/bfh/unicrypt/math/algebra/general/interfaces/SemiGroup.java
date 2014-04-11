@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import java.math.BigInteger;
 
 /**
@@ -48,7 +49,7 @@ import java.math.BigInteger;
  * (but not necessarily commutative) binary operation. Applying the operation to elements yields another element. It is
  * implemented as a specialization of {@link Set}.
  * <p>
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this semigroup
  * @see "Handbook of Applied Cryptography, Definition 2.162"
  * <p>
  * @author R. Haenni
@@ -59,13 +60,13 @@ public interface SemiGroup<V extends Object>
 	   extends Set<V> {
 
 	/**
-	 * Applies the binary group operation to two group elements (in the given order).
+	 * Applies the binary group operation to two semigroup elements (in the given order).
 	 * <p>
-	 * @param element1 The first group element
-	 * @param element2 The second group element
-	 * @return The result of applying the group operation to the two input elements
-	 * @throws IllegalArgumentException if {@code element1} or {@code element2} is null TODO
-	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
+	 * @param element1 The first semigroup element
+	 * @param element2 The second semigroup element
+	 * @return The result of applying the semigroup operation to the two input elements
+	 * <p>
+	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the semigroup
    * */
 	public Element<V> apply(Element element1, Element element2);
 
@@ -76,22 +77,21 @@ public interface SemiGroup<V extends Object>
 	 * @param elements A given array of elements
 	 * @return The result of applying the operation to the input elements
 	 * @throws IllegalArgumentException if {@code elements} or one of its elements is null TODO
-	 * @throws IllegalArgumentException if one of the elements in {@code elements} does not belong to the group
+	 * @throws IllegalArgumentException if one of the elements in {@code elements} does not belong to the semigroup
 	 */
 	public Element<V> apply(Element... elements);
 
 	/**
-	 * Applies the binary group operation repeatedly to {@code amount} many instances of a given group element. If
+	 * Applies the binary group operation repeatedly to {@code amount} many instances of a given semigroup element. If
 	 * {@code amount} equals 0, then the identity element is returned. If {@code amount} is negative, then the
-	 * corresponding positive value is applied to the inverse of the given element. If the group is finite and if its
-	 * order is known to be {@code q}, then {
+	 * corresponding positive value is applied to the inverse of the given element. If the semigroup is finite and if
+	 * its order is known to be {@code q}, then {
 	 * <p>
 	 * @amount} can be replaced by {@code amount mod q}.
 	 * @param element A given group element
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the group operation multiple times to the input element
-	 * @throws IllegalArgumentException if {@code element} or {@code amount} is null
-	 * @throws IllegalArgumentException if {@code element} does not belong to the group
+	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
 	 */
 	public Element<V> selfApply(Element element, BigInteger amount);
 
@@ -102,10 +102,9 @@ public interface SemiGroup<V extends Object>
 	 * @param element A given group element
 	 * @param amount  The number of instances of the input element given as an {@link Element} object
 	 * @return The result of applying the group operation multiple times to the input element TODO
-	 * @throws IllegalArgumentException if {@code element} or {@code amount} is null
-	 * @throws IllegalArgumentException if {@code element} does not belong to the group
+	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
 	 */
-	public Element<V> selfApply(Element element, Element amount);
+	public Element<V> selfApply(Element element, Element<Numerical> amount);
 
 	/**
 	 * Same as {@link #Group.selfApply(Element, BigInteger)}, except that the amount is given as an {@code int} value.
@@ -113,17 +112,17 @@ public interface SemiGroup<V extends Object>
 	 * @param element A given group element
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the operation multiple times to the input element TODO
-	 * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
+	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
 	 */
 	public Element<V> selfApply(Element element, int amount);
 
 	/**
-	 * Applies the group operation to two instances of a given group element. This is equivalent to
+	 * Applies the group operation to two instances of a given semigroup element. This is equivalent to
 	 * {@code selfApply(element, 2)}.
 	 * <p>
 	 * @param element A given group element
 	 * @return The result of applying the group operation to the input element TODO
-	 * @throws IllegalArgumentException if {@code element} is null or does not belong to the group
+	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
 	 */
 	public Element<V> selfApply(Element element);
 
@@ -135,9 +134,7 @@ public interface SemiGroup<V extends Object>
 	 * @param elements A given array of elements
 	 * @param amounts  Corresponding amounts
 	 * @return The result of this operation
-	 * @throws IllegalArgumentException if {@code elements} or one of its elements is null
-	 * @throws IllegalArgumentException if {@code amounts} or one of its values is null
-	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
+	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the semigroup
 	 * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
 	 */
 	public Element<V> multiSelfApply(Element[] elements, BigInteger[] amounts);

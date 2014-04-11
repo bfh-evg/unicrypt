@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
 import ch.bfh.unicrypt.helper.compound.Compound;
 import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -177,7 +177,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple defaultGetElementFrom(ByteTree byteTree, ByteArrayConverter converter) {
+	protected Tuple defaultGetElementFrom(ByteTree byteTree, BigIntegerConverter converter) {
 		if (!byteTree.isLeaf()) {
 			int arity = this.getArity();
 			ImmutableArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
@@ -198,7 +198,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected ByteTree defaultGetByteTreeFrom(Tuple tuple, ByteArrayConverter converter) {
+	protected ByteTree defaultGetByteTreeFrom(Tuple tuple, BigIntegerConverter converter) {
 		ByteTree[] byteTrees = new ByteTree[this.getArity()];
 		int i = 0;
 		for (Element element : tuple.getValue()) {
@@ -308,6 +308,26 @@ public class ProductSet
 			result[i++] = set;
 		}
 		return result;
+	}
+
+	@Override
+	public ProductSet extractPrefix(int length) {
+		return this.extract(0, length);
+	}
+
+	@Override
+	public ProductSet extractSuffix(int length) {
+		return this.extract(this.getArity() - length, length);
+	}
+
+	@Override
+	public ProductSet extractRange(int fromIndex, int toIndex) {
+		return this.extract(fromIndex, toIndex - fromIndex + 1);
+	}
+
+	@Override
+	public ProductSet extract(int offset, int length) {
+		return ProductSet.getInstance(this.sets.extract(offset, length));
 	}
 
 	@Override

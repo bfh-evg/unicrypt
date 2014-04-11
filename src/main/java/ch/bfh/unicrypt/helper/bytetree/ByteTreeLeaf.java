@@ -71,8 +71,8 @@ public class ByteTreeLeaf
 	}
 
 	@Override
-	public String defaultToStringValue() {
-		return this.binaryData.defaultToStringValue();
+	protected String defaultToStringValue() {
+		return this.binaryData.toString();
 	}
 
 	@Override

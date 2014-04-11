@@ -68,7 +68,7 @@ public class ZStarMod
 	   extends AbstractMultiplicativeGroup<ZStarModElement, ResidueClass> {
 
 	private final BigInteger modulus;
-	private final Factorization moduloFactorization;
+	private final Factorization modulusFactorization;
 
 	/**
 	 * This is a private constructor of this class. It is called by the static factory methods.
@@ -82,22 +82,22 @@ public class ZStarMod
 	/**
 	 * This is a private constructor of this class. It is called by the static factory methods.
 	 * <p>
-	 * @param factorization The given factorization
+	 * @param modulusFactorization The given factorization
 	 */
-	protected ZStarMod(final Factorization factorization) {
-		this(factorization.getValue(), factorization);
+	protected ZStarMod(final Factorization modulusFactorization) {
+		this(modulusFactorization.getValue(), modulusFactorization);
 	}
 
 	/**
 	 * This is a private constructor of this class. It is called by the static factory methods.
 	 * <p>
-	 * @param modulus       The given modulus
-	 * @param factorization The given factorization
+	 * @param modulus              The given modulus
+	 * @param modulusFactorization The given factorization
 	 */
-	protected ZStarMod(final BigInteger modulus, final Factorization factorization) {
+	protected ZStarMod(final BigInteger modulus, final Factorization modulusFactorization) {
 		super(ResidueClass.class);
 		this.modulus = modulus;
-		this.moduloFactorization = factorization;
+		this.modulusFactorization = modulusFactorization;
 	}
 
 	/**
@@ -115,8 +115,8 @@ public class ZStarMod
 	 * <p>
 	 * @return The prime factorization
 	 */
-	public final Factorization getModuloFactorization() {
-		return this.moduloFactorization;
+	public final Factorization getModulusFactorization() {
+		return this.modulusFactorization;
 	}
 
 	public final boolean contains(int integerValue) {
@@ -154,7 +154,7 @@ public class ZStarMod
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.getModulus().toString();
 	}
 
@@ -196,10 +196,10 @@ public class ZStarMod
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		if (!this.getModuloFactorization().getValue().equals(this.getModulus())) {
+		if (!this.getModulusFactorization().getValue().equals(this.getModulus())) {
 			return Group.UNKNOWN_ORDER;
 		}
-		return MathUtil.eulerFunction(this.getModulus(), this.getModuloFactorization().getPrimeFactors());
+		return MathUtil.eulerFunction(this.getModulus(), this.getModulusFactorization().getPrimeFactors());
 	}
 
 	@Override
@@ -259,16 +259,16 @@ public class ZStarMod
 	 * This is a static factory method to construct a new instance of this class, where the group's modulus is value of
 	 * the given prime factorization. This always leads to a group of known order.
 	 * <p>
-	 * @param factorization The given prime factorization
+	 * @param modulusFactorization The given prime factorization
 	 * @return
 	 * @throws IllegalArgumentException if {@literal primeFactorization} is null
 	 * @throws IllegalArgumentException if {@literal primeFactorization.getValue()} is 1
 	 */
-	public static ZStarMod getInstance(final Factorization factorization) {
-		if (factorization == null || factorization.getValue().compareTo(BigInteger.ONE) <= 0) {
+	public static ZStarMod getInstance(final Factorization modulusFactorization) {
+		if (modulusFactorization == null || modulusFactorization.getValue().compareTo(BigInteger.ONE) <= 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ZStarMod(factorization);
+		return new ZStarMod(modulusFactorization);
 	}
 
 	public static ZStarMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {

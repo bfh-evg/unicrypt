@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
-public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
+public abstract class AbstractEC<F extends FiniteField, V extends Object>
 	   extends AbstractAdditiveCyclicGroup<ECElement<V>, Point<DualisticElement<V>>>
 	   implements EC<V> {
 
@@ -185,7 +185,9 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 	protected ECElement<V> abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		if (this.getDefaultGenerator() != null) {
 			DualisticElement<V> r = this.getFiniteField().getRandomElement(randomByteSequence);
-			return this.getDefaultGenerator().selfApply(r);
+			// TODO ?!?
+			//return this.getDefaultGenerator().selfApply(r);
+			return this.getDefaultGenerator().selfApply(r.getBigInteger());
 		} else {
 			return this.getRandomElementWithoutGenerator(randomByteSequence);
 		}
@@ -257,7 +259,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 	protected abstract ECElement<V> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.getA().getValue() + "," + this.getB().getValue();
 	}
 

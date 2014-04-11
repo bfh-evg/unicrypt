@@ -92,6 +92,14 @@ public interface Compound<C extends Compound<C, T>, T> {
 	 */
 	public Object[] getAll();
 
+	public Compound<C, T> extractPrefix(int length);
+
+	public Compound<C, T> extractSuffix(int length);
+
+	public Compound<C, T> extractRange(int fromIndex, int toIndex);
+
+	public Compound<C, T> extract(int offset, int length);
+
 	/**
 	 * Creates a new product set which contains one set less than the given product set.
 	 * <p>

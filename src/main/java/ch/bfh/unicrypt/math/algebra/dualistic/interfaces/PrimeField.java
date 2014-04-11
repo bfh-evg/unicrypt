@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 /**
  *
  * @author rolfhaenni
+ * @param <V>
  */
 public interface PrimeField<V extends Object>
 	   extends FiniteField<V>, CyclicRing<V> {

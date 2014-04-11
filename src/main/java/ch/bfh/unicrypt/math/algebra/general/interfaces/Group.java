@@ -50,7 +50,7 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
  * corresponding integer values and back.
  * <p>
  *
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this group
  * @see "Handbook of Applied Cryptography, Definition 2.162"
  * <p>
  * @author R. Haenni
@@ -65,9 +65,9 @@ public interface Group<V extends Object>
 	 * <p>
 	 * @param element A given group element
 	 * @return The inverse element of the input element
-	 * @throws IllegalArgumentException if {@code element} is null or does belong to the group
+	 * @throws IllegalArgumentException if {@code element} does belong to the group
 	 */
-	public Element invert(Element element);
+	public Element<V> invert(Element element);
 
 	/**
 	 * Applies the binary group operation to the first and the inverse of the second given group element.
@@ -75,9 +75,8 @@ public interface Group<V extends Object>
 	 * @param element1 The first group element
 	 * @param element2 The second group element
 	 * @return The result of applying the group operation to the two input elements
-	 * @throws IllegalArgumentException if {@code element1} or {@code element2} is null
 	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
    * */
-	public Element applyInverse(Element element1, Element element2);
+	public Element<V> applyInverse(Element element1, Element element2);
 
 }

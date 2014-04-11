@@ -62,7 +62,7 @@ public class StringElement
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return "\"" + this.getValue() + "\"";
 	}
 

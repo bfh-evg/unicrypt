@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import java.math.BigInteger;
 import java.nio.ByteOrder;
 import org.junit.Assert;
@@ -52,10 +53,10 @@ import org.junit.Test;
  */
 public class ByteArrayConverterTest {
 
-	public static ByteArrayConverter c1 = ByteArrayConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
-	public static ByteArrayConverter c2 = ByteArrayConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 0);
-	public static ByteArrayConverter c3 = ByteArrayConverter.getInstance(ByteOrder.BIG_ENDIAN, 10);
-	public static ByteArrayConverter c4 = ByteArrayConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
+	public static BigIntegerConverter c1 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
+	public static BigIntegerConverter c2 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 0);
+	public static BigIntegerConverter c3 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 10);
+	public static BigIntegerConverter c4 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
 
 	@Test
 	public void testByteArrayConverter() {
@@ -63,11 +64,11 @@ public class ByteArrayConverterTest {
 		BigInteger b1 = BigInteger.valueOf(9);
 		BigInteger b2 = BigInteger.valueOf(200);
 		BigInteger b3 = BigInteger.valueOf(300);
-		for (ByteArrayConverter converter : new ByteArrayConverter[]{c1, c2, c3, c4}) {
+		for (BigIntegerConverter converter : new BigIntegerConverter[]{c1, c2, c3, c4}) {
 			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
-				ByteArray ba = converter.integerToByteArray(bigInteger);
+				ByteArray ba = converter.convertToByteArray(bigInteger);
 				Assert.assertTrue(ba.getLength() >= converter.getMinLength());
-				Assert.assertEquals(bigInteger, converter.byteArrayToInteger(ba));
+				Assert.assertEquals(bigInteger, converter.convertFromByteArray(ba));
 			}
 
 		}

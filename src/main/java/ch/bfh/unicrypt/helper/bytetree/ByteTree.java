@@ -158,6 +158,11 @@ public abstract class ByteTree
 		return new ByteTreeLeaf(byteArray);
 	}
 
+	@Override
+	protected String defaultToStringName() {
+		return ByteTree.class.getSimpleName();
+	}
+
 	/**
 	 * Returns a new instance of ByteTree given one or more ByteTree instances.
 	 * <p>
@@ -265,11 +270,6 @@ class SafeByteArray
 			return this.bytes;
 		}
 		return super.getAll();
-	}
-
-	@Override
-	protected String defaultToStringName() {
-		return this.getClass().getSuperclass().getSimpleName();
 	}
 
 }

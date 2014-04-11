@@ -41,10 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -92,7 +93,7 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	 * @param amount  the same as in {@link #Group.selfApply(Element, Element)}
 	 * @return the same as in {@link #Group.selfApply(Element, Element)}
 	 */
-	public MultiplicativeElement<V> power(Element element, Element amount);
+	public MultiplicativeElement<V> power(Element element, Element<Numerical> amount);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
@@ -158,7 +159,7 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	public MultiplicativeElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(Element element, Element amount);
+	public MultiplicativeElement<V> selfApply(Element element, Element<Numerical> amount);
 
 	@Override
 	public MultiplicativeElement<V> selfApply(Element element, int amount);

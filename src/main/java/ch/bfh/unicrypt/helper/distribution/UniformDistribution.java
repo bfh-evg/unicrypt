@@ -39,62 +39,52 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.polynomial;
+package ch.bfh.unicrypt.helper.distribution;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.math.BigInteger;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <C>
+ * @see http://en.wikipedia.org/wiki/Uniform_distribution_%28discrete%29
+ * <p>
+ * @author philipp
  */
-public class BinaryPolynomial
+public class UniformDistribution
 	   extends UniCrypt
-	   implements Polynomial<Boolean> {
+	   implements Distribution {
 
-	private final int degree;
-	private final ByteArray coefficients;
+	private final BigInteger a;
+	private final BigInteger b;
 
-	private BinaryPolynomial(ByteArray coefficients) {
-		this.coefficients = coefficients;
-		int byteIndex = 0;
-		for (int i = 0; i < this.coefficients.getLength(); i++) {
-			if (this.coefficients.getAt(i) > 0) {
-				byteIndex = i;
-			}
-		}
-		byte b = this.coefficients.getAt(byteIndex);
-		int bitIndex = Byte.SIZE - Integer.numberOfLeadingZeros(b);
-		this.degree = byteIndex * Byte.SIZE + bitIndex;
+	private UniformDistribution(final BigInteger a, final BigInteger b) {
+		this.a = a;
+		this.b = b;
 	}
 
 	@Override
-	public int getDegree() {
-		return this.degree;
+	public BigInteger getLowerBound() {
+		return this.a;
 	}
 
 	@Override
-	public Boolean getCoefficient(int index) {
-		if (index < 0) {
-			throw new IllegalArgumentException();
-		}
-		int byteIndex = index / Byte.SIZE;
-		int bitIndex = index % Byte.SIZE;
-		if (byteIndex >= this.coefficients.getLength()) {
-			return false;
-		}
-		return ((this.coefficients.getAt(byteIndex) >> bitIndex) & 1) == 1;
+	public BigInteger getUpperBound() {
+		return this.b;
 	}
 
-	public ByteArray getCoefficients() {
-		return this.coefficients;
+	@Override
+	public BigInteger getBigInteger(RandomByteSequence randomByteSequence) {
+		return randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.a, this.b);
 	}
 
 	@Override
 	public int hashCode() {
-		int hash = 5;
-		hash = 29 * hash + (this.coefficients != null ? this.coefficients.hashCode() : 0);
+		int hash = 7;
+		hash = 79 * hash + this.getClass().hashCode();
+		hash = 79 * hash + this.a.hashCode();
+		hash = 79 * hash + this.b.hashCode();
 		return hash;
 	}
 
@@ -103,26 +93,35 @@ public class BinaryPolynomial
 		if (obj == null) {
 			return false;
 		}
-		if (this.getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final BinaryPolynomial other = (BinaryPolynomial) obj;
-		if (this.coefficients != other.coefficients && (this.coefficients == null || !this.coefficients.equals(other.coefficients))) {
-			return false;
-		}
-		return true;
+		final UniformDistribution other = (UniformDistribution) obj;
+		return this.a.equals(other.a) && this.b.equals(other.b);
 	}
 
-	@Override
-	public String defaultToStringValue() {
-		return "f(x)=" + this.coefficients;
+	public static UniformDistribution getInstance(final BigInteger b) {
+		return UniformDistribution.getInstance(BigInteger.ZERO, b);
 	}
 
-	public static BinaryPolynomial getInstance(ByteArray coefficients) {
-		if (coefficients == null) {
+	public static UniformDistribution getInstance(final BigInteger a, final BigInteger b) {
+		if (a == null || b == null || a.compareTo(b) > 0) {
 			throw new IllegalArgumentException();
 		}
-		return new BinaryPolynomial(coefficients);
+		return new UniformDistribution(a, b);
+	}
+
+	public static UniformDistribution getInstance(final int maxBits) {
+		return UniformDistribution.getInstance(0, maxBits);
+	}
+
+	public static UniformDistribution getInstance(final int minBits, final int maxBits) {
+		if (minBits < 0 || maxBits < minBits) {
+			throw new IllegalArgumentException();
+		}
+		BigInteger a = (minBits == 0) ? BigInteger.ZERO : MathUtil.powerOfTwo(minBits - 1);
+		BigInteger b = MathUtil.powerOfTwo(maxBits).subtract(BigInteger.ONE);
+		return UniformDistribution.getInstance(a, b);
 	}
 
 }

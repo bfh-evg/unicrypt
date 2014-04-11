@@ -42,41 +42,42 @@
 package ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.abstracts.AbstractNonInteractiveSigmaChallengeGenerator;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.helper.distribution.UniformDistribution;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 public class StandardNonInteractiveSigmaChallengeGenerator
 	   extends AbstractNonInteractiveSigmaChallengeGenerator {
 
-	protected StandardNonInteractiveSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, RandomOracle randomOracle, Element proverID) {
-		super(publicInputSpace, commitmentSpace, challengeSpace, randomOracle, proverID);
+	protected StandardNonInteractiveSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, Z challengeSpace, RandomOracle randomOracle, Element proverId) {
+		super(publicInputSpace, commitmentSpace, challengeSpace, randomOracle, proverId);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace) {
+	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, Z challengeSpace) {
 		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(publicInputSpace, commitmentSpace, challengeSpace, (RandomOracle) null, (Element) null);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverID) {
-		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(publicInputSpace, commitmentSpace, challengeSpace, (RandomOracle) null, (Element) proverID);
+	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, Z challengeSpace, Element proverId) {
+		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(publicInputSpace, commitmentSpace, challengeSpace, (RandomOracle) null, (Element) proverId);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, RandomOracle randomOracle) {
+	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, Z challengeSpace, RandomOracle randomOracle) {
 		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(publicInputSpace, commitmentSpace, challengeSpace, randomOracle, (Element) null);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, RandomOracle randomOracle, Element proverID) {
+	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, Z challengeSpace, RandomOracle randomOracle, Element proverId) {
 		if (publicInputSpace == null || commitmentSpace == null || challengeSpace == null) {
 			throw new IllegalArgumentException();
 		}
 		if (randomOracle == null) {
 			randomOracle = PseudoRandomOracle.DEFAULT;
 		}
-		return new StandardNonInteractiveSigmaChallengeGenerator(publicInputSpace, commitmentSpace, challengeSpace, randomOracle, proverID);
+		return new StandardNonInteractiveSigmaChallengeGenerator(publicInputSpace, commitmentSpace, challengeSpace, randomOracle, proverId);
 	}
 
 	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Function function) {
@@ -87,11 +88,11 @@ public class StandardNonInteractiveSigmaChallengeGenerator
 		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(function, randomOracle, (Element) null);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Function function, Element proverID) {
-		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(function, (RandomOracle) null, proverID);
+	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Function function, Element proverId) {
+		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(function, (RandomOracle) null, proverId);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Function function, RandomOracle randomOracle, Element proverID) {
+	public static StandardNonInteractiveSigmaChallengeGenerator getInstance(Function function, RandomOracle randomOracle, Element proverId) {
 		if (function == null || !function.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
@@ -99,7 +100,7 @@ public class StandardNonInteractiveSigmaChallengeGenerator
 			randomOracle = PseudoRandomOracle.DEFAULT;
 		}
 		return new StandardNonInteractiveSigmaChallengeGenerator(
-			   function.getCoDomain(), (SemiGroup) function.getCoDomain(), ZMod.getInstance(function.getDomain().getMinimalOrder()), randomOracle, proverID);
+			   function.getCoDomain(), (SemiGroup) function.getCoDomain(), Z.getInstance(UniformDistribution.getInstance(function.getDomain().getMinimalOrder())), randomOracle, proverId);
 
 	}
 

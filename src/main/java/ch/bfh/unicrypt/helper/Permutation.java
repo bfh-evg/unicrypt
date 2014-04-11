@@ -128,7 +128,12 @@ public class Permutation
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringName() {
+		return "";
+	}
+
+	@Override
+	protected String defaultToStringValue() {
 		String str = Arrays.toString(this.permutationVector);
 		return "" + str.substring(1, str.length() - 1);
 	}

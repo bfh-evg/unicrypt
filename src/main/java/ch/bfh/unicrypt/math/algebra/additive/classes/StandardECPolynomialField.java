@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,47 +32,51 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.hash.classes;
+package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.crypto.schemes.hash.abstracts.AbstractHashScheme;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
-import ch.bfh.unicrypt.math.function.classes.HashFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
+import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
+import java.math.BigInteger;
 
-public class StandardHashScheme
-			 extends AbstractHashScheme<ByteArrayMonoid, ByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement> {
+public class StandardECPolynomialField
+	   extends ECPolynomialField {
 
-	private final HashMethod hashMethod;
-
-	protected StandardHashScheme(HashMethod hashMethod) {
-		this.hashMethod = hashMethod;
+	public StandardECPolynomialField(PolynomialField finiteField, PolynomialElement a,
+		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
+		   BigInteger order, BigInteger h) {
+		super(finiteField, a, b, gx, gy, order, h);
 	}
 
-	public HashMethod getHashMethod() {
-		return this.hashMethod;
+	public static StandardECPolynomialField getInstance(final StandardECPolynomialFieldParams params) {
+		PolynomialField field;
+		PolynomialElement a, b, gx, gy;
+		BigInteger order, h;
+
+		field = params.getFiniteField();
+		a = params.getA();
+		b = params.getB();
+		gx = params.getGx();
+		gy = params.getGy();
+		order = params.getOrder();
+		h = params.getH();
+
+		return new StandardECPolynomialField(field, a, b, gx, gy, order, h);
 	}
 
-	@Override
-	protected Function abstractGetHashFunction() {
-		return HashFunction.getInstance(ByteArrayMonoid.getInstance(), this.getHashMethod());
-	}
-
-	public static StandardHashScheme getInstance(HashMethod hashMethod) {
-		if (hashMethod == null) {
-			throw new IllegalArgumentException();
-		}
-		return new StandardHashScheme(hashMethod);
-	}
-
+//	public static void main(String[] args) {
+//
+//		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
+//
+//			StandardECPolynomialField ec = StandardECPolynomialField.getInstance(params);
+//			System.out.println(params.name() + "(\"" + ec.getA().getBigInteger().toString(16) + "\",\"" + ec.getB().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getBigInteger().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getCoFactor() + "\"),");
+//		}
+//	}
 }

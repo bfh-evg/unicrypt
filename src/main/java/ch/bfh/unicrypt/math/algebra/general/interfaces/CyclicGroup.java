@@ -46,13 +46,13 @@ import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
- * This interface represents the concept a cyclic atomic group. Every element of a cyclic group can be written as a
- * power of some particular element in multiplicative notation, or as a multiple of the element in additive notation.
- * Such an element is called generator of the group. For every positive integer there is exactly one cyclic group (up to
+ * This interface represents the concept a cyclic group. Every element of a cyclic group can be written as a power of
+ * some particular element in multiplicative notation, or as a multiple of the element in additive notation. Such an
+ * element is called generator of the group. For every positive integer there is exactly one cyclic group (up to
  * isomorphism) with that order, and there is exactly one infinite cyclic group. This interface extends {@link Group}
  * with additional methods for dealing with generators. Each implementing class must provide a default generator.
  * <p>
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this cyclic group
  * @see "Handbook of Applied Cryptography, Definition 2.167"
  * <p>
  * @author R. Haenni
@@ -63,21 +63,21 @@ public interface CyclicGroup<V extends Object>
 	   extends Group<V> {
 
 	/**
-	 * Returns a default generator of this group.
+	 * TODO Returns a default generator of this cyclic group.
 	 * <p>
 	 * @return The default generator
 	 */
 	public Element<V> getDefaultGenerator();
 
 	/**
-	 * Returns a randomly selected generator of this group using the default random generator.
+	 * TODO Returns a randomly selected generator of this cyclic group using the default random generator.
 	 * <p>
 	 * @return The randomly selected generator
 	 */
 	public Element<V> getRandomGenerator();
 
 	/**
-	 * Returns a randomly selected generator of this group using a given random generator.
+	 * TODO Returns a randomly selected generator of this cyclic group using a given random generator.
 	 * <p>
 	 * @param randomByteSequence
 	 * @return The randomly selected generator
@@ -85,14 +85,16 @@ public interface CyclicGroup<V extends Object>
 	public Element<V> getRandomGenerator(RandomByteSequence randomByteSequence);
 
 	/**
-	 *
+	 * TODO
+	 * <p>
 	 * @param index
 	 * @return
 	 */
 	public Element<V> getIndependentGenerator(int index);
 
 	/**
-	 *
+	 * TODO
+	 * <p>
 	 * @param index
 	 * @param referenceRandomByteSequence
 	 * @return
@@ -100,14 +102,16 @@ public interface CyclicGroup<V extends Object>
 	public Element<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 	/**
-	 *
+	 * TODO
+	 * <p>
 	 * @param maxIndex
 	 * @return
 	 */
 	public Tuple getIndependentGenerators(int maxIndex);
 
 	/**
-	 *
+	 * TODO
+	 * <p>
 	 * @param maxIndex
 	 * @param referenceRandomByteSequence
 	 * @return
@@ -115,7 +119,8 @@ public interface CyclicGroup<V extends Object>
 	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 	/**
-	 *
+	 * TODO
+	 * <p>
 	 * @param minIndex
 	 * @param maxIndex
 	 * @return
@@ -123,7 +128,8 @@ public interface CyclicGroup<V extends Object>
 	public Tuple getIndependentGenerators(int minIndex, int maxIndex);
 
 	/**
-	 *
+	 * TODO
+	 * <p>
 	 * @param minIndex
 	 * @param maxIndex
 	 * @param referenceRandomByteSequence
@@ -132,11 +138,10 @@ public interface CyclicGroup<V extends Object>
 	public Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 	/**
-	 * Checks if a given element is a generator of the group.
+	 * TODO Checks if a given element is a generator of this cyclic group.
 	 * <p>
 	 * @param element The given element
 	 * @return {@code true} if the element is a generator, {@code false} otherwise
-	 * @throws IllegalArgumentException if {@code} is null
 	 */
 	public boolean isGenerator(Element element);
 

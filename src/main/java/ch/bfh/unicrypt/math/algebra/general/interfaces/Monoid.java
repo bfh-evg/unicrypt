@@ -50,7 +50,7 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
  * corresponding integer values and back.
  * <p>
  *
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this monoid
  * @see "Handbook of Applied Cryptography, Definition 2.162"
  * <p>
  * @author R. Haenni
@@ -61,18 +61,17 @@ public interface Monoid<V extends Object>
 	   extends SemiGroup<V> {
 
 	/**
-	 * Returns the group's unique identity element.
+	 * Returns the monoid's unique identity element.
 	 * <p>
 	 * @return The identity element.
 	 */
 	public Element<V> getIdentityElement();
 
 	/**
-	 * Checks if a given element is the group's identity element.
+	 * Checks if a given element is the monoid's identity element.
 	 * <p>
 	 * @param element The given element
-	 * @return {@code true} if {@code element} is the group's identity element, {@code false} otherwise
-	 * @throws IllegalArgumentException if {@code element} is null
+	 * @return {@code true} if {@code element} is the monoid's identity element, {@code false} otherwise
 	 */
 	public boolean isIdentityElement(Element element);
 

@@ -53,13 +53,13 @@ import java.util.Map;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  */
-public class DiscreteSet<V extends Object>
-	   extends AbstractSet<DiscreteSetElement<V>, V> {
+public class EnumeratedSet<V extends Object>
+	   extends AbstractSet<EnumeratedSetElement<V>, V> {
 
 	protected final Map<Integer, V> valueMap;
 	protected final Map<V, Integer> indexMap;
 
-	public DiscreteSet(Map<Integer, V> valueMap, Map<V, Integer> indexMap, Class<V> valueClass) {
+	public EnumeratedSet(Map<Integer, V> valueMap, Map<V, Integer> indexMap, Class<V> valueClass) {
 		super(valueClass);
 		this.valueMap = valueMap;
 		this.indexMap = indexMap;
@@ -76,12 +76,12 @@ public class DiscreteSet<V extends Object>
 	}
 
 	@Override
-	protected DiscreteSetElement<V> abstractGetElement(V value) {
-		return new DiscreteSetElement<V>(this, value);
+	protected EnumeratedSetElement<V> abstractGetElement(V value) {
+		return new EnumeratedSetElement<V>(this, value);
 	}
 
 	@Override
-	protected DiscreteSetElement<V> abstractGetElementFrom(BigInteger integerValue) {
+	protected EnumeratedSetElement<V> abstractGetElementFrom(BigInteger integerValue) {
 		if (integerValue.compareTo(this.getOrder()) >= 0) {
 			return null; // no such element
 		}
@@ -89,19 +89,19 @@ public class DiscreteSet<V extends Object>
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(DiscreteSetElement element) {
+	protected BigInteger abstractGetBigIntegerFrom(EnumeratedSetElement element) {
 		return BigInteger.valueOf(this.indexMap.get(element.getValue()));
 	}
 
 	@Override
-	protected DiscreteSetElement<V> abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected EnumeratedSetElement<V> abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		int index = randomByteSequence.getRandomNumberGenerator().nextInteger(this.getOrder().intValue() - 1);
 		return this.abstractGetElement(this.valueMap.get(index));
 	}
 
 	@Override
 	protected boolean abstractEquals(Set set) {
-		DiscreteSet<?> other = (DiscreteSet<?>) set;
+		EnumeratedSet<?> other = (EnumeratedSet<?>) set;
 		return this.valueMap.equals(other.valueMap);
 	}
 
@@ -111,12 +111,12 @@ public class DiscreteSet<V extends Object>
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		String str = this.valueMap.values().toString();
 		return str.substring(1, str.length() - 1);
 	}
 
-	public static <V> DiscreteSet<V> getInstance(V... values) {
+	public static <V> EnumeratedSet<V> getInstance(V... values) {
 		if (values == null || values.length == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -132,7 +132,7 @@ public class DiscreteSet<V extends Object>
 			indexMap.put(value, index);
 			index++;
 		}
-		return new DiscreteSet<V>(valueMap, indexMap, (Class<V>) values.getClass().getComponentType());
+		return new EnumeratedSet<V>(valueMap, indexMap, (Class<V>) values.getClass().getComponentType());
 	}
 
 }

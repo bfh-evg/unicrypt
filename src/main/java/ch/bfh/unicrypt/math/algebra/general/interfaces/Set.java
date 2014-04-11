@@ -42,9 +42,9 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.compound.Compound;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -65,7 +65,7 @@ import java.math.BigInteger;
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this set
  */
 public interface Set<V extends Object> {
 
@@ -187,7 +187,7 @@ public interface Set<V extends Object> {
 	public BigInteger getOrderLowerBound();
 
 	/**
-	 * TODO Returns an upper bound for the set order in case the exact group order is unknown. The heighest return value
+	 * TODO Returns an upper bound for the set order in case the exact set order is unknown. The heighest return value
 	 * is -1. Otherwise, if the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
 	 * @return A upper bound for the set order
@@ -209,20 +209,20 @@ public interface Set<V extends Object> {
 	public boolean isSingleton();
 
 	/**
-	 * TODO Returns an additive integer group of type {@link ZPlusMod} with the same group order. For this to work, the
-	 * group order must be finite and known.
+	 * TODO Returns an additive integer group of type {@link ZPlusMod} with the same set order. For this to work, the
+	 * set order must be finite and known.
 	 * <p>
 	 * @return The resulting additive group.
-	 * @throws UnsupportedOperationException if the group order is infinite or unknown
+	 * @throws UnsupportedOperationException if the set order is infinite or unknown
 	 */
 	public ZMod getZModOrder();
 
 	/**
-	 * Returns an multiplicative integer group of type {@link ZTimesMod} with the same group order. For this to work,
-	 * the group order must be finite and known. TODO teilerfremd
+	 * Returns an multiplicative integer set of type {@link ZTimesMod} with the same set order. For this to work, the
+	 * set order must be finite and known. TODO teilerfremd
 	 * <p>
 	 * @return The resulting multiplicative group.
-	 * @throws UnsupportedOperationException if the group order is infinite or unknown
+	 * @throws UnsupportedOperationException if the set order is infinite or unknown
 	 */
 	public ZStarMod getZStarModOrder();
 
@@ -231,7 +231,6 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param element The given element
 	 * @return {@code true} if {@literal element} belongs to this set
-	 * @throws IllegalArgumentException if {@literal element} is null
 	 */
 	public boolean contains(Element element);
 
@@ -240,7 +239,6 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param value The given value
 	 * @return {@code true} if {@literal value} belongs to this set
-	 * @throws IllegalArgumentException if {@literal value} is null
 	 */
 	public boolean contains(Object value);
 
@@ -275,12 +273,11 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param bigInteger The given BigInteger value
 	 * @return The corresponding element, or {@literal null} if no such element exists
-	 * @throws IllegalArgumentException if {@literal bigInteger} is null
 	 */
 	public Element<V> getElementFrom(BigInteger bigInteger);
 
 	/**
-	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray}.
+	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the default converter.
 	 * <p>
 	 * @param byteArray The given ByteArray
 	 * @return the corresponding element
@@ -288,13 +285,14 @@ public interface Set<V extends Object> {
 	public Element<V> getElementFrom(ByteArray byteArray);
 
 	/**
-	 *
+	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the
+	 * {@link BigIntegerConverter}.
+	 * <p>
 	 * @param byteArray
 	 * @param converter
 	 * @return
-	 * @throws IllegalArgumentException if {@literal byteArray} is null
 	 */
-	public Element<V> getElementFrom(ByteArray byteArray, ByteArrayConverter converter);
+	public Element<V> getElementFrom(ByteArray byteArray, BigIntegerConverter converter);
 
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteTree}.
@@ -310,9 +308,8 @@ public interface Set<V extends Object> {
 	 * @param byteTree
 	 * @param converter
 	 * @return
-	 * @throws IllegalArgumentException if {@literal byteTree} is null
 	 */
-	public Element<V> getElementFrom(ByteTree byteTree, ByteArrayConverter converter);
+	public Element<V> getElementFrom(ByteTree byteTree, BigIntegerConverter converter);
 
 	/**
 	 * Creates and returns the element that corresponds to the integer value of some other element (if one exists).
@@ -320,13 +317,12 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param element The given element of this or another set
 	 * @return The corresponding element of this set, or {@literal null} if no such element exists
-	 * @throws IllegalArgumentException if {@literal element} is null
 	 */
 	public Element<V> getElementFrom(Element element);
 
 	/**
-	 * Selects and returns a random group element using the default random generator. For finite order group, it is
-	 * selected uniformly at random. For groups of infinite or unknown order, the underlying probability distribution is
+	 * Selects and returns a random group element using the default random generator. For finite order set, it is
+	 * selected uniformly at random. For sets of infinite or unknown order, the underlying probability distribution is
 	 * not further specified.
 	 * <p>
 	 * @return A random element from the set
@@ -334,24 +330,22 @@ public interface Set<V extends Object> {
 	public Element<V> getRandomElement();
 
 	/**
-	 * Selects and returns a random group element using a given random generator. If no random generator is specified,
-	 * i.e., if {@literal random} is null, then the system-wide random generator is taken. For finite order group, it is
-	 * selected uniformly at random. For groups of infinite or unknown order, the underlying probability distribution is
+	 * Selects and returns a random set element using a given random generator. If no random generator is specified,
+	 * i.e., if {@literal random} is null, then the system-wide random generator is taken. For finite order set, it is
+	 * selected uniformly at random. For sets of infinite or unknown order, the underlying probability distribution is
 	 * not generally specified.
 	 * <p>
 	 * @param randomByteSequence Either {@literal null} or a given random generator
 	 * @return A random element from the set
-	 * @throws IllegalArgumentException if {@literal randomByteSequence} is null
 	 */
 	public Element<V> getRandomElement(RandomByteSequence randomByteSequence);
 
 	/**
-	 * Checks if two given elements of this group are equal.
+	 * Checks if two given elements of this set are equal.
 	 * <p>
 	 * @param element1 The first element
 	 * @param element2 The second element
 	 * @return {@code true} if the elements are equal and belong to the group
-	 * @throws IllegalArgumentException if {@literal element1} or {@literal element2} is null
 	 */
 	public boolean areEquivalent(Element element1, Element element2);
 
@@ -362,7 +356,6 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param set The given Set.
 	 * @return {@code true} if this set is equal
-	 * @throws IllegalArgumentException if {@literal set} is null
 	 */
 	public boolean isEquivalent(Set set);
 
@@ -371,7 +364,6 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param element
 	 * @return the corresponding BigInteger value
-	 * @throws IllegalArgumentException if {@literal element} is null
 	 */
 	public BigInteger getBigIntegerFrom(Element element);
 
@@ -380,8 +372,7 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param element The given Element
 	 * @return the corresponding ByteArray
-	 * @throws IllegalArgumentException if {@literal element} is null or this set does not contain the
-	 *                                  {@literal element}
+	 * @throws IllegalArgumentException if this set does not contain the {@literal element}
 	 */
 	public ByteArray getByteArrayFrom(Element element);
 
@@ -392,7 +383,7 @@ public interface Set<V extends Object> {
 	 * @param converter
 	 * @return
 	 */
-	public ByteArray getByteArrayFrom(Element element, ByteArrayConverter converter);
+	public ByteArray getByteArrayFrom(Element element, BigIntegerConverter converter);
 
 	/**
 	 * TODO Returns the corresponding {@link ByteTree} for a given {@link Element}.
@@ -409,6 +400,6 @@ public interface Set<V extends Object> {
 	 * @param converter
 	 * @return
 	 */
-	public ByteTree getByteTreeFrom(Element element, ByteArrayConverter converter);
+	public ByteTree getByteTreeFrom(Element element, BigIntegerConverter converter);
 
 }

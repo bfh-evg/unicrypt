@@ -39,17 +39,20 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.polynomial;
+package ch.bfh.unicrypt.math.algebra.general.classes;
+
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <C>
+ * @param <V>
  */
-public interface Polynomial<C extends Object> {
+public class EnumeratedSetElement<V extends Object>
+	   extends AbstractElement<EnumeratedSet<V>, EnumeratedSetElement<V>, V> {
 
-	C getCoefficient(int index);
-
-	int getDegree();
+	protected EnumeratedSetElement(EnumeratedSet<V> set, V value) {
+		super(set, value);
+	}
 
 }

@@ -39,44 +39,35 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.classes;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
-import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECBinaryPolinomialFieldParams;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 
-public class StandardECBinaryPolynomialField
-	   extends ECBinaryPolynomialField {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <T>
+ */
+public abstract class Converter<T extends Object>
+	   extends UniCrypt {
 
-	public StandardECBinaryPolynomialField(BinaryPolynomialField finiteField, BinaryPolynomialElement a,
-		   BinaryPolynomialElement b, BinaryPolynomialElement gx, BinaryPolynomialElement gy,
-		   BigInteger order, BigInteger h) {
-		super(finiteField, a, b, gx, gy, order, h);
+	public final ByteArray convertToByteArray(T object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
+		return abstractConvertToByteArray(object);
 	}
 
-	public static StandardECBinaryPolynomialField getInstance(final StandardECBinaryPolinomialFieldParams params) {
-		BinaryPolynomialField field;
-		BinaryPolynomialElement a, b, gx, gy;
-		BigInteger order, h;
-
-		field = params.getFiniteField();
-		a = params.getA();
-		b = params.getB();
-		gx = params.getGx();
-		gy = params.getGy();
-		order = params.getOrder();
-		h = params.getH();
-
-		return new StandardECBinaryPolynomialField(field, a, b, gx, gy, order, h);
+	public final T convertFromByteArray(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new IllegalArgumentException();
+		}
+		return abstractConvertFromByteArray(byteArray);
 	}
 
-//	public static void main(String[] args) {
-//
-//		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
-//
-//			StandardECBinaryPolynomialField ec = StandardECBinaryPolynomialField.getInstance(params);
-//			System.out.println(params.name() + "(\"" + ec.getA().getBigInteger().toString(16) + "\",\"" + ec.getB().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getBigInteger().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getCoFactor() + "\"),");
-//		}
-//	}
+	protected abstract ByteArray abstractConvertToByteArray(T Object);
+
+	protected abstract T abstractConvertFromByteArray(ByteArray ByteArray);
+
 }

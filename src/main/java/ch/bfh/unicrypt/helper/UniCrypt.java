@@ -68,6 +68,10 @@ public abstract class UniCrypt
 		return str1 + "[" + str2 + "]";
 	}
 
+	public final String toStringValue() {
+		return this.defaultToStringValue();
+	}
+
 	protected String defaultToStringName() {
 		return this.getClass().getSimpleName();
 	}

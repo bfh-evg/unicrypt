@@ -41,12 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement<V>, V extends Object>
@@ -96,7 +97,7 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 	}
 
 	@Override
-	public final E selfConcatenate(final Element element, final Element amount) {
+	public final E selfConcatenate(final Element element, final Element<Numerical> amount) {
 		return this.selfApply(element, amount);
 	}
 

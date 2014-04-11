@@ -42,10 +42,10 @@
 package ch.bfh.unicrypt.crypto.encoder.abstracts;
 
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
+import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.UniCrypt;
 
 public abstract class AbstractEncoder<D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends UniCrypt
@@ -91,7 +91,7 @@ public abstract class AbstractEncoder<D extends Set, DE extends Element, C exten
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.getDomain() + " <=> " + this.getCoDomain();
 	}
 

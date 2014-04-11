@@ -161,11 +161,6 @@ public class OutputFeedbackRandomByteSequence
 			super(randomBytes);
 		}
 
-		@Override
-		protected String defaultToStringName() {
-			return this.getClass().getSuperclass().getSimpleName();
-		}
-
 	}
 
 	@Override

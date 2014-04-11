@@ -44,12 +44,8 @@ package ch.bfh.unicrypt.crypto.proofgenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
+import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -58,7 +54,11 @@ import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
@@ -74,7 +74,6 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
@@ -91,8 +90,8 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		// Permutation commitment proof generator
 		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
-		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size);
+		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size);
 
 		// Proof and verify
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
@@ -119,9 +118,9 @@ public class PermutationCommitmentProofGeneratorTest {
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Permutation commitment proof generator
-		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
-		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
+		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size, 60, null, null);
+		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, 60, ro);
+		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, 20, rrs);
 
 		// Proof and verify
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
@@ -134,7 +133,6 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
@@ -150,9 +148,7 @@ public class PermutationCommitmentProofGeneratorTest {
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Permutation commitment proof generator
-		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
-		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
+		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(G_q, size);
 
 		// Proof and verify
 		// Invalid: Wrong sV
@@ -173,7 +169,6 @@ public class PermutationCommitmentProofGeneratorTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
 		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
@@ -197,9 +192,7 @@ public class PermutationCommitmentProofGeneratorTest {
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Permutation commitment proof generator
-		SigmaChallengeGenerator scg = PermutationCommitmentProofGenerator.createNonInteractiveSigmaChallengeGenerator(G_q, size);
-		ChallengeGenerator ecg = PermutationCommitmentProofGenerator.createNonInteractiveEValuesGenerator(G_q, size, ro);
-		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(scg, ecg, G_q, size, rrs);
+		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(G_q, size, null, 60, 60, 20, rrs);
 
 		// Proof and verify
 		// Invalid: Modified permutation

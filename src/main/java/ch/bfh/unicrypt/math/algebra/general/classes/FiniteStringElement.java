@@ -67,7 +67,7 @@ public class FiniteStringElement
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return "\"" + this.getValue() + "\"";
 	}
 

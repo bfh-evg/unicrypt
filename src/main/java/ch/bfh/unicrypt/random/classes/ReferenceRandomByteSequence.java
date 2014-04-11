@@ -66,7 +66,7 @@ public class ReferenceRandomByteSequence
 	private transient HashMap<Integer, byte[]> randomByteBufferMap;
 	private int javaHashValue;
 
-	public ReferenceRandomByteSequence(HashAlgorithm hashAlgorithm, ByteArray seed) {
+	protected ReferenceRandomByteSequence(HashAlgorithm hashAlgorithm, ByteArray seed) {
 		super(hashAlgorithm, seed);
 	}
 

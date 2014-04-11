@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper.hash;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 
 /**
  *
@@ -58,10 +58,10 @@ public class HashMethod
 	};
 
 	private final HashAlgorithm hashAlgorithm;
-	private final ByteArrayConverter converter;
+	private final BigIntegerConverter converter;
 	private final Mode mode;
 
-	protected HashMethod(HashAlgorithm hashAlgorithm, ByteArrayConverter converter, Mode mode) {
+	protected HashMethod(HashAlgorithm hashAlgorithm, BigIntegerConverter converter, Mode mode) {
 		this.hashAlgorithm = hashAlgorithm;
 		this.converter = converter;
 		this.mode = mode;
@@ -71,7 +71,7 @@ public class HashMethod
 		return this.hashAlgorithm;
 	}
 
-	public ByteArrayConverter getByteArrayConverter() {
+	public BigIntegerConverter getByteArrayConverter() {
 		return this.converter;
 	}
 
@@ -80,7 +80,7 @@ public class HashMethod
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		return this.hashAlgorithm.toString() + "," + this.converter.toString() + "," + this.mode.toString();
 	}
 
@@ -106,14 +106,14 @@ public class HashMethod
 	}
 
 	public static HashMethod getInstance() {
-		return HashMethod.getInstance(HashAlgorithm.getInstance(), ByteArrayConverter.getInstance(), Mode.RECURSIVE);
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), BigIntegerConverter.getInstance(), Mode.RECURSIVE);
 	}
 
 	public static HashMethod getInstance(HashAlgorithm hashAlgorithm) {
-		return HashMethod.getInstance(hashAlgorithm, ByteArrayConverter.getInstance(), Mode.RECURSIVE);
+		return HashMethod.getInstance(hashAlgorithm, BigIntegerConverter.getInstance(), Mode.RECURSIVE);
 	}
 
-	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ByteArrayConverter converter, Mode mode) {
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, BigIntegerConverter converter, Mode mode) {
 		if (hashAlgorithm == null || converter == null || mode == null) {
 			throw new IllegalArgumentException();
 		}

@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
+import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.helper.Point;
 
 /**
  *
@@ -85,7 +85,7 @@ public class ECElement<V extends Object>
 	}
 
 	@Override
-	public String defaultToStringValue() {
+	protected String defaultToStringValue() {
 		if (this.infinity) {
 			return "Infinity";
 		} else {

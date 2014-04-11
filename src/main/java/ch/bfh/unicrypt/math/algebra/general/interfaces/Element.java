@@ -42,9 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.numerical.Numerical;
 import java.math.BigInteger;
 
 /**
@@ -52,7 +53,7 @@ import java.math.BigInteger;
  * operation and other methods from a {@link Group} in a convenient way. Most methods provided by {@link Element} have
  * an equivalent method in {@link Group}.
  * <p>
- * @param <V>
+ * @param <V> Generic type of values stored in this element
  * @see Group
  * <p>
  * @author R. Haenni
@@ -128,13 +129,13 @@ public interface Element<V extends Object> {
 	public ByteArray getByteArray();
 
 	/**
-	 * TODO Returns the corresponding {@link ByteArray} of this Element after converting the corresponding ByteTree with
-	 * the help of a a given {@link ByteArrayConverter}.
+	 * TODO Returns the corresponding {@link ByteArray} of this Element with the help of a a given
+	 * {@link BigIntegerConverter}.
 	 * <p>
 	 * @param converter
 	 * @return
 	 */
-	public ByteArray getByteArray(ByteArrayConverter converter);
+	public ByteArray getByteArray(BigIntegerConverter converter);
 
 	/**
 	 * TODO Returns the corresponding {@link ByteTree} of this Element.
@@ -144,13 +145,13 @@ public interface Element<V extends Object> {
 	public ByteTree getByteTree();
 
 	/**
-	 * TODO Returns the corresponding {@link ByteTree} of this Element after converting the corresponding ByteArray with
-	 * with the help of a given {@link ByteArrayConverter}.
+	 * TODO Returns the corresponding {@link ByteTree} of this Element with the help of a given
+	 * {@link BigIntegerConverter}.
 	 * <p>
 	 * @param converter
 	 * @return The corresponding ByteTree
 	 */
-	public ByteTree getByteTree(ByteArrayConverter converter);
+	public ByteTree getByteTree(BigIntegerConverter converter);
 
 	/**
 	 * TODO
@@ -203,7 +204,7 @@ public interface Element<V extends Object> {
 	 * @return
 	 * @see Group#selfApply(Element, Element)
 	 */
-	public Element<V> selfApply(Element amount);
+	public Element<V> selfApply(Element<Numerical> amount);
 
 	/**
 	 * @param amount
