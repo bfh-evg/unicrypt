@@ -43,21 +43,20 @@ package ch.bfh.unicrypt.general;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.mixer.classes.ReEncryptionMixer;
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.ChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.ElGamalEncryptionValidityProofGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.PermutationCommitmentProofGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.PreimageProofGenerator;
-import ch.bfh.unicrypt.crypto.proofgenerator.classes.ReEncryptionShuffleProofGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.ElGamalEncryptionValidityProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.ReEncryptionShuffleProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -131,7 +130,7 @@ public class MixAndProofExample {
 		// - Create sigma challenge generator
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, proverId);
 		// - Create preimage proof generator
-		PreimageProofGenerator pg = PreimageProofGenerator.getInstance(scg, f);
+		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
 
 		// Private and public input
 		Element privateInput = G_q.getZModOrder().getElement(3);
@@ -141,7 +140,7 @@ public class MixAndProofExample {
 		Triple proof = pg.generate(privateInput, publicInput);
 
 		// Verify proof
-		BooleanElement v = pg.verify(proof, publicInput);
+		boolean v = pg.verify(proof, publicInput);
 		Example.printLine("Proof is valid", v);
 	}
 
@@ -164,7 +163,7 @@ public class MixAndProofExample {
 		Subset plaintexts = Subset.getInstance(G_q, new Element[]{G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)});
 		// - Create ElGamal encryption validity proof generator (a non-inteactive sigma challenge generator
 		//   is created implicitly
-		ElGamalEncryptionValidityProofGenerator pg = ElGamalEncryptionValidityProofGenerator.getInstance(elGamalES, publicKey, plaintexts, proverId);
+		ElGamalEncryptionValidityProofSystem pg = ElGamalEncryptionValidityProofSystem.getInstance(elGamalES, publicKey, plaintexts, proverId);
 
 		// Public input
 		Pair publicInput = Pair.getInstance(G_q.getElement(8), G_q.getElement(128));
@@ -178,7 +177,7 @@ public class MixAndProofExample {
 		Triple proof = pg.generate(privateInput, publicInput);
 
 		// Verify proof
-		BooleanElement v = pg.verify(proof, publicInput);
+		boolean v = pg.verify(proof, publicInput);
 		Example.printLine("Proof is valid", v);
 	}
 
@@ -255,7 +254,7 @@ public class MixAndProofExample {
 		// Create permutation commitment proof generator (a non-interactive challenge generator for the
 		// e-values and a non-interactive sigma challenge generator are created implicitly, the independent
 		// generators are created based on the default random reference byte sequence)
-		PermutationCommitmentProofGenerator pcpg = PermutationCommitmentProofGenerator.getInstance(G_q, size);
+		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(G_q, size);
 
 		// Private and public input
 		Pair privateInput1 = Pair.getInstance(permutation, permutationCommitmentRandomizations);
@@ -267,7 +266,7 @@ public class MixAndProofExample {
 		// 2. Shuffle Proof
 		//------------------
 		// Create shuffle proof generator (... -> see permutatin commitment proof generator)
-		ReEncryptionShuffleProofGenerator spg = ReEncryptionShuffleProofGenerator.getInstance(G_q, size, elGamalES, publicKey);
+		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(G_q, size, elGamalES, publicKey);
 
 		// Private and public input
 		Triple privateInput2 = Triple.getInstance(permutation, permutationCommitmentRandomizations, randomizations);
@@ -279,15 +278,15 @@ public class MixAndProofExample {
 		// V E R I F Y
 		//-------------
 		// Verify permutation commitment proof
-		BooleanElement vPermutation = pcpg.verify(proofPermutation, publicInput1);
+		boolean vPermutation = pcpg.verify(proofPermutation, publicInput1);
 
 		// Verify shuffle proof
-		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput2);
+		boolean vShuffle = spg.verify(proofShuffle, publicInput2);
 
 		// Verify equality of permutation commitments
 		boolean vPermutationCommitments = publicInput1.isEquivalent(publicInput2.getFirst());
 
-		if (vPermutation.getValue() && vShuffle.getValue() && vPermutationCommitments) {
+		if (vPermutation && vShuffle && vPermutationCommitments) {
 			Example.printLine("Proof is valid!");
 		} else {
 			Example.printLine("Proof is NOT valid!");
@@ -350,8 +349,8 @@ public class MixAndProofExample {
 		// Create permutation commitment proof generator based on the independent generators and with explicit
 		// security parameters (a non-interactive challenge generator for the e-values and a non-interactive
 		// sigma challenge generator are created implicitly)
-		PermutationCommitmentProofGenerator pcpg
-			   = PermutationCommitmentProofGenerator.getInstance(independentGenerators, proverId, 60, 60, 20);
+		PermutationCommitmentProofSystem pcpg
+			   = PermutationCommitmentProofSystem.getInstance(independentGenerators, proverId, 60, 60, 20);
 
 		// Private and public input
 		Pair privateInput1 = Pair.getInstance(permutation, permutationCommitmentRandomizations);
@@ -363,8 +362,8 @@ public class MixAndProofExample {
 		// 2. Shuffle Proof
 		//------------------
 		// Create shuffle proof generator (... -> see permutatin commitment proof generator)
-		ReEncryptionShuffleProofGenerator spg
-			   = ReEncryptionShuffleProofGenerator.getInstance(independentGenerators, elGamalES, publicKey, proverId, 60, 60, 20);
+		ReEncryptionShuffleProofSystem spg
+			   = ReEncryptionShuffleProofSystem.getInstance(independentGenerators, elGamalES, publicKey, proverId, 60, 60, 20);
 
 		// Private and public input
 		Triple privateInput2 = Triple.getInstance(permutation, permutationCommitmentRandomizations, randomizations);
@@ -376,15 +375,15 @@ public class MixAndProofExample {
 		// V E R I F Y
 		//-------------
 		// Verify permutation commitment proof
-		BooleanElement vPermutation = pcpg.verify(proofPermutation, publicInput1);
+		boolean vPermutation = pcpg.verify(proofPermutation, publicInput1);
 
 		// Verify shuffle proof
-		BooleanElement vShuffle = spg.verify(proofShuffle, publicInput2);
+		boolean vShuffle = spg.verify(proofShuffle, publicInput2);
 
 		// Verify equality of permutation commitments
 		boolean vPermutationCommitments = publicInput1.isEquivalent(publicInput2.getFirst());
 
-		if (vPermutation.getValue() && vShuffle.getValue() && vPermutationCommitments) {
+		if (vPermutation && vShuffle && vPermutationCommitments) {
 			Example.printLine("Proof is valid!");
 		} else {
 			Example.printLine("Proof is NOT valid!");
