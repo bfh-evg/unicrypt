@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 
 /**
- * This interface provides represents an multiplicatively written cyclic group. No functionality is added to the super
- * interfaces {@link MultiplicativeSemiGroup} and {@link CyclicGroup}.
+ * This interface represents a multiplicatively written cyclic group. No functionality is added to the super interfaces
+ * {@link MultiplicativeSemiGroup} and {@link CyclicGroup}.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig

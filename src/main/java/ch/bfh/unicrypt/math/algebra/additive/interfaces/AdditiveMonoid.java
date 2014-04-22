@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 
 /**
- * This interface provides represents an additively written monoid. No functionality is added.
+ * This interface represents an additively written monoid. No functionality is added.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig

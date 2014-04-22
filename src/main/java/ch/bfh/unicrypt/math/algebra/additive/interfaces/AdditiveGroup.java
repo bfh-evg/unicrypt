@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
- * This interface provides represents an additively written group. It provides the renaming of one group operation. No
+ * This interface represents an additively written group. It provides the renaming of one group operation. No
  * functionality is added.
  * <p>
  * @author R. Haenni

@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- * This interface provides the renaming of some group operations for the case of an additively written semigroup. No
+ * This interface provides the renaming of {@link SemiGroup} methods for the case of an additively written semigroup. No
  * functionality is added.
  * <p>
  * @author R. Haenni
