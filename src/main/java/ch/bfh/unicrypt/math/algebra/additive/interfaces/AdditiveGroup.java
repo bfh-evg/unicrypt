@@ -45,13 +45,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
- * This interface represents an additively written group. It provides the renaming of one group operation. No
+ * This interface represents an additively written {link Group}. It provides the renaming of one group operation. No
  * functionality is added.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of the group
  */
 public interface AdditiveGroup<V extends Object>
 	   extends Group<V>, AdditiveMonoid<V> {

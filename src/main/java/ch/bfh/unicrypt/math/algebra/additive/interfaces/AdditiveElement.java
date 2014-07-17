@@ -47,8 +47,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
- *
+ * This interface represents an additively written {@link Element}. No functionality is added.
+ * <p>
  * @author rolfhaenni
+ * @param <V> Generic type of values stored in the element
  */
 public interface AdditiveElement<V>
 	   extends Element<V> {

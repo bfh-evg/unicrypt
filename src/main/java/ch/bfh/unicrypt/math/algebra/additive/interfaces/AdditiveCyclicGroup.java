@@ -46,12 +46,12 @@ import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
- * This interface represents an additively written cyclic group. No functionality is added.
+ * This interface represents an additively written {@link CyclicGroup}. No functionality is added.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of the cyclic group
  */
 public interface AdditiveCyclicGroup<V extends Object>
 	   extends CyclicGroup<V>, AdditiveGroup<V> {

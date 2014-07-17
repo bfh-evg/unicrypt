@@ -65,7 +65,7 @@ public interface Group<V extends Object>
 	 * <p>
 	 * @param element A given group element
 	 * @return The inverse element of the input element
-	 * @throws IllegalArgumentException if {@code element} does belong to the group
+	 * @throws IllegalArgumentException if {@code element} does not belong to the group
 	 */
 	public Element<V> invert(Element element);
 

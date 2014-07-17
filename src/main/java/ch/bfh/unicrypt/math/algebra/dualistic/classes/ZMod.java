@@ -53,7 +53,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class implements the cyclic group Z_n = {0,...,n-1} with the operation of addition modulo n. Its identity
+ * This class implements the {@link CyclicRing} Z_n = {0,...,n-1} with the operation of addition modulo n. Its identity
  * element is 0. Every integer in Z_n that is relatively prime to n is a generator of Z_n. The smallest such group is
  * Z_1 = {0}.
  * <p>
@@ -74,7 +74,7 @@ public class ZMod
 	}
 
 	/**
-	 * Returns the modulus if this group.
+	 * Returns the modulus of this group.
 	 * <p>
 	 * @return The modulus
 	 */
@@ -82,6 +82,13 @@ public class ZMod
 		return this.modulus;
 	}
 
+	/**
+	 * Checks if this class contains a given integer value
+	 * <p>
+	 * @param integerValue
+	 * @return {
+	 * @true} if
+	 */
 	public final boolean contains(int integerValue) {
 		return this.contains(ResidueClass.getInstance(BigInteger.valueOf(integerValue), this.modulus));
 	}
@@ -217,11 +224,12 @@ public class ZMod
 	}
 
 	/**
-	 * Returns a the unique instance of this class for a given positive modulus.
+	 * Returns the unique instance of this class for a given positive modulus. The instance for every modulus is created
+	 * only once.
 	 * <p>
 	 * @param modulus The modulus
-	 * @return
-	 * @throws IllegalArgumentException if {@literal modulus} is null, zero, or negative
+	 * @return The instance of this class for the given modulus
+	 * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
 	 */
 	public static ZMod getInstance(final BigInteger modulus) {
 		if ((modulus == null) || (modulus.compareTo(BigInteger.valueOf(2)) < 0)) {
@@ -235,6 +243,14 @@ public class ZMod
 		return instance;
 	}
 
+	/**
+	 * Returns the unique instance of this class for a given bit lenght and a given {@link RandomByteSequence}.
+	 * <p>
+	 * @param bitLength          The given bit lenght
+	 * @param randomByteSequence The given RandomByteSequence
+	 * @return The instance of this class for a random modulus
+	 * @throws IllegalArgumentException if {@code bitLenght} is smaller than 2 or {@code randomByteSequence} is null
+	 */
 	public static ZMod getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
 		if (bitLength < 2 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
@@ -242,6 +258,13 @@ public class ZMod
 		return ZMod.getInstance(randomByteSequence.getRandomNumberGenerator().nextBigInteger(bitLength));
 	}
 
+	/**
+	 * Returns the unique instance of this class for a given bit lenght.
+	 * <p>
+	 * @param bitLength The given bit lenght
+	 * @return The instance of this class for a random modulus
+	 * @throws IllegalArgumentException if {@code bitLenght} is smaller than 2
+	 */
 	public static ZMod getRandomInstance(int bitLength) {
 		return ZMod.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}

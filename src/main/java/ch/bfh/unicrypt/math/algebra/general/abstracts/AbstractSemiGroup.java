@@ -49,8 +49,8 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link SemiGroup}.
  * <p>
- * @param <E>
- * @param <V>
+ * @param <E> Generic type of elements of this semigroup
+ * @param <V> Generic type of values stored in the elements of this semigroup
  * @see AbstractElement
  * <p>
  * @author R. Haenni

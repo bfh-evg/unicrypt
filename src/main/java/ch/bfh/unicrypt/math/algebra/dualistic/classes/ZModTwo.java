@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
@@ -75,7 +75,7 @@ public class ZModTwo
 	private static ZModTwo instance;
 
 	/**
-	 * Returns the singleton object of this class.
+	 * This factory method returns the singleton object of this class.
 	 * <p>
 	 * @return The singleton object of this class
 	 */
