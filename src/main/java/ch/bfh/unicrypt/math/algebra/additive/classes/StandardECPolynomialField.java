@@ -46,6 +46,11 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import java.math.BigInteger;
 
+/**
+ * 
+ * @author Christian Lutz
+ *
+ */
 public class StandardECPolynomialField
 	   extends ECPolynomialField {
 

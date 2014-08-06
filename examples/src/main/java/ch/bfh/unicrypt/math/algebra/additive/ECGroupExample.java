@@ -41,25 +41,37 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive;
 
-import ch.bfh.unicrypt.Example;
+import java.math.BigInteger;
 
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
+
+/**
+ * 
+ * @author Christian Lutz
+ *
+ */
 public class ECGroupExample {
 
-	public static void example1() {
+	public static void example1() throws Exception {
 
 		//Example 1
-		/*
-		 * StandardECZModPrime ec1=StandardECZModPrime.getInstance(SECECCParamsFp.secp224k1); ECZModPrimeElement
-		 * g1=ec1.getDefaultGenerator(); ec1.getRandomElement(); BigInteger n2=ec1.getOrder();
-		 * System.out.println(g1.selfApply(n2));	//order*generator -> (-1,-1) System.out.println(MathUtil.arePrime(n2));
-		 * //order must be prime
-		 *
-		 * long t1=System.currentTimeMillis(); ECZModPrimeElement w2=ec1.getRandomElement();
-		 * t1=System.currentTimeMillis()-t1; System.out.println(w2); System.out.println("Computing time for random
-		 * element w2= "+t1+" ms"); t1=System.currentTimeMillis(); w2=w2.selfApply(n2);
-		 * t1=System.currentTimeMillis()-t1; System.out.println(w2);	//Must be Identity (-1,-1) if h=1
-		 * System.out.println("Computing time for n2*w2= "+t1+" ms");
-		 */
+		
+		 StandardECZModPrime ec1=StandardECZModPrime.getInstance(SECECCParamsFp.secp224k1); 
+		 ECElement<ResidueClass> g1=ec1.getDefaultGenerator(); 
+		 ec1.getRandomElement(); 
+		 BigInteger n2=ec1.getOrder();
+		 System.out.println(g1.selfApply(n2));	//order*generator -> (-1,-1) System.out.println(MathUtil.arePrime(n2));
+		 //order must be prime
+		 
+		 long t1=System.currentTimeMillis(); ECElement<ResidueClass> w2=ec1.getRandomElement();
+		 t1=System.currentTimeMillis()-t1; System.out.println(w2); System.out.println("Computing time for random element w2= "+t1+" ms"); t1=System.currentTimeMillis(); w2=w2.selfApply(n2);
+		 t1=System.currentTimeMillis()-t1; System.out.println(w2);	//Must be Identity (-1,-1) if h=1
+		 System.out.println("Computing time for n2*w2= "+t1+" ms");
+		 
 	}
 
 	public static void example2() {
