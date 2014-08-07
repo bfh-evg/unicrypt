@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
@@ -66,9 +66,9 @@ import java.util.HashMap;
  * and other methods from a {@link Group} in a convenient way. Most methods provided by {@link AbstractElement} have an
  * equivalent method in {@link Group}.
  * <p>
- * @param <S>
- * @param <E>
- * @param <V>
+ * @param <S> Generic type of {@link Set} of this element
+ * @param <E> Generic type of this element
+ * @param <V> Generic type of value stored in this element
  * @see Group
  * <p>
  * @author R. Haenni

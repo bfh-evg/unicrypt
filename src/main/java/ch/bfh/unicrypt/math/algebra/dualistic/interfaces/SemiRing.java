@@ -52,7 +52,7 @@ import java.math.BigInteger;
 /**
  *
  * @author rolfhaenni
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this semiring
  */
 public interface SemiRing<V extends Object>
 	   extends AdditiveMonoid<V>, MultiplicativeMonoid<V> {

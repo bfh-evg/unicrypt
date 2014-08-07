@@ -41,16 +41,18 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
+import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
-import ch.bfh.unicrypt.helper.Point;
 import java.math.BigInteger;
 
 /**
- *
+ * TODO This interface represents an elliptic curve. Its set of points creates an additive group so that adding two
+ * points creates another point.
+ * <p>
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of the elliptic curve
  */
 public interface EC<V extends Object>
 	   extends AdditiveCyclicGroup<Point<DualisticElement<V>>> {

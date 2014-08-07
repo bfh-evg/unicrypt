@@ -46,13 +46,13 @@ import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
- * This interface represents a multiplicatively written cyclic group. No functionality is added to the super interfaces
- * {@link MultiplicativeSemiGroup} and {@link CyclicGroup}.
+ * This interface provides the renaming of some group operations for the case of a multiplicatively written
+ * {@link CyclicGroup}. No functionality is added.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this cyclic group
  */
 public interface MultiplicativeCyclicGroup<V extends Object>
 	   extends CyclicGroup<V>, MultiplicativeGroup<V> {

@@ -49,13 +49,13 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- * This interface provides the renaming of some group operations for the case of a multiplicatively written semigroup.
- * No functionality is added.
+ * This interface provides the renaming of some group operations for the case of a multiplicatively written
+ * {@link SemiGroup}. No functionality is added.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this semigroup
  */
 public interface MultiplicativeSemiGroup<V extends Object>
 	   extends SemiGroup<V> {

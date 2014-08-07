@@ -43,10 +43,10 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.compound.Compound;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -67,10 +67,10 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
- * This abstract class provides a basis implementation for atomic sets.
+ * This abstract class provides a basis implementation for the interface Set.
  * <p>
- * @param <E>
- * @param <V>
+ * @param <E> Generic type of elements of this set
+ * @param <V> Generic type of values stored in the elements of this set
  * @see AbstractElement
  * <p>
  * @author R. Haenni

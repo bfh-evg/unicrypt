@@ -362,7 +362,7 @@ public interface Set<V extends Object> {
 	/**
 	 * TODO Returns the positive BigInteger value that corresponds the element.
 	 * <p>
-	 * @param element
+	 * @param element The given Element
 	 * @return the corresponding BigInteger value
 	 */
 	public BigInteger getBigIntegerFrom(Element element);
@@ -379,9 +379,9 @@ public interface Set<V extends Object> {
 	/**
 	 * TODO
 	 * <p>
-	 * @param element
-	 * @param converter
-	 * @return
+	 * @param element   The given Element
+	 * @param converter The given Converter
+	 * @return the corresponding ByteArray
 	 */
 	public ByteArray getByteArrayFrom(Element element, BigIntegerConverter converter);
 
@@ -396,9 +396,9 @@ public interface Set<V extends Object> {
 	/**
 	 * TODO
 	 * <p>
-	 * @param element
-	 * @param converter
-	 * @return
+	 * @param element   The given Element
+	 * @param converter The given Converter
+	 * @return the corresponding ByteTree
 	 */
 	public ByteTree getByteTreeFrom(Element element, BigIntegerConverter converter);
 

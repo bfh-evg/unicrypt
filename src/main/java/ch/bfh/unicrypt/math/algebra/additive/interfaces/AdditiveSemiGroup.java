@@ -55,7 +55,7 @@ import java.math.BigInteger;
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this semigroup
  */
 public interface AdditiveSemiGroup<V extends Object>
 	   extends SemiGroup<V> {

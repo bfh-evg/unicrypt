@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +55,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+/**
+ * This abstract class provides a basis implementation for objects of type {@link CyclicGroup}.
+ * <p>
+ * @param <E> Generic type of elements of this group
+ * @param <V> Generic type of values stored in the elements of this group
+ * @see Group
+ * <p>
+ * TODO
+ * @author
+ */
 public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object>
 	   extends AbstractGroup<E, V>
 	   implements CyclicGroup<V>, Iterable<E> {
@@ -194,7 +204,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	}
 
 	//
-	// The following protected abstract method must be implemented in every direct sub-class
+	// The following protected abstract methods must be implemented in every direct sub-class
 	//
 	protected abstract E abstractGetDefaultGenerator();
 
