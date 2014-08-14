@@ -53,7 +53,7 @@ import java.util.Arrays;
 public class BigIntegerConverter
 	   extends Converter<BigInteger> {
 
-	private final ByteOrder byteOrder;
+	private transient final ByteOrder byteOrder; //TODO not serializable
 	private final int minLength;
 
 	protected BigIntegerConverter(ByteOrder byteOrder, int minLength) {

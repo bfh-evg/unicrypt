@@ -43,7 +43,10 @@ package ch.bfh.unicrypt.crypto.schemes.encryption;
 
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.RSAEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -54,14 +57,14 @@ public class RSAEncryptionSchemeTest {
 
 	@Test
 	public void EncryptionDecryptionTest() {
-		RSAEncryptionScheme rsa = RSAEncryptionScheme.getInstance(ZModPrimePair.getInstance(3, 5));
+		RSAEncryptionScheme rsa = RSAEncryptionScheme.getInstance(ZModPrimePair.getInstance(7, 13));
 		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
 		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
 		Element message = rsa.getMessageSpace().getElement(5);
 		Element encryption = rsa.encrypt(puKey, message);
-		Element decryption = rsa.decrypt(prKey, message);
-		//	Assert.assertTrue(encryption.isEquivalent(decryption));
-//		System.out.println(Tuple.getInstance(prKey, puKey, message, encryption, decryption));
+		Element decryption = rsa.decrypt(prKey, encryption);
+
+		assertEquals(decryption,message);
 	}
 
 }

@@ -1,16 +1,16 @@
 /*
  * UniCrypt
- *
+ * 
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- *
+ * 
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- *
+ * 
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * 
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,39 +32,71 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- *
+ * 
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- *
+ * 
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+package ch.bfh.unicrypt.crypto.schemes.signature;
+
+import ch.bfh.unicrypt.crypto.schemes.encryption.classes.RSAEncryptionScheme;
+import ch.bfh.unicrypt.crypto.schemes.signature.classes.RSASignatureScheme;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SK extends Set, VK extends Set, KG extends KeyPairGenerator>
-	   extends AbstractSignatureScheme<MS, ME, SS, SE, SK, VK, KG>
-	   implements RandomizedSignatureScheme {
-
-	@Override
-	public RS getRandomizationSpace() {
-		return (RS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(2);
+/**
+ *
+ * @author Philémon von Bergen &lt;philemon.vonbergen@bfh.ch&gt;
+ */
+public class RSASignatureTest {
+	
+	public RSASignatureTest() {
+	}
+	
+	@BeforeClass
+	public static void setUpClass() {
+	}
+	
+	@AfterClass
+	public static void tearDownClass() {
+	}
+	
+	@Before
+	public void setUp() {
+	}
+	
+	@After
+	public void tearDown() {
 	}
 
-	@Override
-	public SE sign(Element privateKey, Element message, RandomByteSequence randomByteSequence) {
-		return this.sign(privateKey, message, getRandomizationSpace().getRandomElement(randomByteSequence));
-	}
+    @Test
+	public void SignatureTest1() {
+		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(7, 13));
+		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
+		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
+		Element message = rsa.getMessageSpace().getElement(5);
+		Element signature = rsa.sign(prKey, message);
 
-	@Override
-	public SE sign(Element privateKey, Element message, Element randomization) {
-		return (SE) this.getSignatureFunction().apply(privateKey, message, randomization);
+		assertTrue(rsa.verify(puKey,message, signature).getValue().booleanValue());
 	}
+	
+	@Test
+	public void SignatureTest2() {
+		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(7, 13));
+		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
+		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
+		Element message = rsa.getMessageSpace().getElement(5);
+		Element signature = rsa.sign(prKey, message);
 
+		assertFalse(rsa.verify(puKey,message, message).getValue().booleanValue());
+	}
 }

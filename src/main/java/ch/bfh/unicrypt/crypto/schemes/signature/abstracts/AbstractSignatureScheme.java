@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element>
+public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, SK extends Set, VK extends Set, KG extends KeyPairGenerator>
 	   extends AbstractScheme<MS>
 	   implements SignatureScheme {
 
