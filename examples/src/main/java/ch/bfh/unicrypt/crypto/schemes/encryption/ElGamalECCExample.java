@@ -41,30 +41,24 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption;
 
-import java.math.BigInteger;
-
-import sun.security.util.BigInt;
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
+import java.math.BigInteger;
 
 public class ElGamalECCExample {
 
 	public static void example1() throws Exception {
 
 		// Example Elgamal over ECFp with 123456789 as text to encode using ProbabilisticECGroupFpEncode
-		
 		//Generate schema and keypair
 		final StandardECZModPrime g_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1); //Possible curves secp{112,160,192,224,256,384,521}r1
 		final ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(g_q);
@@ -102,6 +96,7 @@ public class ElGamalECCExample {
 		Example.printLine("Message decoded: " + plain);
 
 	}
+
 	public static void main(final String[] args) {
 		Example.runExamples();
 	}

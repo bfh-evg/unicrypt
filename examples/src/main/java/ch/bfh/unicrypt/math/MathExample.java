@@ -43,30 +43,18 @@ package ch.bfh.unicrypt.math;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-
-import java.awt.List;
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import com.sun.org.apache.xalan.internal.xsltc.dom.BitArray;
-
-import sun.security.util.BigInt;
 
 /**
  *
@@ -153,39 +141,35 @@ public class MathExample {
 		ZModElement e3 = (ZModElement) zMod.getElementFrom(9);
 		Example.printLine(e3);
 	}
-	
-	/**
-	 * PolynomialField example
-	 * Shows how to generate a irreducible Polynom from a BitString
-	 */
-	public static void example5(){
-		ZModTwo primeField= ZModTwo.getInstance();
-		PolynomialRing<ZModTwo> ring = PolynomialRing.getInstance(primeField);
-		
-		String b = "10100100001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001";
-		
 
-		
-		BigInteger h=new BigInteger("10100100001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",2);
+	/**
+	 * PolynomialField example Shows how to generate a irreducible Polynom from a BitString
+	 */
+	public static void example5() {
+		ZModTwo primeField = ZModTwo.getInstance();
+		PolynomialRing<ZModTwo> ring = PolynomialRing.getInstance(primeField);
+
+		String b = "10100100001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001";
+
+		BigInteger h = new BigInteger("10100100001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001", 2);
 		Example.printLine(h.toString(16));
-		
-		
+
 		//Read bits and create a BigInteger ArrayList
-		ArrayList<BigInteger> arrayBigInteger=new ArrayList<BigInteger>();
-		for (Character s  : h.toString(2).toCharArray()) {
+		ArrayList<BigInteger> arrayBigInteger = new ArrayList<BigInteger>();
+		for (Character s : h.toString(2).toCharArray()) {
 			arrayBigInteger.add(new BigInteger(s.toString()));
-			
+
 		}
-		
+
 		//Convert ArrayList BigInteger array and get element
-		BigInteger[] bigs={};
-		bigs=arrayBigInteger.toArray(bigs);
-		
-		PolynomialElement<ZModTwo> irreduciblePolynom=ring.getElement(bigs);
-		
+		BigInteger[] bigs = {};
+		bigs = arrayBigInteger.toArray(bigs);
+
+		PolynomialElement<ZModTwo> irreduciblePolynom = ring.getElement(bigs);
+
 		Example.printLine(irreduciblePolynom);
 		Example.printLine(irreduciblePolynom.isIrreducible());
-		
+
 	}
 
 	public static void main(final String[] args) {
