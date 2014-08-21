@@ -39,47 +39,67 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
-import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
- * @author Christian Lutz
- * <p>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ECGroupExample {
+public class ConverterMap {
 
-	public static void example1() throws Exception {
+	private final Map<String, Converter> map;
 
-		//Example with StandardECZModPrime
-		StandardECZModPrime ec = StandardECZModPrime.getInstance(SECECCParamsFp.secp224k1);
-		ECElement<ResidueClass> generator = ec.getDefaultGenerator();
-		ec.getRandomElement();
-		BigInteger order = ec.getOrder();
-		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
+	private ConverterMap() {
+		this.map = new HashMap();
 	}
 
-	public static void example2() throws Exception {
-		//Example with StandardECPolynomialField
-
-		StandardECPolynomialField ec = StandardECPolynomialField.getInstance(SECECCParamsF2m.sect283k1);
-		ECElement<Polynomial> generator = ec.getDefaultGenerator();
-		ec.getRandomElement();
-		BigInteger order = ec.getOrder();
-		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
+	public Converter getConverter(String className) {
+		return this.map.get(className);
 	}
 
-	public static void main(final String[] args) {
-		Example.runExamples();
+	public void addConverter(Converter converter) {
+		String className = converter.getClassName();
+		if (this.map.containsKey(className)) {
+			throw new IllegalArgumentException();
+		}
+		this.map.put(className, converter);
+	}
+
+	public ByteArray convertToByteArray(Object object) {
+		Converter converter = this.getConverter(object.getClass().getName());
+		if (converter == null) {
+			return null;
+		}
+		return converter.convertToByteArray(object);
+	}
+
+	public static ConverterMap getInstance() {
+		return ConverterMap.getInstance(
+			   BigIntegerConverter.getInstance(),
+			   ByteArrayConverter.getInstance(),
+			   PermutationConverter.getInstance(),
+			   NaturalNumberConverter.getInstance(),
+			   //			   ResidueClassConverter.getInstance(),
+			   StringConverter.getInstance(),
+			   WholeNumberConverter.getInstance());
+	}
+
+	public static ConverterMap getInstance(Converter... converters) {
+		if (converters == null) {
+			throw new IllegalArgumentException();
+		}
+		ConverterMap map = new ConverterMap();
+		for (Converter converter : converters) {
+			if (converter == null) {
+				throw new IllegalArgumentException();
+			}
+			map.addConverter(converter);
+		}
+		return map;
 	}
 
 }

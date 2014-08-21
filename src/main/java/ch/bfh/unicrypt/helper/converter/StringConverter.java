@@ -54,6 +54,7 @@ public class StringConverter
 	private final Charset charset;
 
 	private StringConverter(Charset charset) {
+		super(String.class.getName());
 		this.charset = charset;
 	}
 
