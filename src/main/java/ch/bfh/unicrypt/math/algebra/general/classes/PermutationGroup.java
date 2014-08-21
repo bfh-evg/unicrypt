@@ -121,24 +121,12 @@ public class PermutationGroup
 
 	@Override
 	protected PermutationElement abstractGetElementFrom(final BigInteger value) {
-		BigInteger[] values = MathUtil.unpair(value, this.getSize());
-		int[] intValues = new int[values.length];
-		for (int i = 0; i < values.length; i++) {
-			if (values[i] == null) {
-				throw new IllegalArgumentException();
-			}
-			intValues[i] = values[i].intValue();
-		}
-		if (!Permutation.isValid(intValues)) {
-			return null; // no such element
-		}
-		return this.abstractGetElement(Permutation.getInstance(intValues));
+		return this.abstractGetElement(Permutation.getInstance(this.getSize(), value));
 	}
 
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(PermutationElement element) {
-		// better with Lehmer codes
-		return MathUtil.pair(element.getValue().getPermutationVector());
+		return element.getValue().getRank();
 	}
 
 	@Override

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.converter;
 
+import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,24 +50,41 @@ import java.util.Map;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ConverterMap {
+public class ConvertMethod
+	   extends UniCrypt {
 
-	private final Map<String, Converter> map;
+	public enum Mode {
 
-	private ConverterMap() {
-		this.map = new HashMap();
+		DIRECT, INDIRECT, MIXED;
+		// DIRECT = Using corresponding converters
+		// INDIRECT = via BigInteger
+		// MIXED = DIRECT (if converter exists), INDIRECT (otherwise)
+
+	};
+
+	private final Mode mode;
+	private final Map<String, Converter> converterMap;
+
+	private ConvertMethod(Mode mode) {
+		this.mode = mode;
+		this.converterMap = new HashMap();
+	}
+
+	public ConvertMethod.Mode getMode() {
+		return this.mode;
 	}
 
 	public Converter getConverter(String className) {
-		return this.map.get(className);
+		return this.converterMap.get(className);
 	}
 
+	// should this method be public?
 	public void addConverter(Converter converter) {
 		String className = converter.getClassName();
-		if (this.map.containsKey(className)) {
+		if (this.converterMap.containsKey(className)) {
 			throw new IllegalArgumentException();
 		}
-		this.map.put(className, converter);
+		this.converterMap.put(className, converter);
 	}
 
 	public ByteArray convertToByteArray(Object object) {
@@ -77,8 +95,8 @@ public class ConverterMap {
 		return converter.convertToByteArray(object);
 	}
 
-	public static ConverterMap getInstance() {
-		return ConverterMap.getInstance(
+	public static ConvertMethod getInstance() {
+		return ConvertMethod.getInstance(
 			   BigIntegerConverter.getInstance(),
 			   ByteArrayConverter.getInstance(),
 			   PermutationConverter.getInstance(),
@@ -88,11 +106,11 @@ public class ConverterMap {
 			   WholeNumberConverter.getInstance());
 	}
 
-	public static ConverterMap getInstance(Converter... converters) {
+	public static ConvertMethod getInstance(Converter... converters) {
 		if (converters == null) {
 			throw new IllegalArgumentException();
 		}
-		ConverterMap map = new ConverterMap();
+		ConvertMethod map = new ConvertMethod(Mode.MIXED);
 		for (Converter converter : converters) {
 			if (converter == null) {
 				throw new IllegalArgumentException();

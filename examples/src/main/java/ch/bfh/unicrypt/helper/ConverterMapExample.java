@@ -2,7 +2,7 @@ package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.converter.ConverterMap;
+import ch.bfh.unicrypt.helper.converter.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.ResidueClassConverter;
 import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
 import ch.bfh.unicrypt.helper.numerical.ResidueClass;
@@ -49,7 +49,7 @@ import java.math.BigInteger;
 public class ConverterMapExample {
 
 	public static void example1() {
-		ConverterMap cMap = ConverterMap.getInstance();
+		ConvertMethod cMap = ConvertMethod.getInstance();
 		Example.printLine(cMap.convertToByteArray(ByteArray.getInstance(10, true)));
 		Example.printLine(cMap.convertToByteArray(BigInteger.valueOf(123456)));
 		Example.printLine(cMap.convertToByteArray(NaturalNumber.getInstance(BigInteger.valueOf(123))));
