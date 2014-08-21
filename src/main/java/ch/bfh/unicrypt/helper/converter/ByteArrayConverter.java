@@ -42,45 +42,43 @@
 package ch.bfh.unicrypt.helper.converter;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import java.nio.charset.Charset;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringConverter
-	   extends Converter<String> {
+public class ByteArrayConverter
+	   extends Converter<ByteArray> {
 
-	private final Charset charset;
+	private boolean reverse;
 
-	private StringConverter(Charset charset) {
-		super(String.class.getName());
-		this.charset = charset;
-	}
-
-	public Charset getCharset() {
-		return this.charset;
+	public ByteArrayConverter(boolean reverse) {
+		super(ByteArray.class.getName());
+		this.reverse = reverse;
 	}
 
 	@Override
-	protected ByteArray abstractConvertToByteArray(String string) {
-		return ByteArray.getInstance(string.getBytes(this.charset));
-	}
-
-	@Override
-	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getAll(), charset);
-	}
-
-	public static StringConverter getInstance() {
-		return new StringConverter(Charset.defaultCharset());
-	}
-
-	public static StringConverter getInstance(Charset charset) {
-		if (charset == null) {
-			throw new IllegalArgumentException();
+	protected ByteArray abstractConvertToByteArray(ByteArray byteArray) {
+		if (this.reverse) {
+			return byteArray.reverse();
 		}
-		return new StringConverter(charset);
+		return byteArray;
+	}
+
+	@Override
+	protected ByteArray abstractConvertFromByteArray(ByteArray byteArray) {
+		if (this.reverse) {
+			return byteArray.reverse();
+		}
+		return byteArray;
+	}
+
+	public static ByteArrayConverter getInstance() {
+		return ByteArrayConverter.getInstance(false);
+	}
+
+	public static ByteArrayConverter getInstance(boolean reverse) {
+		return new ByteArrayConverter(reverse);
 	}
 
 }

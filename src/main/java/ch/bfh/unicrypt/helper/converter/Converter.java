@@ -52,22 +52,32 @@ import ch.bfh.unicrypt.helper.array.ByteArray;
 public abstract class Converter<T extends Object>
 	   extends UniCrypt {
 
+	private String className;
+
+	public Converter(String className) {
+		this.className = className;
+	}
+
+	public String getClassName() {
+		return this.className;
+	}
+
 	public final ByteArray convertToByteArray(T object) {
 		if (object == null) {
 			throw new IllegalArgumentException();
 		}
-		return abstractConvertToByteArray(object);
+		return this.abstractConvertToByteArray(object);
 	}
 
 	public final T convertFromByteArray(ByteArray byteArray) {
 		if (byteArray == null) {
 			throw new IllegalArgumentException();
 		}
-		return abstractConvertFromByteArray(byteArray);
+		return this.abstractConvertFromByteArray(byteArray);
 	}
 
 	protected abstract ByteArray abstractConvertToByteArray(T Object);
 
-	protected abstract T abstractConvertFromByteArray(ByteArray ByteArray);
+	protected abstract T abstractConvertFromByteArray(ByteArray byteArray);
 
 }

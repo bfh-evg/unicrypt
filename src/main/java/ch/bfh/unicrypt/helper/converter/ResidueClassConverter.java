@@ -42,45 +42,46 @@
 package ch.bfh.unicrypt.helper.converter;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import java.nio.charset.Charset;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
+import ch.bfh.unicrypt.math.MathUtil;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringConverter
-	   extends Converter<String> {
+public class ResidueClassConverter
+	   extends Converter<ResidueClass> {
 
-	private final Charset charset;
+	private final BigIntegerConverter bigIntegerConverter;
 
-	private StringConverter(Charset charset) {
-		super(String.class.getName());
-		this.charset = charset;
-	}
-
-	public Charset getCharset() {
-		return this.charset;
+	private ResidueClassConverter(BigIntegerConverter bigIntegerConverter) {
+		super(ResidueClass.class.getName());
+		this.bigIntegerConverter = bigIntegerConverter;
 	}
 
 	@Override
-	protected ByteArray abstractConvertToByteArray(String string) {
-		return ByteArray.getInstance(string.getBytes(this.charset));
+	protected ByteArray abstractConvertToByteArray(ResidueClass residueClass) {
+		BigInteger pairedValue = MathUtil.pair(residueClass.getBigInteger(), residueClass.getModulus());
+		return this.bigIntegerConverter.abstractConvertToByteArray(pairedValue);
 	}
 
 	@Override
-	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getAll(), charset);
+	protected ResidueClass abstractConvertFromByteArray(ByteArray ByteArray) {
+		BigInteger pairedValue = this.bigIntegerConverter.convertFromByteArray(ByteArray);
+		BigInteger[] values = MathUtil.unpair(pairedValue);
+		return ResidueClass.getInstance(values[0], values[1]);
 	}
 
-	public static StringConverter getInstance() {
-		return new StringConverter(Charset.defaultCharset());
+	public static ResidueClassConverter getInstance() {
+		return ResidueClassConverter.getInstance(BigIntegerConverter.getInstance());
 	}
 
-	public static StringConverter getInstance(Charset charset) {
-		if (charset == null) {
+	public static ResidueClassConverter getInstance(BigIntegerConverter bigIntegerConverter) {
+		if (bigIntegerConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new StringConverter(charset);
+		return new ResidueClassConverter(bigIntegerConverter);
 	}
 
 }

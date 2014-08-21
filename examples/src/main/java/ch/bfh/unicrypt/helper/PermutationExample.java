@@ -39,48 +39,34 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import java.nio.charset.Charset;
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.math.MathUtil;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringConverter
-	   extends Converter<String> {
+public class PermutationExample {
 
-	private final Charset charset;
-
-	private StringConverter(Charset charset) {
-		super(String.class.getName());
-		this.charset = charset;
-	}
-
-	public Charset getCharset() {
-		return this.charset;
-	}
-
-	@Override
-	protected ByteArray abstractConvertToByteArray(String string) {
-		return ByteArray.getInstance(string.getBytes(this.charset));
-	}
-
-	@Override
-	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getAll(), charset);
-	}
-
-	public static StringConverter getInstance() {
-		return new StringConverter(Charset.defaultCharset());
-	}
-
-	public static StringConverter getInstance(Charset charset) {
-		if (charset == null) {
-			throw new IllegalArgumentException();
+	public static void example1() {
+		for (int size = 0; size <= 4; size++) {
+			Example.printLine("SIZE", size);
+			BigInteger n = MathUtil.factorial(size);
+			BigInteger rank = BigInteger.valueOf(0);
+			while (rank.compareTo(n) < 0) {
+				Permutation permutation = Permutation.getInstance(size, rank);
+				BigInteger newRank = permutation.getRank();
+				Example.printLine(rank.toString(), permutation, newRank);
+				rank = rank.add(BigInteger.ONE);
+			}
 		}
-		return new StringConverter(charset);
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

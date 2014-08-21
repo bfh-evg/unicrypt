@@ -182,6 +182,14 @@ public class ByteArray
 		return new ByteArray(result);
 	}
 
+	public ByteArray reverse() {
+		byte[] result = new byte[this.length];
+		for (int i = 0; i < this.length; i++) {
+			result[i] = this.getAt(this.length - i - 1);
+		}
+		return ByteArray.getInstance(result);
+	}
+
 	public ByteArray xor(ByteArray... others) {
 		return this.applyOperand(0, others, false, ALL_ZERO);
 	}

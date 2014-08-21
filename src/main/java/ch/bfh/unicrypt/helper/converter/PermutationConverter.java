@@ -41,46 +41,47 @@
  */
 package ch.bfh.unicrypt.helper.converter;
 
+import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import java.nio.charset.Charset;
+import ch.bfh.unicrypt.math.MathUtil;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringConverter
-	   extends Converter<String> {
+public class PermutationConverter
+	   extends Converter<Permutation> {
 
-	private final Charset charset;
+	private final BigIntegerConverter bigIntegerConverter;
 
-	private StringConverter(Charset charset) {
-		super(String.class.getName());
-		this.charset = charset;
-	}
-
-	public Charset getCharset() {
-		return this.charset;
+	public PermutationConverter(BigIntegerConverter bigIntegerConverter) {
+		super(Permutation.class.getName());
+		this.bigIntegerConverter = bigIntegerConverter;
 	}
 
 	@Override
-	protected ByteArray abstractConvertToByteArray(String string) {
-		return ByteArray.getInstance(string.getBytes(this.charset));
+	protected ByteArray abstractConvertToByteArray(Permutation permutation) {
+		BigInteger pairedValue = MathUtil.pair(BigInteger.valueOf(permutation.getSize()), permutation.getRank());
+		return this.bigIntegerConverter.convertToByteArray(pairedValue);
 	}
 
 	@Override
-	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getAll(), charset);
+	protected Permutation abstractConvertFromByteArray(ByteArray byteArray) {
+		BigInteger pairedValue = this.bigIntegerConverter.convertFromByteArray(byteArray);
+		BigInteger[] values = MathUtil.unpair(pairedValue);
+		return Permutation.getInstance(values[0].intValue(), values[1]);
 	}
 
-	public static StringConverter getInstance() {
-		return new StringConverter(Charset.defaultCharset());
+	public static PermutationConverter getInstance() {
+		return PermutationConverter.getInstance(BigIntegerConverter.getInstance());
 	}
 
-	public static StringConverter getInstance(Charset charset) {
-		if (charset == null) {
+	public static PermutationConverter getInstance(BigIntegerConverter bigIntegerConverter) {
+		if (bigIntegerConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new StringConverter(charset);
+		return new PermutationConverter(bigIntegerConverter);
 	}
 
 }

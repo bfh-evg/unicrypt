@@ -42,45 +42,63 @@
 package ch.bfh.unicrypt.helper.converter;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringConverter
-	   extends Converter<String> {
+public class ConverterMap {
 
-	private final Charset charset;
+	private final Map<String, Converter> map;
 
-	private StringConverter(Charset charset) {
-		super(String.class.getName());
-		this.charset = charset;
+	private ConverterMap() {
+		this.map = new HashMap();
 	}
 
-	public Charset getCharset() {
-		return this.charset;
+	public Converter getConverter(String className) {
+		return this.map.get(className);
 	}
 
-	@Override
-	protected ByteArray abstractConvertToByteArray(String string) {
-		return ByteArray.getInstance(string.getBytes(this.charset));
-	}
-
-	@Override
-	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getAll(), charset);
-	}
-
-	public static StringConverter getInstance() {
-		return new StringConverter(Charset.defaultCharset());
-	}
-
-	public static StringConverter getInstance(Charset charset) {
-		if (charset == null) {
+	private void addConverter(String className, Converter converter) {
+		if (this.map.containsKey(className)) {
 			throw new IllegalArgumentException();
 		}
-		return new StringConverter(charset);
+		this.map.put(className, converter);
+	}
+
+	public ByteArray convertToByteArray(Object object) {
+		Converter converter = this.getConverter(object.getClass().getName());
+		if (converter == null) {
+			return null;
+		}
+		return converter.convertToByteArray(object);
+	}
+
+	public static ConverterMap getInstance() {
+		return ConverterMap.getInstance(
+			   BigIntegerConverter.getInstance(),
+			   ByteArrayConverter.getInstance(),
+			   PermutationConverter.getInstance(),
+			   NaturalNumberConverter.getInstance(),
+			   //			   ResidueClassConverter.getInstance(),
+			   StringConverter.getInstance(),
+			   WholeNumberConverter.getInstance());
+	}
+
+	public static ConverterMap getInstance(Converter... converters) {
+		if (converters == null) {
+			throw new IllegalArgumentException();
+		}
+		ConverterMap map = new ConverterMap();
+		for (Converter converter : converters) {
+			if (converter == null) {
+				throw new IllegalArgumentException();
+			}
+			map.addConverter(converter.getClassName(), converter);
+		}
+		return map;
 	}
 
 }

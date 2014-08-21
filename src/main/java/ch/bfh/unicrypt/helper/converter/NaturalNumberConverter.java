@@ -42,45 +42,41 @@
 package ch.bfh.unicrypt.helper.converter;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import java.nio.charset.Charset;
+import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringConverter
-	   extends Converter<String> {
+public class NaturalNumberConverter
+	   extends Converter<NaturalNumber> {
 
-	private final Charset charset;
+	private final BigIntegerConverter bigIntegerConverter;
 
-	private StringConverter(Charset charset) {
-		super(String.class.getName());
-		this.charset = charset;
-	}
-
-	public Charset getCharset() {
-		return this.charset;
+	private NaturalNumberConverter(BigIntegerConverter bigIntegerConverter) {
+		super(NaturalNumber.class.getName());
+		this.bigIntegerConverter = bigIntegerConverter;
 	}
 
 	@Override
-	protected ByteArray abstractConvertToByteArray(String string) {
-		return ByteArray.getInstance(string.getBytes(this.charset));
+	protected ByteArray abstractConvertToByteArray(NaturalNumber naturalNumber) {
+		return this.bigIntegerConverter.convertToByteArray(naturalNumber.getBigInteger());
 	}
 
 	@Override
-	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getAll(), charset);
+	protected NaturalNumber abstractConvertFromByteArray(ByteArray byteArray) {
+		return NaturalNumber.getInstance(this.bigIntegerConverter.convertFromByteArray(byteArray));
 	}
 
-	public static StringConverter getInstance() {
-		return new StringConverter(Charset.defaultCharset());
+	public static NaturalNumberConverter getInstance() {
+		return NaturalNumberConverter.getInstance(BigIntegerConverter.getInstance());
 	}
 
-	public static StringConverter getInstance(Charset charset) {
-		if (charset == null) {
+	public static NaturalNumberConverter getInstance(BigIntegerConverter bigIntegerConverter) {
+		if (bigIntegerConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new StringConverter(charset);
+		return new NaturalNumberConverter(bigIntegerConverter);
 	}
 
 }

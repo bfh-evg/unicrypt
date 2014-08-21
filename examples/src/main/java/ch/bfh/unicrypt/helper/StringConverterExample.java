@@ -39,48 +39,51 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import java.nio.charset.Charset;
+import ch.bfh.unicrypt.helper.converter.StringConverter;
+import java.nio.charset.StandardCharsets;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringConverter
-	   extends Converter<String> {
+public class StringConverterExample {
 
-	private final Charset charset;
-
-	private StringConverter(Charset charset) {
-		super(String.class.getName());
-		this.charset = charset;
+	public static void example1() {
+		StringConverter converter = StringConverter.getInstance(StandardCharsets.UTF_8);
+		String string = "Hallo René";
+		ByteArray byteArray = converter.convertToByteArray(string);
+		String newString = converter.convertFromByteArray(byteArray);
+		Example.printLine(string);
+		Example.printLine("UTF8", byteArray);
+		Example.printLine(newString);
 	}
 
-	public Charset getCharset() {
-		return this.charset;
+	public static void example2() {
+		StringConverter converter = StringConverter.getInstance(StandardCharsets.UTF_16BE);
+		String string = "Hallo René";
+		ByteArray byteArray = converter.convertToByteArray(string);
+		String newString = converter.convertFromByteArray(byteArray);
+		Example.printLine(string);
+		Example.printLine("UTF16-BE", byteArray);
+		Example.printLine(newString);
 	}
 
-	@Override
-	protected ByteArray abstractConvertToByteArray(String string) {
-		return ByteArray.getInstance(string.getBytes(this.charset));
+	public static void example3() {
+		StringConverter converter = StringConverter.getInstance(StandardCharsets.UTF_16LE);
+		String string = "Hallo René";
+		ByteArray byteArray = converter.convertToByteArray(string);
+		String newString = converter.convertFromByteArray(byteArray);
+		Example.printLine(string);
+		Example.printLine("UTF16-LE", byteArray);
+		Example.printLine(newString);
 	}
 
-	@Override
-	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getAll(), charset);
-	}
-
-	public static StringConverter getInstance() {
-		return new StringConverter(Charset.defaultCharset());
-	}
-
-	public static StringConverter getInstance(Charset charset) {
-		if (charset == null) {
-			throw new IllegalArgumentException();
-		}
-		return new StringConverter(charset);
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

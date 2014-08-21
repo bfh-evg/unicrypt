@@ -39,48 +39,30 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper;
 
+import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import java.nio.charset.Charset;
+import ch.bfh.unicrypt.helper.converter.PermutationConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringConverter
-	   extends Converter<String> {
+public class PermutationConverterExample {
 
-	private final Charset charset;
-
-	private StringConverter(Charset charset) {
-		super(String.class.getName());
-		this.charset = charset;
+	public static void example1() {
+		PermutationConverter converter = PermutationConverter.getInstance();
+		Permutation permutation = Permutation.getRandomInstance(20);
+		ByteArray byteArray = converter.convertToByteArray(permutation);
+		Permutation newPermutation = converter.convertFromByteArray(byteArray);
+		Example.printLine(permutation);
+		Example.printLine(byteArray);
+		Example.printLine(newPermutation);
 	}
 
-	public Charset getCharset() {
-		return this.charset;
-	}
-
-	@Override
-	protected ByteArray abstractConvertToByteArray(String string) {
-		return ByteArray.getInstance(string.getBytes(this.charset));
-	}
-
-	@Override
-	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getAll(), charset);
-	}
-
-	public static StringConverter getInstance() {
-		return new StringConverter(Charset.defaultCharset());
-	}
-
-	public static StringConverter getInstance(Charset charset) {
-		if (charset == null) {
-			throw new IllegalArgumentException();
-		}
-		return new StringConverter(charset);
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }
