@@ -39,13 +39,14 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-
 package ch.bfh.unicrypt.crypto.schemes.signature;
 
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.RSAEncryptionScheme;
 import ch.bfh.unicrypt.crypto.schemes.signature.classes.RSASignatureScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -58,45 +59,55 @@ import org.junit.Test;
  * @author Philémon von Bergen &lt;philemon.vonbergen@bfh.ch&gt;
  */
 public class RSASignatureTest {
-	
+
 	public RSASignatureTest() {
 	}
-	
+
 	@BeforeClass
 	public static void setUpClass() {
 	}
-	
+
 	@AfterClass
 	public static void tearDownClass() {
 	}
-	
+
 	@Before
 	public void setUp() {
 	}
-	
+
 	@After
 	public void tearDown() {
 	}
 
-    @Test
+	@Test
 	public void SignatureTest1() {
-		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(7, 13));
+//		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(1023, 65537));
+		BigInteger p = BigInteger.probablePrime(1024, new SecureRandom());
+		BigInteger q = BigInteger.probablePrime(1024, new SecureRandom());
+		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
 		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
 		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
 		Element message = rsa.getMessageSpace().getElement(5);
 		Element signature = rsa.sign(prKey, message);
 
-		assertTrue(rsa.verify(puKey,message, signature).getValue().booleanValue());
+		assertTrue(rsa.verify(puKey, message, signature).getValue().booleanValue());
+		
 	}
-	
+
 	@Test
 	public void SignatureTest2() {
-		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(7, 13));
-		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
-		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
-		Element message = rsa.getMessageSpace().getElement(5);
-		Element signature = rsa.sign(prKey, message);
+		BigInteger p = BigInteger.probablePrime(1024, new SecureRandom());
+		BigInteger q = BigInteger.probablePrime(1024, new SecureRandom());
 
-		assertFalse(rsa.verify(puKey,message, message).getValue().booleanValue());
+			RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
+			Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
+			Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
+
+			Element message = rsa.getMessageSpace().getElement(5);
+			Element signature = rsa.sign(prKey, message);
+
+			assertFalse(rsa.verify(puKey, message, message).getValue().booleanValue());
+		
 	}
+
 }

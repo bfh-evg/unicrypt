@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyPairGenerator;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractAsymmetricEncryptionScheme;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractSignatureScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -52,7 +50,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
-import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.PowerFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
@@ -84,7 +81,9 @@ public class RSASignatureScheme
 	@Override
 	protected Function abstractGetSignatureFunction() {
 		return CompositeFunction.getInstance(
+			   //takes parameter 1 (message) and 0 (private key) and pass them in that order to next function
 			   AdapterFunction.getInstance(ProductSet.getInstance(this.zMod, 2), 1, 0),
+			   //computes m^d
 			   PowerFunction.getInstance(zMod));
 	}
 
@@ -93,14 +92,20 @@ public class RSASignatureScheme
 		ProductSet ps = ProductSet.getInstance(this.zMod, 3);
 		
 		return CompositeFunction.getInstance(
+			   //duplicate the input for the power function (s^e) and equality function m=s^e
 			   MultiIdentityFunction.getInstance(ps, 2),
+			   //product function: selection of m and computation of s^e
 			   ProductFunction.getInstance(
+					//select parameter 1 (message) to pass it later to equality function
 					SelectionFunction.getInstance(ps, 1),
-						CompositeFunction.getInstance(
-							AdapterFunction.getInstance(ps, 2, 0),
-							PowerFunction.getInstance(zMod)
+					CompositeFunction.getInstance(
+						//takes parameter 2 (signature) and 0 (public key) and pass them in that order
+						AdapterFunction.getInstance(ps, 2, 0),
+						//compute power function of parameter received from adapter function => s^e
+						PowerFunction.getInstance(zMod)
 					)
-			   ), 
+			   ),
+			   //receive output of selection function (m) and composite function (s^e) and check their equality
 			   EqualityFunction.getInstance(this.zMod)						 
 			);			   
 	}
