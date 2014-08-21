@@ -70,13 +70,22 @@ public class HybridRandomByteSequence
 	 * @param forwardSecurityInBytes
 	 * @param backwardSecurityInBytes
 	 */
-	protected HybridRandomByteSequence(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, int backwardSecurityInBytes) {
+	protected HybridRandomByteSequence(final HashAlgorithm hashAlgorithm, final int forwardSecurityInBytes, final int backwardSecurityInBytes) {
 		super(hashAlgorithm, forwardSecurityInBytes, ByteArray.getInstance());
 
 		this.backwardSecurityInBytes = backwardSecurityInBytes;
 
 		this.distributionSampler = DistributionSamplerCollector.getInstance(this);
-		super.setSeed(this.distributionSampler.getDistributionSamples(backwardSecurityInBytes));
+		Thread seeder = new Thread() {
+
+			@Override
+			public void run() {
+				HybridRandomByteSequence.super.setSeed(HybridRandomByteSequence.this.distributionSampler.getDistributionSamples(backwardSecurityInBytes));
+			}
+		};
+		seeder.setDaemon(true);
+		seeder.start();
+
 	}
 
 	@Override
