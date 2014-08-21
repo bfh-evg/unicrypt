@@ -294,7 +294,7 @@ public class MixAndProofExample {
 	}
 
 	// COMPLETE SHUFFLE WITH DIFFERENT GROUPS AND EXPLICIT SECURITY PARAMETERS
-	public static void example6() {
+	public static void example6() throws Exception {
 
 		// S E T U P
 		//-----------

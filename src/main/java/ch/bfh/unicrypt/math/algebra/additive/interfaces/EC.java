@@ -65,10 +65,10 @@ public interface EC<V extends Object>
 
 	public BigInteger getCoFactor();
 
-	public boolean contains(DualisticElement xValue);
+	public boolean contains(DualisticElement<V> xValue);
 
-	public boolean contains(DualisticElement xValue, DualisticElement yValue);
+	public boolean contains(DualisticElement<V> xValue, DualisticElement<V> yValue);
 
-	public ECElement<V> getElement(DualisticElement xValue, DualisticElement yValue);
+	public ECElement<V> getElement(DualisticElement<V> xValue, DualisticElement<V> yValue);
 
 }

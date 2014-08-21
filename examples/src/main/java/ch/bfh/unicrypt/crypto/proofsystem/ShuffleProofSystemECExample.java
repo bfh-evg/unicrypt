@@ -131,7 +131,7 @@ public class ShuffleProofSystemECExample {
 		System.out.println("Shuffle was sucessful: " + (vPermutation && vShuffle));
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		// Setup
 		final int size = 100;
