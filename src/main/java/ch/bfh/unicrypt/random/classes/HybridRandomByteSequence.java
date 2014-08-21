@@ -61,7 +61,7 @@ public class HybridRandomByteSequence
 	   implements TrueRandomByteSequence {
 
 	private static HybridRandomByteSequence DEFAULT;
-	private final DistributionSamplerCollector distributionSampler;
+	private DistributionSamplerCollector distributionSampler;
 	private final int backwardSecurityInBytes;
 
 	/**
@@ -74,13 +74,12 @@ public class HybridRandomByteSequence
 		super(hashAlgorithm, forwardSecurityInBytes, ByteArray.getInstance());
 
 		this.backwardSecurityInBytes = backwardSecurityInBytes;
-
-		this.distributionSampler = DistributionSamplerCollector.getInstance(this);
 		Thread seeder = new Thread() {
 
 			@Override
 			public void run() {
-				HybridRandomByteSequence.super.setSeed(HybridRandomByteSequence.this.distributionSampler.getDistributionSamples(backwardSecurityInBytes));
+
+				HybridRandomByteSequence.super.setSeed(HybridRandomByteSequence.this.getDistributionSampler().getDistributionSamples(backwardSecurityInBytes));
 			}
 		};
 		seeder.setDaemon(true);
@@ -133,7 +132,10 @@ public class HybridRandomByteSequence
 	}
 
 	@Override
-	public DistributionSamplerCollector getDistributionSampler() {
+	public synchronized DistributionSamplerCollector getDistributionSampler() {
+		if (distributionSampler == null) {
+			distributionSampler = DistributionSamplerCollector.getInstance(this);
+		}
 		return this.distributionSampler;
 	}
 
