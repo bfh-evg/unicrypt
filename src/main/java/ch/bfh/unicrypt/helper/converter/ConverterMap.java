@@ -61,7 +61,8 @@ public class ConverterMap {
 		return this.map.get(className);
 	}
 
-	private void addConverter(String className, Converter converter) {
+	public void addConverter(Converter converter) {
+		String className = converter.getClassName();
 		if (this.map.containsKey(className)) {
 			throw new IllegalArgumentException();
 		}
@@ -96,7 +97,7 @@ public class ConverterMap {
 			if (converter == null) {
 				throw new IllegalArgumentException();
 			}
-			map.addConverter(converter.getClassName(), converter);
+			map.addConverter(converter);
 		}
 		return map;
 	}

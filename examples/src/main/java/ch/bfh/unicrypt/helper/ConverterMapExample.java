@@ -3,6 +3,7 @@ package ch.bfh.unicrypt.helper;
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.converter.ConverterMap;
+import ch.bfh.unicrypt.helper.converter.ResidueClassConverter;
 import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
 import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.helper.numerical.WholeNumber;
@@ -49,13 +50,17 @@ public class ConverterMapExample {
 
 	public static void example1() {
 		ConverterMap cMap = ConverterMap.getInstance();
-		Example.printLine(cMap.convertToByteArray("Hallo"));
+		Example.printLine(cMap.convertToByteArray(ByteArray.getInstance(10, true)));
 		Example.printLine(cMap.convertToByteArray(BigInteger.valueOf(123456)));
+		Example.printLine(cMap.convertToByteArray(NaturalNumber.getInstance(BigInteger.valueOf(123))));
 		Example.printLine(cMap.convertToByteArray(Permutation.getInstance(10)));
 		Example.printLine(cMap.convertToByteArray(ResidueClass.getInstance(BigInteger.valueOf(123), BigInteger.valueOf(1234))));
-		Example.printLine(cMap.convertToByteArray(NaturalNumber.getInstance(BigInteger.valueOf(123))));
+		Example.printLine(cMap.convertToByteArray("Hallo"));
 		Example.printLine(cMap.convertToByteArray(WholeNumber.getInstance(BigInteger.valueOf(-123))));
-		Example.printLine(cMap.convertToByteArray(ByteArray.getInstance(10, true)));
+
+		cMap.addConverter(ResidueClassConverter.getInstance());
+		Example.printLine(cMap.convertToByteArray(ResidueClass.getInstance(BigInteger.valueOf(123), BigInteger.valueOf(1234))));
+
 	}
 
 	public static void main(final String[] args) {
