@@ -39,43 +39,26 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive;
+package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
-import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.converter.PermutationConverter;
 
 /**
  *
- * @author Christian Lutz
- * <p>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ECGroupExample {
+public class PermutationConverterExample {
 
-	public static void example1() throws Exception {
-
-		//Example with StandardECZModPrime
-		StandardECZModPrime ec = StandardECZModPrime.getInstance(SECECCParamsFp.secp224k1);
-		ECElement<ResidueClass> generator = ec.getDefaultGenerator();
-		ec.getRandomElement();
-		BigInteger order = ec.getOrder();
-		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
-	}
-
-	public static void example2() throws Exception {
-		//Example with StandardECPolynomialField
-
-		StandardECPolynomialField ec = StandardECPolynomialField.getInstance(SECECCParamsF2m.sect283k1);
-		ECElement<Polynomial> generator = ec.getDefaultGenerator();
-		ec.getRandomElement();
-		BigInteger order = ec.getOrder();
-		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
+	public static void example1() {
+		PermutationConverter converter = PermutationConverter.getInstance();
+		Permutation permutation = Permutation.getRandomInstance(20);
+		ByteArray byteArray = converter.convertToByteArray(permutation);
+		Permutation newPermutation = converter.convertFromByteArray(byteArray);
+		Example.printLine(permutation);
+		Example.printLine(byteArray);
+		Example.printLine(newPermutation);
 	}
 
 	public static void main(final String[] args) {

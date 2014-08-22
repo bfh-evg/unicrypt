@@ -39,47 +39,49 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
-import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
+import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
 
 /**
  *
- * @author Christian Lutz
- * <p>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ECGroupExample {
+public class PermutationConverter
+	   extends Converter<Permutation> {
 
-	public static void example1() throws Exception {
+	private final BigIntegerConverter bigIntegerConverter;
 
-		//Example with StandardECZModPrime
-		StandardECZModPrime ec = StandardECZModPrime.getInstance(SECECCParamsFp.secp224k1);
-		ECElement<ResidueClass> generator = ec.getDefaultGenerator();
-		ec.getRandomElement();
-		BigInteger order = ec.getOrder();
-		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
+	public PermutationConverter(BigIntegerConverter bigIntegerConverter) {
+		super(Permutation.class.getName());
+		this.bigIntegerConverter = bigIntegerConverter;
 	}
 
-	public static void example2() throws Exception {
-		//Example with StandardECPolynomialField
-
-		StandardECPolynomialField ec = StandardECPolynomialField.getInstance(SECECCParamsF2m.sect283k1);
-		ECElement<Polynomial> generator = ec.getDefaultGenerator();
-		ec.getRandomElement();
-		BigInteger order = ec.getOrder();
-		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
+	@Override
+	protected ByteArray abstractConvertToByteArray(Permutation permutation) {
+		BigInteger pairedValue = MathUtil.pair(BigInteger.valueOf(permutation.getSize()), permutation.getRank());
+		return this.bigIntegerConverter.convertToByteArray(pairedValue);
 	}
 
-	public static void main(final String[] args) {
-		Example.runExamples();
+	@Override
+	protected Permutation abstractConvertFromByteArray(ByteArray byteArray) {
+		BigInteger pairedValue = this.bigIntegerConverter.convertFromByteArray(byteArray);
+		BigInteger[] values = MathUtil.unpair(pairedValue);
+		return Permutation.getInstance(values[0].intValue(), values[1]);
+	}
+
+	public static PermutationConverter getInstance() {
+		return PermutationConverter.getInstance(BigIntegerConverter.getInstance());
+	}
+
+	public static PermutationConverter getInstance(BigIntegerConverter bigIntegerConverter) {
+		if (bigIntegerConverter == null) {
+			throw new IllegalArgumentException();
+		}
+		return new PermutationConverter(bigIntegerConverter);
 	}
 
 }

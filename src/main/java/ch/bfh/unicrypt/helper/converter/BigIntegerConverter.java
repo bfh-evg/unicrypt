@@ -57,6 +57,7 @@ public class BigIntegerConverter
 	private final int minLength;
 
 	protected BigIntegerConverter(ByteOrder byteOrder, int minLength) {
+		super(BigInteger.class.getName());
 		this.byteOrder = byteOrder;
 		this.minLength = minLength;
 	}
