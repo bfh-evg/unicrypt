@@ -297,7 +297,7 @@ public class ShuffleProofSystemTest {
 	}
 
 	@Test
-	public void testShuffleProofGenerator3() {
+	public void testShuffleProofGenerator3() throws Exception {
 
 		final RandomOracle ro = PseudoRandomOracle.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
