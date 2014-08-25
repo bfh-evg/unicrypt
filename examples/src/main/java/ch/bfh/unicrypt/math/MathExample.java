@@ -51,10 +51,13 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -166,9 +169,35 @@ public class MathExample {
 		bigs = arrayBigInteger.toArray(bigs);
 
 		PolynomialElement<ZModTwo> irreduciblePolynom = ring.getElement(bigs);
-
+		PolynomialElement<ZModTwo> p1=irreduciblePolynom;
 		Example.printLine(irreduciblePolynom);
 		Example.printLine(irreduciblePolynom.isIrreducible());
+		
+		
+		
+		//Error for simple polynomial addition?!
+		//Addition works correctly for i=569 but not for i=569!
+		int i=567;
+		//i=569;
+		DualisticElement<ResidueClass> c=ZModTwo.ONE;
+		HashMap map = new HashMap(1);
+		map.put(i, c);
+		PolynomialElement<ZModTwo> t = ring.getElement(map);
+		
+		Example.printLine("t: "+t);
+		Example.printLine("One element: "+ring.getOneElement());
+		PolynomialElement<ZModTwo> q=t.add(ring.getOneElement());
+		Example.printLine("q: "+q);
+		
+		//Example longDivision complete
+		//x^2
+		//PolynomialElement<ZModTwo> p2=ring.getElement(BigInteger.ZERO,BigInteger.ZERO,BigInteger.ONE);
+				
+		//x^4
+		PolynomialElement<ZModTwo> p2=ring.getElement(BigInteger.ZERO,BigInteger.ZERO,BigInteger.ZERO,BigInteger.ZERO,BigInteger.ONE);		
+		Example.printLine(p1);
+		Example.printLine(p2);
+		Example.printLine(ring.longDivision(p1, p2));
 
 	}
 
