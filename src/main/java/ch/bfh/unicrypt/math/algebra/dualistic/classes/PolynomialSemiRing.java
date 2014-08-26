@@ -288,8 +288,8 @@ public class PolynomialSemiRing<V>
 				if (p2.getBitAt(0)) {
 					result = result.xorFillZero(p1);
 				}
-				p1 = p1.shiftRight(1);
-				p2 = p2.shiftLeft(1);
+				p1 = p1.shiftBitsRight(1);
+				p2 = p2.shiftBitsLeft(1);
 			}
 			return this.getElement(result);
 

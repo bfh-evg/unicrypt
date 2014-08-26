@@ -54,12 +54,14 @@ public class ByteArrayExample {
 		ByteArray byteArray = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 
 		Example.printLine(byteArray);
-		Example.printLine("Length ", byteArray.getLength());
-		Example.printLine("Bytes  ", byteArray);
+		Example.printLine("Length    ", byteArray.getLength());
+		Example.printLine("Bytes     ", byteArray);
 
-		Example.printLine("Reverse", byteArray.reverse());
-		Example.printLine("Extract", byteArray.extract(2, 4));
-		Example.printLine("RemoveAt", byteArray.removeAt(6));
+		Example.printLine("Reverse   ", byteArray.reverse());
+		Example.printLine("Extract   ", byteArray.extract(2, 4));
+		Example.printLine("RemoveAt  ", byteArray.removeAt(6));
+		Example.printLine("ShiftLeft ", byteArray.shiftLeft(7));
+		Example.printLine("ShiftRight", byteArray.shiftRight(7));
 
 		Object[] byteArrays = byteArray.split(2, 4, 7);
 		Example.printLine("Split  ", byteArrays);
@@ -108,7 +110,7 @@ public class ByteArrayExample {
 		ByteArray byteArray1 = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}).extract(1, 7);
 
 		Example.printLine(byteArray1);
-		for (int i = 8; i < 16; i++) {
+		for (int i = 0; i < 16; i++) {
 			Example.printLine("GetBitAt", byteArray1.getBitAt(i));
 		}
 		Example.printLine("0-Bits", byteArray1.countZeroBits());
@@ -119,7 +121,7 @@ public class ByteArrayExample {
 		ByteArray byteArray2 = byteArray1.reverse();
 
 		Example.printLine(byteArray2);
-		for (int i = 8; i < 16; i++) {
+		for (int i = 0; i < 16; i++) {
 			Example.printLine("GetBitAt", byteArray2.getBitAt(i));
 		}
 		Example.printLine("0-Bits", byteArray2.countZeroBits());
@@ -133,10 +135,10 @@ public class ByteArrayExample {
 
 		Example.printLine(byteArray);
 		for (int i = 0; i < 10; i++) {
-			Example.printLine("Left ", byteArray.shiftRight(i));
+			Example.printLine("Left ", byteArray.shiftBitsRight(i));
 		}
 		for (int i = 0; i < 10; i++) {
-			Example.printLine("Right", byteArray.shiftLeft(i));
+			Example.printLine("Right", byteArray.shiftBitsLeft(i));
 		}
 	}
 
