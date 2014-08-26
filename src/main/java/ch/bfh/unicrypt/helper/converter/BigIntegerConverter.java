@@ -53,10 +53,11 @@ import java.util.Arrays;
 public class BigIntegerConverter
 	   extends Converter<BigInteger> {
 
-	private final ByteOrder byteOrder;
+	private transient final ByteOrder byteOrder; //TODO not serializable
 	private final int minLength;
 
 	protected BigIntegerConverter(ByteOrder byteOrder, int minLength) {
+		super(BigInteger.class.getName());
 		this.byteOrder = byteOrder;
 		this.minLength = minLength;
 	}
@@ -90,28 +91,22 @@ public class BigIntegerConverter
 			System.arraycopy(bytes, 0, expandedBytes, minLength - length, length);
 			bytes = expandedBytes;
 		}
+		ByteArray result = ByteArray.getInstance(bytes);
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
-			BigIntegerConverter.reverseBytes(bytes);
+			return result.reverse();
 		}
-		return ByteArray.getInstance(bytes);
+		return result;
 	}
 
 	@Override
 	public BigInteger abstractConvertFromByteArray(ByteArray byteArray) {
-		byte[] bytes = byteArray.getAll();
+		byte[] bytes;
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
-			BigIntegerConverter.reverseBytes(bytes);
+			bytes = byteArray.reverse().getAll();
+		} else {
+			bytes = byteArray.getAll();
 		}
 		return new BigInteger(1, bytes);
-	}
-
-	private static void reverseBytes(byte[] bytes) {
-		int length = bytes.length;
-		for (int i = 0; i < length / 2; i++) {
-			byte b = bytes[i];
-			bytes[i] = bytes[length - 1 - i];
-			bytes[length - 1 - i] = b;
-		}
 	}
 
 	public static BigIntegerConverter getInstance() {

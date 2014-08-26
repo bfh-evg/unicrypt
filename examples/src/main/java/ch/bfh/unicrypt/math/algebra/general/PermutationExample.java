@@ -65,6 +65,22 @@ public class PermutationExample {
 		Example.printLines(pg, order, p1, p2, p12);
 	}
 
+	public static void example2() {
+		PermutationGroup pg = PermutationGroup.getInstance(5);
+
+		// Pick random permutation and invert it
+		Element p1 = pg.getRandomElement();
+
+		// Convert it to BigInteger
+		BigInteger x = p1.getBigInteger();
+
+		// Convert it back to PermutationElement
+		Element p2 = pg.getElementFrom(x);
+
+		Example.printLines(p1, x, p2);
+
+	}
+
 	public static void main(final String[] args) {
 		Example.runExamples();
 	}

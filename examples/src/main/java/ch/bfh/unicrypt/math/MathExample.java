@@ -46,11 +46,18 @@ import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -136,6 +143,62 @@ public class MathExample {
 		// Option 3: Specific Type (casting required)
 		ZModElement e3 = (ZModElement) zMod.getElementFrom(9);
 		Example.printLine(e3);
+	}
+
+	/**
+	 * PolynomialField example Shows how to generate a irreducible Polynom from a BitString
+	 */
+	public static void example5() {
+		ZModTwo primeField = ZModTwo.getInstance();
+		PolynomialRing<ZModTwo> ring = PolynomialRing.getInstance(primeField);
+
+		String b = "10100100001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001";
+
+		BigInteger h = new BigInteger("10100100001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001", 2);
+		Example.printLine(h.toString(16));
+
+		//Read bits and create a BigInteger ArrayList
+		ArrayList<BigInteger> arrayBigInteger = new ArrayList<BigInteger>();
+		for (Character s : h.toString(2).toCharArray()) {
+			arrayBigInteger.add(new BigInteger(s.toString()));
+
+		}
+
+		//Convert ArrayList BigInteger array and get element
+		BigInteger[] bigs = {};
+		bigs = arrayBigInteger.toArray(bigs);
+
+		PolynomialElement<ZModTwo> irreduciblePolynom = ring.getElement(bigs);
+		PolynomialElement<ZModTwo> p1=irreduciblePolynom;
+		Example.printLine(irreduciblePolynom);
+		Example.printLine(irreduciblePolynom.isIrreducible());
+		
+		
+		
+		//Error for simple polynomial addition?!
+		//Addition works correctly for i=569 but not for i=569!
+		int i=567;
+		//i=569;
+		DualisticElement<ResidueClass> c=ZModTwo.ONE;
+		HashMap map = new HashMap(1);
+		map.put(i, c);
+		PolynomialElement<ZModTwo> t = ring.getElement(map);
+		
+		Example.printLine("t: "+t);
+		Example.printLine("One element: "+ring.getOneElement());
+		PolynomialElement<ZModTwo> q=t.add(ring.getOneElement());
+		Example.printLine("q: "+q);
+		
+		//Example longDivision complete
+		//x^2
+		//PolynomialElement<ZModTwo> p2=ring.getElement(BigInteger.ZERO,BigInteger.ZERO,BigInteger.ONE);
+				
+		//x^4
+		PolynomialElement<ZModTwo> p2=ring.getElement(BigInteger.ZERO,BigInteger.ZERO,BigInteger.ZERO,BigInteger.ZERO,BigInteger.ONE);		
+		Example.printLine(p1);
+		Example.printLine(p2);
+		Example.printLine(ring.longDivision(p1, p2));
+
 	}
 
 	public static void main(final String[] args) {

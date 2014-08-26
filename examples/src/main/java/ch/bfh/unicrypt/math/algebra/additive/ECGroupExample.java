@@ -42,44 +42,40 @@
 package ch.bfh.unicrypt.math.algebra.additive;
 
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.Polynomial;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
+import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
+import java.math.BigInteger;
 
+/**
+ *
+ * @author Christian Lutz
+ * <p>
+ */
 public class ECGroupExample {
 
-	public static void example1() {
+	public static void example1() throws Exception {
 
-		//Example 1
-		/*
-		 * StandardECZModPrime ec1=StandardECZModPrime.getInstance(SECECCParamsFp.secp224k1); ECZModPrimeElement
-		 * g1=ec1.getDefaultGenerator(); ec1.getRandomElement(); BigInteger n2=ec1.getOrder();
-		 * System.out.println(g1.selfApply(n2));	//order*generator -> (-1,-1) System.out.println(MathUtil.arePrime(n2));
-		 * //order must be prime
-		 *
-		 * long t1=System.currentTimeMillis(); ECZModPrimeElement w2=ec1.getRandomElement();
-		 * t1=System.currentTimeMillis()-t1; System.out.println(w2); System.out.println("Computing time for random
-		 * element w2= "+t1+" ms"); t1=System.currentTimeMillis(); w2=w2.selfApply(n2);
-		 * t1=System.currentTimeMillis()-t1; System.out.println(w2);	//Must be Identity (-1,-1) if h=1
-		 * System.out.println("Computing time for n2*w2= "+t1+" ms");
-		 */
+		//Example with StandardECZModPrime
+		StandardECZModPrime ec = StandardECZModPrime.getInstance(SECECCParamsFp.secp224k1);
+		ECElement<ResidueClass> generator = ec.getDefaultGenerator();
+		ec.getRandomElement();
+		BigInteger order = ec.getOrder();
+		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
 	}
 
-	public static void example2() {
-		/*
-		 * //Example 2 with "own" ECGroupFp ZModPrime field2=ZModPrime.getInstance(new
-		 * BigInteger("DB7C2ABF62E35E668076BEAD208B",16)); ZModElement a2=field2.getElement(new
-		 * BigInteger("DB7C2ABF62E35E668076BEAD2088",16)); ZModElement b2=field2.getElement(new
-		 * BigInteger("659EF8BA043916EEDE8911702B22",16)); BigInteger order2=new
-		 * BigInteger("DB7C2ABF62E35E7628DFAC6561C5",16); BigInteger h2=new BigInteger("1"); //ECZModPrime
-		 * ec3=ECZModPrime.getInstance(field, a1, b1, order, h); ECZModPrime ec2=ECZModPrime.getInstance(field2, a2, b2,
-		 * order2, h2); ECZModPrimeElement gen2=ec2.getDefaultGenerator(); System.out.println(gen2);
-		 * System.out.println(gen2.selfApply(h2).selfApply(order2));	//order*h*generator -> (-1,-1)
-		 */
-		/* StandardECZModPrime ec=StandardECZModPrime.getInstance(SECECCParamsFp.secp112r1); BigInteger
-		 * order=ec.getOrder(); ECZModPrimeElement e1=ec.getDefaultGenerator(); ECZModPrimeElement
-		 * e2=e1.selfApply(order.subtract(BigInteger.ONE)); generator * order-1 e2=e2.apply(e1); should be identity
-		 * (-1,-1)
-		 *
-		 * System.out.println(e2);
-		 */
+	public static void example2() throws Exception {
+		//Example with StandardECPolynomialField
+
+		StandardECPolynomialField ec = StandardECPolynomialField.getInstance(SECECCParamsF2m.sect283k1);
+		ECElement<Polynomial> generator = ec.getDefaultGenerator();
+		ec.getRandomElement();
+		BigInteger order = ec.getOrder();
+		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
 	}
 
 	public static void main(final String[] args) {

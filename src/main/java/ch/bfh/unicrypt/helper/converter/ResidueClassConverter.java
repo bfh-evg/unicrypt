@@ -39,32 +39,49 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
+import ch.bfh.unicrypt.math.MathUtil;
+import java.math.BigInteger;
 
-public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SK extends Set, VK extends Set, KG extends KeyPairGenerator>
-	   extends AbstractSignatureScheme<MS, ME, SS, SE, SK, VK, KG>
-	   implements RandomizedSignatureScheme {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class ResidueClassConverter
+	   extends Converter<ResidueClass> {
 
-	@Override
-	public RS getRandomizationSpace() {
-		return (RS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(2);
+	private final BigIntegerConverter bigIntegerConverter;
+
+	private ResidueClassConverter(BigIntegerConverter bigIntegerConverter) {
+		super(ResidueClass.class.getName());
+		this.bigIntegerConverter = bigIntegerConverter;
 	}
 
 	@Override
-	public SE sign(Element privateKey, Element message, RandomByteSequence randomByteSequence) {
-		return this.sign(privateKey, message, getRandomizationSpace().getRandomElement(randomByteSequence));
+	protected ByteArray abstractConvertToByteArray(ResidueClass residueClass) {
+		BigInteger pairedValue = MathUtil.pair(residueClass.getBigInteger(), residueClass.getModulus());
+		return this.bigIntegerConverter.abstractConvertToByteArray(pairedValue);
 	}
 
 	@Override
-	public SE sign(Element privateKey, Element message, Element randomization) {
-		return (SE) this.getSignatureFunction().apply(privateKey, message, randomization);
+	protected ResidueClass abstractConvertFromByteArray(ByteArray ByteArray) {
+		BigInteger pairedValue = this.bigIntegerConverter.convertFromByteArray(ByteArray);
+		BigInteger[] values = MathUtil.unpair(pairedValue);
+		return ResidueClass.getInstance(values[0], values[1]);
+	}
+
+	public static ResidueClassConverter getInstance() {
+		return ResidueClassConverter.getInstance(BigIntegerConverter.getInstance());
+	}
+
+	public static ResidueClassConverter getInstance(BigIntegerConverter bigIntegerConverter) {
+		if (bigIntegerConverter == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ResidueClassConverter(bigIntegerConverter);
 	}
 
 }

@@ -39,32 +39,34 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
+package ch.bfh.unicrypt.helper;
 
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.math.MathUtil;
+import java.math.BigInteger;
 
-public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SK extends Set, VK extends Set, KG extends KeyPairGenerator>
-	   extends AbstractSignatureScheme<MS, ME, SS, SE, SK, VK, KG>
-	   implements RandomizedSignatureScheme {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class PermutationExample {
 
-	@Override
-	public RS getRandomizationSpace() {
-		return (RS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(2);
+	public static void example1() {
+		for (int size = 0; size <= 4; size++) {
+			Example.printLine("SIZE", size);
+			BigInteger n = MathUtil.factorial(size);
+			BigInteger rank = BigInteger.valueOf(0);
+			while (rank.compareTo(n) < 0) {
+				Permutation permutation = Permutation.getInstance(size, rank);
+				BigInteger newRank = permutation.getRank();
+				Example.printLine(rank.toString(), permutation, newRank);
+				rank = rank.add(BigInteger.ONE);
+			}
+		}
 	}
 
-	@Override
-	public SE sign(Element privateKey, Element message, RandomByteSequence randomByteSequence) {
-		return this.sign(privateKey, message, getRandomizationSpace().getRandomElement(randomByteSequence));
-	}
-
-	@Override
-	public SE sign(Element privateKey, Element message, Element randomization) {
-		return (SE) this.getSignatureFunction().apply(privateKey, message, randomization);
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

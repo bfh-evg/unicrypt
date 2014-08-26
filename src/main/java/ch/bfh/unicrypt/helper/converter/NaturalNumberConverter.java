@@ -39,32 +39,44 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
 
-public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SK extends Set, VK extends Set, KG extends KeyPairGenerator>
-	   extends AbstractSignatureScheme<MS, ME, SS, SE, SK, VK, KG>
-	   implements RandomizedSignatureScheme {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class NaturalNumberConverter
+	   extends Converter<NaturalNumber> {
 
-	@Override
-	public RS getRandomizationSpace() {
-		return (RS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(2);
+	private final BigIntegerConverter bigIntegerConverter;
+
+	private NaturalNumberConverter(BigIntegerConverter bigIntegerConverter) {
+		super(NaturalNumber.class.getName());
+		this.bigIntegerConverter = bigIntegerConverter;
 	}
 
 	@Override
-	public SE sign(Element privateKey, Element message, RandomByteSequence randomByteSequence) {
-		return this.sign(privateKey, message, getRandomizationSpace().getRandomElement(randomByteSequence));
+	protected ByteArray abstractConvertToByteArray(NaturalNumber naturalNumber) {
+		return this.bigIntegerConverter.convertToByteArray(naturalNumber.getBigInteger());
 	}
 
 	@Override
-	public SE sign(Element privateKey, Element message, Element randomization) {
-		return (SE) this.getSignatureFunction().apply(privateKey, message, randomization);
+	protected NaturalNumber abstractConvertFromByteArray(ByteArray byteArray) {
+		return NaturalNumber.getInstance(this.bigIntegerConverter.convertFromByteArray(byteArray));
+	}
+
+	public static NaturalNumberConverter getInstance() {
+		return NaturalNumberConverter.getInstance(BigIntegerConverter.getInstance());
+	}
+
+	public static NaturalNumberConverter getInstance(BigIntegerConverter bigIntegerConverter) {
+		if (bigIntegerConverter == null) {
+			throw new IllegalArgumentException();
+		}
+		return new NaturalNumberConverter(bigIntegerConverter);
 	}
 
 }

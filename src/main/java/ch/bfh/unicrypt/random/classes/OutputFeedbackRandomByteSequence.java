@@ -73,6 +73,25 @@ public class OutputFeedbackRandomByteSequence
 	private ByteArray internalState;
 	private final int forwardSecurityInBytes;
 
+	private synchronized ByteArray getInternalState() {
+		while (this.internalState == null) {
+			try {
+				wait(10000);
+			} catch (InterruptedException ex) {
+				//
+			}
+		}
+		return this.internalState;
+	}
+
+	private synchronized void setInternalState(ByteArray internalState) {
+		if (internalState == null) {
+			return;
+		}
+		this.internalState = internalState;
+		this.notifyAll();
+	}
+
 	// Random random;
 	protected OutputFeedbackRandomByteSequence(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, final ByteArray seed) {
 		this.hashAlgorithm = hashAlgorithm;
@@ -88,9 +107,9 @@ public class OutputFeedbackRandomByteSequence
 	 */
 	protected void update(ByteArray freshData) {
 		if (freshData != null) {
-			internalState = internalState.xorFillZero(freshData);
+			setInternalState(getInternalState().xorFillZero(freshData));
 		}
-		internalState = internalState.xorFillZero(internalState.getHashValue(this.hashAlgorithm));
+		setInternalState(getInternalState().xorFillZero(getInternalState().getHashValue(this.hashAlgorithm)));
 	}
 
 	/**
@@ -100,8 +119,8 @@ public class OutputFeedbackRandomByteSequence
 	 * @return
 	 */
 	protected ByteArray update() {
-		ByteArray[] full = internalState.getHashValue(this.hashAlgorithm).split(this.forwardSecurityInBytes);
-		this.internalState = this.internalState.xorFillZero(full[0]);
+		ByteArray[] full = getInternalState().getHashValue(this.hashAlgorithm).split(this.forwardSecurityInBytes);
+		setInternalState(getInternalState().xorFillZero(full[0]));
 
 		//Careful: Due to the underlying implementation of ByteArray, this  leaks information within the internal array.
 		return full[1];
@@ -115,7 +134,7 @@ public class OutputFeedbackRandomByteSequence
 
 	@Override
 	public void setSeed(ByteArray seed) {
-		this.internalState = seed.getHashValue(this.hashAlgorithm);
+		setInternalState(seed.getHashValue(this.hashAlgorithm));
 	}
 
 	@Override
@@ -185,7 +204,7 @@ public class OutputFeedbackRandomByteSequence
 		if (this.hashCode() != other.hashCode()) {
 			return false;
 		}
-		if (!this.internalState.equals(other.internalState)) {
+		if (!this.getInternalState().equals(other.getInternalState())) {
 			return false;
 		}
 		return true;

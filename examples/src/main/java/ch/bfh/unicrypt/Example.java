@@ -87,8 +87,14 @@ public class Example {
 					Example.printTitle(method.getName().toUpperCase());
 					try {
 						method.invoke(null);
-					} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException ex) {
+					} catch (IllegalArgumentException ex) {
 						Example.printLine("RUNTIME ERROR");
+					} catch (IllegalAccessException e) {
+						Example.printLine("RUNTIME ERROR");
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						Example.printLine("RUNTIME ERROR");
+						e.printStackTrace();
 					}
 					Example.printLine();
 				}

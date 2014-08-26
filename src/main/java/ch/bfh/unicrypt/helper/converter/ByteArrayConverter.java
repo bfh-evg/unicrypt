@@ -39,32 +39,46 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 
-public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SK extends Set, VK extends Set, KG extends KeyPairGenerator>
-	   extends AbstractSignatureScheme<MS, ME, SS, SE, SK, VK, KG>
-	   implements RandomizedSignatureScheme {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class ByteArrayConverter
+	   extends Converter<ByteArray> {
 
-	@Override
-	public RS getRandomizationSpace() {
-		return (RS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(2);
+	private boolean reverse;
+
+	public ByteArrayConverter(boolean reverse) {
+		super(ByteArray.class.getName());
+		this.reverse = reverse;
 	}
 
 	@Override
-	public SE sign(Element privateKey, Element message, RandomByteSequence randomByteSequence) {
-		return this.sign(privateKey, message, getRandomizationSpace().getRandomElement(randomByteSequence));
+	protected ByteArray abstractConvertToByteArray(ByteArray byteArray) {
+		if (this.reverse) {
+			return byteArray.reverse();
+		}
+		return byteArray;
 	}
 
 	@Override
-	public SE sign(Element privateKey, Element message, Element randomization) {
-		return (SE) this.getSignatureFunction().apply(privateKey, message, randomization);
+	protected ByteArray abstractConvertFromByteArray(ByteArray byteArray) {
+		if (this.reverse) {
+			return byteArray.reverse();
+		}
+		return byteArray;
+	}
+
+	public static ByteArrayConverter getInstance() {
+		return ByteArrayConverter.getInstance(false);
+	}
+
+	public static ByteArrayConverter getInstance(boolean reverse) {
+		return new ByteArrayConverter(reverse);
 	}
 
 }

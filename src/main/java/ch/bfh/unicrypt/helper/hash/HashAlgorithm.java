@@ -52,7 +52,7 @@ import java.security.NoSuchAlgorithmException;
 public class HashAlgorithm
 	   extends UniCrypt {
 
-	public static HashAlgorithm MD2 = new HashAlgorithm("MD2");
+//	public static HashAlgorithm MD2 = new HashAlgorithm("MD2"); Not supported by Android (OpenSSL implementation)
 	public static HashAlgorithm MD5 = new HashAlgorithm("MD5");
 	public static HashAlgorithm SHA1 = new HashAlgorithm("SHA-1");
 	public static HashAlgorithm SHA256 = new HashAlgorithm("SHA-256");

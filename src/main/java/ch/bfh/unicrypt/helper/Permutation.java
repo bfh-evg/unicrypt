@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -66,6 +67,48 @@ public class Permutation
 		return this.permutationVector.length;
 	}
 
+	// Ranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time"
+	public BigInteger getRank() {
+		int size = this.getSize();
+		int[] invertedPermutation = new int[size];
+		for (int i = 0; i < size; i++) {
+			invertedPermutation[this.permutationVector[i]] = i;
+		}
+		return computeRank(size, this.permutationVector.clone(), invertedPermutation);
+	}
+
+	public static BigInteger computeRank(int n, int[] permutation, int[] invertedPermutation) {
+		if (n <= 1) {
+			return BigInteger.ZERO;
+		}
+		int s = permutation[n - 1];
+		swap(permutation, n - 1, invertedPermutation[n - 1]);
+		swap(invertedPermutation, s, n - 1);
+		return BigInteger.valueOf(s).add(BigInteger.valueOf(n).multiply(computeRank(n - 1, permutation, invertedPermutation)));
+	}
+
+	public static void swap(int[] permutation, int i, int j) {
+		int x = permutation[i];
+		permutation[i] = permutation[j];
+		permutation[j] = x;
+	}
+
+//		// code copied from http://rosettacode.org/wiki/Permutations/Rank_of_a_permutation
+//		int n = this.getSize();
+//		BitSet usedDigits = new BitSet();
+//		BigInteger rank = BigInteger.ZERO;
+//		for (int i = 0; i < n; i++) {
+//			rank = rank.multiply(BigInteger.valueOf(n - i));
+//			int digit = 0;
+//			int v = -1;
+//			while ((v = usedDigits.nextClearBit(v + 1)) < this.permutationVector[i]) {
+//				digit++;
+//			}
+//			usedDigits.set(v);
+//			rank = rank.add(BigInteger.valueOf(digit));
+//		}
+//		return rank;
+//}
 	/**
 	 * Returns the result of applying the permutation vector to a given index.
 	 * <p>
@@ -113,7 +156,7 @@ public class Permutation
 	 * @return {@literal true} if {@literal permutationVector} is a permutation vector, {@literal false} otherwise
 	 * @throws IllegalArgumentException if {@literal permutationVector} is null
 	 */
-	public static boolean isValid(final int... permutationVector) {
+	public static boolean isValid(final int[] permutationVector) {
 		if (permutationVector == null) {
 			throw new IllegalArgumentException();
 		}
@@ -135,7 +178,7 @@ public class Permutation
 	@Override
 	protected String defaultToStringValue() {
 		String str = Arrays.toString(this.permutationVector);
-		return "" + str.substring(1, str.length() - 1);
+		return "(" + str.substring(1, str.length() - 1) + ")";
 	}
 
 	@Override
@@ -196,6 +239,27 @@ public class Permutation
 			throw new IllegalArgumentException();
 		}
 		return new Permutation(permutationVector.clone());
+	}
+
+	// Unranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time"
+	public static Permutation getInstance(int size, BigInteger rank) {
+		if (size < 0 || rank.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		int[] permutationVector = new int[size];
+		for (int i = 0; i < size; i++) {
+			permutationVector[i] = i;
+		}
+		for (int i = size; i > 0; i--) {
+			BigInteger iBig = BigInteger.valueOf(i);
+			swap(permutationVector, rank.mod(iBig).intValue(), i - 1);
+			rank = rank.divide(iBig);
+		}
+		// original rank >= factorial(size)
+		if (rank.signum() != 0) {
+			throw new IllegalArgumentException();
+		}
+		return new Permutation(permutationVector);
 	}
 
 	public static Permutation getRandomInstance(int size) {

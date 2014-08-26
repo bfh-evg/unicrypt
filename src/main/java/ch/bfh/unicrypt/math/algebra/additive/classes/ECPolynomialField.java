@@ -51,6 +51,11 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
+
+/**
+*
+* @author Christian Lutz
+*/
 public class ECPolynomialField
 	   extends AbstractEC<PolynomialField, Polynomial> {
 
@@ -58,19 +63,11 @@ public class ECPolynomialField
 		   DualisticElement<Polynomial> b, DualisticElement<Polynomial> gx, DualisticElement<Polynomial> gy,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
-		// this test should be moved to getInstance
-		if (!isValid()) {
-			throw new IllegalArgumentException("Curve parameters are not valid");
-		}
 	}
 
 	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, givenOrder, coFactor);
-		// this test should be moved to getInstance
-		if (!isValid()) {
-			throw new IllegalArgumentException("Curve parameters are not valid");
-		}
 	}
 
 	@Override
@@ -140,6 +137,10 @@ public class ECPolynomialField
 		return null;
 	}
 
+	/**
+	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 21
+	 * @return True if curve parameters are valid
+	 */
 	private boolean isValid() {
 		BigInteger m = new BigInteger("131"); //Must be set correctly
 		final BigInteger TWO = new BigInteger("2");
@@ -164,9 +165,15 @@ public class ECPolynomialField
 		}
 		return c1 && c2 && c3 && c4 && c5 && c6 && c7 && c81 && c82;
 	}
+	
+	
+	
+	//
+	// STATIC FACTORY METHODS
+	//
 
 	/**
-	 * Returns an elliptic curve over Fp y²=x³+ax+b
+	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
 	 * <p>
 	 * @param f          Finite field of type ZModPrime
 	 * @param a          Element of F_p representing a in the curve equation
@@ -174,13 +181,21 @@ public class ECPolynomialField
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
+	 * @throws Exception 
 	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger givenOrder, BigInteger coFactor) {
-		return new ECPolynomialField(f, a, b, givenOrder, coFactor);
+	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+		ECPolynomialField newInstance =  new ECPolynomialField(f, a, b, givenOrder, coFactor);
+		
+		if(newInstance.isValid()){
+			return newInstance;
+		}
+		else{
+			throw new Exception("Curve parameters not valid!");
+		}
 	}
 
 	/**
-	 * Returns an elliptic curve over Fp y²=x³+ax+b
+	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
 	 * <p>
 	 * @param f          Finite field of type ZModPrime
 	 * @param a          Element of F_p representing a in the curve equation
@@ -190,9 +205,17 @@ public class ECPolynomialField
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
+	 * @throws Exception 
 	 */
-	public static ECPolynomialField getInstance(PolynomialField f, DualisticElement<Polynomial> a, DualisticElement<Polynomial> b, DualisticElement<Polynomial> gx, DualisticElement<Polynomial> gy, BigInteger givenOrder, BigInteger coFactor) {
-		return new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
+	public static ECPolynomialField getInstance(PolynomialField f, DualisticElement<Polynomial> a, DualisticElement<Polynomial> b, DualisticElement<Polynomial> gx, DualisticElement<Polynomial> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+		ECPolynomialField newInstance =  new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
+		
+		if(newInstance.isValid()){
+			return newInstance;
+		}
+		else{
+			throw new Exception("Curve parameters not valid!");
+		}
 	}
 
 }

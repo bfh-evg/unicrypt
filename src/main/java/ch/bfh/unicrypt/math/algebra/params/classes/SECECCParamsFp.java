@@ -46,6 +46,11 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
 import java.math.BigInteger;
 
+/**
+ * 
+ * @author Christian Lutz
+ *
+ */
 public enum SECECCParamsFp
 	   implements StandardECZModParams {
 

@@ -39,32 +39,39 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
+package ch.bfh.unicrypt.helper;
 
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
 
-public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SK extends Set, VK extends Set, KG extends KeyPairGenerator>
-	   extends AbstractSignatureScheme<MS, ME, SS, SE, SK, VK, KG>
-	   implements RandomizedSignatureScheme {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class ImmutableArrayExample {
 
-	@Override
-	public RS getRandomizationSpace() {
-		return (RS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(2);
+	public static void example1() {
+
+		ImmutableArray<Integer> a = ImmutableArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+		Example.printLine(a);
+		Example.printLine("Length  ", a.getLength());
+		Example.printLine("Add     ", a.add(7));
+		Example.printLine("Append  ", a.append(a));
+		Example.printLine("Conc    ", a.concatenate(a));
+		Example.printLine("Extract ", a.extract(2, 3));
+		Example.printLine("ExtraxtP", a.extractPrefix(2));
+		Example.printLine("ExtraxtS", a.extractSuffix(2));
+		Example.printLine("ExtractR", a.extractRange(2, 8));
+		Example.printLine("GetAll  ", a.getAll());
+		Example.printLine("Insert  ", a.insertAt(5, 100));
+		Example.printLine("Remove  ", a.removeAt(5));
+		Example.printLines("Split   ", a.split(2, 4, 7));
+
 	}
 
-	@Override
-	public SE sign(Element privateKey, Element message, RandomByteSequence randomByteSequence) {
-		return this.sign(privateKey, message, getRandomizationSpace().getRandomElement(randomByteSequence));
-	}
-
-	@Override
-	public SE sign(Element privateKey, Element message, Element randomization) {
-		return (SE) this.getSignatureFunction().apply(privateKey, message, randomization);
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

@@ -55,6 +55,9 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  *
  * @author rolfhaenni
  */
+
+// TODO see ElGamalKeyPairGenerator
+
 public class SchnorrSignatureKeyPairGenerator
 			 extends AbstractKeyPairGenerator<ZModPrime, ZModElement, GStarModPrime, GStarModElement> {
 

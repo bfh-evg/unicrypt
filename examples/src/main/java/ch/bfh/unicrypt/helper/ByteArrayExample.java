@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.array.ByteArray;
 
 /**
  *
@@ -57,27 +57,87 @@ public class ByteArrayExample {
 		Example.printLine("Length ", byteArray.getLength());
 		Example.printLine("Bytes  ", byteArray);
 
+		Example.printLine("Reverse", byteArray.reverse());
 		Example.printLine("Extract", byteArray.extract(2, 4));
+		Example.printLine("RemoveAt", byteArray.removeAt(6));
 
 		Object[] byteArrays = byteArray.split(2, 4, 7);
 		Example.printLine("Split  ", byteArrays);
-		Example.printLine("Conc   ", byteArray.concatenate(byteArray));
-
 	}
 
 	public static void example2() {
-		ByteArray byteArray = ByteArray.getInstance("01|02|03|04|05|06|07|08|09|0A");
+		ByteArray byteArray1 = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+		ByteArray byteArray2 = ByteArray.getInstance("E3|85|72|37|08|19");
+		ByteArray byteArray3 = ByteArray.getRandomInstance(5);
+
+		Example.printLine(byteArray1);
+		Example.printLine(byteArray2);
+		Example.printLine(byteArray3);
+
+		Example.printLine("Conc   ", byteArray1.concatenate(byteArray2).concatenate(byteArray3));
+	}
+
+	public static void example3() {
+		ByteArray byteArray1 = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+		ByteArray byteArray2 = byteArray1.reverse();
+
+		Example.printLine(byteArray1);
+		Example.printLine(byteArray2);
+
+		Example.printLine("Extract", byteArray2.extract(2, 4));
+		Example.printLine("RemoveAt", byteArray2.removeAt(6));
+		Object[] byteArrays = byteArray2.split(2, 4, 7);
+		Example.printLine("Split  ", byteArrays);
+	}
+
+	public static void example4() {
+		ByteArray byteArray1 = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+		ByteArray byteArray2 = byteArray1.extract(1, 7).reverse();
+
+		Example.printLine(byteArray1);
+		Example.printLine(byteArray2);
+
+		Example.printLine("Extract", byteArray2.extract(2, 4));
+		Object[] byteArrays = byteArray2.split(2, 4);
+		Example.printLine("Split  ", byteArrays);
+		Example.printLine("Conc   ", byteArray1.concatenate(byteArray2));
+		Example.printLine("Conc   ", byteArray2.concatenate(byteArray1));
+	}
+
+	public static void example5() {
+		ByteArray byteArray1 = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}).extract(1, 7);
+
+		Example.printLine(byteArray1);
+		for (int i = 8; i < 16; i++) {
+			Example.printLine("GetBitAt", byteArray1.getBitAt(i));
+		}
+		Example.printLine("0-Bits", byteArray1.countZeroBits());
+		Example.printLine("1-Bits", byteArray1.countOneBits());
+		Example.printLine("Leading Zeros", byteArray1.countLeadingZeroBits());
+		Example.printLine("Trailing Zeros", byteArray1.countTrailingZeroBits());
+
+		ByteArray byteArray2 = byteArray1.reverse();
+
+		Example.printLine(byteArray2);
+		for (int i = 8; i < 16; i++) {
+			Example.printLine("GetBitAt", byteArray2.getBitAt(i));
+		}
+		Example.printLine("0-Bits", byteArray2.countZeroBits());
+		Example.printLine("1-Bits", byteArray2.countOneBits());
+		Example.printLine("Leading Zeros", byteArray2.countLeadingZeroBits());
+		Example.printLine("Trailing Zeros", byteArray2.countTrailingZeroBits());
+	}
+
+	public static void example6() {
+		ByteArray byteArray = ByteArray.getInstance(new byte[]{64});
 
 		Example.printLine(byteArray);
-		Example.printLine("Length ", byteArray.getLength());
-		Example.printLine("Bytes  ", byteArray);
-
-		Example.printLine("Extract", byteArray.extract(2, 4));
-
-		Object[] byteArrays = byteArray.split(2, 4, 7);
-		Example.printLine("Split  ", byteArrays);
-		Example.printLine("Conc   ", byteArray.concatenate(byteArray));
-
+		for (int i = 0; i < 10; i++) {
+			Example.printLine("Left ", byteArray.shiftRight(i));
+		}
+		for (int i = 0; i < 10; i++) {
+			Example.printLine("Right", byteArray.shiftLeft(i));
+		}
 	}
 
 	public static void main(final String[] args) {

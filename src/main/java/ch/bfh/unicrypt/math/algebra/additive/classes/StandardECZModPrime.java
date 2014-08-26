@@ -46,6 +46,11 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
 import java.math.BigInteger;
 
+/**
+ * 
+ * @author Christian Lutz
+ *
+ */
 public class StandardECZModPrime
 	   extends ECZModPrime {
 
@@ -53,10 +58,9 @@ public class StandardECZModPrime
 		   ZModElement b, ZModElement gx, ZModElement gy,
 		   BigInteger order, BigInteger h) {
 		super(field, a, b, gx, gy, order, h);
-		// TODO Auto-generated constructor stub
 	}
 
-	public static StandardECZModPrime getInstance(final StandardECZModParams params) {
+	public static StandardECZModPrime getInstance(final StandardECZModParams params) throws Exception {
 		ZModPrime field;
 		ZModElement a, b, gx, gy;
 		BigInteger order, h;
@@ -69,7 +73,13 @@ public class StandardECZModPrime
 		order = params.getOrder();
 		h = params.getH();
 
-		return new StandardECZModPrime(field, a, b, gx, gy, order, h);
+		StandardECZModPrime newInstance = new StandardECZModPrime(field, a, b, gx, gy, order, h);
+		if(newInstance.isValid()){
+			return newInstance;
+		}
+		else{
+			throw new IllegalArgumentException("Curve parameter are not valid!");
+		}
 	}
 
 //	public static void main(String[] args) {

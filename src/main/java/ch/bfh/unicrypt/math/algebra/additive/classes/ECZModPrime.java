@@ -46,28 +46,28 @@ import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
 
+
+/**
+*
+* @author Christian Lutz
+*/
 public class ECZModPrime
 	   extends AbstractEC<ZModPrime, ResidueClass> {
 
 	protected ECZModPrime(ZModPrime finiteField, DualisticElement<ResidueClass> a, DualisticElement<ResidueClass> b, DualisticElement<ResidueClass> gx, DualisticElement<ResidueClass> gy, BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
-		// this test should be moved to getInstance
-		if (!isValid()) {
-			throw new IllegalArgumentException("Curve parameters are not valid");
-		}
 	}
 
 	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, givenOrder, coFactor);
-		// this test should be moved to getInstance
-		if (!isValid()) {
-			throw new IllegalArgumentException("Curve parameters are not valid");
-		}
 	}
 
 	@Override
@@ -158,13 +158,26 @@ public class ECZModPrime
 		return this.abstractGetElement(Point.getInstance(x, y));
 	}
 
-	private boolean isValid() {
-		boolean c1, c2, c3, c4, c5, c61, c62;
+	
+	/**
+	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 18
+	 * @return True if curve parameters are valid
+	 */
+	public boolean isValid() {
+		boolean c11,c12, c21,c22,c23,c24, c3, c4, c5, c61, c62,c7,c8;
+		
 		DualisticElement<ResidueClass> i4 = getFiniteField().getElement(4);
 		DualisticElement<ResidueClass> i27 = getFiniteField().getElement(27);
-		c1 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
-		c2 = contains(this.getDefaultGenerator());
-		c3 = MathUtil.arePrime(getOrder());
+		BigInteger p=this.getFiniteField().getModulus();
+		int t = getOrder().bitCount();
+		
+		c11 = MathUtil.arePrime(p);
+		c12 = true;
+		c21=this.getA().getBigInteger().compareTo(BigInteger.ZERO)>-1 && this.getA().getBigInteger().compareTo(p.subtract(BigInteger.ONE))<1;
+		c22=this.getB().getBigInteger().compareTo(BigInteger.ZERO)>-1 && this.getB().getBigInteger().compareTo(p.subtract(BigInteger.ONE))<1;
+		c23=this.getDefaultGenerator().getValue().getX().getBigInteger().compareTo(BigInteger.ZERO)>-1 && this.getDefaultGenerator().getValue().getX().getBigInteger().compareTo(p.subtract(BigInteger.ONE))<1;
+		c24=this.getDefaultGenerator().getValue().getY().getBigInteger().compareTo(BigInteger.ZERO)>-1 && this.getDefaultGenerator().getValue().getY().getBigInteger().compareTo(p.subtract(BigInteger.ONE))<1;		
+		c3 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
 		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
 		c5 = getZeroElement().equals(getDefaultGenerator().selfApply(getOrder()));
 		c61 = true; //_> Must be corrected!
@@ -172,7 +185,7 @@ public class ECZModPrime
 			// ???
 		}
 		c62 = !getOrder().multiply(getCoFactor()).equals(this.getFiniteField().getModulus());
-		return c1 && c2 && c3 && c4 && c5 && c61 && c62;
+		return c11 && c12 && c21 && c22 && c23 && c24 && c3 && c4 && c5 && c61 && c62;
 	}
 
 	/**
@@ -184,14 +197,21 @@ public class ECZModPrime
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
+	 * @throws Exception 
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger givenOrder, BigInteger coFactor) {
-		// isValid() test should come here!!
-		return new ECZModPrime(f, a, b, givenOrder, coFactor);
+	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+		
+		ECZModPrime newInstance = new ECZModPrime(f, a, b, givenOrder, coFactor);
+		if(newInstance.isValid()){
+			return newInstance;
+		}
+		else{
+			throw new IllegalArgumentException("Curve parameter are not valid!");
+		}
 	}
 
 	/**
-	 * Returns an elliptic curve over Fp y²=x³+ax+b
+	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
 	 * <p>
 	 * @param f          Finite field of type ZModPrime
 	 * @param a          Element of F_p representing a in the curve equation
@@ -201,10 +221,18 @@ public class ECZModPrime
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
+	 * @throws Exception 
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, DualisticElement<ResidueClass> a, DualisticElement<ResidueClass> b, DualisticElement<ResidueClass> gx, DualisticElement<ResidueClass> gy, BigInteger givenOrder, BigInteger coFactor) {
-		// isValid() test should come here!!
-		return new ECZModPrime(f, a, b, gx, gy, givenOrder, coFactor);
+	public static ECZModPrime getInstance(ZModPrime f, DualisticElement<ResidueClass> a, DualisticElement<ResidueClass> b, DualisticElement<ResidueClass> gx, DualisticElement<ResidueClass> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+		ECZModPrime newInstance = new ECZModPrime(f, a, b, gx, gy, givenOrder, coFactor);
+		if(newInstance.isValid()){
+			return newInstance;
+		}
+		else{
+			throw new IllegalArgumentException("Curve parameter are not valid!");
+		}
 	}
+	
+	
 
 }
