@@ -93,7 +93,7 @@ public class BigIntegerConverter
 		}
 		ByteArray result = ByteArray.getInstance(bytes);
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
-			result.reverse();
+			return result.reverse();
 		}
 		return result;
 	}

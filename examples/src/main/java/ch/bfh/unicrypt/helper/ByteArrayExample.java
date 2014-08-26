@@ -59,6 +59,7 @@ public class ByteArrayExample {
 
 		Example.printLine("Reverse", byteArray.reverse());
 		Example.printLine("Extract", byteArray.extract(2, 4));
+		Example.printLine("RemoveAt", byteArray.removeAt(6));
 
 		Object[] byteArrays = byteArray.split(2, 4, 7);
 		Example.printLine("Split  ", byteArrays);
@@ -84,6 +85,7 @@ public class ByteArrayExample {
 		Example.printLine(byteArray2);
 
 		Example.printLine("Extract", byteArray2.extract(2, 4));
+		Example.printLine("RemoveAt", byteArray2.removeAt(6));
 		Object[] byteArrays = byteArray2.split(2, 4, 7);
 		Example.printLine("Split  ", byteArrays);
 	}
@@ -109,7 +111,8 @@ public class ByteArrayExample {
 		for (int i = 8; i < 16; i++) {
 			Example.printLine("GetBitAt", byteArray1.getBitAt(i));
 		}
-		Example.printLine("Bits", byteArray1.countBits());
+		Example.printLine("0-Bits", byteArray1.countZeroBits());
+		Example.printLine("1-Bits", byteArray1.countOneBits());
 		Example.printLine("Leading Zeros", byteArray1.countLeadingZeroBits());
 		Example.printLine("Trailing Zeros", byteArray1.countTrailingZeroBits());
 
@@ -119,7 +122,8 @@ public class ByteArrayExample {
 		for (int i = 8; i < 16; i++) {
 			Example.printLine("GetBitAt", byteArray2.getBitAt(i));
 		}
-		Example.printLine("Bits", byteArray2.countBits());
+		Example.printLine("0-Bits", byteArray2.countZeroBits());
+		Example.printLine("1-Bits", byteArray2.countOneBits());
 		Example.printLine("Leading Zeros", byteArray2.countLeadingZeroBits());
 		Example.printLine("Trailing Zeros", byteArray2.countTrailingZeroBits());
 	}

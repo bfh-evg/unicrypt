@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -56,7 +55,7 @@ import java.util.Locale;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ByteArray
-	   extends UniCrypt
+	   extends AbstractImmutableArray<ByteArray>
 	   implements Iterable<Byte> {
 
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
@@ -66,7 +65,6 @@ public class ByteArray
 
 	protected final byte[] bytes;
 	private final int offset;
-	private final int length;
 	private boolean reverse;
 
 	protected ByteArray(byte[] bytes) {
@@ -74,22 +72,18 @@ public class ByteArray
 	}
 
 	protected ByteArray(byte[] bytes, int offset, int length, boolean reverse) {
+		super(length);
 		this.bytes = bytes;
 		this.offset = offset;
-		this.length = length;
 		this.reverse = reverse;
 	}
 
-	public int getLength() {
-		return this.length;
-	}
-
 	public byte[] getAll() {
-		byte[] bytes = Arrays.copyOfRange(this.bytes, this.offset, this.offset + this.length);
+		byte[] result = Arrays.copyOfRange(this.bytes, this.offset, this.offset + this.length);
 		if (this.reverse) {
-			reverse(bytes);
+			reverse(result);
 		}
-		return bytes;
+		return result;
 	}
 
 	public byte getAt(int index) {
@@ -115,7 +109,7 @@ public class ByteArray
 	public int countLeadingZeroBytes() {
 		int result = 0;
 		for (int i = this.length - 1; i >= 0; i--) {
-			if (this.getAt(i) > 0) {
+			if (this.getAt(i) != 0) {
 				return result;
 			}
 			result++;
@@ -127,7 +121,7 @@ public class ByteArray
 	public int countTrailingZeroBytes() {
 		int result = 0;
 		for (int i = 0; i < this.length; i++) {
-			if (this.getAt(i) > 0) {
+			if (this.getAt(i) != 0) {
 				return result;
 			}
 			result++;
@@ -169,7 +163,7 @@ public class ByteArray
 		return result;
 	}
 
-	public int countBits() {
+	public int countOneBits() {
 		int result = 0;
 		for (int i = 0; i < this.length * Byte.SIZE; i++) {
 			if (this.getBitAt(i)) {
@@ -179,79 +173,14 @@ public class ByteArray
 		return result;
 	}
 
-	// prefix here means the lowest indices
-	public ByteArray stripPrefix(int n) {
-		return this.extract(n, this.length - n);
-	}
-
-	// trailing here means the highest indices
-	public ByteArray stripSuffix(int n) {
-		return this.extract(0, this.length - n);
-	}
-
-	public ByteArray extractPrefix(int length) {
-		return this.extract(0, length);
-	}
-
-	public ByteArray extractSuffix(int length) {
-		return this.extract(this.length - length, length);
-	}
-
-	public ByteArray extractRange(int fromIndex, int toIndex) {
-		return this.extract(fromIndex, toIndex - fromIndex + 1);
-	}
-
-	public ByteArray extract(int offset, int length) {
-		if (offset < 0 || length < 0 || offset + length > this.length) {
-			throw new IllegalArgumentException();
-		}
-		if (offset == 0 && length == this.length) {
-			return this;
-		}
-		if (this.reverse) {
-			offset = this.length - length - offset;
-		}
-		return new ByteArray(this.bytes, this.offset + offset, length, this.reverse);
-	}
-
-	public ByteArray[] split(int... indices) {
-		if (indices == null) {
-			throw new IllegalArgumentException();
-		}
-		ByteArray[] result = new ByteArray[indices.length + 1];
-		int lastIndex = 0;
-		for (int i = 0; i < indices.length; i++) {
-			int currentIndex = indices[i];
-			if (currentIndex < lastIndex || currentIndex > this.length) {
-				throw new IllegalArgumentException();
+	public int countZeroBits() {
+		int result = 0;
+		for (int i = 0; i < this.length * Byte.SIZE; i++) {
+			if (!this.getBitAt(i)) {
+				result++;
 			}
-			result[i] = this.extract(lastIndex, currentIndex - lastIndex);
-			lastIndex = currentIndex;
 		}
-		result[indices.length] = this.extract(lastIndex, this.length - lastIndex);
 		return result;
-	}
-
-	public ByteArray concatenate(ByteArray other) {
-		if (other == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this.length == 0) {
-			return other;
-		}
-		if (other.length == 0) {
-			return this;
-		}
-		byte[] result = new byte[this.length + other.length];
-		System.arraycopy(this.bytes, this.offset, result, 0, this.length);
-		if (this.reverse) {
-			reverse(result, 0, this.length - 1);
-		}
-		System.arraycopy(other.bytes, other.offset, result, this.length, other.length);
-		if (other.reverse) {
-			reverse(result, this.length, this.length + other.length - 1);
-		}
-		return new ByteArray(result);
 	}
 
 	public ByteArray reverse() {
@@ -349,11 +278,8 @@ public class ByteArray
 		int nBytes = n / Byte.SIZE;
 		int nBits = n % Byte.SIZE;
 		int nBits2 = Byte.SIZE - nBits;
-		int newBitLength = (this.length * Byte.SIZE - countLeadingZeroBits() - n);
-		if (newBitLength <= 0) {
-			return new ByteArray(new byte[0]);
-		}
-		int newByteLength = newBitLength / Byte.SIZE + ((newBitLength % Byte.SIZE == 0) ? 0 : 1);
+		int newBitLength = Math.max(0, this.length * Byte.SIZE - countLeadingZeroBits() - n);
+		int newByteLength = (newBitLength + Byte.SIZE - 1) / Byte.SIZE;
 		byte[] result = new byte[newByteLength];
 		for (int i = 0; i < newByteLength; i++) {
 			result[i] = (byte) (((this.getAt(i + nBytes) & 0xff) >>> nBits) | (i + nBytes + 1 < this.length ? (this.getAt(i + nBytes + 1) << nBits2) : 0));
@@ -372,8 +298,8 @@ public class ByteArray
 		int nBytes = n / Byte.SIZE;
 		int nBits = n % Byte.SIZE;
 		int nBits2 = Byte.SIZE - nBits;
-		int newBitLength = (this.length * Byte.SIZE - countLeadingZeroBits() + n);
-		int newByteLength = newBitLength / Byte.SIZE + ((newBitLength % Byte.SIZE == 0) ? 0 : 1);
+		int newBitLength = this.length * Byte.SIZE - countLeadingZeroBits() + n;
+		int newByteLength = (newBitLength + Byte.SIZE - 1) / Byte.SIZE;
 		byte[] result = new byte[newByteLength];
 		for (int i = 0; i < newByteLength; i++) {
 			if (i < nBytes) {
@@ -601,6 +527,31 @@ public class ByteArray
 			j--;
 			i++;
 		}
+	}
+
+	@Override
+	protected ByteArray abstractExtract(int offset, int length) {
+		if (this.reverse) {
+			offset = this.length - length - offset;
+		}
+		return new ByteArray(this.bytes, this.offset + offset, length, this.reverse);
+	}
+
+	@Override
+	protected ByteArray abstractConcatenate(ByteArray other) {
+		byte[] result = new byte[this.length + other.length];
+		for (int i = 0; i < this.length; i++) {
+			result[i] = this.getAt(i);
+		}
+		for (int i = 0; i < other.length; i++) {
+			result[this.length + i] = other.getAt(i);
+		}
+		return new ByteArray(result);
+	}
+
+	@Override
+	protected Class<ByteArray> getBaseClass() {
+		return ByteArray.class;
 	}
 
 }

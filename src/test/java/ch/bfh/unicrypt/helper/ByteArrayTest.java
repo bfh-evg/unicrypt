@@ -86,12 +86,12 @@ public class ByteArrayTest {
 		assertFalse(b.getBitAt(15));
 		assertEquals(2, b.countLeadingZeroBits());
 		assertEquals(1, b.countTrailingZeroBits());
-		assertEquals(5, b.countBits());
-		assertEquals(0, a0.countBits());
-		assertEquals(15, a1.countBits());
-		assertEquals(0, a2.countBits());
-		assertEquals(160, a3.countBits());
-		assertEquals(15, a4.countBits());
+		assertEquals(5, b.countOneBits());
+		assertEquals(0, a0.countOneBits());
+		assertEquals(15, a1.countOneBits());
+		assertEquals(0, a2.countOneBits());
+		assertEquals(160, a3.countOneBits());
+		assertEquals(15, a4.countOneBits());
 	}
 
 	@Test

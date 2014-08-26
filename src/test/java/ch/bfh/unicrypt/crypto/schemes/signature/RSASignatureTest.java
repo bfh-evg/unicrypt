@@ -1,16 +1,16 @@
 /*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,16 +32,15 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.crypto.schemes.signature;
 
-import ch.bfh.unicrypt.crypto.schemes.encryption.classes.RSAEncryptionScheme;
 import ch.bfh.unicrypt.crypto.schemes.signature.classes.RSASignatureScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -49,7 +48,8 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -91,7 +91,7 @@ public class RSASignatureTest {
 		Element signature = rsa.sign(prKey, message);
 
 		assertTrue(rsa.verify(puKey, message, signature).getValue().booleanValue());
-		
+
 	}
 
 	@Test
@@ -99,15 +99,15 @@ public class RSASignatureTest {
 		BigInteger p = BigInteger.probablePrime(1024, new SecureRandom());
 		BigInteger q = BigInteger.probablePrime(1024, new SecureRandom());
 
-			RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
-			Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
-			Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
+		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
+		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
+		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
 
-			Element message = rsa.getMessageSpace().getElement(5);
-			Element signature = rsa.sign(prKey, message);
+		Element message = rsa.getMessageSpace().getElement(5);
+		Element signature = rsa.sign(prKey, message);
 
-			assertFalse(rsa.verify(puKey, message, message).getValue().booleanValue());
-		
+		assertFalse(rsa.verify(puKey, message, message).getValue().booleanValue());
+
 	}
 
 }
