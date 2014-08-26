@@ -48,7 +48,9 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import java.math.BigInteger;
 
 /**
- *
+ * TODO A dualistic element can be understood as an element that can be additive or multiplicative. It is implemented as
+ * a specialization of {@link Element}.
+ * <p>
  * @author rolfhaenni
  * @param <V>
  */

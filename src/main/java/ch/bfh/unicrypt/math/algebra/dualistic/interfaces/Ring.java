@@ -45,7 +45,10 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
- *
+ * TODO This interface represents the mathematical concept of a ring. A ring is a semiring where additive operations are
+ * a commutative {@link Group}. It is therefore implemented as a specialization of {@link SemiRing}. One familiar
+ * example of a ring is the set of integers.
+ * <p>
  * @author rolfhaenni
  * @param <V>
  */

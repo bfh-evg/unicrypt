@@ -45,9 +45,8 @@ import ch.bfh.unicrypt.helper.numerical.Numerical;
 import java.math.BigInteger;
 
 /**
- * This interface represents the mathematical concept of a semigroup. It defines a set of elements and an associative
- * (but not necessarily commutative) binary operation. Applying the operation to elements yields another element. It is
- * implemented as a specialization of {@link Set}.
+ * TODO This interface represents the mathematical concept of a semigroup. It defines a set of elements and an
+ * associative (but not necessarily commutative) binary operation. It is implemented as a specialization of {@link Set}.
  * <p>
  * @param <V> Generic type of values stored in the elements of this semigroup
  * @see "Handbook of Applied Cryptography, Definition 2.162"

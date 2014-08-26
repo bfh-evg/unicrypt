@@ -50,7 +50,10 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- *
+ * TODO This interface represents the mathematical concept of a semiring. A semiring is a monoid with a second
+ * associative compositions: the first binary operation is called "addition" and is commutative and the second binary
+ * operation is called "multiplication". It is implemented as a specialization of {@link Monoid}.
+ * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values stored in the elements of this semiring
  */

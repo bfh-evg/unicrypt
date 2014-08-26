@@ -45,7 +45,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 
 /**
- *
+ * This interface represents the mathematical concept of a field. A field is a commutative ring in which one can divide
+ * by any nonzero element. It is implemented as a specialization of {@link Ring}.
+ * <p>
  * @author rolfhaenni
  * @param <V>
  */

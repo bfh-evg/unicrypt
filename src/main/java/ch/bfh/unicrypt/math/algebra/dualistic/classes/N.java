@@ -50,8 +50,7 @@ import java.math.BigInteger;
 
 /**
  * /**
- * This class implements the additive cyclic group of non-negative integers with infinite order. Its identity element is
- * 0.
+ * This class implements the SemiRing of non-negative integers with infinite order. Its identity element is 0.
  * <p>
  * @see "Handbook of Applied Cryptography, Example 2.164"
  * @see <a href="http://en.wikipedia.org/wiki/Integer">http://en.wikipedia.org/wiki/Integer</a>

@@ -57,10 +57,10 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- * This interface represents the concept a non-empty mathematical set of elements. The number of elements in the set is
- * called order. The order may be infinite or unknown. It is assumed that each element of a set corresponds to a unique
- * BigInteger value. Therefore, the interface provides methods for converting elements into corresponding BigInteger
- * values and back.
+ * This interface represents the concept of a non-empty mathematical set of elements. The number of elements in the set
+ * is called order of this set. The order may be infinite or unknown. TODO It is assumed that each element of a set
+ * corresponds to a unique BigInteger or integer value. Therefore, the interface provides methods for converting
+ * elements into corresponding BigInteger or integer values and back.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig

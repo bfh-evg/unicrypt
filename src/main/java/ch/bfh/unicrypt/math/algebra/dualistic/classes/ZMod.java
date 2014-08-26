@@ -83,11 +83,10 @@ public class ZMod
 	}
 
 	/**
-	 * Checks if this class contains a given integer value
+	 * Returns {@code true} if this class contains a given integer value
 	 * <p>
-	 * @param integerValue
-	 * @return {
-	 * @true} if
+	 * @param integerValue The given integer
+	 * @return {@code true} if this class contains
 	 */
 	public final boolean contains(int integerValue) {
 		return this.contains(ResidueClass.getInstance(BigInteger.valueOf(integerValue), this.modulus));

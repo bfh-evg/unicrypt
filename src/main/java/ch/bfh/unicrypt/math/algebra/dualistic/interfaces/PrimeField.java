@@ -42,7 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 /**
- *
+ * TODO This interface represents the mathematical concept of a prime field. A prime field is the minimal subfield of a
+ * field, the smallest subfield containing 1F(? see wikipedia http://en.wikipedia.org/wiki/Field_extension). It is
+ * implemented as a specialization of {@link FiniteField} and {@link CyclicRing}.
+ * <p>
  * @author rolfhaenni
  * @param <V>
  */

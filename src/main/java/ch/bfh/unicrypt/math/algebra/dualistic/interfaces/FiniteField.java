@@ -44,7 +44,9 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 import java.math.BigInteger;
 
 /**
- *
+ * This interface represents the mathematical concept of a finite field. A finite field is a field that contains a
+ * finite number of elements, called its order. It is implemented as a specialization of {@link Field}.
+ * <p>
  * @author rolfhaenni
  * @param <V>
  */
