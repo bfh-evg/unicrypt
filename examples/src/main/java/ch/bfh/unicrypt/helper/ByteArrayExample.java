@@ -57,14 +57,13 @@ public class ByteArrayExample {
 		Example.printLine("Length    ", byteArray.getLength());
 		Example.printLine("Bytes     ", byteArray);
 
-		Example.printLine("Reverse   ", byteArray.reverse());
 		Example.printLine("Extract   ", byteArray.extract(2, 4));
 		Example.printLine("RemoveAt  ", byteArray.removeAt(6));
 		Example.printLine("ShiftLeft ", byteArray.shiftLeft(7));
 		Example.printLine("ShiftRight", byteArray.shiftRight(7));
 
 		Object[] byteArrays = byteArray.split(2, 4, 7);
-		Example.printLine("Split  ", byteArrays);
+		Example.printLine("Split     ", byteArrays);
 	}
 
 	public static void example2() {
@@ -86,24 +85,29 @@ public class ByteArrayExample {
 		Example.printLine(byteArray1);
 		Example.printLine(byteArray2);
 
-		Example.printLine("Extract", byteArray2.extract(2, 4));
-		Example.printLine("RemoveAt", byteArray2.removeAt(6));
+		Example.printLine("Extract   ", byteArray2.extract(2, 4));
+		Example.printLine("RemoveAt  ", byteArray2.removeAt(6));
+		Example.printLine("ShiftLeft ", byteArray2.shiftLeft(7));
+		Example.printLine("ShiftRight", byteArray2.shiftRight(7));
+
 		Object[] byteArrays = byteArray2.split(2, 4, 7);
-		Example.printLine("Split  ", byteArrays);
+		Example.printLine("Split     ", byteArrays);
 	}
 
 	public static void example4() {
 		ByteArray byteArray1 = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-		ByteArray byteArray2 = byteArray1.extract(1, 7).reverse();
+		ByteArray byteArray2 = byteArray1.extract(1, 8).reverse();
 
 		Example.printLine(byteArray1);
 		Example.printLine(byteArray2);
 
-		Example.printLine("Extract", byteArray2.extract(2, 4));
+		Example.printLine("Extract   ", byteArray2.extract(2, 4));
 		Object[] byteArrays = byteArray2.split(2, 4);
-		Example.printLine("Split  ", byteArrays);
-		Example.printLine("Conc   ", byteArray1.concatenate(byteArray2));
-		Example.printLine("Conc   ", byteArray2.concatenate(byteArray1));
+		Example.printLine("Split     ", byteArrays);
+		Example.printLine("Conc      ", byteArray1.concatenate(byteArray2));
+		Example.printLine("Conc      ", byteArray2.concatenate(byteArray1));
+		Example.printLine("ShiftLeft ", byteArray2.shiftLeft(7));
+		Example.printLine("ShiftRight ", byteArray2.shiftRight(7));
 	}
 
 	public static void example5() {

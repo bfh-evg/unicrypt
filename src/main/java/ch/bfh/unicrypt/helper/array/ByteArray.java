@@ -158,7 +158,11 @@ public class ByteArray
 		if (n <= 0) {
 			return this.shiftLeft(-n);
 		}
-		return new ByteArray(this.bytes, this.offset, this.length + n, this.header + n, this.trailer, this.reverse);
+		if (this.reverse) {
+			return new ByteArray(this.bytes, this.offset, this.length + n, this.header, this.trailer + n, this.reverse);
+		} else {
+			return new ByteArray(this.bytes, this.offset, this.length + n, this.header + n, this.trailer, this.reverse);
+		}
 	}
 
 	public ByteArray xor(ByteArray... others) {
