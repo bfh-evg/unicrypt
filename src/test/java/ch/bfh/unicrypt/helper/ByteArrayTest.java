@@ -226,46 +226,43 @@ public class ByteArrayTest {
 	}
 
 	@Test
-	public void testShiftBitsLeft() {
+	public void testShiftLeft() {
 		ByteArray b = ByteArray.getInstance("12|34"); // 00010010|00110100
 		assertEquals(ByteArray.getInstance("09|1a"), b.shiftBitsLeft(1));
 		assertEquals(ByteArray.getInstance("04|0d"), b.shiftBitsLeft(2));
 		assertEquals(ByteArray.getInstance("82|06"), b.shiftBitsLeft(3));
 		assertEquals(ByteArray.getInstance("41|03"), b.shiftBitsLeft(4));
 		assertEquals(ByteArray.getInstance("a0|01"), b.shiftBitsLeft(5));
-		assertEquals(ByteArray.getInstance("d0|00"), b.shiftBitsLeft(6));
-		assertEquals(ByteArray.getInstance("68|00"), b.shiftBitsLeft(7));
+		assertEquals(ByteArray.getInstance("d0"), b.shiftBitsLeft(6));
+		assertEquals(ByteArray.getInstance("68"), b.shiftBitsLeft(7));
 		assertEquals(ByteArray.getInstance("34"), b.shiftBitsLeft(8));
 		assertEquals(ByteArray.getInstance("1a"), b.shiftBitsLeft(9));
 		assertEquals(ByteArray.getInstance("0d"), b.shiftBitsLeft(10));
 		assertEquals(ByteArray.getInstance("06"), b.shiftBitsLeft(11));
 		assertEquals(ByteArray.getInstance("03"), b.shiftBitsLeft(12));
 		assertEquals(ByteArray.getInstance("01"), b.shiftBitsLeft(13));
-		assertEquals(ByteArray.getInstance("00"), b.shiftBitsLeft(14));
-		assertEquals(ByteArray.getInstance("00"), b.shiftBitsLeft(15));
-		assertEquals(ByteArray.getInstance(""), b.shiftBitsLeft(16));
+		assertEquals(ByteArray.getInstance(""), b.shiftBitsLeft(14));
+		assertEquals(ByteArray.getInstance(""), b.shiftBitsLeft(15));
 	}
 
 	@Test
-	public void testShiftBitsRight() {
+	public void testShiftRight() {
 		ByteArray b = ByteArray.getInstance("02");
-		assertEquals(ByteArray.getInstance("02"), b.shiftBitsRight(0));
-		assertEquals(ByteArray.getInstance("04|00"), b.shiftBitsRight(1));
-		assertEquals(ByteArray.getInstance("08|00"), b.shiftBitsRight(2));
-		assertEquals(ByteArray.getInstance("10|00"), b.shiftBitsRight(3));
-		assertEquals(ByteArray.getInstance("20|00"), b.shiftBitsRight(4));
-		assertEquals(ByteArray.getInstance("40|00"), b.shiftBitsRight(5));
-		assertEquals(ByteArray.getInstance("80|00"), b.shiftBitsRight(6));
+		assertEquals(ByteArray.getInstance("04"), b.shiftBitsRight(1));
+		assertEquals(ByteArray.getInstance("08"), b.shiftBitsRight(2));
+		assertEquals(ByteArray.getInstance("10"), b.shiftBitsRight(3));
+		assertEquals(ByteArray.getInstance("20"), b.shiftBitsRight(4));
+		assertEquals(ByteArray.getInstance("40"), b.shiftBitsRight(5));
+		assertEquals(ByteArray.getInstance("80"), b.shiftBitsRight(6));
 		assertEquals(ByteArray.getInstance("00|01"), b.shiftBitsRight(7));
 		assertEquals(ByteArray.getInstance("00|02"), b.shiftBitsRight(8));
-		assertEquals(ByteArray.getInstance("00|04|00"), b.shiftBitsRight(9));
-		assertEquals(ByteArray.getInstance("00|08|00"), b.shiftBitsRight(10));
-		assertEquals(ByteArray.getInstance("00|10|00"), b.shiftBitsRight(11));
-		assertEquals(ByteArray.getInstance("00|20|00"), b.shiftBitsRight(12));
-		assertEquals(ByteArray.getInstance("00|40|00"), b.shiftBitsRight(13));
-		assertEquals(ByteArray.getInstance("00|80|00"), b.shiftBitsRight(14));
+		assertEquals(ByteArray.getInstance("00|04"), b.shiftBitsRight(9));
+		assertEquals(ByteArray.getInstance("00|08"), b.shiftBitsRight(10));
+		assertEquals(ByteArray.getInstance("00|10"), b.shiftBitsRight(11));
+		assertEquals(ByteArray.getInstance("00|20"), b.shiftBitsRight(12));
+		assertEquals(ByteArray.getInstance("00|40"), b.shiftBitsRight(13));
+		assertEquals(ByteArray.getInstance("00|80"), b.shiftBitsRight(14));
 		assertEquals(ByteArray.getInstance("00|00|01"), b.shiftBitsRight(15));
-		assertEquals(ByteArray.getInstance("00|00|02"), b.shiftBitsRight(16));
 
 		b = ByteArray.getInstance("80");
 		assertEquals(ByteArray.getInstance("00|01"), b.shiftBitsRight(1));
