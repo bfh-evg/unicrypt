@@ -79,7 +79,7 @@ public class PolynomialSemiRing<V>
 		return this.semiRing;
 	}
 
-	public boolean isBinray() {
+	public boolean isBinary() {
 		return this.getSemiRing().getOrder().intValue() == 2;
 	}
 
@@ -240,7 +240,7 @@ public class PolynomialSemiRing<V>
 		Polynomial<DualisticElement<V>> polynomial1 = element1.getValue();
 		Polynomial<DualisticElement<V>> polynomial2 = element2.getValue();
 
-		if (this.isBinray()) {
+		if (this.isBinary()) {
 			ByteArray coefficients = polynomial1.getCoefficients().xorFillZero(polynomial2.getCoefficients());
 			return this.getElement(coefficients);
 		} else {
@@ -274,7 +274,7 @@ public class PolynomialSemiRing<V>
 			return this.getZeroElement();
 		}
 
-		if (this.isBinray()) {
+		if (this.isBinary()) {
 			ByteArray p1 = polynomial1.getCoefficients();
 			ByteArray p2 = polynomial2.getCoefficients();
 			if (polynomial2.getDegree() > polynomial1.getDegree()) {
@@ -282,14 +282,16 @@ public class PolynomialSemiRing<V>
 				p1 = p2;
 				p2 = tmp;
 			}
-			ByteArray zero = ByteArray.getInstance(new byte[0]);
+			ByteArray zero = ByteArray.getInstance(); // an empty byte array
 			ByteArray result = zero;
 			while (!p2.equals(zero)) {
 				if (p2.getBitAt(0)) {
 					result = result.xorFillZero(p1);
 				}
-				p1 = p1.shiftBitsRight(1);
-				p2 = p2.shiftBitsLeft(1);
+				// stripLeadingZeros was added to avoid an endless loop in PolynomialFieldTest
+				// the problem could probably be avoided by working with BitArray
+				p1 = p1.shiftBitsRight(1).stripLeadingZeros();
+				p2 = p2.shiftBitsLeft(1).stripLeadingZeros();
 			}
 			return this.getElement(result);
 

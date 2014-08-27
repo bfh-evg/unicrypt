@@ -75,9 +75,9 @@ public class PolynomialSemiRingTest {
 
 	@Test
 	public void testIsBinary() {
-		assertFalse(ring0.isBinray());
-		assertFalse(ring7.isBinray());
-		assertTrue(ring2.isBinray());
+		assertFalse(ring0.isBinary());
+		assertFalse(ring7.isBinary());
+		assertTrue(ring2.isBinary());
 	}
 
 	@Test

@@ -65,7 +65,7 @@ public class PolynomialElement<V>
 			throw new IllegalArgumentException();
 		}
 
-		if (this.getSet().isBinray()) {
+		if (this.getSet().isBinary()) {
 			SemiRing semiRing = this.getSet().getSemiRing();
 			if (semiRing.getZeroElement().isEquivalent(element)) {
 				return this.getValue().getCoefficient(0);
