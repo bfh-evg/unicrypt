@@ -107,11 +107,17 @@ public class PolynomialField<V>
 		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact 2.229/2.230)
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
+	
+	@Override
+	protected PolynomialElement<V> abstractApply(PolynomialElement<V> element1, PolynomialElement<V> element2){
+		PolynomialElement<V> poly=super.abstractApply(element1, element2);
+		return this.mod(this.getElement(poly.getValue()));
+	}
 
 	@Override
 	protected PolynomialElement<V> abstractMultiply(PolynomialElement<V> element1, PolynomialElement<V> element2) {
 		PolynomialElement<V> poly = super.abstractMultiply(element1, element2);
-		return this.getElement(poly.getValue());
+		return this.mod(this.getElement(poly.getValue()));
 	}
 
 	@Override

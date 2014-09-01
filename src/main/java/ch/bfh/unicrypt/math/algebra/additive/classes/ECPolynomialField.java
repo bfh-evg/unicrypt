@@ -78,7 +78,7 @@ public class ECPolynomialField
 
 	@Override
 	protected boolean abstractContains(DualisticElement<Polynomial> x, DualisticElement<Polynomial> y) {
-		DualisticElement<Polynomial> left = y.power(2).add(x.multiply(getA()));
+		DualisticElement<Polynomial> left = y.power(2).add(x.multiply(y));
 		DualisticElement<Polynomial> right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
 		return left.isEquivalent(right);
 	}

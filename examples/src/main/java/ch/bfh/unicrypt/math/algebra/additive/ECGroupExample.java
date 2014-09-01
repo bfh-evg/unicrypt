@@ -47,8 +47,11 @@ import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
+
 import java.math.BigInteger;
 
 /**

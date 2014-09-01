@@ -57,15 +57,16 @@ import java.util.ArrayList;
  * 
  */
 public enum SECECCParamsF2m implements StandardECPolynomialFieldParams {
-
-	sect113r1("20100000000000000000000000001",
-			"003088250CA6E7C7FE649CE85820F7", "00E8BEE4D3E2260744188BE0E9C723",
-			"009D73616F35F4AB1407D73562C10F", "00A52830277958EE84D1315ED31886",
-			"0100000000000000D9CCEC8A39E56F", "2"), sect113r2(
-			"20100000000000000000000000001", "00689918DBEC7E5A0DD6DFC0AA55C7",
-			"0095E9A9EC9B297BD4BF36E059184F", "01A57A6A7B26CA5EF52FCDB8164797",
-			"00B3ADC94ED1FE674C06E695BABA1D", "010000000000000108789B2496AF93",
-			"2"), sect131r1("b08000000000000000000000000000001",
+	//sectTest("13", "3", "1", "6", "8", "f", "2"), 
+	sect113r1(
+			"20100000000000000000000000001", "003088250CA6E7C7FE649CE85820F7",
+			"00E8BEE4D3E2260744188BE0E9C723", "009D73616F35F4AB1407D73562C10F",
+			"00A52830277958EE84D1315ED31886", "0100000000000000D9CCEC8A39E56F",
+			"2"), sect113r2("20100000000000000000000000001",
+			"00689918DBEC7E5A0DD6DFC0AA55C7", "0095E9A9EC9B297BD4BF36E059184F",
+			"01A57A6A7B26CA5EF52FCDB8164797", "00B3ADC94ED1FE674C06E695BABA1D",
+			"010000000000000108789B2496AF93", "2"), sect131r1(
+			"b08000000000000000000000000000001",
 			"07A11B09A76B562144418FF3FF8C2570B8",
 			"0217C05610884B63B9C6C7291678F9D341",
 			"0081BAF91FDF9833C40F9C181343638399",
@@ -175,7 +176,7 @@ public enum SECECCParamsF2m implements StandardECPolynomialFieldParams {
 		this.h = h;
 	}
 
-	private PolynomialElement<ZModTwo> getIrreduciblePolinomialElement(String p) {
+	private PolynomialElement<ZModTwo> getPolynomeFromString(String p) {
 		BigInteger bitString = new BigInteger(p, 16);
 
 		// Read bits and create a BigInteger ArrayList
@@ -188,16 +189,21 @@ public enum SECECCParamsF2m implements StandardECPolynomialFieldParams {
 		// Convert ArrayList BigInteger array and get element
 		BigInteger[] coeffs = {};
 		coeffs = arrayBigInteger.toArray(coeffs);
-		
-		
-		PolynomialElement<ZModTwo> irreduciblePolynom = PolynomialRing.getInstance(ZModTwo.getInstance()).getElement(coeffs);
+
+		PolynomialElement<ZModTwo> irreduciblePolynom = PolynomialRing
+				.getInstance(ZModTwo.getInstance()).getElement(coeffs);
 		return irreduciblePolynom;
 
+	}
+	
+	public PolynomialElement getIrreduciblePolynome(){
+		return getPolynomeFromString(polynom);
 	}
 
 	@Override
 	public PolynomialField getFiniteField() {
-		PolynomialElement irreduciblePolynomialElement = this.getIrreduciblePolinomialElement(this.polynom);
+		PolynomialElement irreduciblePolynomialElement = this
+				.getPolynomeFromString(this.polynom);
 		return PolynomialField.getInstance(ZModTwo.getInstance(),
 				irreduciblePolynomialElement);
 	}
@@ -209,26 +215,22 @@ public enum SECECCParamsF2m implements StandardECPolynomialFieldParams {
 
 	@Override
 	public PolynomialElement getA() {
-		return (PolynomialElement) getFiniteField().getElementFrom(
-				new BigInteger(a, 16));
+		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(a).getValue());
 	}
 
 	@Override
 	public PolynomialElement getB() {
-		return (PolynomialElement) getFiniteField().getElementFrom(
-				new BigInteger(b, 16));
+		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(b).getValue());
 	}
 
 	@Override
 	public PolynomialElement getGx() {
-		return (PolynomialElement) getFiniteField().getElementFrom(
-				new BigInteger(gx, 16));
+		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(gx).getValue());
 	}
 
 	@Override
 	public PolynomialElement getGy() {
-		return (PolynomialElement) getFiniteField().getElementFrom(
-				new BigInteger(gy, 16));
+		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(gy).getValue());
 	}
 
 	@Override
@@ -240,7 +242,7 @@ public enum SECECCParamsF2m implements StandardECPolynomialFieldParams {
 	public BigInteger getH() {
 		return new BigInteger(h, 16);
 	}
-	
+
 	public static SECECCParamsF2m getFromString(String s) {
 		for (SECECCParamsF2m parameter : SECECCParamsF2m.values()) {
 			if (parameter.name().equals(s)) {
@@ -251,22 +253,24 @@ public enum SECECCParamsF2m implements StandardECPolynomialFieldParams {
 		throw new IllegalArgumentException("No Enum with name: " + s);
 	}
 
-	 public static void main(String[] args) {
-	 for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
-	 System.out.println(params.getFiniteField());
-	 System.out.println(params.getA());
-	 System.out.println(params.getB());
-	 System.out.println(params.getGx());
-	 System.out.println(params.getGy());
-	 System.out.println(params.getOrder());
-	 System.out.println(params.getH());
-	 }
-	
-	 for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
-	 System.out.print(params.name() + " ");
-	 StandardECPolynomialField ec =
-	 StandardECPolynomialField.getInstance(params);
-	 System.out.println(ec);
-	 }
-	 }
+	public static void main(String[] args) {
+		/*for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
+			System.out.println(params.name() + " ");
+			System.out.println(params.getFiniteField());
+			System.out.println(params.getIrreduciblePolynome());
+			System.out.println(params.getA());
+			System.out.println(params.getB());
+			System.out.println(params.getGx());
+			System.out.println(params.getGy());
+			System.out.println(params.getOrder());
+			System.out.println(params.getH());
+		}*/
+
+		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
+			System.out.print(params.name() + " ");
+			StandardECPolynomialField ec = StandardECPolynomialField
+					.getInstance(params);
+			System.out.println(ec);
+		}
+	}
 }

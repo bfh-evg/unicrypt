@@ -172,28 +172,8 @@ public class MathExample {
 		Example.printLine(irreduciblePolynom);
 		Example.printLine(irreduciblePolynom.isIrreducible());
 
-		//Error for simple polynomial addition?!
-		//Addition works correctly for i=569 but not for i=569!
-		int i = 567;
-		//i=569;
-		DualisticElement<ResidueClass> c = ZModTwo.ONE;
-		HashMap map = new HashMap(1);
-		map.put(i, c);
-		PolynomialElement<ZModTwo> t = ring.getElement(map);
-
-		Example.printLine("t: " + t);
-		Example.printLine("One element: " + ring.getOneElement());
-		PolynomialElement<ZModTwo> q = t.add(ring.getOneElement());
-		Example.printLine("q: " + q);
-
-		//Example longDivision complete
-		//x^2
-		//PolynomialElement<ZModTwo> p2=ring.getElement(BigInteger.ZERO,BigInteger.ZERO,BigInteger.ONE);
-		//x^4
-		PolynomialElement<ZModTwo> p2 = ring.getElement(BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ONE);
-		Example.printLine(p1);
-		Example.printLine(p2);
-		Example.printLine(ring.longDivision(p1, p2));
+		
+		
 
 	}
 
