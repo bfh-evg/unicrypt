@@ -45,11 +45,13 @@ import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+
 import java.math.BigInteger;
 
 public abstract class AbstractEC<F extends FiniteField, V extends Object>
@@ -184,10 +186,10 @@ public abstract class AbstractEC<F extends FiniteField, V extends Object>
 	@Override
 	protected ECElement<V> abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		if (this.getDefaultGenerator() != null) {
-			DualisticElement<V> r = this.getFiniteField().getRandomElement(randomByteSequence);
+			ZMod r=ZMod.getInstance(this.getFiniteField().getOrder());
 			// TODO ?!?
 			//return this.getDefaultGenerator().selfApply(r);
-			return this.getDefaultGenerator().selfApply(r.getBigInteger());
+			return this.getDefaultGenerator().selfApply(r.getRandomElement().getBigInteger());
 		} else {
 			return this.getRandomElementWithoutGenerator(randomByteSequence);
 		}

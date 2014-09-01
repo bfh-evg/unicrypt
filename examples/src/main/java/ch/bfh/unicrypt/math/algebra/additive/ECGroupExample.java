@@ -49,6 +49,7 @@ import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 
@@ -74,10 +75,11 @@ public class ECGroupExample {
 	public static void example2() throws Exception {
 		//Example with StandardECPolynomialField
 
-		StandardECPolynomialField ec = StandardECPolynomialField.getInstance(SECECCParamsF2m.sect283k1);
+		StandardECPolynomialField ec = StandardECPolynomialField.getInstance(SECECCParamsF2m.sectTest);
 		ECElement<Polynomial> generator = ec.getDefaultGenerator();
-		ec.getRandomElement();
+		Element random = ec.getRandomElement();
 		BigInteger order = ec.getOrder();
+		Example.printLine(random);
 		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
 	}
 
