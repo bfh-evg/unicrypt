@@ -52,35 +52,48 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
+import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
+import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
 
 import java.math.BigInteger;
+import java.util.Iterator;
 
 /**
  *
  * @author Christian Lutz
- * <p>
+ *         <p>
  */
 public class ECGroupExample {
 
 	public static void example1() throws Exception {
 
-		//Example with StandardECZModPrime
-		StandardECZModPrime ec = StandardECZModPrime.getInstance(SECECCParamsFp.secp224k1);
-		ECElement<ResidueClass> generator = ec.getDefaultGenerator();
-		ec.getRandomElement();
-		BigInteger order = ec.getOrder();
-		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
+		// Example with StandardECZModPrime
+		for (StandardECZModParams params : SECECCParamsFp.values()) {
+
+			StandardECZModPrime ec = StandardECZModPrime
+					.getInstance(params);
+			ECElement<ResidueClass> generator = ec.getDefaultGenerator();
+			ec.getRandomElement();
+			BigInteger order = ec.getOrder();
+			Example.printLine(ec);
+			Example.printLine(generator.selfApply(order)); // Result should be
+															// Infinity element
+		}
 	}
 
 	public static void example2() throws Exception {
-		//Example with StandardECPolynomialField
+		// Example with StandardECPolynomialField
 
-		StandardECPolynomialField ec = StandardECPolynomialField.getInstance(SECECCParamsF2m.sectTest);
-		ECElement<Polynomial> generator = ec.getDefaultGenerator();
-		Element random = ec.getRandomElement();
-		BigInteger order = ec.getOrder();
-		Example.printLine(random);
-		Example.printLine(generator.selfApply(order));	//Result should be Infinity element
+		for (StandardECPolynomialFieldParams params : SECECCParamsF2m.values()) {
+			StandardECPolynomialField ec = StandardECPolynomialField
+					.getInstance(params);
+			ECElement<Polynomial> generator = ec.getDefaultGenerator();
+			ec.getRandomElement();
+			BigInteger order = ec.getOrder();
+			Example.printLine(ec.getFiniteField().getIrreduciblePolynomial());
+			Example.printLine(generator.selfApply(order)); // Result should be Infinity element
+														
+		}
 	}
 
 	public static void main(final String[] args) {
