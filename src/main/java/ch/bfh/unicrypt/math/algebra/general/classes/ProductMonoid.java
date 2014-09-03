@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import java.math.BigInteger;
 
 /**
@@ -67,6 +67,11 @@ public class ProductMonoid
 	}
 
 	@Override
+	public Monoid getLast() {
+		return (Monoid) super.getLast();
+	}
+
+	@Override
 	public Monoid getAt(int index) {
 		return (Monoid) super.getAt(index);
 	}
@@ -74,11 +79,6 @@ public class ProductMonoid
 	@Override
 	public Monoid getAt(int... indices) {
 		return (Monoid) super.getAt(indices);
-	}
-
-	@Override
-	public Monoid[] getAll() {
-		return (Monoid[]) super.getAll();
 	}
 
 	@Override

@@ -84,7 +84,7 @@ public class ByteTreeLeaf
 	protected void abstractConstructByteArray(ByteBuffer buffer, ByteArray byteArray) {
 		buffer.put(IDENTIFIER);
 		buffer.putInt(this.binaryData.getLength());
-		buffer.put(this.binaryData.getAll());
+		buffer.put(this.binaryData.getBytes());
 	}
 
 	@Override

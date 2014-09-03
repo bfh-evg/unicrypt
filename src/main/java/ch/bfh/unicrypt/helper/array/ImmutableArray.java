@@ -50,19 +50,17 @@ import java.util.Iterator;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <T>
  */
-public class ImmutableArray<T>
-	   extends AbstractArray<ImmutableArray<T>>
-	   implements Array<ImmutableArray<T>, T>, Iterable<T> {
+public class ImmutableArray<T extends Object>
+	   extends AbstractArray<ImmutableArray<T>, T>
+	   implements Iterable<T> {
 
 	// The obects are stored either as an ordinary, possibly empty array (case 1)
 	// or as an array of length 1 together with the full length of the immutable
 	// array (case 2, all elements are equal)
 	private final Object[] array;
-	protected Boolean uniform = null;
 
 	protected ImmutableArray(T object, int length) {
 		this(new Object[]{object}, 0, length, false);
-		this.uniform = true;
 	}
 
 	protected ImmutableArray(Object[] objects) {
@@ -72,96 +70,13 @@ public class ImmutableArray<T>
 	protected ImmutableArray(Object[] objects, int offset, int length, boolean reverse) {
 		super(length, offset, reverse);
 		this.array = objects;
+		if (length <= 1 || objects.length <= 1) {
+			this.uniform = true;
+		}
 	}
 
 	public int getArity() {
 		return this.length;
-	}
-
-	@Override
-	public boolean isUniform() {
-		if (this.uniform == null) {
-			this.uniform = true;
-			if (this.length > 1) {
-				T first = this.abstractGetAt(0);
-				for (int i = 1; i < this.length; i++) {
-					if (!first.equals(this.abstractGetAt(i))) {
-						this.uniform = false;
-						break;
-					}
-				}
-			}
-		}
-		return this.uniform;
-	}
-
-	@Override
-	public T getAt(int index) {
-		if (index < 0 || index >= this.length) {
-			throw new IndexOutOfBoundsException();
-		}
-		return this.abstractGetAt(index);
-	}
-
-	@Override
-	public T getFirst() {
-		return this.getAt(0);
-	}
-
-	@Override
-	public T getLast() {
-		return this.getAt(this.length - 1);
-	}
-
-	@Override
-	public Object[] getAll() {
-		Object[] result = new Object[this.length];
-		for (int i = 0; i < this.length; i++) {
-			result[i] = this.abstractGetAt(i);
-		}
-		return result;
-	}
-
-	@Override
-	public ImmutableArray<T> insertAt(int index, T newObject) {
-		if (index < 0 || index > this.length) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (newObject == null) {
-			throw new IllegalArgumentException();
-		}
-		Object[] result = new Object[this.length + 1];
-		for (int i = 0; i < result.length; i++) {
-			if (i != index) {
-				result[i] = (i < index) ? this.abstractGetAt(i) : this.abstractGetAt(i - 1);
-			}
-		}
-		result[index] = newObject;
-		return new ImmutableArray<T>(result);
-	}
-
-	@Override
-	public ImmutableArray<T> replaceAt(int index, T newObject) {
-		if (index < 0 || index >= this.length) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (newObject == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this.getAt(index).equals(newObject)) {
-			return this;
-		}
-		Object[] result = new Object[this.length];
-		for (int i = 0; i < result.length; i++) {
-			result[i] = this.abstractGetAt(i);
-		}
-		result[index] = newObject;
-		return new ImmutableArray<T>(result);
-	}
-
-	@Override
-	public ImmutableArray<T> add(T object) {
-		return this.insertAt(this.length, object);
 	}
 
 	@Override
@@ -265,6 +180,14 @@ public class ImmutableArray<T>
 	}
 
 	@Override
+	protected T abstractGetAt(int index) {
+		if (this.reverse) {
+			index = this.length - index - 1;
+		}
+		return (T) this.array[(this.offset + index) % this.array.length];
+	}
+
+	@Override
 	protected ImmutableArray<T> abstractExtract(int offset, int length) {
 		if (this.reverse) {
 			offset = this.length - (offset + length);
@@ -285,6 +208,28 @@ public class ImmutableArray<T>
 	}
 
 	@Override
+	protected ImmutableArray<T> abstractInsertAt(int index, T newObject) {
+		Object[] result = new Object[this.length + 1];
+		for (int i = 0; i < result.length; i++) {
+			if (i != index) {
+				result[i] = (i < index) ? this.abstractGetAt(i) : this.abstractGetAt(i - 1);
+			}
+		}
+		result[index] = newObject;
+		return new ImmutableArray<T>(result);
+	}
+
+	@Override
+	protected ImmutableArray<T> abstractReplaceAt(int index, T newObject) {
+		Object[] result = new Object[this.length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = this.abstractGetAt(i);
+		}
+		result[index] = newObject;
+		return new ImmutableArray<T>(result);
+	}
+
+	@Override
 	protected ImmutableArray<T> abstractReverse() {
 		return new ImmutableArray<T>(this.array, this.offset, this.length, !this.reverse);
 	}
@@ -292,13 +237,6 @@ public class ImmutableArray<T>
 	@Override
 	protected Class getArrayClass() {
 		return ImmutableArray.class;
-	}
-
-	private T abstractGetAt(int index) {
-		if (this.reverse) {
-			index = this.length - index - 1;
-		}
-		return (T) this.array[(this.offset + index) % this.array.length];
 	}
 
 }

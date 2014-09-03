@@ -206,11 +206,11 @@ public abstract class ByteTree
 	}
 
 	private static byte extractIdentifier(ByteArray byteArray) {
-		return byteArray.getAt(0);
+		return byteArray.getByteAt(0);
 	}
 
 	private static int extractAmount(ByteArray byteArray) {
-		return new BigInteger(1, byteArray.extract(1, LENGTH_OF_INTEGER).getAll()).intValue();
+		return new BigInteger(1, byteArray.extract(1, LENGTH_OF_INTEGER).getBytes()).intValue();
 	}
 
 	private static ByteArray extractBinaryData(ByteArray byteArray) {
@@ -265,11 +265,11 @@ class SafeByteArray
 	}
 
 	@Override
-	public byte[] getAll() {
+	public byte[] getBytes() {
 		if (this.getLength() == this.bytes.length) {
 			return this.bytes;
 		}
-		return super.getAll();
+		return super.getBytes();
 	}
 
 }

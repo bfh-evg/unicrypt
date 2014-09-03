@@ -90,12 +90,12 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 
 	private int getUnpaddingLength(ByteArray byteArray) {
 		if (this.abstractEndsWithLength()) {
-			return byteArray.getAt(byteArray.getLength() - 1);
+			return byteArray.getByteAt(byteArray.getLength() - 1);
 		}
 		Byte separator = this.abstractGetSeparator();
 		if (separator != null) {
 			int i = byteArray.getLength() - 1;
-			while (byteArray.getAt(i) != separator) {
+			while (byteArray.getByteAt(i) != separator) {
 				i--;
 			}
 			return byteArray.getLength() - i;

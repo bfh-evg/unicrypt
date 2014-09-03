@@ -88,7 +88,7 @@ public class PreimageEqualityProofSystemTest {
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
 		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(f, this.proverId);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
+		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
 		// Valid proof
 		Element privateInput = Z_q.getElement(3);
@@ -127,7 +127,7 @@ public class PreimageEqualityProofSystemTest {
 			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), Z.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(scg, f1, f2);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
+		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
 		// Invalid proof -> preimages are not equal
 		Element privateInput = Z_q.getElement(3);

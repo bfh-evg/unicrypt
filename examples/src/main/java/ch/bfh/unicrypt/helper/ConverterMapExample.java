@@ -50,7 +50,7 @@ public class ConverterMapExample {
 
 	public static void example1() {
 		ConvertMethod cMap = ConvertMethod.getInstance();
-		Example.printLine(cMap.convertToByteArray(ByteArray.getInstance(10, true)));
+		Example.printLine(cMap.convertToByteArray(ByteArray.getInstance(true, 10)));
 		Example.printLine(cMap.convertToByteArray(BigInteger.valueOf(123456)));
 		Example.printLine(cMap.convertToByteArray(NaturalNumber.getInstance(BigInteger.valueOf(123))));
 		Example.printLine(cMap.convertToByteArray(Permutation.getInstance(10)));

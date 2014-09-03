@@ -57,6 +57,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.util.List;
 
 public class PreimageOrProofSystem
 	   extends AbstractSigmaProofSystem<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
@@ -75,6 +76,10 @@ public class PreimageOrProofSystem
 	public static PreimageOrProofSystem getInstance(final ProductFunction proofFunction, final Element proverId) {
 		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return PreimageOrProofSystem.getInstance(challengeGenerator, proofFunction);
+	}
+
+	public static PreimageOrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final List<Function> proofFunctions) {
+		return PreimageOrProofSystem.getInstance(challengeGenerator, proofFunctions.toArray(new Function[]{}));
 	}
 
 	public static PreimageOrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
@@ -136,26 +141,27 @@ public class PreimageOrProofSystem
 		final int index = privateInput.getSecond().getBigInteger().intValue();
 		final Element secret = ((Tuple) privateInput.getFirst()).getAt(index);
 
-		final Function[] proofFunctions = this.getPreimageProofFunction().getAll();
+		final ProductFunction proofFunction = this.getPreimageProofFunction();
+		final int length = proofFunction.getLength();
 
 		// Create lists for proof elements (t, c, s)
-		final Element[] commitments = new Element[proofFunctions.length];
-		final Element[] challenges = new Element[proofFunctions.length];
-		final Element[] responses = new Element[proofFunctions.length];
+		final Element[] commitments = new Element[length];
+		final Element[] challenges = new Element[length];
+		final Element[] responses = new Element[length];
 
 		// Get challenge space and initialze the summation of the challenges
 		final Z challengeSpace = this.getChallengeSpace();
 		ZElement sumOfChallenges = challengeSpace.getIdentityElement();
 		int z = challengeSpace.getOrder().intValue();
 		// Create proof elements (simulate proof) for all but the known secret
-		for (int i = 0; i < proofFunctions.length; i++) {
+		for (int i = 0; i < length; i++) {
 			if (i == index) {
 				continue;
 			}
 
 			// Create random challenge and response
 			ZElement c = challengeSpace.getRandomElement(randomByteSequence);
-			Function f = proofFunctions[i];
+			Function f = proofFunction.getAt(i);
 			Element s = f.getDomain().getRandomElement(randomByteSequence);
 
 			sumOfChallenges = sumOfChallenges.add(c);
@@ -168,8 +174,8 @@ public class PreimageOrProofSystem
 
 		// Create the proof of the known secret (normal preimage-proof, but with a special challange)
 		// - Create random element and calculate commitment
-		final Element randomElement = proofFunctions[index].getDomain().getRandomElement(randomByteSequence);
-		commitments[index] = proofFunctions[index].apply(randomElement);
+		final Element randomElement = proofFunction.getAt(index).getDomain().getRandomElement(randomByteSequence);
+		commitments[index] = proofFunction.getAt(index).apply(randomElement);
 
 		// - Create overall proof challenge
 		final ZElement challenge = this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));

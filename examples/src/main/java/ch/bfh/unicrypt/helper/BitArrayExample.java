@@ -65,7 +65,7 @@ public class BitArrayExample {
 		Example.printLine("Extract Prefix", bitArray.extractPrefix(3));
 		Example.printLine("Extract Suffix", bitArray.extractSuffix(5));
 		Example.printLine("Extract Range ", bitArray.extractRange(7, 9));
-		Example.printLine("Get All       ", Arrays.toString(bitArray.getAll()));
+		Example.printLine("Get All       ", Arrays.toString(bitArray.getBits()));
 		Example.printLine("RemoveAt      ", bitArray.removeAt(7));
 		Example.printLine("Shif Left     ", bitArray.shiftLeft(3));
 		Example.printLine("Shift Right   ", bitArray.shiftRight(3));
@@ -84,8 +84,8 @@ public class BitArrayExample {
 		BitArray bitArray3 = BitArray.getInstance(new boolean[10]);
 		BitArray bitArray4 = BitArray.getInstance(new byte[3]);
 		BitArray bitArray5 = BitArray.getInstance(10);
-		BitArray bitArray6 = BitArray.getInstance(10, false);
-		BitArray bitArray7 = BitArray.getInstance(10, true);
+		BitArray bitArray6 = BitArray.getInstance(false, 10);
+		BitArray bitArray7 = BitArray.getInstance(true, 10);
 		BitArray bitArray8 = BitArray.getRandomInstance(20);
 
 		Example.printLine(bitArray1);

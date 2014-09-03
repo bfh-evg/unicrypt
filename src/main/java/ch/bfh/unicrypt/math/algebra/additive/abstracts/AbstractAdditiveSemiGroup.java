@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
+import java.util.List;
 
 public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
@@ -63,6 +64,11 @@ public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V 
 
 	@Override
 	public final E add(final Element... elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E add(final List<Element> elements) {
 		return this.apply(elements);
 	}
 

@@ -41,13 +41,15 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
+import java.util.List;
+
 /**
  *
  * @param <A>
  * @param <T>
  * @author rolfhaenni
  */
-public interface Array<A extends Array<A, T>, T> {
+public interface Array<A extends Array<A, T>, T extends Object> {
 
 	public int getLength();
 
@@ -55,7 +57,13 @@ public interface Array<A extends Array<A, T>, T> {
 
 	public boolean isUniform();
 
-	public Object[] getAll();
+	public int count(T object);
+
+	public int countPrefix(T object);
+
+	public int countSuffix(T object);
+
+	public List<T> getAll();
 
 	public T getAt(int index);
 
@@ -83,11 +91,11 @@ public interface Array<A extends Array<A, T>, T> {
 
 	public A insertAt(final int index, final T object);
 
-	public A replaceAt(final int index, final T object);
+	public A replaceAt(int index, T object);
 
-	public A add(final T object);
+	public A add(T object);
 
-	public A append(final A other);
+	public A append(A other);
 
 	public A reverse();
 

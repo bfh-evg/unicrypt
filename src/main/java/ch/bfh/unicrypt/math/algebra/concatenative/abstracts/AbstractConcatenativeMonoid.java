@@ -49,6 +49,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.util.List;
 
 public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
@@ -88,6 +89,11 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 
 	@Override
 	public final E concatenate(final Element... elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E concatenate(final List<Element> elements) {
 		return this.apply(elements);
 	}
 

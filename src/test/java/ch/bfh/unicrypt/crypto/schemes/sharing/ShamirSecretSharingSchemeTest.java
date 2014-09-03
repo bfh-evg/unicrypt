@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import static org.junit.Assert.assertTrue;
@@ -96,7 +95,7 @@ public class ShamirSecretSharingSchemeTest {
 		// Share the message
 		Tuple shares = ssss.share(message);
 
-		List<Element> sharesList = Arrays.asList(shares.getAll());
+		List<Element> sharesList = shares.getAll();
 
 		// Shuffle the list of shares
 		Collections.shuffle(sharesList);

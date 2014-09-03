@@ -55,7 +55,7 @@ import java.util.Locale;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ByteArray
-	   extends AbstractArray<ByteArray>
+	   extends AbstractArray<ByteArray, Byte>
 	   implements Iterable<Byte> {
 
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
@@ -67,6 +67,10 @@ public class ByteArray
 	private int trailer; // number of trailing zeros not included in bytes
 	private int header; // number of leading zeros not included in bytes
 
+	protected ByteArray(byte fillByte, int length) {
+		this(new byte[]{fillByte}, 0, length, 0, 0, false);
+	}
+
 	protected ByteArray(byte[] bytes) {
 		this(bytes, 0, bytes.length, 0, 0, false);
 	}
@@ -76,12 +80,15 @@ public class ByteArray
 		this.bytes = bytes;
 		this.trailer = trailer;
 		this.header = header;
+		if (length <= 1 || (bytes.length <= 1 && trailer == 0 && header == 0)) {
+			this.uniform = true;
+		}
 	}
 
-	public byte[] getAll() {
+	public byte[] getBytes() {
 		byte[] result = new byte[this.length];
 		for (int i = 0; i < this.length; i++) {
-			result[i] = this.abstractGetAt(i);
+			result[i] = this.abstractGetByteAt(i);
 		}
 		return result;
 	}
@@ -94,45 +101,39 @@ public class ByteArray
 		return result;
 	}
 
-	public byte getAt(int index) {
+	public byte getByteAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
-		return this.abstractGetAt(index);
+		return this.abstractGetByteAt(index);
 	}
 
 	public boolean getBitAt(int bitIndex) {
 		int byteIndex = bitIndex / Byte.SIZE;
 		byte mask = bitMask(bitIndex % Byte.SIZE);
-		return logicalAND(this.getAt(byteIndex), mask) != 0;
+		return logicalAND(this.getByteAt(byteIndex), mask) != 0;
 	}
 
 	public int getIntAt(int index) {
-		return this.getAt(index) & BYTE_MASK;
+		return this.getByteAt(index) & BYTE_MASK;
+	}
+
+	public int countOnes() {
+		return this.count(ALL_ONE);
+	}
+
+	public int countZeros() {
+		return this.count(ALL_ZERO);
 	}
 
 	// leading here means the highest indices
 	public int countLeadingZeros() {
-		int result = 0;
-		for (int i = this.length - 1; i >= 0; i--) {
-			if (this.abstractGetAt(i) != 0) {
-				return result;
-			}
-			result++;
-		}
-		return result;
+		return this.countSuffix(ALL_ZERO);
 	}
 
 	// trailing here means the lowest indices
 	public int countTrailingZeros() {
-		int result = 0;
-		for (int i = 0; i < this.length; i++) {
-			if (this.abstractGetAt(i) != 0) {
-				return result;
-			}
-			result++;
-		}
-		return result;
+		return this.countPrefix(ALL_ZERO);
 	}
 
 	// leading here means the highest indices
@@ -282,11 +283,11 @@ public class ByteArray
 		}
 		byte[] result = new byte[newLength];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = (i < this.length) ? this.abstractGetAt(i) : fillByte;
+			result[i] = (i < this.length) ? this.abstractGetByteAt(i) : fillByte;
 		}
 		for (ByteArray other : others) {
 			for (int i = 0; i < result.length; i++) {
-				byte b = (i < other.length) ? other.abstractGetAt(i) : fillByte;
+				byte b = (i < other.length) ? other.abstractGetByteAt(i) : fillByte;
 				switch (operand) {
 					case 0:
 						result[i] = ByteArray.logicalXOR(result[i], b);
@@ -308,7 +309,7 @@ public class ByteArray
 	public ByteArray not() {
 		byte[] result = new byte[this.length];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = ByteArray.logicalNOT(this.abstractGetAt(i));
+			result[i] = ByteArray.logicalNOT(this.abstractGetByteAt(i));
 		}
 		return new ByteArray(result);
 	}
@@ -321,7 +322,7 @@ public class ByteArray
 		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		byte[] hash = hashAlgorithm.getHashValue(this.getAll());
+		byte[] hash = hashAlgorithm.getHashValue(this.getBytes());
 		return new ByteArray(hash);
 	}
 
@@ -354,7 +355,7 @@ public class ByteArray
 
 			@Override
 			public Byte next() {
-				return abstractGetAt(currentIndex++);
+				return abstractGetByteAt(currentIndex++);
 			}
 
 			@Override
@@ -387,7 +388,7 @@ public class ByteArray
 			return false;
 		}
 		for (int i = 0; i < this.length; i++) {
-			if (this.abstractGetAt(i) != other.abstractGetAt(i)) {
+			if (this.abstractGetByteAt(i) != other.abstractGetByteAt(i)) {
 				return false;
 			}
 		}
@@ -398,19 +399,19 @@ public class ByteArray
 		return new ByteArray(new byte[0]);
 	}
 
-	public static ByteArray getInstance(int length, boolean fillbit) {
+	public static ByteArray getInstance(boolean fillbit, int length) {
 		if (fillbit) {
-			return ByteArray.getInstance(length, ALL_ONE);
+			return ByteArray.getInstance(ALL_ONE, length);
 		} else {
-			return ByteArray.getInstance(length, ALL_ZERO);
+			return ByteArray.getInstance(ALL_ZERO, length);
 		}
 	}
 
-	public static ByteArray getInstance(int length, byte fillByte) {
+	public static ByteArray getInstance(byte fillByte, int length) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArray(new byte[]{fillByte}, 0, length, 0, 0, false);
+		return new ByteArray(fillByte, length);
 	}
 
 	public static ByteArray getInstance(byte... bytes) {
@@ -486,7 +487,7 @@ public class ByteArray
 		}
 		ByteBuffer byteBuffer = ByteBuffer.allocate(length);
 		for (ByteArray byteArray : byteArrays) {
-			byteBuffer.put(byteArray.getAll());
+			byteBuffer.put(byteArray.getBytes());
 		}
 		return new ByteArray(byteBuffer.array());
 	}
@@ -539,6 +540,21 @@ public class ByteArray
 	}
 
 	@Override
+	protected Byte abstractGetAt(int index) {
+		return this.abstractGetByteAt(index);
+	}
+
+	private byte abstractGetByteAt(int index) {
+		if (this.reverse) {
+			index = this.length - index - 1;
+		}
+		if (index < this.trailer || index >= this.length - this.header) {
+			return ByteArray.ALL_ZERO;
+		}
+		return this.bytes[(this.offset + index - this.trailer) % this.bytes.length];
+	}
+
+	@Override
 	protected ByteArray abstractExtract(int offset, int length) {
 		if (this.reverse) {
 			offset = this.length - (offset + length);
@@ -553,27 +569,39 @@ public class ByteArray
 	protected ByteArray abstractAppend(ByteArray other) {
 		byte[] result = new byte[this.length + other.length];
 		for (int i = 0; i < this.length; i++) {
-			result[i] = this.abstractGetAt(i);
+			result[i] = this.abstractGetByteAt(i);
 		}
 		for (int i = 0; i < other.length; i++) {
-			result[this.length + i] = other.abstractGetAt(i);
+			result[this.length + i] = other.abstractGetByteAt(i);
 		}
+		return new ByteArray(result);
+	}
+
+	@Override
+	protected ByteArray abstractInsertAt(int index, Byte newByte) {
+		byte[] result = new byte[this.length + 1];
+		for (int i = 0; i < result.length; i++) {
+			if (i != index) {
+				result[i] = (i < index) ? this.abstractGetByteAt(i) : this.abstractGetByteAt(i - 1);
+			}
+		}
+		result[index] = newByte;
+		return new ByteArray(result);
+	}
+
+	@Override
+	protected ByteArray abstractReplaceAt(int index, Byte newByte) {
+		byte[] result = new byte[this.length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = this.abstractGetByteAt(i);
+		}
+		result[index] = newByte;
 		return new ByteArray(result);
 	}
 
 	@Override
 	protected ByteArray abstractReverse() {
 		return new ByteArray(this.bytes, this.offset, this.length, this.trailer, this.header, !this.reverse);
-	}
-
-	private byte abstractGetAt(int index) {
-		if (this.reverse) {
-			index = this.length - index - 1;
-		}
-		if (index < this.trailer || index >= this.length - this.header) {
-			return ByteArray.ALL_ZERO;
-		}
-		return this.bytes[(this.offset + index - this.trailer) % this.bytes.length];
 	}
 
 	@Override

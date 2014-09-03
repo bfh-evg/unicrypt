@@ -51,7 +51,7 @@ import java.util.Iterator;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class BitArray
-	   extends AbstractArray<BitArray>
+	   extends AbstractArray<BitArray, Boolean>
 	   implements Iterable<Boolean> {
 
 	ByteArray byteArray;
@@ -67,9 +67,12 @@ public class BitArray
 		this.byteArray = byteArray;
 		this.trailer = trailer;
 		this.header = header;
+		if (length <= 1) {
+			this.uniform = true;
+		}
 	}
 
-	public boolean[] getAll() {
+	public boolean[] getBits() {
 		boolean[] result = new boolean[this.length];
 		for (int i = 0; i < this.length; i++) {
 			result[i] = this.abstractGetAt(i);
@@ -87,7 +90,7 @@ public class BitArray
 		return result;
 	}
 
-	public boolean getAt(int index) {
+	public boolean getBitAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -106,28 +109,22 @@ public class BitArray
 		return result;
 	}
 
+	public int countOnes() {
+		return this.count(true);
+	}
+
+	public int countZeros() {
+		return this.count(false);
+	}
+
 	// leading here means the highest indices
 	public int countLeadingZeros() {
-		int result = 0;
-		for (int i = this.length - 1; i >= 0; i--) {
-			if (this.abstractGetAt(i)) {
-				return result;
-			}
-			result++;
-		}
-		return result;
+		return this.countSuffix(false);
 	}
 
 	// trailing here means the lowest indices
 	public int countTrailingZeros() {
-		int result = 0;
-		for (int i = 0; i < this.length; i++) {
-			if (this.abstractGetAt(i)) {
-				return result;
-			}
-			result++;
-		}
-		return result;
+		return this.countPrefix(false);
 	}
 
 	public BitArray removeLeadingZeros() {
@@ -138,20 +135,6 @@ public class BitArray
 	public BitArray removeTrailingZeros() {
 		int n = this.countTrailingZeros();
 		return this.removePrefix(n);
-	}
-
-	public int countOnes() {
-		return this.length - this.countZeros();
-	}
-
-	public int countZeros() {
-		int result = 0;
-		for (int i = 0; i < this.length; i++) {
-			if (!this.getAt(i)) {
-				result++;
-			}
-		}
-		return result;
 	}
 
 	// left here means making the bit array smaller
@@ -191,25 +174,22 @@ public class BitArray
 	}
 
 	public static BitArray getInstance(int length) {
-		return BitArray.getInstance(length, false);
+		return BitArray.getInstance(false, length);
 	}
 
-	public static BitArray getInstance(int length, boolean bit) {
+	public static BitArray getInstance(boolean fillBit, int length) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		if (bit) {
-			int byteLength = (length + Byte.SIZE - 1) / Byte.SIZE;
-			return new BitArray(ByteArray.getInstance(byteLength, true), length);
-		}
-		return new BitArray(ByteArray.getInstance(), 0, length, length, 0, false);
+		int byteLength = (length + Byte.SIZE - 1) / Byte.SIZE;
+		return new BitArray(ByteArray.getInstance(fillBit, byteLength), length);
 	}
 
 	public static BitArray getInstance(boolean... bits) {
 		if (bits == null) {
 			throw new IllegalArgumentException();
 		}
-		return new BitArray(bitsToByteArray(bits), bits.length);
+		return BitArray.getInstance(bitsToBytes(bits), bits.length);
 	}
 
 	public static BitArray getInstance(byte... bytes) {
@@ -277,7 +257,7 @@ public class BitArray
 			if (i > 0 && i % 8 == 0) {
 				str = str + "|";
 			}
-			if (this.getAt(i)) {
+			if (this.getBitAt(i)) {
 				str = str + "1";
 			} else {
 				str = str + "0";
@@ -339,7 +319,12 @@ public class BitArray
 		return true;
 	}
 
-	private boolean abstractGetAt(int index) {
+	@Override
+	protected Boolean abstractGetAt(int index) {
+		return this.abstractGetBitAt(index);
+	}
+
+	private boolean abstractGetBitAt(int index) {
 		if (this.reverse) {
 			index = this.length - index - 1;
 		}
@@ -360,12 +345,34 @@ public class BitArray
 	protected BitArray abstractAppend(BitArray other) {
 		boolean[] result = new boolean[this.length + other.length];
 		for (int i = 0; i < this.length; i++) {
-			result[i] = this.getAt(i);
+			result[i] = this.getBitAt(i);
 		}
 		for (int i = 0; i < other.length; i++) {
-			result[this.length + i] = other.getAt(i);
+			result[this.length + i] = other.getBitAt(i);
 		}
-		return new BitArray(bitsToByteArray(result), result.length);
+		return BitArray.getInstance(result);
+	}
+
+	@Override
+	protected BitArray abstractInsertAt(int index, Boolean newBit) {
+		boolean[] result = new boolean[this.length + 1];
+		for (int i = 0; i < result.length; i++) {
+			if (i != index) {
+				result[i] = (i < index) ? this.abstractGetBitAt(i) : this.abstractGetBitAt(i - 1);
+			}
+		}
+		result[index] = newBit;
+		return BitArray.getInstance(result);
+	}
+
+	@Override
+	protected BitArray abstractReplaceAt(int index, Boolean newBit) {
+		boolean[] result = new boolean[this.length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = this.abstractGetBitAt(i);
+		}
+		result[index] = newBit;
+		return BitArray.getInstance(result);
 	}
 
 	@Override
@@ -373,7 +380,7 @@ public class BitArray
 		return new BitArray(this.byteArray, this.offset, this.length, this.trailer, this.header, !this.reverse);
 	}
 
-	private static ByteArray bitsToByteArray(boolean[] bits) {
+	private static byte[] bitsToBytes(boolean[] bits) {
 		int byteLength = (bits.length + Byte.SIZE - 1) / Byte.SIZE;
 		byte[] bytes = new byte[byteLength];
 		for (int i = 0; i < bits.length; i++) {
@@ -383,7 +390,7 @@ public class BitArray
 				bytes[byteIndex] = ByteArray.setBit(bytes[byteIndex], bitIndex);
 			}
 		}
-		return ByteArray.getInstance(bytes);
+		return bytes;
 	}
 
 	@Override

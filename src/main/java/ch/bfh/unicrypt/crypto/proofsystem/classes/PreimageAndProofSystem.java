@@ -85,8 +85,4 @@ public class PreimageAndProofSystem
 		return new PreimageAndProofSystem(challengeGenerator, proofFunction);
 	}
 
-	public Function[] getProofFunctions() {
-		return this.getPreimageProofFunction().getAll();
-	}
-
 }

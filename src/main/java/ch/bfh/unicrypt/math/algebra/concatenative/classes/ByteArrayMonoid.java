@@ -111,7 +111,7 @@ public class ByteArrayMonoid
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(ByteArrayElement element) {
 		ByteArray value = element.getValue();
-		BigInteger value1 = new BigInteger(1, value.getAll());
+		BigInteger value1 = new BigInteger(1, value.getBytes());
 		BigInteger value2 = BigInteger.ZERO;
 		int blockLength = this.getBlockLength();
 		if (value.getLength() > 0) {

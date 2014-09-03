@@ -69,7 +69,7 @@ public class StringConverter
 
 	@Override
 	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getAll(), charset);
+		return new String(byteArray.getBytes(), charset);
 	}
 
 	public static StringConverter getInstance() {

@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  *
@@ -66,6 +67,11 @@ public class ProductSemiGroup
 	}
 
 	@Override
+	public SemiGroup getLast() {
+		return (SemiGroup) super.getLast();
+	}
+
+	@Override
 	public SemiGroup getAt(int index) {
 		return (SemiGroup) super.getAt(index);
 	}
@@ -73,11 +79,6 @@ public class ProductSemiGroup
 	@Override
 	public SemiGroup getAt(int... indices) {
 		return (SemiGroup) super.getAt(indices);
-	}
-
-	@Override
-	public SemiGroup[] getAll() {
-		return (SemiGroup[]) super.getAll();
 	}
 
 	@Override
@@ -115,6 +116,14 @@ public class ProductSemiGroup
 			throw new IllegalArgumentException();
 		}
 		return this.defaultApply(elements);
+	}
+
+	@Override
+	public final Tuple apply(List<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultApply(elements.toArray(new Element[]{}));
 	}
 
 	@Override

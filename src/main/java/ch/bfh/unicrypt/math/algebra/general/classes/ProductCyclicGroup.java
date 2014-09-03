@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -72,6 +72,11 @@ public class ProductCyclicGroup
 	}
 
 	@Override
+	public CyclicGroup getLast() {
+		return (CyclicGroup) super.getLast();
+	}
+
+	@Override
 	public CyclicGroup getAt(int index) {
 		return (CyclicGroup) super.getAt(index);
 	}
@@ -79,11 +84,6 @@ public class ProductCyclicGroup
 	@Override
 	public CyclicGroup getAt(int... indices) {
 		return (CyclicGroup) super.getAt(indices);
-	}
-
-	@Override
-	public CyclicGroup[] getAll() {
-		return (CyclicGroup[]) super.getAll();
 	}
 
 	@Override

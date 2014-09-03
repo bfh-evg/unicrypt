@@ -107,10 +107,10 @@ public class ImmutableArrayTest {
 
 	@Test
 	public void testGetAll() {
-		assertArrayEquals(new String[]{}, a0.getAll());
-		assertArrayEquals(new String[]{"s1", "s2", "s3"}, a1.getAll());
-		assertArrayEquals(new String[]{"s1", "s1", "s1"}, a2.getAll());
-		assertArrayEquals(new String[]{"s1", "s1", "s1"}, a3.getAll());
+		assertArrayEquals(new String[]{}, a0.getAll().toArray());
+		assertArrayEquals(new String[]{"s1", "s2", "s3"}, a1.getAll().toArray());
+		assertArrayEquals(new String[]{"s1", "s1", "s1"}, a2.getAll().toArray());
+		assertArrayEquals(new String[]{"s1", "s1", "s1"}, a3.getAll().toArray());
 	}
 
 	@Test

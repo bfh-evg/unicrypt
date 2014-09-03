@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
 
 /**
  *
@@ -64,6 +64,11 @@ public class ProductGroup
 	}
 
 	@Override
+	public Group getLast() {
+		return (Group) super.getLast();
+	}
+
+	@Override
 	public Group getAt(int index) {
 		return (Group) super.getAt(index);
 	}
@@ -71,11 +76,6 @@ public class ProductGroup
 	@Override
 	public Group getAt(int... indices) {
 		return (Group) super.getAt(indices);
-	}
-
-	@Override
-	public Group[] getAll() {
-		return (Group[]) super.getAll();
 	}
 
 	@Override

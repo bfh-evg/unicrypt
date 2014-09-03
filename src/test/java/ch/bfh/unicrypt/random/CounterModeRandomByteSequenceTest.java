@@ -181,7 +181,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBytes");
 		int byteArrayLength = 1;
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
-//		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getAll();
+//		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 //		byte[] result = instance.getNextByteArray(byteArrayLength);
 //TODO:		Assert.assertTrue(expResult[0] == result[0]);
 	}
@@ -195,7 +195,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBytes");
 		int byteArrayLength = 1;
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
-//		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getAll();
+//		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 //		for (int i = 0; i < expResult.length; i++) {
 //			byte[] result = instance.getNextByteArray(byteArrayLength);
 //TODO:			Assert.assertTrue("Byte no: " + i, expResult[i] == result[0]);
@@ -213,7 +213,7 @@ public class CounterModeRandomByteSequenceTest {
 //		int byteArrayLength = 1;
 //		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 //		for (int j = 0; j < 10; j++) {
-//			byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(j)).getHashValue().getValue().getAll();
+//			byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(j)).getHashValue().getValue().getBytes();
 //			for (int i = 0; i < expResult.length; i++) {
 //				byte[] result = instance.getNextByteArray(byteArrayLength);
 ////TODO:				Assert.assertTrue("Byte no: " + i, expResult[i] == result[0]);
@@ -231,7 +231,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBytes");
 		int byteArrayLength = HashAlgorithm.getInstance().getHashLength();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
-//		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getAll();
+//		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 //		byte[] result = instance.getNextByteArray(byteArrayLength);
 ////TODO:		Assert.assertTrue(Arrays.equals(expResult, result));
 	}
@@ -246,7 +246,7 @@ public class CounterModeRandomByteSequenceTest {
 		int byteArrayLength = HashAlgorithm.getInstance().getHashLength();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		instance.getNextByteArray(byteArrayLength);
-//		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getValue().getAll();
+//		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getValue().getBytes();
 //		byte[] result = instance.getNextByteArray(byteArrayLength);
 //TODO:		Assert.assertTrue(Arrays.equals(expResult, result));
 

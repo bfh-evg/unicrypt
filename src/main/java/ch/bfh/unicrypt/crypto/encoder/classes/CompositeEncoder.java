@@ -49,7 +49,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
@@ -62,18 +64,42 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public Encoder[] getAll() {
-		Encoder[] result = new Encoder[this.getLength()];
-		int i = 0;
-		for (Encoder encoder : this.encoders) {
-			result[i++] = encoder;
-		}
-		return result;
+	public int getLength() {
+		return this.encoders.getLength();
 	}
 
 	@Override
-	public int getLength() {
-		return this.encoders.getLength();
+	public boolean isEmpty() {
+		return this.encoders.isEmpty();
+	}
+
+	@Override
+	public boolean isUniform() {
+		return this.encoders.isUniform();
+	}
+
+	@Override
+	public int count(Encoder encoder) {
+		return this.encoders.count(encoder);
+	}
+
+	@Override
+	public int countPrefix(Encoder encoder) {
+		return this.encoders.countPrefix(encoder);
+	}
+
+	@Override
+	public int countSuffix(Encoder encoder) {
+		return this.encoders.countSuffix(encoder);
+	}
+
+	@Override
+	public List<Encoder> getAll() {
+		List<Encoder> result = new ArrayList<Encoder>();
+		for (Encoder encoder : this.encoders) {
+			result.add(encoder);
+		}
+		return result;
 	}
 
 	@Override
@@ -105,16 +131,6 @@ public class CompositeEncoder
 	@Override
 	public Encoder getLast() {
 		return this.encoders.getLast();
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return this.encoders.isEmpty();
-	}
-
-	@Override
-	public boolean isUniform() {
-		return this.encoders.isUniform();
 	}
 
 	@Override

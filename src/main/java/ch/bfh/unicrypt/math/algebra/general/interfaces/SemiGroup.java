@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.numerical.Numerical;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * TODO This interface represents the mathematical concept of a semigroup. It defines a set of elements and an
@@ -79,6 +80,8 @@ public interface SemiGroup<V extends Object>
 	 * @throws IllegalArgumentException if one of the elements in {@code elements} does not belong to the semigroup
 	 */
 	public Element<V> apply(Element... elements);
+
+	public Element<V> apply(List<Element> elements);
 
 	/**
 	 * Applies the binary group operation repeatedly to {@code amount} many instances of a given semigroup element. If

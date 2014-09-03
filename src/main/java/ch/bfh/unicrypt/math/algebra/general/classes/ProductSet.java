@@ -56,6 +56,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -273,6 +275,21 @@ public class ProductSet
 	}
 
 	@Override
+	public int count(Set set) {
+		return this.sets.count(set);
+	}
+
+	@Override
+	public int countPrefix(Set set) {
+		return this.sets.countPrefix(set);
+	}
+
+	@Override
+	public int countSuffix(Set set) {
+		return this.sets.countSuffix(set);
+	}
+
+	@Override
 	public Set getFirst() {
 		return this.sets.getFirst();
 	}
@@ -304,11 +321,10 @@ public class ProductSet
 	}
 
 	@Override
-	public Set[] getAll() {
-		Set[] result = new Set[this.getLength()];
-		int i = 0;
+	public List<Set> getAll() {
+		List<Set> result = new ArrayList<Set>();
 		for (Set set : this.sets) {
-			result[i++] = set;
+			result.add(set);
 		}
 		return result;
 	}

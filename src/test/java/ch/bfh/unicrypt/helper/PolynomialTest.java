@@ -205,21 +205,21 @@ public class PolynomialTest {
 			fail();
 		} catch (UnsupportedOperationException e) {
 		}
-		assertArrayEquals(ByteArray.getInstance().getAll(), p4.getCoefficients().getAll());
-		assertArrayEquals(ByteArray.getInstance(0x0b).getAll(), p5.getCoefficients().getAll());
-		assertArrayEquals(ByteArray.getInstance(0x4d, 0x17).getAll(), p7.getCoefficients().getAll());
+		assertArrayEquals(ByteArray.getInstance().getBytes(), p4.getCoefficients().getBytes());
+		assertArrayEquals(ByteArray.getInstance(0x0b).getBytes(), p5.getCoefficients().getBytes());
+		assertArrayEquals(ByteArray.getInstance(0x4d, 0x17).getBytes(), p7.getCoefficients().getBytes());
 
 	}
 
 	@Test
 	public void testGetIndices() {
-		assertArrayEquals(new Integer[]{}, p0.getIndices().getAll());
-		assertArrayEquals(new Integer[]{0, 1, 3}, p1.getIndices().getAll());
-		assertArrayEquals(new Integer[]{}, p2.getIndices().getAll());
-		assertArrayEquals(new Integer[]{0, 1, 3}, p3.getIndices().getAll());
-		assertArrayEquals(new Integer[]{}, p4.getIndices().getAll());
-		assertArrayEquals(new Integer[]{0, 1, 3}, p5.getIndices().getAll());
-		assertArrayEquals(new Integer[]{3, 5, 7, 10, 14, 15}, p6.getIndices().getAll());
+		assertArrayEquals(new Integer[]{}, p0.getIndices().getAll().toArray());
+		assertArrayEquals(new Integer[]{0, 1, 3}, p1.getIndices().getAll().toArray());
+		assertArrayEquals(new Integer[]{}, p2.getIndices().getAll().toArray());
+		assertArrayEquals(new Integer[]{0, 1, 3}, p3.getIndices().getAll().toArray());
+		assertArrayEquals(new Integer[]{}, p4.getIndices().getAll().toArray());
+		assertArrayEquals(new Integer[]{0, 1, 3}, p5.getIndices().getAll().toArray());
+		assertArrayEquals(new Integer[]{3, 5, 7, 10, 14, 15}, p6.getIndices().getAll().toArray());
 	}
 
 	@Test

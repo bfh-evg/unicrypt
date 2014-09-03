@@ -93,7 +93,7 @@ public class AESEncryptionScheme
 
 	public static final int AES_BLOCK_SIZE = 128; // bits
 	public static final ByteArrayMonoid AES_ENCRYPTION_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-	public static final ByteArray DEFAULT_IV = ByteArray.getInstance(AES_BLOCK_SIZE / Byte.SIZE, false);
+	public static final ByteArray DEFAULT_IV = ByteArray.getInstance(false, AES_BLOCK_SIZE / Byte.SIZE);
 
 	private final KeyLength keyLength;
 	private final Mode mode;
@@ -153,15 +153,15 @@ public class AESEncryptionScheme
 		protected ByteArrayElement abstractApply(Pair element, RandomByteSequence randomByteSequence) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement message = (ByteArrayElement) element.getSecond();
-			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getAll(), ALGORITHM_NAME);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getBytes(), ALGORITHM_NAME);
 			byte[] encryptedBytes;
 			try {
 				if (mode == Mode.CBC) {
-					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getAll()));
+					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 				}
-				encryptedBytes = cipher.doFinal(message.getValue().getAll());
+				encryptedBytes = cipher.doFinal(message.getValue().getBytes());
 			} catch (InvalidKeyException ex) {
 				throw new RuntimeException();
 			} catch (IllegalBlockSizeException ex) {
@@ -187,15 +187,15 @@ public class AESEncryptionScheme
 		protected ByteArrayElement abstractApply(Pair element, RandomByteSequence randomByteSequence) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement encryption = (ByteArrayElement) element.getSecond();
-			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getAll(), ALGORITHM_NAME);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getBytes(), ALGORITHM_NAME);
 			byte[] message;
 			try {
 				if (mode == Mode.CBC) {
-					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getAll()));
+					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 				}
-				message = cipher.doFinal(encryption.getValue().getAll());
+				message = cipher.doFinal(encryption.getValue().getBytes());
 			} catch (InvalidKeyException e) {
 				throw new RuntimeException();
 			} catch (IllegalBlockSizeException e) {

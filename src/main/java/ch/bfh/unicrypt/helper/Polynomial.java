@@ -121,11 +121,11 @@ public class Polynomial<C>
 		} else {
 			int byteIndex = 0;
 			for (int i = 0; i < this.binaryCoefficients.getLength(); i++) {
-				if (this.binaryCoefficients.getAt(i) != 0) {
+				if (this.binaryCoefficients.getByteAt(i) != 0) {
 					byteIndex = i;
 				}
 			}
-			byte b = coefficients.getAt(byteIndex);
+			byte b = coefficients.getByteAt(byteIndex);
 			int bitIndex = Integer.SIZE - Integer.numberOfLeadingZeros(b & 0xff);
 			int d = byteIndex * Byte.SIZE + bitIndex - 1;
 			this.degree = d < 0 ? ZERO_POLYNOMIAL_DEGREE : d;
@@ -158,7 +158,7 @@ public class Polynomial<C>
 			if (byteIndex >= this.binaryCoefficients.getLength()) {
 				return this.zeroCoefficient;
 			}
-			return ((this.binaryCoefficients.getAt(byteIndex) >> bitIndex) & 1) == 1 ? this.oneCoefficient : this.zeroCoefficient;
+			return ((this.binaryCoefficients.getByteAt(byteIndex) >> bitIndex) & 1) == 1 ? this.oneCoefficient : this.zeroCoefficient;
 		} else {
 			C coefficient = this.coefficients.get(index);
 			return coefficient == null ? this.zeroCoefficient : coefficient;
@@ -179,7 +179,7 @@ public class Polynomial<C>
 				ArrayList<Integer> ind = new ArrayList();
 				for (int i = 0; i < this.binaryCoefficients.getLength(); i++) {
 					for (int j = 0; j < Byte.SIZE; j++) {
-						if (((this.binaryCoefficients.getAt(i) >> j) & 1) == 1) {
+						if (((this.binaryCoefficients.getByteAt(i) >> j) & 1) == 1) {
 							ind.add(i * Byte.SIZE + j);
 						}
 					}

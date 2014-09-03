@@ -43,18 +43,23 @@ package ch.bfh.unicrypt.helper.array;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <A>
+ * @param <T>
  */
-abstract public class AbstractArray<A extends AbstractArray<A>>
-	   extends UniCrypt {
+abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Object>
+	   extends UniCrypt
+	   implements ch.bfh.unicrypt.helper.array.Array<A, T> {
 
 	protected int length;
 	protected int offset;
 	protected boolean reverse;
+	protected Boolean uniform = null;
 
 	protected AbstractArray(int length, int offset, boolean reverse) {
 		this.length = length;
@@ -62,14 +67,98 @@ abstract public class AbstractArray<A extends AbstractArray<A>>
 		this.reverse = reverse;
 	}
 
+	@Override
 	public int getLength() {
 		return this.length;
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return this.length == 0;
 	}
 
+	@Override
+	public boolean isUniform() {
+		if (this.uniform == null) {
+			this.uniform = true;
+			if (this.length > 1) {
+				T first = this.abstractGetAt(0);
+				for (int i = 1; i < this.length; i++) {
+					if (!first.equals(this.abstractGetAt(i))) {
+						this.uniform = false;
+						break;
+					}
+				}
+			}
+		}
+		return this.uniform;
+	}
+
+	@Override
+	public int count(T object) {
+		int result = 0;
+		for (int i = 0; i < this.length; i++) {
+			if (this.abstractGetAt(i).equals(object)) {
+				result++;
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public int countPrefix(T object) {
+		int result = 0;
+		for (int i = 0; i < this.length; i++) {
+			if (this.abstractGetAt(i).equals(object)) {
+				result++;
+			} else {
+				break;
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public int countSuffix(T object) {
+		int result = 0;
+		for (int i = this.length - 1; i >= 0; i--) {
+			if (this.abstractGetAt(i).equals(object)) {
+				result++;
+			} else {
+				break;
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public List<T> getAll() {
+		List<T> result = new ArrayList<T>();
+		for (int i = 0; i < this.length; i++) {
+			result.add(this.abstractGetAt(i));
+		}
+		return result;
+	}
+
+	@Override
+	public T getAt(int index) {
+		if (index < 0 || index >= this.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		return this.abstractGetAt(index);
+	}
+
+	@Override
+	public T getFirst() {
+		return this.getAt(0);
+	}
+
+	@Override
+	public T getLast() {
+		return this.getAt(this.length - 1);
+	}
+
+	@Override
 	public A extract(int offset, int length) {
 		if (offset < 0 || length < 0 || offset + length > this.length) {
 			throw new IllegalArgumentException();
@@ -80,18 +169,22 @@ abstract public class AbstractArray<A extends AbstractArray<A>>
 		return abstractExtract(offset, length);
 	}
 
+	@Override
 	public A extractPrefix(int length) {
 		return this.extract(0, length);
 	}
 
+	@Override
 	public A extractSuffix(int length) {
 		return this.extract(this.length - length, length);
 	}
 
+	@Override
 	public A extractRange(int fromIndex, int toIndex) {
 		return this.extract(fromIndex, toIndex - fromIndex + 1);
 	}
 
+	@Override
 	public A remove(int offset, int length) {
 		A prefix = this.extractPrefix(offset);
 		A suffix = this.extractSuffix(this.length - offset - length);
@@ -99,23 +192,28 @@ abstract public class AbstractArray<A extends AbstractArray<A>>
 	}
 
 	// prefix here means the lowest indices
+	@Override
 	public A removePrefix(int length) {
 		return this.remove(0, length);
 	}
 
 	// trailing here means the highest indices
+	@Override
 	public A removeSuffix(int length) {
 		return this.remove(this.length - length, length);
 	}
 
+	@Override
 	public A removeRange(int fromIndex, int toIndex) {
 		return this.remove(fromIndex, toIndex - fromIndex + 1);
 	}
 
+	@Override
 	public A removeAt(int index) {
 		return this.removeRange(index, index);
 	}
 
+	@Override
 	public A append(A other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
@@ -127,6 +225,36 @@ abstract public class AbstractArray<A extends AbstractArray<A>>
 			return (A) this;
 		}
 		return this.abstractAppend(other);
+	}
+
+	@Override
+	public A add(T object) {
+		return this.insertAt(this.length, object);
+	}
+
+	@Override
+	public A insertAt(int index, T newObject) {
+		if (index < 0 || index > this.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (newObject == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractInsertAt(index, newObject);
+	}
+
+	@Override
+	public A replaceAt(int index, T newObject) {
+		if (index < 0 || index >= this.length) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (newObject == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.getAt(index).equals(newObject)) {
+			return (A) this;
+		}
+		return this.abstractReplaceAt(index, newObject);
 	}
 
 	public A[] split(int... indices) {
@@ -147,13 +275,20 @@ abstract public class AbstractArray<A extends AbstractArray<A>>
 		return result;
 	}
 
+	@Override
 	public A reverse() {
 		return this.abstractReverse();
 	}
 
+	abstract protected T abstractGetAt(int index);
+
 	abstract protected A abstractExtract(int offset, int length);
 
 	abstract protected A abstractAppend(A other);
+
+	abstract protected A abstractInsertAt(int offset, T newObject);
+
+	abstract protected A abstractReplaceAt(int offset, T newObject);
 
 	abstract protected A abstractReverse();
 

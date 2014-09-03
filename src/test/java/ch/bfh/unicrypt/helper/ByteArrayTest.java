@@ -58,8 +58,8 @@ public class ByteArrayTest {
 
 	public static ByteArray a0 = ByteArray.getInstance();
 	public static ByteArray a1 = ByteArray.getInstance(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-	public static ByteArray a2 = ByteArray.getInstance(15, false);
-	public static ByteArray a3 = ByteArray.getInstance(20, true);
+	public static ByteArray a2 = ByteArray.getInstance(false, 15);
+	public static ByteArray a3 = ByteArray.getInstance(true, 20);
 	public static ByteArray a4 = ByteArray.getInstance(9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
 	public static ByteArray a012 = ByteArray.getInstance(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	public static ByteArray a34 = ByteArray.getInstance(255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
@@ -238,8 +238,8 @@ public class ByteArrayTest {
 		ByteArray byteArray = ByteArray.getInstance("00|01|02|03|04|05|06|07|08|09");
 		List<ByteArray> byteArrays = new ArrayList<ByteArray>();
 		byteArrays.add(ByteArray.getInstance("00|00|00|08|07|05|04|03|FF|FF"));
-		byteArrays.add(byteArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(ByteArray.getInstance(2, true)));
-		byteArrays.add(byteArray.extract(3, 6).removeAt(3).reverse().append(ByteArray.getInstance(2, true)).shiftRight(3));
+		byteArrays.add(byteArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(ByteArray.getInstance(true, 2)));
+		byteArrays.add(byteArray.extract(3, 6).removeAt(3).reverse().append(ByteArray.getInstance(true, 2)).shiftRight(3));
 
 		for (ByteArray b1 : byteArrays) {
 			for (ByteArray b2 : byteArrays) {

@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.List;
 
 public class PreimageEqualityProofSystem
 	   extends AbstractPreimageProofSystem<SemiGroup, Element, ProductSemiGroup, Tuple, SharedDomainFunction> {
@@ -81,6 +82,10 @@ public class PreimageEqualityProofSystem
 		return PreimageEqualityProofSystem.getInstance(challengeGenerator, function.getAll());
 	}
 
+	public static PreimageEqualityProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final List<Function> proofFunctions) {
+		return PreimageEqualityProofSystem.getInstance(challengeGenerator, proofFunctions.toArray(new Function[]{}));
+	}
+
 	public static PreimageEqualityProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
 		if (challengeGenerator == null || proofFunctions == null || proofFunctions.length < 1) {
 			throw new IllegalArgumentException();
@@ -103,10 +108,6 @@ public class PreimageEqualityProofSystem
 			throw new IllegalArgumentException("Spaces of challenge generator and proof function are unequal.");
 		}
 		return new PreimageEqualityProofSystem(challengeGenerator, proofFunction);
-	}
-
-	public Function[] getProofFunctions() {
-		return this.getPreimageProofFunction().getAll();
 	}
 
 }

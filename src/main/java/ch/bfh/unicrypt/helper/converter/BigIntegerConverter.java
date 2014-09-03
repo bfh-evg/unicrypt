@@ -102,9 +102,9 @@ public class BigIntegerConverter
 	public BigInteger abstractConvertFromByteArray(ByteArray byteArray) {
 		byte[] bytes;
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
-			bytes = byteArray.reverse().getAll();
+			bytes = byteArray.reverse().getBytes();
 		} else {
-			bytes = byteArray.getAll();
+			bytes = byteArray.getBytes();
 		}
 		return new BigInteger(1, bytes);
 	}

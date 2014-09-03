@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * This interface provides the renaming of {@link SemiGroup} methods for the case of an additively written semigroup. No
@@ -76,6 +77,8 @@ public interface AdditiveSemiGroup<V extends Object>
 	 * @return the same as in {@link #Group.apply(Element...)}
 	 */
 	public AdditiveElement<V> add(Element... elements);
+
+	public AdditiveElement<V> add(List<Element> elements);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.

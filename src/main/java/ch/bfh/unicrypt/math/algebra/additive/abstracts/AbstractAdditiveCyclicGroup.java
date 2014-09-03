@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
+import java.util.List;
 
 public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractCyclicGroup<E, V>
@@ -63,6 +64,11 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, 
 
 	@Override
 	public final E add(final Element... elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E add(final List<Element> elements) {
 		return this.apply(elements);
 	}
 

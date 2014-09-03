@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * This abstract class provides a basis implementation for objects of type {@link SemiGroup}.
@@ -79,6 +80,14 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 			throw new IllegalArgumentException();
 		}
 		return this.defaultApply(elements);
+	}
+
+	@Override
+	public final E apply(final List<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultApply(elements.toArray(new Element[]{}));
 	}
 
 	@Override

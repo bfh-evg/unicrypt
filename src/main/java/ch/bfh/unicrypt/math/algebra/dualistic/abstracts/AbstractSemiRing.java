@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  *
@@ -78,6 +79,14 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 			throw new IllegalArgumentException();
 		}
 		return this.defaultMultiply(elements);
+	}
+
+	@Override
+	public E multiply(List<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultMultiply(elements.toArray(new Element[]{}));
 	}
 
 	@Override

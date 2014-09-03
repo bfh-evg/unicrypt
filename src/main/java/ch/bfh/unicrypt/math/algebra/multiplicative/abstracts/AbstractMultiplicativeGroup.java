@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import java.math.BigInteger;
+import java.util.List;
 
 public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractGroup<E, V>
@@ -63,6 +64,11 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
 
 	@Override
 	public final E multiply(final Element... elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E multiply(final List<Element> elements) {
 		return this.apply(elements);
 	}
 

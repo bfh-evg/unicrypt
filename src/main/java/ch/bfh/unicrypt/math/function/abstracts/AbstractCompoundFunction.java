@@ -47,7 +47,9 @@ import ch.bfh.unicrypt.helper.array.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -89,6 +91,21 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
+	public int count(Function function) {
+		return this.functions.count(function);
+	}
+
+	@Override
+	public int countPrefix(Function function) {
+		return this.functions.countPrefix(function);
+	}
+
+	@Override
+	public int countSuffix(Function function) {
+		return this.functions.countSuffix(function);
+	}
+
+	@Override
 	public Function getFirst() {
 		return this.functions.getFirst();
 	}
@@ -120,11 +137,10 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public Function[] getAll() {
-		Function[] result = new Function[this.getLength()];
-		int i = 0;
+	public List<Function> getAll() {
+		List<Function> result = new ArrayList<Function>();
 		for (Function function : this.functions) {
-			result[i++] = function;
+			result.add(function);
 		}
 		return result;
 	}

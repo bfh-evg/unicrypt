@@ -70,8 +70,8 @@ public class ApplyFunction
 	}
 
 	@Override
-	protected Element abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().apply(element.getAll());
+	protected Element abstractApply(final Tuple tuple, final RandomByteSequence randomByteSequence) {
+		return this.getCoDomain().apply(tuple.getAll());
 	}
 
 	/**

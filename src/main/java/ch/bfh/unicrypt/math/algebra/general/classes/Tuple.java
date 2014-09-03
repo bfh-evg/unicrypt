@@ -46,7 +46,9 @@ import ch.bfh.unicrypt.helper.array.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -77,6 +79,21 @@ public class Tuple
 	@Override
 	public final boolean isUniform() {
 		return this.getValue().isUniform();
+	}
+
+	@Override
+	public int count(Element element) {
+		return this.getValue().count(element);
+	}
+
+	@Override
+	public int countPrefix(Element element) {
+		return this.getValue().countPrefix(element);
+	}
+
+	@Override
+	public int countSuffix(Element element) {
+		return this.getValue().countSuffix(element);
 	}
 
 	@Override
@@ -111,11 +128,10 @@ public class Tuple
 	}
 
 	@Override
-	public Element[] getAll() {
-		Element[] result = new Element[this.getLength()];
-		int i = 0;
+	public List<Element> getAll() {
+		List<Element> result = new ArrayList<Element>();
 		for (Element element : this.getValue()) {
-			result[i++] = element;
+			result.add(element);
 		}
 		return result;
 	}
