@@ -268,6 +268,9 @@ public class Tuple
 
 	// helper method to distinguish between pairs, triples and tuples
 	private static Tuple getInstance(ProductSet productSet, ImmutableArray<Element> elements) {
+		if (elements.getLength() == 1) {
+			return new Singleton(productSet, elements);
+		}
 		if (elements.getLength() == 2) {
 			return new Pair(productSet, elements);
 		}

@@ -39,51 +39,40 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.converter;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import java.math.BigInteger;
+import java.nio.ByteOrder;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
- * @author Reto E. Koenig <reto.koenig@bfh.ch>
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteTreeTest {
+public class ByteArrayConverterTest {
 
-	public static ByteTree b0 = ByteTree.getInstance(ByteArray.getInstance("00|00"));
-	public static ByteTree b1 = ByteTree.getInstance(ByteArray.getInstance("12|34"));
-	public static ByteTree b2 = ByteTree.getInstance(ByteArray.getInstance("56|78|90"));
-	public static ByteTree b12 = ByteTree.getInstance(b1, b2);
-	public static ByteTree b012 = ByteTree.getInstance(b0, b12);
-
-	public ByteTreeTest() {
-	}
+	public static BigIntegerConverter c1 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
+	public static BigIntegerConverter c2 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 0);
+	public static BigIntegerConverter c3 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 10);
+	public static BigIntegerConverter c4 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
 
 	@Test
-	public void testGetByteArray() {
-		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|02|00|00"), b0.getByteArray());
-		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|02|12|34"), b1.getByteArray());
-		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|03|56|78|90"), b2.getByteArray());
-		Assert.assertEquals(ByteArray.getInstance("00|00|00|00|02|01|00|00|00|02|12|34|01|00|00|00|03|56|78|90"), b12.getByteArray());
-		Assert.assertEquals(ByteArray.getInstance("00|00|00|00|02|01|00|00|00|02|00|00|00|00|00|00|02|01|00|00|00|02|12|34|01|00|00|00|03|56|78|90"), b012.getByteArray());
-	}
+	public void testByteArrayConverter() {
+		BigInteger b0 = BigInteger.valueOf(0);
+		BigInteger b1 = BigInteger.valueOf(9);
+		BigInteger b2 = BigInteger.valueOf(200);
+		BigInteger b3 = BigInteger.valueOf(300);
+		for (BigIntegerConverter converter : new BigIntegerConverter[]{c1, c2, c3, c4}) {
+			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
+				ByteArray ba = converter.convertToByteArray(bigInteger);
+				Assert.assertTrue(ba.getLength() >= converter.getMinLength());
+				Assert.assertEquals(bigInteger, converter.convertFromByteArray(ba));
+			}
 
-	@Test
-	public void testGetInstance_ByteArray() {
-		Assert.assertEquals(b0, ByteTree.getInstanceFrom(b0.getByteArray()));
-		Assert.assertEquals(b1, ByteTree.getInstanceFrom(b1.getByteArray()));
-		Assert.assertEquals(b2, ByteTree.getInstanceFrom(b2.getByteArray()));
-		Assert.assertEquals(b12, ByteTree.getInstanceFrom(b12.getByteArray()));
-		Assert.assertEquals(b012, ByteTree.getInstanceFrom(b012.getByteArray()));
-	}
-
-	@Test
-	public void testGetInstance_GetHashValue() {
-		ByteArray h0 = b0.getRecursiveHashValue();
-		ByteArray h12 = b12.getRecursiveHashValue();
-		Assert.assertEquals(h0.append(h12).getHashValue(), b012.getRecursiveHashValue());
+		}
 	}
 
 }
