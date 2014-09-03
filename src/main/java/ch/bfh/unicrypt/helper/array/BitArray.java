@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.helper.array;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.util.Iterator;
 
 /**
  *
@@ -264,59 +263,6 @@ public class BitArray
 			}
 		}
 		return "\"" + str + "\"";
-	}
-
-	@Override
-	public Iterator<Boolean> iterator() {
-		return new Iterator<Boolean>() {
-
-			int currentIndex = 0;
-
-			@Override
-			public boolean hasNext() {
-				return currentIndex < length;
-			}
-
-			@Override
-			public Boolean next() {
-				return abstractGetAt(currentIndex++);
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 5;
-		hash = 79 * hash + this.length;
-		for (boolean b : this) {
-			hash = 79 * hash + ((b) ? 1 : 0);
-		}
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof BitArray)) {
-			return false;
-		}
-		final BitArray other = (BitArray) obj;
-		if (this.length != other.length) {
-			return false;
-		}
-		for (int i = 0; i < this.length; i++) {
-			if (this.abstractGetAt(i) != other.abstractGetAt(i)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	@Override

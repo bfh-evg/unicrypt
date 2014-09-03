@@ -61,7 +61,6 @@ public class AESEncryptionSchemeTest {
 		Element key = aes.getSecretKeyGenerator().generateSecretKey();
 		Element encryptedMessage = aes.encrypt(key, message);
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
-
 		Assert.assertEquals(message, decryptedMessage);
 	}
 

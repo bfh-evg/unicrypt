@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.array;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  *
@@ -51,8 +50,7 @@ import java.util.Iterator;
  * @param <T>
  */
 public class ImmutableArray<T extends Object>
-	   extends AbstractArray<ImmutableArray<T>, T>
-	   implements Iterable<T> {
+	   extends AbstractArray<ImmutableArray<T>, T> {
 
 	// The obects are stored either as an ordinary, possibly empty array (case 1)
 	// or as an array of length 1 together with the full length of the immutable
@@ -80,29 +78,6 @@ public class ImmutableArray<T extends Object>
 	}
 
 	@Override
-	public Iterator<T> iterator() {
-		return new Iterator<T>() {
-
-			int currentIndex = 0;
-
-			@Override
-			public boolean hasNext() {
-				return currentIndex < length;
-			}
-
-			@Override
-			public T next() {
-				return abstractGetAt(currentIndex++);
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
-
-	@Override
 	protected String defaultToStringName() {
 		return "";
 	}
@@ -116,36 +91,6 @@ public class ImmutableArray<T extends Object>
 			delimiter = ", ";
 		}
 		return str;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 5;
-		hash = 43 * hash + this.length;
-		for (T object : this) {
-			hash = 43 * hash + object.hashCode();
-		}
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null || this.getClass() != obj.getClass()) {
-			return false;
-		}
-		final ImmutableArray<?> other = (ImmutableArray<?>) obj;
-		if (this.length != other.length) {
-			return false;
-		}
-		for (int i = 0; i < this.length; i++) {
-			if (!this.abstractGetAt(i).equals(other.abstractGetAt(i))) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	public static <T> ImmutableArray<T> getInstance(T... array) {

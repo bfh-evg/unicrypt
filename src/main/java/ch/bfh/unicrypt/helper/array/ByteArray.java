@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -340,59 +339,6 @@ public class ByteArray
 			delimiter = "|";
 		}
 		return "\"" + str + "\"";
-	}
-
-	@Override
-	public Iterator<Byte> iterator() {
-		return new Iterator<Byte>() {
-
-			int currentIndex = 0;
-
-			@Override
-			public boolean hasNext() {
-				return currentIndex < length;
-			}
-
-			@Override
-			public Byte next() {
-				return abstractGetByteAt(currentIndex++);
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 5;
-		hash = 79 * hash + this.length;
-		for (byte b : this) {
-			hash = 79 * hash + b;
-		}
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof ByteArray)) {
-			return false;
-		}
-		final ByteArray other = (ByteArray) obj;
-		if (this.length != other.length) {
-			return false;
-		}
-		for (int i = 0; i < this.length; i++) {
-			if (this.abstractGetByteAt(i) != other.abstractGetByteAt(i)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	public static ByteArray getInstance() {

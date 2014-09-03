@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.array;
 import ch.bfh.unicrypt.helper.UniCrypt;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ import java.util.List;
  */
 abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Object>
 	   extends UniCrypt
-	   implements ch.bfh.unicrypt.helper.array.Array<A, T> {
+	   implements ch.bfh.unicrypt.helper.array.Array<A, T>, Iterable<T> {
 
 	protected int length;
 	protected int offset;
@@ -278,6 +279,59 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	@Override
 	public A reverse() {
 		return this.abstractReverse();
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+
+			int currentIndex = 0;
+
+			@Override
+			public boolean hasNext() {
+				return currentIndex < length;
+			}
+
+			@Override
+			public T next() {
+				return abstractGetAt(currentIndex++);
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		hash = 43 * hash + this.length;
+		for (T object : this) {
+			hash = 43 * hash + object.hashCode();
+		}
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || !(obj instanceof AbstractArray)) {
+			return false;
+		}
+		final AbstractArray other = (AbstractArray) obj;
+		if (this.length != other.length) {
+			return false;
+		}
+		for (int i = 0; i < this.length; i++) {
+			if (!this.abstractGetAt(i).equals(other.abstractGetAt(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	abstract protected T abstractGetAt(int index);
