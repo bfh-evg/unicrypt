@@ -89,8 +89,8 @@ public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public E defaultApply(final Element[] elements) {
-		if (elements.length == 0) {
+	public E defaultApply(final Iterable<Element> elements) {
+		if (!elements.iterator().hasNext()) {
 			return this.getIdentityElement();
 		}
 		return super.defaultApply(elements);

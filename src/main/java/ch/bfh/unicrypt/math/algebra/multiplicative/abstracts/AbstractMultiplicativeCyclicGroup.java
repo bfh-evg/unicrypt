@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import java.math.BigInteger;
-import java.util.List;
 
 public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractCyclicGroup<E, V>
@@ -68,7 +67,7 @@ public abstract class AbstractMultiplicativeCyclicGroup<E extends Multiplicative
 	}
 
 	@Override
-	public final E multiply(final List<Element> elements) {
+	public final E multiply(final Iterable<Element> elements) {
 		return this.apply(elements);
 	}
 

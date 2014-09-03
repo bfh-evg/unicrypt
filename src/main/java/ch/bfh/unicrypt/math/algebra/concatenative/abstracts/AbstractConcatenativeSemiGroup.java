@@ -49,7 +49,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.List;
 
 public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
@@ -93,7 +92,7 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
 	}
 
 	@Override
-	public final E concatenate(final List<Element> elements) {
+	public final E concatenate(final Iterable<Element> elements) {
 		return this.apply(elements);
 	}
 

@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.helper.array.IterableArray;
 import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
-import java.util.List;
 
 /**
  * This abstract class provides a basis implementation for objects of type {@link SemiGroup}.
@@ -79,15 +79,15 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultApply(elements);
+		return this.defaultApply(IterableArray.getInstance(elements));
 	}
 
 	@Override
-	public final E apply(final List<Element> elements) {
+	public final E apply(final Iterable<Element> elements) {
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultApply(elements.toArray(new Element[]{}));
+		return this.defaultApply(elements);
 	}
 
 	@Override
@@ -128,8 +128,8 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	// The following protected methods are default implementations for sets.
 	// They may need to be changed in certain sub-classes.
 	//
-	protected E defaultApply(final Element... elements) {
-		if (elements.length == 0) {
+	protected E defaultApply(final Iterable<Element> elements) {
+		if (!elements.iterator().hasNext()) {
 			throw new IllegalArgumentException();
 		}
 		E result = null;

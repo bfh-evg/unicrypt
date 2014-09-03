@@ -39,61 +39,28 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.abstracts;
+package ch.bfh.unicrypt.helper;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.array.IterableArray;
 
-public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V extends Object>
-	   extends AbstractSemiGroup<E, V>
-	   implements AdditiveSemiGroup<V> {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class IterableArrayExample {
 
-	public AbstractAdditiveSemiGroup(Class<? extends Object> valueClass) {
-		super(valueClass);
+	public static void example1() {
+		String[] strings = new String[]{"One", "Two", "Three", "Four"};
+		IterableArray<String> iterableStrings = IterableArray.getInstance(strings);
+
+		for (String string : iterableStrings) {
+			System.out.println(string);
+		}
 	}
 
-	@Override
-	public final E add(final Element element1, final Element element2) {
-		return this.apply(element1, element2);
-	}
-
-	@Override
-	public final E add(final Element... elements) {
-		return this.apply(elements);
-	}
-
-	@Override
-	public final E add(final Iterable<Element> elements) {
-		return this.apply(elements);
-	}
-
-	@Override
-	public final E times(final Element element, final BigInteger amount) {
-		return this.selfApply(element, amount);
-	}
-
-	@Override
-	public final E times(final Element element, final Element<Numerical> amount) {
-		return this.selfApply(element, amount);
-	}
-
-	@Override
-	public final E times(final Element element, final int amount) {
-		return this.selfApply(element, amount);
-	}
-
-	@Override
-	public final E timesTwo(Element element) {
-		return this.selfApply(element);
-	}
-
-	@Override
-	public final E sumOfProducts(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

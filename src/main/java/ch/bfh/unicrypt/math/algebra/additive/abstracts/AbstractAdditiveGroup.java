@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
-import java.util.List;
 
 public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractGroup<E, V>
@@ -68,7 +67,7 @@ public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V exte
 	}
 
 	@Override
-	public final E add(final List<Element> elements) {
+	public final E add(final Iterable<Element> elements) {
 		return this.apply(elements);
 	}
 

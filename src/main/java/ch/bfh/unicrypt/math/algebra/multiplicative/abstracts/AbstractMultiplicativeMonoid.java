@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 import java.math.BigInteger;
-import java.util.List;
 
 public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
@@ -63,12 +62,12 @@ public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeEleme
 	}
 
 	@Override
-	public final E multiply(final List<Element> elements) {
+	public final E multiply(final Element... elements) {
 		return this.apply(elements);
 	}
 
 	@Override
-	public final E multiply(final Element... elements) {
+	public final E multiply(final Iterable<Element> elements) {
 		return this.apply(elements);
 	}
 

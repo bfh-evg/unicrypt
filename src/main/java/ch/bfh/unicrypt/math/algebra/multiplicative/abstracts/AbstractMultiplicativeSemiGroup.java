@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import java.math.BigInteger;
-import java.util.List;
 
 public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
@@ -68,7 +67,7 @@ public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeEl
 	}
 
 	@Override
-	public final E multiply(final List<Element> elements) {
+	public final E multiply(final Iterable<Element> elements) {
 		return this.apply(elements);
 	}
 

@@ -120,8 +120,8 @@ public class ProductMonoid
 	}
 
 	@Override
-	public Tuple defaultApply(final Element[] elements) {
-		if (elements.length == 0) {
+	public Tuple defaultApply(final Iterable<Element> elements) {
+		if (!elements.iterator().hasNext()) {
 			return this.getIdentityElement();
 		}
 		return super.defaultApply(elements);

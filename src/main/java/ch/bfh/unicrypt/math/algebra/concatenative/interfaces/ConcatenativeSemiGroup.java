@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.List;
 
 /**
  * This interface provides the renaming of some group operations for the case of an additively written
@@ -84,7 +83,7 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	 */
 	public ConcatenativeElement<V> concatenate(Element... elements);
 
-	public ConcatenativeElement<V> concatenate(List<Element> elements);
+	public ConcatenativeElement<V> concatenate(Iterable<Element> elements);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.

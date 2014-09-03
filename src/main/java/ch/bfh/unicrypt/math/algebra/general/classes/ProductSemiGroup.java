@@ -42,12 +42,12 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.IterableArray;
 import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
-import java.util.List;
 
 /**
  *
@@ -115,15 +115,15 @@ public class ProductSemiGroup
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultApply(elements);
+		return this.defaultApply(IterableArray.getInstance(elements));
 	}
 
 	@Override
-	public final Tuple apply(List<Element> elements) {
+	public final Tuple apply(Iterable<Element> elements) {
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultApply(elements.toArray(new Element[]{}));
+		return this.defaultApply(elements);
 	}
 
 	@Override
@@ -175,8 +175,8 @@ public class ProductSemiGroup
 		return this.abstractGetElement(ImmutableArray.getInstance(results));
 	}
 
-	protected Tuple defaultApply(final Element... elements) {
-		if (elements.length == 0) {
+	protected Tuple defaultApply(final Iterable<Element> elements) {
+		if (!elements.iterator().hasNext()) {
 			throw new IllegalArgumentException();
 		}
 		Element result = null;

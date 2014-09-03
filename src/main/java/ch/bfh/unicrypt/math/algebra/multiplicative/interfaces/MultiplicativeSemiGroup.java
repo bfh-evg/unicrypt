@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.List;
 
 /**
  * This interface provides the renaming of some group operations for the case of a multiplicatively written
@@ -78,7 +77,7 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	 */
 	public MultiplicativeElement<V> multiply(Element... elements);
 
-	public MultiplicativeElement<V> multiply(List<Element> elements);
+	public MultiplicativeElement<V> multiply(Iterable<Element> elements);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
