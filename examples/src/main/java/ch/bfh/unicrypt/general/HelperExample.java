@@ -61,7 +61,7 @@ public class HelperExample {
 
 		// Perform operations
 		ByteArray b4 = b1.extract(2, 4);
-		ByteArray b5 = b1.concatenate(b2);
+		ByteArray b5 = b1.append(b2);
 		ByteArray b6 = b1.xor(b3);
 
 		// Compute hash values

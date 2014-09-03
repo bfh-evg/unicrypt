@@ -74,7 +74,7 @@ public class BitArrayExample {
 		Example.printLine("Strip T.Zeros ", bitArray.stripTrailingZeros());
 		Example.printLine("Strip Prefix  ", bitArray.stripPrefix(3));
 		Example.printLine("Strip Suffix  ", bitArray.stripSuffix(3));
-		Example.printLine("Concatenate   ", bitArray.concatenate(bitArray));
+		Example.printLine("Concatenate   ", bitArray.append(bitArray));
 	}
 
 	public static void example2() {

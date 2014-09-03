@@ -49,47 +49,18 @@ package ch.bfh.unicrypt.helper.compound;
  */
 public interface Compound<C extends Compound<C, T>, T> {
 
-	/**
-	 * The arity of a function is the number of functions applied in parallel or in series when calling the function.
-	 * <p>
-	 * @return The function's arity
-	 */
 	public int getArity();
 
 	public boolean isEmpty();
 
-	/**
-	 * Checks if a compound function consists of multiple copies of the same function.
-	 * <p>
-	 * @return {@code true}, if the function is a power function, {@code false} otherwise
-	 */
 	public boolean isUniform();
 
-	/**
-	 * Returns the function at index 0.
-	 * <p>
-	 * @return The function at index 0
-	 * @throws UnsupportedOperationException for functions of arity 0
-	 */
 	public T getFirst();
 
 	public T getLast();
 
-	/**
-	 * Returns the function at the given index.
-	 * <p>
-	 * @param index The given index
-	 * @return The corresponding function
-	 * @throws IndexOutOfBoundsException if {
-	 * @ode index} is an invalid index
-	 */
 	public T getAt(int index);
 
-	/**
-	 * Returns an array containing all the functions of which {@code this} function is composed of.
-	 * <p>
-	 * @return The corresponding array of functions
-	 */
 	public Object[] getAll();
 
 	public Compound<C, T> extractPrefix(int length);
@@ -100,13 +71,6 @@ public interface Compound<C extends Compound<C, T>, T> {
 
 	public Compound<C, T> extract(int offset, int length);
 
-	/**
-	 * Creates a new product set which contains one set less than the given product set.
-	 * <p>
-	 * @param index The index of the set to remove
-	 * @return The resulting product set.
-	 * @throws IndexOutOfBoundsException if {@code index<0} or {@code index>arity-1}
-	 */
 	public Compound<C, T> removeAt(final int index);
 
 	public Compound<C, T> insertAt(final int index, final T object);

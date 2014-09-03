@@ -75,7 +75,7 @@ public class ByteArrayExample {
 		Example.printLine(byteArray2);
 		Example.printLine(byteArray3);
 
-		Example.printLine("Conc   ", byteArray1.concatenate(byteArray2).concatenate(byteArray3));
+		Example.printLine("Conc   ", byteArray1.append(byteArray2).append(byteArray3));
 	}
 
 	public static void example3() {
@@ -104,8 +104,8 @@ public class ByteArrayExample {
 		Example.printLine("Extract   ", byteArray2.extract(2, 4));
 		Object[] byteArrays = byteArray2.split(2, 4);
 		Example.printLine("Split     ", byteArrays);
-		Example.printLine("Conc      ", byteArray1.concatenate(byteArray2));
-		Example.printLine("Conc      ", byteArray2.concatenate(byteArray1));
+		Example.printLine("Conc      ", byteArray1.append(byteArray2));
+		Example.printLine("Conc      ", byteArray2.append(byteArray1));
 		Example.printLine("ShiftLeft ", byteArray2.shiftLeft(7));
 		Example.printLine("ShiftRight ", byteArray2.shiftRight(7));
 	}

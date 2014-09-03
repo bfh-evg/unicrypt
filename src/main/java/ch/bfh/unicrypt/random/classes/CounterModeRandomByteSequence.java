@@ -93,8 +93,8 @@ public class CounterModeRandomByteSequence
 		//Even though the following is the nice way to program it with unicrypt, it is too expensive. Reason: If the first part of a pair is a big tuple, it has to be hashed each time... Reprogram?!
 		//this.digestBytes=Pair.getInstance(seed,Z.getInstance().getElement(counter)).getHashValue(hashAlgorithm).getByteArray();
 		//-->This is, why the following implementation exists.
-		return hashedSeed.concatenate(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getHashValue(this.hashAlgorithm).getAll();
-//		return digest.digest(hashedSeed.concatenate(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getBytes());
+		return hashedSeed.append(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getHashValue(this.hashAlgorithm).getAll();
+//		return digest.digest(hashedSeed.append(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getBytes());
 	}
 
 	@Override

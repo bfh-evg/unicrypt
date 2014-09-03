@@ -49,17 +49,25 @@ import java.lang.reflect.Array;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <A>
  */
-abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A>>
+abstract public class AbstractArray<A extends AbstractArray<A>>
 	   extends UniCrypt {
 
 	protected int length;
+	protected int offset;
+	protected boolean reverse;
 
-	protected AbstractImmutableArray(int length) {
+	protected AbstractArray(int length, int offset, boolean reverse) {
 		this.length = length;
+		this.offset = offset;
+		this.reverse = reverse;
 	}
 
 	public int getLength() {
 		return this.length;
+	}
+
+	public boolean isEmpty() {
+		return this.length == 0;
 	}
 
 	// prefix here means the lowest indices
@@ -98,7 +106,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A>
 		if (indices == null) {
 			throw new IllegalArgumentException();
 		}
-		A[] result = (A[]) Array.newInstance(this.getBaseClass(), indices.length + 1);
+		A[] result = (A[]) Array.newInstance(this.getArrayClass(), indices.length + 1);
 		int lastIndex = 0;
 		for (int i = 0; i < indices.length; i++) {
 			int currentIndex = indices[i];
@@ -112,7 +120,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A>
 		return result;
 	}
 
-	public A concatenate(A other) {
+	public A append(A other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
 		}
@@ -122,19 +130,19 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A>
 		if (other.length == 0) {
 			return (A) this;
 		}
-		return this.abstractConcatenate(other);
+		return this.abstractAppend(other);
 	}
 
 	public A removeAt(int index) {
 		A prefix = this.extract(0, index);
 		A suffix = this.extract(index + 1, this.length - index - 1);
-		return prefix.concatenate(suffix);
+		return prefix.append(suffix);
 	}
 
 	abstract protected A abstractExtract(int offset, int length);
 
-	abstract protected A abstractConcatenate(A other);
+	abstract protected A abstractAppend(A other);
 
-	abstract protected Class getBaseClass();
+	abstract protected Class getArrayClass();
 
 }

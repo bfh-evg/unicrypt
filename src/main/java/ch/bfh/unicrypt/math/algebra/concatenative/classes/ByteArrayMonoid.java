@@ -142,7 +142,7 @@ public class ByteArrayMonoid
 
 	@Override
 	protected ByteArrayElement abstractApply(ByteArrayElement element1, ByteArrayElement element2) {
-		return this.abstractGetElement(element1.getValue().concatenate(element2.getValue()));
+		return this.abstractGetElement(element1.getValue().append(element2.getValue()));
 	}
 
 	@Override

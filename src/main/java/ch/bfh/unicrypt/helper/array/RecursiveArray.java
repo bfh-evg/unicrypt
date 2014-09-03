@@ -39,39 +39,29 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
-
-import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+package ch.bfh.unicrypt.helper.array;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <C>
+ * @param <T>
  */
-public class ImmutableArrayExample {
+public interface RecursiveArray<C extends Array<C, T>, T>
+	   extends Array<C, T> {
 
-	public static void example1() {
-
-		ImmutableArray<Integer> a = ImmutableArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-
-		Example.printLine(a);
-		Example.printLine("Length  ", a.getLength());
-		Example.printLine("Add     ", a.add(7));
-		Example.printLine("Append  ", a.append(a));
-		Example.printLine("Conc    ", a.append(a));
-		Example.printLine("Extract ", a.extract(2, 3));
-		Example.printLine("ExtraxtP", a.extractPrefix(2));
-		Example.printLine("ExtraxtS", a.extractSuffix(2));
-		Example.printLine("ExtractR", a.extractRange(2, 8));
-		Example.printLine("GetAll  ", a.getAll());
-		Example.printLine("Insert  ", a.insertAt(5, 100));
-		Example.printLine("Remove  ", a.removeAt(5));
-		Example.printLines("Split   ", a.split(2, 4, 7));
-
-	}
-
-	public static void main(final String[] args) {
-		Example.runExamples();
-	}
+	/**
+	 * Select and returns in a hierarchy of compound functions the function that corresponds to a given sequence of
+	 * indices. (e.g., 0,3,2 for the third function in the fourth compound function of the first compound function).
+	 * Returns {@code this} function if {@code indices} is empty.
+	 * <p>
+	 * @param indices The given sequence of indices
+	 * @return The corresponding function
+	 * @throws IllegalArgumentException  if {
+	 * @ode indices} is null or if its length exceeds the hierarchy's depth
+	 * @throws IndexOutOfBoundsException if {
+	 * @ode indices} contains an out-of-bounds index
+	 */
+	public T getAt(int... indices);
 
 }

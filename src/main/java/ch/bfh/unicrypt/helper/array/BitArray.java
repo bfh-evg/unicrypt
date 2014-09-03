@@ -51,26 +51,22 @@ import java.util.Iterator;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class BitArray
-	   extends AbstractImmutableArray<BitArray>
+	   extends AbstractArray<BitArray>
 	   implements Iterable<Boolean> {
 
 	ByteArray byteArray;
-	int offset;
 	private int trailer; // number of trailing zeros not included in byteArray
 	private int header; // number of leading zeros not included in byteArray
-	private boolean reverse;
 
 	private BitArray(ByteArray byteArray, int length) {
 		this(byteArray, 0, length, 0, 0, false);
 	}
 
 	private BitArray(ByteArray byteArray, int offset, int length, int trailer, int header, boolean reverse) {
-		super(length);
+		super(length, offset, reverse);
 		this.byteArray = byteArray;
-		this.offset = offset;
 		this.trailer = trailer;
 		this.header = header;
-		this.reverse = reverse;
 	}
 
 	public boolean[] getAll() {
@@ -236,7 +232,7 @@ public class BitArray
 	}
 
 	public static BitArray getInstance(ByteArray byteArray, int length) {
-		if (byteArray == null) {
+		if (byteArray == null || length > byteArray.getLength() * Byte.SIZE) {
 			throw new IllegalArgumentException();
 		}
 		return new BitArray(byteArray, length);
@@ -365,7 +361,7 @@ public class BitArray
 	}
 
 	@Override
-	protected BitArray abstractConcatenate(BitArray other) {
+	protected BitArray abstractAppend(BitArray other) {
 		boolean[] result = new boolean[this.length + other.length];
 		for (int i = 0; i < this.length; i++) {
 			result[i] = this.getAt(i);
@@ -390,7 +386,7 @@ public class BitArray
 	}
 
 	@Override
-	protected Class<BitArray> getBaseClass() {
+	protected Class<BitArray> getArrayClass() {
 		return BitArray.class;
 	}
 

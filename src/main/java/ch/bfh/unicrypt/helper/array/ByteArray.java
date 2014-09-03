@@ -55,7 +55,7 @@ import java.util.Locale;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ByteArray
-	   extends AbstractImmutableArray<ByteArray>
+	   extends AbstractArray<ByteArray>
 	   implements Iterable<Byte> {
 
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
@@ -64,8 +64,6 @@ public class ByteArray
 	private static final byte ALL_ONE = (byte) BYTE_MASK;
 
 	protected final byte[] bytes;
-	private final int offset;
-	private boolean reverse;
 	private int trailer; // number of trailing zeros not included in bytes
 	private int header; // number of leading zeros not included in bytes
 
@@ -74,12 +72,10 @@ public class ByteArray
 	}
 
 	protected ByteArray(byte[] bytes, int offset, int length, int trailer, int header, boolean reverse) {
-		super(length);
+		super(length, offset, reverse);
 		this.bytes = bytes;
-		this.offset = offset;
 		this.trailer = trailer;
 		this.header = header;
-		this.reverse = reverse;
 	}
 
 	public byte[] getAll() {
@@ -399,24 +395,25 @@ public class ByteArray
 	}
 
 	public static ByteArray getInstance(int length, boolean fillbit) {
+		if (fillbit) {
+			return ByteArray.getInstance(length, ALL_ONE);
+		} else {
+			return ByteArray.getInstance(length, ALL_ZERO);
+		}
+	}
+
+	public static ByteArray getInstance(int length, byte fillByte) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		if (fillbit) {
-			byte[] bytes = new byte[length];
-			Arrays.fill(bytes, ALL_ONE);
-			return new ByteArray(bytes);
-		} else {
-			return new ByteArray(new byte[0], 0, length, length, 0, false);
-		}
-
+		return new ByteArray(new byte[]{fillByte}, 0, length, 0, 0, false);
 	}
 
 	public static ByteArray getInstance(byte... bytes) {
 		if (bytes == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArray(bytes.clone());
+		return new ByteArray(Arrays.copyOf(bytes, bytes.length));
 	}
 
 	// convenicene method to avoid casting integers to byte
@@ -463,6 +460,9 @@ public class ByteArray
 		byte[] bytes = new byte[byteList.size()];
 		int i = 0;
 		for (Byte b : byteList) {
+			if (b == null) {
+				throw new IllegalArgumentException();
+			}
 			bytes[i] = b;
 			i++;
 		}
@@ -541,7 +541,7 @@ public class ByteArray
 		if (index < this.trailer || index >= this.length - this.header) {
 			return ByteArray.ALL_ZERO;
 		}
-		return this.bytes[this.offset + index - this.trailer];
+		return this.bytes[(this.offset + index - this.trailer) % this.bytes.length];
 	}
 
 	@Override
@@ -556,7 +556,7 @@ public class ByteArray
 	}
 
 	@Override
-	protected ByteArray abstractConcatenate(ByteArray other) {
+	protected ByteArray abstractAppend(ByteArray other) {
 		byte[] result = new byte[this.length + other.length];
 		for (int i = 0; i < this.length; i++) {
 			result[i] = this.abstractGetAt(i);
@@ -568,7 +568,7 @@ public class ByteArray
 	}
 
 	@Override
-	protected Class<ByteArray> getBaseClass() {
+	protected Class<ByteArray> getArrayClass() {
 		return ByteArray.class;
 	}
 

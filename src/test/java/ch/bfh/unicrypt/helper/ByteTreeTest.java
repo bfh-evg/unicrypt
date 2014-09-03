@@ -83,7 +83,7 @@ public class ByteTreeTest {
 	public void testGetInstance_GetHashValue() {
 		ByteArray h0 = b0.getRecursiveHashValue();
 		ByteArray h12 = b12.getRecursiveHashValue();
-		Assert.assertEquals(h0.concatenate(h12).getHashValue(), b012.getRecursiveHashValue());
+		Assert.assertEquals(h0.append(h12).getHashValue(), b012.getRecursiveHashValue());
 	}
 
 }

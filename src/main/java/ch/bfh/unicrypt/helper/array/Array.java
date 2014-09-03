@@ -39,39 +39,49 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
-
-import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+package ch.bfh.unicrypt.helper.array;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <C>
+ * @param <T>
+ * @author rolfhaenni
  */
-public class ImmutableArrayExample {
+public interface Array<C extends Array<C, T>, T>
+	   extends Iterable<T> {
 
-	public static void example1() {
+	public int getLength();
 
-		ImmutableArray<Integer> a = ImmutableArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+	public boolean isEmpty();
 
-		Example.printLine(a);
-		Example.printLine("Length  ", a.getLength());
-		Example.printLine("Add     ", a.add(7));
-		Example.printLine("Append  ", a.append(a));
-		Example.printLine("Conc    ", a.append(a));
-		Example.printLine("Extract ", a.extract(2, 3));
-		Example.printLine("ExtraxtP", a.extractPrefix(2));
-		Example.printLine("ExtraxtS", a.extractSuffix(2));
-		Example.printLine("ExtractR", a.extractRange(2, 8));
-		Example.printLine("GetAll  ", a.getAll());
-		Example.printLine("Insert  ", a.insertAt(5, 100));
-		Example.printLine("Remove  ", a.removeAt(5));
-		Example.printLines("Split   ", a.split(2, 4, 7));
+	public boolean isUniform();
 
-	}
+	public T getFirst();
 
-	public static void main(final String[] args) {
-		Example.runExamples();
-	}
+	public T getLast();
+
+	public T getAt(int index);
+
+	public Object[] getAll();
+
+	public C extract(int offset, int length);
+
+	public C extractPrefix(int length);
+
+	public C extractSuffix(int length);
+
+	public C extractRange(int fromIndex, int toIndex);
+
+	public C removeAt(final int index);
+
+	public C insertAt(final int index, final T object);
+
+	public C replaceAt(final int index, final T object);
+
+	public C add(final T object);
+
+	public C append(final Array<C, T> other);
+
+	public C reverse();
 
 }

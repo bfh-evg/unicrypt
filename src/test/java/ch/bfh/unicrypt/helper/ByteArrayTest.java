@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -128,7 +130,7 @@ public class ByteArrayTest {
 		ByteArray instance = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6});
 		ByteArray other = ByteArray.getInstance(new byte[]{7, 8, 9, 10});
 		ByteArray expResult = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});;
-		ByteArray result = instance.concatenate(other);
+		ByteArray result = instance.append(other);
 		assertEquals(expResult, result);
 	}
 
@@ -159,38 +161,6 @@ public class ByteArrayTest {
 	}
 
 	@Test
-	public void testAnd() {
-	}
-
-	@Test
-	public void testOr() {
-	}
-
-	@Test
-	public void testNot() {
-	}
-
-	@Test
-	public void testIterator() {
-	}
-
-	@Test
-	public void testEquals() {
-	}
-
-	@Test
-	public void testGetInstance_int() {
-	}
-
-	@Test
-	public void testGetInstance_int_boolean() {
-	}
-
-	@Test
-	public void testGetInstance_byteArr() {
-	}
-
-	@Test
 	public void testGetInstance_byteArrayArr() {
 		ByteArray b012 = ByteArray.getInstance(a0, a1, a2);
 		assertEquals(a012, b012);
@@ -199,14 +169,6 @@ public class ByteArrayTest {
 		assertEquals(a34, b34);
 
 		assertEquals(ByteArray.getInstance(a012, a34), ByteArray.getInstance(a0, a1, a2, a3, a4));
-	}
-
-	@Test
-	public void testGetRandomInstance_int() {
-	}
-
-	@Test
-	public void testGetRandomInstance_int_RandomNumberGenerator() {
 	}
 
 	@Test
@@ -269,6 +231,60 @@ public class ByteArrayTest {
 
 		b = ByteArray.getInstance("80");
 		assertEquals(ByteArray.getInstance("00|01"), b.shiftBitsRight(1));
+	}
+
+	@Test
+	public void generalTest() {
+		ByteArray byteArray = ByteArray.getInstance("00|01|02|03|04|05|06|07|08|09");
+		List<ByteArray> byteArrays = new ArrayList<ByteArray>();
+		byteArrays.add(ByteArray.getInstance("00|00|00|08|07|05|04|03|FF|FF"));
+		byteArrays.add(byteArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(ByteArray.getInstance(2, true)));
+		byteArrays.add(byteArray.extract(3, 6).removeAt(3).reverse().append(ByteArray.getInstance(2, true)).shiftRight(3));
+
+		for (ByteArray b1 : byteArrays) {
+			for (ByteArray b2 : byteArrays) {
+				assertEquals(b1, b2);
+				assertEquals(b1.getLength(), b2.getLength());
+				assertEquals(b1.append(b1), b2.append(b1));
+				assertEquals(b1.append(b1), b2.append(b2));
+				assertEquals(b1.append(b2), b2.append(b1));
+				assertEquals(b1.append(b2), b2.append(b2));
+				assertEquals(b1.append(b1), b2.append(b2));
+				assertEquals(b1.countLeadingZeroBits(), b2.countLeadingZeroBits());
+				assertEquals(b1.countLeadingZeros(), b2.countLeadingZeros());
+				assertEquals(b1.countOneBits(), b2.countOneBits());
+				assertEquals(b1.countTrailingZeroBits(), b2.countTrailingZeroBits());
+				assertEquals(b1.countTrailingZeros(), b2.countTrailingZeros());
+				for (int i = 0; i < b1.getLength(); i++) {
+					assertEquals(b1.removeAt(i), b2.removeAt(i));
+				}
+				assertEquals(b1.reverse(), b2.reverse());
+				for (int i = 0; i <= b1.getLength() + 2; i++) {
+					assertEquals(b1.shiftLeft(i), b2.shiftLeft(i));
+					assertEquals(b1.shiftRight(i), b2.shiftRight(i));
+				}
+				for (int i = 0; i <= b1.getLength() * Byte.SIZE + 2; i++) {
+					assertEquals(b1.shiftBitsLeft(i), b2.shiftBitsLeft(i));
+					assertEquals(b1.shiftBitsRight(i), b2.shiftBitsRight(i));
+				}
+				assertEquals(b1.stripLeadingZeros(), b2.stripLeadingZeros());
+				assertEquals(b1.stripTrailingZeros(), b2.stripTrailingZeros());
+				for (int i = 0; i < b1.getLength(); i++) {
+					assertEquals(b1.stripPrefix(i), b2.stripPrefix(i));
+					assertEquals(b1.stripSuffix(i), b2.stripSuffix(i));
+				}
+				for (int i = 0; i < b1.getLength(); i++) {
+					for (int j = 0; j < b1.getLength() - i + 1; j++) {
+						assertEquals(b1.extract(i, j), b2.extract(i, j));
+					}
+				}
+
+			}
+		}
+
+//		byteArrays.add(ByteArray.getInstance(15, false));
+//		byteArrays.add(ByteArray.getInstance(15, true));
+//		byteArrays.add(ByteArray.getInstance());
 	}
 
 }

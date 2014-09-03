@@ -52,35 +52,27 @@ import java.util.Iterator;
  * @param <T>
  */
 public class ImmutableArray<T>
-	   extends AbstractImmutableArray<ImmutableArray<T>>
-	   implements Iterable<T>, Compound<ImmutableArray<T>, T> {
+	   extends AbstractArray<ImmutableArray<T>>
+	   implements Iterable<T>, Compound<ImmutableArray<T>, T>, Array<ImmutableArray<T>, T> {
 
 	// The obects are stored either as an ordinary, possibly empty array (case 1)
 	// or as an array of length 1 together with the full length of the immutable
 	// array (case 2, all elements are equal)
 	private final Object[] array;
+	protected Boolean uniform = null;
 
-	// Empty
-	private ImmutableArray() {
-		super(0);
-		this.array = new Object[0];
+	protected ImmutableArray(T object, int length) {
+		this(new Object[]{object}, 0, length, false);
+		this.uniform = true;
 	}
 
-	// Case 1: General case
-	private ImmutableArray(Object[] array) {
-		super(array.length);
-		this.array = array;
+	protected ImmutableArray(Object[] objects) {
+		this(objects, 0, objects.length, false);
 	}
 
-	// Case 2: Special constructor for array of length 1
-	private ImmutableArray(Object object) {
-		this(object, 1);
-	}
-
-	// Case 2: General case
-	private ImmutableArray(Object object, int length) {
-		super(length);
-		this.array = new Object[]{object};
+	protected ImmutableArray(Object[] objects, int offset, int length, boolean reverse) {
+		super(length, offset, reverse);
+		this.array = objects;
 	}
 
 	@Override
@@ -89,13 +81,20 @@ public class ImmutableArray<T>
 	}
 
 	@Override
-	public boolean isUniform() { // case 2 or empty
-		return this.array.length <= 1;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return this.length == 0;
+	public boolean isUniform() {
+		if (this.uniform == null) {
+			this.uniform = true;
+			if (this.length > 1) {
+				T first = this.abstractGetAt(0);
+				for (int i = 1; i < this.length; i++) {
+					if (!first.equals(this.abstractGetAt(i))) {
+						this.uniform = false;
+						break;
+					}
+				}
+			}
+		}
+		return this.uniform;
 	}
 
 	@Override
@@ -103,10 +102,7 @@ public class ImmutableArray<T>
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
-		if (this.isUniform()) { // case 2, not empty
-			return (T) this.array[0];
-		}
-		return (T) this.array[index]; // case 1
+		return this.abstractGetAt(index);
 	}
 
 	@Override
@@ -123,7 +119,7 @@ public class ImmutableArray<T>
 	public Object[] getAll() {
 		Object[] result = new Object[this.length];
 		for (int i = 0; i < this.length; i++) {
-			result[i] = this.getAt(i);
+			result[i] = this.abstractGetAt(i);
 		}
 		return result;
 	}
@@ -136,15 +132,10 @@ public class ImmutableArray<T>
 		if (newObject == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.isUniform()) { // case 2, possibly empty
-			if (this.isEmpty() || this.array[0].equals(newObject)) {
-				return new ImmutableArray<T>(newObject, this.length + 1);
-			}
-		}
 		Object[] result = new Object[this.length + 1];
 		for (int i = 0; i < result.length; i++) {
 			if (i != index) {
-				result[i] = (i < index) ? this.getAt(i) : this.getAt(i - 1);
+				result[i] = (i < index) ? this.abstractGetAt(i) : this.abstractGetAt(i - 1);
 			}
 		}
 		result[index] = newObject;
@@ -164,7 +155,7 @@ public class ImmutableArray<T>
 		}
 		Object[] result = new Object[this.length];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = this.getAt(i);
+			result[i] = this.abstractGetAt(i);
 		}
 		result[index] = newObject;
 		return new ImmutableArray<T>(result);
@@ -177,7 +168,12 @@ public class ImmutableArray<T>
 
 	@Override
 	public ImmutableArray<T> append(Compound<ImmutableArray<T>, T> compound) {
-		return this.concatenate((ImmutableArray<T>) compound);
+		return this.append((ImmutableArray<T>) compound);
+	}
+
+	@Override
+	public ImmutableArray<T> reverse() {
+		return new ImmutableArray<T>(this.array, this.offset, this.length, !this.reverse);
 	}
 
 	@Override
@@ -193,7 +189,7 @@ public class ImmutableArray<T>
 
 			@Override
 			public T next() {
-				return getAt(currentIndex++);
+				return abstractGetAt(currentIndex++);
 			}
 
 			@Override
@@ -222,8 +218,10 @@ public class ImmutableArray<T>
 	@Override
 	public int hashCode() {
 		int hash = 5;
-		hash = 43 * hash + Arrays.hashCode(this.array);
 		hash = 43 * hash + this.length;
+		for (T object : this) {
+			hash = 43 * hash + object.hashCode();
+		}
 		return hash;
 	}
 
@@ -240,7 +238,7 @@ public class ImmutableArray<T>
 			return false;
 		}
 		for (int i = 0; i < this.length; i++) {
-			if (!this.getAt(i).equals(other.getAt(i))) {
+			if (!this.abstractGetAt(i).equals(other.abstractGetAt(i))) {
 				return false;
 			}
 		}
@@ -251,17 +249,11 @@ public class ImmutableArray<T>
 		if (array == null) {
 			throw new IllegalArgumentException();
 		}
-		boolean isUniform = true;
 		for (T object : array) {
 			if (object == null) {
 				throw new IllegalArgumentException();
 			}
-			isUniform = isUniform && object.equals(array[0]);
 		}
-		if (isUniform && array.length != 0) {
-			return new ImmutableArray(array[0], array.length);
-		}
-		// Array.copyOf is necessary to protect external array modification
 		return new ImmutableArray<T>(Arrays.copyOf(array, array.length));
 	}
 
@@ -269,69 +261,56 @@ public class ImmutableArray<T>
 		if (collection == null) {
 			throw new IllegalArgumentException();
 		}
-		boolean isUniform = true;
-		T first = null;
 		for (T object : collection) {
 			if (object == null) {
 				throw new IllegalArgumentException();
 			}
-			if (first == null) {
-				first = object;
-			} else {
-				isUniform = isUniform && object.equals(first);
-			}
-		}
-		if (isUniform && !collection.isEmpty()) {
-			return new ImmutableArray(first, collection.size());
 		}
 		return new ImmutableArray<T>(collection.toArray());
 	}
 
 	public static <T> ImmutableArray<T> getInstance(T object, int length) {
-		if (object == null || length < 1) {
+		if (object == null || length < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ImmutableArray(object, length);
+		return new ImmutableArray(new Object[]{object}, 0, length, false);
 	}
 
 	@Override
 	protected ImmutableArray<T> abstractExtract(int offset, int length) {
-		if (length == 0) {
-			return new ImmutableArray<T>();
+		if (this.reverse) {
+			offset = this.length - (offset + length);
 		}
-		if (this.isUniform()) { // case 2, not empty
-			return new ImmutableArray<T>(this.array[0], length);
-		}
-		boolean isUniform = true;
-		Object[] result = new Object[length];
-		for (int i = 0; i < length; i++) {
-			result[i] = this.getAt(offset + i);
-			isUniform = isUniform && result[i].equals(result[0]);
-		}
-		if (isUniform) {
-			return new ImmutableArray<T>(result[0], length);
-		}
-		return new ImmutableArray<T>(result);
+		return new ImmutableArray<T>(this.array, this.offset + offset, length, this.reverse);
 	}
 
 	@Override
-	protected ImmutableArray<T> abstractConcatenate(ImmutableArray<T> other) {
-		if (this.isUniform() && other.isUniform() && this.getFirst().equals(other.getFirst())) {
-			return new ImmutableArray<T>(this.getFirst(), this.length + other.length);
-		}
+	protected ImmutableArray<T> abstractAppend(ImmutableArray<T> other) {
 		Object[] result = new Object[this.length + other.length];
 		for (int i = 0; i < this.length; i++) {
-			result[i] = this.getAt(i);
+			result[i] = this.abstractGetAt(i);
 		}
 		for (int i = 0; i < other.length; i++) {
-			result[this.length + i] = other.getAt(i);
+			result[this.length + i] = other.abstractGetAt(i);
 		}
 		return new ImmutableArray<T>(result);
 	}
 
 	@Override
-	protected Class getBaseClass() {
+	protected Class getArrayClass() {
 		return ImmutableArray.class;
+	}
+
+	@Override
+	public ImmutableArray<T> append(Array<ImmutableArray<T>, T> other) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	private T abstractGetAt(int index) {
+		if (this.reverse) {
+			index = this.length - index - 1;
+		}
+		return (T) this.array[(this.offset + index) % this.array.length];
 	}
 
 }
