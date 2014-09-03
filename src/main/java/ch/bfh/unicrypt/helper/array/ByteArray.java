@@ -86,11 +86,25 @@ public class ByteArray
 		return result;
 	}
 
+	public boolean[] getBits() {
+		boolean[] result = new boolean[this.length * Byte.SIZE];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = this.getBitAt(i);
+		}
+		return result;
+	}
+
 	public byte getAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
 		return this.abstractGetAt(index);
+	}
+
+	public boolean getBitAt(int bitIndex) {
+		int byteIndex = bitIndex / Byte.SIZE;
+		byte mask = bitMask(bitIndex % Byte.SIZE);
+		return logicalAND(this.getAt(byteIndex), mask) != 0;
 	}
 
 	public int getIntAt(int index) {
@@ -121,18 +135,58 @@ public class ByteArray
 		return result;
 	}
 
-	public ByteArray stripLeadingZeros() {
+	// leading here means the highest indices
+	public int countLeadingZeroBits() {
+		int result = 0;
+		for (int i = this.length * Byte.SIZE - 1; i >= 0; i--) {
+			if (this.getBitAt(i)) {
+				return result;
+			}
+			result++;
+		}
+		return result;
+	}
+
+	// trailing here means the lowest indices
+	public int countTrailingZeroBits() {
+		int result = 0;
+		for (int i = 0; i < this.length * Byte.SIZE; i++) {
+			if (this.getBitAt(i)) {
+				return result;
+			}
+			result++;
+		}
+		return result;
+	}
+
+	public int countOneBits() {
+		int result = 0;
+		for (int i = 0; i < this.length * Byte.SIZE; i++) {
+			if (this.getBitAt(i)) {
+				result++;
+			}
+		}
+		return result;
+	}
+
+	public int countZeroBits() {
+		int result = 0;
+		for (int i = 0; i < this.length * Byte.SIZE; i++) {
+			if (!this.getBitAt(i)) {
+				result++;
+			}
+		}
+		return result;
+	}
+
+	public ByteArray removeLeadingZeros() {
 		int n = this.countLeadingZeros();
-		return this.stripSuffix(n);
+		return this.removeSuffix(n);
 	}
 
-	public ByteArray stripTrailingZeros() {
+	public ByteArray removeTrailingZeros() {
 		int n = this.countTrailingZeros();
-		return this.stripPrefix(n);
-	}
-
-	public ByteArray reverse() {
-		return new ByteArray(this.bytes, this.offset, this.length, this.trailer, this.header, !this.reverse);
+		return this.removePrefix(n);
 	}
 
 	// left here means making the byte array smaller
@@ -140,7 +194,7 @@ public class ByteArray
 		if (n < 0) {
 			return this.shiftRight(-n);
 		}
-		return this.stripPrefix(Math.min(this.length, n));
+		return this.removePrefix(Math.min(this.length, n));
 	}
 
 	// right here means making the byte array larger
@@ -153,6 +207,30 @@ public class ByteArray
 		} else {
 			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
 		}
+	}
+
+	// left here means making the byte array smaller
+	public ByteArray shiftBitsLeft(int n) {
+		if (n < 0) {
+			return this.shiftBitsRight(-n);
+		}
+		if (n % Byte.SIZE == 0) {
+			return this.shiftLeft(n / Byte.SIZE);
+		}
+		BitArray bitArray = BitArray.getInstance(this).shiftLeft(n);
+		return ByteArray.getInstance(bitArray.getBytes());
+	}
+
+	// right here means making the byte array larger
+	public ByteArray shiftBitsRight(int n) {
+		if (n < 0) {
+			return this.shiftBitsLeft(-n);
+		}
+		if (n % Byte.SIZE == 0) {
+			return this.shiftRight(n / Byte.SIZE);
+		}
+		BitArray bitArray = BitArray.getInstance(this).shiftRight(n);
+		return ByteArray.getInstance(bitArray.getBytes());
 	}
 
 	public ByteArray xor(ByteArray... others) {
@@ -233,80 +311,6 @@ public class ByteArray
 			result[i] = ByteArray.logicalNOT(this.abstractGetAt(i));
 		}
 		return new ByteArray(result);
-	}
-
-	public boolean getBitAt(int bitIndex) {
-		int byteIndex = bitIndex / Byte.SIZE;
-		byte mask = bitMask(bitIndex % Byte.SIZE);
-		return logicalAND(this.getAt(byteIndex), mask) != 0;
-	}
-
-	// leading here means the highest indices
-	public int countLeadingZeroBits() {
-		int result = 0;
-		for (int i = this.length * Byte.SIZE - 1; i >= 0; i--) {
-			if (this.getBitAt(i)) {
-				return result;
-			}
-			result++;
-		}
-		return result;
-	}
-
-	// trailing here means the lowest indices
-	public int countTrailingZeroBits() {
-		int result = 0;
-		for (int i = 0; i < this.length * Byte.SIZE; i++) {
-			if (this.getBitAt(i)) {
-				return result;
-			}
-			result++;
-		}
-		return result;
-	}
-
-	public int countOneBits() {
-		int result = 0;
-		for (int i = 0; i < this.length * Byte.SIZE; i++) {
-			if (this.getBitAt(i)) {
-				result++;
-			}
-		}
-		return result;
-	}
-
-	public int countZeroBits() {
-		int result = 0;
-		for (int i = 0; i < this.length * Byte.SIZE; i++) {
-			if (!this.getBitAt(i)) {
-				result++;
-			}
-		}
-		return result;
-	}
-
-	// left here means making the byte array smaller
-	public ByteArray shiftBitsLeft(int n) {
-		if (n < 0) {
-			return this.shiftBitsRight(-n);
-		}
-		if (n % Byte.SIZE == 0) {
-			return this.shiftLeft(n / Byte.SIZE);
-		}
-		BitArray bitArray = BitArray.getInstance(this).shiftLeft(n);
-		return ByteArray.getInstance(bitArray.getAllBytes());
-	}
-
-	// right here means making the byte array larger
-	public ByteArray shiftBitsRight(int n) {
-		if (n < 0) {
-			return this.shiftBitsLeft(-n);
-		}
-		if (n % Byte.SIZE == 0) {
-			return this.shiftRight(n / Byte.SIZE);
-		}
-		BitArray bitArray = BitArray.getInstance(this).shiftRight(n);
-		return ByteArray.getInstance(bitArray.getAllBytes());
 	}
 
 	public ByteArray getHashValue() {
@@ -534,16 +538,6 @@ public class ByteArray
 		return (byte) ~b;
 	}
 
-	private byte abstractGetAt(int index) {
-		if (this.reverse) {
-			index = this.length - index - 1;
-		}
-		if (index < this.trailer || index >= this.length - this.header) {
-			return ByteArray.ALL_ZERO;
-		}
-		return this.bytes[(this.offset + index - this.trailer) % this.bytes.length];
-	}
-
 	@Override
 	protected ByteArray abstractExtract(int offset, int length) {
 		if (this.reverse) {
@@ -565,6 +559,21 @@ public class ByteArray
 			result[this.length + i] = other.abstractGetAt(i);
 		}
 		return new ByteArray(result);
+	}
+
+	@Override
+	protected ByteArray abstractReverse() {
+		return new ByteArray(this.bytes, this.offset, this.length, this.trailer, this.header, !this.reverse);
+	}
+
+	private byte abstractGetAt(int index) {
+		if (this.reverse) {
+			index = this.length - index - 1;
+		}
+		if (index < this.trailer || index >= this.length - this.header) {
+			return ByteArray.ALL_ZERO;
+		}
+		return this.bytes[(this.offset + index - this.trailer) % this.bytes.length];
 	}
 
 	@Override

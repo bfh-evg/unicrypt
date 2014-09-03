@@ -44,24 +44,12 @@ package ch.bfh.unicrypt.helper.array;
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <C>
+ * @param <A>
  * @param <T>
  */
-public interface RecursiveArray<C extends Array<C, T>, T>
-	   extends Array<C, T> {
+public interface RecursiveArray<A extends Array<A, T>, T>
+	   extends Array<A, T> {
 
-	/**
-	 * Select and returns in a hierarchy of compound functions the function that corresponds to a given sequence of
-	 * indices. (e.g., 0,3,2 for the third function in the fourth compound function of the first compound function).
-	 * Returns {@code this} function if {@code indices} is empty.
-	 * <p>
-	 * @param indices The given sequence of indices
-	 * @return The corresponding function
-	 * @throws IllegalArgumentException  if {
-	 * @ode indices} is null or if its length exceeds the hierarchy's depth
-	 * @throws IndexOutOfBoundsException if {
-	 * @ode indices} contains an out-of-bounds index
-	 */
 	public T getAt(int... indices);
 
 }

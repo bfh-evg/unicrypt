@@ -288,10 +288,10 @@ public class PolynomialSemiRing<V>
 				if (p2.getBitAt(0)) {
 					result = result.xorFillZero(p1);
 				}
-				// stripLeadingZeros was added to avoid an endless loop in PolynomialFieldTest
+				// removeLeadingZeros was added to avoid an endless loop in PolynomialFieldTest
 				// the problem could probably be avoided by working with BitArray
-				p1 = p1.shiftBitsRight(1).stripLeadingZeros();
-				p2 = p2.shiftBitsLeft(1).stripLeadingZeros();
+				p1 = p1.shiftBitsRight(1).removeLeadingZeros();
+				p2 = p2.shiftBitsLeft(1).removeLeadingZeros();
 			}
 			return this.getElement(result);
 

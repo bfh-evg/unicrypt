@@ -267,11 +267,11 @@ public class ByteArrayTest {
 					assertEquals(b1.shiftBitsLeft(i), b2.shiftBitsLeft(i));
 					assertEquals(b1.shiftBitsRight(i), b2.shiftBitsRight(i));
 				}
-				assertEquals(b1.stripLeadingZeros(), b2.stripLeadingZeros());
-				assertEquals(b1.stripTrailingZeros(), b2.stripTrailingZeros());
+				assertEquals(b1.removeLeadingZeros(), b2.removeLeadingZeros());
+				assertEquals(b1.removeTrailingZeros(), b2.removeTrailingZeros());
 				for (int i = 0; i < b1.getLength(); i++) {
-					assertEquals(b1.stripPrefix(i), b2.stripPrefix(i));
-					assertEquals(b1.stripSuffix(i), b2.stripSuffix(i));
+					assertEquals(b1.removePrefix(i), b2.removePrefix(i));
+					assertEquals(b1.removeSuffix(i), b2.removeSuffix(i));
 				}
 				for (int i = 0; i < b1.getLength(); i++) {
 					for (int j = 0; j < b1.getLength() - i + 1; j++) {

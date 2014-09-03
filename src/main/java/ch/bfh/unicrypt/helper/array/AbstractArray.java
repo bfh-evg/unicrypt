@@ -70,14 +70,14 @@ abstract public class AbstractArray<A extends AbstractArray<A>>
 		return this.length == 0;
 	}
 
-	// prefix here means the lowest indices
-	public A stripPrefix(int n) {
-		return this.extract(n, this.length - n);
-	}
-
-	// trailing here means the highest indices
-	public A stripSuffix(int n) {
-		return this.extract(0, this.length - n);
+	public A extract(int offset, int length) {
+		if (offset < 0 || length < 0 || offset + length > this.length) {
+			throw new IllegalArgumentException();
+		}
+		if (offset == 0 && length == this.length) {
+			return (A) this;
+		}
+		return abstractExtract(offset, length);
 	}
 
 	public A extractPrefix(int length) {
@@ -92,14 +92,41 @@ abstract public class AbstractArray<A extends AbstractArray<A>>
 		return this.extract(fromIndex, toIndex - fromIndex + 1);
 	}
 
-	public A extract(int offset, int length) {
-		if (offset < 0 || length < 0 || offset + length > this.length) {
+	public A remove(int offset, int length) {
+		A prefix = this.extractPrefix(offset);
+		A suffix = this.extractSuffix(this.length - offset - length);
+		return prefix.append(suffix);
+	}
+
+	// prefix here means the lowest indices
+	public A removePrefix(int length) {
+		return this.remove(0, length);
+	}
+
+	// trailing here means the highest indices
+	public A removeSuffix(int length) {
+		return this.remove(this.length - length, length);
+	}
+
+	public A removeRange(int fromIndex, int toIndex) {
+		return this.remove(fromIndex, toIndex - fromIndex + 1);
+	}
+
+	public A removeAt(int index) {
+		return this.removeRange(index, index);
+	}
+
+	public A append(A other) {
+		if (other == null) {
 			throw new IllegalArgumentException();
 		}
-		if (offset == 0 && length == this.length) {
+		if (this.length == 0) {
+			return other;
+		}
+		if (other.length == 0) {
 			return (A) this;
 		}
-		return abstractExtract(offset, length);
+		return this.abstractAppend(other);
 	}
 
 	public A[] split(int... indices) {
@@ -120,28 +147,15 @@ abstract public class AbstractArray<A extends AbstractArray<A>>
 		return result;
 	}
 
-	public A append(A other) {
-		if (other == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this.length == 0) {
-			return other;
-		}
-		if (other.length == 0) {
-			return (A) this;
-		}
-		return this.abstractAppend(other);
-	}
-
-	public A removeAt(int index) {
-		A prefix = this.extract(0, index);
-		A suffix = this.extract(index + 1, this.length - index - 1);
-		return prefix.append(suffix);
+	public A reverse() {
+		return this.abstractReverse();
 	}
 
 	abstract protected A abstractExtract(int offset, int length);
 
 	abstract protected A abstractAppend(A other);
+
+	abstract protected A abstractReverse();
 
 	abstract protected Class getArrayClass();
 

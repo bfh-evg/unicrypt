@@ -43,12 +43,11 @@ package ch.bfh.unicrypt.helper.array;
 
 /**
  *
- * @param <C>
+ * @param <A>
  * @param <T>
  * @author rolfhaenni
  */
-public interface Array<C extends Array<C, T>, T>
-	   extends Iterable<T> {
+public interface Array<A extends Array<A, T>, T> {
 
 	public int getLength();
 
@@ -56,32 +55,40 @@ public interface Array<C extends Array<C, T>, T>
 
 	public boolean isUniform();
 
+	public Object[] getAll();
+
+	public T getAt(int index);
+
 	public T getFirst();
 
 	public T getLast();
 
-	public T getAt(int index);
+	public A extract(int offset, int length);
 
-	public Object[] getAll();
+	public A extractPrefix(int length);
 
-	public C extract(int offset, int length);
+	public A extractSuffix(int length);
 
-	public C extractPrefix(int length);
+	public A extractRange(int fromIndex, int toIndex);
 
-	public C extractSuffix(int length);
+	public A remove(int offset, int length);
 
-	public C extractRange(int fromIndex, int toIndex);
+	public A removePrefix(int n);
 
-	public C removeAt(final int index);
+	public A removeSuffix(int n);
 
-	public C insertAt(final int index, final T object);
+	public A removeRange(int fromIndex, int toIndex);
 
-	public C replaceAt(final int index, final T object);
+	public A removeAt(int index);
 
-	public C add(final T object);
+	public A insertAt(final int index, final T object);
 
-	public C append(final Array<C, T> other);
+	public A replaceAt(final int index, final T object);
 
-	public C reverse();
+	public A add(final T object);
+
+	public A append(final A other);
+
+	public A reverse();
 
 }

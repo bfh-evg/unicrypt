@@ -78,7 +78,7 @@ public class BitArray
 	}
 
 	// filled up with leading zeros
-	public byte[] getAllBytes() {
+	public byte[] getBytes() {
 		int byteLength = (this.length + Byte.SIZE - 1) / Byte.SIZE;
 		byte[] result = new byte[byteLength];
 		for (int i = 0; i < byteLength; i++) {
@@ -130,18 +130,14 @@ public class BitArray
 		return result;
 	}
 
-	public BitArray stripLeadingZeros() {
+	public BitArray removeLeadingZeros() {
 		int n = this.countLeadingZeros();
-		return this.stripSuffix(n);
+		return this.removeSuffix(n);
 	}
 
-	public BitArray stripTrailingZeros() {
+	public BitArray removeTrailingZeros() {
 		int n = this.countTrailingZeros();
-		return this.stripPrefix(n);
-	}
-
-	public BitArray reverse() {
-		return new BitArray(this.byteArray, this.offset, this.length, this.trailer, this.header, !this.reverse);
+		return this.removePrefix(n);
 	}
 
 	public int countOnes() {
@@ -163,7 +159,7 @@ public class BitArray
 		if (n < 0) {
 			return this.shiftRight(-n);
 		}
-		return this.stripPrefix(Math.min(this.length, n));
+		return this.removePrefix(Math.min(this.length, n));
 	}
 
 	// right here means making the bit array larger
@@ -186,7 +182,7 @@ public class BitArray
 		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		byte[] hash = hashAlgorithm.getHashValue(this.getAllBytes());
+		byte[] hash = hashAlgorithm.getHashValue(this.getBytes());
 		return new ByteArray(hash);
 	}
 
@@ -370,6 +366,11 @@ public class BitArray
 			result[this.length + i] = other.getAt(i);
 		}
 		return new BitArray(bitsToByteArray(result), result.length);
+	}
+
+	@Override
+	protected BitArray abstractReverse() {
+		return new BitArray(this.byteArray, this.offset, this.length, this.trailer, this.header, !this.reverse);
 	}
 
 	private static ByteArray bitsToByteArray(boolean[] bits) {

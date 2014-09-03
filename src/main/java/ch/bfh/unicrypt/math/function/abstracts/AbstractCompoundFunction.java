@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
+import ch.bfh.unicrypt.helper.array.Array;
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.compound.Compound;
-import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.helper.array.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -60,7 +60,7 @@ import java.util.Iterator;
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<CF, D, DE, C, CE>
-	   implements RecursiveCompound<CF, Function>, Iterable<Function> {
+	   implements RecursiveArray<CF, Function>, Iterable<Function> {
 
 	protected final ImmutableArray<Function> functions;
 
@@ -69,8 +69,12 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 		this.functions = functions;
 	}
 
-	@Override
 	public int getArity() {
+		return this.getLength();
+	}
+
+	@Override
+	public int getLength() {
 		return this.functions.getLength();
 	}
 
@@ -107,7 +111,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 		Function function = this;
 		for (final int index : indices) {
 			if (function.isCompound()) {
-				function = ((Compound<CF, Function>) function).getAt(index);
+				function = ((Array<CF, Function>) function).getAt(index);
 			} else {
 				throw new IllegalArgumentException();
 			}
@@ -117,7 +121,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 
 	@Override
 	public Function[] getAll() {
-		Function[] result = new Function[this.getArity()];
+		Function[] result = new Function[this.getLength()];
 		int i = 0;
 		for (Function function : this.functions) {
 			result[i++] = function;
@@ -126,23 +130,43 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
+	public CF extract(int offset, int length) {
+		return this.abstractGetInstance(this.functions.extract(offset, length));
+	}
+
+	@Override
 	public CF extractPrefix(int length) {
-		return this.extract(0, length);
+		return this.abstractGetInstance(this.functions.extractPrefix(length));
 	}
 
 	@Override
 	public CF extractSuffix(int length) {
-		return this.extract(this.getArity() - length, length);
+		return this.abstractGetInstance(this.functions.extractSuffix(length));
 	}
 
 	@Override
 	public CF extractRange(int fromIndex, int toIndex) {
-		return this.extract(fromIndex, toIndex - fromIndex + 1);
+		return this.abstractGetInstance(this.functions.extractRange(fromIndex, toIndex));
 	}
 
 	@Override
-	public CF extract(int offset, int length) {
-		return this.abstractGetInstance(this.functions.extract(offset, length));
+	public CF remove(int offset, int length) {
+		return this.abstractGetInstance(this.functions.remove(offset, length));
+	}
+
+	@Override
+	public CF removePrefix(int length) {
+		return this.abstractGetInstance(this.functions.removePrefix(length));
+	}
+
+	@Override
+	public CF removeSuffix(int length) {
+		return this.abstractGetInstance(this.functions.removeSuffix(length));
+	}
+
+	@Override
+	public CF removeRange(int fromIndex, int toIndex) {
+		return this.abstractGetInstance(this.functions.removeRange(fromIndex, toIndex));
 	}
 
 	@Override
@@ -166,12 +190,13 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public CF append(Compound<CF, Function> compound) {
-		if (this.getClass().isInstance(compound)) {
-			CF other = (CF) compound;
-			return this.abstractGetInstance(this.functions.append(other.functions));
-		}
-		throw new IllegalArgumentException();
+	public CF append(CF other) {
+		return this.abstractGetInstance(this.functions.append(other.functions));
+	}
+
+	@Override
+	public CF reverse() {
+		return this.abstractGetInstance(this.functions.reverse());
 	}
 
 	@Override
@@ -186,10 +211,10 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 
 	@Override
 	protected boolean defaultIsEquivalent(CF other) {
-		if (this.getArity() != other.getArity()) {
+		if (this.getLength() != other.getLength()) {
 			return false;
 		}
-		for (int i = 0; i < this.getArity(); i++) {
+		for (int i = 0; i < this.getLength(); i++) {
 			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
 				return false;
 			}

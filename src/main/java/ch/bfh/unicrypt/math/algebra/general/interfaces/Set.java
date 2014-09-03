@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.compound.Compound;
 import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
@@ -149,9 +148,9 @@ public interface Set<V extends Object> {
 	public boolean isConcatenative();
 
 	/**
-	 * TODO Returns {@code true} if this set is an instance of {@link Compound}. This set is a cartesian product
+	 * Returns {@code true} if this set is a cartesian product
 	 * <p>
-	 * @return {@code true} if this set is compound
+	 * @return {@code true} if this set is a product set
 	 */
 	public boolean isProduct();
 

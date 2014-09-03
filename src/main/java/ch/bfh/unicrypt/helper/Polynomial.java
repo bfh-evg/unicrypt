@@ -301,7 +301,7 @@ public class Polynomial<C>
 		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Polynomial<C>(coefficients.stripLeadingZeros(), zeroCoefficient, oneCoefficient);
+		return new Polynomial<C>(coefficients.removeLeadingZeros(), zeroCoefficient, oneCoefficient);
 	}
 
 }

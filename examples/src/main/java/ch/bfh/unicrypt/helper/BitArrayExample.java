@@ -70,10 +70,10 @@ public class BitArrayExample {
 		Example.printLine("Shif Left     ", bitArray.shiftLeft(3));
 		Example.printLine("Shift Right   ", bitArray.shiftRight(3));
 		Example.printLines("Split         ", bitArray.split(2, 4, 10));
-		Example.printLine("Strip L.Zeros ", bitArray.stripLeadingZeros());
-		Example.printLine("Strip T.Zeros ", bitArray.stripTrailingZeros());
-		Example.printLine("Strip Prefix  ", bitArray.stripPrefix(3));
-		Example.printLine("Strip Suffix  ", bitArray.stripSuffix(3));
+		Example.printLine("Strip L.Zeros ", bitArray.removeLeadingZeros());
+		Example.printLine("Strip T.Zeros ", bitArray.removeTrailingZeros());
+		Example.printLine("Strip Prefix  ", bitArray.removePrefix(3));
+		Example.printLine("Strip Suffix  ", bitArray.removeSuffix(3));
 		Example.printLine("Concatenate   ", bitArray.append(bitArray));
 	}
 

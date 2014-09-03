@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
-import ch.bfh.unicrypt.helper.compound.Compound;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -53,7 +52,7 @@ import java.util.Iterator;
  */
 public class ImmutableArray<T>
 	   extends AbstractArray<ImmutableArray<T>>
-	   implements Iterable<T>, Compound<ImmutableArray<T>, T>, Array<ImmutableArray<T>, T> {
+	   implements Array<ImmutableArray<T>, T>, Iterable<T> {
 
 	// The obects are stored either as an ordinary, possibly empty array (case 1)
 	// or as an array of length 1 together with the full length of the immutable
@@ -75,7 +74,6 @@ public class ImmutableArray<T>
 		this.array = objects;
 	}
 
-	@Override
 	public int getArity() {
 		return this.length;
 	}
@@ -167,16 +165,6 @@ public class ImmutableArray<T>
 	}
 
 	@Override
-	public ImmutableArray<T> append(Compound<ImmutableArray<T>, T> compound) {
-		return this.append((ImmutableArray<T>) compound);
-	}
-
-	@Override
-	public ImmutableArray<T> reverse() {
-		return new ImmutableArray<T>(this.array, this.offset, this.length, !this.reverse);
-	}
-
-	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
 
@@ -209,7 +197,7 @@ public class ImmutableArray<T>
 		String str = "";
 		String delimiter = "";
 		for (int i = 0; i < this.length; i++) {
-			str = str + delimiter + this.getAt(i);
+			str = str + delimiter + this.abstractGetAt(i);
 			delimiter = ", ";
 		}
 		return str;
@@ -297,13 +285,13 @@ public class ImmutableArray<T>
 	}
 
 	@Override
-	protected Class getArrayClass() {
-		return ImmutableArray.class;
+	protected ImmutableArray<T> abstractReverse() {
+		return new ImmutableArray<T>(this.array, this.offset, this.length, !this.reverse);
 	}
 
 	@Override
-	public ImmutableArray<T> append(Array<ImmutableArray<T>, T> other) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected Class getArrayClass() {
+		return ImmutableArray.class;
 	}
 
 	private T abstractGetAt(int index) {
