@@ -108,7 +108,7 @@ public class ReferenceRandomByteSequenceTest {
 		ByteArray result = instance.getNextByteArray(100000);
 		long resTime = System.currentTimeMillis() - time;
 		Assert.assertEquals(expResult, result);
-		// System.out.println("Timing: " + (expTime - resTime));
+//		System.out.println("Timing: " + (expTime - resTime));
 		Assert.assertTrue(expTime > resTime);
 	}
 
