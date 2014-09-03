@@ -51,20 +51,22 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 /**
  *
  * @author rolfhaenni
  * @param <V>
  */
-public class PolynomialField<V>
-	   extends PolynomialRing<V>
-	   implements FiniteField<Polynomial<DualisticElement<V>>> {
+public class PolynomialField<V> extends PolynomialRing<V> implements
+		FiniteField<Polynomial<DualisticElement<V>>> {
 
 	private final PolynomialElement<V> irreduciblePolynomial;
 
-	protected PolynomialField(PrimeField primeField, PolynomialElement<V> irreduciblePolynomial) {
+	protected PolynomialField(PrimeField primeField,
+			PolynomialElement<V> irreduciblePolynomial) {
 		super(primeField);
 		this.irreduciblePolynomial = irreduciblePolynomial;
 	}
@@ -79,6 +81,35 @@ public class PolynomialField<V>
 
 	public int getDegree() {
 		return this.irreduciblePolynomial.getValue().getDegree();
+	}
+
+	/**
+	 * 
+	 * @param s
+	 *            String containing 0/1 for each coefficient of binary
+	 *            polynomial with rightmost bit as constant term.
+	 * @return
+	 */
+	public PolynomialElement<V> getElementFromBitString(String s) {
+		if (!this.getPrimeField().equals(ZModTwo.getInstance())) {
+			throw new UnsupportedOperationException(
+					"Only binary polynomials supported");
+		}
+
+		BigInteger bitString = new BigInteger(s, 2);
+
+		// Read bits and create a BigInteger ArrayList
+		ArrayList<BigInteger> arrayBigInteger = new ArrayList<BigInteger>();
+		for (Character c : bitString.toString(2).toCharArray()) {
+			arrayBigInteger.add(0, new BigInteger(c.toString()));
+
+		}
+
+		// Convert ArrayList BigInteger array and get element
+		BigInteger[] coeffs = {};
+		coeffs = arrayBigInteger.toArray(coeffs);
+
+		return this.getElement(coeffs);
 	}
 
 	//
@@ -104,18 +135,30 @@ public class PolynomialField<V>
 
 	@Override
 	public MultiplicativeGroup<Polynomial<DualisticElement<V>>> getMultiplicativeGroup() {
-		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact 2.229/2.230)
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact
+		// 2.229/2.230)
+		throw new UnsupportedOperationException("Not supported yet."); // To
+																		// change
+																		// body
+																		// of
+																		// generated
+																		// methods,
+																		// choose
+																		// Tools
+																		// |
+																		// Templates.
 	}
-	
+
 	@Override
-	protected PolynomialElement<V> abstractApply(PolynomialElement<V> element1, PolynomialElement<V> element2){
-		PolynomialElement<V> poly=super.abstractApply(element1, element2);
+	protected PolynomialElement<V> abstractApply(PolynomialElement<V> element1,
+			PolynomialElement<V> element2) {
+		PolynomialElement<V> poly = super.abstractApply(element1, element2);
 		return this.mod(this.getElement(poly.getValue()));
 	}
 
 	@Override
-	protected PolynomialElement<V> abstractMultiply(PolynomialElement<V> element1, PolynomialElement<V> element2) {
+	protected PolynomialElement<V> abstractMultiply(
+			PolynomialElement<V> element1, PolynomialElement<V> element2) {
 		PolynomialElement<V> poly = super.abstractMultiply(element1, element2);
 		return this.mod(this.getElement(poly.getValue()));
 	}
@@ -128,8 +171,10 @@ public class PolynomialField<V>
 	/**
 	 * oneOver.
 	 * <p>
-	 * Compute using extended Euclidean algorithm for polynomial (Algorithm 2.226)
+	 * Compute using extended Euclidean algorithm for polynomial (Algorithm
+	 * 2.226)
 	 * <p>
+	 * 
 	 * @param element
 	 * @return
 	 */
@@ -144,8 +189,10 @@ public class PolynomialField<V>
 			throw new UnsupportedOperationException();
 		}
 
-		Triple euclid = this.extendedEuclidean((PolynomialElement<V>) element, this.irreduciblePolynomial);
-		return this.getElement(((PolynomialElement<V>) euclid.getSecond()).getValue());
+		Triple euclid = this.extendedEuclidean((PolynomialElement<V>) element,
+				this.irreduciblePolynomial);
+		return this.getElement(((PolynomialElement<V>) euclid.getSecond())
+				.getValue());
 
 	}
 
@@ -154,7 +201,9 @@ public class PolynomialField<V>
 	 * <p>
 	 * Z_p must be a field.
 	 * <p>
-	 * @param g g(x) in Z_p[x]
+	 * 
+	 * @param g
+	 *            g(x) in Z_p[x]
 	 * @return h(x) in Z_p[x]
 	 */
 	private PolynomialElement<V> mod(PolynomialElement<V> g) {
@@ -168,23 +217,30 @@ public class PolynomialField<V>
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static <V> PolynomialField getInstance(PrimeField primeField, int degree) {
-		return getInstance(primeField, degree, HybridRandomByteSequence.getInstance());
+	public static <V> PolynomialField getInstance(PrimeField primeField,
+			int degree) {
+		return getInstance(primeField, degree,
+				HybridRandomByteSequence.getInstance());
 	}
 
-	public static <V> PolynomialField getInstance(PrimeField primeField, int degree, RandomByteSequence randomByteSequence) {
+	public static <V> PolynomialField getInstance(PrimeField primeField,
+			int degree, RandomByteSequence randomByteSequence) {
 		if (primeField == null || degree < 1) {
 			throw new IllegalArgumentException();
 		}
 		PolynomialRing<V> ring = PolynomialRing.getInstance(primeField);
-		PolynomialElement<V> irreduciblePolynomial = ring.findIrreduciblePolynomial(degree, randomByteSequence);
+		PolynomialElement<V> irreduciblePolynomial = ring
+				.findIrreduciblePolynomial(degree, randomByteSequence);
 		return new PolynomialField(primeField, irreduciblePolynomial);
 	}
 
-	public static <V> PolynomialField getInstance(PrimeField primeField, PolynomialElement<V> irreduciblePolynomial) {
-		if (primeField == null || irreduciblePolynomial == null
-			   || !irreduciblePolynomial.getSet().getSemiRing().isEquivalent(primeField)
-			   || !irreduciblePolynomial.isIrreducible()) {
+	public static <V> PolynomialField getInstance(PrimeField primeField,
+			PolynomialElement<V> irreduciblePolynomial) {
+		if (primeField == null
+				|| irreduciblePolynomial == null
+				|| !irreduciblePolynomial.getSet().getSemiRing()
+						.isEquivalent(primeField)
+				|| !irreduciblePolynomial.isIrreducible()) {
 			throw new IllegalArgumentException();
 		}
 		return new PolynomialField(primeField, irreduciblePolynomial);
