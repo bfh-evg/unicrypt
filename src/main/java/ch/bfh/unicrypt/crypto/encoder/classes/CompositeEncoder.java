@@ -204,6 +204,16 @@ public class CompositeEncoder
 	}
 
 	@Override
+	public CompositeEncoder[] split(int... indices) {
+		ImmutableArray<Encoder>[] encoderArray = this.encoders.split(indices);
+		CompositeEncoder[] result = new CompositeEncoder[encoderArray.length];
+		for (int i = 0; i < encoderArray.length; i++) {
+			result[i] = new CompositeEncoder(encoderArray[i]);
+		}
+		return result;
+	}
+
+	@Override
 	public Iterator<Encoder> iterator() {
 		return this.encoders.iterator();
 	}

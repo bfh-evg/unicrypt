@@ -258,6 +258,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 		return this.abstractReplaceAt(index, newObject);
 	}
 
+	@Override
 	public A[] split(int... indices) {
 		if (indices == null) {
 			throw new IllegalArgumentException();

@@ -400,6 +400,16 @@ public class ProductSet
 	}
 
 	@Override
+	public ProductSet[] split(int... indices) {
+		ImmutableArray<Set>[] setArray = this.sets.split(indices);
+		ProductSet[] result = new ProductSet[setArray.length];
+		for (int i = 0; i < setArray.length; i++) {
+			result[i] = ProductSet.getInstance(setArray[i]);
+		}
+		return result;
+	}
+
+	@Override
 	protected BigInteger defaultGetOrderLowerBound() {
 		if (this.isUniform()) {
 			return this.getFirst().getOrderLowerBound().pow(this.getLength());

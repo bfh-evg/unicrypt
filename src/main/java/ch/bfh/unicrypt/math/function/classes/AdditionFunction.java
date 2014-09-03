@@ -72,7 +72,7 @@ public class AdditionFunction
 
 	@Override
 	protected AdditiveElement abstractApply(final Tuple tuple, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().add(tuple.getAll());
+		return this.getCoDomain().add(tuple);
 	}
 
 	public static AdditionFunction getInstance(final AdditiveSemiGroup additiveSemiGroup) {

@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This class represents the concept of a composite function f:X_1->Y_n. It consists of multiple internal functions
@@ -77,6 +77,11 @@ public final class CompositeFunction
 	@Override
 	protected CompositeFunction abstractGetInstance(ImmutableArray<Function> functions) {
 		return CompositeFunction.getInstance(functions);
+	}
+
+	@Override
+	protected Class getArrayClass() {
+		return CompositeFunction.class;
 	}
 
 	/**

@@ -216,6 +216,16 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
+	public CF[] split(int... indices) {
+		ImmutableArray<Function>[] functionArray = this.functions.split(indices);
+		CF[] result = (CF[]) java.lang.reflect.Array.newInstance(this.getArrayClass(), functionArray.length);
+		for (int i = 0; i < functionArray.length; i++) {
+			result[i] = this.abstractGetInstance(functionArray[i]);
+		}
+		return result;
+	}
+
+	@Override
 	public Iterator<Function> iterator() {
 		return this.functions.iterator();
 	}
@@ -239,5 +249,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	protected abstract CF abstractGetInstance(ImmutableArray<Function> functions);
+
+	abstract protected Class getArrayClass();
 
 }

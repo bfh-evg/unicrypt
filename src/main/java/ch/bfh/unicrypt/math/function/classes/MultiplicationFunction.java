@@ -72,7 +72,7 @@ public class MultiplicationFunction
 
 	@Override
 	protected MultiplicativeElement abstractApply(final Tuple tuple, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().multiply(tuple.getAll());
+		return this.getCoDomain().multiply(tuple);
 	}
 
 	public static MultiplicationFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup) {

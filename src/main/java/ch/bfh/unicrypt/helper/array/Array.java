@@ -99,4 +99,6 @@ public interface Array<A extends Array<A, T>, T extends Object> {
 
 	public A reverse();
 
+	public A[] split(int... indices);
+
 }

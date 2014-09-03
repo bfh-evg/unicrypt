@@ -207,6 +207,16 @@ public class Tuple
 	}
 
 	@Override
+	public Tuple[] split(int... indices) {
+		ImmutableArray<Element>[] elementArray = this.getValue().split(indices);
+		Tuple[] result = new Tuple[elementArray.length];
+		for (int i = 0; i < elementArray.length; i++) {
+			result[i] = Tuple.getInstance(elementArray[i]);
+		}
+		return result;
+	}
+
+	@Override
 	public Iterator<Element> iterator() {
 		return this.getValue().iterator();
 	}

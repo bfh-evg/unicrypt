@@ -238,7 +238,7 @@ public class PermutationCommitmentProofSystem
 		// Compute image of preimage proof
 		final Element[] ps = new Element[this.size + 3];
 		// - p_0 = c_pi^1/prod(g_i) = prod(c_pi_i)/prod(g_i)
-		ps[0] = this.cyclicGroup.apply(publicInput.getAll()).applyInverse(this.cyclicGroup.apply(gV.getAll()));
+		ps[0] = this.cyclicGroup.apply(publicInput).applyInverse(this.cyclicGroup.apply(gV));
 		// - p_1 = c_pi^e                                                                     [N]
 		ps[1] = computeInnerProduct(publicInput, eV);
 		// - p_2...p_(N+2) = c_1 ... c_N
