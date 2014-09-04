@@ -75,10 +75,10 @@ public class ElGamalEncryptionValidityProofSystem
 	}
 
 	public static ElGamalEncryptionValidityProofSystem getInstance(final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
-		return ElGamalEncryptionValidityProofSystem.getInstance(elGamalES, publicKey, plaintexts, (Element) null);
+		return ElGamalEncryptionValidityProofSystem.getInstance((Element) null, elGamalES, publicKey, plaintexts);
 	}
 
-	public static ElGamalEncryptionValidityProofSystem getInstance(final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts, final Element proverId) {
+	public static ElGamalEncryptionValidityProofSystem getInstance(final Element proverId, final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
 		SigmaChallengeGenerator challengeGenerator = ElGamalEncryptionValidityProofSystem.createNonInteractiveChallengeGenerator(elGamalES, plaintexts.getOrder().intValue(), proverId);
 		return ElGamalEncryptionValidityProofSystem.getInstance(challengeGenerator, elGamalES, publicKey, plaintexts);
 	}

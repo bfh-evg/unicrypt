@@ -85,10 +85,10 @@ public class InequalityOfPreimagesProofSystem
 	}
 
 	public static InequalityOfPreimagesProofSystem getInstance(final Function firstFunction, final Function secondFunction) {
-		return InequalityOfPreimagesProofSystem.getInstance(firstFunction, secondFunction, (Element) null);
+		return InequalityOfPreimagesProofSystem.getInstance((Element) null, firstFunction, secondFunction);
 	}
 
-	public static InequalityOfPreimagesProofSystem getInstance(final Function firstFunction, final Function secondFunction, final Element proverId) {
+	public static InequalityOfPreimagesProofSystem getInstance(final Element proverId, final Function firstFunction, final Function secondFunction) {
 		SigmaChallengeGenerator challengeGenerator = InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
 		return InequalityOfPreimagesProofSystem.getInstance(challengeGenerator, firstFunction, secondFunction);
 	}

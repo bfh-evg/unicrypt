@@ -69,10 +69,10 @@ public class PreimageOrProofSystem
 	}
 
 	public static PreimageOrProofSystem getInstance(final ProductFunction proofFunction) {
-		return PreimageOrProofSystem.getInstance(proofFunction, (Element) null);
+		return PreimageOrProofSystem.getInstance((Element) null, proofFunction);
 	}
 
-	public static PreimageOrProofSystem getInstance(final ProductFunction proofFunction, final Element proverId) {
+	public static PreimageOrProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
 		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return PreimageOrProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
