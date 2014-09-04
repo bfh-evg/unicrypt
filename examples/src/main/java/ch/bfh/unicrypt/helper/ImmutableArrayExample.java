@@ -63,7 +63,6 @@ public class ImmutableArrayExample {
 		Example.printLine("ExtraxtP", a.extractPrefix(2));
 		Example.printLine("ExtraxtS", a.extractSuffix(2));
 		Example.printLine("ExtractR", a.extractRange(2, 8));
-		Example.printLine("GetAll  ", a.getAll());
 		Example.printLine("Insert  ", a.insertAt(5, 100));
 		Example.printLine("Remove  ", a.removeAt(5));
 		Example.printLines("Split   ", a.split(2, 4, 7));

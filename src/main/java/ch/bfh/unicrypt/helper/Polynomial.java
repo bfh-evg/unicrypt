@@ -173,7 +173,6 @@ public class Polynomial<C>
 	}
 
 	public final ImmutableArray<Integer> getIndices() {
-
 		if (this.indices == null) {
 			if (this.isBinary()) {
 				ArrayList<Integer> ind = new ArrayList();

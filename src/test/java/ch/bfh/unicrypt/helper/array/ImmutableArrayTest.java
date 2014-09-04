@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.helper.array;
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import java.util.ArrayList;
 import java.util.Iterator;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -103,14 +102,6 @@ public class ImmutableArrayTest {
 		assertEquals("s3", a4.getAt(2));
 		assertEquals("s1", a5.getAt(0));
 		assertEquals("s1", a5.getAt(2));
-	}
-
-	@Test
-	public void testGetAll() {
-		assertArrayEquals(new String[]{}, a0.getAll().toArray());
-		assertArrayEquals(new String[]{"s1", "s2", "s3"}, a1.getAll().toArray());
-		assertArrayEquals(new String[]{"s1", "s1", "s1"}, a2.getAll().toArray());
-		assertArrayEquals(new String[]{"s1", "s1", "s1"}, a3.getAll().toArray());
 	}
 
 	@Test

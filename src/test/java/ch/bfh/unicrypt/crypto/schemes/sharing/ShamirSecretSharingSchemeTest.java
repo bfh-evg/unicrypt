@@ -48,8 +48,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.List;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -95,21 +93,13 @@ public class ShamirSecretSharingSchemeTest {
 		// Share the message
 		Tuple shares = ssss.share(message);
 
-		List<Element> sharesList = shares.getAll();
-
 		// Shuffle the list of shares
-		Collections.shuffle(sharesList);
-
-		// choose a random number of shares between the threshold and the size
-		// which will be removed from the list
+//		shares = shares.shuffle();
+		// choose a random number of shares between the threshold and size to remove
 		int numberToRemove = random.nextInt(size - threshold);
 
 		// remove the last shares
-		sharesList = sharesList.subList(0, sharesList.size() - numberToRemove);
-
-		// restore pair array with remaining shares
-		Pair[] remainingShares = new Pair[sharesList.size()];
-		sharesList.toArray(remainingShares);
+		Tuple remainingShares = shares.removeSuffix(numberToRemove);
 
 		// recover message and check whether it is equal with original message
 		ZModElement recoveredMessage = ssss.recover(remainingShares);

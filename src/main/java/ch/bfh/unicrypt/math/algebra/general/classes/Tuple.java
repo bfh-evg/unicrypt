@@ -46,9 +46,7 @@ import ch.bfh.unicrypt.helper.array.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  *
@@ -125,15 +123,6 @@ public class Tuple
 			}
 		}
 		return element;
-	}
-
-	@Override
-	public List<Element> getAll() {
-		List<Element> result = new ArrayList<Element>();
-		for (Element element : this.getValue()) {
-			result.add(element);
-		}
-		return result;
 	}
 
 	@Override

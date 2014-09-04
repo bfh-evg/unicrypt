@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import java.util.HashMap;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -213,13 +214,13 @@ public class PolynomialTest {
 
 	@Test
 	public void testGetIndices() {
-		assertArrayEquals(new Integer[]{}, p0.getIndices().getAll().toArray());
-		assertArrayEquals(new Integer[]{0, 1, 3}, p1.getIndices().getAll().toArray());
-		assertArrayEquals(new Integer[]{}, p2.getIndices().getAll().toArray());
-		assertArrayEquals(new Integer[]{0, 1, 3}, p3.getIndices().getAll().toArray());
-		assertArrayEquals(new Integer[]{}, p4.getIndices().getAll().toArray());
-		assertArrayEquals(new Integer[]{0, 1, 3}, p5.getIndices().getAll().toArray());
-		assertArrayEquals(new Integer[]{3, 5, 7, 10, 14, 15}, p6.getIndices().getAll().toArray());
+		assertEquals(ImmutableArray.getInstance(new Integer[0]), p0.getIndices());
+		assertEquals(ImmutableArray.getInstance(0, 1, 3), p1.getIndices());
+		assertEquals(ImmutableArray.getInstance(new Integer[0]), p2.getIndices());
+		assertEquals(ImmutableArray.getInstance(0, 1, 3), p3.getIndices());
+		assertEquals(ImmutableArray.getInstance(new Integer[0]), p4.getIndices());
+		assertEquals(ImmutableArray.getInstance(0, 1, 3), p5.getIndices());
+		assertEquals(ImmutableArray.getInstance(3, 5, 7, 10, 14, 15), p6.getIndices());
 	}
 
 	@Test

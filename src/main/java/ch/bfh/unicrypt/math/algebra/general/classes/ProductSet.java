@@ -56,8 +56,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -318,15 +316,6 @@ public class ProductSet
 			}
 		}
 		return set;
-	}
-
-	@Override
-	public List<Set> getAll() {
-		List<Set> result = new ArrayList<Set>();
-		for (Set set : this.sets) {
-			result.add(set);
-		}
-		return result;
 	}
 
 	@Override

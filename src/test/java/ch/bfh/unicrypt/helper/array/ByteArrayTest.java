@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -103,10 +102,6 @@ public class ByteArrayTest {
 		assertEquals(15, a2.getLength());
 		assertEquals(20, a3.getLength());
 		assertEquals(10, a4.getLength());
-	}
-
-	@Test
-	public void testGetAll() {
 	}
 
 	@Test

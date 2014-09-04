@@ -49,9 +49,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
@@ -91,15 +89,6 @@ public class CompositeEncoder
 	@Override
 	public int countSuffix(Encoder encoder) {
 		return this.encoders.countSuffix(encoder);
-	}
-
-	@Override
-	public List<Encoder> getAll() {
-		List<Encoder> result = new ArrayList<Encoder>();
-		for (Encoder encoder : this.encoders) {
-			result.add(encoder);
-		}
-		return result;
 	}
 
 	@Override

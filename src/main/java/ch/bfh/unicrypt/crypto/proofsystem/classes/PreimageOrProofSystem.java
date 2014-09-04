@@ -57,7 +57,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.util.List;
 
 public class PreimageOrProofSystem
 	   extends AbstractSigmaProofSystem<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
@@ -76,10 +75,6 @@ public class PreimageOrProofSystem
 	public static PreimageOrProofSystem getInstance(final ProductFunction proofFunction, final Element proverId) {
 		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return PreimageOrProofSystem.getInstance(challengeGenerator, proofFunction);
-	}
-
-	public static PreimageOrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final List<Function> proofFunctions) {
-		return PreimageOrProofSystem.getInstance(challengeGenerator, proofFunctions.toArray(new Function[]{}));
 	}
 
 	public static PreimageOrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {

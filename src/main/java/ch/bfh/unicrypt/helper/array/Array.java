@@ -41,8 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
-import java.util.List;
-
 /**
  *
  * @param <A>
@@ -62,8 +60,6 @@ public interface Array<A extends Array<A, T>, T extends Object> {
 	public int countPrefix(T object);
 
 	public int countSuffix(T object);
-
-	public List<T> getAll();
 
 	public T getAt(int index);
 

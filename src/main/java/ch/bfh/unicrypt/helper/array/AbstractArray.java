@@ -43,9 +43,7 @@ package ch.bfh.unicrypt.helper.array;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  *
@@ -128,15 +126,6 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 			} else {
 				break;
 			}
-		}
-		return result;
-	}
-
-	@Override
-	public List<T> getAll() {
-		List<T> result = new ArrayList<T>();
-		for (int i = 0; i < this.length; i++) {
-			result.add(this.abstractGetAt(i));
 		}
 		return result;
 	}

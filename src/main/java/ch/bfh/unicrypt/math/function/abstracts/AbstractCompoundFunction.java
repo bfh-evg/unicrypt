@@ -47,9 +47,7 @@ import ch.bfh.unicrypt.helper.array.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  *
@@ -134,15 +132,6 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 			}
 		}
 		return function;
-	}
-
-	@Override
-	public List<Function> getAll() {
-		List<Function> result = new ArrayList<Function>();
-		for (Function function : this.functions) {
-			result.add(function);
-		}
-		return result;
 	}
 
 	@Override

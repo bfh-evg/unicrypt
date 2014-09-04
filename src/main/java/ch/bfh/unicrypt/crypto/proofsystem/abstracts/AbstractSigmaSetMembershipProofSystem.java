@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageOrProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaSetMembershipProofSystem;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
@@ -59,6 +58,7 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 //
 // setMembershipProofFunction: f(x,r)
@@ -153,7 +153,7 @@ public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGrou
 
 	private PreimageOrProofSystem getOrProofGenerator() {
 		if (this.orProofGenerator == null) {
-			this.orProofGenerator = PreimageOrProofSystem.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction().getAll());
+			this.orProofGenerator = PreimageOrProofSystem.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction());
 		}
 		return this.orProofGenerator;
 	}
