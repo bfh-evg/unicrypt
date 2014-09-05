@@ -103,6 +103,56 @@ public class ProductMonoid
 	}
 
 	@Override
+	public ProductMonoid extract(int offset, int length) {
+		return (ProductMonoid) super.extract(offset, length);
+	}
+
+	@Override
+	public ProductMonoid extractPrefix(int length) {
+		return (ProductMonoid) super.extractPrefix(length);
+	}
+
+	@Override
+	public ProductMonoid extractSuffix(int length) {
+		return (ProductMonoid) super.extractSuffix(length);
+	}
+
+	@Override
+	public ProductMonoid extractRange(int fromIndex, int toIndex) {
+		return (ProductMonoid) super.extractRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductMonoid remove(int offset, int length) {
+		return (ProductMonoid) super.remove(offset, length);
+	}
+
+	@Override
+	public ProductMonoid removePrefix(int length) {
+		return (ProductMonoid) super.removePrefix(length);
+	}
+
+	@Override
+	public ProductMonoid removeSuffix(int length) {
+		return (ProductMonoid) super.removeSuffix(length);
+	}
+
+	@Override
+	public ProductMonoid removeRange(int fromIndex, int toIndex) {
+		return (ProductMonoid) super.removeRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductMonoid reverse() {
+		return (ProductMonoid) super.reverse();
+	}
+
+	@Override
+	public ProductMonoid[] split(int... indices) {
+		return (ProductMonoid[]) super.split(indices);
+	}
+
+	@Override
 	public Tuple getIdentityElement() {
 		if (this.identityElement == null) {
 			final Element[] identityElements = new Element[this.getArity()];

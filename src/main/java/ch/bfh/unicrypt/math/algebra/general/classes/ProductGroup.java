@@ -100,6 +100,56 @@ public class ProductGroup
 	}
 
 	@Override
+	public ProductGroup extract(int offset, int length) {
+		return (ProductGroup) super.extract(offset, length);
+	}
+
+	@Override
+	public ProductGroup extractPrefix(int length) {
+		return (ProductGroup) super.extractPrefix(length);
+	}
+
+	@Override
+	public ProductGroup extractSuffix(int length) {
+		return (ProductGroup) super.extractSuffix(length);
+	}
+
+	@Override
+	public ProductGroup extractRange(int fromIndex, int toIndex) {
+		return (ProductGroup) super.extractRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductGroup remove(int offset, int length) {
+		return (ProductGroup) super.remove(offset, length);
+	}
+
+	@Override
+	public ProductGroup removePrefix(int length) {
+		return (ProductGroup) super.removePrefix(length);
+	}
+
+	@Override
+	public ProductGroup removeSuffix(int length) {
+		return (ProductGroup) super.removeSuffix(length);
+	}
+
+	@Override
+	public ProductGroup removeRange(int fromIndex, int toIndex) {
+		return (ProductGroup) super.removeRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductGroup reverse() {
+		return (ProductGroup) super.reverse();
+	}
+
+	@Override
+	public ProductGroup[] split(int... indices) {
+		return (ProductGroup[]) super.split(indices);
+	}
+
+	@Override
 	public final Tuple invert(Element element) {
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();

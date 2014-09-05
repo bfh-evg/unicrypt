@@ -92,6 +92,56 @@ public class ProductCyclicGroup
 	}
 
 	@Override
+	public ProductCyclicGroup extract(int offset, int length) {
+		return (ProductCyclicGroup) super.extract(offset, length);
+	}
+
+	@Override
+	public ProductCyclicGroup extractPrefix(int length) {
+		return (ProductCyclicGroup) super.extractPrefix(length);
+	}
+
+	@Override
+	public ProductCyclicGroup extractSuffix(int length) {
+		return (ProductCyclicGroup) super.extractSuffix(length);
+	}
+
+	@Override
+	public ProductCyclicGroup extractRange(int fromIndex, int toIndex) {
+		return (ProductCyclicGroup) super.extractRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductCyclicGroup remove(int offset, int length) {
+		return (ProductCyclicGroup) super.remove(offset, length);
+	}
+
+	@Override
+	public ProductCyclicGroup removePrefix(int length) {
+		return (ProductCyclicGroup) super.removePrefix(length);
+	}
+
+	@Override
+	public ProductCyclicGroup removeSuffix(int length) {
+		return (ProductCyclicGroup) super.removeSuffix(length);
+	}
+
+	@Override
+	public ProductCyclicGroup removeRange(int fromIndex, int toIndex) {
+		return (ProductCyclicGroup) super.removeRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductCyclicGroup reverse() {
+		return (ProductCyclicGroup) super.reverse();
+	}
+
+	@Override
+	public ProductCyclicGroup[] split(int... indices) {
+		return (ProductCyclicGroup[]) super.split(indices);
+	}
+
+	@Override
 	protected Iterator<Tuple> defaultIterator() {
 		final ProductCyclicGroup productCyclicGroup = this;
 		return new Iterator<Tuple>() {
