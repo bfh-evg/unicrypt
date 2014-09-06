@@ -44,6 +44,8 @@ package ch.bfh.unicrypt.helper.array;
 import ch.bfh.unicrypt.helper.UniCrypt;
 import java.lang.reflect.Array;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -91,6 +93,17 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 			}
 		}
 		return this.uniform;
+	}
+
+	@Override
+	public List<Integer> getIndices(T object) {
+		List<Integer> result = new LinkedList<Integer>();
+		for (int i = 0; i < this.length; i++) {
+			if (this.abstractGetAt(i).equals(object)) {
+				result.add(i);
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -149,14 +162,14 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public A extract(int offset, int length) {
-		if (offset < 0 || length < 0 || offset + length > this.length) {
+	public A extract(int fromIndex, int length) {
+		if (fromIndex < 0 || length < 0 || fromIndex + length > this.length) {
 			throw new IllegalArgumentException();
 		}
-		if (offset == 0 && length == this.length) {
+		if (fromIndex == 0 && length == this.length) {
 			return (A) this;
 		}
-		return abstractExtract(offset, length);
+		return abstractExtract(fromIndex, length);
 	}
 
 	@Override
@@ -175,9 +188,9 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public A remove(int offset, int length) {
-		A prefix = this.extractPrefix(offset);
-		A suffix = this.extractSuffix(this.length - offset - length);
+	public A remove(int fromIndex, int length) {
+		A prefix = this.extractPrefix(fromIndex);
+		A suffix = this.extractSuffix(this.length - fromIndex - length);
 		return prefix.append(suffix);
 	}
 
@@ -326,13 +339,13 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 
 	abstract protected T abstractGetAt(int index);
 
-	abstract protected A abstractExtract(int offset, int length);
+	abstract protected A abstractExtract(int fromIndex, int length);
 
 	abstract protected A abstractAppend(A other);
 
-	abstract protected A abstractInsertAt(int offset, T newObject);
+	abstract protected A abstractInsertAt(int index, T newObject);
 
-	abstract protected A abstractReplaceAt(int offset, T newObject);
+	abstract protected A abstractReplaceAt(int index, T newObject);
 
 	abstract protected A abstractReverse();
 

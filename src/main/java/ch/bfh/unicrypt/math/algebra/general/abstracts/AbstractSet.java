@@ -464,7 +464,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 					}
 					return true;
 				}
-				return false; // the defult iterator does not work for groups of unknown order
+				return false; // the default iterator does not work for groups of unknown order
 			}
 
 			@Override

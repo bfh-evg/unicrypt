@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
+import java.util.List;
+
 /**
  *
  * @param <A>
@@ -55,6 +57,8 @@ public interface Array<A extends Array<A, T>, T extends Object> {
 
 	public boolean isUniform();
 
+	public List<Integer> getIndices(T object);
+
 	public int count(T object);
 
 	public int countPrefix(T object);
@@ -67,7 +71,7 @@ public interface Array<A extends Array<A, T>, T extends Object> {
 
 	public T getLast();
 
-	public A extract(int offset, int length);
+	public A extract(int fromIndex, int length);
 
 	public A extractPrefix(int length);
 
@@ -75,7 +79,7 @@ public interface Array<A extends Array<A, T>, T extends Object> {
 
 	public A extractRange(int fromIndex, int toIndex);
 
-	public A remove(int offset, int length);
+	public A remove(int fromIndex, int length);
 
 	public A removePrefix(int n);
 

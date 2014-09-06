@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -86,6 +87,11 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	@Override
 	public final boolean isUniform() {
 		return this.functions.isUniform();
+	}
+
+	@Override
+	public List<Integer> getIndices(Function function) {
+		return this.functions.getIndices(function);
 	}
 
 	@Override

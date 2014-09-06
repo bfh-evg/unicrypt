@@ -56,6 +56,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  *
@@ -270,6 +271,11 @@ public class ProductSet
 	@Override
 	public final boolean isUniform() {
 		return this.sets.isUniform();
+	}
+
+	@Override
+	public List<Integer> getIndices(Set set) {
+		return this.sets.getIndices(set);
 	}
 
 	@Override

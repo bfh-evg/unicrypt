@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.array;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.util.List;
 
 /**
  *
@@ -69,6 +70,18 @@ public class BitArray
 		if (length <= 1) {
 			this.uniform = true;
 		}
+	}
+
+	public List<Integer> getOneIndices() {
+		return this.getIndices(true);
+	}
+
+	public List<Integer> getZeroIndices() {
+		return this.getIndices(false);
+	}
+
+	public int getByteLength() {
+		return (this.length + Byte.SIZE - 1) / Byte.SIZE;
 	}
 
 	public boolean[] getBits() {
@@ -281,10 +294,14 @@ public class BitArray
 	}
 
 	@Override
-	protected BitArray abstractExtract(int offset, int length) {
-		int newTrailer = Math.max(0, this.trailer - offset);
-		int newOffset = this.offset + Math.max(0, offset - this.trailer);
-		return new BitArray(this.byteArray, newOffset, length, newTrailer, this.header, this.reverse);
+	protected BitArray abstractExtract(int fromIndex, int length) {
+		if (this.reverse) {
+			fromIndex = this.length - fromIndex - length;
+		}
+		int newTrailer = Math.min(Math.max(0, this.trailer - fromIndex), length);
+		int newHeader = Math.min(Math.max(0, this.header - (this.length - fromIndex - length)), length);
+		int newOffset = this.offset + Math.max(0, fromIndex - this.trailer);
+		return new BitArray(this.byteArray, newOffset, length, newTrailer, newHeader, this.reverse);
 	}
 
 	@Override

@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -77,6 +78,11 @@ public class Tuple
 	@Override
 	public final boolean isUniform() {
 		return this.getValue().isUniform();
+	}
+
+	@Override
+	public List<Integer> getIndices(Element element) {
+		return this.getValue().getIndices(element);
 	}
 
 	@Override

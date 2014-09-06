@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -97,24 +96,30 @@ public class ImmutableArray<T extends Object>
 		if (array == null) {
 			throw new IllegalArgumentException();
 		}
+		Object[] newArray = new Object[array.length];
+		int i = 0;
 		for (T object : array) {
 			if (object == null) {
 				throw new IllegalArgumentException();
 			}
+			newArray[i++] = object;
 		}
-		return new ImmutableArray<T>(Arrays.copyOf(array, array.length));
+		return new ImmutableArray<T>(newArray);
 	}
 
 	public static <T> ImmutableArray<T> getInstance(Collection<T> collection) {
 		if (collection == null) {
 			throw new IllegalArgumentException();
 		}
+		Object[] array = new Object[collection.size()];
+		int i = 0;
 		for (T object : collection) {
 			if (object == null) {
 				throw new IllegalArgumentException();
 			}
+			array[i++] = object;
 		}
-		return new ImmutableArray<T>(collection.toArray());
+		return new ImmutableArray<T>(array);
 	}
 
 	public static <T> ImmutableArray<T> getInstance(T object, int length) {
@@ -133,11 +138,11 @@ public class ImmutableArray<T extends Object>
 	}
 
 	@Override
-	protected ImmutableArray<T> abstractExtract(int offset, int length) {
+	protected ImmutableArray<T> abstractExtract(int fromIndex, int length) {
 		if (this.reverse) {
-			offset = this.length - (offset + length);
+			fromIndex = this.length - fromIndex - length;
 		}
-		return new ImmutableArray<T>(this.array, this.offset + offset, length, this.reverse);
+		return new ImmutableArray<T>(this.array, this.offset + fromIndex, length, this.reverse);
 	}
 
 	@Override

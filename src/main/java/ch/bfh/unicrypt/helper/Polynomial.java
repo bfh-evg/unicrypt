@@ -153,16 +153,16 @@ public class Polynomial<C>
 			throw new IllegalArgumentException();
 		}
 		if (this.isBinary()) {
-			int byteIndex = index / Byte.SIZE;
-			int bitIndex = index % Byte.SIZE;
-			if (byteIndex >= this.binaryCoefficients.getLength()) {
-				return this.zeroCoefficient;
+			if (index < this.binaryCoefficients.getBitLength() && this.binaryCoefficients.getBitAt(index)) {
+				return this.oneCoefficient;
 			}
-			return ((this.binaryCoefficients.getByteAt(byteIndex) >> bitIndex) & 1) == 1 ? this.oneCoefficient : this.zeroCoefficient;
 		} else {
 			C coefficient = this.coefficients.get(index);
-			return coefficient == null ? this.zeroCoefficient : coefficient;
+			if (coefficient != null) {
+				return coefficient;
+			}
 		}
+		return this.zeroCoefficient;
 	}
 
 	public ByteArray getCoefficients() {
@@ -176,11 +176,9 @@ public class Polynomial<C>
 		if (this.indices == null) {
 			if (this.isBinary()) {
 				ArrayList<Integer> ind = new ArrayList();
-				for (int i = 0; i < this.binaryCoefficients.getLength(); i++) {
-					for (int j = 0; j < Byte.SIZE; j++) {
-						if (((this.binaryCoefficients.getByteAt(i) >> j) & 1) == 1) {
-							ind.add(i * Byte.SIZE + j);
-						}
+				for (int i = 0; i < this.binaryCoefficients.getBitLength(); i++) {
+					if (this.binaryCoefficients.getBitAt(i)) {
+						ind.add(i);
 					}
 				}
 				this.indices = ImmutableArray.getInstance(ind);

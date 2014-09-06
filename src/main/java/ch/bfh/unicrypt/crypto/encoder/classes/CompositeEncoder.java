@@ -50,6 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Iterator;
+import java.util.List;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
@@ -74,6 +75,11 @@ public class CompositeEncoder
 	@Override
 	public boolean isUniform() {
 		return this.encoders.isUniform();
+	}
+
+	@Override
+	public List<Integer> getIndices(Encoder encoder) {
+		return this.encoders.getIndices(encoder);
 	}
 
 	@Override

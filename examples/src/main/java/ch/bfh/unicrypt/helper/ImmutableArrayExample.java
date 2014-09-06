@@ -43,6 +43,8 @@ package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 
 /**
  *
@@ -66,6 +68,16 @@ public class ImmutableArrayExample {
 		Example.printLine("Insert  ", a.insertAt(5, 100));
 		Example.printLine("Remove  ", a.removeAt(5));
 		Example.printLines("Split   ", a.split(2, 4, 7));
+
+	}
+
+	public static void example2() {
+
+		ProductSet ps = ProductSet.getInstance(ZMod.getInstance(3), 2);
+
+		Example.printLine(ImmutableArray.getInstance(ps));
+		Example.printLine(ImmutableArray.<ProductSet>getInstance(ps));
+		Example.printLine(ImmutableArray.getInstance(ps, ps, ps));
 
 	}
 
