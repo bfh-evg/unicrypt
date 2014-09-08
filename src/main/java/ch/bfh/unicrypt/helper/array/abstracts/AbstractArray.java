@@ -39,9 +39,10 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
+package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.iterable.IterableRange;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -55,7 +56,7 @@ import java.util.List;
  */
 abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Object>
 	   extends UniCrypt
-	   implements ch.bfh.unicrypt.helper.array.Array<A, T>, Iterable<T> {
+	   implements ch.bfh.unicrypt.helper.array.interfaces.Array<A, T>, Iterable<T> {
 
 	protected int length;
 	protected int offset;
@@ -66,6 +67,9 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 		this.length = length;
 		this.offset = offset;
 		this.reverse = reverse;
+		if (length <= 1) {
+			this.uniform = true;
+		}
 	}
 
 	@Override
@@ -96,10 +100,26 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
+	public IterableRange getAllIndices() {
+		return IterableRange.getInstance(0, this.length);
+	}
+
+	@Override
 	public List<Integer> getIndices(T object) {
 		List<Integer> result = new LinkedList<Integer>();
 		for (int i = 0; i < this.length; i++) {
 			if (this.abstractGetAt(i).equals(object)) {
+				result.add(i);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public List<Integer> getIndicesExcept(T object) {
+		List<Integer> result = new LinkedList<Integer>();
+		for (int i = 0; i < this.length; i++) {
+			if (!this.abstractGetAt(i).equals(object)) {
 				result.add(i);
 			}
 		}

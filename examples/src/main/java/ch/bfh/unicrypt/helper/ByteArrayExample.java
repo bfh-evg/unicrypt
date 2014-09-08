@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *
@@ -104,8 +104,8 @@ public class ByteArrayExample {
 		Example.printLine("Extract   ", byteArray2.extract(2, 4));
 		Object[] byteArrays = byteArray2.split(2, 4);
 		Example.printLine("Split     ", byteArrays);
-		Example.printLine("Conc      ", byteArray1.append(byteArray2));
-		Example.printLine("Conc      ", byteArray2.append(byteArray1));
+		Example.printLine("Append    ", byteArray1.append(byteArray2));
+		Example.printLine("Append    ", byteArray2.append(byteArray1));
 		Example.printLine("ShiftLeft ", byteArray2.shiftLeft(7));
 		Example.printLine("ShiftRight ", byteArray2.shiftRight(7));
 	}
@@ -128,8 +128,8 @@ public class ByteArrayExample {
 		for (int i = 0; i < 16; i++) {
 			Example.printLine("GetBitAt", byteArray2.getBitAt(i));
 		}
-		Example.printLine("0-Bits", byteArray2.countZeroBits());
-		Example.printLine("1-Bits", byteArray2.countOneBits());
+		Example.printLine("Count 0-Bits ", byteArray2.countZeroBits());
+		Example.printLine("Count 1-Bit s", byteArray2.countOneBits());
 		Example.printLine("Leading Zeros", byteArray2.countLeadingZeroBits());
 		Example.printLine("Trailing Zeros", byteArray2.countTrailingZeroBits());
 	}

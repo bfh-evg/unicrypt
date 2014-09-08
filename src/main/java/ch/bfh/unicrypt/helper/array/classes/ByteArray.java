@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
+package ch.bfh.unicrypt.helper.array.classes;
 
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractArrayWithDefault;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -54,7 +55,7 @@ import java.util.Locale;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ByteArray
-	   extends AbstractArray<ByteArray, Byte>
+	   extends AbstractArrayWithDefault<ByteArray, Byte>
 	   implements Iterable<Byte> {
 
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
@@ -63,8 +64,6 @@ public class ByteArray
 	private static final byte ALL_ONE = (byte) BYTE_MASK;
 
 	protected final byte[] bytes;
-	private int trailer; // number of trailing zeros not included in bytes
-	private int header; // number of leading zeros not included in bytes
 
 	protected ByteArray(byte fillByte, int length) {
 		this(new byte[]{fillByte}, 0, length, 0, 0, false);
@@ -75,11 +74,9 @@ public class ByteArray
 	}
 
 	protected ByteArray(byte[] bytes, int offset, int length, int trailer, int header, boolean reverse) {
-		super(length, offset, reverse);
+		super(ByteArray.ALL_ZERO, trailer, header, length, offset, reverse);
 		this.bytes = bytes;
-		this.trailer = trailer;
-		this.header = header;
-		if (length <= 1 || (bytes.length <= 1 && trailer == 0 && header == 0)) {
+		if (bytes.length <= 1 && trailer == 0 && header == 0) {
 			this.uniform = true;
 		}
 	}
@@ -199,26 +196,6 @@ public class ByteArray
 	public ByteArray removeTrailingZeros() {
 		int n = this.countTrailingZeros();
 		return this.removePrefix(n);
-	}
-
-	// left here means making the byte array smaller
-	public ByteArray shiftLeft(int n) {
-		if (n < 0) {
-			return this.shiftRight(-n);
-		}
-		return this.removePrefix(Math.min(this.length, n));
-	}
-
-	// right here means making the byte array larger
-	public ByteArray shiftRight(int n) {
-		if (n <= 0) {
-			return this.shiftLeft(-n);
-		}
-		if (this.reverse) {
-			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		} else {
-			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		}
 	}
 
 	// left here means making the byte array smaller
@@ -507,7 +484,7 @@ public class ByteArray
 			index = this.length - index - 1;
 		}
 		if (index < this.trailer || index >= this.length - this.header) {
-			return ByteArray.ALL_ZERO;
+			return this.defaultObject;
 		}
 		return this.bytes[(this.offset + index - this.trailer) % this.bytes.length];
 	}
@@ -536,11 +513,22 @@ public class ByteArray
 	}
 
 	@Override
+	protected ByteArray abstractAppend(int n) {
+		if (this.reverse) {
+			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
+		} else {
+			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
+		}
+	}
+
+	@Override
 	protected ByteArray abstractInsertAt(int index, Byte newByte) {
 		byte[] result = new byte[this.length + 1];
-		for (int i = 0; i < result.length; i++) {
-			if (i != index) {
-				result[i] = (i < index) ? this.abstractGetByteAt(i) : this.abstractGetByteAt(i - 1);
+		for (int i = 0; i < this.length; i++) {
+			if (i < index) {
+				result[i] = this.abstractGetByteAt(i);
+			} else {
+				result[i + 1] = this.abstractGetByteAt(i);
 			}
 		}
 		result[index] = newByte;
@@ -550,7 +538,7 @@ public class ByteArray
 	@Override
 	protected ByteArray abstractReplaceAt(int index, Byte newByte) {
 		byte[] result = new byte[this.length];
-		for (int i = 0; i < result.length; i++) {
+		for (int i = 0; i < this.length; i++) {
 			result[i] = this.abstractGetByteAt(i);
 		}
 		result[index] = newByte;
@@ -560,6 +548,15 @@ public class ByteArray
 	@Override
 	protected ByteArray abstractReverse() {
 		return new ByteArray(this.bytes, this.offset, this.length, this.trailer, this.header, !this.reverse);
+	}
+
+	@Override
+	protected ByteArray abstractShiftRight(int n) {
+		if (this.reverse) {
+			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
+		} else {
+			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
+		}
 	}
 
 	@Override

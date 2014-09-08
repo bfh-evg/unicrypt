@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *

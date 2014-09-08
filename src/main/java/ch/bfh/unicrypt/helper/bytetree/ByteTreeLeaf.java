@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.bytetree;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.nio.ByteBuffer;
 

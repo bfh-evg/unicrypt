@@ -39,28 +39,17 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
-
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <A>
+ * @param <T>
  */
-public class Singleton
-	   extends Tuple {
+public interface RecursiveArray<A extends Array<A, T>, T>
+	   extends Array<A, T> {
 
-	protected Singleton(final ProductSet set, final ImmutableArray<Element> elements) {
-		super(set, elements);
-	}
-
-	public static Singleton getInstance(Element first) {
-		if (first == null) {
-			throw new IllegalArgumentException();
-		}
-		ImmutableArray<Element> elements = ImmutableArray.getInstance(first);
-		return new Singleton(ProductSet.getInstance(first.getSet()), elements);
-	}
+	public T getAt(int... indices);
 
 }

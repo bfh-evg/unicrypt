@@ -39,9 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
-
-import java.util.List;
+package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
  *
@@ -57,7 +55,11 @@ public interface Array<A extends Array<A, T>, T extends Object> {
 
 	public boolean isUniform();
 
-	public List<Integer> getIndices(T object);
+	public Iterable<Integer> getAllIndices();
+
+	public Iterable<Integer> getIndices(T object);
+
+	public Iterable<Integer> getIndicesExcept(T object);
 
 	public int count(T object);
 

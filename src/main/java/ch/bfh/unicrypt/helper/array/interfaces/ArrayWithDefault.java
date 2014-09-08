@@ -39,28 +39,43 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
-
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <A>
+ * @param <T>
  */
-public class Singleton
-	   extends Tuple {
+public interface ArrayWithDefault<A extends Array<A, T>, T extends Object>
+	   extends Array<A, T> {
 
-	protected Singleton(final ProductSet set, final ImmutableArray<Element> elements) {
-		super(set, elements);
-	}
+	public T getDefault();
 
-	public static Singleton getInstance(Element first) {
-		if (first == null) {
-			throw new IllegalArgumentException();
-		}
-		ImmutableArray<Element> elements = ImmutableArray.getInstance(first);
-		return new Singleton(ProductSet.getInstance(first.getSet()), elements);
-	}
+	// collects the indices of default objects
+	public Iterable<Integer> getIndices();
+
+	// collects the indices of objects different from the default
+	public Iterable<Integer> getIndicesExcept();
+
+	public int count();
+
+	public int countPrefix();
+
+	public int countSuffix();
+
+	public A insertAt(final int index);
+
+	public A replaceAt(int index);
+
+	public A add();
+
+	public A append(int n);
+
+	// left here means making the byte array smaller
+	public A shiftLeft(int n);
+
+	// right here means making the byte array larger
+	public A shiftRight(int n);
 
 }

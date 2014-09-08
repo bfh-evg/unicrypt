@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.RecursiveArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -81,8 +81,18 @@ public class Tuple
 	}
 
 	@Override
+	public Iterable<Integer> getAllIndices() {
+		return this.getValue().getAllIndices();
+	}
+
+	@Override
 	public List<Integer> getIndices(Element element) {
 		return this.getValue().getIndices(element);
+	}
+
+	@Override
+	public List<Integer> getIndicesExcept(Element element) {
+		return this.getValue().getIndicesExcept(element);
 	}
 
 	@Override

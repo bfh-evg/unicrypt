@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.BitArray;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import java.util.Arrays;
 
 /**

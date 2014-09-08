@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
+package ch.bfh.unicrypt.helper.array.classes;
 
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractArrayWithDefault;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -51,25 +52,18 @@ import java.util.List;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class BitArray
-	   extends AbstractArray<BitArray, Boolean>
+	   extends AbstractArrayWithDefault<BitArray, Boolean>
 	   implements Iterable<Boolean> {
 
 	ByteArray byteArray;
-	private int trailer; // number of trailing zeros not included in byteArray
-	private int header; // number of leading zeros not included in byteArray
 
 	private BitArray(ByteArray byteArray, int length) {
 		this(byteArray, 0, length, 0, 0, false);
 	}
 
 	private BitArray(ByteArray byteArray, int offset, int length, int trailer, int header, boolean reverse) {
-		super(length, offset, reverse);
+		super(false, trailer, header, length, offset, reverse);
 		this.byteArray = byteArray;
-		this.trailer = trailer;
-		this.header = header;
-		if (length <= 1) {
-			this.uniform = true;
-		}
 	}
 
 	public List<Integer> getOneIndices() {
@@ -147,26 +141,6 @@ public class BitArray
 	public BitArray removeTrailingZeros() {
 		int n = this.countTrailingZeros();
 		return this.removePrefix(n);
-	}
-
-	// left here means making the bit array smaller
-	public BitArray shiftLeft(int n) {
-		if (n < 0) {
-			return this.shiftRight(-n);
-		}
-		return this.removePrefix(Math.min(this.length, n));
-	}
-
-	// right here means making the bit array larger
-	public BitArray shiftRight(int n) {
-		if (n <= 0) {
-			return this.shiftLeft(-n);
-		}
-		if (this.reverse) {
-			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		} else {
-			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		}
 	}
 
 	public ByteArray getHashValue() {
@@ -317,11 +291,22 @@ public class BitArray
 	}
 
 	@Override
+	protected BitArray abstractAppend(int n) {
+		if (this.reverse) {
+			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
+		} else {
+			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
+		}
+	}
+
+	@Override
 	protected BitArray abstractInsertAt(int index, Boolean newBit) {
 		boolean[] result = new boolean[this.length + 1];
-		for (int i = 0; i < result.length; i++) {
-			if (i != index) {
-				result[i] = (i < index) ? this.abstractGetBitAt(i) : this.abstractGetBitAt(i - 1);
+		for (int i = 0; i < this.length; i++) {
+			if (i < index) {
+				result[i] = this.abstractGetBitAt(i);
+			} else {
+				result[i + 1] = this.abstractGetBitAt(i);
 			}
 		}
 		result[index] = newBit;
@@ -331,7 +316,7 @@ public class BitArray
 	@Override
 	protected BitArray abstractReplaceAt(int index, Boolean newBit) {
 		boolean[] result = new boolean[this.length];
-		for (int i = 0; i < result.length; i++) {
+		for (int i = 0; i < this.length; i++) {
 			result[i] = this.abstractGetBitAt(i);
 		}
 		result[index] = newBit;
@@ -359,6 +344,15 @@ public class BitArray
 	@Override
 	protected Class<BitArray> getArrayClass() {
 		return BitArray.class;
+	}
+
+	@Override
+	protected BitArray abstractShiftRight(int n) {
+		if (this.reverse) {
+			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
+		} else {
+			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
+		}
 	}
 
 }

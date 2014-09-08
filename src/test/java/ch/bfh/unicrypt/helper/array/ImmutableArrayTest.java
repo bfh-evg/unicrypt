@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import java.util.ArrayList;
 import java.util.Iterator;
 import static org.junit.Assert.assertEquals;

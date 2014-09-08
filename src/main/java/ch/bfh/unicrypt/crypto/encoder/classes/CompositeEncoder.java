@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.RecursiveArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -78,8 +78,18 @@ public class CompositeEncoder
 	}
 
 	@Override
+	public Iterable<Integer> getAllIndices() {
+		return this.encoders.getAllIndices();
+	}
+
+	@Override
 	public List<Integer> getIndices(Encoder encoder) {
 		return this.encoders.getIndices(encoder);
+	}
+
+	@Override
+	public List<Integer> getIndicesExcept(Encoder encoder) {
+		return this.encoders.getIndicesExcept(encoder);
 	}
 
 	@Override

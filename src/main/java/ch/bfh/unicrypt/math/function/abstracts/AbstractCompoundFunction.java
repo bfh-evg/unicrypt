@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.helper.array.Array;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.RecursiveArray;
+import ch.bfh.unicrypt.helper.array.interfaces.Array;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -90,8 +90,18 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
+	public Iterable<Integer> getAllIndices() {
+		return this.functions.getAllIndices();
+	}
+
+	@Override
 	public List<Integer> getIndices(Function function) {
 		return this.functions.getIndices(function);
+	}
+
+	@Override
+	public List<Integer> getIndicesExcept(Function function) {
+		return this.functions.getIndicesExcept(function);
 	}
 
 	@Override

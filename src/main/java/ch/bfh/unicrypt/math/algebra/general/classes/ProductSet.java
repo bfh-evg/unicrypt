@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.RecursiveArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
 import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
@@ -274,8 +274,18 @@ public class ProductSet
 	}
 
 	@Override
+	public Iterable<Integer> getAllIndices() {
+		return this.sets.getAllIndices();
+	}
+
+	@Override
 	public List<Integer> getIndices(Set set) {
 		return this.sets.getIndices(set);
+	}
+
+	@Override
+	public List<Integer> getIndicesExcept(Set set) {
+		return this.sets.getIndicesExcept(set);
 	}
 
 	@Override

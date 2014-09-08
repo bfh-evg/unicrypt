@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
+package ch.bfh.unicrypt.helper.iterable;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import java.util.Iterator;
@@ -49,29 +49,31 @@ import java.util.Iterator;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <T>
  */
-public class IterableArray<T>
+public class IterableRange
 	   extends UniCrypt
-	   implements Iterable<T> {
+	   implements Iterable<Integer> {
 
-	private final T[] array;
+	private int from;
+	private int to;
 
-	private IterableArray(T[] array) {
-		this.array = array;
+	private IterableRange(int from, int to) {
+		this.from = from;
+		this.to = to;
 	}
 
 	@Override
-	public Iterator<T> iterator() {
-		return new Iterator<T>() {
-			private int pos = 0;
+	public Iterator<Integer> iterator() {
+		return new Iterator<Integer>() {
+			private int pos = from;
 
 			@Override
 			public boolean hasNext() {
-				return array.length > pos;
+				return pos < to;
 			}
 
 			@Override
-			public T next() {
-				return array[pos++];
+			public Integer next() {
+				return pos;
 			}
 
 			@Override
@@ -81,11 +83,11 @@ public class IterableArray<T>
 		};
 	}
 
-	public static <T> IterableArray<T> getInstance(T[] array) {
-		if (array == null) {
+	public static IterableRange getInstance(int from, int to) {
+		if (from > to) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableArray<T>(array);
+		return new IterableRange(from, to);
 	}
 
 }

@@ -39,28 +39,53 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.helper.iterable;
 
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.helper.UniCrypt;
+import java.util.Iterator;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <T>
  */
-public class Singleton
-	   extends Tuple {
+public class IterableArray<T>
+	   extends UniCrypt
+	   implements Iterable<T> {
 
-	protected Singleton(final ProductSet set, final ImmutableArray<Element> elements) {
-		super(set, elements);
+	private final T[] array;
+
+	private IterableArray(T[] array) {
+		this.array = array;
 	}
 
-	public static Singleton getInstance(Element first) {
-		if (first == null) {
+	@Override
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+			private int pos = 0;
+
+			@Override
+			public boolean hasNext() {
+				return array.length > pos;
+			}
+
+			@Override
+			public T next() {
+				return array[pos++];
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("Cannot remove an element of an array.");
+			}
+		};
+	}
+
+	public static <T> IterableArray<T> getInstance(T[] array) {
+		if (array == null) {
 			throw new IllegalArgumentException();
 		}
-		ImmutableArray<Element> elements = ImmutableArray.getInstance(first);
-		return new Singleton(ProductSet.getInstance(first.getSet()), elements);
+		return new IterableArray<T>(array);
 	}
 
 }

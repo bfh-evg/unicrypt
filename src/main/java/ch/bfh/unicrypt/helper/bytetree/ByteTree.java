@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.helper.bytetree;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;

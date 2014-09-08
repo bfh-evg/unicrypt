@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.random.distributionsampler.classes;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.random.distributionsampler.interfaces.DistributionSampler;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

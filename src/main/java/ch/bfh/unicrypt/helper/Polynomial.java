@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

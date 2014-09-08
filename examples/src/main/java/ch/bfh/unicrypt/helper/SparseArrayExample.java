@@ -39,17 +39,62 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
+package ch.bfh.unicrypt.helper;
+
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.array.classes.SparseArray;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <A>
- * @param <T>
  */
-public interface RecursiveArray<A extends Array<A, T>, T>
-	   extends Array<A, T> {
+public class SparseArrayExample {
 
-	public T getAt(int... indices);
+	public static void example1() {
+
+		Map<Integer, String> map = new HashMap<>();
+		map.put(3, "3");
+		map.put(7, "7");
+		map.put(11, "11");
+
+		SparseArray<String> sparseArray = SparseArray.getInstance("0", map);
+
+		Example.printLine(sparseArray);
+		Example.printLine(sparseArray.getLength());
+		Example.printLine(sparseArray.getAllIndices());
+		Example.printLine(sparseArray.shiftLeft(1));
+		Example.printLine(sparseArray.shiftLeft(2));
+		Example.printLine(sparseArray.shiftLeft(3));
+		Example.printLine(sparseArray.shiftLeft(4));
+		Example.printLine(sparseArray.shiftLeft(11));
+		Example.printLine(sparseArray.shiftLeft(12));
+		Example.printLine(sparseArray.shiftRight(2));
+	}
+
+	public static void example2() {
+
+		SparseArray<Integer> a = SparseArray.getInstance(0, 0, 1, 2, 0, 4, 5, 0, 0, 8, 9, 10);
+
+		Example.printLine(a);
+		Example.printLine("Length  ", a.getLength());
+		//	Example.printLine("Add     ", a.add(7));
+		//	Example.printLine("Append  ", a.append(a));
+		Example.printLine("Extract ", a.extract(2, 3));
+		Example.printLine("ExtraxtP", a.extractPrefix(2));
+		Example.printLine("ExtraxtS", a.extractSuffix(2));
+		Example.printLine("ExtractR", a.extractRange(2, 8));
+		Example.printLine("Insert  ", a.insertAt(5, 100));
+		Example.printLine("Replace ", a.replaceAt(5, 100));
+		Example.printLine("Replace ", a.replaceAt(6, 100));
+		Example.printLine("Remove  ", a.removeAt(5));
+		Example.printLines("Split   ", a.split(2, 4, 7));
+
+	}
+
+	public static void main(final String[] args) {
+		Example.runExamples();
+	}
 
 }

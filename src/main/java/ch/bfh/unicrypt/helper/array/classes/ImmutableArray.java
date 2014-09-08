@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
+package ch.bfh.unicrypt.helper.array.classes;
 
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractArray;
 import java.util.Collection;
 
 /**
@@ -67,13 +68,9 @@ public class ImmutableArray<T extends Object>
 	protected ImmutableArray(Object[] objects, int offset, int length, boolean reverse) {
 		super(length, offset, reverse);
 		this.array = objects;
-		if (length <= 1 || objects.length <= 1) {
+		if (objects.length <= 1) {
 			this.uniform = true;
 		}
-	}
-
-	public int getArity() {
-		return this.length;
 	}
 
 	@Override
@@ -89,7 +86,7 @@ public class ImmutableArray<T extends Object>
 			str = str + delimiter + this.abstractGetAt(i);
 			delimiter = ", ";
 		}
-		return str;
+		return "[" + str + "]";
 	}
 
 	public static <T> ImmutableArray<T> getInstance(T... array) {
@@ -160,9 +157,11 @@ public class ImmutableArray<T extends Object>
 	@Override
 	protected ImmutableArray<T> abstractInsertAt(int index, T newObject) {
 		Object[] result = new Object[this.length + 1];
-		for (int i = 0; i < result.length; i++) {
-			if (i != index) {
-				result[i] = (i < index) ? this.abstractGetAt(i) : this.abstractGetAt(i - 1);
+		for (int i = 0; i < this.length; i++) {
+			if (i < index) {
+				result[i] = this.abstractGetAt(i);
+			} else {
+				result[i + 1] = this.abstractGetAt(i);
 			}
 		}
 		result[index] = newObject;
@@ -172,7 +171,7 @@ public class ImmutableArray<T extends Object>
 	@Override
 	protected ImmutableArray<T> abstractReplaceAt(int index, T newObject) {
 		Object[] result = new Object[this.length];
-		for (int i = 0; i < result.length; i++) {
+		for (int i = 0; i < this.length; i++) {
 			result[i] = this.abstractGetAt(i);
 		}
 		result[index] = newObject;
