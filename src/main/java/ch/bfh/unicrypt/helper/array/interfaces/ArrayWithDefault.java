@@ -72,6 +72,10 @@ public interface ArrayWithDefault<A extends Array<A, T>, T extends Object>
 
 	public A append(int n);
 
+	public A removePrefix();
+
+	public A removeSuffix();
+
 	// left here means making the byte array smaller
 	public A shiftLeft(int n);
 

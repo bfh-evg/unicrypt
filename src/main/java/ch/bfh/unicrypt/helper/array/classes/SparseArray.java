@@ -110,11 +110,6 @@ public class SparseArray<T extends Object>
 	}
 
 	@Override
-	protected String defaultToStringName() {
-		return "";
-	}
-
-	@Override
 	protected String defaultToStringValue() {
 		if (this.isEmpty()) {
 			return "[]";
@@ -190,32 +185,12 @@ public class SparseArray<T extends Object>
 	}
 
 	@Override
-	protected SparseArray<T> abstractExtract(int fromIndex, int length) {
-		if (this.reverse) {
-			fromIndex = this.length - fromIndex - length;
-		}
-		int newTrailer = Math.min(Math.max(0, this.trailer - fromIndex), length);
-		int newHeader = Math.min(Math.max(0, this.header - (this.length - fromIndex - length)), length);
-		int newOffset = this.offset + Math.max(0, fromIndex - this.trailer);
-		return new SparseArray<T>(this.defaultObject, this.map, newOffset, length, newTrailer, newHeader, this.reverse);
-	}
-
-	@Override
 	protected SparseArray<T> abstractAppend(SparseArray<T> other) {
 		if (this.defaultObject.equals(other.defaultObject)) {
 			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 		}
 		return null;
 		// TODO
-	}
-
-	@Override
-	protected SparseArray<T> abstractAppend(int n) {
-		if (this.reverse) {
-			return new SparseArray<T>(this.defaultObject, this.map, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		} else {
-			return new SparseArray<T>(this.defaultObject, this.map, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		}
 	}
 
 	@Override
@@ -249,23 +224,14 @@ public class SparseArray<T extends Object>
 	}
 
 	@Override
-	protected SparseArray<T> abstractReverse() {
-		return new SparseArray<T>(this.defaultObject, this.map, this.offset, this.length, this.trailer, this.header, !this.reverse);
+	protected SparseArray<T> abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
+		return new SparseArray<T>(this.defaultObject, this.map, offset, length, trailer, header, reverse);
 	}
 
 	@Override
 	protected Class
 		   getArrayClass() {
 		return SparseArray.class;
-	}
-
-	@Override
-	protected SparseArray<T> abstractShiftRight(int n) {
-		if (this.reverse) {
-			return new SparseArray<T>(this.defaultObject, this.map, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		} else {
-			return new SparseArray<T>(this.defaultObject, this.map, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		}
 	}
 
 }

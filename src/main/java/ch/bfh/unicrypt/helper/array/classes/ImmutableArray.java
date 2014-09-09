@@ -74,11 +74,6 @@ public class ImmutableArray<T extends Object>
 	}
 
 	@Override
-	protected String defaultToStringName() {
-		return "";
-	}
-
-	@Override
 	protected String defaultToStringValue() {
 		String str = "";
 		String delimiter = "";

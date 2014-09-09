@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.helper.array.abstracts.AbstractArrayWithDefault;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.util.List;
 
 /**
  *
@@ -66,14 +65,6 @@ public class BitArray
 		this.byteArray = byteArray;
 	}
 
-	public List<Integer> getOneIndices() {
-		return this.getIndices(true);
-	}
-
-	public List<Integer> getZeroIndices() {
-		return this.getIndices(false);
-	}
-
 	public int getByteLength() {
 		return (this.length + Byte.SIZE - 1) / Byte.SIZE;
 	}
@@ -86,7 +77,7 @@ public class BitArray
 		return result;
 	}
 
-	// filled up with leading zeros
+	// filled up with trailing zeros
 	public byte[] getBytes() {
 		int byteLength = (this.length + Byte.SIZE - 1) / Byte.SIZE;
 		byte[] result = new byte[byteLength];
@@ -113,34 +104,6 @@ public class BitArray
 			}
 		}
 		return result;
-	}
-
-	public int countOnes() {
-		return this.count(true);
-	}
-
-	public int countZeros() {
-		return this.count(false);
-	}
-
-	// leading here means the highest indices
-	public int countLeadingZeros() {
-		return this.countSuffix(false);
-	}
-
-	// trailing here means the lowest indices
-	public int countTrailingZeros() {
-		return this.countPrefix(false);
-	}
-
-	public BitArray removeLeadingZeros() {
-		int n = this.countLeadingZeros();
-		return this.removeSuffix(n);
-	}
-
-	public BitArray removeTrailingZeros() {
-		int n = this.countTrailingZeros();
-		return this.removePrefix(n);
 	}
 
 	public ByteArray getHashValue() {
@@ -232,11 +195,6 @@ public class BitArray
 	}
 
 	@Override
-	protected String defaultToStringName() {
-		return "";
-	}
-
-	@Override
 	protected String defaultToStringValue() {
 		String str = "";
 		for (int i = 0; i < this.length; i++) {
@@ -268,17 +226,6 @@ public class BitArray
 	}
 
 	@Override
-	protected BitArray abstractExtract(int fromIndex, int length) {
-		if (this.reverse) {
-			fromIndex = this.length - fromIndex - length;
-		}
-		int newTrailer = Math.min(Math.max(0, this.trailer - fromIndex), length);
-		int newHeader = Math.min(Math.max(0, this.header - (this.length - fromIndex - length)), length);
-		int newOffset = this.offset + Math.max(0, fromIndex - this.trailer);
-		return new BitArray(this.byteArray, newOffset, length, newTrailer, newHeader, this.reverse);
-	}
-
-	@Override
 	protected BitArray abstractAppend(BitArray other) {
 		boolean[] result = new boolean[this.length + other.length];
 		for (int i = 0; i < this.length; i++) {
@@ -288,15 +235,6 @@ public class BitArray
 			result[this.length + i] = other.getBitAt(i);
 		}
 		return BitArray.getInstance(result);
-	}
-
-	@Override
-	protected BitArray abstractAppend(int n) {
-		if (this.reverse) {
-			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		} else {
-			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		}
 	}
 
 	@Override
@@ -324,8 +262,8 @@ public class BitArray
 	}
 
 	@Override
-	protected BitArray abstractReverse() {
-		return new BitArray(this.byteArray, this.offset, this.length, this.trailer, this.header, !this.reverse);
+	protected BitArray abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
+		return new BitArray(this.byteArray, offset, length, trailer, header, reverse);
 	}
 
 	private static byte[] bitsToBytes(boolean[] bits) {
@@ -344,15 +282,6 @@ public class BitArray
 	@Override
 	protected Class<BitArray> getArrayClass() {
 		return BitArray.class;
-	}
-
-	@Override
-	protected BitArray abstractShiftRight(int n) {
-		if (this.reverse) {
-			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		} else {
-			return new BitArray(this.byteArray, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		}
 	}
 
 }

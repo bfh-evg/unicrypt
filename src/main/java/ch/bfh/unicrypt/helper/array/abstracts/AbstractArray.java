@@ -305,6 +305,11 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
+	protected final String defaultToStringName() {
+		return "";
+	}
+
+	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
 

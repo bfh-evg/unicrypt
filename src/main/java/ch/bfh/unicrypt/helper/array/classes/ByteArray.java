@@ -81,14 +81,6 @@ public class ByteArray
 		}
 	}
 
-	public List<Integer> getOneIndices() {
-		return this.getIndices(ByteArray.ALL_ONE);
-	}
-
-	public List<Integer> getZeroIndices() {
-		return this.getIndices(ByteArray.ALL_ZERO);
-	}
-
 	public int getBitLength() {
 		return this.length * Byte.SIZE;
 	}
@@ -124,24 +116,6 @@ public class ByteArray
 
 	public int getIntAt(int index) {
 		return this.getByteAt(index) & BYTE_MASK;
-	}
-
-	public int countOnes() {
-		return this.count(ALL_ONE);
-	}
-
-	public int countZeros() {
-		return this.count(ALL_ZERO);
-	}
-
-	// leading here means the highest indices
-	public int countLeadingZeros() {
-		return this.countSuffix(ALL_ZERO);
-	}
-
-	// trailing here means the lowest indices
-	public int countTrailingZeros() {
-		return this.countPrefix(ALL_ZERO);
 	}
 
 	// leading here means the highest indices
@@ -186,16 +160,6 @@ public class ByteArray
 			}
 		}
 		return result;
-	}
-
-	public ByteArray removeLeadingZeros() {
-		int n = this.countLeadingZeros();
-		return this.removeSuffix(n);
-	}
-
-	public ByteArray removeTrailingZeros() {
-		int n = this.countTrailingZeros();
-		return this.removePrefix(n);
 	}
 
 	// left here means making the byte array smaller
@@ -312,11 +276,6 @@ public class ByteArray
 		}
 		byte[] hash = hashAlgorithm.getHashValue(this.getBytes());
 		return new ByteArray(hash);
-	}
-
-	@Override
-	protected String defaultToStringName() {
-		return "";
 	}
 
 	@Override
@@ -490,17 +449,6 @@ public class ByteArray
 	}
 
 	@Override
-	protected ByteArray abstractExtract(int fromIndex, int length) {
-		if (this.reverse) {
-			fromIndex = this.length - fromIndex - length;
-		}
-		int newTrailer = Math.min(Math.max(0, this.trailer - fromIndex), length);
-		int newHeader = Math.min(Math.max(0, this.header - (this.length - fromIndex - length)), length);
-		int newOffset = this.offset + Math.max(0, fromIndex - this.trailer);
-		return new ByteArray(this.bytes, newOffset, length, newTrailer, newHeader, this.reverse);
-	}
-
-	@Override
 	protected ByteArray abstractAppend(ByteArray other) {
 		byte[] result = new byte[this.length + other.length];
 		for (int i = 0; i < this.length; i++) {
@@ -510,15 +458,6 @@ public class ByteArray
 			result[this.length + i] = other.abstractGetByteAt(i);
 		}
 		return new ByteArray(result);
-	}
-
-	@Override
-	protected ByteArray abstractAppend(int n) {
-		if (this.reverse) {
-			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		} else {
-			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		}
 	}
 
 	@Override
@@ -546,17 +485,8 @@ public class ByteArray
 	}
 
 	@Override
-	protected ByteArray abstractReverse() {
-		return new ByteArray(this.bytes, this.offset, this.length, this.trailer, this.header, !this.reverse);
-	}
-
-	@Override
-	protected ByteArray abstractShiftRight(int n) {
-		if (this.reverse) {
-			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		} else {
-			return new ByteArray(this.bytes, this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		}
+	protected ByteArray abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
+		return new ByteArray(this.bytes, offset, length, trailer, header, reverse);
 	}
 
 	@Override

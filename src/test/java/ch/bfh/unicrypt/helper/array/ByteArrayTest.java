@@ -247,10 +247,10 @@ public class ByteArrayTest {
 				assertEquals(b1.append(b2), b2.append(b2));
 				assertEquals(b1.append(b1), b2.append(b2));
 				assertEquals(b1.countLeadingZeroBits(), b2.countLeadingZeroBits());
-				assertEquals(b1.countLeadingZeros(), b2.countLeadingZeros());
+				assertEquals(b1.countSuffix(), b2.countSuffix());
 				assertEquals(b1.countOneBits(), b2.countOneBits());
 				assertEquals(b1.countTrailingZeroBits(), b2.countTrailingZeroBits());
-				assertEquals(b1.countTrailingZeros(), b2.countTrailingZeros());
+				assertEquals(b1.countPrefix(), b2.countPrefix());
 				for (int i = 0; i < b1.getLength(); i++) {
 					assertEquals(b1.removeAt(i), b2.removeAt(i));
 				}
@@ -263,8 +263,8 @@ public class ByteArrayTest {
 					assertEquals(b1.shiftBitsLeft(i), b2.shiftBitsLeft(i));
 					assertEquals(b1.shiftBitsRight(i), b2.shiftBitsRight(i));
 				}
-				assertEquals(b1.removeLeadingZeros(), b2.removeLeadingZeros());
-				assertEquals(b1.removeTrailingZeros(), b2.removeTrailingZeros());
+				assertEquals(b1.removeSuffix(), b2.removeSuffix());
+				assertEquals(b1.removePrefix(), b2.removePrefix());
 				for (int i = 0; i < b1.getLength(); i++) {
 					assertEquals(b1.removePrefix(i), b2.removePrefix(i));
 					assertEquals(b1.removeSuffix(i), b2.removeSuffix(i));

@@ -114,7 +114,24 @@ abstract public class AbstractArrayWithDefault<A extends AbstractArray<A, T>, T 
 
 	@Override
 	public A append(int n) {
-		return this.abstractAppend(n);
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (this.reverse) {
+			return this.abstractGetInstance(this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
+		} else {
+			return this.abstractGetInstance(this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
+		}
+	}
+
+	@Override
+	public A removePrefix() {
+		return this.removePrefix(this.countPrefix());
+	}
+
+	@Override
+	public A removeSuffix() {
+		return this.removeSuffix(this.countSuffix());
 	}
 
 	@Override
@@ -130,11 +147,29 @@ abstract public class AbstractArrayWithDefault<A extends AbstractArray<A, T>, T 
 		if (n <= 0) {
 			return this.shiftLeft(-n);
 		}
-		return this.abstractShiftRight(n);
+		if (this.reverse) {
+			return this.abstractGetInstance(this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
+		} else {
+			return this.abstractGetInstance(this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
+		}
 	}
 
-	protected abstract A abstractAppend(int n);
+	@Override
+	protected A abstractExtract(int fromIndex, int length) {
+		if (this.reverse) {
+			fromIndex = this.length - fromIndex - length;
+		}
+		int newTrailer = Math.min(Math.max(0, this.trailer - fromIndex), length);
+		int newHeader = Math.min(Math.max(0, this.header - (this.length - fromIndex - length)), length);
+		int newOffset = this.offset + Math.max(0, fromIndex - this.trailer);
+		return this.abstractGetInstance(newOffset, length, newTrailer, newHeader, this.reverse);
+	}
 
-	protected abstract A abstractShiftRight(int n);
+	@Override
+	protected A abstractReverse() {
+		return this.abstractGetInstance(this.offset, this.length, this.trailer, this.header, !this.reverse);
+	}
+
+	protected abstract A abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse);
 
 }
