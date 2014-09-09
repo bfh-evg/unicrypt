@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.iterable;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -66,7 +67,7 @@ public class IterableArray<T>
 
 			@Override
 			public boolean hasNext() {
-				return array.length > pos;
+				return pos < array.length;
 			}
 
 			@Override
@@ -79,6 +80,11 @@ public class IterableArray<T>
 				throw new UnsupportedOperationException("Cannot remove an element of an array.");
 			}
 		};
+	}
+
+	@Override
+	protected String defaultToStringValue() {
+		return Arrays.toString(this.array);
 	}
 
 	public static <T> IterableArray<T> getInstance(T[] array) {

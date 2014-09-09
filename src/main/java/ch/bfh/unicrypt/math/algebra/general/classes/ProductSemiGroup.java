@@ -181,10 +181,9 @@ public class ProductSemiGroup
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		int arity = this.getArity();
 		Tuple tuple = (Tuple) element;
-		final Element[] results = new Element[arity];
-		for (int i = 0; i < arity; i++) {
+		final Element[] results = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
 			results[i] = tuple.getAt(i).selfApply(amount);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(results));
@@ -217,9 +216,8 @@ public class ProductSemiGroup
 	}
 
 	protected Tuple abstractApply(Tuple tuple1, Tuple tuple2) {
-		int arity = this.getArity();
-		final Element[] results = new Element[arity];
-		for (int i = 0; i < arity; i++) {
+		final Element[] results = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
 			results[i] = tuple1.getAt(i).apply(tuple2.getAt(i));
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(results));

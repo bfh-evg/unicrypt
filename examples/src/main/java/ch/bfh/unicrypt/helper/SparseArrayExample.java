@@ -79,8 +79,8 @@ public class SparseArrayExample {
 
 		Example.printLine(a);
 		Example.printLine("Length  ", a.getLength());
-		//	Example.printLine("Add     ", a.add(7));
-		//	Example.printLine("Append  ", a.append(a));
+		Example.printLine("Add     ", a.add(7));
+		Example.printLine("Append  ", a.append(a));
 		Example.printLine("Extract ", a.extract(2, 3));
 		Example.printLine("ExtraxtP", a.extractPrefix(2));
 		Example.printLine("ExtraxtS", a.extractSuffix(2));

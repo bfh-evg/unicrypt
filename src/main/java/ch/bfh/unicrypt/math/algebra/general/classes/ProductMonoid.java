@@ -156,7 +156,7 @@ public class ProductMonoid
 	public Tuple getIdentityElement() {
 		if (this.identityElement == null) {
 			final Element[] identityElements = new Element[this.getArity()];
-			for (int i = 0; i < identityElements.length; i++) {
+			for (int i : this.getAllIndices()) {
 				identityElements[i] = this.getAt(i).getIdentityElement();
 			}
 			this.identityElement = this.abstractGetElement(ImmutableArray.getInstance(identityElements));

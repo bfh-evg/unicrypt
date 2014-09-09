@@ -69,12 +69,19 @@ public class SparseArray<T extends Object>
 		}
 	}
 
+	// this method is more efficient than its predecessor
 	@Override
-	public List<Integer> getIndicesExcept() {
+	public Iterable<Integer> getIndices(T object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.defaultObject.equals(object)) {
+			return super.getIndices(object);
+		}
 		List<Integer> result = new LinkedList<Integer>();
 		for (Integer i : this.map.keySet()) {
 			if (i >= this.offset && i < this.offset + this.length - this.header - this.trailer) {
-				if (!this.map.get(i).equals(this.defaultObject)) {
+				if (this.map.get(i).equals(object)) {
 					result.add(this.getIndex(i));
 				}
 			}
@@ -82,27 +89,20 @@ public class SparseArray<T extends Object>
 		return result;
 	}
 
-	private int getIndex(int i) {
-		if (this.reverse) {
-			return this.length - i - 1 + this.offset - this.trailer;
-		}
-		return i - this.offset + this.trailer;
-	}
-
-	// collects the indices a given object
+	// this method is more efficient than its predecessor
 	@Override
-	public List<Integer> getIndices(T object) {
+	public Iterable<Integer> getIndicesExcept(T object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
+		if (!this.defaultObject.equals(object)) {
+			return super.getIndicesExcept(object);
+		}
 		List<Integer> result = new LinkedList<Integer>();
-		if (object.equals(this.defaultObject)) {
-			for (int i = 0; i < this.length; i++) {
-				if (this.abstractGetAt(i).equals(object)) {
-					result.add(i);
-				}
-			}
-		} else {
-			for (Integer i : this.map.keySet()) {
-				if (this.map.get(i).equals(object)) {
-					result.add(this.reverse ? this.length - i - 1 + offset + this.trailer : i - this.offset + this.trailer);
+		for (Integer i : this.map.keySet()) {
+			if (i >= this.offset && i < this.offset + this.length - this.header - this.trailer) {
+				if (!this.map.get(i).equals(this.defaultObject)) {
+					result.add(this.getIndex(i));
 				}
 			}
 		}
@@ -186,15 +186,25 @@ public class SparseArray<T extends Object>
 
 	@Override
 	protected SparseArray<T> abstractAppend(SparseArray<T> other) {
-		if (this.defaultObject.equals(other.defaultObject)) {
-			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Map<Integer, T> newMap = new HashMap<Integer, T>();
+		for (int i : this.getIndicesExcept()) {
+			newMap.put(i, this.abstractGetAt(i));
 		}
-		return null;
-		// TODO
+		Iterable<Integer> indices;
+		if (this.defaultObject.equals(other.defaultObject)) {
+			indices = other.getIndicesExcept();
+		} else {
+			indices = other.getIndicesExcept(this.defaultObject);
+		}
+		for (int i : indices) {
+			newMap.put(this.length + i, other.abstractGetAt(i));
+		}
+		return new SparseArray<T>(this.defaultObject, newMap, this.length + other.length);
 	}
 
 	@Override
-	protected SparseArray<T> abstractInsertAt(int index, T newObject) {
+	protected SparseArray<T> abstractInsertAt(int index, T newObject
+	) {
 		Map<Integer, T> newMap = new HashMap<Integer, T>();
 		for (int i : this.getIndicesExcept()) {
 			if (i < index) {
@@ -210,7 +220,8 @@ public class SparseArray<T extends Object>
 	}
 
 	@Override
-	protected SparseArray<T> abstractReplaceAt(int index, T newObject) {
+	protected SparseArray<T> abstractReplaceAt(int index, T newObject
+	) {
 		Map<Integer, T> newMap = new HashMap<Integer, T>();
 		for (int i : this.getIndicesExcept()) {
 			if (i != index) {
@@ -224,14 +235,21 @@ public class SparseArray<T extends Object>
 	}
 
 	@Override
-	protected SparseArray<T> abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
+	protected SparseArray<T> abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse
+	) {
 		return new SparseArray<T>(this.defaultObject, this.map, offset, length, trailer, header, reverse);
 	}
 
 	@Override
-	protected Class
-		   getArrayClass() {
+	protected Class getArrayClass() {
 		return SparseArray.class;
+	}
+
+	private int getIndex(int i) {
+		if (this.reverse) {
+			return this.length - i - 1 + this.offset - this.trailer;
+		}
+		return i - this.offset + this.trailer;
 	}
 
 }

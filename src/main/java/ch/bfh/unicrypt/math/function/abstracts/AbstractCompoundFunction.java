@@ -41,14 +41,13 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.helper.array.interfaces.Array;
 import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.Array;
 import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  *
@@ -95,12 +94,12 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public List<Integer> getIndices(Function function) {
+	public Iterable<Integer> getIndices(Function function) {
 		return this.functions.getIndices(function);
 	}
 
 	@Override
-	public List<Integer> getIndicesExcept(Function function) {
+	public Iterable<Integer> getIndicesExcept(Function function) {
 		return this.functions.getIndicesExcept(function);
 	}
 
@@ -245,7 +244,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 		if (this.getLength() != other.getLength()) {
 			return false;
 		}
-		for (int i = 0; i < this.getLength(); i++) {
+		for (int i : this.getAllIndices()) {
 			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
 				return false;
 			}

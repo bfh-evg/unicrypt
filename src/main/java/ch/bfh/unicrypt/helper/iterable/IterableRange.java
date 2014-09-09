@@ -53,8 +53,8 @@ public class IterableRange
 	   extends UniCrypt
 	   implements Iterable<Integer> {
 
-	private int from;
-	private int to;
+	private final int from;
+	private final int to;
 
 	private IterableRange(int from, int to) {
 		this.from = from;
@@ -68,12 +68,12 @@ public class IterableRange
 
 			@Override
 			public boolean hasNext() {
-				return pos < to;
+				return pos <= to;
 			}
 
 			@Override
 			public Integer next() {
-				return pos;
+				return pos++;
 			}
 
 			@Override
@@ -83,8 +83,13 @@ public class IterableRange
 		};
 	}
 
+	@Override
+	protected String defaultToStringValue() {
+		return this.from + "..." + this.to;
+	}
+
 	public static IterableRange getInstance(int from, int to) {
-		if (from > to) {
+		if (to < from - 1) {
 			throw new IllegalArgumentException();
 		}
 		return new IterableRange(from, to);

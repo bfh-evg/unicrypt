@@ -100,14 +100,17 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public IterableRange getAllIndices() {
-		return IterableRange.getInstance(0, this.length);
+	public Iterable<Integer> getAllIndices() {
+		return IterableRange.getInstance(0, this.length - 1);
 	}
 
 	@Override
-	public List<Integer> getIndices(T object) {
+	public Iterable<Integer> getIndices(T object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
 		List<Integer> result = new LinkedList<Integer>();
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			if (this.abstractGetAt(i).equals(object)) {
 				result.add(i);
 			}
@@ -116,9 +119,12 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public List<Integer> getIndicesExcept(T object) {
+	public Iterable<Integer> getIndicesExcept(T object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
 		List<Integer> result = new LinkedList<Integer>();
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			if (!this.abstractGetAt(i).equals(object)) {
 				result.add(i);
 			}
@@ -128,8 +134,11 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 
 	@Override
 	public int count(T object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
 		int result = 0;
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			if (this.abstractGetAt(i).equals(object)) {
 				result++;
 			}
@@ -139,8 +148,11 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 
 	@Override
 	public int countPrefix(T object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
 		int result = 0;
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			if (this.abstractGetAt(i).equals(object)) {
 				result++;
 			} else {
@@ -152,6 +164,9 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 
 	@Override
 	public int countSuffix(T object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
 		int result = 0;
 		for (int i = this.length - 1; i >= 0; i--) {
 			if (this.abstractGetAt(i).equals(object)) {
@@ -354,7 +369,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 		if (this.length != other.length) {
 			return false;
 		}
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			if (!this.abstractGetAt(i).equals(other.abstractGetAt(i))) {
 				return false;
 			}

@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  *
@@ -86,12 +85,12 @@ public class Tuple
 	}
 
 	@Override
-	public List<Integer> getIndices(Element element) {
+	public Iterable<Integer> getIndices(Element element) {
 		return this.getValue().getIndices(element);
 	}
 
 	@Override
-	public List<Integer> getIndicesExcept(Element element) {
+	public Iterable<Integer> getIndicesExcept(Element element) {
 		return this.getValue().getIndicesExcept(element);
 	}
 
@@ -255,7 +254,7 @@ public class Tuple
 			productSet = ProductSet.getInstance(elements.getFirst().getSet(), elements.getLength());
 		} else {
 			Set[] sets = new Set[elements.getLength()];
-			for (int i = 0; i < elements.getLength(); i++) {
+			for (int i : elements.getAllIndices()) {
 				sets[i] = elements.getAt(i).getSet();
 			}
 			productSet = ProductSet.getInstance(sets);

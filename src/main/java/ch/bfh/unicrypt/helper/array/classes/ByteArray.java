@@ -87,7 +87,7 @@ public class ByteArray
 
 	public byte[] getBytes() {
 		byte[] result = new byte[this.length];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetByteAt(i);
 		}
 		return result;
@@ -260,7 +260,7 @@ public class ByteArray
 
 	public ByteArray not() {
 		byte[] result = new byte[this.length];
-		for (int i = 0; i < result.length; i++) {
+		for (int i : this.getAllIndices()) {
 			result[i] = ByteArray.logicalNOT(this.abstractGetByteAt(i));
 		}
 		return new ByteArray(result);
@@ -282,7 +282,7 @@ public class ByteArray
 	protected String defaultToStringValue() {
 		String str = "";
 		String delimiter = "";
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			str = str + delimiter + String.format("%02X", this.getIntAt(i));
 			delimiter = "|";
 		}
@@ -451,10 +451,10 @@ public class ByteArray
 	@Override
 	protected ByteArray abstractAppend(ByteArray other) {
 		byte[] result = new byte[this.length + other.length];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetByteAt(i);
 		}
-		for (int i = 0; i < other.length; i++) {
+		for (int i : other.getAllIndices()) {
 			result[this.length + i] = other.abstractGetByteAt(i);
 		}
 		return new ByteArray(result);
@@ -463,7 +463,7 @@ public class ByteArray
 	@Override
 	protected ByteArray abstractInsertAt(int index, Byte newByte) {
 		byte[] result = new byte[this.length + 1];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			if (i < index) {
 				result[i] = this.abstractGetByteAt(i);
 			} else {
@@ -477,7 +477,7 @@ public class ByteArray
 	@Override
 	protected ByteArray abstractReplaceAt(int index, Byte newByte) {
 		byte[] result = new byte[this.length];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetByteAt(i);
 		}
 		result[index] = newByte;

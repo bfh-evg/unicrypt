@@ -77,7 +77,7 @@ public class ImmutableArray<T extends Object>
 	protected String defaultToStringValue() {
 		String str = "";
 		String delimiter = "";
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			str = str + delimiter + this.abstractGetAt(i);
 			delimiter = ", ";
 		}
@@ -140,10 +140,10 @@ public class ImmutableArray<T extends Object>
 	@Override
 	protected ImmutableArray<T> abstractAppend(ImmutableArray<T> other) {
 		Object[] result = new Object[this.length + other.length];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetAt(i);
 		}
-		for (int i = 0; i < other.length; i++) {
+		for (int i : other.getAllIndices()) {
 			result[this.length + i] = other.abstractGetAt(i);
 		}
 		return new ImmutableArray<T>(result);
@@ -152,7 +152,7 @@ public class ImmutableArray<T extends Object>
 	@Override
 	protected ImmutableArray<T> abstractInsertAt(int index, T newObject) {
 		Object[] result = new Object[this.length + 1];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			if (i < index) {
 				result[i] = this.abstractGetAt(i);
 			} else {
@@ -166,7 +166,7 @@ public class ImmutableArray<T extends Object>
 	@Override
 	protected ImmutableArray<T> abstractReplaceAt(int index, T newObject) {
 		Object[] result = new Object[this.length];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetAt(i);
 		}
 		result[index] = newObject;

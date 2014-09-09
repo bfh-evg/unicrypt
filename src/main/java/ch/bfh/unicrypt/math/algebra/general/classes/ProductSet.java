@@ -56,7 +56,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.List;
 
 /**
  *
@@ -97,7 +96,7 @@ public class ProductSet
 			throw new IllegalArgumentException();
 		}
 		Element[] elements = new Element[this.getLength()];
-		for (int i = 0; i < this.getLength(); i++) {
+		for (int i : this.getAllIndices()) {
 			elements[i] = this.getAt(i).getElementFrom(values[i]);
 			if (elements[i] == null) {
 				return null; // no such element
@@ -141,7 +140,7 @@ public class ProductSet
 		if (value == null || value.getLength() != this.getLength()) {
 			return false;
 		}
-		for (int i = 0; i < this.getLength(); i++) {
+		for (int i : this.getAllIndices()) {
 			if (!this.getAt(i).contains(value.getAt(i))) {
 				return false;
 			}
@@ -183,7 +182,7 @@ public class ProductSet
 			ImmutableArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
 			if (byteTrees.getLength() == length) {
 				Element[] elements = new Element[length];
-				for (int i = 0; i < length; i++) {
+				for (int i : this.getAllIndices()) {
 					elements[i] = this.getAt(i).getElementFrom(byteTrees.getAt(i), converter);
 					if (elements[i] == null) {
 						// no such element
@@ -210,7 +209,7 @@ public class ProductSet
 	@Override
 	protected Tuple abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		final Element[] randomElements = new Element[this.getLength()];
-		for (int i = 0; i < this.getLength(); i++) {
+		for (int i : this.getAllIndices()) {
 			randomElements[i] = this.getAt(i).getRandomElement(randomByteSequence);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(randomElements));
@@ -222,7 +221,7 @@ public class ProductSet
 		if (this.getLength() != other.getLength()) {
 			return false;
 		}
-		for (int i = 0; i < this.getLength(); i++) {
+		for (int i : this.getAllIndices()) {
 			if (!this.getAt(i).equals(other.getAt(i))) {
 				return false;
 			}
@@ -234,7 +233,7 @@ public class ProductSet
 	protected int abstractHashCode() {
 		int hash = 7;
 		hash = 47 * hash + this.getLength();
-		for (int i = 0; i < this.getLength(); i++) {
+		for (int i : this.getAllIndices()) {
 			hash = 47 * hash + this.getAt(i).hashCode();
 		}
 		return hash;
@@ -246,7 +245,7 @@ public class ProductSet
 		if (this.getLength() != other.getLength()) {
 			return false;
 		}
-		for (int i = 0; i < this.getLength(); i++) {
+		for (int i : this.getAllIndices()) {
 			if (!this.getAt(i).isEquivalent(other.getAt(i))) {
 				return false;
 			}
@@ -279,12 +278,12 @@ public class ProductSet
 	}
 
 	@Override
-	public List<Integer> getIndices(Set set) {
+	public Iterable<Integer> getIndices(Set set) {
 		return this.sets.getIndices(set);
 	}
 
 	@Override
-	public List<Integer> getIndicesExcept(Set set) {
+	public Iterable<Integer> getIndicesExcept(Set set) {
 		return this.sets.getIndicesExcept(set);
 	}
 

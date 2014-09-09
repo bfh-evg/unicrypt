@@ -81,9 +81,8 @@ public final class ProductFunction
 	//
 	@Override
 	protected Tuple abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
-		int arity = this.getArity();
-		final Element[] elements = new Element[arity];
-		for (int i = 0; i < arity; i++) {
+		final Element[] elements = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
 			elements[i] = this.getAt(i).apply(element.getAt(i), randomByteSequence);
 		}
 		return this.getCoDomain().getElement(elements);

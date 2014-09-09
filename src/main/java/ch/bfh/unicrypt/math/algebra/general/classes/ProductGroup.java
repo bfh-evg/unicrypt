@@ -154,10 +154,9 @@ public class ProductGroup
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		int arity = this.getArity();
 		Tuple tuple = (Tuple) element;
-		final Element[] invertedElements = new Element[arity];
-		for (int i = 0; i < arity; i++) {
+		final Element[] invertedElements = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
 			invertedElements[i] = tuple.getAt(i).invert();
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(invertedElements));

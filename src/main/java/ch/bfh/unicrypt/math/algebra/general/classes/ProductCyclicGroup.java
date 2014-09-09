@@ -174,9 +174,8 @@ public class ProductCyclicGroup
 	@Override
 	public final Tuple getDefaultGenerator() {
 		if (this.defaultGenerator == null) {
-			int arity = this.getArity();
-			Element[] defaultGenerators = new Element[arity];
-			for (int i = 0; i < arity; i++) {
+			Element[] defaultGenerators = new Element[this.getArity()];
+			for (int i : this.getAllIndices()) {
 				defaultGenerators[i] = this.getAt(i).getDefaultGenerator();
 			}
 			this.defaultGenerator = this.abstractGetElement(ImmutableArray.getInstance(defaultGenerators));
@@ -191,9 +190,8 @@ public class ProductCyclicGroup
 
 	@Override
 	public final Tuple getRandomGenerator(RandomByteSequence randomByteSequence) {
-		int arity = this.getArity();
-		Element[] randomGenerators = new Element[arity];
-		for (int i = 0; i < arity; i++) {
+		Element[] randomGenerators = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
 			randomGenerators[i] = this.getAt(i).getRandomGenerator(randomByteSequence);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(randomGenerators));
@@ -249,7 +247,7 @@ public class ProductCyclicGroup
 			throw new IllegalArgumentException();
 		}
 		Tuple tuple = (Tuple) element;
-		for (int i = 0; i < this.getArity(); i++) {
+		for (int i : this.getAllIndices()) {
 			if (!this.getAt(i).isGenerator(tuple.getAt(i))) {
 				return false;
 			}
@@ -257,48 +255,4 @@ public class ProductCyclicGroup
 		return true;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-//	/**
-//	 * This is a static factory method to construct a composed cyclic group without calling respective constructors. The
-//	 * input groups are given as an array.
-//	 * <p/>
-//	 * @param cyclicGroups The array of cyclic groups
-//	 * @return The corresponding composed group
-//	 * @throws IllegalArgumentException if {@literal groups} is null or contains null
-//	 */
-//	public static ProductCyclicGroup getInstance(final CyclicGroup... cyclicGroups) {
-//		if (cyclicGroups == null) {
-//			throw new IllegalArgumentException();
-//		}
-//		if (ProductCyclicGroup.areRelativelyPrime(cyclicGroups)) {
-//			return new ProductCyclicGroup(cyclicGroups);
-//		}
-//		throw new IllegalArgumentException();
-//	}
-//
-//	public static ProductCyclicGroup getInstance(final CyclicGroup group, int arity) {
-//		if ((group == null) || (arity < 0) || (arity > 1)) {
-//			throw new IllegalArgumentException();
-//		}
-//		if (arity == 0) {
-//			return new ProductCyclicGroup(new CyclicGroup[]{});
-//		}
-//		return new ProductCyclicGroup(new CyclicGroup[]{group});
-//	}
-//
-//	//
-//	// STATIC HELPER METHODS
-//	//
-//	private static boolean areRelativelyPrime(CyclicGroup[] cyclicGroups) {
-//		BigInteger[] orders = new BigInteger[cyclicGroups.length];
-//		for (int i = 0; i < cyclicGroups.length; i++) {
-//			if (cyclicGroups[i] == null) {
-//				throw new IllegalArgumentException();
-//			}
-//			orders[i] = cyclicGroups[i].getOrder();
-//		}
-//		return MathUtil.areRelativelyPrime(orders);
-//	}
 }

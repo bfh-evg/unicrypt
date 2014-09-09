@@ -50,7 +50,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.util.Iterator;
-import java.util.List;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
@@ -83,12 +82,12 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public List<Integer> getIndices(Encoder encoder) {
+	public Iterable<Integer> getIndices(Encoder encoder) {
 		return this.encoders.getIndices(encoder);
 	}
 
 	@Override
-	public List<Integer> getIndicesExcept(Encoder encoder) {
+	public Iterable<Integer> getIndicesExcept(Encoder encoder) {
 		return this.encoders.getIndicesExcept(encoder);
 	}
 
@@ -227,7 +226,7 @@ public class CompositeEncoder
 	protected Function abstractGetEncodingFunction() {
 		int length = this.getLength();
 		Function[] encodingFunctions = new Function[length];
-		for (int i = 0; i < length; i++) {
+		for (int i : this.getAllIndices()) {
 			encodingFunctions[i] = this.encoders.getAt(i).getEncodingFunction();
 		}
 		return CompositeFunction.getInstance(encodingFunctions);
@@ -237,7 +236,7 @@ public class CompositeEncoder
 	protected Function abstractGetDecodingFunction() {
 		int length = this.getLength();
 		Function[] decodingFunctions = new Function[length];
-		for (int i = 0; i < length; i++) {
+		for (int i : this.getAllIndices()) {
 			decodingFunctions[length - i - 1] = this.encoders.getAt(i).getDecodingFunction();
 		}
 		return CompositeFunction.getInstance(decodingFunctions);

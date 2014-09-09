@@ -71,7 +71,7 @@ public class BitArray
 
 	public boolean[] getBits() {
 		boolean[] result = new boolean[this.length];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetAt(i);
 		}
 		return result;
@@ -197,7 +197,7 @@ public class BitArray
 	@Override
 	protected String defaultToStringValue() {
 		String str = "";
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			if (i > 0 && i % 8 == 0) {
 				str = str + "|";
 			}
@@ -228,10 +228,10 @@ public class BitArray
 	@Override
 	protected BitArray abstractAppend(BitArray other) {
 		boolean[] result = new boolean[this.length + other.length];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			result[i] = this.getBitAt(i);
 		}
-		for (int i = 0; i < other.length; i++) {
+		for (int i : other.getAllIndices()) {
 			result[this.length + i] = other.getBitAt(i);
 		}
 		return BitArray.getInstance(result);
@@ -240,7 +240,7 @@ public class BitArray
 	@Override
 	protected BitArray abstractInsertAt(int index, Boolean newBit) {
 		boolean[] result = new boolean[this.length + 1];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			if (i < index) {
 				result[i] = this.abstractGetBitAt(i);
 			} else {
@@ -254,7 +254,7 @@ public class BitArray
 	@Override
 	protected BitArray abstractReplaceAt(int index, Boolean newBit) {
 		boolean[] result = new boolean[this.length];
-		for (int i = 0; i < this.length; i++) {
+		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetBitAt(i);
 		}
 		result[index] = newBit;
