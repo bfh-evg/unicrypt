@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array;
+package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.util.ArrayList;
