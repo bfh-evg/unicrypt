@@ -152,7 +152,7 @@ public class SparseArray<T extends Object>
 				newMap.put(i, object);
 			}
 		}
-		return new SparseArray<T>(defaultObject, newMap, 0, length, 0, 0, false);
+		return new SparseArray<T>(defaultObject, newMap, length);
 	}
 
 	public static <T> SparseArray<T> getInstance(T defaultObject, T... objects) {
@@ -170,7 +170,7 @@ public class SparseArray<T extends Object>
 			}
 			i++;
 		}
-		return new SparseArray<T>(defaultObject, map, 0, objects.length, 0, 0, false);
+		return new SparseArray<T>(defaultObject, map, objects.length);
 	}
 
 	@Override
@@ -203,8 +203,7 @@ public class SparseArray<T extends Object>
 	}
 
 	@Override
-	protected SparseArray<T> abstractInsertAt(int index, T newObject
-	) {
+	protected SparseArray<T> abstractInsertAt(int index, T newObject) {
 		Map<Integer, T> newMap = new HashMap<Integer, T>();
 		for (int i : this.getIndicesExcept()) {
 			if (i < index) {
@@ -220,8 +219,7 @@ public class SparseArray<T extends Object>
 	}
 
 	@Override
-	protected SparseArray<T> abstractReplaceAt(int index, T newObject
-	) {
+	protected SparseArray<T> abstractReplaceAt(int index, T newObject) {
 		Map<Integer, T> newMap = new HashMap<Integer, T>();
 		for (int i : this.getIndicesExcept()) {
 			if (i != index) {
@@ -235,8 +233,7 @@ public class SparseArray<T extends Object>
 	}
 
 	@Override
-	protected SparseArray<T> abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse
-	) {
+	protected SparseArray<T> abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
 		return new SparseArray<T>(this.defaultObject, this.map, offset, length, trailer, header, reverse);
 	}
 
