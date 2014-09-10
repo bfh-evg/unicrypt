@@ -56,7 +56,7 @@ import java.util.List;
  */
 abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Object>
 	   extends UniCrypt
-	   implements ch.bfh.unicrypt.helper.array.interfaces.Array<A, T>, Iterable<T> {
+	   implements ch.bfh.unicrypt.helper.array.interfaces.Array<A, T> {
 
 	protected int length;
 	protected int offset;

@@ -67,12 +67,12 @@ import java.util.NoSuchElementException;
  */
 public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object>
 	   extends AbstractGroup<E, V>
-	   implements CyclicGroup<V>, Iterable<E> {
+	   implements CyclicGroup<V> {
 
 	private E defaultGenerator;
 	private final Map<ReferenceRandomByteSequence, ArrayList<E>> generatorLists;
 
-	public AbstractCyclicGroup(Class<? extends Object> valueClass) {
+	protected AbstractCyclicGroup(Class<? extends Object> valueClass) {
 		super(valueClass);
 		this.generatorLists = new HashMap<ReferenceRandomByteSequence, ArrayList<E>>();
 	}
@@ -174,7 +174,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	}
 
 	@Override
-	protected Iterator<E> defaultIterator() {
+	protected Iterator<E> defaultGetIterator() {
 		final AbstractCyclicGroup<E, V> cyclicGroup = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;

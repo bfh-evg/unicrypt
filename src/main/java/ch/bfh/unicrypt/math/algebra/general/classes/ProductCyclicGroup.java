@@ -142,7 +142,7 @@ public class ProductCyclicGroup
 	}
 
 	@Override
-	protected Iterator<Tuple> defaultIterator() {
+	protected Iterator<Tuple> defaultGetIterator() {
 		final ProductCyclicGroup productCyclicGroup = this;
 		return new Iterator<Tuple>() {
 			BigInteger counter = BigInteger.ZERO;

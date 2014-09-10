@@ -47,7 +47,8 @@ package ch.bfh.unicrypt.helper.array.interfaces;
  * @param <T>
  * @author rolfhaenni
  */
-public interface Array<A extends Array<A, T>, T extends Object> {
+public interface Array<A extends Array<A, T>, T extends Object>
+	   extends Iterable<T> {
 
 	public int getLength();
 

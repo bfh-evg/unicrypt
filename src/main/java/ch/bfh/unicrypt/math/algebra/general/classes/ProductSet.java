@@ -56,6 +56,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.util.Iterator;
 
 /**
  *
@@ -411,6 +412,11 @@ public class ProductSet
 			result[i] = ProductSet.getInstance(setArray[i]);
 		}
 		return result;
+	}
+
+	@Override
+	public Iterator<Set> iterator() {
+		return this.sets.iterator();
 	}
 
 	@Override

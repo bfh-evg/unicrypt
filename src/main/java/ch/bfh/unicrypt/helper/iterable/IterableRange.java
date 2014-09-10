@@ -78,7 +78,7 @@ public class IterableRange
 
 			@Override
 			public void remove() {
-				throw new UnsupportedOperationException("Cannot remove an element of an array.");
+				throw new UnsupportedOperationException();
 			}
 		};
 	}

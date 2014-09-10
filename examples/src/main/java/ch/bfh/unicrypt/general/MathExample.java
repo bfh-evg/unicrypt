@@ -110,7 +110,7 @@ public class MathExample {
 		BigInteger order = g11.getOrder();
 
 		// Iterate over all elements
-		for (Element e : g11) {
+		for (Element e : g11.getElements()) {
 			Example.printLine(e);
 		}
 
@@ -147,7 +147,7 @@ public class MathExample {
 		BigInteger order = z11.getOrder();
 
 		// Iterate over all elements
-		for (Element e : z11) {
+		for (Element e : z11.getElements()) {
 			Example.printLine(e);
 		}
 

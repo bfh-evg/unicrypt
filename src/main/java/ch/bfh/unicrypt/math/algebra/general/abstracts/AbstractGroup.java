@@ -60,7 +60,7 @@ public abstract class AbstractGroup<E extends Element<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
 	   implements Group<V> {
 
-	public AbstractGroup(Class<? extends Object> valueClass) {
+	protected AbstractGroup(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 

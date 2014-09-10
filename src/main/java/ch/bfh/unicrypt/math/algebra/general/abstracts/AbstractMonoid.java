@@ -62,7 +62,7 @@ public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 
 	private E identityElement;
 
-	public AbstractMonoid(Class<? extends Object> valueClass) {
+	protected AbstractMonoid(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 
@@ -89,7 +89,7 @@ public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public E defaultApply(final Iterable<Element> elements) {
+	protected E defaultApply(final Iterable<Element> elements) {
 		if (!elements.iterator().hasNext()) {
 			return this.getIdentityElement();
 		}

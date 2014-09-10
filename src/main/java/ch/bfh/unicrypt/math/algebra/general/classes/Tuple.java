@@ -54,7 +54,7 @@ import java.util.Iterator;
  */
 public class Tuple
 	   extends AbstractElement<ProductSet, Tuple, ImmutableArray<Element>>
-	   implements RecursiveArray<Tuple, Element>, Iterable<Element> {
+	   implements RecursiveArray<Tuple, Element> {
 
 	protected Tuple(final ProductSet set, final ImmutableArray<Element> elements) {
 		super(set, elements);

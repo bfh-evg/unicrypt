@@ -41,14 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -61,7 +61,7 @@ import java.util.NoSuchElementException;
  */
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractRing<E, V>
-	   implements CyclicRing<V>, Iterable<E> {
+	   implements CyclicRing<V> {
 
 	private E defaultGenerator;
 
@@ -156,7 +156,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	}
 
 	@Override
-	protected Iterator<E> defaultIterator() {
+	protected Iterator<E> defaultGetIterator() {
 		final AbstractCyclicRing<E, V> cyclicRing = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;

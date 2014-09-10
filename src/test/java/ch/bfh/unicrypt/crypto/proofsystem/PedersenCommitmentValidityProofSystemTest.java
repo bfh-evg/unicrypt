@@ -44,16 +44,17 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PedersenCommitmentValidityProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.helper.Alphabet;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -103,7 +104,11 @@ public class PedersenCommitmentValidityProofSystemTest {
 		ZMod Z_q = G_q.getZModOrder();
 
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q.getElement(2), G_q.getElement(4));
-		Subset messages = Subset.getInstance(Z_q, new Element[]{Z_q.getElement(2), Z_q.getElement(3), Z_q.getElement(4), Z_q.getElement(5)});
+		ZModElement message0 = Z_q.getElement(2);
+		ZModElement message1 = Z_q.getElement(3);
+		ZModElement message2 = Z_q.getElement(4);
+		ZModElement message3 = Z_q.getElement(5);
+		Subset messages = Subset.getInstance(Z_q, message0, message1, message2, message3);
 
 		SigmaChallengeGenerator scg = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, messages.getOrder().intValue(), proverId);
 		PedersenCommitmentValidityProofSystem pg = PedersenCommitmentValidityProofSystem.getInstance(scg, pedersenCS, messages);
@@ -112,7 +117,7 @@ public class PedersenCommitmentValidityProofSystemTest {
 		Element r = Z_q.getElement(5);
 
 		Tuple privateInput = pg.createPrivateInput(r, index);
-		Element publicInput = pedersenCS.commit(messages.getElements()[index], r);
+		Element publicInput = pedersenCS.commit(message3, r);
 
 		Triple proof = pg.generate(privateInput, publicInput);
 		boolean v = pg.verify(proof, publicInput);

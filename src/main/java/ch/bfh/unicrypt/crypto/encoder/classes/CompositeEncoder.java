@@ -53,7 +53,7 @@ import java.util.Iterator;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
-	   implements RecursiveArray<CompositeEncoder, Encoder>, Iterable<Encoder> {
+	   implements RecursiveArray<CompositeEncoder, Encoder> {
 
 	private final ImmutableArray<Encoder> encoders;
 

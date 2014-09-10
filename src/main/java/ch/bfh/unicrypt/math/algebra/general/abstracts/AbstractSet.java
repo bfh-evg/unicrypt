@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.array.interfaces.Array;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.Array;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
@@ -79,7 +79,7 @@ import java.util.Iterator;
  */
 public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	   extends UniCrypt
-	   implements Set<V>, Iterable<E> {
+	   implements Set<V> {
 
 	private final Class<? extends Object> valueClass;
 	private BigInteger order, lowerBound, upperBound, minimum;
@@ -258,7 +258,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public BigInteger getBigIntegerFrom(Element element) {
+	public final BigInteger getBigIntegerFrom(Element element) {
 		if (element == null || !this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
@@ -279,12 +279,12 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public ByteArray getByteArrayFrom(Element element) {
+	public final ByteArray getByteArrayFrom(Element element) {
 		return this.getByteArrayFrom(element, BigIntegerConverter.getInstance());
 	}
 
 	@Override
-	public ByteArray getByteArrayFrom(Element element, BigIntegerConverter converter) {
+	public final ByteArray getByteArrayFrom(Element element, BigIntegerConverter converter) {
 		if (element == null || !this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
@@ -305,12 +305,12 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public ByteTree getByteTreeFrom(Element element) {
+	public final ByteTree getByteTreeFrom(Element element) {
 		return this.getByteTreeFrom(element, BigIntegerConverter.getInstance());
 	}
 
 	@Override
-	public ByteTree getByteTreeFrom(Element element, BigIntegerConverter converter) {
+	public final ByteTree getByteTreeFrom(Element element, BigIntegerConverter converter) {
 		if (element == null || !this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
@@ -371,6 +371,21 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return false;
 	}
 
+	public final Iterable<E> getElements() {
+		return new Iterable<E>() {
+
+			@Override
+			public Iterator<E> iterator() {
+				return defaultGetIterator();
+			}
+
+		};
+	}
+
+	public final Iterator<E> getIterator() {
+		return this.defaultGetIterator();
+	}
+
 	@Override
 	public final int hashCode() {
 		int hash = 7;
@@ -389,11 +404,6 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 			return false;
 		}
 		return this.abstractEquals((Set) other);
-	}
-
-	@Override
-	public final Iterator<E> iterator() {
-		return this.defaultIterator();
 	}
 
 	//
@@ -449,7 +459,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.abstractEquals(set);
 	}
 
-	protected Iterator<E> defaultIterator() {
+	protected Iterator<E> defaultGetIterator() {
 		final AbstractSet<E, V> set = this;
 		return new Iterator<E>() {
 
@@ -464,7 +474,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 					}
 					return true;
 				}
-				return false; // the default iterator does not work for groups of unknown order
+				return false; // the default iterator does not work for sets of unknown order
 			}
 
 			@Override

@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
@@ -55,39 +54,40 @@ import java.util.LinkedHashSet;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class Subset
-	   extends AbstractSet<Element<Object>, Object>
-	   implements Iterable<Element<Object>> {
+	   extends AbstractSet<Element<Object>, Object> {
 
 	private final Set superSet;
-	private final HashSet<Element<Object>> elements;
+	private final LinkedHashSet<Element<Object>> elementSet;
 
-	protected Subset(Set superSet, HashSet<Element<Object>> elements) {
+	protected Subset(Set superSet, LinkedHashSet<Element<Object>> elements) {
 		super(Element.class);
 		this.superSet = superSet;
-		this.elements = elements;
+		this.elementSet = elements;
 	}
 
 	public Set getSuperset() {
 		return this.superSet;
 	}
 
-	public Element[] getElements() {
-		return this.elements.toArray(new Element[]{});
-	}
-
 	@Override
-	protected Iterator<Element<Object>> defaultIterator() {
-		return this.elements.iterator();
+	protected Iterator<Element<Object>> defaultGetIterator() {
+		return this.elementSet.iterator();
 	}
 
 	@Override
 	protected boolean defaultContains(final Element element) {
-		return this.elements.contains(element);
+		return this.elementSet.contains(element);
+	}
+
+	@Override
+	protected boolean defaultIsEquivalent(Set set) {
+		Subset other = (Subset) set;
+		return this.superSet.isEquivalent(other.superSet) && this.elementSet.equals(other.elementSet);
 	}
 
 	@Override
 	protected boolean abstractContains(Object value) {
-		for (Element element : this.elements) {
+		for (Element element : this.elementSet) {
 			if (element.getValue().equals(value)) {
 				return true;
 			}
@@ -97,7 +97,7 @@ public class Subset
 
 	@Override
 	protected Element abstractGetElement(Object value) {
-		for (Element element : this.elements) {
+		for (Element element : this.elementSet) {
 			if (element.getValue().equals(value)) {
 				return element;
 			}
@@ -107,7 +107,7 @@ public class Subset
 
 	@Override
 	protected Element abstractGetElementFrom(BigInteger bigInteger) {
-		for (Element element : this.elements) {
+		for (Element element : this.elementSet) {
 			if (element.getBigInteger().equals(bigInteger)) {
 				return element;
 			}
@@ -122,31 +122,33 @@ public class Subset
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return BigInteger.valueOf(this.elements.size());
+		return BigInteger.valueOf(this.elementSet.size());
 	}
 
 	@Override
 	protected Element abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.getElements()[randomByteSequence.getRandomNumberGenerator().nextInteger(this.elements.size() - 1)];
+		int randomIndex = randomByteSequence.getRandomNumberGenerator().nextInteger(this.elementSet.size() - 1);
+		int i = 0;
+		for (Element element : this.getElements()) {
+			if (i == randomIndex) {
+				return element;
+			}
+			i++;
+		}
+		throw new UnknownError();
 	}
 
 	@Override
 	protected boolean abstractEquals(Set set) {
 		Subset other = (Subset) set;
-		return this.superSet.equals(other.superSet) && this.elements.equals(other.elements);
-	}
-
-	@Override
-	protected boolean defaultIsEquivalent(Set set) {
-		Subset other = (Subset) set;
-		return this.superSet.isEquivalent(other.superSet) && this.elements.equals(other.elements);
+		return this.superSet.equals(other.superSet) && this.elementSet.equals(other.elementSet);
 	}
 
 	@Override
 	protected int abstractHashCode() {
 		int hash = 7;
 		hash = 47 * hash + this.superSet.hashCode();
-		hash = 47 * hash + this.elements.hashCode();
+		hash = 47 * hash + this.elementSet.hashCode();
 		return hash;
 	}
 
@@ -155,7 +157,7 @@ public class Subset
 			throw new IllegalArgumentException();
 		}
 		// A LinkedHashSet retains the order
-		HashSet<Element<Object>> hashSet = new LinkedHashSet<Element<Object>>();
+		LinkedHashSet<Element<Object>> hashSet = new LinkedHashSet<Element<Object>>();
 		for (Element element : elements) {
 			if (element == null || !superSet.contains(element)) {
 				throw new IllegalArgumentException();

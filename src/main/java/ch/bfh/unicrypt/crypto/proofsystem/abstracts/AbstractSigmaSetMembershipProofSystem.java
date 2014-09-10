@@ -142,11 +142,10 @@ public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGrou
 	}
 
 	private Tuple createProofImages(PUE publicInput) {
-		final Element[] memberElements = this.members.getElements();
-		final Element[] images = new Element[memberElements.length];
-
-		for (int i = 0; i < memberElements.length; i++) {
-			images[i] = this.getDeltaFunction().apply(memberElements[i], publicInput);
+		final Element[] images = new Element[this.members.getOrder().intValue()];
+		int i = 0;
+		for (Element memberElement : this.members.getElements()) {
+			images[i++] = this.getDeltaFunction().apply(memberElement, publicInput);
 		}
 		return Tuple.getInstance(images);
 	}
@@ -167,12 +166,12 @@ public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGrou
 																	 this.getDeltaFunction());
 
 		// proofFunction_x = composite( multiIdentity(1), proofFunction.partiallyApply(x, 0))
-		final Element[] memberElements = this.members.getElements();
-		final Function[] proofFunctions = new Function[memberElements.length];
+		final Function[] proofFunctions = new Function[this.members.getOrder().intValue()];
 		final Set rSet = setMembershipPFDomain.getAt(1);
-		for (int i = 0; i < memberElements.length; i++) {
-			proofFunctions[i] = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(rSet, 1),
-															  proofFunction.partiallyApply(memberElements[i], 0));
+		int i = 0;
+		for (Element memberElement : this.members.getElements()) {
+			proofFunctions[i++] = CompositeFunction.getInstance(MultiIdentityFunction.getInstance(rSet, 1),
+																proofFunction.partiallyApply(memberElement, 0));
 		}
 
 		return ProductFunction.getInstance(proofFunctions);

@@ -62,7 +62,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	   extends AbstractSet<E, V>
 	   implements SemiGroup<V> {
 
-	public AbstractSemiGroup(Class<? extends Object> valueClass) {
+	protected AbstractSemiGroup(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 

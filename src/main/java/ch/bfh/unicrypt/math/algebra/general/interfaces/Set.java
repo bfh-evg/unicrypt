@@ -54,6 +54,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.util.Iterator;
 
 /**
  * This interface represents the concept of a non-empty mathematical set of elements. The number of elements in the set
@@ -400,5 +401,19 @@ public interface Set<V extends Object> {
 	 * @return the corresponding ByteTree
 	 */
 	public ByteTree getByteTreeFrom(Element element, BigIntegerConverter converter);
+
+	/**
+	 * TODO
+	 * <p>
+	 * @return
+	 */
+	public Iterable<? extends Element<V>> getElements();
+
+	/**
+	 * TODO
+	 * <p>
+	 * @return
+	 */
+	public Iterator<? extends Element<V>> getIterator();
 
 }
