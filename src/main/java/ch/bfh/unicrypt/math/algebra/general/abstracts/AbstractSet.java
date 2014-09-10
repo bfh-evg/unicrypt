@@ -371,6 +371,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return false;
 	}
 
+	@Override
 	public final Iterable<E> getElements() {
 		return new Iterable<E>() {
 
@@ -382,6 +383,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		};
 	}
 
+	@Override
 	public final Iterator<E> getIterator() {
 		return this.defaultGetIterator();
 	}
