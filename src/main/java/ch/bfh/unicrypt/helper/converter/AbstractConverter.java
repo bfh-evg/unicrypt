@@ -41,44 +41,47 @@
  */
 package ch.bfh.unicrypt.helper.converter;
 
+import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class ByteArrayConverter
-	   extends AbstractConverter<ByteArray> {
+public abstract class AbstractConverter<V extends Object>
+	   extends UniCrypt
+	   implements Converter<V> {
 
-	private boolean reverse;
+	private final Class<V> valueClass;
 
-	public ByteArrayConverter(boolean reverse) {
-		super(ByteArray.class);
-		this.reverse = reverse;
+	public AbstractConverter(Class<V> valueClass) {
+		this.valueClass = valueClass;
 	}
 
 	@Override
-	protected ByteArray abstractConvertToByteArray(ByteArray byteArray) {
-		if (this.reverse) {
-			return byteArray.reverse();
-		}
-		return byteArray;
+	public Class<V> getValueClass() {
+		return this.valueClass;
 	}
 
 	@Override
-	protected ByteArray abstractConvertFromByteArray(ByteArray byteArray) {
-		if (this.reverse) {
-			return byteArray.reverse();
+	public final ByteArray convertToByteArray(V object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
 		}
-		return byteArray;
+		return this.abstractConvertToByteArray(object);
 	}
 
-	public static ByteArrayConverter getInstance() {
-		return ByteArrayConverter.getInstance(false);
+	@Override
+	public final V convertFromByteArray(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractConvertFromByteArray(byteArray);
 	}
 
-	public static ByteArrayConverter getInstance(boolean reverse) {
-		return new ByteArrayConverter(reverse);
-	}
+	protected abstract ByteArray abstractConvertToByteArray(V Object);
+
+	protected abstract V abstractConvertFromByteArray(ByteArray byteArray);
 
 }

@@ -51,12 +51,12 @@ import ch.bfh.unicrypt.math.MathUtil;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class WholeNumberConverter
-	   extends Converter<WholeNumber> {
+	   extends AbstractConverter<WholeNumber> {
 
 	private final BigIntegerConverter bigIntegerConverter;
 
 	private WholeNumberConverter(BigIntegerConverter bigIntegerConverter) {
-		super(WholeNumber.class.getName());
+		super(WholeNumber.class);
 		this.bigIntegerConverter = bigIntegerConverter;
 	}
 

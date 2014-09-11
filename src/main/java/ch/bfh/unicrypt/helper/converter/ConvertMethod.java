@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.converter;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,71 +52,47 @@ import java.util.Map;
 public class ConvertMethod
 	   extends UniCrypt {
 
-	public enum Mode {
+	private final Map<Class, Converter> converterMap;
 
-		DIRECT, INDIRECT, MIXED;
-		// DIRECT = Using corresponding converters
-		// INDIRECT = via BigInteger
-		// MIXED = DIRECT (if converter exists), INDIRECT (otherwise)
-
-	};
-
-	private final Mode mode;
-	private final Map<String, Converter> converterMap;
-
-	private ConvertMethod(Mode mode) {
-		this.mode = mode;
+	private ConvertMethod() {
 		this.converterMap = new HashMap();
 	}
 
-	public ConvertMethod.Mode getMode() {
-		return this.mode;
-	}
-
-	public Converter getConverter(String className) {
-		return this.converterMap.get(className);
+	public Converter getConverter(Class valueClass) {
+		return this.converterMap.get(valueClass);
 	}
 
 	// should this method be public?
-	public void addConverter(Converter converter) {
-		String className = converter.getClassName();
-		if (this.converterMap.containsKey(className)) {
+	private void addConverter(Converter converter) {
+		Class valueClass = converter.getValueClass();
+		if (this.converterMap.containsKey(valueClass)) {
 			throw new IllegalArgumentException();
 		}
-		this.converterMap.put(className, converter);
+		this.converterMap.put(valueClass, converter);
 	}
 
-	public ByteArray convertToByteArray(Object object) {
-		Converter converter = this.getConverter(object.getClass().getName());
-		if (converter == null) {
-			return null;
-		}
-		return converter.convertToByteArray(object);
-	}
-
-	public static ConvertMethod getInstance() {
-		return ConvertMethod.getInstance(
-			   BigIntegerConverter.getInstance(),
-			   ByteArrayConverter.getInstance(),
-			   PermutationConverter.getInstance(),
-			   NaturalNumberConverter.getInstance(),
-			   //			   ResidueClassConverter.getInstance(),
-			   StringConverter.getInstance(),
-			   WholeNumberConverter.getInstance());
-	}
-
+//	public static ConvertMethod getInstance() {
+//		return ConvertMethod.getInstance(
+//			   BigIntegerConverter.getInstance(),
+//			   ByteArrayConverter.getInstance(),
+//			   PermutationConverter.getInstance(),
+//			   NaturalNumberConverter.getInstance(),
+//			   ResidueClassConverter.getInstance(),
+//			   StringConverter.getInstance(),
+//			   WholeNumberConverter.getInstance());
+//	}
 	public static ConvertMethod getInstance(Converter... converters) {
 		if (converters == null) {
 			throw new IllegalArgumentException();
 		}
-		ConvertMethod map = new ConvertMethod(Mode.MIXED);
+		ConvertMethod convertMethod = new ConvertMethod();
 		for (Converter converter : converters) {
 			if (converter == null) {
 				throw new IllegalArgumentException();
 			}
-			map.addConverter(converter);
+			convertMethod.addConverter(converter);
 		}
-		return map;
+		return convertMethod;
 	}
 
 }

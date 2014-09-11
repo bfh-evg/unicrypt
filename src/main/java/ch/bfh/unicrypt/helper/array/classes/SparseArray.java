@@ -57,12 +57,12 @@ public class SparseArray<T extends Object>
 
 	private final Map<Integer, T> map;
 
-	private SparseArray(T defaultObject, Map<Integer, T> map, int length) {
-		this(defaultObject, map, 0, length, 0, 0, false);
+	private SparseArray(T defaultValue, Map<Integer, T> map, int length) {
+		this(defaultValue, map, 0, length, 0, 0, false);
 	}
 
-	private SparseArray(T defaultObject, Map<Integer, T> map, int offset, int length, int trailer, int header, boolean reverse) {
-		super(defaultObject, trailer, header, length, offset, reverse);
+	private SparseArray(T defaultValue, Map<Integer, T> map, int offset, int length, int trailer, int header, boolean reverse) {
+		super(SparseArray.class, defaultValue, trailer, header, length, offset, reverse);
 		this.map = map;
 		if (map.isEmpty()) {
 			this.uniform = true;
@@ -71,17 +71,17 @@ public class SparseArray<T extends Object>
 
 	// this method is more efficient than its predecessor
 	@Override
-	public Iterable<Integer> getIndices(T object) {
-		if (object == null) {
+	public Iterable<Integer> getIndices(T value) {
+		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.defaultObject.equals(object)) {
-			return super.getIndices(object);
+		if (this.defaultValue.equals(value)) {
+			return super.getIndices(value);
 		}
 		List<Integer> result = new LinkedList<Integer>();
 		for (Integer i : this.map.keySet()) {
 			if (i >= this.offset && i < this.offset + this.length - this.header - this.trailer) {
-				if (this.map.get(i).equals(object)) {
+				if (this.map.get(i).equals(value)) {
 					result.add(this.getIndex(i));
 				}
 			}
@@ -91,17 +91,17 @@ public class SparseArray<T extends Object>
 
 	// this method is more efficient than its predecessor
 	@Override
-	public Iterable<Integer> getIndicesExcept(T object) {
-		if (object == null) {
+	public Iterable<Integer> getIndicesExcept(T value) {
+		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		if (!this.defaultObject.equals(object)) {
-			return super.getIndicesExcept(object);
+		if (!this.defaultValue.equals(value)) {
+			return super.getIndicesExcept(value);
 		}
 		List<Integer> result = new LinkedList<Integer>();
 		for (Integer i : this.map.keySet()) {
 			if (i >= this.offset && i < this.offset + this.length - this.header - this.trailer) {
-				if (!this.map.get(i).equals(this.defaultObject)) {
+				if (!this.map.get(i).equals(this.defaultValue)) {
 					result.add(this.getIndex(i));
 				}
 			}
@@ -123,11 +123,11 @@ public class SparseArray<T extends Object>
 		return "[" + this.getLength() + ": " + str + "]";
 	}
 
-	public static <T> SparseArray<T> getInstance(T defaultObject, int length) {
-		return SparseArray.getInstance(defaultObject, new HashMap<Integer, T>(), length);
+	public static <T> SparseArray<T> getInstance(T defaultValue, int length) {
+		return SparseArray.getInstance(defaultValue, new HashMap<Integer, T>(), length);
 	}
 
-	public static <T> SparseArray<T> getInstance(T defaultObject, Map<Integer, T> map) {
+	public static <T> SparseArray<T> getInstance(T defaultValue, Map<Integer, T> map) {
 		if (map == null) {
 			throw new IllegalArgumentException();
 		}
@@ -135,42 +135,42 @@ public class SparseArray<T extends Object>
 		for (Integer i : map.keySet()) {
 			maxIndex = Math.max(maxIndex, i);
 		}
-		return SparseArray.getInstance(defaultObject, map, maxIndex + 1);
+		return SparseArray.getInstance(defaultValue, map, maxIndex + 1);
 	}
 
-	public static <T> SparseArray<T> getInstance(T defaultObject, Map<Integer, T> map, int length) {
-		if (defaultObject == null || map == null || length < 0) {
+	public static <T> SparseArray<T> getInstance(T defaultValue, Map<Integer, T> map, int length) {
+		if (defaultValue == null || map == null || length < 0) {
 			throw new IllegalArgumentException();
 		}
 		Map<Integer, T> newMap = new HashMap();
 		for (Integer i : map.keySet()) {
-			T object = map.get(i);
-			if (object == null || i >= length) {
+			T value = map.get(i);
+			if (value == null || i >= length) {
 				throw new IllegalArgumentException();
 			}
-			if (!object.equals(defaultObject)) {
-				newMap.put(i, object);
+			if (!value.equals(defaultValue)) {
+				newMap.put(i, value);
 			}
 		}
-		return new SparseArray<T>(defaultObject, newMap, length);
+		return new SparseArray<T>(defaultValue, newMap, length);
 	}
 
-	public static <T> SparseArray<T> getInstance(T defaultObject, T... objects) {
-		if (defaultObject == null || objects == null) {
+	public static <T> SparseArray<T> getInstance(T defaultValue, T... values) {
+		if (defaultValue == null || values == null) {
 			throw new IllegalArgumentException();
 		}
 		Map<Integer, T> map = new HashMap<Integer, T>();
 		int i = 0;
-		for (T object : objects) {
-			if (object == null) {
+		for (T value : values) {
+			if (value == null) {
 				throw new IllegalArgumentException();
 			}
-			if (!object.equals(defaultObject)) {
-				map.put(i, object);
+			if (!value.equals(defaultValue)) {
+				map.put(i, value);
 			}
 			i++;
 		}
-		return new SparseArray<T>(defaultObject, map, objects.length);
+		return new SparseArray<T>(defaultValue, map, values.length);
 	}
 
 	@Override
@@ -179,9 +179,9 @@ public class SparseArray<T extends Object>
 			index = this.length - index - 1;
 		}
 		if (index < this.trailer || index >= this.length - this.header) {
-			return this.defaultObject;
+			return this.defaultValue;
 		}
-		return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultObject);
+		return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultValue);
 	}
 
 	@Override
@@ -191,15 +191,15 @@ public class SparseArray<T extends Object>
 			newMap.put(i, this.abstractGetAt(i));
 		}
 		Iterable<Integer> indices;
-		if (this.defaultObject.equals(other.defaultObject)) {
+		if (this.defaultValue.equals(other.defaultValue)) {
 			indices = other.getIndicesExcept();
 		} else {
-			indices = other.getIndicesExcept(this.defaultObject);
+			indices = other.getIndicesExcept(this.defaultValue);
 		}
 		for (int i : indices) {
 			newMap.put(this.length + i, other.abstractGetAt(i));
 		}
-		return new SparseArray<T>(this.defaultObject, newMap, this.length + other.length);
+		return new SparseArray<T>(this.defaultValue, newMap, this.length + other.length);
 	}
 
 	@Override
@@ -212,10 +212,10 @@ public class SparseArray<T extends Object>
 				newMap.put(i + 1, this.abstractGetAt(i));
 			}
 		}
-		if (!newObject.equals(this.defaultObject)) {
+		if (!newObject.equals(this.defaultValue)) {
 			newMap.put(index, newObject);
 		}
-		return new SparseArray<T>(this.defaultObject, newMap, this.length + 1);
+		return new SparseArray<T>(this.defaultValue, newMap, this.length + 1);
 	}
 
 	@Override
@@ -226,20 +226,15 @@ public class SparseArray<T extends Object>
 				newMap.put(i, this.abstractGetAt(i));
 			}
 		}
-		if (!newObject.equals(this.defaultObject)) {
+		if (!newObject.equals(this.defaultValue)) {
 			newMap.put(index, newObject);
 		}
-		return new SparseArray<T>(this.defaultObject, newMap, this.length);
+		return new SparseArray<T>(this.defaultValue, newMap, this.length);
 	}
 
 	@Override
 	protected SparseArray<T> abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
-		return new SparseArray<T>(this.defaultObject, this.map, offset, length, trailer, header, reverse);
-	}
-
-	@Override
-	protected Class getArrayClass() {
-		return SparseArray.class;
+		return new SparseArray<T>(this.defaultValue, this.map, offset, length, trailer, header, reverse);
 	}
 
 	private int getIndex(int i) {

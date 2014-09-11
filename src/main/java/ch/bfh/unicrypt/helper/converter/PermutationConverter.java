@@ -51,12 +51,12 @@ import java.math.BigInteger;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class PermutationConverter
-	   extends Converter<Permutation> {
+	   extends AbstractConverter<Permutation> {
 
 	private final BigIntegerConverter bigIntegerConverter;
 
 	public PermutationConverter(BigIntegerConverter bigIntegerConverter) {
-		super(Permutation.class.getName());
+		super(Permutation.class);
 		this.bigIntegerConverter = bigIntegerConverter;
 	}
 

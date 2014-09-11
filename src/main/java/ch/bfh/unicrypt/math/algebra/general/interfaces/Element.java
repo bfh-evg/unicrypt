@@ -44,8 +44,14 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.ConvertMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.numerical.Numerical;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import java.math.BigInteger;
 
 /**
@@ -128,14 +134,16 @@ public interface Element<V extends Object> {
 	 */
 	public ByteArray getByteArray();
 
+	public ByteArray getByteArray(BigIntegerConverter converter);
+
 	/**
 	 * TODO Returns the corresponding {@link ByteArray} of this Element with the help of a a given
 	 * {@link BigIntegerConverter}.
 	 * <p>
-	 * @param converter
+	 * @param convertMethod
 	 * @return
 	 */
-	public ByteArray getByteArray(BigIntegerConverter converter);
+	public ByteArray getByteArray(ConvertMethod convertMethod);
 
 	/**
 	 * TODO Returns the corresponding {@link ByteTree} of this Element.
@@ -148,10 +156,10 @@ public interface Element<V extends Object> {
 	 * TODO Returns the corresponding {@link ByteTree} of this Element with the help of a given
 	 * {@link BigIntegerConverter}.
 	 * <p>
-	 * @param converter
+	 * @param convertMethod
 	 * @return The corresponding ByteTree
 	 */
-	public ByteTree getByteTree(BigIntegerConverter converter);
+	public ByteTree getByteTree(ConvertMethod convertMethod);
 
 	/**
 	 * TODO

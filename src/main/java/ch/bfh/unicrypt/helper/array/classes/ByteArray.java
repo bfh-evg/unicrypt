@@ -74,7 +74,7 @@ public class ByteArray
 	}
 
 	protected ByteArray(byte[] bytes, int offset, int length, int trailer, int header, boolean reverse) {
-		super(ByteArray.ALL_ZERO, trailer, header, length, offset, reverse);
+		super(ByteArray.class, ByteArray.ALL_ZERO, trailer, header, length, offset, reverse);
 		this.bytes = bytes;
 		if (bytes.length <= 1 && trailer == 0 && header == 0) {
 			this.uniform = true;
@@ -443,7 +443,7 @@ public class ByteArray
 			index = this.length - index - 1;
 		}
 		if (index < this.trailer || index >= this.length - this.header) {
-			return this.defaultObject;
+			return this.defaultValue;
 		}
 		return this.bytes[(this.offset + index - this.trailer) % this.bytes.length];
 	}
@@ -487,11 +487,6 @@ public class ByteArray
 	@Override
 	protected ByteArray abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
 		return new ByteArray(this.bytes, offset, length, trailer, header, reverse);
-	}
-
-	@Override
-	protected Class<ByteArray> getArrayClass() {
-		return ByteArray.class;
 	}
 
 }

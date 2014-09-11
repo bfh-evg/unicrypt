@@ -47,6 +47,8 @@ import ch.bfh.unicrypt.helper.array.interfaces.Array;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.Converter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -272,49 +274,35 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final E getElementFrom(ByteArray byteArray, BigIntegerConverter converter) {
-		if (byteArray == null) {
+		if (converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetElementFrom(byteArray, converter);
+		return this.getElementFrom(converter.convertFromByteArray(byteArray));
 	}
 
 	@Override
-	public final ByteArray getByteArrayFrom(Element element) {
-		return this.getByteArrayFrom(element, BigIntegerConverter.getInstance());
-	}
-
-	@Override
-	public final ByteArray getByteArrayFrom(Element element, BigIntegerConverter converter) {
-		if (element == null || !this.contains(element)) {
+	public final E getElementFrom(ByteArray byteArray, ConvertMethod convertMethod) {
+		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetByteArrayFrom((E) element, converter);
+		Converter<V> converter = convertMethod.getConverter(this.valueClass);
+		if (converter == null) {
+			return this.getElementFrom(byteArray);
+		}
+		return this.getElement(converter.convertFromByteArray(byteArray));
 	}
 
 	@Override
 	public final E getElementFrom(ByteTree byteTree) {
-		return this.getElementFrom(byteTree, BigIntegerConverter.getInstance());
+		return this.getElementFrom(byteTree, ConvertMethod.getInstance());
 	}
 
 	@Override
-	public final E getElementFrom(ByteTree byteTree, BigIntegerConverter converter) {
-		if (byteTree == null) {
+	public final E getElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
+		if (byteTree == null || convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetElementFrom(byteTree, converter);
-	}
-
-	@Override
-	public final ByteTree getByteTreeFrom(Element element) {
-		return this.getByteTreeFrom(element, BigIntegerConverter.getInstance());
-	}
-
-	@Override
-	public final ByteTree getByteTreeFrom(Element element, BigIntegerConverter converter) {
-		if (element == null || !this.contains(element)) {
-			throw new IllegalArgumentException();
-		}
-		return this.defaultGetByteTreeFrom((E) element, converter);
+		return this.defaultGetElementFrom(byteTree, convertMethod);
 	}
 
 	@Override
@@ -436,25 +424,13 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.isEquivalent(element.getSet());
 	}
 
-	protected E defaultGetElementFrom(ByteArray byteArray, BigIntegerConverter converter) {
-		return this.getElementFrom(converter.convertFromByteArray(byteArray));
-	}
-
-	protected ByteArray defaultGetByteArrayFrom(E element, BigIntegerConverter converter) {
-		return ByteArray.getInstance(converter.convertToByteArray(this.abstractGetBigIntegerFrom(element)));
-	}
-
-	protected E defaultGetElementFrom(ByteTree byteTree, BigIntegerConverter converter) {
+	protected E defaultGetElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
 		if (byteTree.isLeaf()) {
-			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getBinaryData();
-			return this.defaultGetElementFrom(byteArray, converter);
+			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getValue();
+			return this.getElementFrom(byteArray, convertMethod);
 		}
 		// no such element
 		return null;
-	}
-
-	protected ByteTree defaultGetByteTreeFrom(E element, BigIntegerConverter converter) {
-		return ByteTree.getInstance(this.defaultGetByteArrayFrom(element, converter));
 	}
 
 	protected boolean defaultIsEquivalent(Set set) {

@@ -52,7 +52,7 @@ import org.junit.Test;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArrayConverterTest {
+public class BigIntegerConverterTest {
 
 	public static BigIntegerConverter c1 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
 	public static BigIntegerConverter c2 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 0);

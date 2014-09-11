@@ -51,12 +51,12 @@ import java.math.BigInteger;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ResidueClassConverter
-	   extends Converter<ResidueClass> {
+	   extends AbstractConverter<ResidueClass> {
 
 	private final BigIntegerConverter bigIntegerConverter;
 
 	private ResidueClassConverter(BigIntegerConverter bigIntegerConverter) {
-		super(ResidueClass.class.getName());
+		super(ResidueClass.class);
 		this.bigIntegerConverter = bigIntegerConverter;
 	}
 

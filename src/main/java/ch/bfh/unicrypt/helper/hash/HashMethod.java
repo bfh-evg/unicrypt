@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper.hash;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.ConvertMethod;
 
 /**
  *
@@ -58,12 +58,12 @@ public class HashMethod
 	};
 
 	private final HashAlgorithm hashAlgorithm;
-	private final BigIntegerConverter converter;
+	private final ConvertMethod convertMethod;
 	private final Mode mode;
 
-	protected HashMethod(HashAlgorithm hashAlgorithm, BigIntegerConverter converter, Mode mode) {
+	protected HashMethod(HashAlgorithm hashAlgorithm, ConvertMethod convertMethod, Mode mode) {
 		this.hashAlgorithm = hashAlgorithm;
-		this.converter = converter;
+		this.convertMethod = convertMethod;
 		this.mode = mode;
 	}
 
@@ -71,8 +71,8 @@ public class HashMethod
 		return this.hashAlgorithm;
 	}
 
-	public BigIntegerConverter getByteArrayConverter() {
-		return this.converter;
+	public ConvertMethod getConvertMethod() {
+		return this.convertMethod;
 	}
 
 	public Mode getMode() {
@@ -81,14 +81,14 @@ public class HashMethod
 
 	@Override
 	protected String defaultToStringValue() {
-		return this.hashAlgorithm.toString() + "," + this.converter.toString() + "," + this.mode.toString();
+		return this.hashAlgorithm.toString() + "," + this.convertMethod.toString() + "," + this.mode.toString();
 	}
 
 	@Override
 	public int hashCode() {
 		int hash = 3;
 		hash = 97 * hash + this.hashAlgorithm.hashCode();
-		hash = 97 * hash + this.converter.hashCode();
+		hash = 97 * hash + this.convertMethod.hashCode();
 		hash = 97 * hash + this.mode.hashCode();
 		return hash;
 	}
@@ -102,22 +102,42 @@ public class HashMethod
 			return false;
 		}
 		final HashMethod other = (HashMethod) obj;
-		return this.hashAlgorithm.equals(other.hashAlgorithm) && this.converter.equals(other.converter) && this.mode.equals(other.mode);
+		return this.hashAlgorithm.equals(other.hashAlgorithm) && this.convertMethod.equals(other.convertMethod) && this.mode.equals(other.mode);
 	}
 
 	public static HashMethod getInstance() {
-		return HashMethod.getInstance(HashAlgorithm.getInstance(), BigIntegerConverter.getInstance(), Mode.RECURSIVE);
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.getInstance(), Mode.RECURSIVE);
 	}
 
 	public static HashMethod getInstance(HashAlgorithm hashAlgorithm) {
-		return HashMethod.getInstance(hashAlgorithm, BigIntegerConverter.getInstance(), Mode.RECURSIVE);
+		return HashMethod.getInstance(hashAlgorithm, ConvertMethod.getInstance(), Mode.RECURSIVE);
 	}
 
-	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, BigIntegerConverter converter, Mode mode) {
-		if (hashAlgorithm == null || converter == null || mode == null) {
+	public static HashMethod getInstance(ConvertMethod convertMethod) {
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), convertMethod, Mode.RECURSIVE);
+	}
+
+	public static HashMethod getInstance(Mode mode) {
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.getInstance(), mode);
+	}
+
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ConvertMethod convertMethod) {
+		return HashMethod.getInstance(hashAlgorithm, convertMethod, Mode.RECURSIVE);
+	}
+
+	public static HashMethod getInstance(ConvertMethod convertMethod, Mode mode) {
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), convertMethod, mode);
+	}
+
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, Mode mode) {
+		return HashMethod.getInstance(hashAlgorithm, ConvertMethod.getInstance(), mode);
+	}
+
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ConvertMethod convertMethod, Mode mode) {
+		if (hashAlgorithm == null || convertMethod == null || mode == null) {
 			throw new IllegalArgumentException();
 		}
-		return new HashMethod(hashAlgorithm, converter, mode);
+		return new HashMethod(hashAlgorithm, convertMethod, mode);
 	}
 
 }

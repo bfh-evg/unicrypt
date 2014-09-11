@@ -51,13 +51,13 @@ import java.util.Arrays;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class BigIntegerConverter
-	   extends Converter<BigInteger> {
+	   extends AbstractConverter<BigInteger> {
 
 	private transient final ByteOrder byteOrder; //TODO not serializable
 	private final int minLength;
 
 	protected BigIntegerConverter(ByteOrder byteOrder, int minLength) {
-		super(BigInteger.class.getName());
+		super(BigInteger.class);
 		this.byteOrder = byteOrder;
 		this.minLength = minLength;
 	}

@@ -58,15 +58,15 @@ public interface Array<A extends Array<A, T>, T extends Object>
 
 	public Iterable<Integer> getAllIndices();
 
-	public Iterable<Integer> getIndices(T object);
+	public Iterable<Integer> getIndices(T value);
 
-	public Iterable<Integer> getIndicesExcept(T object);
+	public Iterable<Integer> getIndicesExcept(T value);
 
-	public int count(T object);
+	public int count(T value);
 
-	public int countPrefix(T object);
+	public int countPrefix(T value);
 
-	public int countSuffix(T object);
+	public int countSuffix(T value);
 
 	public T getAt(int index);
 
@@ -92,11 +92,11 @@ public interface Array<A extends Array<A, T>, T extends Object>
 
 	public A removeAt(int index);
 
-	public A insertAt(final int index, final T object);
+	public A insertAt(final int index, final T value);
 
-	public A replaceAt(int index, T object);
+	public A replaceAt(int index, T value);
 
-	public A add(T object);
+	public A add(T value);
 
 	public A append(A other);
 

@@ -52,10 +52,10 @@ public interface ArrayWithDefault<A extends Array<A, T>, T extends Object>
 
 	public T getDefault();
 
-	// collects the indices of default objects
+	// collects the indices of default values
 	public Iterable<Integer> getIndices();
 
-	// collects the indices of objects different from the default
+	// collects the indices of values different from the default
 	public Iterable<Integer> getIndicesExcept();
 
 	public int count();

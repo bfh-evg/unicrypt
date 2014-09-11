@@ -61,7 +61,7 @@ public class BitArray
 	}
 
 	private BitArray(ByteArray byteArray, int offset, int length, int trailer, int header, boolean reverse) {
-		super(false, trailer, header, length, offset, reverse);
+		super(BitArray.class, false, trailer, header, length, offset, reverse);
 		this.byteArray = byteArray;
 	}
 
@@ -277,11 +277,6 @@ public class BitArray
 			}
 		}
 		return bytes;
-	}
-
-	@Override
-	protected Class<BitArray> getArrayClass() {
-		return BitArray.class;
 	}
 
 }

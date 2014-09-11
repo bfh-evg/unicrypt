@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.ConvertMethod;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -177,14 +177,14 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple defaultGetElementFrom(ByteTree byteTree, BigIntegerConverter converter) {
+	protected Tuple defaultGetElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
 		if (!byteTree.isLeaf()) {
 			int length = this.getLength();
 			ImmutableArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
 			if (byteTrees.getLength() == length) {
 				Element[] elements = new Element[length];
 				for (int i : this.getAllIndices()) {
-					elements[i] = this.getAt(i).getElementFrom(byteTrees.getAt(i), converter);
+					elements[i] = this.getAt(i).getElementFrom(byteTrees.getAt(i), convertMethod);
 					if (elements[i] == null) {
 						// no such element
 						return null;
@@ -195,16 +195,6 @@ public class ProductSet
 		}
 		// no such element
 		return null;
-	}
-
-	@Override
-	protected ByteTree defaultGetByteTreeFrom(Tuple tuple, BigIntegerConverter converter) {
-		ByteTree[] byteTrees = new ByteTree[this.getLength()];
-		int i = 0;
-		for (Element element : tuple.getValue()) {
-			byteTrees[i++] = element.getByteTree(converter);
-		}
-		return ByteTree.getInstance(byteTrees);
 	}
 
 	@Override
