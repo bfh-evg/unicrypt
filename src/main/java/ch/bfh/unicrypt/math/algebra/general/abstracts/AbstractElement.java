@@ -155,49 +155,49 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	}
 
 	@Override
-	public ByteArray getByteArray(BigIntegerConverter converter) {
-		if (converter == null) {
-			throw new IllegalArgumentException();
-		}
-		ByteArray byteArray = this.byteArrays.get(converter);
-		if (byteArray == null) {
-			byteArray = converter.convertToByteArray(this.getBigInteger());
-			this.byteArrays.put(converter, byteArray);
-		}
-		return byteArray;
+	public ByteArray getByteArray(Converter converter) {
+		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
+		return this.getByteArray(convertMethod);
 	}
 
 	@Override
-	public ByteArray getByteArray(Converter<V> converter) {
-		if (converter == null) {
+	public ByteArray getByteArray(ConvertMethod convertMethod) {
+		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray byteArray = this.byteArrays.get(converter);
-		if (byteArray == null) {
-			byteArray = converter.convertToByteArray(this.value);
-		}
-		return byteArray;
-	}
-
-	@Override
-	public ByteArray getByteArray(ConvertMethod converterMethod) {
-		if (converterMethod == null) {
-			throw new IllegalArgumentException();
-		}
-		Converter converter = converterMethod.getConverter(this.value.getClass());
+		Converter converter = convertMethod.getConverter(this.value.getClass());
 		if (converter == null) {
-			converter = converterMethod.getConverter(BigInteger.class);
+			// conversion over BigInteger
+			converter = convertMethod.getConverter(BigInteger.class);
 			if (converter == null) {
-				return this.getByteArray();
+				converter = BigIntegerConverter.getInstance();
 			}
-			return this.getByteArray((BigIntegerConverter) converter);
+			ByteArray byteArray = this.byteArrays.get(converter);
+			if (byteArray == null) {
+				byteArray = converter.convertToByteArray(this.getBigInteger());
+				this.byteArrays.put(converter, byteArray);
+			}
+			return byteArray;
+		} else {
+			// conversion over value
+			ByteArray byteArray = this.byteArrays.get(converter);
+			if (byteArray == null) {
+				byteArray = converter.convertToByteArray(this.value);
+				this.byteArrays.put(converter, byteArray);
+			}
+			return byteArray;
 		}
-		return this.getByteArray((Converter<V>) converter);
 	}
 
 	@Override
 	public ByteTree getByteTree() {
-		return this.getByteTree(ConvertMethod.getInstance());
+		return this.getByteTree(BigIntegerConverter.getInstance());
+	}
+
+	@Override
+	public ByteTree getByteTree(Converter converter) {
+		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
+		return this.getByteTree(convertMethod);
 	}
 
 	@Override
@@ -209,7 +209,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 			Tuple tuple = (Tuple) this;
 			ByteTree[] byteTrees = new ByteTree[tuple.getArity()];
 			int i = 0;
-			for (Element<V> element : tuple) {
+			for (Element element : tuple) {
 				byteTrees[i++] = element.getByteTree(convertMethod);
 			}
 			return ByteTree.getInstance(byteTrees);

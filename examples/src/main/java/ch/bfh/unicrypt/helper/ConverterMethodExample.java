@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.PermutationConverter;
@@ -88,8 +89,10 @@ public class ConverterMethodExample {
 		Example.printLine(set);
 		Example.printLine(element);
 
-		// Converting the element forth and back
 		Example.printLine("BigInteger", element.getBigInteger());
+
+		// Converting the element to byte array (forth and back)
+		Example.printLabelLine("CONVERSION TO BYTE ARRAY");
 
 		ByteArray byteArray;
 		byteArray = element.getByteArray();
@@ -106,15 +109,37 @@ public class ConverterMethodExample {
 
 		byteArray = element.getByteArray(convertMethod2);
 		Example.printLine(set.getElementFrom(byteArray, convertMethod2), byteArray);
-		Example.decreaseIndentLevel();
 
 		byteArray = element.getByteArray(convertMethod3);
 		Example.printLine(set.getElementFrom(byteArray, convertMethod3), byteArray);
-		Example.decreaseIndentLevel();
 
 		byteArray = element.getByteArray(convertMethod4);
 		Example.printLine(set.getElementFrom(byteArray, convertMethod4), byteArray);
 
+		// Converting the element to byte tree (forth and back)
+		Example.printLabelLine("CONVERSION TO BYTE TREE");
+
+		ByteTree byteTree;
+		byteTree = element.getByteTree();
+		Example.printLine(set.getElementFrom(byteTree), byteTree);
+
+		byteTree = element.getByteTree(bigIntegerConverter);
+		Example.printLine(set.getElementFrom(byteTree, bigIntegerConverter), byteTree);
+
+		byteTree = element.getByteTree(stringConverter);
+		Example.printLine(set.getElementFrom(byteTree, stringConverter), byteTree);
+
+		byteTree = element.getByteTree(convertMethod1);
+		Example.printLine(set.getElementFrom(byteTree, convertMethod1), byteTree);
+
+		byteTree = element.getByteTree(convertMethod2);
+		Example.printLine(set.getElementFrom(byteTree, convertMethod2), byteTree);
+
+		byteTree = element.getByteTree(convertMethod3);
+		Example.printLine(set.getElementFrom(byteTree, convertMethod3), byteTree);
+
+		byteTree = element.getByteTree(convertMethod4);
+		Example.printLine(set.getElementFrom(byteTree, convertMethod4), byteTree);
 	}
 
 	public static void example2() {
@@ -148,8 +173,10 @@ public class ConverterMethodExample {
 		Example.printLine(e1, e2, e3);
 		Example.printLine(tuple);
 
-		// Converting the tuple forth and back
 		Example.printLine("BigInteger", tuple.getBigInteger());
+
+		// Converting the tuple to byte array forth and back
+		Example.printLabelLine("CONVERSION TO BYTE ARRAY");
 
 		ByteArray byteArray;
 		byteArray = tuple.getByteArray();
@@ -163,8 +190,22 @@ public class ConverterMethodExample {
 
 		byteArray = tuple.getByteArray(convertMethod2);
 		Example.printLine(productSet.getElementFrom(byteArray, convertMethod2), byteArray);
-		Example.decreaseIndentLevel();
 
+		// Converting the tuple to byte tree forth and back
+		Example.printLabelLine("CONVERSION TO BYTE TREE");
+
+		ByteTree byteTree;
+		byteTree = tuple.getByteTree();
+		Example.printLine(productSet.getElementFrom(byteTree), byteTree);
+
+		byteTree = tuple.getByteTree(bigIntegerConverter);
+		Example.printLine(productSet.getElementFrom(byteTree, bigIntegerConverter), byteTree);
+
+		byteTree = tuple.getByteTree(convertMethod1);
+		Example.printLine(productSet.getElementFrom(byteTree, convertMethod1), byteTree);
+
+		byteTree = tuple.getByteTree(convertMethod2);
+		Example.printLine(productSet.getElementFrom(byteTree, convertMethod2), byteTree);
 	}
 
 	public static void main(final String[] args) {

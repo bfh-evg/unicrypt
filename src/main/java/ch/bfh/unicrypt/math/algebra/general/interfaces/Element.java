@@ -142,11 +142,9 @@ public interface Element<V extends Object> {
 	 * @param converter
 	 * @return
 	 */
-	public ByteArray getByteArray(BigIntegerConverter converter);
+	public ByteArray getByteArray(Converter converter);
 
-	public ByteArray getByteArray(Converter<V> converter);
-
-	public ByteArray getByteArray(ConvertMethod converterMethod);
+	public ByteArray getByteArray(ConvertMethod convertMethod);
 
 	/**
 	 * TODO Returns the corresponding {@link ByteTree} of this Element.
@@ -154,6 +152,8 @@ public interface Element<V extends Object> {
 	 * @return The corresponding ByteTree
 	 */
 	public ByteTree getByteTree();
+
+	public ByteTree getByteTree(Converter converter);
 
 	/**
 	 * TODO Returns the corresponding {@link ByteTree} of this Element with the help of a given

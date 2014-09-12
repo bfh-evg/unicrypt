@@ -286,9 +286,7 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteArray byteArray);
 
-	public Element<V> getElementFrom(ByteArray byteArray, BigIntegerConverter converter);
-
-	public Element<V> getElementFrom(ByteArray byteArray, Converter<V> converter);
+	public Element<V> getElementFrom(ByteArray byteArray, Converter converter);
 
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the
@@ -307,6 +305,8 @@ public interface Set<V extends Object> {
 	 * @return the corresponding element
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree);
+
+	public Element<V> getElementFrom(ByteTree byteTree, Converter converter);
 
 	/**
 	 * <p>

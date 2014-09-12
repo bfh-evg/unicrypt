@@ -151,6 +151,9 @@ public class ProductSet
 
 	@Override
 	protected Tuple abstractGetElement(ImmutableArray<Element> value) {
+		if (this.getLength() == 1) {
+			return new Singleton(this, value);
+		}
 		if (this.getLength() == 2) {
 			return new Pair(this, value);
 		}

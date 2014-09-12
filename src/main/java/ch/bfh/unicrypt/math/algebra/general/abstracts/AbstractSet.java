@@ -273,21 +273,9 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E getElementFrom(ByteArray byteArray, BigIntegerConverter converter) {
-		if (converter == null) {
-			throw new IllegalArgumentException();
-		}
-		BigInteger bigInteger = converter.convertFromByteArray(byteArray);
-		return this.getElementFrom(bigInteger);
-	}
-
-	@Override
-	public final E getElementFrom(ByteArray byteArray, Converter<V> converter) {
-		if (converter == null) {
-			throw new IllegalArgumentException();
-		}
-		V value = converter.convertFromByteArray(byteArray);
-		return this.getElement(value);
+	public final E getElementFrom(ByteArray byteArray, Converter converter) {
+		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
+		return this.getElementFrom(byteArray, convertMethod);
 	}
 
 	@Override
@@ -297,18 +285,29 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		}
 		Converter converter = convertMethod.getConverter(this.valueClass);
 		if (converter == null) {
+			// conversion over BigInteger
 			converter = convertMethod.getConverter(BigInteger.class);
 			if (converter == null) {
-				return this.getElementFrom(byteArray);
+				converter = BigIntegerConverter.getInstance();
 			}
-			return this.getElementFrom(byteArray, (BigIntegerConverter) converter);
+			BigInteger bigInteger = ((BigIntegerConverter) converter).convertFromByteArray(byteArray);
+			return this.getElementFrom(bigInteger);
+		} else {
+			// conversion over value
+			V value = ((Converter<V>) converter).convertFromByteArray(byteArray);
+			return this.getElement(value);
 		}
-		return this.getElementFrom(byteArray, (Converter<V>) converter);
 	}
 
 	@Override
 	public final E getElementFrom(ByteTree byteTree) {
-		return this.getElementFrom(byteTree, ConvertMethod.getInstance());
+		return this.getElementFrom(byteTree, BigIntegerConverter.getInstance());
+	}
+
+	@Override
+	public final E getElementFrom(ByteTree byteTree, Converter converter) {
+		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
+		return this.getElementFrom(byteTree, convertMethod);
 	}
 
 	@Override
