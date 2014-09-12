@@ -49,6 +49,8 @@ import ch.bfh.unicrypt.helper.converter.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.PermutationConverter;
 import ch.bfh.unicrypt.helper.converter.ResidueClassConverter;
 import ch.bfh.unicrypt.helper.converter.StringConverter;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.hash.HashMethod.Mode;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -206,6 +208,24 @@ public class ConverterMethodExample {
 
 		byteTree = tuple.getByteTree(convertMethod2);
 		Example.printLine(productSet.getElementFrom(byteTree, convertMethod2), byteTree);
+
+		// Computing hash values
+		Example.printLabelLine("HASH VALUES");
+
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance()));
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(Mode.BYTEARRAY)));
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(Mode.BYTETREE)));
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(Mode.RECURSIVE)));
+
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(convertMethod1)));
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(convertMethod1, Mode.BYTEARRAY)));
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(convertMethod1, Mode.BYTETREE)));
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(convertMethod1, Mode.RECURSIVE)));
+
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(convertMethod2)));
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(convertMethod2, Mode.BYTEARRAY)));
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(convertMethod2, Mode.BYTETREE)));
+		Example.printLine(tuple.getHashValue(HashMethod.getInstance(convertMethod2, Mode.RECURSIVE)));
 	}
 
 	public static void main(final String[] args) {

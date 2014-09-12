@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.Converter;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
@@ -230,15 +231,17 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		}
 		ByteArray hashValue = this.hashValues.get(hashMethod);
 		if (hashValue == null) {
+			ConvertMethod convertMethod = hashMethod.getConvertMethod();
+			HashAlgorithm algorithm = hashMethod.getHashAlgorithm();
 			switch (hashMethod.getMode()) {
 				case BYTEARRAY:
-					hashValue = this.getByteArray().getHashValue(hashMethod.getHashAlgorithm());
+					hashValue = this.getByteArray(convertMethod).getHashValue(algorithm);
 					break;
 				case BYTETREE:
-					hashValue = this.getByteTree(hashMethod.getConvertMethod()).getHashValue(hashMethod.getHashAlgorithm());
+					hashValue = this.getByteTree(convertMethod).getHashValue(algorithm);
 					break;
 				case RECURSIVE:
-					hashValue = this.getByteTree(hashMethod.getConvertMethod()).getRecursiveHashValue(hashMethod.getHashAlgorithm());
+					hashValue = this.getByteTree(convertMethod).getRecursiveHashValue(algorithm);
 					break;
 				default:
 					throw new UnsupportedOperationException();
