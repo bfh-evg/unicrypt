@@ -277,7 +277,17 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.getElementFrom(converter.convertFromByteArray(byteArray));
+		BigInteger bigInteger = converter.convertFromByteArray(byteArray);
+		return this.getElementFrom(bigInteger);
+	}
+
+	@Override
+	public final E getElementFrom(ByteArray byteArray, Converter<V> converter) {
+		if (converter == null) {
+			throw new IllegalArgumentException();
+		}
+		V value = converter.convertFromByteArray(byteArray);
+		return this.getElement(value);
 	}
 
 	@Override
@@ -285,11 +295,15 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Converter<V> converter = convertMethod.getConverter(this.valueClass);
+		Converter converter = convertMethod.getConverter(this.valueClass);
 		if (converter == null) {
-			return this.getElementFrom(byteArray);
+			converter = convertMethod.getConverter(BigInteger.class);
+			if (converter == null) {
+				return this.getElementFrom(byteArray);
+			}
+			return this.getElementFrom(byteArray, (BigIntegerConverter) converter);
 		}
-		return this.getElement(converter.convertFromByteArray(byteArray));
+		return this.getElementFrom(byteArray, (Converter<V>) converter);
 	}
 
 	@Override

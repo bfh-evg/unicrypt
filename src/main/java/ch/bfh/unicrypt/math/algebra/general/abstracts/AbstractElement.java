@@ -159,24 +159,40 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		if (converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return converter.convertToByteArray(this.getBigInteger());
-	}
-
-	@Override
-	public ByteArray getByteArray(ConvertMethod convertMethod) {
-		if (convertMethod == null) {
-			throw new IllegalArgumentException();
-		}
-		Converter converter = convertMethod.getConverter(this.getValue().getClass());
-		if (converter == null) {
-			return this.getByteArray();
-		}
 		ByteArray byteArray = this.byteArrays.get(converter);
 		if (byteArray == null) {
-			byteArray = converter.convertToByteArray(this.getValue());
+			byteArray = converter.convertToByteArray(this.getBigInteger());
 			this.byteArrays.put(converter, byteArray);
 		}
 		return byteArray;
+	}
+
+	@Override
+	public ByteArray getByteArray(Converter<V> converter) {
+		if (converter == null) {
+			throw new IllegalArgumentException();
+		}
+		ByteArray byteArray = this.byteArrays.get(converter);
+		if (byteArray == null) {
+			byteArray = converter.convertToByteArray(this.value);
+		}
+		return byteArray;
+	}
+
+	@Override
+	public ByteArray getByteArray(ConvertMethod converterMethod) {
+		if (converterMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		Converter converter = converterMethod.getConverter(this.value.getClass());
+		if (converter == null) {
+			converter = converterMethod.getConverter(BigInteger.class);
+			if (converter == null) {
+				return this.getByteArray();
+			}
+			return this.getByteArray((BigIntegerConverter) converter);
+		}
+		return this.getByteArray((Converter<V>) converter);
 	}
 
 	@Override
@@ -354,7 +370,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		if (!this.set.isEquivalent(other.getSet())) {
 			return false;
 		}
-		return this.getValue().equals(other.getValue());
+		return this.value.equals(other.getValue());
 	}
 
 	@Override
@@ -374,10 +390,10 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 			return false;
 		}
 		final Element other = (Element) object;
-		if (!this.getSet().equals(other.getSet())) {
+		if (!this.set.equals(other.getSet())) {
 			return false;
 		}
-		return this.getValue().equals(other.getValue());
+		return this.value.equals(other.getValue());
 	}
 
 	@Override
@@ -387,7 +403,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	protected String defaultToStringValue() {
-		return this.getValue().toString();
+		return this.value.toString();
 	}
 
 }
