@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyPairGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractSignatureScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -57,7 +57,7 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class RSASignatureScheme
-	   extends AbstractSignatureScheme<ZMod, ZModElement, ZMod, ZModElement, ZMod, ZMod, RSAKeyPairGenerator> {
+	   extends AbstractSignatureScheme<ZMod, ZModElement, ZMod, ZModElement, ZMod, ZMod, RSAKeyGenerator> {
 
 	
 	private final ZMod zMod;
@@ -71,9 +71,9 @@ public class RSASignatureScheme
 	}
 
 	@Override
-	protected RSAKeyPairGenerator abstractGetKeyPairGenerator() {
+	protected RSAKeyGenerator abstractGetKeyPairGenerator() {
 		if (this.getZMod() instanceof ZModPrimePair) {
-			return RSAKeyPairGenerator.getInstance((ZModPrimePair) this.getZMod());
+			return RSAKeyGenerator.getInstance((ZModPrimePair) this.getZMod());
 		}
 		throw new UnsupportedOperationException();
 	}

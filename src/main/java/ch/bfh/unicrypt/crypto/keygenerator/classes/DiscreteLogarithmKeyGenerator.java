@@ -42,8 +42,9 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.helper.converter.StringConverter;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
@@ -53,18 +54,18 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  *
  * @author rolfhaenni
  */
-public class ElGamalKeyPairGenerator
-	   extends AbstractKeyPairGenerator<ZMod, ZModElement, CyclicGroup, Element> {
+public class DiscreteLogarithmKeyGenerator
+	   extends AbstractKeyPairGenerator<ZModPrime, ZModElement, CyclicGroup, Element> {
 
 	private final Element generator;
 
-	protected ElGamalKeyPairGenerator(CyclicGroup publicKeySpace) {
-		super(publicKeySpace.getZModOrder());
+	protected DiscreteLogarithmKeyGenerator(CyclicGroup publicKeySpace, StringConverter stringConverter) {
+		super((ZModPrime) publicKeySpace.getZModOrder(), stringConverter);
 		this.generator = publicKeySpace.getDefaultGenerator();
 	}
 
-	protected ElGamalKeyPairGenerator(Element generator) {
-		super(generator.getSet().getZModOrder());
+	protected DiscreteLogarithmKeyGenerator(Element generator, StringConverter stringConverter) {
+		super((ZModPrime) generator.getSet().getZModOrder(), stringConverter);
 		this.generator = generator;
 	}
 
@@ -77,18 +78,26 @@ public class ElGamalKeyPairGenerator
 		return GeneratorFunction.getInstance(this.getGenerator());
 	}
 
-	public static ElGamalKeyPairGenerator getInstance(CyclicGroup publicKeySpace) {
-		if (publicKeySpace == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ElGamalKeyPairGenerator(publicKeySpace);
+	public static DiscreteLogarithmKeyGenerator getInstance(CyclicGroup publicKeySpace) {
+		return DiscreteLogarithmKeyGenerator.getInstance(publicKeySpace, StringConverter.getInstance());
 	}
 
-	public static ElGamalKeyPairGenerator getInstance(Element generator) {
-		if (generator == null) {
+	public static DiscreteLogarithmKeyGenerator getInstance(CyclicGroup publicKeySpace, StringConverter stringConverter) {
+		if (publicKeySpace == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ElGamalKeyPairGenerator(generator);
+		return new DiscreteLogarithmKeyGenerator(publicKeySpace, stringConverter);
+	}
+
+	public static DiscreteLogarithmKeyGenerator getInstance(Element generator) {
+		return DiscreteLogarithmKeyGenerator.getInstance(generator, StringConverter.getInstance());
+	}
+
+	public static DiscreteLogarithmKeyGenerator getInstance(Element generator, StringConverter stringConverter) {
+		if (generator == null || stringConverter == null) {
+			throw new IllegalArgumentException();
+		}
+		return new DiscreteLogarithmKeyGenerator(generator, stringConverter);
 	}
 
 }

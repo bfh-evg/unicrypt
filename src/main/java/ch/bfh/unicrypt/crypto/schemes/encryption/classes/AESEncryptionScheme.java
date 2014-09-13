@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.ByteArrayKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
@@ -64,7 +64,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, FixedByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
 
 	public enum KeyLength {
 
@@ -138,8 +138,8 @@ public class AESEncryptionScheme
 	}
 
 	@Override
-	protected FixedByteArrayKeyGenerator abstractGetKeyGenerator() {
-		return FixedByteArrayKeyGenerator.getInstance(this.getKeyLength().getLenght() / Byte.SIZE);
+	protected ByteArrayKeyGenerator abstractGetKeyGenerator() {
+		return ByteArrayKeyGenerator.getInstance(this.getKeyLength().getLenght() / Byte.SIZE);
 	}
 
 	private class AESEncryptionFunction

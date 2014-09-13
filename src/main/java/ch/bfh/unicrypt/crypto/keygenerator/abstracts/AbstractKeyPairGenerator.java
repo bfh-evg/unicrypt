@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.StringConverter;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
@@ -54,6 +54,8 @@ import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element>
 	   extends AbstractKeyGenerator
@@ -64,7 +66,8 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	private Function publicKeyGenerationFunction;
 	private Function keyPairGenerationFunction;
 
-	protected AbstractKeyPairGenerator(PRS privateKeySpace) {
+	protected AbstractKeyPairGenerator(PRS privateKeySpace, StringConverter stringConverter) {
+		super(stringConverter);
 		this.privateKeySpace = privateKeySpace;
 	}
 
@@ -89,6 +92,20 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	@Override
 	public final PRE generatePrivateKey(RandomByteSequence randomByteSequence) {
 		return (PRE) this.getPrivateKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
+	}
+
+	@Override
+	public PRE generatePrivateKey(String password) {
+		return this.generatePrivateKey(password, ByteArray.getInstance());
+	}
+
+	@Override
+	public PRE generatePrivateKey(String password, ByteArray salt) {
+		if (password == null || salt == null) {
+			throw new IllegalArgumentException();
+		}
+		ByteArray seed = stringConverter.convertToByteArray(password).append(salt);
+		return this.generatePrivateKey(HybridRandomByteSequence.getInstance(seed));
 	}
 
 	@Override
@@ -142,6 +159,20 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	@Override
 	public Pair generateKeyPair(RandomByteSequence randomByteSequence) {
 		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
+	}
+
+	@Override
+	public Pair generateKeyPair(String password) {
+		return this.generateKeyPair(password, ByteArray.getInstance());
+	}
+
+	@Override
+	public Pair generateKeyPair(String password, ByteArray salt) {
+		if (password == null || salt == null) {
+			throw new IllegalArgumentException();
+		}
+		ByteArray seed = stringConverter.convertToByteArray(password).append(salt);
+		return this.generateKeyPair(HybridRandomByteSequence.getInstance(seed));
 	}
 
 	@Override

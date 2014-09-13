@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,68 +32,71 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
+import ch.bfh.unicrypt.helper.converter.StringConverter;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
+import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
+import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
+import ch.bfh.unicrypt.math.function.classes.InvertFunction;
+import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
  * @author rolfhaenni
  */
+public class RSAKeyGenerator
+	   extends AbstractKeyPairGenerator<ZMod, ZModElement, ZMod, ZModElement> {
 
-// TODO see ElGamalKeyPairGenerator
+	private final ZModPrimePair zModPrimes;
+	private final ZStarMod zStarMod;
 
-public class SchnorrSignatureKeyPairGenerator
-			 extends AbstractKeyPairGenerator<ZModPrime, ZModElement, GStarModPrime, GStarModElement> {
-
-	private final Element generator;
-
-	protected SchnorrSignatureKeyPairGenerator(GStarModSafePrime publicKeySpace) {
-		super((ZModPrime) publicKeySpace.getZModOrder());
-		this.generator = publicKeySpace.getDefaultGenerator();
+	protected RSAKeyGenerator(ZModPrimePair zModPrimes, StringConverter stringConverter) {
+		super(zModPrimes.getZModOrder(), stringConverter);
+		this.zModPrimes = zModPrimes;
+		this.zStarMod = ZStarMod.getInstance(zModPrimes.getZStarModOrder().getOrder());
 	}
 
-	protected SchnorrSignatureKeyPairGenerator(Element generator) {
-		super((ZModPrime) generator.getSet().getZModOrder());
-		this.generator = generator;
+	public ZModPrimePair getZModPrimes() {
+		return this.zModPrimes;
 	}
 
-	public Element getGenerator() {
-		return this.generator;
+	@Override
+	protected Function defaultGetPrivateKeyGenerationFunction() {
+		return CompositeFunction.getInstance(
+			   RandomFunction.getInstance(this.zStarMod),
+			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimes));
 	}
 
 	@Override
 	protected Function abstractGetPublicKeyGenerationFunction() {
-		return GeneratorFunction.getInstance(this.getGenerator());
+		return CompositeFunction.getInstance(
+			   ConvertFunction.getInstance(this.zModPrimes, this.zStarMod),
+			   InvertFunction.getInstance(this.zStarMod),
+			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimes));
 	}
 
-	public static SchnorrSignatureKeyPairGenerator getInstance(GStarModSafePrime publicKeySpace) {
-		if (publicKeySpace == null) {
-			throw new IllegalArgumentException();
-		}
-		return new SchnorrSignatureKeyPairGenerator(publicKeySpace);
+	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimes) {
+		return RSAKeyGenerator.getInstance(zModPrimes, StringConverter.getInstance());
 	}
 
-	public static SchnorrSignatureKeyPairGenerator getInstance(Element generator) {
-		if (generator == null) {
+	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimes, StringConverter stringConverter) {
+		if (zModPrimes == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new SchnorrSignatureKeyPairGenerator(generator);
+		return new RSAKeyGenerator(zModPrimes, stringConverter);
 	}
 
 }

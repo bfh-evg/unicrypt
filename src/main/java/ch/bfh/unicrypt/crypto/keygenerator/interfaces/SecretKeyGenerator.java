@@ -41,10 +41,11 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -53,12 +54,16 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 public interface SecretKeyGenerator
 	   extends KeyGenerator {
 
-	Element generateSecretKey();
+	public Element generateSecretKey();
 
-	Element generateSecretKey(RandomByteSequence randomByteSequence);
+	public Element generateSecretKey(RandomByteSequence randomByteSequence);
 
-	Function getSecretKeyGenerationFunction();
+	public Element generateSecretKey(String password);
 
-	Set getSecretKeySpace();
+	public Element generateSecretKey(String password, ByteArray salt);
+
+	public Function getSecretKeyGenerationFunction();
+
+	public Set getSecretKeySpace();
 
 }

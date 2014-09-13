@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.converter.StringConverter;
 
 /**
  *
@@ -51,5 +52,11 @@ import ch.bfh.unicrypt.helper.UniCrypt;
 public class AbstractKeyGenerator
 	   extends UniCrypt
 	   implements KeyGenerator {
+
+	protected StringConverter stringConverter;
+
+	public AbstractKeyGenerator(StringConverter stringConverter) {
+		this.stringConverter = stringConverter;
+	}
 
 }

@@ -71,16 +71,6 @@ public class ConvertMethod
 		this.converterMap.put(valueClass, converter);
 	}
 
-//	public static ConvertMethod getInstance() {
-//		return ConvertMethod.getInstance(
-//			   BigIntegerConverter.getInstance(),
-//			   ByteArrayConverter.getInstance(),
-//			   PermutationConverter.getInstance(),
-//			   NaturalNumberConverter.getInstance(),
-//			   ResidueClassConverter.getInstance(),
-//			   StringConverter.getInstance(),
-//			   WholeNumberConverter.getInstance());
-//	}
 	public static ConvertMethod getInstance(Converter... converters) {
 		if (converters == null) {
 			throw new IllegalArgumentException();
