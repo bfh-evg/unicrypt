@@ -60,7 +60,7 @@ public class GStarModSafePrimeTest {
 	public void testIteration() {
 		GStarModSafePrime set = GStarModSafePrime.getInstance(23);
 		for (Element element : set.getElements()) {
-			System.out.println(element);
+//			System.out.println(element);
 		}
 	}
 
