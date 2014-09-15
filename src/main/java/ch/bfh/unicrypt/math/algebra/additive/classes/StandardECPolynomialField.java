@@ -43,15 +43,13 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
-
 import java.math.BigInteger;
 
 /**
- * 
- * @author Christian Lutz
  *
+ * @author Christian Lutz
+ * <p>
  */
 public class StandardECPolynomialField
 	   extends ECPolynomialField {

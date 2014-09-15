@@ -47,21 +47,18 @@ import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
-
 import java.math.BigInteger;
-import java.util.Iterator;
 
 /**
  *
  * @author Christian Lutz
- *         <p>
+ * <p>
  */
 public class ECGroupExample {
 
@@ -71,13 +68,13 @@ public class ECGroupExample {
 		for (StandardECZModParams params : SECECCParamsFp.values()) {
 
 			StandardECZModPrime ec = StandardECZModPrime
-					.getInstance(params);
+				   .getInstance(params);
 			ECElement<ResidueClass> generator = ec.getDefaultGenerator();
 			ec.getRandomElement();
 			BigInteger order = ec.getOrder();
 			Example.printLine(ec);
 			Example.printLine(generator.selfApply(order)); // Result should be
-															// Infinity element
+			// Infinity element
 		}
 	}
 
@@ -86,13 +83,13 @@ public class ECGroupExample {
 
 		for (StandardECPolynomialFieldParams params : SECECCParamsF2m.values()) {
 			StandardECPolynomialField ec = StandardECPolynomialField
-					.getInstance(params);
-			ECElement<Polynomial> generator = ec.getDefaultGenerator();
+				   .getInstance(params);
+			ECElement<Polynomial<DualisticElement<ZModTwo>>> generator = ec.getDefaultGenerator();
 			ec.getRandomElement();
 			BigInteger order = ec.getOrder();
 			Example.printLine(ec.getFiniteField().getIrreduciblePolynomial());
 			Example.printLine(generator.selfApply(order)); // Result should be Infinity element
-														
+
 		}
 	}
 

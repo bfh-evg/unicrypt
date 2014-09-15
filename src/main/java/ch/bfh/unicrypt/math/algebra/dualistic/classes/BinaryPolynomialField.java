@@ -45,48 +45,42 @@ import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
-import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-import sun.security.util.BigInt;
-
 /**
  * Represents a Polynomialfield with ZmodTwo as Primefield
+ * <p>
  * @author Christian Lutz
- * @param <V>
  */
-public class BinaryPolynomialField extends PolynomialField<ZModTwo> implements FiniteField<Polynomial<DualisticElement<ZModTwo>>>{
+public class BinaryPolynomialField
+	   extends PolynomialField<ZModTwo>
+	   implements FiniteField<Polynomial<DualisticElement<ZModTwo>>> {
 
 	private BinaryPolynomialField(PolynomialElement<ZModTwo> irreduciblePolynomial) {
 		super(ZModTwo.getInstance(), irreduciblePolynomial);
 	}
-	
+
 	/**
 	 * Fermat theorem Source?!! TODO add source
+	 * <p>
 	 * @param element
 	 * @return
 	 */
-	public PolynomialElement<ZModTwo> sqrtMod(PolynomialElement<ZModTwo> element){
-		BigInteger i=new BigInteger("2").pow(this.getDegree()-1);
+	public PolynomialElement<ZModTwo> sqrtMod(PolynomialElement<ZModTwo> element) {
+		BigInteger i = new BigInteger("2").pow(this.getDegree() - 1);
 		return element.power(i);
 	}
-	
+
 	/**
-	 * 
-	 * @param s
-	 *            String containing 0/1 for each coefficient of binary
-	 *            polynomial with rightmost bit as constant term.
+	 *
+	 * @param s String containing 0/1 for each coefficient of binary polynomial with rightmost bit as constant term.
 	 * @return
 	 */
 	public PolynomialElement<ZModTwo> getElementFromBitString(String s) {
-		
+
 		BigInteger bitString = new BigInteger(s, 2);
 
 		// Read bits and create a BigInteger ArrayList
@@ -102,38 +96,36 @@ public class BinaryPolynomialField extends PolynomialField<ZModTwo> implements F
 
 		return this.getElement(coeffs);
 	}
-	
-	
+
 	//
 	// STATIC FACTORY METHODS
 	//
 	public static BinaryPolynomialField getInstance(int degree) {
 		return getInstance(degree,
-				HybridRandomByteSequence.getInstance());
+						   HybridRandomByteSequence.getInstance());
 	}
 
 	public static BinaryPolynomialField getInstance(int degree, RandomByteSequence randomByteSequence) {
 		if (degree < 1) {
 			throw new IllegalArgumentException();
 		}
-		PrimeField primeField=ZModTwo.getInstance();
+		PrimeField primeField = ZModTwo.getInstance();
 		PolynomialRing<ZModTwo> ring = PolynomialRing.getInstance(primeField);
 		PolynomialElement<ZModTwo> irreduciblePolynomial = ring
-				.findIrreduciblePolynomial(degree, randomByteSequence);
+			   .findIrreduciblePolynomial(degree, randomByteSequence);
 		return getInstance(irreduciblePolynomial);
 	}
 
 	public static BinaryPolynomialField getInstance(PolynomialElement<ZModTwo> irreduciblePolynomial) {
-		PrimeField primeField=ZModTwo.getInstance();
+		PrimeField primeField = ZModTwo.getInstance();
 		if (irreduciblePolynomial == null
-				|| !irreduciblePolynomial.getSet().getSemiRing()
-						.isEquivalent(primeField)
-				|| !irreduciblePolynomial.isIrreducible()) {
+			   || !irreduciblePolynomial.getSet().getSemiRing()
+			   .isEquivalent(primeField)
+			   || !irreduciblePolynomial.isIrreducible()) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		return new BinaryPolynomialField(irreduciblePolynomial);
 	}
-	
-	
+
 }
