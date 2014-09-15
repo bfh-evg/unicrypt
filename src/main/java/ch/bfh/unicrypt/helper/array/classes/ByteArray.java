@@ -288,6 +288,17 @@ public class ByteArray
 		}
 		return "\"" + str + "\"";
 	}
+	
+	public String toBitString(){
+		boolean bits[] =this.getBits();
+		String res="";
+		
+		for (boolean b : bits) {
+			int myInt = (b) ? 1 : 0;
+			res=res+myInt;
+		}
+		return res;
+	}
 
 	public static ByteArray getInstance() {
 		return new ByteArray(new byte[0]);
