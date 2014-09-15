@@ -218,6 +218,8 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final E getElement(V value) {
+		System.out.println(this);
+		System.out.println(value);
 		if (!this.contains(value)) {
 			throw new IllegalArgumentException();
 		}

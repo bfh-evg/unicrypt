@@ -50,14 +50,20 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <S>
- * @param <E>
+ * @param <MS> Message space
+ * @param <ME> Message element
+ * @param <PS> Padding space
+ * @param <PE> Padding element
  */
-public abstract class AbstractReversiblePaddingScheme<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement>
-	   extends AbstractPaddingScheme<S, E>
+public abstract class AbstractReversiblePaddingScheme<MS extends ConcatenativeSemiGroup, ME extends ConcatenativeElement, PS extends ConcatenativeSemiGroup, PE extends ConcatenativeElement>
+	   extends AbstractPaddingScheme<MS, ME, PS, PE>
 	   implements ReversiblePaddingScheme {
 
 	private Function unpaddingFunction;
+
+	public AbstractReversiblePaddingScheme(MS messageSpace, PS paddingSpace) {
+		super(messageSpace, paddingSpace);
+	}
 
 	@Override
 	public Function getUnpaddingFunction() {
@@ -68,8 +74,8 @@ public abstract class AbstractReversiblePaddingScheme<S extends ConcatenativeSem
 	}
 
 	@Override
-	public E unpad(final Element element) {
-		return (E) this.getUnpaddingFunction().apply(element);
+	public ME unpad(final Element element) {
+		return (ME) this.getUnpaddingFunction().apply(element);
 	}
 
 	protected abstract Function abstractGetUnpaddingFunction();

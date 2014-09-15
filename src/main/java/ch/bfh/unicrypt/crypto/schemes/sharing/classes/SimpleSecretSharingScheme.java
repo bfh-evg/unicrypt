@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractSecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -57,18 +57,8 @@ public class SimpleSecretSharingScheme
 	private final Group group;
 
 	protected SimpleSecretSharingScheme(Group group, int size) {
-		super(size);
+		super(group, group, size);
 		this.group = group;
-	}
-
-	@Override
-	protected Group abstractGetMessageSpace() {
-		return this.group;
-	}
-
-	@Override
-	protected Group abstractGetShareSpace() {
-		return this.group;
 	}
 
 	@Override

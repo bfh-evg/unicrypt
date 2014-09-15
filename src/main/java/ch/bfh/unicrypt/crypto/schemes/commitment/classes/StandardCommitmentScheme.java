@@ -56,6 +56,7 @@ public class StandardCommitmentScheme
 	private final Element generator;
 
 	protected StandardCommitmentScheme(CyclicGroup cyclicGroup, Element generator) {
+		super(cyclicGroup.getZModOrder(), cyclicGroup);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
 	}

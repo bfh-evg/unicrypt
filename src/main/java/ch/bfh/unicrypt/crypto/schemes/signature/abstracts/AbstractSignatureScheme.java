@@ -44,19 +44,43 @@ package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.SignatureScheme;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, SK extends Set, VK extends Set, KG extends KeyPairGenerator>
+/**
+ *
+ * @author rolfhaenni
+ * @param <MS>  Message space
+ * @param <ME>  Message element
+ * @param <SS>  Signature space
+ * @param <SE>  Signature element
+ * @param <SKS> Signature key space
+ * @param <VKS> Verification key space
+ * @param <KG>  Key generator
+ */
+public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, SKS extends Set, VKS extends Set, KG extends KeyPairGenerator>
 	   extends AbstractScheme<MS>
 	   implements SignatureScheme {
 
+	protected final SS signatureSpace;
+	protected final HashMethod hashMethod;
 	private Function signatureFunction;
 	private Function verificationFunction;
 	private KeyPairGenerator keyPairGenerator;
+
+	public AbstractSignatureScheme(MS messageSpace, SS signatureSpace, HashMethod hashMethod) {
+		super(messageSpace);
+		this.signatureSpace = signatureSpace;
+		this.hashMethod = hashMethod;
+	}
+
+	@Override
+	public HashMethod getHashMethod() {
+		return this.hashMethod;
+	}
 
 	@Override
 	public SE sign(final Element privateKey, final Element message) {
@@ -70,7 +94,7 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 
 	@Override
 	public SS getSignatureSpace() {
-		return (SS) this.getSignatureFunction().getCoDomain();
+		return this.signatureSpace;
 	}
 
 	@Override
@@ -98,11 +122,16 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 	}
 
 	@Override
-	protected MS abstractGetMessageSpace() {
-		return (MS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(1);
+	public SKS getSignatureKeySpace() {
+		return (SKS) this.keyPairGenerator.getPrivateKeySpace();
 	}
 
-	protected abstract KeyPairGenerator abstractGetKeyPairGenerator();
+	@Override
+	public VKS getVerificationKeySpace() {
+		return (VKS) this.keyPairGenerator.getPublicKeySpace();
+	}
+
+	protected abstract KG abstractGetKeyPairGenerator();
 
 	protected abstract Function abstractGetSignatureFunction();
 

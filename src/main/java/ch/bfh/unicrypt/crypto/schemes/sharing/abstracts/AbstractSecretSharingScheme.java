@@ -41,28 +41,31 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.abstracts;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.SecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element>
 	   extends AbstractScheme<MS>
 	   implements SecretSharingScheme {
 
-	private final int size;
+	protected final SS shareSpace;
+	protected final int size;
 
-	protected AbstractSecretSharingScheme(int size) {
+	protected AbstractSecretSharingScheme(MS messageSpace, SS shareSpace, int size) {
+		super(messageSpace);
+		this.shareSpace = shareSpace;
 		this.size = size;
 	}
 
 	@Override
 	public final SS getShareSpace() {
-		return this.abstractGetShareSpace();
+		return this.shareSpace;
 	}
 
 	@Override
@@ -101,8 +104,6 @@ public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Ele
 	protected int getThreshold() {
 		return this.getSize();
 	}
-
-	protected abstract SS abstractGetShareSpace();
 
 	protected abstract Tuple abstractShare(Element message, RandomByteSequence randomByteSequence);
 

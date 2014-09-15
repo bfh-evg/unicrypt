@@ -51,8 +51,6 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public interface PaddingScheme
 	   extends Scheme {
 
-	public int getBlockLength();
-
 	public ConcatenativeSemiGroup getPaddingSpace();
 
 	public Function getPaddingFunction();

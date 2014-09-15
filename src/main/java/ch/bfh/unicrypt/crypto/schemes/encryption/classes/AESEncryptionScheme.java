@@ -92,7 +92,7 @@ public class AESEncryptionScheme
 	public static final Mode DEFAULT_MODE = Mode.CBC;
 
 	public static final int AES_BLOCK_SIZE = 128; // bits
-	public static final ByteArrayMonoid AES_ENCRYPTION_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
+	public static final ByteArrayMonoid AES_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
 	public static final ByteArray DEFAULT_IV = ByteArray.getInstance(false, AES_BLOCK_SIZE / Byte.SIZE);
 
 	private final KeyLength keyLength;
@@ -101,6 +101,7 @@ public class AESEncryptionScheme
 	private Cipher cipher;
 
 	protected AESEncryptionScheme(KeyLength keyLength, Mode mode, ByteArray initializationVector) {
+		super(AES_SPACE, AES_SPACE);
 		this.keyLength = keyLength;
 		this.mode = mode;
 		this.initializationVector = initializationVector;
@@ -127,14 +128,12 @@ public class AESEncryptionScheme
 
 	@Override
 	protected Function abstractGetEncryptionFunction() {
-		ByteArrayMonoid messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-		return new AESEncryptionFunction(messageSpace, this.getSecretKeyGenerator().getSecretKeySpace());
+		return new AESEncryptionFunction();
 	}
 
 	@Override
 	protected Function abstractGetDecryptionFunction() {
-		ByteArrayMonoid messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-		return new AESDecryptionFunction(messageSpace, this.getSecretKeyGenerator().getSecretKeySpace());
+		return new AESDecryptionFunction();
 	}
 
 	@Override
@@ -145,8 +144,8 @@ public class AESEncryptionScheme
 	private class AESEncryptionFunction
 		   extends AbstractFunction<AESEncryptionFunction, ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
-		protected AESEncryptionFunction(ByteArrayMonoid messageSpace, FixedByteArraySet keySpace) {
-			super(ProductSet.getInstance(keySpace, messageSpace), messageSpace);
+		protected AESEncryptionFunction() {
+			super(ProductSet.getInstance(getEncryptionKeySpace(), messageSpace), encryptionSpace);
 		}
 
 		@Override
@@ -179,8 +178,8 @@ public class AESEncryptionScheme
 	private class AESDecryptionFunction
 		   extends AbstractFunction<AESDecryptionFunction, ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
-		protected AESDecryptionFunction(ByteArrayMonoid messageSpace, FixedByteArraySet keySpace) {
-			super(ProductSet.getInstance(keySpace, messageSpace), messageSpace);
+		protected AESDecryptionFunction() {
+			super(ProductSet.getInstance(getDecryptionKeySpace(), encryptionSpace), messageSpace);
 		}
 
 		@Override

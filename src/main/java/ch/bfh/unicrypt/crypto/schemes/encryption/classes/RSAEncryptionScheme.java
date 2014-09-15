@@ -59,6 +59,7 @@ public class RSAEncryptionScheme
 	private final ZMod zMod;
 
 	protected RSAEncryptionScheme(ZMod zMod) {
+		super(zMod, zMod);
 		this.zMod = zMod;
 	}
 
@@ -70,18 +71,19 @@ public class RSAEncryptionScheme
 	protected Function abstractGetEncryptionFunction() {
 		return CompositeFunction.getInstance(
 			   AdapterFunction.getInstance(ProductSet.getInstance(this.zMod, 2), 1, 0),
-			   PowerFunction.getInstance(zMod));
+			   PowerFunction.getInstance(this.zMod));
 	}
 
 	@Override
 	protected Function abstractGetDecryptionFunction() {
 		return CompositeFunction.getInstance(
 			   AdapterFunction.getInstance(ProductSet.getInstance(this.zMod, 2), 1, 0),
-			   PowerFunction.getInstance(zMod));
+			   PowerFunction.getInstance(this.zMod));
 	}
 
 	@Override
 	protected RSAKeyGenerator abstractGetKeyPairGenerator() {
+		// keys can only be generated if p and q are known
 		if (this.getZMod() instanceof ZModPrimePair) {
 			return RSAKeyGenerator.getInstance((ZModPrimePair) this.getZMod());
 		}

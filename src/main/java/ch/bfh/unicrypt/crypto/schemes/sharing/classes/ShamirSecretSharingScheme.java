@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.sharing.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.sharing.abstracts.AbstractThresholdSecretSharingScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
@@ -52,6 +51,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
@@ -65,7 +65,7 @@ public class ShamirSecretSharingScheme
 	private final PolynomialRing polynomialRing;
 
 	protected ShamirSecretSharingScheme(ZModPrime zModPrime, int size, int threshold) {
-		super(size, threshold);
+		super(zModPrime, ProductGroup.getInstance(zModPrime, 2), size, threshold);
 		this.zModPrime = zModPrime;
 		this.polynomialRing = PolynomialRing.getInstance(zModPrime);
 	}
@@ -76,16 +76,6 @@ public class ShamirSecretSharingScheme
 
 	public PolynomialRing getPolynomialRing() {
 		return this.polynomialRing;
-	}
-
-	@Override
-	protected ZModPrime abstractGetMessageSpace() {
-		return this.zModPrime;
-	}
-
-	@Override
-	protected ProductGroup abstractGetShareSpace() {
-		return ProductGroup.getInstance(this.zModPrime, 2);
 	}
 
 	@Override

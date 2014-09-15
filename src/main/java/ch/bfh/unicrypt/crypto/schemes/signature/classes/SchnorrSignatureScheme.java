@@ -42,34 +42,32 @@
 package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class SchnorrSignatureScheme
-	   extends AbstractRandomizedSignatureScheme<ByteArrayMonoid, ByteArrayElement, ProductGroup, Pair, ZModPrime, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
+	   extends AbstractRandomizedSignatureScheme<Set, Element, ProductGroup, Pair, ZModPrime, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
-	private final HashMethod hashMethod; // HashAlgorithm?
 
-	protected SchnorrSignatureScheme(CyclicGroup cyclicGroup, Element generator, HashMethod hashMethod) {
+	protected SchnorrSignatureScheme(Set messageSpace, CyclicGroup cyclicGroup, Element generator, HashMethod hashMethod) {
+		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), (ZModPrime) cyclicGroup.getZModOrder(), hashMethod);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
-		this.hashMethod = hashMethod;
 	}
 
 	@Override
-	protected KeyPairGenerator abstractGetKeyPairGenerator() {
+	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator() {
 		return DiscreteLogarithmKeyGenerator.getInstance(this.generator);
 	}
 
@@ -79,10 +77,6 @@ public class SchnorrSignatureScheme
 
 	public final Element getGenerator() {
 		return this.generator;
-	}
-
-	public final HashMethod getHashMethod() {
-		return this.hashMethod;
 	}
 
 	@Override

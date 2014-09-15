@@ -57,12 +57,18 @@ public abstract class AbstractHashingScheme<MS extends Set, ME extends Element, 
 	   extends AbstractScheme<MS>
 	   implements HashingScheme {
 
+	protected final HS hashSpace;
 	protected Function hashFunction;
 	protected Function checkFunction;
 
+	public AbstractHashingScheme(MS messageSpace, HS hashSpace) {
+		super(messageSpace);
+		this.hashSpace = hashSpace;
+	}
+
 	@Override
 	public final HS getHashSpace() {
-		return (HS) this.getHashFunction().getCoDomain();
+		return this.hashSpace;
 	}
 
 	@Override
@@ -94,11 +100,6 @@ public abstract class AbstractHashingScheme<MS extends Set, ME extends Element, 
 	@Override
 	public final BooleanElement check(Element message, Element hashValue) {
 		return (BooleanElement) this.getCheckFunction().apply(message, hashValue);
-	}
-
-	@Override
-	protected final MS abstractGetMessageSpace() {
-		return (MS) this.getHashFunction().getDomain();
 	}
 
 	protected abstract Function abstractGetHashFunction();
