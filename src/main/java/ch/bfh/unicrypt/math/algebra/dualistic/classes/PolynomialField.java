@@ -55,6 +55,8 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import sun.security.util.BigInt;
+
 /**
  *
  * @author rolfhaenni
@@ -83,34 +85,6 @@ public class PolynomialField<V> extends PolynomialRing<V> implements
 		return this.irreduciblePolynomial.getValue().getDegree();
 	}
 
-	/**
-	 * 
-	 * @param s
-	 *            String containing 0/1 for each coefficient of binary
-	 *            polynomial with rightmost bit as constant term.
-	 * @return
-	 */
-	public PolynomialElement<V> getElementFromBitString(String s) {
-		if (!this.getPrimeField().equals(ZModTwo.getInstance())) {
-			throw new UnsupportedOperationException(
-					"Only binary polynomials supported");
-		}
-
-		BigInteger bitString = new BigInteger(s, 2);
-
-		// Read bits and create a BigInteger ArrayList
-		ArrayList<BigInteger> arrayBigInteger = new ArrayList<BigInteger>();
-		for (Character c : bitString.toString(2).toCharArray()) {
-			arrayBigInteger.add(0, new BigInteger(c.toString()));
-
-		}
-
-		// Convert ArrayList BigInteger array and get element
-		BigInteger[] coeffs = {};
-		coeffs = arrayBigInteger.toArray(coeffs);
-
-		return this.getElement(coeffs);
-	}
 
 	//
 	// The following protected methods override the default implementation from
@@ -214,10 +188,7 @@ public class PolynomialField<V> extends PolynomialRing<V> implements
 		return (PolynomialElement<V>) longDiv.getSecond();
 	}
 	
-	public PolynomialElement<V> sqrtMod(PolynomialElement<V> element){
-		BigInteger i=new BigInteger("2").pow(this.getDegree()-1);
-		return element.power(i);
-	}
+	
 
 	//
 	// STATIC FACTORY METHODS
