@@ -39,49 +39,22 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.abstracts;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  */
-public abstract class AbstractConverter<V extends Object>
-	   extends UniCrypt
-	   implements Converter<V> {
+public abstract class AbstractBigIntegerConverter<V extends Object>
+	   extends AbstractConverter<V, BigInteger>
+	   implements BigIntegerConverter<V> {
 
-	private final Class<V> valueClass;
-
-	public AbstractConverter(Class<V> valueClass) {
-		this.valueClass = valueClass;
+	public AbstractBigIntegerConverter(Class<V> inputClass) {
+		super(inputClass, BigInteger.class);
 	}
-
-	@Override
-	public Class<V> getValueClass() {
-		return this.valueClass;
-	}
-
-	@Override
-	public final ByteArray convertToByteArray(V object) {
-		if (object == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractConvertToByteArray(object);
-	}
-
-	@Override
-	public final V convertFromByteArray(ByteArray byteArray) {
-		if (byteArray == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractConvertFromByteArray(byteArray);
-	}
-
-	protected abstract ByteArray abstractConvertToByteArray(V Object);
-
-	protected abstract V abstractConvertFromByteArray(ByteArray byteArray);
 
 }

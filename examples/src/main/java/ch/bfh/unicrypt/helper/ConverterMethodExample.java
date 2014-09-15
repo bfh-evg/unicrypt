@@ -44,11 +44,11 @@ package ch.bfh.unicrypt.helper;
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.PermutationConverter;
-import ch.bfh.unicrypt.helper.converter.ResidueClassConverter;
-import ch.bfh.unicrypt.helper.converter.StringConverter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.PermutationToByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.ResidueClassToByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod.Mode;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
@@ -71,10 +71,10 @@ public class ConverterMethodExample {
 	public static void example1() {
 
 		// String converter
-		StringConverter stringConverter = StringConverter.getInstance(Charset.forName("UTF-8"));
+		StringToByteArray stringConverter = StringToByteArray.getInstance(Charset.forName("UTF-8"));
 
-		// BigIntegerConverter (minimal length = 10)
-		BigIntegerConverter bigIntegerConverter = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
+		// BigIntegerToByteArray (minimal length = 10)
+		BigIntegerToByteArray bigIntegerConverter = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
 
 		// Two ConvertMethods
 		ConvertMethod convertMethod1 = ConvertMethod.getInstance();
@@ -147,12 +147,12 @@ public class ConverterMethodExample {
 	public static void example2() {
 
 		// Three converters
-		StringConverter stringConverter = StringConverter.getInstance(Charset.forName("UTF-8"));
-		ResidueClassConverter residueClassConverter = ResidueClassConverter.getInstance();
-		PermutationConverter permutationConverter = PermutationConverter.getInstance();
+		StringToByteArray stringConverter = StringToByteArray.getInstance(Charset.forName("UTF-8"));
+		ResidueClassToByteArray residueClassConverter = ResidueClassToByteArray.getInstance();
+		PermutationToByteArray permutationConverter = PermutationToByteArray.getInstance();
 
-		// BigIntegerConverter (minimal length = 10)
-		BigIntegerConverter bigIntegerConverter = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
+		// BigIntegerToByteArray (minimal length = 10)
+		BigIntegerToByteArray bigIntegerConverter = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
 
 		// Two ConvertMethods
 		ConvertMethod convertMethod1 = ConvertMethod.getInstance(permutationConverter);

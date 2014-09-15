@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.StringConverter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
@@ -66,7 +66,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	private Function publicKeyGenerationFunction;
 	private Function keyPairGenerationFunction;
 
-	protected AbstractKeyPairGenerator(PRS privateKeySpace, StringConverter stringConverter) {
+	protected AbstractKeyPairGenerator(PRS privateKeySpace, StringToByteArray stringConverter) {
 		super(stringConverter);
 		this.privateKeySpace = privateKeySpace;
 	}
@@ -104,7 +104,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 		if (password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray seed = stringConverter.convertToByteArray(password).append(salt);
+		ByteArray seed = stringConverter.convert(password).append(salt);
 		return this.generatePrivateKey(HybridRandomByteSequence.getInstance(seed));
 	}
 
@@ -171,7 +171,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 		if (password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray seed = stringConverter.convertToByteArray(password).append(salt);
+		ByteArray seed = stringConverter.convert(password).append(salt);
 		return this.generateKeyPair(HybridRandomByteSequence.getInstance(seed));
 	}
 

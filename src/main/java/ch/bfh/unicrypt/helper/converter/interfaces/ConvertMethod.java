@@ -39,30 +39,50 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.converter.interfaces;
 
-import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.PermutationToByteArray;
+import ch.bfh.unicrypt.helper.UniCrypt;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PermutationConverterExample {
+public class ConvertMethod
+	   extends UniCrypt {
 
-	public static void example1() {
-		PermutationToByteArray converter = PermutationToByteArray.getInstance();
-		Permutation permutation = Permutation.getRandomInstance(20);
-		ByteArray byteArray = converter.convert(permutation);
-		Permutation newPermutation = converter.reconvert(byteArray);
-		Example.printLine(permutation);
-		Example.printLine(byteArray);
-		Example.printLine(newPermutation);
+	private final Map<Class, ByteArrayConverter> converterMap;
+
+	private ConvertMethod() {
+		this.converterMap = new HashMap();
 	}
 
-	public static void main(final String[] args) {
-		Example.runExamples();
+	public ByteArrayConverter getConverter(Class valueClass) {
+		return this.converterMap.get(valueClass);
+	}
+
+	// should this method be public?
+	private void addConverter(ByteArrayConverter converter) {
+		Class valueClass = converter.getInputClass();
+		if (this.converterMap.containsKey(valueClass)) {
+			throw new IllegalArgumentException();
+		}
+		this.converterMap.put(valueClass, converter);
+	}
+
+	public static ConvertMethod getInstance(ByteArrayConverter... converters) {
+		if (converters == null) {
+			throw new IllegalArgumentException();
+		}
+		ConvertMethod convertMethod = new ConvertMethod();
+		for (ByteArrayConverter converter : converters) {
+			if (converter == null) {
+				throw new IllegalArgumentException();
+			}
+			convertMethod.addConverter(converter);
+		}
+		return convertMethod;
 	}
 
 }

@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.SecretKeyGenerator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.StringConverter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -59,7 +59,7 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 	private final KS secretKeySpace;
 	private Function secretKeyGenerationFunction; // with singleton domain
 
-	protected AbstractSecretKeyGenerator(final KS secretKeySpace, StringConverter stringConverter) {
+	protected AbstractSecretKeyGenerator(final KS secretKeySpace, StringToByteArray stringConverter) {
 		super(stringConverter);
 		this.secretKeySpace = secretKeySpace;
 	}
@@ -89,7 +89,7 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 		if (password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray seed = stringConverter.convertToByteArray(password).append(salt);
+		ByteArray seed = stringConverter.convert(password).append(salt);
 		return this.generateSecretKey(HybridRandomByteSequence.getInstance(seed));
 	}
 

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
-import ch.bfh.unicrypt.helper.converter.StringConverter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -59,12 +59,12 @@ public class DiscreteLogarithmKeyGenerator
 
 	private final Element generator;
 
-	protected DiscreteLogarithmKeyGenerator(CyclicGroup publicKeySpace, StringConverter stringConverter) {
+	protected DiscreteLogarithmKeyGenerator(CyclicGroup publicKeySpace, StringToByteArray stringConverter) {
 		super((ZModPrime) publicKeySpace.getZModOrder(), stringConverter);
 		this.generator = publicKeySpace.getDefaultGenerator();
 	}
 
-	protected DiscreteLogarithmKeyGenerator(Element generator, StringConverter stringConverter) {
+	protected DiscreteLogarithmKeyGenerator(Element generator, StringToByteArray stringConverter) {
 		super((ZModPrime) generator.getSet().getZModOrder(), stringConverter);
 		this.generator = generator;
 	}
@@ -79,10 +79,10 @@ public class DiscreteLogarithmKeyGenerator
 	}
 
 	public static DiscreteLogarithmKeyGenerator getInstance(CyclicGroup publicKeySpace) {
-		return DiscreteLogarithmKeyGenerator.getInstance(publicKeySpace, StringConverter.getInstance());
+		return DiscreteLogarithmKeyGenerator.getInstance(publicKeySpace, StringToByteArray.getInstance());
 	}
 
-	public static DiscreteLogarithmKeyGenerator getInstance(CyclicGroup publicKeySpace, StringConverter stringConverter) {
+	public static DiscreteLogarithmKeyGenerator getInstance(CyclicGroup publicKeySpace, StringToByteArray stringConverter) {
 		if (publicKeySpace == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}
@@ -90,10 +90,10 @@ public class DiscreteLogarithmKeyGenerator
 	}
 
 	public static DiscreteLogarithmKeyGenerator getInstance(Element generator) {
-		return DiscreteLogarithmKeyGenerator.getInstance(generator, StringConverter.getInstance());
+		return DiscreteLogarithmKeyGenerator.getInstance(generator, StringToByteArray.getInstance());
 	}
 
-	public static DiscreteLogarithmKeyGenerator getInstance(Element generator, StringConverter stringConverter) {
+	public static DiscreteLogarithmKeyGenerator getInstance(Element generator, StringToByteArray stringConverter) {
 		if (generator == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}

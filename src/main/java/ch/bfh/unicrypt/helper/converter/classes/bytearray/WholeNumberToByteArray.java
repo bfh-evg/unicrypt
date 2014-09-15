@@ -39,48 +39,47 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import java.nio.charset.Charset;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
+import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
+import ch.bfh.unicrypt.helper.numerical.WholeNumber;
+import ch.bfh.unicrypt.math.MathUtil;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class StringConverter
-	   extends AbstractConverter<String> {
+public class WholeNumberToByteArray
+	   extends AbstractByteArrayConverter<WholeNumber> {
 
-	private final Charset charset;
+	private final BigIntegerToByteArray bigIntegerConverter;
 
-	private StringConverter(Charset charset) {
-		super(String.class);
-		this.charset = charset;
-	}
-
-	public Charset getCharset() {
-		return this.charset;
+	private WholeNumberToByteArray(BigIntegerToByteArray bigIntegerToByteArray) {
+		super(WholeNumber.class);
+		this.bigIntegerConverter = bigIntegerToByteArray;
 	}
 
 	@Override
-	protected ByteArray abstractConvertToByteArray(String string) {
-		return ByteArray.getInstance(string.getBytes(this.charset));
+	protected ByteArray abstractConvert(WholeNumber wholeNumber) {
+		return this.bigIntegerConverter.convert(MathUtil.fold(wholeNumber.getBigInteger()));
 	}
 
 	@Override
-	protected String abstractConvertFromByteArray(ByteArray byteArray) {
-		return new String(byteArray.getBytes(), charset);
+	protected WholeNumber abstractReconvert(ByteArray byteArray) {
+		return NaturalNumber.getInstance(MathUtil.unfold(this.bigIntegerConverter.reconvert(byteArray)));
 	}
 
-	public static StringConverter getInstance() {
-		return new StringConverter(Charset.defaultCharset());
+	public static WholeNumberToByteArray getInstance() {
+		return WholeNumberToByteArray.getInstance(BigIntegerToByteArray.getInstance());
 	}
 
-	public static StringConverter getInstance(Charset charset) {
-		if (charset == null) {
+	public static WholeNumberToByteArray getInstance(BigIntegerToByteArray bigIntegerToByteArray) {
+		if (bigIntegerToByteArray == null) {
 			throw new IllegalArgumentException();
 		}
-		return new StringConverter(charset);
+		return new WholeNumberToByteArray(bigIntegerToByteArray);
 	}
 
 }

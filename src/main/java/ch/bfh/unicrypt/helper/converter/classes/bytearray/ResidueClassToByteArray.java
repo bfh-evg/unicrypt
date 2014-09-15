@@ -39,10 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 
-import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
+import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
 
@@ -50,38 +51,38 @@ import java.math.BigInteger;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PermutationConverter
-	   extends AbstractConverter<Permutation> {
+public class ResidueClassToByteArray
+	   extends AbstractByteArrayConverter<ResidueClass> {
 
-	private final BigIntegerConverter bigIntegerConverter;
+	private final BigIntegerToByteArray bigIntegerToByteArray;
 
-	public PermutationConverter(BigIntegerConverter bigIntegerConverter) {
-		super(Permutation.class);
-		this.bigIntegerConverter = bigIntegerConverter;
+	private ResidueClassToByteArray(BigIntegerToByteArray bigIntegerToByteArray) {
+		super(ResidueClass.class);
+		this.bigIntegerToByteArray = bigIntegerToByteArray;
 	}
 
 	@Override
-	protected ByteArray abstractConvertToByteArray(Permutation permutation) {
-		BigInteger pairedValue = MathUtil.pair(BigInteger.valueOf(permutation.getSize()), permutation.getRank());
-		return this.bigIntegerConverter.convertToByteArray(pairedValue);
+	protected ByteArray abstractConvert(ResidueClass residueClass) {
+		BigInteger pairedValue = MathUtil.pair(residueClass.getBigInteger(), residueClass.getModulus());
+		return this.bigIntegerToByteArray.convert(pairedValue);
 	}
 
 	@Override
-	protected Permutation abstractConvertFromByteArray(ByteArray byteArray) {
-		BigInteger pairedValue = this.bigIntegerConverter.convertFromByteArray(byteArray);
+	protected ResidueClass abstractReconvert(ByteArray ByteArray) {
+		BigInteger pairedValue = this.bigIntegerToByteArray.reconvert(ByteArray);
 		BigInteger[] values = MathUtil.unpair(pairedValue);
-		return Permutation.getInstance(values[0].intValue(), values[1]);
+		return ResidueClass.getInstance(values[0], values[1]);
 	}
 
-	public static PermutationConverter getInstance() {
-		return PermutationConverter.getInstance(BigIntegerConverter.getInstance());
+	public static ResidueClassToByteArray getInstance() {
+		return ResidueClassToByteArray.getInstance(BigIntegerToByteArray.getInstance());
 	}
 
-	public static PermutationConverter getInstance(BigIntegerConverter bigIntegerConverter) {
-		if (bigIntegerConverter == null) {
+	public static ResidueClassToByteArray getInstance(BigIntegerToByteArray bigIntegerToByteArray) {
+		if (bigIntegerToByteArray == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PermutationConverter(bigIntegerConverter);
+		return new ResidueClassToByteArray(bigIntegerToByteArray);
 	}
 
 }

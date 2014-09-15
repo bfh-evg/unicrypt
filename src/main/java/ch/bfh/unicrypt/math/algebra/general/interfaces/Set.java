@@ -43,9 +43,9 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.Converter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -286,11 +286,11 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteArray byteArray);
 
-	public Element<V> getElementFrom(ByteArray byteArray, Converter converter);
+	public Element<V> getElementFrom(ByteArray byteArray, ByteArrayConverter converter);
 
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the
-	 * {@link BigIntegerConverter}.
+	 * {@link BigIntegerToByteArray}.
 	 * <p>
 	 * @param byteArray
 	 * @param convertMethod
@@ -306,7 +306,7 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree);
 
-	public Element<V> getElementFrom(ByteTree byteTree, Converter converter);
+	public Element<V> getElementFrom(ByteTree byteTree, ByteArrayConverter converter);
 
 	/**
 	 * <p>

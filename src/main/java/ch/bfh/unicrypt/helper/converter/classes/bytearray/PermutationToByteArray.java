@@ -39,30 +39,50 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 
-import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.PermutationToByteArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
+import ch.bfh.unicrypt.math.MathUtil;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PermutationConverterExample {
+public class PermutationToByteArray
+	   extends AbstractByteArrayConverter<Permutation> {
 
-	public static void example1() {
-		PermutationToByteArray converter = PermutationToByteArray.getInstance();
-		Permutation permutation = Permutation.getRandomInstance(20);
-		ByteArray byteArray = converter.convert(permutation);
-		Permutation newPermutation = converter.reconvert(byteArray);
-		Example.printLine(permutation);
-		Example.printLine(byteArray);
-		Example.printLine(newPermutation);
+	private final BigIntegerToByteArray bigIntegerConverter;
+
+	public PermutationToByteArray(BigIntegerToByteArray bigIntegerConverter) {
+		super(Permutation.class);
+		this.bigIntegerConverter = bigIntegerConverter;
 	}
 
-	public static void main(final String[] args) {
-		Example.runExamples();
+	@Override
+	protected ByteArray abstractConvert(Permutation permutation) {
+		BigInteger pairedValue = MathUtil.pair(BigInteger.valueOf(permutation.getSize()), permutation.getRank());
+		return this.bigIntegerConverter.convert(pairedValue);
+	}
+
+	@Override
+	protected Permutation abstractReconvert(ByteArray byteArray) {
+		BigInteger pairedValue = this.bigIntegerConverter.reconvert(byteArray);
+		BigInteger[] values = MathUtil.unpair(pairedValue);
+		return Permutation.getInstance(values[0].intValue(), values[1]);
+	}
+
+	public static PermutationToByteArray getInstance() {
+		return PermutationToByteArray.getInstance(BigIntegerToByteArray.getInstance());
+	}
+
+	public static PermutationToByteArray getInstance(BigIntegerToByteArray bigIntegerConverter) {
+		if (bigIntegerConverter == null) {
+			throw new IllegalArgumentException();
+		}
+		return new PermutationToByteArray(bigIntegerConverter);
 	}
 
 }

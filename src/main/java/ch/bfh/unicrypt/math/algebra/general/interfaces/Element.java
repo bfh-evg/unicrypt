@@ -43,9 +43,9 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.Converter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
@@ -137,12 +137,12 @@ public interface Element<V extends Object> {
 
 	/**
 	 * TODO Returns the corresponding {@link ByteArray} of this Element with the help of a a given
-	 * {@link BigIntegerConverter}.
+	 * {@link BigIntegerToByteArray}.
 	 * <p>
 	 * @param converter
 	 * @return
 	 */
-	public ByteArray getByteArray(Converter converter);
+	public ByteArray getByteArray(ByteArrayConverter converter);
 
 	public ByteArray getByteArray(ConvertMethod convertMethod);
 
@@ -153,11 +153,11 @@ public interface Element<V extends Object> {
 	 */
 	public ByteTree getByteTree();
 
-	public ByteTree getByteTree(Converter converter);
+	public ByteTree getByteTree(ByteArrayConverter converter);
 
 	/**
 	 * TODO Returns the corresponding {@link ByteTree} of this Element with the help of a given
-	 * {@link BigIntegerConverter}.
+	 * {@link BigIntegerToByteArray}.
 	 * <p>
 	 * @param convertMethod
 	 * @return The corresponding ByteTree

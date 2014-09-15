@@ -39,9 +39,10 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
 import java.math.BigInteger;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -50,13 +51,13 @@ import java.util.Arrays;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class BigIntegerConverter
-	   extends AbstractConverter<BigInteger> {
+public class BigIntegerToByteArray
+	   extends AbstractByteArrayConverter<BigInteger> {
 
 	private transient final ByteOrder byteOrder; //TODO not serializable
 	private final int minLength;
 
-	protected BigIntegerConverter(ByteOrder byteOrder, int minLength) {
+	protected BigIntegerToByteArray(ByteOrder byteOrder, int minLength) {
 		super(BigInteger.class);
 		this.byteOrder = byteOrder;
 		this.minLength = minLength;
@@ -71,11 +72,11 @@ public class BigIntegerConverter
 	}
 
 	public ByteArray convertToByteArray(int integer) {
-		return this.abstractConvertToByteArray(BigInteger.valueOf(integer));
+		return this.abstractConvert(BigInteger.valueOf(integer));
 	}
 
 	@Override
-	public ByteArray abstractConvertToByteArray(BigInteger posBigInteger) {
+	public ByteArray abstractConvert(BigInteger posBigInteger) {
 		// TODO: negative integers not allowed
 		if (posBigInteger.signum() == -1) {
 			throw new IllegalArgumentException();
@@ -99,7 +100,7 @@ public class BigIntegerConverter
 	}
 
 	@Override
-	public BigInteger abstractConvertFromByteArray(ByteArray byteArray) {
+	public BigInteger abstractReconvert(ByteArray byteArray) {
 		byte[] bytes;
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
 			bytes = byteArray.reverse().getBytes();
@@ -109,23 +110,23 @@ public class BigIntegerConverter
 		return new BigInteger(1, bytes);
 	}
 
-	public static BigIntegerConverter getInstance() {
-		return BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
+	public static BigIntegerToByteArray getInstance() {
+		return BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN, 0);
 	}
 
-	public static BigIntegerConverter getInstance(ByteOrder byteOrder) {
-		return BigIntegerConverter.getInstance(byteOrder, 0);
+	public static BigIntegerToByteArray getInstance(ByteOrder byteOrder) {
+		return BigIntegerToByteArray.getInstance(byteOrder, 0);
 	}
 
-	public static BigIntegerConverter getInstance(int minLength) {
-		return BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, minLength);
+	public static BigIntegerToByteArray getInstance(int minLength) {
+		return BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN, minLength);
 	}
 
-	public static BigIntegerConverter getInstance(ByteOrder byteOrder, int minLength) {
+	public static BigIntegerToByteArray getInstance(ByteOrder byteOrder, int minLength) {
 		if (byteOrder == null || minLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new BigIntegerConverter(byteOrder, minLength);
+		return new BigIntegerToByteArray(byteOrder, minLength);
 	}
 
 }

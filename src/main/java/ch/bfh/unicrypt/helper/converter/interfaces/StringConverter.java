@@ -39,46 +39,14 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
-
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
-import ch.bfh.unicrypt.helper.numerical.WholeNumber;
-import ch.bfh.unicrypt.math.MathUtil;
+package ch.bfh.unicrypt.helper.converter.interfaces;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class WholeNumberConverter
-	   extends AbstractConverter<WholeNumber> {
-
-	private final BigIntegerConverter bigIntegerConverter;
-
-	private WholeNumberConverter(BigIntegerConverter bigIntegerConverter) {
-		super(WholeNumber.class);
-		this.bigIntegerConverter = bigIntegerConverter;
-	}
-
-	@Override
-	protected ByteArray abstractConvertToByteArray(WholeNumber wholeNumber) {
-		return this.bigIntegerConverter.convertToByteArray(MathUtil.fold(wholeNumber.getBigInteger()));
-	}
-
-	@Override
-	protected WholeNumber abstractConvertFromByteArray(ByteArray byteArray) {
-		return NaturalNumber.getInstance(MathUtil.unfold(this.bigIntegerConverter.convertFromByteArray(byteArray)));
-	}
-
-	public static WholeNumberConverter getInstance() {
-		return WholeNumberConverter.getInstance(BigIntegerConverter.getInstance());
-	}
-
-	public static WholeNumberConverter getInstance(BigIntegerConverter bigIntegerConverter) {
-		if (bigIntegerConverter == null) {
-			throw new IllegalArgumentException();
-		}
-		return new WholeNumberConverter(bigIntegerConverter);
-	}
+public interface StringConverter<V extends Object>
+	   extends Converter<V, String> {
 
 }

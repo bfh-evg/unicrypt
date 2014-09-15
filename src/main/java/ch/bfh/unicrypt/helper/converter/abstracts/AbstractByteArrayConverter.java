@@ -39,30 +39,22 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.converter.abstracts;
 
-import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.PermutationToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class PermutationConverterExample {
+public abstract class AbstractByteArrayConverter<V extends Object>
+	   extends AbstractConverter<V, ByteArray>
+	   implements ByteArrayConverter<V> {
 
-	public static void example1() {
-		PermutationToByteArray converter = PermutationToByteArray.getInstance();
-		Permutation permutation = Permutation.getRandomInstance(20);
-		ByteArray byteArray = converter.convert(permutation);
-		Permutation newPermutation = converter.reconvert(byteArray);
-		Example.printLine(permutation);
-		Example.printLine(byteArray);
-		Example.printLine(newPermutation);
-	}
-
-	public static void main(final String[] args) {
-		Example.runExamples();
+	public AbstractByteArrayConverter(Class<V> inputClass) {
+		super(inputClass, ByteArray.class);
 	}
 
 }

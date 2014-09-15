@@ -39,49 +39,47 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
-import ch.bfh.unicrypt.math.MathUtil;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ResidueClassConverter
-	   extends AbstractConverter<ResidueClass> {
+public class ByteArrayToByteArray
+	   extends AbstractByteArrayConverter<ByteArray> {
 
-	private final BigIntegerConverter bigIntegerConverter;
+	private boolean reverse;
 
-	private ResidueClassConverter(BigIntegerConverter bigIntegerConverter) {
-		super(ResidueClass.class);
-		this.bigIntegerConverter = bigIntegerConverter;
+	public ByteArrayToByteArray(boolean reverse) {
+		super(ByteArray.class);
+		this.reverse = reverse;
 	}
 
 	@Override
-	protected ByteArray abstractConvertToByteArray(ResidueClass residueClass) {
-		BigInteger pairedValue = MathUtil.pair(residueClass.getBigInteger(), residueClass.getModulus());
-		return this.bigIntegerConverter.abstractConvertToByteArray(pairedValue);
-	}
-
-	@Override
-	protected ResidueClass abstractConvertFromByteArray(ByteArray ByteArray) {
-		BigInteger pairedValue = this.bigIntegerConverter.convertFromByteArray(ByteArray);
-		BigInteger[] values = MathUtil.unpair(pairedValue);
-		return ResidueClass.getInstance(values[0], values[1]);
-	}
-
-	public static ResidueClassConverter getInstance() {
-		return ResidueClassConverter.getInstance(BigIntegerConverter.getInstance());
-	}
-
-	public static ResidueClassConverter getInstance(BigIntegerConverter bigIntegerConverter) {
-		if (bigIntegerConverter == null) {
-			throw new IllegalArgumentException();
+	protected ByteArray abstractConvert(ByteArray byteArray) {
+		if (this.reverse) {
+			return byteArray.reverse();
 		}
-		return new ResidueClassConverter(bigIntegerConverter);
+		return byteArray;
+	}
+
+	@Override
+	protected ByteArray abstractReconvert(ByteArray byteArray) {
+		if (this.reverse) {
+			return byteArray.reverse();
+		}
+		return byteArray;
+	}
+
+	public static ByteArrayToByteArray getInstance() {
+		return ByteArrayToByteArray.getInstance(false);
+	}
+
+	public static ByteArrayToByteArray getInstance(boolean reverse) {
+		return new ByteArrayToByteArray(reverse);
 	}
 
 }

@@ -39,21 +39,49 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
+import java.nio.charset.Charset;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
  */
-public interface Converter<V extends Object> {
+public class StringToByteArray
+	   extends AbstractByteArrayConverter<String> {
 
-	Class<V> getValueClass();
+	private final Charset charset;
 
-	V convertFromByteArray(ByteArray byteArray);
+	private StringToByteArray(Charset charset) {
+		super(String.class);
+		this.charset = charset;
+	}
 
-	ByteArray convertToByteArray(V object);
+	public Charset getCharset() {
+		return this.charset;
+	}
+
+	@Override
+	protected ByteArray abstractConvert(String string) {
+		return ByteArray.getInstance(string.getBytes(this.charset));
+	}
+
+	@Override
+	protected String abstractReconvert(ByteArray byteArray) {
+		return new String(byteArray.getBytes(), charset);
+	}
+
+	public static StringToByteArray getInstance() {
+		return new StringToByteArray(Charset.defaultCharset());
+	}
+
+	public static StringToByteArray getInstance(Charset charset) {
+		if (charset == null) {
+			throw new IllegalArgumentException();
+		}
+		return new StringToByteArray(charset);
+	}
 
 }

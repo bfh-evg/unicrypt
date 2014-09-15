@@ -39,44 +39,45 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
 import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class NaturalNumberConverter
-	   extends AbstractConverter<NaturalNumber> {
+public class NaturalNumberToByteArray
+	   extends AbstractByteArrayConverter<NaturalNumber> {
 
-	private final BigIntegerConverter bigIntegerConverter;
+	private final BigIntegerToByteArray bigIntegerConverter;
 
-	private NaturalNumberConverter(BigIntegerConverter bigIntegerConverter) {
+	private NaturalNumberToByteArray(BigIntegerToByteArray bigIntegerConverter) {
 		super(NaturalNumber.class);
 		this.bigIntegerConverter = bigIntegerConverter;
 	}
 
 	@Override
-	protected ByteArray abstractConvertToByteArray(NaturalNumber naturalNumber) {
-		return this.bigIntegerConverter.convertToByteArray(naturalNumber.getBigInteger());
+	protected ByteArray abstractConvert(NaturalNumber naturalNumber) {
+		return this.bigIntegerConverter.convert(naturalNumber.getBigInteger());
 	}
 
 	@Override
-	protected NaturalNumber abstractConvertFromByteArray(ByteArray byteArray) {
-		return NaturalNumber.getInstance(this.bigIntegerConverter.convertFromByteArray(byteArray));
+	protected NaturalNumber abstractReconvert(ByteArray byteArray) {
+		return NaturalNumber.getInstance(this.bigIntegerConverter.reconvert(byteArray));
 	}
 
-	public static NaturalNumberConverter getInstance() {
-		return NaturalNumberConverter.getInstance(BigIntegerConverter.getInstance());
+	public static NaturalNumberToByteArray getInstance() {
+		return NaturalNumberToByteArray.getInstance(BigIntegerToByteArray.getInstance());
 	}
 
-	public static NaturalNumberConverter getInstance(BigIntegerConverter bigIntegerConverter) {
+	public static NaturalNumberToByteArray getInstance(BigIntegerToByteArray bigIntegerConverter) {
 		if (bigIntegerConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new NaturalNumberConverter(bigIntegerConverter);
+		return new NaturalNumberToByteArray(bigIntegerConverter);
 	}
 
 }

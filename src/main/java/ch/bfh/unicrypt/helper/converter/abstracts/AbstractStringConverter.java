@@ -39,46 +39,21 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.abstracts;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class ByteArrayConverter
-	   extends AbstractConverter<ByteArray> {
+public abstract class AbstractStringConverter<V extends Object>
+	   extends AbstractConverter<V, String>
+	   implements StringConverter<V> {
 
-	private boolean reverse;
-
-	public ByteArrayConverter(boolean reverse) {
-		super(ByteArray.class);
-		this.reverse = reverse;
-	}
-
-	@Override
-	protected ByteArray abstractConvertToByteArray(ByteArray byteArray) {
-		if (this.reverse) {
-			return byteArray.reverse();
-		}
-		return byteArray;
-	}
-
-	@Override
-	protected ByteArray abstractConvertFromByteArray(ByteArray byteArray) {
-		if (this.reverse) {
-			return byteArray.reverse();
-		}
-		return byteArray;
-	}
-
-	public static ByteArrayConverter getInstance() {
-		return ByteArrayConverter.getInstance(false);
-	}
-
-	public static ByteArrayConverter getInstance(boolean reverse) {
-		return new ByteArrayConverter(reverse);
+	public AbstractStringConverter(Class<V> inputClass) {
+		super(inputClass, String.class);
 	}
 
 }

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
-import ch.bfh.unicrypt.helper.converter.StringConverter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
@@ -63,7 +63,7 @@ public class RSAKeyGenerator
 	private final ZModPrimePair zModPrimes;
 	private final ZStarMod zStarMod;
 
-	protected RSAKeyGenerator(ZModPrimePair zModPrimes, StringConverter stringConverter) {
+	protected RSAKeyGenerator(ZModPrimePair zModPrimes, StringToByteArray stringConverter) {
 		super(zModPrimes.getZModOrder(), stringConverter);
 		this.zModPrimes = zModPrimes;
 		this.zStarMod = ZStarMod.getInstance(zModPrimes.getZStarModOrder().getOrder());
@@ -89,10 +89,10 @@ public class RSAKeyGenerator
 	}
 
 	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimes) {
-		return RSAKeyGenerator.getInstance(zModPrimes, StringConverter.getInstance());
+		return RSAKeyGenerator.getInstance(zModPrimes, StringToByteArray.getInstance());
 	}
 
-	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimes, StringConverter stringConverter) {
+	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimes, StringToByteArray stringConverter) {
 		if (zModPrimes == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}

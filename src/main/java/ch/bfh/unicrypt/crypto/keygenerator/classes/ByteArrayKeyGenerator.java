@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractSecretKeyGenerator;
-import ch.bfh.unicrypt.helper.converter.StringConverter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 
@@ -53,15 +53,15 @@ import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 public class ByteArrayKeyGenerator
 	   extends AbstractSecretKeyGenerator<FixedByteArraySet, FiniteByteArrayElement> {
 
-	protected ByteArrayKeyGenerator(FixedByteArraySet fixedByteArraySet, StringConverter stringConverter) {
+	protected ByteArrayKeyGenerator(FixedByteArraySet fixedByteArraySet, StringToByteArray stringConverter) {
 		super(fixedByteArraySet, stringConverter);
 	}
 
 	public static ByteArrayKeyGenerator getInstance(int keyLength) {
-		return ByteArrayKeyGenerator.getInstance(keyLength, StringConverter.getInstance());
+		return ByteArrayKeyGenerator.getInstance(keyLength, StringToByteArray.getInstance());
 	}
 
-	public static ByteArrayKeyGenerator getInstance(int keyLength, StringConverter stringConverter) {
+	public static ByteArrayKeyGenerator getInstance(int keyLength, StringToByteArray stringConverter) {
 		if (keyLength < 0 || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}
@@ -69,10 +69,10 @@ public class ByteArrayKeyGenerator
 	}
 
 	public static ByteArrayKeyGenerator getInstance(FixedByteArraySet fixedByteArraySet) {
-		return ByteArrayKeyGenerator.getInstance(fixedByteArraySet, StringConverter.getInstance());
+		return ByteArrayKeyGenerator.getInstance(fixedByteArraySet, StringToByteArray.getInstance());
 	}
 
-	public static ByteArrayKeyGenerator getInstance(FixedByteArraySet fixedByteArraySet, StringConverter stringConverter) {
+	public static ByteArrayKeyGenerator getInstance(FixedByteArraySet fixedByteArraySet, StringToByteArray stringConverter) {
 		if (fixedByteArraySet == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}

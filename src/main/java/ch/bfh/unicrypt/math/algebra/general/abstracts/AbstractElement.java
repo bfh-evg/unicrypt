@@ -44,9 +44,9 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.Converter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.numerical.Numerical;
@@ -87,13 +87,13 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	// the following fields are needed for optimizations
 	private BigInteger bigInteger;
-	private final HashMap<Converter, ByteArray> byteArrays;
+	private final HashMap<ByteArrayConverter, ByteArray> byteArrays;
 	private final HashMap<HashMethod, ByteArray> hashValues;
 
 	protected AbstractElement(final S set, V value) {
 		this.set = set;
 		this.value = value;
-		this.byteArrays = new HashMap<Converter, ByteArray>();
+		this.byteArrays = new HashMap<ByteArrayConverter, ByteArray>();
 		this.hashValues = new HashMap<HashMethod, ByteArray>();
 	}
 
@@ -152,11 +152,11 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	public ByteArray getByteArray() {
-		return this.getByteArray(BigIntegerConverter.getInstance());
+		return this.getByteArray(BigIntegerToByteArray.getInstance());
 	}
 
 	@Override
-	public ByteArray getByteArray(Converter converter) {
+	public ByteArray getByteArray(ByteArrayConverter converter) {
 		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
 		return this.getByteArray(convertMethod);
 	}
@@ -166,25 +166,25 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Converter converter = convertMethod.getConverter(this.value.getClass());
-		if (converter == null) {
+		ByteArrayConverter<V> valueConverter = convertMethod.getConverter(this.value.getClass());
+		if (valueConverter == null) {
 			// conversion over BigInteger
-			converter = convertMethod.getConverter(BigInteger.class);
-			if (converter == null) {
-				converter = BigIntegerConverter.getInstance();
+			ByteArrayConverter<BigInteger> bigIntegerConverter = convertMethod.getConverter(BigInteger.class);
+			if (bigIntegerConverter == null) {
+				bigIntegerConverter = BigIntegerToByteArray.getInstance();
 			}
-			ByteArray byteArray = this.byteArrays.get(converter);
+			ByteArray byteArray = this.byteArrays.get(bigIntegerConverter);
 			if (byteArray == null) {
-				byteArray = converter.convertToByteArray(this.getBigInteger());
-				this.byteArrays.put(converter, byteArray);
+				byteArray = bigIntegerConverter.convert(this.getBigInteger());
+				this.byteArrays.put(bigIntegerConverter, byteArray);
 			}
 			return byteArray;
 		} else {
 			// conversion over value
-			ByteArray byteArray = this.byteArrays.get(converter);
+			ByteArray byteArray = this.byteArrays.get(valueConverter);
 			if (byteArray == null) {
-				byteArray = converter.convertToByteArray(this.value);
-				this.byteArrays.put(converter, byteArray);
+				byteArray = (ByteArray) valueConverter.convert(this.value);
+				this.byteArrays.put(valueConverter, byteArray);
 			}
 			return byteArray;
 		}
@@ -192,11 +192,11 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	public ByteTree getByteTree() {
-		return this.getByteTree(BigIntegerConverter.getInstance());
+		return this.getByteTree(BigIntegerToByteArray.getInstance());
 	}
 
 	@Override
-	public ByteTree getByteTree(Converter converter) {
+	public ByteTree getByteTree(ByteArrayConverter converter) {
 		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
 		return this.getByteTree(convertMethod);
 	}

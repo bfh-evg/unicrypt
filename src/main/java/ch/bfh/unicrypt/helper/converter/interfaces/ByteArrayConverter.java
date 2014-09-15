@@ -39,50 +39,16 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.interfaces;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
-import java.util.HashMap;
-import java.util.Map;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class ConvertMethod
-	   extends UniCrypt {
-
-	private final Map<Class, Converter> converterMap;
-
-	private ConvertMethod() {
-		this.converterMap = new HashMap();
-	}
-
-	public Converter getConverter(Class valueClass) {
-		return this.converterMap.get(valueClass);
-	}
-
-	// should this method be public?
-	private void addConverter(Converter converter) {
-		Class valueClass = converter.getValueClass();
-		if (this.converterMap.containsKey(valueClass)) {
-			throw new IllegalArgumentException();
-		}
-		this.converterMap.put(valueClass, converter);
-	}
-
-	public static ConvertMethod getInstance(Converter... converters) {
-		if (converters == null) {
-			throw new IllegalArgumentException();
-		}
-		ConvertMethod convertMethod = new ConvertMethod();
-		for (Converter converter : converters) {
-			if (converter == null) {
-				throw new IllegalArgumentException();
-			}
-			convertMethod.addConverter(converter);
-		}
-		return convertMethod;
-	}
+public interface ByteArrayConverter<V extends Object>
+	   extends Converter<V, ByteArray> {
 
 }

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper.converter;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import java.math.BigInteger;
 import java.nio.ByteOrder;
 import org.junit.Assert;
@@ -54,10 +54,10 @@ import org.junit.Test;
  */
 public class BigIntegerConverterTest {
 
-	public static BigIntegerConverter c1 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
-	public static BigIntegerConverter c2 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 0);
-	public static BigIntegerConverter c3 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 10);
-	public static BigIntegerConverter c4 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
+	public static BigIntegerToByteArray c1 = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN, 0);
+	public static BigIntegerToByteArray c2 = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN, 0);
+	public static BigIntegerToByteArray c3 = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN, 10);
+	public static BigIntegerToByteArray c4 = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
 
 	@Test
 	public void testByteArrayConverter() {
@@ -65,11 +65,11 @@ public class BigIntegerConverterTest {
 		BigInteger b1 = BigInteger.valueOf(9);
 		BigInteger b2 = BigInteger.valueOf(200);
 		BigInteger b3 = BigInteger.valueOf(300);
-		for (BigIntegerConverter converter : new BigIntegerConverter[]{c1, c2, c3, c4}) {
+		for (BigIntegerToByteArray converter : new BigIntegerToByteArray[]{c1, c2, c3, c4}) {
 			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
-				ByteArray ba = converter.convertToByteArray(bigInteger);
+				ByteArray ba = converter.convert(bigInteger);
 				Assert.assertTrue(ba.getLength() >= converter.getMinLength());
-				Assert.assertEquals(bigInteger, converter.convertFromByteArray(ba));
+				Assert.assertEquals(bigInteger, converter.reconvert(ba));
 			}
 
 		}

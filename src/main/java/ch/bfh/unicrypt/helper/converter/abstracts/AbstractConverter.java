@@ -39,30 +39,57 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.converter.abstracts;
 
-import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.PermutationToByteArray;
+import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
+ * @param <W>
  */
-public class PermutationConverterExample {
+public abstract class AbstractConverter<V extends Object, W extends Object>
+	   extends UniCrypt
+	   implements Converter<V, W> {
 
-	public static void example1() {
-		PermutationToByteArray converter = PermutationToByteArray.getInstance();
-		Permutation permutation = Permutation.getRandomInstance(20);
-		ByteArray byteArray = converter.convert(permutation);
-		Permutation newPermutation = converter.reconvert(byteArray);
-		Example.printLine(permutation);
-		Example.printLine(byteArray);
-		Example.printLine(newPermutation);
+	private final Class<V> inputClass;
+	private final Class<W> outputClass;
+
+	public AbstractConverter(Class<V> inputClass, Class<W> outputClass) {
+		this.inputClass = inputClass;
+		this.outputClass = outputClass;
 	}
 
-	public static void main(final String[] args) {
-		Example.runExamples();
+	@Override
+	public Class<V> getInputClass() {
+		return this.inputClass;
 	}
+
+	@Override
+	public Class<W> getOutputClass() {
+		return this.outputClass;
+	}
+
+	@Override
+	public final W convert(V object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractConvert(object);
+	}
+
+	@Override
+	public final V reconvert(W object) {
+		if (object == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractReconvert(object);
+	}
+
+	protected abstract W abstractConvert(V Object);
+
+	protected abstract V abstractReconvert(W object);
 
 }
