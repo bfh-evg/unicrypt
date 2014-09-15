@@ -41,9 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
+
 import java.math.BigInteger;
 
 /**
@@ -54,14 +56,14 @@ import java.math.BigInteger;
 public class StandardECPolynomialField
 	   extends ECPolynomialField {
 
-	public StandardECPolynomialField(PolynomialField finiteField, PolynomialElement a,
+	public StandardECPolynomialField(BinaryPolynomialField finiteField, PolynomialElement a,
 		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
 		   BigInteger order, BigInteger h) {
 		super(finiteField, a, b, gx, gy, order, h);
 	}
 
 	public static StandardECPolynomialField getInstance(final StandardECPolynomialFieldParams params) {
-		PolynomialField field;
+		BinaryPolynomialField field;
 		PolynomialElement a, b, gx, gy;
 		BigInteger order, h;
 

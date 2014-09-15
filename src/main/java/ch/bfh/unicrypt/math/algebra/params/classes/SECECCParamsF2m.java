@@ -41,15 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.params.classes;
 
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
-import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import java.math.BigInteger;
 import java.util.ArrayList;
+
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
+import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 
 /**
  * 
@@ -190,23 +189,20 @@ public enum SECECCParamsF2m implements StandardECPolynomialFieldParams {
 		// Convert ArrayList BigInteger array and get element
 		BigInteger[] coeffs = {};
 		coeffs = arrayBigInteger.toArray(coeffs);
-
-		PolynomialElement<ZModTwo> irreduciblePolynom = PolynomialRing
-				.getInstance(ZModTwo.getInstance()).getElement(coeffs);
+		PolynomialElement<ZModTwo> irreduciblePolynom = PolynomialRing.getInstance(ZModTwo.getInstance()).getElement(coeffs);
 		return irreduciblePolynom;
 
 	}
 	
-	public PolynomialElement getIrreduciblePolynome(){
+	public PolynomialElement<ZModTwo> getIrreduciblePolynome(){
 		return getPolynomeFromString(polynom);
 	}
 
 	@Override
-	public PolynomialField getFiniteField() {
-		PolynomialElement irreduciblePolynomialElement = this
+	public BinaryPolynomialField getFiniteField() {
+		PolynomialElement<ZModTwo> irreduciblePolynomialElement = this
 				.getPolynomeFromString(this.polynom);
-		return PolynomialField.getInstance(ZModTwo.getInstance(),
-				irreduciblePolynomialElement);
+		return BinaryPolynomialField.getInstance(irreduciblePolynomialElement);
 	}
 
 	@Override
@@ -215,23 +211,23 @@ public enum SECECCParamsF2m implements StandardECPolynomialFieldParams {
 	}
 
 	@Override
-	public PolynomialElement getA() {
-		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(a).getValue());
+	public PolynomialElement<ZModTwo> getA() {
+		return (PolynomialElement<ZModTwo>) getFiniteField().getElement(getPolynomeFromString(a).getValue());
 	}
 
 	@Override
-	public PolynomialElement getB() {
-		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(b).getValue());
+	public PolynomialElement<ZModTwo> getB() {
+		return (PolynomialElement<ZModTwo>) getFiniteField().getElement(getPolynomeFromString(b).getValue());
 	}
 
 	@Override
-	public PolynomialElement getGx() {
-		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(gx).getValue());
+	public PolynomialElement<ZModTwo> getGx() {
+		return (PolynomialElement<ZModTwo>) getFiniteField().getElement(getPolynomeFromString(gx).getValue());
 	}
 
 	@Override
-	public PolynomialElement getGy() {
-		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(gy).getValue());
+	public PolynomialElement<ZModTwo> getGy() {
+		return (PolynomialElement<ZModTwo>) getFiniteField().getElement(getPolynomeFromString(gy).getValue());
 	}
 
 	@Override
