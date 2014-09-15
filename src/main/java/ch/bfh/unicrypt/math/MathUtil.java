@@ -516,7 +516,7 @@ public final class MathUtil {
 					m = i;
 				}
 
-				if (r.modPow(two, p).equals(r2)) {
+				if (r.modPow(two, p).equals(r2.mod(p))) {
 					return r;
 				} else {
 					throw new IllegalArgumentException("Tonnelli fails...");

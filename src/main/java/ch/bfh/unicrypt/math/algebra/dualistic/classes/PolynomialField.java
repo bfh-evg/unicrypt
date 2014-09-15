@@ -213,6 +213,11 @@ public class PolynomialField<V> extends PolynomialRing<V> implements
 		Pair longDiv = this.longDivision(g, this.irreduciblePolynomial);
 		return (PolynomialElement<V>) longDiv.getSecond();
 	}
+	
+	public PolynomialElement<V> sqrtMod(PolynomialElement<V> element){
+		BigInteger i=new BigInteger("2").pow(this.getDegree()-1);
+		return element.power(i);
+	}
 
 	//
 	// STATIC FACTORY METHODS
