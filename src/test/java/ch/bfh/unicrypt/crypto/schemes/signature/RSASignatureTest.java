@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.crypto.schemes.signature;
 
 import ch.bfh.unicrypt.crypto.schemes.signature.classes.RSASignatureScheme;
+import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
@@ -64,11 +66,12 @@ public class RSASignatureTest {
 		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
 		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
 		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
-		System.out.println(rsa.getMessageSpace());
+
 		Element message = rsa.getMessageSpace().getElementFrom(5);
 		Element signature = rsa.sign(prKey, message);
 
 		assertTrue(rsa.verify(puKey, message, signature).getValue());
+		assertFalse(rsa.verify(puKey, message, message).getValue());
 
 	}
 
@@ -77,14 +80,15 @@ public class RSASignatureTest {
 		BigInteger p = BigInteger.probablePrime(512, new SecureRandom());
 		BigInteger q = BigInteger.probablePrime(512, new SecureRandom());
 
-		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
+		RSASignatureScheme rsa = RSASignatureScheme.getInstance(StringMonoid.getInstance(Alphabet.ALPHANUMERIC), ZModPrimePair.getInstance(p, q));
 		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
 		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
 
-		Element message = rsa.getMessageSpace().getElementFrom(5);
+		Element message = rsa.getMessageSpace().getElement("Hallo");
 		Element signature = rsa.sign(prKey, message);
 
-		assertFalse(rsa.verify(puKey, message, message).getValue());
+		assertTrue(rsa.verify(puKey, message, signature).getValue());
+		assertFalse(rsa.verify(puKey, rsa.getMessageSpace().getElement("World"), signature).getValue());
 
 	}
 
