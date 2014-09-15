@@ -49,12 +49,12 @@ import java.nio.charset.Charset;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class StringConverter
-	   extends Converter<String> {
+	   extends AbstractConverter<String> {
 
 	private final Charset charset;
 
 	private StringConverter(Charset charset) {
-		super(String.class.getName());
+		super(String.class);
 		this.charset = charset;
 	}
 

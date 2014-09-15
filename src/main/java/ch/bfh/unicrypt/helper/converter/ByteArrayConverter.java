@@ -48,12 +48,12 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ByteArrayConverter
-	   extends Converter<ByteArray> {
+	   extends AbstractConverter<ByteArray> {
 
 	private boolean reverse;
 
 	public ByteArrayConverter(boolean reverse) {
-		super(ByteArray.class.getName());
+		super(ByteArray.class);
 		this.reverse = reverse;
 	}
 

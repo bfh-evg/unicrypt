@@ -53,13 +53,13 @@ abstract public class AbstractArrayWithDefault<A extends AbstractArray<A, T>, T 
 	   extends AbstractArray<A, T>
 	   implements ArrayWithDefault<A, T> {
 
-	protected final T defaultObject;
+	protected final T defaultValue;
 	protected int trailer; // number of trailing zeros not included in byteArray
 	protected int header; // number of leading zeros not included in byteArray
 
-	protected AbstractArrayWithDefault(T defaultObject, int trailer, int header, int length, int offset, boolean reverse) {
-		super(length, offset, reverse);
-		this.defaultObject = defaultObject;
+	protected AbstractArrayWithDefault(Class valueClass, T defaultValue, int trailer, int header, int length, int offset, boolean reverse) {
+		super(valueClass, length, offset, reverse);
+		this.defaultValue = defaultValue;
 		this.trailer = trailer;
 		this.header = header;
 		if (header + trailer == length) {
@@ -69,47 +69,47 @@ abstract public class AbstractArrayWithDefault<A extends AbstractArray<A, T>, T 
 
 	@Override
 	public final T getDefault() {
-		return this.defaultObject;
+		return this.defaultValue;
 	}
 
 	@Override
 	public Iterable<Integer> getIndices() {
-		return this.getIndices(this.defaultObject);
+		return this.getIndices(this.defaultValue);
 	}
 
 	@Override
 	public Iterable<Integer> getIndicesExcept() {
-		return this.getIndicesExcept(this.defaultObject);
+		return this.getIndicesExcept(this.defaultValue);
 	}
 
 	@Override
 	public int count() {
-		return this.count(this.defaultObject);
+		return this.count(this.defaultValue);
 	}
 
 	@Override
 	public int countPrefix() {
-		return this.countPrefix(this.defaultObject);
+		return this.countPrefix(this.defaultValue);
 	}
 
 	@Override
 	public int countSuffix() {
-		return this.countSuffix(this.defaultObject);
+		return this.countSuffix(this.defaultValue);
 	}
 
 	@Override
 	public A insertAt(int index) {
-		return this.insertAt(index, this.defaultObject);
+		return this.insertAt(index, this.defaultValue);
 	}
 
 	@Override
 	public A replaceAt(int index) {
-		return this.replaceAt(index, this.defaultObject);
+		return this.replaceAt(index, this.defaultValue);
 	}
 
 	@Override
 	public A add() {
-		return this.add(this.defaultObject);
+		return this.add(this.defaultValue);
 	}
 
 	@Override

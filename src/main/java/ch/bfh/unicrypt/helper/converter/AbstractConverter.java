@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,68 +32,56 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.keygenerator.classes;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *
- * @author rolfhaenni
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
+public abstract class AbstractConverter<V extends Object>
+	   extends UniCrypt
+	   implements Converter<V> {
 
-// TODO see ElGamalKeyPairGenerator
+	private final Class<V> valueClass;
 
-public class SchnorrSignatureKeyPairGenerator
-			 extends AbstractKeyPairGenerator<ZModPrime, ZModElement, GStarModPrime, GStarModElement> {
-
-	private final Element generator;
-
-	protected SchnorrSignatureKeyPairGenerator(GStarModSafePrime publicKeySpace) {
-		super((ZModPrime) publicKeySpace.getZModOrder());
-		this.generator = publicKeySpace.getDefaultGenerator();
-	}
-
-	protected SchnorrSignatureKeyPairGenerator(Element generator) {
-		super((ZModPrime) generator.getSet().getZModOrder());
-		this.generator = generator;
-	}
-
-	public Element getGenerator() {
-		return this.generator;
+	public AbstractConverter(Class<V> valueClass) {
+		this.valueClass = valueClass;
 	}
 
 	@Override
-	protected Function abstractGetPublicKeyGenerationFunction() {
-		return GeneratorFunction.getInstance(this.getGenerator());
+	public Class<V> getValueClass() {
+		return this.valueClass;
 	}
 
-	public static SchnorrSignatureKeyPairGenerator getInstance(GStarModSafePrime publicKeySpace) {
-		if (publicKeySpace == null) {
+	@Override
+	public final ByteArray convertToByteArray(V object) {
+		if (object == null) {
 			throw new IllegalArgumentException();
 		}
-		return new SchnorrSignatureKeyPairGenerator(publicKeySpace);
+		return this.abstractConvertToByteArray(object);
 	}
 
-	public static SchnorrSignatureKeyPairGenerator getInstance(Element generator) {
-		if (generator == null) {
+	@Override
+	public final V convertFromByteArray(ByteArray byteArray) {
+		if (byteArray == null) {
 			throw new IllegalArgumentException();
 		}
-		return new SchnorrSignatureKeyPairGenerator(generator);
+		return this.abstractConvertFromByteArray(byteArray);
 	}
+
+	protected abstract ByteArray abstractConvertToByteArray(V Object);
+
+	protected abstract V abstractConvertFromByteArray(ByteArray byteArray);
 
 }

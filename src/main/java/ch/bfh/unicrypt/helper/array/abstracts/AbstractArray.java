@@ -52,18 +52,20 @@ import java.util.List;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <A>
- * @param <T>
+ * @param <V>
  */
-abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Object>
+abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Object>
 	   extends UniCrypt
-	   implements ch.bfh.unicrypt.helper.array.interfaces.Array<A, T> {
+	   implements ch.bfh.unicrypt.helper.array.interfaces.Array<A, V> {
 
+	protected Class valueClass;
 	protected int length;
 	protected int offset;
 	protected boolean reverse;
 	protected Boolean uniform = null;
 
-	protected AbstractArray(int length, int offset, boolean reverse) {
+	protected AbstractArray(Class valueClass, int length, int offset, boolean reverse) {
+		this.valueClass = valueClass;
 		this.length = length;
 		this.offset = offset;
 		this.reverse = reverse;
@@ -87,7 +89,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 		if (this.uniform == null) {
 			this.uniform = true;
 			if (this.length > 1) {
-				T first = this.abstractGetAt(0);
+				V first = this.abstractGetAt(0);
 				for (int i = 1; i < this.length; i++) {
 					if (!first.equals(this.abstractGetAt(i))) {
 						this.uniform = false;
@@ -105,13 +107,13 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(T object) {
-		if (object == null) {
+	public Iterable<Integer> getIndices(V value) {
+		if (value == null) {
 			throw new IllegalArgumentException();
 		}
 		List<Integer> result = new LinkedList<Integer>();
 		for (int i : this.getAllIndices()) {
-			if (this.abstractGetAt(i).equals(object)) {
+			if (this.abstractGetAt(i).equals(value)) {
 				result.add(i);
 			}
 		}
@@ -119,13 +121,13 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(T object) {
-		if (object == null) {
+	public Iterable<Integer> getIndicesExcept(V value) {
+		if (value == null) {
 			throw new IllegalArgumentException();
 		}
 		List<Integer> result = new LinkedList<Integer>();
 		for (int i : this.getAllIndices()) {
-			if (!this.abstractGetAt(i).equals(object)) {
+			if (!this.abstractGetAt(i).equals(value)) {
 				result.add(i);
 			}
 		}
@@ -133,13 +135,13 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public int count(T object) {
-		if (object == null) {
+	public int count(V value) {
+		if (value == null) {
 			throw new IllegalArgumentException();
 		}
 		int result = 0;
 		for (int i : this.getAllIndices()) {
-			if (this.abstractGetAt(i).equals(object)) {
+			if (this.abstractGetAt(i).equals(value)) {
 				result++;
 			}
 		}
@@ -147,13 +149,13 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public int countPrefix(T object) {
-		if (object == null) {
+	public int countPrefix(V value) {
+		if (value == null) {
 			throw new IllegalArgumentException();
 		}
 		int result = 0;
 		for (int i : this.getAllIndices()) {
-			if (this.abstractGetAt(i).equals(object)) {
+			if (this.abstractGetAt(i).equals(value)) {
 				result++;
 			} else {
 				break;
@@ -163,13 +165,13 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public int countSuffix(T object) {
-		if (object == null) {
+	public int countSuffix(V value) {
+		if (value == null) {
 			throw new IllegalArgumentException();
 		}
 		int result = 0;
 		for (int i = this.length - 1; i >= 0; i--) {
-			if (this.abstractGetAt(i).equals(object)) {
+			if (this.abstractGetAt(i).equals(value)) {
 				result++;
 			} else {
 				break;
@@ -179,7 +181,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public T getAt(int index) {
+	public V getAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -187,12 +189,12 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public T getFirst() {
+	public V getFirst() {
 		return this.getAt(0);
 	}
 
 	@Override
-	public T getLast() {
+	public V getLast() {
 		return this.getAt(this.length - 1);
 	}
 
@@ -266,33 +268,33 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public A add(T object) {
-		return this.insertAt(this.length, object);
+	public A add(V value) {
+		return this.insertAt(this.length, value);
 	}
 
 	@Override
-	public A insertAt(int index, T newObject) {
+	public A insertAt(int index, V value) {
 		if (index < 0 || index > this.length) {
 			throw new IndexOutOfBoundsException();
 		}
-		if (newObject == null) {
+		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractInsertAt(index, newObject);
+		return this.abstractInsertAt(index, value);
 	}
 
 	@Override
-	public A replaceAt(int index, T newObject) {
+	public A replaceAt(int index, V value) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
-		if (newObject == null) {
+		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.getAt(index).equals(newObject)) {
+		if (this.getAt(index).equals(value)) {
 			return (A) this;
 		}
-		return this.abstractReplaceAt(index, newObject);
+		return this.abstractReplaceAt(index, value);
 	}
 
 	@Override
@@ -300,7 +302,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 		if (indices == null) {
 			throw new IllegalArgumentException();
 		}
-		A[] result = (A[]) Array.newInstance(this.getArrayClass(), indices.length + 1);
+		A[] result = (A[]) Array.newInstance(this.valueClass, indices.length + 1);
 		int lastIndex = 0;
 		for (int i = 0; i < indices.length; i++) {
 			int currentIndex = indices[i];
@@ -325,8 +327,8 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	}
 
 	@Override
-	public Iterator<T> iterator() {
-		return new Iterator<T>() {
+	public Iterator<V> iterator() {
+		return new Iterator<V>() {
 
 			int currentIndex = 0;
 
@@ -336,7 +338,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 			}
 
 			@Override
-			public T next() {
+			public V next() {
 				return abstractGetAt(currentIndex++);
 			}
 
@@ -351,21 +353,21 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 	public int hashCode() {
 		int hash = 5;
 		hash = 43 * hash + this.length;
-		for (T object : this) {
-			hash = 43 * hash + object.hashCode();
+		for (V value : this) {
+			hash = 43 * hash + value.hashCode();
 		}
 		return hash;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+	public boolean equals(Object value) {
+		if (this == value) {
 			return true;
 		}
-		if (obj == null || !(obj instanceof AbstractArray)) {
+		if (value == null || !(value instanceof AbstractArray)) {
 			return false;
 		}
-		final AbstractArray other = (AbstractArray) obj;
+		final AbstractArray other = (AbstractArray) value;
 		if (this.length != other.length) {
 			return false;
 		}
@@ -377,18 +379,16 @@ abstract public class AbstractArray<A extends AbstractArray<A, T>, T extends Obj
 		return true;
 	}
 
-	abstract protected T abstractGetAt(int index);
+	abstract protected V abstractGetAt(int index);
 
 	abstract protected A abstractExtract(int fromIndex, int length);
 
 	abstract protected A abstractAppend(A other);
 
-	abstract protected A abstractInsertAt(int index, T newObject);
+	abstract protected A abstractInsertAt(int index, V value);
 
-	abstract protected A abstractReplaceAt(int index, T newObject);
+	abstract protected A abstractReplaceAt(int index, V value);
 
 	abstract protected A abstractReverse();
-
-	abstract protected Class getArrayClass();
 
 }

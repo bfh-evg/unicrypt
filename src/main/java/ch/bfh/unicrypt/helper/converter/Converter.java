@@ -41,43 +41,19 @@
  */
 package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <T>
+ * @param <V>
  */
-public abstract class Converter<T extends Object>
-	   extends UniCrypt {
+public interface Converter<V extends Object> {
 
-	private String className;
+	Class<V> getValueClass();
 
-	public Converter(String className) {
-		this.className = className;
-	}
+	V convertFromByteArray(ByteArray byteArray);
 
-	public String getClassName() {
-		return this.className;
-	}
-
-	public final ByteArray convertToByteArray(T object) {
-		if (object == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractConvertToByteArray(object);
-	}
-
-	public final T convertFromByteArray(ByteArray byteArray) {
-		if (byteArray == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractConvertFromByteArray(byteArray);
-	}
-
-	protected abstract ByteArray abstractConvertToByteArray(T Object);
-
-	protected abstract T abstractConvertFromByteArray(ByteArray byteArray);
+	ByteArray convertToByteArray(V object);
 
 }

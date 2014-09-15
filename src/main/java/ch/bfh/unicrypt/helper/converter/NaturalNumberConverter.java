@@ -49,12 +49,12 @@ import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class NaturalNumberConverter
-	   extends Converter<NaturalNumber> {
+	   extends AbstractConverter<NaturalNumber> {
 
 	private final BigIntegerConverter bigIntegerConverter;
 
 	private NaturalNumberConverter(BigIntegerConverter bigIntegerConverter) {
-		super(NaturalNumber.class.getName());
+		super(NaturalNumber.class);
 		this.bigIntegerConverter = bigIntegerConverter;
 	}
 

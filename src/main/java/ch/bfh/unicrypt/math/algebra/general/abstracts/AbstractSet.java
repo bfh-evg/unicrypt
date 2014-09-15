@@ -47,6 +47,8 @@ import ch.bfh.unicrypt.helper.array.interfaces.Array;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.Converter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -271,24 +273,30 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E getElementFrom(ByteArray byteArray, BigIntegerConverter converter) {
-		if (byteArray == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.defaultGetElementFrom(byteArray, converter);
+	public final E getElementFrom(ByteArray byteArray, Converter converter) {
+		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
+		return this.getElementFrom(byteArray, convertMethod);
 	}
 
 	@Override
-	public final ByteArray getByteArrayFrom(Element element) {
-		return this.getByteArrayFrom(element, BigIntegerConverter.getInstance());
-	}
-
-	@Override
-	public final ByteArray getByteArrayFrom(Element element, BigIntegerConverter converter) {
-		if (element == null || !this.contains(element)) {
+	public final E getElementFrom(ByteArray byteArray, ConvertMethod convertMethod) {
+		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetByteArrayFrom((E) element, converter);
+		Converter converter = convertMethod.getConverter(this.valueClass);
+		if (converter == null) {
+			// conversion over BigInteger
+			converter = convertMethod.getConverter(BigInteger.class);
+			if (converter == null) {
+				converter = BigIntegerConverter.getInstance();
+			}
+			BigInteger bigInteger = ((BigIntegerConverter) converter).convertFromByteArray(byteArray);
+			return this.getElementFrom(bigInteger);
+		} else {
+			// conversion over value
+			V value = ((Converter<V>) converter).convertFromByteArray(byteArray);
+			return this.getElement(value);
+		}
 	}
 
 	@Override
@@ -297,24 +305,17 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E getElementFrom(ByteTree byteTree, BigIntegerConverter converter) {
-		if (byteTree == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.defaultGetElementFrom(byteTree, converter);
+	public final E getElementFrom(ByteTree byteTree, Converter converter) {
+		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
+		return this.getElementFrom(byteTree, convertMethod);
 	}
 
 	@Override
-	public final ByteTree getByteTreeFrom(Element element) {
-		return this.getByteTreeFrom(element, BigIntegerConverter.getInstance());
-	}
-
-	@Override
-	public final ByteTree getByteTreeFrom(Element element, BigIntegerConverter converter) {
-		if (element == null || !this.contains(element)) {
+	public final E getElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
+		if (byteTree == null || convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultGetByteTreeFrom((E) element, converter);
+		return this.defaultGetElementFrom(byteTree, convertMethod);
 	}
 
 	@Override
@@ -436,25 +437,13 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.isEquivalent(element.getSet());
 	}
 
-	protected E defaultGetElementFrom(ByteArray byteArray, BigIntegerConverter converter) {
-		return this.getElementFrom(converter.convertFromByteArray(byteArray));
-	}
-
-	protected ByteArray defaultGetByteArrayFrom(E element, BigIntegerConverter converter) {
-		return ByteArray.getInstance(converter.convertToByteArray(this.abstractGetBigIntegerFrom(element)));
-	}
-
-	protected E defaultGetElementFrom(ByteTree byteTree, BigIntegerConverter converter) {
+	protected E defaultGetElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
 		if (byteTree.isLeaf()) {
-			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getBinaryData();
-			return this.defaultGetElementFrom(byteArray, converter);
+			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getValue();
+			return this.getElementFrom(byteArray, convertMethod);
 		}
 		// no such element
 		return null;
-	}
-
-	protected ByteTree defaultGetByteTreeFrom(E element, BigIntegerConverter converter) {
-		return ByteTree.getInstance(this.defaultGetByteArrayFrom(element, converter));
 	}
 
 	protected boolean defaultIsEquivalent(Set set) {

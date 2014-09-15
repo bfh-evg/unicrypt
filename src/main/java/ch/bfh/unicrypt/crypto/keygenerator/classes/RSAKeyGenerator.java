@@ -42,53 +42,61 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
+import ch.bfh.unicrypt.helper.converter.StringConverter;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
+import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
+import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
+import ch.bfh.unicrypt.math.function.classes.InvertFunction;
+import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ElGamalKeyPairGenerator
-	   extends AbstractKeyPairGenerator<ZMod, ZModElement, CyclicGroup, Element> {
+public class RSAKeyGenerator
+	   extends AbstractKeyPairGenerator<ZMod, ZModElement, ZMod, ZModElement> {
 
-	private final Element generator;
+	private final ZModPrimePair zModPrimes;
+	private final ZStarMod zStarMod;
 
-	protected ElGamalKeyPairGenerator(CyclicGroup publicKeySpace) {
-		super(publicKeySpace.getZModOrder());
-		this.generator = publicKeySpace.getDefaultGenerator();
+	protected RSAKeyGenerator(ZModPrimePair zModPrimes, StringConverter stringConverter) {
+		super(zModPrimes.getZModOrder(), stringConverter);
+		this.zModPrimes = zModPrimes;
+		this.zStarMod = ZStarMod.getInstance(zModPrimes.getZStarModOrder().getOrder());
 	}
 
-	protected ElGamalKeyPairGenerator(Element generator) {
-		super(generator.getSet().getZModOrder());
-		this.generator = generator;
+	public ZModPrimePair getZModPrimes() {
+		return this.zModPrimes;
 	}
 
-	public Element getGenerator() {
-		return this.generator;
+	@Override
+	protected Function defaultGetPrivateKeyGenerationFunction() {
+		return CompositeFunction.getInstance(
+			   RandomFunction.getInstance(this.zStarMod),
+			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimes));
 	}
 
 	@Override
 	protected Function abstractGetPublicKeyGenerationFunction() {
-		return GeneratorFunction.getInstance(this.getGenerator());
+		return CompositeFunction.getInstance(
+			   ConvertFunction.getInstance(this.zModPrimes, this.zStarMod),
+			   InvertFunction.getInstance(this.zStarMod),
+			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimes));
 	}
 
-	public static ElGamalKeyPairGenerator getInstance(CyclicGroup publicKeySpace) {
-		if (publicKeySpace == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ElGamalKeyPairGenerator(publicKeySpace);
+	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimes) {
+		return RSAKeyGenerator.getInstance(zModPrimes, StringConverter.getInstance());
 	}
 
-	public static ElGamalKeyPairGenerator getInstance(Element generator) {
-		if (generator == null) {
+	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimes, StringConverter stringConverter) {
+		if (zModPrimes == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ElGamalKeyPairGenerator(generator);
+		return new RSAKeyGenerator(zModPrimes, stringConverter);
 	}
 
 }

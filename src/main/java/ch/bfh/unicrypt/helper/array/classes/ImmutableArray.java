@@ -55,20 +55,20 @@ public class ImmutableArray<T extends Object>
 	// The obects are stored either as an ordinary, possibly empty array (case 1)
 	// or as an array of length 1 together with the full length of the immutable
 	// array (case 2, all elements are equal)
-	private final Object[] array;
+	private final Object[] values;
 
-	protected ImmutableArray(T object, int length) {
-		this(new Object[]{object}, 0, length, false);
+	protected ImmutableArray(T value, int length) {
+		this(new Object[]{value}, 0, length, false);
 	}
 
-	protected ImmutableArray(Object[] objects) {
-		this(objects, 0, objects.length, false);
+	protected ImmutableArray(Object[] values) {
+		this(values, 0, values.length, false);
 	}
 
-	protected ImmutableArray(Object[] objects, int offset, int length, boolean reverse) {
-		super(length, offset, reverse);
-		this.array = objects;
-		if (objects.length <= 1) {
+	protected ImmutableArray(Object[] values, int offset, int length, boolean reverse) {
+		super(ImmutableArray.class, length, offset, reverse);
+		this.values = values;
+		if (values.length <= 1) {
 			this.uniform = true;
 		}
 	}
@@ -90,11 +90,11 @@ public class ImmutableArray<T extends Object>
 		}
 		Object[] newArray = new Object[array.length];
 		int i = 0;
-		for (T object : array) {
-			if (object == null) {
+		for (T value : array) {
+			if (value == null) {
 				throw new IllegalArgumentException();
 			}
-			newArray[i++] = object;
+			newArray[i++] = value;
 		}
 		return new ImmutableArray<T>(newArray);
 	}
@@ -105,20 +105,20 @@ public class ImmutableArray<T extends Object>
 		}
 		Object[] array = new Object[collection.size()];
 		int i = 0;
-		for (T object : collection) {
-			if (object == null) {
+		for (T value : collection) {
+			if (value == null) {
 				throw new IllegalArgumentException();
 			}
-			array[i++] = object;
+			array[i++] = value;
 		}
 		return new ImmutableArray<T>(array);
 	}
 
-	public static <T> ImmutableArray<T> getInstance(T object, int length) {
-		if (object == null || length < 0) {
+	public static <T> ImmutableArray<T> getInstance(T value, int length) {
+		if (value == null || length < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ImmutableArray(new Object[]{object}, 0, length, false);
+		return new ImmutableArray(new Object[]{value}, 0, length, false);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class ImmutableArray<T extends Object>
 		if (this.reverse) {
 			index = this.length - index - 1;
 		}
-		return (T) this.array[(this.offset + index) % this.array.length];
+		return (T) this.values[(this.offset + index) % this.values.length];
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class ImmutableArray<T extends Object>
 		if (this.reverse) {
 			fromIndex = this.length - fromIndex - length;
 		}
-		return new ImmutableArray<T>(this.array, this.offset + fromIndex, length, this.reverse);
+		return new ImmutableArray<T>(this.values, this.offset + fromIndex, length, this.reverse);
 	}
 
 	@Override
@@ -175,12 +175,7 @@ public class ImmutableArray<T extends Object>
 
 	@Override
 	protected ImmutableArray<T> abstractReverse() {
-		return new ImmutableArray<T>(this.array, this.offset, this.length, !this.reverse);
-	}
-
-	@Override
-	protected Class getArrayClass() {
-		return ImmutableArray.class;
+		return new ImmutableArray<T>(this.values, this.offset, this.length, !this.reverse);
 	}
 
 }

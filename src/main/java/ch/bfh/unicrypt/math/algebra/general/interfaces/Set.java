@@ -44,6 +44,8 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.Converter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -209,8 +211,8 @@ public interface Set<V extends Object> {
 	public boolean isSingleton();
 
 	/**
-	 * TODO Returns an additive integer group of type {@link ZPlusMod} with the same set order. For this to work, the
-	 * set order must be finite and known.
+	 * TODO Returns an additive integer group of type {@link ZMod} with the same set order. For this to work, the set
+	 * order must be finite and known.
 	 * <p>
 	 * @return The resulting additive group.
 	 * @throws UnsupportedOperationException if the set order is infinite or unknown
@@ -218,8 +220,8 @@ public interface Set<V extends Object> {
 	public ZMod getZModOrder();
 
 	/**
-	 * Returns an multiplicative integer set of type {@link ZTimesMod} with the same set order. For this to work, the
-	 * set order must be finite and known. TODO teilerfremd
+	 * Returns an multiplicative integer set of type {@link ZMod} with the same set order. For this to work, the set
+	 * order must be finite and known. TODO teilerfremd
 	 * <p>
 	 * @return The resulting multiplicative group.
 	 * @throws UnsupportedOperationException if the set order is infinite or unknown
@@ -284,15 +286,17 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteArray byteArray);
 
+	public Element<V> getElementFrom(ByteArray byteArray, Converter converter);
+
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the
 	 * {@link BigIntegerConverter}.
 	 * <p>
 	 * @param byteArray
-	 * @param converter
+	 * @param convertMethod
 	 * @return
 	 */
-	public Element<V> getElementFrom(ByteArray byteArray, BigIntegerConverter converter);
+	public Element<V> getElementFrom(ByteArray byteArray, ConvertMethod convertMethod);
 
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteTree}.
@@ -302,14 +306,16 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree);
 
+	public Element<V> getElementFrom(ByteTree byteTree, Converter converter);
+
 	/**
 	 * <p>
 	 * <p>
 	 * @param byteTree
-	 * @param converter
+	 * @param convertMethod
 	 * @return
 	 */
-	public Element<V> getElementFrom(ByteTree byteTree, BigIntegerConverter converter);
+	public Element<V> getElementFrom(ByteTree byteTree, ConvertMethod convertMethod);
 
 	/**
 	 * Creates and returns the element that corresponds to the integer value of some other element (if one exists).
@@ -366,41 +372,6 @@ public interface Set<V extends Object> {
 	 * @return the corresponding BigInteger value
 	 */
 	public BigInteger getBigIntegerFrom(Element element);
-
-	/**
-	 * TODO Returns the corresponding {@link ByteArray} for a given {@link Element}.
-	 * <p>
-	 * @param element The given Element
-	 * @return the corresponding ByteArray
-	 * @throws IllegalArgumentException if this set does not contain the {@literal element}
-	 */
-	public ByteArray getByteArrayFrom(Element element);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param element   The given Element
-	 * @param converter The given Converter
-	 * @return the corresponding ByteArray
-	 */
-	public ByteArray getByteArrayFrom(Element element, BigIntegerConverter converter);
-
-	/**
-	 * TODO Returns the corresponding {@link ByteTree} for a given {@link Element}.
-	 * <p>
-	 * @param element The given Element
-	 * @return the corresponding ByteTree
-	 */
-	public ByteTree getByteTreeFrom(Element element);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @param element   The given Element
-	 * @param converter The given Converter
-	 * @return the corresponding ByteTree
-	 */
-	public ByteTree getByteTreeFrom(Element element, BigIntegerConverter converter);
 
 	/**
 	 * TODO

@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,42 +32,47 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.keygenerator.classes;
+package ch.bfh.unicrypt.helper.converter;
 
-import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractSecretKeyGenerator;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import java.math.BigInteger;
+import java.nio.ByteOrder;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class FixedByteArrayKeyGenerator
-			 extends AbstractSecretKeyGenerator<FixedByteArraySet, FiniteByteArrayElement> {
+public class BigIntegerConverterTest {
 
-	protected FixedByteArrayKeyGenerator(FixedByteArraySet fixedByteArraySet) {
-		super(fixedByteArraySet);
-	}
+	public static BigIntegerConverter c1 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 0);
+	public static BigIntegerConverter c2 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 0);
+	public static BigIntegerConverter c3 = BigIntegerConverter.getInstance(ByteOrder.BIG_ENDIAN, 10);
+	public static BigIntegerConverter c4 = BigIntegerConverter.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
 
-	public static FixedByteArrayKeyGenerator getInstance(int keyLength) {
-		if (keyLength < 0) {
-			throw new IllegalArgumentException();
+	@Test
+	public void testByteArrayConverter() {
+		BigInteger b0 = BigInteger.valueOf(0);
+		BigInteger b1 = BigInteger.valueOf(9);
+		BigInteger b2 = BigInteger.valueOf(200);
+		BigInteger b3 = BigInteger.valueOf(300);
+		for (BigIntegerConverter converter : new BigIntegerConverter[]{c1, c2, c3, c4}) {
+			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
+				ByteArray ba = converter.convertToByteArray(bigInteger);
+				Assert.assertTrue(ba.getLength() >= converter.getMinLength());
+				Assert.assertEquals(bigInteger, converter.convertFromByteArray(ba));
+			}
+
 		}
-		return new FixedByteArrayKeyGenerator(FixedByteArraySet.getInstance(keyLength));
-	}
-
-	public static FixedByteArrayKeyGenerator getInstance(FixedByteArraySet fixedByteArraySet) {
-		if (fixedByteArraySet == null) {
-			throw new IllegalArgumentException();
-		}
-		return new FixedByteArrayKeyGenerator(fixedByteArraySet);
 	}
 
 }

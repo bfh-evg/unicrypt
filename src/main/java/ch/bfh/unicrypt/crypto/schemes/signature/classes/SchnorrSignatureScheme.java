@@ -41,8 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.ElGamalKeyPairGenerator;
-import ch.bfh.unicrypt.crypto.keygenerator.classes.SchnorrSignatureKeyPairGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
@@ -57,7 +56,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class SchnorrSignatureScheme
-	   extends AbstractRandomizedSignatureScheme<ByteArrayMonoid, ByteArrayElement, ProductGroup, Pair, ZModPrime, ZMod, CyclicGroup, SchnorrSignatureKeyPairGenerator > {
+	   extends AbstractRandomizedSignatureScheme<ByteArrayMonoid, ByteArrayElement, ProductGroup, Pair, ZModPrime, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
@@ -71,7 +70,7 @@ public class SchnorrSignatureScheme
 
 	@Override
 	protected KeyPairGenerator abstractGetKeyPairGenerator() {
-		return SchnorrSignatureKeyPairGenerator.getInstance(this.generator);
+		return DiscreteLogarithmKeyGenerator.getInstance(this.generator);
 	}
 
 	public final CyclicGroup getCyclicGroup() {

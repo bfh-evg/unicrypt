@@ -42,7 +42,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyPairGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractAsymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -54,7 +54,7 @@ import ch.bfh.unicrypt.math.function.classes.PowerFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class RSAEncryptionScheme
-	   extends AbstractAsymmetricEncryptionScheme<ZMod, ZModElement, ZMod, ZModElement, ZMod, ZMod, RSAKeyPairGenerator> {
+	   extends AbstractAsymmetricEncryptionScheme<ZMod, ZModElement, ZMod, ZModElement, ZMod, ZMod, RSAKeyGenerator> {
 
 	private final ZMod zMod;
 
@@ -81,9 +81,9 @@ public class RSAEncryptionScheme
 	}
 
 	@Override
-	protected RSAKeyPairGenerator abstractGetKeyPairGenerator() {
+	protected RSAKeyGenerator abstractGetKeyPairGenerator() {
 		if (this.getZMod() instanceof ZModPrimePair) {
-			return RSAKeyPairGenerator.getInstance((ZModPrimePair) this.getZMod());
+			return RSAKeyGenerator.getInstance((ZModPrimePair) this.getZMod());
 		}
 		throw new UnsupportedOperationException();
 	}

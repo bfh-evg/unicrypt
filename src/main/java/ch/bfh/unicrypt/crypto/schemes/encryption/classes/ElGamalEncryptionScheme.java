@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.ElGamalKeyPairGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractReEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -64,7 +64,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author rolfhaenni
  */
 public class ElGamalEncryptionScheme
-	   extends AbstractReEncryptionScheme<CyclicGroup, Element, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup, ZMod, ElGamalKeyPairGenerator> {
+	   extends AbstractReEncryptionScheme<CyclicGroup, Element, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup, ZMod, DiscreteLogarithmKeyGenerator> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
@@ -106,8 +106,8 @@ public class ElGamalEncryptionScheme
 	}
 
 	@Override
-	protected ElGamalKeyPairGenerator abstractGetKeyPairGenerator() {
-		return ElGamalKeyPairGenerator.getInstance(this.getGenerator());
+	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator() {
+		return DiscreteLogarithmKeyGenerator.getInstance(this.getGenerator());
 	}
 
 	public Function getEncryptionFunctionLeft() {

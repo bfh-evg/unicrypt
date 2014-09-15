@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.ByteArrayKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
@@ -58,7 +58,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author rolfhaenni
  */
 public class OneTimePadEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, FixedByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
 
 	private final FiniteByteArraySet finiteByteArraySet;
 	private final FixedByteArraySet fixedByteArraySet;
@@ -84,8 +84,8 @@ public class OneTimePadEncryptionScheme
 	}
 
 	@Override
-	protected FixedByteArrayKeyGenerator abstractGetKeyGenerator() {
-		return FixedByteArrayKeyGenerator.getInstance(this.fixedByteArraySet);
+	protected ByteArrayKeyGenerator abstractGetKeyGenerator() {
+		return ByteArrayKeyGenerator.getInstance(this.fixedByteArraySet);
 	}
 
 	public static OneTimePadEncryptionScheme getInstance(int maxLength) {
