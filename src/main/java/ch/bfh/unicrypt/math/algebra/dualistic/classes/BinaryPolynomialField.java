@@ -134,6 +134,8 @@ public class BinaryPolynomialField extends PolynomialField<ZModTwo> implements F
 		
 		return new BinaryPolynomialField(irreduciblePolynomial);
 	}
+
+
 	
 	
 }
