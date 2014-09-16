@@ -39,57 +39,70 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.abstracts;
+package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import java.math.BigInteger;
+import java.nio.ByteOrder;
+import java.util.Arrays;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
- * @param <W>
  */
-public abstract class AbstractConverter<V extends Object, W extends Object>
-	   extends UniCrypt
-	   implements Converter<V, W> {
+public class ByteArrayToBigInteger
+	   extends AbstractBigIntegerConverter<ByteArray> {
 
-	private final Class<V> inputClass;
-	private final Class<W> outputClass;
+	private transient final ByteOrder byteOrder; //TODO not serializable
 
-	public AbstractConverter(Class<V> inputClass, Class<W> outputClass) {
-		this.inputClass = inputClass;
-		this.outputClass = outputClass;
+	protected ByteArrayToBigInteger(ByteOrder byteOrder) {
+		super(ByteArray.class);
+		this.byteOrder = byteOrder;
+	}
+
+	public ByteOrder getByteOrder() {
+		return byteOrder;
 	}
 
 	@Override
-	public Class<V> getInputClass() {
-		return this.inputClass;
+	public BigInteger abstractConvert(ByteArray byteArray) {
+		byte[] bytes;
+		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
+			bytes = byteArray.reverse().getBytes();
+		} else {
+			bytes = byteArray.getBytes();
+		}
+		return new BigInteger(1, bytes);
 	}
 
 	@Override
-	public Class<W> getOutputClass() {
-		return this.outputClass;
-	}
-
-	@Override
-	public final W convert(V value) {
-		if (value == null) {
+	public ByteArray abstractReconvert(BigInteger posBigInteger) {
+		// TODO: negative integers not allowed
+		if (posBigInteger.signum() == -1) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractConvert(value);
+		byte[] bytes = posBigInteger.toByteArray();
+		// remove the sign bit if necessary
+		if (bytes[0] == 0) {
+			bytes = Arrays.copyOfRange(bytes, 1, bytes.length);
+		}
+		ByteArray result = ByteArray.getInstance(bytes);
+		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
+			return result.reverse();
+		}
+		return result;
 	}
 
-	@Override
-	public final V reconvert(W value) {
-		if (value == null) {
+	public static ByteArrayToBigInteger getInstance() {
+		return ByteArrayToBigInteger.getInstance(ByteOrder.BIG_ENDIAN);
+	}
+
+	public static ByteArrayToBigInteger getInstance(ByteOrder byteOrder) {
+		if (byteOrder == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractReconvert(value);
+		return new ByteArrayToBigInteger(byteOrder);
 	}
-
-	protected abstract W abstractConvert(V value);
-
-	protected abstract V abstractReconvert(W value);
 
 }

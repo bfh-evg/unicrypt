@@ -39,57 +39,34 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.abstracts;
+package ch.bfh.unicrypt.helper.converter.classes;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V>
- * @param <W>
  */
-public abstract class AbstractConverter<V extends Object, W extends Object>
-	   extends UniCrypt
-	   implements Converter<V, W> {
+public class IdentityConverter<V extends Object>
+	   extends AbstractConverter<V, V> {
 
-	private final Class<V> inputClass;
-	private final Class<W> outputClass;
-
-	public AbstractConverter(Class<V> inputClass, Class<W> outputClass) {
-		this.inputClass = inputClass;
-		this.outputClass = outputClass;
+	public IdentityConverter(Class<V> valueClass) {
+		super(valueClass, valueClass);
 	}
 
 	@Override
-	public Class<V> getInputClass() {
-		return this.inputClass;
+	protected V abstractConvert(V value) {
+		return value;
 	}
 
 	@Override
-	public Class<W> getOutputClass() {
-		return this.outputClass;
+	protected V abstractReconvert(V value) {
+		return value;
 	}
 
-	@Override
-	public final W convert(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractConvert(value);
+	public static <V extends Object> IdentityConverter getInstance(Class<V> valueClass) {
+		return new IdentityConverter(valueClass);
 	}
-
-	@Override
-	public final V reconvert(W value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractReconvert(value);
-	}
-
-	protected abstract W abstractConvert(V value);
-
-	protected abstract V abstractReconvert(W value);
 
 }

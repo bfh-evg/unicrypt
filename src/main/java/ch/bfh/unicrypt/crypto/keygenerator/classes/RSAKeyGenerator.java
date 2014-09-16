@@ -60,43 +60,43 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 public class RSAKeyGenerator
 	   extends AbstractKeyPairGenerator<ZMod, ZModElement, ZMod, ZModElement> {
 
-	private final ZModPrimePair zModPrimes;
+	private final ZModPrimePair zModPrimePair;
 	private final ZStarMod zStarMod;
 
-	protected RSAKeyGenerator(ZModPrimePair zModPrimes, StringToByteArray stringConverter) {
-		super(zModPrimes.getZModOrder(), stringConverter);
-		this.zModPrimes = zModPrimes;
-		this.zStarMod = ZStarMod.getInstance(zModPrimes.getZStarModOrder().getOrder());
+	protected RSAKeyGenerator(ZModPrimePair zModPrimePair, StringToByteArray stringConverter) {
+		super(zModPrimePair.getZModOrder(), stringConverter);
+		this.zModPrimePair = zModPrimePair;
+		this.zStarMod = ZStarMod.getInstance(zModPrimePair.getZStarModOrder().getOrder());
 	}
 
 	public ZModPrimePair getZModPrimes() {
-		return this.zModPrimes;
+		return this.zModPrimePair;
 	}
 
 	@Override
 	protected Function defaultGetPrivateKeyGenerationFunction() {
 		return CompositeFunction.getInstance(
 			   RandomFunction.getInstance(this.zStarMod),
-			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimes));
+			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimePair));
 	}
 
 	@Override
 	protected Function abstractGetPublicKeyGenerationFunction() {
 		return CompositeFunction.getInstance(
-			   ConvertFunction.getInstance(this.zModPrimes, this.zStarMod),
+			   ConvertFunction.getInstance(this.zModPrimePair, this.zStarMod),
 			   InvertFunction.getInstance(this.zStarMod),
-			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimes));
+			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimePair));
 	}
 
-	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimes) {
-		return RSAKeyGenerator.getInstance(zModPrimes, StringToByteArray.getInstance());
+	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimePair) {
+		return RSAKeyGenerator.getInstance(zModPrimePair, StringToByteArray.getInstance());
 	}
 
-	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimes, StringToByteArray stringConverter) {
-		if (zModPrimes == null || stringConverter == null) {
+	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimePair, StringToByteArray stringConverter) {
+		if (zModPrimePair == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new RSAKeyGenerator(zModPrimes, stringConverter);
+		return new RSAKeyGenerator(zModPrimePair, stringConverter);
 	}
 
 }

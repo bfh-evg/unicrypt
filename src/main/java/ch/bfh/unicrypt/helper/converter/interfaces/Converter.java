@@ -53,8 +53,8 @@ public interface Converter<V extends Object, W extends Object> {
 
 	public Class<W> getOutputClass();
 
-	public W convert(V object);
+	public W convert(V value);
 
-	public V reconvert(W object);
+	public V reconvert(W value);
 
 }

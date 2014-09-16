@@ -71,7 +71,7 @@ public class BigIntegerToByteArray
 		return minLength;
 	}
 
-	public ByteArray convertToByteArray(int integer) {
+	public ByteArray convert(int integer) {
 		return this.abstractConvert(BigInteger.valueOf(integer));
 	}
 
