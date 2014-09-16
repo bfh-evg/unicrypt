@@ -125,8 +125,6 @@ public class ProbabilisticECGroupF2mEncoder
 				if (i >= (1 << SHIFT)) {
 					throw new ProbabilisticEncodingException(element + " can not be encoded");
 				}
-				
-				System.out.println(i);
 			}
 			
 			PolynomialElement<ZModTwo> y=this.calculateY(x);
