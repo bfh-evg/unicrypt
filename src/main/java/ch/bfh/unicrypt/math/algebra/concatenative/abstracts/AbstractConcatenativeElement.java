@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
@@ -85,7 +84,7 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
 	 * @see Group#selfApply(Element, Element)
 	 */
 	@Override
-	public final E selfConcatenate(final Element<Numerical> amount) {
+	public final E selfConcatenate(final Element<BigInteger> amount) {
 		return (E) this.getSet().selfConcatenate(this, amount);
 	}
 

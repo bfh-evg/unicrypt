@@ -43,8 +43,6 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.factorization.Factorization;
 import ch.bfh.unicrypt.helper.factorization.SpecialFactorization;
-import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
@@ -68,7 +66,7 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class GStarMod
-	   extends AbstractMultiplicativeCyclicGroup<GStarModElement, ResidueClass> {
+	   extends AbstractMultiplicativeCyclicGroup<GStarModElement, BigInteger> {
 
 	private final BigInteger modulus;
 	private final SpecialFactorization moduloFactorization;
@@ -76,7 +74,7 @@ public class GStarMod
 	private ZStarMod superGroup;
 
 	protected GStarMod(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
-		super(ResidueClass.class);
+		super(BigInteger.class);
 		this.modulus = moduloFactorization.getValue();
 		this.moduloFactorization = moduloFactorization;
 		this.orderFactorization = orderFactorization;
@@ -121,19 +119,11 @@ public class GStarMod
 	}
 
 	public final boolean contains(int integerValue) {
-		return this.contains(ResidueClass.getInstance(BigInteger.valueOf(integerValue), this.modulus));
-	}
-
-	public final boolean contains(BigInteger integerValue) {
-		return this.contains(ResidueClass.getInstance(integerValue, this.modulus));
+		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
 	public final GStarModElement getElement(int integerValue) {
-		return this.getElement(ResidueClass.getInstance(BigInteger.valueOf(integerValue), this.modulus));
-	}
-
-	public final GStarModElement getElement(BigInteger integerValue) {
-		return this.getElement(ResidueClass.getInstance(integerValue, this.modulus));
+		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
 	/**
@@ -153,7 +143,7 @@ public class GStarMod
 	@Override
 	protected GStarModElement defaultSelfApply(final GStarModElement element, final BigInteger amount) {
 		BigInteger newAmount = amount.mod(this.getOrder());
-		return this.abstractGetElement(element.getValue().power(NaturalNumber.getInstance(newAmount)));
+		return this.abstractGetElement(element.getValue().modPow(newAmount, this.modulus));
 	}
 
 	@Override
@@ -166,28 +156,32 @@ public class GStarMod
 	// various super-classes
 	//
 	@Override
-	protected boolean abstractContains(final ResidueClass value) {
-		return this.modulus.equals(value.getModulus()) && value.isRelativelyPrime()
-			   && value.power(NaturalNumber.getInstance(this.getOrder())).getBigInteger().equals(BigInteger.ONE);
+	protected boolean abstractContains(final BigInteger value) {
+		return value.signum() > 0
+			   && value.compareTo(this.modulus) < 0
+			   && MathUtil.areRelativelyPrime(value, this.modulus)
+			   && value.modPow(this.getOrder(), this.modulus).equals(BigInteger.ONE);
 	}
 
 	@Override
-	protected GStarModElement abstractGetElement(ResidueClass value) {
+	protected GStarModElement abstractGetElement(BigInteger value) {
 		return new GStarModElement(this, value);
 	}
 
 	@Override
-	protected GStarModElement abstractGetElementFrom(BigInteger value) {
-		if (value.signum() == 0 || value.compareTo(this.getModulus()) >= 0 || !MathUtil.areRelativelyPrime(value, this.getModulus())
-			   || !value.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE)) {
+	protected GStarModElement abstractGetElementFrom(BigInteger bigInteger) {
+		if (bigInteger.signum() == 0
+			   || bigInteger.compareTo(this.getModulus()) >= 0
+			   || !MathUtil.areRelativelyPrime(bigInteger, this.getModulus())
+			   || !bigInteger.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE)) {
 			return null; // no such element
 		}
-		return this.abstractGetElement(ResidueClass.getInstance(value, this.modulus));
+		return this.abstractGetElement(bigInteger);
 	}
 
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(GStarModElement element) {
-		return element.getValue().getBigInteger();
+		return element.getValue();
 	}
 
 	@Override
@@ -211,17 +205,17 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement abstractGetIdentityElement() {
-		return this.abstractGetElement(ResidueClass.getInstance(BigInteger.ONE, this.modulus));
+		return this.abstractGetElement(BigInteger.ONE);
 	}
 
 	@Override
 	protected GStarModElement abstractApply(final GStarModElement element1, final GStarModElement element2) {
-		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
+		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.modulus));
 	}
 
 	@Override
 	protected GStarModElement abstractInvert(final GStarModElement element) {
-		return this.abstractGetElement(element.getValue().invert());
+		return this.abstractGetElement(element.getValue().modInverse(this.modulus));
 	}
 
 	/**
@@ -238,7 +232,7 @@ public class GStarMod
 			do {
 				alpha = alpha.add(BigInteger.ONE);
 			} while (!MathUtil.areRelativelyPrime(alpha, this.getModulus()));
-			element = this.abstractGetElement(ResidueClass.getInstance(alpha.modPow(this.getCoFactor(), this.getModulus()), this.modulus));
+			element = this.abstractGetElement(alpha.modPow(this.getCoFactor(), this.modulus));
 		} while (!this.isGenerator(element)); // this test could be skipped for a prime order
 		return element;
 	}

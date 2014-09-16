@@ -43,17 +43,17 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
 public class GStarModElement
-	   extends AbstractMultiplicativeElement<GStarMod, GStarModElement, ResidueClass>
-	   implements MultiplicativeElement<ResidueClass> {
+	   extends AbstractMultiplicativeElement<GStarMod, GStarModElement, BigInteger>
+	   implements MultiplicativeElement<BigInteger> {
 
-	protected GStarModElement(final GStarMod gStarMod, final ResidueClass value) {
+	protected GStarModElement(final GStarMod gStarMod, final BigInteger value) {
 		super(gStarMod, value);
 	}
 

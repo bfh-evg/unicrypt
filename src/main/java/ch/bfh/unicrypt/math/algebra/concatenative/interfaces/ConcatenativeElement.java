@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
@@ -70,7 +69,7 @@ public interface ConcatenativeElement<V extends Object>
 	/**
 	 * @see Group#selfApply(Element, Element)
 	 */
-	public ConcatenativeElement<V> selfConcatenate(Element<Numerical> amount);
+	public ConcatenativeElement<V> selfConcatenate(Element<BigInteger> amount);
 
 	/**
 	 * @see Group#selfApply(Element, int)
@@ -98,7 +97,7 @@ public interface ConcatenativeElement<V extends Object>
 	public ConcatenativeElement<V> selfApply(BigInteger amount);
 
 	@Override
-	public ConcatenativeElement<V> selfApply(Element<Numerical> amount);
+	public ConcatenativeElement<V> selfApply(Element<BigInteger> amount);
 
 	@Override
 	public ConcatenativeElement<V> selfApply(int amount);

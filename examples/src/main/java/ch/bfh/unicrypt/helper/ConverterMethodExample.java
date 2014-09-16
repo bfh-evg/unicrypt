@@ -45,10 +45,9 @@ import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
-import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.PermutationToByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.ResidueClassToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod.Mode;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
@@ -146,9 +145,8 @@ public class ConverterMethodExample {
 
 	public static void example2() {
 
-		// Three converters
+		// Two converters
 		StringToByteArray stringConverter = StringToByteArray.getInstance(Charset.forName("UTF-8"));
-		ResidueClassToByteArray residueClassConverter = ResidueClassToByteArray.getInstance();
 		PermutationToByteArray permutationConverter = PermutationToByteArray.getInstance();
 
 		// BigIntegerToByteArray (minimal length = 10)
@@ -156,7 +154,7 @@ public class ConverterMethodExample {
 
 		// Two ConvertMethods
 		ConvertMethod convertMethod1 = ConvertMethod.getInstance(permutationConverter);
-		ConvertMethod convertMethod2 = ConvertMethod.getInstance(stringConverter, residueClassConverter, permutationConverter, bigIntegerConverter);
+		ConvertMethod convertMethod2 = ConvertMethod.getInstance(stringConverter, bigIntegerConverter, permutationConverter, bigIntegerConverter);
 
 		// Three sets
 		StringMonoid s1 = StringMonoid.getInstance(Alphabet.DECIMAL);

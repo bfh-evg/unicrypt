@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
@@ -99,11 +98,11 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E selfApply(final Element element, final Element<Numerical> amount) {
+	public final E selfApply(final Element element, final Element<BigInteger> amount) {
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.selfApply(element, amount.getValue().getBigInteger());
+		return this.selfApply(element, amount.getValue());
 	}
 
 	@Override

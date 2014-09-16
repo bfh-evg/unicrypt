@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.factorization.Prime;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
@@ -59,7 +58,7 @@ import java.util.Map;
  */
 public class ZStarModPrime
 	   extends ZStarMod
-	   implements MultiplicativeCyclicGroup<ResidueClass> {
+	   implements MultiplicativeCyclicGroup<BigInteger> {
 
 	private final static Map<BigInteger, ZStarModPrime> instances = new HashMap<BigInteger, ZStarModPrime>();
 

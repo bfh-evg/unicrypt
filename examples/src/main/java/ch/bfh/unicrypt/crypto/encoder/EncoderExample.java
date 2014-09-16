@@ -41,22 +41,18 @@
  */
 package ch.bfh.unicrypt.crypto.encoder;
 
-import java.math.BigInteger;
-
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.CompositeEncoder;
 import ch.bfh.unicrypt.crypto.encoder.classes.FiniteStringToZModEncoder;
 import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupF2mEncoder;
 import ch.bfh.unicrypt.crypto.encoder.classes.ZModToGStarModSafePrimeEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
-import ch.bfh.unicrypt.helper.Alphabet;
 
 /**
  *
@@ -86,24 +82,24 @@ public class EncoderExample {
 		Example.printLines("Encoders", encoder1, encoder2, encoder12);
 		Example.printLines("Messages", message, encodedMessage, decodedMessage);
 	}
-	
+
 	/**
 	 * Example shows how to encode an element from ZMod into an elliptic curve over F2m
 	 */
 	public static void example2() {
-		
+
 		// Define underlying groups
 		StandardECPolynomialField ecf2m = StandardECPolynomialField
-				.getInstance(SECECCParamsF2m.sect113r1);
-		ZMod z=ZMod.getInstance(ecf2m.getOrder());
-		
+			   .getInstance(SECECCParamsF2m.sect113r1);
+		ZMod z = ZMod.getInstance(ecf2m.getOrder());
+
 		// Create encoders
 		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.LOWER_CASE);
-		ProbabilisticECGroupF2mEncoder encoder2=ProbabilisticECGroupF2mEncoder.getInstance(z, ecf2m);
-		
+		ProbabilisticECGroupF2mEncoder encoder2 = ProbabilisticECGroupF2mEncoder.getInstance(z, ecf2m);
+
 		// Create composite encoder
 		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);
-		
+
 		// Encode and decode message
 		Element message = encoder12.getDomain().getElement("hello");
 		Element encodedMessage = encoder12.encode(message);
@@ -112,7 +108,7 @@ public class EncoderExample {
 		Example.printLines("Groups", ecf2m, z);
 		Example.printLines("Encoders", encoder1, encoder2, encoder12);
 		Example.printLines("Messages", message, encodedMessage, decodedMessage);
-		
+
 	}
 
 	public static void main(final String[] args) {

@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
@@ -56,7 +55,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public class ProbabilisticECGroupFpEncoder
-	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECElement<ResidueClass>>
+	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECElement<BigInteger>>
 	   implements ProbabilisticEncoder {
 
 	protected static final int SHIFT = 10;
@@ -84,18 +83,18 @@ public class ProbabilisticECGroupFpEncoder
 	}
 
 	static class ECEncodingFunction
-		   extends AbstractFunction<ECEncodingFunction, ZModPrime, ZModElement, ECZModPrime, ECElement<ResidueClass>> {
+		   extends AbstractFunction<ECEncodingFunction, ZModPrime, ZModElement, ECZModPrime, ECElement<BigInteger>> {
 
 		protected ECEncodingFunction(ZModPrime domain, ECZModPrime coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected ECElement<ResidueClass> abstractApply(ZModElement element, RandomByteSequence randomByteSequence) {
+		protected ECElement<BigInteger> abstractApply(ZModElement element, RandomByteSequence randomByteSequence) {
 			ZModPrime zModPrime = this.getDomain();
 			ECZModPrime ecPrime = this.getCoDomain();
 
-			BigInteger e = element.getValue().getBigInteger();
+			BigInteger e = element.getValue();
 			e = e.shiftLeft(SHIFT);
 
 			if (!zModPrime.contains(e)) {
@@ -114,22 +113,22 @@ public class ProbabilisticECGroupFpEncoder
 				count++;
 			}
 			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
-			ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue().getBigInteger(), zModPrime.getModulus()));
+			ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
 			return ecPrime.getElement(x, y);
 		}
 
 	}
 
 	static class ECDecodingFunction
-		   extends AbstractFunction<ECDecodingFunction, ECZModPrime, ECElement<ResidueClass>, ZModPrime, ZModElement> {
+		   extends AbstractFunction<ECDecodingFunction, ECZModPrime, ECElement<BigInteger>, ZModPrime, ZModElement> {
 
 		protected ECDecodingFunction(ECZModPrime domain, ZModPrime coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected ZModElement abstractApply(ECElement<ResidueClass> element, RandomByteSequence randomByteSequence) {
-			BigInteger x1 = element.getX().getValue().getBigInteger();
+		protected ZModElement abstractApply(ECElement<BigInteger> element, RandomByteSequence randomByteSequence) {
+			BigInteger x1 = element.getX().getValue();
 			x1 = x1.shiftRight(SHIFT);
 			return this.getCoDomain().getElement(x1);
 		}

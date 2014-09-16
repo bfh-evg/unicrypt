@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -95,7 +94,7 @@ public interface AdditiveSemiGroup<V extends Object>
 	 * @param amount  the same as in {@link #Group.selfApply(Element, Element)}
 	 * @return the same as in {@link #Group.selfApply(Element, Element)}
 	 */
-	public AdditiveElement<V> times(Element element, Element<Numerical> amount);
+	public AdditiveElement<V> times(Element element, Element<BigInteger> amount);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
@@ -161,7 +160,7 @@ public interface AdditiveSemiGroup<V extends Object>
 	public AdditiveElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
-	public AdditiveElement<V> selfApply(Element element, Element<Numerical> amount);
+	public AdditiveElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
 	public AdditiveElement<V> selfApply(Element element, int amount);

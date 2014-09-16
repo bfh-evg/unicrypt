@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -190,11 +189,11 @@ public class ProductSemiGroup
 	}
 
 	@Override
-	public final Tuple selfApply(Element element, Element<Numerical> amount) {
+	public final Tuple selfApply(Element element, Element<BigInteger> amount) {
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.selfApply(element, amount.getValue().getBigInteger());
+		return this.selfApply(element, amount.getValue());
 	}
 
 	@Override

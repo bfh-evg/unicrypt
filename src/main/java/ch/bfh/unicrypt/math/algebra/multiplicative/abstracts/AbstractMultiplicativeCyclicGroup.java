@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
@@ -77,7 +76,7 @@ public abstract class AbstractMultiplicativeCyclicGroup<E extends Multiplicative
 	}
 
 	@Override
-	public final E power(final Element element, final Element<Numerical> amount) {
+	public final E power(final Element element, final Element<BigInteger> amount) {
 		return this.selfApply(element, amount);
 	}
 

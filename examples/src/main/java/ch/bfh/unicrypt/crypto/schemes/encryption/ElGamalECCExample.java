@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
@@ -78,7 +77,7 @@ public class ElGamalECCExample {
 		//encoding
 		FiniteField f = g_q.getFiniteField();
 		Element m = f.getElementFrom(new BigInteger("123456789"));
-		ECElement<ResidueClass> message = enc.encode(m);
+		ECElement<BigInteger> message = enc.encode(m);
 		Example.printLine("Message: " + m);
 		Example.printLine("Message encoded: " + message);
 

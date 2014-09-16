@@ -41,13 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
-import ch.bfh.unicrypt.helper.factorization.Prime;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +57,7 @@ import java.util.Map;
  */
 public class ZModPrime
 	   extends ZMod
-	   implements PrimeField<ResidueClass> {
+	   implements PrimeField<BigInteger> {
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());
@@ -82,7 +81,7 @@ public class ZModPrime
 		if (element.isEquivalent(this.getZeroElement())) {
 			throw new UnsupportedOperationException();
 		}
-		return this.abstractGetElement(((ZModElement) element).getValue().invert());
+		return this.abstractGetElement(((ZModElement) element).getValue().modInverse(this.modulus));
 	}
 
 	@Override

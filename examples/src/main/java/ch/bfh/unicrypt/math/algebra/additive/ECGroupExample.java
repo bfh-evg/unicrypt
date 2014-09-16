@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.algebra.additive;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
@@ -69,7 +68,7 @@ public class ECGroupExample {
 
 			StandardECZModPrime ec = StandardECZModPrime
 				   .getInstance(params);
-			ECElement<ResidueClass> generator = ec.getDefaultGenerator();
+			ECElement<BigInteger> generator = ec.getDefaultGenerator();
 			ec.getRandomElement();
 			BigInteger order = ec.getOrder();
 			Example.printLine(ec);

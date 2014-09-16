@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
@@ -93,7 +92,7 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement<V> selfApply(Element element, Element<Numerical> amount);
+	public DualisticElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
 	public DualisticElement<V> selfApply(Element element, int amount);
@@ -122,7 +121,7 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> times(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement<V> times(Element element, Element<Numerical> amount);
+	public DualisticElement<V> times(Element element, Element<BigInteger> amount);
 
 	@Override
 	public DualisticElement<V> times(Element element, int amount);
@@ -151,7 +150,7 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> power(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement<V> power(Element element, Element<Numerical> amount);
+	public DualisticElement<V> power(Element element, Element<BigInteger> amount);
 
 	@Override
 	public DualisticElement<V> power(Element element, int amount);

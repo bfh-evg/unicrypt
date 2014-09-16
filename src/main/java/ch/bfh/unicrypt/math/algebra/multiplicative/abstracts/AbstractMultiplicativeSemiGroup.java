@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
@@ -77,7 +76,7 @@ public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeEl
 	}
 
 	@Override
-	public final E power(final Element element, final Element<Numerical> amount) {
+	public final E power(final Element element, final Element<BigInteger> amount) {
 		return this.selfApply(element, amount);
 	}
 

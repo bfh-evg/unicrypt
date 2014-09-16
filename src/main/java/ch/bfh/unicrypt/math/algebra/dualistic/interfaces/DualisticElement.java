@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
@@ -71,7 +70,7 @@ public interface DualisticElement<V extends Object>
 	public DualisticElement<V> selfApply(BigInteger amount);
 
 	@Override
-	public DualisticElement<V> selfApply(Element<Numerical> amount);
+	public DualisticElement<V> selfApply(Element<BigInteger> amount);
 
 	@Override
 	public DualisticElement<V> selfApply(int amount);
@@ -93,7 +92,7 @@ public interface DualisticElement<V extends Object>
 	public DualisticElement<V> times(BigInteger amount);
 
 	@Override
-	public DualisticElement<V> times(Element<Numerical> amount);
+	public DualisticElement<V> times(Element<BigInteger> amount);
 
 	@Override
 	public DualisticElement<V> times(int amount);
@@ -115,7 +114,7 @@ public interface DualisticElement<V extends Object>
 	public DualisticElement<V> power(BigInteger amount);
 
 	@Override
-	public DualisticElement<V> power(Element<Numerical> amount);
+	public DualisticElement<V> power(Element<BigInteger> amount);
 
 	@Override
 	public DualisticElement<V> power(int amount);

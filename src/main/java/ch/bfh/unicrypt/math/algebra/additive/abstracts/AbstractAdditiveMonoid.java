@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
@@ -77,7 +76,7 @@ public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V ext
 	}
 
 	@Override
-	public final E times(final Element element, final Element<Numerical> amount) {
+	public final E times(final Element element, final Element<BigInteger> amount) {
 		return this.selfApply(element, amount);
 	}
 
