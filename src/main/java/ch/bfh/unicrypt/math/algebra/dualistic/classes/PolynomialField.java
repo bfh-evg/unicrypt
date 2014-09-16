@@ -221,6 +221,39 @@ public class PolynomialField<V> extends PolynomialRing<V> implements
 		return z;
 	}
 	
+	/**
+	 * Test if there is a solution for the quadratic equation z²+z=b for any polynomial basis.
+	 * Source: AMERICAN NATIONAL STANDARD X9.62 D.1.6
+	 * @param PolynomialElement b
+	 * @return true/false
+	 */
+	public boolean hasQuadradicEquationSolution(PolynomialElement<V> b) {
+		PolynomialElement<V> y = this.getZeroElement();
+		PolynomialElement<V> z = this.getZeroElement();
+
+		while (y.equals(this.getZeroElement())) {
+
+			PolynomialElement<V> r = this.getRandomElement(this.getDegree());
+			z = this.getZeroElement();
+			PolynomialElement<V> w = b;
+			int m = this.getDegree();
+
+			for (int i = 1; i <= m - 1; i++) {
+
+				z = z.square().add(w.square().multiply((r)));
+				w = w.square().add(b);
+			}
+
+			y = z.square().add(z);
+			if (!w.equals(this.getZeroElement())) {
+				return false;
+			}
+
+		}
+
+		return true;
+	}
+	
 	
 
 	//
