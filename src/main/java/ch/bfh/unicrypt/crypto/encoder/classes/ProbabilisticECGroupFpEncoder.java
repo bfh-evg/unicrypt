@@ -108,7 +108,7 @@ public class ProbabilisticECGroupFpEncoder
 			int count = 0;
 			while (!ecPrime.contains(x)) {
 				if (count >= (1 << SHIFT)) {
-					throw new IllegalArgumentException("No encoding was found");
+					throw new ProbabilisticEncodingException(e + " can not be encoded");
 				}
 				x = x.add(ONE);
 				count++;
