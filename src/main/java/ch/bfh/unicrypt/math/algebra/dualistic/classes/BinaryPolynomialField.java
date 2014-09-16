@@ -128,4 +128,7 @@ public class BinaryPolynomialField
 		return new BinaryPolynomialField(irreduciblePolynomial);
 	}
 
+
+	
+	
 }
