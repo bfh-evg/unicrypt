@@ -86,7 +86,7 @@ public class RSASignatureScheme
 
 	@Override
 	protected Function abstractGetSignatureFunction() {
-		ProductSet inputSpace = ProductSet.getInstance(this.getSignatureKeySpace(), this.messageSpace);
+		ProductSet inputSpace = ProductSet.getInstance(this.zMod, this.messageSpace);
 		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
 		return CompositeFunction.getInstance(
 			   MultiIdentityFunction.getInstance(inputSpace, 2),
@@ -102,7 +102,7 @@ public class RSASignatureScheme
 
 	@Override
 	protected Function abstractGetVerificationFunction() {
-		ProductSet inputSpace = ProductSet.getInstance(this.getVerificationKeySpace(), this.messageSpace, this.signatureSpace);
+		ProductSet inputSpace = ProductSet.getInstance(this.zMod, this.messageSpace, this.signatureSpace);
 		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
 		return CompositeFunction.getInstance(
 			   //duplicate the input for the power function (s^e) and equality function m=s^e
