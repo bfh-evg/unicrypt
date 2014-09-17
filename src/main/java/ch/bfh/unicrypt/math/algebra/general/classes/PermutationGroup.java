@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.PermutationToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -127,6 +129,11 @@ public class PermutationGroup
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(PermutationElement element) {
 		return element.getValue().getRank();
+	}
+
+	@Override
+	protected BigIntegerConverter<Permutation> abstractGetBigIntegerConverter() {
+		return PermutationToBigInteger.getInstance(this.size);
 	}
 
 	@Override

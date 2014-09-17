@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
@@ -170,6 +172,11 @@ public class ZMod
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(ZModElement element) {
 		return element.getValue();
+	}
+
+	@Override
+	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance();
 	}
 
 	@Override

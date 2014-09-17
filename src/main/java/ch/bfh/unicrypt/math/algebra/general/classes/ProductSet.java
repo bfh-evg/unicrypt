@@ -45,6 +45,8 @@ import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -177,6 +179,35 @@ public class ProductSet
 			bigIntegers[i++] = element.getBigInteger();
 		}
 		return MathUtil.pair(bigIntegers);
+	}
+
+	@Override
+	protected BigIntegerConverter<ImmutableArray<Element>> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<ImmutableArray<Element>>(null) { // class parameter not needed
+
+			@Override
+			protected BigInteger abstractConvert(ImmutableArray<Element> elements) {
+				BigInteger[] bigIntegers = new BigInteger[getLength()];
+				int i = 0;
+				for (Element element : elements) {
+					bigIntegers[i] = element.getBigInteger();
+					i++;
+				}
+				return MathUtil.pair(bigIntegers);
+			}
+
+			@Override
+			protected ImmutableArray<Element> abstractReconvert(BigInteger bigInteger) {
+				BigInteger[] values = MathUtil.unpair(bigInteger, getLength());
+				Element[] elements = new Element[getLength()];
+				int i = 0;
+				for (BigInteger value : values) {
+					elements[i] = getAt(i).getElementFrom(value);
+					i++;
+				}
+				return ImmutableArray.getInstance(elements);
+			}
+		};
 	}
 
 	@Override

@@ -41,65 +41,61 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
-import java.util.LinkedList;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArrayToBigInteger
-	   extends AbstractBigIntegerConverter<ByteArray> {
+public class StringToBigInteger
+	   extends AbstractBigIntegerConverter<String> {
 
+	private final Alphabet alphabet;
 	private final int blockLength;
 
-	protected ByteArrayToBigInteger(int blockLength) {
-		super(ByteArray.class);
+	protected StringToBigInteger(Alphabet alphabet, int blockLength) {
+		super(String.class);
+		this.alphabet = alphabet;
 		this.blockLength = blockLength;
 	}
 
 	@Override
-	public BigInteger abstractConvert(ByteArray value) {
-		// For blocklLength=1, there is 1 bytearray of length 0, 256 of length 1,
-		// 65536 of length 2, etc. Therefore:
-		//   lenght=0 -> 0
-		//   length=1 -> 1,...,256
-		//   length=2 -> 257,...,65792
-		// etc.
-		BigInteger result = BigInteger.ZERO;
-		if (value.getLength() > 0) {
-			byte[] bytes = new byte[value.getLength()];
-			int amount = bytes.length / this.blockLength;
-			for (int i = 0; i < amount; i++) {
-				bytes[(bytes.length - 1) - (i * this.blockLength)] = 1;
-			}
-			result = new BigInteger(1, bytes);
+	protected BigInteger abstractConvert(String value) {
+		BigInteger value1 = BigInteger.ZERO;
+		BigInteger alphabetSize = BigInteger.valueOf(this.alphabet.getSize());
+		for (int i = 0; i < value.length(); i++) {
+			int charIndex = this.alphabet.getIndex(value.charAt(i));
+			value1 = value1.multiply(alphabetSize).add(BigInteger.valueOf(charIndex));
 		}
-		return result.add(new BigInteger(1, value.getBytes()));
+		BigInteger value2 = BigInteger.ZERO;
+		BigInteger blockSize = alphabetSize.pow(this.blockLength);
+		for (int i = 0; i < value.length() / this.blockLength; i++) {
+			value2 = value2.multiply(blockSize).add(BigInteger.ONE);
+		}
+		return value1.add(value2);
 	}
 
 	@Override
-	public ByteArray abstractReconvert(BigInteger value) {
-		LinkedList<Byte> byteList = new LinkedList<Byte>();
-		BigInteger byteSize = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger blockSize = MathUtil.powerOfTwo(Byte.SIZE * this.blockLength);
+	protected String abstractReconvert(BigInteger value) {
+		StringBuilder strBuilder = new StringBuilder();
+		BigInteger alphabetSize = BigInteger.valueOf(this.alphabet.getSize());
+		BigInteger blockSize = alphabetSize.pow(this.blockLength);
 		while (!value.equals(BigInteger.ZERO)) {
 			value = value.subtract(BigInteger.ONE);
 			BigInteger remainder = value.mod(blockSize);
 			for (int i = 0; i < this.blockLength; i++) {
-				byteList.addFirst(remainder.mod(byteSize).byteValue());
-				remainder = remainder.divide(byteSize);
+				strBuilder.append(this.alphabet.getCharacter(remainder.mod(alphabetSize).intValue()));
+				remainder = remainder.divide(alphabetSize);
 			}
 			value = value.divide(blockSize);
 		}
-		return ByteArray.getInstance(byteList);
+		return strBuilder.reverse().toString();
 	}
 
-	public static ByteArrayToBigInteger getInstance(int blockLength) {
-		return new ByteArrayToBigInteger(blockLength);
+	public static StringToBigInteger getInstance(Alphabet alphabet, int blockLength) {
+		return new StringToBigInteger(alphabet, blockLength);
 	}
 
 }

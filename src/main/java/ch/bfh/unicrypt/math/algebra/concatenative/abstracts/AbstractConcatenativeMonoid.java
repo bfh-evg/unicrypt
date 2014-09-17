@@ -53,7 +53,7 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 	   extends AbstractMonoid<E, V>
 	   implements ConcatenativeMonoid<V> {
 
-	private final int blockLength;
+	protected final int blockLength;
 
 	public AbstractConcatenativeMonoid(Class<? extends Object> valueClass, int blockLength) {
 		super(valueClass);

@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.helper.array.interfaces.Array;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -85,6 +86,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	private final Class<? extends Object> valueClass;
 	private BigInteger order, lowerBound, upperBound, minimum;
+	private BigIntegerConverter<V> converter;
 
 	protected AbstractSet(Class<? extends Object> valueClass) {
 		this.valueClass = valueClass;
@@ -346,6 +348,14 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
+	public final BigIntegerConverter<V> getBigIntegerConverter() {
+		if (this.converter == null) {
+			this.converter = this.abstractGetBigIntegerConverter();
+		}
+		return this.converter;
+	}
+
+	@Override
 	public final boolean areEquivalent(final Element element1, final Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
 			throw new IllegalArgumentException();
@@ -501,6 +511,8 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	protected abstract E abstractGetElementFrom(BigInteger integerValue);
 
 	protected abstract BigInteger abstractGetBigIntegerFrom(E element);
+
+	protected abstract BigIntegerConverter<V> abstractGetBigIntegerConverter();
 
 	protected abstract E abstractGetRandomElement(RandomByteSequence randomByteSequence);
 

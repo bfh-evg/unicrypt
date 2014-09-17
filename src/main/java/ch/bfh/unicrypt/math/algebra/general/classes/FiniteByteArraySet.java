@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -127,6 +129,11 @@ public class FiniteByteArraySet
 			result = result.multiply(size).add(BigInteger.valueOf(intValue));
 		}
 		return result;
+	}
+
+	@Override
+	protected BigIntegerConverter<ByteArray> abstractGetBigIntegerConverter() {
+		return FiniteByteArrayToBigInteger.getInstance(this.minLength, this.maxLength);
 	}
 
 	@Override

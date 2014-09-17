@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -177,6 +179,11 @@ public class ZStarMod
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(ZStarModElement element) {
 		return element.getValue();
+	}
+
+	@Override
+	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance();
 	}
 
 	@Override

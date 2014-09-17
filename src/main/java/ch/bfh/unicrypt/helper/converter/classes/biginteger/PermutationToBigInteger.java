@@ -39,34 +39,38 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes;
+package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
+import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
  */
-public class IdentityConverter<V extends Object>
-	   extends AbstractConverter<V, V> {
+public class PermutationToBigInteger
+	   extends AbstractBigIntegerConverter<Permutation> {
 
-	public IdentityConverter(Class<V> valueClass) {
-		super(valueClass, valueClass);
+	private final int size;
+
+	protected PermutationToBigInteger(int size) {
+		super(Permutation.class);
+		this.size = size;
 	}
 
 	@Override
-	protected V abstractConvert(V value) {
-		return value;
+	protected BigInteger abstractConvert(Permutation value) {
+		return value.getRank();
 	}
 
 	@Override
-	protected V abstractReconvert(V value) {
-		return value;
+	protected Permutation abstractReconvert(BigInteger value) {
+		return Permutation.getInstance(this.size, value);
 	}
 
-	public static <V extends Object> IdentityConverter getInstance(Class<V> valueClass) {
-		return new IdentityConverter(valueClass);
+	public static PermutationToBigInteger getInstance(int size) {
+		return new PermutationToBigInteger(size);
 	}
 
 }

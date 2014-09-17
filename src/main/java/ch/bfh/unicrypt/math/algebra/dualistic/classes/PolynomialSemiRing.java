@@ -44,6 +44,8 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -228,6 +230,36 @@ public class PolynomialSemiRing<V>
 			values[i] = element.getValue().getCoefficient(i).getBigInteger();
 		}
 		return MathUtil.pairWithSize(values);
+	}
+
+	@Override
+	protected BigIntegerConverter<Polynomial<DualisticElement<V>>> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<Polynomial<DualisticElement<V>>>(null) { // class not needed
+
+			@Override
+			protected BigInteger abstractConvert(Polynomial<DualisticElement<V>> polynomial) {
+				int degree = polynomial.getDegree();
+				BigInteger[] values = new BigInteger[degree + 1];
+				for (int i = 0; i <= degree; i++) {
+					values[i] = polynomial.getCoefficient(i).getBigInteger();
+				}
+				return MathUtil.pairWithSize(values);
+			}
+
+			@Override
+			protected Polynomial<DualisticElement<V>> abstractReconvert(BigInteger value) {
+				BigInteger[] bigIntegers = MathUtil.unpairWithSize(value);
+				DualisticElement[] elements = new DualisticElement[bigIntegers.length];
+				int i = 0;
+				for (BigInteger bigInteger : bigIntegers) {
+					DualisticElement<V> element = getSemiRing().getElementFrom(bigInteger);
+					elements[i] = element;
+					i++;
+				}
+				Polynomial<DualisticElement<V>> polynomial = Polynomial.<DualisticElement<V>>getInstance(elements, getSemiRing().getZeroElement(), getSemiRing().getOneElement());
+				return polynomial;
+			}
+		};
 	}
 
 	@Override

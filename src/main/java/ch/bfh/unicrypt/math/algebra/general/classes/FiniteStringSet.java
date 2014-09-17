@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteStringToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -122,6 +124,11 @@ public class FiniteStringSet
 			result = result.multiply(size).add(BigInteger.valueOf(charIndex));
 		}
 		return result;
+	}
+
+	@Override
+	protected BigIntegerConverter<String> abstractGetBigIntegerConverter() {
+		return FiniteStringToBigInteger.getInstance(this.alphabet, this.minLength, this.maxLength);
 	}
 
 	@Override

@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
 import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
@@ -162,6 +164,34 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 			return BigInteger.ZERO;
 		}
 		return MathUtil.pair(point.getX().getBigInteger(), point.getY().getBigInteger()).add(BigInteger.ONE);
+	}
+
+	@Override
+	protected BigIntegerConverter<Point<DualisticElement<V>>> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<Point<DualisticElement<V>>>(null) { // class parameter not needed
+
+			@Override
+			protected BigInteger abstractConvert(Point<DualisticElement<V>> point) {
+				if (point.equals(infinityPoint)) {
+					return BigInteger.ZERO;
+				}
+				return MathUtil.pair(point.getX().getBigInteger(), point.getY().getBigInteger()).add(BigInteger.ONE);
+			}
+
+			@Override
+			protected Point<DualisticElement<V>> abstractReconvert(BigInteger value) {
+				if (value.equals(BigInteger.ZERO)) {
+					return getZeroElement().getValue();
+				}
+				BigInteger[] result = MathUtil.unpair(value.subtract(BigInteger.ONE));
+				DualisticElement<V> xValue = getFiniteField().getElementFrom(result[0]);
+				DualisticElement<V> yValue = getFiniteField().getElementFrom(result[1]);
+				if (xValue == null || yValue == null) {
+					return null; // no such element
+				}
+				return Point.getInstance((DualisticElement<V>) xValue, (DualisticElement<V>) yValue);
+			}
+		};
 	}
 
 	@Override

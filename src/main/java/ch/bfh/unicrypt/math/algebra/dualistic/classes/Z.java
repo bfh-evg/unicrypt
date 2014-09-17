@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.distribution.Distribution;
 import ch.bfh.unicrypt.helper.distribution.InfiniteDistribution;
 import ch.bfh.unicrypt.helper.distribution.UniformDistribution;
@@ -161,6 +163,11 @@ public class Z
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(ZElement element) {
 		return MathUtil.fold(element.getValue());
+	}
+
+	@Override
+	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance(true);
 	}
 
 	@Override

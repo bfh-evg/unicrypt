@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -118,6 +119,11 @@ public class Subset
 	@Override
 	protected BigInteger abstractGetBigIntegerFrom(Element element) {
 		return this.superSet.getBigIntegerFrom(element);
+	}
+
+	@Override
+	protected BigIntegerConverter<Object> abstractGetBigIntegerConverter() {
+		return this.superSet.getBigIntegerConverter();
 	}
 
 	@Override

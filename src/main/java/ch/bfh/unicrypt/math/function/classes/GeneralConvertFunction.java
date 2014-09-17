@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.helper.converter.classes.IdentityConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -87,10 +86,6 @@ public class GeneralConvertFunction<V extends Object, W extends Object>
 	 */
 	public static <V, W> GeneralConvertFunction getInstance(final Set<V> domain, final Set<W> coDomain, Converter<V, W> converter) {
 		return new GeneralConvertFunction<V, W>(domain, coDomain, converter);
-	}
-
-	public static <V> GeneralConvertFunction getInstance(final Set<V> domain, final Set<V> coDomain, Class<V> valueClass) {
-		return new GeneralConvertFunction<V, V>(domain, coDomain, IdentityConverter.getInstance(valueClass));
 	}
 
 }

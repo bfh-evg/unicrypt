@@ -41,65 +41,35 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
-import java.util.LinkedList;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArrayToBigInteger
-	   extends AbstractBigIntegerConverter<ByteArray> {
+public class BooleanToBigInteger
+	   extends AbstractBigIntegerConverter<Boolean> {
 
-	private final int blockLength;
-
-	protected ByteArrayToBigInteger(int blockLength) {
-		super(ByteArray.class);
-		this.blockLength = blockLength;
+	private BooleanToBigInteger() {
+		super(Boolean.class);
 	}
 
 	@Override
-	public BigInteger abstractConvert(ByteArray value) {
-		// For blocklLength=1, there is 1 bytearray of length 0, 256 of length 1,
-		// 65536 of length 2, etc. Therefore:
-		//   lenght=0 -> 0
-		//   length=1 -> 1,...,256
-		//   length=2 -> 257,...,65792
-		// etc.
-		BigInteger result = BigInteger.ZERO;
-		if (value.getLength() > 0) {
-			byte[] bytes = new byte[value.getLength()];
-			int amount = bytes.length / this.blockLength;
-			for (int i = 0; i < amount; i++) {
-				bytes[(bytes.length - 1) - (i * this.blockLength)] = 1;
-			}
-			result = new BigInteger(1, bytes);
+	protected BigInteger abstractConvert(Boolean value) {
+		if (value) {
+			return BigInteger.ONE;
 		}
-		return result.add(new BigInteger(1, value.getBytes()));
+		return BigInteger.ZERO;
 	}
 
 	@Override
-	public ByteArray abstractReconvert(BigInteger value) {
-		LinkedList<Byte> byteList = new LinkedList<Byte>();
-		BigInteger byteSize = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger blockSize = MathUtil.powerOfTwo(Byte.SIZE * this.blockLength);
-		while (!value.equals(BigInteger.ZERO)) {
-			value = value.subtract(BigInteger.ONE);
-			BigInteger remainder = value.mod(blockSize);
-			for (int i = 0; i < this.blockLength; i++) {
-				byteList.addFirst(remainder.mod(byteSize).byteValue());
-				remainder = remainder.divide(byteSize);
-			}
-			value = value.divide(blockSize);
-		}
-		return ByteArray.getInstance(byteList);
+	protected Boolean abstractReconvert(BigInteger value) {
+		return value.equals(BigInteger.ONE);
 	}
 
-	public static ByteArrayToBigInteger getInstance(int blockLength) {
-		return new ByteArrayToBigInteger(blockLength);
+	public static BooleanToBigInteger getInstance() {
+		return new BooleanToBigInteger();
 	}
 
 }

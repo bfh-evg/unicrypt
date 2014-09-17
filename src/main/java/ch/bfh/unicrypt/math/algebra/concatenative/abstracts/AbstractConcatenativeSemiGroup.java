@@ -53,7 +53,7 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
 	   extends AbstractSemiGroup<E, V>
 	   implements ConcatenativeSemiGroup<V> {
 
-	private final int blockLength;
+	protected final int blockLength;
 
 	public AbstractConcatenativeSemiGroup(Class<? extends Object> valueClass, int blockLength) {
 		super(valueClass);

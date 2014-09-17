@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -81,6 +83,11 @@ public class EnumeratedSet<V extends Object>
 	}
 
 	@Override
+	protected BigInteger abstractGetBigIntegerFrom(EnumeratedSetElement<V> element) {
+		return BigInteger.valueOf(this.indexMap.get(element.getValue()));
+	}
+
+	@Override
 	protected EnumeratedSetElement<V> abstractGetElementFrom(BigInteger integerValue) {
 		if (integerValue.compareTo(this.getOrder()) >= 0) {
 			return null; // no such element
@@ -89,8 +96,19 @@ public class EnumeratedSet<V extends Object>
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(EnumeratedSetElement element) {
-		return BigInteger.valueOf(this.indexMap.get(element.getValue()));
+	protected BigIntegerConverter<V> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<V>(null) { // class parameter not needed
+
+			@Override
+			protected BigInteger abstractConvert(V value) {
+				return BigInteger.valueOf(indexMap.get(value));
+			}
+
+			@Override
+			protected V abstractReconvert(BigInteger value) {
+				return valueMap.get(value.intValue());
+			}
+		};
 	}
 
 	@Override
