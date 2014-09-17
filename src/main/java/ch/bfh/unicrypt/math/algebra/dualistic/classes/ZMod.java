@@ -162,19 +162,6 @@ public class ZMod
 	}
 
 	@Override
-	protected ZModElement abstractGetElementFrom(BigInteger value) {
-		if (value.compareTo(this.modulus) >= 0) {
-			return null; // no such element
-		}
-		return this.abstractGetElement(value);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ZModElement element) {
-		return element.getValue();
-	}
-
-	@Override
 	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance();
 	}

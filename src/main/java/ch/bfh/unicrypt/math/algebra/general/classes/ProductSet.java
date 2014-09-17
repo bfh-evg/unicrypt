@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -163,22 +163,6 @@ public class ProductSet
 			return new Triple(this, value);
 		}
 		return new Tuple(this, value);
-	}
-
-	@Override
-	protected Tuple abstractGetElementFrom(BigInteger integerValue) {
-		BigInteger[] values = MathUtil.unpair(integerValue, this.getLength());
-		return this.getElementFrom(values);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(Tuple tuple) {
-		BigInteger[] bigIntegers = new BigInteger[this.getLength()];
-		int i = 0;
-		for (Element element : tuple.getValue()) {
-			bigIntegers[i++] = element.getBigInteger();
-		}
-		return MathUtil.pair(bigIntegers);
 	}
 
 	@Override

@@ -100,25 +100,6 @@ public class BooleanSet
 	}
 
 	@Override
-	protected BooleanElement abstractGetElementFrom(BigInteger bigInteger) {
-		if (bigInteger.equals(BigInteger.ZERO)) {
-			return BooleanSet.FALSE;
-		}
-		if (bigInteger.equals(BigInteger.ONE)) {
-			return BooleanSet.TRUE;
-		}
-		return null; // no such element
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(BooleanElement element) {
-		if (element.getValue()) {
-			return BigInteger.ONE;
-		}
-		return BigInteger.ZERO;
-	}
-
-	@Override
 	protected BigIntegerConverter<Boolean> abstractGetBigIntegerConverter() {
 		return BooleanToBigInteger.getInstance();
 	}

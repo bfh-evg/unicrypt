@@ -44,9 +44,8 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
-import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
@@ -85,14 +84,15 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	private final V value;
 
 	// the following fields are needed for optimizations
-	private BigInteger bigInteger;
-	private final HashMap<ByteArrayConverter, ByteArray> byteArrays;
+	private final HashMap<Converter<V, BigInteger>, BigInteger> bigIntegers;
+	private final HashMap<Converter<V, ByteArray>, ByteArray> byteArrays;
 	private final HashMap<HashMethod, ByteArray> hashValues;
 
 	protected AbstractElement(final S set, V value) {
 		this.set = set;
 		this.value = value;
-		this.byteArrays = new HashMap<ByteArrayConverter, ByteArray>();
+		this.bigIntegers = new HashMap<Converter<V, BigInteger>, BigInteger>();
+		this.byteArrays = new HashMap<Converter<V, ByteArray>, ByteArray>();
 		this.hashValues = new HashMap<HashMethod, ByteArray>();
 	}
 
@@ -143,65 +143,78 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	public BigInteger getBigInteger() {
-		if (this.bigInteger == null) {
-			this.bigInteger = this.set.getBigIntegerFrom(this);
+		return this.getBigInteger(this.set.getBigIntegerConverter());
+	}
+
+	@Override
+	public BigInteger getBigInteger(Converter<V, BigInteger> converter) {
+		if (converter == null) {
+			throw new IllegalArgumentException();
 		}
-		return this.bigInteger;
+		BigInteger result = this.bigIntegers.get(converter);
+		if (result == null) {
+			result = converter.convert(this.value);
+			this.bigIntegers.put(converter, result);
+		}
+		return result;
+	}
+
+	@Override
+	public BigInteger getBigInteger(ConvertMethod<BigInteger> convertMethod) {
+		if (convertMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		Converter<V, BigInteger> converter = (Converter<V, BigInteger>) convertMethod.getConverter(this.value.getClass());
+		if (converter == null) {
+			return this.getBigInteger();
+		}
+		return this.getBigInteger(converter);
 	}
 
 	@Override
 	public ByteArray getByteArray() {
-		return this.getByteArray(BigIntegerToByteArray.getInstance());
+		return this.getByteArray(this.set.getByteArrayConverter());
 	}
 
 	@Override
-	public ByteArray getByteArray(ByteArrayConverter converter) {
-		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
-		return this.getByteArray(convertMethod);
+	public ByteArray getByteArray(Converter<V, ByteArray> converter) {
+		if (converter == null) {
+			throw new IllegalArgumentException();
+		}
+		ByteArray result = this.byteArrays.get(converter);
+		if (result == null) {
+			result = converter.convert(this.value);
+			this.byteArrays.put(converter, result);
+		}
+		return result;
 	}
 
 	@Override
-	public ByteArray getByteArray(ConvertMethod convertMethod) {
+	public ByteArray getByteArray(ConvertMethod<ByteArray> convertMethod) {
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArrayConverter<V> valueConverter = convertMethod.getConverter(this.value.getClass());
-		if (valueConverter == null) {
-			// conversion over BigInteger
-			ByteArrayConverter<BigInteger> bigIntegerConverter = convertMethod.getConverter(BigInteger.class);
-			if (bigIntegerConverter == null) {
-				bigIntegerConverter = BigIntegerToByteArray.getInstance();
-			}
-			ByteArray byteArray = this.byteArrays.get(bigIntegerConverter);
-			if (byteArray == null) {
-				byteArray = bigIntegerConverter.convert(this.getBigInteger());
-				this.byteArrays.put(bigIntegerConverter, byteArray);
-			}
-			return byteArray;
-		} else {
-			// conversion over value
-			ByteArray byteArray = this.byteArrays.get(valueConverter);
-			if (byteArray == null) {
-				byteArray = (ByteArray) valueConverter.convert(this.value);
-				this.byteArrays.put(valueConverter, byteArray);
-			}
-			return byteArray;
+		Converter<V, ByteArray> converter = (Converter<V, ByteArray>) convertMethod.getConverter(this.value.getClass());
+		if (converter == null) {
+			return this.getByteArray();
 		}
+		return this.getByteArray(converter);
 	}
 
 	@Override
 	public ByteTree getByteTree() {
-		return this.getByteTree(BigIntegerToByteArray.getInstance());
-	}
-
-	@Override
-	public ByteTree getByteTree(ByteArrayConverter converter) {
-		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.<ByteArray>getInstance();
 		return this.getByteTree(convertMethod);
 	}
 
 	@Override
-	public ByteTree getByteTree(ConvertMethod convertMethod) {
+	public ByteTree getByteTree(Converter<V, ByteArray> converter) {
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.<ByteArray>getInstance(converter);
+		return this.getByteTree(convertMethod);
+	}
+
+	@Override
+	public ByteTree getByteTree(ConvertMethod<ByteArray> convertMethod) {
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -230,7 +243,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		}
 		ByteArray hashValue = this.hashValues.get(hashMethod);
 		if (hashValue == null) {
-			ConvertMethod convertMethod = hashMethod.getConvertMethod();
+			ConvertMethod<ByteArray> convertMethod = hashMethod.getConvertMethod();
 			HashAlgorithm algorithm = hashMethod.getHashAlgorithm();
 			switch (hashMethod.getMode()) {
 				case BYTEARRAY:

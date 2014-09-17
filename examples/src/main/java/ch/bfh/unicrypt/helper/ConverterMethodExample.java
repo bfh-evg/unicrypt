@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.PermutationToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
-import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod.Mode;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;

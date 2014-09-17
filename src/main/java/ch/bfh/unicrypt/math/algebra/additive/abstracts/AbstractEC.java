@@ -144,29 +144,6 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 	}
 
 	@Override
-	protected ECElement<V> abstractGetElementFrom(BigInteger integerValue) {
-		if (integerValue.equals(BigInteger.ZERO)) {
-			return this.getZeroElement();
-		}
-		BigInteger[] result = MathUtil.unpair(integerValue.subtract(BigInteger.ONE));
-		DualisticElement<V> xValue = this.getFiniteField().getElementFrom(result[0]);
-		DualisticElement<V> yValue = this.getFiniteField().getElementFrom(result[1]);
-		if (xValue == null || yValue == null) {
-			return null; // no such element
-		}
-		return this.getElement(xValue, yValue);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ECElement<V> element) {
-		Point<DualisticElement<V>> point = element.getValue();
-		if (point.equals(this.infinityPoint)) {
-			return BigInteger.ZERO;
-		}
-		return MathUtil.pair(point.getX().getBigInteger(), point.getY().getBigInteger()).add(BigInteger.ONE);
-	}
-
-	@Override
 	protected BigIntegerConverter<Point<DualisticElement<V>>> abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<Point<DualisticElement<V>>>(null) { // class parameter not needed
 

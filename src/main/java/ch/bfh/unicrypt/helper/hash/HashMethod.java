@@ -42,7 +42,8 @@
 package ch.bfh.unicrypt.helper.hash;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 
 /**
  *
@@ -58,10 +59,10 @@ public class HashMethod
 	};
 
 	private final HashAlgorithm hashAlgorithm;
-	private final ConvertMethod convertMethod;
+	private final ConvertMethod<ByteArray> convertMethod;
 	private final Mode mode;
 
-	protected HashMethod(HashAlgorithm hashAlgorithm, ConvertMethod convertMethod, Mode mode) {
+	protected HashMethod(HashAlgorithm hashAlgorithm, ConvertMethod<ByteArray> convertMethod, Mode mode) {
 		this.hashAlgorithm = hashAlgorithm;
 		this.convertMethod = convertMethod;
 		this.mode = mode;
@@ -71,7 +72,7 @@ public class HashMethod
 		return this.hashAlgorithm;
 	}
 
-	public ConvertMethod getConvertMethod() {
+	public ConvertMethod<ByteArray> getConvertMethod() {
 		return this.convertMethod;
 	}
 
@@ -106,26 +107,26 @@ public class HashMethod
 	}
 
 	public static HashMethod getInstance() {
-		return HashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.getInstance(), Mode.RECURSIVE);
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE);
 	}
 
 	public static HashMethod getInstance(HashAlgorithm hashAlgorithm) {
-		return HashMethod.getInstance(hashAlgorithm, ConvertMethod.getInstance(), Mode.RECURSIVE);
+		return HashMethod.getInstance(hashAlgorithm, ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE);
 	}
 
-	public static HashMethod getInstance(ConvertMethod convertMethod) {
+	public static HashMethod getInstance(ConvertMethod<ByteArray> convertMethod) {
 		return HashMethod.getInstance(HashAlgorithm.getInstance(), convertMethod, Mode.RECURSIVE);
 	}
 
 	public static HashMethod getInstance(Mode mode) {
-		return HashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.getInstance(), mode);
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.<ByteArray>getInstance(), mode);
 	}
 
-	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ConvertMethod convertMethod) {
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ConvertMethod<ByteArray> convertMethod) {
 		return HashMethod.getInstance(hashAlgorithm, convertMethod, Mode.RECURSIVE);
 	}
 
-	public static HashMethod getInstance(ConvertMethod convertMethod, Mode mode) {
+	public static HashMethod getInstance(ConvertMethod<ByteArray> convertMethod, Mode mode) {
 		return HashMethod.getInstance(HashAlgorithm.getInstance(), convertMethod, mode);
 	}
 
@@ -133,7 +134,7 @@ public class HashMethod
 		return HashMethod.getInstance(hashAlgorithm, ConvertMethod.getInstance(), mode);
 	}
 
-	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ConvertMethod convertMethod, Mode mode) {
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ConvertMethod<ByteArray> convertMethod, Mode mode) {
 		if (hashAlgorithm == null || convertMethod == null || mode == null) {
 			throw new IllegalArgumentException();
 		}

@@ -70,7 +70,10 @@ public class BigIntegerToBigInteger
 	@Override
 	protected BigInteger abstractReconvert(BigInteger value) {
 		if (this.fold) {
-			return MathUtil.unfold(value);
+			if (value.signum() >= 0) {
+				return MathUtil.unfold(value);
+			}
+			return null;
 		}
 		return value;
 	}

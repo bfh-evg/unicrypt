@@ -46,10 +46,12 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.interfaces.Array;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -86,7 +88,8 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	private final Class<? extends Object> valueClass;
 	private BigInteger order, lowerBound, upperBound, minimum;
-	private BigIntegerConverter<V> converter;
+	private BigIntegerConverter<V> bigIntegerConverter;
+	private ByteArrayConverter<V> byteArrayConverter;
 
 	protected AbstractSet(Class<? extends Object> valueClass) {
 		this.valueClass = valueClass;
@@ -252,68 +255,78 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final E getElementFrom(BigInteger bigInteger) {
-		if (bigInteger == null) {
-			throw new IllegalArgumentException();
-		}
-		if (bigInteger.signum() < 0) {
-			return null; // no such element
-		}
-		return this.abstractGetElementFrom(bigInteger);
+		return this.getElementFrom(bigInteger, this.getBigIntegerConverter());
 	}
 
 	@Override
-	public final BigInteger getBigIntegerFrom(Element element) {
-		if (element == null || !this.contains(element)) {
+	public final E getElementFrom(BigInteger bigInteger, Converter<V, BigInteger> converter) {
+		if (bigInteger == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetBigIntegerFrom((E) element);
+		V value = converter.reconvert(bigInteger);
+		if (value != null && this.abstractContains(value)) {
+			return this.abstractGetElement(value);
+		}
+		// no such element
+		return null;
+	}
+
+	@Override
+	public final E getElementFrom(BigInteger bigInteger, ConvertMethod<BigInteger> convertMethod) {
+		if (convertMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		Converter<V, BigInteger> converter = (Converter<V, BigInteger>) convertMethod.getConverter(this.getClass());
+		if (converter == null) {
+			return this.getElementFrom(bigInteger);
+		}
+		return this.getElementFrom(bigInteger, converter);
 	}
 
 	@Override
 	public final E getElementFrom(ByteArray byteArray) {
-		return this.getElementFrom(byteArray, BigIntegerToByteArray.getInstance());
+		return this.getElementFrom(byteArray, this.getByteArrayConverter());
 	}
 
 	@Override
-	public final E getElementFrom(ByteArray byteArray, ByteArrayConverter converter) {
-		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
-		return this.getElementFrom(byteArray, convertMethod);
+	public final E getElementFrom(ByteArray byteArray, Converter<V, ByteArray> converter) {
+		if (byteArray == null || converter == null) {
+			throw new IllegalArgumentException();
+		}
+		V value = converter.reconvert(byteArray);
+		if (value != null && this.abstractContains(value)) {
+			return this.abstractGetElement(value);
+		}
+		// no such element
+		return null;
 	}
 
 	@Override
-	public final E getElementFrom(ByteArray byteArray, ConvertMethod convertMethod) {
+	public final E getElementFrom(ByteArray byteArray, ConvertMethod<ByteArray> convertMethod) {
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArrayConverter converter = convertMethod.getConverter(this.valueClass);
+		Converter<V, ByteArray> converter = (Converter<V, ByteArray>) convertMethod.getConverter(this.getClass());
 		if (converter == null) {
-			// conversion over BigInteger
-			converter = convertMethod.getConverter(BigInteger.class);
-			if (converter == null) {
-				converter = BigIntegerToByteArray.getInstance();
-			}
-			BigInteger bigInteger = ((BigIntegerToByteArray) converter).reconvert(byteArray);
-			return this.getElementFrom(bigInteger);
-		} else {
-			// conversion over value
-			V value = ((ByteArrayConverter<V>) converter).reconvert(byteArray);
-			return this.getElement(value);
+			return this.getElementFrom(byteArray);
 		}
+		return this.getElementFrom(byteArray, converter);
 	}
 
 	@Override
 	public final E getElementFrom(ByteTree byteTree) {
-		return this.getElementFrom(byteTree, BigIntegerToByteArray.getInstance());
-	}
-
-	@Override
-	public final E getElementFrom(ByteTree byteTree, ByteArrayConverter converter) {
-		ConvertMethod convertMethod = ConvertMethod.getInstance(converter);
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.<ByteArray>getInstance();
 		return this.getElementFrom(byteTree, convertMethod);
 	}
 
 	@Override
-	public final E getElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
+	public final E getElementFrom(ByteTree byteTree, Converter<V, ByteArray> converter) {
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.<ByteArray>getInstance(converter);
+		return this.getElementFrom(byteTree, convertMethod);
+	}
+
+	@Override
+	public final E getElementFrom(ByteTree byteTree, ConvertMethod<ByteArray> convertMethod) {
 		if (byteTree == null || convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -349,10 +362,19 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final BigIntegerConverter<V> getBigIntegerConverter() {
-		if (this.converter == null) {
-			this.converter = this.abstractGetBigIntegerConverter();
+		if (this.bigIntegerConverter == null) {
+			this.bigIntegerConverter = this.abstractGetBigIntegerConverter();
 		}
-		return this.converter;
+		return this.bigIntegerConverter;
+	}
+
+	@Override
+	public ByteArrayConverter<V> getByteArrayConverter() {
+		if (this.byteArrayConverter == null) {
+			this.byteArrayConverter = this.defaultGetByteArrayConverter();
+		}
+		return this.byteArrayConverter;
+
 	}
 
 	@Override
@@ -447,13 +469,30 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.isEquivalent(element.getSet());
 	}
 
-	protected E defaultGetElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
+	protected E defaultGetElementFrom(ByteTree byteTree, ConvertMethod<ByteArray> convertMethod) {
 		if (byteTree.isLeaf()) {
 			ByteArray byteArray = ((ByteTreeLeaf) byteTree).getValue();
 			return this.getElementFrom(byteArray, convertMethod);
 		}
 		// no such element
 		return null;
+	}
+
+	protected ByteArrayConverter<V> defaultGetByteArrayConverter() {
+		return new AbstractByteArrayConverter<V>(null) {
+
+			private ByteArrayConverter<BigInteger> converter = BigIntegerToByteArray.getInstance();
+
+			@Override
+			protected ByteArray abstractConvert(V value) {
+				return this.converter.convert(getBigIntegerConverter().convert(value));
+			}
+
+			@Override
+			protected V abstractReconvert(ByteArray value) {
+				return getBigIntegerConverter().reconvert(this.converter.reconvert(value));
+			}
+		};
 	}
 
 	protected boolean defaultIsEquivalent(Set set) {
@@ -480,10 +519,10 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 			@Override
 			public E next() {
-				E element = set.abstractGetElementFrom(this.currentValue);
+				E element = set.getElementFrom(this.currentValue);
 				while (element == null) {
 					this.currentValue = this.currentValue.add(BigInteger.ONE);
-					element = set.abstractGetElementFrom(this.currentValue);
+					element = set.getElementFrom(this.currentValue);
 				}
 				this.counter = this.counter.add(BigInteger.ONE);
 				this.currentValue = this.currentValue.add(BigInteger.ONE);
@@ -508,13 +547,9 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	protected abstract E abstractGetElement(V value);
 
-	protected abstract E abstractGetElementFrom(BigInteger integerValue);
-
-	protected abstract BigInteger abstractGetBigIntegerFrom(E element);
+	protected abstract E abstractGetRandomElement(RandomByteSequence randomByteSequence);
 
 	protected abstract BigIntegerConverter<V> abstractGetBigIntegerConverter();
-
-	protected abstract E abstractGetRandomElement(RandomByteSequence randomByteSequence);
 
 	protected abstract boolean abstractEquals(Set set);
 

@@ -167,21 +167,6 @@ public class ZStarMod
 	}
 
 	@Override
-	protected ZStarModElement abstractGetElementFrom(BigInteger bigInteger) {
-		if (bigInteger.signum() == 0
-			   || bigInteger.compareTo(this.modulus) >= 0
-			   || !MathUtil.areRelativelyPrime(bigInteger, this.modulus)) {
-			return null; // no such element
-		}
-		return this.abstractGetElement(bigInteger);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ZStarModElement element) {
-		return element.getValue();
-	}
-
-	@Override
 	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance();
 	}

@@ -91,16 +91,6 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected SingletonElement abstractGetElementFrom(final BigInteger value) {
-		return this.element;
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(SingletonElement element) {
-		return element.getValue();
-	}
-
-	@Override
 	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance();
 	}

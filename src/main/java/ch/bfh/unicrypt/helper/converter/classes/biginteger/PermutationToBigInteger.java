@@ -66,7 +66,11 @@ public class PermutationToBigInteger
 
 	@Override
 	protected Permutation abstractReconvert(BigInteger value) {
-		return Permutation.getInstance(this.size, value);
+		try {
+			return Permutation.getInstance(this.size, value);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public static PermutationToBigInteger getInstance(int size) {

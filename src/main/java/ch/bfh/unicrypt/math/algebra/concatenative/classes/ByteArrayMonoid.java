@@ -44,13 +44,11 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -90,39 +88,6 @@ public class ByteArrayMonoid
 	@Override
 	protected ByteArrayElement abstractGetElement(ByteArray value) {
 		return new ByteArrayElement(this, value);
-	}
-
-	@Override
-	protected ByteArrayElement abstractGetElementFrom(BigInteger value) {
-		LinkedList<Byte> byteList = new LinkedList<Byte>();
-		BigInteger byteSize = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger blockSize = MathUtil.powerOfTwo(Byte.SIZE * this.blockLength);
-		while (!value.equals(BigInteger.ZERO)) {
-			value = value.subtract(BigInteger.ONE);
-			BigInteger remainder = value.mod(blockSize);
-			for (int i = 0; i < this.blockLength; i++) {
-				byteList.addFirst(remainder.mod(byteSize).byteValue());
-				remainder = remainder.divide(byteSize);
-			}
-			value = value.divide(blockSize);
-		}
-		return this.abstractGetElement(ByteArray.getInstance(byteList));
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ByteArrayElement element) {
-		ByteArray value = element.getValue();
-		BigInteger value1 = new BigInteger(1, value.getBytes());
-		BigInteger value2 = BigInteger.ZERO;
-		if (value.getLength() > 0) {
-			byte[] bytes = new byte[value.getLength()];
-			int amount = bytes.length / this.blockLength;
-			for (int i = 0; i < amount; i++) {
-				bytes[(bytes.length - 1) - (i * this.blockLength)] = 1;
-			}
-			value2 = new BigInteger(1, bytes);
-		}
-		return value1.add(value2);
 	}
 
 	@Override

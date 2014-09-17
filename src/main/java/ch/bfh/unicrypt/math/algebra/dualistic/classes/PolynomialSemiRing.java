@@ -206,33 +206,6 @@ public class PolynomialSemiRing<V>
 	}
 
 	@Override
-	protected PolynomialElement<V> abstractGetElementFrom(BigInteger integerValue) {
-		BigInteger[] bigIntegers = MathUtil.unpairWithSize(integerValue);
-		DualisticElement[] elements = new DualisticElement[bigIntegers.length];
-		int i = 0;
-		for (BigInteger bigInteger : bigIntegers) {
-			DualisticElement<V> element = this.getSemiRing().getElementFrom(bigInteger);
-			if (element == null) {
-				return null; // no such elements
-			}
-			elements[i] = element;
-			i++;
-		}
-		Polynomial<DualisticElement<V>> polynomial = Polynomial.<DualisticElement<V>>getInstance(elements, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement());
-		return new PolynomialElement<V>(this, polynomial);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(PolynomialElement<V> element) {
-		int degree = element.getValue().getDegree();
-		BigInteger[] values = new BigInteger[degree + 1];
-		for (int i = 0; i <= degree; i++) {
-			values[i] = element.getValue().getCoefficient(i).getBigInteger();
-		}
-		return MathUtil.pairWithSize(values);
-	}
-
-	@Override
 	protected BigIntegerConverter<Polynomial<DualisticElement<V>>> abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<Polynomial<DualisticElement<V>>>(null) { // class not needed
 

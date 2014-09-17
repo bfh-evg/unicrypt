@@ -124,16 +124,6 @@ public class N
 	}
 
 	@Override
-	protected NElement abstractGetElementFrom(BigInteger value) {
-		return this.abstractGetElement(value);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(NElement element) {
-		return element.getValue();
-	}
-
-	@Override
 	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance();
 	}

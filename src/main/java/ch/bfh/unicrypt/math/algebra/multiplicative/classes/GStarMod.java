@@ -171,22 +171,6 @@ public class GStarMod
 	}
 
 	@Override
-	protected GStarModElement abstractGetElementFrom(BigInteger bigInteger) {
-		if (bigInteger.signum() == 0
-			   || bigInteger.compareTo(this.getModulus()) >= 0
-			   || !MathUtil.areRelativelyPrime(bigInteger, this.getModulus())
-			   || !bigInteger.mod(this.getModulus()).modPow(this.getOrder(), this.getModulus()).equals(BigInteger.ONE)) {
-			return null; // no such element
-		}
-		return this.abstractGetElement(bigInteger);
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(GStarModElement element) {
-		return element.getValue();
-	}
-
-	@Override
 	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance();
 	}

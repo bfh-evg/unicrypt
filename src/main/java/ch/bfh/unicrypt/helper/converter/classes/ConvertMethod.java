@@ -39,44 +39,46 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.interfaces;
+package ch.bfh.unicrypt.helper.converter.classes;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <T>
  */
-public class ConvertMethod
+public class ConvertMethod<T extends Object>
 	   extends UniCrypt {
 
-	private final Map<Class, ByteArrayConverter> converterMap;
+	private final Map<Class<?>, Converter<?, T>> converterMap;
 
 	private ConvertMethod() {
-		this.converterMap = new HashMap();
+		this.converterMap = new HashMap<Class<?>, Converter<?, T>>();
 	}
 
-	public ByteArrayConverter getConverter(Class valueClass) {
+	public Converter<?, T> getConverter(Class<?> valueClass) {
 		return this.converterMap.get(valueClass);
 	}
 
 	// should this method be public?
-	private void addConverter(ByteArrayConverter converter) {
-		Class valueClass = converter.getInputClass();
+	private void addConverter(Converter<?, T> converter) {
+		Class<?> valueClass = converter.getInputClass();
 		if (this.converterMap.containsKey(valueClass)) {
 			throw new IllegalArgumentException();
 		}
 		this.converterMap.put(valueClass, converter);
 	}
 
-	public static ConvertMethod getInstance(ByteArrayConverter... converters) {
+	public static <T> ConvertMethod getInstance(Converter<?, T>... converters) {
 		if (converters == null) {
 			throw new IllegalArgumentException();
 		}
 		ConvertMethod convertMethod = new ConvertMethod();
-		for (ByteArrayConverter converter : converters) {
+		for (Converter<?, T> converter : converters) {
 			if (converter == null) {
 				throw new IllegalArgumentException();
 			}

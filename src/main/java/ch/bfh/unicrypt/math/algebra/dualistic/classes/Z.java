@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.distribution.Distribution;
 import ch.bfh.unicrypt.helper.distribution.InfiniteDistribution;
 import ch.bfh.unicrypt.helper.distribution.UniformDistribution;
-import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -153,16 +152,6 @@ public class Z
 	@Override
 	protected ZElement abstractGetElement(BigInteger value) {
 		return new ZElement(this, value);
-	}
-
-	@Override
-	protected ZElement abstractGetElementFrom(BigInteger value) {
-		return this.abstractGetElement(MathUtil.unfold(value));
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ZElement element) {
-		return MathUtil.fold(element.getValue());
 	}
 
 	@Override

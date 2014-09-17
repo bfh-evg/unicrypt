@@ -83,19 +83,6 @@ public class EnumeratedSet<V extends Object>
 	}
 
 	@Override
-	protected BigInteger abstractGetBigIntegerFrom(EnumeratedSetElement<V> element) {
-		return BigInteger.valueOf(this.indexMap.get(element.getValue()));
-	}
-
-	@Override
-	protected EnumeratedSetElement<V> abstractGetElementFrom(BigInteger integerValue) {
-		if (integerValue.compareTo(this.getOrder()) >= 0) {
-			return null; // no such element
-		}
-		return abstractGetElement(this.valueMap.get(integerValue.intValue()));
-	}
-
-	@Override
 	protected BigIntegerConverter<V> abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<V>(null) { // class parameter not needed
 

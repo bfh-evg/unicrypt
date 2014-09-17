@@ -43,9 +43,9 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
-import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
@@ -127,6 +127,10 @@ public interface Element<V extends Object> {
 	 */
 	public BigInteger getBigInteger();
 
+	public BigInteger getBigInteger(Converter<V, BigInteger> convert);
+
+	public BigInteger getBigInteger(ConvertMethod<BigInteger> convertMethod);
+
 	/**
 	 * TODO Returns the corresponding {@link ByteArray} of this element.
 	 * <p>
@@ -141,9 +145,9 @@ public interface Element<V extends Object> {
 	 * @param converter
 	 * @return
 	 */
-	public ByteArray getByteArray(ByteArrayConverter converter);
+	public ByteArray getByteArray(Converter<V, ByteArray> converter);
 
-	public ByteArray getByteArray(ConvertMethod convertMethod);
+	public ByteArray getByteArray(ConvertMethod<ByteArray> convertMethod);
 
 	/**
 	 * TODO Returns the corresponding {@link ByteTree} of this Element.
@@ -152,7 +156,7 @@ public interface Element<V extends Object> {
 	 */
 	public ByteTree getByteTree();
 
-	public ByteTree getByteTree(ByteArrayConverter converter);
+	public ByteTree getByteTree(Converter<V, ByteArray> converter);
 
 	/**
 	 * TODO Returns the corresponding {@link ByteTree} of this Element with the help of a given
@@ -161,7 +165,7 @@ public interface Element<V extends Object> {
 	 * @param convertMethod
 	 * @return The corresponding ByteTree
 	 */
-	public ByteTree getByteTree(ConvertMethod convertMethod);
+	public ByteTree getByteTree(ConvertMethod<ByteArray> convertMethod);
 
 	/**
 	 * TODO

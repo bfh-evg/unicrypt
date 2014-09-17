@@ -43,10 +43,11 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -279,6 +280,10 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(BigInteger bigInteger);
 
+	public Element<V> getElementFrom(BigInteger bigInteger, Converter<V, BigInteger> converter);
+
+	public Element<V> getElementFrom(BigInteger bigInteger, ConvertMethod<BigInteger> convertMethod);
+
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the default converter.
 	 * <p>
@@ -287,7 +292,7 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteArray byteArray);
 
-	public Element<V> getElementFrom(ByteArray byteArray, ByteArrayConverter converter);
+	public Element<V> getElementFrom(ByteArray byteArray, Converter<V, ByteArray> converter);
 
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the
@@ -297,7 +302,7 @@ public interface Set<V extends Object> {
 	 * @param convertMethod
 	 * @return
 	 */
-	public Element<V> getElementFrom(ByteArray byteArray, ConvertMethod convertMethod);
+	public Element<V> getElementFrom(ByteArray byteArray, ConvertMethod<ByteArray> convertMethod);
 
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteTree}.
@@ -307,7 +312,7 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree);
 
-	public Element<V> getElementFrom(ByteTree byteTree, ByteArrayConverter converter);
+	public Element<V> getElementFrom(ByteTree byteTree, Converter<V, ByteArray> converter);
 
 	/**
 	 * <p>
@@ -316,7 +321,7 @@ public interface Set<V extends Object> {
 	 * @param convertMethod
 	 * @return
 	 */
-	public Element<V> getElementFrom(ByteTree byteTree, ConvertMethod convertMethod);
+	public Element<V> getElementFrom(ByteTree byteTree, ConvertMethod<ByteArray> convertMethod);
 
 	/**
 	 * Creates and returns the element that corresponds to the integer value of some other element (if one exists).
@@ -366,15 +371,9 @@ public interface Set<V extends Object> {
 	 */
 	public boolean isEquivalent(Set set);
 
-	/**
-	 * TODO Returns the positive BigInteger value that corresponds the element.
-	 * <p>
-	 * @param element The given Element
-	 * @return the corresponding BigInteger value
-	 */
-	public BigInteger getBigIntegerFrom(Element element);
-
 	public BigIntegerConverter<V> getBigIntegerConverter();
+
+	public ByteArrayConverter<V> getByteArrayConverter();
 
 	/**
 	 * TODO

@@ -122,16 +122,6 @@ public class PermutationGroup
 	}
 
 	@Override
-	protected PermutationElement abstractGetElementFrom(final BigInteger value) {
-		return this.abstractGetElement(Permutation.getInstance(this.getSize(), value));
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(PermutationElement element) {
-		return element.getValue().getRank();
-	}
-
-	@Override
 	protected BigIntegerConverter<Permutation> abstractGetBigIntegerConverter() {
 		return PermutationToBigInteger.getInstance(this.size);
 	}

@@ -107,21 +107,6 @@ public class Subset
 	}
 
 	@Override
-	protected Element abstractGetElementFrom(BigInteger bigInteger) {
-		for (Element element : this.elementSet) {
-			if (element.getBigInteger().equals(bigInteger)) {
-				return element;
-			}
-		}
-		return null; // no such element
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(Element element) {
-		return this.superSet.getBigIntegerFrom(element);
-	}
-
-	@Override
 	protected BigIntegerConverter<Object> abstractGetBigIntegerConverter() {
 		return this.superSet.getBigIntegerConverter();
 	}

@@ -65,7 +65,13 @@ public class BooleanToBigInteger
 
 	@Override
 	protected Boolean abstractReconvert(BigInteger value) {
-		return value.equals(BigInteger.ONE);
+		if (value.equals(BigInteger.ZERO)) {
+			return false;
+		}
+		if (value.equals(BigInteger.ONE)) {
+			return true;
+		}
+		return null;
 	}
 
 	public static BooleanToBigInteger getInstance() {
