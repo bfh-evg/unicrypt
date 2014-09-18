@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -284,6 +285,12 @@ public interface Set<V extends Object> {
 
 	public Element<V> getElementFrom(BigInteger bigInteger, ConvertMethod<BigInteger> convertMethod);
 
+	public Element<V> getElementFrom(String string);
+
+	public Element<V> getElementFrom(String string, Converter<V, String> converter);
+
+	public Element<V> getElementFrom(String string, ConvertMethod<String> convertMethod);
+
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the default converter.
 	 * <p>
@@ -372,6 +379,8 @@ public interface Set<V extends Object> {
 	public boolean isEquivalent(Set set);
 
 	public BigIntegerConverter<V> getBigIntegerConverter();
+
+	public StringConverter<V> getStringConverter();
 
 	public ByteArrayConverter<V> getByteArrayConverter();
 

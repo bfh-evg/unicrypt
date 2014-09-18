@@ -131,6 +131,12 @@ public interface Element<V extends Object> {
 
 	public BigInteger getBigInteger(ConvertMethod<BigInteger> convertMethod);
 
+	public String getString();
+
+	public String getString(Converter<V, String> convert);
+
+	public String getString(ConvertMethod<String> convertMethod);
+
 	/**
 	 * TODO Returns the corresponding {@link ByteArray} of this element.
 	 * <p>

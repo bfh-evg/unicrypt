@@ -43,7 +43,9 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -65,6 +67,11 @@ public class StringMonoid
 
 	public Alphabet getAlphabet() {
 		return this.alphabet;
+	}
+
+	@Override
+	protected StringConverter<String> defaultGetStringConverter() {
+		return StringToString.getInstance();
 	}
 
 	//

@@ -85,6 +85,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	// the following fields are needed for optimizations
 	private final HashMap<Converter<V, BigInteger>, BigInteger> bigIntegers;
+	private final HashMap<Converter<V, String>, String> strings;
 	private final HashMap<Converter<V, ByteArray>, ByteArray> byteArrays;
 	private final HashMap<HashMethod, ByteArray> hashValues;
 
@@ -92,6 +93,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		this.set = set;
 		this.value = value;
 		this.bigIntegers = new HashMap<Converter<V, BigInteger>, BigInteger>();
+		this.strings = new HashMap<Converter<V, String>, String>();
 		this.byteArrays = new HashMap<Converter<V, ByteArray>, ByteArray>();
 		this.hashValues = new HashMap<HashMethod, ByteArray>();
 	}
@@ -169,6 +171,36 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 			return this.getBigInteger();
 		}
 		return this.getBigInteger(converter);
+	}
+
+	@Override
+	public String getString() {
+		return this.getString(this.set.getStringConverter());
+	}
+
+	@Override
+	public String getString(Converter<V, String> converter) {
+		if (converter == null) {
+			throw new IllegalArgumentException();
+		}
+		String result = this.strings.get(converter);
+		if (result == null) {
+			result = converter.convert(this.value);
+			this.strings.put(converter, result);
+		}
+		return result;
+	}
+
+	@Override
+	public String getString(ConvertMethod<String> convertMethod) {
+		if (convertMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		Converter<V, String> converter = (Converter<V, String>) convertMethod.getConverter(this.value.getClass());
+		if (converter == null) {
+			return this.getString();
+		}
+		return this.getString(converter);
 	}
 
 	@Override
