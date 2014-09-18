@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
+import ch.bfh.unicrypt.helper.converter.classes.TrivialConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -53,30 +55,42 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
+ * @param <V>
+ * @param <W>
  */
-public class ConvertFunction
-	   extends AbstractFunction<ConvertFunction, Set, Element, Set, Element> {
+public class ConvertFunction<V extends Object, W extends Object>
+	   extends AbstractFunction<ConvertFunction, Set<V>, Element<V>, Set<W>, Element<W>> {
 
-	private ConvertFunction(final Set domain, final Set coDomain) {
+	private final Converter<V, W> converter;
+
+	private ConvertFunction(final Set<V> domain, final Set<W> coDomain, Converter<V, W> converter) {
 		super(domain, coDomain);
+		this.converter = converter;
 	}
 
 	@Override
-	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().getElementFrom(element);
+	protected Element<W> abstractApply(final Element<V> element, final RandomByteSequence randomByteSequence) {
+		return this.getCoDomain().getElement(this.converter.convert(element.getValue()));
 	}
 
 	/**
 	 * This is the general factory method for this class. It creates an function that converts values from the domain
 	 * into values from the co-domain.
 	 * <p/>
-	 * @param domain   The given domain
-	 * @param coDomain The given co-domain
+	 * @param <V>
+	 * @param <W>
+	 * @param domain    The given domain
+	 * @param coDomain  The given co-domain
+	 * @param converter
 	 * @return The resulting function
 	 * @throws IllegalArgumentException if the domain or coDomain is null
 	 */
-	public static ConvertFunction getInstance(final Set domain, final Set coDomain) {
-		return new ConvertFunction(domain, coDomain);
+	public static <V, W> ConvertFunction<V, W> getInstance(final Set<V> domain, final Set<W> coDomain, Converter<V, W> converter) {
+		return new ConvertFunction<V, W>(domain, coDomain, converter);
+	}
+
+	public static <V> ConvertFunction<V, V> getInstance(Set<V> domain, Set<V> coDomain) {
+		return new ConvertFunction<V, V>(domain, coDomain, TrivialConverter.<V>getInstance());
 	}
 
 }

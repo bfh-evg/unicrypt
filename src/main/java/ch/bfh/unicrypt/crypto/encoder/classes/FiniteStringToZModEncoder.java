@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
-import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
+import ch.bfh.unicrypt.math.function.classes.BigIntegerConvertFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.helper.Alphabet;
 
@@ -75,12 +75,12 @@ public class FiniteStringToZModEncoder
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return ConvertFunction.getInstance(this.getFiniteStringSet(), this.getZMod());
+		return BigIntegerConvertFunction.getInstance(this.getFiniteStringSet(), this.getZMod());
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return ConvertFunction.getInstance(this.getZMod(), this.getFiniteStringSet());
+		return BigIntegerConvertFunction.getInstance(this.getZMod(), this.getFiniteStringSet());
 	}
 
 	public static FiniteStringToZModEncoder getInstance(FiniteStringSet finiteStringSet) {

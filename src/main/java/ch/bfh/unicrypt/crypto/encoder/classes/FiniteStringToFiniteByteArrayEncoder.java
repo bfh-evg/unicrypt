@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
-import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
+import ch.bfh.unicrypt.math.function.classes.BigIntegerConvertFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.helper.Alphabet;
 import java.math.BigInteger;
@@ -76,12 +76,12 @@ public class FiniteStringToFiniteByteArrayEncoder
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return ConvertFunction.getInstance(this.getFiniteStringSet(), this.getFiniteByteArraySet());
+		return BigIntegerConvertFunction.getInstance(this.getFiniteStringSet(), this.getFiniteByteArraySet());
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return ConvertFunction.getInstance(this.getFiniteByteArraySet(), this.getFiniteStringSet());
+		return BigIntegerConvertFunction.getInstance(this.getFiniteByteArraySet(), this.getFiniteStringSet());
 	}
 
 	public static FiniteStringToFiniteByteArrayEncoder getInstance(FiniteStringSet finiteStringSet) {

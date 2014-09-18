@@ -1,16 +1,16 @@
-/* 
+/*
  * UniCrypt
- * 
+ *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
- * 
+ *
  *  Licensed under Dual License consisting of:
  *  1. GNU Affero General Public License (AGPL) v3
  *  and
  *  2. Commercial license
- * 
+ *
  *
  *  1. This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@
  *
  *   You should have received a copy of the GNU Affero General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *
  *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
  *   accordance with the commercial license agreement provided with the
@@ -32,59 +32,45 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
- * 
+ *
  *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
- * 
+ *
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.encoder.classes;
+package ch.bfh.unicrypt.helper.converter.classes;
 
-import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.function.classes.BigIntegerConvertFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class StringToByteArrayEncoder
-			 extends AbstractEncoder<StringMonoid, StringElement, ByteArrayMonoid, ByteArrayElement> {
+public class TrivialConverter<V extends Object>
+	   extends AbstractConverter<V, V> {
 
-	private final StringMonoid stringMonoid;
-
-	protected StringToByteArrayEncoder(StringMonoid stringMonoid) {
-		this.stringMonoid = stringMonoid;
-	}
-
-	public StringMonoid getStringMonoid() {
-		return this.stringMonoid;
-	}
-
-	public ByteArrayToStringEncoder getDecoder() {
-		return ByteArrayToStringEncoder.getInstance(this.getStringMonoid());
+	protected TrivialConverter(Class<V> valueClass) {
+		super(valueClass, valueClass);
 	}
 
 	@Override
-	protected Function abstractGetEncodingFunction() {
-		return BigIntegerConvertFunction.getInstance(this.getStringMonoid(), ByteArrayMonoid.getInstance());
+	protected V abstractConvert(V value) {
+		return value;
 	}
 
 	@Override
-	protected Function abstractGetDecodingFunction() {
-		return BigIntegerConvertFunction.getInstance(ByteArrayMonoid.getInstance(), this.getStringMonoid());
+	protected V abstractReconvert(V value) {
+		return value;
 	}
 
-	public static StringToByteArrayEncoder getInstance(StringMonoid stringMonoid) {
-		if (stringMonoid == null) {
-			throw new IllegalArgumentException();
-		}
-		return new StringToByteArrayEncoder(stringMonoid);
+	public static <V> TrivialConverter<V> getInstance() {
+		return new TrivialConverter<V>(null);
+	}
+
+	public static <V> TrivialConverter<V> getInstance(Class<V> valueClass) {
+		return new TrivialConverter<V>(valueClass);
 	}
 
 }

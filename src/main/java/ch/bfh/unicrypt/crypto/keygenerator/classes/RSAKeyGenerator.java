@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -77,15 +78,15 @@ public class RSAKeyGenerator
 	protected Function defaultGetPrivateKeyGenerationFunction() {
 		return CompositeFunction.getInstance(
 			   RandomFunction.getInstance(this.zStarMod),
-			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimePair));
+			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimePair, BigIntegerToBigInteger.getInstance()));
 	}
 
 	@Override
 	protected Function abstractGetPublicKeyGenerationFunction() {
 		return CompositeFunction.getInstance(
-			   ConvertFunction.getInstance(this.zModPrimePair, this.zStarMod),
+			   ConvertFunction.getInstance(this.zModPrimePair, this.zStarMod, BigIntegerToBigInteger.getInstance()),
 			   InvertFunction.getInstance(this.zStarMod),
-			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimePair));
+			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimePair, BigIntegerToBigInteger.getInstance()));
 	}
 
 	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimePair) {

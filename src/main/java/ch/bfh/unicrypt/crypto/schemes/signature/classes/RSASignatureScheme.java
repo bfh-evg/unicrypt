@@ -57,7 +57,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
-import ch.bfh.unicrypt.math.function.classes.GeneralConvertFunction;
+import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
@@ -126,7 +126,7 @@ public class RSASignatureScheme
 	private Function getSelectHashConvertModuloFunction(ProductSet inputSpace) {
 		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
 		BigIntegerConverter<ByteArray> converter = FiniteByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
-		GeneralConvertFunction convertFunction = GeneralConvertFunction.getInstance(hashFunction.getCoDomain(), Z.getInstance(), converter);
+		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), Z.getInstance(), converter);
 		ModuloFunction moduloFunction = ModuloFunction.getInstance(Z.getInstance(), this.zMod);
 
 		return CompositeFunction.getInstance(SelectionFunction.getInstance(inputSpace, 1), hashFunction, convertFunction, moduloFunction);
