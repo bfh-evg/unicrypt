@@ -92,6 +92,10 @@ public class FiniteByteArrayToBigInteger
 		return ByteArray.getInstance(byteList);
 	}
 
+	public static FiniteByteArrayToBigInteger getInstance(int length) {
+		return FiniteByteArrayToBigInteger.getInstance(length, length);
+	}
+
 	public static FiniteByteArrayToBigInteger getInstance(int minLength, int maxLength) {
 		return new FiniteByteArrayToBigInteger(minLength, maxLength);
 	}

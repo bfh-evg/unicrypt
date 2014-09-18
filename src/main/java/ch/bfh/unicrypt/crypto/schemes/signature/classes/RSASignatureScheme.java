@@ -43,7 +43,11 @@ package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractSignatureScheme;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
@@ -52,9 +56,10 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
-import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
+import ch.bfh.unicrypt.math.function.classes.GeneralConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
+import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.PowerFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
@@ -87,14 +92,10 @@ public class RSASignatureScheme
 	@Override
 	protected Function abstractGetSignatureFunction() {
 		ProductSet inputSpace = ProductSet.getInstance(this.zMod, this.messageSpace);
-		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
 		return CompositeFunction.getInstance(
 			   MultiIdentityFunction.getInstance(inputSpace, 2),
 			   ProductFunction.getInstance(
-					  CompositeFunction.getInstance(
-							 SelectionFunction.getInstance(inputSpace, 1),
-							 hashFunction,
-							 ConvertFunction.getInstance(hashFunction.getCoDomain(), this.zMod)),
+					  this.getSelectHashConvertModuloFunction(inputSpace),
 					  SelectionFunction.getInstance(inputSpace, 0)),
 			   //computes m^d
 			   PowerFunction.getInstance(this.zMod));
@@ -103,17 +104,13 @@ public class RSASignatureScheme
 	@Override
 	protected Function abstractGetVerificationFunction() {
 		ProductSet inputSpace = ProductSet.getInstance(this.zMod, this.messageSpace, this.signatureSpace);
-		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
 		return CompositeFunction.getInstance(
 			   //duplicate the input for the power function (s^e) and equality function m=s^e
 			   MultiIdentityFunction.getInstance(inputSpace, 2),
 			   //product function: selection of m and computation of s^e
 			   ProductFunction.getInstance(
 					  //select parameter 1 (message) to comute hash and pass it later to equality function
-					  CompositeFunction.getInstance(
-							 SelectionFunction.getInstance(inputSpace, 1),
-							 hashFunction,
-							 ConvertFunction.getInstance(hashFunction.getCoDomain(), this.zMod)),
+					  this.getSelectHashConvertModuloFunction(inputSpace),
 					  CompositeFunction.getInstance(
 							 //takes parameter 2 (signature) and 0 (public key) and pass them in that order
 							 AdapterFunction.getInstance(inputSpace, 2, 0),
@@ -124,6 +121,15 @@ public class RSASignatureScheme
 			   //receive output of selection function (m) and composite function (s^e) and check their equality
 			   EqualityFunction.getInstance(this.zMod)
 		);
+	}
+
+	private Function getSelectHashConvertModuloFunction(ProductSet inputSpace) {
+		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
+		BigIntegerConverter<ByteArray> converter = FiniteByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
+		GeneralConvertFunction convertFunction = GeneralConvertFunction.getInstance(hashFunction.getCoDomain(), Z.getInstance(), converter);
+		ModuloFunction moduloFunction = ModuloFunction.getInstance(Z.getInstance(), this.zMod);
+
+		return CompositeFunction.getInstance(SelectionFunction.getInstance(inputSpace, 1), hashFunction, convertFunction, moduloFunction);
 	}
 
 	public static RSASignatureScheme getInstance(ZMod zMod) {
