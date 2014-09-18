@@ -43,7 +43,9 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -85,6 +87,11 @@ public class FiniteByteArraySet
 	// for strings of the form "00|95|2B|9B|E2|FD|30|89"
 	public final FiniteByteArrayElement getElement(String string) {
 		return this.getElement(ByteArray.getInstance(string));
+	}
+
+	@Override
+	protected ByteArrayConverter<ByteArray> defaultGetByteArrayConverter() {
+		return ByteArrayToByteArray.getInstance();
 	}
 
 	@Override

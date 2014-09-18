@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
 public class ByteArrayToByteArray
 	   extends AbstractByteArrayConverter<ByteArray> {
 
-	private boolean reverse;
+	private final boolean reverse;
 
 	public ByteArrayToByteArray(boolean reverse) {
 		super(ByteArray.class);

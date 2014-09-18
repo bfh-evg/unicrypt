@@ -44,10 +44,9 @@ package ch.bfh.unicrypt.helper;
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.PermutationToByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod.Mode;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
@@ -72,8 +71,8 @@ public class ConverterMethodExample {
 		// String converter
 		StringToByteArray stringConverter = StringToByteArray.getInstance(Charset.forName("UTF-8"));
 
-		// BigIntegerToByteArray (minimal length = 10)
-		BigIntegerToByteArray bigIntegerConverter = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
+		// BigIntegerToByteArray
+		BigIntegerToByteArray bigIntegerConverter = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN);
 
 		// Two ConvertMethods
 		ConvertMethod convertMethod1 = ConvertMethod.getInstance();
@@ -99,9 +98,6 @@ public class ConverterMethodExample {
 		byteArray = element.getByteArray();
 		Example.printLine(set.getElementFrom(byteArray), byteArray);
 
-		byteArray = element.getByteArray(bigIntegerConverter);
-		Example.printLine(set.getElementFrom(byteArray, bigIntegerConverter), byteArray);
-
 		byteArray = element.getByteArray(stringConverter);
 		Example.printLine(set.getElementFrom(byteArray, stringConverter), byteArray);
 
@@ -124,9 +120,6 @@ public class ConverterMethodExample {
 		byteTree = element.getByteTree();
 		Example.printLine(set.getElementFrom(byteTree), byteTree);
 
-		byteTree = element.getByteTree(bigIntegerConverter);
-		Example.printLine(set.getElementFrom(byteTree, bigIntegerConverter), byteTree);
-
 		byteTree = element.getByteTree(stringConverter);
 		Example.printLine(set.getElementFrom(byteTree, stringConverter), byteTree);
 
@@ -147,14 +140,11 @@ public class ConverterMethodExample {
 
 		// Two converters
 		StringToByteArray stringConverter = StringToByteArray.getInstance(Charset.forName("UTF-8"));
-		PermutationToByteArray permutationConverter = PermutationToByteArray.getInstance();
-
-		// BigIntegerToByteArray (minimal length = 10)
-		BigIntegerToByteArray bigIntegerConverter = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
+		BigIntegerToByteArray bigIntegerConverter = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN);
 
 		// Two ConvertMethods
-		ConvertMethod convertMethod1 = ConvertMethod.getInstance(permutationConverter);
-		ConvertMethod convertMethod2 = ConvertMethod.getInstance(stringConverter, bigIntegerConverter, permutationConverter, bigIntegerConverter);
+		ConvertMethod convertMethod1 = ConvertMethod.getInstance(stringConverter);
+		ConvertMethod convertMethod2 = ConvertMethod.getInstance(stringConverter, bigIntegerConverter);
 
 		// Three sets
 		StringMonoid s1 = StringMonoid.getInstance(Alphabet.DECIMAL);
@@ -182,9 +172,6 @@ public class ConverterMethodExample {
 		byteArray = tuple.getByteArray();
 		Example.printLine(productSet.getElementFrom(byteArray), byteArray);
 
-		byteArray = tuple.getByteArray(bigIntegerConverter);
-		Example.printLine(productSet.getElementFrom(byteArray, bigIntegerConverter), byteArray);
-
 		byteArray = tuple.getByteArray(convertMethod1);
 		Example.printLine(productSet.getElementFrom(byteArray, convertMethod1), byteArray);
 
@@ -197,9 +184,6 @@ public class ConverterMethodExample {
 		ByteTree byteTree;
 		byteTree = tuple.getByteTree();
 		Example.printLine(productSet.getElementFrom(byteTree), byteTree);
-
-		byteTree = tuple.getByteTree(bigIntegerConverter);
-		Example.printLine(productSet.getElementFrom(byteTree, bigIntegerConverter), byteTree);
 
 		byteTree = tuple.getByteTree(convertMethod1);
 		Example.printLine(productSet.getElementFrom(byteTree, convertMethod1), byteTree);

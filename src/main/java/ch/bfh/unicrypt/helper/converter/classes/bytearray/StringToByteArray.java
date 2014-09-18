@@ -59,10 +59,6 @@ public class StringToByteArray
 		this.charset = charset;
 	}
 
-	public Charset getCharset() {
-		return this.charset;
-	}
-
 	@Override
 	protected ByteArray abstractConvert(String string) {
 		return ByteArray.getInstance(string.getBytes(this.charset));

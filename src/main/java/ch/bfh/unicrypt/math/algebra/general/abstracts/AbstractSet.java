@@ -481,7 +481,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	protected ByteArrayConverter<V> defaultGetByteArrayConverter() {
 		return new AbstractByteArrayConverter<V>(null) {
 
-			private ByteArrayConverter<BigInteger> converter = BigIntegerToByteArray.getInstance();
+			private final ByteArrayConverter<BigInteger> converter = BigIntegerToByteArray.getInstance();
 
 			@Override
 			protected ByteArray abstractConvert(V value) {

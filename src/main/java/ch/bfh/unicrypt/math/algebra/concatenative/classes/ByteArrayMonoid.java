@@ -43,7 +43,9 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -69,6 +71,11 @@ public class ByteArrayMonoid
 	// for strings of the form "00|95|2B|9B|E2|FD|30|89"
 	public final ByteArrayElement getElement(String string) {
 		return this.getElement(ByteArray.getInstance(string));
+	}
+
+	@Override
+	protected ByteArrayConverter<ByteArray> defaultGetByteArrayConverter() {
+		return ByteArrayToByteArray.getInstance();
 	}
 
 	//

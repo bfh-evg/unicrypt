@@ -54,10 +54,8 @@ import org.junit.Test;
  */
 public class BigIntegerConverterTest {
 
-	public static BigIntegerToByteArray c1 = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN, 0);
-	public static BigIntegerToByteArray c2 = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN, 0);
-	public static BigIntegerToByteArray c3 = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN, 10);
-	public static BigIntegerToByteArray c4 = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN, 10);
+	public static BigIntegerToByteArray c1 = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
+	public static BigIntegerToByteArray c2 = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN);
 
 	@Test
 	public void testByteArrayConverter() {
@@ -65,10 +63,9 @@ public class BigIntegerConverterTest {
 		BigInteger b1 = BigInteger.valueOf(9);
 		BigInteger b2 = BigInteger.valueOf(200);
 		BigInteger b3 = BigInteger.valueOf(300);
-		for (BigIntegerToByteArray converter : new BigIntegerToByteArray[]{c1, c2, c3, c4}) {
+		for (BigIntegerToByteArray converter : new BigIntegerToByteArray[]{c1, c2}) {
 			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
 				ByteArray ba = converter.convert(bigInteger);
-				Assert.assertTrue(ba.getLength() >= converter.getMinLength());
 				Assert.assertEquals(bigInteger, converter.reconvert(ba));
 			}
 

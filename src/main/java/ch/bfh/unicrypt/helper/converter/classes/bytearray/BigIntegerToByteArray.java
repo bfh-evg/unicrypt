@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
 import java.math.BigInteger;
 import java.nio.ByteOrder;
-import java.util.Arrays;
 
 /**
  *
@@ -55,44 +54,19 @@ public class BigIntegerToByteArray
 	   extends AbstractByteArrayConverter<BigInteger> {
 
 	private transient final ByteOrder byteOrder; //TODO not serializable
-	private final int minLength;
 
-	protected BigIntegerToByteArray(ByteOrder byteOrder, int minLength) {
+	protected BigIntegerToByteArray(ByteOrder byteOrder) {
 		super(BigInteger.class);
 		this.byteOrder = byteOrder;
-		this.minLength = minLength;
 	}
 
 	public ByteOrder getByteOrder() {
 		return byteOrder;
 	}
 
-	public int getMinLength() {
-		return minLength;
-	}
-
-	public ByteArray convert(int integer) {
-		return this.abstractConvert(BigInteger.valueOf(integer));
-	}
-
 	@Override
-	public ByteArray abstractConvert(BigInteger posBigInteger) {
-		// TODO: negative integers not allowed
-		if (posBigInteger.signum() == -1) {
-			throw new IllegalArgumentException();
-		}
-		byte[] bytes = posBigInteger.toByteArray();
-		// remove the sign bit if necessary
-		if (bytes[0] == 0) {
-			bytes = Arrays.copyOfRange(bytes, 1, bytes.length);
-		}
-		int length = bytes.length;
-		if (length < minLength) {
-			byte[] expandedBytes = new byte[minLength];
-			System.arraycopy(bytes, 0, expandedBytes, minLength - length, length);
-			bytes = expandedBytes;
-		}
-		ByteArray result = ByteArray.getInstance(bytes);
+	public ByteArray abstractConvert(BigInteger bigInteger) {
+		ByteArray result = ByteArray.getInstance(bigInteger.toByteArray());
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
 			return result.reverse();
 		}
@@ -107,26 +81,18 @@ public class BigIntegerToByteArray
 		} else {
 			bytes = byteArray.getBytes();
 		}
-		return new BigInteger(1, bytes);
+		return new BigInteger(bytes);
 	}
 
 	public static BigIntegerToByteArray getInstance() {
-		return BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN, 0);
+		return BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
 	}
 
 	public static BigIntegerToByteArray getInstance(ByteOrder byteOrder) {
-		return BigIntegerToByteArray.getInstance(byteOrder, 0);
-	}
-
-	public static BigIntegerToByteArray getInstance(int minLength) {
-		return BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN, minLength);
-	}
-
-	public static BigIntegerToByteArray getInstance(ByteOrder byteOrder, int minLength) {
-		if (byteOrder == null || minLength < 0) {
+		if (byteOrder == null) {
 			throw new IllegalArgumentException();
 		}
-		return new BigIntegerToByteArray(byteOrder, minLength);
+		return new BigIntegerToByteArray(byteOrder);
 	}
 
 }
