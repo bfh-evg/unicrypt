@@ -53,30 +53,30 @@ import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 public class ByteArrayKeyGenerator
 	   extends AbstractSecretKeyGenerator<FixedByteArraySet, FiniteByteArrayElement> {
 
-	protected ByteArrayKeyGenerator(FixedByteArraySet fixedByteArraySet, StringToByteArray stringConverter) {
-		super(fixedByteArraySet, stringConverter);
+	protected ByteArrayKeyGenerator(FixedByteArraySet fixedByteArraySet, StringToByteArray converter) {
+		super(fixedByteArraySet, converter);
 	}
 
 	public static ByteArrayKeyGenerator getInstance(int keyLength) {
 		return ByteArrayKeyGenerator.getInstance(keyLength, StringToByteArray.getInstance());
 	}
 
-	public static ByteArrayKeyGenerator getInstance(int keyLength, StringToByteArray stringConverter) {
-		if (keyLength < 0 || stringConverter == null) {
+	public static ByteArrayKeyGenerator getInstance(int keyLength, StringToByteArray converter) {
+		if (keyLength < 0 || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArrayKeyGenerator(FixedByteArraySet.getInstance(keyLength), stringConverter);
+		return new ByteArrayKeyGenerator(FixedByteArraySet.getInstance(keyLength), converter);
 	}
 
 	public static ByteArrayKeyGenerator getInstance(FixedByteArraySet fixedByteArraySet) {
 		return ByteArrayKeyGenerator.getInstance(fixedByteArraySet, StringToByteArray.getInstance());
 	}
 
-	public static ByteArrayKeyGenerator getInstance(FixedByteArraySet fixedByteArraySet, StringToByteArray stringConverter) {
-		if (fixedByteArraySet == null || stringConverter == null) {
+	public static ByteArrayKeyGenerator getInstance(FixedByteArraySet fixedByteArraySet, StringToByteArray converter) {
+		if (fixedByteArraySet == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArrayKeyGenerator(fixedByteArraySet, stringConverter);
+		return new ByteArrayKeyGenerator(fixedByteArraySet, converter);
 	}
 
 }

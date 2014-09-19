@@ -61,43 +61,51 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 public class RSAKeyGenerator
 	   extends AbstractKeyPairGenerator<ZMod, ZModElement, ZMod, ZModElement> {
 
-	private final ZModPrimePair zModPrimePair;
-	private final ZStarMod zStarMod;
+	private final ZMod zMod;
+	private ZStarMod zStarMod;
 
-	protected RSAKeyGenerator(ZModPrimePair zModPrimePair, StringToByteArray stringConverter) {
-		super(zModPrimePair.getZModOrder(), stringConverter);
-		this.zModPrimePair = zModPrimePair;
-		this.zStarMod = ZStarMod.getInstance(zModPrimePair.getZStarModOrder().getOrder());
+	protected RSAKeyGenerator(ZMod zMod, StringToByteArray converter) {
+		super(zMod, zMod, converter);
+		this.zMod = zMod;
 	}
 
-	public ZModPrimePair getZModPrimes() {
-		return this.zModPrimePair;
+	public ZStarMod getZStarMod() {
+		if (this.zStarMod == null) {
+			if (this.zMod instanceof ZModPrimePair) {
+				// calling getZStarModOrder() twice is necessary here
+				this.zStarMod = ((ZModPrimePair) this.zMod).getZStarModOrder().getZStarModOrder();
+			} else {
+				// keys can only be generated if p and q are known
+				throw new UnsupportedOperationException();
+			}
+		}
+		return this.zStarMod;
 	}
 
 	@Override
 	protected Function defaultGetPrivateKeyGenerationFunction() {
 		return CompositeFunction.getInstance(
-			   RandomFunction.getInstance(this.zStarMod),
-			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimePair, BigIntegerToBigInteger.getInstance()));
+			   RandomFunction.getInstance(this.getZStarMod()),
+			   ConvertFunction.getInstance(this.getZStarMod(), this.zMod, BigIntegerToBigInteger.getInstance()));
 	}
 
 	@Override
 	protected Function abstractGetPublicKeyGenerationFunction() {
 		return CompositeFunction.getInstance(
-			   ConvertFunction.getInstance(this.zModPrimePair, this.zStarMod, BigIntegerToBigInteger.getInstance()),
-			   InvertFunction.getInstance(this.zStarMod),
-			   ConvertFunction.getInstance(this.zStarMod, this.zModPrimePair, BigIntegerToBigInteger.getInstance()));
+			   ConvertFunction.getInstance(this.zMod, this.getZStarMod(), BigIntegerToBigInteger.getInstance()),
+			   InvertFunction.getInstance(this.getZStarMod()),
+			   ConvertFunction.getInstance(this.getZStarMod(), this.zMod, BigIntegerToBigInteger.getInstance()));
 	}
 
-	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimePair) {
-		return RSAKeyGenerator.getInstance(zModPrimePair, StringToByteArray.getInstance());
+	public static RSAKeyGenerator getInstance(ZMod zMod) {
+		return RSAKeyGenerator.getInstance(zMod, StringToByteArray.getInstance());
 	}
 
-	public static RSAKeyGenerator getInstance(ZModPrimePair zModPrimePair, StringToByteArray stringConverter) {
-		if (zModPrimePair == null || stringConverter == null) {
+	public static RSAKeyGenerator getInstance(ZMod zMod, StringToByteArray converter) {
+		if (zMod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new RSAKeyGenerator(zModPrimePair, stringConverter);
+		return new RSAKeyGenerator(zMod, converter);
 	}
 
 }

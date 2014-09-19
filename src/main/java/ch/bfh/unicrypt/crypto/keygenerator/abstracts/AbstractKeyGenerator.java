@@ -53,10 +53,10 @@ public class AbstractKeyGenerator
 	   extends UniCrypt
 	   implements KeyGenerator {
 
-	protected StringToByteArray stringConverter;
+	protected StringToByteArray converter;
 
-	public AbstractKeyGenerator(StringToByteArray stringConverter) {
-		this.stringConverter = stringConverter;
+	public AbstractKeyGenerator(StringToByteArray converter) {
+		this.converter = converter;
 	}
 
 }

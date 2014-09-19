@@ -59,13 +59,13 @@ public class DiscreteLogarithmKeyGenerator
 
 	private final Element generator;
 
-	protected DiscreteLogarithmKeyGenerator(CyclicGroup publicKeySpace, StringToByteArray stringConverter) {
-		super((ZModPrime) publicKeySpace.getZModOrder(), stringConverter);
+	protected DiscreteLogarithmKeyGenerator(CyclicGroup publicKeySpace, StringToByteArray converter) {
+		super((ZModPrime) publicKeySpace.getZModOrder(), publicKeySpace, converter);
 		this.generator = publicKeySpace.getDefaultGenerator();
 	}
 
-	protected DiscreteLogarithmKeyGenerator(Element generator, StringToByteArray stringConverter) {
-		super((ZModPrime) generator.getSet().getZModOrder(), stringConverter);
+	protected DiscreteLogarithmKeyGenerator(Element generator, StringToByteArray converter) {
+		super((ZModPrime) generator.getSet().getZModOrder(), (CyclicGroup) generator.getSet(), converter);
 		this.generator = generator;
 	}
 
@@ -82,22 +82,25 @@ public class DiscreteLogarithmKeyGenerator
 		return DiscreteLogarithmKeyGenerator.getInstance(publicKeySpace, StringToByteArray.getInstance());
 	}
 
-	public static DiscreteLogarithmKeyGenerator getInstance(CyclicGroup publicKeySpace, StringToByteArray stringConverter) {
-		if (publicKeySpace == null || stringConverter == null) {
+	public static DiscreteLogarithmKeyGenerator getInstance(CyclicGroup publicKeySpace, StringToByteArray converter) {
+		if (publicKeySpace == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new DiscreteLogarithmKeyGenerator(publicKeySpace, stringConverter);
+		return new DiscreteLogarithmKeyGenerator(publicKeySpace, converter);
 	}
 
 	public static DiscreteLogarithmKeyGenerator getInstance(Element generator) {
 		return DiscreteLogarithmKeyGenerator.getInstance(generator, StringToByteArray.getInstance());
 	}
 
-	public static DiscreteLogarithmKeyGenerator getInstance(Element generator, StringToByteArray stringConverter) {
-		if (generator == null || stringConverter == null) {
+	public static DiscreteLogarithmKeyGenerator getInstance(Element generator, StringToByteArray converter) {
+		if (generator == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new DiscreteLogarithmKeyGenerator(generator, stringConverter);
+		if (generator.getSet().isCyclic() && generator.isGenerator()) {
+			return new DiscreteLogarithmKeyGenerator(generator, converter);
+		}
+		throw new IllegalArgumentException();
 	}
 
 }

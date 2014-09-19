@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractAsymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -83,11 +82,11 @@ public class RSAEncryptionScheme
 
 	@Override
 	protected RSAKeyGenerator abstractGetKeyPairGenerator() {
-		// keys can only be generated if p and q are known
-		if (this.getZMod() instanceof ZModPrimePair) {
-			return RSAKeyGenerator.getInstance((ZModPrimePair) this.getZMod());
-		}
-		throw new UnsupportedOperationException();
+		return RSAKeyGenerator.getInstance(this.zMod);
+	}
+
+	public static RSAEncryptionScheme getInstance(ZModElement key) {
+		return RSAEncryptionScheme.getInstance(key.getSet());
 	}
 
 	public static RSAEncryptionScheme getInstance(ZMod zMod) {
@@ -95,13 +94,6 @@ public class RSAEncryptionScheme
 			throw new IllegalArgumentException();
 		}
 		return new RSAEncryptionScheme(zMod);
-	}
-
-	public static RSAEncryptionScheme getInstance(ZModElement key) {
-		if (key == null) {
-			throw new IllegalArgumentException();
-		}
-		return new RSAEncryptionScheme(key.getSet());
 	}
 
 }

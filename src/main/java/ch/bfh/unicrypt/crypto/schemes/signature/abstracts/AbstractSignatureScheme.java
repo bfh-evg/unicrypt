@@ -123,12 +123,12 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 
 	@Override
 	public SKS getSignatureKeySpace() {
-		return (SKS) this.keyPairGenerator.getPrivateKeySpace();
+		return (SKS) this.getKeyPairGenerator().getPrivateKeySpace();
 	}
 
 	@Override
 	public VKS getVerificationKeySpace() {
-		return (VKS) this.keyPairGenerator.getPublicKeySpace();
+		return (VKS) this.getKeyPairGenerator().getPublicKeySpace();
 	}
 
 	protected abstract KG abstractGetKeyPairGenerator();

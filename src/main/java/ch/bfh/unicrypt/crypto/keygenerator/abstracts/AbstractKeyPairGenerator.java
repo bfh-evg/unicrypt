@@ -57,23 +57,45 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
+/**
+ *
+ * @author rolfhaenni
+ * @param <PRS> Private key space
+ * @param <PRE> Private key element
+ * @param <PUS> Public key space
+ * @param <PUE> Public key element
+ */
 public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element>
 	   extends AbstractKeyGenerator
 	   implements KeyPairGenerator {
 
 	private final PRS privateKeySpace;
+	private final PUS publicKeySpace;
+
 	private Function privateKeyGenerationFunction;
 	private Function publicKeyGenerationFunction;
 	private Function keyPairGenerationFunction;
 
-	protected AbstractKeyPairGenerator(PRS privateKeySpace, StringToByteArray stringConverter) {
-		super(stringConverter);
+	/**
+	 *
+	 * @param privateKeySpace
+	 * @param publicKeySpace
+	 * @param converter
+	 */
+	protected AbstractKeyPairGenerator(PRS privateKeySpace, PUS publicKeySpace, StringToByteArray converter) {
+		super(converter);
 		this.privateKeySpace = privateKeySpace;
+		this.publicKeySpace = publicKeySpace;
 	}
 
 	@Override
 	public final PRS getPrivateKeySpace() {
-		return privateKeySpace;
+		return this.privateKeySpace;
+	}
+
+	@Override
+	public final PUS getPublicKeySpace() {
+		return this.publicKeySpace;
 	}
 
 	@Override
@@ -89,30 +111,45 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 		return this.generatePrivateKey(HybridRandomByteSequence.getInstance());
 	}
 
+	/**
+	 *
+	 * @param randomByteSequence
+	 * @return
+	 */
 	@Override
 	public final PRE generatePrivateKey(RandomByteSequence randomByteSequence) {
 		return (PRE) this.getPrivateKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
 	}
 
+	/**
+	 *
+	 * @param password
+	 * @return
+	 */
 	@Override
 	public PRE generatePrivateKey(String password) {
 		return this.generatePrivateKey(password, ByteArray.getInstance());
 	}
 
+	/**
+	 *
+	 * @param password
+	 * @param salt
+	 * @return
+	 */
 	@Override
 	public PRE generatePrivateKey(String password, ByteArray salt) {
 		if (password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray seed = stringConverter.convert(password).append(salt);
+		ByteArray seed = converter.convert(password).append(salt);
 		return this.generatePrivateKey(HybridRandomByteSequence.getInstance(seed));
 	}
 
-	@Override
-	public final PUS getPublicKeySpace() {
-		return (PUS) this.getPublicKeyGenerationFunction().getCoDomain();
-	}
-
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public final Function getPublicKeyGenerationFunction() {
 		if (this.publicKeyGenerationFunction == null) {
@@ -121,11 +158,22 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 		return this.publicKeyGenerationFunction;
 	}
 
+	/**
+	 *
+	 * @param privateKey
+	 * @return
+	 */
 	@Override
 	public final PUE generatePublicKey(Element privateKey) {
 		return this.generatePublicKey(privateKey, HybridRandomByteSequence.getInstance());
 	}
 
+	/**
+	 *
+	 * @param privateKey
+	 * @param randomByteSequence
+	 * @return
+	 */
 	@Override
 	public final PUE generatePublicKey(Element privateKey, RandomByteSequence randomByteSequence) {
 		if (privateKey == null || !this.getPrivateKeySpace().contains(privateKey)) {
@@ -134,12 +182,20 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 		return (PUE) this.getPublicKeyGenerationFunction().apply(privateKey, randomByteSequence);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public ProductSet getKeyPairSpace() {
 		return (ProductSet) this.getKeyPairGenerationFunction().getCoDomain();
 	}
 
 	//		this.keyPairSpace = ProductSet.getInstance(this.getPrivateKeySpace(), this.getPublicKeySpace());
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public final Function getKeyPairGenerationFunction() {
 		if (this.keyPairGenerationFunction == null) {
@@ -151,39 +207,71 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 		return this.keyPairGenerationFunction;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public Pair generateKeyPair() {
 		return this.generateKeyPair(HybridRandomByteSequence.getInstance());
 	}
 
+	/**
+	 *
+	 * @param randomByteSequence
+	 * @return
+	 */
 	@Override
 	public Pair generateKeyPair(RandomByteSequence randomByteSequence) {
 		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
 	}
 
+	/**
+	 *
+	 * @param password
+	 * @return
+	 */
 	@Override
 	public Pair generateKeyPair(String password) {
 		return this.generateKeyPair(password, ByteArray.getInstance());
 	}
 
+	/**
+	 *
+	 * @param password
+	 * @param salt
+	 * @return
+	 */
 	@Override
 	public Pair generateKeyPair(String password, ByteArray salt) {
 		if (password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray seed = stringConverter.convert(password).append(salt);
+		ByteArray seed = converter.convert(password).append(salt);
 		return this.generateKeyPair(HybridRandomByteSequence.getInstance(seed));
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	protected String defaultToStringValue() {
 		return this.getPrivateKeySpace().toString() + ", " + this.getPublicKeySpace().toString();
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	protected Function defaultGetPrivateKeyGenerationFunction() {
 		return RandomFunction.getInstance(this.getPrivateKeySpace());
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	protected abstract Function abstractGetPublicKeyGenerationFunction();
 
 }

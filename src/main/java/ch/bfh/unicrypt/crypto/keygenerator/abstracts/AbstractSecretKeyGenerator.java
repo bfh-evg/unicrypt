@@ -59,8 +59,8 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 	private final KS secretKeySpace;
 	private Function secretKeyGenerationFunction; // with singleton domain
 
-	protected AbstractSecretKeyGenerator(final KS secretKeySpace, StringToByteArray stringConverter) {
-		super(stringConverter);
+	protected AbstractSecretKeyGenerator(final KS secretKeySpace, StringToByteArray converter) {
+		super(converter);
 		this.secretKeySpace = secretKeySpace;
 	}
 
@@ -89,7 +89,7 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 		if (password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray seed = stringConverter.convert(password).append(salt);
+		ByteArray seed = converter.convert(password).append(salt);
 		return this.generateSecretKey(HybridRandomByteSequence.getInstance(seed));
 	}
 

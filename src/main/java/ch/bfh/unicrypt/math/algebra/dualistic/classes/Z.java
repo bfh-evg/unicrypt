@@ -42,7 +42,9 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 import ch.bfh.unicrypt.helper.distribution.Distribution;
 import ch.bfh.unicrypt.helper.distribution.InfiniteDistribution;
 import ch.bfh.unicrypt.helper.distribution.UniformDistribution;
@@ -95,6 +97,11 @@ public class Z
 	@Override
 	protected ZElement defaultSelfApply(ZElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().multiply(amount));
+	}
+
+	@Override
+	protected StringConverter<BigInteger> defaultGetStringConverter() {
+		return BigIntegerToString.getInstance();
 	}
 
 	@Override
