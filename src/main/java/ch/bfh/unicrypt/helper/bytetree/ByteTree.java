@@ -264,12 +264,4 @@ class SafeByteArray
 		super(bytes);
 	}
 
-	@Override
-	public byte[] getBytes() {
-		if (this.getLength() == this.bytes.length) {
-			return this.bytes;
-		}
-		return super.getBytes();
-	}
-
 }
