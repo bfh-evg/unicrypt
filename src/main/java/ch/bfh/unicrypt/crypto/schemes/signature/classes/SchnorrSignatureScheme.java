@@ -99,27 +99,35 @@ public class SchnorrSignatureScheme<MS extends Set>
 	protected Function abstractGetSignatureFunction() {
 		ZMod zMod = this.cyclicGroup.getZModOrder();
 		ProductSet inputSpace = ProductSet.getInstance(zMod, this.messageSpace, zMod);
-		ProductSet hashSpace = ProductSet.getInstance(this.messageSpace, this.cyclicGroup);
-		HashFunction hashFunction = HashFunction.getInstance(hashSpace, this.hashMethod);
+		ProductSet middleSpace = ProductSet.getInstance(zMod, N.getInstance(), zMod);
+
+		HashFunction hashFunction = HashFunction.getInstance(ProductSet.getInstance(this.messageSpace, this.cyclicGroup), this.hashMethod);
 		BigIntegerConverter<ByteArray> converter = FiniteByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
 		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
+
 		return CompositeFunction.getInstance(
-			   MultiIdentityFunction.getInstance(inputSpace, 2),
+			   MultiIdentityFunction.getInstance(inputSpace, 3),
 			   ProductFunction.getInstance(
+					  SelectionFunction.getInstance(inputSpace, 0),
 					  CompositeFunction.getInstance(
-							 MultiIdentityFunction.getInstance(inputSpace, 2),
+							 AdapterFunction.getInstance(inputSpace, 1, 2),
 							 ProductFunction.getInstance(
-									SelectionFunction.getInstance(inputSpace, 0),
-									CompositeFunction.getInstance(
-										   AdapterFunction.getInstance(inputSpace, 1, 2),
-										   ProductFunction.getInstance(
-												  IdentityFunction.getInstance(this.messageSpace),
-												  GeneratorFunction.getInstance(this.generator)),
-										   hashFunction,
-										   convertFunction)),
-							 TimesFunction.getInstance(zMod, N.getInstance())),
+									IdentityFunction.getInstance(this.messageSpace),
+									GeneratorFunction.getInstance(this.generator)),
+							 hashFunction,
+							 convertFunction),
 					  SelectionFunction.getInstance(inputSpace, 2)),
-			   AdditionFunction.getInstance(zMod));
+			   MultiIdentityFunction.getInstance(middleSpace, 2),
+			   ProductFunction.getInstance(
+					  SelectionFunction.getInstance(middleSpace, 1),
+					  CompositeFunction.getInstance(
+							 MultiIdentityFunction.getInstance(middleSpace, 2),
+							 ProductFunction.getInstance(
+									CompositeFunction.getInstance(
+										   AdapterFunction.getInstance(middleSpace, 0, 1),
+										   TimesFunction.getInstance(zMod, N.getInstance())),
+									SelectionFunction.getInstance(middleSpace, 2)),
+							 AdditionFunction.getInstance(zMod))));
 	}
 
 	@Override
