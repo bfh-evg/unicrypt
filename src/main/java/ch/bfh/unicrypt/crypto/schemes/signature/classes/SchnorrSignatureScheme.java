@@ -43,7 +43,12 @@ package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -52,23 +57,34 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
+import ch.bfh.unicrypt.math.function.classes.AdditionFunction;
+import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
+import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
+import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
+import ch.bfh.unicrypt.math.function.classes.HashFunction;
+import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
+import ch.bfh.unicrypt.math.function.classes.TimesFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class SchnorrSignatureScheme
-	   extends AbstractRandomizedSignatureScheme<Set, Element, ProductGroup, Pair, ZModPrime, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
+public class SchnorrSignatureScheme<MS extends Set>
+	   extends AbstractRandomizedSignatureScheme<MS, Element, ProductGroup, Pair, ZModPrime, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
 
-	protected SchnorrSignatureScheme(Set messageSpace, CyclicGroup cyclicGroup, Element generator, HashMethod hashMethod) {
+	protected SchnorrSignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator, HashMethod hashMethod) {
 		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), (ZModPrime) cyclicGroup.getZModOrder(), hashMethod);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
 	}
 
 	@Override
-	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator() {
-		return DiscreteLogarithmKeyGenerator.getInstance(this.generator);
+	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator(StringToByteArray converter) {
+		return DiscreteLogarithmKeyGenerator.getInstance(this.generator, converter);
 	}
 
 	public final CyclicGroup getCyclicGroup() {
@@ -81,12 +97,47 @@ public class SchnorrSignatureScheme
 
 	@Override
 	protected Function abstractGetSignatureFunction() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		ZMod zMod = this.cyclicGroup.getZModOrder();
+		ProductSet inputSpace = ProductSet.getInstance(zMod, this.messageSpace, zMod);
+		ProductSet hashSpace = ProductSet.getInstance(this.messageSpace, this.cyclicGroup);
+		HashFunction hashFunction = HashFunction.getInstance(hashSpace, this.hashMethod);
+		BigIntegerConverter<ByteArray> converter = FiniteByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
+		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
+		return CompositeFunction.getInstance(
+			   MultiIdentityFunction.getInstance(inputSpace, 2),
+			   ProductFunction.getInstance(
+					  CompositeFunction.getInstance(
+							 MultiIdentityFunction.getInstance(inputSpace, 2),
+							 ProductFunction.getInstance(
+									SelectionFunction.getInstance(inputSpace, 0),
+									CompositeFunction.getInstance(
+										   AdapterFunction.getInstance(inputSpace, 1, 2),
+										   ProductFunction.getInstance(
+												  IdentityFunction.getInstance(this.messageSpace),
+												  GeneratorFunction.getInstance(this.generator)),
+										   hashFunction,
+										   convertFunction)),
+							 TimesFunction.getInstance(zMod, N.getInstance())),
+					  SelectionFunction.getInstance(inputSpace, 2)),
+			   AdditionFunction.getInstance(zMod));
 	}
 
 	@Override
 	protected Function abstractGetVerificationFunction() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		ZMod zMod = this.cyclicGroup.getZModOrder();
+		ProductSet inputSpace = ProductSet.getInstance(zMod, this.messageSpace, this.signatureSpace);
+		return null;
+	}
+
+	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, Element generator) {
+		return SchnorrSignatureScheme.getInstance(messageSpace, generator, HashMethod.getInstance());
+	}
+
+	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, Element generator, HashMethod hashMethod) {
+		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator() || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new SchnorrSignatureScheme(messageSpace, (CyclicGroup) generator.getSet(), generator, hashMethod);
 	}
 
 }

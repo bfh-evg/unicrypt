@@ -44,11 +44,14 @@ package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.SignatureScheme;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -69,12 +72,13 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 	protected final HashMethod hashMethod;
 	private Function signatureFunction;
 	private Function verificationFunction;
-	private KeyPairGenerator keyPairGenerator;
+	private Map<StringToByteArray, KG> keyPairGenerators;
 
 	public AbstractSignatureScheme(MS messageSpace, SS signatureSpace, HashMethod hashMethod) {
 		super(messageSpace);
 		this.signatureSpace = signatureSpace;
 		this.hashMethod = hashMethod;
+		this.keyPairGenerators = new HashMap<StringToByteArray, KG>();
 	}
 
 	@Override
@@ -99,10 +103,20 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 
 	@Override
 	public final KeyPairGenerator getKeyPairGenerator() {
-		if (this.keyPairGenerator == null) {
-			this.keyPairGenerator = this.abstractGetKeyPairGenerator();
+		return this.getKeyPairGenerator(StringToByteArray.getInstance());
+	}
+
+	@Override
+	public final KeyPairGenerator getKeyPairGenerator(StringToByteArray converter) {
+		if (converter == null) {
+			throw new IllegalArgumentException();
 		}
-		return this.keyPairGenerator;
+		KG keyPairGenerator = this.keyPairGenerators.get(converter);
+		if (keyPairGenerator == null) {
+			keyPairGenerator = this.abstractGetKeyPairGenerator(converter);
+			this.keyPairGenerators.put(converter, keyPairGenerator);
+		}
+		return keyPairGenerator;
 	}
 
 	@Override
@@ -131,7 +145,7 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 		return (VKS) this.getKeyPairGenerator().getPublicKeySpace();
 	}
 
-	protected abstract KG abstractGetKeyPairGenerator();
+	protected abstract KG abstractGetKeyPairGenerator(StringToByteArray converter);
 
 	protected abstract Function abstractGetSignatureFunction();
 

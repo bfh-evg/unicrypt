@@ -51,6 +51,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.math.BigInteger;
 
 /**
  * This class represents the the concept of a function f:XxZ->Y, where Z is an atomic group. The second input element
@@ -76,7 +77,9 @@ public class TimesFunction
 	//
 	@Override
 	protected AdditiveElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
-		return ((AdditiveElement) element.getFirst()).times(element.getSecond());
+		AdditiveElement element1 = (AdditiveElement) element.getFirst();
+		Element<BigInteger> element2 = (Element<BigInteger>) element.getSecond();
+		return element1.times(element2.getValue());
 	}
 
 	//
@@ -111,7 +114,7 @@ public class TimesFunction
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
 	 */
-	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup, final Set amountSet) {
+	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup, final Set<BigInteger> amountSet) {
 		if (additiveSemiGroup == null || amountSet == null) {
 			throw new IllegalArgumentException();
 		}

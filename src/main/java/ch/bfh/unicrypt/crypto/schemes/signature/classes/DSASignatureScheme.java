@@ -39,42 +39,55 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.signature.interfaces;
+package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
+import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
-import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-/**
- *
- * @author rolfhaenni
- */
-public interface SignatureScheme
-	   extends Scheme {
+public class DSASignatureScheme<MS extends Set>
+	   extends AbstractRandomizedSignatureScheme<MS, Element, ProductGroup, Pair, ZModPrime, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
 
-	public HashMethod getHashMethod();
+	private final CyclicGroup cyclicGroup;
+	private final Element generator;
 
-	public KeyPairGenerator getKeyPairGenerator();
+	protected DSASignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator, HashMethod hashMethod) {
+		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), (ZModPrime) cyclicGroup.getZModOrder(), hashMethod);
+		this.cyclicGroup = cyclicGroup;
+		this.generator = generator;
+	}
 
-	public KeyPairGenerator getKeyPairGenerator(StringToByteArray converter);
+	@Override
+	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator(StringToByteArray converter) {
+		return DiscreteLogarithmKeyGenerator.getInstance(this.generator, converter);
+	}
 
-	public Set getSignatureSpace();
+	public final CyclicGroup getCyclicGroup() {
+		return this.cyclicGroup;
+	}
 
-	public Function getSignatureFunction();
+	public final Element getGenerator() {
+		return this.generator;
+	}
 
-	public Function getVerificationFunction();
+	@Override
+	protected Function abstractGetSignatureFunction() {
+		return null;
+	}
 
-	public Element sign(final Element privateKey, final Element message);
-
-	public BooleanElement verify(final Element publicKey, final Element message, Element signature);
-
-	public Set getSignatureKeySpace();
-
-	public Set getVerificationKeySpace();
+	@Override
+	protected Function abstractGetVerificationFunction() {
+		return null;
+	}
 
 }
