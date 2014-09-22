@@ -39,56 +39,48 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.encoder.classes;
+package ch.bfh.unicrypt.crypto.schemes.hashing;
 
-import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.crypto.schemes.hashing.classes.FixedByteArrayHashingScheme;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.crypto.encoder.BigIntegerConvertFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ByteArrayToStringEncoder
-	   extends AbstractEncoder<ByteArrayMonoid, ByteArrayElement, StringMonoid, StringElement> {
+public class HashingExample {
 
-	private final StringMonoid stringMonoid;
+	public static void example1() {
 
-	protected ByteArrayToStringEncoder(StringMonoid stringMonoid) {
-		this.stringMonoid = stringMonoid;
+		StringMonoid stringSet = StringMonoid.getInstance(Alphabet.LOWER_CASE);
+		Element<String> stringElement = stringSet.getElement("message");
+
+		Z bigIntegerSet = Z.getInstance();
+		Element<BigInteger> bigIntegerElement = bigIntegerSet.getElement(5);
+
+		ProductSet messageSpace = ProductSet.getInstance(stringSet, bigIntegerSet);
+		Tuple message = messageSpace.getElement(stringElement, bigIntegerElement);
+
+		FixedByteArrayHashingScheme scheme = FixedByteArrayHashingScheme.getInstance(messageSpace);
+
+		Element hash = scheme.hash(message);
+		Element result = scheme.check(message, hash);
+
+		Example.printLine(scheme);
+		Example.printLine("Message", message);
+		Example.printLine("Hash   ", hash);
+		Example.printLine("Check  ", result);
 	}
 
-	public StringMonoid getStringMonoid() {
-		return this.stringMonoid;
-	}
-
-	public StringToByteArrayEncoder getDecoder() {
-		return StringToByteArrayEncoder.getInstance(this.getStringMonoid());
-	}
-
-	@Override
-	protected Function abstractGetEncodingFunction() {
-		return BigIntegerConvertFunction.getInstance(ByteArrayMonoid.getInstance(), this.getStringMonoid());
-	}
-//	@Override
-//	protected Function abstractGetEncodingFunction() {
-//		return ConvertFunction.getInstance(ByteArrayMonoid.getInstance(), this.getStringMonoid());
-//	}
-
-	@Override
-	protected Function abstractGetDecodingFunction() {
-		return BigIntegerConvertFunction.getInstance(this.getStringMonoid(), ByteArrayMonoid.getInstance());
-	}
-
-	public static ByteArrayToStringEncoder getInstance(StringMonoid stringMonoid) {
-		if (stringMonoid == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ByteArrayToStringEncoder(stringMonoid);
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

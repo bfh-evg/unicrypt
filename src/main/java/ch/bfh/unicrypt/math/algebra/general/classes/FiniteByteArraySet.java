@@ -150,6 +150,9 @@ public class FiniteByteArraySet
 		if (minLength < 0 || maxLength < minLength) {
 			throw new IllegalArgumentException();
 		}
+		if (minLength == maxLength) {
+			return FixedByteArraySet.getInstance(minLength);
+		}
 		return new FiniteByteArraySet(minLength, maxLength);
 	}
 
@@ -168,6 +171,9 @@ public class FiniteByteArraySet
 		while (order1.multiply(order2).compareTo(minOrder) < 0) {
 			order2 = order2.multiply(size).add(BigInteger.ONE);
 			maxLength++;
+		}
+		if (minLength == maxLength) {
+			return FixedByteArraySet.getInstance(minLength);
 		}
 		return new FiniteByteArraySet(minLength, maxLength);
 	}

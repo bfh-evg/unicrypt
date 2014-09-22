@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.function.classes.BigIntegerConvertFunction;
+import ch.bfh.unicrypt.crypto.encoder.BigIntegerConvertFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**

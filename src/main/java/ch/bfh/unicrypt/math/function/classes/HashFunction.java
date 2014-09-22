@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.math.function.classes;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
+import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -66,11 +66,11 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @version 2.0
  */
 public class HashFunction
-	   extends AbstractFunction<HashFunction, Set, Element, FiniteByteArraySet, FiniteByteArrayElement> {
+	   extends AbstractFunction<HashFunction, Set, Element, FixedByteArraySet, FiniteByteArrayElement> {
 
 	private final HashMethod hashMethod;
 
-	private HashFunction(Set domain, FiniteByteArraySet coDomain, HashMethod hashMethod) {
+	private HashFunction(Set domain, FixedByteArraySet coDomain, HashMethod hashMethod) {
 		super(domain, coDomain);
 		this.hashMethod = hashMethod;
 	}
@@ -112,7 +112,7 @@ public class HashFunction
 		if (domain == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new HashFunction(domain, FiniteByteArraySet.getInstance(hashMethod.getHashAlgorithm().getHashLength()), hashMethod);
+		return new HashFunction(domain, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getHashLength()), hashMethod);
 	}
 
 }

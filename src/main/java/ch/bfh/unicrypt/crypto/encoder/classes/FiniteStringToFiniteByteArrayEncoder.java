@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
-import ch.bfh.unicrypt.math.function.classes.BigIntegerConvertFunction;
+import ch.bfh.unicrypt.crypto.encoder.BigIntegerConvertFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.helper.Alphabet;
 import java.math.BigInteger;

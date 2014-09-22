@@ -70,9 +70,10 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 
 	protected final SS signatureSpace;
 	protected final HashMethod hashMethod;
+	protected final Map<StringToByteArray, KG> keyPairGenerators;
+
 	private Function signatureFunction;
 	private Function verificationFunction;
-	private Map<StringToByteArray, KG> keyPairGenerators;
 
 	public AbstractSignatureScheme(MS messageSpace, SS signatureSpace, HashMethod hashMethod) {
 		super(messageSpace);

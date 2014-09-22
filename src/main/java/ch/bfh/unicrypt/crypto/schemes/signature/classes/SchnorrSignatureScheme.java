@@ -157,7 +157,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 										   ApplyFunction.getInstance(this.cyclicGroup, 2))),
 							 this.getHashConvertModuloFunction(zMod)),
 					  SelectionFunction.getInstance(inputSpace, 2, 0)),
-			   EqualityFunction.getInstance(zMod, 2));
+			   EqualityFunction.getInstance(zMod));
 	}
 
 	private Function getHashConvertModuloFunction(ZMod zMod) {
