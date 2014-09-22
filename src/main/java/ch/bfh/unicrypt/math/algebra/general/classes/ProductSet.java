@@ -46,11 +46,10 @@ import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
@@ -505,7 +504,14 @@ public class ProductSet
 			isCyclic = isCyclic && set.isCyclic();
 		}
 		if (isCyclic) {
-			return new ProductCyclicGroup(sets);
+			BigInteger[] orders = new BigInteger[sets.getLength()];
+			int i = 0;
+			for (Set set : sets) {
+				orders[i++] = set.getOrder();
+			}
+			if (MathUtil.areRelativelyPrime(orders)) {
+				return new ProductCyclicGroup(sets);
+			}
 		}
 		if (isGroup) {
 			return new ProductGroup(sets);
@@ -535,10 +541,6 @@ public class ProductSet
 		return (ProductGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(groups));
 	}
 
-	public static ProductCyclicGroup getInstance(final CyclicGroup... cyclicGroups) {
-		return (ProductCyclicGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(cyclicGroups));
-	}
-
 	public static ProductSet getInstance(final Set set, int arity) {
 		return ProductSet.getInstance(ImmutableArray.<Set>getInstance(set, arity));
 	}
@@ -553,10 +555,6 @@ public class ProductSet
 
 	public static ProductGroup getInstance(final Group group, int arity) {
 		return (ProductGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(group, arity));
-	}
-
-	public static ProductCyclicGroup getInstance(final CyclicGroup cyclicGroup, int arity) {
-		return (ProductCyclicGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(cyclicGroup, arity));
 	}
 
 }

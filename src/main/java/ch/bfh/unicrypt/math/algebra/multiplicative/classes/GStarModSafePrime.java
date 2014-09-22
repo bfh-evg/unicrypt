@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.SafePrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
@@ -61,16 +60,6 @@ public class GStarModSafePrime
 
 	protected GStarModSafePrime(SafePrime modulo) {
 		super(modulo, Prime.getInstance(modulo.getValue().subtract(BigInteger.ONE).divide(BigInteger.valueOf(2))));
-	}
-
-	@Override
-	protected ZModPrime defaultGetZModOrder() {
-		return ZModPrime.getInstance(this.getOrder());
-	}
-
-	@Override
-	protected ZStarModPrime defaultGetZStarModOrder() {
-		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
 	@Override

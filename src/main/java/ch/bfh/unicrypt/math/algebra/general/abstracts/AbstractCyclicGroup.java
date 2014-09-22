@@ -182,15 +182,15 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(cyclicGroup.getOrder()) < 0;
+				return this.counter.compareTo(cyclicGroup.getOrder()) < 0;
 			}
 
 			@Override
 			public E next() {
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
-					E nextElement = currentElement;
-					currentElement = cyclicGroup.apply(currentElement, cyclicGroup.getDefaultGenerator());
+					E nextElement = this.currentElement;
+					this.currentElement = cyclicGroup.apply(this.currentElement, cyclicGroup.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();

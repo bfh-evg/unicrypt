@@ -59,14 +59,19 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
 import ch.bfh.unicrypt.math.function.classes.AdditionFunction;
+import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
+import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
+import ch.bfh.unicrypt.math.function.classes.InvertFunction;
+import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
 import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
+import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.TimesFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
@@ -99,7 +104,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 	protected Function abstractGetSignatureFunction() {
 		ZMod zMod = this.cyclicGroup.getZModOrder();
 		ProductSet inputSpace = ProductSet.getInstance(zMod, this.messageSpace, zMod);
-		ProductSet middleSpace = ProductSet.getInstance(zMod, N.getInstance(), zMod);
+		ProductSet middleSpace = ProductSet.getInstance(zMod, 3);
 
 		HashFunction hashFunction = HashFunction.getInstance(ProductSet.getInstance(this.messageSpace, this.cyclicGroup), this.hashMethod);
 		BigIntegerConverter<ByteArray> converter = FiniteByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
@@ -115,7 +120,8 @@ public class SchnorrSignatureScheme<MS extends Set>
 									IdentityFunction.getInstance(this.messageSpace),
 									GeneratorFunction.getInstance(this.generator)),
 							 hashFunction,
-							 convertFunction),
+							 convertFunction,
+							 ModuloFunction.getInstance(N.getInstance(), zMod)),
 					  SelectionFunction.getInstance(inputSpace, 2)),
 			   MultiIdentityFunction.getInstance(middleSpace, 2),
 			   ProductFunction.getInstance(
@@ -125,7 +131,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 							 ProductFunction.getInstance(
 									CompositeFunction.getInstance(
 										   AdapterFunction.getInstance(middleSpace, 0, 1),
-										   TimesFunction.getInstance(zMod, N.getInstance())),
+										   TimesFunction.getInstance(zMod, zMod)),
 									SelectionFunction.getInstance(middleSpace, 2)),
 							 AdditionFunction.getInstance(zMod))));
 	}
@@ -133,8 +139,38 @@ public class SchnorrSignatureScheme<MS extends Set>
 	@Override
 	protected Function abstractGetVerificationFunction() {
 		ZMod zMod = this.cyclicGroup.getZModOrder();
-		ProductSet inputSpace = ProductSet.getInstance(zMod, this.messageSpace, this.signatureSpace);
-		return null;
+		ProductSet inputSpace = ProductSet.getInstance(this.cyclicGroup, this.messageSpace, this.signatureSpace);
+
+		HashFunction hashFunction = HashFunction.getInstance(ProductSet.getInstance(this.messageSpace, this.cyclicGroup), this.hashMethod);
+		BigIntegerConverter<ByteArray> converter = FiniteByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
+		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
+
+		return CompositeFunction.getInstance(
+			   MultiIdentityFunction.getInstance(inputSpace, 2),
+			   ProductFunction.getInstance(
+					  CompositeFunction.getInstance(
+							 MultiIdentityFunction.getInstance(inputSpace, 2),
+							 ProductFunction.getInstance(
+									SelectionFunction.getInstance(inputSpace, 1),
+									CompositeFunction.getInstance(
+										   MultiIdentityFunction.getInstance(inputSpace, 2),
+										   ProductFunction.getInstance(
+												  CompositeFunction.getInstance(
+														 SelectionFunction.getInstance(inputSpace, 2, 1),
+														 GeneratorFunction.getInstance(this.generator)),
+												  CompositeFunction.getInstance(
+														 MultiIdentityFunction.getInstance(inputSpace, 2),
+														 ProductFunction.getInstance(
+																SelectionFunction.getInstance(inputSpace, 0),
+																SelectionFunction.getInstance(inputSpace, 2, 0)),
+														 SelfApplyFunction.getInstance(this.cyclicGroup, zMod),
+														 InvertFunction.getInstance(this.cyclicGroup))),
+										   ApplyFunction.getInstance(this.cyclicGroup, 2))),
+							 hashFunction,
+							 convertFunction,
+							 ModuloFunction.getInstance(N.getInstance(), zMod)),
+					  SelectionFunction.getInstance(inputSpace, 2, 0)),
+			   EqualityFunction.getInstance(zMod, 2));
 	}
 
 	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, Element generator) {

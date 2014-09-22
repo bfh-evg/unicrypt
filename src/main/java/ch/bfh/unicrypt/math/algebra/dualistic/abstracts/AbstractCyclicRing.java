@@ -171,8 +171,8 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 			public E next() {
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
-					E nextElement = currentElement;
-					currentElement = cyclicRing.apply(currentElement, cyclicRing.getDefaultGenerator());
+					E nextElement = this.currentElement;
+					this.currentElement = cyclicRing.apply(this.currentElement, cyclicRing.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();

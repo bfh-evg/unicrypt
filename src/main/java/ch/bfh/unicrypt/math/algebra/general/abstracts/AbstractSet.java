@@ -91,6 +91,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	private final Class<? extends Object> valueClass;
 	private BigInteger order, lowerBound, upperBound, minimum;
+
 	private BigIntegerConverter<V> bigIntegerConverter;
 	private StringConverter<V> stringConverter;
 	private ByteArrayConverter<V> byteArrayConverter;
@@ -210,19 +211,19 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final ZMod getZModOrder() {
+	public ZMod getZModOrder() {
 		if (!(this.isFinite() && this.hasKnownOrder())) {
 			throw new UnsupportedOperationException();
 		}
-		return this.defaultGetZModOrder();
+		return ZMod.getInstance(this.getOrder());
 	}
 
 	@Override
-	public final ZStarMod getZStarModOrder() {
+	public ZStarMod getZStarModOrder() {
 		if (!(this.isFinite() && this.hasKnownOrder())) {
 			throw new UnsupportedOperationException();
 		}
-		return this.defaultGetZStarModOrder();
+		return ZStarMod.getInstance(this.getOrder());
 	}
 
 	@Override
@@ -486,14 +487,6 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	// The following protected methods are default implementations for sets.
 	// They may need to be changed in certain sub-classes.
 	//
-	protected ZMod defaultGetZModOrder() {
-		return ZMod.getInstance(this.getOrder());
-	}
-
-	protected ZStarMod defaultGetZStarModOrder() {
-		return ZStarMod.getInstance(this.getOrder());
-	}
-
 	protected BigInteger defaultGetOrderLowerBound() {
 		return BigInteger.ZERO;
 	}

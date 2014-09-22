@@ -150,15 +150,16 @@ public class ProductCyclicGroup
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(productCyclicGroup.getOrder()) < 0;
+				return this.counter.compareTo(productCyclicGroup.getOrder()) < 0;
 			}
 
 			@Override
 			public Tuple next() {
+				System.out.println("HELLO");
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
-					Tuple nextElement = currentTuple;
-					currentTuple = productCyclicGroup.apply(currentTuple, productCyclicGroup.getDefaultGenerator());
+					Tuple nextElement = this.currentTuple;
+					this.currentTuple = productCyclicGroup.apply(this.currentTuple, productCyclicGroup.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();

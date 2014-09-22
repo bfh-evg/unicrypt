@@ -39,10 +39,8 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.signature;
+package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
-import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.crypto.schemes.signature.classes.SchnorrSignatureScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -51,14 +49,20 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class SchnorrSignatureExample {
+public class SchnorrSignatureSchemeTest {
 
-	public static void example1() {
+	public SchnorrSignatureSchemeTest() {
+	}
+
+	@Test
+	public void testSignVerify() {
 		GStarModSafePrime g_q = GStarModSafePrime.getInstance(23);
 		GStarModElement g = g_q.getElement(4);
 
@@ -68,22 +72,14 @@ public class SchnorrSignatureExample {
 		Element privateKey = keyPair.getFirst();
 		Element publicKey = keyPair.getSecond();
 
-		StringElement message = schnorr.getMessageSpace().getElement("MessageXX");
+		StringElement message = schnorr.getMessageSpace().getElement("Message");
 		Element randomization = schnorr.getRandomizationSpace().getRandomElement();
 
-		Element signature = schnorr.sign(privateKey, message, randomization);
-		Example.printLine("Signature", signature);
+		Pair signature = schnorr.sign(privateKey, message, randomization);
 
 		BooleanElement result = schnorr.verify(publicKey, message, signature);
-		Example.printLine("Verification", result);
+		Assert.assertTrue(result.getValue());
 
-		BooleanElement falseResult = schnorr.verify(publicKey, message, signature.invert());
-		Example.printLine("Verification", falseResult);
-
-	}
-
-	public static void main(final String[] args) {
-		Example.runExamples();
 	}
 
 }
