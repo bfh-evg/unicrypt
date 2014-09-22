@@ -49,9 +49,9 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGrou
 /**
  *
  * @author rolfhaenni
- * @param <E>
- * @param <M>
- * @param <V>
+ * @param <E> Generic type of elements of this field
+ * @param <M> Generic type for the multiplicative group of this field
+ * @param <V> Generic type of values stored in the elements of this field
  */
 public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V extends Object>
 	   extends AbstractRing<E, V>

@@ -133,7 +133,7 @@ public interface Element<V extends Object> {
 	 * {@link BigIntegerConverter}.
 	 * <p>
 	 * @param converter
-	 * @return
+	 * @return The corresponding ByteArray
 	 */
 	public ByteArray getByteArray(BigIntegerConverter converter);
 

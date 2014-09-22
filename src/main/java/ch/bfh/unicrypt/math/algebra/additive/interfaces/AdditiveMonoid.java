@@ -55,8 +55,19 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 public interface AdditiveMonoid<V extends Object>
 	   extends Monoid<V>, AdditiveSemiGroup<V> {
 
+	/**
+	 * Returns the neutral element of this monoid, which in this case is 0 (see {@link Monoid}).
+	 * <p>
+	 * @return The neutral element
+	 */
 	public AdditiveElement<V> getZeroElement();
 
+	/**
+	 * Returns {@code true} if the given element corresponds to the neutral element, which is 0.
+	 * <p>
+	 * @param element The given element
+	 * @return {@code true} if the given element equals zero
+	 */
 	public boolean isZeroElement(Element element);
 
 	// The following methods are overridden from Monoid with an adapted return type
