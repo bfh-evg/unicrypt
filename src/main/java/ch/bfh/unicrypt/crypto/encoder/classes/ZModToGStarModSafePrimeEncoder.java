@@ -67,12 +67,12 @@ public class ZModToGStarModSafePrimeEncoder
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new EncodingFunction((ZModPrime) this.getGStarModSafePrime().getZModOrder(), this.getGStarModSafePrime());
+		return new EncodingFunction(this.getGStarModSafePrime().getZModOrder(), this.getGStarModSafePrime());
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new DecodingFunction(this.getGStarModSafePrime(), (ZModPrime) this.getGStarModSafePrime().getZModOrder());
+		return new DecodingFunction(this.getGStarModSafePrime(), this.getGStarModSafePrime().getZModOrder());
 	}
 
 	public static ZModToGStarModSafePrimeEncoder getInstance(GStarModSafePrime gStarModSafePrime) {

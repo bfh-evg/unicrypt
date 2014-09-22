@@ -156,7 +156,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	}
 
 	@Override
-	protected Iterator<E> defaultGetIterator() {
+	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractCyclicRing<E, V> cyclicRing = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;
@@ -164,7 +164,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(cyclicRing.getOrder()) < 0;
+				return counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override

@@ -42,11 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -57,63 +53,12 @@ import java.util.Map;
  * @author rolfhaenni
  */
 public class ZStarModPrimePair
-	   extends ZStarMod
-	   implements MultiplicativeCyclicGroup<BigInteger> {
+	   extends ZStarMod {
 
 	private final static Map<BigInteger, ZStarModPrimePair> instances = new HashMap<BigInteger, ZStarModPrimePair>();
 
 	protected ZStarModPrimePair(PrimePair primePair) {
 		super(primePair);
-	}
-
-	@Override
-	public ZStarModElement getDefaultGenerator() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public ZStarModElement getRandomGenerator() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public ZStarModElement getRandomGenerator(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public ZStarModElement getIndependentGenerator(int index) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public ZStarModElement getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public Tuple getIndependentGenerators(int maxIndex) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public boolean isGenerator(Element element) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	public static ZStarModPrimePair getInstance(final PrimePair primePair) {

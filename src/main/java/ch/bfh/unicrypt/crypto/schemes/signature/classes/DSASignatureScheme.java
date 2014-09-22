@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSign
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -56,13 +55,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class DSASignatureScheme<MS extends Set>
-	   extends AbstractRandomizedSignatureScheme<MS, Element, ProductGroup, Pair, ZModPrime, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
+	   extends AbstractRandomizedSignatureScheme<MS, Element, ProductGroup, Pair, ZMod, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
 
 	protected DSASignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator, HashMethod hashMethod) {
-		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), (ZModPrime) cyclicGroup.getZModOrder(), hashMethod);
+		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(), hashMethod);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
 	}

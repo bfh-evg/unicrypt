@@ -452,7 +452,22 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 			@Override
 			public Iterator<E> iterator() {
-				return defaultGetIterator();
+				return getIterator();
+			}
+
+		};
+	}
+
+	@Override
+	public final Iterable<E> getElements(final int n) {
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new Iterable<E>() {
+
+			@Override
+			public Iterator<E> iterator() {
+				return getIterator(n);
 			}
 
 		};
@@ -460,7 +475,12 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final Iterator<E> getIterator() {
-		return this.defaultGetIterator();
+		return this.defaultGetIterator(this.getOrder());
+	}
+
+	@Override
+	public final Iterator<E> getIterator(int n) {
+		return this.defaultGetIterator(BigInteger.valueOf(n).min(this.getOrder()));
 	}
 
 	@Override
@@ -550,10 +570,9 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.abstractEquals(set);
 	}
 
-	protected Iterator<E> defaultGetIterator() {
+	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractSet<E, V> set = this;
 		return new Iterator<E>() {
-
 			BigInteger counter = BigInteger.ZERO;
 			BigInteger currentValue = BigInteger.ZERO;
 
@@ -561,7 +580,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 			public boolean hasNext() {
 				if (set.hasKnownOrder()) {
 					if (set.isFinite()) {
-						return counter.compareTo(set.getOrder()) < 0;
+						return counter.compareTo(maxCounter) < 0;
 					}
 					return true;
 				}

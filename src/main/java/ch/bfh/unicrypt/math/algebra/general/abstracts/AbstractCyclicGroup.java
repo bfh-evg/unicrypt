@@ -174,7 +174,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	}
 
 	@Override
-	protected Iterator<E> defaultGetIterator() {
+	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractCyclicGroup<E, V> cyclicGroup = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;
@@ -182,7 +182,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 			@Override
 			public boolean hasNext() {
-				return this.counter.compareTo(cyclicGroup.getOrder()) < 0;
+				return this.counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override

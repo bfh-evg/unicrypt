@@ -142,7 +142,7 @@ public class ProductCyclicGroup
 	}
 
 	@Override
-	protected Iterator<Tuple> defaultGetIterator() {
+	protected Iterator<Tuple> defaultGetIterator(final BigInteger maxCounter) {
 		final ProductCyclicGroup productCyclicGroup = this;
 		return new Iterator<Tuple>() {
 			BigInteger counter = BigInteger.ZERO;
@@ -150,12 +150,11 @@ public class ProductCyclicGroup
 
 			@Override
 			public boolean hasNext() {
-				return this.counter.compareTo(productCyclicGroup.getOrder()) < 0;
+				return this.counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override
 			public Tuple next() {
-				System.out.println("HELLO");
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
 					Tuple nextElement = this.currentTuple;

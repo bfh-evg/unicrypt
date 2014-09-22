@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -62,7 +63,7 @@ public class SchnorrSignatureSchemeTest {
 	}
 
 	@Test
-	public void testSignVerify() {
+	public void testSignVerify1() {
 		GStarModSafePrime g_q = GStarModSafePrime.getInstance(23);
 		GStarModElement g = g_q.getElement(4);
 
@@ -79,6 +80,33 @@ public class SchnorrSignatureSchemeTest {
 
 		BooleanElement result = schnorr.verify(publicKey, message, signature);
 		Assert.assertTrue(result.getValue());
+
+	}
+
+	@Test
+	public void testSignVerify2() {
+		GStarModSafePrime g_q = GStarModSafePrime.getRandomInstance(128);
+		GStarModElement g = g_q.getDefaultGenerator();
+
+		SchnorrSignatureScheme<StringMonoid> schnorr = SchnorrSignatureScheme.getInstance(StringMonoid.getInstance(Alphabet.BASE64), g);
+
+		Pair keyPair = schnorr.getKeyPairGenerator().generateKeyPair();
+		Element privateKey = keyPair.getFirst();
+		Element publicKey = keyPair.getSecond();
+
+		StringElement message = schnorr.getMessageSpace().getElement("Message");
+		Element randomization = schnorr.getRandomizationSpace().getRandomElement();
+
+		Pair signature = schnorr.sign(privateKey, message, randomization);
+
+		BooleanElement result = schnorr.verify(publicKey, message, signature);
+		Assert.assertTrue(result.getValue());
+
+		// Generate and verify the 100 first pairs from the signature space
+		for (Tuple falseSignature : schnorr.getSignatureSpace().getElements(100)) {
+			result = schnorr.verify(publicKey, message, falseSignature);
+			Assert.assertFalse(result.getValue());
+		}
 
 	}
 

@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.crypto.keygenerator.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.abstracts.AbstractKeyPairGenerator;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
@@ -55,17 +55,17 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author rolfhaenni
  */
 public class DiscreteLogarithmKeyGenerator
-	   extends AbstractKeyPairGenerator<ZModPrime, ZModElement, CyclicGroup, Element> {
+	   extends AbstractKeyPairGenerator<ZMod, ZModElement, CyclicGroup, Element> {
 
 	private final Element generator;
 
 	protected DiscreteLogarithmKeyGenerator(CyclicGroup publicKeySpace, StringToByteArray converter) {
-		super((ZModPrime) publicKeySpace.getZModOrder(), publicKeySpace, converter);
+		super(publicKeySpace.getZModOrder(), publicKeySpace, converter);
 		this.generator = publicKeySpace.getDefaultGenerator();
 	}
 
 	protected DiscreteLogarithmKeyGenerator(Element generator, StringToByteArray converter) {
-		super((ZModPrime) generator.getSet().getZModOrder(), (CyclicGroup) generator.getSet(), converter);
+		super(generator.getSet().getZModOrder(), (CyclicGroup) generator.getSet(), converter);
 		this.generator = generator;
 	}
 

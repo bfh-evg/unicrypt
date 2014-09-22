@@ -41,14 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
-import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
+import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -250,7 +250,7 @@ public class BooleanSetTest {
 	public void testGetZModOrder() {
 //		System.out.println("getZModOrder");
 		ZModPrime expResult = ZModPrime.getInstance(2);
-		ZModPrime result = (ZModPrime) BooleanSet.getInstance().getZModOrder();
+		ZModPrime result = BooleanSet.getInstance().getZModOrder();
 
 		// TODO implement equals methods in sets
 		Assert.assertTrue(expResult.isEquivalent(result));

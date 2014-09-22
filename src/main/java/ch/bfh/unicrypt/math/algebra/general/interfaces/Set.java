@@ -391,11 +391,15 @@ public interface Set<V extends Object> {
 	 */
 	public Iterable<? extends Element<V>> getElements();
 
+	public Iterable<? extends Element<V>> getElements(int n);
+
 	/**
 	 * TODO
 	 * <p>
 	 * @return
 	 */
 	public Iterator<? extends Element<V>> getIterator();
+
+	public Iterator<? extends Element<V>> getIterator(int n);
 
 }
