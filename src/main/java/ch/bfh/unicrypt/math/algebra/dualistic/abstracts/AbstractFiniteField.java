@@ -47,11 +47,12 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGrou
 import java.math.BigInteger;
 
 /**
- *
+ * This abstract class provides a basis implementation for objects of type {@link FiniteField}.
+ * <p>
+ * @param <E> Generic type of the elements of this finite field
+ * @param <M> Generic type of the {@link MultplicativeGroup} of this finite field
+ * @param <V> Generic type of values stored in the elements of this finite field
  * @author rolfhaenni
- * @param <E>
- * @param <M>
- * @param <V>
  */
 public abstract class AbstractFiniteField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V extends Object>
 	   extends AbstractField<E, M, V>
@@ -71,6 +72,7 @@ public abstract class AbstractFiniteField<E extends DualisticElement<V>, M exten
 		return this.characteristic;
 	}
 
+	// The following protected abstract method must be implemented in every direct sub-class.
 	protected abstract BigInteger abstractGetCharacteristic();
 
 }

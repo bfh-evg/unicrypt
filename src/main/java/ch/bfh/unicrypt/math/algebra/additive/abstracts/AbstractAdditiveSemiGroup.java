@@ -48,6 +48,13 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
+/**
+ * This abstract class provides a basis implementation for objects of type {@link  AdditiveSemiGroup}.
+ * <p>
+ * @param <E> Generic type of the elements of this semigroup
+ * @param <V> Generic type of values stored in the elements of this semigroup
+ * @author
+ */
 public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements AdditiveSemiGroup<V> {

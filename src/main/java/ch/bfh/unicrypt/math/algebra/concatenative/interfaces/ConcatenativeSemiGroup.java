@@ -146,8 +146,6 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	 * @param elements A given array of elements
 	 * @param amounts  Corresponding amounts
 	 * @return The result of this operation
-	 * @throws IllegalArgumentException if {@code elements} or one of its elements is null
-	 * @throws IllegalArgumentException if {@code amounts} or one of its values is null
 	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
 	 * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
 	 */

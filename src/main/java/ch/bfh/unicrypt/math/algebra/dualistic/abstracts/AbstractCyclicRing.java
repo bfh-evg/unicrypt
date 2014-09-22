@@ -41,23 +41,24 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- *
+ * This abstract class provides a basis implementation for objects of type {@link CyclicRing}.
+ * <p>
+ * @param <E> Generic type of the elements of this cyclic ring
+ * @param <V> Generic type of values stored in the elements of this cyclic ring
  * @author rolfhaenni
- * @param <E>
- * @param <V>
  */
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractRing<E, V>

@@ -48,6 +48,13 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
+/**
+ * This abstract class provides a basis implementation for objects of type {@link AdditiveMonoid}.
+ * <p>
+ * @param <E> Generic type of elements of this monoid
+ * @param <V> Generic type of values stored in the elements of this monoid
+ * @author
+ */
 public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
 	   implements AdditiveMonoid<V> {

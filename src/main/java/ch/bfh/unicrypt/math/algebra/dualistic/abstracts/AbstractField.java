@@ -47,11 +47,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 
 /**
- *
- * @author rolfhaenni
+ * This abstract class provides a basis implementation for objects of type {@link Field}.
+ * <p>
  * @param <E> Generic type of elements of this field
- * @param <M> Generic type for the multiplicative group of this field
+ * @param <M> Generic type of the {@link MultiplicativeGroup} of this field
  * @param <V> Generic type of values stored in the elements of this field
+ * @author rolfhaenni
  */
 public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V extends Object>
 	   extends AbstractRing<E, V>
@@ -87,8 +88,17 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 		return this.abstractOneOver((E) element);
 	}
 
+	/**
+	 *
+	 * @param element
+	 * @return
+	 */
 	protected abstract E abstractOneOver(E element);
 
+	/**
+	 *
+	 * @return
+	 */
 	protected abstract M abstractGetMultiplicativeGroup();
 
 }

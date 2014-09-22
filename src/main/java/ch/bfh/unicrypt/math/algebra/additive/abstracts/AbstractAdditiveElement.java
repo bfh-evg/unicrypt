@@ -51,7 +51,15 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- *
+ * This abstract class provides a basis implementation for objects of type {@link AdditiveElement}.
+ * <p>
+ * TODO
+ * <p>
+ * @param <S> Generic type of {@link AdditiveSemiGroup} of this element
+ * @param <E> Generic type of the element
+ * @param <V> Generic type of value stored in the element and the elements of the additive semigroup
+ * @see Element
+ * <p>
  * @author rolfhaenni
  */
 public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E extends AdditiveElement<V>, V extends Object>

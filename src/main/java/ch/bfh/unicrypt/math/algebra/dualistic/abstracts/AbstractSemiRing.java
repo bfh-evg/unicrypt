@@ -49,10 +49,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- *
+ * This abstract class provides a basis implementation for objects of type {@link SemiRing}.
+ * <p>
+ * @param <E> Generic type of the elements of this semiring
+ * @param <V> Generic type of values stored in the elements of this semiring
  * @author rolfhaenni
- * @param <E>
- * @param <V>
  */
 public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractAdditiveMonoid<E, V>

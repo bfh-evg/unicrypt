@@ -75,7 +75,6 @@ public interface SemiGroup<V extends Object>
 	 * <p>
 	 * @param elements A given array of elements
 	 * @return The result of applying the operation to the input elements
-	 * @throws IllegalArgumentException if {@code elements} or one of its elements is null TODO
 	 * @throws IllegalArgumentException if one of the elements in {@code elements} does not belong to the semigroup
 	 */
 	public Element<V> apply(Element... elements);
@@ -87,7 +86,7 @@ public interface SemiGroup<V extends Object>
 	 * its order is known to be {@code q}, then {
 	 * <p>
 	 * @amount} can be replaced by {@code amount mod q}.
-	 * @param element A given group element
+	 * @param element The given group element
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the group operation multiple times to the input element
 	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
@@ -100,7 +99,7 @@ public interface SemiGroup<V extends Object>
 	 * <p>
 	 * @param element A given group element
 	 * @param amount  The number of instances of the input element given as an {@link Element} object
-	 * @return The result of applying the group operation multiple times to the input element TODO
+	 * @return The result of applying the group operation multiple times to the input element
 	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
 	 */
 	public Element<V> selfApply(Element element, Element<Numerical> amount);

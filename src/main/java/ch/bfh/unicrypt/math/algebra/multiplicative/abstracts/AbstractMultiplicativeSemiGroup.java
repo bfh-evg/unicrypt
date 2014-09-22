@@ -48,6 +48,13 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import java.math.BigInteger;
 
+/**
+ * This abstract class provides a basis implementation for objects of type {@link MultiplicativeSemiGroup}.
+ * <p>
+ * @param <E> Generic type of the elements of this semigroup
+ * @param <V> Generic type of values stored in the elements of this semigroup
+ * @author
+ */
 public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements MultiplicativeSemiGroup<V> {

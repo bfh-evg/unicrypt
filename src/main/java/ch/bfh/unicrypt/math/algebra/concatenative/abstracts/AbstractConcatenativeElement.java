@@ -51,11 +51,12 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
- *
- * @param <S>
- * @param <E>
- * @param <V>
- * @author rolfhaenni
+ * This abstract class provides a basis implementation for objects of type {@link ConcatenativeElement}.
+ * <p>
+ * @param <S> Generic type of the {@link ConcatenativeSemiGroup} of this element
+ * @param <E> Generic type of this element
+ * @param <V> Generic type of value stored in this element
+ * @author rolfhaennip
  */
 public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>, E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractElement<S, E, V>

@@ -52,7 +52,7 @@ import java.math.BigInteger;
  * a specialization of {@link Element}.
  * <p>
  * @author rolfhaenni
- * @param <V>
+ * @param <V> Generic type of values stored in this element
  */
 public interface DualisticElement<V extends Object>
 	   extends AdditiveElement<V>, MultiplicativeElement<V> {

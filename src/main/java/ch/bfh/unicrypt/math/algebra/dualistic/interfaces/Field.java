@@ -62,7 +62,7 @@ public interface Field<V extends Object>
 	public MultiplicativeGroup<V> getMultiplicativeGroup();
 
 	/**
-	 * Returns the result from dividing element1 by element2.
+	 * Returns the fraction element1 over element2.
 	 * <p>
 	 * @param element1 The given numerator
 	 * @param element2 The given denominator

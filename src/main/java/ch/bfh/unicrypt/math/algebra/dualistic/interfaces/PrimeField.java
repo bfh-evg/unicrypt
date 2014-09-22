@@ -47,7 +47,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
  * implemented as a specialization of {@link FiniteField} and {@link CyclicRing}.
  * <p>
  * @author rolfhaenni
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this field
  */
 public interface PrimeField<V extends Object>
 	   extends FiniteField<V>, CyclicRing<V> {

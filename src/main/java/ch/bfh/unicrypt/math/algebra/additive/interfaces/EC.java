@@ -90,6 +90,7 @@ public interface EC<V extends Object>
 	 * <p>
 	 * @param xValue The given x value
 	 * @return {@code true} if this elliptic curve lies on the given x co-ordinate
+	 * @throws IllegalArgumentException if {@code xValue} do not belong to the finite field
 	 */
 	public boolean contains(DualisticElement<V> xValue);
 
@@ -99,6 +100,7 @@ public interface EC<V extends Object>
 	 * @param xValue The given xValue
 	 * @param yValue The given yValue
 	 * @return {@code true} if xValue and yValue form a point on this elliptic curve.
+	 * @throws IllegalArgumentException if {@code xValue} or {@code yValue} do not belong to the finite field
 	 */
 	public boolean contains(DualisticElement<V> xValue, DualisticElement<V> yValue);
 
@@ -108,6 +110,7 @@ public interface EC<V extends Object>
 	 * @param xValue The given xValue
 	 * @param yValue The given yValue
 	 * @return The corresponding point for a given x and y value
+	 * @throws IllegalArgumentException if {@code xValue} or {@code yValue} do not belong to this elliptic curve
 	 */
 	public ECElement<V> getElement(DualisticElement<V> xValue, DualisticElement<V> yValue);
 
