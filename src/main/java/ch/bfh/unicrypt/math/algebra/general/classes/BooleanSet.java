@@ -75,12 +75,12 @@ public class BooleanSet
 	}
 
 	@Override
-	protected ZModPrime defaultGetZModOrder() {
+	public ZModPrime getZModOrder() {
 		return ZModPrime.getInstance(this.getOrder());
 	}
 
 	@Override
-	protected ZStarModPrime defaultGetZStarModOrder() {
+	public ZStarModPrime getZStarModOrder() {
 		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
