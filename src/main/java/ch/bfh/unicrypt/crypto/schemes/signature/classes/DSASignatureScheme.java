@@ -39,77 +39,54 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.abstracts;
+package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
+import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-/**
- * This abstract class provides a basis implementation for objects of type {@link AdditiveMonoid}.
- * <p>
- * @param <E> Generic type of elements of this monoid
- * @param <V> Generic type of values stored in the elements of this monoid
- * @author
- */
-public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V extends Object>
-	   extends AbstractMonoid<E, V>
-	   implements AdditiveMonoid<V> {
+public class DSASignatureScheme<MS extends Set>
+	   extends AbstractRandomizedSignatureScheme<MS, Element, ProductGroup, Pair, ZMod, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
 
-	public AbstractAdditiveMonoid(Class<? extends Object> valueClass) {
-		super(valueClass);
+	private final CyclicGroup cyclicGroup;
+	private final Element generator;
+
+	protected DSASignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator, HashMethod hashMethod) {
+		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(), hashMethod);
+		this.cyclicGroup = cyclicGroup;
+		this.generator = generator;
 	}
 
 	@Override
-	public final E add(final Element element1, final Element element2) {
-		return this.apply(element1, element2);
+	protected DiscreteLogarithmKeyGenerator abstractGetKeyPairGenerator(StringToByteArray converter) {
+		return DiscreteLogarithmKeyGenerator.getInstance(this.generator, converter);
+	}
+
+	public final CyclicGroup getCyclicGroup() {
+		return this.cyclicGroup;
+	}
+
+	public final Element getGenerator() {
+		return this.generator;
 	}
 
 	@Override
-	public final E add(final Element... elements) {
-		return this.apply(elements);
+	protected Function abstractGetSignatureFunction() {
+		return null;
 	}
 
 	@Override
-	public final E add(final Iterable<Element> elements) {
-		return this.apply(elements);
-	}
-
-	@Override
-	public final E times(final Element element, final BigInteger amount) {
-		return this.selfApply(element, amount);
-	}
-
-	@Override
-	public final E times(final Element element, final Element<BigInteger> amount) {
-		return this.selfApply(element, amount);
-	}
-
-	@Override
-	public final E times(final Element element, final int amount) {
-		return this.selfApply(element, amount);
-	}
-
-	@Override
-	public final E timesTwo(Element element) {
-		return this.selfApply(element);
-	}
-
-	@Override
-	public final E sumOfProducts(Element[] elements, BigInteger[] amounts) {
-		return this.multiSelfApply(elements, amounts);
-	}
-
-	@Override
-	public final E getZeroElement() {
-		return this.getIdentityElement();
-	}
-
-	@Override
-	public final boolean isZeroElement(Element element) {
-		return this.isIdentityElement(element);
+	protected Function abstractGetVerificationFunction() {
+		return null;
 	}
 
 }

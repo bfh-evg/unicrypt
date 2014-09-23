@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductCyclicGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -56,7 +56,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 
 public class GeneralizedPedersenCommitmentScheme
-	   extends AbstractRandomizedCommitmentScheme<ProductCyclicGroup, Tuple, CyclicGroup, Element, ZMod> {
+	   extends AbstractRandomizedCommitmentScheme<ProductGroup, Tuple, CyclicGroup, Element, ZMod> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element randomizationGenerator;

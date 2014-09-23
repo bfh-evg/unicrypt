@@ -49,15 +49,33 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGrou
  * by any nonzero element. It is implemented as a specialization of {@link Ring}.
  * <p>
  * @author rolfhaenni
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this field
  */
 public interface Field<V extends Object>
 	   extends Ring<V> {
 
+	/**
+	 * Returns the multiplicative group of this field.
+	 * <p>
+	 * @return the multiplicative group of this field
+	 */
 	public MultiplicativeGroup<V> getMultiplicativeGroup();
 
+	/**
+	 * Returns the fraction element1 over element2.
+	 * <p>
+	 * @param element1 The given numerator
+	 * @param element2 The given denominator
+	 * @return the result from dividing element1 with element2
+	 */
 	public DualisticElement<V> divide(Element element1, Element element2);
 
+	/**
+	 * Returns the fraction one over the given element.
+	 * <p>
+	 * @param element The given element
+	 * @return one over the given element
+	 */
 	public DualisticElement<V> oneOver(Element element);
 
 }

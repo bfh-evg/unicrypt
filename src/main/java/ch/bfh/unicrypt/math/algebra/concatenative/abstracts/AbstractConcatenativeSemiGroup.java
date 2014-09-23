@@ -49,6 +49,13 @@ import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
+/**
+ * This abstract class provides a basis implementation for objects of type {@link ConcatenativeSemiGroup}.
+ * <p>
+ * @param <E> Generic type of the elements of this semigroup
+ * @param <V> Generic type of values stored in the elements of this semigroup
+ * @author
+ */
 public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements ConcatenativeSemiGroup<V> {

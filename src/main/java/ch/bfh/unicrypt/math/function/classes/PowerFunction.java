@@ -51,6 +51,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.math.BigInteger;
 
 /**
  * This class represents the the concept of a function f:XxZ->Y, where Z is an atomic group. The second input element
@@ -76,7 +77,9 @@ public class PowerFunction
 	//
 	@Override
 	protected MultiplicativeElement abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
-		return ((MultiplicativeElement) element.getFirst()).power(element.getSecond());
+		MultiplicativeElement element1 = (MultiplicativeElement) element.getFirst();
+		Element<BigInteger> element2 = (Element<BigInteger>) element.getSecond();
+		return element1.power(element2.getValue());
 	}
 
 	//
@@ -111,7 +114,7 @@ public class PowerFunction
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
 	 */
-	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup, final Set amountSet) {
+	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup, final Set<BigInteger> amountSet) {
 		if (multiplicativeSemiGroup == null || amountSet == null) {
 			throw new IllegalArgumentException();
 		}

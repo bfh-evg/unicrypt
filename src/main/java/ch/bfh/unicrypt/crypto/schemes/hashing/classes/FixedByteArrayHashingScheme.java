@@ -39,44 +39,50 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.function.classes;
+package ch.bfh.unicrypt.crypto.schemes.hashing.classes;
 
+import ch.bfh.unicrypt.crypto.schemes.hashing.abstracts.AbstractHashingScheme;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.math.function.classes.HashFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-/**
- * This class represents the the concept of a function f:X->Y, which outputs the element of Y that corresponds to the
- * integer value of the input element.
- * <p/>
- * @author R. Haenni
- * @author R. E. Koenig
- * @version 2.0
- */
-public class BigIntegerConvertFunction
-	   extends AbstractFunction<BigIntegerConvertFunction, Set, Element, Set, Element> {
+public class FixedByteArrayHashingScheme<MS extends Set>
+	   extends AbstractHashingScheme<MS, Element, FixedByteArraySet, FiniteByteArrayElement> {
 
-	private BigIntegerConvertFunction(final Set domain, final Set coDomain) {
-		super(domain, coDomain);
+	private final HashMethod hashMethod;
+
+	protected FixedByteArrayHashingScheme(MS messageSpace, HashMethod hashMethod) {
+		super(messageSpace, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getHashLength()));
+		this.hashMethod = hashMethod;
+	}
+
+	public HashMethod getHashMethod() {
+		return this.hashMethod;
 	}
 
 	@Override
-	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().getElementFrom(element);
+	protected Function abstractGetHashFunction() {
+		return HashFunction.getInstance(this.messageSpace, this.getHashMethod());
 	}
 
-	/**
-	 * This is the general factory method for this class. It creates an function that converts values from the domain
-	 * into values from the co-domain.
-	 * <p/>
-	 * @param domain   The given domain
-	 * @param coDomain The given co-domain
-	 * @return The resulting function
-	 * @throws IllegalArgumentException if the domain or coDomain is null
-	 */
-	public static BigIntegerConvertFunction getInstance(final Set domain, final Set coDomain) {
-		return new BigIntegerConvertFunction(domain, coDomain);
+	public static <MS extends Set> FixedByteArrayHashingScheme getInstance(MS messageSpace) {
+		return FixedByteArrayHashingScheme.<MS>getInstance(messageSpace, HashMethod.getInstance());
+	}
+
+	public static FixedByteArrayHashingScheme getInstance(HashMethod hashMethod) {
+		return FixedByteArrayHashingScheme.<ByteArrayMonoid>getInstance(ByteArrayMonoid.getInstance(), hashMethod);
+	}
+
+	public static <MS extends Set> FixedByteArrayHashingScheme getInstance(MS messageSpace, HashMethod hashMethod) {
+		if (messageSpace == null || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new FixedByteArrayHashingScheme(messageSpace, hashMethod);
 	}
 
 }

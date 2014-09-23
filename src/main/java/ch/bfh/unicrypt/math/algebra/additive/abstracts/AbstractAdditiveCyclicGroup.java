@@ -47,6 +47,13 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
+/**
+ * This abstract class provides a basis implementation for objects of type {@link AdditiveCyclicGroup}.
+ * <p>
+ * @param <E> Generic type of the elements of this cyclic group
+ * @param <V> Generic type of values stored in the elements of this cyclic group
+ * @author
+ */
 public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractCyclicGroup<E, V>
 	   implements AdditiveCyclicGroup<V> {

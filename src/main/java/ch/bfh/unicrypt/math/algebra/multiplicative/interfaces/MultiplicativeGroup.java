@@ -65,6 +65,12 @@ public interface MultiplicativeGroup<V extends Object>
 	 */
 	public MultiplicativeElement<V> divide(Element element1, Element element2);
 
+	/**
+	 * TODO This method is a synonym for {@link #Group.inverse(Element, Element)}.
+	 * <p>
+	 * @param element the same as in {@link #Group.inverse(Element, Element)}
+	 * @return the same as in {@link #Group.inverse(Element, Element)}
+	 */
 	public MultiplicativeElement<V> oneOver(Element element);
 
 	// The following methods are overridden from Monoid with an adapted return type

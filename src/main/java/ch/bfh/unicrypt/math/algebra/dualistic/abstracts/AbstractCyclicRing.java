@@ -54,10 +54,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- *
+ * This abstract class provides a basis implementation for objects of type {@link CyclicRing}.
+ * <p>
+ * @param <E> Generic type of the elements of this cyclic ring
+ * @param <V> Generic type of values stored in the elements of this cyclic ring
  * @author rolfhaenni
- * @param <E>
- * @param <V>
  */
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractRing<E, V>
@@ -156,7 +157,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	}
 
 	@Override
-	protected Iterator<E> defaultGetIterator() {
+	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractCyclicRing<E, V> cyclicRing = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;
@@ -164,15 +165,15 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(cyclicRing.getOrder()) < 0;
+				return counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override
 			public E next() {
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
-					E nextElement = currentElement;
-					currentElement = cyclicRing.apply(currentElement, cyclicRing.getDefaultGenerator());
+					E nextElement = this.currentElement;
+					this.currentElement = cyclicRing.apply(this.currentElement, cyclicRing.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();

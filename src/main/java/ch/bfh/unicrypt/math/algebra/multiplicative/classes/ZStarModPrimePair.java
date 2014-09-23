@@ -39,30 +39,54 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
+package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
-import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.factorization.PrimePair;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author rolfhaenni
  */
-public class AbstractKeyGenerator
-	   extends UniCrypt
-	   implements KeyGenerator {
+public class ZStarModPrimePair
+	   extends ZStarMod {
 
-	// needed to convert password into seed
-	protected StringToByteArray converter;
+	private final static Map<BigInteger, ZStarModPrimePair> instances = new HashMap<BigInteger, ZStarModPrimePair>();
 
-	public AbstractKeyGenerator(StringToByteArray converter) {
-		this.converter = converter;
+	protected ZStarModPrimePair(PrimePair primePair) {
+		super(primePair);
 	}
 
-	@Override
-	public StringToByteArray getStringToByteArray() {
-		return this.converter;
+	public static ZStarModPrimePair getInstance(final PrimePair primePair) {
+		if (primePair == null) {
+			throw new IllegalArgumentException();
+		}
+		ZStarModPrimePair instance = ZStarModPrimePair.instances.get(primePair.getValue());
+		if (instance == null) {
+			instance = new ZStarModPrimePair(primePair);
+			ZStarModPrimePair.instances.put(primePair.getValue(), instance);
+		}
+		return instance;
+	}
+
+	public static ZStarModPrimePair getInstance(final int p, final int q) {
+		return ZStarModPrimePair.getInstance(BigInteger.valueOf(p), BigInteger.valueOf(q));
+	}
+
+	public static ZStarModPrimePair getInstance(final BigInteger p, final BigInteger q) {
+		return ZStarModPrimePair.getInstance(PrimePair.getInstance(p, q));
+	}
+
+	public static ZStarModPrimePair getRandomInstance(int bitLength) {
+		return ZStarModPrimePair.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
+	}
+
+	public static ZStarModPrimePair getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
+		return ZStarModPrimePair.getInstance(PrimePair.getRandomInstance(bitLength, randomByteSequence));
 	}
 
 }

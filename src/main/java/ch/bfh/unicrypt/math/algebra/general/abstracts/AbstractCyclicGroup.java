@@ -56,10 +56,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link CyclicGroup}.
+ * This abstract class provides a basis implementation for additive objects of type {@link CyclicGroup}.
  * <p>
- * @param <E> Generic type of elements of this group
- * @param <V> Generic type of values stored in the elements of this group
+ * @param <E> Generic type of elements of this cyclic group
+ * @param <V> Generic type of values stored in the elements of this cyclic group
  * @see Group
  * <p>
  * TODO
@@ -174,7 +174,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	}
 
 	@Override
-	protected Iterator<E> defaultGetIterator() {
+	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractCyclicGroup<E, V> cyclicGroup = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;
@@ -182,15 +182,15 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(cyclicGroup.getOrder()) < 0;
+				return this.counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override
 			public E next() {
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
-					E nextElement = currentElement;
-					currentElement = cyclicGroup.apply(currentElement, cyclicGroup.getDefaultGenerator());
+					E nextElement = this.currentElement;
+					this.currentElement = cyclicGroup.apply(this.currentElement, cyclicGroup.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();

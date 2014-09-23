@@ -39,32 +39,44 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general;
+package ch.bfh.unicrypt.crypto.encoder;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductCyclicGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import org.junit.Test;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * This class represents the the concept of a function f:X->Y, which outputs the element of Y that corresponds to the
+ * integer value of the input element.
+ * <p/>
+ * @author R. Haenni
+ * @author R. E. Koenig
+ * @version 2.0
  */
-public class ProductGroupTest {
+public class BigIntegerConvertFunction
+	   extends AbstractFunction<BigIntegerConvertFunction, Set, Element, Set, Element> {
 
-	@Test
-	public void testIteration() {
-		CyclicGroup g1 = GStarModSafePrime.getInstance(11);
-		CyclicGroup g2 = GStarModSafePrime.getInstance(23);
-		CyclicGroup g3 = GStarModSafePrime.getInstance(5);
-		ProductCyclicGroup pg = ProductCyclicGroup.getInstance(g1, g2, g3);
-//		for (CyclicGroup group : pg.makeIterable()) {
-//			System.out.println(group.getDefaultGenerator());
-//		}
-//		for (Tuple tuple : pg) {
-//			System.out.println(tuple);
-//		}
+	private BigIntegerConvertFunction(final Set domain, final Set coDomain) {
+		super(domain, coDomain);
+	}
 
+	@Override
+	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
+		return this.getCoDomain().getElementFrom(element);
+	}
+
+	/**
+	 * This is the general factory method for this class. It creates an function that converts values from the domain
+	 * into values from the co-domain.
+	 * <p/>
+	 * @param domain   The given domain
+	 * @param coDomain The given co-domain
+	 * @return The resulting function
+	 * @throws IllegalArgumentException if the domain or coDomain is null
+	 */
+	public static BigIntegerConvertFunction getInstance(final Set domain, final Set coDomain) {
+		return new BigIntegerConvertFunction(domain, coDomain);
 	}
 
 }

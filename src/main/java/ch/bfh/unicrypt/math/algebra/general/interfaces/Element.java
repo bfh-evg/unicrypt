@@ -149,7 +149,7 @@ public interface Element<V extends Object> {
 	 * {@link BigIntegerToByteArray}.
 	 * <p>
 	 * @param converter
-	 * @return
+	 * @return The corresponding ByteArray
 	 */
 	public ByteArray getByteArray(Converter<V, ByteArray> converter);
 
@@ -199,37 +199,27 @@ public interface Element<V extends Object> {
 
 	// The following methods are equivalent to corresponding Set methods
 	/**
-	 * @param element
-	 * @return
-	 * @see Group#apply(Element, Element)
+	 * @return @see Group#apply(Element, Element)
 	 */
 	public Element<V> apply(Element element);
 
 	/**
-	 * @param element
-	 * @return
-	 * @see Group#applyInverse(Element, Element)
+	 * @return @see Group#applyInverse(Element, Element)
 	 */
 	public Element<V> applyInverse(Element element);
 
 	/**
-	 * @param amount
-	 * @return
-	 * @see Group#selfApply(Element, BigInteger)
+	 * @return @see Group#selfApply(Element, BigInteger)
 	 */
 	public Element<V> selfApply(BigInteger amount);
 
 	/**
-	 * @param amount
-	 * @return
-	 * @see Group#selfApply(Element, Element)
+	 * @return @see Group#selfApply(Element, Element)
 	 */
 	public Element<V> selfApply(Element<BigInteger> amount);
 
 	/**
-	 * @param amount
-	 * @return
-	 * @see Group#selfApply(Element, int)
+	 * @return @see Group#selfApply(Element, int)
 	 */
 	public Element<V> selfApply(int amount);
 

@@ -84,10 +84,12 @@ public abstract class AbstractHashingScheme<MS extends Set, ME extends Element, 
 		if (this.checkFunction == null) {
 			ProductSet checkDomain = ProductSet.getInstance(this.getMessageSpace(), this.getHashSpace());
 			this.checkFunction = CompositeFunction.getInstance(
-				   SharedDomainFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(checkDomain, 0),
-																				  this.getHashFunction()),
-													SelectionFunction.getInstance(checkDomain, 1)),
-				   EqualityFunction.getInstance(this.getHashSpace(), 2));
+				   SharedDomainFunction.getInstance(
+						  CompositeFunction.getInstance(
+								 SelectionFunction.getInstance(checkDomain, 0),
+								 this.getHashFunction()),
+						  SelectionFunction.getInstance(checkDomain, 1)),
+				   EqualityFunction.getInstance(this.getHashSpace()));
 		}
 		return this.checkFunction;
 	}

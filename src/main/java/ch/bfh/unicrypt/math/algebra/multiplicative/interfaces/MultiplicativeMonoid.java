@@ -56,8 +56,19 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 public interface MultiplicativeMonoid<V extends Object>
 	   extends Monoid<V>, MultiplicativeSemiGroup<V> {
 
+	/**
+	 * Returns the identity element, which in the case of a multiplicatively written monoid is 1.
+	 * <p>
+	 * @return the identity element of this monoid
+	 */
 	public MultiplicativeElement<V> getOneElement();
 
+	/**
+	 * Returns {@code true} if the given element is the identity element of this monoid.
+	 * <p>
+	 * @param element The given element
+	 * @return {@code true} if the given element is the identity element
+	 */
 	public boolean isOneElement(Element element);
 
 	// The following methods are overridden from Monoid with an adapted return type

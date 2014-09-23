@@ -49,11 +49,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- *
- * @author rolfhaenni
- * @param <S>
- * @param <E>
- * @param <V>
+ * This abstract class provides a basis implementation for objects of type {@link DualisticElement}.
+ * <p>
+ * @param <S> Generic type of the {@link Semiring} of this element
+ * @param <E> Generic type of this element
+ * @param <V> Generic type of value stored in this element
+ * <p>
+ * @author
  */
 public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends DualisticElement<V>, V extends Object>
 	   extends AbstractAdditiveElement<S, E, V>

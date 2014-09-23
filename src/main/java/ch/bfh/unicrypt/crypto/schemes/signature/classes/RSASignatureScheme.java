@@ -45,9 +45,10 @@ import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractSignatureScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -65,12 +66,12 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class RSASignatureScheme
-	   extends AbstractSignatureScheme<Set, Element, ZMod, ZModElement, ZMod, ZMod, RSAKeyGenerator> {
+public class RSASignatureScheme<MS extends Set>
+	   extends AbstractSignatureScheme<MS, Element, ZMod, ZModElement, ZMod, ZMod, RSAKeyGenerator> {
 
 	private final ZMod zMod;
 
-	protected RSASignatureScheme(Set messageSpace, ZMod zMod, HashMethod hashMethod) {
+	protected RSASignatureScheme(MS messageSpace, ZMod zMod, HashMethod hashMethod) {
 		super(messageSpace, zMod, hashMethod);
 		this.zMod = zMod;
 	}
@@ -80,8 +81,8 @@ public class RSASignatureScheme
 	}
 
 	@Override
-	protected RSAKeyGenerator abstractGetKeyPairGenerator() {
-		return RSAKeyGenerator.getInstance(this.zMod);
+	protected RSAKeyGenerator abstractGetKeyPairGenerator(StringToByteArray converter) {
+		return RSAKeyGenerator.getInstance(this.zMod, converter);
 	}
 
 	@Override
@@ -121,8 +122,8 @@ public class RSASignatureScheme
 	private Function getSelectHashConvertModuloFunction(ProductSet inputSpace) {
 		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
 		BigIntegerConverter<ByteArray> converter = FiniteByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
-		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), Z.getInstance(), converter);
-		ModuloFunction moduloFunction = ModuloFunction.getInstance(Z.getInstance(), this.zMod);
+		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
+		ModuloFunction moduloFunction = ModuloFunction.getInstance(N.getInstance(), this.zMod);
 
 		return CompositeFunction.getInstance(SelectionFunction.getInstance(inputSpace, 1), hashFunction, convertFunction, moduloFunction);
 	}
@@ -131,11 +132,11 @@ public class RSASignatureScheme
 		return RSASignatureScheme.getInstance(zMod, zMod);
 	}
 
-	public static RSASignatureScheme getInstance(Set messageSpace, ZMod zMod) {
+	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZMod zMod) {
 		return RSASignatureScheme.getInstance(messageSpace, zMod, HashMethod.getInstance());
 	}
 
-	public static RSASignatureScheme getInstance(Set messageSpace, ZMod zMod, HashMethod hashMethod) {
+	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZMod zMod, HashMethod hashMethod) {
 		if (messageSpace == null || zMod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -149,15 +150,15 @@ public class RSASignatureScheme
 		return RSASignatureScheme.getInstance(key.getSet());
 	}
 
-	public static RSASignatureScheme getInstance(Set messageSpace, ZModElement key) {
+	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZModElement key) {
 		if (key == null) {
 			throw new IllegalArgumentException();
 		}
 		return RSASignatureScheme.getInstance(messageSpace, key.getSet());
 	}
 
-	public static RSASignatureScheme getInstance(Set messageSpace, ZModElement key, HashMethod hashMethod) {
-		if (key == null) {
+	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZModElement key, HashMethod hashMethod) {
+		if (messageSpace == null || key == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 		return new RSASignatureScheme(messageSpace, key.getSet(), hashMethod);

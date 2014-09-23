@@ -39,51 +39,48 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.hashing.classes;
+package ch.bfh.unicrypt.crypto.schemes.hashing;
 
-import ch.bfh.unicrypt.crypto.schemes.hashing.abstracts.AbstractHashingScheme;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
-import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
+import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.crypto.schemes.hashing.classes.FixedByteArrayHashingScheme;
+import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.classes.HashFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
+import java.math.BigInteger;
 
-public class StandardHashingScheme
-	   extends AbstractHashingScheme<Set, Element, FiniteByteArraySet, FiniteByteArrayElement> {
+/**
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ */
+public class HashingExample {
 
-	private final HashMethod hashMethod;
+	public static void example1() {
 
-	protected StandardHashingScheme(Set messageSpace, HashMethod hashMethod) {
-		super(messageSpace, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getHashLength()));
-		this.hashMethod = hashMethod;
+		StringMonoid stringSet = StringMonoid.getInstance(Alphabet.LOWER_CASE);
+		Element<String> stringElement = stringSet.getElement("message");
+
+		Z bigIntegerSet = Z.getInstance();
+		Element<BigInteger> bigIntegerElement = bigIntegerSet.getElement(5);
+
+		ProductSet messageSpace = ProductSet.getInstance(stringSet, bigIntegerSet);
+		Tuple message = messageSpace.getElement(stringElement, bigIntegerElement);
+
+		FixedByteArrayHashingScheme scheme = FixedByteArrayHashingScheme.getInstance(messageSpace);
+
+		Element hash = scheme.hash(message);
+		Element result = scheme.check(message, hash);
+
+		Example.printLine(scheme);
+		Example.printLine("Message", message);
+		Example.printLine("Hash   ", hash);
+		Example.printLine("Check  ", result);
 	}
 
-	public HashMethod getHashMethod() {
-		return this.hashMethod;
-	}
-
-	@Override
-	protected Function abstractGetHashFunction() {
-		return HashFunction.getInstance(this.messageSpace, this.getHashMethod());
-	}
-
-	public static StandardHashingScheme getInstance(Set messageSpace) {
-		return StandardHashingScheme.getInstance(messageSpace, HashMethod.getInstance());
-	}
-
-	public static StandardHashingScheme getInstance(HashMethod hashMethod) {
-		return StandardHashingScheme.getInstance(ByteArrayMonoid.getInstance(), hashMethod);
-	}
-
-	public static StandardHashingScheme getInstance(Set messageSpace, HashMethod hashMethod) {
-		if (messageSpace == null || hashMethod == null) {
-			throw new IllegalArgumentException();
-		}
-		return new StandardHashingScheme(messageSpace, hashMethod);
+	public static void main(final String[] args) {
+		Example.runExamples();
 	}
 
 }

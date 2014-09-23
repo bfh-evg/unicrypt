@@ -47,6 +47,13 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
+/**
+ * This abstract class provides a basis implementation for objects of type {@link AdditiveGroup}.
+ * <p>
+ * @param <E> Generic type of the elements of this group
+ * @param <V> Generic type of values stored in the elements of this group
+ * @author
+ */
 public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractGroup<E, V>
 	   implements AdditiveGroup<V> {

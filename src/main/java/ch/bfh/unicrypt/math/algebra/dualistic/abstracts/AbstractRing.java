@@ -47,10 +47,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- *
+ * This abstract class provides a basis implementation for objects of type {@link Ring}.
+ * <p>
+ * @param <E> Generic type of the elements of this ring
+ * @param <V> Generic type of values stored in the elements of this ring
  * @author rolfhaenni
- * @param <E>
- * @param <V>
  */
 public abstract class AbstractRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractSemiRing<E, V>

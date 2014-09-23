@@ -91,6 +91,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	private final Class<? extends Object> valueClass;
 	private BigInteger order, lowerBound, upperBound, minimum;
+
 	private BigIntegerConverter<V> bigIntegerConverter;
 	private StringConverter<V> stringConverter;
 	private ByteArrayConverter<V> byteArrayConverter;
@@ -210,19 +211,19 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final ZMod getZModOrder() {
+	public ZMod getZModOrder() {
 		if (!(this.isFinite() && this.hasKnownOrder())) {
 			throw new UnsupportedOperationException();
 		}
-		return this.defaultGetZModOrder();
+		return ZMod.getInstance(this.getOrder());
 	}
 
 	@Override
-	public final ZStarMod getZStarModOrder() {
+	public ZStarMod getZStarModOrder() {
 		if (!(this.isFinite() && this.hasKnownOrder())) {
 			throw new UnsupportedOperationException();
 		}
-		return this.defaultGetZStarModOrder();
+		return ZStarMod.getInstance(this.getOrder());
 	}
 
 	@Override
@@ -451,7 +452,22 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 			@Override
 			public Iterator<E> iterator() {
-				return defaultGetIterator();
+				return getIterator();
+			}
+
+		};
+	}
+
+	@Override
+	public final Iterable<E> getElements(final int n) {
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new Iterable<E>() {
+
+			@Override
+			public Iterator<E> iterator() {
+				return getIterator(n);
 			}
 
 		};
@@ -459,7 +475,12 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final Iterator<E> getIterator() {
-		return this.defaultGetIterator();
+		return this.defaultGetIterator(this.getOrder());
+	}
+
+	@Override
+	public final Iterator<E> getIterator(int n) {
+		return this.defaultGetIterator(BigInteger.valueOf(n).min(this.getOrder()));
 	}
 
 	@Override
@@ -486,14 +507,6 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	// The following protected methods are default implementations for sets.
 	// They may need to be changed in certain sub-classes.
 	//
-	protected ZMod defaultGetZModOrder() {
-		return ZMod.getInstance(this.getOrder());
-	}
-
-	protected ZStarMod defaultGetZStarModOrder() {
-		return ZStarMod.getInstance(this.getOrder());
-	}
-
 	protected BigInteger defaultGetOrderLowerBound() {
 		return BigInteger.ZERO;
 	}
@@ -557,10 +570,9 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.abstractEquals(set);
 	}
 
-	protected Iterator<E> defaultGetIterator() {
+	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractSet<E, V> set = this;
 		return new Iterator<E>() {
-
 			BigInteger counter = BigInteger.ZERO;
 			BigInteger currentValue = BigInteger.ZERO;
 
@@ -568,7 +580,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 			public boolean hasNext() {
 				if (set.hasKnownOrder()) {
 					if (set.isFinite()) {
-						return counter.compareTo(set.getOrder()) < 0;
+						return counter.compareTo(maxCounter) < 0;
 					}
 					return true;
 				}

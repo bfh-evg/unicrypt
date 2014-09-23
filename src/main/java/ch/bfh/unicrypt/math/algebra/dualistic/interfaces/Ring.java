@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  * example of a ring is the set of integers.
  * <p>
  * @author rolfhaenni
- * @param <V>
+ * @param <V> Generic type of values stored in the elements of this ring
  */
 public interface Ring<V extends Object>
 	   extends SemiRing<V>, AdditiveGroup<V> {
