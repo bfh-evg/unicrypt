@@ -55,7 +55,15 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
+/**
+ * This abstract class provides a basis implementation for objects of type {@link EC}.
+ * <p>
+ * @param <F> Generic type of the {@link FiniteField} of this elliptic curve
+ * @param <V> Generic type of values stored in the elements of this elliptic curve
+ * @author
+ */
 public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
+
 	   extends AbstractAdditiveCyclicGroup<ECElement<V>, Point<DualisticElement<V>>>
 	   implements EC<V> {
 
@@ -259,10 +267,10 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 	}
 
 	/**
-	 * Returns random element witcoFactorout knowing a generator of tcoFactore group
+	 * Returns random element witcoFactorout knowing a generator of tcoFactore group.
 	 * <p>
-	 * @param randomByteSequence
-	 * @return
+	 * @param randomByteSequence The given random byte sequence
+	 * @return The random element
 	 */
 	protected abstract ECElement<V> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence);
 

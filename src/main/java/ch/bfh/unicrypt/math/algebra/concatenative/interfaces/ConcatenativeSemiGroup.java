@@ -59,10 +59,28 @@ import java.math.BigInteger;
 public interface ConcatenativeSemiGroup<V extends Object>
 	   extends SemiGroup<V> {
 
+	/**
+	 * Returns the blocklength of this concatenative semigroup.
+	 * <p>
+	 * @return the blocklength of this concatenative semigroup
+	 */
 	public int getBlockLength();
 
+	/**
+	 * Returns a random concatenative element with a given length.
+	 * <p>
+	 * @param length The given length
+	 * @return a random concatenative element
+	 */
 	public ConcatenativeElement<V> getRandomElement(int length);
 
+	/**
+	 * Returns a random concatenative element with a given length and a given {@link RandomByteSequence}.
+	 * <p>
+	 * @param length             The given length
+	 * @param randomByteSequence The given random Byte Sequence
+	 * @return a random concatenative element
+	 */
 	public ConcatenativeElement<V> getRandomElement(int length, RandomByteSequence randomByteSequence);
 
 	/**
@@ -129,15 +147,24 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	 * @param elements A given array of elements
 	 * @param amounts  Corresponding amounts
 	 * @return The result of this operation
-	 * @throws IllegalArgumentException if {@code elements} or one of its elements is null
-	 * @throws IllegalArgumentException if {@code amounts} or one of its values is null
 	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the group
 	 * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
 	 */
 	public ConcatenativeElement<V> multiSelfConcatenate(Element[] elements, BigInteger[] amounts);
 
+	/**
+	 * Returns the identity element of this concatenative semigroup.
+	 * <p>
+	 * @return the identity element
+	 */
 	public ConcatenativeElement<V> getEmptyElement();
 
+	/**
+	 * Returns {@code true} if the given element is the identity element
+	 * <p>
+	 * @param element The given element
+	 * @return {@code true} if the given element is the identity element
+	 */
 	public boolean isEmptyElement(Element element);
 
 	// The following methods are overridden from Set with an adapted return type

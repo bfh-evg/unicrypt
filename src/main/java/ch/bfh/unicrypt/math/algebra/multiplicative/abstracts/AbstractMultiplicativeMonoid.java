@@ -47,6 +47,13 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 import java.math.BigInteger;
 
+/**
+ * This abstract class provides a basis implementation for objects of type {@link MulitplicativeMonoid}.
+ * <p>
+ * @param <E> Generic type of the elements of this monoid
+ * @param <V> Generic type of values stored in the elements of this monoid
+ * @author
+ */
 public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
 	   implements MultiplicativeMonoid<V> {

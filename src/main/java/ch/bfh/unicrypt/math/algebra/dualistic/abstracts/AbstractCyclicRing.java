@@ -54,10 +54,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- *
+ * This abstract class provides a basis implementation for objects of type {@link CyclicRing}.
+ * <p>
+ * @param <E> Generic type of the elements of this cyclic ring
+ * @param <V> Generic type of values stored in the elements of this cyclic ring
  * @author rolfhaenni
- * @param <E>
- * @param <V>
  */
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractRing<E, V>

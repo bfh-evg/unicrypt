@@ -62,9 +62,16 @@ public interface AdditiveGroup<V extends Object>
 	 * @param element1 the same as in {@link #Group.applyInverse(Element, Element)}
 	 * @param element2 the same as in {@link #Group.applyInverse(Element, Element)}
 	 * @return the same as in {@link #Group.applyInverse(Element, Element)}
+	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
 	 */
 	public AdditiveElement<V> subtract(Element element1, Element element2);
 
+	/**
+	 * Computes and returns the inverse of a given group element.
+	 * <p>
+	 * @param element The given element
+	 * @return The inverse element of the input element
+	 */
 	public AdditiveElement<V> negate(Element element);
 
 	// The following methods are overridden from Monoid with an adapted return type

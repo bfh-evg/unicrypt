@@ -56,10 +56,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * This abstract class provides a basis implementation for objects of type {@link CyclicGroup}.
+ * This abstract class provides a basis implementation for additive objects of type {@link CyclicGroup}.
  * <p>
- * @param <E> Generic type of elements of this group
- * @param <V> Generic type of values stored in the elements of this group
+ * @param <E> Generic type of elements of this cyclic group
+ * @param <V> Generic type of values stored in the elements of this cyclic group
  * @see Group
  * <p>
  * TODO
