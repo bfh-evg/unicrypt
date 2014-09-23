@@ -42,6 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
 import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -65,6 +69,11 @@ public class StringMonoid
 		return this.alphabet;
 	}
 
+	@Override
+	protected StringConverter<String> defaultGetStringConverter() {
+		return StringToString.getInstance();
+	}
+
 	//
 	// The following protected methods implement the abstract methods from
 	// various super-classes
@@ -85,39 +94,8 @@ public class StringMonoid
 	}
 
 	@Override
-	protected StringElement abstractGetElementFrom(BigInteger value) {
-		int blockLength = this.getBlockLength();
-		StringBuilder strBuilder = new StringBuilder();
-		BigInteger alphabetSize = BigInteger.valueOf(this.getAlphabet().getSize());
-		BigInteger blockSize = alphabetSize.pow(blockLength);
-		while (!value.equals(BigInteger.ZERO)) {
-			value = value.subtract(BigInteger.ONE);
-			BigInteger remainder = value.mod(blockSize);
-			for (int i = 0; i < blockLength; i++) {
-				strBuilder.append(this.getAlphabet().getCharacter(remainder.mod(alphabetSize).intValue()));
-				remainder = remainder.divide(alphabetSize);
-			}
-			value = value.divide(blockSize);
-		}
-		return this.abstractGetElement(strBuilder.reverse().toString());
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(StringElement element) {
-		String value = element.getValue();
-		BigInteger value1 = BigInteger.ZERO;
-		BigInteger alphabetSize = BigInteger.valueOf(this.getAlphabet().getSize());
-		for (int i = 0; i < value.length(); i++) {
-			int charIndex = this.getAlphabet().getIndex(value.charAt(i));
-			value1 = value1.multiply(alphabetSize).add(BigInteger.valueOf(charIndex));
-		}
-		BigInteger value2 = BigInteger.ZERO;
-		int blockLength = this.getBlockLength();
-		BigInteger blockSize = alphabetSize.pow(blockLength);
-		for (int i = 0; i < value.length() / blockLength; i++) {
-			value2 = value2.multiply(blockSize).add(BigInteger.ONE);
-		}
-		return value1.add(value2);
+	protected BigIntegerConverter<String> abstractGetBigIntegerConverter() {
+		return StringToBigInteger.getInstance(this.alphabet, this.blockLength);
 	}
 
 	@Override

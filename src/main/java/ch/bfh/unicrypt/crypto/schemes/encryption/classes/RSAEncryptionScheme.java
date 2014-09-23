@@ -42,11 +42,10 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyPairGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.RSAKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractAsymmetricEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.function.classes.AdapterFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -54,11 +53,12 @@ import ch.bfh.unicrypt.math.function.classes.PowerFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class RSAEncryptionScheme
-	   extends AbstractAsymmetricEncryptionScheme<ZMod, ZModElement, ZMod, ZModElement, ZMod, ZMod, RSAKeyPairGenerator> {
+	   extends AbstractAsymmetricEncryptionScheme<ZMod, ZModElement, ZMod, ZModElement, ZMod, ZMod, RSAKeyGenerator> {
 
 	private final ZMod zMod;
 
 	protected RSAEncryptionScheme(ZMod zMod) {
+		super(zMod, zMod);
 		this.zMod = zMod;
 	}
 
@@ -70,22 +70,23 @@ public class RSAEncryptionScheme
 	protected Function abstractGetEncryptionFunction() {
 		return CompositeFunction.getInstance(
 			   AdapterFunction.getInstance(ProductSet.getInstance(this.zMod, 2), 1, 0),
-			   PowerFunction.getInstance(zMod));
+			   PowerFunction.getInstance(this.zMod));
 	}
 
 	@Override
 	protected Function abstractGetDecryptionFunction() {
 		return CompositeFunction.getInstance(
 			   AdapterFunction.getInstance(ProductSet.getInstance(this.zMod, 2), 1, 0),
-			   PowerFunction.getInstance(zMod));
+			   PowerFunction.getInstance(this.zMod));
 	}
 
 	@Override
-	protected RSAKeyPairGenerator abstractGetKeyPairGenerator() {
-		if (this.getZMod() instanceof ZModPrimePair) {
-			return RSAKeyPairGenerator.getInstance((ZModPrimePair) this.getZMod());
-		}
-		throw new UnsupportedOperationException();
+	protected RSAKeyGenerator abstractGetKeyPairGenerator() {
+		return RSAKeyGenerator.getInstance(this.zMod);
+	}
+
+	public static RSAEncryptionScheme getInstance(ZModElement key) {
+		return RSAEncryptionScheme.getInstance(key.getSet());
 	}
 
 	public static RSAEncryptionScheme getInstance(ZMod zMod) {
@@ -93,13 +94,6 @@ public class RSAEncryptionScheme
 			throw new IllegalArgumentException();
 		}
 		return new RSAEncryptionScheme(zMod);
-	}
-
-	public static RSAEncryptionScheme getInstance(ZModElement key) {
-		if (key == null) {
-			throw new IllegalArgumentException();
-		}
-		return new RSAEncryptionScheme(key.getSet());
 	}
 
 }

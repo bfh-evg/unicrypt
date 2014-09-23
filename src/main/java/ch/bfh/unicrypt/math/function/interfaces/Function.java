@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.function.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface represents the concept a unary mathematical function f:X->Y. It takes an input element from one group
@@ -86,8 +86,8 @@ public interface Function {
 	 * the function is deterministic, then {@literal random} is ignored. This is the main the method to implement for
 	 * any type of function.
 	 * <p>
-	 * @param element         The given input element
-	 * @param randomGenerator Either {@literal null} or a given random generator
+	 * @param element            The given input element
+	 * @param randomByteSequence
 	 * @return The resulting output element
 	 * @throws IllegalArgumentException if {@literal element} is null or not contained in the domain
 	 */

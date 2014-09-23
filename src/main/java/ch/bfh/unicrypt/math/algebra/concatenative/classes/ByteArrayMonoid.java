@@ -41,14 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -71,6 +73,11 @@ public class ByteArrayMonoid
 		return this.getElement(ByteArray.getInstance(string));
 	}
 
+	@Override
+	protected ByteArrayConverter<ByteArray> defaultGetByteArrayConverter() {
+		return ByteArrayToByteArray.getInstance();
+	}
+
 	//
 	// The following protected methods implement the abstract methods from
 	// various super-classes
@@ -82,7 +89,7 @@ public class ByteArrayMonoid
 
 	@Override
 	protected boolean abstractContains(ByteArray value) {
-		return value.getLength() % this.getBlockLength() == 0;
+		return value.getLength() % this.blockLength == 0;
 	}
 
 	@Override
@@ -91,38 +98,8 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayElement abstractGetElementFrom(BigInteger value) {
-		int blockLength = this.getBlockLength();
-		LinkedList<Byte> byteList = new LinkedList<Byte>();
-		BigInteger byteSize = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger blockSize = MathUtil.powerOfTwo(Byte.SIZE * blockLength);
-		while (!value.equals(BigInteger.ZERO)) {
-			value = value.subtract(BigInteger.ONE);
-			BigInteger remainder = value.mod(blockSize);
-			for (int i = 0; i < blockLength; i++) {
-				byteList.addFirst(remainder.mod(byteSize).byteValue());
-				remainder = remainder.divide(byteSize);
-			}
-			value = value.divide(blockSize);
-		}
-		return this.abstractGetElement(ByteArray.getInstance(byteList));
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ByteArrayElement element) {
-		ByteArray value = element.getValue();
-		BigInteger value1 = new BigInteger(1, value.getAll());
-		BigInteger value2 = BigInteger.ZERO;
-		int blockLength = this.getBlockLength();
-		if (value.getLength() > 0) {
-			byte[] bytes = new byte[value.getLength()];
-			int amount = bytes.length / blockLength;
-			for (int i = 0; i < amount; i++) {
-				bytes[(bytes.length - 1) - (i * blockLength)] = 1;
-			}
-			value2 = new BigInteger(1, bytes);
-		}
-		return value1.add(value2);
+	protected BigIntegerConverter<ByteArray> abstractGetBigIntegerConverter() {
+		return ByteArrayToBigInteger.getInstance(this.blockLength);
 	}
 
 	@Override
@@ -142,7 +119,7 @@ public class ByteArrayMonoid
 
 	@Override
 	protected ByteArrayElement abstractApply(ByteArrayElement element1, ByteArrayElement element2) {
-		return this.abstractGetElement(element1.getValue().concatenate(element2.getValue()));
+		return this.abstractGetElement(element1.getValue().append(element2.getValue()));
 	}
 
 	@Override
@@ -177,7 +154,7 @@ public class ByteArrayMonoid
 		ByteArrayMonoid instance = ByteArrayMonoid.instances.get(Integer.valueOf(blockLength));
 		if (instance == null) {
 			instance = new ByteArrayMonoid(blockLength);
-			ByteArrayMonoid.instances.put(Integer.valueOf(blockLength), instance);
+			ByteArrayMonoid.instances.put(blockLength, instance);
 		}
 		return instance;
 	}

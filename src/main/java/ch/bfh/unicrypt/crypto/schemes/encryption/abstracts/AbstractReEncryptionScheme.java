@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -55,26 +53,32 @@ import ch.bfh.unicrypt.math.function.classes.RemovalFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
  * @author rolfhaenni
- * @param <MS>
- * @param <ES>
- * @param <ME>
- * @param <EE>
- * @param <RS>
- * @param <RE>
- * @param <EK>
- * @param <DK>
- * @param <KG>
+ * @param <MS>  Message space
+ * @param <ME>  Message element
+ * @param <ES>  Encryption space
+ * @param <EE>  Encryption element
+ * @param <RS>  Randomization space
+ * @param <RE>  Randomization element
+ * @param <EKS> Encryption key space
+ * @param <DKS> Decryption key space
+ * @param <KG>  Key pair generator
  */
-public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends Element, ES extends Monoid, EE extends Element, RS extends Monoid, RE extends Element, EK extends Set, DK extends Set, KG extends KeyPairGenerator>
-	   extends AbstractRandomizedEncryptionScheme<MS, ME, ES, EE, RS, RE, EK, DK, KG>
+public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends Element, ES extends Monoid, EE extends Element, RS extends Monoid, RE extends Element, EKS extends Set, DKS extends Set, KG extends KeyPairGenerator>
+	   extends AbstractRandomizedEncryptionScheme<MS, ME, ES, EE, RS, RE, EKS, DKS, KG>
 	   implements ReEncryptionScheme {
 
 	private Function identityEncryptionFunction;
 	private Function reEncryptionFunction;
+
+	public AbstractReEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
+		super(messageSpace, encryptionSpace, randomizationSpace);
+	}
 
 	@Override
 	public final Function getIdentityEncryptionFunction() {

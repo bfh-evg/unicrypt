@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.helper.bytetree;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -206,11 +206,11 @@ public abstract class ByteTree
 	}
 
 	private static byte extractIdentifier(ByteArray byteArray) {
-		return byteArray.getAt(0);
+		return byteArray.getByteAt(0);
 	}
 
 	private static int extractAmount(ByteArray byteArray) {
-		return new BigInteger(1, byteArray.extract(1, LENGTH_OF_INTEGER).getAll()).intValue();
+		return new BigInteger(1, byteArray.extract(1, LENGTH_OF_INTEGER).getBytes()).intValue();
 	}
 
 	private static ByteArray extractBinaryData(ByteArray byteArray) {
@@ -262,14 +262,6 @@ class SafeByteArray
 
 	protected SafeByteArray(byte[] bytes) {
 		super(bytes);
-	}
-
-	@Override
-	public byte[] getAll() {
-		if (this.getLength() == this.bytes.length) {
-			return this.bytes;
-		}
-		return super.getAll();
 	}
 
 }

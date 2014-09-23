@@ -141,7 +141,7 @@ public class PreimageProofSystemTest {
 
 		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
 
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(f, this.proverId);
+		PreimageProofSystem pg = PreimageProofSystem.getInstance(this.proverId, f);
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(m, r);
@@ -165,7 +165,7 @@ public class PreimageProofSystemTest {
 		Element r = G_q.getZModOrder().getElement(2);
 
 		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(f, this.proverId);
+		PreimageProofSystem pg = PreimageProofSystem.getInstance(this.proverId, f);
 
 		// Invalid proof  => wrong r
 		Element privateInput = Tuple.getInstance(m, G_q.getZModOrder().getElement(7));

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.general;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 
@@ -61,7 +61,7 @@ public class HelperExample {
 
 		// Perform operations
 		ByteArray b4 = b1.extract(2, 4);
-		ByteArray b5 = b1.concatenate(b2);
+		ByteArray b5 = b1.append(b2);
 		ByteArray b6 = b1.xor(b3);
 
 		// Compute hash values

@@ -57,6 +57,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
@@ -85,10 +86,10 @@ public class PreimageEqualityProofSystemTest {
 		// Proof generator
 		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
 		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
-		ProductFunction f = ProductFunction.getInstance(f1, f2);
+		SharedDomainFunction f = SharedDomainFunction.getInstance(f1, f2);
 
-		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(f, this.proverId);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
+		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(this.proverId, f);
+		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
 		// Valid proof
 		Element privateInput = Z_q.getElement(3);
@@ -127,7 +128,7 @@ public class PreimageEqualityProofSystemTest {
 			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), Z.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(scg, f1, f2);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
+		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
 		// Invalid proof -> preimages are not equal
 		Element privateInput = Z_q.getElement(3);

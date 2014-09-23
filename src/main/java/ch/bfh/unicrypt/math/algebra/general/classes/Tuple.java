@@ -41,9 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.compound.Compound;
-import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -55,14 +54,18 @@ import java.util.Iterator;
  */
 public class Tuple
 	   extends AbstractElement<ProductSet, Tuple, ImmutableArray<Element>>
-	   implements RecursiveCompound<Tuple, Element>, Iterable<Element> {
+	   implements RecursiveArray<Tuple, Element> {
 
 	protected Tuple(final ProductSet set, final ImmutableArray<Element> elements) {
 		super(set, elements);
 	}
 
-	@Override
 	public int getArity() {
+		return this.getLength();
+	}
+
+	@Override
+	public int getLength() {
 		return this.getValue().getLength();
 	}
 
@@ -74,6 +77,36 @@ public class Tuple
 	@Override
 	public final boolean isUniform() {
 		return this.getValue().isUniform();
+	}
+
+	@Override
+	public Iterable<Integer> getAllIndices() {
+		return this.getValue().getAllIndices();
+	}
+
+	@Override
+	public Iterable<Integer> getIndices(Element element) {
+		return this.getValue().getIndices(element);
+	}
+
+	@Override
+	public Iterable<Integer> getIndicesExcept(Element element) {
+		return this.getValue().getIndicesExcept(element);
+	}
+
+	@Override
+	public int count(Element element) {
+		return this.getValue().count(element);
+	}
+
+	@Override
+	public int countPrefix(Element element) {
+		return this.getValue().countPrefix(element);
+	}
+
+	@Override
+	public int countSuffix(Element element) {
+		return this.getValue().countSuffix(element);
 	}
 
 	@Override
@@ -108,43 +141,43 @@ public class Tuple
 	}
 
 	@Override
-	public Element[] getAll() {
-		Element[] result = new Element[this.getArity()];
-		int i = 0;
-		for (Element element : this.getValue()) {
-			result[i++] = element;
-		}
-		return result;
+	public Tuple extract(int offset, int length) {
+		return Tuple.getInstance(this.getSet().extract(offset, length), this.getValue().extract(offset, length));
 	}
 
-//	public Element[] getRange(int fromIndex, int toIndex) {
-//		if (fromIndex < 0 || toIndex >= this.getArity() || toIndex < fromIndex) {
-//			throw new IllegalArgumentException();
-//		}
-//		Element[] result = new Element[toIndex - fromIndex + 1];
-//		for (int i = 0; i < result.length; i++) {
-//			result[i] = this.getAt(i + fromIndex);
-//		}
-//		return result;
-//	}
 	@Override
 	public Tuple extractPrefix(int length) {
-		return this.extract(0, length);
+		return Tuple.getInstance(this.getSet().extractPrefix(length), this.getValue().extractPrefix(length));
 	}
 
 	@Override
 	public Tuple extractSuffix(int length) {
-		return this.extract(this.getArity() - length, length);
+		return Tuple.getInstance(this.getSet().extractSuffix(length), this.getValue().extractSuffix(length));
 	}
 
 	@Override
 	public Tuple extractRange(int fromIndex, int toIndex) {
-		return this.extract(fromIndex, toIndex - fromIndex + 1);
+		return Tuple.getInstance(this.getSet().extractRange(fromIndex, toIndex), this.getValue().extractRange(fromIndex, toIndex));
 	}
 
 	@Override
-	public Tuple extract(int offset, int length) {
-		return Tuple.getInstance(this.getSet().extract(offset, length), this.getValue().extract(offset, length));
+	public Tuple remove(int offset, int length) {
+		return Tuple.getInstance(this.getSet().remove(offset, length), this.getValue().remove(offset, length));
+	}
+
+	@Override
+	public Tuple removePrefix(int length) {
+		return Tuple.getInstance(this.getSet().removePrefix(length), this.getValue().removePrefix(length));
+	}
+
+	@Override
+	public Tuple removeSuffix(int length) {
+		return Tuple.getInstance(this.getSet().removeSuffix(length), this.getValue().removeSuffix(length));
+	}
+
+	@Override
+	public Tuple removeRange(int fromIndex, int toIndex) {
+		return Tuple.getInstance(this.getSet().removeRange(fromIndex, toIndex), this.getValue().removeRange(fromIndex, toIndex));
 	}
 
 	@Override
@@ -158,22 +191,33 @@ public class Tuple
 	}
 
 	@Override
+	public Tuple add(Element element) {
+		return Tuple.getInstance(this.getSet().add(element.getSet()), this.getValue().add(element));
+	}
+
+	@Override
+	public Tuple append(Tuple other) {
+		return Tuple.getInstance(this.getSet().append(other.getSet()), this.getValue().append(other.getValue()));
+	}
+
+	@Override
 	public Tuple replaceAt(int index, Element element) {
 		return Tuple.getInstance(this.getSet().replaceAt(index, element.getSet()), this.getValue().replaceAt(index, element));
 	}
 
 	@Override
-	public Tuple add(Element element) {
-		return this.insertAt(this.getArity(), element);
+	public Tuple reverse() {
+		return Tuple.getInstance(this.getSet().reverse(), this.getValue().reverse());
 	}
 
 	@Override
-	public Tuple append(Compound<Tuple, Element> compound) {
-		if (compound instanceof Tuple) {
-			Tuple other = (Tuple) compound;
-			return Tuple.getInstance(this.getSet().append(other.getSet()), this.getValue().append(other.getValue()));
+	public Tuple[] split(int... indices) {
+		ImmutableArray<Element>[] elementArray = this.getValue().split(indices);
+		Tuple[] result = new Tuple[elementArray.length];
+		for (int i = 0; i < elementArray.length; i++) {
+			result[i] = Tuple.getInstance(elementArray[i]);
 		}
-		throw new IllegalArgumentException();
+		return result;
 	}
 
 	@Override
@@ -210,7 +254,7 @@ public class Tuple
 			productSet = ProductSet.getInstance(elements.getFirst().getSet(), elements.getLength());
 		} else {
 			Set[] sets = new Set[elements.getLength()];
-			for (int i = 0; i < elements.getLength(); i++) {
+			for (int i : elements.getAllIndices()) {
 				sets[i] = elements.getAt(i).getSet();
 			}
 			productSet = ProductSet.getInstance(sets);
@@ -228,6 +272,9 @@ public class Tuple
 
 	// helper method to distinguish between pairs, triples and tuples
 	private static Tuple getInstance(ProductSet productSet, ImmutableArray<Element> elements) {
+		if (elements.getLength() == 1) {
+			return new Singleton(productSet, elements);
+		}
 		if (elements.getLength() == 2) {
 			return new Pair(productSet, elements);
 		}

@@ -42,7 +42,9 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 
 /**
  *
@@ -58,15 +60,23 @@ public class ImmutableArrayExample {
 		Example.printLine("Length  ", a.getLength());
 		Example.printLine("Add     ", a.add(7));
 		Example.printLine("Append  ", a.append(a));
-		Example.printLine("Conc    ", a.concatenate(a));
 		Example.printLine("Extract ", a.extract(2, 3));
 		Example.printLine("ExtraxtP", a.extractPrefix(2));
 		Example.printLine("ExtraxtS", a.extractSuffix(2));
 		Example.printLine("ExtractR", a.extractRange(2, 8));
-		Example.printLine("GetAll  ", a.getAll());
 		Example.printLine("Insert  ", a.insertAt(5, 100));
 		Example.printLine("Remove  ", a.removeAt(5));
 		Example.printLines("Split   ", a.split(2, 4, 7));
+
+	}
+
+	public static void example2() {
+
+		ProductSet ps = ProductSet.getInstance(ZMod.getInstance(3), 2);
+
+		Example.printLine(ImmutableArray.getInstance(ps));
+		Example.printLine(ImmutableArray.<ProductSet>getInstance(ps));
+		Example.printLine(ImmutableArray.getInstance(ps, ps, ps));
 
 	}
 

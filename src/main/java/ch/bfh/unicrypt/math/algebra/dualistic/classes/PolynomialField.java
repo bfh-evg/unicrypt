@@ -60,11 +60,13 @@ import java.math.BigInteger;
  */
 public class PolynomialField<V>
 	   extends PolynomialRing<V>
-	   implements FiniteField<Polynomial<DualisticElement<V>>> {
+	   implements
+	   FiniteField<Polynomial<DualisticElement<V>>> {
 
 	private final PolynomialElement<V> irreduciblePolynomial;
 
-	protected PolynomialField(PrimeField primeField, PolynomialElement<V> irreduciblePolynomial) {
+	protected PolynomialField(PrimeField primeField,
+		   PolynomialElement<V> irreduciblePolynomial) {
 		super(primeField);
 		this.irreduciblePolynomial = irreduciblePolynomial;
 	}
@@ -104,14 +106,32 @@ public class PolynomialField<V>
 
 	@Override
 	public MultiplicativeGroup<Polynomial<DualisticElement<V>>> getMultiplicativeGroup() {
-		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact 2.229/2.230)
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact
+		// 2.229/2.230)
+		throw new UnsupportedOperationException("Not supported yet."); // To
+		// change
+		// body
+		// of
+		// generated
+		// methods,
+		// choose
+		// Tools
+		// |
+		// Templates.
 	}
 
 	@Override
-	protected PolynomialElement<V> abstractMultiply(PolynomialElement<V> element1, PolynomialElement<V> element2) {
+	protected PolynomialElement<V> abstractApply(PolynomialElement<V> element1,
+		   PolynomialElement<V> element2) {
+		PolynomialElement<V> poly = super.abstractApply(element1, element2);
+		return this.mod(this.getElement(poly.getValue()));
+	}
+
+	@Override
+	protected PolynomialElement<V> abstractMultiply(
+		   PolynomialElement<V> element1, PolynomialElement<V> element2) {
 		PolynomialElement<V> poly = super.abstractMultiply(element1, element2);
-		return this.getElement(poly.getValue());
+		return this.mod(this.getElement(poly.getValue()));
 	}
 
 	@Override
@@ -123,6 +143,7 @@ public class PolynomialField<V>
 	 * oneOver.
 	 * <p>
 	 * Compute using extended Euclidean algorithm for polynomial (Algorithm 2.226)
+	 * <p>
 	 * <p>
 	 * @param element
 	 * @return
@@ -138,8 +159,10 @@ public class PolynomialField<V>
 			throw new UnsupportedOperationException();
 		}
 
-		Triple euclid = this.extendedEuclidean((PolynomialElement<V>) element, this.irreduciblePolynomial);
-		return this.getElement(((PolynomialElement<V>) euclid.getSecond()).getValue());
+		Triple euclid = this.extendedEuclidean((PolynomialElement<V>) element,
+											   this.irreduciblePolynomial);
+		return this.getElement(((PolynomialElement<V>) euclid.getSecond())
+			   .getValue());
 
 	}
 
@@ -147,6 +170,7 @@ public class PolynomialField<V>
 	 * Mod. g(x) mod irreduciblePolynomial = h(x)
 	 * <p>
 	 * Z_p must be a field.
+	 * <p>
 	 * <p>
 	 * @param g g(x) in Z_p[x]
 	 * @return h(x) in Z_p[x]
@@ -158,26 +182,101 @@ public class PolynomialField<V>
 		Pair longDiv = this.longDivision(g, this.irreduciblePolynomial);
 		return (PolynomialElement<V>) longDiv.getSecond();
 	}
+	
+	/**
+	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis.
+	 * Source: AMERICAN NATIONAL STANDARD X9.62 D.1.6
+	 * @param PolynomialElement b
+	 * @return PolynomialElement z which is a solution for the quadratic equation z²+z=b
+	 */
+	public PolynomialElement<V> solveQuadradicEquation(PolynomialElement<V> b) {
+		PolynomialElement<V> y = this.getZeroElement();
+		PolynomialElement<V> z = this.getZeroElement();
+
+		while (y.equals(this.getZeroElement())) {
+
+			PolynomialElement<V> r = this.getRandomElement(this.getDegree());
+			z = this.getZeroElement();
+			PolynomialElement<V> w = b;
+			int m = this.getDegree();
+
+			for (int i = 1; i <= m - 1; i++) {
+
+				z = z.square().add(w.square().multiply((r)));
+				w = w.square().add(b);
+			}
+
+			y = z.square().add(z);
+			if (!w.equals(this.getZeroElement())) {
+				throw new IllegalArgumentException("No solution for quadratic equation was found");
+			}
+
+		}
+
+		return z;
+	}
+	
+	/**
+	 * Test if there is a solution for the quadratic equation z²+z=b for any polynomial basis.
+	 * Source: AMERICAN NATIONAL STANDARD X9.62 D.1.6
+	 * @param PolynomialElement b
+	 * @return true/false
+	 */
+	public boolean hasQuadradicEquationSolution(PolynomialElement<V> b) {
+		PolynomialElement<V> y = this.getZeroElement();
+		PolynomialElement<V> z = this.getZeroElement();
+
+		while (y.equals(this.getZeroElement())) {
+
+			PolynomialElement<V> r = this.getRandomElement(this.getDegree());
+			z = this.getZeroElement();
+			PolynomialElement<V> w = b;
+			int m = this.getDegree();
+
+			for (int i = 1; i <= m - 1; i++) {
+
+				z = z.square().add(w.square().multiply((r)));
+				w = w.square().add(b);
+			}
+
+			y = z.square().add(z);
+			if (!w.equals(this.getZeroElement())) {
+				return false;
+			}
+
+		}
+
+		return true;
+	}
+	
+	
 
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static <V> PolynomialField getInstance(PrimeField primeField, int degree) {
-		return getInstance(primeField, degree, HybridRandomByteSequence.getInstance());
+	public static <V> PolynomialField getInstance(PrimeField primeField,
+		   int degree) {
+		return getInstance(primeField, degree,
+						   HybridRandomByteSequence.getInstance());
 	}
 
-	public static <V> PolynomialField getInstance(PrimeField primeField, int degree, RandomByteSequence randomByteSequence) {
+	public static <V> PolynomialField getInstance(PrimeField primeField,
+		   int degree, RandomByteSequence randomByteSequence) {
 		if (primeField == null || degree < 1) {
 			throw new IllegalArgumentException();
 		}
 		PolynomialRing<V> ring = PolynomialRing.getInstance(primeField);
-		PolynomialElement<V> irreduciblePolynomial = ring.findIrreduciblePolynomial(degree, randomByteSequence);
+		PolynomialElement<V> irreduciblePolynomial = ring
+			   .findIrreduciblePolynomial(degree, randomByteSequence);
 		return new PolynomialField(primeField, irreduciblePolynomial);
 	}
 
-	public static <V> PolynomialField getInstance(PrimeField primeField, PolynomialElement<V> irreduciblePolynomial) {
-		if (primeField == null || irreduciblePolynomial == null
-			   || !irreduciblePolynomial.getSet().getSemiRing().isEquivalent(primeField)
+	public static <V> PolynomialField getInstance(PrimeField primeField,
+		   PolynomialElement<V> irreduciblePolynomial) {
+		if (primeField == null
+			   || irreduciblePolynomial == null
+			   || !irreduciblePolynomial.getSet().getSemiRing()
+			   .isEquivalent(primeField)
 			   || !irreduciblePolynomial.isIrreducible()) {
 			throw new IllegalArgumentException();
 		}

@@ -170,7 +170,8 @@ public class Example {
 	public static void printLine(String label, Object object) {
 		Example.printIndent();
 		Example.printLabel(label);
-		Example.printLine(object);
+		Example.print(object);
+		Example.printLine();
 	}
 
 	public static void printLine(Object... objects) {
@@ -186,7 +187,12 @@ public class Example {
 	public static void printLine(String label, Object... objects) {
 		Example.printIndent();
 		Example.printLabel(label);
-		Example.printLine(objects);
+		String sep = "";
+		for (Object object : objects) {
+			Example.print(sep + object);
+			sep = Example.ITEM_SEP;
+		}
+		Example.printLine();
 	}
 
 	public static void printLines(Object object) {

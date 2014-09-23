@@ -41,12 +41,13 @@
  */
 package ch.bfh.unicrypt.crypto.keygenerator.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -55,28 +56,36 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 public interface KeyPairGenerator
 	   extends KeyGenerator {
 
-	Element generatePrivateKey();
+	public Element generatePrivateKey();
 
-	Element generatePrivateKey(RandomByteSequence randomByteSequence);
+	public Element generatePrivateKey(RandomByteSequence randomByteSequence);
 
-	Element generatePublicKey(Element privateKey);
+	public Element generatePrivateKey(String password);
 
-	Element generatePublicKey(Element privateKey, RandomByteSequence randomByteSequence);
+	public Element generatePrivateKey(String password, ByteArray salt);
 
-	Pair generateKeyPair();
+	public Element generatePublicKey(Element privateKey);
 
-	Pair generateKeyPair(RandomByteSequence randomByteSequence);
+	public Element generatePublicKey(Element privateKey, RandomByteSequence randomByteSequence);
 
-	ProductSet getKeyPairSpace();
+	public Pair generateKeyPair();
 
-	Set getPrivateKeySpace();
+	public Pair generateKeyPair(RandomByteSequence randomByteSequence);
 
-	Set getPublicKeySpace();
+	public Pair generateKeyPair(String password);
 
-	Function getKeyPairGenerationFunction();
+	public Pair generateKeyPair(String password, ByteArray salt);
 
-	Function getPrivateKeyGenerationFunction();
+	public ProductSet getKeyPairSpace();
 
-	Function getPublicKeyGenerationFunction();
+	public Set getPrivateKeySpace();
+
+	public Set getPublicKeySpace();
+
+	public Function getKeyPairGenerationFunction();
+
+	public Function getPrivateKeyGenerationFunction();
+
+	public Function getPublicKeyGenerationFunction();
 
 }

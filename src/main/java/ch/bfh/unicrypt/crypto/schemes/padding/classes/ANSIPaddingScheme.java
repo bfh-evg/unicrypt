@@ -1,7 +1,7 @@
 package ch.bfh.unicrypt.crypto.schemes.padding.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.padding.abstracts.AbstractReversibleByteArrayPaddingScheme;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 

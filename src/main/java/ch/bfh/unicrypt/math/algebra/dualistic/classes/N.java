@@ -41,7 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -60,26 +61,18 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class N
-	   extends AbstractSemiRing<NElement, NaturalNumber> {
+	   extends AbstractSemiRing<NElement, BigInteger> {
 
 	public N() {
-		super(NaturalNumber.class);
-	}
-
-	public final boolean contains(BigInteger integerValue) {
-		return this.contains(NaturalNumber.getInstance(integerValue));
+		super(BigInteger.class);
 	}
 
 	public final boolean contains(int integerValue) {
-		return this.contains(NaturalNumber.getInstance(integerValue));
+		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
 	public final NElement getElement(int integerValue) {
-		return this.getElement(NaturalNumber.getInstance(integerValue));
-	}
-
-	public final NElement getElement(BigInteger integerValue) {
-		return this.getElement(NaturalNumber.getInstance(integerValue));
+		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
 	//
@@ -88,7 +81,7 @@ public class N
 	//
 	@Override
 	protected NElement defaultSelfApply(NElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(NaturalNumber.getInstance(amount)));
+		return this.abstractGetElement(element.getValue().multiply(amount));
 	}
 
 	//
@@ -102,7 +95,7 @@ public class N
 
 	@Override
 	protected NElement abstractGetIdentityElement() {
-		return this.abstractGetElement(NaturalNumber.ZERO);
+		return this.abstractGetElement(BigInteger.ZERO);
 	}
 
 	@Override
@@ -112,7 +105,7 @@ public class N
 
 	@Override
 	protected NElement abstractGetOne() {
-		return this.abstractGetElement(NaturalNumber.ONE);
+		return this.abstractGetElement(BigInteger.ONE);
 	}
 
 	@Override
@@ -121,23 +114,18 @@ public class N
 	}
 
 	@Override
-	protected boolean abstractContains(NaturalNumber value) {
-		return true;
+	protected boolean abstractContains(BigInteger value) {
+		return value.signum() >= 0;
 	}
 
 	@Override
-	protected NElement abstractGetElement(NaturalNumber value) {
+	protected NElement abstractGetElement(BigInteger value) {
 		return new NElement(this, value);
 	}
 
 	@Override
-	protected NElement abstractGetElementFrom(BigInteger value) {
-		return this.abstractGetElement(NaturalNumber.getInstance(value));
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(NElement element) {
-		return element.getValue().getBigInteger();
+	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance();
 	}
 
 	@Override

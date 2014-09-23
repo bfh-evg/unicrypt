@@ -45,56 +45,55 @@ import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
-
 /**
-*
-* @author Christian Lutz
-*/
+ *
+ * @author Christian Lutz
+ */
 public class ECPolynomialField
-	   extends AbstractEC<PolynomialField, Polynomial> {
+	   extends AbstractEC<BinaryPolynomialField, Polynomial<DualisticElement<ZModTwo>>> {
 
-	public ECPolynomialField(PolynomialField finiteField, DualisticElement<Polynomial> a,
-		   DualisticElement<Polynomial> b, DualisticElement<Polynomial> gx, DualisticElement<Polynomial> gy,
+	public ECPolynomialField(BinaryPolynomialField finiteField, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a,
+		   DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gx, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gy,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
 	}
 
-	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
+	public ECPolynomialField(BinaryPolynomialField finiteField, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, givenOrder, coFactor);
 	}
 
 	@Override
-	protected boolean abstractContains(DualisticElement<Polynomial> x) {
+	protected boolean abstractContains(DualisticElement x) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	protected boolean abstractContains(DualisticElement<Polynomial> x, DualisticElement<Polynomial> y) {
-		DualisticElement<Polynomial> left = y.power(2).add(x.multiply(getA()));
+	protected boolean abstractContains(DualisticElement x, DualisticElement y) {
+		DualisticElement<Polynomial> left = y.power(2).add(x.multiply(y));
 		DualisticElement<Polynomial> right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
 		return left.isEquivalent(right);
 	}
 
 	@Override
-	protected ECElement<Polynomial> abstractGetElement(Point<DualisticElement<Polynomial>> value) {
-		return new ECElement<Polynomial>(this, value);
+	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> abstractGetElement(Point<DualisticElement<Polynomial<DualisticElement<ZModTwo>>>> value) {
+		return new ECElement<Polynomial<DualisticElement<ZModTwo>>>(this, value);
 	}
 
 	@Override
-	protected ECElement<Polynomial> abstractGetIdentityElement() {
-		return new ECElement<Polynomial>(this);
+	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> abstractGetIdentityElement() {
+		return new ECElement<Polynomial<DualisticElement<ZModTwo>>>(this);
 	}
 
 	@Override
-	protected ECElement<Polynomial> abstractApply(ECElement<Polynomial> element1, ECElement<Polynomial> element2) {
+	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> abstractApply(ECElement<Polynomial<DualisticElement<ZModTwo>>> element1, ECElement<Polynomial<DualisticElement<ZModTwo>>> element2) {
 		if (element1.isZero()) {
 			return element2;
 		}
@@ -104,11 +103,11 @@ public class ECPolynomialField
 		if (element1.equals(element2.invert())) {
 			return this.getIdentityElement();
 		}
-		DualisticElement<Polynomial> s, rx, ry;
-		DualisticElement<Polynomial> px = element1.getX();
-		DualisticElement<Polynomial> py = element1.getY();
-		DualisticElement<Polynomial> qx = element2.getX();
-		DualisticElement<Polynomial> qy = element2.getY();
+		DualisticElement<Polynomial<DualisticElement<ZModTwo>>> s, rx, ry;
+		DualisticElement<Polynomial<DualisticElement<ZModTwo>>> px = element1.getX();
+		DualisticElement<Polynomial<DualisticElement<ZModTwo>>> py = element1.getY();
+		DualisticElement<Polynomial<DualisticElement<ZModTwo>>> qx = element2.getX();
+		DualisticElement<Polynomial<DualisticElement<ZModTwo>>> qy = element2.getY();
 		if (element1.equals(element2)) {
 			final DualisticElement one = this.getFiniteField().getOneElement();
 			s = px.add(py.divide(px));
@@ -123,22 +122,22 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected ECElement<Polynomial> abstractInvert(ECElement<Polynomial> element) {
+	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> abstractInvert(ECElement<Polynomial<DualisticElement<ZModTwo>>> element) {
 		if (element.isZero()) {
 			return this.getZeroElement();
 		}
-		// TODO: The following seems to be incorrect!!!
-		return this.abstractGetElement(Point.getInstance(element.getX(), element.getX().add(element.getY())));
+		return this.abstractGetElement(Point.getInstance(element.getX(), element.getY().invert()));
 	}
 
 	@Override
-	protected ECElement<Polynomial> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
+	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	/**
 	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 21
+	 * <p>
 	 * @return True if curve parameters are valid
 	 */
 	private boolean isValid() {
@@ -165,13 +164,10 @@ public class ECPolynomialField
 		}
 		return c1 && c2 && c3 && c4 && c5 && c6 && c7 && c81 && c82;
 	}
-	
-	
-	
+
 	//
 	// STATIC FACTORY METHODS
 	//
-
 	/**
 	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
 	 * <p>
@@ -181,15 +177,14 @@ public class ECPolynomialField
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
-		ECPolynomialField newInstance =  new ECPolynomialField(f, a, b, givenOrder, coFactor);
-		
-		if(newInstance.isValid()){
+	public static ECPolynomialField getInstance(BinaryPolynomialField f, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, givenOrder, coFactor);
+
+		if (newInstance.isValid()) {
 			return newInstance;
-		}
-		else{
+		} else {
 			throw new Exception("Curve parameters not valid!");
 		}
 	}
@@ -205,15 +200,14 @@ public class ECPolynomialField
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public static ECPolynomialField getInstance(PolynomialField f, DualisticElement<Polynomial> a, DualisticElement<Polynomial> b, DualisticElement<Polynomial> gx, DualisticElement<Polynomial> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
-		ECPolynomialField newInstance =  new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
-		
-		if(newInstance.isValid()){
+	public static ECPolynomialField getInstance(BinaryPolynomialField f, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gx, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
+
+		if (newInstance.isValid()) {
 			return newInstance;
-		}
-		else{
+		} else {
 			throw new Exception("Curve parameters not valid!");
 		}
 	}

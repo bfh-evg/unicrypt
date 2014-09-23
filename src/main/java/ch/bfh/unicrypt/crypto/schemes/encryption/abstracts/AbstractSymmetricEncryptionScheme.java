@@ -49,19 +49,23 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 /**
  *
  * @author rolfhaenni
- * @param <MS>
- * @param <ME>
- * @param <ES>
- * @param <EE>
- * @param <KS>
- * @param <KE>
- * @param <KG>
+ * @param <MS> Message space
+ * @param <ME> Message element
+ * @param <ES> Encryption space
+ * @param <EE> Encryption element
+ * @param <KS> Key space
+ * @param <KE> Key element
+ * @param <KG> Key generator
  */
 public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, KS extends Set, KE extends Element, KG extends SecretKeyGenerator>
 	   extends AbstractEncryptionScheme<MS, ME, ES, EE>
 	   implements SymmetricEncryptionScheme {
 
 	private KG keyGenerator;
+
+	public AbstractSymmetricEncryptionScheme(MS messageSpace, ES encryptionSpace) {
+		super(messageSpace, encryptionSpace);
+	}
 
 	@Override
 	public final KG getSecretKeyGenerator() {

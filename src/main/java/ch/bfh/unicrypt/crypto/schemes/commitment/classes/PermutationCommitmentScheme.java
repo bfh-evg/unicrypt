@@ -72,11 +72,12 @@ public class PermutationCommitmentScheme
 	private final Tuple messageGenerators;
 	private final int size;
 
-	protected PermutationCommitmentScheme(Element randomizationGenerator, Tuple messageGenerators) {
-		this.cyclicGroup = (CyclicGroup) randomizationGenerator.getSet();
+	protected PermutationCommitmentScheme(CyclicGroup cyclicGroup, int size, Element randomizationGenerator, Tuple messageGenerators) {
+		super(PermutationGroup.getInstance(size), ProductGroup.getInstance(cyclicGroup, size), ProductGroup.getInstance(cyclicGroup.getZModOrder(), size));
+		this.cyclicGroup = cyclicGroup;
+		this.size = size;
 		this.randomizationGenerator = randomizationGenerator;
 		this.messageGenerators = messageGenerators;
-		this.size = messageGenerators.getArity();
 	}
 
 	@Override
@@ -101,16 +102,18 @@ public class PermutationCommitmentScheme
 	}
 
 	public static PermutationCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size) {
-		return PermutationCommitmentScheme.getInstance(cyclicGroup, size, (ReferenceRandomByteSequence) null);
+		return PermutationCommitmentScheme.getInstance(cyclicGroup, size, ReferenceRandomByteSequence.getInstance());
 	}
 
 	public static PermutationCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size, ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (cyclicGroup == null || size < 1 || referenceRandomByteSequence == null) {
-			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
+			throw new IllegalArgumentException();
 		}
+		// TODO: is this thread safe???
+		referenceRandomByteSequence.reset();
 		Element randomizationGenerator = cyclicGroup.getIndependentGenerator(0, referenceRandomByteSequence);
 		Tuple messageGenerators = cyclicGroup.getIndependentGenerators(1, size, referenceRandomByteSequence);
-		return new PermutationCommitmentScheme(randomizationGenerator, messageGenerators);
+		return new PermutationCommitmentScheme(cyclicGroup, size, randomizationGenerator, messageGenerators);
 	}
 
 	public static PermutationCommitmentScheme getInstance(final Element randomizationGenerator, final Tuple messageGenerators) {
@@ -118,22 +121,16 @@ public class PermutationCommitmentScheme
 			   || messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform() || !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
 			throw new IllegalArgumentException();
 		}
-		return new PermutationCommitmentScheme(randomizationGenerator, messageGenerators);
+		CyclicGroup cycicGroup = (CyclicGroup) randomizationGenerator.getSet();
+		int size = messageGenerators.getArity();
+		return new PermutationCommitmentScheme(cycicGroup, size, randomizationGenerator, messageGenerators);
 	}
 
 	private class PermutationCommitmentFunction
 		   extends AbstractFunction<PermutationCommitmentFunction, ProductSet, Pair, ProductGroup, Tuple> {
 
-		private final Element randomizationGenerator;
-		private final Tuple messageGenerators;
-		private final int size;
-
 		protected PermutationCommitmentFunction(CyclicGroup cyclicGroup, int size, Element randomizationGenerator, Tuple messageGenerators) {
-			super(ProductSet.getInstance(PermutationGroup.getInstance(size), ProductGroup.getInstance(cyclicGroup.getZModOrder(), size)),
-				  ProductGroup.getInstance(cyclicGroup, size));
-			this.randomizationGenerator = randomizationGenerator;
-			this.messageGenerators = messageGenerators;
-			this.size = size;
+			super(ProductSet.getInstance(messageSpace, randomizationSpace), commitmentSpace);
 		}
 
 		@Override
@@ -142,9 +139,8 @@ public class PermutationCommitmentScheme
 			final Tuple randomizations = (Tuple) element.getSecond();
 			Element[] ret = new Element[size];
 			for (int i = 0; i < size; i++) {
-				ret[i] = this.randomizationGenerator.selfApply(randomizations.getAt(i)).apply(this.messageGenerators.getAt(permutation.permute(i)));
+				ret[i] = randomizationGenerator.selfApply(randomizations.getAt(i)).apply(messageGenerators.getAt(permutation.permute(i)));
 			}
-
 			return Tuple.getInstance(ret);
 		}
 

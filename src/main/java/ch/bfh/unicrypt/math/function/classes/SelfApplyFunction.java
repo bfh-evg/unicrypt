@@ -50,6 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.math.BigInteger;
 
 /**
  * This class represents the the concept of a function f:XxZ->Y, where Z is an atomic group. The second input element
@@ -75,7 +76,9 @@ public class SelfApplyFunction
 	//
 	@Override
 	protected Element abstractApply(final Pair element, final RandomByteSequence randomByteSequence) {
-		return element.getFirst().selfApply(element.getSecond());
+		Element element1 = element.getFirst();
+		Element<BigInteger> element2 = (Element<BigInteger>) element.getSecond();
+		return element1.selfApply(element2.getValue());
 	}
 
 	//
@@ -110,7 +113,7 @@ public class SelfApplyFunction
 	 * @throws IllegalArgumentException if {@literal group} is null
 	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
 	 */
-	public static SelfApplyFunction getInstance(final SemiGroup semiGroup, final Set amountSet) {
+	public static SelfApplyFunction getInstance(final SemiGroup semiGroup, final Set<BigInteger> amountSet) {
 		if (semiGroup == null || amountSet == null) {
 			throw new IllegalArgumentException();
 		}

@@ -52,17 +52,15 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public abstract class AbstractByteArrayPaddingScheme
-	   extends AbstractPaddingScheme<ByteArrayMonoid, ByteArrayElement> {
+	   extends AbstractPaddingScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement> {
 
-	protected final ByteArrayMonoid byteArrayMonoid;
-
-	protected AbstractByteArrayPaddingScheme(ByteArrayMonoid byteArrayMonoid) {
-		this.byteArrayMonoid = byteArrayMonoid;
+	protected AbstractByteArrayPaddingScheme(ByteArrayMonoid paddingSpace) {
+		super(ByteArrayMonoid.getInstance(), paddingSpace);
 	}
 
 	@Override
 	protected Function abstractGetPaddingFunction() {
-		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(ByteArrayMonoid.getInstance(), this.byteArrayMonoid) {
+		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(this.messageSpace, this.paddingSpace) {
 			@Override
 			protected ByteArrayElement abstractApply(ByteArrayElement element, RandomByteSequence randomByteSequence) {
 				int paddingLength = getPaddingLength(element);
@@ -87,11 +85,12 @@ public abstract class AbstractByteArrayPaddingScheme
 	}
 
 	protected int getPaddingLength(ByteArrayElement message) {
+		int blockLength = this.paddingSpace.getBlockLength();
 		Byte separator = this.abstractGetSeparator();
 		int minPaddingLength = (separator == null ? 0 : 1) + (this.abstractEndsWithLength() ? 1 : 0);
-		int paddingLength = (this.getBlockLength() - message.getLength() % this.getBlockLength()) % this.getBlockLength();
+		int paddingLength = (blockLength - message.getLength() % blockLength) % blockLength;
 		if (paddingLength < minPaddingLength) {
-			return this.getBlockLength() + paddingLength;
+			return blockLength + paddingLength;
 		}
 		return paddingLength;
 	}

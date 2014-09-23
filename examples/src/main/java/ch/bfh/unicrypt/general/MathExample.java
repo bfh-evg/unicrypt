@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.general;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
@@ -110,7 +110,7 @@ public class MathExample {
 		BigInteger order = g11.getOrder();
 
 		// Iterate over all elements
-		for (Element e : g11) {
+		for (Element e : g11.getElements()) {
 			Example.printLine(e);
 		}
 
@@ -147,7 +147,7 @@ public class MathExample {
 		BigInteger order = z11.getOrder();
 
 		// Iterate over all elements
-		for (Element e : z11) {
+		for (Element e : z11.getElements()) {
 			Example.printLine(e);
 		}
 

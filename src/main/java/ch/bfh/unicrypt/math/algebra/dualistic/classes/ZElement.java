@@ -43,17 +43,17 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.helper.numerical.WholeNumber;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
 public class ZElement
-	   extends AbstractDualisticElement<Z, ZElement, WholeNumber>
-	   implements DualisticElement<WholeNumber> {
+	   extends AbstractDualisticElement<Z, ZElement, BigInteger>
+	   implements DualisticElement<BigInteger> {
 
-	protected ZElement(final Z z, final WholeNumber value) {
+	protected ZElement(final Z z, final BigInteger value) {
 		super(z, value);
 	}
 

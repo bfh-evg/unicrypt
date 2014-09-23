@@ -42,33 +42,39 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.RandomizedEncryptionScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
  * @author rolfhaenni
- * @param <MS>
- * @param <ME>
- * @param <ES>
- * @param <EE>
- * @param <RS>
- * @param <RE>
- * @param <EK>
- * @param <DK>
- * @param <KG>
+ * @param <MS>  Message space
+ * @param <ME>  Message element
+ * @param <ES>  Encryption space
+ * @param <EE>  Encryption element
+ * @param <RS>  Randomization space
+ * @param <RE>  Randomization element
+ * @param <EKS> Encryption key space
+ * @param <DKS> Decryption key space
+ * @param <KG>  Key pair generator
  */
-public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, RS extends Set, RE extends Element, EK extends Set, DK extends Set, KG extends KeyPairGenerator>
-	   extends AbstractAsymmetricEncryptionScheme<MS, ME, ES, EE, EK, DK, KG>
+public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, RS extends Set, RE extends Element, EKS extends Set, DKS extends Set, KG extends KeyPairGenerator>
+	   extends AbstractAsymmetricEncryptionScheme<MS, ME, ES, EE, EKS, DKS, KG>
 	   implements RandomizedEncryptionScheme {
+
+	protected final RS randomizationSpace;
+
+	public AbstractRandomizedEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
+		super(messageSpace, encryptionSpace);
+		this.randomizationSpace = randomizationSpace;
+	}
 
 	@Override
 	public final RS getRandomizationSpace() {
-		return (RS) ((ProductSet) this.getEncryptionFunction().getDomain()).getAt(2);
+		return this.randomizationSpace;
 	}
 
 	@Override

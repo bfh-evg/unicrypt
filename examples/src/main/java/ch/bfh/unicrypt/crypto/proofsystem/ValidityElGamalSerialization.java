@@ -1,6 +1,6 @@
 package ch.bfh.unicrypt.crypto.proofsystem;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.ElGamalKeyPairGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.ElGamalEncryptionValidityProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
@@ -35,7 +35,7 @@ public class ValidityElGamalSerialization {
 
 		StringElement proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 
-		ElGamalKeyPairGenerator egkpg = ElGamalKeyPairGenerator.getInstance(gQ);
+		DiscreteLogarithmKeyGenerator egkpg = DiscreteLogarithmKeyGenerator.getInstance(gQ);
 
 		RandomOracle r1 = PseudoRandomOracle.getInstance();
 

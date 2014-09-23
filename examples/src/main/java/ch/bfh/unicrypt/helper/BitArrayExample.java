@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.BitArray;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import java.util.Arrays;
 
 /**
@@ -57,24 +57,24 @@ public class BitArrayExample {
 
 		Example.printLine(bitArray);
 		Example.printLine("Length        ", bitArray.getLength());
-		Example.printLine("Leading Zeros ", bitArray.countLeadingZeros());
-		Example.printLine("Trailing Zeros", bitArray.countTrailingZeros());
-		Example.printLine("Count Zeros   ", bitArray.countZeros());
-		Example.printLine("Count Ones    ", bitArray.countOnes());
+		Example.printLine("Trailing Zeros", bitArray.countPrefix());
+		Example.printLine("Leading Zeros ", bitArray.countSuffix());
+		Example.printLine("Count Zeros   ", bitArray.count(false));
+		Example.printLine("Count Ones    ", bitArray.count(true));
 		Example.printLine("Extract       ", bitArray.extract(2, 9));
 		Example.printLine("Extract Prefix", bitArray.extractPrefix(3));
 		Example.printLine("Extract Suffix", bitArray.extractSuffix(5));
 		Example.printLine("Extract Range ", bitArray.extractRange(7, 9));
-		Example.printLine("Get All       ", Arrays.toString(bitArray.getAll()));
+		Example.printLine("Get All       ", Arrays.toString(bitArray.getBits()));
 		Example.printLine("RemoveAt      ", bitArray.removeAt(7));
 		Example.printLine("Shif Left     ", bitArray.shiftLeft(3));
 		Example.printLine("Shift Right   ", bitArray.shiftRight(3));
 		Example.printLines("Split         ", bitArray.split(2, 4, 10));
-		Example.printLine("Strip L.Zeros ", bitArray.stripLeadingZeros());
-		Example.printLine("Strip T.Zeros ", bitArray.stripTrailingZeros());
-		Example.printLine("Strip Prefix  ", bitArray.stripPrefix(3));
-		Example.printLine("Strip Suffix  ", bitArray.stripSuffix(3));
-		Example.printLine("Concatenate   ", bitArray.concatenate(bitArray));
+		Example.printLine("Strip L.Zeros ", bitArray.removeSuffix());
+		Example.printLine("Strip T.Zeros ", bitArray.removePrefix());
+		Example.printLine("Strip Prefix  ", bitArray.removePrefix(3));
+		Example.printLine("Strip Suffix  ", bitArray.removeSuffix(3));
+		Example.printLine("Concatenate   ", bitArray.append(bitArray));
 	}
 
 	public static void example2() {
@@ -84,8 +84,8 @@ public class BitArrayExample {
 		BitArray bitArray3 = BitArray.getInstance(new boolean[10]);
 		BitArray bitArray4 = BitArray.getInstance(new byte[3]);
 		BitArray bitArray5 = BitArray.getInstance(10);
-		BitArray bitArray6 = BitArray.getInstance(10, false);
-		BitArray bitArray7 = BitArray.getInstance(10, true);
+		BitArray bitArray6 = BitArray.getInstance(false, 10);
+		BitArray bitArray7 = BitArray.getInstance(true, 10);
 		BitArray bitArray8 = BitArray.getRandomInstance(20);
 
 		Example.printLine(bitArray1);

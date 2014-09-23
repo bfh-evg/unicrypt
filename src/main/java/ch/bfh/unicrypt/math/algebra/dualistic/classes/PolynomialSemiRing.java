@@ -42,8 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -79,7 +81,7 @@ public class PolynomialSemiRing<V>
 		return this.semiRing;
 	}
 
-	public boolean isBinray() {
+	public boolean isBinary() {
 		return this.getSemiRing().getOrder().intValue() == 2;
 	}
 
@@ -204,30 +206,33 @@ public class PolynomialSemiRing<V>
 	}
 
 	@Override
-	protected PolynomialElement<V> abstractGetElementFrom(BigInteger integerValue) {
-		BigInteger[] bigIntegers = MathUtil.unpairWithSize(integerValue);
-		DualisticElement[] elements = new DualisticElement[bigIntegers.length];
-		int i = 0;
-		for (BigInteger bigInteger : bigIntegers) {
-			DualisticElement<V> element = this.getSemiRing().getElementFrom(bigInteger);
-			if (element == null) {
-				return null; // no such elements
-			}
-			elements[i] = element;
-			i++;
-		}
-		Polynomial<DualisticElement<V>> polynomial = Polynomial.<DualisticElement<V>>getInstance(elements, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement());
-		return new PolynomialElement<V>(this, polynomial);
-	}
+	protected BigIntegerConverter<Polynomial<DualisticElement<V>>> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<Polynomial<DualisticElement<V>>>(null) { // class not needed
 
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(PolynomialElement<V> element) {
-		int degree = element.getValue().getDegree();
-		BigInteger[] values = new BigInteger[degree + 1];
-		for (int i = 0; i <= degree; i++) {
-			values[i] = element.getValue().getCoefficient(i).getBigInteger();
-		}
-		return MathUtil.pairWithSize(values);
+			@Override
+			protected BigInteger abstractConvert(Polynomial<DualisticElement<V>> polynomial) {
+				int degree = polynomial.getDegree();
+				BigInteger[] values = new BigInteger[degree + 1];
+				for (int i = 0; i <= degree; i++) {
+					values[i] = polynomial.getCoefficient(i).getBigInteger();
+				}
+				return MathUtil.pairWithSize(values);
+			}
+
+			@Override
+			protected Polynomial<DualisticElement<V>> abstractReconvert(BigInteger value) {
+				BigInteger[] bigIntegers = MathUtil.unpairWithSize(value);
+				DualisticElement[] elements = new DualisticElement[bigIntegers.length];
+				int i = 0;
+				for (BigInteger bigInteger : bigIntegers) {
+					DualisticElement<V> element = getSemiRing().getElementFrom(bigInteger);
+					elements[i] = element;
+					i++;
+				}
+				Polynomial<DualisticElement<V>> polynomial = Polynomial.<DualisticElement<V>>getInstance(elements, getSemiRing().getZeroElement(), getSemiRing().getOneElement());
+				return polynomial;
+			}
+		};
 	}
 
 	@Override
@@ -240,7 +245,7 @@ public class PolynomialSemiRing<V>
 		Polynomial<DualisticElement<V>> polynomial1 = element1.getValue();
 		Polynomial<DualisticElement<V>> polynomial2 = element2.getValue();
 
-		if (this.isBinray()) {
+		if (this.isBinary()) {
 			ByteArray coefficients = polynomial1.getCoefficients().xorFillZero(polynomial2.getCoefficients());
 			return this.getElement(coefficients);
 		} else {
@@ -274,7 +279,7 @@ public class PolynomialSemiRing<V>
 			return this.getZeroElement();
 		}
 
-		if (this.isBinray()) {
+		if (this.isBinary()) {
 			ByteArray p1 = polynomial1.getCoefficients();
 			ByteArray p2 = polynomial2.getCoefficients();
 			if (polynomial2.getDegree() > polynomial1.getDegree()) {
@@ -282,14 +287,16 @@ public class PolynomialSemiRing<V>
 				p1 = p2;
 				p2 = tmp;
 			}
-			ByteArray zero = ByteArray.getInstance(new byte[0]);
+			ByteArray zero = ByteArray.getInstance(); // an empty byte array
 			ByteArray result = zero;
 			while (!p2.equals(zero)) {
 				if (p2.getBitAt(0)) {
 					result = result.xorFillZero(p1);
 				}
-				p1 = p1.shiftRight(1);
-				p2 = p2.shiftLeft(1);
+				// removeSuffix was added to avoid an endless loop in PolynomialFieldTest
+				// the problem could probably be avoided by working with BitArray
+				p1 = p1.shiftBitsRight(1).removeSuffix();
+				p2 = p2.shiftBitsLeft(1).removeSuffix();
 			}
 			return this.getElement(result);
 

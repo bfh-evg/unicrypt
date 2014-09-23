@@ -57,7 +57,7 @@ import java.math.BigInteger;
  * @version 1.0
  */
 public class ModuloFunction
-	   extends AbstractFunction<ModuloFunction, Set, Element, ZMod, ZModElement> {
+	   extends AbstractFunction<ModuloFunction, Set<BigInteger>, Element<BigInteger>, ZMod, ZModElement> {
 
 	private final BigInteger modulus;
 
@@ -79,8 +79,8 @@ public class ModuloFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected ZModElement abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().getElementFrom(element.getBigInteger().mod(this.getModulus()));
+	protected ZModElement abstractApply(final Element<BigInteger> element, final RandomByteSequence randomByteSequence) {
+		return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
 	}
 
 	//
@@ -94,14 +94,11 @@ public class ModuloFunction
 	 * @return
 	 * @throws IllegalArgumentException if the group is null
 	 */
-	public static ModuloFunction getInstance(final Set domain, BigInteger modulus) {
-		if (domain == null || modulus == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ModuloFunction(domain, ZMod.getInstance(modulus));
+	public static ModuloFunction getInstance(final Set<BigInteger> domain, BigInteger modulus) {
+		return ModuloFunction.getInstance(domain, ZMod.getInstance(modulus));
 	}
 
-	public static ModuloFunction getInstance(final Set domain, ZMod coDomain) {
+	public static ModuloFunction getInstance(final Set<BigInteger> domain, ZMod coDomain) {
 		if (domain == null || coDomain == null) {
 			throw new IllegalArgumentException();
 		}

@@ -41,10 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.compound.Compound;
-import ch.bfh.unicrypt.helper.converter.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -55,6 +59,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.util.Iterator;
 
 /**
  * This interface represents the concept of a non-empty mathematical set of elements. The number of elements in the set
@@ -149,9 +154,9 @@ public interface Set<V extends Object> {
 	public boolean isConcatenative();
 
 	/**
-	 * TODO Returns {@code true} if this set is an instance of {@link Compound}. This set is a cartesian product
+	 * Returns {@code true} if this set is a cartesian product
 	 * <p>
-	 * @return {@code true} if this set is compound
+	 * @return {@code true} if this set is a product set
 	 */
 	public boolean isProduct();
 
@@ -209,8 +214,8 @@ public interface Set<V extends Object> {
 	public boolean isSingleton();
 
 	/**
-	 * TODO Returns an additive integer group of type {@link ZPlusMod} with the same set order. For this to work, the
-	 * set order must be finite and known.
+	 * TODO Returns an additive integer group of type {@link ZMod} with the same set order. For this to work, the set
+	 * order must be finite and known.
 	 * <p>
 	 * @return The resulting additive group.
 	 * @throws UnsupportedOperationException if the set order is infinite or unknown
@@ -218,8 +223,8 @@ public interface Set<V extends Object> {
 	public ZMod getZModOrder();
 
 	/**
-	 * Returns an multiplicative integer set of type {@link ZTimesMod} with the same set order. For this to work, the
-	 * set order must be finite and known. TODO teilerfremd
+	 * Returns an multiplicative integer set of type {@link ZMod} with the same set order. For this to work, the set
+	 * order must be finite and known. TODO teilerfremd
 	 * <p>
 	 * @return The resulting multiplicative group.
 	 * @throws UnsupportedOperationException if the set order is infinite or unknown
@@ -276,6 +281,16 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(BigInteger bigInteger);
 
+	public Element<V> getElementFrom(BigInteger bigInteger, Converter<V, BigInteger> converter);
+
+	public Element<V> getElementFrom(BigInteger bigInteger, ConvertMethod<BigInteger> convertMethod);
+
+	public Element<V> getElementFrom(String string);
+
+	public Element<V> getElementFrom(String string, Converter<V, String> converter);
+
+	public Element<V> getElementFrom(String string, ConvertMethod<String> convertMethod);
+
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the default converter.
 	 * <p>
@@ -284,15 +299,17 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteArray byteArray);
 
+	public Element<V> getElementFrom(ByteArray byteArray, Converter<V, ByteArray> converter);
+
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the
-	 * {@link BigIntegerConverter}.
+	 * {@link BigIntegerToByteArray}.
 	 * <p>
 	 * @param byteArray
-	 * @param converter
+	 * @param convertMethod
 	 * @return
 	 */
-	public Element<V> getElementFrom(ByteArray byteArray, BigIntegerConverter converter);
+	public Element<V> getElementFrom(ByteArray byteArray, ConvertMethod<ByteArray> convertMethod);
 
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@link ByteTree}.
@@ -302,14 +319,16 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree);
 
+	public Element<V> getElementFrom(ByteTree byteTree, Converter<V, ByteArray> converter);
+
 	/**
 	 * <p>
 	 * <p>
 	 * @param byteTree
-	 * @param converter
+	 * @param convertMethod
 	 * @return
 	 */
-	public Element<V> getElementFrom(ByteTree byteTree, BigIntegerConverter converter);
+	public Element<V> getElementFrom(ByteTree byteTree, ConvertMethod<ByteArray> convertMethod);
 
 	/**
 	 * Creates and returns the element that corresponds to the integer value of some other element (if one exists).
@@ -359,47 +378,28 @@ public interface Set<V extends Object> {
 	 */
 	public boolean isEquivalent(Set set);
 
-	/**
-	 * TODO Returns the positive BigInteger value that corresponds the element.
-	 * <p>
-	 * @param element The given Element
-	 * @return the corresponding BigInteger value
-	 */
-	public BigInteger getBigIntegerFrom(Element element);
+	public BigIntegerConverter<V> getBigIntegerConverter();
 
-	/**
-	 * TODO Returns the corresponding {@link ByteArray} for a given {@link Element}.
-	 * <p>
-	 * @param element The given Element
-	 * @return the corresponding ByteArray
-	 * @throws IllegalArgumentException if this set does not contain the {@literal element}
-	 */
-	public ByteArray getByteArrayFrom(Element element);
+	public StringConverter<V> getStringConverter();
+
+	public ByteArrayConverter<V> getByteArrayConverter();
 
 	/**
 	 * TODO
 	 * <p>
-	 * @param element   The given Element
-	 * @param converter The given Converter
-	 * @return the corresponding ByteArray
+	 * @return
 	 */
-	public ByteArray getByteArrayFrom(Element element, BigIntegerConverter converter);
+	public Iterable<? extends Element<V>> getElements();
 
-	/**
-	 * TODO Returns the corresponding {@link ByteTree} for a given {@link Element}.
-	 * <p>
-	 * @param element The given Element
-	 * @return the corresponding ByteTree
-	 */
-	public ByteTree getByteTreeFrom(Element element);
+	public Iterable<? extends Element<V>> getElements(int n);
 
 	/**
 	 * TODO
 	 * <p>
-	 * @param element   The given Element
-	 * @param converter The given Converter
-	 * @return the corresponding ByteTree
+	 * @return
 	 */
-	public ByteTree getByteTreeFrom(Element element, BigIntegerConverter converter);
+	public Iterator<? extends Element<V>> getIterator();
+
+	public Iterator<? extends Element<V>> getIterator(int n);
 
 }

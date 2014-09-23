@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import java.math.BigInteger;
 
 /**
@@ -79,6 +78,8 @@ public interface SemiGroup<V extends Object>
 	 */
 	public Element<V> apply(Element... elements);
 
+	public Element<V> apply(Iterable<Element> elements);
+
 	/**
 	 * Applies the binary group operation repeatedly to {@code amount} many instances of a given semigroup element. If
 	 * {@code amount} equals 0, then the identity element is returned. If {@code amount} is negative, then the
@@ -102,7 +103,7 @@ public interface SemiGroup<V extends Object>
 	 * @return The result of applying the group operation multiple times to the input element
 	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
 	 */
-	public Element<V> selfApply(Element element, Element<Numerical> amount);
+	public Element<V> selfApply(Element element, Element<BigInteger> amount);
 
 	/**
 	 * Same as {@link #Group.selfApply(Element, BigInteger)}, except that the amount is given as an {@code int} value.

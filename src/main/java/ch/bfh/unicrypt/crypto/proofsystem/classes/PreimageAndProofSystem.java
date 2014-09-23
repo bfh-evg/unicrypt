@@ -58,10 +58,10 @@ public class PreimageAndProofSystem
 	}
 
 	public static PreimageAndProofSystem getInstance(final ProductFunction proofFunction) {
-		return PreimageAndProofSystem.getInstance(proofFunction, (Element) null);
+		return PreimageAndProofSystem.getInstance((Element) null, proofFunction);
 	}
 
-	public static PreimageAndProofSystem getInstance(final ProductFunction proofFunction, final Element proverId) {
+	public static PreimageAndProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
 		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return PreimageAndProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
@@ -83,10 +83,6 @@ public class PreimageAndProofSystem
 			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
 		}
 		return new PreimageAndProofSystem(challengeGenerator, proofFunction);
-	}
-
-	public Function[] getProofFunctions() {
-		return this.getPreimageProofFunction().getAll();
 	}
 
 }

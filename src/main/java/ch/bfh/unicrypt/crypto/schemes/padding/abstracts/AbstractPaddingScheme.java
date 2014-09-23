@@ -53,18 +53,26 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 /**
  *
  * @author rolfhaenni
- * @param <S>
- * @param <E>
+ * @param <MS> Message space
+ * @param <ME> Message element
+ * @param <PS> Padding space
+ * @param <PE> Padding element
  */
-public abstract class AbstractPaddingScheme<S extends ConcatenativeSemiGroup, E extends ConcatenativeElement>
-	   extends AbstractScheme<S>
+public abstract class AbstractPaddingScheme<MS extends ConcatenativeSemiGroup, ME extends ConcatenativeElement, PS extends ConcatenativeSemiGroup, PE extends ConcatenativeElement>
+	   extends AbstractScheme<MS>
 	   implements PaddingScheme {
 
+	protected final PS paddingSpace;
 	private Function paddingFunction;
 
+	public AbstractPaddingScheme(MS messageSpace, PS paddingSpace) {
+		super(messageSpace);
+		this.paddingSpace = paddingSpace;
+	}
+
 	@Override
-	public int getBlockLength() {
-		return this.getPaddingSpace().getBlockLength();
+	public PS getPaddingSpace() {
+		return this.paddingSpace;
 	}
 
 	@Override
@@ -76,28 +84,18 @@ public abstract class AbstractPaddingScheme<S extends ConcatenativeSemiGroup, E 
 	}
 
 	@Override
-	public S getPaddingSpace() {
-		return (S) this.getPaddingFunction().getCoDomain();
-	}
-
-	@Override
-	public E pad(final Element element) {
+	public PE pad(final Element element) {
 		return this.pad(element, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override
-	public E pad(final Element element, RandomByteSequence randomByteSequence) {
-		return (E) this.getPaddingFunction().apply(element, randomByteSequence);
+	public PE pad(final Element element, RandomByteSequence randomByteSequence) {
+		return (PE) this.getPaddingFunction().apply(element, randomByteSequence);
 	}
 
 	@Override
 	protected String defaultToStringValue() {
-		return "" + this.getBlockLength();
-	}
-
-	@Override
-	protected final S abstractGetMessageSpace() {
-		return (S) this.getPaddingFunction().getDomain();
+		return "" + this.messageSpace.getBlockLength();
 	}
 
 	protected abstract Function abstractGetPaddingFunction();

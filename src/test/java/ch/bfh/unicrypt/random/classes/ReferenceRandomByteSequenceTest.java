@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -108,7 +108,7 @@ public class ReferenceRandomByteSequenceTest {
 		ByteArray result = instance.getNextByteArray(100000);
 		long resTime = System.currentTimeMillis() - time;
 		Assert.assertEquals(expResult, result);
-		// System.out.println("Timing: " + (expTime - resTime));
+//		System.out.println("Timing: " + (expTime - resTime));
 		Assert.assertTrue(expTime > resTime);
 	}
 

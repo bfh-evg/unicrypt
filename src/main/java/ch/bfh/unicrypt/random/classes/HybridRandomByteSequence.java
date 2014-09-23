@@ -41,10 +41,13 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.distributionsampler.classes.DistributionSamplerCollector;
 import ch.bfh.unicrypt.random.interfaces.TrueRandomByteSequence;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  * This class allows the generation of ephemeral keys. Hence it provides (backward-)security and forward-security to the
@@ -84,7 +87,6 @@ public class HybridRandomByteSequence
 		};
 		seeder.setDaemon(true);
 		seeder.start();
-
 	}
 
 	@Override

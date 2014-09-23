@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
-import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -65,7 +65,7 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class ZStarMod
-	   extends AbstractMultiplicativeGroup<ZStarModElement, ResidueClass> {
+	   extends AbstractMultiplicativeGroup<ZStarModElement, BigInteger> {
 
 	private final BigInteger modulus;
 	private final Factorization modulusFactorization;
@@ -95,7 +95,7 @@ public class ZStarMod
 	 * @param modulusFactorization The given factorization
 	 */
 	protected ZStarMod(final BigInteger modulus, final Factorization modulusFactorization) {
-		super(ResidueClass.class);
+		super(BigInteger.class);
 		this.modulus = modulus;
 		this.modulusFactorization = modulusFactorization;
 	}
@@ -120,19 +120,11 @@ public class ZStarMod
 	}
 
 	public final boolean contains(int integerValue) {
-		return this.contains(ResidueClass.getInstance(BigInteger.valueOf(integerValue), this.modulus));
-	}
-
-	public final boolean contains(BigInteger integerValue) {
-		return this.contains(ResidueClass.getInstance(integerValue, this.modulus));
+		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
 	public final ZStarModElement getElement(int integerValue) {
-		return this.getElement(ResidueClass.getInstance(BigInteger.valueOf(integerValue), this.modulus));
-	}
-
-	public final ZStarModElement getElement(BigInteger integerValue) {
-		return this.getElement(ResidueClass.getInstance(integerValue, this.modulus));
+		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
 	//
@@ -145,7 +137,7 @@ public class ZStarMod
 		if (this.hasKnownOrder()) {
 			newAmount = amount.mod(this.getOrder());
 		}
-		return this.abstractGetElement(element.getValue().power(NaturalNumber.getInstance(newAmount)));
+		return this.abstractGetElement(element.getValue().modPow(newAmount, this.modulus));
 	}
 
 	@Override
@@ -163,26 +155,20 @@ public class ZStarMod
 	// various super-classes
 	//
 	@Override
-	protected boolean abstractContains(final ResidueClass value) {
-		return this.modulus.equals(value.getModulus()) && value.isRelativelyPrime();
+	protected boolean abstractContains(final BigInteger value) {
+		return value.signum() > 0
+			   && value.compareTo(this.modulus) < 0
+			   && MathUtil.areRelativelyPrime(value, this.modulus);
 	}
 
 	@Override
-	protected ZStarModElement abstractGetElement(ResidueClass value) {
+	protected ZStarModElement abstractGetElement(BigInteger value) {
 		return new ZStarModElement(this, value);
 	}
 
 	@Override
-	protected ZStarModElement abstractGetElementFrom(BigInteger value) {
-		if (value.signum() == 0 || value.compareTo(this.getModulus()) >= 0 || !MathUtil.areRelativelyPrime(value, this.getModulus())) {
-			return null; // no such element
-		}
-		return this.abstractGetElement(ResidueClass.getInstance(value, this.modulus));
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ZStarModElement element) {
-		return element.getValue().getBigInteger();
+	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance();
 	}
 
 	@Override
@@ -191,7 +177,7 @@ public class ZStarMod
 		do {
 			randomValue = randomByteSequence.getRandomNumberGenerator().nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
 		} while (!this.contains(randomValue));
-		return this.abstractGetElement(ResidueClass.getInstance(randomValue, this.modulus));
+		return this.abstractGetElement(randomValue);
 	}
 
 	@Override
@@ -204,17 +190,17 @@ public class ZStarMod
 
 	@Override
 	protected ZStarModElement abstractGetIdentityElement() {
-		return this.abstractGetElement(ResidueClass.getInstance(BigInteger.ONE, this.modulus));
+		return this.abstractGetElement(BigInteger.ONE);
 	}
 
 	@Override
 	protected ZStarModElement abstractApply(final ZStarModElement element1, final ZStarModElement element2) {
-		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()));
+		return this.abstractGetElement(element1.getValue().multiply(element2.getValue()).mod(this.modulus));
 	}
 
 	@Override
 	public ZStarModElement abstractInvert(final ZStarModElement element) {
-		return this.abstractGetElement(element.getValue().invert());
+		return this.abstractGetElement(element.getValue().modInverse(this.modulus));
 	}
 
 	@Override

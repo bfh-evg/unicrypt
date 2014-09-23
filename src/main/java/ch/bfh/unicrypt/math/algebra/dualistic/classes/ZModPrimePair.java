@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrimePair;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,25 +77,25 @@ public class ZModPrimePair
 	}
 
 	@Override
-	protected ZModPrimePair defaultGetZModOrder() {
+	public ZModPrimePair getZModOrder() {
 		return ZModPrimePair.getInstance(this.getPrimePair());
 	}
 
 	@Override
-	protected ZStarMod defaultGetZStarModOrder() {
-		return ZStarMod.getInstance(this.getPrimePair());
+	public ZStarModPrimePair getZStarModOrder() {
+		return ZStarModPrimePair.getInstance(this.getPrimePair());
 	}
 
 	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<BigInteger, ZModPrimePair>();
 
-	public static ZModPrimePair getInstance(final PrimePair twoPrimes) {
-		if (twoPrimes == null) {
+	public static ZModPrimePair getInstance(final PrimePair primePair) {
+		if (primePair == null) {
 			throw new IllegalArgumentException();
 		}
-		ZModPrimePair instance = ZModPrimePair.instances.get(twoPrimes.getValue());
+		ZModPrimePair instance = ZModPrimePair.instances.get(primePair.getValue());
 		if (instance == null) {
-			instance = new ZModPrimePair(twoPrimes);
-			ZModPrimePair.instances.put(twoPrimes.getValue(), instance);
+			instance = new ZModPrimePair(primePair);
+			ZModPrimePair.instances.put(primePair.getValue(), instance);
 		}
 		return instance;
 	}

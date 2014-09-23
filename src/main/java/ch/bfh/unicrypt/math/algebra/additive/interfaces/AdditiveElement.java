@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
@@ -73,7 +72,7 @@ public interface AdditiveElement<V>
 	/**
 	 * @see Group#selfApply(Element, Element)
 	 */
-	public AdditiveElement<V> times(Element<Numerical> amount);
+	public AdditiveElement<V> times(Element<BigInteger> amount);
 
 	/**
 	 * @see Group#selfApply(Element, int)
@@ -106,7 +105,7 @@ public interface AdditiveElement<V>
 	public AdditiveElement<V> selfApply(BigInteger amount);
 
 	@Override
-	public AdditiveElement<V> selfApply(Element<Numerical> amount);
+	public AdditiveElement<V> selfApply(Element<BigInteger> amount);
 
 	@Override
 	public AdditiveElement<V> selfApply(int amount);

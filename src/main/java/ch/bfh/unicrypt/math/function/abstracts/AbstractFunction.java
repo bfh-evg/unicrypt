@@ -97,7 +97,7 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 		if (this.getDomain().contains(element)) {
 			return this.abstractApply((DE) element, randomByteSequence);
 		}
-		// This is for increased convenience for a function with a CompoundSet domain of arity 1.
+		// This is for increased convenience for a function with a ProductSet domain of arity 1.
 		return this.apply(new Element[]{element}, randomByteSequence);
 	}
 

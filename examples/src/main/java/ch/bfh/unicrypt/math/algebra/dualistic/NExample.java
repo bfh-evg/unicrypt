@@ -53,14 +53,14 @@ public class NExample {
 
 	public static void example1() {
 
-		N naturalNumbers = N.getInstance();
-		Element n0 = naturalNumbers.getZeroElement();
-		Element n1 = naturalNumbers.getElement(5);
-		Element n2 = naturalNumbers.getElement(10);
+		N nSet = N.getInstance();
+		Element n0 = nSet.getZeroElement();
+		Element n1 = nSet.getElement(5);
+		Element n2 = nSet.getElement(10);
 
-		Element sum = naturalNumbers.add(n0, n1, n2);
+		Element sum = nSet.add(n0, n1, n2);
 
-		Example.printLines(naturalNumbers, n0, n1, n2, sum);
+		Example.printLines(nSet, n0, n1, n2, sum);
 	}
 
 	public static void main(final String[] args) {

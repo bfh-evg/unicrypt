@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
@@ -51,13 +50,10 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  *
@@ -71,24 +67,18 @@ public class MathExample {
 
 		// Option 1: Non-Generic Type (casting required)
 		Element e1 = zMod.getElement(5);
-		ResidueClass v1 = (ResidueClass) e1.getValue();
-		BigInteger b1 = v1.getBigInteger();
-		BigInteger m1 = v1.getModulus();
-		Example.printLine(e1, v1, b1, m1);
+		BigInteger v1 = (BigInteger) e1.getValue();
+		Example.printLine(e1, v1);
 
 		// Option 2: Generic Type
-		Element<ResidueClass> e2 = zMod.getElement(7);
-		ResidueClass v2 = e2.getValue();
-		BigInteger b2 = v2.getBigInteger();
-		BigInteger m2 = v2.getModulus();
-		Example.printLine(e2, v2, b2, m2);
+		Element<BigInteger> e2 = zMod.getElement(7);
+		BigInteger v2 = e2.getValue();
+		Example.printLine(e2, v2);
 
 		// Option 3: Specific Type
 		ZModElement e3 = zMod.getElement(9);
-		ResidueClass v3 = e3.getValue();
-		BigInteger b3 = v3.getBigInteger();
-		BigInteger m3 = v3.getModulus();
-		Example.printLine(e3, v3, b3, m3);
+		BigInteger v3 = e3.getValue();
+		Example.printLine(e3, v3);
 	}
 
 	public static void example2() {
@@ -120,7 +110,7 @@ public class MathExample {
 		Example.printLine(e1);
 
 		// Option 2: Generic Type
-		Element<ResidueClass> e2 = zMod.getElementFrom(7);
+		Element<BigInteger> e2 = zMod.getElementFrom(7);
 		Example.printLine(e2);
 
 		// Option 3: Specific Type (casting required)
@@ -130,14 +120,14 @@ public class MathExample {
 
 	public static void example4() {
 		// Generate Z_23 (generic type)
-		Set<ResidueClass> zMod = ZMod.getInstance(23);
+		Set<BigInteger> zMod = ZMod.getInstance(23);
 
 		// Option 1: Non-Generic Type
 		Element e1 = zMod.getElementFrom(5);
 		Example.printLine(e1);
 
 		// Option 2: Generic Type
-		Element<ResidueClass> e2 = zMod.getElementFrom(7);
+		Element<BigInteger> e2 = zMod.getElementFrom(7);
 		Example.printLine(e2);
 
 		// Option 3: Specific Type (casting required)
@@ -169,35 +159,9 @@ public class MathExample {
 		bigs = arrayBigInteger.toArray(bigs);
 
 		PolynomialElement<ZModTwo> irreduciblePolynom = ring.getElement(bigs);
-		PolynomialElement<ZModTwo> p1=irreduciblePolynom;
+		PolynomialElement<ZModTwo> p1 = irreduciblePolynom;
 		Example.printLine(irreduciblePolynom);
 		Example.printLine(irreduciblePolynom.isIrreducible());
-		
-		
-		
-		//Error for simple polynomial addition?!
-		//Addition works correctly for i=569 but not for i=569!
-		int i=567;
-		//i=569;
-		DualisticElement<ResidueClass> c=ZModTwo.ONE;
-		HashMap map = new HashMap(1);
-		map.put(i, c);
-		PolynomialElement<ZModTwo> t = ring.getElement(map);
-		
-		Example.printLine("t: "+t);
-		Example.printLine("One element: "+ring.getOneElement());
-		PolynomialElement<ZModTwo> q=t.add(ring.getOneElement());
-		Example.printLine("q: "+q);
-		
-		//Example longDivision complete
-		//x^2
-		//PolynomialElement<ZModTwo> p2=ring.getElement(BigInteger.ZERO,BigInteger.ZERO,BigInteger.ONE);
-				
-		//x^4
-		PolynomialElement<ZModTwo> p2=ring.getElement(BigInteger.ZERO,BigInteger.ZERO,BigInteger.ZERO,BigInteger.ZERO,BigInteger.ONE);		
-		Example.printLine(p1);
-		Example.printLine(p2);
-		Example.printLine(ring.longDivision(p1, p2));
 
 	}
 

@@ -67,12 +67,12 @@ public class ZModToGStarModSafePrimeEncoder
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new EncodingFunction((ZModPrime) this.getGStarModSafePrime().getZModOrder(), this.getGStarModSafePrime());
+		return new EncodingFunction(this.getGStarModSafePrime().getZModOrder(), this.getGStarModSafePrime());
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new DecodingFunction(this.getGStarModSafePrime(), (ZModPrime) this.getGStarModSafePrime().getZModOrder());
+		return new DecodingFunction(this.getGStarModSafePrime(), this.getGStarModSafePrime().getZModOrder());
 	}
 
 	public static ZModToGStarModSafePrimeEncoder getInstance(GStarModSafePrime gStarModSafePrime) {
@@ -91,7 +91,7 @@ public class ZModToGStarModSafePrimeEncoder
 
 		@Override
 		protected GStarModElement abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
-			final BigInteger value = element.getValue().getBigInteger().add(BigInteger.ONE);
+			final BigInteger value = element.getValue().add(BigInteger.ONE);
 			final GStarModSafePrime coDomain = this.getCoDomain();
 			if (coDomain.contains(value)) {
 				return coDomain.getElement(value);
@@ -110,7 +110,7 @@ public class ZModToGStarModSafePrimeEncoder
 
 		@Override
 		protected ZModElement abstractApply(final GStarModElement element, final RandomByteSequence randomByteSequence) {
-			final BigInteger value = element.getValue().getBigInteger();
+			final BigInteger value = element.getValue();
 			final GStarModSafePrime domain = this.getDomain();
 			if (value.compareTo(domain.getOrder()) <= 0) {
 				return this.getCoDomain().getElement(value.subtract(BigInteger.ONE));

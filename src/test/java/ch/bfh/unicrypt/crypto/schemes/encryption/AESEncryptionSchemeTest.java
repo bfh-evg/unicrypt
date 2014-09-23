@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption;
 
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.AESEncryptionScheme;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -61,7 +61,6 @@ public class AESEncryptionSchemeTest {
 		Element key = aes.getSecretKeyGenerator().generateSecretKey();
 		Element encryptedMessage = aes.encrypt(key, message);
 		Element decryptedMessage = aes.decrypt(key, encryptedMessage);
-
 		Assert.assertEquals(message, decryptedMessage);
 	}
 

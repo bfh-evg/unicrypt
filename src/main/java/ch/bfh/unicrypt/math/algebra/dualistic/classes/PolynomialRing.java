@@ -76,7 +76,7 @@ public class PolynomialRing<V>
 	//
 	@Override
 	public PolynomialElement<V> invert(Element element) {
-		if (this.isBinray()) {
+		if (this.isBinary()) {
 			return (PolynomialElement<V>) element;
 		}
 

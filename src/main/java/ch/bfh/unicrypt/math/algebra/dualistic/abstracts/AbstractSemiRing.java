@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
+import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -78,6 +78,14 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
+		return this.defaultMultiply(IterableArray.getInstance(elements));
+	}
+
+	@Override
+	public E multiply(Iterable<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
 		return this.defaultMultiply(elements);
 	}
 
@@ -90,11 +98,11 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 	}
 
 	@Override
-	public E power(Element element, Element<Numerical> amount) {
+	public E power(Element element, Element<BigInteger> amount) {
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.power(element, amount.getValue().getBigInteger());
+		return this.power(element, amount.getValue());
 	}
 
 	@Override
@@ -132,8 +140,8 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 // The following protected methods are default implementations for sets.
 // They may need to be changed in certain sub-classes.
 //
-	protected E defaultMultiply(final Element... elements) {
-		if (elements.length == 0) {
+	protected E defaultMultiply(final Iterable<Element> elements) {
+		if (!elements.iterator().hasNext()) {
 			return this.getOneElement();
 		}
 		E result = null;

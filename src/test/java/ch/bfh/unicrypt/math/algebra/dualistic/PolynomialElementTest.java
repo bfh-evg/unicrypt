@@ -42,9 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
 import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
-import ch.bfh.unicrypt.helper.numerical.WholeNumber;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
@@ -65,12 +63,12 @@ public class PolynomialElementTest {
 	private static final Z z = Z.getInstance();
 	private static final ZModPrime zmod2 = ZModPrime.getInstance(2);
 
-	private static final PolynomialSemiRing<WholeNumber> ring0 = PolynomialSemiRing.getInstance(z);
-	private static final PolynomialSemiRing<ResidueClass> ring2 = PolynomialSemiRing.getInstance(zmod2);
+	private static final PolynomialSemiRing<BigInteger> ring0 = PolynomialSemiRing.getInstance(z);
+	private static final PolynomialSemiRing<BigInteger> ring2 = PolynomialSemiRing.getInstance(zmod2);
 
 	@Test
 	public void testEvaluate() {
-		PolynomialElement<WholeNumber> p = ring0.getElement(Tuple.getInstance(z.getElement(-1), z.getElement(2), z.getElement(-6), z.getElement(2)));
+		PolynomialElement<BigInteger> p = ring0.getElement(Tuple.getInstance(z.getElement(-1), z.getElement(2), z.getElement(-6), z.getElement(2)));
 		assertEquals(z.getElement(5), p.evaluate(z.getElement(3)));
 
 		p = ring0.getElement(Tuple.getInstance(z.getElement(0)));
@@ -86,9 +84,9 @@ public class PolynomialElementTest {
 		map.put(0, z.getElement(1));
 		map.put(1001, z.getElement(48));
 		p = ring0.getElement(Polynomial.getInstance(map, z.getZeroElement(), z.getOneElement()));
-		assertEquals(BigInteger.valueOf(3).pow(1001).multiply(BigInteger.valueOf(48)).add(BigInteger.ONE), p.evaluate(z.getElement(3)).getValue().getBigInteger());
+		assertEquals(BigInteger.valueOf(3).pow(1001).multiply(BigInteger.valueOf(48)).add(BigInteger.ONE), p.evaluate(z.getElement(3)).getValue());
 
-		PolynomialElement<ResidueClass> p2 = ring2.getElement(Tuple.getInstance(zmod2.getElement(0), zmod2.getElement(1), zmod2.getElement(1), zmod2.getElement(1)));
+		PolynomialElement<BigInteger> p2 = ring2.getElement(Tuple.getInstance(zmod2.getElement(0), zmod2.getElement(1), zmod2.getElement(1), zmod2.getElement(1)));
 		assertEquals(zmod2.getZeroElement(), p2.evaluate(zmod2.getElement(0)));
 		assertEquals(zmod2.getOneElement(), p2.evaluate(zmod2.getElement(1)));
 

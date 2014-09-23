@@ -42,13 +42,15 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.SecretKeyGenerator;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.SingletonGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Element>
 	   extends AbstractKeyGenerator
@@ -57,7 +59,8 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 	private final KS secretKeySpace;
 	private Function secretKeyGenerationFunction; // with singleton domain
 
-	protected AbstractSecretKeyGenerator(final KS secretKeySpace) {
+	protected AbstractSecretKeyGenerator(final KS secretKeySpace, StringToByteArray converter) {
+		super(converter);
 		this.secretKeySpace = secretKeySpace;
 	}
 
@@ -74,6 +77,20 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 	@Override
 	public KE generateSecretKey(RandomByteSequence randomByteSequence) {
 		return (KE) this.getSecretKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
+	}
+
+	@Override
+	public KE generateSecretKey(String password) {
+		return this.generateSecretKey(password, ByteArray.getInstance());
+	}
+
+	@Override
+	public KE generateSecretKey(String password, ByteArray salt) {
+		if (password == null || salt == null) {
+			throw new IllegalArgumentException();
+		}
+		ByteArray seed = converter.convert(password).append(salt);
+		return this.generateSecretKey(HybridRandomByteSequence.getInstance(seed));
 	}
 
 	@Override

@@ -52,9 +52,21 @@ import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
+/**
+ *
+ * @author rolfhaenni
+ * @param <MS> Message space
+ * @param <ME> Message element
+ * @param <CS> Commitment space
+ * @param <CE> Commitment element
+ */
 public abstract class AbstractDeterministicCommitmentScheme<MS extends Set, ME extends Element, CS extends Set, CE extends Element>
 	   extends AbstractCommitmentScheme<MS, CS>
 	   implements DeterministicCommitmentScheme {
+
+	public AbstractDeterministicCommitmentScheme(MS messageSpace, CS commitmentSpace) {
+		super(messageSpace, commitmentSpace);
+	}
 
 	@Override
 	public final CE commit(final Element message) {
@@ -67,13 +79,8 @@ public abstract class AbstractDeterministicCommitmentScheme<MS extends Set, ME e
 	}
 
 	@Override
-	protected final MS abstractGetMessageSpace() {
-		return (MS) this.getCommitmentFunction().getDomain();
-	}
-
-	@Override
 	protected Function abstractGetDecommitmentFunction() {
-		ProductSet decommitmentDomain = ProductSet.getInstance(this.getMessageSpace(), this.getCommitmentSpace());
+		ProductSet decommitmentDomain = ProductSet.getInstance(this.messageSpace, this.commitmentSpace);
 		return CompositeFunction.getInstance(
 			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(decommitmentDomain, 0),
 																			  this.getCommitmentFunction()),

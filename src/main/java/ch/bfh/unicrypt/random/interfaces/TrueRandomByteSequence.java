@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.random.interfaces;
 
 import ch.bfh.unicrypt.random.distributionsampler.classes.DistributionSamplerCollector;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *

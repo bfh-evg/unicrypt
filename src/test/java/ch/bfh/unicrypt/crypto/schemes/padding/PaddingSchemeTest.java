@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.crypto.schemes.padding.classes.IECPaddingScheme;
 import ch.bfh.unicrypt.crypto.schemes.padding.classes.ISOPaddingScheme;
 import ch.bfh.unicrypt.crypto.schemes.padding.classes.PKCSPaddingScheme;
 import ch.bfh.unicrypt.crypto.schemes.padding.interfaces.ReversiblePaddingScheme;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

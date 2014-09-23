@@ -163,7 +163,7 @@ public class MixAndProofExample {
 		Subset plaintexts = Subset.getInstance(G_q, new Element[]{G_q.getElement(4), G_q.getElement(2), G_q.getElement(8), G_q.getElement(16)});
 		// - Create ElGamal encryption validity proof generator (a non-inteactive sigma challenge generator
 		//   is created implicitly
-		ElGamalEncryptionValidityProofSystem pg = ElGamalEncryptionValidityProofSystem.getInstance(elGamalES, publicKey, plaintexts, proverId);
+		ElGamalEncryptionValidityProofSystem pg = ElGamalEncryptionValidityProofSystem.getInstance(proverId, elGamalES, publicKey, plaintexts);
 
 		// Public input
 		Pair publicInput = Pair.getInstance(G_q.getElement(8), G_q.getElement(128));

@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
@@ -61,7 +60,7 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
 	   extends AbstractSemiGroup<E, V>
 	   implements ConcatenativeSemiGroup<V> {
 
-	private final int blockLength;
+	protected final int blockLength;
 
 	public AbstractConcatenativeSemiGroup(Class<? extends Object> valueClass, int blockLength) {
 		super(valueClass);
@@ -99,12 +98,17 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
 	}
 
 	@Override
+	public final E concatenate(final Iterable<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
 	public final E selfConcatenate(final Element element, final BigInteger amount) {
 		return this.selfApply(element, amount);
 	}
 
 	@Override
-	public final E selfConcatenate(final Element element, final Element<Numerical> amount) {
+	public final E selfConcatenate(final Element element, final Element<BigInteger> amount) {
 		return this.selfApply(element, amount);
 	}
 

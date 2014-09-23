@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.ByteArrayKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
@@ -58,19 +58,17 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author rolfhaenni
  */
 public class OneTimePadEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, FixedByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArraySet, FiniteByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
 
 	private final FiniteByteArraySet finiteByteArraySet;
-	private final FixedByteArraySet fixedByteArraySet;
-
-	protected OneTimePadEncryptionScheme(int maxLength) {
-		this.finiteByteArraySet = FiniteByteArraySet.getInstance(maxLength);
-		this.fixedByteArraySet = FixedByteArraySet.getInstance(maxLength);
-	}
 
 	protected OneTimePadEncryptionScheme(FiniteByteArraySet finiteByteArraySet) {
+		super(finiteByteArraySet, finiteByteArraySet);
 		this.finiteByteArraySet = finiteByteArraySet;
-		this.fixedByteArraySet = FixedByteArraySet.getInstance(finiteByteArraySet.getMaxLength());
+	}
+
+	public FiniteByteArraySet getFiniteByteArraySet() {
+		return this.finiteByteArraySet;
 	}
 
 	@Override
@@ -84,15 +82,15 @@ public class OneTimePadEncryptionScheme
 	}
 
 	@Override
-	protected FixedByteArrayKeyGenerator abstractGetKeyGenerator() {
-		return FixedByteArrayKeyGenerator.getInstance(this.fixedByteArraySet);
+	protected ByteArrayKeyGenerator abstractGetKeyGenerator() {
+		return ByteArrayKeyGenerator.getInstance(this.finiteByteArraySet.getMaxLength());
 	}
 
 	public static OneTimePadEncryptionScheme getInstance(int maxLength) {
 		if (maxLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new OneTimePadEncryptionScheme(maxLength);
+		return OneTimePadEncryptionScheme.getInstance(FiniteByteArraySet.getInstance(maxLength));
 	}
 
 	public static OneTimePadEncryptionScheme getInstance(FiniteByteArraySet finiteByteArraySet) {
@@ -106,7 +104,7 @@ public class OneTimePadEncryptionScheme
 		   extends AbstractFunction<OneTimePadFunction, ProductSet, Pair, FiniteByteArraySet, FiniteByteArrayElement> {
 
 		protected OneTimePadFunction() {
-			super(ProductSet.getInstance(fixedByteArraySet, finiteByteArraySet), finiteByteArraySet);
+			super(ProductSet.getInstance(getEncryptionKeySpace(), messageSpace), encryptionSpace);
 		}
 
 		@Override

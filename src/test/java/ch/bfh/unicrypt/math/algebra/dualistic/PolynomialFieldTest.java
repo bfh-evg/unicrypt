@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
 import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
@@ -68,18 +67,18 @@ public class PolynomialFieldTest {
 	private static final ZModPrime zmod5 = ZModPrime.getInstance(5);
 	private static final ZModPrime zmod7 = ZModPrime.getInstance(7);
 
-	private static final PolynomialRing<ResidueClass> ring2 = PolynomialRing.getInstance(zmod2);
-	private static final PolynomialElement<ResidueClass> irrPoly = ring2.getElement(one, one, zero, zero, one);
-	private static final PolynomialField<ResidueClass> field2_4 = PolynomialField.getInstance(zmod2, irrPoly);
+	private static final PolynomialRing<BigInteger> ring2 = PolynomialRing.getInstance(zmod2);
+	private static final PolynomialElement<BigInteger> irrPoly = ring2.getElement(one, one, zero, zero, one);
+	private static final PolynomialField<BigInteger> field2_4 = PolynomialField.getInstance(zmod2, irrPoly);
 
-	private static final PolynomialField<ResidueClass> field5_3 = PolynomialField.<ResidueClass>getInstance(zmod5, 3);
-	private static final PolynomialField<ResidueClass> field7_4 = PolynomialField.<ResidueClass>getInstance(zmod7, 4);
-	private static final PolynomialField<ResidueClass> field3_10 = PolynomialField.<ResidueClass>getInstance(zmod3, 10);
+	private static final PolynomialField<BigInteger> field5_3 = PolynomialField.<BigInteger>getInstance(zmod5, 3);
+	private static final PolynomialField<BigInteger> field7_4 = PolynomialField.<BigInteger>getInstance(zmod7, 4);
+	private static final PolynomialField<BigInteger> field3_10 = PolynomialField.<BigInteger>getInstance(zmod3, 10);
 
 	@Test
 	public void testGetElement() {
 		// 1 + x^2 + x^5 + x^6 => 1 + x + x^2 + x^3
-		PolynomialElement<ResidueClass> p = field2_4.getElement(one, zero, one, zero, zero, one, one);
+		PolynomialElement<BigInteger> p = field2_4.getElement(one, zero, one, zero, zero, one, one);
 
 		assertEquals(zmod2.getOneElement(), p.getValue().getCoefficient(0));
 		assertEquals(zmod2.getOneElement(), p.getValue().getCoefficient(1));
@@ -92,21 +91,21 @@ public class PolynomialFieldTest {
 		assertTrue(4 > p.getValue().getDegree());
 
 		HashMap map = new HashMap();
-		map.put(4, zmod3.getElement(14));
-		map.put(9, zmod3.getElement(13));
-		map.put(12, zmod3.getElement(19));
-		p = field3_10.getElement(Polynomial.<DualisticElement<ResidueClass>>getInstance(map, zmod3.getZeroElement(), zmod3.getOneElement()));
+		map.put(4, zmod3.getElement(14 % 3));
+		map.put(9, zmod3.getElement(13 % 3));
+		map.put(12, zmod3.getElement(19 % 3));
+		p = field3_10.getElement(Polynomial.<DualisticElement<BigInteger>>getInstance(map, zmod3.getZeroElement(), zmod3.getOneElement()));
 		assertTrue(10 > p.getValue().getDegree());
 	}
 
 	@Test
 	public void testMultiply() {
 		// p1 = 1 + x^2 + x^3
-		PolynomialElement<ResidueClass> p1 = field2_4.getElement(one, zero, one, one);
+		PolynomialElement<BigInteger> p1 = field2_4.getElement(one, zero, one, one);
 		// p2 = 1 + x^3
-		PolynomialElement<ResidueClass> p2 = field2_4.getElement(one, zero, zero, one);
+		PolynomialElement<BigInteger> p2 = field2_4.getElement(one, zero, zero, one);
 		// p1 * p2 = 1 + x^2 + x^5 + x^6 => 1 + x + x^2 + x^3
-		PolynomialElement<ResidueClass> p3 = p1.multiply(p2);
+		PolynomialElement<BigInteger> p3 = p1.multiply(p2);
 		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(0));
 		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(1));
 		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(2));
@@ -126,8 +125,8 @@ public class PolynomialFieldTest {
 	@Test
 	public void testOneOver() {
 		// p1 = 1 + x + x^3
-		PolynomialElement<ResidueClass> p1 = field2_4.getElement(one, one, zero, one);
-		PolynomialElement<ResidueClass> p2 = p1.oneOver();
+		PolynomialElement<BigInteger> p1 = field2_4.getElement(one, one, zero, one);
+		PolynomialElement<BigInteger> p2 = p1.oneOver();
 
 		assertEquals(zmod2.getOneElement(), p2.getValue().getCoefficient(0));
 		assertEquals(zmod2.getZeroElement(), p2.getValue().getCoefficient(1));
@@ -135,7 +134,7 @@ public class PolynomialFieldTest {
 		assertEquals(zmod2.getZeroElement(), p2.getValue().getCoefficient(3));
 		assertTrue(p2.getSet().isField());
 
-		PolynomialElement<ResidueClass> p3 = p1.multiply(p2);
+		PolynomialElement<BigInteger> p3 = p1.multiply(p2);
 		assertTrue(p3.isEquivalent(field2_4.getOneElement()));
 
 		p1 = field5_3.getElement(one, zero, BigInteger.valueOf(2));
@@ -152,11 +151,11 @@ public class PolynomialFieldTest {
 	@Test
 	public void testDivide() {
 		// p1 = 1 + x^2 + x^3
-		PolynomialElement<ResidueClass> p1 = field2_4.getElement(one, zero, one, one);
+		PolynomialElement<BigInteger> p1 = field2_4.getElement(one, zero, one, one);
 		// p2 = 1 + x + x^2 + x^3
-		PolynomialElement<ResidueClass> p2 = field2_4.getElement(one, one, one, one);
+		PolynomialElement<BigInteger> p2 = field2_4.getElement(one, one, one, one);
 		// p2 / p1 = 1 + x^3
-		PolynomialElement<ResidueClass> p3 = p2.divide(p1);
+		PolynomialElement<BigInteger> p3 = p2.divide(p1);
 		assertEquals(field2_4.getElement(one, zero, zero, one), p3);
 		assertTrue(p3.getSet().isField());
 	}

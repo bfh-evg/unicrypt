@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -72,6 +72,11 @@ public class ProductCyclicGroup
 	}
 
 	@Override
+	public CyclicGroup getLast() {
+		return (CyclicGroup) super.getLast();
+	}
+
+	@Override
 	public CyclicGroup getAt(int index) {
 		return (CyclicGroup) super.getAt(index);
 	}
@@ -82,17 +87,62 @@ public class ProductCyclicGroup
 	}
 
 	@Override
-	public CyclicGroup[] getAll() {
-		return (CyclicGroup[]) super.getAll();
-	}
-
-	@Override
 	public ProductCyclicGroup removeAt(final int index) {
 		return (ProductCyclicGroup) super.removeAt(index);
 	}
 
 	@Override
-	protected Iterator<Tuple> defaultIterator() {
+	public ProductCyclicGroup extract(int offset, int length) {
+		return (ProductCyclicGroup) super.extract(offset, length);
+	}
+
+	@Override
+	public ProductCyclicGroup extractPrefix(int length) {
+		return (ProductCyclicGroup) super.extractPrefix(length);
+	}
+
+	@Override
+	public ProductCyclicGroup extractSuffix(int length) {
+		return (ProductCyclicGroup) super.extractSuffix(length);
+	}
+
+	@Override
+	public ProductCyclicGroup extractRange(int fromIndex, int toIndex) {
+		return (ProductCyclicGroup) super.extractRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductCyclicGroup remove(int offset, int length) {
+		return (ProductCyclicGroup) super.remove(offset, length);
+	}
+
+	@Override
+	public ProductCyclicGroup removePrefix(int length) {
+		return (ProductCyclicGroup) super.removePrefix(length);
+	}
+
+	@Override
+	public ProductCyclicGroup removeSuffix(int length) {
+		return (ProductCyclicGroup) super.removeSuffix(length);
+	}
+
+	@Override
+	public ProductCyclicGroup removeRange(int fromIndex, int toIndex) {
+		return (ProductCyclicGroup) super.removeRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductCyclicGroup reverse() {
+		return (ProductCyclicGroup) super.reverse();
+	}
+
+	@Override
+	public ProductCyclicGroup[] split(int... indices) {
+		return (ProductCyclicGroup[]) super.split(indices);
+	}
+
+	@Override
+	protected Iterator<Tuple> defaultGetIterator(final BigInteger maxCounter) {
 		final ProductCyclicGroup productCyclicGroup = this;
 		return new Iterator<Tuple>() {
 			BigInteger counter = BigInteger.ZERO;
@@ -100,15 +150,15 @@ public class ProductCyclicGroup
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(productCyclicGroup.getOrder()) < 0;
+				return this.counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override
 			public Tuple next() {
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
-					Tuple nextElement = currentTuple;
-					currentTuple = productCyclicGroup.apply(currentTuple, productCyclicGroup.getDefaultGenerator());
+					Tuple nextElement = this.currentTuple;
+					this.currentTuple = productCyclicGroup.apply(this.currentTuple, productCyclicGroup.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();
@@ -124,9 +174,8 @@ public class ProductCyclicGroup
 	@Override
 	public final Tuple getDefaultGenerator() {
 		if (this.defaultGenerator == null) {
-			int arity = this.getArity();
-			Element[] defaultGenerators = new Element[arity];
-			for (int i = 0; i < arity; i++) {
+			Element[] defaultGenerators = new Element[this.getArity()];
+			for (int i : this.getAllIndices()) {
 				defaultGenerators[i] = this.getAt(i).getDefaultGenerator();
 			}
 			this.defaultGenerator = this.abstractGetElement(ImmutableArray.getInstance(defaultGenerators));
@@ -141,9 +190,8 @@ public class ProductCyclicGroup
 
 	@Override
 	public final Tuple getRandomGenerator(RandomByteSequence randomByteSequence) {
-		int arity = this.getArity();
-		Element[] randomGenerators = new Element[arity];
-		for (int i = 0; i < arity; i++) {
+		Element[] randomGenerators = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
 			randomGenerators[i] = this.getAt(i).getRandomGenerator(randomByteSequence);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(randomGenerators));
@@ -199,7 +247,7 @@ public class ProductCyclicGroup
 			throw new IllegalArgumentException();
 		}
 		Tuple tuple = (Tuple) element;
-		for (int i = 0; i < this.getArity(); i++) {
+		for (int i : this.getAllIndices()) {
 			if (!this.getAt(i).isGenerator(tuple.getAt(i))) {
 				return false;
 			}
@@ -207,48 +255,4 @@ public class ProductCyclicGroup
 		return true;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-//	/**
-//	 * This is a static factory method to construct a composed cyclic group without calling respective constructors. The
-//	 * input groups are given as an array.
-//	 * <p/>
-//	 * @param cyclicGroups The array of cyclic groups
-//	 * @return The corresponding composed group
-//	 * @throws IllegalArgumentException if {@literal groups} is null or contains null
-//	 */
-//	public static ProductCyclicGroup getInstance(final CyclicGroup... cyclicGroups) {
-//		if (cyclicGroups == null) {
-//			throw new IllegalArgumentException();
-//		}
-//		if (ProductCyclicGroup.areRelativelyPrime(cyclicGroups)) {
-//			return new ProductCyclicGroup(cyclicGroups);
-//		}
-//		throw new IllegalArgumentException();
-//	}
-//
-//	public static ProductCyclicGroup getInstance(final CyclicGroup group, int arity) {
-//		if ((group == null) || (arity < 0) || (arity > 1)) {
-//			throw new IllegalArgumentException();
-//		}
-//		if (arity == 0) {
-//			return new ProductCyclicGroup(new CyclicGroup[]{});
-//		}
-//		return new ProductCyclicGroup(new CyclicGroup[]{group});
-//	}
-//
-//	//
-//	// STATIC HELPER METHODS
-//	//
-//	private static boolean areRelativelyPrime(CyclicGroup[] cyclicGroups) {
-//		BigInteger[] orders = new BigInteger[cyclicGroups.length];
-//		for (int i = 0; i < cyclicGroups.length; i++) {
-//			if (cyclicGroups[i] == null) {
-//				throw new IllegalArgumentException();
-//			}
-//			orders[i] = cyclicGroups[i].getOrder();
-//		}
-//		return MathUtil.areRelativelyPrime(orders);
-//	}
 }

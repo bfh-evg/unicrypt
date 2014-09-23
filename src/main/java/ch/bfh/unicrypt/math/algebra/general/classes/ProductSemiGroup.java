@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.numerical.Numerical;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -61,11 +61,6 @@ public class ProductSemiGroup
 	}
 
 	@Override
-	public SemiGroup getFirst() {
-		return (SemiGroup) super.getFirst();
-	}
-
-	@Override
 	public SemiGroup getAt(int index) {
 		return (SemiGroup) super.getAt(index);
 	}
@@ -76,8 +71,13 @@ public class ProductSemiGroup
 	}
 
 	@Override
-	public SemiGroup[] getAll() {
-		return (SemiGroup[]) super.getAll();
+	public SemiGroup getFirst() {
+		return (SemiGroup) super.getFirst();
+	}
+
+	@Override
+	public SemiGroup getLast() {
+		return (SemiGroup) super.getLast();
 	}
 
 	@Override
@@ -102,6 +102,56 @@ public class ProductSemiGroup
 	}
 
 	@Override
+	public ProductSemiGroup extract(int offset, int length) {
+		return (ProductSemiGroup) super.extract(offset, length);
+	}
+
+	@Override
+	public ProductSemiGroup extractPrefix(int length) {
+		return (ProductSemiGroup) super.extractPrefix(length);
+	}
+
+	@Override
+	public ProductSemiGroup extractSuffix(int length) {
+		return (ProductSemiGroup) super.extractSuffix(length);
+	}
+
+	@Override
+	public ProductSemiGroup extractRange(int fromIndex, int toIndex) {
+		return (ProductSemiGroup) super.extractRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductSemiGroup remove(int offset, int length) {
+		return (ProductSemiGroup) super.remove(offset, length);
+	}
+
+	@Override
+	public ProductSemiGroup removePrefix(int length) {
+		return (ProductSemiGroup) super.removePrefix(length);
+	}
+
+	@Override
+	public ProductSemiGroup removeSuffix(int length) {
+		return (ProductSemiGroup) super.removeSuffix(length);
+	}
+
+	@Override
+	public ProductSemiGroup removeRange(int fromIndex, int toIndex) {
+		return (ProductSemiGroup) super.removeRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductSemiGroup reverse() {
+		return (ProductSemiGroup) super.reverse();
+	}
+
+	@Override
+	public ProductSemiGroup[] split(int... indices) {
+		return (ProductSemiGroup[]) super.split(indices);
+	}
+
+	@Override
 	public final Tuple apply(Element element1, Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
 			throw new IllegalArgumentException();
@@ -114,6 +164,14 @@ public class ProductSemiGroup
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
+		return this.defaultApply(IterableArray.getInstance(elements));
+	}
+
+	@Override
+	public final Tuple apply(Iterable<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
 		return this.defaultApply(elements);
 	}
 
@@ -122,21 +180,20 @@ public class ProductSemiGroup
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		int arity = this.getArity();
 		Tuple tuple = (Tuple) element;
-		final Element[] results = new Element[arity];
-		for (int i = 0; i < arity; i++) {
+		final Element[] results = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
 			results[i] = tuple.getAt(i).selfApply(amount);
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(results));
 	}
 
 	@Override
-	public final Tuple selfApply(Element element, Element<Numerical> amount) {
+	public final Tuple selfApply(Element element, Element<BigInteger> amount) {
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.selfApply(element, amount.getValue().getBigInteger());
+		return this.selfApply(element, amount.getValue());
 	}
 
 	@Override
@@ -158,16 +215,15 @@ public class ProductSemiGroup
 	}
 
 	protected Tuple abstractApply(Tuple tuple1, Tuple tuple2) {
-		int arity = this.getArity();
-		final Element[] results = new Element[arity];
-		for (int i = 0; i < arity; i++) {
+		final Element[] results = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
 			results[i] = tuple1.getAt(i).apply(tuple2.getAt(i));
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(results));
 	}
 
-	protected Tuple defaultApply(final Element... elements) {
-		if (elements.length == 0) {
+	protected Tuple defaultApply(final Iterable<Element> elements) {
+		if (!elements.iterator().hasNext()) {
 			throw new IllegalArgumentException();
 		}
 		Element result = null;
@@ -192,52 +248,4 @@ public class ProductSemiGroup
 		return this.apply(results);
 	}
 
-//	/**
-//	 * This is a static factory method to construct a composed semigroup without calling respective constructors. The
-//	 * input semigroups are given as an array.
-//	 * <p/>
-//	 * @param semiGroups The array of input semigroups
-//	 * @return The corresponding product semigroup
-//	 * @throws IllegalArgumentException if {@literal semigroups} is null or contains null
-//	 */
-//	public static ProductSemiGroup getInstance(final SemiGroup... semiGroups) {
-//		if (semiGroups == null) {
-//			throw new IllegalArgumentException();
-//		}
-//		boolean isMonoid = true;
-//		if (semiGroups.length > 0) {
-//			boolean uniform = true;
-//			SemiGroup first = semiGroups[0];
-//			for (final SemiGroup semiGroup : semiGroups) {
-//				if (semiGroup == null) {
-//					throw new IllegalArgumentException();
-//				}
-//				if (!semiGroup.isEquivalent(first)) {
-//					uniform = false;
-//				}
-//				isMonoid = isMonoid && semiGroup.isMonoid();
-//			}
-//			if (uniform) {
-//				return ProductSemiGroup.getInstance(first, semiGroups.length);
-//			}
-//		}
-//		if (isMonoid) {
-//			Monoid[] monoids = Arrays.copyOf(semiGroups, semiGroups.length, Monoid[].class);
-//			return ProductMonoid.getInstance(monoids);
-//		}
-//		return new ProductSemiGroup(semiGroups);
-//	}
-//
-//	public static ProductSemiGroup getInstance(final SemiGroup semiGroup, int arity) {
-//		if ((semiGroup == null) || (arity < 0)) {
-//			throw new IllegalArgumentException();
-//		}
-//		if (semiGroup.isMonoid()) {
-//			return ProductMonoid.getInstance((Monoid) semiGroup, arity);
-//		}
-//		if (arity == 0) {
-//			return new ProductSemiGroup(new SemiGroup[]{});
-//		}
-//		return new ProductSemiGroup(semiGroup, arity);
-//	}
 }

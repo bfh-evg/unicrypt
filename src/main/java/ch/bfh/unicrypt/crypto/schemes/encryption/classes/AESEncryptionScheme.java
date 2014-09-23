@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.classes;
 
-import ch.bfh.unicrypt.crypto.keygenerator.classes.FixedByteArrayKeyGenerator;
+import ch.bfh.unicrypt.crypto.keygenerator.classes.ByteArrayKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.abstracts.AbstractSymmetricEncryptionScheme;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
@@ -64,7 +64,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, FixedByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
 
 	public enum KeyLength {
 
@@ -92,8 +92,8 @@ public class AESEncryptionScheme
 	public static final Mode DEFAULT_MODE = Mode.CBC;
 
 	public static final int AES_BLOCK_SIZE = 128; // bits
-	public static final ByteArrayMonoid AES_ENCRYPTION_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-	public static final ByteArray DEFAULT_IV = ByteArray.getInstance(AES_BLOCK_SIZE / Byte.SIZE, false);
+	public static final ByteArrayMonoid AES_SPACE = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
+	public static final ByteArray DEFAULT_IV = ByteArray.getInstance(false, AES_BLOCK_SIZE / Byte.SIZE);
 
 	private final KeyLength keyLength;
 	private final Mode mode;
@@ -101,6 +101,7 @@ public class AESEncryptionScheme
 	private Cipher cipher;
 
 	protected AESEncryptionScheme(KeyLength keyLength, Mode mode, ByteArray initializationVector) {
+		super(AES_SPACE, AES_SPACE);
 		this.keyLength = keyLength;
 		this.mode = mode;
 		this.initializationVector = initializationVector;
@@ -127,41 +128,39 @@ public class AESEncryptionScheme
 
 	@Override
 	protected Function abstractGetEncryptionFunction() {
-		ByteArrayMonoid messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-		return new AESEncryptionFunction(messageSpace, this.getSecretKeyGenerator().getSecretKeySpace());
+		return new AESEncryptionFunction();
 	}
 
 	@Override
 	protected Function abstractGetDecryptionFunction() {
-		ByteArrayMonoid messageSpace = ByteArrayMonoid.getInstance(AES_BLOCK_SIZE / Byte.SIZE);
-		return new AESDecryptionFunction(messageSpace, this.getSecretKeyGenerator().getSecretKeySpace());
+		return new AESDecryptionFunction();
 	}
 
 	@Override
-	protected FixedByteArrayKeyGenerator abstractGetKeyGenerator() {
-		return FixedByteArrayKeyGenerator.getInstance(this.getKeyLength().getLenght() / Byte.SIZE);
+	protected ByteArrayKeyGenerator abstractGetKeyGenerator() {
+		return ByteArrayKeyGenerator.getInstance(this.getKeyLength().getLenght() / Byte.SIZE);
 	}
 
 	private class AESEncryptionFunction
 		   extends AbstractFunction<AESEncryptionFunction, ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
-		protected AESEncryptionFunction(ByteArrayMonoid messageSpace, FixedByteArraySet keySpace) {
-			super(ProductSet.getInstance(keySpace, messageSpace), messageSpace);
+		protected AESEncryptionFunction() {
+			super(ProductSet.getInstance(getEncryptionKeySpace(), messageSpace), encryptionSpace);
 		}
 
 		@Override
 		protected ByteArrayElement abstractApply(Pair element, RandomByteSequence randomByteSequence) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement message = (ByteArrayElement) element.getSecond();
-			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getAll(), ALGORITHM_NAME);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getBytes(), ALGORITHM_NAME);
 			byte[] encryptedBytes;
 			try {
 				if (mode == Mode.CBC) {
-					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getAll()));
+					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 				}
-				encryptedBytes = cipher.doFinal(message.getValue().getAll());
+				encryptedBytes = cipher.doFinal(message.getValue().getBytes());
 			} catch (InvalidKeyException ex) {
 				throw new RuntimeException();
 			} catch (IllegalBlockSizeException ex) {
@@ -179,23 +178,23 @@ public class AESEncryptionScheme
 	private class AESDecryptionFunction
 		   extends AbstractFunction<AESDecryptionFunction, ProductSet, Pair, ByteArrayMonoid, ByteArrayElement> {
 
-		protected AESDecryptionFunction(ByteArrayMonoid messageSpace, FixedByteArraySet keySpace) {
-			super(ProductSet.getInstance(keySpace, messageSpace), messageSpace);
+		protected AESDecryptionFunction() {
+			super(ProductSet.getInstance(getDecryptionKeySpace(), encryptionSpace), messageSpace);
 		}
 
 		@Override
 		protected ByteArrayElement abstractApply(Pair element, RandomByteSequence randomByteSequence) {
 			FiniteByteArrayElement key = (FiniteByteArrayElement) element.getFirst();
 			ByteArrayElement encryption = (ByteArrayElement) element.getSecond();
-			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getAll(), ALGORITHM_NAME);
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getValue().getBytes(), ALGORITHM_NAME);
 			byte[] message;
 			try {
 				if (mode == Mode.CBC) {
-					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getAll()));
+					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 				}
-				message = cipher.doFinal(encryption.getValue().getAll());
+				message = cipher.doFinal(encryption.getValue().getBytes());
 			} catch (InvalidKeyException e) {
 				throw new RuntimeException();
 			} catch (IllegalBlockSizeException e) {

@@ -42,12 +42,15 @@
 package ch.bfh.unicrypt.crypto.schemes.signature;
 
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.crypto.schemes.signature.classes.SchnorrSignatureScheme;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.helper.Alphabet;
 
 /**
  *
@@ -58,13 +61,25 @@ public class SchnorrSignatureExample {
 	public static void example1() {
 		GStarModSafePrime g_q = GStarModSafePrime.getInstance(23);
 		GStarModElement g = g_q.getElement(4);
-		Element randomization = g_q.getZModOrder().getElement(3);
-		Element privateKey = g_q.getZModOrder().getElement(5);
-		StringElement message = StringMonoid.getInstance(Alphabet.BASE64).getElement("MessageXX");
-//		SchnorrSignatureScheme<StringMonoid, StringElement> schnorr = SchnorrSignatureScheme.getInstance(message.getSet(), g_q, g);
-//		Function ssF = schnorr.getSignatureFunction();
-//		Element s = ssF.apply(privateKey, message, randomization);
-//		System.out.println("s: " + s);
+
+		SchnorrSignatureScheme<StringMonoid> schnorr = SchnorrSignatureScheme.getInstance(StringMonoid.getInstance(Alphabet.BASE64), g);
+
+		Pair keyPair = schnorr.getKeyPairGenerator().generateKeyPair();
+		Element privateKey = keyPair.getFirst();
+		Element publicKey = keyPair.getSecond();
+
+		StringElement message = schnorr.getMessageSpace().getElement("MessageXX");
+		Element randomization = schnorr.getRandomizationSpace().getRandomElement();
+
+		Element signature = schnorr.sign(privateKey, message, randomization);
+		Example.printLine("Signature", signature);
+
+		BooleanElement result = schnorr.verify(publicKey, message, signature);
+		Example.printLine("Verification", result);
+
+		BooleanElement falseResult = schnorr.verify(publicKey, message, signature.invert());
+		Example.printLine("Verification", falseResult);
+
 	}
 
 	public static void main(final String[] args) {

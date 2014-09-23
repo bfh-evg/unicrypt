@@ -43,23 +43,42 @@ package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SK extends Set, VK extends Set, KG extends KeyPairGenerator>
-	   extends AbstractSignatureScheme<MS, ME, SS, SE, SK, VK, KG>
+/**
+ *
+ * @author rolfhaenni
+ * @param <MS>  Message space
+ * @param <ME>  Message element
+ * @param <SS>  Signature space
+ * @param <SE>  Signature element
+ * @param <RS>  Randomization space
+ * @param <SKS> Signature key space
+ * @param <VKS> Verification key space
+ * @param <KG>  Key generator
+ */
+public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SKS extends Set, VKS extends Set, KG extends KeyPairGenerator>
+	   extends AbstractSignatureScheme<MS, ME, SS, SE, SKS, VKS, KG>
 	   implements RandomizedSignatureScheme {
+
+	protected final RS randomizationSpace;
+
+	public AbstractRandomizedSignatureScheme(MS messageSpace, SS signatureSpace, RS randomizationSpace, HashMethod hashMethod) {
+		super(messageSpace, signatureSpace, hashMethod);
+		this.randomizationSpace = randomizationSpace;
+	}
 
 	@Override
 	public RS getRandomizationSpace() {
-		return (RS) ((ProductSet) this.getSignatureFunction().getDomain()).getAt(2);
+		return this.randomizationSpace;
 	}
 
 	@Override
 	public SE sign(Element privateKey, Element message, RandomByteSequence randomByteSequence) {
-		return this.sign(privateKey, message, getRandomizationSpace().getRandomElement(randomByteSequence));
+		return this.sign(privateKey, message, this.randomizationSpace.getRandomElement(randomByteSequence));
 	}
 
 	@Override

@@ -41,11 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 import ch.bfh.unicrypt.helper.distribution.Distribution;
 import ch.bfh.unicrypt.helper.distribution.InfiniteDistribution;
 import ch.bfh.unicrypt.helper.distribution.UniformDistribution;
-import ch.bfh.unicrypt.helper.numerical.WholeNumber;
-import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -67,12 +69,12 @@ import java.util.Map;
  * @version 2.0
  */
 public class Z
-	   extends AbstractCyclicRing<ZElement, WholeNumber> {
+	   extends AbstractCyclicRing<ZElement, BigInteger> {
 
 	private final Distribution distribution;
 
 	private Z(final Distribution distribution) {
-		super(WholeNumber.class);
+		super(BigInteger.class);
 		this.distribution = distribution;
 	}
 
@@ -81,19 +83,11 @@ public class Z
 	}
 
 	public final boolean contains(int integerValue) {
-		return this.contains(WholeNumber.getInstance(integerValue));
-	}
-
-	public final boolean contains(BigInteger integerValue) {
-		return this.contains(WholeNumber.getInstance(integerValue));
+		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
 	public final ZElement getElement(int integerValue) {
-		return this.getElement(WholeNumber.getInstance(integerValue));
-	}
-
-	public final ZElement getElement(BigInteger integerValue) {
-		return this.getElement(WholeNumber.getInstance(integerValue));
+		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
 	//
@@ -102,7 +96,12 @@ public class Z
 	//
 	@Override
 	protected ZElement defaultSelfApply(ZElement element, BigInteger amount) {
-		return this.abstractGetElement(element.getValue().multiply(WholeNumber.getInstance(amount)));
+		return this.abstractGetElement(element.getValue().multiply(amount));
+	}
+
+	@Override
+	protected StringConverter<BigInteger> defaultGetStringConverter() {
+		return BigIntegerToString.getInstance();
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetIdentityElement() {
-		return this.abstractGetElement(WholeNumber.ZERO.ZERO);
+		return this.abstractGetElement(BigInteger.ZERO);
 	}
 
 	@Override
@@ -144,7 +143,7 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetOne() {
-		return this.abstractGetElement(WholeNumber.ONE);
+		return this.abstractGetElement(BigInteger.ONE);
 	}
 
 	@Override
@@ -153,23 +152,18 @@ public class Z
 	}
 
 	@Override
-	protected boolean abstractContains(WholeNumber value) {
+	protected boolean abstractContains(BigInteger value) {
 		return true;
 	}
 
 	@Override
-	protected ZElement abstractGetElement(WholeNumber value) {
+	protected ZElement abstractGetElement(BigInteger value) {
 		return new ZElement(this, value);
 	}
 
 	@Override
-	protected ZElement abstractGetElementFrom(BigInteger value) {
-		return this.abstractGetElement(WholeNumber.getInstance(MathUtil.unfold(value)));
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ZElement element) {
-		return MathUtil.fold(element.getValue().getBigInteger());
+	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance(true);
 	}
 
 	@Override
@@ -179,12 +173,12 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetDefaultGenerator() {
-		return this.abstractGetElement(WholeNumber.ONE);
+		return this.abstractGetElement(BigInteger.ONE);
 	}
 
 	@Override
 	protected boolean abstractIsGenerator(final ZElement element) {
-		return element.getValue().getBigInteger().abs().equals(BigInteger.ONE);
+		return element.getValue().abs().equals(BigInteger.ONE);
 	}
 
 	@Override

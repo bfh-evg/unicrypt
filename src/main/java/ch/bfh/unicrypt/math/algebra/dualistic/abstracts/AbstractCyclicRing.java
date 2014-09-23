@@ -62,7 +62,7 @@ import java.util.NoSuchElementException;
  */
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractRing<E, V>
-	   implements CyclicRing<V>, Iterable<E> {
+	   implements CyclicRing<V> {
 
 	private E defaultGenerator;
 
@@ -157,7 +157,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	}
 
 	@Override
-	protected Iterator<E> defaultIterator() {
+	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractCyclicRing<E, V> cyclicRing = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;
@@ -165,15 +165,15 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(cyclicRing.getOrder()) < 0;
+				return counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override
 			public E next() {
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
-					E nextElement = currentElement;
-					currentElement = cyclicRing.apply(currentElement, cyclicRing.getDefaultGenerator());
+					E nextElement = this.currentElement;
+					this.currentElement = cyclicRing.apply(this.currentElement, cyclicRing.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();

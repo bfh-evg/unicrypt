@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative;
 
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -59,8 +59,8 @@ public class GStarModSafePrimeTest {
 	@Test
 	public void testIteration() {
 		GStarModSafePrime set = GStarModSafePrime.getInstance(23);
-		for (Element element : set) {
-			// System.out.println(element);
+		for (Element element : set.getElements()) {
+//			System.out.println(element);
 		}
 	}
 

@@ -41,28 +41,23 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.helper.Point;
-import ch.bfh.unicrypt.helper.numerical.ResidueClass;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
-
 /**
-*
-* @author Christian Lutz
-*/
+ *
+ * @author Christian Lutz
+ */
 public class ECZModPrime
-	   extends AbstractEC<ZModPrime, ResidueClass> {
+	   extends AbstractEC<ZModPrime, BigInteger> {
 
-	protected ECZModPrime(ZModPrime finiteField, DualisticElement<ResidueClass> a, DualisticElement<ResidueClass> b, DualisticElement<ResidueClass> gx, DualisticElement<ResidueClass> gy, BigInteger givenOrder, BigInteger coFactor) {
+	protected ECZModPrime(ZModPrime finiteField, DualisticElement<BigInteger> a, DualisticElement<BigInteger> b, DualisticElement<BigInteger> gx, DualisticElement<BigInteger> gy, BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
 	}
 
@@ -71,11 +66,11 @@ public class ECZModPrime
 	}
 
 	@Override
-	public boolean abstractContains(DualisticElement<ResidueClass> x) {
+	public boolean abstractContains(DualisticElement<BigInteger> x) {
 		BigInteger p = this.getFiniteField().getModulus();
-		DualisticElement<ResidueClass> right = x.power(3).add(getA().multiply(x)).add(getB());
-		if (MathUtil.hasSqrtModPrime(right.getValue().getBigInteger(), p)) {
-			BigInteger y1 = MathUtil.sqrtModPrime(right.getValue().getBigInteger(), p);
+		DualisticElement<BigInteger> right = x.power(3).add(getA().multiply(x)).add(getB());
+		if (MathUtil.hasSqrtModPrime(right.getValue(), p)) {
+			BigInteger y1 = MathUtil.sqrtModPrime(right.getValue(), p);
 			ZModElement y = this.getFiniteField().getElement(y1);
 			return this.abstractContains(x, y);
 		} else {
@@ -84,24 +79,24 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected boolean abstractContains(DualisticElement<ResidueClass> x, DualisticElement<ResidueClass> y) {
-		DualisticElement<ResidueClass> left = y.square();
-		DualisticElement<ResidueClass> right = x.power(3).add(x.multiply(this.getA())).add(this.getB());
+	protected boolean abstractContains(DualisticElement<BigInteger> x, DualisticElement<BigInteger> y) {
+		DualisticElement<BigInteger> left = y.square();
+		DualisticElement<BigInteger> right = x.power(3).add(x.multiply(this.getA())).add(this.getB());
 		return left.isEquivalent(right);
 	}
 
 	@Override
-	protected ECElement<ResidueClass> abstractGetElement(Point<DualisticElement<ResidueClass>> value) {
-		return new ECElement<ResidueClass>(this, value);
+	protected ECElement<BigInteger> abstractGetElement(Point<DualisticElement<BigInteger>> value) {
+		return new ECElement<BigInteger>(this, value);
 	}
 
 	@Override
-	protected ECElement<ResidueClass> abstractGetIdentityElement() {
-		return new ECElement<ResidueClass>(this);
+	protected ECElement<BigInteger> abstractGetIdentityElement() {
+		return new ECElement<BigInteger>(this);
 	}
 
 	@Override
-	protected ECElement<ResidueClass> abstractApply(ECElement<ResidueClass> element1, ECElement<ResidueClass> element2) {
+	protected ECElement<BigInteger> abstractApply(ECElement<BigInteger> element1, ECElement<BigInteger> element2) {
 		if (element1.isZero()) {
 			return element2;
 		}
@@ -111,14 +106,14 @@ public class ECZModPrime
 		if (element1.isEquivalent(element2.invert())) {
 			return this.getZeroElement();
 		}
-		DualisticElement<ResidueClass> s, rx, ry;
-		DualisticElement<ResidueClass> px = element1.getX();
-		DualisticElement<ResidueClass> py = element1.getY();
-		DualisticElement<ResidueClass> qx = element2.getX();
-		DualisticElement<ResidueClass> qy = element2.getY();
+		DualisticElement<BigInteger> s, rx, ry;
+		DualisticElement<BigInteger> px = element1.getX();
+		DualisticElement<BigInteger> py = element1.getY();
+		DualisticElement<BigInteger> qx = element2.getX();
+		DualisticElement<BigInteger> qy = element2.getY();
 		if (element1.isEquivalent(element2)) {
-			DualisticElement<ResidueClass> three = this.getFiniteField().getElement(3);
-			DualisticElement<ResidueClass> two = this.getFiniteField().getElement(2);
+			DualisticElement<BigInteger> three = this.getFiniteField().getElement(3);
+			DualisticElement<BigInteger> two = this.getFiniteField().getElement(2);
 			s = ((px.square().multiply(three)).apply(this.getA())).divide(py.multiply(two));
 			rx = s.square().apply(px.multiply(two).invert());
 			ry = s.multiply(px.subtract(rx)).apply(py.invert());
@@ -131,7 +126,7 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECElement<ResidueClass> abstractInvert(ECElement<ResidueClass> element) {
+	protected ECElement<BigInteger> abstractInvert(ECElement<BigInteger> element) {
 		if (element.isZero()) {
 			return this.getZeroElement();
 		}
@@ -139,44 +134,44 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECElement<ResidueClass> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
+	protected ECElement<BigInteger> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
 		BigInteger p = this.getFiniteField().getModulus();
-		DualisticElement<ResidueClass> x = this.getFiniteField().getRandomElement(randomByteSequence);
-		DualisticElement<ResidueClass> y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
-		boolean neg = x.getValue().getBigInteger().mod(new BigInteger("2")).equals(BigInteger.ONE);
+		DualisticElement<BigInteger> x = this.getFiniteField().getRandomElement(randomByteSequence);
+		DualisticElement<BigInteger> y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
+		boolean neg = x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
 
-		while (!MathUtil.hasSqrtModPrime(y.getValue().getBigInteger(), p)) {
+		while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
 			x = this.getFiniteField().getRandomElement(randomByteSequence);
 			y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
 		}
 		//if neg is true return solution 2(p-sqrt) of sqrtModPrime else solution 1
 		if (neg) {
-			y = this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue().getBigInteger(), p)));
+			y = this.getFiniteField().getElement(p.subtract(MathUtil.sqrtModPrime(y.getValue(), p)));
 		} else {
-			y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue().getBigInteger(), p));
+			y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y.getValue(), p));
 		}
 		return this.abstractGetElement(Point.getInstance(x, y));
 	}
 
-	
 	/**
 	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 18
+	 * <p>
 	 * @return True if curve parameters are valid
 	 */
 	public boolean isValid() {
-		boolean c11,c12, c21,c22,c23,c24, c3, c4, c5, c61, c62,c7,c8;
-		
-		DualisticElement<ResidueClass> i4 = getFiniteField().getElement(4);
-		DualisticElement<ResidueClass> i27 = getFiniteField().getElement(27);
-		BigInteger p=this.getFiniteField().getModulus();
+		boolean c11, c12, c21, c22, c23, c24, c3, c4, c5, c61, c62, c7, c8;
+
+		DualisticElement<BigInteger> i4 = getFiniteField().getElement(4);
+		DualisticElement<BigInteger> i27 = getFiniteField().getElement(27);
+		BigInteger p = this.getFiniteField().getModulus();
 		int t = getOrder().bitCount();
-		
+
 		c11 = MathUtil.arePrime(p);
 		c12 = true;
-		c21=this.getA().getBigInteger().compareTo(BigInteger.ZERO)>-1 && this.getA().getBigInteger().compareTo(p.subtract(BigInteger.ONE))<1;
-		c22=this.getB().getBigInteger().compareTo(BigInteger.ZERO)>-1 && this.getB().getBigInteger().compareTo(p.subtract(BigInteger.ONE))<1;
-		c23=this.getDefaultGenerator().getValue().getX().getBigInteger().compareTo(BigInteger.ZERO)>-1 && this.getDefaultGenerator().getValue().getX().getBigInteger().compareTo(p.subtract(BigInteger.ONE))<1;
-		c24=this.getDefaultGenerator().getValue().getY().getBigInteger().compareTo(BigInteger.ZERO)>-1 && this.getDefaultGenerator().getValue().getY().getBigInteger().compareTo(p.subtract(BigInteger.ONE))<1;		
+		c21 = this.getA().getBigInteger().compareTo(BigInteger.ZERO) > -1 && this.getA().getBigInteger().compareTo(p.subtract(BigInteger.ONE)) < 1;
+		c22 = this.getB().getBigInteger().compareTo(BigInteger.ZERO) > -1 && this.getB().getBigInteger().compareTo(p.subtract(BigInteger.ONE)) < 1;
+		c23 = this.getDefaultGenerator().getValue().getX().getBigInteger().compareTo(BigInteger.ZERO) > -1 && this.getDefaultGenerator().getValue().getX().getBigInteger().compareTo(p.subtract(BigInteger.ONE)) < 1;
+		c24 = this.getDefaultGenerator().getValue().getY().getBigInteger().compareTo(BigInteger.ZERO) > -1 && this.getDefaultGenerator().getValue().getY().getBigInteger().compareTo(p.subtract(BigInteger.ONE)) < 1;
 		c3 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
 		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
 		c5 = getZeroElement().equals(getDefaultGenerator().selfApply(getOrder()));
@@ -197,15 +192,14 @@ public class ECZModPrime
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
-		
+
 		ECZModPrime newInstance = new ECZModPrime(f, a, b, givenOrder, coFactor);
-		if(newInstance.isValid()){
+		if (newInstance.isValid()) {
 			return newInstance;
-		}
-		else{
+		} else {
 			throw new IllegalArgumentException("Curve parameter are not valid!");
 		}
 	}
@@ -221,18 +215,15 @@ public class ECZModPrime
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, DualisticElement<ResidueClass> a, DualisticElement<ResidueClass> b, DualisticElement<ResidueClass> gx, DualisticElement<ResidueClass> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECZModPrime getInstance(ZModPrime f, DualisticElement<BigInteger> a, DualisticElement<BigInteger> b, DualisticElement<BigInteger> gx, DualisticElement<BigInteger> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECZModPrime newInstance = new ECZModPrime(f, a, b, gx, gy, givenOrder, coFactor);
-		if(newInstance.isValid()){
+		if (newInstance.isValid()) {
 			return newInstance;
-		}
-		else{
+		} else {
 			throw new IllegalArgumentException("Curve parameter are not valid!");
 		}
 	}
-	
-	
 
 }

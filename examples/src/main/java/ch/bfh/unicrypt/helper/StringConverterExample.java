@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.converter.StringConverter;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -53,30 +53,30 @@ import java.nio.charset.StandardCharsets;
 public class StringConverterExample {
 
 	public static void example1() {
-		StringConverter converter = StringConverter.getInstance(StandardCharsets.UTF_8);
+		StringToByteArray converter = StringToByteArray.getInstance(StandardCharsets.UTF_8);
 		String string = "Hallo René";
-		ByteArray byteArray = converter.convertToByteArray(string);
-		String newString = converter.convertFromByteArray(byteArray);
+		ByteArray byteArray = converter.convert(string);
+		String newString = converter.reconvert(byteArray);
 		Example.printLine(string);
 		Example.printLine("UTF8", byteArray);
 		Example.printLine(newString);
 	}
 
 	public static void example2() {
-		StringConverter converter = StringConverter.getInstance(StandardCharsets.UTF_16BE);
+		StringToByteArray converter = StringToByteArray.getInstance(StandardCharsets.UTF_16BE);
 		String string = "Hallo René";
-		ByteArray byteArray = converter.convertToByteArray(string);
-		String newString = converter.convertFromByteArray(byteArray);
+		ByteArray byteArray = converter.convert(string);
+		String newString = converter.reconvert(byteArray);
 		Example.printLine(string);
 		Example.printLine("UTF16-BE", byteArray);
 		Example.printLine(newString);
 	}
 
 	public static void example3() {
-		StringConverter converter = StringConverter.getInstance(StandardCharsets.UTF_16LE);
+		StringToByteArray converter = StringToByteArray.getInstance(StandardCharsets.UTF_16LE);
 		String string = "Hallo René";
-		ByteArray byteArray = converter.convertToByteArray(string);
-		String newString = converter.convertFromByteArray(byteArray);
+		ByteArray byteArray = converter.convert(string);
+		String newString = converter.reconvert(byteArray);
 		Example.printLine(string);
 		Example.printLine("UTF16-LE", byteArray);
 		Example.printLine(newString);

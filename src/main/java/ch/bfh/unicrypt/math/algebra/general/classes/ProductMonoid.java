@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
 import java.math.BigInteger;
 
 /**
@@ -67,6 +67,11 @@ public class ProductMonoid
 	}
 
 	@Override
+	public Monoid getLast() {
+		return (Monoid) super.getLast();
+	}
+
+	@Override
 	public Monoid getAt(int index) {
 		return (Monoid) super.getAt(index);
 	}
@@ -74,11 +79,6 @@ public class ProductMonoid
 	@Override
 	public Monoid getAt(int... indices) {
 		return (Monoid) super.getAt(indices);
-	}
-
-	@Override
-	public Monoid[] getAll() {
-		return (Monoid[]) super.getAll();
 	}
 
 	@Override
@@ -103,10 +103,60 @@ public class ProductMonoid
 	}
 
 	@Override
+	public ProductMonoid extract(int offset, int length) {
+		return (ProductMonoid) super.extract(offset, length);
+	}
+
+	@Override
+	public ProductMonoid extractPrefix(int length) {
+		return (ProductMonoid) super.extractPrefix(length);
+	}
+
+	@Override
+	public ProductMonoid extractSuffix(int length) {
+		return (ProductMonoid) super.extractSuffix(length);
+	}
+
+	@Override
+	public ProductMonoid extractRange(int fromIndex, int toIndex) {
+		return (ProductMonoid) super.extractRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductMonoid remove(int offset, int length) {
+		return (ProductMonoid) super.remove(offset, length);
+	}
+
+	@Override
+	public ProductMonoid removePrefix(int length) {
+		return (ProductMonoid) super.removePrefix(length);
+	}
+
+	@Override
+	public ProductMonoid removeSuffix(int length) {
+		return (ProductMonoid) super.removeSuffix(length);
+	}
+
+	@Override
+	public ProductMonoid removeRange(int fromIndex, int toIndex) {
+		return (ProductMonoid) super.removeRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductMonoid reverse() {
+		return (ProductMonoid) super.reverse();
+	}
+
+	@Override
+	public ProductMonoid[] split(int... indices) {
+		return (ProductMonoid[]) super.split(indices);
+	}
+
+	@Override
 	public Tuple getIdentityElement() {
 		if (this.identityElement == null) {
 			final Element[] identityElements = new Element[this.getArity()];
-			for (int i = 0; i < identityElements.length; i++) {
+			for (int i : this.getAllIndices()) {
 				identityElements[i] = this.getAt(i).getIdentityElement();
 			}
 			this.identityElement = this.abstractGetElement(ImmutableArray.getInstance(identityElements));
@@ -120,8 +170,8 @@ public class ProductMonoid
 	}
 
 	@Override
-	public Tuple defaultApply(final Element[] elements) {
-		if (elements.length == 0) {
+	public Tuple defaultApply(final Iterable<Element> elements) {
+		if (!elements.iterator().hasNext()) {
 			return this.getIdentityElement();
 		}
 		return super.defaultApply(elements);

@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
+import ch.bfh.unicrypt.crypto.encoder.BigIntegerConvertFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
@@ -72,12 +72,12 @@ public class StringToByteArrayEncoder
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return ConvertFunction.getInstance(this.getStringMonoid(), ByteArrayMonoid.getInstance());
+		return BigIntegerConvertFunction.getInstance(this.getStringMonoid(), ByteArrayMonoid.getInstance());
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return ConvertFunction.getInstance(ByteArrayMonoid.getInstance(), this.getStringMonoid());
+		return BigIntegerConvertFunction.getInstance(ByteArrayMonoid.getInstance(), this.getStringMonoid());
 	}
 
 	public static StringToByteArrayEncoder getInstance(StringMonoid stringMonoid) {

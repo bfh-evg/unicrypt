@@ -71,8 +71,8 @@ public class AdditionFunction
 	}
 
 	@Override
-	protected AdditiveElement abstractApply(final Tuple element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().add(element.getAll());
+	protected AdditiveElement abstractApply(final Tuple tuple, final RandomByteSequence randomByteSequence) {
+		return this.getCoDomain().add(tuple);
 	}
 
 	public static AdditionFunction getInstance(final AdditiveSemiGroup additiveSemiGroup) {

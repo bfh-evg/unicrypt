@@ -67,12 +67,12 @@ import java.util.NoSuchElementException;
  */
 public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object>
 	   extends AbstractGroup<E, V>
-	   implements CyclicGroup<V>, Iterable<E> {
+	   implements CyclicGroup<V> {
 
 	private E defaultGenerator;
 	private final Map<ReferenceRandomByteSequence, ArrayList<E>> generatorLists;
 
-	public AbstractCyclicGroup(Class<? extends Object> valueClass) {
+	protected AbstractCyclicGroup(Class<? extends Object> valueClass) {
 		super(valueClass);
 		this.generatorLists = new HashMap<ReferenceRandomByteSequence, ArrayList<E>>();
 	}
@@ -174,7 +174,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	}
 
 	@Override
-	protected Iterator<E> defaultIterator() {
+	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractCyclicGroup<E, V> cyclicGroup = this;
 		return new Iterator<E>() {
 			BigInteger counter = BigInteger.ZERO;
@@ -182,15 +182,15 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(cyclicGroup.getOrder()) < 0;
+				return this.counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override
 			public E next() {
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
-					E nextElement = currentElement;
-					currentElement = cyclicGroup.apply(currentElement, cyclicGroup.getDefaultGenerator());
+					E nextElement = this.currentElement;
+					this.currentElement = cyclicGroup.apply(this.currentElement, cyclicGroup.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();

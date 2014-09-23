@@ -42,6 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteStringToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -82,6 +86,11 @@ public class FiniteStringSet
 	}
 
 	@Override
+	protected StringConverter<String> defaultGetStringConverter() {
+		return StringToString.getInstance();
+	}
+
+	@Override
 	protected boolean abstractContains(String value) {
 		return value.length() >= this.minLength && value.length() <= this.maxLength && this.getAlphabet().isValid(value);
 	}
@@ -92,36 +101,8 @@ public class FiniteStringSet
 	}
 
 	@Override
-	protected FiniteStringElement abstractGetElementFrom(BigInteger value) {
-		if (value.compareTo(this.getOrder()) >= 0) {
-			return null; // no such element
-		}
-		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
-		StringBuilder strBuilder = new StringBuilder(this.maxLength);
-		while (!value.equals(BigInteger.ZERO) || strBuilder.length() < this.minLength) {
-			if (strBuilder.length() >= this.minLength) {
-				value = value.subtract(BigInteger.ONE);
-			}
-			strBuilder.append(this.getAlphabet().getCharacter(value.mod(size).intValue()));
-			value = value.divide(size);
-		}
-		return this.abstractGetElement(strBuilder.reverse().toString());
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(FiniteStringElement element) {
-		String value = element.getValue();
-		int length = value.length();
-		BigInteger result = BigInteger.ZERO;
-		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
-		for (int i = 0; i < length; i++) {
-			int charIndex = this.getAlphabet().getIndex(value.charAt(i));
-			if (i < length - this.minLength) {
-				charIndex++;
-			}
-			result = result.multiply(size).add(BigInteger.valueOf(charIndex));
-		}
-		return result;
+	protected BigIntegerConverter<String> abstractGetBigIntegerConverter() {
+		return FiniteStringToBigInteger.getInstance(this.alphabet, this.minLength, this.maxLength);
 	}
 
 	@Override
@@ -136,7 +117,7 @@ public class FiniteStringSet
 
 	@Override
 	protected FiniteStringElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.abstractGetElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 
 	@Override
@@ -170,6 +151,9 @@ public class FiniteStringSet
 		if (alphabet == null || minLength < 0 || maxLength < minLength) {
 			throw new IllegalArgumentException();
 		}
+		if (minLength == maxLength) {
+			return FixedStringSet.getInstance(alphabet, minLength);
+		}
 		return new FiniteStringSet(alphabet, minLength, maxLength);
 	}
 
@@ -188,6 +172,9 @@ public class FiniteStringSet
 		while (order1.multiply(order2).compareTo(minOrder) < 0) {
 			order2 = order2.multiply(size).add(BigInteger.ONE);
 			maxLength++;
+		}
+		if (minLength == maxLength) {
+			return FixedStringSet.getInstance(alphabet, minLength);
 		}
 		return new FiniteStringSet(alphabet, minLength, maxLength);
 	}

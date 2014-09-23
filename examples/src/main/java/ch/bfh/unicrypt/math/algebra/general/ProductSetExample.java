@@ -42,12 +42,14 @@
 package ch.bfh.unicrypt.math.algebra.general;
 
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.Alphabet;
 
 /**
  *
@@ -78,6 +80,28 @@ public class ProductSetExample {
 
 		ProductSet s12_22 = ProductSet.getInstance(s12, s22);
 		Example.printLine(s12_22);
+	}
+
+	public static void example2() {
+		Set z2 = ZMod.getInstance(2);
+		Set z3 = ZMod.getInstance(3);
+		Set z4 = ZMod.getInstance(4);
+		Set z5 = ZMod.getInstance(5);
+		Set z6 = ZMod.getInstance(6);
+		Set z7 = ZMod.getInstance(7);
+		Set z8 = ZMod.getInstance(8);
+		Set z9 = ZMod.getInstance(9);
+		ProductSet ps = ProductSet.getInstance(z2, z3, z4, z5, z6, z7, z8, z9);
+
+		Example.printLine(ps);
+		Example.printLine(ps.extract(2, 4));
+		Example.printLines(ps.split(2, 4, 7));
+
+		Tuple t = ps.getRandomElement();
+		Example.printLine(t);
+		Example.printLine(t.extract(2, 4));
+		Example.printLines(t.split(2, 4, 7));
+
 	}
 
 	public static void main(final String[] args) {

@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -101,6 +100,8 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	 */
 	public ConcatenativeElement<V> concatenate(Element... elements);
 
+	public ConcatenativeElement<V> concatenate(Iterable<Element> elements);
+
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
 	 * <p>
@@ -117,7 +118,7 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	 * @param amount  the same as in {@link #Group.selfApply(Element, Element)}
 	 * @return the same as in {@link #Group.selfApply(Element, Element)}
 	 */
-	public ConcatenativeElement<V> selfConcatenate(Element element, Element<Numerical> amount);
+	public ConcatenativeElement<V> selfConcatenate(Element element, Element<BigInteger> amount);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
@@ -196,7 +197,7 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	public ConcatenativeElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
-	public ConcatenativeElement<V> selfApply(Element element, Element<Numerical> amount);
+	public ConcatenativeElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
 	public ConcatenativeElement<V> selfApply(Element element, int amount);

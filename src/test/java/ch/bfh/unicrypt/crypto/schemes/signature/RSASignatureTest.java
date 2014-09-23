@@ -42,16 +42,15 @@
 package ch.bfh.unicrypt.crypto.schemes.signature;
 
 import ch.bfh.unicrypt.crypto.schemes.signature.classes.RSASignatureScheme;
+import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -60,53 +59,39 @@ import org.junit.Test;
  */
 public class RSASignatureTest {
 
-	public RSASignatureTest() {
-	}
-
-	@BeforeClass
-	public static void setUpClass() {
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-	}
-
-	@Before
-	public void setUp() {
-	}
-
-	@After
-	public void tearDown() {
-	}
-
 	@Test
 	public void SignatureTest1() {
 //		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(1023, 65537));
-		BigInteger p = BigInteger.probablePrime(1024, new SecureRandom());
-		BigInteger q = BigInteger.probablePrime(1024, new SecureRandom());
+		BigInteger p = BigInteger.probablePrime(512, new SecureRandom());
+		BigInteger q = BigInteger.probablePrime(512, new SecureRandom());
 		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
 		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
 		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
-		Element message = rsa.getMessageSpace().getElement(5);
+
+		Element message = rsa.getMessageSpace().getElementFrom(5);
 		Element signature = rsa.sign(prKey, message);
 
-		assertTrue(rsa.verify(puKey, message, signature).getValue().booleanValue());
+		BigInteger n = p.multiply(q);
+		rsa = RSASignatureScheme.getInstance(ZMod.getInstance(n));
+		assertTrue(rsa.verify(puKey, message, signature).getValue());
+		assertFalse(rsa.verify(puKey, message, message).getValue());
 
 	}
 
 	@Test
 	public void SignatureTest2() {
-		BigInteger p = BigInteger.probablePrime(1024, new SecureRandom());
-		BigInteger q = BigInteger.probablePrime(1024, new SecureRandom());
+		BigInteger p = BigInteger.probablePrime(512, new SecureRandom());
+		BigInteger q = BigInteger.probablePrime(512, new SecureRandom());
 
-		RSASignatureScheme rsa = RSASignatureScheme.getInstance(ZModPrimePair.getInstance(p, q));
+		RSASignatureScheme rsa = RSASignatureScheme.getInstance(StringMonoid.getInstance(Alphabet.ALPHANUMERIC), ZModPrimePair.getInstance(p, q));
 		Element prKey = rsa.getKeyPairGenerator().generatePrivateKey();
 		Element puKey = rsa.getKeyPairGenerator().generatePublicKey(prKey);
 
-		Element message = rsa.getMessageSpace().getElement(5);
+		Element message = rsa.getMessageSpace().getElement("Hallo");
 		Element signature = rsa.sign(prKey, message);
 
-		assertFalse(rsa.verify(puKey, message, message).getValue().booleanValue());
+		assertTrue(rsa.verify(puKey, message, signature).getValue());
+		assertFalse(rsa.verify(puKey, rsa.getMessageSpace().getElement("World"), signature).getValue());
 
 	}
 

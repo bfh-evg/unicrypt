@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.math.BigInteger;
 
 /**

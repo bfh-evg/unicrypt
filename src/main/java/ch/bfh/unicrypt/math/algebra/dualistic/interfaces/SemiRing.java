@@ -42,9 +42,9 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.numerical.Numerical;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
@@ -92,7 +92,7 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement<V> selfApply(Element element, Element<Numerical> amount);
+	public DualisticElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
 	public DualisticElement<V> selfApply(Element element, int amount);
@@ -115,10 +115,13 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> add(Element... elements);
 
 	@Override
+	public DualisticElement<V> add(Iterable<Element> elements);
+
+	@Override
 	public DualisticElement<V> times(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement<V> times(Element element, Element<Numerical> amount);
+	public DualisticElement<V> times(Element element, Element<BigInteger> amount);
 
 	@Override
 	public DualisticElement<V> times(Element element, int amount);
@@ -141,10 +144,13 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> multiply(Element... elements);
 
 	@Override
+	public DualisticElement<V> multiply(Iterable<Element> elements);
+
+	@Override
 	public DualisticElement<V> power(Element element, BigInteger amount);
 
 	@Override
-	public DualisticElement<V> power(Element element, Element<Numerical> amount);
+	public DualisticElement<V> power(Element element, Element<BigInteger> amount);
 
 	@Override
 	public DualisticElement<V> power(Element element, int amount);

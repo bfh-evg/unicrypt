@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -84,14 +84,14 @@ public class ByteTreeExample {
 	public static void example2() {
 
 		// The same as Example 1, but using UniCrypt elements
-		N naturalNumber = N.getInstance();
+		N nSet = N.getInstance();
 
 		// Define multiple natural numbers
-		Element e1 = naturalNumber.getElement(1);
-		Element e2 = naturalNumber.getElement(2);
-		Element e3 = naturalNumber.getElement(3);
-		Element e4 = naturalNumber.getElement(4);
-		Element e5 = naturalNumber.getElement(256);
+		Element e1 = nSet.getElement(1);
+		Element e2 = nSet.getElement(2);
+		Element e3 = nSet.getElement(3);
+		Element e4 = nSet.getElement(4);
+		Element e5 = nSet.getElement(256);
 
 		// Combine e1 to e3
 		Tuple t1 = Tuple.getInstance(e1, e2, e3);
@@ -135,12 +135,12 @@ public class ByteTreeExample {
 	public static void example4() {
 
 		// Same as Example 2
-		N naturalNumber = N.getInstance();
-		Element e1 = naturalNumber.getElement(1);
-		Element e2 = naturalNumber.getElement(2);
-		Element e3 = naturalNumber.getElement(3);
-		Element e4 = naturalNumber.getElement(4);
-		Element e5 = naturalNumber.getElement(256);
+		N nSet = N.getInstance();
+		Element e1 = nSet.getElement(1);
+		Element e2 = nSet.getElement(2);
+		Element e3 = nSet.getElement(3);
+		Element e4 = nSet.getElement(4);
+		Element e5 = nSet.getElement(256);
 		Tuple t1 = Tuple.getInstance(e1, e2, e3);
 		Tuple t2 = Tuple.getInstance(e4, e5);
 		Tuple tuple = Tuple.getInstance(t1, t2);

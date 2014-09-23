@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.bytetree;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.nio.ByteBuffer;
 
@@ -54,43 +54,43 @@ public class ByteTreeLeaf
 
 	public static final byte IDENTIFIER = 1;
 
-	private final ByteArray binaryData;
+	private final ByteArray value;
 
-	protected ByteTreeLeaf(ByteArray binaryData) {
-		this.binaryData = binaryData;
-		this.length = LENGTH_OF_PREAMBLE + binaryData.getLength();
+	protected ByteTreeLeaf(ByteArray value) {
+		this.value = value;
+		this.length = LENGTH_OF_PREAMBLE + value.getLength();
 	}
 
-	protected ByteTreeLeaf(ByteArray binaryData, ByteArray byteArray) {
-		this(binaryData);
+	protected ByteTreeLeaf(ByteArray value, ByteArray byteArray) {
+		this(value);
 		this.byteArray = byteArray;
 	}
 
-	public ByteArray getBinaryData() {
-		return this.binaryData;
+	public ByteArray getValue() {
+		return this.value;
 	}
 
 	@Override
 	protected String defaultToStringValue() {
-		return this.binaryData.toString();
+		return this.value.toString();
 	}
 
 	@Override
 	protected ByteArray abstractGetRecursiveHashValue(HashAlgorithm hashAlgorithm) {
-		return this.binaryData.getHashValue(hashAlgorithm);
+		return this.value.getHashValue(hashAlgorithm);
 	}
 
 	@Override
 	protected void abstractConstructByteArray(ByteBuffer buffer, ByteArray byteArray) {
 		buffer.put(IDENTIFIER);
-		buffer.putInt(this.binaryData.getLength());
-		buffer.put(this.binaryData.getAll());
+		buffer.putInt(this.value.getLength());
+		buffer.put(this.value.getBytes());
 	}
 
 	@Override
 	public int hashCode() {
 		int hash = 5;
-		hash = 17 * hash + this.binaryData.hashCode();
+		hash = 17 * hash + this.value.hashCode();
 		return hash;
 	}
 
@@ -103,7 +103,7 @@ public class ByteTreeLeaf
 			return false;
 		}
 		final ByteTreeLeaf other = (ByteTreeLeaf) obj;
-		return this.binaryData.equals(other.binaryData);
+		return this.value.equals(other.value);
 	}
 
 }

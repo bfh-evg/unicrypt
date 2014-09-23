@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.numerical.Numerical;
+import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
@@ -61,7 +61,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	   extends AbstractSet<E, V>
 	   implements SemiGroup<V> {
 
-	public AbstractSemiGroup(Class<? extends Object> valueClass) {
+	protected AbstractSemiGroup(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 
@@ -78,6 +78,14 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
+		return this.defaultApply(IterableArray.getInstance(elements));
+	}
+
+	@Override
+	public final E apply(final Iterable<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
 		return this.defaultApply(elements);
 	}
 
@@ -90,11 +98,11 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E selfApply(final Element element, final Element<Numerical> amount) {
+	public final E selfApply(final Element element, final Element<BigInteger> amount) {
 		if (amount == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.selfApply(element, amount.getValue().getBigInteger());
+		return this.selfApply(element, amount.getValue());
 	}
 
 	@Override
@@ -119,8 +127,8 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	// The following protected methods are default implementations for sets.
 	// They may need to be changed in certain sub-classes.
 	//
-	protected E defaultApply(final Element... elements) {
-		if (elements.length == 0) {
+	protected E defaultApply(final Iterable<Element> elements) {
+		if (!elements.iterator().hasNext()) {
 			throw new IllegalArgumentException();
 		}
 		E result = null;

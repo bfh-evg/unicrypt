@@ -88,7 +88,7 @@ public class RandomNumberGenerator
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		return this.randomByteSequence.getNextByteArray(length).getAll();
+		return this.randomByteSequence.getNextByteArray(length).getBytes();
 	}
 
 	/**

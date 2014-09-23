@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageAndProofSystem;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -55,7 +56,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.Alphabet;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -86,7 +86,7 @@ public class PreimageAndProofSystemTest {
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofSystem pg = PreimageAndProofSystem.getInstance(scg, f1, f2);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
+		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(
@@ -114,7 +114,7 @@ public class PreimageAndProofSystemTest {
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageAndProofSystem pg = PreimageAndProofSystem.getInstance(scg, f1, f2);
-		assertTrue(pg.getProofFunctions().length == 2 && pg.getProofFunctions()[0].isEquivalent(f1));
+		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
 		// Invalid proof -> One preimages is wrong
 		Element privateInput = Tuple.getInstance(

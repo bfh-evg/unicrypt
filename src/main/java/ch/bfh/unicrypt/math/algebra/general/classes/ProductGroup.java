@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
 
 /**
  *
@@ -64,6 +64,11 @@ public class ProductGroup
 	}
 
 	@Override
+	public Group getLast() {
+		return (Group) super.getLast();
+	}
+
+	@Override
 	public Group getAt(int index) {
 		return (Group) super.getAt(index);
 	}
@@ -71,11 +76,6 @@ public class ProductGroup
 	@Override
 	public Group getAt(int... indices) {
 		return (Group) super.getAt(indices);
-	}
-
-	@Override
-	public Group[] getAll() {
-		return (Group[]) super.getAll();
 	}
 
 	@Override
@@ -100,14 +100,63 @@ public class ProductGroup
 	}
 
 	@Override
+	public ProductGroup extract(int offset, int length) {
+		return (ProductGroup) super.extract(offset, length);
+	}
+
+	@Override
+	public ProductGroup extractPrefix(int length) {
+		return (ProductGroup) super.extractPrefix(length);
+	}
+
+	@Override
+	public ProductGroup extractSuffix(int length) {
+		return (ProductGroup) super.extractSuffix(length);
+	}
+
+	@Override
+	public ProductGroup extractRange(int fromIndex, int toIndex) {
+		return (ProductGroup) super.extractRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductGroup remove(int offset, int length) {
+		return (ProductGroup) super.remove(offset, length);
+	}
+
+	@Override
+	public ProductGroup removePrefix(int length) {
+		return (ProductGroup) super.removePrefix(length);
+	}
+
+	@Override
+	public ProductGroup removeSuffix(int length) {
+		return (ProductGroup) super.removeSuffix(length);
+	}
+
+	@Override
+	public ProductGroup removeRange(int fromIndex, int toIndex) {
+		return (ProductGroup) super.removeRange(fromIndex, toIndex);
+	}
+
+	@Override
+	public ProductGroup reverse() {
+		return (ProductGroup) super.reverse();
+	}
+
+	@Override
+	public ProductGroup[] split(int... indices) {
+		return (ProductGroup[]) super.split(indices);
+	}
+
+	@Override
 	public final Tuple invert(Element element) {
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		int arity = this.getArity();
 		Tuple tuple = (Tuple) element;
-		final Element[] invertedElements = new Element[arity];
-		for (int i = 0; i < arity; i++) {
+		final Element[] invertedElements = new Element[this.getArity()];
+		for (int i : this.getAllIndices()) {
 			invertedElements[i] = tuple.getAt(i).invert();
 		}
 		return this.abstractGetElement(ImmutableArray.getInstance(invertedElements));

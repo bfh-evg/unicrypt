@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *
@@ -54,15 +54,16 @@ public class ByteArrayExample {
 		ByteArray byteArray = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
 
 		Example.printLine(byteArray);
-		Example.printLine("Length ", byteArray.getLength());
-		Example.printLine("Bytes  ", byteArray);
+		Example.printLine("Length    ", byteArray.getLength());
+		Example.printLine("Bytes     ", byteArray);
 
-		Example.printLine("Reverse", byteArray.reverse());
-		Example.printLine("Extract", byteArray.extract(2, 4));
-		Example.printLine("RemoveAt", byteArray.removeAt(6));
+		Example.printLine("Extract   ", byteArray.extract(2, 4));
+		Example.printLine("RemoveAt  ", byteArray.removeAt(6));
+		Example.printLine("ShiftLeft ", byteArray.shiftLeft(7));
+		Example.printLine("ShiftRight", byteArray.shiftRight(7));
 
 		Object[] byteArrays = byteArray.split(2, 4, 7);
-		Example.printLine("Split  ", byteArrays);
+		Example.printLine("Split     ", byteArrays);
 	}
 
 	public static void example2() {
@@ -74,7 +75,7 @@ public class ByteArrayExample {
 		Example.printLine(byteArray2);
 		Example.printLine(byteArray3);
 
-		Example.printLine("Conc   ", byteArray1.concatenate(byteArray2).concatenate(byteArray3));
+		Example.printLine("Conc   ", byteArray1.append(byteArray2).append(byteArray3));
 	}
 
 	public static void example3() {
@@ -84,31 +85,36 @@ public class ByteArrayExample {
 		Example.printLine(byteArray1);
 		Example.printLine(byteArray2);
 
-		Example.printLine("Extract", byteArray2.extract(2, 4));
-		Example.printLine("RemoveAt", byteArray2.removeAt(6));
+		Example.printLine("Extract   ", byteArray2.extract(2, 4));
+		Example.printLine("RemoveAt  ", byteArray2.removeAt(6));
+		Example.printLine("ShiftLeft ", byteArray2.shiftLeft(7));
+		Example.printLine("ShiftRight", byteArray2.shiftRight(7));
+
 		Object[] byteArrays = byteArray2.split(2, 4, 7);
-		Example.printLine("Split  ", byteArrays);
+		Example.printLine("Split     ", byteArrays);
 	}
 
 	public static void example4() {
 		ByteArray byteArray1 = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-		ByteArray byteArray2 = byteArray1.extract(1, 7).reverse();
+		ByteArray byteArray2 = byteArray1.extract(1, 8).reverse();
 
 		Example.printLine(byteArray1);
 		Example.printLine(byteArray2);
 
-		Example.printLine("Extract", byteArray2.extract(2, 4));
+		Example.printLine("Extract   ", byteArray2.extract(2, 4));
 		Object[] byteArrays = byteArray2.split(2, 4);
-		Example.printLine("Split  ", byteArrays);
-		Example.printLine("Conc   ", byteArray1.concatenate(byteArray2));
-		Example.printLine("Conc   ", byteArray2.concatenate(byteArray1));
+		Example.printLine("Split     ", byteArrays);
+		Example.printLine("Append    ", byteArray1.append(byteArray2));
+		Example.printLine("Append    ", byteArray2.append(byteArray1));
+		Example.printLine("ShiftLeft ", byteArray2.shiftLeft(7));
+		Example.printLine("ShiftRight ", byteArray2.shiftRight(7));
 	}
 
 	public static void example5() {
 		ByteArray byteArray1 = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}).extract(1, 7);
 
 		Example.printLine(byteArray1);
-		for (int i = 8; i < 16; i++) {
+		for (int i = 0; i < 16; i++) {
 			Example.printLine("GetBitAt", byteArray1.getBitAt(i));
 		}
 		Example.printLine("0-Bits", byteArray1.countZeroBits());
@@ -119,11 +125,11 @@ public class ByteArrayExample {
 		ByteArray byteArray2 = byteArray1.reverse();
 
 		Example.printLine(byteArray2);
-		for (int i = 8; i < 16; i++) {
+		for (int i = 0; i < 16; i++) {
 			Example.printLine("GetBitAt", byteArray2.getBitAt(i));
 		}
-		Example.printLine("0-Bits", byteArray2.countZeroBits());
-		Example.printLine("1-Bits", byteArray2.countOneBits());
+		Example.printLine("Count 0-Bits ", byteArray2.countZeroBits());
+		Example.printLine("Count 1-Bit s", byteArray2.countOneBits());
 		Example.printLine("Leading Zeros", byteArray2.countLeadingZeroBits());
 		Example.printLine("Trailing Zeros", byteArray2.countTrailingZeroBits());
 	}
@@ -133,10 +139,10 @@ public class ByteArrayExample {
 
 		Example.printLine(byteArray);
 		for (int i = 0; i < 10; i++) {
-			Example.printLine("Left ", byteArray.shiftRight(i));
+			Example.printLine("Left ", byteArray.shiftBitsRight(i));
 		}
 		for (int i = 0; i < 10; i++) {
-			Example.printLine("Right", byteArray.shiftLeft(i));
+			Example.printLine("Right", byteArray.shiftBitsLeft(i));
 		}
 	}
 

@@ -237,7 +237,7 @@ public class ReEncryptionShuffleProofSystem
 			// - Com(e', w)                              [n+1]
 			Element ePrimeVs[] = new Element[ePrimeV.getArity()];
 			for (int i = 0; i < ePrimeV.getArity(); i++) {
-				ePrimeVs[i] = this.cyclicGroup.getZModOrder().getElement(((ZElement) ePrimeV.getAt(i)).getValue().getBigInteger());
+				ePrimeVs[i] = this.cyclicGroup.getZModOrder().getElement(((ZElement) ePrimeV.getAt(i)).getValue().mod(this.cyclicGroup.getOrder()));
 			}
 			cV[0] = gpcs.commit(Tuple.getInstance(ePrimeVs), w);
 

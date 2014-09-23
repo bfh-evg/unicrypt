@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.padding.abstracts;
 
 import ch.bfh.unicrypt.crypto.schemes.padding.interfaces.ReversiblePaddingScheme;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -60,8 +60,8 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 
 	private Function unpaddingFunction;
 
-	protected AbstractReversibleByteArrayPaddingScheme(ByteArrayMonoid byteArrayMonoid) {
-		super(byteArrayMonoid);
+	protected AbstractReversibleByteArrayPaddingScheme(ByteArrayMonoid paddingSpace) {
+		super(paddingSpace);
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 	}
 
 	protected Function abstractGetUnpaddingFunction() {
-		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(this.byteArrayMonoid, ByteArrayMonoid.getInstance()) {
+		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(this.paddingSpace, this.messageSpace) {
 			@Override
 			protected ByteArrayElement abstractApply(ByteArrayElement element, RandomByteSequence randomByteSequence) {
 				ByteArray byteArray = element.getValue();
@@ -90,12 +90,12 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 
 	private int getUnpaddingLength(ByteArray byteArray) {
 		if (this.abstractEndsWithLength()) {
-			return byteArray.getAt(byteArray.getLength() - 1);
+			return byteArray.getByteAt(byteArray.getLength() - 1);
 		}
 		Byte separator = this.abstractGetSeparator();
 		if (separator != null) {
 			int i = byteArray.getLength() - 1;
-			while (byteArray.getAt(i) != separator) {
+			while (byteArray.getByteAt(i) != separator) {
 				i--;
 			}
 			return byteArray.getLength() - i;

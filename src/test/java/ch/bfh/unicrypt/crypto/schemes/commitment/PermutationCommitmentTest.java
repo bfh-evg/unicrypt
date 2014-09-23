@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.schemes.commitment;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.helper.Permutation;
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -123,10 +123,10 @@ public class PermutationCommitmentTest {
 
 		PermutationCommitmentScheme cp = PermutationCommitmentScheme.getInstance(this.G_q, pi.getSize(), this.rrs);
 		Tuple commitment = cp.commit(permutation, randomizations);
-//TODO:		assertTrue(commitment.getAt(0).isEquivalent(this.G_q.getElement(3)));  // 4^1 * 18 =  3
-//TODO:		assertTrue(commitment.getAt(1).isEquivalent(this.G_q.getElement(13))); // 4^2 *  8 = 13
-//TODO:		assertTrue(commitment.getAt(2).isEquivalent(this.G_q.getElement(8)));  // 4^3 *  3 =  8
-//TODO:		assertTrue(commitment.getAt(3).isEquivalent(this.G_q.getElement(4)));  // 4^4 *  9 =  4
+//TODO:		assertTrue(commitment.getByteAt(0).isEquivalent(this.G_q.getElement(3)));  // 4^1 * 18 =  3
+//TODO:		assertTrue(commitment.getByteAt(1).isEquivalent(this.G_q.getElement(13))); // 4^2 *  8 = 13
+//TODO:		assertTrue(commitment.getByteAt(2).isEquivalent(this.G_q.getElement(8)));  // 4^3 *  3 =  8
+//TODO:		assertTrue(commitment.getByteAt(3).isEquivalent(this.G_q.getElement(4)));  // 4^4 *  9 =  4
 	}
 
 }

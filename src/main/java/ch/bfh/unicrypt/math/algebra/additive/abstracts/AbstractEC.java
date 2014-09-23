@@ -42,9 +42,12 @@
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
 import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -59,7 +62,8 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this elliptic curve
  * @author
  */
-public abstract class AbstractEC<F extends FiniteField, V extends Object>
+public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
+
 	   extends AbstractAdditiveCyclicGroup<ECElement<V>, Point<DualisticElement<V>>>
 	   implements EC<V> {
 
@@ -148,26 +152,31 @@ public abstract class AbstractEC<F extends FiniteField, V extends Object>
 	}
 
 	@Override
-	protected ECElement<V> abstractGetElementFrom(BigInteger integerValue) {
-		if (integerValue.equals(BigInteger.ZERO)) {
-			return this.getZeroElement();
-		}
-		BigInteger[] result = MathUtil.unpair(integerValue.subtract(BigInteger.ONE));
-		DualisticElement<V> xValue = this.getFiniteField().getElementFrom(result[0]);
-		DualisticElement<V> yValue = this.getFiniteField().getElementFrom(result[1]);
-		if (xValue == null || yValue == null) {
-			return null; // no such element
-		}
-		return this.getElement(xValue, yValue);
-	}
+	protected BigIntegerConverter<Point<DualisticElement<V>>> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<Point<DualisticElement<V>>>(null) { // class parameter not needed
 
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(ECElement<V> element) {
-		Point<DualisticElement<V>> point = element.getValue();
-		if (point.equals(this.infinityPoint)) {
-			return BigInteger.ZERO;
-		}
-		return MathUtil.pair(point.getX().getBigInteger(), point.getY().getBigInteger()).add(BigInteger.ONE);
+			@Override
+			protected BigInteger abstractConvert(Point<DualisticElement<V>> point) {
+				if (point.equals(infinityPoint)) {
+					return BigInteger.ZERO;
+				}
+				return MathUtil.pair(point.getX().getBigInteger(), point.getY().getBigInteger()).add(BigInteger.ONE);
+			}
+
+			@Override
+			protected Point<DualisticElement<V>> abstractReconvert(BigInteger value) {
+				if (value.equals(BigInteger.ZERO)) {
+					return getZeroElement().getValue();
+				}
+				BigInteger[] result = MathUtil.unpair(value.subtract(BigInteger.ONE));
+				DualisticElement<V> xValue = getFiniteField().getElementFrom(result[0]);
+				DualisticElement<V> yValue = getFiniteField().getElementFrom(result[1]);
+				if (xValue == null || yValue == null) {
+					return null; // no such element
+				}
+				return Point.getInstance((DualisticElement<V>) xValue, (DualisticElement<V>) yValue);
+			}
+		};
 	}
 
 	@Override
@@ -191,10 +200,10 @@ public abstract class AbstractEC<F extends FiniteField, V extends Object>
 	@Override
 	protected ECElement<V> abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		if (this.getDefaultGenerator() != null) {
-			DualisticElement<V> r = this.getFiniteField().getRandomElement(randomByteSequence);
+			ZMod r = ZMod.getInstance(this.getFiniteField().getOrder());
 			// TODO ?!?
 			//return this.getDefaultGenerator().selfApply(r);
-			return this.getDefaultGenerator().selfApply(r.getBigInteger());
+			return this.getDefaultGenerator().selfApply(r.getRandomElement().getBigInteger());
 		} else {
 			return this.getRandomElementWithoutGenerator(randomByteSequence);
 		}

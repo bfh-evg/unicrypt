@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.abstracts.AbstractRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.PseudoRandomByteSequence;
@@ -124,7 +124,7 @@ public class OutputFeedbackRandomByteSequence
 
 		//Careful: Due to the underlying implementation of ByteArray, this  leaks information within the internal array.
 		return full[1];
-		//return ByteArray.getInstance(full[1].getAll());
+		//return ByteArray.getInstance(full[1].getBytes());
 
 	}
 
@@ -151,7 +151,7 @@ public class OutputFeedbackRandomByteSequence
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		while (bytes.size() < length) {
 			try {
-				bytes.write(update().getAll());
+				bytes.write(update().getBytes());
 			} catch (IOException ex) {
 				Logger.getLogger(OutputFeedbackRandomByteSequence.class.getName()).log(Level.SEVERE, null, ex);
 			}

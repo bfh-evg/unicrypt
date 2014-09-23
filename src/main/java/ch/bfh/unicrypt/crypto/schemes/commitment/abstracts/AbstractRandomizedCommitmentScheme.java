@@ -55,20 +55,27 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author philipp
- * @param <MS> MessageSpace
- * @param <ME> MessageElement
- * @param <CS>
- * @param <CE>
- * @param <RS>
+ * @author rolfhaenni
+ * @param <MS> Message space
+ * @param <ME> Message element
+ * @param <CS> Commitment space
+ * @param <CE> Commitment element
+ * @param <RS> Randomization space
  */
 public abstract class AbstractRandomizedCommitmentScheme<MS extends Set, ME extends Element, CS extends Set, CE extends Element, RS extends Set>
 	   extends AbstractCommitmentScheme<MS, CS>
 	   implements RandomizedCommitmentScheme {
 
+	protected final RS randomizationSpace;
+
+	public AbstractRandomizedCommitmentScheme(MS messageSpace, CS commitmentSpace, RS randomizationSpace) {
+		super(messageSpace, commitmentSpace);
+		this.randomizationSpace = randomizationSpace;
+	}
+
 	@Override
 	public final RS getRandomizationSpace() {
-		return (RS) ((ProductSet) this.getCommitmentFunction().getDomain()).getAt(1);
+		return this.randomizationSpace;
 	}
 
 	@Override
@@ -82,13 +89,8 @@ public abstract class AbstractRandomizedCommitmentScheme<MS extends Set, ME exte
 	}
 
 	@Override
-	protected final MS abstractGetMessageSpace() {
-		return (MS) ((ProductSet) this.getCommitmentFunction().getDomain()).getAt(0);
-	}
-
-	@Override
 	protected Function abstractGetDecommitmentFunction() {
-		ProductSet decommitmentDomain = ProductSet.getInstance(this.getMessageSpace(), this.getRandomizationSpace(), this.getCommitmentSpace());
+		ProductSet decommitmentDomain = ProductSet.getInstance(this.messageSpace, this.randomizationSpace, this.commitmentSpace);
 		return CompositeFunction.getInstance(
 			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(AdapterFunction.getInstance(decommitmentDomain, 0, 1),
 																			  this.getCommitmentFunction()),

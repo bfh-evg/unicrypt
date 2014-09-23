@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BooleanToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -73,12 +75,12 @@ public class BooleanSet
 	}
 
 	@Override
-	protected ZModPrime defaultGetZModOrder() {
+	public ZModPrime getZModOrder() {
 		return ZModPrime.getInstance(this.getOrder());
 	}
 
 	@Override
-	protected ZStarModPrime defaultGetZStarModOrder() {
+	public ZStarModPrime getZStarModOrder() {
 		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
@@ -98,22 +100,8 @@ public class BooleanSet
 	}
 
 	@Override
-	protected BooleanElement abstractGetElementFrom(BigInteger bigInteger) {
-		if (bigInteger.equals(BigInteger.ZERO)) {
-			return BooleanSet.FALSE;
-		}
-		if (bigInteger.equals(BigInteger.ONE)) {
-			return BooleanSet.TRUE;
-		}
-		return null; // no such element
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(BooleanElement element) {
-		if (element.getValue()) {
-			return BigInteger.ONE;
-		}
-		return BigInteger.ZERO;
+	protected BigIntegerConverter<Boolean> abstractGetBigIntegerConverter() {
+		return BooleanToBigInteger.getInstance();
 	}
 
 	@Override

@@ -41,13 +41,16 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.LinkedList;
 
 /**
  *
@@ -87,6 +90,11 @@ public class FiniteByteArraySet
 	}
 
 	@Override
+	protected ByteArrayConverter<ByteArray> defaultGetByteArrayConverter() {
+		return ByteArrayToByteArray.getInstance();
+	}
+
+	@Override
 	protected boolean abstractContains(ByteArray value) {
 		return value.getLength() >= this.minLength && value.getLength() <= this.getMaxLength();
 	}
@@ -97,36 +105,8 @@ public class FiniteByteArraySet
 	}
 
 	@Override
-	protected FiniteByteArrayElement abstractGetElementFrom(BigInteger value) {
-		if (value.compareTo(this.getOrder()) >= 0) {
-			return null; // no such element
-		}
-		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
-		LinkedList<Byte> byteList = new LinkedList<Byte>();
-		while (!value.equals(BigInteger.ZERO) || byteList.size() < this.minLength) {
-			if (byteList.size() >= this.minLength) {
-				value = value.subtract(BigInteger.ONE);
-			}
-			byteList.addFirst(value.mod(size).byteValue());
-			value = value.divide(size);
-		}
-		return this.abstractGetElement(ByteArray.getInstance(byteList));
-	}
-
-	@Override
-	protected BigInteger abstractGetBigIntegerFrom(FiniteByteArrayElement element) {
-		ByteArray value = element.getValue();
-		int length = value.getLength();
-		BigInteger result = BigInteger.ZERO;
-		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
-		for (int i = 0; i < length; i++) {
-			int intValue = value.getIntAt(i);
-			if (i < length - this.minLength) {
-				intValue++;
-			}
-			result = result.multiply(size).add(BigInteger.valueOf(intValue));
-		}
-		return result;
+	protected BigIntegerConverter<ByteArray> abstractGetBigIntegerConverter() {
+		return FiniteByteArrayToBigInteger.getInstance(this.minLength, this.maxLength);
 	}
 
 	@Override
@@ -141,8 +121,8 @@ public class FiniteByteArraySet
 
 	@Override
 	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		// this seems to be unnecessarly complicated, but is needed to generate shorer byte arrays with equal probability
-		return this.abstractGetElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+		// this seems to be unnecessarly complicated, but is needed to generate shorter byte arrays with equal probability
+		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 
 	@Override
@@ -170,6 +150,9 @@ public class FiniteByteArraySet
 		if (minLength < 0 || maxLength < minLength) {
 			throw new IllegalArgumentException();
 		}
+		if (minLength == maxLength) {
+			return FixedByteArraySet.getInstance(minLength);
+		}
 		return new FiniteByteArraySet(minLength, maxLength);
 	}
 
@@ -188,6 +171,9 @@ public class FiniteByteArraySet
 		while (order1.multiply(order2).compareTo(minOrder) < 0) {
 			order2 = order2.multiply(size).add(BigInteger.ONE);
 			maxLength++;
+		}
+		if (minLength == maxLength) {
+			return FixedByteArraySet.getInstance(minLength);
 		}
 		return new FiniteByteArraySet(minLength, maxLength);
 	}

@@ -53,15 +53,15 @@ public class ZExample {
 
 	public static void example1() {
 
-		Z wholeNumbers = Z.getInstance();
-		Element z0 = wholeNumbers.getZeroElement();
-		Element z1 = wholeNumbers.getElement(5);
-		Element z2 = wholeNumbers.getElement(10);
-		Element z3 = wholeNumbers.getElement(-3);
+		Z zSet = Z.getInstance();
+		Element z0 = zSet.getZeroElement();
+		Element z1 = zSet.getElement(5);
+		Element z2 = zSet.getElement(10);
+		Element z3 = zSet.getElement(-3);
 
-		Element sum = wholeNumbers.add(z0, z1, z2, z3);
+		Element sum = zSet.add(z0, z1, z2, z3);
 
-		Example.printLines(wholeNumbers, z0, z1, z2, z3, sum);
+		Example.printLines(zSet, z0, z1, z2, z3, sum);
 	}
 
 	public static void main(final String[] args) {

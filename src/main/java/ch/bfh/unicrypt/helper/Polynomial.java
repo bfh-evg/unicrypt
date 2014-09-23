@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper;
 
-import ch.bfh.unicrypt.helper.array.ByteArray;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -121,11 +121,11 @@ public class Polynomial<C>
 		} else {
 			int byteIndex = 0;
 			for (int i = 0; i < this.binaryCoefficients.getLength(); i++) {
-				if (this.binaryCoefficients.getAt(i) != 0) {
+				if (this.binaryCoefficients.getByteAt(i) != 0) {
 					byteIndex = i;
 				}
 			}
-			byte b = coefficients.getAt(byteIndex);
+			byte b = coefficients.getByteAt(byteIndex);
 			int bitIndex = Integer.SIZE - Integer.numberOfLeadingZeros(b & 0xff);
 			int d = byteIndex * Byte.SIZE + bitIndex - 1;
 			this.degree = d < 0 ? ZERO_POLYNOMIAL_DEGREE : d;
@@ -153,16 +153,16 @@ public class Polynomial<C>
 			throw new IllegalArgumentException();
 		}
 		if (this.isBinary()) {
-			int byteIndex = index / Byte.SIZE;
-			int bitIndex = index % Byte.SIZE;
-			if (byteIndex >= this.binaryCoefficients.getLength()) {
-				return this.zeroCoefficient;
+			if (index < this.binaryCoefficients.getBitLength() && this.binaryCoefficients.getBitAt(index)) {
+				return this.oneCoefficient;
 			}
-			return ((this.binaryCoefficients.getAt(byteIndex) >> bitIndex) & 1) == 1 ? this.oneCoefficient : this.zeroCoefficient;
 		} else {
 			C coefficient = this.coefficients.get(index);
-			return coefficient == null ? this.zeroCoefficient : coefficient;
+			if (coefficient != null) {
+				return coefficient;
+			}
 		}
+		return this.zeroCoefficient;
 	}
 
 	public ByteArray getCoefficients() {
@@ -173,15 +173,12 @@ public class Polynomial<C>
 	}
 
 	public final ImmutableArray<Integer> getIndices() {
-
 		if (this.indices == null) {
 			if (this.isBinary()) {
 				ArrayList<Integer> ind = new ArrayList();
-				for (int i = 0; i < this.binaryCoefficients.getLength(); i++) {
-					for (int j = 0; j < Byte.SIZE; j++) {
-						if (((this.binaryCoefficients.getAt(i) >> j) & 1) == 1) {
-							ind.add(i * Byte.SIZE + j);
-						}
+				for (int i = 0; i < this.binaryCoefficients.getBitLength(); i++) {
+					if (this.binaryCoefficients.getBitAt(i)) {
+						ind.add(i);
 					}
 				}
 				this.indices = ImmutableArray.getInstance(ind);
@@ -301,7 +298,7 @@ public class Polynomial<C>
 		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Polynomial<C>(coefficients.stripLeadingZeroBytes(), zeroCoefficient, oneCoefficient);
+		return new Polynomial<C>(coefficients.removeSuffix(), zeroCoefficient, oneCoefficient);
 	}
 
 }

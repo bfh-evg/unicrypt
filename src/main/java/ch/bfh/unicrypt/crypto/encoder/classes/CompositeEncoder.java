@@ -43,9 +43,8 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
-import ch.bfh.unicrypt.helper.array.ImmutableArray;
-import ch.bfh.unicrypt.helper.compound.Compound;
-import ch.bfh.unicrypt.helper.compound.RecursiveCompound;
+import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -54,7 +53,7 @@ import java.util.Iterator;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
-	   implements RecursiveCompound<CompositeEncoder, Encoder>, Iterable<Encoder> {
+	   implements RecursiveArray<CompositeEncoder, Encoder> {
 
 	private final ImmutableArray<Encoder> encoders;
 
@@ -63,18 +62,48 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public Encoder[] getAll() {
-		Encoder[] result = new Encoder[this.getArity()];
-		int i = 0;
-		for (Encoder encoder : this.encoders) {
-			result[i++] = encoder;
-		}
-		return result;
+	public int getLength() {
+		return this.encoders.getLength();
 	}
 
 	@Override
-	public int getArity() {
-		return this.encoders.getLength();
+	public boolean isEmpty() {
+		return this.encoders.isEmpty();
+	}
+
+	@Override
+	public boolean isUniform() {
+		return this.encoders.isUniform();
+	}
+
+	@Override
+	public Iterable<Integer> getAllIndices() {
+		return this.encoders.getAllIndices();
+	}
+
+	@Override
+	public Iterable<Integer> getIndices(Encoder encoder) {
+		return this.encoders.getIndices(encoder);
+	}
+
+	@Override
+	public Iterable<Integer> getIndicesExcept(Encoder encoder) {
+		return this.encoders.getIndicesExcept(encoder);
+	}
+
+	@Override
+	public int count(Encoder encoder) {
+		return this.encoders.count(encoder);
+	}
+
+	@Override
+	public int countPrefix(Encoder encoder) {
+		return this.encoders.countPrefix(encoder);
+	}
+
+	@Override
+	public int countSuffix(Encoder encoder) {
+		return this.encoders.countSuffix(encoder);
 	}
 
 	@Override
@@ -109,33 +138,43 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public boolean isEmpty() {
-		return this.encoders.isEmpty();
-	}
-
-	@Override
-	public boolean isUniform() {
-		return this.encoders.isUniform();
+	public CompositeEncoder extract(int offset, int length) {
+		return new CompositeEncoder(this.encoders.extract(offset, length));
 	}
 
 	@Override
 	public CompositeEncoder extractPrefix(int length) {
-		return this.extract(0, length);
+		return new CompositeEncoder(this.encoders.extractPrefix(length));
 	}
 
 	@Override
 	public CompositeEncoder extractSuffix(int length) {
-		return this.extract(this.getArity() - length, length);
+		return new CompositeEncoder(this.encoders.extractSuffix(length));
 	}
 
 	@Override
 	public CompositeEncoder extractRange(int fromIndex, int toIndex) {
-		return this.extract(fromIndex, toIndex - fromIndex + 1);
+		return new CompositeEncoder(this.encoders.extractRange(fromIndex, toIndex));
 	}
 
 	@Override
-	public CompositeEncoder extract(int offset, int length) {
-		return new CompositeEncoder(this.encoders.extract(offset, length));
+	public CompositeEncoder remove(int offset, int length) {
+		return new CompositeEncoder(this.encoders.remove(offset, length));
+	}
+
+	@Override
+	public CompositeEncoder removePrefix(int n) {
+		return new CompositeEncoder(this.encoders.removePrefix(n));
+	}
+
+	@Override
+	public CompositeEncoder removeSuffix(int n) {
+		return new CompositeEncoder(this.encoders.removeSuffix(n));
+	}
+
+	@Override
+	public CompositeEncoder removeRange(int fromIndex, int toIndex) {
+		return new CompositeEncoder(this.encoders.removeRange(fromIndex, toIndex));
 	}
 
 	@Override
@@ -159,12 +198,23 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public CompositeEncoder append(Compound<CompositeEncoder, Encoder> compound) {
-		if (compound instanceof CompositeEncoder) {
-			CompositeEncoder other = (CompositeEncoder) compound;
-			return new CompositeEncoder(this.encoders.append(other.encoders));
+	public CompositeEncoder append(CompositeEncoder other) {
+		return new CompositeEncoder(this.encoders.append(other.encoders));
+	}
+
+	@Override
+	public CompositeEncoder reverse() {
+		return new CompositeEncoder(this.encoders.reverse());
+	}
+
+	@Override
+	public CompositeEncoder[] split(int... indices) {
+		ImmutableArray<Encoder>[] encoderArray = this.encoders.split(indices);
+		CompositeEncoder[] result = new CompositeEncoder[encoderArray.length];
+		for (int i = 0; i < encoderArray.length; i++) {
+			result[i] = new CompositeEncoder(encoderArray[i]);
 		}
-		throw new IllegalArgumentException();
+		return result;
 	}
 
 	@Override
@@ -174,9 +224,9 @@ public class CompositeEncoder
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		int arity = this.getArity();
-		Function[] encodingFunctions = new Function[arity];
-		for (int i = 0; i < arity; i++) {
+		int length = this.getLength();
+		Function[] encodingFunctions = new Function[length];
+		for (int i : this.getAllIndices()) {
 			encodingFunctions[i] = this.encoders.getAt(i).getEncodingFunction();
 		}
 		return CompositeFunction.getInstance(encodingFunctions);
@@ -184,10 +234,10 @@ public class CompositeEncoder
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		int arity = this.getArity();
-		Function[] decodingFunctions = new Function[arity];
-		for (int i = 0; i < arity; i++) {
-			decodingFunctions[arity - i - 1] = this.encoders.getAt(i).getDecodingFunction();
+		int length = this.getLength();
+		Function[] decodingFunctions = new Function[length];
+		for (int i : this.getAllIndices()) {
+			decodingFunctions[length - i - 1] = this.encoders.getAt(i).getDecodingFunction();
 		}
 		return CompositeFunction.getInstance(decodingFunctions);
 	}
@@ -203,8 +253,8 @@ public class CompositeEncoder
 		return CompositeEncoder.getInstance(ImmutableArray.getInstance(encoders));
 	}
 
-	public static CompositeEncoder getInstance(Encoder encoder, int arity) {
-		return CompositeEncoder.getInstance(ImmutableArray.getInstance(encoder, arity));
+	public static CompositeEncoder getInstance(Encoder encoder, int length) {
+		return CompositeEncoder.getInstance(ImmutableArray.getInstance(encoder, length));
 	}
 
 }

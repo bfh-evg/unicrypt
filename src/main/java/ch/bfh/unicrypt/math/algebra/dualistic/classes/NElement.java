@@ -43,17 +43,17 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.helper.numerical.NaturalNumber;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
 public class NElement
-	   extends AbstractDualisticElement<N, NElement, NaturalNumber>
-	   implements DualisticElement<NaturalNumber> {
+	   extends AbstractDualisticElement<N, NElement, BigInteger>
+	   implements DualisticElement<BigInteger> {
 
-	protected NElement(final N n, final NaturalNumber value) {
+	protected NElement(final N n, final BigInteger value) {
 		super(n, value);
 	}
 
