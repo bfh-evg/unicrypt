@@ -59,6 +59,7 @@ public class Alphabet
 	public static final Alphabet ALPHANUMERIC = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "[A-Za-z0-9]");
 	public static final Alphabet BASE64 = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\+\\/", "[A-Za-z0-9\\+\\/]");
 	public static final Alphabet PRINTABLE_ASCII = Alphabet.getInstance('\u0020', '\u007E');
+	public static final Alphabet UNICODE_BMP = Alphabet.getInstance('\u0000', '\uFFFF');
 
 	private final String characters;
 	private final String regExp;
