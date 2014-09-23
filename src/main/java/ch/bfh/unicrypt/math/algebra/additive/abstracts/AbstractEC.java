@@ -53,8 +53,8 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-
 import java.math.BigInteger;
 
 /**
@@ -114,13 +114,15 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 	public final BigInteger getCoFactor() {
 		return this.coFactor;
 	}
-	
-	
 
 	@Override
-	protected ZMod defaultGetZModOrder() {
-		ZModPrime zModPrime=ZModPrime.getInstance(this.getOrder());
-		return zModPrime;
+	public ZModPrime getZModOrder() {
+		return ZModPrime.getInstance(this.getOrder());
+	}
+
+	@Override
+	public ZStarModPrime getZStarModOrder() {
+		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
 	@Override
