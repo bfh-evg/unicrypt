@@ -67,10 +67,10 @@ import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.IdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.InvertFunction;
 import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
 import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.classes.TimesFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
@@ -106,8 +106,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 		ProductSet middleSpace = ProductSet.getInstance(zMod, 3);
 
 		return CompositeFunction.getInstance(
-			   MultiIdentityFunction.getInstance(inputSpace, 3),
-			   ProductFunction.getInstance(
+			   SharedDomainFunction.getInstance(
 					  SelectionFunction.getInstance(inputSpace, 0),
 					  CompositeFunction.getInstance(
 							 AdapterFunction.getInstance(inputSpace, 1, 2),
@@ -116,12 +115,10 @@ public class SchnorrSignatureScheme<MS extends Set>
 									GeneratorFunction.getInstance(this.generator)),
 							 this.getHashConvertModuloFunction(zMod)),
 					  SelectionFunction.getInstance(inputSpace, 2)),
-			   MultiIdentityFunction.getInstance(middleSpace, 2),
-			   ProductFunction.getInstance(
+			   SharedDomainFunction.getInstance(
 					  SelectionFunction.getInstance(middleSpace, 1),
 					  CompositeFunction.getInstance(
-							 MultiIdentityFunction.getInstance(middleSpace, 2),
-							 ProductFunction.getInstance(
+							 SharedDomainFunction.getInstance(
 									CompositeFunction.getInstance(
 										   AdapterFunction.getInstance(middleSpace, 0, 1),
 										   TimesFunction.getInstance(zMod, zMod)),
@@ -135,21 +132,17 @@ public class SchnorrSignatureScheme<MS extends Set>
 		ProductSet inputSpace = ProductSet.getInstance(this.cyclicGroup, this.messageSpace, this.signatureSpace);
 
 		return CompositeFunction.getInstance(
-			   MultiIdentityFunction.getInstance(inputSpace, 2),
-			   ProductFunction.getInstance(
+			   SharedDomainFunction.getInstance(
 					  CompositeFunction.getInstance(
-							 MultiIdentityFunction.getInstance(inputSpace, 2),
-							 ProductFunction.getInstance(
+							 SharedDomainFunction.getInstance(
 									SelectionFunction.getInstance(inputSpace, 1),
 									CompositeFunction.getInstance(
-										   MultiIdentityFunction.getInstance(inputSpace, 2),
-										   ProductFunction.getInstance(
+										   SharedDomainFunction.getInstance(
 												  CompositeFunction.getInstance(
 														 SelectionFunction.getInstance(inputSpace, 2, 1),
 														 GeneratorFunction.getInstance(this.generator)),
 												  CompositeFunction.getInstance(
-														 MultiIdentityFunction.getInstance(inputSpace, 2),
-														 ProductFunction.getInstance(
+														 SharedDomainFunction.getInstance(
 																SelectionFunction.getInstance(inputSpace, 0),
 																SelectionFunction.getInstance(inputSpace, 2, 0)),
 														 SelfApplyFunction.getInstance(this.cyclicGroup, zMod),

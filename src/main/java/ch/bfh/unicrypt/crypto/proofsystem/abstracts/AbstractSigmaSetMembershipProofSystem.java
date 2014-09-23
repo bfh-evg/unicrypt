@@ -159,7 +159,7 @@ public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGrou
 
 	private ProductFunction createPreimageProofFunction() {
 
-		// proofFunction = composite( multiIdentity(2), productFunction(selction(0), setMembershipProofFunction), deltaFunction)
+		// proofFunction = composite( sharedDomainFunction(selction(0), setMembershipProofFunction), deltaFunction)
 		final ProductSet setMembershipPFDomain = (ProductSet) this.getSetMembershipProofFunction().getDomain();
 		final Function proofFunction = CompositeFunction.getInstance(SharedDomainFunction.getInstance(SelectionFunction.getInstance(setMembershipPFDomain, 0),
 																									  this.getSetMembershipProofFunction()),

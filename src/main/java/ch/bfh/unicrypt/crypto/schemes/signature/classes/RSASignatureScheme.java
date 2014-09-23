@@ -60,10 +60,9 @@ import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.EqualityFunction;
 import ch.bfh.unicrypt.math.function.classes.HashFunction;
 import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
-import ch.bfh.unicrypt.math.function.classes.MultiIdentityFunction;
 import ch.bfh.unicrypt.math.function.classes.PowerFunction;
-import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
+import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class RSASignatureScheme<MS extends Set>
@@ -89,8 +88,7 @@ public class RSASignatureScheme<MS extends Set>
 	protected Function abstractGetSignatureFunction() {
 		ProductSet inputSpace = ProductSet.getInstance(this.zMod, this.messageSpace);
 		return CompositeFunction.getInstance(
-			   MultiIdentityFunction.getInstance(inputSpace, 2),
-			   ProductFunction.getInstance(
+			   SharedDomainFunction.getInstance(
 					  this.getSelectHashConvertModuloFunction(inputSpace),
 					  SelectionFunction.getInstance(inputSpace, 0)),
 			   //computes m^d
@@ -102,9 +100,7 @@ public class RSASignatureScheme<MS extends Set>
 		ProductSet inputSpace = ProductSet.getInstance(this.zMod, this.messageSpace, this.signatureSpace);
 		return CompositeFunction.getInstance(
 			   //duplicate the input for the power function (s^e) and equality function m=s^e
-			   MultiIdentityFunction.getInstance(inputSpace, 2),
-			   //product function: selection of m and computation of s^e
-			   ProductFunction.getInstance(
+			   SharedDomainFunction.getInstance(
 					  //select parameter 1 (message) to comute hash and pass it later to equality function
 					  this.getSelectHashConvertModuloFunction(inputSpace),
 					  CompositeFunction.getInstance(
