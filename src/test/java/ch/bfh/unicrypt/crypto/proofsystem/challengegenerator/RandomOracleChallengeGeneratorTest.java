@@ -41,19 +41,20 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator;
 
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleChallengeGenerator;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import org.junit.Test;
 
-public class StandardNonInteractiveChallengeGeneratorTest {
+public class RandomOracleChallengeGeneratorTest {
 
 	@Test
 	public void testStandardNonInteractiveElementChallengeGenerator() {
 
 		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
-		StandardNonInteractiveChallengeGenerator cg = StandardNonInteractiveChallengeGenerator.getInstance(cyclicGroup, cyclicGroup, 10);
+		RandomOracleChallengeGenerator cg = RandomOracleChallengeGenerator.getInstance(cyclicGroup, ProductSet.getInstance(cyclicGroup, 10));
 		Tuple elements = (Tuple) cg.generate(cyclicGroup.getRandomElement());
 
 		// System.out.println(elements);

@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
@@ -54,11 +54,11 @@ public interface SigmaChallengeGenerator
 	public Set getCommitmentSpace();
 
 	@Override
-	public Z getChallengeSpace();
+	public ZMod getChallengeSpace();
 
-	public ZElement generate(Element publicInput, Element commitment);
+	public ZModElement generate(Element publicInput, Element commitment);
 
 	@Override
-	public ZElement generate(Element input);
+	public ZModElement generate(Element input);
 
 }

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem.interfaces;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -59,7 +59,7 @@ public interface SigmaProofSystem
 
 	public Set getCommitmentSpace();
 
-	public Z getChallengeSpace();
+	public ZMod getChallengeSpace();
 
 	public Set getResponseSpace();
 

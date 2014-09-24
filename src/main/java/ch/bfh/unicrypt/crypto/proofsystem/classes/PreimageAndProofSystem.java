@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractPreimageProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -62,7 +62,7 @@ public class PreimageAndProofSystem
 	}
 
 	public static PreimageAndProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
-		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return PreimageAndProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 

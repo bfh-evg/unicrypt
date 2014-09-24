@@ -154,6 +154,10 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(Element element1, Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
+			System.out.println("ERROR");
+			System.out.println(this);
+			System.out.println(element1);
+			System.out.println(element2);
 			throw new IllegalArgumentException();
 		}
 		return this.abstractApply((Tuple) element1, (Tuple) element2);

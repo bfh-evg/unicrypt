@@ -42,47 +42,38 @@
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.NonInteractiveSigmaChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
-public class AbstractNonInteractiveSigmaChallengeGenerator
+public abstract class AbstractNonInteractiveSigmaChallengeGenerator
 	   extends AbstractSigmaChallengeGenerator
 	   implements NonInteractiveSigmaChallengeGenerator {
 
-	private final RandomOracle randomOracle;
-	private final Element proverId;
+	protected final Element proverId;
 
-	protected AbstractNonInteractiveSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, Z challengeSpace, RandomOracle randomOracle, Element proverId) {
+	protected AbstractNonInteractiveSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverId) {
 		super(publicInputSpace, commitmentSpace, challengeSpace);
-		this.randomOracle = randomOracle;
 		this.proverId = proverId;
-	}
-
-	@Override
-	public RandomOracle getRandomOracle() {
-		return this.randomOracle;
 	}
 
 	// May return null!
 	@Override
-	public Element getProverId() {
+	public final Element getProverId() {
 		return this.proverId;
 	}
 
 	@Override
-	protected ZElement abstractGenerate(Pair input) {
-		Tuple query = (this.getProverId() == null
+	protected final ZModElement abstractGenerate(Pair input) {
+		Pair newInput = (this.proverId == null)
 			   ? input
-			   : Pair.getInstance(input, this.getProverId()));
-		ReferenceRandomByteSequence randomReferenceString = this.getRandomOracle().getReferenceRandomByteSequence(query.getByteTree().getByteArray());
-		return this.getChallengeSpace().getRandomElement(randomReferenceString);
+			   : Pair.getInstance(input, this.proverId);
+		return this.abstractAbstractGenerate(newInput);
 	}
+
+	protected abstract ZModElement abstractAbstractGenerate(Element input);
 
 }

@@ -42,11 +42,10 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductMonoid;
@@ -73,7 +72,7 @@ public class PreimageOrProofSystem
 	}
 
 	public static PreimageOrProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
-		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return PreimageOrProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
@@ -145,9 +144,8 @@ public class PreimageOrProofSystem
 		final Element[] responses = new Element[length];
 
 		// Get challenge space and initialze the summation of the challenges
-		final Z challengeSpace = this.getChallengeSpace();
-		ZElement sumOfChallenges = challengeSpace.getIdentityElement();
-		int z = challengeSpace.getOrder().intValue();
+		final ZMod challengeSpace = this.getChallengeSpace();
+		ZModElement sumOfChallenges = challengeSpace.getIdentityElement();
 		// Create proof elements (simulate proof) for all but the known secret
 		for (int i = 0; i < length; i++) {
 			if (i == index) {
@@ -155,7 +153,7 @@ public class PreimageOrProofSystem
 			}
 
 			// Create random challenge and response
-			ZElement c = challengeSpace.getRandomElement(randomByteSequence);
+			ZModElement c = challengeSpace.getRandomElement(randomByteSequence);
 			Function f = proofFunction.getAt(i);
 			Element s = f.getDomain().getRandomElement(randomByteSequence);
 
@@ -173,7 +171,7 @@ public class PreimageOrProofSystem
 		commitments[index] = proofFunction.getAt(index).apply(randomElement);
 
 		// - Create overall proof challenge
-		final ZElement challenge = this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
+		final ZModElement challenge = this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
 		// - Calculate challenge based on the overall challenge and the chosen challenges for the simulated proofs
 		challenges[index] = challenge.subtract(sumOfChallenges);
 		// - finally compute response element
@@ -195,8 +193,8 @@ public class PreimageOrProofSystem
 		final Tuple responses = this.getResponse(proof);
 
 		// 1. Check whether challenges sum up to the overall challenge
-		final ZElement challenge = this.getChallengeGenerator().generate(publicInput, commitments);
-		ZElement sumOfChallenges = this.getChallengeSpace().getIdentityElement();
+		final ZModElement challenge = this.getChallengeGenerator().generate(publicInput, commitments);
+		ZModElement sumOfChallenges = this.getChallengeSpace().getIdentityElement();
 		for (int i = 0; i < challenges.getArity(); i++) {
 			sumOfChallenges = sumOfChallenges.add(challenges.getAt(i));
 		}

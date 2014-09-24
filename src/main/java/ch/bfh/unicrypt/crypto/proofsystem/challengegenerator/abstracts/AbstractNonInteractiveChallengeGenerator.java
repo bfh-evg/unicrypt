@@ -42,8 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.NonInteractiveChallengeGenerator;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
@@ -51,22 +50,28 @@ public abstract class AbstractNonInteractiveChallengeGenerator<IS extends Set, I
 	   extends AbstractChallengeGenerator<IS, IE, CS, CE>
 	   implements NonInteractiveChallengeGenerator {
 
-	private final RandomOracle randomOracle;
+	protected final Element proverId;
 
-	protected AbstractNonInteractiveChallengeGenerator(IS inputSpace, CS challengeSpace, RandomOracle randomOracle) {
+	protected AbstractNonInteractiveChallengeGenerator(IS inputSpace, CS challengeSpace, Element proverId) {
 		super(inputSpace, challengeSpace);
-		this.randomOracle = randomOracle;
+		this.proverId = proverId;
+	}
+
+	// May return null!
+	@Override
+	public final Element getProverId() {
+		return this.proverId;
 	}
 
 	@Override
-	public RandomOracle getRandomOracle() {
-		return this.randomOracle;
+	protected final CE abstractGenerate(IE input) {
+		Element newInput = (this.proverId == null)
+			   ? input
+			   : Pair.getInstance(input, this.proverId);
+		return this.abstractAbstractGenerate(newInput);
 	}
 
-	@Override
-	protected CE abstractGenerate(IE input) {
-		ReferenceRandomByteSequence randomReferenceString = this.getRandomOracle().getReferenceRandomByteSequence(input.getByteTree().getByteArray());
-		return (CE) this.getChallengeSpace().getRandomElement(randomReferenceString);
-	}
+	// a "second-order" abstract method is required here
+	protected abstract CE abstractAbstractGenerate(Element input);
 
 }

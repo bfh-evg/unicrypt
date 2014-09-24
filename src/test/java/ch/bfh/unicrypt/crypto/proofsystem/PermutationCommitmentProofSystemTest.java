@@ -117,7 +117,7 @@ public class PermutationCommitmentProofSystemTest {
 		Tuple cPiV = pcs.commit(pi, sV);
 
 		// Permutation commitment proof generator
-		SigmaChallengeGenerator scg = PermutationCommitmentProofSystem.createNonInteractiveSigmaChallengeGenerator(G_q, size, 60, null, null);
+		SigmaChallengeGenerator scg = PermutationCommitmentProofSystem.createNonInteractiveSigmaChallengeGenerator(G_q, size, 60, null);
 		ChallengeGenerator ecg = PermutationCommitmentProofSystem.createNonInteractiveEValuesGenerator(G_q, size, 60, ro);
 		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size, 20, rrs);
 

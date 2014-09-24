@@ -42,10 +42,10 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaSetMembershipProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -90,7 +90,7 @@ public class ElGamalEncryptionValidityProofSystem
 		}
 		final Set codomain = ProductGroup.getInstance(elGamalES.getEncryptionFunction().getCoDomain(), plaintexts.getOrder().intValue());
 		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
-			   || !Z.getInstance(elGamalES.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
+			   || !ZMod.getInstance(elGamalES.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
 		}
 		return new ElGamalEncryptionValidityProofSystem(challengeGenerator, elGamalES, publicKey, plaintexts);
@@ -105,31 +105,35 @@ public class ElGamalEncryptionValidityProofSystem
 	protected Function abstractGetDeltaFunction() {
 		final CyclicGroup elGamalCyclicGroup = this.elGamalES.getCyclicGroup();
 		final ProductSet deltaFunctionDomain = ProductSet.getInstance(elGamalCyclicGroup, this.getSetMembershipProofFunction().getCoDomain());
-		return SharedDomainFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
-												CompositeFunction.getInstance(SharedDomainFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1, 1),
-																											   CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
-																																			 InvertFunction.getInstance(elGamalCyclicGroup))),
-																			  ApplyFunction.getInstance(elGamalCyclicGroup)));
+		return SharedDomainFunction.getInstance(
+			   SelectionFunction.getInstance(deltaFunctionDomain, 1, 0),
+			   CompositeFunction.getInstance(
+					  SharedDomainFunction.getInstance(
+							 SelectionFunction.getInstance(deltaFunctionDomain, 1, 1),
+							 CompositeFunction.getInstance(
+									SelectionFunction.getInstance(deltaFunctionDomain, 0),
+									InvertFunction.getInstance(elGamalCyclicGroup))),
+					  ApplyFunction.getInstance(elGamalCyclicGroup)));
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts) {
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts) {
 		return ElGamalEncryptionValidityProofSystem.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId) {
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId) {
 		return ElGamalEncryptionValidityProofSystem.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, proverId, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final RandomOracle randomOracle) {
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final RandomOracle randomOracle) {
 		return ElGamalEncryptionValidityProofSystem.createNonInteractiveChallengeGenerator(elGamalES, numberOfPlaintexts, (Element) null, randomOracle);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId, final RandomOracle randomOracle) {
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final ElGamalEncryptionScheme elGamalES, final int numberOfPlaintexts, final Element proverId, final RandomOracle randomOracle) {
 		if (elGamalES == null || numberOfPlaintexts < 1 || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}
 		final ProductGroup codomain = ProductGroup.getInstance((ProductGroup) elGamalES.getEncryptionFunction().getCoDomain(), numberOfPlaintexts);
-		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(codomain, codomain, Z.getInstance(elGamalES.getCyclicGroup().getOrder()), randomOracle, proverId);
+		return RandomOracleSigmaChallengeGenerator.getInstance(codomain, codomain, ZMod.getInstance(elGamalES.getCyclicGroup().getOrder()), proverId, randomOracle);
 	}
 
 }

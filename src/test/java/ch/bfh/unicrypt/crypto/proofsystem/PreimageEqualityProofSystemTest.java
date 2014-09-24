@@ -41,13 +41,12 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem;
 
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageEqualityProofSystem;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -124,8 +123,8 @@ public class PreimageEqualityProofSystemTest {
 		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), Z.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
+			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(scg, f1, f2);
 		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
@@ -147,7 +146,7 @@ public class PreimageEqualityProofSystemTest {
 		Function f2 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
 		Function f3 = GeneratorFunction.getInstance(this.G_q2.getElement(4));
 		ProductFunction f = ProductFunction.getInstance(f1, f2, f3);
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(scg, f1, f2, f3);
 	}
 

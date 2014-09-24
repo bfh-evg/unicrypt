@@ -42,42 +42,50 @@
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts.AbstractNonInteractiveChallengeGenerator;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
-public class StandardNonInteractiveChallengeGenerator
-	   extends AbstractNonInteractiveChallengeGenerator<Set, Element, Set, Element> {
+public class RandomOracleChallengeGenerator
+	   extends AbstractNonInteractiveChallengeGenerator {
 
-	protected StandardNonInteractiveChallengeGenerator(final Set inputSpace, final Set challengeSpace, final RandomOracle randomOracle) {
-		super(inputSpace, challengeSpace, randomOracle);
+	protected final RandomOracle randomOracle;
+
+	protected RandomOracleChallengeGenerator(Set inputSpace, Set challengeSpace, Element proverId, final RandomOracle randomOracle) {
+		super(inputSpace, challengeSpace, proverId);
+		this.randomOracle = randomOracle;
 	}
 
-	public static StandardNonInteractiveChallengeGenerator getInstance(final Set inputSpace, final Set challengeSet, final int arity) {
-		return StandardNonInteractiveChallengeGenerator.getInstance(inputSpace, challengeSet, arity, (RandomOracle) null);
+	public RandomOracle getRandomOracle() {
+		return this.randomOracle;
 	}
 
-	public static StandardNonInteractiveChallengeGenerator getInstance(final Set inputSpace, final Set challengeSet, final int arity, final RandomOracle randomOracle) {
-		if (challengeSet == null || arity < 1) {
+	@Override
+	protected Element abstractAbstractGenerate(Element input) {
+		// TODO: One should be able to specify the ConvertMethod
+		ReferenceRandomByteSequence randomByteSequence = this.randomOracle.getReferenceRandomByteSequence(input.getByteArray());
+		return this.getChallengeSpace().getRandomElement(randomByteSequence);
+	}
+
+	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace) {
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, Element proverId) {
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, RandomOracle randomOracle) {
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, randomOracle);
+	}
+
+	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, Element proverId, RandomOracle randomOracle) {
+		if (inputSpace == null || challengeSpace == null || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}
-		return StandardNonInteractiveChallengeGenerator.getInstance(inputSpace, ProductSet.getInstance(challengeSet, arity), randomOracle);
-	}
-
-	public static StandardNonInteractiveChallengeGenerator getInstance(final Set inputSpace, final Set challengeSpace) {
-		return StandardNonInteractiveChallengeGenerator.getInstance(inputSpace, challengeSpace, (RandomOracle) null);
-	}
-
-	public static StandardNonInteractiveChallengeGenerator getInstance(final Set inputSpace, final Set challengeSpace, RandomOracle randomOracle) {
-		if (inputSpace == null || challengeSpace == null) {
-			throw new IllegalArgumentException();
-		}
-		if (randomOracle == null) {
-			randomOracle = PseudoRandomOracle.DEFAULT;
-		}
-		return new StandardNonInteractiveChallengeGenerator(inputSpace, challengeSpace, randomOracle);
+		return new RandomOracleChallengeGenerator(inputSpace, challengeSpace, proverId, randomOracle);
 	}
 
 }
