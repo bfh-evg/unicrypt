@@ -342,8 +342,9 @@ public class PermutationCommitmentProofSystem
 
 			// - Com(e', w)                       [n+1]
 			Element ePrimeVs[] = new Element[ePrimeV.getArity()];
+			ZMod zMod = this.cyclicGroup.getZModOrder();
 			for (int i = 0; i < ePrimeV.getArity(); i++) {
-				ePrimeVs[i] = this.cyclicGroup.getZModOrder().getElement(((ZModElement) ePrimeV.getAt(i)).getValue().mod(this.cyclicGroup.getOrder()));
+				ePrimeVs[i] = zMod.getElement(((ZModElement) ePrimeV.getAt(i)).getValue().mod(zMod.getOrder()));
 			}
 			pV[1] = this.gpcs.commit(Tuple.getInstance(ePrimeVs), w);
 
