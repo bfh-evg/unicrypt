@@ -42,50 +42,81 @@
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts.AbstractNonInteractiveChallengeGenerator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
-import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
+import java.math.BigInteger;
 
 public class FiatShamirChallengeGenerator
-	   extends AbstractNonInteractiveChallengeGenerator {
+	   extends AbstractNonInteractiveChallengeGenerator<Set, Element, ZMod, ZModElement> {
 
-	protected final RandomOracle randomOracle;
+	private final HashMethod hashMethod;
+	private final Converter<ByteArray, BigInteger> converter;
 
-	protected FiatShamirChallengeGenerator(Set inputSpace, Set challengeSpace, Element proverId, final RandomOracle randomOracle) {
+	protected FiatShamirChallengeGenerator(Set inputSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
 		super(inputSpace, challengeSpace, proverId);
-		this.randomOracle = randomOracle;
+		this.hashMethod = hashMethod;
+		this.converter = converter;
 	}
 
-	public RandomOracle getRandomOracle() {
-		return this.randomOracle;
+	public HashMethod getHashMethod() {
+		return this.hashMethod;
+	}
+
+	public Converter<ByteArray, BigInteger> getConverter() {
+		return this.converter;
 	}
 
 	@Override
-	protected Element abstractAbstractGenerate(Element input) {
-		// TODO: One should be able to specify the ConvertMethod
-		ReferenceRandomByteSequence randomByteSequence = this.randomOracle.getReferenceRandomByteSequence(input.getByteArray());
-		return this.getChallengeSpace().getRandomElement(randomByteSequence);
+	protected ZModElement abstractAbstractGenerate(Element input) {
+		ByteArray hashedInput = input.getHashValue(this.hashMethod);
+		return this.getChallengeSpace().getElement(this.converter.convert(hashedInput).mod(this.challengeSpace.getModulus()));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace) {
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, PseudoRandomOracle.getInstance());
+	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace) {
+		HashMethod hashMethod = HashMethod.getInstance();
+		int length = hashMethod.getHashAlgorithm().getHashLength();
+		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, Element proverId) {
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, PseudoRandomOracle.getInstance());
+	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Element proverId) {
+		HashMethod hashMethod = HashMethod.getInstance();
+		int length = hashMethod.getHashAlgorithm().getHashLength();
+		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, RandomOracle randomOracle) {
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, randomOracle);
+	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, HashMethod hashMethod) {
+		int length = hashMethod.getHashAlgorithm().getHashLength();
+		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, Element proverId, RandomOracle randomOracle) {
-		if (inputSpace == null || challengeSpace == null || randomOracle == null) {
+	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod) {
+		int length = hashMethod.getHashAlgorithm().getHashLength();
+		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
+	}
+
+	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, HashMethod.getInstance(), converter);
+	}
+
+	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Element proverId, Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, HashMethod.getInstance(), converter);
+	}
+
+	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, hashMethod, converter);
+	}
+
+	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
+		if (inputSpace == null || challengeSpace == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new FiatShamirChallengeGenerator(inputSpace, challengeSpace, proverId, randomOracle);
+		return new FiatShamirChallengeGenerator(inputSpace, challengeSpace, proverId, hashMethod, converter);
 	}
 
 }

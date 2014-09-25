@@ -44,12 +44,14 @@ package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts.AbstractNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.math.BigInteger;
 
 /**
  * This class provides a Fiat-Shamir SigmaChallengeGenerator
@@ -63,19 +65,19 @@ public class FiatShamirSigmaChallengeGenerator
 	   extends AbstractNonInteractiveSigmaChallengeGenerator {
 
 	private final HashMethod hashMethod;
-	private final FiniteByteArrayToBigInteger converter;
+	private final Converter<ByteArray, BigInteger> converter;
 
-	protected FiatShamirSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, FiniteByteArrayToBigInteger byteArrayToBigIntConverter) {
+	protected FiatShamirSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
 		super(publicInputSpace, commitmentSpace, challengeSpace, proverId);
 		this.hashMethod = hashMethod;
-		this.converter = byteArrayToBigIntConverter;
+		this.converter = converter;
 	}
 
 	public HashMethod getHashMethod() {
 		return this.hashMethod;
 	}
 
-	public FiniteByteArrayToBigInteger getFiniteByteArrayToBigInteger() {
+	public Converter<ByteArray, BigInteger> getConverter() {
 		return this.converter;
 	}
 
@@ -115,7 +117,7 @@ public class FiatShamirSigmaChallengeGenerator
 		return FiatShamirSigmaChallengeGenerator.getInstance(publicInputSpace, commitmentSpace, challengeSpace, proverId, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
 	}
 
-	public static FiatShamirSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, HashMethod hashMethod, FiniteByteArrayToBigInteger converter) {
+	public static FiatShamirSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
 		return FiatShamirSigmaChallengeGenerator.getInstance(publicInputSpace, commitmentSpace, challengeSpace, (Element) null, hashMethod, converter);
 	}
 
@@ -140,7 +142,7 @@ public class FiatShamirSigmaChallengeGenerator
 	 *                         array in a big integer representing the challenge
 	 * @return a challenge generator
 	 */
-	public static FiatShamirSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, FiniteByteArrayToBigInteger converter) {
+	public static FiatShamirSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
 		if (publicInputSpace == null || commitmentSpace == null || challengeSpace == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}

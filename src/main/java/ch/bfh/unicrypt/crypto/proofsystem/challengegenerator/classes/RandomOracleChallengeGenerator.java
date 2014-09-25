@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts.AbstractNonInteractiveChallengeGenerator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
@@ -52,40 +54,62 @@ public class RandomOracleChallengeGenerator
 	   extends AbstractNonInteractiveChallengeGenerator {
 
 	protected final RandomOracle randomOracle;
+	protected final ConvertMethod<ByteArray> convertMethod;
 
-	protected RandomOracleChallengeGenerator(Set inputSpace, Set challengeSpace, Element proverId, final RandomOracle randomOracle) {
+	protected RandomOracleChallengeGenerator(Set inputSpace, Set challengeSpace, Element proverId, final RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod) {
 		super(inputSpace, challengeSpace, proverId);
 		this.randomOracle = randomOracle;
+		this.convertMethod = convertMethod;
 	}
 
 	public RandomOracle getRandomOracle() {
 		return this.randomOracle;
 	}
 
+	public ConvertMethod<ByteArray> getConvertMethod() {
+		return this.convertMethod;
+	}
+
 	@Override
 	protected Element abstractAbstractGenerate(Element input) {
-		// TODO: One should be able to specify the ConvertMethod
-		ReferenceRandomByteSequence randomByteSequence = this.randomOracle.getReferenceRandomByteSequence(input.getByteArray());
+		ReferenceRandomByteSequence randomByteSequence = this.randomOracle.getReferenceRandomByteSequence(input.getByteArray(this.convertMethod));
 		return this.getChallengeSpace().getRandomElement(randomByteSequence);
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace) {
-		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, PseudoRandomOracle.getInstance());
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, PseudoRandomOracle.getInstance(), ConvertMethod.<ByteArray>getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, Element proverId) {
-		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, PseudoRandomOracle.getInstance());
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, PseudoRandomOracle.getInstance(), ConvertMethod.<ByteArray>getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, RandomOracle randomOracle) {
-		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, randomOracle);
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, randomOracle, ConvertMethod.<ByteArray>getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, Element proverId, RandomOracle randomOracle) {
-		if (inputSpace == null || challengeSpace == null || randomOracle == null) {
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, randomOracle, ConvertMethod.<ByteArray>getInstance());
+
+	}
+
+	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, ConvertMethod<ByteArray> convertMethod) {
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, PseudoRandomOracle.getInstance(), convertMethod);
+	}
+
+	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, Element proverId, ConvertMethod<ByteArray> convertMethod) {
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, PseudoRandomOracle.getInstance(), convertMethod);
+	}
+
+	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod) {
+		return RandomOracleChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, randomOracle, convertMethod);
+	}
+
+	public static RandomOracleChallengeGenerator getInstance(final Set inputSpace, Set challengeSpace, Element proverId, RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod) {
+		if (inputSpace == null || challengeSpace == null || randomOracle == null || convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new RandomOracleChallengeGenerator(inputSpace, challengeSpace, proverId, randomOracle);
+		return new RandomOracleChallengeGenerator(inputSpace, challengeSpace, proverId, randomOracle, convertMethod);
 	}
 
 }
