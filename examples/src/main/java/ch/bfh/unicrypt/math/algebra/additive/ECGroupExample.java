@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.additive;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.Polynomial;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
@@ -52,6 +53,7 @@ import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
+
 import java.math.BigInteger;
 
 /**
@@ -72,7 +74,7 @@ public class ECGroupExample {
 			ec.getRandomElement();
 			BigInteger order = ec.getOrder();
 			Example.printLine(ec);
-			Example.printLine(generator.selfApply(order)); // Result should be
+			Example.printLine(generator.selfApply(order.multiply(ec.getCoFactor()))); // Result should be
 			// Infinity element
 		}
 	}
@@ -86,8 +88,9 @@ public class ECGroupExample {
 			ECElement<Polynomial<DualisticElement<ZModTwo>>> generator = ec.getDefaultGenerator();
 			ec.getRandomElement();
 			BigInteger order = ec.getOrder();
+			Example.printLine(MathUtil.isPrime(order));
 			Example.printLine(ec.getFiniteField().getIrreduciblePolynomial());
-			Example.printLine(generator.selfApply(order)); // Result should be Infinity element
+			Example.printLine(generator.selfApply(order.multiply(ec.getCoFactor()))); // Result should be Infinity element
 
 		}
 	}

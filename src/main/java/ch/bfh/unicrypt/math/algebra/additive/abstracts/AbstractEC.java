@@ -206,6 +206,8 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object>
 
 	@Override
 	protected boolean abstractIsGenerator(ECElement<V> element) {
+		boolean prime=MathUtil.isPrime(this.getOrder());
+		boolean iszero=this.selfApply(element, this.getOrder()).isZero();
 		return MathUtil.isPrime(this.getOrder()) && this.selfApply(element, this.getOrder()).isZero();
 	}
 

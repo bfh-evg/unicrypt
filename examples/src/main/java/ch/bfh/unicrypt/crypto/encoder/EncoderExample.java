@@ -88,8 +88,9 @@ public class EncoderExample {
 
 	/**
 	 * Example shows how to encode an element from ZMod into an elliptic curve over F2m
+	 * @throws Exception 
 	 */
-	public static void example2() {
+	public static void example2() throws Exception {
 
 		// Define underlying groups
 		StandardECPolynomialField ec = StandardECPolynomialField

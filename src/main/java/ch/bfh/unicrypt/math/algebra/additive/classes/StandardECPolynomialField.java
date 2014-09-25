@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
+
 import java.math.BigInteger;
 
 /**
@@ -60,7 +61,7 @@ public class StandardECPolynomialField
 		super(finiteField, a, b, gx, gy, order, h);
 	}
 
-	public static StandardECPolynomialField getInstance(final StandardECPolynomialFieldParams params) {
+	public static StandardECPolynomialField getInstance(final StandardECPolynomialFieldParams params) throws Exception {
 		BinaryPolynomialField field;
 		PolynomialElement a, b, gx, gy;
 		BigInteger order, h;
@@ -73,7 +74,14 @@ public class StandardECPolynomialField
 		order = params.getOrder();
 		h = params.getH();
 
-		return new StandardECPolynomialField(field, a, b, gx, gy, order, h);
+		StandardECPolynomialField newInstance= new StandardECPolynomialField(field, a, b, gx, gy, order, h);
+		
+		/*if (newInstance.isValid()) {
+			return newInstance;
+		} else {
+			throw new Exception("Curve parameters not valid!");
+		}*/
+		return newInstance;
 	}
 
 //	public static void main(String[] args) {

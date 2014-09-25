@@ -49,6 +49,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+
 import java.math.BigInteger;
 
 /**
@@ -139,41 +140,48 @@ public class ECPolynomialField
 	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 21
 	 * <p>
 	 * @return True if curve parameters are valid
+	 * @throws Exception 
 	 */
-	private boolean isValid() {
-		BigInteger m = new BigInteger("131"); //Must be set correctly
+	public boolean isValid() throws Exception {
+		boolean c2, c3, c4, c5, c6, c7, c8;
+		int m = this.getFiniteField().getDegree();
 		final BigInteger TWO = new BigInteger("2");
-		boolean c1, c2, c3, c4, c5, c6, c7, c81, c82;
-		c1 = true; //-> Must be added!!
-		c2 = !this.getB().equals(this.getFiniteField().getZeroElement());
-		c3 = contains(this.getDefaultGenerator());
-		c4 = MathUtil.arePrime(this.getOrder());
-		c5 = 0 >= this.getCoFactor().compareTo(new BigInteger("4"));
-		c6 = this.getDefaultGenerator().selfApply(getOrder()).isZero();
-		c7 = this.getCoFactor().equals(MathUtil.sqrt(TWO.pow(m.intValue())).add(BigInteger.ONE).pow(2).divide(getOrder()));
-		c81 = true;
-		c82 = true;
-		for (int i = 1; i < 20; i++) {
-			BigInteger b = new BigInteger(String.valueOf(i));
-			if (TWO.modPow(m.multiply(b), getOrder()).equals(BigInteger.ONE)) {
-				c81 = false;
-			}
-			if (getOrder().multiply(getCoFactor()).equals(TWO.pow(m.intValue()))) {
-				c82 = false;
+		
+		c2=this.getFiniteField().isIrreduciblePolynomial(this.getFiniteField().getIrreduciblePolynomial());
+		
+		c3=this.getFiniteField().contains(getA());
+		c3=c3 && this.getFiniteField().contains(getB());
+		c3=c3 && this.getFiniteField().contains(this.getDefaultGenerator().getX());
+		c3=c3 && this.getFiniteField().contains(this.getDefaultGenerator().getY());
+		
+		c4=!this.getB().equals(this.getFiniteField().getZeroElement());
+		
+		c5=this.contains(this.getDefaultGenerator());
+		
+		c6=MathUtil.isPrime(getOrder());
+		
+		c7=this.getDefaultGenerator().times(getOrder().multiply(getCoFactor())).equals(this.getZeroElement());
+		
+		for (BigInteger i = new BigInteger("0"); i.compareTo(new BigInteger("100"))<0; i=i.add(BigInteger.ONE)) {
+			if(TWO.modPow(i, getOrder()).equals(BigInteger.ONE)){
+				throw new Exception("Curve parameter not valid");
 			}
 		}
-		return c1 && c2 && c3 && c4 && c5 && c6 && c7 && c81 && c82;
+		
+		c8=!getOrder().multiply(getCoFactor()).equals(TWO.pow(m));
+		
+		return c2 && c3 && c4 && c5 && c6 && c7 && c8;
 	}
 
 	//
 	// STATIC FACTORY METHODS
 	//
 	/**
-	 * Returns an elliptic curve over Fp y²=x³+ax+b if parameters are valid.
+	 * Returns an elliptic curve over F2m y²+yx=x³+ax²+b if parameters are valid.
 	 * <p>
-	 * @param f          Finite field of type ZModPrime
-	 * @param a          Element of F_p representing a in the curve equation
-	 * @param b          Element of F_p representing b in the curve equation
+	 * @param f          Finite field of type BinaryPolynomial
+	 * @param a          Element of f representing a in the curve equation
+	 * @param b          Element of f representing b in the curve equation
 	 * @param givenOrder Order of the the used subgroup
 	 * @param coFactor   Co-factor h*order= N -> total order of the group
 	 * @return
