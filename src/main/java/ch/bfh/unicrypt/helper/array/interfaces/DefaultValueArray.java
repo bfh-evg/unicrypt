@@ -45,12 +45,12 @@ package ch.bfh.unicrypt.helper.array.interfaces;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <A>
- * @param <T>
+ * @param <V>
  */
-public interface DefaultValueArray<A extends ImmutableArray<A, T>, T extends Object>
-	   extends ImmutableArray<A, T> {
+public interface DefaultValueArray<A extends ImmutableArray<A, V>, V extends Object>
+	   extends ImmutableArray<A, V> {
 
-	public T getDefault();
+	public V getDefault();
 
 	// collects the indices of default values
 	public Iterable<Integer> getIndices();

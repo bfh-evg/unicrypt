@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
@@ -99,7 +100,7 @@ public class BitArray
 		int maxBitIndex = Math.min(this.length, bitIndex + Byte.SIZE);
 		for (int i = 0; bitIndex < maxBitIndex; i++, bitIndex++) {
 			if (this.abstractGetAt(bitIndex)) {
-				result = ByteArray.setBit(result, i);
+				result = MathUtil.setBit(result, i);
 			}
 		}
 		return result;
@@ -221,7 +222,10 @@ public class BitArray
 		if (index < this.trailer || index >= this.length - this.header) {
 			return false;
 		}
-		return this.byteArray.getBitAt(this.offset + index - this.trailer);
+		index = this.offset + index - this.trailer;
+		int byteIndex = index / Byte.SIZE;
+		byte mask = MathUtil.bitMask(index % Byte.SIZE);
+		return MathUtil.logicalAND(this.byteArray.getByteAt(byteIndex), mask) != 0;
 	}
 
 	@Override
@@ -272,7 +276,7 @@ public class BitArray
 			int byteIndex = i / Byte.SIZE;
 			int bitIndex = i % Byte.SIZE;
 			if (bits[i]) {
-				bytes[byteIndex] = ByteArray.setBit(bytes[byteIndex], bitIndex);
+				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
 			}
 		}
 		return bytes;

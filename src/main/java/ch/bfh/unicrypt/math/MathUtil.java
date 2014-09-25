@@ -532,4 +532,40 @@ public final class MathUtil {
 		return r.modPow(p.subtract(BigInteger.ONE).divide(two), p).equals(BigInteger.ONE);
 	}
 
+	public static byte setBit(byte b, int i) {
+		return (byte) logicalOR(b, bitMask(i));
+	}
+
+	public static byte clearBit(byte b, int i) {
+		return (byte) logicalAND(b, logicalNOT(bitMask(i)));
+	}
+
+	public static byte bitMask(int i) {
+		return (byte) (1 << i);
+	}
+
+	public static byte logicalShiftLeft(byte b, int n) {
+		return (byte) (b << n);
+	}
+
+	public static byte logicalShiftRight(byte b, int n) {
+		return (byte) (b >>> n);
+	}
+
+	public static byte logicalXOR(byte b1, byte b2) {
+		return (byte) (b1 ^ b2);
+	}
+
+	public static byte logicalAND(byte b1, byte b2) {
+		return (byte) (b1 & b2);
+	}
+
+	public static byte logicalOR(byte b1, byte b2) {
+		return (byte) (b1 | b2);
+	}
+
+	public static byte logicalNOT(byte b) {
+		return (byte) ~b;
+	}
+
 }

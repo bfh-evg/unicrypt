@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.nio.ByteBuffer;
@@ -63,6 +64,7 @@ public class ByteArray
 	private static final byte ALL_ONE = (byte) BYTE_MASK;
 
 	protected final byte[] bytes;
+	protected BitArray bitArray; // used to provide some bit operations
 
 	protected ByteArray(byte fillByte, int length) {
 		this(new byte[]{fillByte}, 0, length, 0, 0, false);
@@ -80,8 +82,15 @@ public class ByteArray
 		}
 	}
 
+	public BitArray getBitArray() {
+		if (this.bitArray == null) {
+			this.bitArray = BitArray.getInstance(this);
+		}
+		return this.bitArray;
+	}
+
 	public int getBitLength() {
-		return this.length * Byte.SIZE;
+		return this.getBitArray().getLength();
 	}
 
 	public byte[] getBytes() {
@@ -93,11 +102,7 @@ public class ByteArray
 	}
 
 	public boolean[] getBits() {
-		boolean[] result = new boolean[this.length * Byte.SIZE];
-		for (int i = 0; i < result.length; i++) {
-			result[i] = this.getBitAt(i);
-		}
-		return result;
+		return this.getBitArray().getBits();
 	}
 
 	public byte getByteAt(int index) {
@@ -108,9 +113,7 @@ public class ByteArray
 	}
 
 	public boolean getBitAt(int bitIndex) {
-		int byteIndex = bitIndex / Byte.SIZE;
-		byte mask = bitMask(bitIndex % Byte.SIZE);
-		return logicalAND(this.getByteAt(byteIndex), mask) != 0;
+		return this.getBitArray().getAt(bitIndex);
 	}
 
 	public int getIntAt(int index) {
@@ -119,46 +122,20 @@ public class ByteArray
 
 	// leading here means the highest indices
 	public int countLeadingZeroBits() {
-		int result = 0;
-		for (int i = this.length * Byte.SIZE - 1; i >= 0; i--) {
-			if (this.getBitAt(i)) {
-				return result;
-			}
-			result++;
-		}
-		return result;
+		return this.getBitArray().countSuffix();
 	}
 
 	// trailing here means the lowest indices
 	public int countTrailingZeroBits() {
-		int result = 0;
-		for (int i = 0; i < this.length * Byte.SIZE; i++) {
-			if (this.getBitAt(i)) {
-				return result;
-			}
-			result++;
-		}
-		return result;
+		return this.getBitArray().countPrefix();
 	}
 
 	public int countOneBits() {
-		int result = 0;
-		for (int i = 0; i < this.length * Byte.SIZE; i++) {
-			if (this.getBitAt(i)) {
-				result++;
-			}
-		}
-		return result;
+		return this.getBitArray().count(true);
 	}
 
 	public int countZeroBits() {
-		int result = 0;
-		for (int i = 0; i < this.length * Byte.SIZE; i++) {
-			if (!this.getBitAt(i)) {
-				result++;
-			}
-		}
-		return result;
+		return this.getBitArray().count(false);
 	}
 
 	// left here means making the byte array smaller
@@ -169,8 +146,7 @@ public class ByteArray
 		if (n % Byte.SIZE == 0) {
 			return this.shiftLeft(n / Byte.SIZE);
 		}
-		BitArray bitArray = BitArray.getInstance(this).shiftLeft(n);
-		return ByteArray.getInstance(bitArray.getBytes());
+		return ByteArray.getInstance(this.getBitArray().shiftLeft(n).getBytes());
 	}
 
 	// right here means making the byte array larger
@@ -181,8 +157,7 @@ public class ByteArray
 		if (n % Byte.SIZE == 0) {
 			return this.shiftRight(n / Byte.SIZE);
 		}
-		BitArray bitArray = BitArray.getInstance(this).shiftRight(n);
-		return ByteArray.getInstance(bitArray.getBytes());
+		return ByteArray.getInstance(this.getBitArray().shiftRight(n).getBytes());
 	}
 
 	public ByteArray xor(ByteArray... others) {
@@ -241,13 +216,13 @@ public class ByteArray
 				byte b = (i < other.length) ? other.abstractGetByteAt(i) : fillByte;
 				switch (operand) {
 					case 0:
-						result[i] = ByteArray.logicalXOR(result[i], b);
+						result[i] = MathUtil.logicalXOR(result[i], b);
 						break;
 					case 1:
-						result[i] = ByteArray.logicalAND(result[i], b);
+						result[i] = MathUtil.logicalAND(result[i], b);
 						break;
 					case 2:
-						result[i] = ByteArray.logicalOR(result[i], b);
+						result[i] = MathUtil.logicalOR(result[i], b);
 						break;
 					default:
 						throw new UnsupportedOperationException();
@@ -260,7 +235,7 @@ public class ByteArray
 	public ByteArray not() {
 		byte[] result = new byte[this.length];
 		for (int i : this.getAllIndices()) {
-			result[i] = ByteArray.logicalNOT(this.abstractGetByteAt(i));
+			result[i] = MathUtil.logicalNOT(this.abstractGetByteAt(i));
 		}
 		return new ByteArray(result);
 	}
@@ -405,42 +380,6 @@ public class ByteArray
 			throw new IllegalArgumentException();
 		}
 		return randomByteSequence.getNextByteArray(length);
-	}
-
-	protected static byte setBit(byte b, int i) {
-		return (byte) logicalOR(b, bitMask(i));
-	}
-
-	protected static byte clearBit(byte b, int i) {
-		return (byte) logicalAND(b, logicalNOT(bitMask(i)));
-	}
-
-	protected static byte bitMask(int i) {
-		return (byte) (1 << i);
-	}
-
-	protected static byte logicalShiftLeft(byte b, int n) {
-		return (byte) (b << n);
-	}
-
-	protected static byte logicalShiftRight(byte b, int n) {
-		return (byte) (b >>> n);
-	}
-
-	protected static byte logicalXOR(byte b1, byte b2) {
-		return (byte) (b1 ^ b2);
-	}
-
-	protected static byte logicalAND(byte b1, byte b2) {
-		return (byte) (b1 & b2);
-	}
-
-	protected static byte logicalOR(byte b1, byte b2) {
-		return (byte) (b1 | b2);
-	}
-
-	protected static byte logicalNOT(byte b) {
-		return (byte) ~b;
 	}
 
 	@Override
