@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper.bytetree;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -57,9 +57,9 @@ public class ByteTreeNode
 
 	public static final byte IDENTIFIER = 0;
 
-	private final ImmutableArray<ByteTree> byteTrees;
+	private final DenseArray<ByteTree> byteTrees;
 
-	protected ByteTreeNode(ImmutableArray<ByteTree> byteTrees) {
+	protected ByteTreeNode(DenseArray<ByteTree> byteTrees) {
 		this.byteTrees = byteTrees;
 		this.length = LENGTH_OF_PREAMBLE;
 		for (ByteTree byteTree : byteTrees) {
@@ -67,7 +67,7 @@ public class ByteTreeNode
 		}
 	}
 
-	public ImmutableArray<ByteTree> getByteTrees() {
+	public DenseArray<ByteTree> getByteTrees() {
 		return byteTrees;
 	}
 

@@ -47,8 +47,8 @@ package ch.bfh.unicrypt.helper.array.interfaces;
  * @param <A>
  * @param <T>
  */
-public interface RecursiveArray<A extends Array<A, T>, T>
-	   extends Array<A, T> {
+public interface RecursiveArray<A extends ImmutableArray<A, T>, T>
+	   extends ImmutableArray<A, T> {
 
 	public T getAt(int... indices);
 

@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.interfaces.Array;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
@@ -152,7 +152,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final boolean isProduct() {
-		return this instanceof Array;
+		return this instanceof ImmutableArray;
 	}
 
 	@Override

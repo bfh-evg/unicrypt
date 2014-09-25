@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.array.abstracts.AbstractArrayWithDefault;
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +53,7 @@ import java.util.Map;
  * @param <T>
  */
 public class SparseArray<T extends Object>
-	   extends AbstractArrayWithDefault<SparseArray<T>, T> {
+	   extends AbstractDefaultValueArray<SparseArray<T>, T> {
 
 	private final Map<Integer, T> map;
 

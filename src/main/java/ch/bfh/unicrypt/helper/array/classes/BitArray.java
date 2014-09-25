@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.array.abstracts.AbstractArrayWithDefault;
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -51,8 +51,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class BitArray
-	   extends AbstractArrayWithDefault<BitArray, Boolean>
-	   implements Iterable<Boolean> {
+	   extends AbstractDefaultValueArray<BitArray, Boolean> {
 
 	ByteArray byteArray;
 

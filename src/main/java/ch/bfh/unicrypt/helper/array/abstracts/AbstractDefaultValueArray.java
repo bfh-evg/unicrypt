@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.array.abstracts;
 
-import ch.bfh.unicrypt.helper.array.interfaces.ArrayWithDefault;
+import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
 
 /**
  *
@@ -49,15 +49,15 @@ import ch.bfh.unicrypt.helper.array.interfaces.ArrayWithDefault;
  * @param <A>
  * @param <T>
  */
-abstract public class AbstractArrayWithDefault<A extends AbstractArray<A, T>, T extends Object>
-	   extends AbstractArray<A, T>
-	   implements ArrayWithDefault<A, T> {
+abstract public class AbstractDefaultValueArray<A extends AbstractImmutableArray<A, T>, T extends Object>
+	   extends AbstractImmutableArray<A, T>
+	   implements DefaultValueArray<A, T> {
 
 	protected final T defaultValue;
 	protected int trailer; // number of trailing zeros not included in byteArray
 	protected int header; // number of leading zeros not included in byteArray
 
-	protected AbstractArrayWithDefault(Class valueClass, T defaultValue, int trailer, int header, int length, int offset, boolean reverse) {
+	protected AbstractDefaultValueArray(Class valueClass, T defaultValue, int trailer, int header, int length, int offset, boolean reverse) {
 		super(valueClass, length, offset, reverse);
 		this.defaultValue = defaultValue;
 		this.trailer = trailer;

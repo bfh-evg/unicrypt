@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -58,11 +58,11 @@ import java.util.NoSuchElementException;
  */
 public class ProductCyclicGroup
 	   extends ProductGroup
-	   implements CyclicGroup<ImmutableArray<Element>> {
+	   implements CyclicGroup<DenseArray<Element>> {
 
 	private Tuple defaultGenerator;
 
-	protected ProductCyclicGroup(ImmutableArray<Set> sets) {
+	protected ProductCyclicGroup(DenseArray<Set> sets) {
 		super(sets);
 	}
 
@@ -178,7 +178,7 @@ public class ProductCyclicGroup
 			for (int i : this.getAllIndices()) {
 				defaultGenerators[i] = this.getAt(i).getDefaultGenerator();
 			}
-			this.defaultGenerator = this.abstractGetElement(ImmutableArray.getInstance(defaultGenerators));
+			this.defaultGenerator = this.abstractGetElement(DenseArray.getInstance(defaultGenerators));
 		}
 		return this.defaultGenerator;
 	}
@@ -194,7 +194,7 @@ public class ProductCyclicGroup
 		for (int i : this.getAllIndices()) {
 			randomGenerators[i] = this.getAt(i).getRandomGenerator(randomByteSequence);
 		}
-		return this.abstractGetElement(ImmutableArray.getInstance(randomGenerators));
+		return this.abstractGetElement(DenseArray.getInstance(randomGenerators));
 	}
 
 	@Override

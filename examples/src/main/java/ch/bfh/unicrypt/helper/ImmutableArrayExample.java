@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 
@@ -54,7 +54,7 @@ public class ImmutableArrayExample {
 
 	public static void example1() {
 
-		ImmutableArray<Integer> a = ImmutableArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+		DenseArray<Integer> a = DenseArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
 		Example.printLine(a);
 		Example.printLine("Length  ", a.getLength());
@@ -74,9 +74,9 @@ public class ImmutableArrayExample {
 
 		ProductSet ps = ProductSet.getInstance(ZMod.getInstance(3), 2);
 
-		Example.printLine(ImmutableArray.getInstance(ps));
-		Example.printLine(ImmutableArray.<ProductSet>getInstance(ps));
-		Example.printLine(ImmutableArray.getInstance(ps, ps, ps));
+		Example.printLine(DenseArray.getInstance(ps));
+		Example.printLine(DenseArray.<ProductSet>getInstance(ps));
+		Example.printLine(DenseArray.getInstance(ps, ps, ps));
 
 	}
 

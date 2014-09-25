@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.iterable.IterableRange;
 import java.lang.reflect.Array;
 import java.util.Iterator;
@@ -54,9 +55,9 @@ import java.util.List;
  * @param <A>
  * @param <V>
  */
-abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Object>
+abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V extends Object>
 	   extends UniCrypt
-	   implements ch.bfh.unicrypt.helper.array.interfaces.Array<A, V> {
+	   implements ImmutableArray<A, V> {
 
 	protected Class valueClass;
 	protected int length;
@@ -64,7 +65,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	protected boolean reverse;
 	protected Boolean uniform = null;
 
-	protected AbstractArray(Class valueClass, int length, int offset, boolean reverse) {
+	protected AbstractImmutableArray(Class valueClass, int length, int offset, boolean reverse) {
 		this.valueClass = valueClass;
 		this.length = length;
 		this.offset = offset;
@@ -364,10 +365,10 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 		if (this == value) {
 			return true;
 		}
-		if (value == null || !(value instanceof AbstractArray)) {
+		if (value == null || !(value instanceof AbstractImmutableArray)) {
 			return false;
 		}
-		final AbstractArray other = (AbstractArray) value;
+		final AbstractImmutableArray other = (AbstractImmutableArray) value;
 		if (this.length != other.length) {
 			return false;
 		}

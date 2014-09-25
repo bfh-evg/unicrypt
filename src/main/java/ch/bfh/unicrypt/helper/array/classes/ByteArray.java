@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.array.abstracts.AbstractArrayWithDefault;
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -55,8 +55,7 @@ import java.util.Locale;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class ByteArray
-	   extends AbstractArrayWithDefault<ByteArray, Byte>
-	   implements Iterable<Byte> {
+	   extends AbstractDefaultValueArray<ByteArray, Byte> {
 
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
 	private static final int BYTE_MASK = BYTE_ORDER - 1;
@@ -288,14 +287,14 @@ public class ByteArray
 		}
 		return "\"" + str + "\"";
 	}
-	
-	public String toBitString(){
-		boolean bits[] =this.getBits();
-		String res="";
-		
+
+	public String toBitString() {
+		boolean bits[] = this.getBits();
+		String res = "";
+
 		for (boolean b : bits) {
 			int myInt = (b) ? 1 : 0;
-			res=res+myInt;
+			res = res + myInt;
 		}
 		return res;
 	}

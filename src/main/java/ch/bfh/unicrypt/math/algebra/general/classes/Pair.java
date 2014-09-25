@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 
 /**
  *
@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 public class Pair
 	   extends Tuple {
 
-	protected Pair(final ProductSet set, final ImmutableArray<Element> elements) {
+	protected Pair(final ProductSet set, final DenseArray<Element> elements) {
 		super(set, elements);
 	}
 
@@ -63,7 +63,7 @@ public class Pair
 		if (first == null || second == null) {
 			throw new IllegalArgumentException();
 		}
-		ImmutableArray<Element> elements = ImmutableArray.getInstance(first, second);
+		DenseArray<Element> elements = DenseArray.getInstance(first, second);
 		return new Pair(ProductSet.getInstance(first.getSet(), second.getSet()), elements);
 	}
 

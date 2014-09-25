@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
@@ -64,22 +64,22 @@ import java.util.Iterator;
  * @author rolfhaenni
  */
 public class ProductSet
-	   extends AbstractSet<Tuple, ImmutableArray<Element>>
+	   extends AbstractSet<Tuple, DenseArray<Element>>
 	   implements RecursiveArray<ProductSet, Set> {
 
-	private final ImmutableArray<Set> sets;
+	private final DenseArray<Set> sets;
 
-	protected ProductSet(ImmutableArray<Set> sets) {
-		super(ImmutableArray.class);
+	protected ProductSet(DenseArray<Set> sets) {
+		super(DenseArray.class);
 		this.sets = sets;
 	}
 
 	public final boolean contains(Element... elements) {
-		return this.contains(ImmutableArray.getInstance(elements));
+		return this.contains(DenseArray.getInstance(elements));
 	}
 
 	public final Tuple getElement(final Element... elements) {
-		return this.getElement(ImmutableArray.getInstance(elements));
+		return this.getElement(DenseArray.getInstance(elements));
 	}
 
 	public final Tuple getElementFrom(final int... values) {
@@ -104,7 +104,7 @@ public class ProductSet
 				return null; // no such element
 			}
 		}
-		return this.abstractGetElement(ImmutableArray.getInstance(elements));
+		return this.abstractGetElement(DenseArray.getInstance(elements));
 	}
 
 	//
@@ -138,7 +138,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected boolean abstractContains(ImmutableArray<Element> value) {
+	protected boolean abstractContains(DenseArray<Element> value) {
 		if (value == null || value.getLength() != this.getLength()) {
 			return false;
 		}
@@ -151,7 +151,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple abstractGetElement(ImmutableArray<Element> value) {
+	protected Tuple abstractGetElement(DenseArray<Element> value) {
 		if (this.getLength() == 1) {
 			return new Singleton(this, value);
 		}
@@ -165,11 +165,11 @@ public class ProductSet
 	}
 
 	@Override
-	protected BigIntegerConverter<ImmutableArray<Element>> abstractGetBigIntegerConverter() {
-		return new AbstractBigIntegerConverter<ImmutableArray<Element>>(null) { // class parameter not needed
+	protected BigIntegerConverter<DenseArray<Element>> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<DenseArray<Element>>(null) { // class parameter not needed
 
 			@Override
-			protected BigInteger abstractConvert(ImmutableArray<Element> elements) {
+			protected BigInteger abstractConvert(DenseArray<Element> elements) {
 				BigInteger[] bigIntegers = new BigInteger[getLength()];
 				int i = 0;
 				for (Element element : elements) {
@@ -180,7 +180,7 @@ public class ProductSet
 			}
 
 			@Override
-			protected ImmutableArray<Element> abstractReconvert(BigInteger bigInteger) {
+			protected DenseArray<Element> abstractReconvert(BigInteger bigInteger) {
 				BigInteger[] values = MathUtil.unpair(bigInteger, getLength());
 				Element[] elements = new Element[getLength()];
 				int i = 0;
@@ -188,7 +188,7 @@ public class ProductSet
 					elements[i] = getAt(i).getElementFrom(value);
 					i++;
 				}
-				return ImmutableArray.getInstance(elements);
+				return DenseArray.getInstance(elements);
 			}
 		};
 	}
@@ -197,7 +197,7 @@ public class ProductSet
 	protected Tuple defaultGetElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
 		if (!byteTree.isLeaf()) {
 			int length = this.getLength();
-			ImmutableArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
+			DenseArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
 			if (byteTrees.getLength() == length) {
 				Element[] elements = new Element[length];
 				for (int i : this.getAllIndices()) {
@@ -207,7 +207,7 @@ public class ProductSet
 						return null;
 					}
 				}
-				return this.abstractGetElement(ImmutableArray.getInstance(elements));
+				return this.abstractGetElement(DenseArray.getInstance(elements));
 			}
 		}
 		// no such element
@@ -220,7 +220,7 @@ public class ProductSet
 		for (int i : this.getAllIndices()) {
 			randomElements[i] = this.getAt(i).getRandomElement(randomByteSequence);
 		}
-		return this.abstractGetElement(ImmutableArray.getInstance(randomElements));
+		return this.abstractGetElement(DenseArray.getInstance(randomElements));
 	}
 
 	@Override
@@ -413,7 +413,7 @@ public class ProductSet
 
 	@Override
 	public ProductSet[] split(int... indices) {
-		ImmutableArray<Set>[] setArray = this.sets.split(indices);
+		DenseArray<Set>[] setArray = this.sets.split(indices);
 		ProductSet[] result = new ProductSet[setArray.length];
 		for (int i = 0; i < setArray.length; i++) {
 			result[i] = ProductSet.getInstance(setArray[i]);
@@ -489,7 +489,7 @@ public class ProductSet
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static ProductSet getInstance(ImmutableArray<Set> sets) {
+	public static ProductSet getInstance(DenseArray<Set> sets) {
 		if (sets == null) {
 			throw new IllegalArgumentException();
 		}
@@ -526,35 +526,35 @@ public class ProductSet
 	}
 
 	public static ProductSet getInstance(final Set... sets) {
-		return ProductSet.getInstance(ImmutableArray.<Set>getInstance(sets));
+		return ProductSet.getInstance(DenseArray.<Set>getInstance(sets));
 	}
 
 	public static ProductSemiGroup getInstance(final SemiGroup... semiGroups) {
-		return (ProductSemiGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(semiGroups));
+		return (ProductSemiGroup) ProductSet.getInstance(DenseArray.<Set>getInstance(semiGroups));
 	}
 
 	public static ProductMonoid getInstance(final Monoid... monoids) {
-		return (ProductMonoid) ProductSet.getInstance(ImmutableArray.<Set>getInstance(monoids));
+		return (ProductMonoid) ProductSet.getInstance(DenseArray.<Set>getInstance(monoids));
 	}
 
 	public static ProductGroup getInstance(final Group... groups) {
-		return (ProductGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(groups));
+		return (ProductGroup) ProductSet.getInstance(DenseArray.<Set>getInstance(groups));
 	}
 
 	public static ProductSet getInstance(final Set set, int arity) {
-		return ProductSet.getInstance(ImmutableArray.<Set>getInstance(set, arity));
+		return ProductSet.getInstance(DenseArray.<Set>getInstance(set, arity));
 	}
 
 	public static ProductSemiGroup getInstance(final SemiGroup semiGroup, int arity) {
-		return (ProductSemiGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(semiGroup, arity));
+		return (ProductSemiGroup) ProductSet.getInstance(DenseArray.<Set>getInstance(semiGroup, arity));
 	}
 
 	public static ProductMonoid getInstance(final Monoid monoid, int arity) {
-		return (ProductMonoid) ProductSet.getInstance(ImmutableArray.<Set>getInstance(monoid, arity));
+		return (ProductMonoid) ProductSet.getInstance(DenseArray.<Set>getInstance(monoid, arity));
 	}
 
 	public static ProductGroup getInstance(final Group group, int arity) {
-		return (ProductGroup) ProductSet.getInstance(ImmutableArray.<Set>getInstance(group, arity));
+		return (ProductGroup) ProductSet.getInstance(DenseArray.<Set>getInstance(group, arity));
 	}
 
 }

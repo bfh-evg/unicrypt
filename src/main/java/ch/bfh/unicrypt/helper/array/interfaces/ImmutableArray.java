@@ -43,43 +43,65 @@ package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <A>
  * @param <T>
+ * @author rolfhaenni
  */
-public interface ArrayWithDefault<A extends Array<A, T>, T extends Object>
-	   extends Array<A, T> {
+public interface ImmutableArray<A extends ImmutableArray<A, T>, T extends Object>
+	   extends Iterable<T> {
 
-	public T getDefault();
+	public int getLength();
 
-	// collects the indices of default values
-	public Iterable<Integer> getIndices();
+	public boolean isEmpty();
 
-	// collects the indices of values different from the default
-	public Iterable<Integer> getIndicesExcept();
+	public boolean isUniform();
 
-	public int count();
+	public Iterable<Integer> getAllIndices();
 
-	public int countPrefix();
+	public Iterable<Integer> getIndices(T value);
 
-	public int countSuffix();
+	public Iterable<Integer> getIndicesExcept(T value);
 
-	public A insertAt(final int index);
+	public int count(T value);
 
-	public A replaceAt(int index);
+	public int countPrefix(T value);
 
-	public A add();
+	public int countSuffix(T value);
 
-	public A append(int n);
+	public T getAt(int index);
 
-	public A removePrefix();
+	public T getFirst();
 
-	public A removeSuffix();
+	public T getLast();
 
-	// left here means making the byte array smaller
-	public A shiftLeft(int n);
+	public A extract(int fromIndex, int length);
 
-	// right here means making the byte array larger
-	public A shiftRight(int n);
+	public A extractPrefix(int length);
+
+	public A extractSuffix(int length);
+
+	public A extractRange(int fromIndex, int toIndex);
+
+	public A remove(int fromIndex, int length);
+
+	public A removePrefix(int n);
+
+	public A removeSuffix(int n);
+
+	public A removeRange(int fromIndex, int toIndex);
+
+	public A removeAt(int index);
+
+	public A insertAt(final int index, final T value);
+
+	public A replaceAt(int index, T value);
+
+	public A add(T value);
+
+	public A append(A other);
+
+	public A reverse();
+
+	public A[] split(int... indices);
 
 }
