@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+
 import java.math.BigInteger;
 
 /**
@@ -157,30 +158,31 @@ public class ECZModPrime
 	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 18
 	 * <p>
 	 * @return True if curve parameters are valid
+	 * @throws Exception 
 	 */
-	public boolean isValid() {
-		boolean c11, c12, c21, c22, c23, c24, c3, c4, c5, c61, c62, c7, c8;
+	public boolean isValid() throws Exception {
+		boolean c11, c21, c22, c23, c24, c3, c4, c5, c61, c62;
 
 		DualisticElement<BigInteger> i4 = getFiniteField().getElement(4);
 		DualisticElement<BigInteger> i27 = getFiniteField().getElement(27);
 		BigInteger p = this.getFiniteField().getModulus();
-		int t = getOrder().bitCount();
 
 		c11 = MathUtil.arePrime(p);
-		c12 = true;
-		c21 = this.getA().getBigInteger().compareTo(BigInteger.ZERO) > -1 && this.getA().getBigInteger().compareTo(p.subtract(BigInteger.ONE)) < 1;
-		c22 = this.getB().getBigInteger().compareTo(BigInteger.ZERO) > -1 && this.getB().getBigInteger().compareTo(p.subtract(BigInteger.ONE)) < 1;
-		c23 = this.getDefaultGenerator().getValue().getX().getBigInteger().compareTo(BigInteger.ZERO) > -1 && this.getDefaultGenerator().getValue().getX().getBigInteger().compareTo(p.subtract(BigInteger.ONE)) < 1;
-		c24 = this.getDefaultGenerator().getValue().getY().getBigInteger().compareTo(BigInteger.ZERO) > -1 && this.getDefaultGenerator().getValue().getY().getBigInteger().compareTo(p.subtract(BigInteger.ONE)) < 1;
+		c21 = this.getFiniteField().contains(this.getA());
+		c22 = this.getFiniteField().contains(this.getB());
+		c23 = this.getFiniteField().contains(this.getDefaultGenerator().getValue().getX());
+		c24 = this.getFiniteField().contains(this.getDefaultGenerator().getValue().getY());
 		c3 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
 		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
-		c5 = getZeroElement().equals(getDefaultGenerator().selfApply(getOrder()));
-		c61 = true; //_> Must be corrected!
-		for (int i = 1; i < 20; i++) {
-			// ???
+		c5 = getZeroElement().equals(getDefaultGenerator().selfApply(getOrder().multiply(getCoFactor())));
+		c61 = true; //TODO
+		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100"))<0; i=i.add(BigInteger.ONE)) {
+			if(p.modPow(i, getOrder()).equals(BigInteger.ONE)){
+				throw new Exception("Curve parameter not valid");
+			}
 		}
-		c62 = !getOrder().multiply(getCoFactor()).equals(this.getFiniteField().getModulus());
-		return c11 && c12 && c21 && c22 && c23 && c24 && c3 && c4 && c5 && c61 && c62;
+		c62 = !getOrder().equals(this.getFiniteField().getModulus());
+		return c11 && c21 && c22 && c23 && c24 && c3 && c4 && c5 && c61 && c62;
 	}
 
 	/**
