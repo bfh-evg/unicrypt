@@ -95,8 +95,8 @@ public class ProbabilisticECGroupFpEncoder
 
 		@Override
 		protected ECElement<BigInteger> abstractApply(ZModElement element, RandomByteSequence randomByteSequence) {
+			boolean firstOption=true;
 			ZModPrime zModPrime=this.getCoDomain().getFiniteField();
-			ZModElement zModPrimeElement= zModPrime.getElementFrom(element);
 			ECZModPrime ecPrime = this.getCoDomain();
 
 			BigInteger e = element.getValue();
@@ -117,10 +117,40 @@ public class ProbabilisticECGroupFpEncoder
 				x = x.add(ONE);
 				count++;
 			}
+			
+			if(firstOption){
+				ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
+				ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
+				return ecPrime.getElement(x, y);
+			}
+			
+			e=element.invert().getValue().shiftLeft(SHIFT);
+			
+			if (!zModPrime.contains(e)) {
+				throw new ProbabilisticEncodingException(e + " can not be encoded");
+			}
+
+			x = zModPrime.getElement(e);
+			
+
+			count = 0;
+			while (!ecPrime.contains(x)) {
+				if (count >= (1 << SHIFT)) {
+					throw new ProbabilisticEncodingException(e + " can not be encoded");
+				}
+				x = x.add(ONE);
+				count++;
+			}
+			
+			
 			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
 			ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
+			y=y.invert();
 			return ecPrime.getElement(x, y);
+			
+			
 		}
+					
 
 	}
 
@@ -133,9 +163,24 @@ public class ProbabilisticECGroupFpEncoder
 
 		@Override
 		protected ZModElement abstractApply(ECElement<BigInteger> element, RandomByteSequence randomByteSequence) {
-			BigInteger x1 = element.getX().getValue();
-			x1 = x1.shiftRight(SHIFT);
-			return this.getCoDomain().getElement(x1);
+			ECZModPrime ecPrime = this.getDomain();
+			ZModPrime zModPrime=this.getDomain().getFiniteField();
+			ZModElement x=(ZModElement) element.getX();
+			ZModElement y=(ZModElement) element.getY();
+			
+			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
+			ZModElement yEnc = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
+			
+			if(y.isEquivalent(yEnc)){
+				BigInteger x1 = element.getX().getValue();
+				x1 = x1.shiftRight(SHIFT);
+				return this.getCoDomain().getElement(x1);
+			}
+			else{
+				BigInteger x1 = element.getX().invert().getValue();
+				x1 = x1.shiftRight(SHIFT);
+				return this.getCoDomain().getElement(x1);
+			}
 		}
 
 	}

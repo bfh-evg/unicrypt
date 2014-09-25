@@ -109,7 +109,7 @@ public class ProbabilisticECGroupF2mEncoder
 		@Override
 		protected ECElement abstractApply(ZModElement element,
 				RandomByteSequence randomByteSequence) {
-			
+			boolean firstOption=true;
 			BigInteger r=element.getBigInteger().shiftLeft(SHIFT);
 			element=this.getDomain().getElement(r);
 						
@@ -123,14 +123,47 @@ public class ProbabilisticECGroupF2mEncoder
 				x=enc.encode(element);
 				
 				if (i >= (1 << SHIFT)) {
+					firstOption=false;
 					throw new ProbabilisticEncodingException(element + " can not be encoded");
 				}
 			}
+			if(firstOption){
+				PolynomialElement<ZModTwo> y=this.calculateY(x);
+				return this.getCoDomain().getElement(x, y);
+			}
+			else{
 			
-			PolynomialElement<ZModTwo> y=this.calculateY(x);
-			return this.getCoDomain().getElement(x, y);
+				r=element.invert().getBigInteger().shiftLeft(SHIFT);
+				element=this.getDomain().getElement(r);
+				x=enc.encode(element);
+			
+				i=0;
+				while(i<(1 << SHIFT) && !hasY(x)){
+					i++;
+					element=element.add(this.getDomain().getOneElement());
+					x=enc.encode(element);
+				
+					if (i >= (1 << SHIFT)) {
+						firstOption=false;
+						throw new ProbabilisticEncodingException(element + " can not be encoded");
+					}
+				}
+			
+				PolynomialElement<ZModTwo> y=this.calculateY2(x);
+				return this.getCoDomain().getElement(x, y);
+			}
+			
 		}
 		
+		private PolynomialElement<ZModTwo> calculateY2(
+				PolynomialElement<ZModTwo> x) {
+			ECPolynomialField ec=this.getCoDomain();
+			PolynomialElement<ZModTwo> t = x.add(ec.getA()).add(ec.getB().divide(x.square()));
+			PolynomialElement<ZModTwo> l = ec.getFiniteField().solveQuadradicEquation(t);
+			return l.add(l.getSet().getOneElement()).multiply(x);
+
+		}
+
 		private PolynomialElement<ZModTwo> calculateY(PolynomialElement<ZModTwo> x){
 			ECPolynomialField ec=this.getCoDomain();
 			PolynomialElement<ZModTwo> t = x.add(ec.getA()).add(ec.getB().divide(x.square()));
@@ -157,8 +190,42 @@ public class ProbabilisticECGroupF2mEncoder
 		protected ZModElement abstractApply(ECElement element,
 				RandomByteSequence randomByteSequence) {
 			ZModToBinaryPolynomialEncoder enc=ZModToBinaryPolynomialEncoder.getInstance(this.getCoDomain(),this.getDomain().getFiniteField());
-			BigInteger r=enc.decode(element.getX()).getBigInteger();
-			return this.getCoDomain().getElement(r.shiftRight(SHIFT));
+			PolynomialElement<ZModTwo> x=(PolynomialElement<ZModTwo>) element.getX();
+			PolynomialElement<ZModTwo> y=(PolynomialElement<ZModTwo>) element.getY();
+			PolynomialElement<ZModTwo> yEnc=this.calculateY(x);
+			PolynomialElement<ZModTwo> yEnc2=this.calculateY2(x);
+			
+			if(y.isEquivalent(yEnc2)){
+				BigInteger r=enc.decode(element.getX()).getBigInteger();
+				return this.getCoDomain().getElement(r.shiftRight(SHIFT));
+			}
+			else{
+				BigInteger r=enc.decode(element.getX()).getBigInteger();
+				return this.getCoDomain().getElement(r.shiftRight(SHIFT)).invert();
+			}
+
+		}
+		
+		private PolynomialElement<ZModTwo> calculateY2(
+				PolynomialElement<ZModTwo> x) {
+			ECPolynomialField ec=this.getDomain();
+			PolynomialElement<ZModTwo> t = x.add(ec.getA()).add(ec.getB().divide(x.square()));
+			PolynomialElement<ZModTwo> l = ec.getFiniteField().solveQuadradicEquation(t);
+			return l.add(l.getSet().getOneElement()).multiply(x);
+
+		}
+
+		private PolynomialElement<ZModTwo> calculateY(PolynomialElement<ZModTwo> x){
+			ECPolynomialField ec=this.getDomain();
+			PolynomialElement<ZModTwo> t = x.add(ec.getA()).add(ec.getB().divide(x.square()));
+			PolynomialElement<ZModTwo> l = ec.getFiniteField().solveQuadradicEquation(t);
+			return l.multiply(x);
+		}
+		
+		private boolean hasY(PolynomialElement<ZModTwo> x){
+			ECPolynomialField ec=this.getDomain();
+			PolynomialElement<ZModTwo> t = x.add(ec.getA()).add(ec.getB().divide(x.square()));
+			return ec.getFiniteField().hasQuadradicEquationSolution(t);
 		}
 		
 	}

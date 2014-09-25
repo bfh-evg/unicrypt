@@ -193,6 +193,7 @@ public class PolynomialField<V>
 		PolynomialElement<V> y = this.getZeroElement();
 		PolynomialElement<V> z = this.getZeroElement();
 
+
 		while (y.equals(this.getZeroElement())) {
 
 			PolynomialElement<V> r = this.getRandomElement(this.getDegree());
