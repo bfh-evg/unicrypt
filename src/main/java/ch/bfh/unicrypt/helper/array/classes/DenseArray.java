@@ -123,11 +123,6 @@ public class DenseArray<V extends Object>
 	}
 
 	@Override
-	public DenseArray<V> append(ImmutableArray<V> other) {
-		return (DenseArray<V>) super.append(other);
-	}
-
-	@Override
 	protected V abstractGetAt(int index) {
 		if (this.reverse) {
 			index = this.length - index - 1;

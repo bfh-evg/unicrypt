@@ -74,47 +74,47 @@ abstract public class AbstractDefaultValueArray<A extends ImmutableArray<V>, V e
 	}
 
 	@Override
-	public Iterable<Integer> getIndices() {
+	public final Iterable<Integer> getIndices() {
 		return this.getIndices(this.defaultValue);
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept() {
+	public final Iterable<Integer> getIndicesExcept() {
 		return this.getIndicesExcept(this.defaultValue);
 	}
 
 	@Override
-	public int count() {
+	public final int count() {
 		return this.count(this.defaultValue);
 	}
 
 	@Override
-	public int countPrefix() {
+	public final int countPrefix() {
 		return this.countPrefix(this.defaultValue);
 	}
 
 	@Override
-	public int countSuffix() {
+	public final int countSuffix() {
 		return this.countSuffix(this.defaultValue);
 	}
 
 	@Override
-	public A insertAt(int index) {
+	public final A insertAt(int index) {
 		return this.insertAt(index, this.defaultValue);
 	}
 
 	@Override
-	public A replaceAt(int index) {
+	public final A replaceAt(int index) {
 		return this.replaceAt(index, this.defaultValue);
 	}
 
 	@Override
-	public A add() {
+	public final A add() {
 		return this.add(this.defaultValue);
 	}
 
 	@Override
-	public A append(int n) {
+	public final A append(int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -126,12 +126,12 @@ abstract public class AbstractDefaultValueArray<A extends ImmutableArray<V>, V e
 	}
 
 	@Override
-	public A removePrefix() {
+	public final A removePrefix() {
 		return this.removePrefix(this.countPrefix());
 	}
 
 	@Override
-	public A removeSuffix() {
+	public final A removeSuffix() {
 		return this.removeSuffix(this.countSuffix());
 	}
 

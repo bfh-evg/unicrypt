@@ -384,11 +384,6 @@ public class ByteArray
 	}
 
 	@Override
-	public ByteArray append(ImmutableArray<Byte> other) {
-		return (ByteArray) super.append(other);
-	}
-
-	@Override
 	protected Byte abstractGetAt(int index) {
 		return this.abstractGetByteAt(index);
 	}

@@ -72,12 +72,9 @@ public class SparseArray<V extends Object>
 
 	// this method is more efficient than its predecessor
 	@Override
-	public Iterable<Integer> getIndices(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
+	protected Iterable<Integer> defaultGetIndices(V value) {
 		if (this.defaultValue.equals(value)) {
-			return super.getIndices(value);
+			return super.defaultGetIndices(value);
 		}
 		List<Integer> result = new LinkedList<Integer>();
 		for (Integer i : this.map.keySet()) {
@@ -92,12 +89,9 @@ public class SparseArray<V extends Object>
 
 	// this method is more efficient than its predecessor
 	@Override
-	public Iterable<Integer> getIndicesExcept(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
+	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
 		if (!this.defaultValue.equals(value)) {
-			return super.getIndicesExcept(value);
+			return super.defaultGetIndicesExcept(value);
 		}
 		List<Integer> result = new LinkedList<Integer>();
 		for (Integer i : this.map.keySet()) {
@@ -172,11 +166,6 @@ public class SparseArray<V extends Object>
 			i++;
 		}
 		return new SparseArray<T>(defaultValue, map, values.length);
-	}
-
-	@Override
-	public SparseArray<V> append(ImmutableArray<V> other) {
-		return (SparseArray<V>) super.append(other);
 	}
 
 	@Override

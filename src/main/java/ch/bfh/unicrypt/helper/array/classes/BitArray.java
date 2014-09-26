@@ -212,11 +212,6 @@ public class BitArray
 	}
 
 	@Override
-	public BitArray append(ImmutableArray<Boolean> other) {
-		return (BitArray) super.append(other);
-	}
-
-	@Override
 	protected Boolean abstractGetAt(int index) {
 		return this.abstractGetBitAt(index);
 	}

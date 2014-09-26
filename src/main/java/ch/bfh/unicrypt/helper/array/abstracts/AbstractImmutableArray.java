@@ -76,17 +76,17 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public int getLength() {
+	public final int getLength() {
 		return this.length;
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public final boolean isEmpty() {
 		return this.length == 0;
 	}
 
 	@Override
-	public boolean isUniform() {
+	public final boolean isUniform() {
 		if (this.uniform == null) {
 			this.uniform = true;
 			if (this.length > 1) {
@@ -103,15 +103,19 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public Iterable<Integer> getAllIndices() {
+	public final Iterable<Integer> getAllIndices() {
 		return IterableRange.getInstance(0, this.length - 1);
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(V value) {
+	public final Iterable<Integer> getIndices(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
+		return defaultGetIndices(value);
+	}
+
+	protected Iterable<Integer> defaultGetIndices(V value) {
 		List<Integer> result = new LinkedList<Integer>();
 		for (int i : this.getAllIndices()) {
 			if (this.abstractGetAt(i).equals(value)) {
@@ -122,10 +126,14 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(V value) {
+	public final Iterable<Integer> getIndicesExcept(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
+		return defaultGetIndicesExcept(value);
+	}
+
+	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
 		List<Integer> result = new LinkedList<Integer>();
 		for (int i : this.getAllIndices()) {
 			if (!this.abstractGetAt(i).equals(value)) {
@@ -136,7 +144,7 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public int count(V value) {
+	public final int count(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
@@ -150,7 +158,7 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public int countPrefix(V value) {
+	public final int countPrefix(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
@@ -166,7 +174,7 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public int countSuffix(V value) {
+	public final int countSuffix(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
@@ -182,7 +190,7 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public V getAt(int index) {
+	public final V getAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -190,17 +198,17 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public V getFirst() {
+	public final V getFirst() {
 		return this.getAt(0);
 	}
 
 	@Override
-	public V getLast() {
+	public final V getLast() {
 		return this.getAt(this.length - 1);
 	}
 
 	@Override
-	public A extract(int fromIndex, int length) {
+	public final A extract(int fromIndex, int length) {
 		if (fromIndex < 0 || length < 0 || fromIndex + length > this.length) {
 			throw new IllegalArgumentException();
 		}
@@ -211,56 +219,53 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public A extractPrefix(int length) {
+	public final A extractPrefix(int length) {
 		return this.extract(0, length);
 	}
 
 	@Override
-	public A extractSuffix(int length) {
+	public final A extractSuffix(int length) {
 		return this.extract(this.length - length, length);
 	}
 
 	@Override
-	public A extractRange(int fromIndex, int toIndex) {
+	public final A extractRange(int fromIndex, int toIndex) {
 		return this.extract(fromIndex, toIndex - fromIndex + 1);
 	}
 
 	@Override
-	public A remove(int fromIndex, int length) {
+	public final A remove(int fromIndex, int length) {
 		A prefix = this.extractPrefix(fromIndex);
-		ImmutableArray<V> suffix = this.extractSuffix(this.length - fromIndex - length);
+		A suffix = this.extractSuffix(this.length - fromIndex - length);
 		return (A) prefix.append(suffix);
 	}
 
 	// prefix here means the lowest indices
 	@Override
-	public A removePrefix(int length) {
+	public final A removePrefix(int length) {
 		return this.remove(0, length);
 	}
 
 	// trailing here means the highest indices
 	@Override
-	public A removeSuffix(int length) {
+	public final A removeSuffix(int length) {
 		return this.remove(this.length - length, length);
 	}
 
 	@Override
-	public A removeRange(int fromIndex, int toIndex) {
+	public final A removeRange(int fromIndex, int toIndex) {
 		return this.remove(fromIndex, toIndex - fromIndex + 1);
 	}
 
 	@Override
-	public A removeAt(int index) {
+	public final A removeAt(int index) {
 		return this.removeRange(index, index);
 	}
 
 	@Override
-	public ImmutableArray<V> append(ImmutableArray<V> other) {
+	public final A append(ImmutableArray<V> other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
-		}
-		if (this.length == 0) {
-			return other;
 		}
 		if (other.getLength() == 0) {
 			return (A) this;
@@ -269,12 +274,12 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public A add(V value) {
+	public final A add(V value) {
 		return this.insertAt(this.length, value);
 	}
 
 	@Override
-	public A insertAt(int index, V value) {
+	public final A insertAt(int index, V value) {
 		if (index < 0 || index > this.length) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -285,7 +290,7 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public A replaceAt(int index, V value) {
+	public final A replaceAt(int index, V value) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -299,7 +304,7 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public A[] split(int... indices) {
+	public final A[] split(int... indices) {
 		if (indices == null) {
 			throw new IllegalArgumentException();
 		}
@@ -318,7 +323,7 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public A reverse() {
+	public final A reverse() {
 		return this.abstractReverse();
 	}
 
@@ -328,7 +333,7 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 	}
 
 	@Override
-	public Iterator<V> iterator() {
+	public final Iterator<V> iterator() {
 		return new Iterator<V>() {
 
 			int currentIndex = 0;
@@ -390,6 +395,6 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 
 	abstract protected A abstractReverse();
 
-	abstract protected ImmutableArray<V> abstractAppend(ImmutableArray<V> other);
+	abstract protected A abstractAppend(ImmutableArray<V> other);
 
 }
