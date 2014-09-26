@@ -177,8 +177,12 @@ public class SparseArray<V extends Object>
 			return this.defaultValue;
 		}
 // JAVA 8
-//		return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultValue);
-		return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultValue);
+// return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultValue);
+		V result = this.map.get(index - this.trailer + this.offset);
+		if (result == null) {
+			return this.defaultValue;
+		}
+		return result;
 	}
 
 	@Override
