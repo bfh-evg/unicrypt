@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
@@ -64,12 +65,12 @@ import java.util.Iterator;
  * @author rolfhaenni
  */
 public class ProductSet
-	   extends AbstractSet<Tuple, DenseArray<Element>>
-	   implements RecursiveArray<ProductSet, Set> {
+	   extends AbstractSet<Tuple, ImmutableArray<Element>>
+	   implements RecursiveArray<Set> {
 
-	private final DenseArray<Set> sets;
+	private final ImmutableArray<Set> sets;
 
-	protected ProductSet(DenseArray<Set> sets) {
+	protected ProductSet(ImmutableArray<Set> sets) {
 		super(DenseArray.class);
 		this.sets = sets;
 	}
@@ -138,7 +139,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected boolean abstractContains(DenseArray<Element> value) {
+	protected boolean abstractContains(ImmutableArray<Element> value) {
 		if (value == null || value.getLength() != this.getLength()) {
 			return false;
 		}
@@ -151,7 +152,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected Tuple abstractGetElement(DenseArray<Element> value) {
+	protected Tuple abstractGetElement(ImmutableArray<Element> value) {
 		if (this.getLength() == 1) {
 			return new Singleton(this, value);
 		}
@@ -165,11 +166,11 @@ public class ProductSet
 	}
 
 	@Override
-	protected BigIntegerConverter<DenseArray<Element>> abstractGetBigIntegerConverter() {
-		return new AbstractBigIntegerConverter<DenseArray<Element>>(null) { // class parameter not needed
+	protected BigIntegerConverter<ImmutableArray<Element>> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<ImmutableArray<Element>>(null) { // class parameter not needed
 
 			@Override
-			protected BigInteger abstractConvert(DenseArray<Element> elements) {
+			protected BigInteger abstractConvert(ImmutableArray<Element> elements) {
 				BigInteger[] bigIntegers = new BigInteger[getLength()];
 				int i = 0;
 				for (Element element : elements) {
@@ -402,8 +403,8 @@ public class ProductSet
 	}
 
 	@Override
-	public ProductSet append(ProductSet other) {
-		return ProductSet.getInstance(this.sets.append(other.sets));
+	public ProductSet append(ImmutableArray<Set> other) {
+		return ProductSet.getInstance(this.sets.append(other));
 	}
 
 	@Override
@@ -413,7 +414,7 @@ public class ProductSet
 
 	@Override
 	public ProductSet[] split(int... indices) {
-		DenseArray<Set>[] setArray = this.sets.split(indices);
+		ImmutableArray<Set>[] setArray = this.sets.split(indices);
 		ProductSet[] result = new ProductSet[setArray.length];
 		for (int i = 0; i < setArray.length; i++) {
 			result[i] = ProductSet.getInstance(setArray[i]);
@@ -489,7 +490,7 @@ public class ProductSet
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static ProductSet getInstance(DenseArray<Set> sets) {
+	public static ProductSet getInstance(ImmutableArray<Set> sets) {
 		if (sets == null) {
 			throw new IllegalArgumentException();
 		}

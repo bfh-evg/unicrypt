@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -54,9 +55,9 @@ import java.math.BigInteger;
  */
 public class ProductSemiGroup
 	   extends ProductSet
-	   implements SemiGroup<DenseArray<Element>> {
+	   implements SemiGroup<ImmutableArray<Element>> {
 
-	protected ProductSemiGroup(DenseArray<Set> sets) {
+	protected ProductSemiGroup(ImmutableArray<Set> sets) {
 		super(sets);
 	}
 

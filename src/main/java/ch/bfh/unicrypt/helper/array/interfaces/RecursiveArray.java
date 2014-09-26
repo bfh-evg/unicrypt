@@ -44,11 +44,10 @@ package ch.bfh.unicrypt.helper.array.interfaces;
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <A>
  * @param <V>
  */
-public interface RecursiveArray<A extends ImmutableArray<A, V>, V>
-	   extends ImmutableArray<A, V> {
+public interface RecursiveArray<V>
+	   extends ImmutableArray<V> {
 
 	public V getAt(int... indices);
 

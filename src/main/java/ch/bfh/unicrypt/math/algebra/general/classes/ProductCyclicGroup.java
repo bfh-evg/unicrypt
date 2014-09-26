@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -58,11 +59,11 @@ import java.util.NoSuchElementException;
  */
 public class ProductCyclicGroup
 	   extends ProductGroup
-	   implements CyclicGroup<DenseArray<Element>> {
+	   implements CyclicGroup<ImmutableArray<Element>> {
 
 	private Tuple defaultGenerator;
 
-	protected ProductCyclicGroup(DenseArray<Set> sets) {
+	protected ProductCyclicGroup(ImmutableArray<Set> sets) {
 		super(sets);
 	}
 

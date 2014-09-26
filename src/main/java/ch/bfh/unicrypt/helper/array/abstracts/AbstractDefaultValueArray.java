@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 
 /**
  *
@@ -49,9 +50,9 @@ import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
  * @param <A>
  * @param <V>
  */
-abstract public class AbstractDefaultValueArray<A extends AbstractImmutableArray<A, V>, V extends Object>
+abstract public class AbstractDefaultValueArray<A extends ImmutableArray<V>, V extends Object>
 	   extends AbstractImmutableArray<A, V>
-	   implements DefaultValueArray<A, V> {
+	   implements DefaultValueArray<V> {
 
 	protected final V defaultValue;
 	protected int trailer; // number of trailing zeros not included in byteArray

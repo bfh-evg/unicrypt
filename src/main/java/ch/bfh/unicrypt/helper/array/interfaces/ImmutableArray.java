@@ -43,12 +43,12 @@ package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
  *
- * @param <A>
- * @param <T>
- * @author rolfhaenni
+ * author rolfhaenni
+ * <p>
+ * @param <V>
  */
-public interface ImmutableArray<A extends ImmutableArray<A, T>, T extends Object>
-	   extends Iterable<T> {
+public interface ImmutableArray<V extends Object>
+	   extends Iterable<V> {
 
 	public int getLength();
 
@@ -58,50 +58,50 @@ public interface ImmutableArray<A extends ImmutableArray<A, T>, T extends Object
 
 	public Iterable<Integer> getAllIndices();
 
-	public Iterable<Integer> getIndices(T value);
+	public Iterable<Integer> getIndices(V value);
 
-	public Iterable<Integer> getIndicesExcept(T value);
+	public Iterable<Integer> getIndicesExcept(V value);
 
-	public int count(T value);
+	public int count(V value);
 
-	public int countPrefix(T value);
+	public int countPrefix(V value);
 
-	public int countSuffix(T value);
+	public int countSuffix(V value);
 
-	public T getAt(int index);
+	public V getAt(int index);
 
-	public T getFirst();
+	public V getFirst();
 
-	public T getLast();
+	public V getLast();
 
-	public A extract(int fromIndex, int length);
+	public ImmutableArray<V> extract(int fromIndex, int length);
 
-	public A extractPrefix(int length);
+	public ImmutableArray<V> extractPrefix(int length);
 
-	public A extractSuffix(int length);
+	public ImmutableArray<V> extractSuffix(int length);
 
-	public A extractRange(int fromIndex, int toIndex);
+	public ImmutableArray<V> extractRange(int fromIndex, int toIndex);
 
-	public A remove(int fromIndex, int length);
+	public ImmutableArray<V> remove(int fromIndex, int length);
 
-	public A removePrefix(int n);
+	public ImmutableArray<V> removePrefix(int n);
 
-	public A removeSuffix(int n);
+	public ImmutableArray<V> removeSuffix(int n);
 
-	public A removeRange(int fromIndex, int toIndex);
+	public ImmutableArray<V> removeRange(int fromIndex, int toIndex);
 
-	public A removeAt(int index);
+	public ImmutableArray<V> removeAt(int index);
 
-	public A insertAt(final int index, final T value);
+	public ImmutableArray<V> insertAt(final int index, final V value);
 
-	public A replaceAt(int index, T value);
+	public ImmutableArray<V> replaceAt(int index, V value);
 
-	public A add(T value);
+	public ImmutableArray<V> add(V value);
 
-	public A append(A other);
+	public ImmutableArray<V> append(ImmutableArray<V> other);
 
-	public A reverse();
+	public ImmutableArray<V> reverse();
 
-	public A[] split(int... indices);
+	public ImmutableArray<V>[] split(int... indices);
 
 }

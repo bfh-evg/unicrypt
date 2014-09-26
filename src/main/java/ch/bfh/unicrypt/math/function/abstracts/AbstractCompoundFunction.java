@@ -60,7 +60,7 @@ import java.util.Iterator;
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<CF, D, DE, C, CE>
-	   implements RecursiveArray<CF, Function> {
+	   implements RecursiveArray<Function> {
 
 	protected final DenseArray<Function> functions;
 
@@ -141,7 +141,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 		Function function = this;
 		for (final int index : indices) {
 			if (function.isCompound()) {
-				function = ((ImmutableArray<CF, Function>) function).getAt(index);
+				function = ((ImmutableArray<Function>) function).getAt(index);
 			} else {
 				throw new IllegalArgumentException();
 			}
@@ -210,8 +210,8 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public CF append(CF other) {
-		return this.abstractGetInstance(this.functions.append(other.functions));
+	public CF append(ImmutableArray<Function> other) {
+		return this.abstractGetInstance(this.functions.append(other));
 	}
 
 	@Override

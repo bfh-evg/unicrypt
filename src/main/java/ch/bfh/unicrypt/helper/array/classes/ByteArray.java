@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
@@ -383,6 +384,11 @@ public class ByteArray
 	}
 
 	@Override
+	public ByteArray append(ImmutableArray<Byte> other) {
+		return (ByteArray) super.append(other);
+	}
+
+	@Override
 	protected Byte abstractGetAt(int index) {
 		return this.abstractGetByteAt(index);
 	}
@@ -398,13 +404,13 @@ public class ByteArray
 	}
 
 	@Override
-	protected ByteArray abstractAppend(ByteArray other) {
-		byte[] result = new byte[this.length + other.length];
+	protected ByteArray abstractAppend(ImmutableArray<Byte> other) {
+		byte[] result = new byte[this.length + other.getLength()];
 		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetByteAt(i);
 		}
 		for (int i : other.getAllIndices()) {
-			result[this.length + i] = other.abstractGetByteAt(i);
+			result[this.length + i] = other.getAt(i);
 		}
 		return new ByteArray(result);
 	}

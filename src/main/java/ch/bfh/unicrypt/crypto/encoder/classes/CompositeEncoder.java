@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -53,11 +54,11 @@ import java.util.Iterator;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
-	   implements RecursiveArray<CompositeEncoder, Encoder> {
+	   implements RecursiveArray<Encoder> {
 
-	private final DenseArray<Encoder> encoders;
+	private final ImmutableArray<Encoder> encoders;
 
-	protected CompositeEncoder(DenseArray<Encoder> encoders) {
+	protected CompositeEncoder(ImmutableArray<Encoder> encoders) {
 		this.encoders = encoders;
 	}
 
@@ -198,8 +199,8 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public CompositeEncoder append(CompositeEncoder other) {
-		return new CompositeEncoder(this.encoders.append(other.encoders));
+	public CompositeEncoder append(ImmutableArray<Encoder> other) {
+		return new CompositeEncoder(this.encoders.append(other));
 	}
 
 	@Override
@@ -209,7 +210,7 @@ public class CompositeEncoder
 
 	@Override
 	public CompositeEncoder[] split(int... indices) {
-		DenseArray<Encoder>[] encoderArray = this.encoders.split(indices);
+		ImmutableArray<Encoder>[] encoderArray = this.encoders.split(indices);
 		CompositeEncoder[] result = new CompositeEncoder[encoderArray.length];
 		for (int i = 0; i < encoderArray.length; i++) {
 			result[i] = new CompositeEncoder(encoderArray[i]);

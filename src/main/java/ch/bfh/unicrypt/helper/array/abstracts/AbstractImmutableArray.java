@@ -55,9 +55,9 @@ import java.util.List;
  * @param <A>
  * @param <V>
  */
-abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V extends Object>
+abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V extends Object>
 	   extends UniCrypt
-	   implements ImmutableArray<A, V> {
+	   implements ImmutableArray<V> {
 
 	protected Class valueClass;
 	protected int length;
@@ -228,8 +228,8 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	@Override
 	public A remove(int fromIndex, int length) {
 		A prefix = this.extractPrefix(fromIndex);
-		A suffix = this.extractSuffix(this.length - fromIndex - length);
-		return prefix.append(suffix);
+		ImmutableArray<V> suffix = this.extractSuffix(this.length - fromIndex - length);
+		return (A) prefix.append(suffix);
 	}
 
 	// prefix here means the lowest indices
@@ -255,14 +255,14 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	public A append(A other) {
+	public ImmutableArray<V> append(ImmutableArray<V> other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
 		}
 		if (this.length == 0) {
 			return other;
 		}
-		if (other.length == 0) {
+		if (other.getLength() == 0) {
 			return (A) this;
 		}
 		return this.abstractAppend(other);
@@ -384,12 +384,12 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 
 	abstract protected A abstractExtract(int fromIndex, int length);
 
-	abstract protected A abstractAppend(A other);
-
 	abstract protected A abstractInsertAt(int index, V value);
 
 	abstract protected A abstractReplaceAt(int index, V value);
 
 	abstract protected A abstractReverse();
+
+	abstract protected ImmutableArray<V> abstractAppend(ImmutableArray<V> other);
 
 }

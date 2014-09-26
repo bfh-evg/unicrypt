@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
@@ -51,7 +52,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 public class Singleton
 	   extends Tuple {
 
-	protected Singleton(final ProductSet set, final DenseArray<Element> elements) {
+	protected Singleton(final ProductSet set, final ImmutableArray<Element> elements) {
 		super(set, elements);
 	}
 

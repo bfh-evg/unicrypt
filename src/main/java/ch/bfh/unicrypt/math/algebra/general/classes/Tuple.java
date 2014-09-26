@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -53,10 +54,10 @@ import java.util.Iterator;
  * @author rolfhaenni
  */
 public class Tuple
-	   extends AbstractElement<ProductSet, Tuple, DenseArray<Element>>
-	   implements RecursiveArray<Tuple, Element> {
+	   extends AbstractElement<ProductSet, Tuple, ImmutableArray<Element>>
+	   implements RecursiveArray<Element> {
 
-	protected Tuple(final ProductSet set, final DenseArray<Element> elements) {
+	protected Tuple(final ProductSet set, final ImmutableArray<Element> elements) {
 		super(set, elements);
 	}
 
@@ -196,8 +197,8 @@ public class Tuple
 	}
 
 	@Override
-	public Tuple append(Tuple other) {
-		return Tuple.getInstance(this.getSet().append(other.getSet()), this.getValue().append(other.getValue()));
+	public Tuple append(ImmutableArray<Element> other) {
+		return Tuple.getInstance(this.getValue().append(other));
 	}
 
 	@Override
@@ -212,7 +213,7 @@ public class Tuple
 
 	@Override
 	public Tuple[] split(int... indices) {
-		DenseArray<Element>[] elementArray = this.getValue().split(indices);
+		ImmutableArray<Element>[] elementArray = this.getValue().split(indices);
 		Tuple[] result = new Tuple[elementArray.length];
 		for (int i = 0; i < elementArray.length; i++) {
 			result[i] = Tuple.getInstance(elementArray[i]);
@@ -245,7 +246,7 @@ public class Tuple
 	 * @return The corresponding tuple element
 	 * @throws IllegalArgumentException if {@literal elements} is null or contains null
 	 */
-	public static Tuple getInstance(DenseArray<Element> elements) {
+	public static Tuple getInstance(ImmutableArray<Element> elements) {
 		if (elements == null || elements.getLength() < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -271,7 +272,7 @@ public class Tuple
 	}
 
 	// helper method to distinguish between pairs, triples and tuples
-	private static Tuple getInstance(ProductSet productSet, DenseArray<Element> elements) {
+	private static Tuple getInstance(ProductSet productSet, ImmutableArray<Element> elements) {
 		if (elements.getLength() == 1) {
 			return new Singleton(productSet, elements);
 		}

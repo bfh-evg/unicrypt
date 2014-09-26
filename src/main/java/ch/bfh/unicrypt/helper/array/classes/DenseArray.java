@@ -42,22 +42,23 @@
 package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import java.util.Collection;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <T>
+ * @param <V>
  */
-public class DenseArray<T extends Object>
-	   extends AbstractImmutableArray<DenseArray<T>, T> {
+public class DenseArray<V extends Object>
+	   extends AbstractImmutableArray<DenseArray<V>, V> {
 
 	// The obects are stored either as an ordinary, possibly empty array (case 1)
 	// or as an array of length 1 together with the full length of the immutable
 	// array (case 2, all elements are equal)
 	private final Object[] values;
 
-	protected DenseArray(T value, int length) {
+	protected DenseArray(V value, int length) {
 		this(new Object[]{value}, 0, length, false);
 	}
 
@@ -122,35 +123,40 @@ public class DenseArray<T extends Object>
 	}
 
 	@Override
-	protected T abstractGetAt(int index) {
+	public DenseArray<V> append(ImmutableArray<V> other) {
+		return (DenseArray<V>) super.append(other);
+	}
+
+	@Override
+	protected V abstractGetAt(int index) {
 		if (this.reverse) {
 			index = this.length - index - 1;
 		}
-		return (T) this.values[(this.offset + index) % this.values.length];
+		return (V) this.values[(this.offset + index) % this.values.length];
 	}
 
 	@Override
-	protected DenseArray<T> abstractExtract(int fromIndex, int length) {
+	protected DenseArray<V> abstractExtract(int fromIndex, int length) {
 		if (this.reverse) {
 			fromIndex = this.length - fromIndex - length;
 		}
-		return new DenseArray<T>(this.values, this.offset + fromIndex, length, this.reverse);
+		return new DenseArray<V>(this.values, this.offset + fromIndex, length, this.reverse);
 	}
 
 	@Override
-	protected DenseArray<T> abstractAppend(DenseArray<T> other) {
-		Object[] result = new Object[this.length + other.length];
+	protected DenseArray<V> abstractAppend(ImmutableArray<V> other) {
+		Object[] result = new Object[this.length + other.getLength()];
 		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetAt(i);
 		}
 		for (int i : other.getAllIndices()) {
-			result[this.length + i] = other.abstractGetAt(i);
+			result[this.length + i] = other.getAt(i);
 		}
-		return new DenseArray<T>(result);
+		return new DenseArray<V>(result);
 	}
 
 	@Override
-	protected DenseArray<T> abstractInsertAt(int index, T newObject) {
+	protected DenseArray<V> abstractInsertAt(int index, V newObject) {
 		Object[] result = new Object[this.length + 1];
 		for (int i : this.getAllIndices()) {
 			if (i < index) {
@@ -160,22 +166,22 @@ public class DenseArray<T extends Object>
 			}
 		}
 		result[index] = newObject;
-		return new DenseArray<T>(result);
+		return new DenseArray<V>(result);
 	}
 
 	@Override
-	protected DenseArray<T> abstractReplaceAt(int index, T newObject) {
+	protected DenseArray<V> abstractReplaceAt(int index, V newObject) {
 		Object[] result = new Object[this.length];
 		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetAt(i);
 		}
 		result[index] = newObject;
-		return new DenseArray<T>(result);
+		return new DenseArray<V>(result);
 	}
 
 	@Override
-	protected DenseArray<T> abstractReverse() {
-		return new DenseArray<T>(this.values, this.offset, this.length, !this.reverse);
+	protected DenseArray<V> abstractReverse() {
+		return new DenseArray<V>(this.values, this.offset, this.length, !this.reverse);
 	}
 
 }

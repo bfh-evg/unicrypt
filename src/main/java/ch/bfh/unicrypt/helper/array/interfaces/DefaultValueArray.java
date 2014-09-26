@@ -44,11 +44,10 @@ package ch.bfh.unicrypt.helper.array.interfaces;
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <A>
  * @param <V>
  */
-public interface DefaultValueArray<A extends ImmutableArray<A, V>, V extends Object>
-	   extends ImmutableArray<A, V> {
+public interface DefaultValueArray<V extends Object>
+	   extends ImmutableArray<V> {
 
 	public V getDefault();
 
@@ -64,22 +63,22 @@ public interface DefaultValueArray<A extends ImmutableArray<A, V>, V extends Obj
 
 	public int countSuffix();
 
-	public A insertAt(final int index);
+	public ImmutableArray<V> insertAt(final int index);
 
-	public A replaceAt(int index);
+	public ImmutableArray<V> replaceAt(int index);
 
-	public A add();
+	public ImmutableArray<V> add();
 
-	public A append(int n);
+	public ImmutableArray<V> append(int n);
 
-	public A removePrefix();
+	public ImmutableArray<V> removePrefix();
 
-	public A removeSuffix();
+	public ImmutableArray<V> removeSuffix();
 
 	// left here means making the byte array smaller
-	public A shiftLeft(int n);
+	public ImmutableArray<V> shiftLeft(int n);
 
 	// right here means making the byte array larger
-	public A shiftRight(int n);
+	public ImmutableArray<V> shiftRight(int n);
 
 }
