@@ -85,9 +85,13 @@ public class ECGroupExample {
 			ECElement<Polynomial<DualisticElement<ZModTwo>>> generator = ec.getDefaultGenerator();
 			ec.getRandomElement();
 			BigInteger order = ec.getOrder().add(BigInteger.ONE);
-			Example.printLine(MathUtil.isPrime(order));
-			Example.printLine(ec.getFiniteField().getIrreduciblePolynomial());
-			Example.printLine(generator.selfApply(order)); // Result should be Infinity element
+			
+			Example.printLine(params.toString());
+			
+			for (int i = 1; i < 10; i++) {
+				Example.printLine(generator.selfApply(i));
+			}
+			// Result should be Infinity element
 //			Example.printLine(generator.selfApply(order.multiply(ec.getCoFactor()))); // Result should be Infinity element
 
 		}
