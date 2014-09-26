@@ -44,73 +44,51 @@ package ch.bfh.unicrypt.crypto.schemes.encryption;
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupF2mEncoder;
 import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.ZModToGStarModSafePrimeEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 
-import java.math.BigInteger;
-
 public class ElGamalECCExample {
 
-	/*public static void example1() throws Exception {
-
-		// Example Elgamal over ECFp with 123456789 as text to encode using ProbabilisticECGroupFpEncode
-		//Generate schema and keypair
-		final StandardECZModPrime g_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1); //Possible curves secp{112,160,192,224,256,384,521}r1
-		final ZMod zMod=g_q.getFiniteField();
-		final ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(g_q);
-		final KeyPairGenerator keyGen = elGamal.getKeyPairGenerator();
-
-		//Create encode/decoder
-		ProbabilisticECGroupFpEncoder enc = ProbabilisticECGroupFpEncoder.getInstance(zMod,g_q);
-
-		// Generate private key
-		final Element privateKey = keyGen.generatePrivateKey();
-		Example.printLine("Private Key: " + privateKey);
-
-		//Generate pubilc key
-		Element publigKey = keyGen.generatePublicKey(privateKey);
-		Example.printLine("Public Key: " + publigKey);
-
-		//encoding
-		FiniteField f = g_q.getFiniteField();
-		Element m = f.getElementFrom(new BigInteger("123456789"));
-		ECElement<BigInteger> message = enc.encode(m);
-		Example.printLine("Message: " + m);
-		Example.printLine("Message encoded: " + message);
-
-		//Encrypt message
-		final Tuple cipherText = elGamal.encrypt(publigKey, message);
-		Example.printLine("Cipher Text: " + cipherText);
-
-		//decrypt message
-		Element newMessage = elGamal.decrypt(privateKey, cipherText);
-		Example.printLine("Decrypted Message: " + newMessage);
-		Example.printLine("Message == Decrypted Message: " + message.isEquivalent(newMessage));
-
-		//decode message
-		Element plain = enc.decode(newMessage);
-		Example.printLine("Message decoded: " + plain);
-
-	}*/
-	
+	/* public static void example1() throws Exception {
+	 *
+	 * // Example Elgamal over ECFp with 123456789 as text to encode using ProbabilisticECGroupFpEncode //Generate
+	 * schema and keypair final StandardECZModPrime g_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1);
+	 * //Possible curves secp{112,160,192,224,256,384,521}r1 final ZMod zMod=g_q.getFiniteField(); final
+	 * ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(g_q); final KeyPairGenerator keyGen =
+	 * elGamal.getKeyPairGenerator();
+	 *
+	 * //Create encode/decoder ProbabilisticECGroupFpEncoder enc = ProbabilisticECGroupFpEncoder.getInstance(zMod,g_q);
+	 *
+	 * // Generate private key final Element privateKey = keyGen.generatePrivateKey(); Example.printLine("Private Key:
+	 * " + privateKey);
+	 *
+	 * //Generate pubilc key Element publigKey = keyGen.generatePublicKey(privateKey); Example.printLine("Public Key: "
+	 * + publigKey);
+	 *
+	 * //encoding FiniteField f = g_q.getFiniteField(); Element m = f.getElementFrom(new BigInteger("123456789"));
+	 * ECElement<BigInteger> message = enc.encode(m); Example.printLine("Message: " + m); Example.printLine("Message
+	 * encoded: " + message);
+	 *
+	 * //Encrypt message final Tuple cipherText = elGamal.encrypt(publigKey, message); Example.printLine("Cipher Text:
+	 * " + cipherText);
+	 *
+	 * //decrypt message Element newMessage = elGamal.decrypt(privateKey, cipherText); Example.printLine("Decrypted
+	 * Message: " + newMessage); Example.printLine("Message == Decrypted Message: " + message.isEquivalent(newMessage));
+	 *
+	 * //decode message Element plain = enc.decode(newMessage); Example.printLine("Message decoded: " + plain);
+	 *
+	 * } */
 	public static void example1() throws Exception {
 
 		// Create cyclic group EC Fp (modulo 521 bits) and get default generator
-		CyclicGroup cyclicGroup = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1);
+		CyclicGroup cyclicGroup = ECZModPrime.getInstance(SECECCParamsFp.secp521r1);
 		Element generator = cyclicGroup.getDefaultGenerator();
 
 		// Create ElGamal encryption scheme
@@ -141,7 +119,7 @@ public class ElGamalECCExample {
 	public static void example2() throws Exception {
 
 		// Create cyclic group EC Fp (modulo 521 bits) and get default generator
-		StandardECZModPrime cyclicGroup = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1);
+		ECZModPrime cyclicGroup = ECZModPrime.getInstance(SECECCParamsFp.secp521r1);
 		Element generator = cyclicGroup.getDefaultGenerator();
 
 		// Create ElGamal encryption scheme
@@ -174,11 +152,11 @@ public class ElGamalECCExample {
 		Example.printLine("Decrypted Message", decryption);
 		Example.printLine("Decoded Message", decodedMessage);
 	}
-	
+
 	public static void example3() throws Exception {
 
 		// Create cyclic group EC Fp (modulo 521 bits) and get default generator
-		CyclicGroup cyclicGroup = StandardECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
+		CyclicGroup cyclicGroup = ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
 		Element generator = cyclicGroup.getDefaultGenerator();
 
 		// Create ElGamal encryption scheme
@@ -209,8 +187,8 @@ public class ElGamalECCExample {
 	public static void example4() throws Exception {
 
 		// Create cyclic group EC Fp (modulo 521 bits) and get default generator
-		StandardECPolynomialField cyclicGroup = StandardECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
-		
+		ECPolynomialField cyclicGroup = ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
+
 		Element generator = cyclicGroup.getDefaultGenerator();
 
 		// Create ElGamal encryption scheme
@@ -243,8 +221,6 @@ public class ElGamalECCExample {
 		Example.printLine("Decrypted Message", decryption);
 		Example.printLine("Decoded Message", decodedMessage);
 	}
-
-	
 
 	public static void main(final String[] args) {
 		Example.runExamples();

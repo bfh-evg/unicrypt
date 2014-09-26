@@ -47,8 +47,8 @@ import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-
 import java.math.BigInteger;
 
 /**
@@ -158,7 +158,7 @@ public class ECZModPrime
 	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 18
 	 * <p>
 	 * @return True if curve parameters are valid
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean isValid() throws Exception {
 		boolean c11, c21, c22, c23, c24, c3, c4, c5, c61, c62;
@@ -176,8 +176,8 @@ public class ECZModPrime
 		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
 		c5 = getZeroElement().equals(getDefaultGenerator().selfApply(getOrder().multiply(getCoFactor())));
 		c61 = true; //TODO
-		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100"))<0; i=i.add(BigInteger.ONE)) {
-			if(p.modPow(i, getOrder()).equals(BigInteger.ONE)){
+		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(BigInteger.ONE)) {
+			if (p.modPow(i, getOrder()).equals(BigInteger.ONE)) {
 				throw new Exception("Curve parameter not valid");
 			}
 		}
@@ -226,6 +226,22 @@ public class ECZModPrime
 		} else {
 			throw new IllegalArgumentException("Curve parameter are not valid!");
 		}
+	}
+
+	public static ECZModPrime getInstance(final StandardECZModParams params) throws Exception {
+		ZModPrime field;
+		ZModElement a, b, gx, gy;
+		BigInteger order, h;
+
+		field = params.getFiniteField();
+		a = params.getA();
+		b = params.getB();
+		gx = params.getGx();
+		gy = params.getGy();
+		order = params.getOrder();
+		h = params.getH();
+
+		return ECZModPrime.getInstance(field, a, b, gx, gy, order, h);
 	}
 
 }

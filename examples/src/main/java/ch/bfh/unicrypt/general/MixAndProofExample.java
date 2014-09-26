@@ -54,7 +54,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.ReEncryptionShuffleProofSystem
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -306,7 +306,7 @@ public class MixAndProofExample {
 		final int size = 10;
 
 		// Create cyclic group for commitments
-		final StandardECZModPrime G_q_Com = StandardECZModPrime.getInstance(SECECCParamsFp.secp160r1);
+		final ECZModPrime G_q_Com = ECZModPrime.getInstance(SECECCParamsFp.secp160r1);
 
 		// Create independent generators
 		final Tuple independentGenerators = G_q_Com.getIndependentGenerators(size, rrs);

@@ -45,15 +45,14 @@ import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
-
 import java.math.BigInteger;
 
 /**
@@ -68,8 +67,7 @@ public class ECGroupExample {
 		// Example with StandardECZModPrime
 		for (StandardECZModParams params : SECECCParamsFp.values()) {
 
-			StandardECZModPrime ec = StandardECZModPrime
-				   .getInstance(params);
+			ECZModPrime ec = ECZModPrime.getInstance(params);
 			ECElement<BigInteger> generator = ec.getDefaultGenerator();
 			ec.getRandomElement();
 			BigInteger order = ec.getOrder();
@@ -83,14 +81,14 @@ public class ECGroupExample {
 		// Example with StandardECPolynomialField
 
 		for (StandardECPolynomialFieldParams params : SECECCParamsF2m.values()) {
-			StandardECPolynomialField ec = StandardECPolynomialField
-				   .getInstance(params);
+			ECPolynomialField ec = ECPolynomialField.getInstance(params);
 			ECElement<Polynomial<DualisticElement<ZModTwo>>> generator = ec.getDefaultGenerator();
 			ec.getRandomElement();
-			BigInteger order = ec.getOrder();
+			BigInteger order = ec.getOrder().add(BigInteger.ONE);
 			Example.printLine(MathUtil.isPrime(order));
 			Example.printLine(ec.getFiniteField().getIrreduciblePolynomial());
-			Example.printLine(generator.selfApply(order.multiply(ec.getCoFactor()))); // Result should be Infinity element
+			Example.printLine(generator.selfApply(order)); // Result should be Infinity element
+//			Example.printLine(generator.selfApply(order.multiply(ec.getCoFactor()))); // Result should be Infinity element
 
 		}
 	}

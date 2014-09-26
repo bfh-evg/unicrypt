@@ -176,6 +176,8 @@ public class SparseArray<V extends Object>
 		if (index < this.trailer || index >= this.length - this.header) {
 			return this.defaultValue;
 		}
+// JAVA 8
+//		return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultValue);
 		return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultValue);
 	}
 

@@ -120,20 +120,19 @@ public class PolynomialField<V>
 		// Templates.
 	}
 
-	@Override
-	protected PolynomialElement<V> abstractApply(PolynomialElement<V> element1,
-		   PolynomialElement<V> element2) {
-		PolynomialElement<V> poly = super.abstractApply(element1, element2);
-		return this.mod(this.getElement(poly.getValue()));
-	}
-
-	@Override
-	protected PolynomialElement<V> abstractMultiply(
-		   PolynomialElement<V> element1, PolynomialElement<V> element2) {
-		PolynomialElement<V> poly = super.abstractMultiply(element1, element2);
-		return this.mod(this.getElement(poly.getValue()));
-	}
-
+//	@Override
+//	protected PolynomialElement<V> abstractApply(PolynomialElement<V> element1,
+//		   PolynomialElement<V> element2) {
+//		PolynomialElement<V> poly = super.abstractApply(element1, element2);
+//		return this.mod(this.getElement(poly.getValue()));
+//	}
+//
+//	@Override
+//	protected PolynomialElement<V> abstractMultiply(
+//		   PolynomialElement<V> element1, PolynomialElement<V> element2) {
+//		PolynomialElement<V> poly = super.abstractMultiply(element1, element2);
+//		return this.mod(this.getElement(poly.getValue()));
+//	}
 	@Override
 	public PolynomialElement<V> divide(Element element1, Element element2) {
 		return this.multiply(element1, this.oneOver(element2));
@@ -182,17 +181,16 @@ public class PolynomialField<V>
 		Pair longDiv = this.longDivision(g, this.irreduciblePolynomial);
 		return (PolynomialElement<V>) longDiv.getSecond();
 	}
-	
+
 	/**
-	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis.
-	 * Source: AMERICAN NATIONAL STANDARD X9.62 D.1.6
-	 * @param PolynomialElement b
+	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
+	 * STANDARD X9.62 D.1.6
+	 * <p>
 	 * @return PolynomialElement z which is a solution for the quadratic equation z²+z=b
 	 */
 	public PolynomialElement<V> solveQuadradicEquation(PolynomialElement<V> b) {
 		PolynomialElement<V> y = this.getZeroElement();
 		PolynomialElement<V> z = this.getZeroElement();
-
 
 		while (y.equals(this.getZeroElement())) {
 
@@ -216,10 +214,11 @@ public class PolynomialField<V>
 
 		return z;
 	}
-	
+
 	/**
-	 * Test if there is a solution for the quadratic equation z²+z=b for any polynomial basis.
-	 * Source: AMERICAN NATIONAL STANDARD X9.62 D.1.6
+	 * Test if there is a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
+	 * STANDARD X9.62 D.1.6
+	 * <p>
 	 * @param PolynomialElement b
 	 * @return true/false
 	 */
@@ -249,8 +248,6 @@ public class PolynomialField<V>
 
 		return true;
 	}
-	
-	
 
 	//
 	// STATIC FACTORY METHODS

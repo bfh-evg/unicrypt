@@ -49,8 +49,8 @@ import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
 import ch.bfh.unicrypt.crypto.encoder.classes.ZModToGStarModSafePrimeEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -88,13 +88,13 @@ public class EncoderExample {
 
 	/**
 	 * Example shows how to encode an element from ZMod into an elliptic curve over F2m
-	 * @throws Exception 
+	 * <p>
+	 * @throws Exception
 	 */
 	public static void example2() throws Exception {
 
 		// Define underlying groups
-		StandardECPolynomialField ec = StandardECPolynomialField
-			   .getInstance(SECECCParamsF2m.sect113r1);
+		ECPolynomialField ec = ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
 		ZMod z = ZMod.getInstance(ec.getOrder());
 
 		// Create encoders
@@ -114,22 +114,21 @@ public class EncoderExample {
 		Example.printLines("Messages", message, encodedMessage, decodedMessage);
 
 	}
-	
-	
+
 	/**
 	 * Example shows how to encode an element from ZMod into an elliptic curve over F2m
-	 * @throws Exception 
+	 * <p>
+	 * @throws Exception
 	 */
 	public static void example3() throws Exception {
 
 		// Define underlying groups
-		StandardECZModPrime ec = StandardECZModPrime
-			   .getInstance(SECECCParamsFp.secp160r1);
+		ECZModPrime ec = ECZModPrime.getInstance(SECECCParamsFp.secp160r1);
 		ZMod z = ZMod.getInstance(ec.getOrder());
 
 		// Create encoders
 		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.LOWER_CASE);
-		ProbabilisticECGroupFpEncoder encoder2 = ProbabilisticECGroupFpEncoder.getInstance(z,ec);
+		ProbabilisticECGroupFpEncoder encoder2 = ProbabilisticECGroupFpEncoder.getInstance(z, ec);
 
 		// Create composite encoder
 		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);

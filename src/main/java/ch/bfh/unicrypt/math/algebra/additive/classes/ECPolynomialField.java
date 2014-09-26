@@ -46,10 +46,11 @@ import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-
 import java.math.BigInteger;
 
 /**
@@ -140,36 +141,36 @@ public class ECPolynomialField
 	 * Checks curve parameters for validity according SEC1: Elliptic Curve Cryptographie Ver. 1.0 page 21
 	 * <p>
 	 * @return True if curve parameters are valid
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean isValid() throws Exception {
 		boolean c2, c3, c4, c5, c6, c7, c8;
 		int m = this.getFiniteField().getDegree();
 		final BigInteger TWO = new BigInteger("2");
-		
-		c2=this.getFiniteField().isIrreduciblePolynomial(this.getFiniteField().getIrreduciblePolynomial());
-		
-		c3=this.getFiniteField().contains(getA());
-		c3=c3 && this.getFiniteField().contains(getB());
-		c3=c3 && this.getFiniteField().contains(this.getDefaultGenerator().getX());
-		c3=c3 && this.getFiniteField().contains(this.getDefaultGenerator().getY());
-		
-		c4=!this.getB().equals(this.getFiniteField().getZeroElement());
-		
-		c5=this.contains(this.getDefaultGenerator());
-		
-		c6=MathUtil.isPrime(getOrder());
-		
-		c7=this.getDefaultGenerator().times(getOrder().multiply(getCoFactor())).equals(this.getZeroElement());
-		
-		for (BigInteger i = new BigInteger("0"); i.compareTo(new BigInteger("100"))<0; i=i.add(BigInteger.ONE)) {
-			if(TWO.modPow(i, getOrder()).equals(BigInteger.ONE)){
+
+		c2 = this.getFiniteField().isIrreduciblePolynomial(this.getFiniteField().getIrreduciblePolynomial());
+
+		c3 = this.getFiniteField().contains(getA());
+		c3 = c3 && this.getFiniteField().contains(getB());
+		c3 = c3 && this.getFiniteField().contains(this.getDefaultGenerator().getX());
+		c3 = c3 && this.getFiniteField().contains(this.getDefaultGenerator().getY());
+
+		c4 = !this.getB().equals(this.getFiniteField().getZeroElement());
+
+		c5 = this.contains(this.getDefaultGenerator());
+
+		c6 = MathUtil.isPrime(getOrder());
+
+		c7 = this.getDefaultGenerator().times(getOrder().multiply(getCoFactor())).equals(this.getZeroElement());
+
+		for (BigInteger i = new BigInteger("0"); i.compareTo(new BigInteger("100")) < 0; i = i.add(BigInteger.ONE)) {
+			if (TWO.modPow(i, getOrder()).equals(BigInteger.ONE)) {
 				throw new Exception("Curve parameter not valid");
 			}
 		}
-		
-		c8=!getOrder().multiply(getCoFactor()).equals(TWO.pow(m));
-		
+
+		c8 = !getOrder().multiply(getCoFactor()).equals(TWO.pow(m));
+
 		return c2 && c3 && c4 && c5 && c6 && c7 && c8;
 	}
 
@@ -213,11 +214,26 @@ public class ECPolynomialField
 	public static ECPolynomialField getInstance(BinaryPolynomialField f, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gx, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
 
-		if (newInstance.isValid()) {
+		if (true) {//newInstance.isValid()) {
 			return newInstance;
 		} else {
 			throw new Exception("Curve parameters not valid!");
 		}
+	}
+
+	public static ECPolynomialField getInstance(final StandardECPolynomialFieldParams params) throws Exception {
+		BinaryPolynomialField field;
+		PolynomialElement a, b, gx, gy;
+		BigInteger order, h;
+
+		field = params.getFiniteField();
+		a = params.getA();
+		b = params.getB();
+		gx = params.getGx();
+		gy = params.getGy();
+		order = params.getOrder();
+		h = params.getH();
+		return ECPolynomialField.getInstance(field, a, b, gx, gy, order, h);
 	}
 
 }
