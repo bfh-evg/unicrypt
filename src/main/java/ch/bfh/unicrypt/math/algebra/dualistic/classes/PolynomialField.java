@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -60,13 +61,11 @@ import java.math.BigInteger;
  */
 public class PolynomialField<V>
 	   extends PolynomialRing<V>
-	   implements
-	   FiniteField<Polynomial<DualisticElement<V>>> {
+	   implements FiniteField<Polynomial<DualisticElement<V>>> {
 
 	private final PolynomialElement<V> irreduciblePolynomial;
 
-	protected PolynomialField(PrimeField primeField,
-		   PolynomialElement<V> irreduciblePolynomial) {
+	protected PolynomialField(PrimeField primeField, PolynomialElement<V> irreduciblePolynomial) {
 		super(primeField);
 		this.irreduciblePolynomial = irreduciblePolynomial;
 	}
@@ -94,9 +93,29 @@ public class PolynomialField<V>
 	}
 
 	@Override
+	protected boolean abstractContains(Polynomial value) {
+		return super.abstractContains(value) && value.getDegree() < this.getDegree();
+	}
+
+	@Override
 	protected PolynomialElement<V> abstractGetElement(Polynomial value) {
-		PolynomialElement<V> e = super.abstractGetElement(value);
-		return new PolynomialElement<V>(this, this.mod(e).getValue());
+		return new PolynomialElement<V>(this, value);
+	}
+
+	@Override
+	public PolynomialElement<V> getRandomElement(int degree, RandomByteSequence randomByteSequence) {
+		if (degree >= this.getDegree()) {
+			throw new IllegalArgumentException();
+		}
+		return super.getRandomElement(degree, randomByteSequence);
+	}
+
+	@Override
+	public PolynomialElement<V> getRandomMonicElement(int degree, boolean a0NotZero, RandomByteSequence randomByteSequence) {
+		if (degree >= this.getDegree()) {
+			throw new IllegalArgumentException();
+		}
+		return super.getRandomMonicElement(degree, a0NotZero, randomByteSequence);
 	}
 
 	@Override
@@ -108,31 +127,27 @@ public class PolynomialField<V>
 	public MultiplicativeGroup<Polynomial<DualisticElement<V>>> getMultiplicativeGroup() {
 		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact
 		// 2.229/2.230)
-		throw new UnsupportedOperationException("Not supported yet."); // To
-		// change
-		// body
-		// of
-		// generated
-		// methods,
-		// choose
-		// Tools
-		// |
-		// Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-//	@Override
-//	protected PolynomialElement<V> abstractApply(PolynomialElement<V> element1,
-//		   PolynomialElement<V> element2) {
-//		PolynomialElement<V> poly = super.abstractApply(element1, element2);
-//		return this.mod(this.getElement(poly.getValue()));
-//	}
-//
-//	@Override
-//	protected PolynomialElement<V> abstractMultiply(
-//		   PolynomialElement<V> element1, PolynomialElement<V> element2) {
-//		PolynomialElement<V> poly = super.abstractMultiply(element1, element2);
-//		return this.mod(this.getElement(poly.getValue()));
-//	}
+	@Override
+	protected PolynomialElement<V> abstractMultiply(PolynomialElement<V> element1, PolynomialElement<V> element2) {
+		Polynomial<DualisticElement<V>> polynomial1 = element1.getValue();
+		Polynomial<DualisticElement<V>> polynomial2 = element2.getValue();
+
+		if (element1.isEquivalent(this.getZeroElement()) || element2.isEquivalent(this.getZeroElement())) {
+			return this.getZeroElement();
+		}
+		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
+		PolynomialElement<V> result;
+		if (this.isBinary()) {
+			result = ring.getElement(multiplyBinary(polynomial1, polynomial2));
+		} else {
+			result = ring.getElement(multiplyNonBinary(polynomial1, polynomial2));
+		}
+		return this.getElement(this.mod(result).getValue());
+	}
+
 	@Override
 	public PolynomialElement<V> divide(Element element1, Element element2) {
 		return this.multiply(element1, this.oneOver(element2));
@@ -158,10 +173,8 @@ public class PolynomialField<V>
 			throw new UnsupportedOperationException();
 		}
 
-		Triple euclid = this.extendedEuclidean((PolynomialElement<V>) element,
-											   this.irreduciblePolynomial);
-		return this.getElement(((PolynomialElement<V>) euclid.getSecond())
-			   .getValue());
+		Triple euclid = this.extendedEuclidean((PolynomialElement<V>) element, this.irreduciblePolynomial);
+		return this.getElement(((PolynomialElement<V>) euclid.getSecond()).getValue());
 
 	}
 
@@ -234,7 +247,6 @@ public class PolynomialField<V>
 			int m = this.getDegree();
 
 			for (int i = 1; i <= m - 1; i++) {
-
 				z = z.square().add(w.square().multiply((r)));
 				w = w.square().add(b);
 			}

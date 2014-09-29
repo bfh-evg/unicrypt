@@ -128,7 +128,7 @@ public class ECPolynomialField
 		if (element.isZero()) {
 			return this.getZeroElement();
 		}
-		return this.abstractGetElement(Point.getInstance(element.getX(), element.getY().invert()));
+		return this.abstractGetElement(Point.getInstance(element.getX(), element.getY().add(element.getX())));
 	}
 
 	@Override

@@ -115,7 +115,7 @@ public class PolynomialSemiRing<V>
 		for (int i = 0; i < coefficients.getArity(); i++) {
 			coefficientMap.put(i, (DualisticElement<V>) coefficients.getAt(i));
 		}
-		return this.getElement(coefficientMap);
+		return this.getElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
 	}
 
 	public PolynomialElement<V> getRandomElement(int degree) {
@@ -133,7 +133,7 @@ public class PolynomialSemiRing<V>
 				coefficientMap.put(i, coefficient);
 			}
 		}
-		return getElement(coefficientMap);
+		return this.getElement(coefficientMap);
 	}
 
 	public PolynomialElement<V> getRandomMonicElement(int degree, boolean a0NotZero) {
@@ -159,10 +159,12 @@ public class PolynomialSemiRing<V>
 		return getElement(coefficientMap);
 	}
 
+	// No argument check! Use it only if you know what you do -> to speed up internal algorithms
 	protected PolynomialElement<V> getElement(Map<Integer, DualisticElement<V>> coefficientMap) {
 		return abstractGetElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
 	}
 
+	// No argument check! Use it only if you know what you do -> to speed up internal algorithms
 	protected PolynomialElement<V> getElement(ByteArray coefficients) {
 		return abstractGetElement(Polynomial.getInstance(coefficients, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
 	}
@@ -280,42 +282,49 @@ public class PolynomialSemiRing<V>
 		}
 
 		if (this.isBinary()) {
-			ByteArray p1 = polynomial1.getCoefficients();
-			ByteArray p2 = polynomial2.getCoefficients();
-			if (polynomial2.getDegree() > polynomial1.getDegree()) {
-				ByteArray tmp = p1;
-				p1 = p2;
-				p2 = tmp;
-			}
-			ByteArray zero = ByteArray.getInstance(); // an empty byte array
-			ByteArray result = zero;
-			while (!p2.equals(zero)) {
-				if (p2.getBitAt(0)) {
-					result = result.xorFillZero(p1);
-				}
-				// removeSuffix was added to avoid an endless loop in PolynomialFieldTest
-				// the problem could probably be avoided by working with BitArray
-				p1 = p1.shiftBitsRight(1).removeSuffix();
-				p2 = p2.shiftBitsLeft(1).removeSuffix();
-			}
-			return this.getElement(result);
-
+			return this.getElement(multiplyBinary(polynomial1, polynomial2));
 		} else {
-			Map<Integer, DualisticElement<V>> coefficientMap = new HashMap();
-			for (Integer i : polynomial1.getIndices()) {
-				for (Integer j : polynomial2.getIndices()) {
-					Integer k = i + j;
-					DualisticElement<V> coefficient = polynomial1.getCoefficient(i).multiply(polynomial2.getCoefficient(j));
-					DualisticElement<V> newCoefficient = coefficientMap.get(k);
-					if (newCoefficient == null) {
-						coefficientMap.put(k, coefficient);
-					} else {
-						coefficientMap.put(k, newCoefficient.add(coefficient));
-					}
+			return this.getElement(multiplyNonBinary(polynomial1, polynomial2));
+		}
+	}
+
+	protected ByteArray multiplyBinary(Polynomial<DualisticElement<V>> polynomial1, Polynomial<DualisticElement<V>> polynomial2) {
+		ByteArray p1 = polynomial1.getCoefficients();
+		ByteArray p2 = polynomial2.getCoefficients();
+		if (polynomial2.getDegree() > polynomial1.getDegree()) {
+			ByteArray tmp = p1;
+			p1 = p2;
+			p2 = tmp;
+		}
+		ByteArray zero = ByteArray.getInstance(); // an empty byte array
+		ByteArray result = zero;
+		while (!p2.equals(zero)) {
+			if (p2.getBitAt(0)) {
+				result = result.xorFillZero(p1);
+			}
+			// removeSuffix was added to avoid an endless loop in PolynomialFieldTest
+			// the problem could probably be avoided by working with BitArray
+			p1 = p1.shiftBitsRight(1).removeSuffix();
+			p2 = p2.shiftBitsLeft(1).removeSuffix();
+		}
+		return result;
+	}
+
+	protected Map<Integer, DualisticElement<V>> multiplyNonBinary(Polynomial<DualisticElement<V>> polynomial1, Polynomial<DualisticElement<V>> polynomial2) {
+		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap();
+		for (Integer i : polynomial1.getIndices()) {
+			for (Integer j : polynomial2.getIndices()) {
+				Integer k = i + j;
+				DualisticElement<V> coefficient = polynomial1.getCoefficient(i).multiply(polynomial2.getCoefficient(j));
+				DualisticElement<V> newCoefficient = coefficientMap.get(k);
+				if (newCoefficient == null) {
+					coefficientMap.put(k, coefficient);
+				} else {
+					coefficientMap.put(k, newCoefficient.add(coefficient));
 				}
 			}
-			return this.getElement(coefficientMap);
 		}
+		return coefficientMap;
 	}
 
 	@Override
