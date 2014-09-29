@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
@@ -50,7 +51,6 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 /**
  *
@@ -255,12 +255,7 @@ public class ByteArray
 
 	@Override
 	protected String defaultToStringValue() {
-		String str = "";
-		String delimiter = "";
-		for (int i : this.getAllIndices()) {
-			str = str + delimiter + String.format("%02X", this.getIntAt(i));
-			delimiter = "|";
-		}
+		String str = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|").convert(this);
 		return "\"" + str + "\"";
 	}
 
@@ -319,23 +314,7 @@ public class ByteArray
 
 	// convenience method to construct byte arrays by hex strings (e.g. "03|A2|29|FF|96")
 	public static ByteArray getInstance(String hexString) {
-		if (hexString == null || (hexString.length() > 0 && hexString.length() % 3 != 2)) {
-			throw new IllegalArgumentException();
-		}
-		for (int i = 2; i < hexString.length(); i = i + 3) {
-			if (hexString.charAt(i) != '|') {
-				throw new IllegalArgumentException();
-			}
-		}
-		byte[] bytes = new byte[(hexString.length() + 1) / 3];
-		for (int i = 0; i < bytes.length; i++) {
-			String string = hexString.substring(i * 3, i * 3 + 2).toUpperCase(Locale.ENGLISH);
-			if (!string.matches("[0-9A-F]{2}")) {
-				throw new IllegalArgumentException();
-			}
-			bytes[i] = (byte) Integer.parseInt(string, 16);
-		}
-		return new ByteArray(bytes);
+		return ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|").reconvert(hexString);
 	}
 
 	public static ByteArray getInstance(List<Byte> byteList) {

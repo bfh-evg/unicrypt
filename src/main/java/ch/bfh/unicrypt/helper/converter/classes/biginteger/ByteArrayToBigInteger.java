@@ -98,6 +98,10 @@ public class ByteArrayToBigInteger
 		return ByteArray.getInstance(byteList);
 	}
 
+	public static ByteArrayToBigInteger getInstance() {
+		return new ByteArrayToBigInteger(1);
+	}
+
 	public static ByteArrayToBigInteger getInstance(int blockLength) {
 		return new ByteArrayToBigInteger(blockLength);
 	}
