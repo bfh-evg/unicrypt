@@ -98,17 +98,10 @@ public class ECGroupExample {
 			
 			Example.printLine(params.toString());
 			Example.printLine("Message"+m.selfApply(order));
-			Example.printLine("Message plus Generator"+ m.add(generator));
-			
-			order=order.add(BigInteger.ONE);
-			
-			for (int i = 1; i < 10; i++) {
-				Example.printLine("Gen "+generator.selfApply(i));
-				Example.printLine("M "+m.selfApply(i));
-				Example.printLine("M+gen "+m_generator.selfApply(i));
-			}
+			Example.printLine("Message plus Generator"+ m.add(generator).selfApply(order));
+			Example.printLine("Gen "+generator.selfApply(order));
+
 			// Result should be Infinity element
-//			Example.printLine(generator.selfApply(order.multiply(ec.getCoFactor()))); // Result should be Infinity element
 
 		}
 	}
