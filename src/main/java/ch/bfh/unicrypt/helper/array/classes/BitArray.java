@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
@@ -165,22 +166,11 @@ public class BitArray
 	}
 
 	// a string of '0's and '1's
-	public static BitArray getInstance(String string) {
-		if (string == null) {
+	public static BitArray getInstance(String binaryString) {
+		if (binaryString == null) {
 			throw new IllegalArgumentException();
 		}
-		boolean[] bits = new boolean[string.length()];
-		for (int i = 0; i < string.length(); i++) {
-			char c = string.charAt(i);
-			if (c == '0') {
-				bits[i] = false;
-			} else if (c == '1') {
-				bits[i] = true;
-			} else {
-				throw new IllegalArgumentException();
-			}
-		}
-		return BitArray.getInstance(bits);
+		return BitArrayToString.getInstance().reconvert(binaryString);
 	}
 
 	public static BitArray getRandomInstance(int length) {
@@ -197,17 +187,7 @@ public class BitArray
 
 	@Override
 	protected String defaultToStringValue() {
-		String str = "";
-		for (int i : this.getAllIndices()) {
-			if (i > 0 && i % 8 == 0) {
-				str = str + "|";
-			}
-			if (this.getBitAt(i)) {
-				str = str + "1";
-			} else {
-				str = str + "0";
-			}
-		}
+		String str = BitArrayToString.getInstance().convert(this);
 		return "\"" + str + "\"";
 	}
 

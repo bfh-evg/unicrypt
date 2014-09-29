@@ -122,7 +122,6 @@ public class ByteArrayToString
 		switch (this.radix) {
 			case BINARY: {
 				if (!string.matches(this.binaryRegExp)) {
-					System.out.println("XXX" + string);
 					throw new IllegalArgumentException();
 				}
 				int subLength = 8 + this.delimiter.length();
