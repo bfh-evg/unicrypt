@@ -51,6 +51,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -77,23 +78,28 @@ public class PolynomialFieldTest {
 
 	@Test
 	public void testGetElement() {
+		PolynomialElement<BigInteger> p;
+
 		// 1 + x^2 + x^5 + x^6 => 1 + x + x^2 + x^3
-		PolynomialElement<BigInteger> p = field2_4.getElement(one, zero, one, zero, zero, one, one);
+		try {
+			p = field2_4.getElement(one, zero, one, zero, zero, one, one);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
 
-		assertEquals(zmod2.getOneElement(), p.getValue().getCoefficient(0));
-		assertEquals(zmod2.getOneElement(), p.getValue().getCoefficient(1));
-		assertEquals(zmod2.getOneElement(), p.getValue().getCoefficient(2));
-		assertEquals(zmod2.getOneElement(), p.getValue().getCoefficient(3));
-		assertEquals(zmod2.getZeroElement(), p.getValue().getCoefficient(4));
-
-		// 1 + 4x^2 + x^3 + x^5 + 6x^6 + x^7
-		p = field7_4.getElement(one, zero, BigInteger.valueOf(4), one, zero, one, BigInteger.valueOf(6), one);
+		// 1 + 4x^2 + x^3
+		p = field7_4.getElement(one, zero, BigInteger.valueOf(4), one);
 		assertTrue(4 > p.getValue().getDegree());
+		assertEquals(zmod7.getOneElement(), p.getValue().getCoefficient(0));
+		assertEquals(zmod7.getZeroElement(), p.getValue().getCoefficient(1));
+		assertEquals(zmod7.getElement(4), p.getValue().getCoefficient(2));
+		assertEquals(zmod7.getOneElement(), p.getValue().getCoefficient(3));
+		assertEquals(zmod7.getZeroElement(), p.getValue().getCoefficient(4));
 
 		HashMap map = new HashMap();
 		map.put(4, zmod3.getElement(14 % 3));
 		map.put(9, zmod3.getElement(13 % 3));
-		map.put(12, zmod3.getElement(19 % 3));
+		//map.put(12, zmod3.getElement(19 % 3));
 		p = field3_10.getElement(Polynomial.<DualisticElement<BigInteger>>getInstance(map, zmod3.getZeroElement(), zmod3.getOneElement()));
 		assertTrue(10 > p.getValue().getDegree());
 	}
@@ -157,6 +163,22 @@ public class PolynomialFieldTest {
 		// p2 / p1 = 1 + x^3
 		PolynomialElement<BigInteger> p3 = p2.divide(p1);
 		assertEquals(field2_4.getElement(one, zero, zero, one), p3);
+		assertTrue(p3.getSet().isField());
+	}
+
+	@Test
+	public void testAdd() {
+		// p1 = 1 + x + x^3
+		PolynomialElement<BigInteger> p1 = field2_4.getElement(one, one, zero, one);
+		// p2 = 1 + x^3
+		PolynomialElement<BigInteger> p2 = field2_4.getElement(one, zero, zero, one);
+		// p1 + p2 = x
+		PolynomialElement<BigInteger> p3 = p1.add(p2);
+		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(0));
+		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(1));
+		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(2));
+		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(3));
+		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(4));
 		assertTrue(p3.getSet().isField());
 	}
 
