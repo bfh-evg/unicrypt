@@ -3,7 +3,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialBinaryField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -22,13 +22,13 @@ import java.nio.ByteOrder;
  * <p>
  */
 public class ZModToBinaryPolynomialEncoder
-	   extends AbstractEncoder<ZMod, ZModElement, BinaryPolynomialField, PolynomialElement<ZModTwo>> {
+	   extends AbstractEncoder<ZMod, ZModElement, PolynomialBinaryField, PolynomialElement<ZModTwo>> {
 
 	private final ZMod zMod;
-	private final BinaryPolynomialField binaryPolynomial;
+	private final PolynomialBinaryField binaryPolynomial;
 	private final BigIntegerToByteArray converter;
 
-	public ZModToBinaryPolynomialEncoder(ZMod zMod, BinaryPolynomialField binaryPolynomial) {
+	public ZModToBinaryPolynomialEncoder(ZMod zMod, PolynomialBinaryField binaryPolynomial) {
 		this.zMod = zMod;
 		this.binaryPolynomial = binaryPolynomial;
 		this.converter = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
@@ -44,7 +44,7 @@ public class ZModToBinaryPolynomialEncoder
 		return new DecodingFunction(this.binaryPolynomial, this.zMod);
 	}
 
-	public static ZModToBinaryPolynomialEncoder getInstance(ZMod zMod, BinaryPolynomialField polynomialField) {
+	public static ZModToBinaryPolynomialEncoder getInstance(ZMod zMod, PolynomialBinaryField polynomialField) {
 		if (zMod == null || polynomialField == null) {
 			throw new IllegalArgumentException();
 		}
@@ -52,9 +52,9 @@ public class ZModToBinaryPolynomialEncoder
 	}
 
 	class EncodingFunction
-		   extends AbstractFunction<EncodingFunction, ZMod, ZModElement, BinaryPolynomialField, PolynomialElement<ZModTwo>> {
+		   extends AbstractFunction<EncodingFunction, ZMod, ZModElement, PolynomialBinaryField, PolynomialElement<ZModTwo>> {
 
-		protected EncodingFunction(final ZMod domain, final BinaryPolynomialField coDomain) {
+		protected EncodingFunction(final ZMod domain, final PolynomialBinaryField coDomain) {
 			super(domain, coDomain);
 		}
 
@@ -71,9 +71,9 @@ public class ZModToBinaryPolynomialEncoder
 	}
 
 	class DecodingFunction
-		   extends AbstractFunction<DecodingFunction, BinaryPolynomialField, PolynomialElement<ZModTwo>, ZMod, ZModElement> {
+		   extends AbstractFunction<DecodingFunction, PolynomialBinaryField, PolynomialElement<ZModTwo>, ZMod, ZModElement> {
 
-		protected DecodingFunction(final BinaryPolynomialField domain, final ZMod coDomain) {
+		protected DecodingFunction(final PolynomialBinaryField domain, final ZMod coDomain) {
 			super(domain, coDomain);
 		}
 

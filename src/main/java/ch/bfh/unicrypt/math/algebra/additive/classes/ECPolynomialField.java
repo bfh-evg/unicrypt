@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialBinaryField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -58,15 +58,15 @@ import java.math.BigInteger;
  * @author Christian Lutz
  */
 public class ECPolynomialField
-	   extends AbstractEC<BinaryPolynomialField, Polynomial<DualisticElement<ZModTwo>>> {
+	   extends AbstractEC<PolynomialBinaryField, Polynomial<DualisticElement<ZModTwo>>> {
 
-	public ECPolynomialField(BinaryPolynomialField finiteField, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a,
+	public ECPolynomialField(PolynomialBinaryField finiteField, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a,
 		   DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gx, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gy,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
 	}
 
-	public ECPolynomialField(BinaryPolynomialField finiteField, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b,
+	public ECPolynomialField(PolynomialBinaryField finiteField, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, givenOrder, coFactor);
 	}
@@ -188,7 +188,7 @@ public class ECPolynomialField
 	 * @return
 	 * @throws Exception
 	 */
-	public static ECPolynomialField getInstance(BinaryPolynomialField f, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECPolynomialField getInstance(PolynomialBinaryField f, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, givenOrder, coFactor);
 
 		if (newInstance.isValid()) {
@@ -211,7 +211,7 @@ public class ECPolynomialField
 	 * @return
 	 * @throws Exception
 	 */
-	public static ECPolynomialField getInstance(BinaryPolynomialField f, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gx, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECPolynomialField getInstance(PolynomialBinaryField f, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gx, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
 
 		if (true) {//newInstance.isValid()) {
@@ -222,7 +222,7 @@ public class ECPolynomialField
 	}
 
 	public static ECPolynomialField getInstance(final StandardECPolynomialFieldParams params) throws Exception {
-		BinaryPolynomialField field;
+		PolynomialBinaryField field;
 		PolynomialElement a, b, gx, gy;
 		BigInteger order, h;
 

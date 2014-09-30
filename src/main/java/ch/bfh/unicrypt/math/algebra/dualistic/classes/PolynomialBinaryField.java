@@ -55,11 +55,11 @@ import java.math.BigInteger;
  * <p>
  * @author Christian Lutz
  */
-public class BinaryPolynomialField
+public class PolynomialBinaryField
 	   extends PolynomialField<ZModTwo>
 	   implements FiniteField<Polynomial<DualisticElement<ZModTwo>>> {
 
-	private BinaryPolynomialField(PolynomialElement<ZModTwo> irreduciblePolynomial) {
+	private PolynomialBinaryField(PolynomialElement<ZModTwo> irreduciblePolynomial) {
 		super(ZModTwo.getInstance(), irreduciblePolynomial);
 	}
 
@@ -106,12 +106,12 @@ public class BinaryPolynomialField
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static BinaryPolynomialField getInstance(int degree) {
+	public static PolynomialBinaryField getInstance(int degree) {
 		return getInstance(degree,
 						   HybridRandomByteSequence.getInstance());
 	}
 
-	public static BinaryPolynomialField getInstance(int degree, RandomByteSequence randomByteSequence) {
+	public static PolynomialBinaryField getInstance(int degree, RandomByteSequence randomByteSequence) {
 		if (degree < 1) {
 			throw new IllegalArgumentException();
 		}
@@ -122,7 +122,7 @@ public class BinaryPolynomialField
 		return getInstance(irreduciblePolynomial);
 	}
 
-	public static BinaryPolynomialField getInstance(PolynomialElement<ZModTwo> irreduciblePolynomial) {
+	public static PolynomialBinaryField getInstance(PolynomialElement<ZModTwo> irreduciblePolynomial) {
 		PrimeField primeField = ZModTwo.getInstance();
 		if (irreduciblePolynomial == null
 			   || !irreduciblePolynomial.getSet().getSemiRing()
@@ -131,7 +131,7 @@ public class BinaryPolynomialField
 			throw new IllegalArgumentException();
 		}
 
-		return new BinaryPolynomialField(irreduciblePolynomial);
+		return new PolynomialBinaryField(irreduciblePolynomial);
 	}
 
 }
