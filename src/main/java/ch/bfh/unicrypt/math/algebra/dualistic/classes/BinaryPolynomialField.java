@@ -42,13 +42,13 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.Polynomial;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.ArrayList;
 
 /**
  * Represents a Polynomialfield with ZmodTwo as Primefield
@@ -74,29 +74,35 @@ public class BinaryPolynomialField
 		return element.power(i);
 	}
 
-	/**
-	 *
-	 * @param s String containing 0/1 for each coefficient of binary polynomial with rightmost bit as constant term.
-	 * @return
-	 */
-	public PolynomialElement<ZModTwo> getElementFromBitString(String s) {
-
-		BigInteger bitString = new BigInteger(s, 2);
-
-		// Read bits and create a BigInteger ArrayList
-		ArrayList<BigInteger> arrayBigInteger = new ArrayList<BigInteger>();
-		for (Character c : bitString.toString(2).toCharArray()) {
-			arrayBigInteger.add(0, new BigInteger(c.toString()));
-
-		}
-
-		// Convert ArrayList BigInteger array and get element
-		BigInteger[] coeffs = {};
-		coeffs = arrayBigInteger.toArray(coeffs);
-
-		return this.getElement(coeffs);
+	// TODO: check arguments!!!
+	@Override
+	public PolynomialElement<ZModTwo> getElement(ByteArray coefficients) {
+		return super.getElement(coefficients);
 	}
 
+// NO LONGER NEEDED IF CHRISTIAN ACCEPTS THE CHANGES IN ZModToBinaryPolynomialConverter
+//	/**
+//	 *
+//	 * @param s String containing 0/1 for each coefficient of binary polynomial with rightmost bit as constant term.
+//	 * @return
+//	 */
+//	public PolynomialElement<ZModTwo> getElementFromBitString(String s) {
+//
+//		BigInteger bitString = new BigInteger(s, 2);
+//
+//		// Read bits and create a BigInteger ArrayList
+//		ArrayList<BigInteger> arrayBigInteger = new ArrayList<BigInteger>();
+//		for (Character c : bitString.toString(2).toCharArray()) {
+//			arrayBigInteger.add(0, new BigInteger(c.toString()));
+//
+//		}
+//
+//		// Convert ArrayList BigInteger array and get element
+//		BigInteger[] coeffs = {};
+//		coeffs = arrayBigInteger.toArray(coeffs);
+//
+//		return this.getElement(coeffs);
+//	}
 	//
 	// STATIC FACTORY METHODS
 	//

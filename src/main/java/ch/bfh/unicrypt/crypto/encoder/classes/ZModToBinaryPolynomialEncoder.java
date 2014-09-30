@@ -12,6 +12,7 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.nio.ByteOrder;
 
 /**
  * Encodes a ZModElement as a binary polynomial by taking the bit-array representation of the ZModElement to create the
@@ -30,7 +31,7 @@ public class ZModToBinaryPolynomialEncoder
 	public ZModToBinaryPolynomialEncoder(ZMod zMod, BinaryPolynomialField binaryPolynomial) {
 		this.zMod = zMod;
 		this.binaryPolynomial = binaryPolynomial;
-		this.converter = BigIntegerToByteArray.getInstance();
+		this.converter = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
 	}
 
 	@Override
@@ -59,11 +60,12 @@ public class ZModToBinaryPolynomialEncoder
 
 		@Override
 		protected PolynomialElement<ZModTwo> abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
-			final BigInteger value = element.getValue();
-			final BinaryPolynomialField coDomain = this.getCoDomain();
+			ByteArray byteArray = converter.convert(element.getValue());
+			return this.getCoDomain().getElement(byteArray);
 
-			return coDomain.getElementFromBitString(value.toString(2));
-
+//			final BigInteger value = element.getValue();
+//			final BinaryPolynomialField coDomain = this.getCoDomain();
+//			return coDomain.getElementFromBitString(value.toString(2));
 		}
 
 	}
@@ -77,11 +79,13 @@ public class ZModToBinaryPolynomialEncoder
 
 		@Override
 		protected ZModElement abstractApply(final PolynomialElement<ZModTwo> element, final RandomByteSequence randomByteSequence) {
-			ByteArray arr = element.getValue().getCoefficients();
-			final String value = new StringBuilder(arr.toBitString()).reverse().toString();
-			BigInteger res = new BigInteger(value, 2);
-			return this.getCoDomain().getElement(res);
-//			return this.getCoDomain().getElement(converter.convert(arr));
+			ByteArray byteArray = element.getValue().getCoefficients();
+			BigInteger bigInteger = converter.reconvert(byteArray);
+			return this.getCoDomain().getElement(bigInteger);
+
+//			final String value = new StringBuilder(arr.toBitString()).reverse().toString();
+//			BigInteger res = new BigInteger(value, 2);
+//			return this.getCoDomain().getElement(res);
 		}
 
 	}

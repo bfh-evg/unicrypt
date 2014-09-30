@@ -259,17 +259,6 @@ public class ByteArray
 		return "\"" + str + "\"";
 	}
 
-	public String toBitString() {
-		boolean bits[] = this.getBits();
-		String res = "";
-
-		for (boolean b : bits) {
-			int myInt = (b) ? 1 : 0;
-			res = res + myInt;
-		}
-		return res;
-	}
-
 	public static ByteArray getInstance() {
 		return new ByteArray(new byte[0]);
 	}
@@ -314,6 +303,9 @@ public class ByteArray
 
 	// convenience method to construct byte arrays by hex strings (e.g. "03|A2|29|FF|96")
 	public static ByteArray getInstance(String hexString) {
+		if (hexString == null) {
+			throw new IllegalArgumentException();
+		}
 		return ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|").reconvert(hexString);
 	}
 
