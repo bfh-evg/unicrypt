@@ -43,13 +43,13 @@ package ch.bfh.unicrypt.math.algebra.params.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialBinaryField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public interface StandardECPolynomialFieldParams
-	   extends StandardECParams<PolynomialBinaryField, PolynomialElement> {
+	   extends StandardECParams<PolynomialBinaryField, PolynomialElement<ZModTwo>> {
 
 }

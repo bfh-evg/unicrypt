@@ -44,11 +44,13 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
+import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+
 import java.math.BigInteger;
 
 /**
@@ -56,7 +58,7 @@ import java.math.BigInteger;
  * @author Christian Lutz
  */
 public class ECZModPrime
-	   extends AbstractEC<ZModPrime, BigInteger> {
+	   extends AbstractEC<ZModPrime, BigInteger,ECZModElement> {
 
 	protected ECZModPrime(ZModPrime finiteField, DualisticElement<BigInteger> a, DualisticElement<BigInteger> b, DualisticElement<BigInteger> gx, DualisticElement<BigInteger> gy, BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
@@ -87,17 +89,17 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECElement<BigInteger> abstractGetElement(Point<DualisticElement<BigInteger>> value) {
-		return new ECElement<BigInteger>(this, value);
+	protected ECZModElement abstractGetElement(Point<DualisticElement<BigInteger>> value) {
+		return new ECZModElement(this, value);
 	}
 
 	@Override
-	protected ECElement<BigInteger> abstractGetIdentityElement() {
-		return new ECElement<BigInteger>(this);
+	protected ECZModElement abstractGetIdentityElement() {
+		return new ECZModElement(this);
 	}
 
 	@Override
-	protected ECElement<BigInteger> abstractApply(ECElement<BigInteger> element1, ECElement<BigInteger> element2) {
+	protected ECZModElement abstractApply(ECZModElement element1, ECZModElement element2) {
 		if (element1.isZero()) {
 			return element2;
 		}
@@ -127,7 +129,7 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECElement<BigInteger> abstractInvert(ECElement<BigInteger> element) {
+	protected ECZModElement abstractInvert(ECZModElement element) {
 		if (element.isZero()) {
 			return this.getZeroElement();
 		}
@@ -135,7 +137,7 @@ public class ECZModPrime
 	}
 
 	@Override
-	protected ECElement<BigInteger> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
+	protected ECZModElement getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
 		BigInteger p = this.getFiniteField().getModulus();
 		DualisticElement<BigInteger> x = this.getFiniteField().getRandomElement(randomByteSequence);
 		DualisticElement<BigInteger> y = x.power(3).add(this.getA().multiply(x)).add(this.getB());

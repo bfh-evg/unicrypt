@@ -39,11 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.classes;
+package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
 import ch.bfh.unicrypt.helper.Point;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 
 /**
@@ -51,19 +51,23 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  */
-public class ECElement<V extends Object>
-	   extends AbstractAdditiveElement<EC<V>, ECElement<V>, Point<DualisticElement<V>>> {
+public class AbstractECElement<V extends Object>
+	   extends AbstractAdditiveElement<EC<V>, AbstractECElement<V>, Point<DualisticElement<V>>> implements ECElement<V> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final boolean infinity;
 
 	// the main constructor
-	protected ECElement(EC ecGroup, Point<DualisticElement<V>> value) {
+	protected AbstractECElement(EC<V> ecGroup, Point<DualisticElement<V>> value) {
 		super(ecGroup, value);
 		this.infinity = false;
 	}
 
 	// special constructor is necessary for the additional point of infinity
-	protected ECElement(EC ecGroup) {
+	protected AbstractECElement(EC<V> ecGroup) {
 		super(ecGroup, Point.<DualisticElement<V>>getInstance());
 		this.infinity = true;
 	}

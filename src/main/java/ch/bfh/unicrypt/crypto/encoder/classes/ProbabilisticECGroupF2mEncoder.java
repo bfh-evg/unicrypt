@@ -6,7 +6,7 @@ import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
 import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
+import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
@@ -65,7 +65,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 
 public class ProbabilisticECGroupF2mEncoder
-	   extends AbstractEncoder<ZModPrime, ZModElement, ECPolynomialField, ECElement<Polynomial>>
+	   extends AbstractEncoder<ZModPrime, ZModElement, ECPolynomialField, AbstractECElement<Polynomial>>
 	   implements ProbabilisticEncoder {
 
 	private ZMod zMod;
@@ -98,7 +98,7 @@ public class ProbabilisticECGroupF2mEncoder
 	}
 	
 	
-	static class ECF2mEncodingFunction extends AbstractFunction<ECF2mEncodingFunction, ZMod, ZModElement, ECPolynomialField, ECElement>{
+	static class ECF2mEncodingFunction extends AbstractFunction<ECF2mEncodingFunction, ZMod, ZModElement, ECPolynomialField, AbstractECElement>{
 
 		
 		
@@ -107,7 +107,7 @@ public class ProbabilisticECGroupF2mEncoder
 		}
 
 		@Override
-		protected ECElement abstractApply(ZModElement element,
+		protected AbstractECElement abstractApply(ZModElement element,
 				RandomByteSequence randomByteSequence) {
 			boolean firstOption=true;
 			BigInteger r=element.getBigInteger().shiftLeft(SHIFT);
@@ -179,7 +179,7 @@ public class ProbabilisticECGroupF2mEncoder
 		
 	}
 	
-	static class ECF2mDecodingFunction extends AbstractFunction<ECF2mDecodingFunction, ECPolynomialField, ECElement, ZMod, ZModElement>{
+	static class ECF2mDecodingFunction extends AbstractFunction<ECF2mDecodingFunction, ECPolynomialField, AbstractECElement, ZMod, ZModElement>{
 
 
 		public ECF2mDecodingFunction(ECPolynomialField domain, ZMod coDomain) {
@@ -187,7 +187,7 @@ public class ProbabilisticECGroupF2mEncoder
 		}
 
 		@Override
-		protected ZModElement abstractApply(ECElement element,
+		protected ZModElement abstractApply(AbstractECElement element,
 				RandomByteSequence randomByteSequence) {
 			ZModToBinaryPolynomialEncoder enc=ZModToBinaryPolynomialEncoder.getInstance(this.getCoDomain(),this.getDomain().getFiniteField());
 			PolynomialElement<ZModTwo> x=(PolynomialElement<ZModTwo>) element.getX();

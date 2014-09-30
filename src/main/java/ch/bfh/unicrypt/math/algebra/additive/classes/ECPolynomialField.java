@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.MathUtil;
@@ -51,14 +53,18 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
 
 /**
  *
  * @author Christian Lutz
  */
 public class ECPolynomialField
-	   extends AbstractEC<PolynomialBinaryField, Polynomial<DualisticElement<ZModTwo>>> {
+	   extends AbstractEC<PolynomialBinaryField, Polynomial<DualisticElement<ZModTwo>>, ECPolynomialElement> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public ECPolynomialField(PolynomialBinaryField finiteField, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a,
 		   DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gx, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gy,
@@ -72,30 +78,30 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected boolean abstractContains(DualisticElement x) {
+	protected boolean abstractContains(DualisticElement<Polynomial<DualisticElement<ZModTwo>>> x) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	protected boolean abstractContains(DualisticElement x, DualisticElement y) {
-		DualisticElement<Polynomial> left = y.power(2).add(x.multiply(y));
-		DualisticElement<Polynomial> right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
+	protected boolean abstractContains(DualisticElement<Polynomial<DualisticElement<ZModTwo>>> x, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> y) {
+		DualisticElement<Polynomial<DualisticElement<ZModTwo>>> left = y.power(2).add(x.multiply(y));
+		DualisticElement<Polynomial<DualisticElement<ZModTwo>>> right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
 		return left.isEquivalent(right);
 	}
 
 	@Override
-	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> abstractGetElement(Point<DualisticElement<Polynomial<DualisticElement<ZModTwo>>>> value) {
-		return new ECElement<Polynomial<DualisticElement<ZModTwo>>>(this, value);
+	protected ECPolynomialElement abstractGetElement(Point<DualisticElement<Polynomial<DualisticElement<ZModTwo>>>> value) {
+		return new ECPolynomialElement(this, value);
 	}
 
 	@Override
-	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> abstractGetIdentityElement() {
-		return new ECElement<Polynomial<DualisticElement<ZModTwo>>>(this);
+	protected ECPolynomialElement abstractGetIdentityElement() {
+		return new ECPolynomialElement(this);
 	}
 
 	@Override
-	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> abstractApply(ECElement<Polynomial<DualisticElement<ZModTwo>>> element1, ECElement<Polynomial<DualisticElement<ZModTwo>>> element2) {
+	protected ECPolynomialElement abstractApply(ECPolynomialElement element1, ECPolynomialElement element2) {
 		if (element1.isZero()) {
 			return element2;
 		}
@@ -111,7 +117,7 @@ public class ECPolynomialField
 		DualisticElement<Polynomial<DualisticElement<ZModTwo>>> qx = element2.getX();
 		DualisticElement<Polynomial<DualisticElement<ZModTwo>>> qy = element2.getY();
 		if (element1.equals(element2)) {
-			final DualisticElement one = this.getFiniteField().getOneElement();
+			final DualisticElement<Polynomial<DualisticElement<ZModTwo>>> one = this.getFiniteField().getOneElement();
 			s = px.add(py.divide(px));
 			rx = s.square().add(s).add(this.getA());
 			ry = px.square().add((s.add(one)).multiply(rx));
@@ -124,7 +130,7 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> abstractInvert(ECElement<Polynomial<DualisticElement<ZModTwo>>> element) {
+	protected ECPolynomialElement abstractInvert(ECPolynomialElement element) {
 		if (element.isZero()) {
 			return this.getZeroElement();
 		}
@@ -132,7 +138,7 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected ECElement<Polynomial<DualisticElement<ZModTwo>>> getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
+	protected ECPolynomialElement getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -214,7 +220,7 @@ public class ECPolynomialField
 	public static ECPolynomialField getInstance(PolynomialBinaryField f, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> a, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> b, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gx, DualisticElement<Polynomial<DualisticElement<ZModTwo>>> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
 
-		if (true) {//newInstance.isValid()) {
+		if (newInstance.isValid()) {
 			return newInstance;
 		} else {
 			throw new Exception("Curve parameters not valid!");
@@ -223,7 +229,7 @@ public class ECPolynomialField
 
 	public static ECPolynomialField getInstance(final StandardECPolynomialFieldParams params) throws Exception {
 		PolynomialBinaryField field;
-		PolynomialElement a, b, gx, gy;
+		PolynomialElement<ZModTwo> a, b, gx, gy;
 		BigInteger order, h;
 
 		field = params.getFiniteField();
