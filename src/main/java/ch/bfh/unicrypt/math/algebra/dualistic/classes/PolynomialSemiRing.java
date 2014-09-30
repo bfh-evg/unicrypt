@@ -165,7 +165,7 @@ public class PolynomialSemiRing<V>
 	}
 
 	// No argument check! Use it only if you know what you do -> to speed up internal algorithms
-	protected PolynomialElement<V> getElement(ByteArray coefficients) {
+	public PolynomialElement<V> getElement(ByteArray coefficients) {//TODO: Change back to protected -> ZModToBinaryEncoder is then not working anymore.
 		return abstractGetElement(Polynomial.getInstance(coefficients, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
 	}
 

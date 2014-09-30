@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
 import ch.bfh.unicrypt.math.MathUtil;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -57,9 +57,13 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 public class ProbabilisticECGroupFpEncoder
-	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, AbstractECElement<BigInteger>>
+	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECZModElement>
 	   implements ProbabilisticEncoder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected static final int SHIFT = 10;
 	private final ECZModPrime ec;
 	private final ZMod zMod;
@@ -87,14 +91,19 @@ public class ProbabilisticECGroupFpEncoder
 	}
 
 	static class ECEncodingFunction
-		   extends AbstractFunction<ECEncodingFunction, ZMod, ZModElement, ECZModPrime, AbstractECElement<BigInteger>> {
+		   extends AbstractFunction<ECEncodingFunction, ZMod, ZModElement, ECZModPrime, ECZModElement> {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		protected ECEncodingFunction(ZMod domain, ECZModPrime coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected AbstractECElement<BigInteger> abstractApply(ZModElement element, RandomByteSequence randomByteSequence) {
+		protected ECZModElement abstractApply(ZModElement element, RandomByteSequence randomByteSequence) {
 			boolean firstOption=true;
 			ZModPrime zModPrime=this.getCoDomain().getFiniteField();
 			ECZModPrime ecPrime = this.getCoDomain();
@@ -155,14 +164,19 @@ public class ProbabilisticECGroupFpEncoder
 	}
 
 	static class ECDecodingFunction
-		   extends AbstractFunction<ECDecodingFunction, ECZModPrime, AbstractECElement<BigInteger>, ZMod, ZModElement> {
+		   extends AbstractFunction<ECDecodingFunction, ECZModPrime, ECZModElement, ZMod, ZModElement> {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		protected ECDecodingFunction(ECZModPrime domain, ZMod coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected ZModElement abstractApply(AbstractECElement<BigInteger> element, RandomByteSequence randomByteSequence) {
+		protected ZModElement abstractApply(ECZModElement element, RandomByteSequence randomByteSequence) {
 			ECZModPrime ecPrime = this.getDomain();
 			ZModPrime zModPrime=this.getDomain().getFiniteField();
 			ZModElement x=(ZModElement) element.getX();

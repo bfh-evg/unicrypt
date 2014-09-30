@@ -5,15 +5,16 @@ import java.math.BigInteger;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
-import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 /*
  * UniCrypt
  *
@@ -55,19 +56,18 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
  *
  * Redistributions of files must retain the above copyright notice.
  */
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 
 
 
 public class ProbabilisticECGroupF2mEncoder
-	   extends AbstractEncoder<ZModPrime, ZModElement, ECPolynomialField, AbstractECElement<Polynomial>>
+	   extends AbstractEncoder<ZModPrime, ZModElement, ECPolynomialField, ECPolynomialElement>
 	   implements ProbabilisticEncoder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ZMod zMod;
 	private ECPolynomialField ecPoly;
 	protected static final int SHIFT = 10;
@@ -98,16 +98,21 @@ public class ProbabilisticECGroupF2mEncoder
 	}
 	
 	
-	static class ECF2mEncodingFunction extends AbstractFunction<ECF2mEncodingFunction, ZMod, ZModElement, ECPolynomialField, AbstractECElement>{
+	static class ECF2mEncodingFunction extends AbstractFunction<ECF2mEncodingFunction, ZMod, ZModElement, ECPolynomialField, ECPolynomialElement>{
 
 		
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		protected ECF2mEncodingFunction(ZMod domain, ECPolynomialField coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected AbstractECElement abstractApply(ZModElement element,
+		protected ECPolynomialElement abstractApply(ZModElement element,
 				RandomByteSequence randomByteSequence) {
 			boolean firstOption=true;
 			BigInteger r=element.getBigInteger().shiftLeft(SHIFT);
@@ -179,20 +184,24 @@ public class ProbabilisticECGroupF2mEncoder
 		
 	}
 	
-	static class ECF2mDecodingFunction extends AbstractFunction<ECF2mDecodingFunction, ECPolynomialField, AbstractECElement, ZMod, ZModElement>{
+	static class ECF2mDecodingFunction extends AbstractFunction<ECF2mDecodingFunction, ECPolynomialField, ECPolynomialElement, ZMod, ZModElement>{
 
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		public ECF2mDecodingFunction(ECPolynomialField domain, ZMod coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected ZModElement abstractApply(AbstractECElement element,
+		protected ZModElement abstractApply(ECPolynomialElement element,
 				RandomByteSequence randomByteSequence) {
 			ZModToBinaryPolynomialEncoder enc=ZModToBinaryPolynomialEncoder.getInstance(this.getCoDomain(),this.getDomain().getFiniteField());
-			PolynomialElement<ZModTwo> x=(PolynomialElement<ZModTwo>) element.getX();
-			PolynomialElement<ZModTwo> y=(PolynomialElement<ZModTwo>) element.getY();
-			PolynomialElement<ZModTwo> yEnc=this.calculateY(x);
+			PolynomialElement<ZModTwo> x= element.getX();
+			PolynomialElement<ZModTwo> y= element.getY();
 			PolynomialElement<ZModTwo> yEnc2=this.calculateY2(x);
 			
 			if(y.isEquivalent(yEnc2)){
@@ -214,19 +223,7 @@ public class ProbabilisticECGroupF2mEncoder
 			return l.add(l.getSet().getOneElement()).multiply(x);
 
 		}
-
-		private PolynomialElement<ZModTwo> calculateY(PolynomialElement<ZModTwo> x){
-			ECPolynomialField ec=this.getDomain();
-			PolynomialElement<ZModTwo> t = x.add(ec.getA()).add(ec.getB().divide(x.square()));
-			PolynomialElement<ZModTwo> l = ec.getFiniteField().solveQuadradicEquation(t);
-			return l.multiply(x);
-		}
 		
-		private boolean hasY(PolynomialElement<ZModTwo> x){
-			ECPolynomialField ec=this.getDomain();
-			PolynomialElement<ZModTwo> t = x.add(ec.getA()).add(ec.getB().divide(x.square()));
-			return ec.getFiniteField().hasQuadradicEquationSolution(t);
-		}
 		
 	}
 

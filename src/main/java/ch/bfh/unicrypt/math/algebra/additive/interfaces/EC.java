@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
 import ch.bfh.unicrypt.helper.Point;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 
@@ -55,8 +54,8 @@ import java.math.BigInteger;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V> Generic type of values stored in the elements of the elliptic curve
  */
-public interface EC<V extends Object>
-	   extends AdditiveCyclicGroup<Point<DualisticElement<V>>> {
+public interface EC<V extends Object, E extends DualisticElement<V>>
+	   extends AdditiveCyclicGroup<Point<E>> {
 
 	/**
 	 * Returns the finite Field of this elliptic curve
@@ -70,14 +69,14 @@ public interface EC<V extends Object>
 	 * <p>
 	 * @return The co-efficient a
 	 */
-	public DualisticElement<V> getA();
+	public E getA();
 
 	/**
 	 * Returns the co-efficient b of this elliptic curve.
 	 * <p>
 	 * @return The co-efficient b
 	 */
-	public DualisticElement<V> getB();
+	public E getB();
 
 	/**
 	 * Returns the cofactor of this elliptic curve.
@@ -93,7 +92,7 @@ public interface EC<V extends Object>
 	 * @return {@code true} if this elliptic curve lies on the given x co-ordinate
 	 * @throws IllegalArgumentException if {@code xValue} do not belong to the finite field
 	 */
-	public boolean contains(DualisticElement<V> xValue);
+	public boolean contains(E xValue);
 
 	/**
 	 * TODO Returns {@code true} if the given x and y value are the co-ordinates for a point on this elliptic curve.
@@ -103,7 +102,7 @@ public interface EC<V extends Object>
 	 * @return {@code true} if xValue and yValue form a point on this elliptic curve.
 	 * @throws IllegalArgumentException if {@code xValue} or {@code yValue} do not belong to the finite field
 	 */
-	public boolean contains(DualisticElement<V> xValue, DualisticElement<V> yValue);
+	public boolean contains(E xValue, E yValue);
 
 	/**
 	 * TODO Returns the corresponding point for a given x and y value.
@@ -113,6 +112,6 @@ public interface EC<V extends Object>
 	 * @return The corresponding point for a given x and y value
 	 * @throws IllegalArgumentException if {@code xValue} or {@code yValue} do not belong to this elliptic curve
 	 */
-	public ECElement<V> getElement(DualisticElement<V> xValue, DualisticElement<V> yValue);
+	public ECElement<V,E> getElement(E xValue, E yValue);
 
 }
