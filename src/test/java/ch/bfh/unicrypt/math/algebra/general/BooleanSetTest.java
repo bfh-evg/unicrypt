@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanSet;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -107,29 +106,6 @@ public class BooleanSetTest {
 
 		result = instance.getElementFrom(BigInteger.ONE);
 		assertEquals(true, result.getValue());
-
-	}
-
-	@Test
-	public void testGetElementElement() {
-		BigInteger value = null;
-		BooleanSet instance = BooleanSet.getInstance();
-		BooleanElement expResult = instance.getElement(true);
-		BooleanElement result = instance.getElementFrom(expResult);
-		assertEquals(expResult, result);
-
-		ZMod zmod = ZMod.getInstance(5);
-		Element element = zmod.getElement(1);
-		result = instance.getElementFrom(element);
-		assertEquals(true, result.getValue());
-
-		element = zmod.getElement(0);
-		result = instance.getElementFrom(element);
-		assertEquals(false, result.getValue());
-
-		element = zmod.getElement(4);
-		result = instance.getElementFrom(element);
-		assertNull(result);
 
 	}
 

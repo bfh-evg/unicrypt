@@ -63,7 +63,7 @@ public class BigIntegerConvertFunction
 
 	@Override
 	protected Element abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().getElementFrom(element);
+		return this.getCoDomain().getElement(element.getValue());
 	}
 
 	/**

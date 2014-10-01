@@ -102,7 +102,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 	@Override
 	protected Function abstractGetSignatureFunction() {
 		ZMod zMod = this.cyclicGroup.getZModOrder();
-		ProductSet inputSpace = ProductSet.getInstance(zMod, this.messageSpace, zMod);
+		ProductSet inputSpace = ProductSet.getInstance(this.getSignatureKeySpace(), this.messageSpace, this.randomizationSpace);
 		ProductSet middleSpace = ProductSet.getInstance(zMod, 3);
 
 		return CompositeFunction.getInstance(
@@ -129,7 +129,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 	@Override
 	protected Function abstractGetVerificationFunction() {
 		ZMod zMod = this.cyclicGroup.getZModOrder();
-		ProductSet inputSpace = ProductSet.getInstance(this.cyclicGroup, this.messageSpace, this.signatureSpace);
+		ProductSet inputSpace = ProductSet.getInstance(this.getVerificationKeySpace(), this.messageSpace, this.signatureSpace);
 
 		return CompositeFunction.getInstance(
 			   SharedDomainFunction.getInstance(

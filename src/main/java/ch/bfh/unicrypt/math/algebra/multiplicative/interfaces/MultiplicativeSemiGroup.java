@@ -140,9 +140,8 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	@Override
 	public MultiplicativeElement<V> getElementFrom(ByteTree byteTree);
 
-	@Override
-	public MultiplicativeElement<V> getElementFrom(Element element);
-
+//	@Override
+//	public MultiplicativeElement<V> getElementFrom(Element element);
 	@Override
 	public MultiplicativeElement<V> getRandomElement();
 

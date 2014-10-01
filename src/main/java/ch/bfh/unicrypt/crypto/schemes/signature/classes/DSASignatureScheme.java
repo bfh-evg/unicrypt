@@ -43,8 +43,12 @@ package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
 import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -52,6 +56,14 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
+import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
+import ch.bfh.unicrypt.math.function.classes.HashFunction;
+import ch.bfh.unicrypt.math.function.classes.InvertFunction;
+import ch.bfh.unicrypt.math.function.classes.ModuloFunction;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.math.function.classes.SelectionFunction;
+import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class DSASignatureScheme<MS extends Set>
@@ -81,12 +93,54 @@ public class DSASignatureScheme<MS extends Set>
 
 	@Override
 	protected Function abstractGetSignatureFunction() {
-		return null;
+		ZMod zMod = this.cyclicGroup.getZModOrder();
+		ProductSet inputSpace = ProductSet.getInstance(this.getSignatureKeySpace(), this.messageSpace, this.randomizationSpace);
+
+		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
+		BigIntegerConverter<ByteArray> converter = FiniteByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
+		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
+		ModuloFunction moduloFunction = ModuloFunction.getInstance(N.getInstance(), zMod);
+
+		return ProductFunction.getInstance(
+			   InvertFunction.getInstance(zMod),
+			   CompositeFunction.getInstance(
+					  hashFunction,
+					  convertFunction,
+					  moduloFunction),
+			   CompositeFunction.getInstance(
+					  SelectionFunction.getInstance(inputSpace, 2),
+					  SelfApplyFunction.getInstance(zMod),
+					  ModuloFunction.getInstance(this.cyclicGroup, zMod)));
+
 	}
 
 	@Override
 	protected Function abstractGetVerificationFunction() {
+		ZMod zMod = this.cyclicGroup.getZModOrder();
+		ProductSet inputSpace = ProductSet.getInstance(this.getVerificationKeySpace(), this.messageSpace, this.signatureSpace);
 		return null;
+	}
+
+	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup) {
+		return DSASignatureScheme.getInstance(messageSpace, cyclicGroup, HashMethod.getInstance());
+	}
+
+	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup, HashMethod hashMethod) {
+		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new DSASignatureScheme<MS>(messageSpace, cyclicGroup, cyclicGroup.getDefaultGenerator(), hashMethod);
+	}
+
+	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, Element generator) {
+		return DSASignatureScheme.getInstance(messageSpace, generator, HashMethod.getInstance());
+	}
+
+	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, Element generator, HashMethod hashMethod) {
+		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator() || hashMethod == null) {
+			throw new IllegalArgumentException();
+		}
+		return new DSASignatureScheme<MS>(messageSpace, (CyclicGroup) generator.getSet(), generator, hashMethod);
 	}
 
 }

@@ -231,7 +231,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (!this.contains(value)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetElement((V) value);
+		return this.abstractGetElement(value);
 	}
 
 	@Override
@@ -366,20 +366,6 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 			throw new IllegalArgumentException();
 		}
 		return this.defaultGetElementFrom(byteTree, convertMethod);
-	}
-
-	@Override
-	public final E getElementFrom(final Element element) {
-		if (element == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this.contains(element)) {
-			return (E) element;
-		}
-		if (this.contains(element.getValue())) {
-			return this.getElement((V) element.getValue());
-		}
-		return this.getElementFrom(element.getBigInteger());
 	}
 
 	@Override
