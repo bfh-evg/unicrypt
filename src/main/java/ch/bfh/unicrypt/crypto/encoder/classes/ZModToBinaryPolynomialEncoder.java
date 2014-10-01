@@ -92,7 +92,7 @@ public class ZModToBinaryPolynomialEncoder
 		protected ZModElement abstractApply(final PolynomialElement<ZModTwo> element, final RandomByteSequence randomByteSequence) {
 			ByteArray byteArray = element.getValue().getCoefficients();
 			BigInteger bigInteger = converter.reconvert(byteArray);
-			return this.getCoDomain().getElement(bigInteger);
+			return this.getCoDomain().getElement(bigInteger.mod(this.getCoDomain().getModulus()));
 
 //			final String value = new StringBuilder(arr.toBitString()).reverse().toString();
 //			BigInteger res = new BigInteger(value, 2);

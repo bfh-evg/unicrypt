@@ -82,8 +82,17 @@ public class ECGroupExample {
 			// Infinity element
 		}
 	}
-
+	
 	public static void example2() throws Exception {
+		ECPolynomialField ec = ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
+		Example.printLine(ec.getDefaultGenerator());
+		Example.printLine(ec.getDefaultGenerator().invert());
+		
+		
+	
+	}
+
+	public static void example3() throws Exception {
 		// Example with StandardECPolynomialField
 
 		for (StandardECPolynomialFieldParams params : SECECCParamsF2m.values()) {

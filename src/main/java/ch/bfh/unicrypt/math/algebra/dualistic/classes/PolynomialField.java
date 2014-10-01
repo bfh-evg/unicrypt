@@ -104,7 +104,6 @@ public class PolynomialField<V>
 
 	@Override
 	public PolynomialElement<V> getRandomElement(int degree, RandomByteSequence randomByteSequence) {
-		int test=this.getDegree();
 		if (degree >= this.getDegree()) {
 			throw new IllegalArgumentException();
 		}

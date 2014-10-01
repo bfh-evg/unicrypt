@@ -56,35 +56,7 @@ import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 
 public class ElGamalECCExample {
 
-	/* public static void example1() throws Exception {
-	 *
-	 * // Example Elgamal over ECFp with 123456789 as text to encode using ProbabilisticECGroupFpEncode //Generate
-	 * schema and keypair final StandardECZModPrime g_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1);
-	 * //Possible curves secp{112,160,192,224,256,384,521}r1 final ZMod zMod=g_q.getFiniteField(); final
-	 * ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(g_q); final KeyPairGenerator keyGen =
-	 * elGamal.getKeyPairGenerator();
-	 *
-	 * //Create encode/decoder ProbabilisticECGroupFpEncoder enc = ProbabilisticECGroupFpEncoder.getInstance(zMod,g_q);
-	 *
-	 * // Generate private key final Element privateKey = keyGen.generatePrivateKey(); Example.printLine("Private Key:
-	 * " + privateKey);
-	 *
-	 * //Generate pubilc key Element publigKey = keyGen.generatePublicKey(privateKey); Example.printLine("Public Key: "
-	 * + publigKey);
-	 *
-	 * //encoding FiniteField f = g_q.getFiniteField(); Element m = f.getElementFrom(new BigInteger("123456789"));
-	 * ECElement<BigInteger> message = enc.encode(m); Example.printLine("Message: " + m); Example.printLine("Message
-	 * encoded: " + message);
-	 *
-	 * //Encrypt message final Tuple cipherText = elGamal.encrypt(publigKey, message); Example.printLine("Cipher Text:
-	 * " + cipherText);
-	 *
-	 * //decrypt message Element newMessage = elGamal.decrypt(privateKey, cipherText); Example.printLine("Decrypted
-	 * Message: " + newMessage); Example.printLine("Message == Decrypted Message: " + message.isEquivalent(newMessage));
-	 *
-	 * //decode message Element plain = enc.decode(newMessage); Example.printLine("Message decoded: " + plain);
-	 *
-	 * } */
+	
 	public static void example1() throws Exception {
 
 		// Create cyclic group EC Fp (modulo 521 bits) and get default generator

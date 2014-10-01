@@ -203,6 +203,7 @@ public class ProbabilisticECGroupF2mEncoder
 			PolynomialElement<ZModTwo> x= element.getX();
 			PolynomialElement<ZModTwo> y= element.getY();
 			PolynomialElement<ZModTwo> yEnc2=this.calculateY2(x);
+			PolynomialElement<ZModTwo> y1=element.invert().getY();
 			
 			if(y.isEquivalent(yEnc2)){
 				BigInteger r=enc.decode(element.getX()).getBigInteger();
