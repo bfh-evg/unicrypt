@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -54,11 +53,11 @@ import java.math.BigInteger;
  */
 public class ProductMonoid
 	   extends ProductSemiGroup
-	   implements Monoid<ImmutableArray<Element>> {
+	   implements Monoid<DenseArray<Element>> {
 
 	private Tuple identityElement;
 
-	protected ProductMonoid(ImmutableArray<Set> sets) {
+	protected ProductMonoid(DenseArray<Set> sets) {
 		super(sets);
 	}
 

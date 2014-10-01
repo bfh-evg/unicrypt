@@ -43,9 +43,7 @@ package ch.bfh.unicrypt.math.algebra.additive;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupF2mEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
 import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
@@ -56,7 +54,6 @@ import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
-
 import java.math.BigInteger;
 
 /**
@@ -86,23 +83,22 @@ public class ECGroupExample {
 
 		for (StandardECPolynomialFieldParams params : SECECCParamsF2m.values()) {
 			ECPolynomialField ec = ECPolynomialField.getInstance(params);
-			ZMod z=ZMod.getInstance(1234567);
-			ECElement<Polynomial<DualisticElement<ZModTwo>>> generator = ec.getDefaultGenerator();
-			
-			ProbabilisticECGroupF2mEncoder encoder=ProbabilisticECGroupF2mEncoder.getInstance(z, ec);
-			
-			ECElement m=encoder.encode(z.getElement(1036));
-			ECElement m_generator=(ECElement) m.add(generator);
-			
+			ZMod z = ZMod.getInstance(1234567);
+			ECElement<Polynomial<? extends DualisticElement<ZModTwo>>> generator = ec.getDefaultGenerator();
+
+			ProbabilisticECGroupF2mEncoder encoder = ProbabilisticECGroupF2mEncoder.getInstance(z, ec);
+
+			ECElement m = encoder.encode(z.getElement(1036));
+			ECElement m_generator = (ECElement) m.add(generator);
+
 			BigInteger order = ec.getOrder();
-			
+
 			Example.printLine(params.toString());
-			Example.printLine("Message"+m.selfApply(order));
-			Example.printLine("Message plus Generator"+ m.add(generator).selfApply(order));
-			Example.printLine("Gen "+generator.selfApply(order));
+			Example.printLine("Message" + m.selfApply(order));
+			Example.printLine("Message plus Generator" + m.add(generator).selfApply(order));
+			Example.printLine("Gen " + generator.selfApply(order));
 
 			// Result should be Infinity element
-
 		}
 	}
 

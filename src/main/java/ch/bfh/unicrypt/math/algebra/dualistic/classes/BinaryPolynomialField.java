@@ -57,7 +57,7 @@ import java.math.BigInteger;
  */
 public class BinaryPolynomialField
 	   extends PolynomialField<ZModTwo>
-	   implements FiniteField<Polynomial<DualisticElement<ZModTwo>>> {
+	   implements FiniteField<Polynomial<? extends DualisticElement<ZModTwo>>> {
 
 	private BinaryPolynomialField(PolynomialElement<ZModTwo> irreduciblePolynomial) {
 		super(ZModTwo.getInstance(), irreduciblePolynomial);

@@ -235,18 +235,15 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final boolean contains(final Object value) {
+	public final boolean contains(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		if (!this.valueClass.isInstance(value)) {
-			return false;
-		}
-		return this.abstractContains((V) value);
+		return this.abstractContains(value);
 	}
 
 	@Override
-	public final boolean contains(final Element element) {
+	public final boolean contains(Element element) {
 		if (element == null) {
 			throw new IllegalArgumentException();
 		}
@@ -254,7 +251,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E getElementFrom(final int integer) {
+	public final E getElementFrom(int integer) {
 		return this.getElementFrom(BigInteger.valueOf(integer));
 	}
 
@@ -505,6 +502,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.getOrderLowerBound();
 	}
 
+	// this method is different only for Subset
 	protected boolean defaultContains(final Element element) {
 		return this.isEquivalent(element.getSet());
 	}

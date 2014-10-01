@@ -119,9 +119,10 @@ public class PolynomialSemiRingTest {
 		assertTrue(ring0.contains(poly1));
 		assertFalse(ring7.contains(poly1));
 
-		Polynomial<BigInteger> poly2 = Polynomial.getInstance(new BigInteger[]{BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(4)},
-															  BigInteger.valueOf(0), BigInteger.valueOf(1));
-		assertFalse(ring0.contains(poly2));
+// This test cannot be executed anymore due to more precise generics
+//		Polynomial<BigInteger> poly2 = Polynomial.getInstance(new BigInteger[]{BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(4)},
+//															  BigInteger.valueOf(0), BigInteger.valueOf(1));
+//		assertFalse(ring0.contains(poly2));
 	}
 
 	@Test

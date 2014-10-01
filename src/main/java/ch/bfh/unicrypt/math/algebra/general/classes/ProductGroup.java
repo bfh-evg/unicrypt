@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -53,9 +52,9 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  */
 public class ProductGroup
 	   extends ProductMonoid
-	   implements Group<ImmutableArray<Element>> {
+	   implements Group<DenseArray<Element>> {
 
-	protected ProductGroup(ImmutableArray<Set> sets) {
+	protected ProductGroup(DenseArray<Set> sets) {
 		super(sets);
 	}
 

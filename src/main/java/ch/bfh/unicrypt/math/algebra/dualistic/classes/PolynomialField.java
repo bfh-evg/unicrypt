@@ -61,7 +61,7 @@ import java.math.BigInteger;
  */
 public class PolynomialField<V>
 	   extends PolynomialRing<V>
-	   implements FiniteField<Polynomial<DualisticElement<V>>> {
+	   implements FiniteField<Polynomial<? extends DualisticElement<V>>> {
 
 	private final PolynomialElement<V> irreduciblePolynomial;
 
@@ -124,7 +124,7 @@ public class PolynomialField<V>
 	}
 
 	@Override
-	public MultiplicativeGroup<Polynomial<DualisticElement<V>>> getMultiplicativeGroup() {
+	public MultiplicativeGroup<Polynomial<? extends DualisticElement<V>>> getMultiplicativeGroup() {
 		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact
 		// 2.229/2.230)
 		throw new UnsupportedOperationException("Not supported yet.");
@@ -132,8 +132,8 @@ public class PolynomialField<V>
 
 	@Override
 	protected PolynomialElement<V> abstractMultiply(PolynomialElement<V> element1, PolynomialElement<V> element2) {
-		Polynomial<DualisticElement<V>> polynomial1 = element1.getValue();
-		Polynomial<DualisticElement<V>> polynomial2 = element2.getValue();
+		Polynomial<? extends DualisticElement<V>> polynomial1 = element1.getValue();
+		Polynomial<? extends DualisticElement<V>> polynomial2 = element2.getValue();
 
 		if (element1.isEquivalent(this.getZeroElement()) || element2.isEquivalent(this.getZeroElement())) {
 			return this.getZeroElement();
