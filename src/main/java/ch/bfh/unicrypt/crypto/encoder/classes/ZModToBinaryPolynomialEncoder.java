@@ -32,7 +32,7 @@ public class ZModToBinaryPolynomialEncoder
 	public ZModToBinaryPolynomialEncoder(ZMod zMod, PolynomialField<ZModTwo> binaryPolynomial) {
 		this.zMod = zMod;
 		this.binaryPolynomial = binaryPolynomial;
-		this.converter = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
+		this.converter = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN);
 	}
 
 	@Override

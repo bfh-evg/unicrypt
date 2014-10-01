@@ -51,6 +51,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
@@ -79,7 +80,16 @@ public class ECPolynomialField
 
 	@Override
 	protected boolean abstractContains(PolynomialElement<ZModTwo> x) {
-		// TODO Auto-generated method stub
+		DualisticElement<ZModTwo> traceX=MathUtil.traceGF2m(x,this);
+		DualisticElement<ZModTwo> traceA=MathUtil.traceGF2m(this.getA(),this);
+		DualisticElement<ZModTwo> traceAX=MathUtil.traceGF2m(this.getA().divide(x),this);
+		
+		boolean e1=traceA.isEquivalent(traceX);
+		boolean e2=traceAX.isEquivalent(traceAX.getSet().getZeroElement());
+		
+		if(e1 && e2){
+			return true;
+		}
 		return false;
 	}
 
@@ -94,6 +104,20 @@ public class ECPolynomialField
 	protected ECPolynomialElement abstractGetElement(
 			Point<PolynomialElement<ZModTwo>> value) {
 		return new ECPolynomialElement(this,value);
+	}
+	
+	/**
+	 * Return the two possible y-coordinates for a given x-coordinate
+	 * @param x x-coordinate of point
+	 */
+	public Tuple getY(PolynomialElement<ZModTwo> x){
+		if(!this.contains(x)){
+			throw new IllegalArgumentException("No y-coordinate exists for the given x-coordinate: "+x);
+		}
+		
+		PolynomialElement<ZModTwo> t = x.add(this.getA()).add(this.getB().divide(x.square()));
+		PolynomialElement<ZModTwo> l = this.getFiniteField().solveQuadradicEquation(t);
+		return Tuple.getInstance(l.add(l.getSet().getOneElement()).multiply(x),l.multiply(x));
 	}
 
 	@Override

@@ -85,6 +85,10 @@ public class ECGroupExample {
 	
 	public static void example2() throws Exception {
 		ECPolynomialField ec = ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
+		ECPolynomialElement r=ec.getRandomElement();
+		Example.printLine(r.getY());
+		Example.printLine(r.invert().getY());
+		Example.printLine(r.getY());
 		Example.printLine(ec.getDefaultGenerator());
 		Example.printLine(ec.getDefaultGenerator().invert());
 		
