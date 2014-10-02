@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.nio.ByteBuffer;

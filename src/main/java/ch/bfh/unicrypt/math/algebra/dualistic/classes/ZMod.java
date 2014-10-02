@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math;
 
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
 import junit.framework.Assert;
 import org.junit.Test;

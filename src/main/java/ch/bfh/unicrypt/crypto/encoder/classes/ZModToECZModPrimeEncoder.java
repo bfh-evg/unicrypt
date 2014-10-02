@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;

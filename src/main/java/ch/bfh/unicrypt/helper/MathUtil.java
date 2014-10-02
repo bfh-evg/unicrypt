@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math;
+package ch.bfh.unicrypt.helper;
 
 import java.math.BigInteger;
 import java.util.Arrays;

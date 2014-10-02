@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;

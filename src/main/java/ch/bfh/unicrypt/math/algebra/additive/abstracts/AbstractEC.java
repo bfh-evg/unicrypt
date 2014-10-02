@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
