@@ -79,17 +79,14 @@ public class ECPolynomialField
 
 	@Override
 	protected boolean abstractContains(PolynomialElement<ZModTwo> x) {
-		DualisticElement<ZModTwo> traceX = MathUtil.traceGF2m(x, this);
-		DualisticElement<ZModTwo> traceA = MathUtil.traceGF2m(this.getA(), this);
-		DualisticElement<ZModTwo> traceAX = MathUtil.traceGF2m(this.getA().divide(x), this);
+		DualisticElement<ZModTwo> traceX = traceGF2m(x, this);
+		DualisticElement<ZModTwo> traceA = traceGF2m(this.getA(), this);
+		DualisticElement<ZModTwo> traceAX = traceGF2m(this.getA().divide(x), this);
 
 		boolean e1 = traceA.isEquivalent(traceX);
 		boolean e2 = traceAX.isEquivalent(traceAX.getSet().getZeroElement());
 
-		if (e1 && e2) {
-			return true;
-		}
-		return false;
+		return e1 && e2;
 	}
 
 	@Override
@@ -266,6 +263,24 @@ public class ECPolynomialField
 		order = params.getOrder();
 		h = params.getH();
 		return ECPolynomialField.getInstance(field, a, b, gx, gy, order, h);
+	}
+
+	/**
+	 * Returns the trace of an polynomial of characteristic 2
+	 * <p>
+	 * @param x
+	 * @param ec
+	 * @return
+	 */
+	public static DualisticElement<ZModTwo> traceGF2m(PolynomialElement<ZModTwo> x, ECPolynomialField ec) {
+		int deg = ec.getFiniteField().getDegree();
+		DualisticElement<ZModTwo> sum = x.getValue().getCoefficient(0);
+
+		for (int i = 1; i < deg; i++) {
+			sum = sum.add(x.getValue().getCoefficient(i));
+		}
+
+		return sum;
 	}
 
 }

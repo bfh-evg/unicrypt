@@ -56,7 +56,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 import java.math.BigInteger;
 
-public class ProbabilisticECGroupFpEncoder
+public class ZModToECZModPrimeEncoder
 	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECZModElement>
 	   implements ProbabilisticEncoder {
 
@@ -68,7 +68,7 @@ public class ProbabilisticECGroupFpEncoder
 	private final ECZModPrime ec;
 	private final ZMod zMod;
 
-	protected ProbabilisticECGroupFpEncoder(ZMod zMod,ECZModPrime ec) {
+	protected ZModToECZModPrimeEncoder(ZMod zMod,ECZModPrime ec) {
 		this.ec = ec;
 		this.zMod=zMod;
 	}
@@ -83,11 +83,11 @@ public class ProbabilisticECGroupFpEncoder
 		return new ECDecodingFunction(ec, this.zMod);
 	}
 
-	public static ProbabilisticECGroupFpEncoder getInstance(final ZMod zMod,final ECZModPrime ec) {
+	public static ZModToECZModPrimeEncoder getInstance(final ZMod zMod,final ECZModPrime ec) {
 		if (ec == null || zMod==null) {
 			throw new IllegalArgumentException();
 		}
-		return new ProbabilisticECGroupFpEncoder(zMod,ec);
+		return new ZModToECZModPrimeEncoder(zMod,ec);
 	}
 
 	static class ECEncodingFunction

@@ -45,11 +45,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-
 /**
  * This is a helper class with some static methods for various mathematical functions.
  * <p>
@@ -536,55 +531,6 @@ public final class MathUtil {
 		BigInteger two = new BigInteger("2");
 		return r.modPow(p.subtract(BigInteger.ONE).divide(two), p).equals(BigInteger.ONE);
 	}
-	
-	/**
-	 * Returns the trace of an polynomial of characteristic 2
-	 * @param x
-	 * @param ec
-	 * @return
-	 */
-	public static DualisticElement<ZModTwo> traceGF2m(PolynomialElement<ZModTwo> x, ECPolynomialField ec){
-		int deg=ec.getFiniteField().getDegree();
-		DualisticElement<ZModTwo> sum=x.getValue().getCoefficient(0);
-		
-		for (int i = 1; i <deg ; i++) {
-			sum=sum.add(x.getValue().getCoefficient(i));
-		}
-		
-		return sum;
-	}
-	
-	/**
-	 * Compares the two polynomial elements and return the element with the most significant coefficient not in common.
-	 * @param y1
-	 * @param y2
-	 */
-	public static PolynomialElement<ZModTwo> getBiggerY(PolynomialElement<ZModTwo> y1,PolynomialElement<ZModTwo> y2){
-		int deg=y1.add(y2).getValue().getDegree();
-		BigInteger y1Coeff = y1.getValue().getCoefficient(deg).getBigInteger();
-		BigInteger y2Coeff = y2.getValue().getCoefficient(deg).getBigInteger();
-		
-		if(y1Coeff.compareTo(y2Coeff)>0){
-			return y1;
-		}
-		
-		
-		return y2;
-	}
-	
-	/**
-	 * Compares y1 and y2 and returns if y1 is bigger then y2 -> getBiggerY
-	 * @param y1
-	 * @param y2
-	 */
-	public static boolean isBigger(PolynomialElement<ZModTwo> y1, PolynomialElement<ZModTwo> y2){
-	if(y1.isEquivalent(getBiggerY(y1, y2))){
-		return true;
-	}
-	return false;
-}
-	
-	
 
 	public static byte setBit(byte b, int i) {
 		return (byte) logicalOR(b, bitMask(i));

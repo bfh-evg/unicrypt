@@ -44,8 +44,8 @@ package ch.bfh.unicrypt.crypto.encoder;
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.encoder.classes.CompositeEncoder;
 import ch.bfh.unicrypt.crypto.encoder.classes.FiniteStringToZModEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupF2mEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECPolynomialFieldEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECZModPrimeEncoder;
 import ch.bfh.unicrypt.crypto.encoder.classes.ZModToGStarModSafePrimeEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.helper.Alphabet;
@@ -98,8 +98,7 @@ public class EncoderExample {
 		ZMod z = ZMod.getInstance(ec.getOrder());
 
 		// Create encoders
-		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.PRINTABLE_ASCII);
-		ProbabilisticECGroupF2mEncoder encoder2 = ProbabilisticECGroupF2mEncoder.getInstance(z, ec);
+		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.PRINTABLE_ASCProbabilisticECPolynomialFieldEncoderEncodProbabilisticECPolynomialFieldEncoderroupF2mEncoder.getInstance(z, ec);
 
 		// Create composite encoder
 		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);
@@ -130,7 +129,7 @@ public class EncoderExample {
 
 		// Create encoders
 		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.LOWER_CASE);
-		ProbabilisticECGroupFpEncoder encoder2 = ProbabilisticECGroupFpEncoder.getInstance(z, ec);
+ProbabilisticECZModPrimeEncoderer encoderProbabilisticECZModPrimeEncoderoder.getInstance(z, ec);
 
 		// Create composite encoder
 		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.additive;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupF2mEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECPolynomialFieldEncoder;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModElement;
@@ -96,7 +96,7 @@ public class ECGroupExample {
 			ZMod z = ZMod.getInstance(1234567);
 			ECPolynomialElement generator = ec.getDefaultGenerator();
 
-			ProbabilisticECGroupF2mEncoder encoder = ProbabilisticECGroupF2mEncoder.getInstance(z, ec);
+			ZModToECPolynomialFieldEncoder encoder = ZModToECPolynomialFieldEncoder.getInstance(z, ec);
 
 			ECPolynomialElement m = encoder.encode(z.getElement(105));
 			ECPolynomialElement m_generator = m.add(generator);
