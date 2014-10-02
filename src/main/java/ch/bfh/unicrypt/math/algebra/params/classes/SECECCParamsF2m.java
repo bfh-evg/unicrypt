@@ -44,8 +44,8 @@ package ch.bfh.unicrypt.math.algebra.params.classes;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
@@ -199,10 +199,10 @@ public enum SECECCParamsF2m implements StandardECPolynomialFieldParams {
 	}
 
 	@Override
-	public BinaryPolynomialField getFiniteField() {
+	public PolynomialField<ZModTwo> getFiniteField() {
 		PolynomialElement<ZModTwo> irreduciblePolynomialElement = this
 				.getPolynomeFromString(this.polynom);
-		return BinaryPolynomialField.getInstance(irreduciblePolynomialElement);
+		return PolynomialField.getInstance(ZModTwo.getInstance(),irreduciblePolynomialElement);
 	}
 
 	@Override

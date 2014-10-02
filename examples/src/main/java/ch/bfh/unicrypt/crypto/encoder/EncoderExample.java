@@ -98,14 +98,16 @@ public class EncoderExample {
 		ZMod z = ZMod.getInstance(ec.getOrder());
 
 		// Create encoders
-		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.LOWER_CASE);
+		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.PRINTABLE_ASCII);
 		ProbabilisticECGroupF2mEncoder encoder2 = ProbabilisticECGroupF2mEncoder.getInstance(z, ec);
 
 		// Create composite encoder
 		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);
 
 		// Encode and decode message
-		Element message = encoder12.getDomain().getElement("hello");
+		String text="hello, good morning";
+		
+		Element message = encoder12.getDomain().getElement("good morning");
 		Element encodedMessage = encoder12.encode(message);
 		Element decodedMessage = encoder12.decode(encodedMessage);
 

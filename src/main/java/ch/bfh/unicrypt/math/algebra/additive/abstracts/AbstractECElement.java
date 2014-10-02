@@ -39,37 +39,44 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.classes;
+package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
 import ch.bfh.unicrypt.helper.Point;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * @param <V> Type Finite Field ov EC
+ * @param <E> Type of FiniteFieldElement
+ * @param <A>
  */
-public class ECElement<V extends Object>
-	   extends AbstractAdditiveElement<EC<V>, ECElement<V>, Point<DualisticElement<V>>> {
+public class AbstractECElement<V extends Object, E extends DualisticElement<V>, A extends ECElement<V, E>>
+	   extends AbstractAdditiveElement<EC<V, E>, A, Point<E>>
+	   implements ECElement<V, E> {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	private final boolean infinity;
 
 	// the main constructor
-	protected ECElement(EC ecGroup, Point<DualisticElement<V>> value) {
+	protected AbstractECElement(EC<V, E> ecGroup, Point<E> value) {
 		super(ecGroup, value);
 		this.infinity = false;
 	}
 
 	// special constructor is necessary for the additional point of infinity
-	protected ECElement(EC ecGroup) {
-		super(ecGroup, Point.<DualisticElement<V>>getInstance());
+	protected AbstractECElement(EC<V, E> ecGroup) {
+		super(ecGroup, Point.<E>getInstance());
 		this.infinity = true;
 	}
 
 	// additional convenience getter method to handle to point of infinity
-	public DualisticElement<V> getX() {
+	public E getX() {
 		if (this.infinity) {
 			throw new UnsupportedOperationException();
 		}
@@ -77,7 +84,7 @@ public class ECElement<V extends Object>
 	}
 
 	// additional convenience getter method to handle to point of infinity
-	public DualisticElement<V> getY() {
+	public E getY() {
 		if (this.infinity) {
 			throw new UnsupportedOperationException();
 		}
