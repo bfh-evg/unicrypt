@@ -98,14 +98,15 @@ public class EncoderExample {
 		ZMod z = ZMod.getInstance(ec.getOrder());
 
 		// Create encoders
-		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.PRINTABLE_ASCProbabilisticECPolynomialFieldEncoderEncodProbabilisticECPolynomialFieldEncoderroupF2mEncoder.getInstance(z, ec);
+		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.PRINTABLE_ASCII);
+		ZModToECPolynomialFieldEncoder encoder2 = ZModToECPolynomialFieldEncoder.getInstance(z, ec);
 
 		// Create composite encoder
 		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);
 
 		// Encode and decode message
-		String text="hello, good morning";
-		
+		String text = "hello, good morning";
+
 		Element message = encoder12.getDomain().getElement("good morning");
 		Element encodedMessage = encoder12.encode(message);
 		Element decodedMessage = encoder12.decode(encodedMessage);
@@ -129,7 +130,7 @@ public class EncoderExample {
 
 		// Create encoders
 		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.LOWER_CASE);
-ProbabilisticECZModPrimeEncoderer encoderProbabilisticECZModPrimeEncoderoder.getInstance(z, ec);
+		ZModToECZModPrimeEncoder encoder2 = ZModToECZModPrimeEncoder.getInstance(z, ec);
 
 		// Create composite encoder
 		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);

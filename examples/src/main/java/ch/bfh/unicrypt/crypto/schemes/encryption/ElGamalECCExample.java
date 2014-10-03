@@ -56,7 +56,6 @@ import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 
 public class ElGamalECCExample {
 
-	
 	public static void example1() throws Exception {
 
 		// Create cyclic group EC Fp (modulo 521 bits) and get default generator
@@ -98,7 +97,7 @@ public class ElGamalECCExample {
 		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
 
 		// Create encoder from Z_q to EC Fp
-		Encoder encoder ProbabilisticECZModPrimeEncoderer.getInstance(cyclicGroup.getZModOrder(), cyclicGroup);
+		Encoder encoder = ZModToECZModPrimeEncoder.getInstance(cyclicGroup.getZModOrder(), cyclicGroup);
 
 		// Create keys
 		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
@@ -167,7 +166,7 @@ public class ElGamalECCExample {
 		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
 
 		// Create encoder from Z_q to EC Fp
-		Encoder encProbabilisticECPolynomialFieldEncoderEncoder.getInstance(cyclicGroup.getZModOrder(), cyclicGroup);
+		Encoder encoder = ZModToECPolynomialFieldEncoder.getInstance(cyclicGroup.getZModOrder(), cyclicGroup);
 
 		// Create keys
 		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
