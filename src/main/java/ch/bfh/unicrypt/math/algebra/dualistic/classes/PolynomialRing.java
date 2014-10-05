@@ -85,7 +85,7 @@ public class PolynomialRing<V>
 		for (Integer i : polynomial.getIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
 		}
-		return this.getElement(coefficientMap);
+		return this.getElementUnchecked(coefficientMap);
 	}
 
 	@Override
@@ -226,7 +226,7 @@ public class PolynomialRing<V>
 			int i = r.getValue().getDegree() - h.getValue().getDegree();
 			HashMap map = new HashMap(1);
 			map.put(i, c);
-			t = ring.getElement(map);
+			t = ring.getElementUnchecked(map);
 			q = t.add(q);
 			r = r.subtract(t.multiply(h));
 		}

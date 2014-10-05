@@ -49,13 +49,13 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V> Type Finite Field ov EC
- * @param <E> Type of FiniteFieldElement
- * @param <A>
+ * @param <V>  Type Finite Field ov EC
+ * @param <DE> Type of FiniteFieldElement
+ * @param <EE>
  */
-public class AbstractECElement<V extends Object, E extends DualisticElement<V>, A extends ECElement<V, E>>
-	   extends AbstractAdditiveElement<EC<V, E>, A, Point<E>>
-	   implements ECElement<V, E> {
+public class AbstractECElement<V extends Object, DE extends DualisticElement<V>, EE extends ECElement<V, DE>>
+	   extends AbstractAdditiveElement<EC<V, DE>, EE, Point<DE>>
+	   implements ECElement<V, DE> {
 
 	/**
 	 *
@@ -64,19 +64,19 @@ public class AbstractECElement<V extends Object, E extends DualisticElement<V>, 
 	private final boolean infinity;
 
 	// the main constructor
-	protected AbstractECElement(EC<V, E> ecGroup, Point<E> value) {
+	protected AbstractECElement(EC<V, DE> ecGroup, Point<DE> value) {
 		super(ecGroup, value);
 		this.infinity = false;
 	}
 
 	// special constructor is necessary for the additional point of infinity
-	protected AbstractECElement(EC<V, E> ecGroup) {
-		super(ecGroup, Point.<E>getInstance());
+	protected AbstractECElement(EC<V, DE> ecGroup) {
+		super(ecGroup, Point.<DE>getInstance());
 		this.infinity = true;
 	}
 
 	// additional convenience getter method to handle to point of infinity
-	public E getX() {
+	public DE getX() {
 		if (this.infinity) {
 			throw new UnsupportedOperationException();
 		}
@@ -84,7 +84,7 @@ public class AbstractECElement<V extends Object, E extends DualisticElement<V>, 
 	}
 
 	// additional convenience getter method to handle to point of infinity
-	public E getY() {
+	public DE getY() {
 		if (this.infinity) {
 			throw new UnsupportedOperationException();
 		}

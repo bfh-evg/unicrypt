@@ -91,7 +91,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 
 	@Override
 	public final E selfApply(final Element element, final BigInteger amount) {
-		if (!this.contains(element) || (amount == null)) {
+		if (!this.contains(element) || amount == null) {
 			throw new IllegalArgumentException();
 		}
 		return this.defaultSelfApply((E) element, amount);

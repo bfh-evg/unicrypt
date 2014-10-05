@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -60,26 +60,26 @@ import java.math.BigInteger;
 /**
  * This abstract class provides a basis implementation for objects of type {@link EC}.
  * <p>
- * @param <F> Generic type of the {@link FiniteField} of this elliptic curve
- * @param <V> Generic type of values stored in the elements of this elliptic curve
- * @param <E>
- * @param <A>
+ * @param <F>  Generic type of the {@link FiniteField} of this elliptic curve
+ * @param <V>  Generic type of values stored in the elements of this elliptic curve
+ * @param <D>
+ * @param <EE>
  */
-public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E extends DualisticElement<V>, A extends ECElement<V, E>>
-	   extends AbstractAdditiveCyclicGroup<A, Point<E>>
-	   implements EC<V, E> {
+public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D extends DualisticElement<V>, EE extends ECElement<V, D>>
+	   extends AbstractAdditiveCyclicGroup<EE, Point<D>>
+	   implements EC<V, D> {
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private final F finiteField;
-	private final E a, b;
-	private final A givenGenerator;
+	private final D a, b;
+	private final EE givenGenerator;
 	private final BigInteger givenOrder, coFactor;
 	private final Point<DualisticElement<V>> infinityPoint = Point.<DualisticElement<V>>getInstance();
 
-	protected AbstractEC(F finiteField, E a, E b, E gx, E gy, BigInteger givenOrder, BigInteger coFactor) {
+	protected AbstractEC(F finiteField, D a, D b, D gx, D gy, BigInteger givenOrder, BigInteger coFactor) {
 		super(Point.class);
 		this.finiteField = finiteField;
 		this.a = a;
@@ -89,7 +89,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 		this.givenGenerator = this.getElement(gx, gy);
 	}
 
-	protected AbstractEC(F finitefield, E a, E b, BigInteger givenOrder, BigInteger coFactor) {
+	protected AbstractEC(F finitefield, D a, D b, BigInteger givenOrder, BigInteger coFactor) {
 		super(Pair.class);
 		this.finiteField = finitefield;
 		this.a = a;
@@ -105,12 +105,12 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 	}
 
 	@Override
-	public final E getB() {
+	public final D getB() {
 		return this.b;
 	}
 
 	@Override
-	public final E getA() {
+	public final D getA() {
 		return this.a;
 	}
 
@@ -130,31 +130,31 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 	}
 
 	@Override
-	public final boolean contains(E xValue) {
+	public final boolean contains(D xValue) {
 		if (xValue == null || !this.getFiniteField().contains(xValue)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractContains((E) xValue);
+		return this.abstractContains((D) xValue);
 	}
 
-	protected abstract boolean abstractContains(E xValue);
+	protected abstract boolean abstractContains(D xValue);
 
 	@Override
-	public final boolean contains(E xValue, E yValue) {
+	public final boolean contains(D xValue, D yValue) {
 		if (xValue == null || yValue == null || !this.getFiniteField().contains(xValue) || !this.getFiniteField().contains(yValue)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractContains((E) xValue, (E) yValue);
+		return this.abstractContains((D) xValue, (D) yValue);
 	}
 
-	protected abstract boolean abstractContains(E xValue, E yValue);
+	protected abstract boolean abstractContains(D xValue, D yValue);
 
 	@Override
-	public final A getElement(E xValue, E yValue) {
+	public final EE getElement(D xValue, D yValue) {
 		if (!this.contains(xValue, yValue)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetElement(Point.getInstance((E) xValue, (E) yValue));
+		return this.abstractGetElement(Point.getInstance((D) xValue, (D) yValue));
 	}
 
 	@Override
@@ -163,13 +163,13 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 	}
 
 	@Override
-	protected boolean abstractContains(Point<E> value) {
+	protected boolean abstractContains(Point<D> value) {
 		return this.abstractContains(value.getX(), value.getY());
 	}
 
 	@Override
-	protected BigIntegerConverter<Point<E>> abstractGetBigIntegerConverter() {
-		return new AbstractBigIntegerConverter<Point<E>>(null) { // class parameter not needed
+	protected BigIntegerConverter<Point<D>> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<Point<D>>(null) { // class parameter not needed
 
 			/**
 			 *
@@ -177,7 +177,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected BigInteger abstractConvert(Point<E> point) {
+			protected BigInteger abstractConvert(Point<D> point) {
 				if (point.equals(infinityPoint)) {
 					return BigInteger.ZERO;
 				}
@@ -185,7 +185,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 			}
 
 			@Override
-			protected Point<E> abstractReconvert(BigInteger value) {
+			protected Point<D> abstractReconvert(BigInteger value) {
 				if (value.equals(BigInteger.ZERO)) {
 					return getZeroElement().getValue();
 				}
@@ -195,18 +195,18 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 				if (xValue == null || yValue == null) {
 					return null; // no such element
 				}
-				return Point.getInstance((E) xValue, (E) yValue);
+				return Point.getInstance((D) xValue, (D) yValue);
 			}
 		};
 	}
 
 	@Override
-	protected A abstractGetDefaultGenerator() {
+	protected EE abstractGetDefaultGenerator() {
 		return this.givenGenerator;
 	}
 
-	private A computeGenerator() {
-		A element = this.selfApply(this.getRandomElement(), this.getCoFactor());
+	private EE computeGenerator() {
+		EE element = this.selfApply(this.getRandomElement(), this.getCoFactor());
 		while (!this.isGenerator(element)) {
 			element = this.getRandomElement();
 		}
@@ -214,12 +214,12 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 	}
 
 	@Override
-	protected boolean abstractIsGenerator(A element) {
+	protected boolean abstractIsGenerator(EE element) {
 		return MathUtil.isPrime(this.getOrder()) && this.selfApply(element, this.getOrder()).isZero();
 	}
 
 	@Override
-	protected A abstractGetRandomElement(RandomByteSequence randomByteSequence) {
+	protected EE abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		if (this.getDefaultGenerator() != null) {
 			ZMod r = ZMod.getInstance(this.getFiniteField().getOrder());
 			return this.selfApply(this.getDefaultGenerator(), r.getRandomElement().getBigInteger());
@@ -230,7 +230,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 
 	@Override
 	protected boolean abstractEquals(Set set) {
-		AbstractEC<F, V, E, A> other = (AbstractEC<F, V, E, A>) set;
+		AbstractEC<F, V, D, EE> other = (AbstractEC<F, V, D, EE>) set;
 		if (!this.finiteField.isEquivalent(other.finiteField)) {
 			return false;
 		}
@@ -266,7 +266,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 
 	@Override
 	protected boolean defaultIsEquivalent(Set set) {
-		AbstractEC<F, V, E, A> other = (AbstractEC<F, V, E, A>) set;
+		AbstractEC<F, V, D, EE> other = (AbstractEC<F, V, D, EE>) set;
 		if (!this.finiteField.isEquivalent(other.finiteField)) {
 			return false;
 		}
@@ -291,7 +291,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, E e
 	 * @param randomByteSequence The given random byte sequence
 	 * @return The random element
 	 */
-	protected abstract A getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence);
+	protected abstract EE getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
 	protected String defaultToStringValue() {

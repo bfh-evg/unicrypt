@@ -141,9 +141,9 @@ public class PolynomialField<V>
 		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
 		PolynomialElement<V> result;
 		if (this.isBinary()) {
-			result = ring.getElement(multiplyBinary(polynomial1, polynomial2));
+			result = ring.getElementUnchecked(multiplyBinary(polynomial1, polynomial2));
 		} else {
-			result = ring.getElement(multiplyNonBinary(polynomial1, polynomial2));
+			result = ring.getElementUnchecked(multiplyNonBinary(polynomial1, polynomial2));
 		}
 		return this.getElement(this.mod(result).getValue());
 	}
@@ -207,7 +207,7 @@ public class PolynomialField<V>
 
 		while (y.equals(this.getZeroElement())) {
 
-			PolynomialElement<V> r = this.getRandomElement(this.getDegree()-1);
+			PolynomialElement<V> r = this.getRandomElement(this.getDegree() - 1);
 			z = this.getZeroElement();
 			PolynomialElement<V> w = b;
 			int m = this.getDegree();
@@ -241,7 +241,7 @@ public class PolynomialField<V>
 
 		while (y.equals(this.getZeroElement())) {
 
-			PolynomialElement<V> r = this.getRandomElement(this.getDegree()-1);
+			PolynomialElement<V> r = this.getRandomElement(this.getDegree() - 1);
 			z = this.getZeroElement();
 			PolynomialElement<V> w = b;
 			int m = this.getDegree();

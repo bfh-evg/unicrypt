@@ -124,7 +124,7 @@ public class PolynomialElement<V>
 				map.put(i, c.divide(value));
 			}
 		}
-		return this.getSet().getElement(map);
+		return this.getSet().getElementUnchecked(map);
 	}
 
 }

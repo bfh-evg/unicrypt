@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -104,6 +104,7 @@ public class ZMod
 	@Override
 	protected ZModElement defaultSelfApply(ZModElement element, BigInteger amount) {
 		return this.abstractGetElement(element.getValue().multiply(amount));
+//		return this.abstractGetElement(element.getValue().multiply(amount).mod(this.modulus));
 	}
 
 	@Override
