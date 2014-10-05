@@ -72,7 +72,7 @@ public class ECGroupExample {
 			BigInteger order = ec.getOrder();
 			Example.printLine(params.toString());
 			Example.printLine(ec);
-			Example.printLine(generator.selfApply(order.multiply(ec.getCoFactor()))); // Result should be
+			Example.printLine(generator.selfApply(order)); // Result should be
 			// Infinity element
 		}
 	}

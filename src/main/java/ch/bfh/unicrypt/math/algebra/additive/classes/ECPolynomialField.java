@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
@@ -190,7 +190,7 @@ public class ECPolynomialField
 
 		c6 = MathUtil.isPrime(getOrder());
 
-		c7 = this.getDefaultGenerator().times(getOrder().multiply(getCoFactor())).equals(this.getZeroElement());
+		c7 = this.getDefaultGenerator().times(getOrder()).equals(this.getZeroElement());
 
 		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(BigInteger.ONE)) {
 			if (TWO.modPow(i, getOrder()).equals(BigInteger.ONE)) {

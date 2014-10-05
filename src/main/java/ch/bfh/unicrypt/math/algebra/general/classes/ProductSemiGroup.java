@@ -181,7 +181,7 @@ public class ProductSemiGroup
 
 	@Override
 	public final Tuple selfApply(Element element, BigInteger amount) {
-		if (!this.contains(element)) {
+		if (!this.contains(element) || amount == null) {
 			throw new IllegalArgumentException();
 		}
 		Tuple tuple = (Tuple) element;

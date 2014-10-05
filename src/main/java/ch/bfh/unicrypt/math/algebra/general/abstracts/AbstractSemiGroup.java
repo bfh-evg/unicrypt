@@ -146,14 +146,18 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 		if (amount.signum() <= 0) {
 			throw new IllegalArgumentException();
 		}
-		Element result = element;
-		for (int i = amount.bitLength() - 2; i >= 0; i--) {
-			result = result.selfApply();
-			if (amount.testBit(i)) {
-				result = result.apply(element);
+		return this.defaultSelfApplyAlgorithm(element, amount);
+	}
+
+	protected E defaultSelfApplyAlgorithm(E element, BigInteger posAmount) {
+		E result = element;
+		for (int i = posAmount.bitLength() - 2; i >= 0; i--) {
+			result = this.abstractApply(result, result);
+			if (posAmount.testBit(i)) {
+				result = this.abstractApply(result, element);
 			}
 		}
-		return (E) result;
+		return result;
 	}
 
 	protected E defaultMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {

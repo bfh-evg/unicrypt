@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -173,7 +173,7 @@ public class ECZModPrime
 		c24 = this.getFiniteField().contains(this.getDefaultGenerator().getValue().getY());
 		c3 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
 		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
-		c5 = getZeroElement().equals(getDefaultGenerator().selfApply(getOrder().multiply(getCoFactor())));
+		c5 = this.getDefaultGenerator().times(getOrder()).equals(this.getZeroElement());
 		c61 = true; //TODO
 		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(BigInteger.ONE)) {
 			if (p.modPow(i, getOrder()).equals(BigInteger.ONE)) {

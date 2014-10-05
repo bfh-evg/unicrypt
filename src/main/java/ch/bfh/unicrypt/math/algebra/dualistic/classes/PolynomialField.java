@@ -232,12 +232,12 @@ public class PolynomialField<V>
 	 * Test if there is a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
 	 * STANDARD X9.62 D.1.6
 	 * <p>
-	 * @param PolynomialElement b
+	 * @param b
 	 * @return true/false
 	 */
 	public boolean hasQuadradicEquationSolution(PolynomialElement<V> b) {
 		PolynomialElement<V> y = this.getZeroElement();
-		PolynomialElement<V> z = this.getZeroElement();
+		PolynomialElement<V> z;
 
 		while (y.equals(this.getZeroElement())) {
 
