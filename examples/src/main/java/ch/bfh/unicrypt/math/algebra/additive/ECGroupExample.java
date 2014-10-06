@@ -93,12 +93,10 @@ public class ECGroupExample {
 
 		for (StandardECPolynomialFieldParams params : SECECCParamsF2m.values()) {
 			ECPolynomialField ec = ECPolynomialField.getInstance(params);
-			ZMod z = ZMod.getInstance(1234567);
 			ECPolynomialElement generator = ec.getDefaultGenerator();
 
-			ZModToECPolynomialFieldEncoder encoder = ZModToECPolynomialFieldEncoder.getInstance(z, ec);
 
-			ECPolynomialElement m = encoder.encode(z.getElement(105));
+			ECPolynomialElement m = ec.getRandomElement();
 			ECPolynomialElement m_generator = m.add(generator);
 
 			BigInteger order = ec.getOrder();
