@@ -55,7 +55,7 @@ import java.util.List;
  * @param <A>
  * @param <V>
  */
-abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V extends Object>
+abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V extends Object>
 	   extends UniCrypt
 	   implements ImmutableArray<V> {
 
@@ -235,9 +235,21 @@ abstract public class AbstractImmutableArray<A extends ImmutableArray<V>, V exte
 
 	@Override
 	public final A remove(int fromIndex, int length) {
+		if (fromIndex < 0 || length < 0 || fromIndex + length > this.length) {
+			throw new IllegalArgumentException();
+		}
+		if (length == 0) {
+			return (A) this;
+		}
 		A prefix = this.extractPrefix(fromIndex);
 		A suffix = this.extractSuffix(this.length - fromIndex - length);
-		return (A) prefix.append(suffix);
+		if (prefix.getLength() == 0) {
+			return suffix;
+		}
+		if (suffix.getLength() == 0) {
+			return prefix;
+		}
+		return prefix.append(suffix);
 	}
 
 	// prefix here means the lowest indices

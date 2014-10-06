@@ -69,16 +69,18 @@ public interface DefaultValueArray<V extends Object>
 
 	public ImmutableArray<V> add();
 
-	public ImmutableArray<V> append(int n);
+	public ImmutableArray<V> appendPrefix(int n);
+
+	public ImmutableArray<V> appendSuffix(int n);
 
 	public ImmutableArray<V> removePrefix();
 
 	public ImmutableArray<V> removeSuffix();
 
-	// left here means making the byte array smaller
+	// left here means making the array smaller
 	public ImmutableArray<V> shiftLeft(int n);
 
-	// right here means making the byte array larger
+	// right here means making the array larger and fill up with default value
 	public ImmutableArray<V> shiftRight(int n);
 
 }
