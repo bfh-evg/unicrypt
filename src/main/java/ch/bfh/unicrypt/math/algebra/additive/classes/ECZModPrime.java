@@ -173,7 +173,7 @@ public class ECZModPrime
 		c24 = this.getFiniteField().contains(this.getDefaultGenerator().getValue().getY());
 		c3 = !getA().power(3).multiply(i4).add(i27.multiply(getB().square())).isZero();
 		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
-		c5 = this.getDefaultGenerator().times(getOrder()).equals(this.getZeroElement());
+		c5 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
 		c61 = true; //TODO
 		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(BigInteger.ONE)) {
 			if (p.modPow(i, getOrder()).equals(BigInteger.ONE)) {
@@ -182,6 +182,23 @@ public class ECZModPrime
 		}
 		c62 = !getOrder().equals(this.getFiniteField().getModulus());
 		return c11 && c21 && c22 && c23 && c24 && c3 && c4 && c5 && c61 && c62;
+	}
+	
+	/**
+	 * Private method implements selfApply to check if a ECZmodElement is a valid generator
+	 * @param element
+	 * @param posAmount
+	 * @return
+	 */
+	private ECZModElement selfApply(ECZModElement element, BigInteger posAmount) {
+		ECZModElement result = element;
+		for (int i = posAmount.bitLength() - 2; i >= 0; i--) {
+			result = result.add(result);
+			if (posAmount.testBit(i)) {
+				result = result.add(element);
+			}
+		}
+		return result;
 	}
 
 	/**

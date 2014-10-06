@@ -52,6 +52,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+
 import java.math.BigInteger;
 
 /**
@@ -190,7 +191,7 @@ public class ECPolynomialField
 
 		c6 = MathUtil.isPrime(getOrder());
 
-		c7 = this.getDefaultGenerator().times(getOrder()).equals(this.getZeroElement());
+		c7 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
 
 		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(BigInteger.ONE)) {
 			if (TWO.modPow(i, getOrder()).equals(BigInteger.ONE)) {
@@ -201,6 +202,23 @@ public class ECPolynomialField
 		c8 = !getOrder().multiply(getCoFactor()).equals(TWO.pow(m));
 
 		return c2 && c3 && c4 && c5 && c6 && c7 && c8;
+	}
+	
+	/**
+	 * Private method implements selfApply to check if a ECPolynomialElement is a valid generator
+	 * @param element
+	 * @param posAmount
+	 * @return
+	 */
+	private ECPolynomialElement selfApply(ECPolynomialElement element, BigInteger posAmount) {
+		ECPolynomialElement result = element;
+		for (int i = posAmount.bitLength() - 2; i >= 0; i--) {
+			result = result.add(result);
+			if (posAmount.testBit(i)) {
+				result = result.add(element);
+			}
+		}
+		return result;
 	}
 
 	//
