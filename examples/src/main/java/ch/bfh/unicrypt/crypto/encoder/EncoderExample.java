@@ -52,6 +52,7 @@ import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
@@ -130,7 +131,7 @@ public class EncoderExample {
 
 		// Create encoders
 		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.LOWER_CASE);
-		ZModToECZModPrimeEncoder encoder2 = ZModToECZModPrimeEncoder.getInstance(z, ec);
+		ZModToECZModPrimeEncoder encoder2 = ZModToECZModPrimeEncoder.getInstance(ec,15);
 
 		// Create composite encoder
 		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);
@@ -142,6 +143,30 @@ public class EncoderExample {
 
 		Example.printLines("Groups", ec, z);
 		Example.printLines("Encoders", encoder1, encoder2, encoder12);
+		Example.printLines("Messages", message, encodedMessage, decodedMessage);
+
+	}
+	
+	/**
+	 * Example shows how to encode an element from ZMod into an elliptic curve over F2m
+	 * <p>
+	 * @throws Exception
+	 */
+	public static void example4() throws Exception {
+
+		// Define underlying groups
+		ECZModPrime ec = ECZModPrime.getInstance(SECECCParamsFp.secp160r1);
+
+		// Create encoders
+		ZModToECZModPrimeEncoder encoder1 = ZModToECZModPrimeEncoder.getInstance(ec,15);
+
+		// Encode and decode message
+		Element message = encoder1.getDomain().getElement(12345);
+		Element encodedMessage = encoder1.encode(message);
+		Element decodedMessage = encoder1.decode(encodedMessage);
+
+		Example.printLines("Groups", ec);
+		Example.printLines("Encoders", encoder1);
 		Example.printLines("Messages", message, encodedMessage, decodedMessage);
 
 	}

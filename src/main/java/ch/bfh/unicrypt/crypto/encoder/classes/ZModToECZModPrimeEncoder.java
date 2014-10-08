@@ -56,6 +56,8 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 import java.math.BigInteger;
 
+import sun.security.util.BigInt;
+
 public class ZModToECZModPrimeEncoder
 	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECZModElement>
 	   implements ProbabilisticEncoder {
@@ -64,42 +66,44 @@ public class ZModToECZModPrimeEncoder
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected static final int SHIFT = 10;
+	protected int shift;
 	private final ECZModPrime ec;
-	private final ZMod zMod;
+	private final ZModPrime zModPrime;
 
-	protected ZModToECZModPrimeEncoder(ZMod zMod,ECZModPrime ec) {
+	protected ZModToECZModPrimeEncoder(ECZModPrime ec,int shift) {
 		this.ec = ec;
-		this.zMod=zMod;
+		this.zModPrime=ec.getFiniteField();
+		this.shift=shift;
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new ECEncodingFunction(this.zMod, this.ec);
+		return new ECEncodingFunction(this.zModPrime, this.ec,this.shift);
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new ECDecodingFunction(ec, this.zMod);
+		return new ECDecodingFunction(ec, this.zModPrime,this.shift);
 	}
 
-	public static ZModToECZModPrimeEncoder getInstance(final ZMod zMod,final ECZModPrime ec) {
-		if (ec == null || zMod==null) {
+	public static ZModToECZModPrimeEncoder getInstance(final ECZModPrime ec,int shift) {
+		if (ec == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ZModToECZModPrimeEncoder(zMod,ec);
+		return new ZModToECZModPrimeEncoder(ec,shift);
 	}
 
 	static class ECEncodingFunction
-		   extends AbstractFunction<ECEncodingFunction, ZMod, ZModElement, ECZModPrime, ECZModElement> {
+		   extends AbstractFunction<ECEncodingFunction, ZModPrime, ZModElement, ECZModPrime, ECZModElement> {
 
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-
-		protected ECEncodingFunction(ZMod domain, ECZModPrime coDomain) {
+		private int shift;
+		protected ECEncodingFunction(ZModPrime domain, ECZModPrime coDomain,int shift) {
 			super(domain, coDomain);
+			this.shift=shift;
 		}
 
 		@Override
@@ -108,22 +112,45 @@ public class ZModToECZModPrimeEncoder
 			ZModPrime zModPrime=this.getCoDomain().getFiniteField();
 			ECZModPrime ecPrime = this.getCoDomain();
 
+			int msgSpace=zModPrime.getOrder().toString(2).length();
+			int msgBitLength=element.getValue().toString(2).length()+2;
+			
+			BigInteger c;
+			
+			
+			if(msgSpace/3>msgBitLength){
+				c=BigInteger.ZERO;
+				this.shift=msgSpace/3*2;
+			}
+			else if(msgSpace/2>msgBitLength){
+				c=BigInteger.ONE;
+				this.shift=msgSpace/2;
+			}
+			else if (msgSpace/3*2>msgBitLength) {
+				c=new BigInteger("2");
+				this.shift=msgSpace/3;
+			}
+			else{
+				c=new BigInteger("3");
+			}
+			
 			BigInteger e = element.getValue();
-			e = e.shiftLeft(SHIFT);
+			e = e.shiftLeft(shift+2);
+			e=e.add(c);
 
 			if (!zModPrime.contains(e)) {
 				throw new ProbabilisticEncodingException(e + " can not be encoded");
 			}
 
 			ZModElement x = zModPrime.getElement(e);
-			final ZModElement ONE = zModPrime.getOneElement();
+			ZModElement stepp = zModPrime.getElement(4);
 
 			int count = 0;
 			while (!ecPrime.contains(x)) {
-				if (count >= (1 << SHIFT)) {
+				if (count >= (1 << shift)) {
 					throw new ProbabilisticEncodingException(e + " can not be encoded");
 				}
-				x = x.add(ONE);
+				x = x.add(stepp);
 				count++;
 			}
 			
@@ -133,7 +160,12 @@ public class ZModToECZModPrimeEncoder
 				return ecPrime.getElement(x, y);
 			}
 			
-			e=element.invert().getValue().shiftLeft(SHIFT);
+			
+			element=element.invert();
+			msgBitLength=element.getValue().toString(2).length();
+			e=element.getValue().shiftLeft(shift+2).add(c);
+
+			
 			
 			if (!zModPrime.contains(e)) {
 				throw new ProbabilisticEncodingException(e + " can not be encoded");
@@ -144,10 +176,10 @@ public class ZModToECZModPrimeEncoder
 
 			count = 0;
 			while (!ecPrime.contains(x)) {
-				if (count >= (1 << SHIFT)) {
+				if (count >= (1 << shift)) {
 					throw new ProbabilisticEncodingException(e + " can not be encoded");
 				}
-				x = x.add(ONE);
+				x = x.add(stepp);
 				count++;
 			}
 			
@@ -170,31 +202,50 @@ public class ZModToECZModPrimeEncoder
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-
-		protected ECDecodingFunction(ECZModPrime domain, ZMod coDomain) {
+		private int shift;
+		
+		protected ECDecodingFunction(ECZModPrime domain, ZMod coDomain,int shift) {
 			super(domain, coDomain);
+			this.shift=shift;
 		}
 
 		@Override
 		protected ZModElement abstractApply(ECZModElement element, RandomByteSequence randomByteSequence) {
 			ECZModPrime ecPrime = this.getDomain();
-			ZModPrime zModPrime=this.getDomain().getFiniteField();
+			ZMod zModPrime=this.getDomain().getFiniteField();
+			int msgSpace=zModPrime.getOrder().toString(2).length();
+			
 			ZModElement x=(ZModElement) element.getX();
 			ZModElement y=(ZModElement) element.getY();
 			
 			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
 			ZModElement yEnc = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
 			
+			BigInteger x1;
 			if(y.isEquivalent(yEnc)){
-				BigInteger x1 = element.getX().getValue();
-				x1 = x1.shiftRight(SHIFT);
-				return this.getCoDomain().getElement(x1);
+				x1 = element.getX().getValue();
+				
 			}
 			else{
-				BigInteger x1 = element.getX().invert().getValue();
-				x1 = x1.shiftRight(SHIFT);
-				return this.getCoDomain().getElement(x1);
+				x1 = element.getX().invert().getValue();
 			}
+			
+			BigInteger c=x1.subtract(x1.shiftRight(2).shiftLeft(2));
+			
+			if(c.equals(BigInteger.ZERO)){
+				this.shift=msgSpace/3*2;
+			}
+			else if (c.equals(BigInteger.ONE)) {
+				this.shift=msgSpace/2;
+			}
+			else if (c.equals(new BigInteger("2"))) {
+				this.shift=msgSpace/3;
+			}
+			
+			x1=x1.shiftRight(shift+2);
+			
+			return zModPrime.getElement(x1);
+			
 		}
 
 	}
