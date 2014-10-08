@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureSc
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
@@ -74,6 +75,11 @@ public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME exten
 	@Override
 	public RS getRandomizationSpace() {
 		return this.randomizationSpace;
+	}
+
+	@Override
+	public SE sign(final Element privateKey, final Element message) {
+		return this.sign(privateKey, message, HybridRandomByteSequence.getInstance());
 	}
 
 	@Override

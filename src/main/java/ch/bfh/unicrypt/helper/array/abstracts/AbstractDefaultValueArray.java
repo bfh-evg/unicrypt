@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 
 /**
  *
@@ -50,7 +49,7 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
  * @param <A>
  * @param <V>
  */
-abstract public class AbstractDefaultValueArray<A extends ImmutableArray<V>, V extends Object>
+abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueArray<A, V>, V extends Object>
 	   extends AbstractImmutableArray<A, V>
 	   implements DefaultValueArray<V> {
 
@@ -114,7 +113,19 @@ abstract public class AbstractDefaultValueArray<A extends ImmutableArray<V>, V e
 	}
 
 	@Override
-	public final A append(int n) {
+	public final A appendPrefix(int n) {
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (this.reverse) {
+			return this.abstractGetInstance(this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
+		} else {
+			return this.abstractGetInstance(this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
+		}
+	}
+
+	@Override
+	public final A appendSuffix(int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -122,6 +133,18 @@ abstract public class AbstractDefaultValueArray<A extends ImmutableArray<V>, V e
 			return this.abstractGetInstance(this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
 		} else {
 			return this.abstractGetInstance(this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
+		}
+	}
+
+	@Override
+	public final A appendPrefixAndSuffix(int n, int m) {
+		if (n < 0 || m < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (this.reverse) {
+			return this.abstractGetInstance(this.offset, this.length + n + m, this.trailer + m, this.header + n, this.reverse);
+		} else {
+			return this.abstractGetInstance(this.offset, this.length + n + m, this.trailer + n, this.header + m, this.reverse);
 		}
 	}
 
@@ -148,11 +171,7 @@ abstract public class AbstractDefaultValueArray<A extends ImmutableArray<V>, V e
 		if (n <= 0) {
 			return this.shiftLeft(-n);
 		}
-		if (this.reverse) {
-			return this.abstractGetInstance(this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		} else {
-			return this.abstractGetInstance(this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		}
+		return this.appendPrefix(n);
 	}
 
 	@Override
