@@ -53,11 +53,12 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-
 import java.math.BigInteger;
-
-import sun.security.util.BigInt;
-
+/**
+ * 
+ * @author Christian Lutz
+ *
+ */
 public class ZModToECZModPrimeEncoder
 	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECZModElement>
 	   implements ProbabilisticEncoder {
@@ -69,7 +70,7 @@ public class ZModToECZModPrimeEncoder
 	protected int shift;
 	private final ECZModPrime ec;
 	private final ZModPrime zModPrime;
-
+	
 	protected ZModToECZModPrimeEncoder(ECZModPrime ec,int shift) {
 		this.ec = ec;
 		this.zModPrime=ec.getFiniteField();
@@ -163,7 +164,27 @@ public class ZModToECZModPrimeEncoder
 			
 			element=element.invert();
 			msgBitLength=element.getValue().toString(2).length();
-			e=element.getValue().shiftLeft(shift+2).add(c);
+			
+			if(msgSpace/3>msgBitLength){
+				c=BigInteger.ZERO;
+				this.shift=msgSpace/3*2;
+			}
+			else if(msgSpace/2>msgBitLength){
+				c=BigInteger.ONE;
+				this.shift=msgSpace/2;
+			}
+			else if (msgSpace/3*2>msgBitLength) {
+				c=new BigInteger("2");
+				this.shift=msgSpace/3;
+			}
+			else{
+				c=new BigInteger("3");
+			}
+			
+			e = element.getValue();
+			e = e.shiftLeft(shift+2);
+			e=e.add(c);
+
 
 			
 			
@@ -212,7 +233,7 @@ public class ZModToECZModPrimeEncoder
 		@Override
 		protected ZModElement abstractApply(ECZModElement element, RandomByteSequence randomByteSequence) {
 			ECZModPrime ecPrime = this.getDomain();
-			ZMod zModPrime=this.getDomain().getFiniteField();
+			ZModPrime zModPrime=this.getDomain().getFiniteField();
 			int msgSpace=zModPrime.getOrder().toString(2).length();
 			
 			ZModElement x=(ZModElement) element.getX();
@@ -221,14 +242,8 @@ public class ZModToECZModPrimeEncoder
 			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
 			ZModElement yEnc = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
 			
-			BigInteger x1;
-			if(y.isEquivalent(yEnc)){
-				x1 = element.getX().getValue();
-				
-			}
-			else{
-				x1 = element.getX().invert().getValue();
-			}
+			BigInteger x1=element.getX().getBigInteger();
+			
 			
 			BigInteger c=x1.subtract(x1.shiftRight(2).shiftLeft(2));
 			
@@ -244,7 +259,13 @@ public class ZModToECZModPrimeEncoder
 			
 			x1=x1.shiftRight(shift+2);
 			
-			return zModPrime.getElement(x1);
+			if(y.isEquivalent(yEnc)){
+				return zModPrime.getElement(x1);
+				
+			}
+			else{
+				return zModPrime.getElement(x1).invert();
+			}
 			
 		}
 

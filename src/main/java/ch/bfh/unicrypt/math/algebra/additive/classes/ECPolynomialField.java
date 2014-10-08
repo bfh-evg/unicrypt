@@ -49,7 +49,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
@@ -109,14 +108,18 @@ public class ECPolynomialField
 	 * @param x x-coordinate of point
 	 * @return
 	 */
-	public Tuple getY(PolynomialElement<ZModTwo> x) {
+	public ECPolynomialElement[] getY(PolynomialElement<ZModTwo> x) {
 		if (!this.contains(x)) {
 			throw new IllegalArgumentException("No y-coordinate exists for the given x-coordinate: " + x);
 		}
 
 		PolynomialElement<ZModTwo> t = x.add(this.getA()).add(this.getB().divide(x.square()));
 		PolynomialElement<ZModTwo> l = this.getFiniteField().solveQuadradicEquation(t);
-		return Tuple.getInstance(l.add(l.getSet().getOneElement()).multiply(x), l.multiply(x));
+		
+		ECPolynomialElement y1=this.getElement(x, l.add(l.getSet().getOneElement()).multiply(x));
+		ECPolynomialElement y2=this.getElement(x, l.multiply(x));
+		ECPolynomialElement[] y={y1,y2};
+		return y;
 	}
 
 	@Override
