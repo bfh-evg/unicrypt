@@ -73,6 +73,8 @@ public interface DefaultValueArray<V extends Object>
 
 	public ImmutableArray<V> appendSuffix(int n);
 
+	public ImmutableArray<V> appendPrefixAndSuffix(int n, int m);
+
 	public ImmutableArray<V> removePrefix();
 
 	public ImmutableArray<V> removeSuffix();

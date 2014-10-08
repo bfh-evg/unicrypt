@@ -137,6 +137,18 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 	}
 
 	@Override
+	public final A appendPrefixAndSuffix(int n, int m) {
+		if (n < 0 || m < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (this.reverse) {
+			return this.abstractGetInstance(this.offset, this.length + n + m, this.trailer + m, this.header + n, this.reverse);
+		} else {
+			return this.abstractGetInstance(this.offset, this.length + n + m, this.trailer + n, this.header + m, this.reverse);
+		}
+	}
+
+	@Override
 	public final A removePrefix() {
 		return this.removePrefix(this.countPrefix());
 	}

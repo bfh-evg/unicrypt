@@ -275,4 +275,28 @@ public class LongArray
 							 this.reverse);
 	}
 
+	// internal method used in subclasses (the remaining bits are filled up with 0)
+	protected final LongArray extractBits(int offset, int n) {
+		if (n == 0) {
+			return LongArray.getInstance();
+		}
+		if (offset % Long.SIZE == 0 && n % Long.SIZE == 0) {
+			return this.extract(offset / Long.SIZE, n / Long.SIZE);
+		}
+		int reverseOffset = Long.SIZE - offset;
+		long[] result = new long[(n - 1) / Long.SIZE + 1];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = (this.abstractGetLongAt(i) >>> offset);
+			if (i < this.length - 1) {
+				result[i] = result[i] | (this.abstractGetLongAt(i + 1) << reverseOffset);
+			}
+		}
+		return LongArray.getInstance(result);
+	}
+
+	public static void main(String[] args) {
+		LongArray l = LongArray.getInstance(0xFFFFFFFFFFFFFFFFL, 0x0L, 0xFFFFFFFFFFFFFFFFL);
+		System.out.println(l);
+	}
+
 }
