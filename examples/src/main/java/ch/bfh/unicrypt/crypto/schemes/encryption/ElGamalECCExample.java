@@ -97,7 +97,7 @@ public class ElGamalECCExample {
 		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
 
 		// Create encoder from Z_q to EC Fp
-		Encoder encoder = ZModToECZModPrimeEncoder.getInstance(cyclicGroup.getZModOrder(), cyclicGroup);
+		Encoder encoder = ZModToECZModPrimeEncoder.getInstance(cyclicGroup,15);
 
 		// Create keys
 		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
@@ -166,7 +166,7 @@ public class ElGamalECCExample {
 		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
 
 		// Create encoder from Z_q to EC Fp
-		Encoder encoder = ZModToECPolynomialFieldEncoder.getInstance(cyclicGroup.getZModOrder(), cyclicGroup);
+		Encoder encoder = ZModToECPolynomialFieldEncoder.getInstance(cyclicGroup.getZModOrder(), cyclicGroup,15);
 
 		// Create keys
 		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
