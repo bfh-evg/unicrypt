@@ -1,4 +1,4 @@
 unicrypt
 ========
 
-unicrypt library
+unicrypt library version 2.0
