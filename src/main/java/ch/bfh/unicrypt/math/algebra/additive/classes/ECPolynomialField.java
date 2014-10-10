@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
@@ -81,10 +82,11 @@ public class ECPolynomialField
 	protected boolean abstractContains(PolynomialElement<ZModTwo> x) {
 		DualisticElement<ZModTwo> traceX = traceGF2m(x, this);
 		DualisticElement<ZModTwo> traceA = traceGF2m(this.getA(), this);
-		DualisticElement<ZModTwo> traceAX = traceGF2m(this.getA().divide(x), this);
+		DualisticElement<ZModTwo> traceAX = traceGF2m(x.add(this.getA()).add(this.getB().divide(x.square())), this);
 
+		
 		boolean e1 = traceA.isEquivalent(traceX);
-		boolean e2 = traceAX.isEquivalent(traceAX.getSet().getZeroElement());
+		boolean e2 = traceAX.isEquivalent(ZModTwo.ZERO);
 
 		return e1 && e2;
 	}

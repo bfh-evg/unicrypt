@@ -75,7 +75,7 @@ public class EncoderExample {
 
 
 
-		Element message = encoder1.getDomain().getElement(18);
+		Element message = encoder1.getDomain().getElement(12350);
 		Element encodedMessage = encoder1.encode(message);
 		Element decodedMessage = encoder1.decode(encodedMessage);
 
@@ -99,7 +99,7 @@ public class EncoderExample {
 		ZModToECZModPrimeEncoder encoder1 = ZModToECZModPrimeEncoder.getInstance(ec,15);
 
 		// Encode and decode message
-		Element message = encoder1.getDomain().getElement(1234567);
+		Element message = encoder1.getDomain().getElement(123456);
 		Element encodedMessage = encoder1.encode(message);
 		Element decodedMessage = encoder1.decode(encodedMessage);
 

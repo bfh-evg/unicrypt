@@ -205,21 +205,22 @@ public class PolynomialField<V>
 		PolynomialElement<V> y = this.getZeroElement();
 		PolynomialElement<V> z = this.getZeroElement();
 
-		while (y.equals(this.getZeroElement())) {
+		while (y.isEquivalent(this.getZeroElement())) {
 
-			PolynomialElement<V> r = this.getRandomElement(this.getDegree() - 1);
+			PolynomialElement<V> r = this.getRandomElement(this.getDegree()-1);
 			z = this.getZeroElement();
 			PolynomialElement<V> w = b;
 			int m = this.getDegree();
 
-			for (int i = 1; i <= m - 1; i++) {
+			for (int i = 1; i < m; i++) {
 
-				z = z.square().add(w.square().multiply((r)));
-				w = w.square().add(b);
+				PolynomialElement<V> w2=w.square();
+				z = z.square().add(w2.multiply(r));
+				w = w2.add(b);
 			}
 
 			y = z.square().add(z);
-			if (!w.equals(this.getZeroElement())) {
+			if (!w.isEquivalent(this.getZeroElement())) {
 				throw new IllegalArgumentException("No solution for quadratic equation was found");
 			}
 
