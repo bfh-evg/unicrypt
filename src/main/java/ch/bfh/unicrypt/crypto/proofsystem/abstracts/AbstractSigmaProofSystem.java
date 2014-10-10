@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaProofSystem;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -76,8 +76,8 @@ public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Elem
 	}
 
 	@Override
-	public final Z getChallengeSpace() {
-		return Z.getInstance(this.getPreimageProofFunction().getDomain().getMinimalOrder());
+	public final ZMod getChallengeSpace() {
+		return ZMod.getInstance(this.getPreimageProofFunction().getDomain().getMinimalOrder());
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Elem
 		return (proofFunction == null || challengeGenerator == null
 			   || !proofFunction.getCoDomain().isEquivalent(challengeGenerator.getPublicInputSpace())
 			   || !proofFunction.getCoDomain().isEquivalent(challengeGenerator.getCommitmentSpace())
-			   || !Z.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator.getChallengeSpace()));
+			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator.getChallengeSpace()));
 
 	}
 

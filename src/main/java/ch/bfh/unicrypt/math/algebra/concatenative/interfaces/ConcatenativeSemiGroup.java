@@ -178,9 +178,6 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	public ConcatenativeElement<V> getElementFrom(ByteTree byteTree);
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(Element element);
-
-	@Override
 	public ConcatenativeElement<V> getRandomElement();
 
 	@Override

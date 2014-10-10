@@ -71,13 +71,8 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> getElementFrom(ByteTree byteTree);
 
 	@Override
-	public DualisticElement<V> getElementFrom(Element element);
-
-	@Override
 	public DualisticElement<V> getRandomElement();
 
-//	@Override
-//	public DualisticElement getElement(int value);
 	@Override
 	public DualisticElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 

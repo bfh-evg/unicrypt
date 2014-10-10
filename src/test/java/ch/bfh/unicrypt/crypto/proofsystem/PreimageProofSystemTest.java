@@ -41,14 +41,14 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem;
 
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -79,8 +79,8 @@ public class PreimageProofSystemTest {
 
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), f.getCoDomain(), Z.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
+			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
 
@@ -98,8 +98,8 @@ public class PreimageProofSystemTest {
 
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q2.getElement(4));
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), f.getCoDomain(), Z.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
+			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
 
@@ -117,7 +117,7 @@ public class PreimageProofSystemTest {
 
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, this.proverId);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
 		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
 
 		// Valid proof
@@ -186,8 +186,8 @@ public class PreimageProofSystemTest {
 	public void TestPreimageProof_Exception() {
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
-			   f.getDomain(), f.getCoDomain(), Z.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
+			   f.getDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
 

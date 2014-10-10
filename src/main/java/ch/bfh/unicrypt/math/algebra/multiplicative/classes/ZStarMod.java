@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
-import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
@@ -132,12 +132,8 @@ public class ZStarMod
 	// various super-classes
 	//
 	@Override
-	protected ZStarModElement defaultSelfApply(final ZStarModElement element, final BigInteger amount) {
-		BigInteger newAmount = amount;
-		if (this.hasKnownOrder()) {
-			newAmount = amount.mod(this.getOrder());
-		}
-		return this.abstractGetElement(element.getValue().modPow(newAmount, this.modulus));
+	protected ZStarModElement defaultSelfApplyAlgorithm(final ZStarModElement element, final BigInteger posAmount) {
+		return this.abstractGetElement(element.getValue().modPow(posAmount, this.modulus));
 	}
 
 	@Override

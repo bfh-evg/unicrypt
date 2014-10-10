@@ -42,12 +42,12 @@
 package ch.bfh.unicrypt.math.algebra.additive;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECPolynomialFieldEncoder;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
@@ -66,11 +66,11 @@ public class ECGroupExample {
 		// Example with StandardECZModPrime
 		for (StandardECZModParams params : SECECCParamsFp.values()) {
 
-			StandardECZModPrime ec = StandardECZModPrime
-				   .getInstance(params);
-			ECElement<BigInteger> generator = ec.getDefaultGenerator();
+			ECZModPrime ec = ECZModPrime.getInstance(params);
+			ECZModElement generator = ec.getDefaultGenerator();
 			ec.getRandomElement();
 			BigInteger order = ec.getOrder();
+			Example.printLine(params.toString());
 			Example.printLine(ec);
 			Example.printLine(generator.selfApply(order)); // Result should be
 			// Infinity element
@@ -78,17 +78,35 @@ public class ECGroupExample {
 	}
 
 	public static void example2() throws Exception {
+		ECPolynomialField ec = ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
+		ECPolynomialElement r = ec.getRandomElement();
+		Example.printLine(r.getY());
+		Example.printLine(r.invert().getY());
+		Example.printLine(r.getY());
+		Example.printLine(ec.getDefaultGenerator());
+		Example.printLine(ec.getDefaultGenerator().invert());
+
+	}
+
+	public static void example3() throws Exception {
 		// Example with StandardECPolynomialField
 
 		for (StandardECPolynomialFieldParams params : SECECCParamsF2m.values()) {
-			StandardECPolynomialField ec = StandardECPolynomialField
-				   .getInstance(params);
-			ECElement<Polynomial<DualisticElement<ZModTwo>>> generator = ec.getDefaultGenerator();
-			ec.getRandomElement();
-			BigInteger order = ec.getOrder();
-			Example.printLine(ec.getFiniteField().getIrreduciblePolynomial());
-			Example.printLine(generator.selfApply(order)); // Result should be Infinity element
+			ECPolynomialField ec = ECPolynomialField.getInstance(params);
+			ECPolynomialElement generator = ec.getDefaultGenerator();
 
+
+			ECPolynomialElement m = ec.getRandomElement();
+			ECPolynomialElement m_generator = m.add(generator);
+
+			BigInteger order = ec.getOrder();
+
+			Example.printLine(params.toString());
+			Example.printLine("Message" + m.selfApply(order));
+			Example.printLine("Message plus Generator" + m_generator.add(generator).selfApply(order));
+			Example.printLine("Gen " + generator.selfApply(order));
+
+			// Result should be Infinity element
 		}
 	}
 

@@ -39,55 +39,65 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.classes;
+package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
-import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 
 /**
- * 
- * @author Christian Lutz
  *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>  Type Finite Field ov EC
+ * @param <DE> Type of FiniteFieldElement
+ * @param <EE>
  */
-public class StandardECZModPrime
-	   extends ECZModPrime {
+public class AbstractECElement<V extends Object, DE extends DualisticElement<V>, EE extends ECElement<V, DE>>
+	   extends AbstractAdditiveElement<EC<V, DE>, EE, Point<DE>>
+	   implements ECElement<V, DE> {
 
-	private StandardECZModPrime(ZModPrime field, ZModElement a,
-		   ZModElement b, ZModElement gx, ZModElement gy,
-		   BigInteger order, BigInteger h) {
-		super(field, a, b, gx, gy, order, h);
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+	private final boolean infinity;
+
+	// the main constructor
+	protected AbstractECElement(EC<V, DE> ecGroup, Point<DE> value) {
+		super(ecGroup, value);
+		this.infinity = false;
 	}
 
-	public static StandardECZModPrime getInstance(final StandardECZModParams params) throws Exception {
-		ZModPrime field;
-		ZModElement a, b, gx, gy;
-		BigInteger order, h;
+	// special constructor is necessary for the additional point of infinity
+	protected AbstractECElement(EC<V, DE> ecGroup) {
+		super(ecGroup, Point.<DE>getInstance());
+		this.infinity = true;
+	}
 
-		field = params.getFiniteField();
-		a = params.getA();
-		b = params.getB();
-		gx = params.getGx();
-		gy = params.getGy();
-		order = params.getOrder();
-		h = params.getH();
-
-		StandardECZModPrime newInstance = new StandardECZModPrime(field, a, b, gx, gy, order, h);
-		if(newInstance.isValid()){
-			return newInstance;
+	// additional convenience getter method to handle to point of infinity
+	public DE getX() {
+		if (this.infinity) {
+			throw new UnsupportedOperationException();
 		}
-		else{
-			throw new IllegalArgumentException("Curve parameter are not valid!");
+		return this.getValue().getX();
+	}
+
+	// additional convenience getter method to handle to point of infinity
+	public DE getY() {
+		if (this.infinity) {
+			throw new UnsupportedOperationException();
+		}
+		return this.getValue().getY();
+	}
+
+	@Override
+	protected String defaultToStringValue() {
+		if (this.infinity) {
+			return "Infinity";
+		} else {
+			return "(" + this.getX().getValue() + "," + this.getY().getValue() + ")";
 		}
 	}
 
-//	public static void main(String[] args) {
-//
-//		for (SECECCParamsFp params : SECECCParamsFp.values()) {
-//
-//			StandardECZModPrime ec = StandardECZModPrime.getInstance(params);
-//			System.out.println(params.name() + "(\"" + ec.getFiniteField().getModulus().toString(16) + "\",\"" + ec.getA().getValue().toString(16) + "\",\"" + ec.getB().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getValue().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getValue().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getCoFactor() + "\"),");
-//		}
-//	}
 }

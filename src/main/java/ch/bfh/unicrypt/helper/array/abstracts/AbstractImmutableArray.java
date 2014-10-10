@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.iterable.IterableRange;
 import java.lang.reflect.Array;
 import java.util.Iterator;
@@ -54,9 +55,9 @@ import java.util.List;
  * @param <A>
  * @param <V>
  */
-abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Object>
+abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V extends Object>
 	   extends UniCrypt
-	   implements ch.bfh.unicrypt.helper.array.interfaces.Array<A, V> {
+	   implements ImmutableArray<V> {
 
 	protected Class valueClass;
 	protected int length;
@@ -64,7 +65,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	protected boolean reverse;
 	protected Boolean uniform = null;
 
-	protected AbstractArray(Class valueClass, int length, int offset, boolean reverse) {
+	protected AbstractImmutableArray(Class valueClass, int length, int offset, boolean reverse) {
 		this.valueClass = valueClass;
 		this.length = length;
 		this.offset = offset;
@@ -75,17 +76,17 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public int getLength() {
+	public final int getLength() {
 		return this.length;
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public final boolean isEmpty() {
 		return this.length == 0;
 	}
 
 	@Override
-	public boolean isUniform() {
+	public final boolean isUniform() {
 		if (this.uniform == null) {
 			this.uniform = true;
 			if (this.length > 1) {
@@ -102,15 +103,19 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public Iterable<Integer> getAllIndices() {
+	public final Iterable<Integer> getAllIndices() {
 		return IterableRange.getInstance(0, this.length - 1);
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(V value) {
+	public final Iterable<Integer> getIndices(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
+		return defaultGetIndices(value);
+	}
+
+	protected Iterable<Integer> defaultGetIndices(V value) {
 		List<Integer> result = new LinkedList<Integer>();
 		for (int i : this.getAllIndices()) {
 			if (this.abstractGetAt(i).equals(value)) {
@@ -121,10 +126,14 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(V value) {
+	public final Iterable<Integer> getIndicesExcept(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
+		return defaultGetIndicesExcept(value);
+	}
+
+	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
 		List<Integer> result = new LinkedList<Integer>();
 		for (int i : this.getAllIndices()) {
 			if (!this.abstractGetAt(i).equals(value)) {
@@ -135,7 +144,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public int count(V value) {
+	public final int count(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
@@ -149,7 +158,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public int countPrefix(V value) {
+	public final int countPrefix(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
@@ -165,7 +174,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public int countSuffix(V value) {
+	public final int countSuffix(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
@@ -181,7 +190,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public V getAt(int index) {
+	public final V getAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -189,17 +198,17 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public V getFirst() {
+	public final V getFirst() {
 		return this.getAt(0);
 	}
 
 	@Override
-	public V getLast() {
+	public final V getLast() {
 		return this.getAt(this.length - 1);
 	}
 
 	@Override
-	public A extract(int fromIndex, int length) {
+	public final A extract(int fromIndex, int length) {
 		if (fromIndex < 0 || length < 0 || fromIndex + length > this.length) {
 			throw new IllegalArgumentException();
 		}
@@ -210,70 +219,79 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public A extractPrefix(int length) {
+	public final A extractPrefix(int length) {
 		return this.extract(0, length);
 	}
 
 	@Override
-	public A extractSuffix(int length) {
+	public final A extractSuffix(int length) {
 		return this.extract(this.length - length, length);
 	}
 
 	@Override
-	public A extractRange(int fromIndex, int toIndex) {
+	public final A extractRange(int fromIndex, int toIndex) {
 		return this.extract(fromIndex, toIndex - fromIndex + 1);
 	}
 
 	@Override
-	public A remove(int fromIndex, int length) {
+	public final A remove(int fromIndex, int length) {
+		if (fromIndex < 0 || length < 0 || fromIndex + length > this.length) {
+			throw new IllegalArgumentException();
+		}
+		if (length == 0) {
+			return (A) this;
+		}
 		A prefix = this.extractPrefix(fromIndex);
 		A suffix = this.extractSuffix(this.length - fromIndex - length);
+		if (prefix.getLength() == 0) {
+			return suffix;
+		}
+		if (suffix.getLength() == 0) {
+			return prefix;
+		}
 		return prefix.append(suffix);
 	}
 
 	// prefix here means the lowest indices
 	@Override
-	public A removePrefix(int length) {
+	public final A removePrefix(int length) {
 		return this.remove(0, length);
 	}
 
 	// trailing here means the highest indices
 	@Override
-	public A removeSuffix(int length) {
+	public final A removeSuffix(int length) {
 		return this.remove(this.length - length, length);
 	}
 
 	@Override
-	public A removeRange(int fromIndex, int toIndex) {
+	public final A removeRange(int fromIndex, int toIndex) {
 		return this.remove(fromIndex, toIndex - fromIndex + 1);
 	}
 
 	@Override
-	public A removeAt(int index) {
+	public final A removeAt(int index) {
 		return this.removeRange(index, index);
 	}
 
 	@Override
-	public A append(A other) {
+	public final A append(ImmutableArray<V> other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.length == 0) {
-			return other;
-		}
-		if (other.length == 0) {
+		if (other.getLength() == 0) {
 			return (A) this;
 		}
 		return this.abstractAppend(other);
 	}
 
 	@Override
-	public A add(V value) {
+	public final A add(V value) {
 		return this.insertAt(this.length, value);
 	}
 
 	@Override
-	public A insertAt(int index, V value) {
+	public final A insertAt(int index, V value) {
 		if (index < 0 || index > this.length) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -284,7 +302,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public A replaceAt(int index, V value) {
+	public final A replaceAt(int index, V value) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -298,7 +316,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public A[] split(int... indices) {
+	public final A[] split(int... indices) {
 		if (indices == null) {
 			throw new IllegalArgumentException();
 		}
@@ -317,7 +335,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public A reverse() {
+	public final A reverse() {
 		return this.abstractReverse();
 	}
 
@@ -327,7 +345,7 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 	}
 
 	@Override
-	public Iterator<V> iterator() {
+	public final Iterator<V> iterator() {
 		return new Iterator<V>() {
 
 			int currentIndex = 0;
@@ -364,10 +382,10 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 		if (this == value) {
 			return true;
 		}
-		if (value == null || !(value instanceof AbstractArray)) {
+		if (value == null || !(value instanceof AbstractImmutableArray)) {
 			return false;
 		}
-		final AbstractArray other = (AbstractArray) value;
+		final AbstractImmutableArray other = (AbstractImmutableArray) value;
 		if (this.length != other.length) {
 			return false;
 		}
@@ -383,12 +401,12 @@ abstract public class AbstractArray<A extends AbstractArray<A, V>, V extends Obj
 
 	abstract protected A abstractExtract(int fromIndex, int length);
 
-	abstract protected A abstractAppend(A other);
-
 	abstract protected A abstractInsertAt(int index, V value);
 
 	abstract protected A abstractReplaceAt(int index, V value);
 
 	abstract protected A abstractReverse();
+
+	abstract protected A abstractAppend(ImmutableArray<V> other);
 
 }

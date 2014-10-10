@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -51,6 +51,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import java.math.BigInteger;
 
 /**
  *
@@ -79,8 +80,8 @@ public abstract class AbstractShuffleProofSystem
 		this.kr = kr;
 		this.independentGenerators = independentGenerators;
 
-		this.ke = ((Z) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getDistribution().getUpperBound().bitLength();
-		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getDistribution().getUpperBound().bitLength();
+		this.ke = ((ZMod) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus().subtract(BigInteger.ONE).bitLength();
+		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(BigInteger.ONE).bitLength();
 	}
 
 	//===================================================================================
@@ -100,7 +101,7 @@ public abstract class AbstractShuffleProofSystem
 	}
 
 	// c: [0,...,2^kc - 1]
-	public Z getChallengeSpace() {
+	public ZMod getChallengeSpace() {
 		return this.getSigmaChallengeGenerator().getChallengeSpace();
 	}
 
@@ -157,13 +158,13 @@ public abstract class AbstractShuffleProofSystem
 	// Helpers to create spaces
 	//
 	// [0,...,2^kc - 1] \subseteq Z
-	protected static Z createChallengeSpace(int kc) {
-		return Z.getInstance(kc);
+	protected static ZMod createChallengeSpace(int k) {
+		return ZMod.getInstance(BigInteger.valueOf(2).pow(k));
 	}
 
 	// [0,...,2^ke - 1]^N \subseteq Z^N
-	protected static ProductGroup createEValuesGeneratorChallengeSpace(int ke, int size) {
-		return ProductGroup.getInstance(Z.getInstance(ke), size);
+	protected static ProductGroup createEValuesGeneratorChallengeSpace(int k, int size) {
+		return ProductGroup.getInstance(createChallengeSpace(k), size);
 	}
 
 	//===================================================================================

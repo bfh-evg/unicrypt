@@ -41,23 +41,23 @@
  */
 package ch.bfh.unicrypt.helper.array.abstracts;
 
-import ch.bfh.unicrypt.helper.array.interfaces.ArrayWithDefault;
+import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <A>
- * @param <T>
+ * @param <V>
  */
-abstract public class AbstractArrayWithDefault<A extends AbstractArray<A, T>, T extends Object>
-	   extends AbstractArray<A, T>
-	   implements ArrayWithDefault<A, T> {
+abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueArray<A, V>, V extends Object>
+	   extends AbstractImmutableArray<A, V>
+	   implements DefaultValueArray<V> {
 
-	protected final T defaultValue;
+	protected final V defaultValue;
 	protected int trailer; // number of trailing zeros not included in byteArray
 	protected int header; // number of leading zeros not included in byteArray
 
-	protected AbstractArrayWithDefault(Class valueClass, T defaultValue, int trailer, int header, int length, int offset, boolean reverse) {
+	protected AbstractDefaultValueArray(Class valueClass, V defaultValue, int trailer, int header, int length, int offset, boolean reverse) {
 		super(valueClass, length, offset, reverse);
 		this.defaultValue = defaultValue;
 		this.trailer = trailer;
@@ -68,52 +68,64 @@ abstract public class AbstractArrayWithDefault<A extends AbstractArray<A, T>, T 
 	}
 
 	@Override
-	public final T getDefault() {
+	public final V getDefault() {
 		return this.defaultValue;
 	}
 
 	@Override
-	public Iterable<Integer> getIndices() {
+	public final Iterable<Integer> getIndices() {
 		return this.getIndices(this.defaultValue);
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept() {
+	public final Iterable<Integer> getIndicesExcept() {
 		return this.getIndicesExcept(this.defaultValue);
 	}
 
 	@Override
-	public int count() {
+	public final int count() {
 		return this.count(this.defaultValue);
 	}
 
 	@Override
-	public int countPrefix() {
+	public final int countPrefix() {
 		return this.countPrefix(this.defaultValue);
 	}
 
 	@Override
-	public int countSuffix() {
+	public final int countSuffix() {
 		return this.countSuffix(this.defaultValue);
 	}
 
 	@Override
-	public A insertAt(int index) {
+	public final A insertAt(int index) {
 		return this.insertAt(index, this.defaultValue);
 	}
 
 	@Override
-	public A replaceAt(int index) {
+	public final A replaceAt(int index) {
 		return this.replaceAt(index, this.defaultValue);
 	}
 
 	@Override
-	public A add() {
+	public final A add() {
 		return this.add(this.defaultValue);
 	}
 
 	@Override
-	public A append(int n) {
+	public final A appendPrefix(int n) {
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (this.reverse) {
+			return this.abstractGetInstance(this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
+		} else {
+			return this.abstractGetInstance(this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
+		}
+	}
+
+	@Override
+	public final A appendSuffix(int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -125,12 +137,24 @@ abstract public class AbstractArrayWithDefault<A extends AbstractArray<A, T>, T 
 	}
 
 	@Override
-	public A removePrefix() {
+	public final A appendPrefixAndSuffix(int n, int m) {
+		if (n < 0 || m < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (this.reverse) {
+			return this.abstractGetInstance(this.offset, this.length + n + m, this.trailer + m, this.header + n, this.reverse);
+		} else {
+			return this.abstractGetInstance(this.offset, this.length + n + m, this.trailer + n, this.header + m, this.reverse);
+		}
+	}
+
+	@Override
+	public final A removePrefix() {
 		return this.removePrefix(this.countPrefix());
 	}
 
 	@Override
-	public A removeSuffix() {
+	public final A removeSuffix() {
 		return this.removeSuffix(this.countSuffix());
 	}
 
@@ -147,11 +171,7 @@ abstract public class AbstractArrayWithDefault<A extends AbstractArray<A, T>, T 
 		if (n <= 0) {
 			return this.shiftLeft(-n);
 		}
-		if (this.reverse) {
-			return this.abstractGetInstance(this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		} else {
-			return this.abstractGetInstance(this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		}
+		return this.appendPrefix(n);
 	}
 
 	@Override

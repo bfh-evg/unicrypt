@@ -80,6 +80,10 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	   extends UniCrypt
 	   implements Element<V> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final S set;
 	private final V value;
 

@@ -162,11 +162,15 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 		if (amount.signum() == 0) {
 			return this.getOneElement();
 		}
+		return this.defaultPowerAlgorithm(element, amount);
+	}
+
+	protected E defaultPowerAlgorithm(E element, BigInteger posAmount) {
 		E result = element;
-		for (int i = amount.bitLength() - 2; i >= 0; i--) {
-			result = this.square(result);
-			if (amount.testBit(i)) {
-				result = this.multiply(result, element);
+		for (int i = posAmount.bitLength() - 2; i >= 0; i--) {
+			result = this.abstractMultiply(result, result);
+			if (posAmount.testBit(i)) {
+				result = this.abstractMultiply(result, element);
 			}
 		}
 		return result;

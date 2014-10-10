@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.interfaces.Array;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -60,11 +60,11 @@ import java.util.Iterator;
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<CF, D, DE, C, CE>
-	   implements RecursiveArray<CF, Function> {
+	   implements RecursiveArray<Function> {
 
-	protected final ImmutableArray<Function> functions;
+	protected final DenseArray<Function> functions;
 
-	protected AbstractCompoundFunction(D domain, C coDomain, ImmutableArray<Function> functions) {
+	protected AbstractCompoundFunction(D domain, C coDomain, DenseArray<Function> functions) {
 		super(domain, coDomain);
 		this.functions = functions;
 	}
@@ -141,7 +141,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 		Function function = this;
 		for (final int index : indices) {
 			if (function.isCompound()) {
-				function = ((Array<CF, Function>) function).getAt(index);
+				function = ((ImmutableArray<Function>) function).getAt(index);
 			} else {
 				throw new IllegalArgumentException();
 			}
@@ -210,8 +210,8 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public CF append(CF other) {
-		return this.abstractGetInstance(this.functions.append(other.functions));
+	public CF append(ImmutableArray<Function> other) {
+		return this.abstractGetInstance(this.functions.append(other));
 	}
 
 	@Override
@@ -221,7 +221,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 
 	@Override
 	public CF[] split(int... indices) {
-		ImmutableArray<Function>[] functionArray = this.functions.split(indices);
+		DenseArray<Function>[] functionArray = this.functions.split(indices);
 		CF[] result = (CF[]) java.lang.reflect.Array.newInstance(this.getArrayClass(), functionArray.length);
 		for (int i = 0; i < functionArray.length; i++) {
 			result[i] = this.abstractGetInstance(functionArray[i]);
@@ -252,7 +252,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 		return true;
 	}
 
-	protected abstract CF abstractGetInstance(ImmutableArray<Function> functions);
+	protected abstract CF abstractGetInstance(DenseArray<Function> functions);
 
 	abstract protected Class getArrayClass();
 

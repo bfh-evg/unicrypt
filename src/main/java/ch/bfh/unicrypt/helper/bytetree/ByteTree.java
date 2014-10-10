@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.bytetree;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -170,7 +170,7 @@ public abstract class ByteTree
 	 * @return new instance of a ByteTree with at least one node-element and one leaf-element.
 	 */
 	public final static ByteTree getInstance(ByteTree... byteTrees) {
-		return new ByteTreeNode(ImmutableArray.getInstance(byteTrees));
+		return new ByteTreeNode(DenseArray.getInstance(byteTrees));
 	}
 
 	/**
@@ -201,7 +201,7 @@ public abstract class ByteTree
 			for (int i = 0; i < amount; i++) {
 				byteTrees[i] = ByteTree.getInstanceFrom(iterator);
 			}
-			return new ByteTreeNode(ImmutableArray.getInstance(byteTrees));
+			return new ByteTreeNode(DenseArray.getInstance(byteTrees));
 		}
 	}
 

@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.math.MathUtil;
+import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
 import java.util.LinkedList;
 
@@ -96,6 +96,10 @@ public class ByteArrayToBigInteger
 			value = value.divide(blockSize);
 		}
 		return ByteArray.getInstance(byteList);
+	}
+
+	public static ByteArrayToBigInteger getInstance() {
+		return new ByteArrayToBigInteger(1);
 	}
 
 	public static ByteArrayToBigInteger getInstance(int blockLength) {

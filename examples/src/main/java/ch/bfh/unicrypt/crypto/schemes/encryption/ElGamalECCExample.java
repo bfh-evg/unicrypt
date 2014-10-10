@@ -42,58 +42,155 @@
 package ch.bfh.unicrypt.crypto.schemes.encryption;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
-import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECPolynomialFieldEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECZModPrimeEncoder;
+import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECElement;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
+import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
-import java.math.BigInteger;
 
 public class ElGamalECCExample {
 
 	public static void example1() throws Exception {
 
-		// Example Elgamal over ECFp with 123456789 as text to encode using ProbabilisticECGroupFpEncode
-		//Generate schema and keypair
-		final StandardECZModPrime g_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp521r1); //Possible curves secp{112,160,192,224,256,384,521}r1
-		final ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(g_q);
-		final KeyPairGenerator keyGen = elGamal.getKeyPairGenerator();
+		// Create cyclic group EC Fp (modulo 521 bits) and get default generator
+		CyclicGroup cyclicGroup = ECZModPrime.getInstance(SECECCParamsFp.secp521r1);
+		Element generator = cyclicGroup.getDefaultGenerator();
 
-		//Create encode/decoder
-		ProbabilisticECGroupFpEncoder enc = ProbabilisticECGroupFpEncoder.getInstance(g_q);
+		// Create ElGamal encryption scheme
+		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
 
-		// Generate private key
-		final Element privateKey = keyGen.generatePrivateKey();
-		Example.printLine("Private Key: " + privateKey);
+		// Create keys
+		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
+		Element privateKey = keyPair.getFirst();
+		Element publicKey = keyPair.getSecond();
 
-		//Generate pubilc key
-		Element publigKey = keyGen.generatePublicKey(privateKey);
-		Example.printLine("Public Key: " + publigKey);
+		// Create random message
+		Element message = elGamal.getMessageSpace().getRandomElement();
 
-		//encoding
-		FiniteField f = g_q.getFiniteField();
-		Element m = f.getElementFrom(new BigInteger("123456789"));
-		ECElement<BigInteger> message = enc.encode(m);
-		Example.printLine("Message: " + m);
-		Example.printLine("Message encoded: " + message);
+		// Encryption
+		Element encryption = elGamal.encrypt(publicKey, message);
 
-		//Encrypt message
-		final Tuple cipherText = elGamal.encrypt(publigKey, message);
-		Example.printLine("Cipher Text: " + cipherText);
+		// Decryption
+		Element decryption = elGamal.decrypt(privateKey, encryption);
 
-		//decrypt message
-		Element newMessage = elGamal.decrypt(privateKey, cipherText);
-		Example.printLine("Decrypted Message: " + newMessage);
-		Example.printLine("Message == Decrypted Message: " + message.isEquivalent(newMessage));
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLine("Key Pair", keyPair);
+		Example.printLine("Message", message);
+		Example.printLine("Encrypted Message", encryption);
+		Example.printLine("Decrypted Message", decryption);
+	}
 
-		//decode message
-		Element plain = enc.decode(newMessage);
-		Example.printLine("Message decoded: " + plain);
+	public static void example2() throws Exception {
 
+		// Create cyclic group EC Fp (modulo 521 bits) and get default generator
+		ECZModPrime cyclicGroup = ECZModPrime.getInstance(SECECCParamsFp.secp521r1);
+		Element generator = cyclicGroup.getDefaultGenerator();
+
+		// Create ElGamal encryption scheme
+		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
+
+		// Create encoder from Z_q to EC Fp
+		Encoder encoder = ZModToECZModPrimeEncoder.getInstance(cyclicGroup,15);
+
+		// Create keys
+		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
+		Element privateKey = keyPair.getFirst();
+		Element publicKey = keyPair.getSecond();
+
+		// Create, encode, and encrypt message m=66
+		Element message = encoder.getDomain().getElementFrom(66);
+		Element encodedMessage = encoder.encode(message);
+		Element encryption = elGamal.encrypt(publicKey, encodedMessage);
+
+		// Decrypt and decode encryption
+		Element decryption = elGamal.decrypt(privateKey, encryption);
+		Element decodedMessage = encoder.decode(decryption);
+
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLine("Key Pair", keyPair);
+		Example.printLine("Encoder", encoder);
+		Example.printLine("Message", message);
+		Example.printLine("Encoded Message", encodedMessage);
+		Example.printLine("Encrypted Message", encryption);
+		Example.printLine("Decrypted Message", decryption);
+		Example.printLine("Decoded Message", decodedMessage);
+	}
+
+	public static void example3() throws Exception {
+
+		// Create cyclic group EC Fp (modulo 521 bits) and get default generator
+		CyclicGroup cyclicGroup = ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
+		Element generator = cyclicGroup.getDefaultGenerator();
+
+		// Create ElGamal encryption scheme
+		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
+
+		// Create keys
+		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
+		Element privateKey = keyPair.getFirst();
+		Element publicKey = keyPair.getSecond();
+
+		// Create random message
+		Element message = elGamal.getMessageSpace().getRandomElement();
+
+		// Encryption
+		Element encryption = elGamal.encrypt(publicKey, message);
+
+		// Decryption
+		Element decryption = elGamal.decrypt(privateKey, encryption);
+
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLine("Key Pair", keyPair);
+		Example.printLine("Message", message);
+		Example.printLine("Encrypted Message", encryption);
+		Example.printLine("Decrypted Message", decryption);
+	}
+
+	public static void example4() throws Exception {
+
+		// Create cyclic group EC Fp (modulo 521 bits) and get default generator
+		ECPolynomialField cyclicGroup = ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
+
+		Element generator = cyclicGroup.getDefaultGenerator();
+
+		// Create ElGamal encryption scheme
+		ElGamalEncryptionScheme elGamal = ElGamalEncryptionScheme.getInstance(generator);
+
+		// Create encoder from Z_q to EC Fp
+		Encoder encoder = ZModToECPolynomialFieldEncoder.getInstance(cyclicGroup.getZModOrder(), cyclicGroup,15);
+
+		// Create keys
+		Pair keyPair = elGamal.getKeyPairGenerator().generateKeyPair();
+		Element privateKey = keyPair.getFirst();
+		Element publicKey = keyPair.getSecond();
+
+		// Create, encode, and encrypt message m=66
+		Element message = encoder.getDomain().getElementFrom(66);
+		Element encodedMessage = encoder.encode(message);
+		Element encryption = elGamal.encrypt(publicKey, encodedMessage);
+
+		// Decrypt and decode encryption
+		Element decryption = elGamal.decrypt(privateKey, encryption);
+		Element decodedMessage = encoder.decode(decryption);
+
+		Example.setLabelLength("Encrypted Message");
+		Example.printLine("Cylic Group", cyclicGroup);
+		Example.printLine("Key Pair", keyPair);
+		Example.printLine("Encoder", encoder);
+		Example.printLine("Message", message);
+		Example.printLine("Encoded Message", encodedMessage);
+		Example.printLine("Encrypted Message", encryption);
+		Example.printLine("Decrypted Message", decryption);
+		Example.printLine("Decoded Message", decodedMessage);
 	}
 
 	public static void main(final String[] args) {

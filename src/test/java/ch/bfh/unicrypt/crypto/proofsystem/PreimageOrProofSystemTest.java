@@ -41,9 +41,10 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem;
 
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageOrProofSystem;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -58,7 +59,6 @@ import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.helper.Alphabet;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -99,7 +99,7 @@ public class PreimageOrProofSystemTest {
 		Function f5 = this.getPedersonCommitmentFunction();
 
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(ProductFunction.getInstance(functions), this.proverId);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(ProductFunction.getInstance(functions), this.proverId);
 		PreimageOrProofSystem pg = PreimageOrProofSystem.getInstance(scg, functions);
 
 		// Default

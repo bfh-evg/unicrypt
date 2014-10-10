@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -72,7 +72,7 @@ public final class SharedDomainFunction
 	 * @param functions
 	 * @throws IllegalArgumentException if {@literal functions} is null or contains null
 	 */
-	protected SharedDomainFunction(final Set domain, ProductSet coDomain, ImmutableArray<Function> functions) {
+	protected SharedDomainFunction(final Set domain, ProductSet coDomain, DenseArray<Function> functions) {
 		super(domain, coDomain, functions);
 	}
 
@@ -89,7 +89,7 @@ public final class SharedDomainFunction
 	}
 
 	@Override
-	protected SharedDomainFunction abstractGetInstance(ImmutableArray<Function> functions) {
+	protected SharedDomainFunction abstractGetInstance(DenseArray<Function> functions) {
 		return SharedDomainFunction.getInstance(functions);
 	}
 
@@ -101,7 +101,7 @@ public final class SharedDomainFunction
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static SharedDomainFunction getInstance(ImmutableArray<Function> functions) {
+	public static SharedDomainFunction getInstance(DenseArray<Function> functions) {
 		if (functions == null || functions.getLength() == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -128,11 +128,11 @@ public final class SharedDomainFunction
 	}
 
 	public static SharedDomainFunction getInstance(final Function... functions) {
-		return SharedDomainFunction.getInstance(ImmutableArray.getInstance(functions));
+		return SharedDomainFunction.getInstance(DenseArray.getInstance(functions));
 	}
 
 	public static SharedDomainFunction getInstance(final Function function, final int arity) {
-		return SharedDomainFunction.getInstance(ImmutableArray.getInstance(function, arity));
+		return SharedDomainFunction.getInstance(DenseArray.getInstance(function, arity));
 	}
 
 }

@@ -39,69 +39,45 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array.interfaces;
+package ch.bfh.unicrypt.helper.converter.classes.string;
+
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
- * @param <A>
- * @param <T>
- * @author rolfhaenni
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public interface Array<A extends Array<A, T>, T extends Object>
-	   extends Iterable<T> {
+public class ByteArrayToStringTest {
 
-	public int getLength();
+	@Test
+	public void testMain() {
 
-	public boolean isEmpty();
+		ByteArray b1 = ByteArray.getInstance("");
+		ByteArray b2 = ByteArray.getInstance("f8");
+		ByteArray b3 = ByteArray.getInstance("00|00");
+		ByteArray b4 = ByteArray.getInstance("01|23|45|67|89|AB|CD|EF");
 
-	public boolean isUniform();
+		ByteArray[] bs = {b1, b2, b3, b4};
 
-	public Iterable<Integer> getAllIndices();
+		String[] delimiters = {"|", " ", "-", "x"};
 
-	public Iterable<Integer> getIndices(T value);
-
-	public Iterable<Integer> getIndicesExcept(T value);
-
-	public int count(T value);
-
-	public int countPrefix(T value);
-
-	public int countSuffix(T value);
-
-	public T getAt(int index);
-
-	public T getFirst();
-
-	public T getLast();
-
-	public A extract(int fromIndex, int length);
-
-	public A extractPrefix(int length);
-
-	public A extractSuffix(int length);
-
-	public A extractRange(int fromIndex, int toIndex);
-
-	public A remove(int fromIndex, int length);
-
-	public A removePrefix(int n);
-
-	public A removeSuffix(int n);
-
-	public A removeRange(int fromIndex, int toIndex);
-
-	public A removeAt(int index);
-
-	public A insertAt(final int index, final T value);
-
-	public A replaceAt(int index, T value);
-
-	public A add(T value);
-
-	public A append(A other);
-
-	public A reverse();
-
-	public A[] split(int... indices);
+		for (String delim : delimiters) {
+			ByteArrayToString c1 = ByteArrayToString.getInstance(ByteArrayToString.Radix.BASE64);
+			ByteArrayToString c2 = ByteArrayToString.getInstance(ByteArrayToString.Radix.BINARY);
+			ByteArrayToString c3 = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX);
+			ByteArrayToString c4 = ByteArrayToString.getInstance(ByteArrayToString.Radix.BINARY, true);
+			ByteArrayToString c5 = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, true);
+			ByteArrayToString c6 = ByteArrayToString.getInstance(ByteArrayToString.Radix.BINARY, delim);
+			ByteArrayToString c7 = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, delim);
+			ByteArrayToString[] cs = {c1, c2, c3, c4, c5, c6, c7};
+			for (ByteArrayToString c : cs) {
+				for (ByteArray b : bs) {
+					Assert.assertEquals(b, c.reconvert(c.convert(b)));
+				}
+			}
+		}
+	}
 
 }

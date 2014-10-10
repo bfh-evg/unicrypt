@@ -39,49 +39,25 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.classes;
+package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.BinaryPolynomialField;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleChallengeGenerator;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
+import org.junit.Test;
 
-/**
- *
- * @author Christian Lutz
- * <p>
- */
-public class StandardECPolynomialField
-	   extends ECPolynomialField {
+public class RandomOracleChallengeGeneratorTest {
 
-	public StandardECPolynomialField(BinaryPolynomialField finiteField, PolynomialElement a,
-		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
-		   BigInteger order, BigInteger h) {
-		super(finiteField, a, b, gx, gy, order, h);
+	@Test
+	public void testStandardNonInteractiveElementChallengeGenerator() {
+
+		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
+		RandomOracleChallengeGenerator cg = RandomOracleChallengeGenerator.getInstance(cyclicGroup, ProductSet.getInstance(cyclicGroup, 10));
+		Tuple elements = (Tuple) cg.generate(cyclicGroup.getRandomElement());
+
+		// System.out.println(elements);
 	}
 
-	public static StandardECPolynomialField getInstance(final StandardECPolynomialFieldParams params) {
-		BinaryPolynomialField field;
-		PolynomialElement a, b, gx, gy;
-		BigInteger order, h;
-
-		field = params.getFiniteField();
-		a = params.getA();
-		b = params.getB();
-		gx = params.getGx();
-		gy = params.getGy();
-		order = params.getOrder();
-		h = params.getH();
-
-		return new StandardECPolynomialField(field, a, b, gx, gy, order, h);
-	}
-
-//	public static void main(String[] args) {
-//
-//		for (SECECCParamsF2m params : SECECCParamsF2m.values()) {
-//
-//			StandardECPolynomialField ec = StandardECPolynomialField.getInstance(params);
-//			System.out.println(params.name() + "(\"" + ec.getA().getBigInteger().toString(16) + "\",\"" + ec.getB().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getX().getBigInteger().toString(16) + "\",\"" + ec.getDefaultGenerator().getY().getBigInteger().toString(16) + "\",\"" + ec.getOrder().toString(16) + "\",\"" + ec.getCoFactor() + "\"),");
-//		}
-//	}
 }

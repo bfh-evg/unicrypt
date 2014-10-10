@@ -137,6 +137,10 @@ public class ElGamalEncryptionScheme
 	}
 
 	public static ElGamalEncryptionScheme getInstance(Element generator) {
+		boolean nul=generator == null;
+		boolean cyclic=generator.getSet().isCyclic();
+		boolean gen=generator.isGenerator();
+		
 		if (generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()) {
 			throw new IllegalArgumentException();
 		}

@@ -41,7 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.array.abstracts.AbstractArrayWithDefault;
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,18 +51,18 @@ import java.util.Map;
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <T>
+ * @param <V>
  */
-public class SparseArray<T extends Object>
-	   extends AbstractArrayWithDefault<SparseArray<T>, T> {
+public class SparseArray<V extends Object>
+	   extends AbstractDefaultValueArray<SparseArray<V>, V> {
 
-	private final Map<Integer, T> map;
+	private final Map<Integer, V> map;
 
-	private SparseArray(T defaultValue, Map<Integer, T> map, int length) {
+	private SparseArray(V defaultValue, Map<Integer, V> map, int length) {
 		this(defaultValue, map, 0, length, 0, 0, false);
 	}
 
-	private SparseArray(T defaultValue, Map<Integer, T> map, int offset, int length, int trailer, int header, boolean reverse) {
+	private SparseArray(V defaultValue, Map<Integer, V> map, int offset, int length, int trailer, int header, boolean reverse) {
 		super(SparseArray.class, defaultValue, trailer, header, length, offset, reverse);
 		this.map = map;
 		if (map.isEmpty()) {
@@ -71,12 +72,9 @@ public class SparseArray<T extends Object>
 
 	// this method is more efficient than its predecessor
 	@Override
-	public Iterable<Integer> getIndices(T value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
+	protected Iterable<Integer> defaultGetIndices(V value) {
 		if (this.defaultValue.equals(value)) {
-			return super.getIndices(value);
+			return super.defaultGetIndices(value);
 		}
 		List<Integer> result = new LinkedList<Integer>();
 		for (Integer i : this.map.keySet()) {
@@ -91,12 +89,9 @@ public class SparseArray<T extends Object>
 
 	// this method is more efficient than its predecessor
 	@Override
-	public Iterable<Integer> getIndicesExcept(T value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
+	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
 		if (!this.defaultValue.equals(value)) {
-			return super.getIndicesExcept(value);
+			return super.defaultGetIndicesExcept(value);
 		}
 		List<Integer> result = new LinkedList<Integer>();
 		for (Integer i : this.map.keySet()) {
@@ -174,37 +169,37 @@ public class SparseArray<T extends Object>
 	}
 
 	@Override
-	protected T abstractGetAt(int index) {
+	protected V abstractGetAt(int index) {
 		if (this.reverse) {
 			index = this.length - index - 1;
 		}
 		if (index < this.trailer || index >= this.length - this.header) {
 			return this.defaultValue;
 		}
-		return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultValue);
+// JAVA 8
+// return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultValue);
+		V result = this.map.get(index - this.trailer + this.offset);
+		if (result == null) {
+			return this.defaultValue;
+		}
+		return result;
 	}
 
 	@Override
-	protected SparseArray<T> abstractAppend(SparseArray<T> other) {
-		Map<Integer, T> newMap = new HashMap<Integer, T>();
+	protected SparseArray<V> abstractAppend(ImmutableArray<V> other) {
+		Map<Integer, V> newMap = new HashMap<Integer, V>();
 		for (int i : this.getIndicesExcept()) {
 			newMap.put(i, this.abstractGetAt(i));
 		}
-		Iterable<Integer> indices;
-		if (this.defaultValue.equals(other.defaultValue)) {
-			indices = other.getIndicesExcept();
-		} else {
-			indices = other.getIndicesExcept(this.defaultValue);
+		for (int i : other.getIndicesExcept(this.defaultValue)) {
+			newMap.put(this.length + i, other.getAt(i));
 		}
-		for (int i : indices) {
-			newMap.put(this.length + i, other.abstractGetAt(i));
-		}
-		return new SparseArray<T>(this.defaultValue, newMap, this.length + other.length);
+		return new SparseArray<V>(this.defaultValue, newMap, this.length + other.getLength());
 	}
 
 	@Override
-	protected SparseArray<T> abstractInsertAt(int index, T newObject) {
-		Map<Integer, T> newMap = new HashMap<Integer, T>();
+	protected SparseArray<V> abstractInsertAt(int index, V newObject) {
+		Map<Integer, V> newMap = new HashMap<Integer, V>();
 		for (int i : this.getIndicesExcept()) {
 			if (i < index) {
 				newMap.put(i, this.abstractGetAt(i));
@@ -215,12 +210,12 @@ public class SparseArray<T extends Object>
 		if (!newObject.equals(this.defaultValue)) {
 			newMap.put(index, newObject);
 		}
-		return new SparseArray<T>(this.defaultValue, newMap, this.length + 1);
+		return new SparseArray<V>(this.defaultValue, newMap, this.length + 1);
 	}
 
 	@Override
-	protected SparseArray<T> abstractReplaceAt(int index, T newObject) {
-		Map<Integer, T> newMap = new HashMap<Integer, T>();
+	protected SparseArray<V> abstractReplaceAt(int index, V newObject) {
+		Map<Integer, V> newMap = new HashMap<Integer, V>();
 		for (int i : this.getIndicesExcept()) {
 			if (i != index) {
 				newMap.put(i, this.abstractGetAt(i));
@@ -229,12 +224,12 @@ public class SparseArray<T extends Object>
 		if (!newObject.equals(this.defaultValue)) {
 			newMap.put(index, newObject);
 		}
-		return new SparseArray<T>(this.defaultValue, newMap, this.length);
+		return new SparseArray<V>(this.defaultValue, newMap, this.length);
 	}
 
 	@Override
-	protected SparseArray<T> abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
-		return new SparseArray<T>(this.defaultValue, this.map, offset, length, trailer, header, reverse);
+	protected SparseArray<V> abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
+		return new SparseArray<V>(this.defaultValue, this.map, offset, length, trailer, header, reverse);
 	}
 
 	private int getIndex(int i) {

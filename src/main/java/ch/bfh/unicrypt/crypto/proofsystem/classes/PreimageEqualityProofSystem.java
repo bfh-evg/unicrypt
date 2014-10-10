@@ -42,9 +42,9 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractPreimageProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -67,8 +67,8 @@ public class PreimageEqualityProofSystem
 		if (proofFunction == null || proofFunction.getArity() < 1 || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException("Domain and codomain of each proof function must be semi groups!");
 		}
-		SigmaChallengeGenerator challengeGenerator = StandardNonInteractiveSigmaChallengeGenerator.getInstance(
-			   proofFunction.getCoDomain(), (ProductSemiGroup) proofFunction.getCoDomain(), Z.getInstance(proofFunction.getDomain().getMinimalOrder()), proverId);
+		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(
+			   proofFunction.getCoDomain(), (ProductSemiGroup) proofFunction.getCoDomain(), ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()), proverId);
 		return new PreimageEqualityProofSystem(challengeGenerator, proofFunction);
 	}
 

@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -60,13 +61,11 @@ import java.math.BigInteger;
  */
 public class PolynomialField<V>
 	   extends PolynomialRing<V>
-	   implements
-	   FiniteField<Polynomial<DualisticElement<V>>> {
+	   implements FiniteField<Polynomial<? extends DualisticElement<V>>> {
 
 	private final PolynomialElement<V> irreduciblePolynomial;
 
-	protected PolynomialField(PrimeField primeField,
-		   PolynomialElement<V> irreduciblePolynomial) {
+	protected PolynomialField(PrimeField primeField, PolynomialElement<V> irreduciblePolynomial) {
 		super(primeField);
 		this.irreduciblePolynomial = irreduciblePolynomial;
 	}
@@ -94,9 +93,29 @@ public class PolynomialField<V>
 	}
 
 	@Override
+	protected boolean abstractContains(Polynomial value) {
+		return super.abstractContains(value) && value.getDegree() < this.getDegree();
+	}
+
+	@Override
 	protected PolynomialElement<V> abstractGetElement(Polynomial value) {
-		PolynomialElement<V> e = super.abstractGetElement(value);
-		return new PolynomialElement<V>(this, this.mod(e).getValue());
+		return new PolynomialElement<V>(this, value);
+	}
+
+	@Override
+	public PolynomialElement<V> getRandomElement(int degree, RandomByteSequence randomByteSequence) {
+		if (degree >= this.getDegree()) {
+			throw new IllegalArgumentException();
+		}
+		return super.getRandomElement(degree, randomByteSequence);
+	}
+
+	@Override
+	public PolynomialElement<V> getRandomMonicElement(int degree, boolean a0NotZero, RandomByteSequence randomByteSequence) {
+		if (degree >= this.getDegree()) {
+			throw new IllegalArgumentException();
+		}
+		return super.getRandomMonicElement(degree, a0NotZero, randomByteSequence);
 	}
 
 	@Override
@@ -105,33 +124,28 @@ public class PolynomialField<V>
 	}
 
 	@Override
-	public MultiplicativeGroup<Polynomial<DualisticElement<V>>> getMultiplicativeGroup() {
+	public MultiplicativeGroup<Polynomial<? extends DualisticElement<V>>> getMultiplicativeGroup() {
 		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact
 		// 2.229/2.230)
-		throw new UnsupportedOperationException("Not supported yet."); // To
-		// change
-		// body
-		// of
-		// generated
-		// methods,
-		// choose
-		// Tools
-		// |
-		// Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	protected PolynomialElement<V> abstractApply(PolynomialElement<V> element1,
-		   PolynomialElement<V> element2) {
-		PolynomialElement<V> poly = super.abstractApply(element1, element2);
-		return this.mod(this.getElement(poly.getValue()));
-	}
+	protected PolynomialElement<V> abstractMultiply(PolynomialElement<V> element1, PolynomialElement<V> element2) {
+		Polynomial<? extends DualisticElement<V>> polynomial1 = element1.getValue();
+		Polynomial<? extends DualisticElement<V>> polynomial2 = element2.getValue();
 
-	@Override
-	protected PolynomialElement<V> abstractMultiply(
-		   PolynomialElement<V> element1, PolynomialElement<V> element2) {
-		PolynomialElement<V> poly = super.abstractMultiply(element1, element2);
-		return this.mod(this.getElement(poly.getValue()));
+		if (element1.isEquivalent(this.getZeroElement()) || element2.isEquivalent(this.getZeroElement())) {
+			return this.getZeroElement();
+		}
+		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
+		PolynomialElement<V> result;
+		if (this.isBinary()) {
+			result = ring.getElementUnchecked(multiplyBinary(polynomial1, polynomial2));
+		} else {
+			result = ring.getElementUnchecked(multiplyNonBinary(polynomial1, polynomial2));
+		}
+		return this.getElement(this.mod(result).getValue());
 	}
 
 	@Override
@@ -159,10 +173,8 @@ public class PolynomialField<V>
 			throw new UnsupportedOperationException();
 		}
 
-		Triple euclid = this.extendedEuclidean((PolynomialElement<V>) element,
-											   this.irreduciblePolynomial);
-		return this.getElement(((PolynomialElement<V>) euclid.getSecond())
-			   .getValue());
+		Triple euclid = this.extendedEuclidean((PolynomialElement<V>) element, this.irreduciblePolynomial);
+		return this.getElement(((PolynomialElement<V>) euclid.getSecond()).getValue());
 
 	}
 
@@ -182,32 +194,33 @@ public class PolynomialField<V>
 		Pair longDiv = this.longDivision(g, this.irreduciblePolynomial);
 		return (PolynomialElement<V>) longDiv.getSecond();
 	}
-	
+
 	/**
-	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis.
-	 * Source: AMERICAN NATIONAL STANDARD X9.62 D.1.6
-	 * @param PolynomialElement b
+	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
+	 * STANDARD X9.62 D.1.6
+	 * <p>
 	 * @return PolynomialElement z which is a solution for the quadratic equation z²+z=b
 	 */
 	public PolynomialElement<V> solveQuadradicEquation(PolynomialElement<V> b) {
 		PolynomialElement<V> y = this.getZeroElement();
 		PolynomialElement<V> z = this.getZeroElement();
 
-		while (y.equals(this.getZeroElement())) {
+		while (y.isEquivalent(this.getZeroElement())) {
 
-			PolynomialElement<V> r = this.getRandomElement(this.getDegree());
+			PolynomialElement<V> r = this.getRandomElement(this.getDegree()-1);
 			z = this.getZeroElement();
 			PolynomialElement<V> w = b;
 			int m = this.getDegree();
 
-			for (int i = 1; i <= m - 1; i++) {
+			for (int i = 1; i < m; i++) {
 
-				z = z.square().add(w.square().multiply((r)));
-				w = w.square().add(b);
+				PolynomialElement<V> w2=w.square();
+				z = z.square().add(w2.multiply(r));
+				w = w2.add(b);
 			}
 
 			y = z.square().add(z);
-			if (!w.equals(this.getZeroElement())) {
+			if (!w.isEquivalent(this.getZeroElement())) {
 				throw new IllegalArgumentException("No solution for quadratic equation was found");
 			}
 
@@ -215,26 +228,26 @@ public class PolynomialField<V>
 
 		return z;
 	}
-	
+
 	/**
-	 * Test if there is a solution for the quadratic equation z²+z=b for any polynomial basis.
-	 * Source: AMERICAN NATIONAL STANDARD X9.62 D.1.6
-	 * @param PolynomialElement b
+	 * Test if there is a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
+	 * STANDARD X9.62 D.1.6
+	 * <p>
+	 * @param b
 	 * @return true/false
 	 */
 	public boolean hasQuadradicEquationSolution(PolynomialElement<V> b) {
 		PolynomialElement<V> y = this.getZeroElement();
-		PolynomialElement<V> z = this.getZeroElement();
+		PolynomialElement<V> z;
 
 		while (y.equals(this.getZeroElement())) {
 
-			PolynomialElement<V> r = this.getRandomElement(this.getDegree());
+			PolynomialElement<V> r = this.getRandomElement(this.getDegree() - 1);
 			z = this.getZeroElement();
 			PolynomialElement<V> w = b;
 			int m = this.getDegree();
 
 			for (int i = 1; i <= m - 1; i++) {
-
 				z = z.square().add(w.square().multiply((r)));
 				w = w.square().add(b);
 			}
@@ -248,8 +261,6 @@ public class PolynomialField<V>
 
 		return true;
 	}
-	
-	
 
 	//
 	// STATIC FACTORY METHODS

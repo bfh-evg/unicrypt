@@ -39,24 +39,69 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator;
+package ch.bfh.unicrypt.helper.array.interfaces;
 
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import org.junit.Test;
+/**
+ *
+ * author rolfhaenni
+ * <p>
+ * @param <V>
+ */
+public interface ImmutableArray<V extends Object>
+	   extends Iterable<V> {
 
-public class StandardNonInteractiveChallengeGeneratorTest {
+	public int getLength();
 
-	@Test
-	public void testStandardNonInteractiveElementChallengeGenerator() {
+	public boolean isEmpty();
 
-		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
-		StandardNonInteractiveChallengeGenerator cg = StandardNonInteractiveChallengeGenerator.getInstance(cyclicGroup, cyclicGroup, 10);
-		Tuple elements = (Tuple) cg.generate(cyclicGroup.getRandomElement());
+	public boolean isUniform();
 
-		// System.out.println(elements);
-	}
+	public Iterable<Integer> getAllIndices();
+
+	public Iterable<Integer> getIndices(V value);
+
+	public Iterable<Integer> getIndicesExcept(V value);
+
+	public int count(V value);
+
+	public int countPrefix(V value);
+
+	public int countSuffix(V value);
+
+	public V getAt(int index);
+
+	public V getFirst();
+
+	public V getLast();
+
+	public ImmutableArray<V> extract(int fromIndex, int length);
+
+	public ImmutableArray<V> extractPrefix(int length);
+
+	public ImmutableArray<V> extractSuffix(int length);
+
+	public ImmutableArray<V> extractRange(int fromIndex, int toIndex);
+
+	public ImmutableArray<V> remove(int fromIndex, int length);
+
+	public ImmutableArray<V> removePrefix(int n);
+
+	public ImmutableArray<V> removeSuffix(int n);
+
+	public ImmutableArray<V> removeRange(int fromIndex, int toIndex);
+
+	public ImmutableArray<V> removeAt(int index);
+
+	public ImmutableArray<V> insertAt(final int index, final V value);
+
+	public ImmutableArray<V> replaceAt(int index, V value);
+
+	public ImmutableArray<V> add(V value);
+
+	public ImmutableArray<V> append(ImmutableArray<V> other);
+
+	public ImmutableArray<V> reverse();
+
+	public ImmutableArray<V>[] split(int... indices);
 
 }

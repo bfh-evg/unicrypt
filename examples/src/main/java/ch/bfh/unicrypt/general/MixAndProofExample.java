@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.general;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.mixer.classes.ReEncryptionMixer;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.ElGamalEncryptionValidityProofSystem;
@@ -54,12 +54,13 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.ReEncryptionShuffleProofSystem
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -90,7 +91,7 @@ public class MixAndProofExample {
 		//=====================
 		// Create a non-interactive challenge generator that on input <StringElement> returns
 		// 10 G_q elements
-		ChallengeGenerator cg = StandardNonInteractiveChallengeGenerator.getInstance(sm, G_q, 10);
+		ChallengeGenerator cg = RandomOracleChallengeGenerator.getInstance(sm, ProductSet.getInstance(G_q, 10));
 
 		// Generate challenge
 		Tuple challenges = (Tuple) cg.generate(sm.getElement("inputX"));
@@ -106,10 +107,10 @@ public class MixAndProofExample {
 		final Element commitment = f.apply(G_q.getZModOrder().getElement(3));
 
 		// Create non-interactive sigma challenge generator for function <f> and prover <proverId>
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, proverId);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, proverId);
 
 		// Generate challenge
-		ZElement challenge = scg.generate(publicInput, commitment);
+		ZModElement challenge = scg.generate(publicInput, commitment);
 		Example.printLine("Challenge", challenge);
 	}
 
@@ -128,7 +129,7 @@ public class MixAndProofExample {
 		// - Create proof function
 		GeneratorFunction f = GeneratorFunction.getInstance(G_q.getElement(4));
 		// - Create sigma challenge generator
-		SigmaChallengeGenerator scg = StandardNonInteractiveSigmaChallengeGenerator.getInstance(f, proverId);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, proverId);
 		// - Create preimage proof generator
 		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
 
@@ -305,7 +306,7 @@ public class MixAndProofExample {
 		final int size = 10;
 
 		// Create cyclic group for commitments
-		final StandardECZModPrime G_q_Com = StandardECZModPrime.getInstance(SECECCParamsFp.secp160r1);
+		final ECZModPrime G_q_Com = ECZModPrime.getInstance(SECECCParamsFp.secp160r1);
 
 		// Create independent generators
 		final Tuple independentGenerators = G_q_Com.getIndependentGenerators(size, rrs);

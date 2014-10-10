@@ -54,9 +54,9 @@ import java.util.HashMap;
  * @param <V>
  */
 public class PolynomialElement<V>
-	   extends AbstractDualisticElement<PolynomialSemiRing<V>, PolynomialElement<V>, Polynomial<DualisticElement<V>>> {
+	   extends AbstractDualisticElement<PolynomialSemiRing<V>, PolynomialElement<V>, Polynomial<? extends DualisticElement<V>>> {
 
-	protected PolynomialElement(final PolynomialSemiRing<V> semiRing, Polynomial<DualisticElement<V>> polynomial) {
+	protected PolynomialElement(final PolynomialSemiRing<V> semiRing, Polynomial<? extends DualisticElement<V>> polynomial) {
 		super(semiRing, polynomial);
 	}
 
@@ -124,7 +124,7 @@ public class PolynomialElement<V>
 				map.put(i, c.divide(value));
 			}
 		}
-		return this.getSet().getElement(map);
+		return this.getSet().getElementUnchecked(map);
 	}
 
 }

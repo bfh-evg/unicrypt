@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.Permutation;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -144,7 +144,7 @@ public class ShuffleProofSystemECExample {
 		BigInteger h = BigInteger.ONE;
 		//final ECZModPrime G_q = ECZModPrime.getInstance(f, a, b, gx, gy, order, h);
 
-		final StandardECZModPrime G_q = StandardECZModPrime.getInstance(SECECCParamsFp.secp160r1); //Possible curves secp{112,160,192,224,256,384,521}r1
+		final ECZModPrime G_q = ECZModPrime.getInstance(SECECCParamsFp.secp160r1); //Possible curves secp{112,160,192,224,256,384,521}r1
 
 		// Create encryption scheme and key
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();

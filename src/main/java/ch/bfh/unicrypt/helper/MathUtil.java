@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math;
+package ch.bfh.unicrypt.helper;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -472,7 +472,7 @@ public final class MathUtil {
 	}
 
 	//Tonelli_Shanks algorithm -> wikipedia
-	public static BigInteger sqrtModPrime(BigInteger r2, BigInteger p) {
+	public static BigInteger sqrtModPrime(BigInteger rSquare, BigInteger p) {
 		BigInteger two = new BigInteger("2");
 		BigInteger z = two;
 
@@ -481,11 +481,11 @@ public final class MathUtil {
 			z = z.add(BigInteger.ONE);
 		}
 
-		if (!hasSqrtModPrime(r2, p)) {
+		if (!hasSqrtModPrime(rSquare, p)) {
 			throw new UnknownError("r has no square root");
 		} else {
 			if (p.mod(new BigInteger("4")).equals(new BigInteger("3"))) {
-				return r2.modPow(p.add(BigInteger.ONE).divide(new BigInteger("4")), p);
+				return rSquare.modPow(p.add(BigInteger.ONE).divide(new BigInteger("4")), p);
 			} else {
 				BigInteger pMin1 = p.subtract(BigInteger.ONE);	//p-1
 				BigInteger s = BigInteger.ONE;
@@ -498,8 +498,8 @@ public final class MathUtil {
 				}
 
 				BigInteger c = z.modPow(q, p);
-				BigInteger r = r2.modPow(q.add(BigInteger.ONE).divide(two), p);
-				BigInteger t = r2.modPow(q, p);
+				BigInteger r = rSquare.modPow(q.add(BigInteger.ONE).divide(two), p);
+				BigInteger t = rSquare.modPow(q, p);
 				BigInteger m = s;
 
 				//Loop until t==1
@@ -516,7 +516,7 @@ public final class MathUtil {
 					m = i;
 				}
 
-				if (r.modPow(two, p).equals(r2.mod(p))) {
+				if (r.modPow(two, p).equals(rSquare.mod(p))) {
 					return r;
 				} else {
 					throw new IllegalArgumentException("Tonnelli fails...");
@@ -530,6 +530,42 @@ public final class MathUtil {
 	public static boolean hasSqrtModPrime(BigInteger r, BigInteger p) {
 		BigInteger two = new BigInteger("2");
 		return r.modPow(p.subtract(BigInteger.ONE).divide(two), p).equals(BigInteger.ONE);
+	}
+
+	public static byte setBit(byte b, int i) {
+		return (byte) logicalOR(b, bitMask(i));
+	}
+
+	public static byte clearBit(byte b, int i) {
+		return (byte) logicalAND(b, logicalNOT(bitMask(i)));
+	}
+
+	public static byte bitMask(int i) {
+		return (byte) (1 << i);
+	}
+
+	public static byte logicalShiftLeft(byte b, int n) {
+		return (byte) (b << n);
+	}
+
+	public static byte logicalShiftRight(byte b, int n) {
+		return (byte) (b >>> n);
+	}
+
+	public static byte logicalXOR(byte b1, byte b2) {
+		return (byte) (b1 ^ b2);
+	}
+
+	public static byte logicalAND(byte b1, byte b2) {
+		return (byte) (b1 & b2);
+	}
+
+	public static byte logicalOR(byte b1, byte b2) {
+		return (byte) (b1 | b2);
+	}
+
+	public static byte logicalNOT(byte b) {
+		return (byte) ~b;
 	}
 
 }

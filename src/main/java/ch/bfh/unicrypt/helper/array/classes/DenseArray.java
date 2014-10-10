@@ -41,32 +41,33 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.array.abstracts.AbstractArray;
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import java.util.Collection;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <T>
+ * @param <V>
  */
-public class ImmutableArray<T extends Object>
-	   extends AbstractArray<ImmutableArray<T>, T> {
+public class DenseArray<V extends Object>
+	   extends AbstractImmutableArray<DenseArray<V>, V> {
 
 	// The obects are stored either as an ordinary, possibly empty array (case 1)
 	// or as an array of length 1 together with the full length of the immutable
 	// array (case 2, all elements are equal)
 	private final Object[] values;
 
-	protected ImmutableArray(T value, int length) {
+	protected DenseArray(V value, int length) {
 		this(new Object[]{value}, 0, length, false);
 	}
 
-	protected ImmutableArray(Object[] values) {
+	protected DenseArray(Object[] values) {
 		this(values, 0, values.length, false);
 	}
 
-	protected ImmutableArray(Object[] values, int offset, int length, boolean reverse) {
-		super(ImmutableArray.class, length, offset, reverse);
+	protected DenseArray(Object[] values, int offset, int length, boolean reverse) {
+		super(DenseArray.class, length, offset, reverse);
 		this.values = values;
 		if (values.length <= 1) {
 			this.uniform = true;
@@ -84,7 +85,7 @@ public class ImmutableArray<T extends Object>
 		return "[" + str + "]";
 	}
 
-	public static <T> ImmutableArray<T> getInstance(T... array) {
+	public static <T> DenseArray<T> getInstance(T... array) {
 		if (array == null) {
 			throw new IllegalArgumentException();
 		}
@@ -96,10 +97,10 @@ public class ImmutableArray<T extends Object>
 			}
 			newArray[i++] = value;
 		}
-		return new ImmutableArray<T>(newArray);
+		return new DenseArray<T>(newArray);
 	}
 
-	public static <T> ImmutableArray<T> getInstance(Collection<T> collection) {
+	public static <T> DenseArray<T> getInstance(Collection<T> collection) {
 		if (collection == null) {
 			throw new IllegalArgumentException();
 		}
@@ -111,46 +112,46 @@ public class ImmutableArray<T extends Object>
 			}
 			array[i++] = value;
 		}
-		return new ImmutableArray<T>(array);
+		return new DenseArray<T>(array);
 	}
 
-	public static <T> ImmutableArray<T> getInstance(T value, int length) {
+	public static <T> DenseArray<T> getInstance(T value, int length) {
 		if (value == null || length < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ImmutableArray(new Object[]{value}, 0, length, false);
+		return new DenseArray(new Object[]{value}, 0, length, false);
 	}
 
 	@Override
-	protected T abstractGetAt(int index) {
+	protected V abstractGetAt(int index) {
 		if (this.reverse) {
 			index = this.length - index - 1;
 		}
-		return (T) this.values[(this.offset + index) % this.values.length];
+		return (V) this.values[(this.offset + index) % this.values.length];
 	}
 
 	@Override
-	protected ImmutableArray<T> abstractExtract(int fromIndex, int length) {
+	protected DenseArray<V> abstractExtract(int fromIndex, int length) {
 		if (this.reverse) {
 			fromIndex = this.length - fromIndex - length;
 		}
-		return new ImmutableArray<T>(this.values, this.offset + fromIndex, length, this.reverse);
+		return new DenseArray<V>(this.values, this.offset + fromIndex, length, this.reverse);
 	}
 
 	@Override
-	protected ImmutableArray<T> abstractAppend(ImmutableArray<T> other) {
-		Object[] result = new Object[this.length + other.length];
+	protected DenseArray<V> abstractAppend(ImmutableArray<V> other) {
+		Object[] result = new Object[this.length + other.getLength()];
 		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetAt(i);
 		}
 		for (int i : other.getAllIndices()) {
-			result[this.length + i] = other.abstractGetAt(i);
+			result[this.length + i] = other.getAt(i);
 		}
-		return new ImmutableArray<T>(result);
+		return new DenseArray<V>(result);
 	}
 
 	@Override
-	protected ImmutableArray<T> abstractInsertAt(int index, T newObject) {
+	protected DenseArray<V> abstractInsertAt(int index, V newObject) {
 		Object[] result = new Object[this.length + 1];
 		for (int i : this.getAllIndices()) {
 			if (i < index) {
@@ -160,22 +161,22 @@ public class ImmutableArray<T extends Object>
 			}
 		}
 		result[index] = newObject;
-		return new ImmutableArray<T>(result);
+		return new DenseArray<V>(result);
 	}
 
 	@Override
-	protected ImmutableArray<T> abstractReplaceAt(int index, T newObject) {
+	protected DenseArray<V> abstractReplaceAt(int index, V newObject) {
 		Object[] result = new Object[this.length];
 		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetAt(i);
 		}
 		result[index] = newObject;
-		return new ImmutableArray<T>(result);
+		return new DenseArray<V>(result);
 	}
 
 	@Override
-	protected ImmutableArray<T> abstractReverse() {
-		return new ImmutableArray<T>(this.values, this.offset, this.length, !this.reverse);
+	protected DenseArray<V> abstractReverse() {
+		return new DenseArray<V>(this.values, this.offset, this.length, !this.reverse);
 	}
 
 }

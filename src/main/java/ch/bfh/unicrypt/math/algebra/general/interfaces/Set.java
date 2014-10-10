@@ -245,7 +245,7 @@ public interface Set<V extends Object> {
 	 * @param value The given value
 	 * @return {@code true} if {@literal value} belongs to this set
 	 */
-	public boolean contains(Object value);
+	public boolean contains(V value);
 
 	/**
 	 * TODO Returns the corresponding {@link Element} for the given {@literal value}.
@@ -256,13 +256,6 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElement(V value);
 
-//	/**
-//	 * TODO: Convenience method
-//	 * <p>
-//	 * @param integerValue
-//	 * @return
-//	 */
-//	public Element getElement(int integerValue);
 	/**
 	 * Creates and returns the element that corresponds to a given integer (if one exists). Returns {@literal null}
 	 * otherwise.
@@ -329,15 +322,6 @@ public interface Set<V extends Object> {
 	 * @return
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree, ConvertMethod<ByteArray> convertMethod);
-
-	/**
-	 * Creates and returns the element that corresponds to the integer value of some other element (if one exists).
-	 * Returns {@literal null} otherwise.
-	 * <p>
-	 * @param element The given element of this or another set
-	 * @return The corresponding element of this set, or {@literal null} if no such element exists
-	 */
-	public Element<V> getElementFrom(Element element);
 
 	/**
 	 * Selects and returns a random group element using the default random generator. For finite order set, it is

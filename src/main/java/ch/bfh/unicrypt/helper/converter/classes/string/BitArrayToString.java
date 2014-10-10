@@ -39,47 +39,68 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array.interfaces;
+package ch.bfh.unicrypt.helper.converter.classes.string;
+
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <A>
- * @param <T>
  */
-public interface ArrayWithDefault<A extends Array<A, T>, T extends Object>
-	   extends Array<A, T> {
+public class BitArrayToString
+	   extends AbstractStringConverter<BitArray> {
 
-	public T getDefault();
+	private final boolean reverse;
+	private final String regExp;
 
-	// collects the indices of default values
-	public Iterable<Integer> getIndices();
+	protected BitArrayToString(boolean reverse) {
+		super(BitArray.class);
+		this.reverse = reverse;
+		this.regExp = "^[0-1]*$";
+	}
 
-	// collects the indices of values different from the default
-	public Iterable<Integer> getIndicesExcept();
+	@Override
+	public String abstractConvert(BitArray bitArray) {
+		StringBuilder sb = new StringBuilder(bitArray.getLength() * (Byte.SIZE + 1));
+		for (Boolean bit : this.reverse ? bitArray.reverse() : bitArray) {
+			sb.append(bit ? "1" : "0");
+		}
+		return sb.toString();
+	}
 
-	public int count();
+	@Override
+	public BitArray abstractReconvert(String string) {
+		if (!string.matches(this.regExp)) {
+			throw new IllegalArgumentException();
+		}
+		boolean[] bits = new boolean[string.length()];
+		for (int i = 0; i < bits.length; i++) {
+			bits[i] = string.charAt(i) == '1';
+		}
+		BitArray result = BitArray.getInstance(bits);
+		return this.reverse ? result.reverse() : result;
+	}
 
-	public int countPrefix();
+	public static BitArrayToString getInstance() {
+		return new BitArrayToString(false);
+	}
 
-	public int countSuffix();
+	public static BitArrayToString getInstance(boolean reverse) {
+		return new BitArrayToString(reverse);
+	}
 
-	public A insertAt(final int index);
+	public static void main(final String[] args) {
 
-	public A replaceAt(int index);
+		BitArrayToString converter1 = BitArrayToString.getInstance();
+		BitArray ba1 = converter1.reconvert("0010100000101010110011000000");
+		System.out.println(ba1);
+		System.out.println(converter1.convert(ba1));
 
-	public A add();
-
-	public A append(int n);
-
-	public A removePrefix();
-
-	public A removeSuffix();
-
-	// left here means making the byte array smaller
-	public A shiftLeft(int n);
-
-	// right here means making the byte array larger
-	public A shiftRight(int n);
+		BitArrayToString converter2 = BitArrayToString.getInstance(true);
+		BitArray ba2 = converter2.reconvert("0010100000101010110011000000");
+		System.out.println(ba2);
+		System.out.println(converter2.convert(ba2));
+	}
 
 }

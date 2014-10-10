@@ -42,10 +42,10 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaSetMembershipProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.StandardNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
@@ -89,7 +89,7 @@ public class PedersenCommitmentValidityProofSystem
 
 		final Set codomain = ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(), messages.getOrder().intValue());
 		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
-			   || !Z.getInstance(pedersenCS.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
+			   || !ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
 		}
 		return new PedersenCommitmentValidityProofSystem(challengeGenerator, pedersenCS, messages);
@@ -104,32 +104,34 @@ public class PedersenCommitmentValidityProofSystem
 	protected Function abstractGetDeltaFunction() {
 		final ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(), this.getSetMembershipProofFunction().getCoDomain());
 		final Function deltaFunction = CompositeFunction.getInstance(
-			   SharedDomainFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 1),
-												CompositeFunction.getInstance(SelectionFunction.getInstance(deltaFunctionDomain, 0),
-																			  GeneratorFunction.getInstance(this.pedersenCS.getMessageGenerator()),
-																			  InvertFunction.getInstance(this.pedersenCS.getCyclicGroup()))),
+			   SharedDomainFunction.getInstance(
+					  SelectionFunction.getInstance(deltaFunctionDomain, 1),
+					  CompositeFunction.getInstance(
+							 SelectionFunction.getInstance(deltaFunctionDomain, 0),
+							 GeneratorFunction.getInstance(this.pedersenCS.getMessageGenerator()),
+							 InvertFunction.getInstance(this.pedersenCS.getCyclicGroup()))),
 			   ApplyFunction.getInstance(this.pedersenCS.getCyclicGroup()));
 		return deltaFunction;
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages) {
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages, final Element proverId) {
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages, final Element proverId) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages, final RandomOracle randomOracle) {
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages, final RandomOracle randomOracle) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, (Element) null, randomOracle);
 	}
 
-	public static StandardNonInteractiveSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages, final Element proverId, final RandomOracle randomOracle) {
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages, final Element proverId, final RandomOracle randomOracle) {
 		if (pedersenCS == null || numberOfMessages < 1 || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}
 		final Group codomain = ProductGroup.getInstance((Group) pedersenCS.getCommitmentFunction().getCoDomain(), numberOfMessages);
-		return StandardNonInteractiveSigmaChallengeGenerator.getInstance(codomain, codomain, Z.getInstance(pedersenCS.getCyclicGroup().getOrder()), randomOracle, proverId);
+		return RandomOracleSigmaChallengeGenerator.getInstance(codomain, codomain, ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder()), proverId, randomOracle);
 
 	}
 

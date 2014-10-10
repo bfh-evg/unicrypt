@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.random.interfaces;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import java.math.BigInteger;
 
@@ -51,8 +50,6 @@ import java.math.BigInteger;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public interface RandomOracle {
-
-	public HashAlgorithm getHashAlgorithm();
 
 	public ReferenceRandomByteSequence getReferenceRandomByteSequence();
 

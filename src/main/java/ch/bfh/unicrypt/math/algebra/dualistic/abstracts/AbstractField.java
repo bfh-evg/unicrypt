@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
+import java.math.BigInteger;
 
 /**
  * This abstract class provides a basis implementation for objects of type {@link Field}.
@@ -82,10 +83,30 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 		if (!this.contains(element)) {
 			throw new IllegalArgumentException();
 		}
-		if (element.isEquivalent(this.getZeroElement())) {
+		if (((E) element).isZero()) {
 			throw new UnsupportedOperationException();
 		}
 		return this.abstractOneOver((E) element);
+	}
+
+	@Override
+	protected E defaultPower(E element, BigInteger amount) {
+		if (element.isZero()) {
+			return element;
+		}
+		boolean negAmount = (amount.signum() < 0);
+		amount = amount.abs();
+		if (this.isFinite() && this.hasKnownOrder()) {
+			amount = amount.mod(this.getOrder().subtract(BigInteger.ONE));
+		}
+		if (amount.signum() == 0) {
+			return this.getOneElement();
+		}
+		E result = this.defaultPowerAlgorithm(element, amount);
+		if (negAmount) {
+			return this.oneOver(result);
+		}
+		return result;
 	}
 
 	/**

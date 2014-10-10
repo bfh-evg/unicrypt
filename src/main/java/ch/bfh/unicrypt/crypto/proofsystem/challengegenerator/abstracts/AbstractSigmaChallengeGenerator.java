@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -51,13 +51,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 public abstract class AbstractSigmaChallengeGenerator
-	   extends AbstractChallengeGenerator<ProductSet, Pair, Z, ZElement>
+	   extends AbstractChallengeGenerator<ProductSet, Pair, ZMod, ZModElement>
 	   implements SigmaChallengeGenerator {
 
-	private final Set publicInputSpace;
-	private final SemiGroup commitmentSpace;
+	protected final Set publicInputSpace;
+	protected final SemiGroup commitmentSpace;
 
-	protected AbstractSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, Z challengeSpace) {
+	protected AbstractSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace) {
 		super(ProductSet.getInstance(publicInputSpace, commitmentSpace), challengeSpace);
 		this.publicInputSpace = publicInputSpace;
 		this.commitmentSpace = commitmentSpace;
@@ -74,7 +74,7 @@ public abstract class AbstractSigmaChallengeGenerator
 	}
 
 	@Override
-	public ZElement generate(Element publicInput, Element commitment) {
+	public ZModElement generate(Element publicInput, Element commitment) {
 		return this.generate(Pair.getInstance(publicInput, commitment));
 	}
 

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -72,7 +72,7 @@ public final class ProductFunction
 	 * @param functions
 	 * @throws IllegalArgumentException if {@literal functions} is null or contains null
 	 */
-	protected ProductFunction(final ProductSet domain, ProductSet coDomain, ImmutableArray<Function> functions) {
+	protected ProductFunction(final ProductSet domain, ProductSet coDomain, DenseArray<Function> functions) {
 		super(domain, coDomain, functions);
 	}
 
@@ -89,7 +89,7 @@ public final class ProductFunction
 	}
 
 	@Override
-	protected ProductFunction abstractGetInstance(ImmutableArray<Function> functions) {
+	protected ProductFunction abstractGetInstance(DenseArray<Function> functions) {
 		return ProductFunction.getInstance(functions);
 	}
 
@@ -101,7 +101,7 @@ public final class ProductFunction
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static ProductFunction getInstance(ImmutableArray<Function> functions) {
+	public static ProductFunction getInstance(DenseArray<Function> functions) {
 		if (functions == null || functions.getLength() == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -123,11 +123,11 @@ public final class ProductFunction
 	}
 
 	public static ProductFunction getInstance(final Function... functions) {
-		return ProductFunction.getInstance(ImmutableArray.getInstance(functions));
+		return ProductFunction.getInstance(DenseArray.getInstance(functions));
 	}
 
 	public static ProductFunction getInstance(final Function function, final int arity) {
-		return ProductFunction.getInstance(ImmutableArray.getInstance(function, arity));
+		return ProductFunction.getInstance(DenseArray.getInstance(function, arity));
 	}
 
 }

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractCompoundFunction;
@@ -61,7 +61,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public final class CompositeFunction
 	   extends AbstractCompoundFunction<CompositeFunction, Set, Element, Set, Element> {
 
-	private CompositeFunction(Set domain, Set coDomain, final ImmutableArray<Function> functions) {
+	private CompositeFunction(Set domain, Set coDomain, final DenseArray<Function> functions) {
 		super(domain, coDomain, functions);
 	}
 
@@ -75,7 +75,7 @@ public final class CompositeFunction
 	}
 
 	@Override
-	protected CompositeFunction abstractGetInstance(ImmutableArray<Function> functions) {
+	protected CompositeFunction abstractGetInstance(DenseArray<Function> functions) {
 		return CompositeFunction.getInstance(functions);
 	}
 
@@ -94,7 +94,7 @@ public final class CompositeFunction
 	 * @throws IllegalArgumentException if the domain of a function is different from the co-domain of the previous
 	 *                                  function
 	 */
-	public static CompositeFunction getInstance(final ImmutableArray<Function> functions) {
+	public static CompositeFunction getInstance(final DenseArray<Function> functions) {
 		if (functions == null || functions.getLength() == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -114,11 +114,11 @@ public final class CompositeFunction
 	}
 
 	public static CompositeFunction getInstance(final Function... functions) {
-		return CompositeFunction.getInstance(ImmutableArray.getInstance(functions));
+		return CompositeFunction.getInstance(DenseArray.getInstance(functions));
 	}
 
 	public static CompositeFunction getInstance(final Function function, final int arity) {
-		return CompositeFunction.getInstance(ImmutableArray.getInstance(function, arity));
+		return CompositeFunction.getInstance(DenseArray.getInstance(function, arity));
 	}
 
 }

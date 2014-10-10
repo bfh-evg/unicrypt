@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -54,9 +54,9 @@ import java.math.BigInteger;
  */
 public class ProductSemiGroup
 	   extends ProductSet
-	   implements SemiGroup<ImmutableArray<Element>> {
+	   implements SemiGroup<DenseArray<Element>> {
 
-	protected ProductSemiGroup(ImmutableArray<Set> sets) {
+	protected ProductSemiGroup(DenseArray<Set> sets) {
 		super(sets);
 	}
 
@@ -154,6 +154,10 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(Element element1, Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
+			System.out.println("ERROR");
+			System.out.println(this);
+			System.out.println(element1);
+			System.out.println(element2);
 			throw new IllegalArgumentException();
 		}
 		return this.abstractApply((Tuple) element1, (Tuple) element2);
@@ -177,7 +181,7 @@ public class ProductSemiGroup
 
 	@Override
 	public final Tuple selfApply(Element element, BigInteger amount) {
-		if (!this.contains(element)) {
+		if (!this.contains(element) || amount == null) {
 			throw new IllegalArgumentException();
 		}
 		Tuple tuple = (Tuple) element;
@@ -185,7 +189,7 @@ public class ProductSemiGroup
 		for (int i : this.getAllIndices()) {
 			results[i] = tuple.getAt(i).selfApply(amount);
 		}
-		return this.abstractGetElement(ImmutableArray.getInstance(results));
+		return this.abstractGetElement(DenseArray.getInstance(results));
 	}
 
 	@Override
@@ -219,7 +223,7 @@ public class ProductSemiGroup
 		for (int i : this.getAllIndices()) {
 			results[i] = tuple1.getAt(i).apply(tuple2.getAt(i));
 		}
-		return this.abstractGetElement(ImmutableArray.getInstance(results));
+		return this.abstractGetElement(DenseArray.getInstance(results));
 	}
 
 	protected Tuple defaultApply(final Iterable<Element> elements) {

@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 
 /**
  *
@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
 public class Triple
 	   extends Tuple {
 
-	protected Triple(final ProductSet set, final ImmutableArray<Element> elements) {
+	protected Triple(final ProductSet set, final DenseArray<Element> elements) {
 		super(set, elements);
 	}
 
@@ -67,7 +67,7 @@ public class Triple
 		if (first == null || second == null || third == null) {
 			throw new IllegalArgumentException();
 		}
-		ImmutableArray<Element> elements = ImmutableArray.getInstance(first, second, third);
+		DenseArray<Element> elements = DenseArray.getInstance(first, second, third);
 		return new Triple(ProductSet.getInstance(first.getSet(), second.getSet(), third.getSet()), elements);
 	}
 

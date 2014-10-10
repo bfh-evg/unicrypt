@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
 import ch.bfh.unicrypt.helper.factorization.SpecialFactorization;
-import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeCyclicGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -143,9 +143,8 @@ public class GStarMod
 	// various super-classes
 	//
 	@Override
-	protected GStarModElement defaultSelfApply(final GStarModElement element, final BigInteger amount) {
-		BigInteger newAmount = amount.mod(this.getOrder());
-		return this.abstractGetElement(element.getValue().modPow(newAmount, this.modulus));
+	protected GStarModElement defaultSelfApplyAlgorithm(final GStarModElement element, final BigInteger posAmount) {
+		return this.abstractGetElement(element.getValue().modPow(posAmount, this.modulus));
 	}
 
 	@Override

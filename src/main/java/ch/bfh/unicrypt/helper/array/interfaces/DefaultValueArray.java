@@ -39,58 +39,50 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.additive.classes;
-
-import ch.bfh.unicrypt.helper.Point;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  */
-public class ECElement<V extends Object>
-	   extends AbstractAdditiveElement<EC<V>, ECElement<V>, Point<DualisticElement<V>>> {
+public interface DefaultValueArray<V extends Object>
+	   extends ImmutableArray<V> {
 
-	private final boolean infinity;
+	public V getDefault();
 
-	// the main constructor
-	protected ECElement(EC ecGroup, Point<DualisticElement<V>> value) {
-		super(ecGroup, value);
-		this.infinity = false;
-	}
+	// collects the indices of default values
+	public Iterable<Integer> getIndices();
 
-	// special constructor is necessary for the additional point of infinity
-	protected ECElement(EC ecGroup) {
-		super(ecGroup, Point.<DualisticElement<V>>getInstance());
-		this.infinity = true;
-	}
+	// collects the indices of values different from the default
+	public Iterable<Integer> getIndicesExcept();
 
-	// additional convenience getter method to handle to point of infinity
-	public DualisticElement<V> getX() {
-		if (this.infinity) {
-			throw new UnsupportedOperationException();
-		}
-		return this.getValue().getX();
-	}
+	public int count();
 
-	// additional convenience getter method to handle to point of infinity
-	public DualisticElement<V> getY() {
-		if (this.infinity) {
-			throw new UnsupportedOperationException();
-		}
-		return this.getValue().getY();
-	}
+	public int countPrefix();
 
-	@Override
-	protected String defaultToStringValue() {
-		if (this.infinity) {
-			return "Infinity";
-		} else {
-			return "(" + this.getX().getValue() + "," + this.getY().getValue() + ")";
-		}
-	}
+	public int countSuffix();
+
+	public ImmutableArray<V> insertAt(final int index);
+
+	public ImmutableArray<V> replaceAt(int index);
+
+	public ImmutableArray<V> add();
+
+	public ImmutableArray<V> appendPrefix(int n);
+
+	public ImmutableArray<V> appendSuffix(int n);
+
+	public ImmutableArray<V> appendPrefixAndSuffix(int n, int m);
+
+	public ImmutableArray<V> removePrefix();
+
+	public ImmutableArray<V> removeSuffix();
+
+	// left here means making the array smaller
+	public ImmutableArray<V> shiftLeft(int n);
+
+	// right here means making the array larger and fill up with default value
+	public ImmutableArray<V> shiftRight(int n);
 
 }

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import java.util.ArrayList;
 import java.util.Iterator;
 import static org.junit.Assert.assertEquals;
@@ -55,25 +55,25 @@ import org.junit.Test;
  */
 public class ImmutableArrayTest {
 
-	private static ImmutableArray<String> a0 = ImmutableArray.getInstance();
-	private static ImmutableArray<String> a1 = ImmutableArray.getInstance("s1", "s2", "s3");
-	private static ImmutableArray<String> a2 = ImmutableArray.getInstance("s1", "s1", "s1");
-	private static ImmutableArray<String> a3 = ImmutableArray.getInstance("s1", 3);
-	private static ImmutableArray<String> a4;
-	private static ImmutableArray<String> a5;
+	private static DenseArray<String> a0 = DenseArray.getInstance();
+	private static DenseArray<String> a1 = DenseArray.getInstance("s1", "s2", "s3");
+	private static DenseArray<String> a2 = DenseArray.getInstance("s1", "s1", "s1");
+	private static DenseArray<String> a3 = DenseArray.getInstance("s1", 3);
+	private static DenseArray<String> a4;
+	private static DenseArray<String> a5;
 
 	public ImmutableArrayTest() {
 		ArrayList list1 = new ArrayList();
 		list1.add("s1");
 		list1.add("s2");
 		list1.add("s3");
-		a4 = ImmutableArray.getInstance(list1);
+		a4 = DenseArray.getInstance(list1);
 
 		ArrayList list2 = new ArrayList();
 		list2.add("s1");
 		list2.add("s1");
 		list2.add("s1");
-		a5 = ImmutableArray.getInstance(list2);
+		a5 = DenseArray.getInstance(list2);
 	}
 
 	@Test
@@ -181,7 +181,7 @@ public class ImmutableArrayTest {
 		list1.add("s1");
 		list1.add(null);
 		list1.add("s3");
-		ImmutableArray a = ImmutableArray.getInstance(list1);
+		DenseArray a = DenseArray.getInstance(list1);
 	}
 
 }

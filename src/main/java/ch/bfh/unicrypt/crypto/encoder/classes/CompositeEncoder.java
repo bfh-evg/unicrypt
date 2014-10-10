@@ -43,7 +43,8 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -53,7 +54,7 @@ import java.util.Iterator;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
-	   implements RecursiveArray<CompositeEncoder, Encoder> {
+	   implements RecursiveArray<Encoder> {
 
 	private final ImmutableArray<Encoder> encoders;
 
@@ -198,8 +199,8 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public CompositeEncoder append(CompositeEncoder other) {
-		return new CompositeEncoder(this.encoders.append(other.encoders));
+	public CompositeEncoder append(ImmutableArray<Encoder> other) {
+		return new CompositeEncoder(this.encoders.append(other));
 	}
 
 	@Override
@@ -242,7 +243,7 @@ public class CompositeEncoder
 		return CompositeFunction.getInstance(decodingFunctions);
 	}
 
-	public static CompositeEncoder getInstance(ImmutableArray<Encoder> encoders) {
+	public static CompositeEncoder getInstance(DenseArray<Encoder> encoders) {
 		if (encoders == null || encoders.getLength() == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -250,11 +251,11 @@ public class CompositeEncoder
 	}
 
 	public static CompositeEncoder getInstance(Encoder... encoders) {
-		return CompositeEncoder.getInstance(ImmutableArray.getInstance(encoders));
+		return CompositeEncoder.getInstance(DenseArray.getInstance(encoders));
 	}
 
 	public static CompositeEncoder getInstance(Encoder encoder, int length) {
-		return CompositeEncoder.getInstance(ImmutableArray.getInstance(encoder, length));
+		return CompositeEncoder.getInstance(DenseArray.getInstance(encoder, length));
 	}
 
 }

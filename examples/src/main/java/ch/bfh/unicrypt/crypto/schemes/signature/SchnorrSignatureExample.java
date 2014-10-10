@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
@@ -68,10 +69,9 @@ public class SchnorrSignatureExample {
 		Element privateKey = keyPair.getFirst();
 		Element publicKey = keyPair.getSecond();
 
-		StringElement message = schnorr.getMessageSpace().getElement("MessageXX");
-		Element randomization = schnorr.getRandomizationSpace().getRandomElement();
+		StringElement message = schnorr.getMessageSpace().getElement("Message");
 
-		Element signature = schnorr.sign(privateKey, message, randomization);
+		Tuple signature = schnorr.sign(privateKey, message);
 		Example.printLine("Signature", signature);
 
 		BooleanElement result = schnorr.verify(publicKey, message, signature);

@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.math.MathUtil;
 import java.math.BigInteger;
 
 /**

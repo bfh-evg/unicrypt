@@ -42,9 +42,9 @@
 package ch.bfh.unicrypt.math.algebra.concatenative;
 
 import ch.bfh.unicrypt.Example;
+import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.helper.Alphabet;
 
 /**
  *
@@ -63,10 +63,12 @@ public class StringMonoidExample {
 		Element s3 = sm.getElement("WORLD");
 		Element s123 = sm.concatenate(s1, s2, s3);
 
+		Element s11111 = sm.selfConcatenate(s1, 5);
+
 		// Generate random string of length 10
 		Element s = sm.getRandomElement(10);
 
-		Example.printLines(sm, s1, s2, s3, s123, s);
+		Example.printLines(sm, s1, s2, s3, s123, s, s11111);
 
 	}
 

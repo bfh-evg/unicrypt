@@ -79,10 +79,19 @@ public abstract class AbstractGroup<E extends Element<V>, V extends Object>
 
 	@Override
 	protected E defaultSelfApply(E element, BigInteger amount) {
-		if (amount.signum() < 0) {
-			return this.invert(super.defaultSelfApply(element, amount.abs()));
+		boolean negAmount = (amount.signum() < 0);
+		amount = amount.abs();
+		if (this.isFinite() && this.hasKnownOrder()) {
+			amount = amount.mod(this.getOrder());
 		}
-		return super.defaultSelfApply(element, amount);
+		if (amount.signum() == 0) {
+			return this.getIdentityElement();
+		}
+		E result = this.defaultSelfApplyAlgorithm(element, amount);
+		if (negAmount) {
+			return this.invert(result);
+		}
+		return result;
 	}
 
 	//

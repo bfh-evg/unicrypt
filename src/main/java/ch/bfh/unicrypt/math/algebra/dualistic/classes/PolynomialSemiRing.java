@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -67,8 +67,8 @@ import java.util.Map;
  * @version 2.0
  * @param <V>
  */
-public class PolynomialSemiRing<V>
-	   extends AbstractSemiRing<PolynomialElement<V>, Polynomial<DualisticElement<V>>> {
+public class PolynomialSemiRing<V extends Object>
+	   extends AbstractSemiRing<PolynomialElement<V>, Polynomial<? extends DualisticElement<V>>> {
 
 	private final SemiRing<V> semiRing;
 
@@ -85,11 +85,12 @@ public class PolynomialSemiRing<V>
 		return this.getSemiRing().getOrder().intValue() == 2;
 	}
 
-	public PolynomialElement<V> getElement(Polynomial<? extends DualisticElement<V>> value) {
-		if (!this.contains(value)) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractGetElement(value);
+	public PolynomialElement<V> getElement(Map<Integer, DualisticElement<V>> coefficientMap) {
+		return this.getElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
+	}
+
+	public PolynomialElement<V> getElement(ByteArray coefficients) {//TODO: Change back to protected -> ZModToBinaryEncoder is then not working anymore.
+		return this.getElement(Polynomial.getInstance(coefficients, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
 	}
 
 	public PolynomialElement<V> getElement(BigInteger... values) {
@@ -115,7 +116,7 @@ public class PolynomialSemiRing<V>
 		for (int i = 0; i < coefficients.getArity(); i++) {
 			coefficientMap.put(i, (DualisticElement<V>) coefficients.getAt(i));
 		}
-		return this.getElement(coefficientMap);
+		return this.getElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
 	}
 
 	public PolynomialElement<V> getRandomElement(int degree) {
@@ -133,7 +134,7 @@ public class PolynomialSemiRing<V>
 				coefficientMap.put(i, coefficient);
 			}
 		}
-		return getElement(coefficientMap);
+		return this.getElementUnchecked(coefficientMap);
 	}
 
 	public PolynomialElement<V> getRandomMonicElement(int degree, boolean a0NotZero) {
@@ -156,14 +157,14 @@ public class PolynomialSemiRing<V>
 		}
 		coefficientMap.put(degree, this.getSemiRing().getOneElement());
 
-		return getElement(coefficientMap);
+		return getElementUnchecked(coefficientMap);
 	}
 
-	protected PolynomialElement<V> getElement(Map<Integer, DualisticElement<V>> coefficientMap) {
+	protected PolynomialElement<V> getElementUnchecked(Map<Integer, DualisticElement<V>> coefficientMap) {
 		return abstractGetElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
 	}
 
-	protected PolynomialElement<V> getElement(ByteArray coefficients) {
+	protected PolynomialElement<V> getElementUnchecked(ByteArray coefficients) {//TODO: Change back to protected -> ZModToBinaryEncoder is then not working anymore.
 		return abstractGetElement(Polynomial.getInstance(coefficients, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
 	}
 
@@ -191,7 +192,7 @@ public class PolynomialSemiRing<V>
 
 	@Override
 	protected boolean abstractContains(Polynomial value) {
-		ImmutableArray<Integer> indices = value.getIndices();
+		DenseArray<Integer> indices = value.getIndices();
 		for (int i : indices) {
 			if (!(Element.class.isInstance(value.getCoefficient(i)) && this.getSemiRing().contains((Element) value.getCoefficient(i)))) {
 				return false;
@@ -206,11 +207,11 @@ public class PolynomialSemiRing<V>
 	}
 
 	@Override
-	protected BigIntegerConverter<Polynomial<DualisticElement<V>>> abstractGetBigIntegerConverter() {
-		return new AbstractBigIntegerConverter<Polynomial<DualisticElement<V>>>(null) { // class not needed
+	protected BigIntegerConverter<Polynomial<? extends DualisticElement<V>>> abstractGetBigIntegerConverter() {
+		return new AbstractBigIntegerConverter<Polynomial<? extends DualisticElement<V>>>(null) { // class not needed
 
 			@Override
-			protected BigInteger abstractConvert(Polynomial<DualisticElement<V>> polynomial) {
+			protected BigInteger abstractConvert(Polynomial<? extends DualisticElement<V>> polynomial) {
 				int degree = polynomial.getDegree();
 				BigInteger[] values = new BigInteger[degree + 1];
 				for (int i = 0; i <= degree; i++) {
@@ -220,7 +221,7 @@ public class PolynomialSemiRing<V>
 			}
 
 			@Override
-			protected Polynomial<DualisticElement<V>> abstractReconvert(BigInteger value) {
+			protected Polynomial<? extends DualisticElement<V>> abstractReconvert(BigInteger value) {
 				BigInteger[] bigIntegers = MathUtil.unpairWithSize(value);
 				DualisticElement[] elements = new DualisticElement[bigIntegers.length];
 				int i = 0;
@@ -229,7 +230,7 @@ public class PolynomialSemiRing<V>
 					elements[i] = element;
 					i++;
 				}
-				Polynomial<DualisticElement<V>> polynomial = Polynomial.<DualisticElement<V>>getInstance(elements, getSemiRing().getZeroElement(), getSemiRing().getOneElement());
+				Polynomial<? extends DualisticElement<V>> polynomial = Polynomial.<DualisticElement<V>>getInstance(elements, getSemiRing().getZeroElement(), getSemiRing().getOneElement());
 				return polynomial;
 			}
 		};
@@ -242,12 +243,12 @@ public class PolynomialSemiRing<V>
 
 	@Override
 	protected PolynomialElement<V> abstractApply(PolynomialElement<V> element1, PolynomialElement<V> element2) {
-		Polynomial<DualisticElement<V>> polynomial1 = element1.getValue();
-		Polynomial<DualisticElement<V>> polynomial2 = element2.getValue();
+		Polynomial<? extends DualisticElement<V>> polynomial1 = element1.getValue();
+		Polynomial<? extends DualisticElement<V>> polynomial2 = element2.getValue();
 
 		if (this.isBinary()) {
 			ByteArray coefficients = polynomial1.getCoefficients().xorFillZero(polynomial2.getCoefficients());
-			return this.getElement(coefficients);
+			return this.getElementUnchecked(coefficients);
 		} else {
 			Map<Integer, DualisticElement<V>> coefficientMap = new HashMap();
 			for (Integer i : polynomial1.getIndices()) {
@@ -261,68 +262,75 @@ public class PolynomialSemiRing<V>
 					coefficientMap.put(i, coefficient.add(polynomial2.getCoefficient(i)));
 				}
 			}
-			return this.getElement(coefficientMap);
+			return this.getElementUnchecked(coefficientMap);
 		}
 	}
 
 	@Override
 	protected PolynomialElement<V> abstractGetIdentityElement() {
-		return this.getElement(new HashMap<Integer, DualisticElement<V>>());
+		return this.getElementUnchecked(new HashMap<Integer, DualisticElement<V>>());
 	}
 
 	@Override
 	protected PolynomialElement<V> abstractMultiply(PolynomialElement<V> element1, PolynomialElement<V> element2) {
-		Polynomial<DualisticElement<V>> polynomial1 = element1.getValue();
-		Polynomial<DualisticElement<V>> polynomial2 = element2.getValue();
+		Polynomial<? extends DualisticElement<V>> polynomial1 = element1.getValue();
+		Polynomial<? extends DualisticElement<V>> polynomial2 = element2.getValue();
 
 		if (element1.isEquivalent(this.getZeroElement()) || element2.isEquivalent(this.getZeroElement())) {
 			return this.getZeroElement();
 		}
 
 		if (this.isBinary()) {
-			ByteArray p1 = polynomial1.getCoefficients();
-			ByteArray p2 = polynomial2.getCoefficients();
-			if (polynomial2.getDegree() > polynomial1.getDegree()) {
-				ByteArray tmp = p1;
-				p1 = p2;
-				p2 = tmp;
-			}
-			ByteArray zero = ByteArray.getInstance(); // an empty byte array
-			ByteArray result = zero;
-			while (!p2.equals(zero)) {
-				if (p2.getBitAt(0)) {
-					result = result.xorFillZero(p1);
-				}
-				// removeSuffix was added to avoid an endless loop in PolynomialFieldTest
-				// the problem could probably be avoided by working with BitArray
-				p1 = p1.shiftBitsRight(1).removeSuffix();
-				p2 = p2.shiftBitsLeft(1).removeSuffix();
-			}
-			return this.getElement(result);
-
+			return this.getElementUnchecked(multiplyBinary(polynomial1, polynomial2));
 		} else {
-			Map<Integer, DualisticElement<V>> coefficientMap = new HashMap();
-			for (Integer i : polynomial1.getIndices()) {
-				for (Integer j : polynomial2.getIndices()) {
-					Integer k = i + j;
-					DualisticElement<V> coefficient = polynomial1.getCoefficient(i).multiply(polynomial2.getCoefficient(j));
-					DualisticElement<V> newCoefficient = coefficientMap.get(k);
-					if (newCoefficient == null) {
-						coefficientMap.put(k, coefficient);
-					} else {
-						coefficientMap.put(k, newCoefficient.add(coefficient));
-					}
+			return this.getElementUnchecked(multiplyNonBinary(polynomial1, polynomial2));
+		}
+	}
+
+	protected ByteArray multiplyBinary(Polynomial<? extends DualisticElement<V>> polynomial1, Polynomial<? extends DualisticElement<V>> polynomial2) {
+		ByteArray p1 = polynomial1.getCoefficients();
+		ByteArray p2 = polynomial2.getCoefficients();
+		if (polynomial2.getDegree() > polynomial1.getDegree()) {
+			ByteArray tmp = p1;
+			p1 = p2;
+			p2 = tmp;
+		}
+		ByteArray zero = ByteArray.getInstance(); // an empty byte array
+		ByteArray result = zero;
+		while (!p2.equals(zero)) {
+			if (p2.getBitAt(0)) {
+				result = result.xorFillZero(p1);
+			}
+			// removeSuffix was added to avoid an endless loop in PolynomialFieldTest
+			// the problem could probably be avoided by working with BitArray
+			p1 = p1.shiftBitsRight(1).removeSuffix();
+			p2 = p2.shiftBitsLeft(1).removeSuffix();
+		}
+		return result;
+	}
+
+	protected Map<Integer, DualisticElement<V>> multiplyNonBinary(Polynomial<? extends DualisticElement<V>> polynomial1, Polynomial<? extends DualisticElement<V>> polynomial2) {
+		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap();
+		for (Integer i : polynomial1.getIndices()) {
+			for (Integer j : polynomial2.getIndices()) {
+				Integer k = i + j;
+				DualisticElement<V> coefficient = polynomial1.getCoefficient(i).multiply(polynomial2.getCoefficient(j));
+				DualisticElement<V> newCoefficient = coefficientMap.get(k);
+				if (newCoefficient == null) {
+					coefficientMap.put(k, coefficient);
+				} else {
+					coefficientMap.put(k, newCoefficient.add(coefficient));
 				}
 			}
-			return this.getElement(coefficientMap);
 		}
+		return coefficientMap;
 	}
 
 	@Override
 	protected PolynomialElement abstractGetOne() {
 		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap<Integer, DualisticElement<V>>();
 		coefficientMap.put(0, this.getSemiRing().getOneElement());
-		return getElement(coefficientMap);
+		return getElementUnchecked(coefficientMap);
 	}
 
 	@Override

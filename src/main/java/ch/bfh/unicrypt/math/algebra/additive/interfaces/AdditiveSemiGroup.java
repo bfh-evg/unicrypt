@@ -139,9 +139,6 @@ public interface AdditiveSemiGroup<V extends Object>
 	public AdditiveElement<V> getElementFrom(ByteTree byteTree);
 
 	@Override
-	public AdditiveElement<V> getElementFrom(Element element);
-
-	@Override
 	public AdditiveElement<V> getRandomElement();
 
 	@Override

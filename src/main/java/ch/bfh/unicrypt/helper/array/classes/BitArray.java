@@ -41,8 +41,11 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.array.abstracts.AbstractArrayWithDefault;
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
@@ -51,8 +54,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
 public class BitArray
-	   extends AbstractArrayWithDefault<BitArray, Boolean>
-	   implements Iterable<Boolean> {
+	   extends AbstractDefaultValueArray<BitArray, Boolean> {
 
 	ByteArray byteArray;
 
@@ -100,7 +102,7 @@ public class BitArray
 		int maxBitIndex = Math.min(this.length, bitIndex + Byte.SIZE);
 		for (int i = 0; bitIndex < maxBitIndex; i++, bitIndex++) {
 			if (this.abstractGetAt(bitIndex)) {
-				result = ByteArray.setBit(result, i);
+				result = MathUtil.setBit(result, i);
 			}
 		}
 		return result;
@@ -164,22 +166,11 @@ public class BitArray
 	}
 
 	// a string of '0's and '1's
-	public static BitArray getInstance(String string) {
-		if (string == null) {
+	public static BitArray getInstance(String binaryString) {
+		if (binaryString == null) {
 			throw new IllegalArgumentException();
 		}
-		boolean[] bits = new boolean[string.length()];
-		for (int i = 0; i < string.length(); i++) {
-			char c = string.charAt(i);
-			if (c == '0') {
-				bits[i] = false;
-			} else if (c == '1') {
-				bits[i] = true;
-			} else {
-				throw new IllegalArgumentException();
-			}
-		}
-		return BitArray.getInstance(bits);
+		return BitArrayToString.getInstance().reconvert(binaryString);
 	}
 
 	public static BitArray getRandomInstance(int length) {
@@ -196,17 +187,7 @@ public class BitArray
 
 	@Override
 	protected String defaultToStringValue() {
-		String str = "";
-		for (int i : this.getAllIndices()) {
-			if (i > 0 && i % 8 == 0) {
-				str = str + "|";
-			}
-			if (this.getBitAt(i)) {
-				str = str + "1";
-			} else {
-				str = str + "0";
-			}
-		}
+		String str = BitArrayToString.getInstance().convert(this);
 		return "\"" + str + "\"";
 	}
 
@@ -222,17 +203,20 @@ public class BitArray
 		if (index < this.trailer || index >= this.length - this.header) {
 			return false;
 		}
-		return this.byteArray.getBitAt(this.offset + index - this.trailer);
+		index = this.offset + index - this.trailer;
+		int byteIndex = index / Byte.SIZE;
+		byte mask = MathUtil.bitMask(index % Byte.SIZE);
+		return MathUtil.logicalAND(this.byteArray.getByteAt(byteIndex), mask) != 0;
 	}
 
 	@Override
-	protected BitArray abstractAppend(BitArray other) {
-		boolean[] result = new boolean[this.length + other.length];
+	protected BitArray abstractAppend(ImmutableArray<Boolean> other) {
+		boolean[] result = new boolean[this.length + other.getLength()];
 		for (int i : this.getAllIndices()) {
 			result[i] = this.getBitAt(i);
 		}
 		for (int i : other.getAllIndices()) {
-			result[this.length + i] = other.getBitAt(i);
+			result[this.length + i] = other.getAt(i);
 		}
 		return BitArray.getInstance(result);
 	}
@@ -273,7 +257,7 @@ public class BitArray
 			int byteIndex = i / Byte.SIZE;
 			int bitIndex = i % Byte.SIZE;
 			if (bits[i]) {
-				bytes[byteIndex] = ByteArray.setBit(bytes[byteIndex], bitIndex);
+				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
 			}
 		}
 		return bytes;

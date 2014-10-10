@@ -54,14 +54,19 @@ import java.util.HashMap;
 public class PseudoRandomOracle
 	   extends AbstractRandomOracle {
 
-	HashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
-
 	public static final RandomOracle DEFAULT = PseudoRandomOracle.getInstance(HashAlgorithm.getInstance());
 
-	protected PseudoRandomOracle(HashAlgorithm hashAlgorithm) {
-		super(hashAlgorithm);
-		this.referenceRandomByteSequence = new HashMap<ByteArray, ReferenceRandomByteSequence>();
+	private final HashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
+	private final HashAlgorithm hashAlgorithm;
 
+	protected PseudoRandomOracle(HashAlgorithm hashAlgorithm) {
+		super();
+		this.referenceRandomByteSequence = new HashMap<ByteArray, ReferenceRandomByteSequence>();
+		this.hashAlgorithm = hashAlgorithm;
+	}
+
+	public final HashAlgorithm getHashAlgorithm() {
+		return this.hashAlgorithm;
 	}
 
 	//TODO: Warning, this is a memory-hog!

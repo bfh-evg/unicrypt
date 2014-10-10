@@ -98,10 +98,13 @@ public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 
 	@Override
 	protected E defaultSelfApply(E element, BigInteger amount) {
+		if (amount.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
 		if (amount.signum() == 0) {
 			return this.getIdentityElement();
 		}
-		return super.defaultSelfApply(element, amount);
+		return this.defaultSelfApplyAlgorithm(element, amount);
 	}
 
 	@Override

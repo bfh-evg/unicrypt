@@ -60,7 +60,7 @@ import java.util.Map;
  */
 public class PolynomialRing<V>
 	   extends PolynomialSemiRing<V>
-	   implements Ring<Polynomial<DualisticElement<V>>> {
+	   implements Ring<Polynomial<? extends DualisticElement<V>>> {
 
 	protected PolynomialRing(Ring ring) {
 		super(ring);
@@ -81,11 +81,11 @@ public class PolynomialRing<V>
 		}
 
 		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap<Integer, DualisticElement<V>>();
-		Polynomial<DualisticElement<V>> polynomial = ((PolynomialElement<V>) element).getValue();
+		Polynomial<? extends DualisticElement<V>> polynomial = ((PolynomialElement<V>) element).getValue();
 		for (Integer i : polynomial.getIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
 		}
-		return this.getElement(coefficientMap);
+		return this.getElementUnchecked(coefficientMap);
 	}
 
 	@Override
@@ -226,7 +226,7 @@ public class PolynomialRing<V>
 			int i = r.getValue().getDegree() - h.getValue().getDegree();
 			HashMap map = new HashMap(1);
 			map.put(i, c);
-			t = ring.getElement(map);
+			t = ring.getElementUnchecked(map);
 			q = t.add(q);
 			r = r.subtract(t.multiply(h));
 		}

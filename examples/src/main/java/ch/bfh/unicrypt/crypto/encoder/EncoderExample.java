@@ -42,18 +42,12 @@
 package ch.bfh.unicrypt.crypto.encoder;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.crypto.encoder.classes.CompositeEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.FiniteStringToZModEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupF2mEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.ProbabilisticECGroupFpEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.ZModToGStarModSafePrimeEncoder;
-import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
-import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.additive.classes.StandardECZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECPolynomialFieldEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECZModPrimeEncoder;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsF2m;
 import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
 
@@ -63,83 +57,54 @@ import ch.bfh.unicrypt.math.algebra.params.classes.SECECCParamsFp;
  */
 public class EncoderExample {
 
-	public static void example1() {
 
-		// Define underlying groups
-		GStarModSafePrime group = GStarModSafePrime.getRandomInstance(64);
-		ZMod zMod = group.getZModOrder();
-
-		// Create encoders
-		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(zMod, Alphabet.LOWER_CASE);
-		Encoder encoder2 = ZModToGStarModSafePrimeEncoder.getInstance(group);
-
-		// Create composite encoder
-		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);
-
-		// Encode and decode message
-		Element message = encoder12.getDomain().getElement("hello");
-		Element encodedMessage = encoder12.encode(message);
-		Element decodedMessage = encoder12.decode(encodedMessage);
-
-		Example.printLines("Groups", group, zMod);
-		Example.printLines("Encoders", encoder1, encoder2, encoder12);
-		Example.printLines("Messages", message, encodedMessage, decodedMessage);
-	}
 
 	/**
-	 * Example shows how to encode an element from ZMod into an elliptic curve over F2m
+	 * Example shows how to encode an element from ZModPrime into an elliptic curve over F2m
+	 * <p>
+	 * @throws Exception
 	 */
-	public static void example2() {
+	public static void example1() throws Exception {
 
 		// Define underlying groups
-		StandardECPolynomialField ec = StandardECPolynomialField
-			   .getInstance(SECECCParamsF2m.sect113r1);
-		ZMod z = ZMod.getInstance(ec.getOrder());
+		ECPolynomialField ec = ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
+		ZModPrime z = ZModPrime.getInstance(ec.getOrder());
 
 		// Create encoders
-		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.LOWER_CASE);
-		ProbabilisticECGroupF2mEncoder encoder2 = ProbabilisticECGroupF2mEncoder.getInstance(z, ec);
+		ZModToECPolynomialFieldEncoder encoder1 = ZModToECPolynomialFieldEncoder.getInstance(z, ec,15);
 
-		// Create composite encoder
-		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);
 
-		// Encode and decode message
-		Element message = encoder12.getDomain().getElement("hello");
-		Element encodedMessage = encoder12.encode(message);
-		Element decodedMessage = encoder12.decode(encodedMessage);
+
+		Element message = encoder1.getDomain().getElement(12350);
+		Element encodedMessage = encoder1.encode(message);
+		Element decodedMessage = encoder1.decode(encodedMessage);
 
 		Example.printLines("Groups", ec, z);
-		Example.printLines("Encoders", encoder1, encoder2, encoder12);
+		Example.printLines("Encoders", encoder1);
 		Example.printLines("Messages", message, encodedMessage, decodedMessage);
 
 	}
 	
-	
 	/**
-	 * Example shows how to encode an element from ZMod into an elliptic curve over F2m
-	 * @throws Exception 
+	 * Example shows how to encode an element from ZModPrime into an elliptic curve over F2m
+	 * <p>
+	 * @throws Exception
 	 */
-	public static void example3() throws Exception {
+	public static void example2() throws Exception {
 
 		// Define underlying groups
-		StandardECZModPrime ec = StandardECZModPrime
-			   .getInstance(SECECCParamsFp.secp160r1);
-		ZMod z = ZMod.getInstance(ec.getOrder());
+		ECZModPrime ec = ECZModPrime.getInstance(SECECCParamsFp.secp160r1);
 
 		// Create encoders
-		Encoder encoder1 = FiniteStringToZModEncoder.getInstance(z, Alphabet.LOWER_CASE);
-		ProbabilisticECGroupFpEncoder encoder2 = ProbabilisticECGroupFpEncoder.getInstance(z,ec);
-
-		// Create composite encoder
-		Encoder encoder12 = CompositeEncoder.getInstance(encoder1, encoder2);
+		ZModToECZModPrimeEncoder encoder1 = ZModToECZModPrimeEncoder.getInstance(ec,15);
 
 		// Encode and decode message
-		Element message = encoder12.getDomain().getElement("hello");
-		Element encodedMessage = encoder12.encode(message);
-		Element decodedMessage = encoder12.decode(encodedMessage);
+		Element message = encoder1.getDomain().getElement(123456);
+		Element encodedMessage = encoder1.encode(message);
+		Element decodedMessage = encoder1.decode(encodedMessage);
 
-		Example.printLines("Groups", ec, z);
-		Example.printLines("Encoders", encoder1, encoder2, encoder12);
+		Example.printLines("Groups", ec);
+		Example.printLines("Encoders", encoder1);
 		Example.printLines("Messages", message, encodedMessage, decodedMessage);
 
 	}

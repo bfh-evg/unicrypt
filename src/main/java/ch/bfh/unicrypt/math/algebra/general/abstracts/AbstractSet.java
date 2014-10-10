@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.interfaces.Array;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
@@ -152,7 +152,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final boolean isProduct() {
-		return this instanceof Array;
+		return this instanceof ImmutableArray;
 	}
 
 	@Override
@@ -231,22 +231,19 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (!this.contains(value)) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetElement((V) value);
+		return this.abstractGetElement(value);
 	}
 
 	@Override
-	public final boolean contains(final Object value) {
+	public final boolean contains(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		if (!this.valueClass.isInstance(value)) {
-			return false;
-		}
-		return this.abstractContains((V) value);
+		return this.abstractContains(value);
 	}
 
 	@Override
-	public final boolean contains(final Element element) {
+	public final boolean contains(Element element) {
 		if (element == null) {
 			throw new IllegalArgumentException();
 		}
@@ -254,7 +251,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E getElementFrom(final int integer) {
+	public final E getElementFrom(int integer) {
 		return this.getElementFrom(BigInteger.valueOf(integer));
 	}
 
@@ -366,20 +363,6 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 			throw new IllegalArgumentException();
 		}
 		return this.defaultGetElementFrom(byteTree, convertMethod);
-	}
-
-	@Override
-	public final E getElementFrom(final Element element) {
-		if (element == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this.contains(element)) {
-			return (E) element;
-		}
-		if (this.contains(element.getValue())) {
-			return this.getElement((V) element.getValue());
-		}
-		return this.getElementFrom(element.getBigInteger());
 	}
 
 	@Override
@@ -519,6 +502,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.getOrderLowerBound();
 	}
 
+	// this method is different only for Subset
 	protected boolean defaultContains(final Element element) {
 		return this.isEquivalent(element.getSet());
 	}

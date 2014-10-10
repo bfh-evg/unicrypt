@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.classes.ImmutableArray;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -72,7 +72,7 @@ public class Polynomial<C>
 	private final C oneCoefficient;
 
 	/** Holds the indices of the non zero coefficients. */
-	private ImmutableArray<Integer> indices;
+	private DenseArray<Integer> indices;
 
 	private Polynomial(Map<Integer, C> coefficients, C zeroCoefficient, C oneCoefficient) {
 		this.coefficients = coefficients;
@@ -172,7 +172,7 @@ public class Polynomial<C>
 		return this.binaryCoefficients;
 	}
 
-	public final ImmutableArray<Integer> getIndices() {
+	public final DenseArray<Integer> getIndices() {
 		if (this.indices == null) {
 			if (this.isBinary()) {
 				ArrayList<Integer> ind = new ArrayList();
@@ -181,10 +181,10 @@ public class Polynomial<C>
 						ind.add(i);
 					}
 				}
-				this.indices = ImmutableArray.getInstance(ind);
+				this.indices = DenseArray.getInstance(ind);
 			} else {
 				TreeSet ind = new TreeSet(this.coefficients.keySet());
-				this.indices = ImmutableArray.getInstance(ind);
+				this.indices = DenseArray.getInstance(ind);
 			}
 		}
 		return this.indices;
