@@ -45,9 +45,6 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.distributionsampler.classes.DistributionSamplerCollector;
 import ch.bfh.unicrypt.random.interfaces.TrueRandomByteSequence;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 /**
  * This class allows the generation of ephemeral keys. Hence it provides (backward-)security and forward-security to the
@@ -77,16 +74,7 @@ public class HybridRandomByteSequence
 		super(hashAlgorithm, forwardSecurityInBytes, ByteArray.getInstance());
 
 		this.backwardSecurityInBytes = backwardSecurityInBytes;
-		Thread seeder = new Thread() {
-
-			@Override
-			public void run() {
-
-				HybridRandomByteSequence.super.setSeed(HybridRandomByteSequence.this.getDistributionSampler().getDistributionSamples(backwardSecurityInBytes));
-			}
-		};
-		seeder.setDaemon(true);
-		seeder.start();
+		HybridRandomByteSequence.super.setSeed(HybridRandomByteSequence.this.getDistributionSampler().getDistributionSamples(backwardSecurityInBytes));
 	}
 
 	@Override

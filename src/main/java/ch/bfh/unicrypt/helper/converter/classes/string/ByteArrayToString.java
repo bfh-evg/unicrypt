@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.converter.classes.string;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
-import java.util.Base64;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -107,7 +107,7 @@ public class ByteArrayToString
 				return sb.toString();
 			}
 			case BASE64:
-				return Base64.getEncoder().encodeToString(byteArray.getBytes());
+				return DatatypeConverter.printBase64Binary(byteArray.getBytes());
 			default:
 				// impossible case
 				throw new IllegalStateException();
@@ -146,7 +146,7 @@ public class ByteArrayToString
 				return this.reverse ? result.reverse() : result;
 			}
 			case BASE64:
-				return ByteArray.getInstance(Base64.getDecoder().decode(string));
+				return ByteArray.getInstance(DatatypeConverter.parseBase64Binary(string));
 			default:
 				// impossible case
 				throw new IllegalStateException();
