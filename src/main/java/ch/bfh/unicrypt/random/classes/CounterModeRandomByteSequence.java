@@ -49,12 +49,11 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * This PseudoRandomGeneratorCounterMode creates the hash value of the seed and stores this internally as a
- * ByteArrayElement. The hash will be done according to the given hashAlgorithm. Then the internal counter will be
- * created as another ByteArrayElement. These two byteArrayElement will be hashed as in @see
- * AbstractElement#getHashValueValueValue(HashAlgorithm hashAlgorithm); The resulting bytes will be used for
- * pseudoRandomness Please note that this PseudoRandomGenerator does not provide any security at all once the internal
- * state is known. This includes a total lack of forward security.
+ * This PseudoRandomGeneratorCounterMode creates the hash value of the seed internally converted to a positive number +
+ * the value of an internal counter. This resulting hash (given by the according hashAlgorithm) is stored internally as
+ * a ByteArrayElement. The resulting bytes will be used for pseudoRandomness Please note that this PseudoRandomGenerator
+ * does not provide any security at all once the internal state is known. This includes a total lack of forward
+ * security.
  * <p>
  * <p>
  * <p>
@@ -75,6 +74,7 @@ public class CounterModeRandomByteSequence
 
 	private final HashAlgorithm hashAlgorithm;
 	private ByteArray seed;
+	private BigInteger seedAsNumber;
 	private ByteArray hashedSeed;
 	private int counter;
 	// TODO: Change it to ByteArray when it becomes iterable;
@@ -90,10 +90,8 @@ public class CounterModeRandomByteSequence
 	}
 
 	protected byte[] getRandomByteBuffer(int counter) {
-		//Even though the following is the nice way to program it with unicrypt, it is too expensive. Reason: If the first part of a pair is a big tuple, it has to be hashed each time... Reprogram?!
-		//this.digestBytes=Pair.getInstance(seed,Z.getInstance().getElement(counter)).getHashValue(hashAlgorithm).getByteArray();
-		//-->This is, why the following implementation exists.
-		return hashedSeed.append(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getHashValue(this.hashAlgorithm).getBytes();
+		BigInteger seedAndCountAsNumber = seedAsNumber.add(BigInteger.valueOf(counter));
+		return ByteArray.getInstance(seedAndCountAsNumber.toByteArray()).getHashValue(this.hashAlgorithm).getBytes();
 //		return digest.digest(hashedSeed.append(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getBytes());
 	}
 
@@ -112,7 +110,7 @@ public class CounterModeRandomByteSequence
 			throw new IllegalArgumentException();
 		}
 		this.seed = seed;
-		this.hashedSeed = seed.getHashValue();
+		this.seedAsNumber = new BigInteger(1, seed.getBytes());
 		this.counter = -1;
 		reset();
 	}

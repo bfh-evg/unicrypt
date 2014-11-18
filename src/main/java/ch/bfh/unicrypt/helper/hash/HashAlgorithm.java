@@ -93,4 +93,9 @@ public class HashAlgorithm
 		return HashAlgorithm.SHA256;
 	}
 
+	@Override
+	protected String defaultToStringValue() {
+		return this.messageDigest.getAlgorithm();
+	}
+
 }
