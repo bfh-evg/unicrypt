@@ -82,7 +82,7 @@ public class ShuffleProofSystemTest {
 	public ShuffleProofSystemTest() {
 	}
 
-	@Test
+	//@Test
 	public void testShuffleProofGenerator() {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(P1);
