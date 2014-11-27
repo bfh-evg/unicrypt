@@ -458,17 +458,18 @@ public final class MathUtil {
 
 	// This is a private helper method to compute the integer square root of a BigInteger value.
 	public static BigInteger sqrt(BigInteger n) {
-		BigInteger a = BigInteger.ONE;
-		BigInteger b = new BigInteger(n.shiftRight(5).add(new BigInteger("8")).toString());
-		while (b.compareTo(a) >= 0) {
-			BigInteger mid = new BigInteger(a.add(b).shiftRight(1).toString());
-			if (mid.multiply(mid).compareTo(n) > 0) {
-				b = mid.subtract(BigInteger.ONE);
-			} else {
-				a = mid.add(BigInteger.ONE);
-			}
+		// special case
+		if (n.signum() == 0) {
+			return BigInteger.ZERO;
 		}
-		return a.subtract(BigInteger.ONE);
+		// first guess
+		BigInteger current = BigInteger.ONE.shiftLeft(n.bitLength() / 2 + 1);
+		BigInteger last;
+		do {
+			last = current;
+			current = last.add(n.divide(last)).shiftRight(1);
+		} while (last.compareTo(current) > 0);
+		return last;
 	}
 
 	//Tonelli_Shanks algorithm -> wikipedia
