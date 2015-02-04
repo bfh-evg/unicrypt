@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.PlainPreimageProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
@@ -82,7 +82,7 @@ public class PreimageProofSystemTest {
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
+		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
 
 		// Valid proof
 		Element privateInput = this.G_q1.getZModOrder().getElement(3);
@@ -101,7 +101,7 @@ public class PreimageProofSystemTest {
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
+		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
 
 		// Invalid proof -> wrong private value
 		Element privateInput = this.G_q2.getZModOrder().getElement(4);
@@ -118,7 +118,7 @@ public class PreimageProofSystemTest {
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
+		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
 
 		// Valid proof
 		Element privateInput = this.G_q1.getZModOrder().getElement(3);
@@ -141,7 +141,7 @@ public class PreimageProofSystemTest {
 
 		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
 
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(this.proverId, f);
+		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(this.proverId, f);
 
 		// Valid proof
 		Element privateInput = Tuple.getInstance(m, r);
@@ -165,7 +165,7 @@ public class PreimageProofSystemTest {
 		Element r = G_q.getZModOrder().getElement(2);
 
 		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(this.proverId, f);
+		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(this.proverId, f);
 
 		// Invalid proof  => wrong r
 		Element privateInput = Tuple.getInstance(m, G_q.getZModOrder().getElement(7));
@@ -189,7 +189,7 @@ public class PreimageProofSystemTest {
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
 			   f.getDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
+		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
 
 	}
 

@@ -44,45 +44,35 @@ package ch.bfh.unicrypt.crypto.proofsystem.classes;
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractPreimageProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class PreimageAndProofSystem
-	   extends AbstractPreimageProofSystem<ProductSemiGroup, Tuple, ProductSemiGroup, Tuple, ProductFunction> {
+public class PlainPreimageProofSystem
+	   extends AbstractPreimageProofSystem<SemiGroup, Element, SemiGroup, Element, Function> {
 
-	protected PreimageAndProofSystem(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
-		super(challengeGenerator, proofFunction);
+	protected PlainPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator, final Function function) {
+		super(challengeGenerator, function);
 	}
 
-	public static PreimageAndProofSystem getInstance(final ProductFunction proofFunction) {
-		return PreimageAndProofSystem.getInstance((Element) null, proofFunction);
+	public static PlainPreimageProofSystem getInstance(final Function proofFunction) {
+		return PlainPreimageProofSystem.getInstance((Element) null, proofFunction);
 	}
 
-	public static PreimageAndProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
+	public static PlainPreimageProofSystem getInstance(final Element proverId, final Function proofFunction) {
 		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
-		return PreimageAndProofSystem.getInstance(challengeGenerator, proofFunction);
+		return PlainPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
-	public static PreimageAndProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
-		return PreimageAndProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
-	}
-
-	public static PreimageAndProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
-		return PreimageAndProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
-	}
-
-	public static PreimageAndProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
-		if (challengeGenerator == null || proofFunction == null || proofFunction.getArity() < 1
-			   || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
+	public static PlainPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction) {
+		if (challengeGenerator == null || proofFunction == null || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
-		if (PreimageAndProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
-			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
+		if (PlainPreimageProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
+			throw new IllegalArgumentException("Spaces of challenge generator and proof function are unequal.");
 		}
-		return new PreimageAndProofSystem(challengeGenerator, proofFunction);
+
+		return new PlainPreimageProofSystem(challengeGenerator, proofFunction);
 	}
 
 }

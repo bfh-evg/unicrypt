@@ -42,8 +42,9 @@
 package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageOrProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.OrPreimageProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaSetMembershipProofSystem;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
@@ -65,7 +66,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 // deltaFunction: f(x,y)
 // preiamgeProofFunction: setMemebershipFunction_x(r) o deltaFunction_x(y)
 //
-public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGroup, PUE extends Element>
+public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE extends Element>
 	   extends AbstractSigmaProofSystem<ProductSet, Pair, PUS, PUE, ProductFunction>
 	   implements SigmaSetMembershipProofSystem {
 
@@ -73,9 +74,9 @@ public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGrou
 	private Function setMembershipProofFunction;
 	private Function deltaFunction;
 	private ProductFunction preimageProofFunction;
-	private PreimageOrProofSystem orProofGenerator;
+	private OrPreimageProofSystem orProofGenerator;
 
-	protected AbstractSigmaSetMembershipProofSystem(final SigmaChallengeGenerator challengeGenerator, final Subset members) {
+	protected AbstractValidityProofSystem(final SigmaChallengeGenerator challengeGenerator, final Subset members) {
 		super(challengeGenerator);
 		this.members = members;
 	}
@@ -93,12 +94,33 @@ public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGrou
 		return this.setMembershipProofFunction;
 	}
 
-	@Override
 	public Function getDeltaFunction() {
 		if (this.deltaFunction == null) {
 			this.deltaFunction = this.abstractGetDeltaFunction();
 		}
 		return this.deltaFunction;
+	}
+
+	public final ProductFunction getPreimageProofFunction() {
+		if (this.preimageProofFunction == null) {
+			this.preimageProofFunction = this.createPreimageProofFunction();
+		}
+		return this.preimageProofFunction;
+	}
+
+	@Override
+	public final Set getCommitmentSpace() {
+		return this.getPreimageProofFunction().getCoDomain();
+	}
+
+	@Override
+	public final ZMod getChallengeSpace() {
+		return ZMod.getInstance(this.getPreimageProofFunction().getDomain().getMinimalOrder());
+	}
+
+	@Override
+	public final Set getResponseSpace() {
+		return this.getPreimageProofFunction().getDomain();
 	}
 
 	@Override
@@ -117,14 +139,6 @@ public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGrou
 			   this.getCommitmentSpace(),
 			   ProductSet.getInstance(this.getChallengeSpace(), this.members.getOrder().intValue()),
 			   this.getResponseSpace());
-	}
-
-	@Override
-	protected ProductFunction abstractGetPreimageProofFunction() {
-		if (this.preimageProofFunction == null) {
-			this.preimageProofFunction = this.createPreimageProofFunction();
-		}
-		return this.preimageProofFunction;
 	}
 
 	@Override
@@ -150,9 +164,9 @@ public abstract class AbstractSigmaSetMembershipProofSystem<PUS extends SemiGrou
 		return Tuple.getInstance(images);
 	}
 
-	private PreimageOrProofSystem getOrProofGenerator() {
+	private OrPreimageProofSystem getOrProofGenerator() {
 		if (this.orProofGenerator == null) {
-			this.orProofGenerator = PreimageOrProofSystem.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction());
+			this.orProofGenerator = OrPreimageProofSystem.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction());
 		}
 		return this.orProofGenerator;
 	}

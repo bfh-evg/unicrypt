@@ -52,48 +52,48 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.function.classes.SharedDomainFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public class PreimageEqualityProofSystem
+public class EqualityPreimageProofSystem
 	   extends AbstractPreimageProofSystem<SemiGroup, Element, ProductSemiGroup, Tuple, SharedDomainFunction> {
 
-	protected PreimageEqualityProofSystem(final SigmaChallengeGenerator challengeGenerator, final SharedDomainFunction proofFunction) {
+	protected EqualityPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator, final SharedDomainFunction proofFunction) {
 		super(challengeGenerator, proofFunction);
 	}
 
-	public static PreimageEqualityProofSystem getInstance(final SharedDomainFunction proofFunction) {
-		return PreimageEqualityProofSystem.getInstance((Element) null, proofFunction);
+	public static EqualityPreimageProofSystem getInstance(final SharedDomainFunction proofFunction) {
+		return EqualityPreimageProofSystem.getInstance((Element) null, proofFunction);
 	}
 
-	public static PreimageEqualityProofSystem getInstance(final Element proverId, final SharedDomainFunction proofFunction) {
+	public static EqualityPreimageProofSystem getInstance(final Element proverId, final SharedDomainFunction proofFunction) {
 		if (proofFunction == null || proofFunction.getArity() < 1 || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException("Domain and codomain of each proof function must be semi groups!");
 		}
 		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(
 			   proofFunction.getCoDomain(), (ProductSemiGroup) proofFunction.getCoDomain(), ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()), proverId);
-		return new PreimageEqualityProofSystem(challengeGenerator, proofFunction);
+		return new EqualityPreimageProofSystem(challengeGenerator, proofFunction);
 	}
 
-	public static PreimageEqualityProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final SharedDomainFunction proofFunction) {
+	public static EqualityPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final SharedDomainFunction proofFunction) {
 		if (proofFunction == null || proofFunction.getArity() < 1 || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException("Domain and codomain of each proof function must be semi groups!");
 		}
-		if (PreimageEqualityProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
+		if (EqualityPreimageProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
 			throw new IllegalArgumentException("Space mismatch");
 		}
-		return new PreimageEqualityProofSystem(challengeGenerator, proofFunction);
+		return new EqualityPreimageProofSystem(challengeGenerator, proofFunction);
 	}
 
-	public static PreimageEqualityProofSystem getInstance(final Function... proofFunctions) {
-		return PreimageEqualityProofSystem.getInstance((Element) null, proofFunctions);
+	public static EqualityPreimageProofSystem getInstance(final Function... proofFunctions) {
+		return EqualityPreimageProofSystem.getInstance((Element) null, proofFunctions);
 	}
 
-	public static PreimageEqualityProofSystem getInstance(final Element proverId, final Function... proofFunctions) {
+	public static EqualityPreimageProofSystem getInstance(final Element proverId, final Function... proofFunctions) {
 		SharedDomainFunction proofFunction = SharedDomainFunction.getInstance(proofFunctions);
-		return PreimageEqualityProofSystem.getInstance(proverId, proofFunction);
+		return EqualityPreimageProofSystem.getInstance(proverId, proofFunction);
 	}
 
-	public static PreimageEqualityProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
+	public static EqualityPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
 		SharedDomainFunction proofFunction = SharedDomainFunction.getInstance(proofFunctions);
-		return PreimageEqualityProofSystem.getInstance(challengeGenerator, proofFunction);
+		return EqualityPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
 }

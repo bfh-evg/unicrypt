@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
-import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaSetMembershipProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractValidityProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
@@ -63,7 +63,7 @@ import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 public class ElGamalEncryptionValidityProofSystem
-	   extends AbstractSigmaSetMembershipProofSystem<ProductGroup, Pair> {
+	   extends AbstractValidityProofSystem<ProductGroup, Pair> {
 
 	private final ElGamalEncryptionScheme elGamalES;
 	private final Element publicKey;

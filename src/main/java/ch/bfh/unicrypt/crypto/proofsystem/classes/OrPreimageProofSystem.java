@@ -53,45 +53,65 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public class PreimageOrProofSystem
+public class OrPreimageProofSystem
 	   extends AbstractSigmaProofSystem<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
 
 	private final ProductFunction preimageProofFunction;
 
-	protected PreimageOrProofSystem(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+	protected OrPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
 		super(challengeGenerator);
 		this.preimageProofFunction = proofFunction;
 	}
 
-	public static PreimageOrProofSystem getInstance(final ProductFunction proofFunction) {
-		return PreimageOrProofSystem.getInstance((Element) null, proofFunction);
+	public static OrPreimageProofSystem getInstance(final ProductFunction proofFunction) {
+		return OrPreimageProofSystem.getInstance((Element) null, proofFunction);
 	}
 
-	public static PreimageOrProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
+	public static OrPreimageProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
 		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
-		return PreimageOrProofSystem.getInstance(challengeGenerator, proofFunction);
+		return OrPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
-	public static PreimageOrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
-		return PreimageOrProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
+	public static OrPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
+		return OrPreimageProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
 	}
 
-	public static PreimageOrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
-		return PreimageOrProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
+	public static OrPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
+		return OrPreimageProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
 	}
 
-	public static PreimageOrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+	public static OrPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
 		if (challengeGenerator == null || proofFunction == null || proofFunction.getArity() < 2) {
 			throw new IllegalArgumentException();
 		}
-		if (PreimageOrProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
+		if (OrPreimageProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
 			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
 		}
-		return new PreimageOrProofSystem(challengeGenerator, proofFunction);
+		return new OrPreimageProofSystem(challengeGenerator, proofFunction);
+	}
+
+	public final ProductFunction getPreimageProofFunction() {
+		return this.preimageProofFunction;
+	}
+
+	@Override
+	public final Set getCommitmentSpace() {
+		return this.getPreimageProofFunction().getCoDomain();
+	}
+
+	@Override
+	public final ZMod getChallengeSpace() {
+		return ZMod.getInstance(this.getPreimageProofFunction().getDomain().getMinimalOrder());
+	}
+
+	@Override
+	public final Set getResponseSpace() {
+		return this.getPreimageProofFunction().getDomain();
 	}
 
 	@Override
@@ -110,11 +130,6 @@ public class PreimageOrProofSystem
 	@Override
 	protected final ProductGroup abstractGetPublicInputSpace() {
 		return (ProductGroup) this.getPreimageProofFunction().getCoDomain();
-	}
-
-	@Override
-	protected ProductFunction abstractGetPreimageProofFunction() {
-		return this.preimageProofFunction;
 	}
 
 	public Pair createPrivateInput(Element secret, int index) {

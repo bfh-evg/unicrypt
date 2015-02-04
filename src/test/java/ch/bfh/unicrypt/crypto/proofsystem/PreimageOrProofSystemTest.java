@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageOrProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.OrPreimageProofSystem;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -100,7 +100,7 @@ public class PreimageOrProofSystemTest {
 
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(ProductFunction.getInstance(functions), this.proverId);
-		PreimageOrProofSystem pg = PreimageOrProofSystem.getInstance(scg, functions);
+		OrPreimageProofSystem pg = OrPreimageProofSystem.getInstance(scg, functions);
 
 		// Default
 		Element secret = this.Z_q.getElement(3);

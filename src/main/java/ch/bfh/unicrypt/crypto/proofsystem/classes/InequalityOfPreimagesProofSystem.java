@@ -215,7 +215,7 @@ public class InequalityOfPreimagesProofSystem
 		functions[0] = this.createSinglePreimageProofFunction(domain, this.getSecondFunction(), z);
 		functions[1] = this.createSinglePreimageProofFunction(domain, this.getFirstFunction(), y);
 
-		return PreimageEqualityProofSystem.getInstance(this.getChallengeGenerator(), functions);
+		return EqualityPreimageProofSystem.getInstance(this.getChallengeGenerator(), functions);
 	}
 
 	// f(a,b) = f(a)/y^b                               |==> f(a,b) = g1^a/g2^b

@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.Challeng
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.ElGamalEncryptionValidityProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.PlainPreimageProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.ReEncryptionShuffleProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
@@ -131,7 +131,7 @@ public class MixAndProofExample {
 		// - Create sigma challenge generator
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, proverId);
 		// - Create preimage proof generator
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(scg, f);
+		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
 
 		// Private and public input
 		Element privateInput = G_q.getZModOrder().getElement(3);

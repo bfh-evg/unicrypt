@@ -42,21 +42,45 @@
 package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.interfaces.PreimageProofSystem;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
-	   extends AbstractSigmaProofSystem<PRS, PRE, PUS, PUE, F> {
+	   extends AbstractSigmaProofSystem<PRS, PRE, PUS, PUE, F>
+	   implements PreimageProofSystem {
 
 	private final F preimageProofFunction;
 
 	protected AbstractPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator, final F function) {
 		super(challengeGenerator);
 		this.preimageProofFunction = function;
+	}
+
+	@Override
+	public final F getPreimageProofFunction() {
+		return this.preimageProofFunction;
+	}
+
+	@Override
+	public final Set getCommitmentSpace() {
+		return this.getPreimageProofFunction().getCoDomain();
+	}
+
+	@Override
+	public final ZMod getChallengeSpace() {
+		return ZMod.getInstance(this.getPreimageProofFunction().getDomain().getMinimalOrder());
+	}
+
+	@Override
+	public final Set getResponseSpace() {
+		return this.getPreimageProofFunction().getDomain();
 	}
 
 	@Override
@@ -72,11 +96,6 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	@Override
 	protected final ProductSet abstractGetProofSpace() {
 		return ProductSet.getInstance(this.getCommitmentSpace(), this.getChallengeSpace(), this.getResponseSpace());
-	}
-
-	@Override
-	protected F abstractGetPreimageProofFunction() {
-		return this.preimageProofFunction;
 	}
 
 	@Override

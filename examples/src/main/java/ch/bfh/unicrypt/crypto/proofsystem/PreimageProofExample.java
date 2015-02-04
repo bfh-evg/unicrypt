@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.PlainPreimageProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -73,7 +73,7 @@ public class PreimageProofExample {
 
 		// Generate proof generator
 		Function function = kpg.getPublicKeyGenerationFunction();
-		PreimageProofSystem pg = PreimageProofSystem.getInstance(function);
+		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(function);
 
 		// Generate and verify proof
 		Triple proof = pg.generate(privateKey, publicKey);

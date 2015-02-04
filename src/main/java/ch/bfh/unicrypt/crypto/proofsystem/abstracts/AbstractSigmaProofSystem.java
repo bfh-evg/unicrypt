@@ -61,28 +61,8 @@ public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Elem
 	}
 
 	@Override
-	public final F getPreimageProofFunction() {
-		return this.abstractGetPreimageProofFunction();
-	}
-
-	@Override
 	public final SigmaChallengeGenerator getChallengeGenerator() {
 		return this.challengeGenerator;
-	}
-
-	@Override
-	public final Set getCommitmentSpace() {
-		return this.getPreimageProofFunction().getCoDomain();
-	}
-
-	@Override
-	public final ZMod getChallengeSpace() {
-		return ZMod.getInstance(this.getPreimageProofFunction().getDomain().getMinimalOrder());
-	}
-
-	@Override
-	public final Set getResponseSpace() {
-		return this.getPreimageProofFunction().getDomain();
 	}
 
 	@Override
@@ -108,8 +88,6 @@ public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Elem
 		}
 		return (PRE) proof.getThird();
 	}
-
-	protected abstract F abstractGetPreimageProofFunction();
 
 	// Checks space equality of challenge generator and proof function
 	protected static boolean checkSpaceEquality(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction) {

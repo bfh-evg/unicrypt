@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,38 +41,11 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.interfaces;
 
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
-import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public interface SigmaProofSystem
+public interface PreimageProofSystem
 	   extends ProofSystem {
 
-	public SigmaChallengeGenerator getChallengeGenerator();
-
-	public Set getCommitmentSpace();
-
-	public ZMod getChallengeSpace();
-
-	public Set getResponseSpace();
-
-	public Element getCommitment(final Triple proof);
-
-	public Element getChallenge(final Triple proof);
-
-	public Element getResponse(final Triple proof);
-
-	@Override
-	public Triple generate(Element privateInput, Element publicInput);
-
-	@Override
-	public Triple generate(Element privateInput, Element publicInput, RandomByteSequence randomByteSequence);
-
-	@Override
-	public ProductSet getProofSpace();
+	public Function getPreimageProofFunction();
 
 }

@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.classes.PreimageEqualityProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.EqualityPreimageProofSystem;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -87,7 +87,7 @@ public class PreimageEqualityProofSystemTest {
 		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
 		SharedDomainFunction f = SharedDomainFunction.getInstance(f1, f2);
 
-		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(this.proverId, f);
+		EqualityPreimageProofSystem pg = EqualityPreimageProofSystem.getInstance(this.proverId, f);
 		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
 		// Valid proof
@@ -126,7 +126,7 @@ public class PreimageEqualityProofSystemTest {
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
 			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
-		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(scg, f1, f2);
+		EqualityPreimageProofSystem pg = EqualityPreimageProofSystem.getInstance(scg, f1, f2);
 		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
 		// Invalid proof -> preimages are not equal
@@ -147,7 +147,7 @@ public class PreimageEqualityProofSystemTest {
 		Function f3 = GeneratorFunction.getInstance(this.G_q2.getElement(4));
 		ProductFunction f = ProductFunction.getInstance(f1, f2, f3);
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
-		PreimageEqualityProofSystem pg = PreimageEqualityProofSystem.getInstance(scg, f1, f2, f3);
+		EqualityPreimageProofSystem pg = EqualityPreimageProofSystem.getInstance(scg, f1, f2, f3);
 	}
 
 }
