@@ -194,7 +194,7 @@ public class PermutationCommitmentProofSystemTest {
 		// Permutation commitment proof generator
 		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(G_q, size, null, 60, 60, 20, rrs);
 
-		// Proof and verify
+		// Proof and verify x
 		// Invalid: Modified permutation
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
 		boolean v = pcpg.verify(proof, cPiV);
