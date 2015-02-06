@@ -62,7 +62,7 @@ import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class PreimageEqualityProofSystemTest {
+public class EqualityPreimageProofSystemTest {
 
 	final static int P1 = 167;
 	final static String P2 = "88059184022561109274134540595138392753102891002065208740257707896840303297223";
@@ -70,7 +70,7 @@ public class PreimageEqualityProofSystemTest {
 	final private GStarMod G_q2;
 	final private StringElement proverId;
 
-	public PreimageEqualityProofSystemTest() {
+	public EqualityPreimageProofSystemTest() {
 		this.G_q1 = GStarModSafePrime.getInstance(P1);
 		this.G_q2 = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		this.proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");

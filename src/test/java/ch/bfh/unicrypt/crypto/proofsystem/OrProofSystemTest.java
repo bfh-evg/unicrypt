@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.classes.OrPreimageProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.OrProofSystem;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -62,7 +62,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class PreimageOrProofSystemTest {
+public class OrProofSystemTest {
 
 	final static int P = 167;
 	final static int P2 = 23;
@@ -71,7 +71,7 @@ public class PreimageOrProofSystemTest {
 	final private ZModPrime Z_q;
 	final private StringElement proverId;
 
-	public PreimageOrProofSystemTest() {
+	public OrProofSystemTest() {
 		this.G_q = GStarModSafePrime.getInstance(P);
 		this.Z_q = ZModPrime.getInstance((P - 1) / 2);         // 83
 		this.G_q2 = GStarModSafePrime.getInstance(P2);
@@ -100,7 +100,7 @@ public class PreimageOrProofSystemTest {
 
 		Function[] functions = new Function[]{f1, f2, f3, f4, f5};
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(ProductFunction.getInstance(functions), this.proverId);
-		OrPreimageProofSystem pg = OrPreimageProofSystem.getInstance(scg, functions);
+		OrProofSystem pg = OrProofSystem.getInstance(scg, functions);
 
 		// Default
 		Element secret = this.Z_q.getElement(3);

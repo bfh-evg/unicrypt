@@ -58,89 +58,88 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public class OrPreimageProofSystem
+public class OrProofSystem
 	   extends AbstractSigmaProofSystem<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
 
-	private final ProductFunction preimageProofFunction;
+	private final ProductFunction proofFunction;
 
-	protected OrPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+	protected OrProofSystem(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
 		super(challengeGenerator);
-		this.preimageProofFunction = proofFunction;
+		this.proofFunction = proofFunction;
 	}
 
-	public static OrPreimageProofSystem getInstance(final ProductFunction proofFunction) {
-		return OrPreimageProofSystem.getInstance((Element) null, proofFunction);
+	public static OrProofSystem getInstance(final ProductFunction proofFunction) {
+		return OrProofSystem.getInstance((Element) null, proofFunction);
 	}
 
-	public static OrPreimageProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
+	public static OrProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
 		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
-		return OrPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
+		return OrProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
-	public static OrPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
-		return OrPreimageProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
+	public static OrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
+		return OrProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
 	}
 
-	public static OrPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
-		return OrPreimageProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
+	public static OrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
+		return OrProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
 	}
 
-	public static OrPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+	public static OrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
 		if (challengeGenerator == null || proofFunction == null || proofFunction.getArity() < 2) {
 			throw new IllegalArgumentException();
 		}
-		if (OrPreimageProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
+		if (OrProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
 			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
 		}
-		return new OrPreimageProofSystem(challengeGenerator, proofFunction);
+		return new OrProofSystem(challengeGenerator, proofFunction);
 	}
 
-	public final ProductFunction getPreimageProofFunction() {
-		return this.preimageProofFunction;
+	public final ProductFunction getProofFunction() {
+		return this.proofFunction;
 	}
 
 	@Override
 	public final Set getCommitmentSpace() {
-		return this.getPreimageProofFunction().getCoDomain();
+		return this.getProofFunction().getCoDomain();
 	}
 
 	@Override
 	public final ZMod getChallengeSpace() {
-		return ZMod.getInstance(this.getPreimageProofFunction().getDomain().getMinimalOrder());
+		return ZMod.getInstance(this.getProofFunction().getDomain().getMinimalOrder());
 	}
 
 	@Override
 	public final Set getResponseSpace() {
-		return this.getPreimageProofFunction().getDomain();
+		return this.getProofFunction().getDomain();
 	}
 
 	@Override
 	protected ProductSet abstractGetProofSpace() {
-		return ProductSet.getInstance(
-			   this.getCommitmentSpace(),
-			   ProductSet.getInstance(this.getChallengeSpace(), this.getPreimageProofFunction().getArity()),
-			   this.getResponseSpace());
+		return ProductSet.getInstance(this.getCommitmentSpace(),
+									  ProductSet.getInstance(this.getChallengeSpace(), this.getProofFunction().getArity()),
+									  this.getResponseSpace());
 	}
 
 	@Override
 	protected ProductSet abstractGetPrivateInputSpace() {
-		return ProductSet.getInstance(this.getPreimageProofFunction().getDomain(), ZMod.getInstance(this.getPreimageProofFunction().getArity()));
+		return ProductSet.getInstance(this.getProofFunction().getDomain(), ZMod.getInstance(this.getProofFunction().getArity()));
 	}
 
 	@Override
 	protected final ProductGroup abstractGetPublicInputSpace() {
-		return (ProductGroup) this.getPreimageProofFunction().getCoDomain();
+		return (ProductGroup) this.getProofFunction().getCoDomain();
 	}
 
 	public Pair createPrivateInput(Element secret, int index) {
-		if (index < 0 || index >= this.getPreimageProofFunction().getArity() || !this.getPreimageProofFunction().getAt(index).getDomain().contains(secret)) {
+		if (index < 0 || index >= this.getProofFunction().getArity() || !this.getProofFunction().getAt(index).getDomain().contains(secret)) {
 			throw new IllegalArgumentException();
 		}
-		Tuple domainElements = ((ProductMonoid) this.getPreimageProofFunction().getDomain()).getIdentityElement();
+		Tuple domainElements = ((ProductMonoid) this.getProofFunction().getDomain()).getIdentityElement();
 		domainElements = domainElements.replaceAt(index, secret);
 
 		return (Pair) this.getPrivateInputSpace().getElement(domainElements,
-															 ZMod.getInstance(this.getPreimageProofFunction().getArity()).getElement(index));
+															 ZMod.getInstance(this.getProofFunction().getArity()).getElement(index));
 	}
 
 	@Override
@@ -150,8 +149,8 @@ public class OrPreimageProofSystem
 		final int index = privateInput.getSecond().getBigInteger().intValue();
 		final Element secret = ((Tuple) privateInput.getFirst()).getAt(index);
 
-		final ProductFunction proofFunction = this.getPreimageProofFunction();
-		final int length = proofFunction.getLength();
+		final ProductFunction proofFunc = this.getProofFunction();
+		final int length = proofFunc.getLength();
 
 		// Create lists for proof elements (t, c, s)
 		final Element[] commitments = new Element[length];
@@ -169,7 +168,7 @@ public class OrPreimageProofSystem
 
 			// Create random challenge and response
 			ZModElement c = challengeSpace.getRandomElement(randomByteSequence);
-			Function f = proofFunction.getAt(i);
+			Function f = proofFunc.getAt(i);
 			Element s = f.getDomain().getRandomElement(randomByteSequence);
 
 			sumOfChallenges = sumOfChallenges.add(c);
@@ -182,8 +181,8 @@ public class OrPreimageProofSystem
 
 		// Create the proof of the known secret (normal preimage-proof, but with a special challange)
 		// - Create random element and calculate commitment
-		final Element randomElement = proofFunction.getAt(index).getDomain().getRandomElement(randomByteSequence);
-		commitments[index] = proofFunction.getAt(index).apply(randomElement);
+		final Element randomElement = proofFunc.getAt(index).getDomain().getRandomElement(randomByteSequence);
+		commitments[index] = proofFunc.getAt(index).apply(randomElement);
 
 		// - Create overall proof challenge
 		final ZModElement challenge = this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
@@ -218,8 +217,8 @@ public class OrPreimageProofSystem
 		}
 
 		// 2. Verify all subproofs
-		for (int i = 0; i < this.getPreimageProofFunction().getArity(); i++) {
-			Element a = this.getPreimageProofFunction().getAt(i).apply(responses.getAt(i));
+		for (int i = 0; i < this.getProofFunction().getArity(); i++) {
+			Element a = this.getProofFunction().getAt(i).apply(responses.getAt(i));
 			Element b = commitments.getAt(i).apply(publicInput.getAt(i).selfApply(challenges.getAt(i)));
 			if (!a.isEquivalent(b)) {
 				return false;

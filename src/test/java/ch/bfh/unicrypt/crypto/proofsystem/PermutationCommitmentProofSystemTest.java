@@ -198,7 +198,6 @@ public class PermutationCommitmentProofSystemTest {
 		// Invalid: Modified permutation
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
 		boolean v = pcpg.verify(proof, cPiV);
-		System.out.println("proof: " + proof);
 		assertTrue(!v);
 
 	}

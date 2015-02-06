@@ -43,8 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.classes.PlainPreimageProofSystem;
-import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.AndPreimageProofSystem;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -55,142 +54,141 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.GeneratorFunction;
+import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class PreimageProofSystemTest {
+public class AndPreimageProofSystemTest {
 
 	final static int P1 = 167;
 	final static String P2 = "88059184022561109274134540595138392753102891002065208740257707896840303297223";
 	final private GStarMod G_q1;
 	final private GStarMod G_q2;
-	final StringElement proverId;
+	final private StringElement proverId;
 
-	public PreimageProofSystemTest() {
+	public AndPreimageProofSystemTest() {
 		this.G_q1 = GStarModSafePrime.getInstance(P1);
 		this.G_q2 = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
 		this.proverId = StringMonoid.getInstance(Alphabet.BASE64).getElement("Prover1");
 	}
 
 	@Test
-	public void testPreimageProof() {
-
-		// Proof generator
-		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
-
-		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
-
-		// Valid proof
-		Element privateInput = this.G_q1.getZModOrder().getElement(3);
-		Element publicInput = this.G_q1.getElement(64);
-
-		Triple proof = pg.generate(privateInput, publicInput);
-		boolean v = pg.verify(proof, publicInput);
-		assertTrue(v);
-	}
-
-	@Test
-	public void testPreimageProof_Invalid() {
-
-		// Proof generator
-		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q2.getElement(4));
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
-
-		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
-
-		// Invalid proof -> wrong private value
-		Element privateInput = this.G_q2.getZModOrder().getElement(4);
-		Element publicInput = this.G_q2.getElement(64);
-
-		Triple proof = pg.generate(privateInput, publicInput);
-		boolean v = pg.verify(proof, publicInput);
-		assertTrue(!v);
-	}
-
-	@Test
-	public void testPreimageProof2() {
-
-		// Proof generator
-		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
-		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
-
-		// Valid proof
-		Element privateInput = this.G_q1.getZModOrder().getElement(3);
-		Element publicInput = this.G_q1.getElement(64);
-
-		Triple proof = pg.generate(privateInput, publicInput);
-		boolean v = pg.verify(proof, publicInput);
-		assertTrue(v);
-	}
-
-	@Test
-	public void testPreimageProof_ElGamal() {
+	public void testPreimageAndProof() {
 
 		GStarMod G_q = this.G_q1;
-		// f_pk(m,r) = (g^r, h^r*m)
-		ElGamalEncryptionScheme elgamal = ElGamalEncryptionScheme.getInstance(G_q.getElement(4));
-		Element pk = G_q.getElement(2);
-		Element m = G_q.getElement(2);
-		Element r = G_q.getZModOrder().getElement(2);
+		ZMod Z_q = this.G_q1.getZModOrder();
 
-		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
-
-		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(this.proverId, f);
+		// Proof generator
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
+		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
+		ProductFunction f = ProductFunction.getInstance(f1, f2);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
+		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, f2);
+		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
 
 		// Valid proof
-		Element privateInput = Tuple.getInstance(m, r);
-		Element publicInput = Tuple.getInstance(G_q.getElement(16), G_q.getElement(8));
-		// System.out.println("" + privateInput + "," + publicInput);
+		Element privateInput = Tuple.getInstance(
+			   Z_q.getZModOrder().getElement(3),
+			   Z_q.getElement(4));
+		Element publicInput = Tuple.getInstance(
+			   G_q.getElement(64),
+			   G_q.getElement(16));
 
-		Tuple proof = pg.generate(privateInput, publicInput);
-		// System.out.println("" + proof);
+		Triple proof = pg.generate(privateInput, publicInput);
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(v);
+
+	}
+
+	@Test
+	public void testPreimageAndProof_Invalid() {
+
+		GStarMod G_q = this.G_q2;
+		ZMod Z_q = this.G_q2.getZModOrder();
+
+		// Proof generator
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(4));
+		Function f2 = GeneratorFunction.getInstance(G_q.getElement(2));
+		ProductFunction f = ProductFunction.getInstance(f1, f2);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
+		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, f2);
+		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));
+
+		// Invalid proof -> One preimages is wrong
+		Element privateInput = Tuple.getInstance(
+			   Z_q.getElement(3),
+			   Z_q.getElement(4));
+		Element publicInput = Tuple.getInstance(
+			   G_q.getElement(64),
+			   G_q.getElement(32));    // Preimage = 5
+		Triple proof = pg.generate(privateInput, publicInput);
+		boolean v = pg.verify(proof, publicInput);
+		assertTrue(!v);
+
+	}
+
+	@Test
+	public void testPreimageAndProof_WithArity() {
+
+		GStarMod G_q = this.G_q2;
+		ZMod Z_q = this.G_q2.getZModOrder();
+
+		// Proof generator
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(2));
+		ProductFunction f = ProductFunction.getInstance(f1, 3);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
+		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, 3);
+
+		// Valid proof
+		Element privateInput = Tuple.getInstance(
+			   Z_q.getElement(2),
+			   Z_q.getElement(3),
+			   Z_q.getElement(4));
+		Element publicInput = Tuple.getInstance(
+			   G_q.getElement(4),
+			   G_q.getElement(8),
+			   G_q.getElement(16));
+
+		Triple proof = pg.generate(privateInput, publicInput);
 		boolean v = pg.verify(proof, publicInput);
 		assertTrue(v);
 	}
 
 	@Test
-	public void testPreimageProof_ElGamalInvalid() {
+	public void testPreimageAndProof_SingleFunction() {
 
 		GStarMod G_q = this.G_q2;
-		// f_pk(m,r) = (g^r, h^r*m)
-		ElGamalEncryptionScheme elgamal = ElGamalEncryptionScheme.getInstance(G_q.getElement(4));
-		Element pk = G_q.getElement(2);
-		Element m = G_q.getElement(2);
-		Element r = G_q.getZModOrder().getElement(2);
+		ZMod Z_q = this.G_q2.getZModOrder();
 
-		Function f = elgamal.getEncryptionFunction().partiallyApply(pk, 0);
-		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(this.proverId, f);
+		// Proof generator
+		Function f1 = GeneratorFunction.getInstance(G_q.getElement(2));
+		ProductFunction f = ProductFunction.getInstance(f1);
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f, this.proverId);
+		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, 1);
 
-		// Invalid proof  => wrong r
-		Element privateInput = Tuple.getInstance(m, G_q.getZModOrder().getElement(7));
-		Element publicInput = Tuple.getInstance(G_q.getElement(16), G_q.getElement(8));
+		Element privateInput = Tuple.getInstance(Z_q.getElement(2));
+		Element publicInput = Tuple.getInstance(G_q.getElement(4));
+
 		Triple proof = pg.generate(privateInput, publicInput);
 		boolean v = pg.verify(proof, publicInput);
-		assertTrue(!v);
+		assertTrue(v);
 
-		// Invalid proof  => wrong m
-		privateInput = Tuple.getInstance(G_q.getElement(8), r);
-
-		proof = pg.generate(privateInput, publicInput);
-		v = pg.verify(proof, publicInput);
-		assertTrue(!v);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void TestPreimageProof_Exception() {
-		// Proof generator
-		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
-		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
-			   f.getDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+	public void testPreimageAndProof_Exception() {
+		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f1, this.proverId);
+		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg);
+	}
 
-		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
-
+	@Test(expected = IllegalArgumentException.class)
+	public void testPreimageAndProof_ExceptionWithArity() {
+		Function f1 = GeneratorFunction.getInstance(this.G_q1.getElement(2));
+		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(f1, this.proverId);
+		AndPreimageProofSystem pg = AndPreimageProofSystem.getInstance(scg, f1, 0);
 	}
 
 }

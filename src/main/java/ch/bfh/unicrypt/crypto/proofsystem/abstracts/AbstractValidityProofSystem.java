@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.classes.OrPreimageProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.OrProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaSetMembershipProofSystem;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -74,7 +74,7 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 	private Function setMembershipProofFunction;
 	private Function deltaFunction;
 	private ProductFunction preimageProofFunction;
-	private OrPreimageProofSystem orProofGenerator;
+	private OrProofSystem orProofGenerator;
 
 	protected AbstractValidityProofSystem(final SigmaChallengeGenerator challengeGenerator, final Subset members) {
 		super(challengeGenerator);
@@ -164,9 +164,9 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 		return Tuple.getInstance(images);
 	}
 
-	private OrPreimageProofSystem getOrProofGenerator() {
+	private OrProofSystem getOrProofGenerator() {
 		if (this.orProofGenerator == null) {
-			this.orProofGenerator = OrPreimageProofSystem.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction());
+			this.orProofGenerator = OrProofSystem.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction());
 		}
 		return this.orProofGenerator;
 	}
