@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaCha
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -168,7 +169,7 @@ public class PermutationCommitmentProofSystemTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance(7));
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 5;
@@ -197,6 +198,7 @@ public class PermutationCommitmentProofSystemTest {
 		// Invalid: Modified permutation
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
 		boolean v = pcpg.verify(proof, cPiV);
+		System.out.println("proof: " + proof);
 		assertTrue(!v);
 
 	}
