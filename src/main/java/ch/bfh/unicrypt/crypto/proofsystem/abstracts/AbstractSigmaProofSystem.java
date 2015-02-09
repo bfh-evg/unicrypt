@@ -66,15 +66,15 @@ public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Elem
 	}
 
 	@Override
-	public final PUE getCommitment(final Triple proof) {
+	public Element getCommitment(final Triple proof) {
 		if (!this.getProofSpace().contains(proof)) {
 			throw new IllegalArgumentException();
 		}
-		return (PUE) proof.getFirst();
+		return proof.getFirst();
 	}
 
 	@Override
-	public final Element getChallenge(final Triple proof) {
+	public Element getChallenge(final Triple proof) {
 		if (!this.getProofSpace().contains(proof)) {
 			throw new IllegalArgumentException();
 		}
@@ -82,11 +82,11 @@ public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Elem
 	}
 
 	@Override
-	public final PRE getResponse(final Triple proof) {
+	public Element getResponse(final Triple proof) {
 		if (!this.getProofSpace().contains(proof)) {
 			throw new IllegalArgumentException();
 		}
-		return (PRE) proof.getThird();
+		return proof.getThird();
 	}
 
 	// Checks space equality of challenge generator and proof function

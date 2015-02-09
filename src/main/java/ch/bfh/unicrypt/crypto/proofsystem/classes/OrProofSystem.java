@@ -202,9 +202,9 @@ public class OrProofSystem
 	protected boolean abstractVerify(Triple proof, Tuple publicInput) {
 
 		// Extract (t, c, s)
-		final Tuple commitments = this.getCommitment(proof);
+		final Tuple commitments = (Tuple) this.getCommitment(proof);
 		final Tuple challenges = (Tuple) this.getChallenge(proof);
-		final Tuple responses = this.getResponse(proof);
+		final Tuple responses = (Tuple) this.getResponse(proof);
 
 		// 1. Check whether challenges sum up to the overall challenge
 		final ZModElement challenge = this.getChallengeGenerator().generate(publicInput, commitments);
