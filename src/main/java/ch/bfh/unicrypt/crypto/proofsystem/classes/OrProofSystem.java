@@ -59,7 +59,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public class OrProofSystem
-	   extends AbstractSigmaProofSystem<ProductSet, Pair, ProductGroup, Tuple, ProductFunction> {
+	   extends AbstractSigmaProofSystem<ProductSet, Pair, ProductGroup, Tuple> {
 
 	private final ProductFunction proofFunction;
 

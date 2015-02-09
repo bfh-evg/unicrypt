@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
-	   extends AbstractSigmaProofSystem<PRS, PRE, PUS, PUE, F>
+	   extends AbstractSigmaProofSystem<PRS, PRE, PUS, PUE>
 	   implements PreimageProofSystem {
 
 	private final F preimageProofFunction;

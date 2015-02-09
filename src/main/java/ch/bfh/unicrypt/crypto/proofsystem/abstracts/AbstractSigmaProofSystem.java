@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
-public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element, F extends Function>
+public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element>
 	   extends AbstractProofSystem<PRS, PRE, PUS, PUE, ProductSet, Triple>
 	   implements SigmaProofSystem {
 

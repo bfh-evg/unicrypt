@@ -67,14 +67,14 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 // preiamgeProofFunction: setMemebershipFunction_x(r) o deltaFunction_x(y)
 //
 public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE extends Element>
-	   extends AbstractSigmaProofSystem<ProductSet, Pair, PUS, PUE, ProductFunction>
+	   extends AbstractSigmaProofSystem<ProductSet, Pair, PUS, PUE>
 	   implements SigmaSetMembershipProofSystem {
 
 	private final Subset members;
 	private Function setMembershipProofFunction;
 	private Function deltaFunction;
 	private ProductFunction preimageProofFunction;
-	private OrProofSystem orProofGenerator;
+	private OrProofSystem orProofSystem;
 
 	protected AbstractValidityProofSystem(final SigmaChallengeGenerator challengeGenerator, final Subset members) {
 		super(challengeGenerator);
@@ -165,10 +165,10 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 	}
 
 	private OrProofSystem getOrProofGenerator() {
-		if (this.orProofGenerator == null) {
-			this.orProofGenerator = OrProofSystem.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction());
+		if (this.orProofSystem == null) {
+			this.orProofSystem = OrProofSystem.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction());
 		}
-		return this.orProofGenerator;
+		return this.orProofSystem;
 	}
 
 	private ProductFunction createPreimageProofFunction() {
