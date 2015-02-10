@@ -140,7 +140,7 @@ public class MathExample {
 	 */
 	public static void example5() {
 		ZModTwo primeField = ZModTwo.getInstance();
-		PolynomialRing<ZModTwo> ring = PolynomialRing.getInstance(primeField);
+		PolynomialRing ring = PolynomialRing.getInstance(primeField);
 
 		String b = "10100100001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001";
 
@@ -158,8 +158,8 @@ public class MathExample {
 		BigInteger[] bigs = {};
 		bigs = arrayBigInteger.toArray(bigs);
 
-		PolynomialElement<ZModTwo> irreduciblePolynom = ring.getElement(bigs);
-		PolynomialElement<ZModTwo> p1 = irreduciblePolynom;
+		PolynomialElement irreduciblePolynom = ring.getElement(bigs);
+		PolynomialElement p1 = irreduciblePolynom;
 		Example.printLine(irreduciblePolynom);
 		Example.printLine(irreduciblePolynom.isIrreducible());
 

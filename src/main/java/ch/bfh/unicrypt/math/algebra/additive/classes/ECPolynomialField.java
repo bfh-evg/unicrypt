@@ -47,12 +47,10 @@ import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECPolynomialFieldParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-
 import java.math.BigInteger;
 
 /**
@@ -60,31 +58,30 @@ import java.math.BigInteger;
  * @author Christian Lutz
  */
 public class ECPolynomialField
-	   extends AbstractEC<PolynomialField<ZModTwo>, Polynomial<? extends DualisticElement<ZModTwo>>, PolynomialElement<ZModTwo>, ECPolynomialElement> {
+	   extends AbstractEC<PolynomialField, Polynomial<? extends DualisticElement<BigInteger>>, PolynomialElement, ECPolynomialElement> {
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ECPolynomialField(PolynomialField<ZModTwo> finiteField, PolynomialElement<ZModTwo> a,
-		   PolynomialElement<ZModTwo> b, PolynomialElement<ZModTwo> gx, PolynomialElement<ZModTwo> gy,
+	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a,
+		   PolynomialElement b, PolynomialElement gx, PolynomialElement gy,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
 	}
 
-	public ECPolynomialField(PolynomialField<ZModTwo> finiteField, PolynomialElement<ZModTwo> a, PolynomialElement<ZModTwo> b,
+	public ECPolynomialField(PolynomialField finiteField, PolynomialElement a, PolynomialElement b,
 		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, givenOrder, coFactor);
 	}
 
 	@Override
-	protected boolean abstractContains(PolynomialElement<ZModTwo> x) {
-		DualisticElement<ZModTwo> traceX = traceGF2m(x, this);
-		DualisticElement<ZModTwo> traceA = traceGF2m(this.getA(), this);
-		DualisticElement<ZModTwo> traceAX = traceGF2m(x.add(this.getA()).add(this.getB().divide(x.square())), this);
+	protected boolean abstractContains(PolynomialElement x) {
+		DualisticElement<BigInteger> traceX = traceGF2m(x, this);
+		DualisticElement<BigInteger> traceA = traceGF2m(this.getA(), this);
+		DualisticElement<BigInteger> traceAX = traceGF2m(x.add(this.getA()).add(this.getB().divide(x.square())), this);
 
-		
 		boolean e1 = traceA.isEquivalent(traceX);
 		boolean e2 = traceAX.isEquivalent(ZModTwo.ZERO);
 
@@ -92,15 +89,15 @@ public class ECPolynomialField
 	}
 
 	@Override
-	protected boolean abstractContains(PolynomialElement<ZModTwo> x, PolynomialElement<ZModTwo> y) {
-		PolynomialElement<ZModTwo> left = y.power(2).add(x.multiply(y));
-		PolynomialElement<ZModTwo> right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
+	protected boolean abstractContains(PolynomialElement x, PolynomialElement y) {
+		PolynomialElement left = y.power(2).add(x.multiply(y));
+		PolynomialElement right = x.power(3).add(x.power(2).multiply(getA())).add(getB());
 		return left.isEquivalent(right);
 	}
 
 	@Override
 	protected ECPolynomialElement abstractGetElement(
-		   Point<PolynomialElement<ZModTwo>> value) {
+		   Point<PolynomialElement> value) {
 		return new ECPolynomialElement(this, value);
 	}
 
@@ -110,17 +107,17 @@ public class ECPolynomialField
 	 * @param x x-coordinate of point
 	 * @return
 	 */
-	public ECPolynomialElement[] getY(PolynomialElement<ZModTwo> x) {
+	public ECPolynomialElement[] getY(PolynomialElement x) {
 		if (!this.contains(x)) {
 			throw new IllegalArgumentException("No y-coordinate exists for the given x-coordinate: " + x);
 		}
 
-		PolynomialElement<ZModTwo> t = x.add(this.getA()).add(this.getB().divide(x.square()));
-		PolynomialElement<ZModTwo> l = this.getFiniteField().solveQuadradicEquation(t);
-		
-		ECPolynomialElement y1=this.getElement(x, l.add(l.getSet().getOneElement()).multiply(x));
-		ECPolynomialElement y2=this.getElement(x, l.multiply(x));
-		ECPolynomialElement[] y={y1,y2};
+		PolynomialElement t = x.add(this.getA()).add(this.getB().divide(x.square()));
+		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
+
+		ECPolynomialElement y1 = this.getElement(x, l.add(l.getSet().getOneElement()).multiply(x));
+		ECPolynomialElement y2 = this.getElement(x, l.multiply(x));
+		ECPolynomialElement[] y = {y1, y2};
 		return y;
 	}
 
@@ -140,13 +137,13 @@ public class ECPolynomialField
 		if (element1.equals(element2.invert())) {
 			return this.getIdentityElement();
 		}
-		PolynomialElement<ZModTwo> s, rx, ry;
-		PolynomialElement<ZModTwo> px = element1.getX();
-		PolynomialElement<ZModTwo> py = element1.getY();
-		PolynomialElement<ZModTwo> qx = element2.getX();
-		PolynomialElement<ZModTwo> qy = element2.getY();
+		PolynomialElement s, rx, ry;
+		PolynomialElement px = element1.getX();
+		PolynomialElement py = element1.getY();
+		PolynomialElement qx = element2.getX();
+		PolynomialElement qy = element2.getY();
 		if (element1.equals(element2)) {
-			final PolynomialElement<ZModTwo> one = this.getFiniteField().getOneElement();
+			final PolynomialElement one = this.getFiniteField().getOneElement();
 			s = px.add(py.divide(px));
 			rx = s.square().add(s).add(this.getA());
 			ry = px.square().add((s.add(one)).multiply(rx));
@@ -208,9 +205,10 @@ public class ECPolynomialField
 
 		return c2 && c3 && c4 && c5 && c6 && c7 && c8;
 	}
-	
+
 	/**
 	 * Private method implements selfApply to check if a ECPolynomialElement is a valid generator
+	 * <p>
 	 * @param element
 	 * @param posAmount
 	 * @return
@@ -240,7 +238,7 @@ public class ECPolynomialField
 	 * @return
 	 * @throws Exception
 	 */
-	public static ECPolynomialField getInstance(PolynomialField<ZModTwo> f, PolynomialElement<ZModTwo> a, PolynomialElement<ZModTwo> b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, givenOrder, coFactor);
 
 		if (newInstance.isValid()) {
@@ -263,7 +261,7 @@ public class ECPolynomialField
 	 * @return
 	 * @throws Exception
 	 */
-	public static ECPolynomialField getInstance(PolynomialField<ZModTwo> f, PolynomialElement<ZModTwo> a, PolynomialElement<ZModTwo> b, PolynomialElement<ZModTwo> gx, PolynomialElement<ZModTwo> gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
 
 		if (newInstance.isValid()) {
@@ -274,8 +272,8 @@ public class ECPolynomialField
 	}
 
 	public static ECPolynomialField getInstance(final StandardECPolynomialFieldParams params) throws Exception {
-		PolynomialField<ZModTwo> field;
-		PolynomialElement<ZModTwo> a, b, gx, gy;
+		PolynomialField field;
+		PolynomialElement a, b, gx, gy;
 		BigInteger order, h;
 
 		field = params.getFiniteField();
@@ -295,9 +293,9 @@ public class ECPolynomialField
 	 * @param ec
 	 * @return
 	 */
-	public static DualisticElement<ZModTwo> traceGF2m(PolynomialElement<ZModTwo> x, ECPolynomialField ec) {
+	public static DualisticElement<BigInteger> traceGF2m(PolynomialElement x, ECPolynomialField ec) {
 		int deg = ec.getFiniteField().getDegree();
-		DualisticElement<ZModTwo> sum = x.getValue().getCoefficient(0);
+		DualisticElement<BigInteger> sum = x.getValue().getCoefficient(0);
 
 		for (int i = 1; i < deg; i++) {
 			sum = sum.add(x.getValue().getCoefficient(i));

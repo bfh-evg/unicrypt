@@ -46,21 +46,21 @@ import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractDualisticElement
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
+import java.math.BigInteger;
 import java.util.HashMap;
 
 /**
  *
  * @author rolfhaenni
- * @param <V>
  */
-public class PolynomialElement<V>
-	   extends AbstractDualisticElement<PolynomialSemiRing<V>, PolynomialElement<V>, Polynomial<? extends DualisticElement<V>>> {
+public class PolynomialElement
+	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement, Polynomial<? extends DualisticElement<BigInteger>>> {
 
-	protected PolynomialElement(final PolynomialSemiRing<V> semiRing, Polynomial<? extends DualisticElement<V>> polynomial) {
+	protected PolynomialElement(final PolynomialSemiRing semiRing, Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
 		super(semiRing, polynomial);
 	}
 
-	public DualisticElement<V> evaluate(DualisticElement element) {
+	public DualisticElement<BigInteger> evaluate(DualisticElement element) {
 		if (element == null || !this.getSet().getSemiRing().contains(element)) {
 			throw new IllegalArgumentException();
 		}
@@ -78,14 +78,14 @@ public class PolynomialElement<V>
 		int n = this.getValue().getDegree();
 		int q = this.getValue().getIndices().getLength();
 		if (n > 0 && ((double) q / n) < 0.01) {
-			DualisticElement<V> result = this.getSet().getSemiRing().getZeroElement();
+			DualisticElement<BigInteger> result = this.getSet().getSemiRing().getZeroElement();
 			for (Integer index : this.getValue().getIndices()) {
 				result = result.add(this.getValue().getCoefficient(index).multiply(element.power(index)));
 			}
 			return result;
 		} else {
 			// Horner
-			DualisticElement<V> r = this.getSet().getSemiRing().getZeroElement();
+			DualisticElement<BigInteger> r = this.getSet().getSemiRing().getZeroElement();
 			for (int i = this.getValue().getDegree(); i >= 0; i--) {
 				r = r.add(this.getValue().getCoefficient(i));
 				if (i > 0) {
@@ -107,10 +107,10 @@ public class PolynomialElement<V>
 		if (!this.getSet().isRing()) {
 			throw new UnsupportedOperationException();
 		}
-		return ((PolynomialRing<V>) this.getSet()).isIrreduciblePolynomial(this);
+		return ((PolynomialRing) this.getSet()).isIrreduciblePolynomial(this);
 	}
 
-	public PolynomialElement<V> reduce(DualisticElement<V> value) {
+	public PolynomialElement reduce(DualisticElement<BigInteger> value) {
 		if (!this.getSet().getSemiRing().isField()) {
 			throw new UnsupportedOperationException();
 		}
@@ -119,7 +119,7 @@ public class PolynomialElement<V>
 		}
 		HashMap map = new HashMap();
 		for (int i = 0; i <= this.getValue().getDegree(); i++) {
-			DualisticElement<V> c = this.getValue().getCoefficient(i);
+			DualisticElement<BigInteger> c = this.getValue().getCoefficient(i);
 			if (!c.isZero()) {
 				map.put(i, c.divide(value));
 			}

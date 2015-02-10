@@ -69,12 +69,12 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	}
 
 	@Override
-	public final Element getCommitment(final Triple proof) {
+	public final PUE getCommitment(final Triple proof) {
 		return (PUE) super.getCommitment(proof);
 	}
 
 	@Override
-	public final Element getResponse(final Triple proof) {
+	public final PRE getResponse(final Triple proof) {
 		return (PRE) super.getResponse(proof);
 	}
 

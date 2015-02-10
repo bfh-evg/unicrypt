@@ -68,17 +68,17 @@ public class PolynomialFieldTest {
 	private static final ZModPrime zmod5 = ZModPrime.getInstance(5);
 	private static final ZModPrime zmod7 = ZModPrime.getInstance(7);
 
-	private static final PolynomialRing<BigInteger> ring2 = PolynomialRing.getInstance(zmod2);
-	private static final PolynomialElement<BigInteger> irrPoly = ring2.getElement(one, one, zero, zero, one);
-	private static final PolynomialField<BigInteger> field2_4 = PolynomialField.getInstance(zmod2, irrPoly);
+	private static final PolynomialRing ring2 = PolynomialRing.getInstance(zmod2);
+	private static final PolynomialElement irrPoly = ring2.getElement(one, one, zero, zero, one);
+	private static final PolynomialField field2_4 = PolynomialField.getInstance(zmod2, irrPoly);
 
-	private static final PolynomialField<BigInteger> field5_3 = PolynomialField.<BigInteger>getInstance(zmod5, 3);
-	private static final PolynomialField<BigInteger> field7_4 = PolynomialField.<BigInteger>getInstance(zmod7, 4);
-	private static final PolynomialField<BigInteger> field3_10 = PolynomialField.<BigInteger>getInstance(zmod3, 10);
+	private static final PolynomialField field5_3 = PolynomialField.getInstance(zmod5, 3);
+	private static final PolynomialField field7_4 = PolynomialField.getInstance(zmod7, 4);
+	private static final PolynomialField field3_10 = PolynomialField.getInstance(zmod3, 10);
 
 	@Test
 	public void testGetElement() {
-		PolynomialElement<BigInteger> p;
+		PolynomialElement p;
 
 		// 1 + x^2 + x^5 + x^6 => 1 + x + x^2 + x^3
 		try {
@@ -107,11 +107,11 @@ public class PolynomialFieldTest {
 	@Test
 	public void testMultiply() {
 		// p1 = 1 + x^2 + x^3
-		PolynomialElement<BigInteger> p1 = field2_4.getElement(one, zero, one, one);
+		PolynomialElement p1 = field2_4.getElement(one, zero, one, one);
 		// p2 = 1 + x^3
-		PolynomialElement<BigInteger> p2 = field2_4.getElement(one, zero, zero, one);
+		PolynomialElement p2 = field2_4.getElement(one, zero, zero, one);
 		// p1 * p2 = 1 + x^2 + x^5 + x^6 => 1 + x + x^2 + x^3
-		PolynomialElement<BigInteger> p3 = p1.multiply(p2);
+		PolynomialElement p3 = p1.multiply(p2);
 		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(0));
 		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(1));
 		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(2));
@@ -131,8 +131,8 @@ public class PolynomialFieldTest {
 	@Test
 	public void testOneOver() {
 		// p1 = 1 + x + x^3
-		PolynomialElement<BigInteger> p1 = field2_4.getElement(one, one, zero, one);
-		PolynomialElement<BigInteger> p2 = p1.oneOver();
+		PolynomialElement p1 = field2_4.getElement(one, one, zero, one);
+		PolynomialElement p2 = p1.oneOver();
 
 		assertEquals(zmod2.getOneElement(), p2.getValue().getCoefficient(0));
 		assertEquals(zmod2.getZeroElement(), p2.getValue().getCoefficient(1));
@@ -140,7 +140,7 @@ public class PolynomialFieldTest {
 		assertEquals(zmod2.getZeroElement(), p2.getValue().getCoefficient(3));
 		assertTrue(p2.getSet().isField());
 
-		PolynomialElement<BigInteger> p3 = p1.multiply(p2);
+		PolynomialElement p3 = p1.multiply(p2);
 		assertTrue(p3.isEquivalent(field2_4.getOneElement()));
 
 		p1 = field5_3.getElement(one, zero, BigInteger.valueOf(2));
@@ -157,11 +157,11 @@ public class PolynomialFieldTest {
 	@Test
 	public void testDivide() {
 		// p1 = 1 + x^2 + x^3
-		PolynomialElement<BigInteger> p1 = field2_4.getElement(one, zero, one, one);
+		PolynomialElement p1 = field2_4.getElement(one, zero, one, one);
 		// p2 = 1 + x + x^2 + x^3
-		PolynomialElement<BigInteger> p2 = field2_4.getElement(one, one, one, one);
+		PolynomialElement p2 = field2_4.getElement(one, one, one, one);
 		// p2 / p1 = 1 + x^3
-		PolynomialElement<BigInteger> p3 = p2.divide(p1);
+		PolynomialElement p3 = p2.divide(p1);
 		assertEquals(field2_4.getElement(one, zero, zero, one), p3);
 		assertTrue(p3.getSet().isField());
 	}
@@ -169,11 +169,11 @@ public class PolynomialFieldTest {
 	@Test
 	public void testAdd() {
 		// p1 = 1 + x + x^3
-		PolynomialElement<BigInteger> p1 = field2_4.getElement(one, one, zero, one);
+		PolynomialElement p1 = field2_4.getElement(one, one, zero, one);
 		// p2 = 1 + x^3
-		PolynomialElement<BigInteger> p2 = field2_4.getElement(one, zero, zero, one);
+		PolynomialElement p2 = field2_4.getElement(one, zero, zero, one);
 		// p1 + p2 = x
-		PolynomialElement<BigInteger> p3 = p1.add(p2);
+		PolynomialElement p3 = p1.add(p2);
 		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(0));
 		assertEquals(zmod2.getOneElement(), p3.getValue().getCoefficient(1));
 		assertEquals(zmod2.getZeroElement(), p3.getValue().getCoefficient(2));

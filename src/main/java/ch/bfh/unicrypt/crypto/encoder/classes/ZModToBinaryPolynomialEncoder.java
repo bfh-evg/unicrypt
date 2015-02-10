@@ -1,8 +1,5 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
-import java.math.BigInteger;
-import java.nio.ByteOrder;
-
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
@@ -10,10 +7,11 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModTwo;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.math.BigInteger;
+import java.nio.ByteOrder;
 
 /**
  * Encodes a ZModElement as a binary polynomial by taking the bit-array representation of the ZModElement to create the
@@ -23,13 +21,13 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * <p>
  */
 public class ZModToBinaryPolynomialEncoder
-	   extends AbstractEncoder<ZMod, ZModElement, PolynomialField<ZModTwo>, PolynomialElement<ZModTwo>> {
+	   extends AbstractEncoder<ZMod, ZModElement, PolynomialField, PolynomialElement> {
 
 	private final ZMod zMod;
-	private final PolynomialField<ZModTwo> binaryPolynomial;
+	private final PolynomialField binaryPolynomial;
 	private final BigIntegerToByteArray converter;
 
-	public ZModToBinaryPolynomialEncoder(ZMod zMod, PolynomialField<ZModTwo> binaryPolynomial) {
+	public ZModToBinaryPolynomialEncoder(ZMod zMod, PolynomialField binaryPolynomial) {
 		this.zMod = zMod;
 		this.binaryPolynomial = binaryPolynomial;
 		this.converter = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN);
@@ -45,7 +43,7 @@ public class ZModToBinaryPolynomialEncoder
 		return new DecodingFunction(this.binaryPolynomial, this.zMod);
 	}
 
-	public static ZModToBinaryPolynomialEncoder getInstance(ZMod zMod, PolynomialField<ZModTwo> polynomialField) {
+	public static ZModToBinaryPolynomialEncoder getInstance(ZMod zMod, PolynomialField polynomialField) {
 		if (zMod == null || polynomialField == null) {
 			throw new IllegalArgumentException();
 		}
@@ -53,19 +51,19 @@ public class ZModToBinaryPolynomialEncoder
 	}
 
 	class EncodingFunction
-		   extends AbstractFunction<EncodingFunction, ZMod, ZModElement, PolynomialField<ZModTwo>, PolynomialElement<ZModTwo>> {
+		   extends AbstractFunction<EncodingFunction, ZMod, ZModElement, PolynomialField, PolynomialElement> {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		protected EncodingFunction(final ZMod domain, final PolynomialField<ZModTwo> coDomain) {
+		protected EncodingFunction(final ZMod domain, final PolynomialField coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected PolynomialElement<ZModTwo> abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
+		protected PolynomialElement abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
 			ByteArray byteArray = converter.convert(element.getValue());
 			return this.getCoDomain().getElement(byteArray);
 
@@ -77,19 +75,19 @@ public class ZModToBinaryPolynomialEncoder
 	}
 
 	class DecodingFunction
-		   extends AbstractFunction<DecodingFunction, PolynomialField<ZModTwo>, PolynomialElement<ZModTwo>, ZMod, ZModElement> {
+		   extends AbstractFunction<DecodingFunction, PolynomialField, PolynomialElement, ZMod, ZModElement> {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		protected DecodingFunction(final PolynomialField<ZModTwo> domain, final ZMod coDomain) {
+		protected DecodingFunction(final PolynomialField domain, final ZMod coDomain) {
 			super(domain, coDomain);
 		}
 
 		@Override
-		protected ZModElement abstractApply(final PolynomialElement<ZModTwo> element, final RandomByteSequence randomByteSequence) {
+		protected ZModElement abstractApply(final PolynomialElement element, final RandomByteSequence randomByteSequence) {
 			ByteArray byteArray = element.getValue().getCoefficients();
 			BigInteger bigInteger = converter.reconvert(byteArray);
 			return this.getCoDomain().getElement(bigInteger.mod(this.getCoDomain().getModulus()));
