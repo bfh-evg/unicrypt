@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
@@ -61,6 +62,9 @@ public class Prime
 	}
 
 	public static Prime getInstance(BigInteger prime) {
+		if (prime == null || !MathUtil.isPrime(prime)) {
+			throw new IllegalArgumentException();
+		}
 		return new Prime(prime);
 	}
 
