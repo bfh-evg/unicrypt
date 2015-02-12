@@ -217,13 +217,13 @@ public class ByteArray
 				byte b = (i < other.length) ? other.abstractGetByteAt(i) : fillByte;
 				switch (operand) {
 					case 0:
-						result[i] = MathUtil.logicalXOR(result[i], b);
+						result[i] = MathUtil.xor(result[i], b);
 						break;
 					case 1:
-						result[i] = MathUtil.logicalAND(result[i], b);
+						result[i] = MathUtil.and(result[i], b);
 						break;
 					case 2:
-						result[i] = MathUtil.logicalOR(result[i], b);
+						result[i] = MathUtil.or(result[i], b);
 						break;
 					default:
 						throw new UnsupportedOperationException();
@@ -236,7 +236,7 @@ public class ByteArray
 	public ByteArray not() {
 		byte[] result = new byte[this.length];
 		for (int i : this.getAllIndices()) {
-			result[i] = MathUtil.logicalNOT(this.abstractGetByteAt(i));
+			result[i] = MathUtil.not(this.abstractGetByteAt(i));
 		}
 		return new ByteArray(result);
 	}

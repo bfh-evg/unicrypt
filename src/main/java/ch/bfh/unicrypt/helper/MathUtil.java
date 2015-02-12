@@ -537,40 +537,86 @@ public final class MathUtil {
 		return n.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
 	}
 
+	// Bit operations on byte
 	public static byte setBit(byte b, int i) {
-		return (byte) logicalOR(b, bitMask(i));
+		return (byte) or(b, byteMask(i));
 	}
 
 	public static byte clearBit(byte b, int i) {
-		return (byte) logicalAND(b, logicalNOT(bitMask(i)));
+		return (byte) and(b, not(byteMask(i)));
 	}
 
-	public static byte bitMask(int i) {
+	public static byte byteMask(int i) {
 		return (byte) (1 << i);
 	}
 
-	public static byte logicalShiftLeft(byte b, int n) {
+	public static byte shiftLeft(byte b, int n) {
 		return (byte) (b << n);
 	}
 
-	public static byte logicalShiftRight(byte b, int n) {
+	public static byte shiftRight(byte b, int n) {
 		return (byte) (b >>> n);
 	}
 
-	public static byte logicalXOR(byte b1, byte b2) {
+	public static byte xor(byte b1, byte b2) {
 		return (byte) (b1 ^ b2);
 	}
 
-	public static byte logicalAND(byte b1, byte b2) {
+	public static byte and(byte b1, byte b2) {
 		return (byte) (b1 & b2);
 	}
 
-	public static byte logicalOR(byte b1, byte b2) {
+	public static byte or(byte b1, byte b2) {
 		return (byte) (b1 | b2);
 	}
 
-	public static byte logicalNOT(byte b) {
+	public static byte not(byte b) {
 		return (byte) ~b;
 	}
 
+	// Bit operations on long
+	public static long setBit(long l, int i) {
+		return or(l, longMask(i));
+	}
+
+	public static long clearBit(long l, int i) {
+		return and(l, not(longMask(i)));
+	}
+
+	public static long longMask(int i) {
+		return (1L << i);
+	}
+
+	public static long shiftLeft(long l, int n) {
+		return l << n;
+	}
+
+	public static long shiftRight(long l, int n) {
+		return l >>> n;
+	}
+
+	public static long xor(long l1, long l2) {
+		return l1 ^ l2;
+	}
+
+	public static long and(long l1, long l2) {
+		return l1 & l2;
+	}
+
+	public static long or(long l1, long l2) {
+		return l1 | l2;
+	}
+
+	public static long not(long l) {
+		return ~l;
+	}
+
+	public static int modulo(int i, int n) {
+		return ((i % n) + n) % n;
+	}
+
+	public static int divide(int i, int n) {
+		return (i - modulo(i, n)) / n;
+	}
+	
 }

@@ -205,8 +205,8 @@ public class BitArray
 		}
 		index = this.offset + index - this.trailer;
 		int byteIndex = index / Byte.SIZE;
-		byte mask = MathUtil.bitMask(index % Byte.SIZE);
-		return MathUtil.logicalAND(this.byteArray.getByteAt(byteIndex), mask) != 0;
+		byte mask = MathUtil.byteMask(index % Byte.SIZE);
+		return MathUtil.and(this.byteArray.getByteAt(byteIndex), mask) != 0;
 	}
 
 	@Override
