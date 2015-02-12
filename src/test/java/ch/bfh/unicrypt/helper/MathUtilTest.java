@@ -261,4 +261,26 @@ public class MathUtilTest {
 		MathUtil.maxValue(new BigInteger[]{ONE, NULL_VALUE, SEVEN});
 	}
 
+	@Test
+	public void testSqrt() {
+		for (int i=0; i<1000; i++) {
+			BigInteger n = BigInteger.valueOf(i);
+			
+			BigInteger s = MathUtil.sqrt(n);
+			BigInteger sSquare = s.multiply(s);
+			Assert.assertTrue(sSquare.compareTo(n)<=0);
+
+			BigInteger sPlusOne = s.add(ONE);
+			BigInteger sPlusOneSquare = sPlusOne.multiply(sPlusOne);
+			Assert.assertTrue(sPlusOneSquare.compareTo(n)>0);
+		}
+		
+		for (int i=0; i<1000; i++) {
+			BigInteger n = BigInteger.valueOf(i);
+			BigInteger nSquare = n.multiply(n);
+			BigInteger result = MathUtil.sqrt(nSquare);
+			Assert.assertEquals(n, result);
+		}
+	}
+	
 }
