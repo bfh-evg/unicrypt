@@ -200,11 +200,11 @@ public class MathUtilTest {
 
 	@Test
 	public void testRemoveDuplicates() {
-		Assert.assertEquals(MathUtil.removeDuplicates(TEN, TWO, SEVEN).length, 3);
-		Assert.assertEquals(MathUtil.removeDuplicates(TEN, TWO, SEVEN, SEVEN).length, 3);
-		Assert.assertEquals(MathUtil.removeDuplicates(SEVEN, SEVEN, SEVEN, SEVEN, SEVEN).length, 1);
-		Assert.assertEquals(MathUtil.removeDuplicates(SEVEN, TWO, SEVEN, SEVEN, SEVEN, TWO, SEVEN).length, 2);
-		Assert.assertEquals(MathUtil.removeDuplicates(NULL_VALUE, NULL_VALUE, NULL_VALUE).length, 1);
+		Assert.assertEquals(3, MathUtil.removeDuplicates(TEN, TWO, SEVEN).length);
+		Assert.assertEquals(3, MathUtil.removeDuplicates(TEN, TWO, SEVEN, SEVEN).length);
+		Assert.assertEquals(1, MathUtil.removeDuplicates(SEVEN, SEVEN, SEVEN, SEVEN, SEVEN).length);
+		Assert.assertEquals(2, MathUtil.removeDuplicates(SEVEN, TWO, SEVEN, SEVEN, SEVEN, TWO, SEVEN).length);
+		Assert.assertEquals(1, MathUtil.removeDuplicates(NULL_VALUE, NULL_VALUE, NULL_VALUE).length);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -275,7 +275,7 @@ public class MathUtilTest {
 			Assert.assertTrue(sPlusOneSquare.compareTo(n)>0);
 		}
 		
-		for (int i=0; i<1000; i++) {
+		for (int i=0; i<1000; i++) { 
 			BigInteger n = BigInteger.valueOf(i);
 			BigInteger nSquare = n.multiply(n);
 			BigInteger result = MathUtil.sqrt(nSquare);
