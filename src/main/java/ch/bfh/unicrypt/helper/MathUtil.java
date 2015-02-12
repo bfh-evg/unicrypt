@@ -56,6 +56,12 @@ public final class MathUtil {
 
 	public static final int NUMBER_OF_PRIME_TESTS = 40;
 
+	public static final BigInteger ZERO = BigInteger.valueOf(0);
+	public static final BigInteger ONE = BigInteger.valueOf(1);
+	public static final BigInteger TWO = BigInteger.valueOf(2);
+	public static final BigInteger THREE = BigInteger.valueOf(3);
+	public static final BigInteger FOUR = BigInteger.valueOf(4);
+
 	/**
 	 * Returns the value obtained from applying the Euler totient function to an integer {@literal value}.
 	 * <dt><b>Preconditions:</b></dt>
@@ -75,14 +81,14 @@ public final class MathUtil {
 		if (value == null || value.signum() == 0 || value.signum() == -1 || primeFactorSet == null) {
 			throw new IllegalArgumentException();
 		}
-		BigInteger product1 = BigInteger.ONE;
-		BigInteger product2 = BigInteger.ONE;
+		BigInteger product1 = ONE;
+		BigInteger product2 = ONE;
 		for (final BigInteger prime : primeFactorSet) {
 			if (prime == null) {
 				throw new IllegalArgumentException();
 			}
 			product1 = product1.multiply(prime);
-			product2 = product2.multiply(prime.subtract(BigInteger.ONE));
+			product2 = product2.multiply(prime.subtract(ONE));
 		}
 		return value.multiply(product2).divide(product1);
 	}
@@ -146,11 +152,11 @@ public final class MathUtil {
 	 * @return {@literal true} if {@literal value} is a save prime, {@literal false} otherwise
 	 */
 	public static boolean isSavePrime(final BigInteger value) {
-		return isPrime(value) && isPrime(value.subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)));
+		return isPrime(value) && isPrime(value.subtract(ONE).divide(TWO));
 	}
 
 	public static boolean areRelativelyPrime(BigInteger value1, BigInteger value2) {
-		return value1.gcd(value2).equals(BigInteger.ONE);
+		return value1.gcd(value2).equals(ONE);
 	}
 
 	public static boolean areRelativelyPrime(BigInteger... values) {
@@ -236,7 +242,7 @@ public final class MathUtil {
 		if (value < 0) {
 			throw new IllegalArgumentException();
 		}
-		BigInteger result = BigInteger.ONE;
+		BigInteger result = ONE;
 		for (int i = 1; i <= value; i++) {
 			result = result.multiply(BigInteger.valueOf(i));
 		}
@@ -314,7 +320,7 @@ public final class MathUtil {
 		}
 		int n = values.length;
 		if (n == 0) {
-			return BigInteger.ZERO;
+			return ZERO;
 		}
 		if (n == 1) {
 			return values[0];
@@ -421,14 +427,14 @@ public final class MathUtil {
 		if (value.signum() > 0) {
 			return value.shiftLeft(1);
 		}
-		return value.negate().shiftLeft(1).subtract(BigInteger.ONE);
+		return value.negate().shiftLeft(1).subtract(ONE);
 	}
 
 	public static BigInteger unfold(BigInteger value) {
-		if (value.mod(BigInteger.valueOf(2)).equals(BigInteger.ZERO)) {
+		if (value.mod(TWO).equals(ZERO)) {
 			return value.shiftRight(1);
 		}
-		return value.add(BigInteger.ONE).shiftRight(1).negate();
+		return value.add(ONE).shiftRight(1).negate();
 	}
 
 	public static BigInteger foldAndPair(BigInteger... values) {
@@ -453,17 +459,17 @@ public final class MathUtil {
 	}
 
 	public static BigInteger powerOfTwo(int exponent) {
-		return BigInteger.ONE.shiftLeft(exponent);
+		return ONE.shiftLeft(exponent);
 	}
 
-	// This is a private helper method to compute the integer square root of a BigInteger value.
+	// This is a private helper method to compute the integer square root of a positive BigInteger value.
 	public static BigInteger sqrt(BigInteger n) {
 		// special case
 		if (n.signum() == 0) {
-			return BigInteger.ZERO;
+			return ZERO;
 		}
 		// first guess
-		BigInteger current = BigInteger.ONE.shiftLeft(n.bitLength() / 2 + 1);
+		BigInteger current = powerOfTwo(n.bitLength() / 2 + 1);
 		BigInteger last;
 		do {
 			last = current;
@@ -473,51 +479,50 @@ public final class MathUtil {
 	}
 
 	//Tonelli_Shanks algorithm -> wikipedia
-	public static BigInteger sqrtModPrime(BigInteger rSquare, BigInteger p) {
-		BigInteger two = new BigInteger("2");
-		BigInteger z = two;
+	public static BigInteger sqrtModPrime(BigInteger n, BigInteger p) {
+		BigInteger z = TWO;
 
 		//z which must be a quadratic non-residue mod p.
 		while (hasSqrtModPrime(z, p)) {
-			z = z.add(BigInteger.ONE);
+			z = z.add(ONE);
 		}
 
-		if (!hasSqrtModPrime(rSquare, p)) {
+		if (!hasSqrtModPrime(n, p)) {
 			throw new UnknownError("r has no square root");
 		} else {
-			if (p.mod(new BigInteger("4")).equals(new BigInteger("3"))) {
-				return rSquare.modPow(p.add(BigInteger.ONE).divide(new BigInteger("4")), p);
+			if (p.mod(FOUR).equals(THREE)) {
+				return n.modPow(p.add(ONE).divide(FOUR), p);
 			} else {
-				BigInteger pMin1 = p.subtract(BigInteger.ONE);	//p-1
-				BigInteger s = BigInteger.ONE;
-				BigInteger q = pMin1.divide(two);
+				BigInteger pMin1 = p.subtract(ONE);	//p-1
+				BigInteger s = ONE;
+				BigInteger q = pMin1.divide(TWO);
 
 				//Finding Q
-				while (q.mod(two).equals(BigInteger.ZERO)) {
-					q = q.divide(two);
-					s = s.add(BigInteger.ONE);
+				while (q.mod(TWO).equals(ZERO)) {
+					q = q.divide(TWO);
+					s = s.add(ONE);
 				}
 
 				BigInteger c = z.modPow(q, p);
-				BigInteger r = rSquare.modPow(q.add(BigInteger.ONE).divide(two), p);
-				BigInteger t = rSquare.modPow(q, p);
+				BigInteger r = n.modPow(q.add(ONE).divide(TWO), p);
+				BigInteger t = n.modPow(q, p);
 				BigInteger m = s;
 
 				//Loop until t==1
-				while (!t.equals(BigInteger.ONE)) {
-					BigInteger i = BigInteger.ZERO;
-					while (!BigInteger.ONE.equals(t.modPow(two.modPow(i, p), p))) {
-						i = i.add(BigInteger.ONE);
+				while (!t.equals(ONE)) {
+					BigInteger i = ZERO;
+					while (!ONE.equals(t.modPow(TWO.modPow(i, p), p))) {
+						i = i.add(ONE);
 					}
 
-					BigInteger b = c.modPow(two.modPow(m.subtract(i).subtract(BigInteger.ONE), p), p);
+					BigInteger b = c.modPow(TWO.modPow(m.subtract(i).subtract(ONE), p), p);
 					r = r.multiply(b).mod(p);
 					t = t.multiply(b.pow(2)).mod(p);
-					c = b.modPow(two, p);
+					c = b.modPow(TWO, p);
 					m = i;
 				}
 
-				if (r.modPow(two, p).equals(rSquare.mod(p))) {
+				if (r.modPow(TWO, p).equals(n.mod(p))) {
 					return r;
 				} else {
 					throw new IllegalArgumentException("Tonnelli fails...");
@@ -527,10 +532,9 @@ public final class MathUtil {
 		}
 	}
 
-	//Check if r has a square root mod p
-	public static boolean hasSqrtModPrime(BigInteger r, BigInteger p) {
-		BigInteger two = new BigInteger("2");
-		return r.modPow(p.subtract(BigInteger.ONE).divide(two), p).equals(BigInteger.ONE);
+	//Check if n has a square root mod p
+	public static boolean hasSqrtModPrime(BigInteger n, BigInteger p) {
+		return n.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
 	}
 
 	public static byte setBit(byte b, int i) {
