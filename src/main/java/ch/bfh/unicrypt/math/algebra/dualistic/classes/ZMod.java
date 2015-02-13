@@ -103,8 +103,7 @@ public class ZMod
 	//
 	@Override
 	protected ZModElement defaultSelfApplyAlgorithm(ZModElement element, BigInteger posAmount) {
-		return this.abstractGetElement(element.getValue().multiply(posAmount));
-//		return this.abstractGetElement(element.getValue().multiply(posAmount).mod(this.modulus));
+		return this.abstractGetElement(element.getValue().multiply(posAmount).mod(this.modulus));
 	}
 
 	@Override

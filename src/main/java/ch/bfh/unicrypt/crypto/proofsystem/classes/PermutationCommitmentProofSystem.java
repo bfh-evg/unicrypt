@@ -60,9 +60,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
-import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
-import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -145,7 +143,9 @@ public class PermutationCommitmentProofSystem
 										cyclicGroup.getZModOrder(),
 										ProductGroup.getInstance(cyclicGroup.getZModOrder(), size),
 										cyclicGroup.getZModOrder(),
-										ProductGroup.getInstance(ZMod.getInstance(BigInteger.valueOf(2).pow(this.ke + this.kc + this.kr)), size));
+										//ProductGroup.getInstance(ZMod.getInstance(BigInteger.valueOf(2).pow(this.ke + this.kc + this.kr)), size)
+										// TODO: Clean Fix!
+										ProductGroup.getInstance(cyclicGroup.getZModOrder(), size));
 	}
 
 	//===================================================================================
@@ -211,12 +211,19 @@ public class PermutationCommitmentProofSystem
 		final Element d = ds[ds.length - 1];
 
 		// Map ePrimeV to [0,...,2^(ke+kc+kr) - 1]^N
-		ePrimeV = ProductFunction.getInstance(
-			   ConvertFunction.getInstance(
-					  ZMod.getInstance(BigInteger.valueOf(2).pow(this.ke)),
-					  ZMod.getInstance(BigInteger.valueOf(2).pow(this.ke + this.kc + this.kr))),
-			   ePrimeV.getLength())
-			   .apply(ePrimeV);
+//		ePrimeV = ProductFunction.getInstance(
+//			   ConvertFunction.getInstance(
+//					  ZMod.getInstance(BigInteger.valueOf(2).pow(this.ke)),
+//					  //ZMod.getInstance(BigInteger.valueOf(2).pow(this.ke + this.kc + this.kr))),
+//					  this.cyclicGroup.getZModOrder()),
+//			   ePrimeV.getLength())
+//			   .apply(ePrimeV);
+		// TODO: Clean Fix!
+		Element[] ePrimeVs = new Element[ePrimeV.getLength()];
+		for (int i = 0; i < ePrimeVs.length; i++) {
+			ePrimeVs[i] = cyclicGroup.getZModOrder().getElement(ePrimeV.getAt(i).getBigInteger().mod(cyclicGroup.getOrder()));
+		}
+		ePrimeV = Tuple.getInstance(ePrimeVs);
 
 		// Create sigma proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.independentGenerators, cV);
@@ -253,7 +260,8 @@ public class PermutationCommitmentProofSystem
 			ps[i + 2] = cV.getAt(i);
 		}
 		// - p_(N+3) = c_N/h^(prod(e))                                                        [1]
-		Element eProd = eV.getAt(0);
+		// TODO: Clean Fix!
+		Element eProd = this.cyclicGroup.getZModOrder().getElement(eV.getAt(0).getBigInteger().mod(this.cyclicGroup.getOrder()));
 		for (int i = 1; i < this.size; i++) {
 			eProd = eProd.selfApply(eV.getAt(i));
 		}

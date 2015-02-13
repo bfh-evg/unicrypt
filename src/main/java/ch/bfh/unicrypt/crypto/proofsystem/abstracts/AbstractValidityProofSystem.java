@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.OrProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaSetMembershipProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SetMembershipProofSystem;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -68,7 +68,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 //
 public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE extends Element>
 	   extends AbstractSigmaProofSystem<ProductSet, Pair, PUS, PUE>
-	   implements SigmaSetMembershipProofSystem {
+	   implements SetMembershipProofSystem {
 
 	private final Subset members;
 	private Function setMembershipProofFunction;
