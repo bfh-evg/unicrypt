@@ -51,8 +51,7 @@ package ch.bfh.unicrypt.helper.array.interfaces;
  *
  * @author Rolf Haenni
  * @version 2.0
- * <p>
- * @param <V> The generic type of the values in the array
+ * @param <V> The generic type of the values in the immutable array
  */
 public interface ImmutableArray<V extends Object>
 	   extends Iterable<V> {
@@ -78,9 +77,9 @@ public interface ImmutableArray<V extends Object>
 
 	/**
 	 * Returns an iterable collection of all array indices from 0 to n-1.
-	 * @return The iterable collection of all array indices.
-	 * @see getIndices(V value)
-	 * @see getIndicesExcept(V value)
+	 * @return The iterable collection of all array indices
+	 * @see ImmutableArray#getIndices(java.lang.Object)
+	 * @see ImmutableArray#getIndicesExcept(java.lang.Object)
 	 */
 	public Iterable<Integer> getAllIndices();
 
@@ -88,9 +87,9 @@ public interface ImmutableArray<V extends Object>
 	 * Returns an iterable collection of all array indices for which the stored
 	 * value matches with the given value.
 	 * @param value The given value
-	 * @return An iterable collection of array indices.
-	 * @see getAllIndices()
-	 * @see getIndicesExcept(V value)
+	 * @return An iterable collection of array indices
+	 * @see ImmutableArray#getAllIndices()
+	 * @see ImmutableArray#getIndicesExcept(java.lang.Object) 
 	 */
 	public Iterable<Integer> getIndices(V value);
 
@@ -99,8 +98,8 @@ public interface ImmutableArray<V extends Object>
 	 * values does not mathc with the given value.
 	 * @param value The given value
 	 * @return An iterable collection of array indices.
-	 * @see getAllIndices()
-	 * @see getIndices(V value)
+	 * @see ImmutableArray#getAllIndices()
+	 * @see ImmutableArray#getIndices(java.lang.Object) 
 	 */
 	public Iterable<Integer> getIndicesExcept(V value);
 
@@ -108,8 +107,8 @@ public interface ImmutableArray<V extends Object>
 	 * Counts the number of occurrences of a given value in the array.
 	 * @param value The given value
 	 * @return The number of occurrences
-	 * @see countPrefix(V value)
-	 * @see countSuffix(V value)
+	 * @see ImmutableArray#countPrefix(java.lang.Object) 
+	 * @see ImmutableArray#countSuffix(java.lang.Object) 
 	 */
 	public int count(V value);
 
@@ -118,8 +117,8 @@ public interface ImmutableArray<V extends Object>
 	 * in the array prefix.
 	 * @param value The given value
 	 * @return The number of occurrences
-	 * @see count(V value)
-	 * @see countSuffix(V value)
+	 * @see ImmutableArray#count(java.lang.Object) 
+	 * @see ImmutableArray#countSuffix(java.lang.Object) 
 	 */
 	public int countPrefix(V value);
 
@@ -128,8 +127,8 @@ public interface ImmutableArray<V extends Object>
 	 * in the array suffix.
 	 * @param value The given value
 	 * @return The number of occurrences
-	 * @see count(V value)
-	 * @see countPrefix(V value)
+	 * @see ImmutableArray#count(java.lang.Object) 
+	 * @see ImmutableArray#countPrefix(java.lang.Object) 
 	 */
 	public int countSuffix(V value);
 
@@ -144,14 +143,14 @@ public interface ImmutableArray<V extends Object>
 	/**
 	 * Returns the first value of the array. This method is equivalent to {@code getAt(0)}.
 	 * @return The first value
-	 * @see getAt(int index)
+	 * @see ImmutableArray#getAt(int)
 	 */
 	public V getFirst();
 
 	/**
 	 * Returns the last value of the array. This method is equivalent to {@code getAt(n-1)}.
 	 * @return The last value
-	 * @see getAt(int index)
+	 * @see ImmutableArray#getAt(int)
 	 */
 	public V getLast();
 
@@ -161,9 +160,9 @@ public interface ImmutableArray<V extends Object>
 	 * @param fromIndex The index of the first extracted value
 	 * @param length The given length
 	 * @return The extracted sub-array
-	 * @see extractPrefix(int length)
-	 * @see extractSuffix(int length)
-	 * @see extractRange(int fromIndex, int toIndex)
+	 * @see ImmutableArray#extractPrefix(int) 
+	 * @see ImmutableArray#extractSuffix(int)
+	 * @see ImmutableArray#extractRange(int, int) 
 	 */
 	public ImmutableArray<V> extract(int fromIndex, int length);
 
@@ -172,9 +171,9 @@ public interface ImmutableArray<V extends Object>
 	 * to {@code extract(0, length)}.
 	 * @param length The given length
 	 * @return The extracted sub-array
-	 * @see extract(int fromIndex, int length)
-	 * @see extractSuffix(int length)
-	 * @see extractRange(int fromIndex, int toIndex)
+	 * @see ImmutableArray#extract(int, int) 
+	 * @see ImmutableArray#extractSuffix(int)
+	 * @see ImmutableArray#extractRange(int, int) 
 	 */
 	public ImmutableArray<V> extractPrefix(int length);
 
@@ -183,9 +182,9 @@ public interface ImmutableArray<V extends Object>
 	 * to {@code extract(n-length, length)}.
 	 * @param length The given length
 	 * @return The extracted sub-array
-	 * @see extract(int fromIndex, int length)
-	 * @see extractPrefix(int length)
-	 * @see extractRange(int fromIndex, int toIndex)
+	 * @see ImmutableArray#extract(int, int) 
+	 * @see ImmutableArray#extractPrefix(int) 
+	 * @see ImmutableArray#extractRange(int, int) 
 	 */
 	public ImmutableArray<V> extractSuffix(int length);
 
@@ -197,90 +196,125 @@ public interface ImmutableArray<V extends Object>
 	 * @param fromIndex The index of the first extracted value
 	 * @param toIndex The index of the last extracted value
 	 * @return The extracted sub-array
-	 * @see extract(int fromIndex, int length)
-	 * @see extractPrefix(int length)
-	 * @see extractSuffix(int length)
+	 * @see ImmutableArray#extract(int, int)
+	 * @see ImmutableArray#extractPrefix(int)
+	 * @see ImmutableArray#extractSuffix(int)
 	 */
 	public ImmutableArray<V> extractRange(int fromIndex, int toIndex);
 
 	/**
-	 * Returns a new array obtained by removing a range of values of a given length
-	 * from the existing array.
+	 * Returns a new immutable array obtained by removing a range of values of a given length
+	 * from the existing immutable array.
 	 * @param fromIndex The index of the first removed value
 	 * @param length The number of removed values
-	 * @return The new array with the remaining values
+	 * @return The new immutable array with the remaining values
+	 * @see ImmutableArray#removePrefix(int)
+	 * @see ImmutableArray#removeSuffix(int)
+	 * @see ImmutableArray#removeRange(int, int)
+	 * @see ImmutableArray#removeAt(int)
 	 */
 	public ImmutableArray<V> remove(int fromIndex, int length);
 
 	/**
-	 *
-	 * @param n
-	 * @return
+	 * Returns a new immutable array obtained by removing a prefix of a given length from the
+	 * existing immutable array. This is equivalent to {@code remove(0, length)}.
+	 * @param length The number of removed values
+	 * @return The new immutable array with the remaining values
+	 * @see ImmutableArray#remove(int, int)
+	 * @see ImmutableArray#removeSuffix(int)
+	 * @see ImmutableArray#removeRange(int, int)
+	 * @see ImmutableArray#removeAt(int)
 	 */
 	public ImmutableArray<V> removePrefix(int length);
 
 	/**
-	 *
-	 * @param n
-	 * @return
+	 * Returns a new immutable array obtained by removing a suffix of a given length from the
+	 * existing immutable array. This is equivalent to {@code remove(n-length, length)}.
+	 * @param length The number of removed values
+	 * @return The new immutable array with the remaining values
+	 * @see ImmutableArray#remove(int, int)
+	 * @see ImmutableArray#removePrefix(int)
+	 * @see ImmutableArray#removeRange(int, int)
+	 * @see ImmutableArray#removeAt(int)
 	 */
 	public ImmutableArray<V> removeSuffix(int length);
 
 	/**
-	 *
-	 * @param fromIndex
-	 * @param toIndex
-	 * @return
+	 * Returns a new immutable array obtained by removing a range of values. The first 
+	 * removed value corresponds to {@code getAt(fromIndex)} and the last
+	 * to {@code getAt(toIndex)}. This method is equivalent to 
+	 * {@code remove(fromIndex, toIndex-fromIndex+1)}.	 *
+	 * @param fromIndex The index of the first removed value
+	 * @param toIndex The index of the last extracted value
+	 * @return The new immutable array with the remaining values
+	 * @see ImmutableArray#remove(int, int)
+	 * @see ImmutableArray#removePrefix(int)
+	 * @see ImmutableArray#removeSuffix(int)
+	 * @see ImmutableArray#removeAt(int)
 	 */
 	public ImmutableArray<V> removeRange(int fromIndex, int toIndex);
 
 	/**
-	 *
-	 * @param index
-	 * @return
+	 * Returns a new immutable array obtained by removing a single value. The 
+	 * removed value corresponds to {@code getAt(index)}. This method is
+	 * equivalent to {@code remove(index, 1)}.
+	 * @param index The index of the removed value
+	 * @return The new immutable array with the remaining values
+	 * @see ImmutableArray#remove(int, int)
+	 * @see ImmutableArray#removePrefix(int)
+	 * @see ImmutableArray#removeSuffix(int)
+	 * @see ImmutableArray#removeRange(int, int)
 	 */
 	public ImmutableArray<V> removeAt(int index);
 
 	/**
-	 *
-	 * @param index
-	 * @param value
-	 * @return
+	 * Returns a new immutable array with an additional value inserted at the given index. The
+	 * length is therefore increased by 1.
+	 * @param index The index of the inserted value
+	 * @param value The new value to be inserted
+	 * @return The new immutable array with the inserted value
+	 * @see ImmutableArray#add(java.lang.Object)
 	 */
-	public ImmutableArray<V> insertAt(final int index, final V value);
+	public ImmutableArray<V> insertAt(int index, V value);
 
 	/**
-	 *
-	 * @param index
-	 * @param value
-	 * @return
+	 * Returns a new immutable array with a single value replaced by a new one. The length of the
+	 * array remains unchanged.
+	 * @param index The index of the value to be replaced
+	 * @param value The new value replacing the old one
+	 * @return The new immutable array with the replaced value
 	 */
 	public ImmutableArray<V> replaceAt(int index, V value);
 
 	/**
-	 *
-	 * @param value
-	 * @return
+	 * Returns a new immutable array with an additional value inserted at its end. This is 
+	 * equivalent to {@code insertAt(n, value)}.
+	 * @param value The new value to be inserted
+	 * @return The new immutable array with the inserted value
+	 * @see ImmutableArray#insertAt(int, java.lang.Object) 
 	 */
 	public ImmutableArray<V> add(V value);
 
 	/**
-	 *
-	 * @param other
-	 * @return
+	 * Returns a new immutable array by appending two existing immutable arrays. The length of the new 
+	 * immutable array is the sum of the two corresponding lengths.
+	 * @param other The second array
+	 * @return The new immutable array obtained from appending the existing ones.
 	 */
 	public ImmutableArray<V> append(ImmutableArray<V> other);
 
 	/**
-	 *
-	 * @return
+	 * Returns a new immutable array with the same values arranged in reverse order.
+	 * @return The reversed immutable array
 	 */
 	public ImmutableArray<V> reverse();
 
 	/**
-	 *
-	 * @param indices
-	 * @return
+	 * Breaks an immutable array into multiple immutable arrays. The break point a 
+	 * specified by a series of increasing indices. The number of newly created
+	 * immutable arrays corresponds to the number of given indices plus 1.
+	 * @param indices The series of indices specifying the break points.
+	 * @return The resulting immutable arrays.
 	 */
 	public ImmutableArray<V>[] split(int... indices);
 
