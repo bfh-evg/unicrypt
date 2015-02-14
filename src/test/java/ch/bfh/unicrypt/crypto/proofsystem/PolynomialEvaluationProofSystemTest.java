@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.proofsystem;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PolynomialEvaluationProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
@@ -74,8 +74,8 @@ public class PolynomialEvaluationProofSystemTest {
 		final Element h = G_q.getElement(BigInteger.valueOf(266));
 
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(h, g);
-		PolynomialField pf = PolynomialField.getInstance(Z_q, 5);
-		PolynomialElement poly = pf.getElement(BigInteger.valueOf(51), BigInteger.valueOf(115), BigInteger.valueOf(3), BigInteger.valueOf(0), BigInteger.valueOf(93));
+		PolynomialRing pr = PolynomialRing.getInstance(Z_q);
+		PolynomialElement poly = pr.getElement(BigInteger.valueOf(51), BigInteger.valueOf(115), BigInteger.valueOf(3), BigInteger.valueOf(0), BigInteger.valueOf(93));
 
 		ZModElement u = Z_q.getElement(BigInteger.valueOf(5));
 		Element v = poly.evaluate(u);
@@ -102,8 +102,8 @@ public class PolynomialEvaluationProofSystemTest {
 		final ZModPrime Z_q = (ZModPrime) G_q.getZModOrder();
 
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q);
-		PolynomialField pf = PolynomialField.getInstance(Z_q, 6);
-		PolynomialElement poly = pf.getElement(BigInteger.valueOf(1), BigInteger.valueOf(15), BigInteger.valueOf(23), BigInteger.valueOf(45), BigInteger.valueOf(33), BigInteger.valueOf(11));
+		PolynomialRing pr = PolynomialRing.getInstance(Z_q);
+		PolynomialElement poly = pr.getElement(BigInteger.valueOf(1), BigInteger.valueOf(15), BigInteger.valueOf(23), BigInteger.valueOf(45), BigInteger.valueOf(33), BigInteger.valueOf(11));
 
 		ZModElement u = Z_q.getElement(BigInteger.valueOf(15));
 		Element v = poly.evaluate(u);
@@ -131,10 +131,10 @@ public class PolynomialEvaluationProofSystemTest {
 
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q);
 
-		for (int i = 2; i < 17; i++) {
+		for (int i = 2; i < 33; i++) {
 
-			PolynomialField pf = PolynomialField.getInstance(Z_q, i + 1);
-			PolynomialElement poly = pf.getElement(ProductGroup.getInstance(Z_q, i + 1).getRandomElement());
+			PolynomialRing pr = PolynomialRing.getInstance(Z_q);
+			PolynomialElement poly = pr.getElement(ProductGroup.getInstance(Z_q, i + 1).getRandomElement());
 
 			ZModElement u = Z_q.getRandomElement();
 			Element v = poly.evaluate(u);
@@ -164,11 +164,10 @@ public class PolynomialEvaluationProofSystemTest {
 
 		PedersenCommitmentScheme pedersenCS = PedersenCommitmentScheme.getInstance(G_q);
 
-		int size = 10;
+		int size = 100;
 
-		//System.out.println("Preparing...");
-		PolynomialField pf = PolynomialField.getInstance(Z_q, size + 1);
-		PolynomialElement poly = pf.getElement(ProductGroup.getInstance(Z_q, size + 1).getRandomElement());
+		PolynomialRing pr = PolynomialRing.getInstance(Z_q);
+		PolynomialElement poly = pr.getElement(ProductGroup.getInstance(Z_q, size + 1).getRandomElement());
 
 		ZModElement u = Z_q.getRandomElement();
 		Element v = poly.evaluate(u);
@@ -183,9 +182,7 @@ public class PolynomialEvaluationProofSystemTest {
 
 		PolynomialEvaluationProofSystem peps = PolynomialEvaluationProofSystem.getInstance(poly, pedersenCS);
 
-		//System.out.println("Proving...");
 		Tuple proof = peps.generate(secretInput, publicInput);
-		//System.out.println("Verifying...");
 		boolean verify = peps.verify(proof, publicInput);
 
 		assertTrue(verify);
