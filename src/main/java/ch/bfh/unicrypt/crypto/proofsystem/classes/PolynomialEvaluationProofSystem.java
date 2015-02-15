@@ -85,7 +85,7 @@ public class PolynomialEvaluationProofSystem
 	}
 
 	public static final PolynomialEvaluationProofSystem getInstance(final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getCyclicGroup().getZModOrder());
+		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
@@ -94,15 +94,26 @@ public class PolynomialEvaluationProofSystem
 		if (challengeGenerator == null || polynomial == null || pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
-		if (!(polynomial.getSet().getSemiRing() instanceof ZModPrime)) {
+		if (!(polynomial.getSet().getSemiRing() instanceof ZModPrime) || pedersenCS.getCyclicGroup().getOrder() != polynomial.getSet().getSemiRing().getOrder()) {
 			throw new IllegalArgumentException();
 		}
-		if (pedersenCS.getCyclicGroup().getOrder() != polynomial.getSet().getSemiRing().getOrder()) {
+		if (!challengeGenerator.getChallengeSpace().isEquivalent(pedersenCS.getMessageSpace())) {
 			throw new IllegalArgumentException();
 		}
-		//TODO Check challenge space of challengeGenerator
 
 		return new PolynomialEvaluationProofSystem(challengeGenerator, polynomial, pedersenCS);
+	}
+
+	public ZModPrime getZModPrime() {
+		return this.zModPrime;
+	}
+
+	public CyclicGroup getCyclicGroup() {
+		return this.cyclicGroup;
+	}
+
+	public PedersenCommitmentScheme getPedersenCommitmentScheme() {
+		return this.pedersenCS;
 	}
 
 	@Override

@@ -118,6 +118,21 @@ public class PolynomialSemiRing
 		return this.getElement(Polynomial.getInstance(coefficientMap, this.getSemiRing().getZeroElement(), this.getSemiRing().getOneElement()));
 	}
 
+	public PolynomialElement getElementByRoots(Tuple roots) {
+		if (roots == null || roots.isEmpty() || !roots.getSet().isUniform() || !roots.getSet().getFirst().isEquivalent(this.getSemiRing())) {
+			throw new IllegalArgumentException();
+		}
+		DualisticElement zero = this.getSemiRing().getZeroElement();
+		DualisticElement one = this.getSemiRing().getOneElement();
+
+		PolynomialElement poly = new PolynomialElement(this, Polynomial.<DualisticElement<BigInteger>>getInstance(new DualisticElement[]{(DualisticElement) roots.getAt(0).invert(), one}, zero, one));
+		for (int i = 1; i < roots.getArity(); i++) {
+			poly = poly.multiply(new PolynomialElement(this, Polynomial.<DualisticElement<BigInteger>>getInstance(new DualisticElement[]{(DualisticElement) roots.getAt(i).invert(), one}, zero, one)));
+		}
+
+		return poly;
+	}
+
 	public PolynomialElement getRandomElement(int degree) {
 		return this.getRandomElement(degree, HybridRandomByteSequence.getInstance());
 	}

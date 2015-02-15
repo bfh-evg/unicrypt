@@ -113,6 +113,32 @@ public class PolynomialSemiRingTest {
 	}
 
 	@Test
+	public void testGetElementByRoots() {
+		PolynomialElement p = ring7.getElementByRoots(Tuple.getInstance(zmod7.getElement(3), zmod7.getElement(4)));
+
+		assertTrue(p.getValue().getCoefficient(2).isEquivalent(zmod7.getOneElement()));
+		assertTrue(p.getValue().getCoefficient(1).isEquivalent(zmod7.getElement(0)));
+		assertTrue(p.getValue().getCoefficient(0).isEquivalent(zmod7.getElement(5)));
+
+		assertTrue(p.evaluate(zmod7.getElement(3)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(p.evaluate(zmod7.getElement(4)).isEquivalent(zmod7.getZeroElement()));
+
+		p = ring7.getElementByRoots(Tuple.getInstance(zmod7.getElement(2), zmod7.getElement(1), zmod7.getElement(5)));
+
+		assertTrue(p.getValue().getCoefficient(3).isEquivalent(zmod7.getOneElement()));
+		assertTrue(p.getValue().getCoefficient(0).isEquivalent(zmod7.getElement(4)));
+
+		assertTrue(p.evaluate(zmod7.getElement(1)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(p.evaluate(zmod7.getElement(2)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(p.evaluate(zmod7.getElement(5)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(!p.evaluate(zmod7.getElement(0)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(!p.evaluate(zmod7.getElement(3)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(!p.evaluate(zmod7.getElement(4)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(!p.evaluate(zmod7.getElement(6)).isEquivalent(zmod7.getZeroElement()));
+
+	}
+
+	@Test
 	public void testContains() {
 		Polynomial<ZElement> poly1 = Polynomial.getInstance(new ZElement[]{z.getElement(1), z.getElement(0), z.getElement(2)},
 															z.getIdentityElement(), z.getOneElement());
