@@ -52,7 +52,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.InvertFunction;
@@ -84,14 +83,11 @@ public class ElGamalEncryptionValidityProofSystem
 	}
 
 	public static ElGamalEncryptionValidityProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final ElGamalEncryptionScheme elGamalES, final Element publicKey, final Subset plaintexts) {
-		if (challengeGenerator == null || elGamalES == null || publicKey == null || !elGamalES.getCyclicGroup().contains(publicKey)
-			   || plaintexts == null || plaintexts.getOrder().intValue() < 1) {
-			throw new IllegalArgumentException();
-		}
-		final Set codomain = ProductGroup.getInstance(elGamalES.getEncryptionFunction().getCoDomain(), plaintexts.getOrder().intValue());
-		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
+		if (challengeGenerator == null || elGamalES == null || publicKey == null
+			   || !elGamalES.getCyclicGroup().contains(publicKey)
+			   || plaintexts == null || plaintexts.getOrder().intValue() < 1
 			   || !ZMod.getInstance(elGamalES.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
-			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
+			throw new IllegalArgumentException();
 		}
 		return new ElGamalEncryptionValidityProofSystem(challengeGenerator, elGamalES, publicKey, plaintexts);
 	}
@@ -132,8 +128,7 @@ public class ElGamalEncryptionValidityProofSystem
 		if (elGamalES == null || numberOfPlaintexts < 1 || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}
-		final ProductGroup codomain = ProductGroup.getInstance((ProductGroup) elGamalES.getEncryptionFunction().getCoDomain(), numberOfPlaintexts);
-		return RandomOracleSigmaChallengeGenerator.getInstance(codomain, codomain, ZMod.getInstance(elGamalES.getCyclicGroup().getOrder()), proverId, randomOracle);
+		return RandomOracleSigmaChallengeGenerator.getInstance(ZMod.getInstance(elGamalES.getCyclicGroup().getOrder()), proverId, randomOracle);
 	}
 
 }

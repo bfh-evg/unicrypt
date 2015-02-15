@@ -67,8 +67,7 @@ public class EqualityPreimageProofSystem
 		if (proofFunction == null || proofFunction.getArity() < 1 || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException("Domain and codomain of each proof function must be semi groups!");
 		}
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(
-			   proofFunction.getCoDomain(), (ProductSemiGroup) proofFunction.getCoDomain(), ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()), proverId);
+		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()), proverId);
 		return new EqualityPreimageProofSystem(challengeGenerator, proofFunction);
 	}
 
@@ -76,7 +75,7 @@ public class EqualityPreimageProofSystem
 		if (proofFunction == null || proofFunction.getArity() < 1 || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException("Domain and codomain of each proof function must be semi groups!");
 		}
-		if (EqualityPreimageProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
+		if (EqualityPreimageProofSystem.checkChallengeSpace(challengeGenerator, proofFunction)) {
 			throw new IllegalArgumentException("Space mismatch");
 		}
 		return new EqualityPreimageProofSystem(challengeGenerator, proofFunction);

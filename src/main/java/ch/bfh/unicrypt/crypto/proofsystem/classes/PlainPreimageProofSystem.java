@@ -68,7 +68,7 @@ public class PlainPreimageProofSystem
 		if (challengeGenerator == null || proofFunction == null || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
-		if (PlainPreimageProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
+		if (PlainPreimageProofSystem.checkChallengeSpace(challengeGenerator, proofFunction)) {
 			throw new IllegalArgumentException("Spaces of challenge generator and proof function are unequal.");
 		}
 

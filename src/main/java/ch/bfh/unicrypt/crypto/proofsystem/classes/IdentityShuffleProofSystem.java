@@ -108,7 +108,7 @@ public class IdentityShuffleProofSystem
 	// t: (Generalized Pedersen Commitemnt, Identity, alpha Commitment)
 	@Override
 	public ProductGroup getCommitmentSpace() {
-		return createCommitmentSpace(this.getCyclicGroup(), this.identityGroup);
+		return ProductGroup.getInstance(this.getCyclicGroup(), identityGroup, identityGroup);
 	}
 
 	// s: (r, w, ePrimeV)
@@ -121,23 +121,6 @@ public class IdentityShuffleProofSystem
 
 	public CyclicGroup getIdentityGroup() {
 		return this.identityGroup;
-	}
-
-	//===================================================================================
-	// Helpers to create spaces
-	//
-	// (Generalized Pedersen Commitemnt, Identity, alpha Commitment)
-	private static ProductGroup createCommitmentSpace(CyclicGroup cyclicGroup, CyclicGroup identityGroup) {
-		return ProductGroup.getInstance(cyclicGroup, identityGroup, identityGroup);
-	}
-
-	// (Permutation Commitment, Input Identities, Output Identites, gk-1, gk)
-	private static ProductGroup createChallengeGeneratorPublicInputSpace(CyclicGroup cyclicGroup, CyclicGroup identityGroup, int size) {
-		return ProductGroup.getInstance(ProductGroup.getInstance(cyclicGroup, size),
-										ProductGroup.getInstance(identityGroup, size),
-										ProductGroup.getInstance(identityGroup, size),
-										identityGroup,
-										identityGroup);
 	}
 
 	//===================================================================================
@@ -328,15 +311,15 @@ public class IdentityShuffleProofSystem
 			   || identityGroup == null || kr < 1) {
 			throw new IllegalArgumentException();
 		}
-		CyclicGroup cyclicGroup = (CyclicGroup) independentGenerators.getFirst().getSet();
-		int size = independentGenerators.getArity() - 1;
-		if (!sigmaChallengeGenerator.getPublicInputSpace().isEquivalent(createChallengeGeneratorPublicInputSpace(cyclicGroup, identityGroup, size))
-			   || !sigmaChallengeGenerator.getCommitmentSpace().isEquivalent(createCommitmentSpace(cyclicGroup, identityGroup))
-			   || !eValuesGenerator.getInputSpace().isEquivalent(createChallengeGeneratorPublicInputSpace(cyclicGroup, identityGroup, size))
-			   // TODO			   || !eValuesGenerator.getChallengeSpace().isEquivalent(ProductSet.getInstance(Z.getInstance(), size))
-			   || !((ProductSet) eValuesGenerator.getChallengeSpace()).isUniform()) {
+
+		if ( // TODO Check ChallengeSpace
+			   //!eValuesGenerator.getChallengeSpace().isEquivalent(ProductSet.getInstance(Z.getInstance(), size))
+			   !((ProductSet) eValuesGenerator.getChallengeSpace()).isUniform()) {
 			throw new IllegalArgumentException();
 		}
+
+		CyclicGroup cyclicGroup = (CyclicGroup) independentGenerators.getFirst().getSet();
+		int size = independentGenerators.getArity() - 1;
 
 		return new IdentityShuffleProofSystem(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, kr, independentGenerators, identityGroup);
 	}
@@ -357,8 +340,6 @@ public class IdentityShuffleProofSystem
 			throw new IllegalArgumentException();
 		}
 		return RandomOracleSigmaChallengeGenerator.getInstance(
-			   createChallengeGeneratorPublicInputSpace(cyclicGroup, identityGroup, size),
-			   createCommitmentSpace(cyclicGroup, identityGroup),
 			   createChallengeSpace(kc),
 			   proverId,
 			   randomOracle);
@@ -376,9 +357,7 @@ public class IdentityShuffleProofSystem
 		if (cyclicGroup == null || identityGroup == null || size < 1 || ke < 1) {
 			throw new IllegalArgumentException();
 		}
-		return RandomOracleChallengeGenerator.getInstance(createChallengeGeneratorPublicInputSpace(cyclicGroup, identityGroup, size),
-														  createEValuesGeneratorChallengeSpace(ke, size),
-														  randomOracle);
+		return RandomOracleChallengeGenerator.getInstance(createEValuesGeneratorChallengeSpace(ke, size), randomOracle);
 	}
 
 }

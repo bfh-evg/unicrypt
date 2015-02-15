@@ -125,4 +125,18 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 		return left.isEquivalent(right);
 	}
 
+	/**
+	 * Checks whether the challenge space of the challenge generator does match with the proof function.
+	 * <p>
+	 * @param challengeGenerator The challenge generator
+	 * @param proofFunction      The proof function
+	 * <p>
+	 * @return true if the challenge space does match otherwise false.
+	 */
+	protected static boolean checkChallengeSpace(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction) {
+		return (proofFunction == null || challengeGenerator == null
+			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator.getChallengeSpace()));
+
+	}
+
 }

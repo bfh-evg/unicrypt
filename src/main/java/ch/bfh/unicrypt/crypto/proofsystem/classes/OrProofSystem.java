@@ -86,11 +86,10 @@ public class OrProofSystem
 	}
 
 	public static OrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
-		if (challengeGenerator == null || proofFunction == null || proofFunction.getArity() < 2) {
+		if (challengeGenerator == null || proofFunction == null
+			   || proofFunction.getArity() < 2
+			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException();
-		}
-		if (OrProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
-			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
 		}
 		return new OrProofSystem(challengeGenerator, proofFunction);
 	}

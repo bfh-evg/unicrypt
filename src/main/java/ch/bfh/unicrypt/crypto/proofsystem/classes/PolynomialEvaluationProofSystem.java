@@ -84,18 +84,8 @@ public class PolynomialEvaluationProofSystem
 		this.d = (int) Math.floor(Math.log(polynomial.getValue().getDegree()) / Math.log(2));
 	}
 
-	// Just TMP
 	public static final PolynomialEvaluationProofSystem getInstance(final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
-
-		int d = (int) Math.floor(Math.log(polynomial.getValue().getDegree()) / Math.log(2));
-		CyclicGroup cyclicGroup = pedersenCS.getCyclicGroup();
-		ZModPrime zModPrime = (ZModPrime) cyclicGroup.getZModOrder();
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(ProductGroup.getInstance(cyclicGroup, 2), ProductGroup.getInstance(
-																									 ProductGroup.getInstance(cyclicGroup, d),
-																									 ProductGroup.getInstance(cyclicGroup, d + 1),
-																									 ProductGroup.getInstance(cyclicGroup, d + 1),
-																									 ProductGroup.getInstance(cyclicGroup, d)), zModPrime);
-
+		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getCyclicGroup().getZModOrder());
 		return PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
@@ -110,7 +100,7 @@ public class PolynomialEvaluationProofSystem
 		if (pedersenCS.getCyclicGroup().getOrder() != polynomial.getSet().getSemiRing().getOrder()) {
 			throw new IllegalArgumentException();
 		}
-		//TODO Check challenge, commitment and public input spaces of challengeGenerator
+		//TODO Check challenge space of challengeGenerator
 
 		return new PolynomialEvaluationProofSystem(challengeGenerator, polynomial, pedersenCS);
 	}

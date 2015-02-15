@@ -80,7 +80,7 @@ public class PlainPreimageProofSystemTest {
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+			   ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
 
@@ -99,7 +99,7 @@ public class PlainPreimageProofSystemTest {
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q2.getElement(4));
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+			   ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
 
@@ -187,7 +187,7 @@ public class PlainPreimageProofSystemTest {
 		// Proof generator
 		GeneratorFunction f = GeneratorFunction.getInstance(this.G_q1.getElement(4));
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
-			   f.getDomain(), f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+			   this.G_q2.getZModOrder(), this.proverId);
 
 		PlainPreimageProofSystem pg = PlainPreimageProofSystem.getInstance(scg, f);
 

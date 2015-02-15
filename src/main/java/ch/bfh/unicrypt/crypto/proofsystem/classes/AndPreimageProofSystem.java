@@ -79,7 +79,7 @@ public class AndPreimageProofSystem
 			   || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
-		if (AndPreimageProofSystem.checkSpaceEquality(challengeGenerator, proofFunction)) {
+		if (AndPreimageProofSystem.checkChallengeSpace(challengeGenerator, proofFunction)) {
 			throw new IllegalArgumentException("Spaces of challenge generator and proof function are inequal.");
 		}
 		return new AndPreimageProofSystem(challengeGenerator, proofFunction);

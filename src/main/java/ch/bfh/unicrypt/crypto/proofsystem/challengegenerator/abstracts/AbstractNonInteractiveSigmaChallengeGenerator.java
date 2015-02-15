@@ -46,8 +46,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 public abstract class AbstractNonInteractiveSigmaChallengeGenerator
 	   extends AbstractSigmaChallengeGenerator
@@ -55,8 +53,8 @@ public abstract class AbstractNonInteractiveSigmaChallengeGenerator
 
 	protected final Element proverId;
 
-	protected AbstractNonInteractiveSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverId) {
-		super(publicInputSpace, commitmentSpace, challengeSpace);
+	protected AbstractNonInteractiveSigmaChallengeGenerator(ZMod challengeSpace, Element proverId) {
+		super(challengeSpace);
 		this.proverId = proverId;
 	}
 
@@ -67,8 +65,8 @@ public abstract class AbstractNonInteractiveSigmaChallengeGenerator
 	}
 
 	@Override
-	protected final ZModElement abstractGenerate(Pair input) {
-		Pair newInput = (this.proverId == null)
+	protected final ZModElement abstractGenerate(Element input) {
+		Element newInput = (this.proverId == null)
 			   ? input
 			   : Pair.getInstance(input, this.proverId);
 		return this.abstractAbstractGenerate(newInput);

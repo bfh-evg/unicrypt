@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.interfaces.SigmaProofSystem;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
@@ -101,9 +100,8 @@ public class InequalityOfPreimagesProofSystem
 
 		ProductSet codomain = ProductSet.getInstance(secondFunction.getCoDomain(), firstFunction.getCoDomain());
 		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
-		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
-			   || !cs.isEquivalent(challengeGenerator.getChallengeSpace())) {
-			throw new IllegalArgumentException("Spaces of challenge generator don't match proof functions.");
+		if (!cs.isEquivalent(challengeGenerator.getChallengeSpace())) {
+			throw new IllegalArgumentException("Challenge spaces of challenge generator does not match.");
 		}
 		return new InequalityOfPreimagesProofSystem(challengeGenerator, firstFunction, secondFunction);
 	}
@@ -244,9 +242,8 @@ public class InequalityOfPreimagesProofSystem
 			   || !firstFunction.getCoDomain().isSemiGroup() || !secondFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
-		ProductSemiGroup codomain = ProductSemiGroup.getInstance((SemiGroup) secondFunction.getCoDomain(), (SemiGroup) firstFunction.getCoDomain());
 		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
-		return RandomOracleSigmaChallengeGenerator.getInstance(codomain, codomain, cs, proverId, randomOracle);
+		return RandomOracleSigmaChallengeGenerator.getInstance(cs, proverId, randomOracle);
 
 	}
 

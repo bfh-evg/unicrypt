@@ -54,7 +54,7 @@ public class RandomOracleChallengeGeneratorTest {
 	public void testStandardNonInteractiveElementChallengeGenerator() {
 
 		CyclicGroup cyclicGroup = GStarModSafePrime.getInstance(167);
-		RandomOracleChallengeGenerator cg = RandomOracleChallengeGenerator.getInstance(cyclicGroup, ProductSet.getInstance(cyclicGroup, 10));
+		RandomOracleChallengeGenerator cg = RandomOracleChallengeGenerator.getInstance(ProductSet.getInstance(cyclicGroup, 10));
 		Tuple elements = (Tuple) cg.generate(cyclicGroup.getRandomElement());
 
 		// System.out.println(elements);

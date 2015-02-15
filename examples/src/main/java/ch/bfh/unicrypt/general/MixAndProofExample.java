@@ -91,7 +91,7 @@ public class MixAndProofExample {
 		//=====================
 		// Create a non-interactive challenge generator that on input <StringElement> returns
 		// 10 G_q elements
-		ChallengeGenerator cg = RandomOracleChallengeGenerator.getInstance(sm, ProductSet.getInstance(G_q, 10));
+		ChallengeGenerator cg = RandomOracleChallengeGenerator.getInstance(ProductSet.getInstance(G_q, 10));
 
 		// Generate challenge
 		Tuple challenges = (Tuple) cg.generate(sm.getElement("inputX"));

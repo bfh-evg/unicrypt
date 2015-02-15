@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -124,7 +123,7 @@ public class EqualityPreimageProofSystemTest {
 		ProductFunction f = ProductFunction.getInstance(f1, f2);
 
 		SigmaChallengeGenerator scg = RandomOracleSigmaChallengeGenerator.getInstance(
-			   f.getCoDomain(), (ProductSemiGroup) f.getCoDomain(), ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
+			   ZMod.getInstance(f.getDomain().getMinimalOrder()), this.proverId);
 
 		EqualityPreimageProofSystem pg = EqualityPreimageProofSystem.getInstance(scg, f1, f2);
 		assertTrue(pg.getPreimageProofFunction().getLength() == 2 && pg.getPreimageProofFunction().getAt(0).isEquivalent(f1));

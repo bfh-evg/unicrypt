@@ -51,7 +51,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.ApplyFunction;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -88,8 +87,7 @@ public class PedersenCommitmentValidityProofSystem
 		}
 
 		final Set codomain = ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(), messages.getOrder().intValue());
-		if (!codomain.isEquivalent(challengeGenerator.getPublicInputSpace()) || !codomain.isEquivalent(challengeGenerator.getCommitmentSpace())
-			   || !ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
+		if (!ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
 		}
 		return new PedersenCommitmentValidityProofSystem(challengeGenerator, pedersenCS, messages);
@@ -130,8 +128,7 @@ public class PedersenCommitmentValidityProofSystem
 		if (pedersenCS == null || numberOfMessages < 1 || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}
-		final Group codomain = ProductGroup.getInstance((Group) pedersenCS.getCommitmentFunction().getCoDomain(), numberOfMessages);
-		return RandomOracleSigmaChallengeGenerator.getInstance(codomain, codomain, ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder()), proverId, randomOracle);
+		return RandomOracleSigmaChallengeGenerator.getInstance(ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder()), proverId, randomOracle);
 
 	}
 

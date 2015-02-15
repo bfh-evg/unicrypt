@@ -49,17 +49,16 @@ import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 
 public class FiatShamirChallengeGenerator
-	   extends AbstractNonInteractiveChallengeGenerator<Set, Element, ZMod, ZModElement> {
+	   extends AbstractNonInteractiveChallengeGenerator<ZMod, ZModElement> {
 
 	private final HashMethod hashMethod;
 	private final Converter<ByteArray, BigInteger> converter;
 
-	protected FiatShamirChallengeGenerator(Set inputSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
-		super(inputSpace, challengeSpace, proverId);
+	protected FiatShamirChallengeGenerator(ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
+		super(challengeSpace, proverId);
 		this.hashMethod = hashMethod;
 		this.converter = converter;
 	}
@@ -78,45 +77,45 @@ public class FiatShamirChallengeGenerator
 		return this.getChallengeSpace().getElement(this.converter.convert(hashedInput).mod(this.challengeSpace.getModulus()));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace) {
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace) {
 		HashMethod hashMethod = HashMethod.getInstance();
 		int length = hashMethod.getHashAlgorithm().getHashLength();
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Element proverId) {
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId) {
 		HashMethod hashMethod = HashMethod.getInstance();
 		int length = hashMethod.getHashAlgorithm().getHashLength();
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, HashMethod hashMethod) {
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, HashMethod hashMethod) {
 		int length = hashMethod.getHashAlgorithm().getHashLength();
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod) {
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, HashMethod hashMethod) {
 		int length = hashMethod.getHashAlgorithm().getHashLength();
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, HashMethod.getInstance(), converter);
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, HashMethod.getInstance(), converter);
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Element proverId, Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, proverId, HashMethod.getInstance(), converter);
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, HashMethod.getInstance(), converter);
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirChallengeGenerator.getInstance(inputSpace, challengeSpace, (Element) null, hashMethod, converter);
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, hashMethod, converter);
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(final Set inputSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
-		if (inputSpace == null || challengeSpace == null || hashMethod == null || converter == null) {
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
+		if (challengeSpace == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new FiatShamirChallengeGenerator(inputSpace, challengeSpace, proverId, hashMethod, converter);
+		return new FiatShamirChallengeGenerator(challengeSpace, proverId, hashMethod, converter);
 	}
 
 }

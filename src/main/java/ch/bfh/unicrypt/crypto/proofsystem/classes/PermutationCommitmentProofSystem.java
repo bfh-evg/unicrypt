@@ -129,7 +129,7 @@ public class PermutationCommitmentProofSystem
 
 	// t: G_q^(N+3)
 	public ProductGroup getCommitmentSpace() {
-		return createCommitmentSpace(this.cyclicGroup, this.size);
+		return ProductGroup.getInstance(this.cyclicGroup, this.size + 3);
 	}
 
 	// c: [0,...,2^kc - 1]
@@ -149,33 +149,6 @@ public class PermutationCommitmentProofSystem
 	}
 
 	//===================================================================================
-	// Helpers to create spaces
-	//
-	private static ProductGroup createCommitmentSpace(CyclicGroup cyclicGroup, int size) {
-		return ProductGroup.getInstance(cyclicGroup, size + 3);
-	}
-
-	// [0,...,2^kc - 1] \subseteq Z
-	private static ZMod createChallengeSpace(int kc) {
-		return ZMod.getInstance(BigInteger.valueOf(2).pow(kc));
-	}
-
-	// (Permutation Commitment, Bridging Commitments)
-	private static ProductGroup createSigmaChallengeGeneratorPublicInputSpace(CyclicGroup cyclicGroup, int size) {
-		return ProductGroup.getInstance(ProductGroup.getInstance(cyclicGroup, size), 2);
-	}
-
-	// (Permutation Commitment)
-	private static ProductGroup createEValuesGeneratorPublicInputSpace(CyclicGroup cyclicGroup, int size) {
-		return ProductGroup.getInstance(cyclicGroup, size);
-	}
-
-	// [0,...,2^ke - 1]^N \subseteq Z^N
-	private static ProductGroup createEValuesGeneratorChallengeSpace(int ke, int size) {
-		return ProductGroup.getInstance(ZMod.getInstance(BigInteger.valueOf(2).pow(ke)), size);
-	}
-
-	//===================================================================================
 	// Generate and Validate
 	//
 	@Override
@@ -187,8 +160,9 @@ public class PermutationCommitmentProofSystem
 		final Tuple eV = (Tuple) this.eValuesGenerator.generate(publicInput);
 
 		// Compute private values for sigma proof
-		final Tuple oneV = createOneVector(this.cyclicGroup.getZModOrder(), this.size);
-		final Element v = computeInnerProduct(oneV, sV);
+		// v = <1,sV> = sum(sV)
+		final Element v = this.cyclicGroup.getZModOrder().add(sV);
+		// w = <sV,eV>
 		final Element w = computeInnerProduct(sV, eV);
 		final Tuple rV = ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size).getRandomElement(randomByteSequence);
 		Tuple ePrimeV = PermutationFunction.getInstance(eV.getSet()).apply(eV, pi);
@@ -280,19 +254,6 @@ public class PermutationCommitmentProofSystem
 	//===================================================================================
 	// Private Helpers
 	//
-	// Helper to crate a one-vector
-	private static Tuple createOneVector(ZMod group, int size) {
-		if (group == null || size < 1) {
-			throw new IllegalArgumentException();
-		}
-		final Element one = group.getOneElement();
-		final Element[] vector = new Element[size];
-		for (int i = 0; i < size; i++) {
-			vector[i] = one;
-		}
-		return Tuple.getInstance(vector);
-	}
-
 	// Helper to compute the inner product
 	// - Additive:       Sum(t1_i*t2_i)
 	// - Multiplicative: Prod(t1_i^(t2_i))
@@ -440,11 +401,9 @@ public class PermutationCommitmentProofSystem
 		CyclicGroup cyclicGroup = (CyclicGroup) independentGenerators.getFirst().getSet();
 		int size = independentGenerators.getArity() - 1;
 
-		if (!sigmaChallengeGenerator.getPublicInputSpace().isEquivalent(createSigmaChallengeGeneratorPublicInputSpace(cyclicGroup, size))
-			   || !sigmaChallengeGenerator.getCommitmentSpace().isEquivalent(createCommitmentSpace(cyclicGroup, size))
-			   || !eValuesGenerator.getInputSpace().isEquivalent(createEValuesGeneratorPublicInputSpace(cyclicGroup, size))
-			   // TODO			   || !eValuesGenerator.getChallengeSpace().isEquivalent(ProductSet.getInstance(Z.getInstance(), size))
-			   || !((ProductSet) eValuesGenerator.getChallengeSpace()).isUniform()) {
+		if ( // TODO Check ChallengeSpace
+			   // || !eValuesGenerator.getChallengeSpace().isEquivalent(ProductSet.getInstance(Z.getInstance(), size))
+			   !((ProductSet) eValuesGenerator.getChallengeSpace()).isUniform()) {
 			throw new IllegalArgumentException();
 		}
 
@@ -469,11 +428,9 @@ public class PermutationCommitmentProofSystem
 		if (cyclicGroup == null || size < 1 || kc < 1) {
 			throw new IllegalArgumentException();
 		}
-		return RandomOracleSigmaChallengeGenerator.getInstance(createSigmaChallengeGeneratorPublicInputSpace(cyclicGroup, size),
-															   createCommitmentSpace(cyclicGroup, size),
-															   createChallengeSpace(kc),
-															   proverId,
-															   randomOracle);
+		//[0,...,2^kc - 1] \subseteq Z
+		ZMod cs = ZMod.getInstance(BigInteger.valueOf(2).pow(kc));
+		return RandomOracleSigmaChallengeGenerator.getInstance(cs, proverId, randomOracle);
 	}
 
 	public static RandomOracleChallengeGenerator createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size) {
@@ -491,9 +448,9 @@ public class PermutationCommitmentProofSystem
 		if (cyclicGroup == null || size < 1 || ke < 1) {
 			throw new IllegalArgumentException();
 		}
-		return RandomOracleChallengeGenerator.getInstance(createEValuesGeneratorPublicInputSpace(cyclicGroup, size),
-														  createEValuesGeneratorChallengeSpace(ke, size),
-														  randomOracle);
+		// [0,...,2^ke - 1]^N \subseteq Z^N
+		ProductGroup cs = ProductGroup.getInstance(ZMod.getInstance(BigInteger.valueOf(2).pow(ke)), size);
+		return RandomOracleChallengeGenerator.getInstance(cs, randomOracle);
 	}
 
 }
