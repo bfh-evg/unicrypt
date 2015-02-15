@@ -314,7 +314,7 @@ public interface ImmutableArray<V extends Object>
 	 * specified by a series of increasing indices. The number of newly created
 	 * immutable arrays corresponds to the number of given indices plus 1.
 	 * @param indices The series of indices specifying the break points.
-	 * @return The resulting immutable arrays.
+	 * @return The resulting immutable arrays
 	 */
 	public ImmutableArray<V>[] split(int... indices);
 
