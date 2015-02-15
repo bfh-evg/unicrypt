@@ -42,25 +42,69 @@
 package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This interface
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <V> The generic type of the values in the immutable array
  */
 public interface BinaryArray<V extends Object>
 	   extends DefaultValueArray<V> {
 
+	/**
+	 *
+	 * @param other
+	 * @return
+	 * @see BinaryArray#and(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray, boolean)
+	 */
 	public BinaryArray<V> and(BinaryArray<V> other);
 
+	/**
+	 *
+	 * @param other
+	 * @return
+	 * @see BinaryArray#or(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray, boolean)
+	 */
 	public BinaryArray<V> or(BinaryArray<V> other);
 
+	/**
+	 *
+	 * @param other
+	 * @return
+	 * @see BinaryArray#xor(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray, boolean)
+	 */
 	public BinaryArray<V> xor(BinaryArray<V> other);
 
+	/**
+	 *
+	 * @param other
+	 * @param fillBit
+	 * @return
+	 * @see BinaryArray#and(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray)
+	 */
 	public BinaryArray<V> and(BinaryArray<V> other, boolean fillBit);
 
+	/**
+	 *
+	 * @param other
+	 * @param fillBit
+	 * @return
+	 * @see BinaryArray#or(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray)
+	 */
 	public BinaryArray<V> or(BinaryArray<V> other, boolean fillBit);
 
+	/**
+	 *
+	 * @param other
+	 * @param fillBit
+	 * @return
+	 * @see BinaryArray#xor(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray)
+	 */
 	public BinaryArray<V> xor(BinaryArray<V> other, boolean fillBit);
 
+	/**
+	 *
+	 * @return
+	 */
 	public BinaryArray<V> not();
 
 }

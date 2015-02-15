@@ -69,118 +69,139 @@ public interface DefaultValueArray<V extends Object>
 	public Iterable<Integer> getIndices();
 
 	/**
-	 *
-	 * @return
+	 * Returns an iterable collection of all array indices for which the stored 
+	 * value differs from the default value.
+	 * @return An iterable collection of array indices
 	 * @see ImmutableArray#getIndicesExcept(java.lang.Object) 
 	 */
 	public Iterable<Integer> getIndicesExcept();
 
 	/**
-	 *
-	 * @return
+	 * Counts the number of occurrences of the default value in the array.
+	 * @return The number of occurrences
 	 * @see ImmutableArray#count(java.lang.Object)  
 	 */
 	public int count();
 
 	/**
-	 *
-	 * @return
+	 * Counts the number of consecutive occurrences of the default value
+	 * in the array prefix.
+	 * @return The number of occurrences
 	 * @see ImmutableArray#countPrefix(java.lang.Object)  
 	 */
 	public int countPrefix();
 
 	/**
-	 *
-	 * @return
+	 * Counts the number of consecutive occurrences of the default value
+	 * in the array suffix.
+	 * @return The number of occurrences
 	 * @see ImmutableArray#countSuffix(java.lang.Object)  
 	 */
 	public int countSuffix();
 
 	/**
-	 *
-	 * @param index
-	 * @return
+	 * Returns a new immutable array with an additional default value inserted at 
+	 * the given index. The length is therefore increased by 1.
+	 * @param index The index of the inserted default value
+	 * @return The new immutable array with the inserted default value
 	 * @see ImmutableArray#insertAt(int, java.lang.Object)
 	 */
-	public ImmutableArray<V> insertAt(final int index);
+	public DefaultValueArray<V> insertAt(int index);
 
 	/**
-	 *
-	 * @param index
-	 * @return
+	 * Returns a new immutable array with a single value replaced by a default value. The 
+	 * length of the array remains unchanged.
+	 * @param index The index of the value to be replaced
+	 * @return The new immutable array with the replaced value
 	 * @see ImmutableArray#replaceAt(int, java.lang.Object)
 	 */
-	public ImmutableArray<V> replaceAt(int index);
+	public DefaultValueArray<V> replaceAt(int index);
 
 	/**
-	 *
-	 * @return
-	 * @see ImmutableArray#add(int, java.lang.Object)
+	 * Returns a new immutable array with an additional default value inserted at its end. 
+	 * This is equivalent to {@code insertAt(n)}.
+	 * @return The new immutable array with the inserted default value
+	 * @see ImmutableArray#add(java.lang.Object)
+	 * @see DefaultValueArray#insertAt(int)
 	 */
-	public ImmutableArray<V> add();
+	public DefaultValueArray<V> add();
 
 	/**
-	 *
-	 * @param length
-	 * @return
+	 * Returns a new immutable array by adding a given number of default values as 
+	 * prefix to an existing immutable array. 
+	 * @param length The number of added default values
+	 * @return The new immutable array with the added prefix
 	 * @see DefaultValueArray#addSuffix(int) 
 	 * @see DefaultValueArray#addPrefixAndSuffix(int, int)
 	 */
-	public ImmutableArray<V> addPrefix(int length);
+	public DefaultValueArray<V> addPrefix(int length);
 
 	/**
-	 *
-	 * @param length
-	 * @return
+	 * Returns a new immutable array by adding a given number of default values as 
+	 * suffix to an existing immutable array. 
+	 * @param length The number of added default values
+	 * @return The new immutable array with the added suffix
 	 * @see DefaultValueArray#addPrefix(int) 
 	 * @see DefaultValueArray#addPrefixAndSuffix(int, int)
 	 */
-	public ImmutableArray<V> addSuffix(int length);
+	public DefaultValueArray<V> addSuffix(int length);
 
 	/**
-	 *
-	 * @param prefixLength
-	 * @param suffixLength
-	 * @return
+	 * Returns a new immutable array by adding a given number of default values as 
+	 * prefix and suffix to an existing immutable array. This method is a combination of
+	 * {@link DefaultValueArray#addPrefix(int)} and {@link DefaultValueArray#addSuffix(int)}.
+	 * @param prefixLength The number of added default values as prefix
+	 * @param suffixLength The number of added default values as suffix
+	 * @return The new immutable array with the added prefix and suffix
 	 * @see DefaultValueArray#addPrefix(int) 
 	 * @see DefaultValueArray#addSuffix(int) 
 	 */
-	public ImmutableArray<V> addPrefixAndSuffix(int prefixLength, int suffixLength);
+	public DefaultValueArray<V> addPrefixAndSuffix(int prefixLength, int suffixLength);
 
 	/**
-	 *
-	 * @return
+	 * Returns a new immutable array obtained from removing all prefix default values.
+	 * @return The new immutable array 
+	 * @see DefaultValueArray#removeSuffix() 
+	 * @see DefaultValueArray#removePrefixAndSuffix() 
 	 */
-	public ImmutableArray<V> removePrefix();
+	public DefaultValueArray<V> removePrefix();
 
 	/**
-	 *
-	 * @return
+	 * Returns a new immutable array obtained from removing all suffix default values.
+	 * @return The new immutable array 
+	 * @see DefaultValueArray#removePrefix() 
+	 * @see DefaultValueArray#removePrefixAndSuffix() 
 	 */
-	public ImmutableArray<V> removeSuffix();
+	public DefaultValueArray<V> removeSuffix();
 
 	/**
-	 *
-	 * @return
+	 * Returns a new immutable array obtained from removing all prefix and suffix default values.
+	 * This method is a combination of {@link DefaultValueArray#removePrefix()} and
+	 * {@link DefaultValueArray#removeSuffix()}.
+	 * @return The new immutable array 
+	 * @see DefaultValueArray#removePrefix() 
+	 * @see DefaultValueArray#removeSuffix() 
 	 */
-	public ImmutableArray<V> removePrefixAndSuffix();
-
-	// left here means making the array smaller
+	public DefaultValueArray<V> removePrefixAndSuffix();
 
 	/**
-	 *
-	 * @param n
-	 * @return
+	 * Returns a new immutable array obtained by shifting the values of a given array to 
+	 * the 'left'. This makes the array smaller. This method is equivalent to
+	 * {@code shiftRight(-n)}.
+	 * @param n The size of the shift
+	 * @return The new immutable array
+	 * @see DefaultValueArray#shiftRight(int)
 	 */
-	public ImmutableArray<V> shiftLeft(int n);
-
-	// right here means making the array larger and fill up with default values
+	public DefaultValueArray<V> shiftLeft(int n);
 
 	/**
-	 *
-	 * @param n
-	 * @return
+	 * Returns a new immutable array obtained by shifting the values of a given array to 
+	 * the 'right'. This makes the array bigger (by filling it up with default values). 
+	 * This method is equivalent to both {@code shiftRight(-n)} and {@code addPrefix(n)}.
+	 * @param n The size of the shift
+	 * @return The new immutable array
+	 * @see DefaultValueArray#shiftLeft(int)
 	 */
-	public ImmutableArray<V> shiftRight(int n);
+	public DefaultValueArray<V> shiftRight(int n);
 
 }
