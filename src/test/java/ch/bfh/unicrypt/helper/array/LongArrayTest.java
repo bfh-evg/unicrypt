@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.array.classes;
+package ch.bfh.unicrypt.helper.array;
 
+import ch.bfh.unicrypt.helper.array.classes.LongArray;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
@@ -50,21 +51,20 @@ import org.junit.Test;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class SparseArrayTest {
+public class LongArrayTest {
 
 	@Test
 	public void generalTest() {
 
-		SparseArray<Integer> sparseArray = SparseArray.getInstance(0, new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-		List<SparseArray<Integer>> sparseArrays = new ArrayList<SparseArray<Integer>>();
-		sparseArrays.add(SparseArray.getInstance(0, new Integer[]{0, 0, 0, 8, 7, 5, 4, 3, 255, 255}));
-		sparseArrays.add(SparseArray.getInstance(0, new Integer[]{0, 0, 0, 8, 7, 5, 4, 3, 255, 255}));
-		sparseArrays.add(sparseArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(SparseArray.getInstance(0, new Integer[]{255, 255})));
-		sparseArrays.add(sparseArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(SparseArray.getInstance(255, 2)));
-		sparseArrays.add(sparseArray.extract(3, 6).removeAt(3).reverse().append(SparseArray.getInstance(0, new Integer[]{255, 255})).shiftRight(3));
+		LongArray longArray = LongArray.getInstance(new long[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+		List<LongArray> longArrays = new ArrayList<LongArray>();
+		longArrays.add(LongArray.getInstance(new long[]{0, 0, 0, 8, 7, 5, 4, 3, 255, 255}));
+		longArrays.add(longArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(LongArray.getInstance(new long[]{255, 255})));
+		longArrays.add(longArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(LongArray.getInstance(255L, (int) 2)));
+		longArrays.add(longArray.extract(3, 6).removeAt(3).reverse().append(LongArray.getInstance(new long[]{255, 255})).shiftRight(3));
 
-		for (SparseArray<Integer> s1 : sparseArrays) {
-			for (SparseArray<Integer> s2 : sparseArrays) {
+		for (LongArray s1 : longArrays) {
+			for (LongArray s2 : longArrays) {
 				assertEquals(s1, s2);
 				assertEquals(s1.getLength(), s2.getLength());
 				assertEquals(s1.append(s1), s2.append(s1));

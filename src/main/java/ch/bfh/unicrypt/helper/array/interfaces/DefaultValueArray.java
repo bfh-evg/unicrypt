@@ -123,23 +123,29 @@ public interface DefaultValueArray<V extends Object>
 	 *
 	 * @param length
 	 * @return
+	 * @see DefaultValueArray#addSuffix(int) 
+	 * @see DefaultValueArray#addPrefixAndSuffix(int, int)
 	 */
-	public ImmutableArray<V> appendPrefix(int length);
+	public ImmutableArray<V> addPrefix(int length);
 
 	/**
 	 *
 	 * @param length
 	 * @return
+	 * @see DefaultValueArray#addPrefix(int) 
+	 * @see DefaultValueArray#addPrefixAndSuffix(int, int)
 	 */
-	public ImmutableArray<V> appendSuffix(int length);
+	public ImmutableArray<V> addSuffix(int length);
 
 	/**
 	 *
 	 * @param prefixLength
 	 * @param suffixLength
 	 * @return
+	 * @see DefaultValueArray#addPrefix(int) 
+	 * @see DefaultValueArray#addSuffix(int) 
 	 */
-	public ImmutableArray<V> appendPrefixAndSuffix(int prefixLength, int suffixLength);
+	public ImmutableArray<V> addPrefixAndSuffix(int prefixLength, int suffixLength);
 
 	/**
 	 *
@@ -152,6 +158,12 @@ public interface DefaultValueArray<V extends Object>
 	 * @return
 	 */
 	public ImmutableArray<V> removeSuffix();
+
+	/**
+	 *
+	 * @return
+	 */
+	public ImmutableArray<V> removePrefixAndSuffix();
 
 	// left here means making the array smaller
 

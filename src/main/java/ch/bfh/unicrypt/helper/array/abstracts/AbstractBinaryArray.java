@@ -39,68 +39,75 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes.string;
+package ch.bfh.unicrypt.helper.array.abstracts;
 
-import ch.bfh.unicrypt.helper.array.classes.BitArray;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
+import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <A>
+ * @param <V>
  */
-public class BitArrayToString
-	   extends AbstractStringConverter<BitArray> {
+public abstract class AbstractBinaryArray<A extends AbstractBinaryArray<A, V>, V extends Object>
+	   extends AbstractDefaultValueArray<A, V>
+	   implements BinaryArray<V> {
 
-	private final boolean reverse;
-	private final String regExp;
+	protected enum Operator {
 
-	protected BitArrayToString(boolean reverse) {
-		super(BitArray.class);
-		this.reverse = reverse;
-		this.regExp = "^[0-1]*$";
+		AND, OR, XOR
+
+	};
+
+	public AbstractBinaryArray(Class valueClass, int length, int rangeOffset, boolean reverse, V defaultValue, int trailer, int header, int rangeLength) {
+		super(valueClass, defaultValue, length, rangeOffset, rangeLength, trailer, header, reverse);
 	}
 
 	@Override
-	public String abstractConvert(BitArray bitArray) {
-		StringBuilder sb = new StringBuilder(bitArray.getLength() * (Byte.SIZE + 1));
-		for (Boolean bit : this.reverse ? bitArray.reverse() : bitArray) {
-			sb.append(bit ? "1" : "0");
-		}
-		return sb.toString();
+	public A and(BinaryArray<V> other) {
+		return this.andOrXor(Operator.AND, other, false, false);
 	}
 
 	@Override
-	public BitArray abstractReconvert(String string) {
-		if (!string.matches(this.regExp)) {
+	public A or(BinaryArray<V> other) {
+		return this.andOrXor(Operator.OR, other, false, false);
+	}
+
+	@Override
+	public A xor(BinaryArray<V> other) {
+		return this.andOrXor(Operator.XOR, other, false, false);
+	}
+
+	@Override
+	public A and(BinaryArray<V> other, boolean fillBit) {
+		return this.andOrXor(Operator.AND, other, true, fillBit);
+	}
+
+	@Override
+	public A or(BinaryArray<V> other, boolean fillBit) {
+		return this.andOrXor(Operator.OR, other, true, fillBit);
+	}
+
+	@Override
+	public A xor(BinaryArray<V> other, boolean fillBit) {
+		return this.andOrXor(Operator.XOR, other, true, fillBit);
+	}
+
+	@Override
+	public A not() {
+		return this.abstractNot();
+	}
+
+	protected A andOrXor(Operator operator, BinaryArray<V> other, boolean maxLength, boolean fillBit) {
+		if (other == null || !this.getClass().isInstance(other)) {
 			throw new IllegalArgumentException();
 		}
-		boolean[] bits = new boolean[string.length()];
-		for (int i = 0; i < bits.length; i++) {
-			bits[i] = string.charAt(i) == '1';
-		}
-		BitArray result = BitArray.getInstance(bits);
-		return this.reverse ? result.reverse() : result;
+		return this.abstractAndOrXor(operator, (A) other, maxLength, fillBit);
+
 	}
 
-	public static BitArrayToString getInstance() {
-		return new BitArrayToString(false);
-	}
+	abstract protected A abstractAndOrXor(Operator operator, A other, boolean maxLength, boolean fillBit);
 
-	public static BitArrayToString getInstance(boolean reverse) {
-		return new BitArrayToString(reverse);
-	}
-
-//	public static void main(final String[] args) {
-//
-//		BitArrayToString converter1 = BitArrayToString.getInstance();
-//		BitArray ba1 = converter1.reconvert("0010100000101010110011000000");
-//		System.out.println(ba1);
-//		System.out.println(converter1.convert(ba1));
-//
-//		BitArrayToString converter2 = BitArrayToString.getInstance(true);
-//		BitArray ba2 = converter2.reconvert("0010100000101010110011000000");
-//		System.out.println(ba2);
-//		System.out.println(converter2.convert(ba2));
-//	}
+	abstract protected A abstractNot();
 
 }

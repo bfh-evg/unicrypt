@@ -39,68 +39,28 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes.string;
-
-import ch.bfh.unicrypt.helper.array.classes.BitArray;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
+package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class BitArrayToString
-	   extends AbstractStringConverter<BitArray> {
+public interface BinaryArray<V extends Object>
+	   extends DefaultValueArray<V> {
 
-	private final boolean reverse;
-	private final String regExp;
+	public BinaryArray<V> and(BinaryArray<V> other);
 
-	protected BitArrayToString(boolean reverse) {
-		super(BitArray.class);
-		this.reverse = reverse;
-		this.regExp = "^[0-1]*$";
-	}
+	public BinaryArray<V> or(BinaryArray<V> other);
 
-	@Override
-	public String abstractConvert(BitArray bitArray) {
-		StringBuilder sb = new StringBuilder(bitArray.getLength() * (Byte.SIZE + 1));
-		for (Boolean bit : this.reverse ? bitArray.reverse() : bitArray) {
-			sb.append(bit ? "1" : "0");
-		}
-		return sb.toString();
-	}
+	public BinaryArray<V> xor(BinaryArray<V> other);
 
-	@Override
-	public BitArray abstractReconvert(String string) {
-		if (!string.matches(this.regExp)) {
-			throw new IllegalArgumentException();
-		}
-		boolean[] bits = new boolean[string.length()];
-		for (int i = 0; i < bits.length; i++) {
-			bits[i] = string.charAt(i) == '1';
-		}
-		BitArray result = BitArray.getInstance(bits);
-		return this.reverse ? result.reverse() : result;
-	}
+	public BinaryArray<V> and(BinaryArray<V> other, boolean fillBit);
 
-	public static BitArrayToString getInstance() {
-		return new BitArrayToString(false);
-	}
+	public BinaryArray<V> or(BinaryArray<V> other, boolean fillBit);
 
-	public static BitArrayToString getInstance(boolean reverse) {
-		return new BitArrayToString(reverse);
-	}
+	public BinaryArray<V> xor(BinaryArray<V> other, boolean fillBit);
 
-//	public static void main(final String[] args) {
-//
-//		BitArrayToString converter1 = BitArrayToString.getInstance();
-//		BitArray ba1 = converter1.reconvert("0010100000101010110011000000");
-//		System.out.println(ba1);
-//		System.out.println(converter1.convert(ba1));
-//
-//		BitArrayToString converter2 = BitArrayToString.getInstance(true);
-//		BitArray ba2 = converter2.reconvert("0010100000101010110011000000");
-//		System.out.println(ba2);
-//		System.out.println(converter2.convert(ba2));
-//	}
+	public BinaryArray<V> not();
 
 }

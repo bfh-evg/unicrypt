@@ -41,53 +41,53 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.string;
 
-import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.array.classes.BooleanArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class BitArrayToString
-	   extends AbstractStringConverter<BitArray> {
+public class BooleanArrayToString
+	   extends AbstractStringConverter<BooleanArray> {
 
 	private final boolean reverse;
 	private final String regExp;
 
-	protected BitArrayToString(boolean reverse) {
-		super(BitArray.class);
+	protected BooleanArrayToString(boolean reverse) {
+		super(BooleanArray.class);
 		this.reverse = reverse;
 		this.regExp = "^[0-1]*$";
 	}
 
 	@Override
-	public String abstractConvert(BitArray bitArray) {
-		StringBuilder sb = new StringBuilder(bitArray.getLength() * (Byte.SIZE + 1));
-		for (Boolean bit : this.reverse ? bitArray.reverse() : bitArray) {
+	public String abstractConvert(BooleanArray booleanArray) {
+		StringBuilder sb = new StringBuilder(booleanArray.getLength());
+		for (Boolean bit : this.reverse ? booleanArray.reverse() : booleanArray) {
 			sb.append(bit ? "1" : "0");
 		}
 		return sb.toString();
 	}
 
 	@Override
-	public BitArray abstractReconvert(String string) {
+	public BooleanArray abstractReconvert(String string) {
 		if (!string.matches(this.regExp)) {
 			throw new IllegalArgumentException();
 		}
 		boolean[] bits = new boolean[string.length()];
 		for (int i = 0; i < bits.length; i++) {
-			bits[i] = string.charAt(i) == '1';
+			bits[i] = (string.charAt(i) == '1');
 		}
-		BitArray result = BitArray.getInstance(bits);
+		BooleanArray result = BooleanArray.getInstance(bits);
 		return this.reverse ? result.reverse() : result;
 	}
 
-	public static BitArrayToString getInstance() {
-		return new BitArrayToString(false);
+	public static BooleanArrayToString getInstance() {
+		return new BooleanArrayToString(false);
 	}
 
-	public static BitArrayToString getInstance(boolean reverse) {
-		return new BitArrayToString(reverse);
+	public static BooleanArrayToString getInstance(boolean reverse) {
+		return new BooleanArrayToString(reverse);
 	}
 
 //	public static void main(final String[] args) {
@@ -102,5 +102,4 @@ public class BitArrayToString
 //		System.out.println(ba2);
 //		System.out.println(converter2.convert(ba2));
 //	}
-
 }
