@@ -59,6 +59,8 @@ import java.math.BigInteger;
 
 /**
  *
+ * @see [BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists
+ * <p>
  * @author philipp
  */
 public class PolynomialEvaluationProofSystem
@@ -73,7 +75,7 @@ public class PolynomialEvaluationProofSystem
 	// D = 2^(d+1) - 1 ==> d = ceil(log(D + 1)) - 1 = floor(log(D))
 	private final int d;
 
-	protected PolynomialEvaluationProofSystem(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+	private PolynomialEvaluationProofSystem(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
 		super(challengeGenerator);
 		this.pedersenCS = pedersenCS;
 		this.polynomial = polynomial;
@@ -85,6 +87,9 @@ public class PolynomialEvaluationProofSystem
 	}
 
 	public static final PolynomialEvaluationProofSystem getInstance(final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+		if (pedersenCS == null) {
+			throw new IllegalArgumentException();
+		}
 		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
@@ -94,6 +99,7 @@ public class PolynomialEvaluationProofSystem
 		if (challengeGenerator == null || polynomial == null || pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
+		// TBD: Check instance of ZModPrime or check whether order is prime and store a ZMod instead of ZModPrime
 		if (!(polynomial.getSet().getSemiRing() instanceof ZModPrime) || pedersenCS.getCyclicGroup().getOrder() != polynomial.getSet().getSemiRing().getOrder()) {
 			throw new IllegalArgumentException();
 		}

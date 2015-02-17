@@ -64,6 +64,8 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
+ * @see [BG13] Zero-Knowledge Argument for Polynomial Evaluation with Application to Blacklists
+ * <p>
  * @author philipp
  */
 public class PolynomialMembershipProofSystem
@@ -73,7 +75,7 @@ public class PolynomialMembershipProofSystem
 	final private Subset members;
 	final private PolynomialEvaluationProofSystem pepsi;
 
-	protected PolynomialMembershipProofSystem(final SigmaChallengeGenerator challengeGenerator, final Subset members, final PedersenCommitmentScheme pedersenCS) {
+	private PolynomialMembershipProofSystem(final SigmaChallengeGenerator challengeGenerator, final Subset members, final PedersenCommitmentScheme pedersenCS) {
 		super(challengeGenerator);
 
 		this.members = members;
