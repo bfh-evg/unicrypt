@@ -122,15 +122,23 @@ public class PolynomialSemiRing
 		if (roots == null || roots.isEmpty() || !roots.getSet().isUniform() || !roots.getSet().getFirst().isEquivalent(this.getSemiRing())) {
 			throw new IllegalArgumentException();
 		}
+
 		DualisticElement zero = this.getSemiRing().getZeroElement();
 		DualisticElement one = this.getSemiRing().getOneElement();
 
-		PolynomialElement poly = new PolynomialElement(this, Polynomial.<DualisticElement<BigInteger>>getInstance(new DualisticElement[]{(DualisticElement) roots.getAt(0).invert(), one}, zero, one));
-		for (int i = 1; i < roots.getArity(); i++) {
-			poly = poly.multiply(new PolynomialElement(this, Polynomial.<DualisticElement<BigInteger>>getInstance(new DualisticElement[]{(DualisticElement) roots.getAt(i).invert(), one}, zero, one)));
+		int degree = roots.getArity();
+		DualisticElement<BigInteger>[] coeffs = new DualisticElement[degree + 1];
+		coeffs[degree] = one;
+		coeffs[degree - 1] = (DualisticElement) roots.getAt(0).invert();
+
+		for (int i = 1; i < degree; i++) {
+			DualisticElement x = (DualisticElement) roots.getAt(i).invert();
+			for (int j = degree - (i + 1); j < degree; j++) {
+				coeffs[j] = coeffs[j + 1].multiply(x).add(coeffs[j] == null ? zero : coeffs[j]);
+			}
 		}
 
-		return poly;
+		return new PolynomialElement(this, Polynomial.<DualisticElement<BigInteger>>getInstance(coeffs, zero, one));
 	}
 
 	public PolynomialElement getRandomElement(int degree) {
