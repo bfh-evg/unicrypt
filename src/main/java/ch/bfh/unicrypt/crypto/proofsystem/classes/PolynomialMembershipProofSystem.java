@@ -89,6 +89,12 @@ public class PolynomialMembershipProofSystem
 		this.pepsi = PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
+	private PolynomialMembershipProofSystem(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+		super(challengeGenerator);
+		this.members = null;
+		this.pepsi = PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
+	}
+
 	public static final PolynomialMembershipProofSystem getInstance(final Subset members, final PedersenCommitmentScheme pedersenCS) {
 		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, members, pedersenCS);
@@ -107,6 +113,26 @@ public class PolynomialMembershipProofSystem
 		}
 
 		return new PolynomialMembershipProofSystem(challengeGenerator, members, pedersenCS);
+	}
+
+	public static final PolynomialMembershipProofSystem getInstance(final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
+	}
+
+	public static final PolynomialMembershipProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+
+		if (challengeGenerator == null || polynomial == null || pedersenCS == null) {
+			throw new IllegalArgumentException();
+		}
+		if (!(polynomial.getSet().getSemiRing() instanceof ZModPrime) || pedersenCS.getCyclicGroup().getOrder() != polynomial.getSet().getSemiRing().getOrder()) {
+			throw new IllegalArgumentException();
+		}
+		if (!challengeGenerator.getChallengeSpace().isEquivalent(pedersenCS.getMessageSpace())) {
+			throw new IllegalArgumentException();
+		}
+
+		return new PolynomialMembershipProofSystem(challengeGenerator, polynomial, pedersenCS);
 	}
 
 	@Override
@@ -143,6 +169,12 @@ public class PolynomialMembershipProofSystem
 
 	@Override
 	public Subset getMembers() {
+
+		// In case, the proof system has been created directly by the representing polynomial
+		// -> May comupte the roots from the polynomial...?
+		if (this.members == null) {
+			throw new UnsupportedOperationException();
+		}
 		return this.members;
 	}
 
