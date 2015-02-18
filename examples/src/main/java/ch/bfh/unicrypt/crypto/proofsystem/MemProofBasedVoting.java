@@ -48,9 +48,13 @@ import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenComm
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Subset;
@@ -96,22 +100,12 @@ public class MemProofBasedVoting {
 		// 0. Preparation
 		final CyclicGroup G_p = GStarModPrime.getInstance(new BigInteger(O, 10), new BigInteger(P, 10));
 		final CyclicGroup G_q = GStarModPrime.getInstance(new BigInteger(P, 10), new BigInteger(Q, 10));
-		final BulletinBoard BB = new BulletinBoard(G_p, G_q, 1);
-
-		// Add a number of random credentials to the BB
-		for (int i = 0; i < 1000; i++) {
-			BB.postCredential("Voter A " + i, G_q.getRandomElement());
-		}
+		final BulletinBoard BB = new BulletinBoard(G_p, G_q, 1, 1000);
 
 		Voter voter = new Voter("Voter X", G_p, G_q, BB);
 
 		// 1. Register
 		voter.register();
-
-		// Add again a number of random credentials to the BB
-		for (int i = 0; i < 97; i++) {
-			BB.postCredential("Voter B " + i, G_q.getRandomElement());
-		}
 
 		// 2. Cast Ballot
 		voter.castBallot();
@@ -172,7 +166,7 @@ public class MemProofBasedVoting {
 			Element r = this.G_p.getZModOrder().getRandomElement(randomGenerator);
 			Element cu = this.BB.getComP().commit(uInZp, r);
 
-			PolynomialMembershipProofSystem pmps = PolynomialMembershipProofSystem.getInstance(this.BB.getCredentials(), this.BB.getComP());
+			PolynomialMembershipProofSystem pmps = PolynomialMembershipProofSystem.getInstance(this.BB.getCredentialPolynomial(), this.BB.getComP());
 			Tuple pi1 = pmps.generate(Tuple.getInstance(uInZp, r), cu);
 
 			// pi_2
@@ -212,7 +206,7 @@ public class MemProofBasedVoting {
 
 		public void verifyBallots() {
 			System.out.println("Start verifying...");
-			PolynomialMembershipProofSystem pmps = PolynomialMembershipProofSystem.getInstance(this.BB.getCredentials(), this.BB.getComP());
+			PolynomialMembershipProofSystem pmps = PolynomialMembershipProofSystem.getInstance(this.BB.getCredentialPolynomial(), this.BB.getComP());
 			DoubleDescreteLogProofSystem ddlps = DoubleDescreteLogProofSystem.getInstance(this.BB.getComP(), this.BB.getComQ(), SECURITY_FACTOR);
 
 			ProductSet space = (ProductSet) this.BB.getComQ().getCommitmentFunction().getDomain();
@@ -240,6 +234,7 @@ public class MemProofBasedVoting {
 
 		private final CyclicGroup G_q;
 		private final ZMod Z_p;
+		private PolynomialElement credentialPolynomial;
 		private final ArrayList<Element> credentials;
 		private final ArrayList<Element> ballots;
 
@@ -248,11 +243,13 @@ public class MemProofBasedVoting {
 		private final PedersenCommitmentScheme com_p;
 		private final GeneralizedPedersenCommitmentScheme com_q;
 
-		public BulletinBoard(CyclicGroup G_p, CyclicGroup G_q, int numberOfPrivateCredentials) {
+		public BulletinBoard(CyclicGroup G_p, CyclicGroup G_q, int numberOfPrivateCredentials, int numberOfInitialCredentials) {
 			this.G_q = G_q;
 			this.Z_p = G_p.getZModOrder();
 			this.credentials = new ArrayList<>();
 			this.ballots = new ArrayList<>();
+
+			this.credentialPolynomial = PolynomialSemiRing.getInstance(Z_p).getRandomElement(numberOfInitialCredentials);
 
 			Element[] gs = new Element[numberOfPrivateCredentials + 1];
 			for (int i = 0; i < gs.length; i++) {
@@ -293,10 +290,19 @@ public class MemProofBasedVoting {
 				throw new IllegalArgumentException();
 			}
 			this.credentials.add(this.Z_p.getElement(credential.getBigInteger()));
+
+			DualisticElement zero = this.Z_p.getZeroElement();
+			DualisticElement one = this.Z_p.getOneElement();
+			Polynomial newRoot = Polynomial.getInstance(new DualisticElement[]{(DualisticElement) this.Z_p.getElement(credential.getBigInteger()).invert(), one}, zero, one);
+			this.credentialPolynomial = this.credentialPolynomial.multiply(PolynomialSemiRing.getInstance(this.Z_p).getElement(newRoot));
 		}
 
 		public Subset getCredentials() {
 			return Subset.getInstance(this.Z_p, this.credentials.toArray(new Element[0]));
+		}
+
+		public PolynomialElement getCredentialPolynomial() {
+			return this.credentialPolynomial;
 		}
 
 		public void postBallot(Element ballot) {
