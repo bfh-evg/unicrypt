@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.WeakHashMap;
 
 /**
  * This is a special 'instance' of a PseudoRandomGeneratorCounterMode which allows to
@@ -63,7 +64,7 @@ public class ReferenceRandomByteSequence
 	 */
 	public static final ReferenceRandomByteSequence DEFAULT = ReferenceRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
 
-	private transient HashMap<Integer, byte[]> randomByteBufferMap;
+	private transient WeakHashMap<Integer, byte[]> randomByteBufferMap;
 	private int javaHashValue;
 
 	protected ReferenceRandomByteSequence(HashAlgorithm hashAlgorithm, ByteArray seed) {
@@ -73,7 +74,7 @@ public class ReferenceRandomByteSequence
 	@Override
 	protected byte[] getRandomByteBuffer(int counter) {
 		if (this.randomByteBufferMap == null) {
-			this.randomByteBufferMap = new HashMap<Integer, byte[]>();
+			this.randomByteBufferMap = new WeakHashMap<Integer, byte[]>();
 		}
 		if (!this.randomByteBufferMap.containsKey(counter)) {
 			this.randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));
