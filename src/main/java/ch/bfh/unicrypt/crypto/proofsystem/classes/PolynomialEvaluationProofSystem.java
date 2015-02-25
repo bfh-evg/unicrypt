@@ -301,13 +301,12 @@ public class PolynomialEvaluationProofSystem
 		return v;
 	}
 
-	private Tuple computeDeltas(Tuple uV, Tuple fV) {
-		PolynomialElement[] result = new PolynomialElement[this.polynomial.getValue().getDegree() + 1];
-		Node root = new Node(this.d + 1, 0, this.polynomial.getSet().getOneElement(), uV, fV, result);
+	private PolynomialElement xPoly;
 
-		for (int i = 1; i < result.length; i++) {
-			result[0] = result[0].add(result[i].times(this.polynomial.getValue().getCoefficient(i)));
-		}
+	private Tuple computeDeltas(Tuple uV, Tuple fV) {
+		PolynomialElement[] result = new PolynomialElement[1];
+		xPoly = polynomial.getSet().getElement(BigInteger.ZERO, BigInteger.ONE);
+		Node root = new Node(this.d + 1, 0, this.polynomial.getSet().getOneElement(), uV, fV, result);
 
 		Element[] dVs = new Element[this.d + 1];
 		for (int i = 0; i < dVs.length; i++) {
@@ -320,10 +319,12 @@ public class PolynomialEvaluationProofSystem
 
 		public Node(int level, int degree, PolynomialElement poly, Tuple uV, Tuple fV, PolynomialElement[] result) {
 			if (level == 0) {
-				result[degree] = poly;
+				if (degree == 0) {
+					result[0] = poly;
+				}
+				result[0] = result[0].add(poly.times(polynomial.getValue().getCoefficient(degree)));
 			} else {
 				// right node
-				PolynomialElement xPoly = polynomial.getSet().getElement(BigInteger.ZERO, BigInteger.ONE);
 				Node right = new Node(level - 1, degree, poly.multiply(xPoly), uV, fV, result);
 
 				// left node
