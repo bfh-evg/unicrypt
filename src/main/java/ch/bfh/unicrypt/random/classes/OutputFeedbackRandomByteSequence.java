@@ -70,13 +70,13 @@ public class OutputFeedbackRandomByteSequence
 	   implements PseudoRandomByteSequence {
 
 	private final HashAlgorithm hashAlgorithm;
-	private ByteArray internalState;
+	private volatile ByteArray internalState;
 	private final int forwardSecurityInBytes;
 
-	private synchronized ByteArray getInternalState() {
+	private ByteArray getInternalState() {
 		while (this.internalState == null) {
 			try {
-				wait(10000);
+				Thread.sleep(100);
 			} catch (InterruptedException ex) {
 				//
 			}
@@ -84,12 +84,11 @@ public class OutputFeedbackRandomByteSequence
 		return this.internalState;
 	}
 
-	private synchronized void setInternalState(ByteArray internalState) {
+	private void setInternalState(ByteArray internalState) {
 		if (internalState == null) {
 			return;
 		}
 		this.internalState = internalState;
-		this.notifyAll();
 	}
 
 	// Random random;

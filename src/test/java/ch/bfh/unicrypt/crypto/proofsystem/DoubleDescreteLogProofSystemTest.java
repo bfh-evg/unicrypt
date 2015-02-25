@@ -184,6 +184,8 @@ public class DoubleDescreteLogProofSystemTest {
 		Tuple secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(Z_q.getElement(16), m2));
 		Triple proofInvalid = ddlps.generate(secretInputInvalid, publicInput);
 		boolean verify = ddlps.verify(proofInvalid, publicInput);
+
+		//Hier kann es probabilistisch zu einem Fehler kommen!
 		assertTrue(!verify);
 
 		secretInputInvalid = Tuple.getInstance(x, r, Z_q.getElement(5), Tuple.getInstance(m1, m2));

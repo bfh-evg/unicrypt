@@ -69,7 +69,6 @@ public class PseudoRandomOracle
 		return this.hashAlgorithm;
 	}
 
-	//TODO: Warning, this is a memory-hog!
 	@Override
 	protected ReferenceRandomByteSequence abstractGetReferenceRandomByteSequence(ByteArray query) {
 		if (!this.referenceRandomByteSequence.containsKey(query)) {
