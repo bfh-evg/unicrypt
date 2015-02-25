@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.abstracts.AbstractRandomOracle;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import java.util.HashMap;
+import java.util.WeakHashMap;
 
 /**
  *
@@ -56,12 +56,12 @@ public class PseudoRandomOracle
 
 	public static final RandomOracle DEFAULT = PseudoRandomOracle.getInstance(HashAlgorithm.getInstance());
 
-	private final HashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
+	private final WeakHashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
 	private final HashAlgorithm hashAlgorithm;
 
 	protected PseudoRandomOracle(HashAlgorithm hashAlgorithm) {
 		super();
-		this.referenceRandomByteSequence = new HashMap<ByteArray, ReferenceRandomByteSequence>();
+		this.referenceRandomByteSequence = new WeakHashMap<ByteArray, ReferenceRandomByteSequence>();
 		this.hashAlgorithm = hashAlgorithm;
 	}
 
