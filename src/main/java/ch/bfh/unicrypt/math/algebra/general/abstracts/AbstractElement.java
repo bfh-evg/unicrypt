@@ -60,7 +60,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import java.math.BigInteger;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * This abstract class represents the concept an element in a mathematical group. It allows applying the group operation
@@ -81,25 +82,21 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	   implements Element<V> {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private final S set;
 	private final V value;
 
-	// the following fields are needed for optimizations
-	private final HashMap<Converter<V, BigInteger>, BigInteger> bigIntegers;
-	private final HashMap<Converter<V, String>, String> strings;
-	private final HashMap<Converter<V, ByteArray>, ByteArray> byteArrays;
-	private final HashMap<HashMethod, ByteArray> hashValues;
+	// the following fields are needed for optimizations -> lazy instantiation
+	private Map<Converter<V, BigInteger>, BigInteger> bigIntegers;
+	private Map<Converter<V, String>, String> strings;
+	private Map<Converter<V, ByteArray>, ByteArray> byteArrays;
+	private Map<HashMethod, ByteArray> hashValues;
 
 	protected AbstractElement(final S set, V value) {
 		this.set = set;
 		this.value = value;
-		this.bigIntegers = new HashMap<Converter<V, BigInteger>, BigInteger>();
-		this.strings = new HashMap<Converter<V, String>, String>();
-		this.byteArrays = new HashMap<Converter<V, ByteArray>, ByteArray>();
-		this.hashValues = new HashMap<HashMethod, ByteArray>();
 	}
 
 	@Override
@@ -157,6 +154,9 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		if (converter == null) {
 			throw new IllegalArgumentException();
 		}
+		if (this.bigIntegers == null) {
+			this.bigIntegers = new WeakHashMap<Converter<V, BigInteger>, BigInteger>();
+		}
 		BigInteger result = this.bigIntegers.get(converter);
 		if (result == null) {
 			result = converter.convert(this.value);
@@ -187,6 +187,9 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		if (converter == null) {
 			throw new IllegalArgumentException();
 		}
+		if (this.strings == null) {
+			this.strings = new WeakHashMap<Converter<V, String>, String>();
+		}
 		String result = this.strings.get(converter);
 		if (result == null) {
 			result = converter.convert(this.value);
@@ -216,6 +219,9 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	public ByteArray getByteArray(Converter<V, ByteArray> converter) {
 		if (converter == null) {
 			throw new IllegalArgumentException();
+		}
+		if (this.byteArrays == null) {
+			this.byteArrays = new WeakHashMap<Converter<V, ByteArray>, ByteArray>();
 		}
 		ByteArray result = this.byteArrays.get(converter);
 		if (result == null) {
@@ -276,6 +282,9 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	public final ByteArray getHashValue(HashMethod hashMethod) {
 		if (hashMethod == null) {
 			throw new IllegalArgumentException();
+		}
+		if (this.hashValues == null) {
+			this.hashValues = new WeakHashMap<HashMethod, ByteArray>();
 		}
 		ByteArray hashValue = this.hashValues.get(hashMethod);
 		if (hashValue == null) {
