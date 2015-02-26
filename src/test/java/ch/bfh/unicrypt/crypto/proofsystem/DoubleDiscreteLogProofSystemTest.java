@@ -41,9 +41,10 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem;
 
-import ch.bfh.unicrypt.crypto.proofsystem.classes.DoubleDescreteLogProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.DoubleDiscreteLogProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -54,6 +55,8 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
+import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -62,7 +65,7 @@ import org.junit.Test;
  *
  * @author philipp
  */
-public class DoubleDescreteLogProofSystemTest {
+public class DoubleDiscreteLogProofSystemTest {
 
 	final static int Q1 = 83;     // Q1               (prime)
 	final static int P1 = 167;    // P1 =  2*Q1+1     (prime)
@@ -76,7 +79,7 @@ public class DoubleDescreteLogProofSystemTest {
 	final static String O2 = "53011628781581787783028993438273312437367940383243255661635140153897862584928247";
 
 	@Test
-	public void testDoubleDescreteLogProofSystem() {
+	public void testDoubleDiscreteLogProofSystem() {
 		final CyclicGroup G_p = GStarModPrime.getInstance(O1, P1);
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
@@ -92,7 +95,7 @@ public class DoubleDescreteLogProofSystemTest {
 		PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(g, g0);
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(h, Tuple.getInstance(h1, h2));
 
-		DoubleDescreteLogProofSystem ddlps = DoubleDescreteLogProofSystem.getInstance(pcs, gpcs, 3);
+		DoubleDiscreteLogProofSystem ddlps = DoubleDiscreteLogProofSystem.getInstance(pcs, gpcs, 3);
 
 		Element m1 = Z_q.getElement(7);
 		Element m2 = Z_q.getElement(13);
@@ -116,7 +119,7 @@ public class DoubleDescreteLogProofSystemTest {
 	}
 
 	@Test
-	public void testDoubleDescreteLogProofSystem2() {
+	public void testDoubleDiscreteLogProofSystem2() {
 		final CyclicGroup G_p = GStarModPrime.getInstance(new BigInteger(O2, 10), new BigInteger(P2, 10));
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
@@ -127,7 +130,7 @@ public class DoubleDescreteLogProofSystemTest {
 		PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(G_p);
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(G_q, size);
 
-		DoubleDescreteLogProofSystem ddlps = DoubleDescreteLogProofSystem.getInstance(pcs, gpcs, 40);
+		DoubleDiscreteLogProofSystem ddlps = DoubleDiscreteLogProofSystem.getInstance(pcs, gpcs, 40);
 
 		Tuple m = gpcs.getMessageSpace().getRandomElement();
 
@@ -150,7 +153,9 @@ public class DoubleDescreteLogProofSystemTest {
 	}
 
 	@Test
-	public void testDoubleDescreteLogProofSystem3() {
+	public void testDoubleDiscreteLogProofSystem3() {
+
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance(7));
 		final CyclicGroup G_p = GStarModPrime.getInstance(O1, P1);
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
@@ -166,7 +171,7 @@ public class DoubleDescreteLogProofSystemTest {
 		PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(g, g0);
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(h, Tuple.getInstance(h1, h2));
 
-		DoubleDescreteLogProofSystem ddlps = DoubleDescreteLogProofSystem.getInstance(pcs, gpcs, 3);
+		DoubleDiscreteLogProofSystem ddlps = DoubleDiscreteLogProofSystem.getInstance(pcs, gpcs, 3);
 
 		Element m1 = Z_q.getElement(7);
 		Element m2 = Z_q.getElement(13);
@@ -182,19 +187,17 @@ public class DoubleDescreteLogProofSystemTest {
 		Pair publicInput = Pair.getInstance(C, D);
 
 		Tuple secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(Z_q.getElement(16), m2));
-		Triple proofInvalid = ddlps.generate(secretInputInvalid, publicInput);
+		Triple proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
 		boolean verify = ddlps.verify(proofInvalid, publicInput);
-
-		//Hier kann es probabilistisch zu einem Fehler kommen!
 		assertTrue(!verify);
 
 		secretInputInvalid = Tuple.getInstance(x, r, Z_q.getElement(5), Tuple.getInstance(m1, m2));
-		proofInvalid = ddlps.generate(secretInputInvalid, publicInput);
+		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
 		verify = ddlps.verify(proofInvalid, publicInput);
 		assertTrue(!verify);
 
 		secretInputInvalid = Tuple.getInstance(x, Z_p.getElement(5), s, Tuple.getInstance(m1, m2));
-		proofInvalid = ddlps.generate(secretInputInvalid, publicInput);
+		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
 		verify = ddlps.verify(proofInvalid, publicInput);
 		assertTrue(!verify);
 	}

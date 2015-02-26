@@ -67,7 +67,7 @@ import java.math.BigInteger;
  * <p>
  * @author philipp
  */
-public class DoubleDescreteLogProofSystem
+public class DoubleDiscreteLogProofSystem
 	   extends AbstractSigmaProofSystem<ProductGroup, Tuple, ProductGroup, Pair> {
 
 	private final PedersenCommitmentScheme pedersenCS;
@@ -80,7 +80,7 @@ public class DoubleDescreteLogProofSystem
 
 	private final int k;
 
-	private DoubleDescreteLogProofSystem(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
+	private DoubleDiscreteLogProofSystem(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
 		super(challengeGenerator);
 		this.pedersenCS = pedersenCS;
 		this.generalizedPedersenCS = generalizedPedersenCS;
@@ -94,15 +94,15 @@ public class DoubleDescreteLogProofSystem
 		this.k = k;
 	}
 
-	public static DoubleDescreteLogProofSystem getInstance(final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
+	public static DoubleDiscreteLogProofSystem getInstance(final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
 		if (pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
 		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
-		return DoubleDescreteLogProofSystem.getInstance(challengeGenerator, pedersenCS, generalizedPedersenCS, k);
+		return DoubleDiscreteLogProofSystem.getInstance(challengeGenerator, pedersenCS, generalizedPedersenCS, k);
 	}
 
-	public static DoubleDescreteLogProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
+	public static DoubleDiscreteLogProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
 		if (challengeGenerator == null || pedersenCS == null || generalizedPedersenCS == null || k <= 1) {
 			throw new IllegalArgumentException();
 		}
@@ -124,7 +124,7 @@ public class DoubleDescreteLogProofSystem
 			throw new IllegalArgumentException();
 		}
 
-		return new DoubleDescreteLogProofSystem(challengeGenerator, pedersenCS, generalizedPedersenCS, k);
+		return new DoubleDiscreteLogProofSystem(challengeGenerator, pedersenCS, generalizedPedersenCS, k);
 	}
 
 	@Override
