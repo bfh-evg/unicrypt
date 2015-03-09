@@ -42,68 +42,96 @@
 package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
- * This interface
+ * This interface extends {@link DefaultValueArray} with some additional methods to perform binary operations on
+ * existing binary arrays. For this to work, the generic type of the array needs to be interpretable as binary data. The
+ * generic types for which this interface is intended to be applied are {@link Boolean}, {@link Byte}, and {@link Long}.
+ * <p>
+ * @see BooleanArray
+ * @see ByteArray
+ * @see LongArray
  * @author Rolf Haenni
  * @version 2.0
- * @param <V> The generic type of the values in the immutable array
+ * @param <V> The generic type of the values in the binary array
  */
 public interface BinaryArray<V extends Object>
 	   extends DefaultValueArray<V> {
 
 	/**
-	 *
-	 * @param other
-	 * @return
+	 * Performs bit-wise logical AND on the binary representations of the values stored in two binary arrays. If the
+	 * given arrays are different in length, the resulting binary array inherits the length of the shorter one. The
+	 * remaining values of the longer array are ignored.
+	 * <p>
+	 * @param other The second binary array
+	 * @return The result from applying bit-wise logical AND to both input arrays
 	 * @see BinaryArray#and(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray, boolean)
 	 */
 	public BinaryArray<V> and(BinaryArray<V> other);
 
 	/**
-	 *
-	 * @param other
-	 * @return
+	 * Performs bit-wise logical OR on the binary representations of the values stored in two binary arrays. If the
+	 * given arrays are different in length, the resulting binary array inherits the length of the shorter one. The
+	 * remaining values of the longer array are ignored.
+	 * <p>
+	 * @param other The second binary array
+	 * @return The result from applying bit-wise logical OR to both input arrays
 	 * @see BinaryArray#or(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray, boolean)
 	 */
 	public BinaryArray<V> or(BinaryArray<V> other);
 
 	/**
-	 *
-	 * @param other
-	 * @return
+	 * Performs bit-wise logical XOR on the binary representations of the values stored in two binary arrays. If the
+	 * given arrays are different in length, the resulting binary array inherits the length of the shorter one. The
+	 * remaining values of the longer array are ignored.
+	 * <p>
+	 * @param other The second binary array
+	 * @return The result from applying bit-wise logical XOR to both input arrays
 	 * @see BinaryArray#xor(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray, boolean)
 	 */
 	public BinaryArray<V> xor(BinaryArray<V> other);
 
 	/**
-	 *
-	 * @param other
-	 * @param fillBit
-	 * @return
+	 * Performs bit-wise logical AND on the binary representations of the values stored in two binary arrays. If the
+	 * given arrays are different in length, the resulting binary array inherits the length of the longer one. To
+	 * perform the operation, the shorter array is extended with 0 or 1 bits, depending on the actual value of the
+	 * parameter {@code fillBit}.
+	 * <p>
+	 * @param other   The second binary array
+	 * @param fillBit The value of the bits extending the shorter array
+	 * @return The result from applying bit-wise logical AND to both input arrays
 	 * @see BinaryArray#and(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray)
 	 */
 	public BinaryArray<V> and(BinaryArray<V> other, boolean fillBit);
 
 	/**
-	 *
-	 * @param other
-	 * @param fillBit
-	 * @return
+	 * Performs bit-wise logical OR on the binary representations of the values stored in two binary arrays. If the
+	 * given arrays are different in length, the resulting binary array inherits the length of the longer one. To
+	 * perform the operation, the shorter array is extended with 0 or 1 bits, depending on the actual value of the
+	 * parameter {@code fillBit}.
+	 * <p>
+	 * @param other   The second binary array
+	 * @param fillBit The value of the bits extending the shorter array
+	 * @return The result from applying bit-wise logical OR to both input arrays
 	 * @see BinaryArray#or(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray)
 	 */
 	public BinaryArray<V> or(BinaryArray<V> other, boolean fillBit);
 
 	/**
-	 *
-	 * @param other
-	 * @param fillBit
-	 * @return
+	 * Performs bit-wise logical XOR on the binary representations of the values stored in two binary arrays. If the
+	 * given arrays are different in length, the resulting binary array inherits the length of the longer one. To
+	 * perform the operation, the shorter array is extended with 0 or 1 bits, depending on the actual value of the
+	 * parameter {@code fillBit}.
+	 * <p>
+	 * @param other   The second binary array
+	 * @param fillBit The value of the bits extending the shorter array
+	 * @return The result from applying bit-wise logical XOR to both input arrays
 	 * @see BinaryArray#xor(ch.bfh.unicrypt.helper.array.interfaces.BinaryArray)
 	 */
 	public BinaryArray<V> xor(BinaryArray<V> other, boolean fillBit);
 
 	/**
-	 *
-	 * @return
+	 * Performs bit-wise logical NOT on the binary representation of the values stored in the input array.
+	 * <p>
+	 * @return The result from applying bit-wise logical NOT to the input array
 	 */
 	public BinaryArray<V> not();
 

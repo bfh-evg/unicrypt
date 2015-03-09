@@ -49,9 +49,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This class is a default implementation of the {@link ImmutableArray} interface. It is optimized for sparse arrays
+ * with a designated default value. Internally, the values are stored in a hash map. The implementation is optimized to
+ * provide O(1) running times for most operations. Compared to {@link DenseArray}, if consumes less memory if the
+ * spareness of the array is high.
+ * <p>
+ * @see DenseArray
+ * @author Rolf Haenni
+ * @param <V> The generic type of the values in the immutable array
  */
 public class SparseArray<V extends Object>
 	   extends AbstractDefaultValueArray<SparseArray<V>, V> {
@@ -70,8 +75,132 @@ public class SparseArray<V extends Object>
 		}
 	}
 
-	// this method is more efficient than its predecessor
+	/**
+	 * Creates a new sparse array of a given length. All its values are identical to the given default value. This
+	 * method is a special case of {@link SparseArray#getInstance(java.lang.Object, java.util.Map, int)} with a n empty
+	 * map.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param length       The length of the new array
+	 * @return The new sparse array
+	 * @see SparseArray#getInstance(java.lang.Object, java.util.Map, int)
+	 * @see DenseArray#getInstance(java.lang.Object, int)
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, int length) {
+		return SparseArray.getInstance(defaultValue, new HashMap<Integer, V>(), length);
+	}
+
+	/**
+	 * Creates a new sparse array from a given map of (index,value) pairs. The length of the resulting array corresponds
+	 * to the maximum index in the map plus 1. For example, a map of pairs (3,v1), (12,v2), (25,v3) leads to an array of
+	 * length 26 with v1 at index 3, v2 at index 12, and v3 at index 25. All other values with another index correspond
+	 * to the default value. This method is a special case of
+	 * {@link SparseArray#getInstance(java.lang.Object, java.util.Map, int)} with the length set to the maximal index
+	 * plus 1.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param map          The given map of (index,value) pairs
+	 * @return The new sparse array
+	 * @see SparseArray#getInstance(java.lang.Object, java.util.Map, int)
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, Map<Integer, V> map) {
+		if (map == null) {
+			throw new IllegalArgumentException();
+		}
+		int maxIndex = 0;
+		for (Integer i : map.keySet()) {
+			maxIndex = Math.max(maxIndex, i);
+		}
+		return SparseArray.getInstance(defaultValue, map, maxIndex + 1);
+	}
+
+	/**
+	 * Creates a new sparse array from a given map of (index,value) pairs and a given total length. For example, a map
+	 * of pairs (3,v1), (12,v2), (25,v3) and a given length 30 leads to an array of length 30 with v1 at index 3, v2 at
+	 * index 12, and v3 at index 25. All values with another index correspond to the default value.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param map          The given map of (index,value) pairs
+	 * @param length       The length of the new array
+	 * @return The new sparse array
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, Map<Integer, V> map, int length) {
+		if (defaultValue == null || map == null || length < 0) {
+			throw new IllegalArgumentException();
+		}
+		Map<Integer, V> newMap = new HashMap();
+		for (Integer i : map.keySet()) {
+			V value = map.get(i);
+			if (value == null || i >= length) {
+				throw new IllegalArgumentException();
+			}
+			if (!value.equals(defaultValue)) {
+				newMap.put(i, value);
+			}
+		}
+		return new SparseArray<V>(newMap, length, defaultValue);
+	}
+
+	/**
+	 * Creates a new sparse array from a given Java array of values. The Java array is transformed into a map for
+	 * internal storage. The length and the indices of the values of the resulting sparse array correspond to the given
+	 * Java array.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param values       The Java array of values
+	 * @return The new sparse array
+	 * @see DenseArray#getInstance(java.lang.Object...)
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, V... values) {
+		if (defaultValue == null || values == null) {
+			throw new IllegalArgumentException();
+		}
+		Map<Integer, V> map = new HashMap<Integer, V>();
+		int i = 0;
+		for (V value : values) {
+			if (value == null) {
+				throw new IllegalArgumentException();
+			}
+			if (!value.equals(defaultValue)) {
+				map.put(i, value);
+			}
+			i++;
+		}
+		return new SparseArray<V>(map, values.length, defaultValue);
+	}
+
+	/**
+	 * Transforms a given immutable array into a sparse array. If the given immutable array is already a sparse array,
+	 * it is returned without doing anything. Otherwise, the array is transformed into a map for internal storage.
+	 * <p>
+	 * @param <V>            The generic type of the new array
+	 * @param defaultValue   The default value of the new array
+	 * @param immutableArray The given immutable array
+	 * @return The new sparse array
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, ImmutableArray<V> immutableArray) {
+		if (defaultValue == null || immutableArray == null) {
+			throw new IllegalArgumentException();
+		}
+		if (immutableArray instanceof SparseArray) {
+			return (SparseArray) immutableArray; // defaultValue is ignored
+		}
+		Map<Integer, V> map = new HashMap<Integer, V>();
+		int i = 0;
+		for (V value : immutableArray) {
+			if (!value.equals(defaultValue)) {
+				map.put(i++, value);
+			}
+		}
+		return new SparseArray<V>(map, immutableArray.getLength(), defaultValue);
+	}
+
 	@Override
+	// this method is more efficient than its predecessor
 	protected Iterable<Integer> defaultGetIndices(V value) {
 		if (this.defaultValue.equals(value)) {
 			return super.defaultGetIndices(value);
@@ -87,8 +216,8 @@ public class SparseArray<V extends Object>
 		return result;
 	}
 
-	// this method is more efficient than its predecessor
 	@Override
+	// this method is more efficient than its predecessor
 	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
 		if (!this.defaultValue.equals(value)) {
 			return super.defaultGetIndicesExcept(value);
@@ -118,81 +247,15 @@ public class SparseArray<V extends Object>
 		return "[" + this.getLength() + ": " + str + "]";
 	}
 
-	public static <T> SparseArray<T> getInstance(T defaultValue, int length) {
-		return SparseArray.getInstance(defaultValue, new HashMap<Integer, T>(), length);
-	}
-
-	public static <T> SparseArray<T> getInstance(T defaultValue, Map<Integer, T> map) {
-		if (map == null) {
-			throw new IllegalArgumentException();
-		}
-		int maxIndex = 0;
-		for (Integer i : map.keySet()) {
-			maxIndex = Math.max(maxIndex, i);
-		}
-		return SparseArray.getInstance(defaultValue, map, maxIndex + 1);
-	}
-
-	public static <T> SparseArray<T> getInstance(T defaultValue, Map<Integer, T> map, int rangeLength) {
-		if (defaultValue == null || map == null || rangeLength < 0) {
-			throw new IllegalArgumentException();
-		}
-		Map<Integer, T> newMap = new HashMap();
-		for (Integer i : map.keySet()) {
-			T value = map.get(i);
-			if (value == null || i >= rangeLength) {
-				throw new IllegalArgumentException();
-			}
-			if (!value.equals(defaultValue)) {
-				newMap.put(i, value);
-			}
-		}
-		return new SparseArray<T>(newMap, rangeLength, defaultValue);
-	}
-
-	public static <T> SparseArray<T> getInstance(T defaultValue, T... values) {
-		if (defaultValue == null || values == null) {
-			throw new IllegalArgumentException();
-		}
-		Map<Integer, T> map = new HashMap<Integer, T>();
-		int i = 0;
-		for (T value : values) {
-			if (value == null) {
-				throw new IllegalArgumentException();
-			}
-			if (!value.equals(defaultValue)) {
-				map.put(i, value);
-			}
-			i++;
-		}
-		return new SparseArray<T>(map, values.length, defaultValue);
-	}
-
-	public static <T> SparseArray<T> getInstance(T defaultValue, ImmutableArray<T> immutableArray) {
-		if (defaultValue == null || immutableArray == null) {
-			throw new IllegalArgumentException();
-		}
-		if (immutableArray instanceof SparseArray) {
-			return (SparseArray) immutableArray; // defaultValue is ignored
-		}
-		Map<Integer, T> map = new HashMap<Integer, T>();
-		int i = 0;
-		for (T value : immutableArray) {
-			if (!value.equals(defaultValue)) {
-				map.put(i++, value);
-			}
-		}
-		return new SparseArray<T>(map, immutableArray.getLength(), defaultValue);
-	}
-
 	@Override
 	protected V abstractGetValueAt(int index) {
-		// JAVA 8: return this.map.getOrDefault(this.rangeOffset + index, this.defaultValue);
 		V result = this.map.get(index);
 		if (result == null) {
 			return this.defaultValue;
 		}
 		return result;
+		// Simplification for Java 8: replace everything by
+		// return this.map.getOrDefault(this.rangeOffset + index, this.defaultValue);
 	}
 
 	@Override

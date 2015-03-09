@@ -46,16 +46,19 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import java.util.Collection;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This class is a default implementation of the {@link ImmutableArray} interface. It is optimized for arrays for which
+ * no designated default value exists, arrays with almost no equal values, or arrays with only equal values. Internally,
+ * the values are either stored in an ordinary (possibly empty) array or as an array of length 1 together with the full
+ * length of the immutable array (all elements are equal in that case). The implementation is optimized to provide O(1)
+ * running times for most operations.
+ * <p>
+ * @see SparseArray
+ * @author Rolf Haenni
+ * @param <V> The generic type of the values in the immutable array
  */
 public class DenseArray<V extends Object>
 	   extends AbstractImmutableArray<DenseArray<V>, V> {
 
-	// The obects are stored either as an ordinary, possibly empty array (case 1)
-	// or as an array of length 1 together with the full length of the immutable
-	// array (case 2, all elements are equal)
 	private final Object[] values;
 
 	protected DenseArray(V value, int length) {
@@ -74,33 +77,39 @@ public class DenseArray<V extends Object>
 		}
 	}
 
-	@Override
-	protected String defaultToStringValue() {
-		String str = "";
-		String delimiter = "";
-		for (int i : this.getAllIndices()) {
-			str = str + delimiter + this.abstractGetAt(i);
-			delimiter = ", ";
-		}
-		return "[" + str + "]";
-	}
-
-	public static <T> DenseArray<T> getInstance(T... array) {
-		if (array == null) {
+	/**
+	 * Creates a new dense array from a given Java array of values. The Java array is copied for internal storage. The
+	 * length and the indices of the values of the resulting dense array correspond to the given Java array.
+	 * <p>
+	 * @param <V>    The generic type of the new array
+	 * @param values The Java array of values
+	 * @return The new sparse array
+	 * @see SparseArray#getInstance(java.lang.Object, java.lang.Object...)
+	 */
+	public static <V> DenseArray<V> getInstance(V... values) {
+		if (values == null) {
 			throw new IllegalArgumentException();
 		}
-		Object[] newArray = new Object[array.length];
+		Object[] newArray = new Object[values.length];
 		int i = 0;
-		for (T value : array) {
+		for (V value : values) {
 			if (value == null) {
 				throw new IllegalArgumentException();
 			}
 			newArray[i++] = value;
 		}
-		return new DenseArray<T>(newArray);
+		return new DenseArray<V>(newArray);
 	}
 
-	public static <T> DenseArray<T> getInstance(ImmutableArray<T> immutableArray) {
+	/**
+	 * Transforms a given immutable array into a dense array. If the given immutable array is already a dense array, it
+	 * is returned without doing anything. Otherwise, the array is transformed into a Java array for internal storage.
+	 * <p>
+	 * @param <V>            The generic type of the new array
+	 * @param immutableArray The given immutable array
+	 * @return The new sparse array
+	 */
+	public static <V> DenseArray<V> getInstance(ImmutableArray<V> immutableArray) {
 		if (immutableArray == null) {
 			throw new IllegalArgumentException();
 		}
@@ -109,28 +118,48 @@ public class DenseArray<V extends Object>
 		}
 		Object[] array = new Object[immutableArray.getLength()];
 		int i = 0;
-		for (T value : immutableArray) {
+		for (V value : immutableArray) {
 			array[i++] = value;
 		}
-		return new DenseArray<T>(array);
+		return new DenseArray<V>(array);
 	}
 
-	public static <T> DenseArray<T> getInstance(Collection<T> collection) {
+	/**
+	 * Transforms a given Java collection into a dense array. The collection is transformed into a Java array for
+	 * internal storage. The length and the indices of the values of the resulting dense array correspond to the given
+	 * Java collection.
+	 * <p>
+	 * @param <V>        The generic type of the new array
+	 * @param collection The given Java collection
+	 * @return The new sparse array
+	 */
+	public static <V> DenseArray<V> getInstance(Collection<V> collection) {
 		if (collection == null) {
 			throw new IllegalArgumentException();
 		}
 		Object[] array = new Object[collection.size()];
 		int i = 0;
-		for (T value : collection) {
+		for (V value : collection) {
 			if (value == null) {
 				throw new IllegalArgumentException();
 			}
 			array[i++] = value;
 		}
-		return new DenseArray<T>(array);
+		return new DenseArray<V>(array);
 	}
 
-	public static <T> DenseArray<T> getInstance(T value, int length) {
+	/**
+	 * Creates a new dense array of a given length. All its values are identical to the given value. This method is
+	 * similar to {@link SparseArray#getInstance(java.lang.Object, int)}, except that a dense array is created instead
+	 * of a sparse array.
+	 * <p>
+	 * @param <V>    The generic type of the new array
+	 * @param value  The value included in the new array
+	 * @param length The length of the new array
+	 * @return The new sparse array
+	 * @see SparseArray#getInstance(java.lang.Object, int)
+	 */
+	public static <V> DenseArray<V> getInstance(V value, int length) {
 		if (value == null || length < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -190,6 +219,17 @@ public class DenseArray<V extends Object>
 	@Override
 	protected DenseArray<V> abstractReverse() {
 		return new DenseArray<V>(this.values, this.length, this.rangeOffset, !this.reverse);
+	}
+
+	@Override
+	protected String defaultToStringValue() {
+		String str = "";
+		String delimiter = "";
+		for (int i : this.getAllIndices()) {
+			str = str + delimiter + this.abstractGetAt(i);
+			delimiter = ", ";
+		}
+		return "[" + str + "]";
 	}
 
 }
