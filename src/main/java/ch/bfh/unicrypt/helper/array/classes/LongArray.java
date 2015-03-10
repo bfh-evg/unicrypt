@@ -64,7 +64,7 @@ public class LongArray
 	private static final long ALL_ZERO = 0x0000000000000000L;
 	private static final long ALL_ONE = 0xFFFFFFFFFFFFFFFFL;
 
-	// the Java array containing the long values
+	// the internal Java array containing the long values
 	private final Long[] longs;
 
 	// a flag that indicates whether the bits of the long values have been negated

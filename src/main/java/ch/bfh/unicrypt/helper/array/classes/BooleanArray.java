@@ -47,12 +47,16 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BooleanArrayToString;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * This class is provides an implementation for immutable arrays of type {@code boolean}/{@code Boolean}. For maximal
+ * performance of binary operations, the boolean values are internally stored in a {@link LongArray} instance. It's
+ * sister class {@link ByteArray} is implemented similarly.
+ * <p>
+ * @see ByteArray
  */
 public class BooleanArray
 	   extends AbstractBinaryArray<BooleanArray, Boolean> {
 
+	// the internal LongArray instance containing the boolean values
 	private final LongArray longArray;
 
 	private BooleanArray(LongArray longArray, int length) {
@@ -63,10 +67,93 @@ public class BooleanArray
 		this(longArray, length, rangeOffset, 0, 0, length);
 	}
 
-	// default value is false, reverse is not used in this class (always false)
 	private BooleanArray(LongArray longArray, int length, int rangeOffset, int trailer, int header, int rangeLength) {
+		// default value is false, reverse is not used in this class (always false)
 		super(BooleanArray.class, length, rangeOffset, false, false, trailer, header, rangeLength);
 		this.longArray = longArray;
+	}
+
+	/**
+	 * Creates a new {@code BooleanArray} instance from a given {@code LongArray} instance. Its length and boolean
+	 * values correspond to the bits in the binary representation of the given {@code LongArray} instance. This method
+	 * is a special case of {@link BooleanArray#getInstance(ch.bfh.unicrypt.helper.array.classes.LongArray, int)} with
+	 * the length computed automatically.
+	 * <p>
+	 * @param longArray The given {@code LongArray} instance
+	 * @return The new boolean array
+	 */
+	public static BooleanArray getInstance(LongArray longArray) {
+		if (longArray == null) {
+			throw new IllegalArgumentException();
+		}
+		return new BooleanArray(longArray, longArray.getLength() * Long.SIZE);
+	}
+
+	/**
+	 * Creates a new {@code BooleanArray} instance of a given length from a given {@code LongArray} instance. Its
+	 * boolean values correspond the the bits in the binary representation of the {@code long} values. Extra bits
+	 * exceeding the given length are ignored.
+	 * <p>
+	 * @param longArray The given {@code LongArray} instance
+	 * @param length    The length of the new boolean array
+	 * @return The new boolean array
+	 */
+	public static BooleanArray getInstance(LongArray longArray, int length) {
+		if (longArray == null || length < 0 || length > longArray.getLength() * Long.SIZE) {
+			throw new IllegalArgumentException();
+		}
+		return new BooleanArray(longArray, length);
+	}
+
+	/**
+	 * Creates a new {@code BooleanArray} instance from a given Java array of {@code boolean} values. The Java array is
+	 * copied for internal storage. The length and the indices of the values of the resulting array correspond to the
+	 * given Java array.
+	 * <p>
+	 * @param bits The Java array of {@code boolean} values
+	 * @return The new boolean array
+	 */
+	public static BooleanArray getInstance(boolean... bits) {
+		if (bits == null) {
+			throw new IllegalArgumentException();
+		}
+		int longLength = (bits.length + Long.SIZE - 1) / Long.SIZE;
+		long[] longs = new long[longLength];
+		for (int i = 0; i < bits.length; i++) {
+			int longIndex = i / Long.SIZE;
+			int bitIndex = i % Long.SIZE;
+			if (bits[i]) {
+				longs[longIndex] = MathUtil.setBit(longs[longIndex], bitIndex);
+			}
+		}
+		return new BooleanArray(LongArray.getInstance(longs), bits.length);
+	}
+
+	/**
+	 * Transforms a given immutable array of type {@code Boolean} into a {@code BooleanArray} instance. If the given
+	 * immutable array is already an instance {@code BooleanArray}, it is returned without doing anything. Otherwise,
+	 * the immutable array is transformed into a {@code LongArray} instance for internal storage.
+	 * <p>
+	 * @param immutableArray The given immutable array
+	 * @return The new array
+	 */
+	public static BooleanArray getInstance(ImmutableArray<Boolean> immutableArray) {
+		if (immutableArray == null) {
+			throw new IllegalArgumentException();
+		}
+		if (immutableArray instanceof BooleanArray) {
+			return (BooleanArray) immutableArray;
+		}
+		int longLength = (immutableArray.getLength() + Long.SIZE - 1) / Long.SIZE;
+		long[] longs = new long[longLength];
+		for (int i = 0; i < immutableArray.getLength(); i++) {
+			int longIndex = i / Long.SIZE;
+			int bitIndex = i % Long.SIZE;
+			if (immutableArray.getAt(i)) {
+				longs[longIndex] = MathUtil.setBit(longs[longIndex], bitIndex);
+			}
+		}
+		return new BooleanArray(LongArray.getInstance(longs), immutableArray.getLength());
 	}
 
 	private LongArray getLongArray() {
@@ -157,106 +244,4 @@ public class BooleanArray
 		return new BooleanArray(this.getLongArray().not(), this.length);
 	}
 
-	public static BooleanArray getInstance(LongArray longArray) {
-		if (longArray == null) {
-			throw new IllegalArgumentException();
-		}
-		return BooleanArray.getInstance(longArray, longArray.getLength() * Long.SIZE);
-	}
-
-	public static BooleanArray getInstance(LongArray longArray, int length) {
-		if (longArray == null || length < 0 || length > longArray.getLength() * Long.SIZE) {
-			throw new IllegalArgumentException();
-		}
-		return new BooleanArray(longArray, length);
-	}
-
-	public static BooleanArray getInstance(boolean... bits) {
-		if (bits == null) {
-			throw new IllegalArgumentException();
-		}
-		int longLength = (bits.length + Long.SIZE - 1) / Long.SIZE;
-		long[] longs = new long[longLength];
-		for (int i = 0; i < bits.length; i++) {
-			int longIndex = i / Long.SIZE;
-			int bitIndex = i % Long.SIZE;
-			if (bits[i]) {
-				longs[longIndex] = MathUtil.setBit(longs[longIndex], bitIndex);
-			}
-		}
-		return BooleanArray.getInstance(LongArray.getInstance(longs), bits.length);
-	}
-
-	public static BooleanArray getInstance(ImmutableArray<Boolean> immutableArray) {
-		if (immutableArray == null) {
-			throw new IllegalArgumentException();
-		}
-		if (immutableArray instanceof BooleanArray) {
-			return (BooleanArray) immutableArray;
-		}
-		int longLength = (immutableArray.getLength() + Long.SIZE - 1) / Long.SIZE;
-		long[] longs = new long[longLength];
-		for (int i = 0; i < immutableArray.getLength(); i++) {
-			int longIndex = i / Long.SIZE;
-			int bitIndex = i % Long.SIZE;
-			if (immutableArray.getAt(i)) {
-				longs[longIndex] = MathUtil.setBit(longs[longIndex], bitIndex);
-			}
-		}
-		return BooleanArray.getInstance(LongArray.getInstance(longs), immutableArray.getLength());
-	}
-
-//	public static void main(String[] args) {
-//		LongArray la = LongArray.getInstance(0x1000000000000001L, 0xC000000000000003L, 0xE000000000000007L);
-//		BooleanArray ba = BooleanArray.getInstance(la);
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//		ba = ba.reverse();
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//		ba = ba.extract(60, 10);
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//		ba = ba.addPrefix(5);
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//		ba = ba.insertAt(7, false);
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//		ba = ba.reverse();
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//		ba = ba.addPrefixAndSuffix(2, 2);
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//		ba = ba.extract(3, 4);
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//		ba = ba.shiftLeft(3);
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//		ba = ba.shiftLeft(1);
-//		System.out.println(ba);
-//		System.out.println(ba.getLongArray());
-//		System.out.println(ba.getLongArray(true));
-//		System.out.println(ba.append(ba));
-//	}
 }
