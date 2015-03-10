@@ -217,6 +217,19 @@ public class LongArray
 		return new LongArray(this.longs, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, this.negated, this.bitReverse, !this.byteReverse);
 	}
 
+	/**
+	 * Transforms the {@code LongArray} instance into a Java {@code long} array.
+	 * <p>
+	 * @return The resulting Java {@code long} array
+	 */
+	public long[] getLongs() {
+		long[] result = new long[this.length];
+		for (int i : this.getAllIndices()) {
+			result[i] = this.abstractGetAt(i);
+		}
+		return result;
+	}
+
 	@Override
 	protected String defaultToStringValue() {
 		String str = LongArrayToString.getInstance(LongArrayToString.Radix.HEX, "|").convert(this);

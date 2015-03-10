@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BooleanArrayToString;
+import java.util.Collection;
 
 /**
  * This class is provides an implementation for immutable arrays of type {@code boolean}/{@code Boolean}. For maximal
@@ -71,6 +72,21 @@ public class BooleanArray
 		// reverse is not used (always false), default value is false
 		super(BooleanArray.class, length, rangeOffset, false, false, trailer, header, rangeLength);
 		this.longArray = longArray;
+	}
+
+	/**
+	 * Creates a new {@code BooleanArray} instance of a given length with values identical to {@code fillBit}.
+	 * <p>
+	 * @param fillBit The boolean value contained in the new array
+	 * @param length  The length of the new array
+	 * @return The new boolean array
+	 */
+	public static BooleanArray getInstance(boolean fillBit, int length) {
+		if (length < 0) {
+			throw new IllegalArgumentException();
+		}
+		int longLength = (length + Long.SIZE - 1) / Long.SIZE;
+		return new BooleanArray(LongArray.getInstance(fillBit, longLength), length);
 	}
 
 	/**
@@ -130,6 +146,30 @@ public class BooleanArray
 	}
 
 	/**
+	 * Creates a new {@code BooleanArray} instance from a given Java collection. The bits of the collection are copied
+	 * for internal storage. The length and the indices of the bits of the resulting array correspond to the given Java
+	 * collection.
+	 * <p>
+	 * @param bits The given Java collection
+	 * @return The new array
+	 */
+	public static BooleanArray getInstance(Collection<Boolean> bits) {
+		if (bits == null) {
+			throw new IllegalArgumentException();
+		}
+		int longLength = (bits.size() + Long.SIZE - 1) / Long.SIZE;
+		long[] longs = new long[longLength];
+		int i = 0;
+		for (Boolean b : bits) {
+			int longIndex = i / Long.SIZE;
+			int bitIndex = i % Long.SIZE;
+			longs[longIndex] = MathUtil.replaceBit(longs[longIndex], bitIndex, b);
+			i++;
+		}
+		return new BooleanArray(LongArray.getInstance(longs), bits.size());
+	}
+
+	/**
 	 * Transforms a given immutable array of type {@code Boolean} into a {@code BooleanArray} instance. If the given
 	 * immutable array is already an instance of {@code BooleanArray}, it is returned without doing anything. Otherwise,
 	 * the immutable array is transformed into a {@code LongArray} instance for internal storage.
@@ -154,6 +194,19 @@ public class BooleanArray
 			}
 		}
 		return new BooleanArray(LongArray.getInstance(longs), immutableArray.getLength());
+	}
+
+	/**
+	 * Transforms the {@code BooleanArray} instance into a Java {@code boolean} array.
+	 * <p>
+	 * @return The resulting Java {@code boolean} array
+	 */
+	public boolean[] getBooleans() {
+		boolean[] result = new boolean[this.length];
+		for (int i : this.getAllIndices()) {
+			result[i] = this.abstractGetAt(i);
+		}
+		return result;
 	}
 
 	private LongArray getLongArray() {

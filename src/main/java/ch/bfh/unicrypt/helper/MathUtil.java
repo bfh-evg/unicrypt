@@ -603,6 +603,14 @@ public final class MathUtil {
 		return or(clearByte(l, i), shiftBytesLeft(b, i));
 	}
 
+	public static long fillWithByte(byte b) {
+		long l = 0L;
+		for (int i = 0; i <= (Long.SIZE / Byte.SIZE); i++) {
+			l = or(l, shiftBytesLeft(b, i));
+		}
+		return l;
+	}
+
 	public static long shiftBytesLeft(long l, int n) {
 		return l << (n * Byte.SIZE);
 	}
