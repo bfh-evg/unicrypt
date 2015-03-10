@@ -44,10 +44,11 @@ package ch.bfh.unicrypt.helper.array.abstracts;
 import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <A>
- * @param <V>
+ * This abstract class serves as a base implementation of the {@link BinaryArray} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @param <A> The type of a potential non-generic sub-class
+ * @param <V> The generic type of the values in the binary array
  */
 public abstract class AbstractBinaryArray<A extends AbstractBinaryArray<A, V>, V extends Object>
 	   extends AbstractDefaultValueArray<A, V>

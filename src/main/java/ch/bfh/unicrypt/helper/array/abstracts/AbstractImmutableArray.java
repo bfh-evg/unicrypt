@@ -50,10 +50,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <A>et
- * @param <V>
+ * This abstract class serves as a base implementation of the {@link ImmutableArray} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @param <A> The type of a potential non-generic sub-class
+ * @param <V> The generic type of the values in the immutable array
  */
 abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V extends Object>
 	   extends UniCrypt

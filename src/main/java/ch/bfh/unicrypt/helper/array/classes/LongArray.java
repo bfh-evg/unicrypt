@@ -48,18 +48,32 @@ import ch.bfh.unicrypt.helper.converter.classes.string.LongArrayToString;
 import java.util.Collection;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * This class is provides an implementation for immutable arrays of type {@code long}/{@code Long}. Internally, the long
+ * values are stored in an ordinary Java array. To inherit the methods from the interface {@link BinaryArray}, it uses
+ * the binary representation of the {@code long} values stored in the array. This class serves as an efficient base
+ * class for the implementations of {@link ByteArray} and {@link BooleanArray}.
+ * <p>
+ * @see ByteArray
+ * @see BooleanArray
+ * @author Rolf Haenni
  */
 public class LongArray
 	   extends AbstractBinaryArray<LongArray, Long> {
 
+	// two static variables for the two borderline long values
 	private static final long ALL_ZERO = 0x0000000000000000L;
 	private static final long ALL_ONE = 0xFFFFFFFFFFFFFFFFL;
 
+	// the Java array containing the long values
 	private final Long[] longs;
+
+	// a flag that indicates whether the bits of the long values have been negated
 	private final boolean negated;
+
+	// a flag that indicates whether the bits of each long value have been reversed
 	private final boolean bitReverse;
+
+	// a flag that indicates whether groups of 8 bits of each long value have been reversed
 	private final boolean byteReverse;
 
 	protected LongArray(Long fillLong, int arrayLength) {
@@ -85,24 +99,15 @@ public class LongArray
 		}
 	}
 
-	public LongArray bitReverse() {
-		return new LongArray(this.longs, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, this.negated, !this.bitReverse, this.byteReverse);
-	}
-
-	public LongArray byteReverse() {
-		return new LongArray(this.longs, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, this.negated, this.bitReverse, !this.byteReverse);
-	}
-
-	@Override
-	protected String defaultToStringValue() {
-		String str = LongArrayToString.getInstance(LongArrayToString.Radix.HEX, "|").convert(this);
-		return "\"" + str + "\"";
-	}
-
-	public static LongArray getInstance() {
-		return new LongArray(new Long[0]);
-	}
-
+	/**
+	 * Creates a new {@code LongArray} instance of a given length. Depending on the parameter {@code fillBit}, all its
+	 * values are identical to either {@code ALL_ZERO} or {@code ALL_ONE}. This method is a special case of
+	 * {@link LongArray#getInstance(long, int)}.
+	 * <p>
+	 * @param fillBit A flag indicating whether the values in the new array are {@code ALL_ZERO} or {@code ALL_ONE}
+	 * @param length  The length of the new array
+	 * @return The new array
+	 */
 	public static LongArray getInstance(boolean fillBit, int length) {
 		if (fillBit) {
 			return LongArray.getInstance(ALL_ONE, length);
@@ -111,6 +116,13 @@ public class LongArray
 		}
 	}
 
+	/**
+	 * Creates a new {@code LongArray} instance of a given length. All its values are identical to the given value.
+	 * <p>
+	 * @param fillLong The value included in the new array
+	 * @param length   The length of the new array
+	 * @return The new array
+	 */
 	public static LongArray getInstance(long fillLong, int length) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
@@ -118,6 +130,14 @@ public class LongArray
 		return new LongArray(fillLong, length);
 	}
 
+	/**
+	 * Creates a new {@code LongArray} instance from a given Java array of {@code long} values. The Java array is copied
+	 * for internal storage. The length and the indices of the values of the resulting array correspond to the given
+	 * Java array.
+	 * <p>
+	 * @param longs The Java array of {@code long} values
+	 * @return The new array
+	 */
 	public static LongArray getInstance(long... longs) {
 		if (longs == null) {
 			throw new IllegalArgumentException();
@@ -130,6 +150,14 @@ public class LongArray
 		return new LongArray(result);
 	}
 
+	/**
+	 * Transforms a given immutable array of type {@code Long} into a {@code LongArray} instance. If the given immutable
+	 * array is already an instance {@code LongArray}, it is returned without doing anything. Otherwise, the immutable
+	 * array is transformed into a Java array for internal storage.
+	 * <p>
+	 * @param immutableArray The given immutable array
+	 * @return The new array
+	 */
 	public static LongArray getInstance(ImmutableArray<Long> immutableArray) {
 		if (immutableArray == null) {
 			throw new IllegalArgumentException();
@@ -145,6 +173,14 @@ public class LongArray
 		return new LongArray(result);
 	}
 
+	/**
+	 * Creates a new {@code LongArray} instance from a given Java collection of {@code Long} values. The collection is
+	 * transformed into a Java array for internal storage. The length and the indices of the values of the resulting
+	 * array correspond to the given Java collection.
+	 * <p>
+	 * @param collection The Java collection of {@code Long} values
+	 * @return The new array
+	 */
 	public static LongArray getInstance(Collection<Long> collection) {
 		if (collection == null) {
 			throw new IllegalArgumentException();
@@ -158,6 +194,33 @@ public class LongArray
 			result[i++] = value;
 		}
 		return new LongArray(result);
+	}
+
+	/**
+	 * Creates a new {@code LongArray} instance by reversing the bits of each {@code Long} value. The order of the
+	 * values in the array remains unchanged. Keeping the order of the values distinguishes this method from
+	 * {@link LongArray#reverse()}.
+	 * <p>
+	 * @return The new array with the bits in each value reversed
+	 */
+	public LongArray bitReverse() {
+		return new LongArray(this.longs, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, this.negated, !this.bitReverse, this.byteReverse);
+	}
+
+	/**
+	 * Creates a new {@code LongArray} instance by reversing the bits of each {@code Long} value byte-wise (in blocks of
+	 * 8 bits). The order of the values in the array remains unchanged.
+	 * <p>
+	 * @return The new array with the bits in each value reversed byte-wise
+	 */
+	public LongArray byteReverse() {
+		return new LongArray(this.longs, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, this.negated, this.bitReverse, !this.byteReverse);
+	}
+
+	@Override
+	protected String defaultToStringValue() {
+		String str = LongArrayToString.getInstance(LongArrayToString.Radix.HEX, "|").convert(this);
+		return "\"" + str + "\"";
 	}
 
 	@Override
@@ -292,18 +355,4 @@ public class LongArray
 		return MathUtil.and(mask1, mask2);
 	}
 
-//	public static void main(String[] args) {
-//		LongArray l = LongArray.getInstance(0x8000000000000001L, 0xC000000000000003L, 0xE000000000000007L);
-//		int rangeLength = 4;
-//		int trailer = 0;
-//		int header = 0;
-//		int length = rangeLength + trailer + header;
-//		boolean reverse = false;
-//		for (int rangeOffset = 0; rangeOffset < 196 - rangeLength; rangeOffset = rangeOffset + 4) {
-//			System.out.println(l.getLongArray(length, rangeOffset, reverse, trailer, header, rangeLength));
-//		}
-//		System.out.println(l.bitReverse());
-//		System.out.println(l.byteReverse());
-//		System.out.println(l.not());
-//	}
 }

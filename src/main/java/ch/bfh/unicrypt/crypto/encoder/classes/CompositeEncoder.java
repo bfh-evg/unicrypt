@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
+import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -54,7 +54,7 @@ import java.util.Iterator;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
-	   implements RecursiveArray<Encoder> {
+	   implements NestedArray<Encoder> {
 
 	private final ImmutableArray<Encoder> encoders;
 

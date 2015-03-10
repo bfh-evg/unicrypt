@@ -153,17 +153,17 @@ public class DenseArray<V extends Object>
 	 * similar to {@link SparseArray#getInstance(java.lang.Object, int)}, except that a dense array is created instead
 	 * of a sparse array.
 	 * <p>
-	 * @param <V>    The generic type of the new array
-	 * @param value  The value included in the new array
-	 * @param length The length of the new array
+	 * @param <V>       The generic type of the new array
+	 * @param fillValue The value included in the new array
+	 * @param length    The length of the new array
 	 * @return The new sparse array
 	 * @see SparseArray#getInstance(java.lang.Object, int)
 	 */
-	public static <V> DenseArray<V> getInstance(V value, int length) {
-		if (value == null || length < 0) {
+	public static <V> DenseArray<V> getInstance(V fillValue, int length) {
+		if (fillValue == null || length < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new DenseArray(new Object[]{value}, length, 0, false);
+		return new DenseArray(new Object[]{fillValue}, length, 0, false);
 	}
 
 	@Override

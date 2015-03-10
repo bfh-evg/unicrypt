@@ -42,13 +42,24 @@
 package ch.bfh.unicrypt.helper.array.interfaces;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This interface extends the {@link ImmutableArray} interface with a single additional method for accessing the values
+ * of a nested array. In a nested array, each value is either atomic or another array of the same generic type. As such,
+ * a nested array can be regarded as a tree.
+ * <p>
+ * @param <V> The generic type of the values in the nested array
  */
-public interface RecursiveArray<V>
+public interface NestedArray<V>
 	   extends ImmutableArray<V> {
 
+	/**
+	 * Returns the value from the given nested array that corresponds to the given list of indices. For example, a list
+	 * of indices (2,3,0) returns the first (index 0) value of the fourth (index 3) array of the third (index 2) array
+	 * of the given nested array. The structure of the given nested array determines the the maximal length of the list
+	 * of indices and their ranges.
+	 * <p>
+	 * @param indices The given list of indices
+	 * @return The corresponding value
+	 */
 	public V getAt(int... indices);
 
 }

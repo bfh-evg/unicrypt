@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
+import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -55,7 +55,7 @@ import java.util.Iterator;
  */
 public class Tuple
 	   extends AbstractElement<ProductSet, Tuple, DenseArray<Element>>
-	   implements RecursiveArray<Element> {
+	   implements NestedArray<Element> {
 
 	protected Tuple(final ProductSet set, final DenseArray<Element> elements) {
 		super(set, elements);

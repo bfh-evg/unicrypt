@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.function.abstracts;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
+import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -60,7 +60,7 @@ import java.util.Iterator;
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<CF, D, DE, C, CE>
-	   implements RecursiveArray<Function> {
+	   implements NestedArray<Function> {
 
 	protected final DenseArray<Function> functions;
 

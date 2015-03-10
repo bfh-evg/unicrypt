@@ -44,10 +44,11 @@ package ch.bfh.unicrypt.helper.array.abstracts;
 import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <A>
- * @param <V>
+ * This abstract class serves as a base implementation of the {@link DefaultValueArray} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @param <A> The type of a potential non-generic sub-class
+ * @param <V> The generic type of the values in the immutable array with a default value
  */
 abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueArray<A, V>, V extends Object>
 	   extends AbstractImmutableArray<A, V>
