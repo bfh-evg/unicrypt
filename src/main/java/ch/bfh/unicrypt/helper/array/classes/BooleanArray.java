@@ -68,7 +68,7 @@ public class BooleanArray
 	}
 
 	private BooleanArray(LongArray longArray, int length, int rangeOffset, int trailer, int header, int rangeLength) {
-		// default value is false, reverse is not used in this class (always false)
+		// reverse is not used (always false), default value is false
 		super(BooleanArray.class, length, rangeOffset, false, false, trailer, header, rangeLength);
 		this.longArray = longArray;
 	}
@@ -91,8 +91,8 @@ public class BooleanArray
 
 	/**
 	 * Creates a new {@code BooleanArray} instance of a given length from a given {@code LongArray} instance. Its
-	 * boolean values correspond the the bits in the binary representation of the {@code long} values. Extra bits
-	 * exceeding the given length are ignored.
+	 * boolean values correspond to the bits in the binary representation of the {@code long} values. Extra bits
+	 * exceeding the given bit length are ignored.
 	 * <p>
 	 * @param longArray The given {@code LongArray} instance
 	 * @param length    The length of the new boolean array
@@ -131,7 +131,7 @@ public class BooleanArray
 
 	/**
 	 * Transforms a given immutable array of type {@code Boolean} into a {@code BooleanArray} instance. If the given
-	 * immutable array is already an instance {@code BooleanArray}, it is returned without doing anything. Otherwise,
+	 * immutable array is already an instance of {@code BooleanArray}, it is returned without doing anything. Otherwise,
 	 * the immutable array is transformed into a {@code LongArray} instance for internal storage.
 	 * <p>
 	 * @param immutableArray The given immutable array
@@ -174,8 +174,8 @@ public class BooleanArray
 	@Override
 	protected Boolean abstractGetValueAt(int index) {
 		int longIndex = index / Long.SIZE;
-		long longMask = 1L << (index % Long.SIZE);
-		return (this.longArray.getAt(longIndex) & longMask) != 0;
+		int bitIndex = index % Long.SIZE;
+		return MathUtil.getBit(this.longArray.getAt(longIndex), bitIndex);
 	}
 
 	@Override

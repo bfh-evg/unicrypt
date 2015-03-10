@@ -538,24 +538,36 @@ public final class MathUtil {
 	}
 
 	// Bit operations on byte
+	public static boolean getBit(byte b, int i) {
+		return and(b, byteBitMask(i)) != 0;
+	}
+
 	public static byte setBit(byte b, int i) {
-		return (byte) or(b, byteMask(i));
+		return (byte) or(b, byteBitMask(i));
 	}
 
 	public static byte clearBit(byte b, int i) {
-		return (byte) and(b, not(byteMask(i)));
+		return (byte) and(b, not(byteBitMask(i)));
 	}
 
-	public static byte byteMask(int i) {
-		return (byte) (1 << i);
+	public static long replaceBit(byte b, int i, boolean bit) {
+		if (bit) {
+			return setBit(b, i);
+		} else {
+			return clearBit(b, i);
+		}
 	}
 
-	public static byte shiftLeft(byte b, int n) {
+	public static byte shiftBitsLeft(byte b, int n) {
 		return (byte) (b << n);
 	}
 
-	public static byte shiftRight(byte b, int n) {
+	public static byte shiftBitsRight(byte b, int n) {
 		return (byte) (b >>> n);
+	}
+
+	public static byte byteBitMask(int i) {
+		return (byte) (1 << i);
 	}
 
 	public static byte xor(byte b1, byte b2) {
@@ -574,25 +586,66 @@ public final class MathUtil {
 		return (byte) ~b;
 	}
 
-	// Bit operations on long
+	// byte operations on long
+	public static byte getByte(long l, int i) {
+		return (byte) shiftBytesRight(and(l, longByteMask(i)), i);
+	}
+
+	public static long setByte(long l, int i) {
+		return or(l, longByteMask(i));
+	}
+
+	public static long clearByte(long l, int i) {
+		return and(l, not(longByteMask(i)));
+	}
+
+	public static long replaceByte(long l, int i, byte b) {
+		return or(clearByte(l, i), shiftBytesLeft(b, i));
+	}
+
+	public static long shiftBytesLeft(long l, int n) {
+		return l << (n * Byte.SIZE);
+	}
+
+	public static long shiftBytesRight(long l, int n) {
+		return l >>> (n * Byte.SIZE);
+	}
+
+	public static long longByteMask(int i) {
+		return (0xFFL << i);
+	}
+
+	// bit operations on long
+	public static boolean getBit(long l, int i) {
+		return and(l, longBitMask(i)) != 0L;
+	}
+
 	public static long setBit(long l, int i) {
-		return or(l, longMask(i));
+		return or(l, longBitMask(i));
 	}
 
 	public static long clearBit(long l, int i) {
-		return and(l, not(longMask(i)));
+		return and(l, not(longBitMask(i)));
 	}
 
-	public static long longMask(int i) {
-		return (1L << i);
+	public static long replaceBit(long l, int i, boolean b) {
+		if (b) {
+			return setBit(l, i);
+		} else {
+			return clearBit(l, i);
+		}
 	}
 
-	public static long shiftLeft(long l, int n) {
+	public static long shiftBitsLeft(long l, int n) {
 		return l << n;
 	}
 
-	public static long shiftRight(long l, int n) {
+	public static long shiftBitsRight(long l, int n) {
 		return l >>> n;
+	}
+
+	public static long longBitMask(int i) {
+		return (1L << i);
 	}
 
 	public static long xor(long l1, long l2) {
@@ -611,6 +664,7 @@ public final class MathUtil {
 		return ~l;
 	}
 
+	// mathematical modulo and divide working for positive and negative values
 	public static int modulo(int i, int n) {
 		return ((i % n) + n) % n;
 	}
@@ -618,5 +672,5 @@ public final class MathUtil {
 	public static int divide(int i, int n) {
 		return (i - modulo(i, n)) / n;
 	}
-	
+
 }

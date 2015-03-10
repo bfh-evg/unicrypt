@@ -152,8 +152,8 @@ public class LongArray
 
 	/**
 	 * Transforms a given immutable array of type {@code Long} into a {@code LongArray} instance. If the given immutable
-	 * array is already an instance {@code LongArray}, it is returned without doing anything. Otherwise, the immutable
-	 * array is transformed into a Java array for internal storage.
+	 * array is already an instance of {@code LongArray}, it is returned without doing anything. Otherwise, the
+	 * immutable array is transformed into a Java array for internal storage.
 	 * <p>
 	 * @param immutableArray The given immutable array
 	 * @return The new array
@@ -323,8 +323,8 @@ public class LongArray
 			return long1;
 		}
 		long long2 = this.getLongAt(index + 1, rangeOffset, rangeLength);
-		return MathUtil.or(MathUtil.shiftRight(long1, shiftMod),
-						   MathUtil.shiftLeft(long2, Long.SIZE - shiftMod));
+		return MathUtil.or(MathUtil.shiftBitsRight(long1, shiftMod),
+						   MathUtil.shiftBitsLeft(long2, Long.SIZE - shiftMod));
 	}
 
 	// makes the long array arbitraily long and filters out unused bits
@@ -350,8 +350,8 @@ public class LongArray
 		if (leftIndex > leftDiv && rightIndex > rightDiv) {
 			return ALL_ONE;
 		}
-		long mask1 = (leftIndex == leftDiv) ? MathUtil.shiftLeft(ALL_ONE, MathUtil.modulo(leftOffset, Long.SIZE)) : ALL_ONE;
-		long mask2 = (rightIndex == rightDiv) ? MathUtil.shiftRight(ALL_ONE, MathUtil.modulo(rightOffset, Long.SIZE)) : ALL_ONE;
+		long mask1 = (leftIndex == leftDiv) ? MathUtil.shiftBitsLeft(ALL_ONE, MathUtil.modulo(leftOffset, Long.SIZE)) : ALL_ONE;
+		long mask2 = (rightIndex == rightDiv) ? MathUtil.shiftBitsRight(ALL_ONE, MathUtil.modulo(rightOffset, Long.SIZE)) : ALL_ONE;
 		return MathUtil.and(mask1, mask2);
 	}
 

@@ -254,7 +254,7 @@ public class BitArray
 	@Override
 	protected Boolean abstractGetValueAt(int index) {
 		int byteIndex = index / Byte.SIZE;
-		byte mask = MathUtil.byteMask(index % Byte.SIZE);
+		byte mask = MathUtil.byteBitMask(index % Byte.SIZE);
 		return MathUtil.and(this.byteArray.getAt(byteIndex), mask) != 0;
 	}
 
