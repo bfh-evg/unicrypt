@@ -50,7 +50,7 @@ import java.util.HashSet;
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
- * @version 1.0
+ * @version 2.0
  */
 public final class MathUtil {
 
@@ -62,25 +62,20 @@ public final class MathUtil {
 	public static final BigInteger THREE = BigInteger.valueOf(3);
 	public static final BigInteger FOUR = BigInteger.valueOf(4);
 
-	private static final long ALL_ZERO = 0L;
-	private static final long ALL_ONE = 0xFFFFFFFFFFFFFFFFL;
+	private static final long LONG_ZERO = 0L;
+	private static final long LONG_ONE = 0xFFFFFFFFFFFFFFFFL;
+	private static final long LONG_BIT = 1L;
+	private static final long LONG_BYTE = 0xFFL;
 
-	private static final long[] BYTE_MASKS = {
-		0x00000000000000FFL,
-		0x000000000000FF00L,
-		0x0000000000FF0000L,
-		0x00000000FF000000L,
-		0x000000FF00000000L,
-		0x0000FF0000000000L,
-		0x00FF000000000000L,
-		0xFF00000000000000L
-	};
-
-	private static final long[] BIT_MASKS = new long[64];
+	private static final long[] BYTE_MASKS = new long[Long.SIZE / Byte.SIZE];
+	private static final long[] BIT_MASKS = new long[Long.SIZE];
 
 	static {
-		for (int i = 0; i < 64; i++) {
-			BIT_MASKS[i] = 0x1L << i;
+		for (int i = 0; i < Long.SIZE / Byte.SIZE; i++) {
+			BYTE_MASKS[i] = LONG_BYTE << (i * Byte.SIZE);
+		}
+		for (int i = 0; i < Long.SIZE; i++) {
+			BIT_MASKS[i] = LONG_BIT << i;
 		}
 	}
 
@@ -254,7 +249,7 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Computes the factorial of some integer value. Returns 1 for inut value 0.
+	 * Computes the factorial of some integer value. Returns 1 for input 0.
 	 * <p>
 	 * @param value The input value
 	 * @return The factorial of {@literal value}
@@ -554,9 +549,8 @@ public final class MathUtil {
 
 		if (r.modPow(TWO, p).equals(x.mod(p))) {
 			return r;
-		} else {
-			throw new IllegalArgumentException("Tonnelli fails...");
 		}
+		throw new IllegalArgumentException();
 	}
 
 	//Check if x has a square root mod p>2
@@ -632,7 +626,7 @@ public final class MathUtil {
 	}
 
 	public static long fillWithByte(byte b) {
-		long l = 0L;
+		long l = LONG_ZERO;
 		for (int i = 0; i <= (Long.SIZE / Byte.SIZE); i++) {
 			l = or(l, shiftBytesLeft(b, i));
 		}
@@ -653,7 +647,7 @@ public final class MathUtil {
 
 	// bit operations on long
 	public static boolean getBit(long l, int i) {
-		return and(l, BIT_MASKS[i]) != 0L;
+		return and(l, BIT_MASKS[i]) != LONG_ZERO;
 	}
 
 	public static long setBit(long l, int i) {
@@ -673,7 +667,7 @@ public final class MathUtil {
 	}
 
 	public static long fillWithBit(boolean b) {
-		return b ? ALL_ONE : ALL_ZERO;
+		return b ? LONG_ONE : LONG_ZERO;
 	}
 
 	public static long shiftBitsLeft(long l, int n) {
