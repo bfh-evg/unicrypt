@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.array;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;

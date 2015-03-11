@@ -62,6 +62,28 @@ public final class MathUtil {
 	public static final BigInteger THREE = BigInteger.valueOf(3);
 	public static final BigInteger FOUR = BigInteger.valueOf(4);
 
+	private static final long ALL_ZERO = 0L;
+	private static final long ALL_ONE = 0xFFFFFFFFFFFFFFFFL;
+
+	private static final long[] BYTE_MASKS = {
+		0x00000000000000FFL,
+		0x000000000000FF00L,
+		0x0000000000FF0000L,
+		0x00000000FF000000L,
+		0x000000FF00000000L,
+		0x0000FF0000000000L,
+		0x00FF000000000000L,
+		0xFF00000000000000L
+	};
+
+	private static final long[] BIT_MASKS = new long[64];
+
+	static {
+		for (int i = 0; i < 64; i++) {
+			BIT_MASKS[i] = 0x1L << i;
+		}
+	}
+
 	/**
 	 * Returns the value obtained from applying the Euler totient function to an integer {@literal value}.
 	 * <dt><b>Preconditions:</b></dt>
@@ -424,13 +446,16 @@ public final class MathUtil {
 	}
 
 	public static BigInteger fold(BigInteger value) {
-		if (value.signum() > 0) {
+		if (value.signum() >= 0) {
 			return value.shiftLeft(1);
 		}
 		return value.negate().shiftLeft(1).subtract(ONE);
 	}
 
 	public static BigInteger unfold(BigInteger value) {
+		if (value.signum() == -1) {
+			throw new IllegalArgumentException();
+		}
 		if (value.mod(TWO).equals(ZERO)) {
 			return value.shiftRight(1);
 		}
@@ -462,8 +487,12 @@ public final class MathUtil {
 		return ONE.shiftLeft(exponent);
 	}
 
-	// This is a private helper method to compute the integer square root of a positive BigInteger value.
+	// This is a helper method to compute the integer square root of a positive BigInteger value.
 	public static BigInteger sqrt(BigInteger n) {
+		// exception if n<0
+		if (n.signum() == -1) {
+			throw new IllegalArgumentException();
+		}
 		// special case
 		if (n.signum() == 0) {
 			return ZERO;
@@ -478,65 +507,64 @@ public final class MathUtil {
 		return last;
 	}
 
-	//Tonelli_Shanks algorithm -> wikipedia
-	public static BigInteger sqrtModPrime(BigInteger n, BigInteger p) {
-		BigInteger z = TWO;
+	//Tonelli_Shanks algorithm for square root modulo prime p>2
+	//Computes only one solution r, the other solution is p-r
+	public static BigInteger sqrtModPrime(BigInteger x, BigInteger p) {
+
+		if (!hasSqrtModPrime(x, p)) {
+			throw new IllegalArgumentException("r has no square root");
+		}
+
+		if (p.mod(FOUR).equals(THREE)) {
+			return x.modPow(p.add(ONE).divide(FOUR), p);
+		}
 
 		//z which must be a quadratic non-residue mod p.
+		BigInteger z = TWO;
 		while (hasSqrtModPrime(z, p)) {
 			z = z.add(ONE);
 		}
+		BigInteger s = ONE;
+		BigInteger q = p.subtract(ONE).divide(TWO);
 
-		if (!hasSqrtModPrime(n, p)) {
-			throw new UnknownError("r has no square root");
-		} else {
-			if (p.mod(FOUR).equals(THREE)) {
-				return n.modPow(p.add(ONE).divide(FOUR), p);
-			} else {
-				BigInteger pMin1 = p.subtract(ONE);	//p-1
-				BigInteger s = ONE;
-				BigInteger q = pMin1.divide(TWO);
+		//Finding Q
+		while (q.mod(TWO).equals(ZERO)) {
+			q = q.divide(TWO);
+			s = s.add(ONE);
+		}
 
-				//Finding Q
-				while (q.mod(TWO).equals(ZERO)) {
-					q = q.divide(TWO);
-					s = s.add(ONE);
-				}
+		BigInteger c = z.modPow(q, p);
+		BigInteger r = x.modPow(q.add(ONE).divide(TWO), p);
+		BigInteger t = x.modPow(q, p);
+		BigInteger m = s;
 
-				BigInteger c = z.modPow(q, p);
-				BigInteger r = n.modPow(q.add(ONE).divide(TWO), p);
-				BigInteger t = n.modPow(q, p);
-				BigInteger m = s;
-
-				//Loop until t==1
-				while (!t.equals(ONE)) {
-					BigInteger i = ZERO;
-					while (!ONE.equals(t.modPow(TWO.modPow(i, p), p))) {
-						i = i.add(ONE);
-					}
-
-					BigInteger b = c.modPow(TWO.modPow(m.subtract(i).subtract(ONE), p), p);
-					r = r.multiply(b).mod(p);
-					t = t.multiply(b.pow(2)).mod(p);
-					c = b.modPow(TWO, p);
-					m = i;
-				}
-
-				if (r.modPow(TWO, p).equals(n.mod(p))) {
-					return r;
-				} else {
-					throw new IllegalArgumentException("Tonnelli fails...");
-				}
-
+		//Loop until t==1
+		while (!t.equals(ONE)) {
+			BigInteger i = ZERO;
+			while (!ONE.equals(t.modPow(TWO.modPow(i, p), p))) {
+				i = i.add(ONE);
 			}
+
+			BigInteger b = c.modPow(TWO.modPow(m.subtract(i).subtract(ONE), p), p);
+			r = r.multiply(b).mod(p);
+			t = t.multiply(b.pow(2)).mod(p);
+			c = b.modPow(TWO, p);
+			m = i;
+		}
+
+		if (r.modPow(TWO, p).equals(x.mod(p))) {
+			return r;
+		} else {
+			throw new IllegalArgumentException("Tonnelli fails...");
 		}
 	}
 
-	//Check if n has a square root mod p
-	public static boolean hasSqrtModPrime(BigInteger n, BigInteger p) {
-		return n.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
+	//Check if x has a square root mod p>2
+	public static boolean hasSqrtModPrime(BigInteger x, BigInteger p) {
+		return x.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
 	}
 
+	// DEPRECATED!!! (these operations will be removed)
 	// Bit operations on byte
 	public static boolean getBit(byte b, int i) {
 		return and(b, byteBitMask(i)) != 0;
@@ -588,15 +616,15 @@ public final class MathUtil {
 
 	// byte operations on long
 	public static byte getByte(long l, int i) {
-		return (byte) shiftBytesRight(and(l, longByteMask(i)), i);
+		return (byte) shiftBytesRight(and(l, BYTE_MASKS[i]), i);
 	}
 
 	public static long setByte(long l, int i) {
-		return or(l, longByteMask(i));
+		return or(l, BYTE_MASKS[i]);
 	}
 
 	public static long clearByte(long l, int i) {
-		return and(l, not(longByteMask(i)));
+		return and(l, not(BYTE_MASKS[i]));
 	}
 
 	public static long replaceByte(long l, int i, byte b) {
@@ -619,21 +647,21 @@ public final class MathUtil {
 		return l >>> (n * Byte.SIZE);
 	}
 
-	public static long longByteMask(int i) {
-		return (0xFFL << i);
+	public static long byteMask(int i) {
+		return BYTE_MASKS[i];
 	}
 
 	// bit operations on long
 	public static boolean getBit(long l, int i) {
-		return and(l, longBitMask(i)) != 0L;
+		return and(l, BIT_MASKS[i]) != 0L;
 	}
 
 	public static long setBit(long l, int i) {
-		return or(l, longBitMask(i));
+		return or(l, BIT_MASKS[i]);
 	}
 
 	public static long clearBit(long l, int i) {
-		return and(l, not(longBitMask(i)));
+		return and(l, not(BIT_MASKS[i]));
 	}
 
 	public static long replaceBit(long l, int i, boolean b) {
@@ -644,6 +672,10 @@ public final class MathUtil {
 		}
 	}
 
+	public static long fillWithBit(boolean b) {
+		return b ? ALL_ONE : ALL_ZERO;
+	}
+
 	public static long shiftBitsLeft(long l, int n) {
 		return l << n;
 	}
@@ -652,8 +684,8 @@ public final class MathUtil {
 		return l >>> n;
 	}
 
-	public static long longBitMask(int i) {
-		return (1L << i);
+	public static long bitMask(int i) {
+		return BIT_MASKS[i];
 	}
 
 	public static long xor(long l1, long l2) {
