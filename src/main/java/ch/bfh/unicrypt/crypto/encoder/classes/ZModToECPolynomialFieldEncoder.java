@@ -102,7 +102,7 @@ public class ZModToECPolynomialFieldEncoder
 			int count = 0;
 			while (!ec.contains(x)) {
 				if (count >= (1 << shift)) {
-					throw new ProbabilisticEncodingException(e + " can not be encoded");
+					firstOption=false;
 				}
 
 				zModElement = zModElement.add(stepp);

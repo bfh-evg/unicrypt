@@ -149,7 +149,7 @@ public class ZModToECZModPrimeEncoder
 			int count = 0;
 			while (!ecPrime.contains(x)) {
 				if (count >= (1 << shift)) {
-					throw new ProbabilisticEncodingException(e + " can not be encoded");
+					firstOption=false;
 				}
 				x = x.add(stepp);
 				count++;
