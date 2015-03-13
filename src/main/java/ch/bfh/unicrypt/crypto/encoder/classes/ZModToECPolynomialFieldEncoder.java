@@ -196,9 +196,7 @@ public class ZModToECPolynomialFieldEncoder
 
 			PolynomialElement x = element.getX();
 			PolynomialElement y = element.getY();
-			ECPolynomialElement[] yTuple = ec.getY(x);
-			PolynomialElement y1 = yTuple[0].getY();
-			PolynomialElement y2 = yTuple[1].getY();
+			PolynomialElement y1 = element.invert().getY();
 
 			BigInteger x1 = enc.decode(x).getBigInteger();
 
@@ -214,7 +212,7 @@ public class ZModToECPolynomialFieldEncoder
 
 			x1 = x1.shiftRight(shift + 2);
 
-			if (y.isEquivalent(getBiggerY(y1, y2))) {
+			if (y.isEquivalent(getBiggerY(y, y1))) {
 				return zModPrime.getElement(x1);
 			} else {
 				return zModPrime.getElement(x1).invert();
