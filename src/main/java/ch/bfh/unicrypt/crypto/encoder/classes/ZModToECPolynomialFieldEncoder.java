@@ -106,6 +106,7 @@ public class ZModToECPolynomialFieldEncoder
 				}
 
 				zModElement = zModElement.add(stepp);
+				
 				x = enc.encode(zModElement);
 				count++;
 

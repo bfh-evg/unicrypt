@@ -76,16 +76,15 @@ public class ECPolynomialField
 		super(finiteField, a, b, givenOrder, coFactor);
 	}
 
+	/**
+	 * <p>Checks if an element x is a valid x-value of an element of the elliptic curve. True only if trace(x+a+b/x^2)=0. Source: Quadratic Equations in Finite Fields of Characteristic 2
+Klaus Pommerening</p>
+	 */
 	@Override
 	protected boolean abstractContains(PolynomialElement x) {
-		DualisticElement<BigInteger> traceX = traceGF2m(x, this);
-		DualisticElement<BigInteger> traceA = traceGF2m(this.getA(), this);
-		DualisticElement<BigInteger> traceAX = traceGF2m(x.add(this.getA()).add(this.getB().divide(x.square())), this);
-
-		boolean e1 = traceA.isEquivalent(traceX);
-		boolean e2 = traceAX.isEquivalent(ZModTwo.ZERO);
-
-		return e1 && e2;
+		DualisticElement<BigInteger> trace = traceGF2m(x.add(this.getA()).add(this.getB().divide(x.square())), this);
+		boolean e2 = trace.isEquivalent(ZModTwo.ZERO);
+		return e2;
 	}
 
 	@Override
@@ -102,16 +101,12 @@ public class ECPolynomialField
 	}
 
 	/**
-	 * Return the two possible y-coordinates for a given x-coordinate
+	 * Return the two possible y-coordinates for a given valid x-coordinate
 	 * <p>
 	 * @param x x-coordinate of point
 	 * @return
 	 */
-	public ECPolynomialElement[] getY(PolynomialElement x) {
-		if (!this.contains(x)) {
-			throw new IllegalArgumentException("No y-coordinate exists for the given x-coordinate: " + x);
-		}
-
+	public ECPolynomialElement[] getY(PolynomialElement x){
 		PolynomialElement t = x.add(this.getA()).add(this.getB().divide(x.square()));
 		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
 
@@ -287,21 +282,28 @@ public class ECPolynomialField
 	}
 
 	/**
-	 * Returns the trace of an polynomial of characteristic 2
+	 * <p>Returns the trace of an polynomial of characteristic 2
+	 * Source;: Quadratic Equations in Finite Fields of 
+	 * Characteristic 2 Klaus Pommerening 
+	 * May 2000 – english version February 2012, Page 2</p>
 	 * <p>
 	 * @param x
 	 * @param ec
 	 * @return
+	 * </p>
 	 */
 	public static DualisticElement<BigInteger> traceGF2m(PolynomialElement x, ECPolynomialField ec) {
 		int deg = ec.getFiniteField().getDegree();
-		DualisticElement<BigInteger> sum = x.getValue().getCoefficient(0);
-
+		PolynomialElement trace=x;
+		PolynomialElement tmp=x;
+		
 		for (int i = 1; i < deg; i++) {
-			sum = sum.add(x.getValue().getCoefficient(i));
+			tmp=tmp.square();
+			trace=trace.add(tmp);
 		}
-
-		return sum;
+				
+		DualisticElement<BigInteger> trace_Dualistic=trace.getValue().getCoefficient(0);
+		return trace_Dualistic;	
 	}
 
 }
