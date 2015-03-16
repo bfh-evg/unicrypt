@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayFinalToString;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -193,6 +194,31 @@ public class ByteArrayFinal
 		return new ByteArrayFinal(result);
 	}
 
+// TODO!!!
+//	public static ByteArrayFinal getRandomInstance(int length) {
+//		return ByteArray.getRandomInstance(length, HybridRandomByteSequence.getInstance());
+//	}
+//
+//	public static ByteArrayFinal getRandomInstance(int length, RandomByteSequence randomByteSequence) {
+//		if (length < 0 || randomByteSequence == null) {
+//			throw new IllegalArgumentException();
+//		}
+//		return randomByteSequence.getNextByteArray(length);
+//	}
+// 	public static ByteArray getInstance(ByteArray... byteArrays) {
+//
+	public ByteArrayFinal getHashValue() {
+		return this.getHashValue(HashAlgorithm.getInstance());
+	}
+
+	public ByteArrayFinal getHashValue(HashAlgorithm hashAlgorithm) {
+		if (hashAlgorithm == null) {
+			throw new IllegalArgumentException();
+		}
+		byte[] hash = hashAlgorithm.getHashValue(this.getBytes());
+		return new ByteArrayFinal(hash);
+	}
+
 	/**
 	 * Creates a new {@code ByteArray} instance by reversing the bits of each byte. The order of the values in the array
 	 * remains unchanged. Keeping the order of the bytes in the array distinguishes this method from
@@ -247,18 +273,20 @@ public class ByteArrayFinal
 	}
 
 	private void normalize() {
-		byte[] newBytes = new byte[this.length];
-		for (int i = 0; i < this.length; i++) {
-			newBytes[i] = this.abstractGetByteAt(i);
+		if (!this.normalized) {
+			byte[] newBytes = new byte[this.length];
+			for (int i = 0; i < this.length; i++) {
+				newBytes[i] = this.abstractGetByteAt(i);
+			}
+			this.bytes = newBytes;
+			this.header = 0;
+			this.trailer = 0;
+			this.rangeOffset = 0;
+			this.rangeLength = this.length;
+			this.byteReversed = false;
+			this.reverse = false;
+			this.normalized = true;
 		}
-		this.bytes = newBytes;
-		this.header = 0;
-		this.trailer = 0;
-		this.rangeOffset = 0;
-		this.rangeLength = this.length;
-		this.byteReversed = false;
-		this.reverse = false;
-		this.normalized = true;
 	}
 
 	@Override
@@ -281,9 +309,7 @@ public class ByteArrayFinal
 	protected ByteArrayFinal abstractAppend(ImmutableArray<Byte> other) {
 
 		// normalize byte arrays for better performance
-		if (!this.normalized) {
-			this.normalize();
-		}
+		this.normalize();
 
 		// create new byte array and copy the bytes of the first one as prefix
 		byte[] result = Arrays.copyOf(this.bytes, this.length + other.getLength());
@@ -312,9 +338,7 @@ public class ByteArrayFinal
 	protected ByteArrayFinal abstractInsertAt(int index, Byte newByte) {
 
 		// normalize byte arrays for better performance
-		if (!this.normalized) {
-			this.normalize();
-		}
+		this.normalize();
 
 		// create new byte array and copy the bytes
 		byte[] result = new byte[this.length + 1];
@@ -333,9 +357,7 @@ public class ByteArrayFinal
 	protected ByteArrayFinal abstractReplaceAt(int index, Byte newByte) {
 
 		// normalize byte arrays for better performance
-		if (!this.normalized) {
-			this.normalize();
-		}
+		this.normalize();
 
 		// create copy of the bytes
 		byte[] result = Arrays.copyOf(this.bytes, this.length);
@@ -362,9 +384,8 @@ public class ByteArrayFinal
 	@Override
 	protected ByteArrayFinal abstractNot() {
 		// normalize byte arrays for better performance
-		if (!this.normalized) {
-			this.normalize();
-		}
+		this.normalize();
+
 		// create resulting byte array
 		byte[] result = new byte[this.length];
 
@@ -380,12 +401,8 @@ public class ByteArrayFinal
 	protected ByteArrayFinal abstractAndOrXor(Operator operator, ByteArrayFinal other, boolean maxLength, boolean fillBit) {
 
 		// normalize byte arrays for better performance
-		if (!this.normalized) {
-			this.normalize();
-		}
-		if (!other.normalized) {
-			other.normalize();
-		}
+		this.normalize();
+		other.normalize();
 
 		// determine minimal and maximal length
 		int min = Math.min(this.length, other.length);
