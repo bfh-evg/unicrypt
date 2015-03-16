@@ -49,7 +49,7 @@ import java.util.Collection;
 
 /**
  * This class is provides an implementation for immutable arrays of type {@code boolean}/{@code Boolean}. For maximal
- * performance of binary operations, the boolean values are internally stored in a {@link LongArray} instance. It's
+ * performance of binary operations, the boolean values are internally stored in a {@link ByteArrayFinal} instance. It's
  * sister class {@link ByteArray} is implemented similarly.
  * <p>
  * @see ByteArray
@@ -57,21 +57,21 @@ import java.util.Collection;
 public class BooleanArray
 	   extends AbstractBinaryArray<BooleanArray, Boolean> {
 
-	// the internal LongArray instance containing the boolean values
-	private final LongArray longArray;
+	// the internal ByteArrayFinal instance containing the boolean values
+	private final ByteArrayFinal byteArray;
 
-	private BooleanArray(LongArray longArray, int length) {
-		this(longArray, length, 0, 0, 0, length);
+	private BooleanArray(ByteArrayFinal byteArray, int length) {
+		this(byteArray, length, 0, 0, 0, length);
 	}
 
-	private BooleanArray(LongArray longArray, int length, int rangeOffset) {
-		this(longArray, length, rangeOffset, 0, 0, length);
+	private BooleanArray(ByteArrayFinal byteArray, int length, int rangeOffset) {
+		this(byteArray, length, rangeOffset, 0, 0, length);
 	}
 
-	private BooleanArray(LongArray longArray, int length, int rangeOffset, int trailer, int header, int rangeLength) {
+	private BooleanArray(ByteArrayFinal byteArray, int length, int rangeOffset, int trailer, int header, int rangeLength) {
 		// reverse is not used (always false), default value is false
 		super(BooleanArray.class, length, rangeOffset, false, false, trailer, header, rangeLength);
-		this.longArray = longArray;
+		this.byteArray = byteArray;
 	}
 
 	/**
@@ -85,40 +85,41 @@ public class BooleanArray
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		int longLength = (length + Long.SIZE - 1) / Long.SIZE;
-		return new BooleanArray(LongArray.getInstance(fillBit, longLength), length);
+		int byteLength = (length + Byte.SIZE - 1) / Byte.SIZE;
+		return new BooleanArray(ByteArrayFinal.getInstance(fillBit, byteLength), length);
 	}
 
 	/**
-	 * Creates a new {@code BooleanArray} instance from a given {@code LongArray} instance. Its length and boolean
-	 * values correspond to the bits in the binary representation of the given {@code LongArray} instance. This method
-	 * is a special case of {@link BooleanArray#getInstance(ch.bfh.unicrypt.helper.array.classes.LongArray, int)} with
-	 * the length computed automatically.
+	 * Creates a new {@code BooleanArray} instance from a given {@code ByteArrayFinal} instance. Its length and boolean
+	 * values correspond to the bits in the binary representation of the given {@code ByteArrayFinal} instance. This
+	 * method is a special case of
+	 * {@link BooleanArray#getInstance(ch.bfh.unicrypt.helper.array.classes.ByteArrayFinal, int)} with the length
+	 * computed automatically.
 	 * <p>
-	 * @param longArray The given {@code LongArray} instance
+	 * @param byteArray The given {@code ByteArrayFinal} instance
 	 * @return The new boolean array
 	 */
-	public static BooleanArray getInstance(LongArray longArray) {
-		if (longArray == null) {
+	public static BooleanArray getInstance(ByteArrayFinal byteArray) {
+		if (byteArray == null) {
 			throw new IllegalArgumentException();
 		}
-		return new BooleanArray(longArray, longArray.getLength() * Long.SIZE);
+		return new BooleanArray(byteArray, byteArray.getLength() * Byte.SIZE);
 	}
 
 	/**
-	 * Creates a new {@code BooleanArray} instance of a given length from a given {@code LongArray} instance. Its
-	 * boolean values correspond to the bits in the binary representation of the {@code long} values. Extra bits
+	 * Creates a new {@code BooleanArray} instance of a given length from a given {@code ByteArrayFinal} instance. Its
+	 * boolean values correspond to the bits in the binary representation of the {@code byte} values. Extra bits
 	 * exceeding the given bit length are ignored.
 	 * <p>
-	 * @param longArray The given {@code LongArray} instance
+	 * @param byteArray The given {@code ByteArrayFinal} instance
 	 * @param length    The length of the new boolean array
 	 * @return The new boolean array
 	 */
-	public static BooleanArray getInstance(LongArray longArray, int length) {
-		if (longArray == null || length < 0 || length > longArray.getLength() * Long.SIZE) {
+	public static BooleanArray getInstance(ByteArrayFinal byteArray, int length) {
+		if (byteArray == null || length < 0 || length > byteArray.getLength() * Byte.SIZE) {
 			throw new IllegalArgumentException();
 		}
-		return new BooleanArray(longArray, length);
+		return new BooleanArray(byteArray, length);
 	}
 
 	/**
@@ -133,16 +134,16 @@ public class BooleanArray
 		if (bits == null) {
 			throw new IllegalArgumentException();
 		}
-		int longLength = (bits.length + Long.SIZE - 1) / Long.SIZE;
-		long[] longs = new long[longLength];
+		int byteLength = (bits.length + Byte.SIZE - 1) / Byte.SIZE;
+		byte[] bytes = new byte[byteLength];
 		for (int i = 0; i < bits.length; i++) {
-			int longIndex = i / Long.SIZE;
-			int bitIndex = i % Long.SIZE;
+			int byteIndex = i / Byte.SIZE;
+			int bitIndex = i % Byte.SIZE;
 			if (bits[i]) {
-				longs[longIndex] = MathUtil.setBit(longs[longIndex], bitIndex);
+				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
 			}
 		}
-		return new BooleanArray(LongArray.getInstance(longs), bits.length);
+		return new BooleanArray(ByteArrayFinal.getInstance(bytes), bits.length);
 	}
 
 	/**
@@ -157,22 +158,22 @@ public class BooleanArray
 		if (bits == null) {
 			throw new IllegalArgumentException();
 		}
-		int longLength = (bits.size() + Long.SIZE - 1) / Long.SIZE;
-		long[] longs = new long[longLength];
+		int byteLength = (bits.size() + Byte.SIZE - 1) / Byte.SIZE;
+		byte[] bytes = new byte[byteLength];
 		int i = 0;
 		for (Boolean b : bits) {
-			int longIndex = i / Long.SIZE;
-			int bitIndex = i % Long.SIZE;
-			longs[longIndex] = MathUtil.replaceBit(longs[longIndex], bitIndex, b);
+			int byteIndex = i / Byte.SIZE;
+			int bitIndex = i % Byte.SIZE;
+			bytes[byteIndex] = MathUtil.replaceBit(bytes[byteIndex], bitIndex, b);
 			i++;
 		}
-		return new BooleanArray(LongArray.getInstance(longs), bits.size());
+		return new BooleanArray(ByteArrayFinal.getInstance(bytes), bits.size());
 	}
 
 	/**
 	 * Transforms a given immutable array of type {@code Boolean} into a {@code BooleanArray} instance. If the given
 	 * immutable array is already an instance of {@code BooleanArray}, it is returned without doing anything. Otherwise,
-	 * the immutable array is transformed into a {@code LongArray} instance for internal storage.
+	 * the immutable array is transformed into a {@code ByteArrayFinal} instance for internal storage.
 	 * <p>
 	 * @param immutableArray The given immutable array
 	 * @return The new array
@@ -184,16 +185,16 @@ public class BooleanArray
 		if (immutableArray instanceof BooleanArray) {
 			return (BooleanArray) immutableArray;
 		}
-		int longLength = (immutableArray.getLength() + Long.SIZE - 1) / Long.SIZE;
-		long[] longs = new long[longLength];
+		int byteLength = (immutableArray.getLength() + Byte.SIZE - 1) / Byte.SIZE;
+		byte[] bytes = new byte[byteLength];
 		for (int i = 0; i < immutableArray.getLength(); i++) {
-			int longIndex = i / Long.SIZE;
-			int bitIndex = i % Long.SIZE;
+			int byteIndex = i / Byte.SIZE;
+			int bitIndex = i % Byte.SIZE;
 			if (immutableArray.getAt(i)) {
-				longs[longIndex] = MathUtil.setBit(longs[longIndex], bitIndex);
+				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
 			}
 		}
-		return new BooleanArray(LongArray.getInstance(longs), immutableArray.getLength());
+		return new BooleanArray(ByteArrayFinal.getInstance(bytes), immutableArray.getLength());
 	}
 
 	/**
@@ -209,13 +210,13 @@ public class BooleanArray
 		return result;
 	}
 
-	private LongArray getLongArray() {
-		int arrayLength = MathUtil.divide(this.length - 1, Long.SIZE) + 1;
-		long[] longs = new long[arrayLength];
+	private ByteArrayFinal getByteArrayFinal() {
+		int arrayLength = MathUtil.divide(this.length - 1, Byte.SIZE) + 1;
+		byte[] bytes = new byte[arrayLength];
 		for (int index = 0; index < arrayLength; index++) {
-			longs[index] = this.longArray.getLongAt(this.rangeOffset - this.trailer, index, this.rangeOffset, this.rangeLength);
+			bytes[index] = this.byteArray.getByteAt(this.rangeOffset - this.trailer, index, this.rangeOffset, this.rangeLength);
 		}
-		return LongArray.getInstance(longs);
+		return ByteArrayFinal.getInstance(bytes);
 	}
 
 	@Override
@@ -226,14 +227,14 @@ public class BooleanArray
 
 	@Override
 	protected Boolean abstractGetValueAt(int index) {
-		int longIndex = index / Long.SIZE;
-		int bitIndex = index % Long.SIZE;
-		return MathUtil.getBit(this.longArray.getAt(longIndex), bitIndex);
+		int byteIndex = index / Byte.SIZE;
+		int bitIndex = index % Byte.SIZE;
+		return MathUtil.getBit(this.byteArray.getAt(byteIndex), bitIndex);
 	}
 
 	@Override
 	protected BooleanArray abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer, int header) {
-		return new BooleanArray(this.longArray, length, rangeOffset, trailer, header, rangeLength);
+		return new BooleanArray(this.byteArray, length, rangeOffset, trailer, header, rangeLength);
 	}
 
 	@Override
@@ -266,35 +267,35 @@ public class BooleanArray
 	}
 
 	protected BooleanArray abstractAppend(BooleanArray other) {
-		// make this BooleanArray right-aligned with a LongArray
-		int shift = (Long.SIZE - this.length % Long.SIZE) % Long.SIZE;
-		LongArray longArray1 = this.addPrefix(shift).getLongArray();
-		LongArray longArray2 = other.getLongArray();
-		return new BooleanArray(longArray1.append(longArray2), this.length + other.length, shift);
+		// make this BooleanArray right-aligned with a ByteArrayFinal
+		int shift = (Byte.SIZE - this.length % Byte.SIZE) % Byte.SIZE;
+		ByteArrayFinal byteArray1 = this.addPrefix(shift).getByteArrayFinal();
+		ByteArrayFinal byteArray2 = other.getByteArrayFinal();
+		return new BooleanArray(byteArray1.append(byteArray2), this.length + other.length, shift);
 	}
 
 	@Override
 	protected BooleanArray abstractReverse() {
-		// reverse longArrarangeOffsetust offset, switch trailer and header (reverse is always false)
-		int newOffset = this.longArray.getLength() * Long.SIZE - this.rangeOffset - this.rangeLength;
-		return new BooleanArray(this.longArray.bitReverse(), this.length, newOffset, this.header, this.trailer, this.rangeLength);
+		// reverse byteArrary, adjust offset, switch trailer and header (reverse is always false)
+		int newOffset = this.byteArray.getLength() * Byte.SIZE - this.rangeOffset - this.rangeLength;
+		return new BooleanArray(this.byteArray.byteReverse(), this.length, newOffset, this.header, this.trailer, this.rangeLength);
 	}
 
 	@Override
 	protected BooleanArray abstractAndOrXor(Operator operator, BooleanArray other, boolean maxLength, boolean fillBit) {
-		// make the shorter BooleanArray right-aligned with a LongArray
+		// make the shorter BooleanArray right-aligned with a ByteArrayFinal
 		int minLength = Math.min(this.length, other.length);
-		int shift = (Long.SIZE - minLength % Long.SIZE) % Long.SIZE;
-		LongArray longArray1 = this.addPrefix(shift).getLongArray();
-		LongArray longArray2 = other.addPrefix(shift).getLongArray();
-		LongArray result = longArray1.abstractAndOrXor(operator, longArray2, maxLength, fillBit);
+		int shift = (Byte.SIZE - minLength % Byte.SIZE) % Byte.SIZE;
+		ByteArrayFinal byteArray1 = this.addPrefix(shift).getByteArrayFinal();
+		ByteArrayFinal byteArray2 = other.addPrefix(shift).getByteArrayFinal();
+		ByteArrayFinal result = byteArray1.abstractAndOrXor(operator, byteArray2, maxLength, fillBit);
 		int newLength = maxLength ? Math.max(this.length, other.length) : minLength;
 		return new BooleanArray(result, newLength, shift);
 	}
 
 	@Override
 	protected BooleanArray abstractNot() {
-		return new BooleanArray(this.getLongArray().not(), this.length);
+		return new BooleanArray(this.getByteArrayFinal().not(), this.length);
 	}
 
 }

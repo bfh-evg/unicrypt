@@ -349,11 +349,6 @@ public class BooleanArrayTest {
 				BooleanArray ba2 = booleanArrayList.get(j);
 				BooleanString bs2 = booleanStringList.get(j);
 
-//				System.out.println(ba1 + " " + ba2);
-//				System.out.println(ba1.and(ba2));
-//				System.out.println(ba1.and(ba2, false));
-//				System.out.println(ba1.and(ba2, true));
-//				System.out.println("");
 				performTest(ba1.and(ba2), bs1.and(bs2));
 				performTest(ba1.and(ba2, false), bs1.and(bs2, false));
 				performTest(ba1.and(ba2, true), bs1.and(bs2, true));
@@ -369,15 +364,6 @@ public class BooleanArrayTest {
 		}
 	}
 
-//	@Test
-//	public void test_() {
-//		for (String string : stringList) {
-//			BooleanArray ba = converter.reconvert(string);
-//			BooleanString bs = new BooleanString(string);
-//
-//			performTest(ba, bs);
-//		}
-//	}
 	public void performTest(boolean a, boolean b) {
 		Assert.assertEquals(a, b);
 	}

@@ -41,19 +41,20 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.string;
 
-import ch.bfh.unicrypt.helper.array.classes.LongArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArrayFinal;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class LongArrayToString
-	   extends AbstractStringConverter<LongArray> {
+public class ByteArrayFinalToString
+	   extends AbstractStringConverter<ByteArrayFinal> {
 
 	public enum Radix {
 
-		BINARY, HEX;
+		BINARY, HEX, BASE64
 
 	};
 
@@ -63,8 +64,8 @@ public class LongArrayToString
 	private final String binaryRegExp;
 	private final String hexRegExp;
 
-	protected LongArrayToString(Radix radix, boolean reverse) {
-		super(LongArray.class);
+	protected ByteArrayFinalToString(Radix radix, boolean reverse) {
+		super(ByteArrayFinal.class);
 		this.radix = radix;
 		this.reverse = reverse;
 		this.delimiter = "";
@@ -72,8 +73,8 @@ public class LongArrayToString
 		this.hexRegExp = "^([0-9A-F]{2}([0-9A-F]{2})*)?$";
 	}
 
-	protected LongArrayToString(Radix radix, boolean reverse, String delimiter) {
-		super(LongArray.class);
+	protected ByteArrayFinalToString(Radix radix, boolean reverse, String delimiter) {
+		super(ByteArrayFinal.class);
 		this.radix = radix;
 		this.reverse = reverse;
 		this.delimiter = delimiter;
@@ -82,28 +83,32 @@ public class LongArrayToString
 	}
 
 	@Override
-	public String abstractConvert(LongArray longArray) {
+	public String abstractConvert(ByteArrayFinal byteArray) {
 		switch (this.radix) {
 			case BINARY: {
-				StringBuilder sb = new StringBuilder(longArray.getLength() * (Long.SIZE + 1));
+				StringBuilder sb = new StringBuilder(byteArray.getLength() * (Byte.SIZE + 1));
 				String delim = "";
-				for (Long l : this.reverse ? longArray.reverse() : longArray) {
+				for (Byte b : this.reverse ? byteArray.reverse() : byteArray) {
+					int i = b & 0xFF;
 					sb.append(delim);
-					sb.append(String.format("%64s", Long.toBinaryString(l)).replace(' ', '0'));
+					sb.append(String.format("%8s", Integer.toBinaryString(i)).replace(' ', '0'));
 					delim = this.delimiter;
 				}
 				return sb.toString();
 			}
 			case HEX: {
-				StringBuilder sb = new StringBuilder(longArray.getLength() * 3);
+				StringBuilder sb = new StringBuilder(byteArray.getLength() * 3);
 				String delim = "";
-				for (Long b : this.reverse ? longArray.reverse() : longArray) {
+				for (Byte b : this.reverse ? byteArray.reverse() : byteArray) {
+					int i = b & 0xFF;
 					sb.append(delim);
-					sb.append(String.format("%016X", b));
+					sb.append(String.format("%02X", i));
 					delim = this.delimiter;
 				}
 				return sb.toString();
 			}
+			case BASE64:
+				return DatatypeConverter.printBase64Binary(byteArray.getBytes());
 			default:
 				// impossible case
 				throw new IllegalStateException();
@@ -111,7 +116,7 @@ public class LongArrayToString
 	}
 
 	@Override
-	public LongArray abstractReconvert(String string) {
+	public ByteArrayFinal abstractReconvert(String string) {
 		if (this.delimiter.length() > 0) {
 			string = string.replace(this.delimiter.charAt(0), '|');
 		}
@@ -121,11 +126,11 @@ public class LongArrayToString
 					throw new IllegalArgumentException();
 				}
 				int subLength = 8 + this.delimiter.length();
-				long[] longs = new long[(string.length() + this.delimiter.length()) / subLength];
-				for (int i = 0; i < longs.length; i++) {
-					longs[i] = (long) Integer.parseInt(string.substring(i * subLength, i * subLength + 8), 2);
+				byte[] bytes = new byte[(string.length() + this.delimiter.length()) / subLength];
+				for (int i = 0; i < bytes.length; i++) {
+					bytes[i] = (byte) Integer.parseInt(string.substring(i * subLength, i * subLength + 8), 2);
 				}
-				LongArray result = LongArray.getInstance(longs);
+				ByteArrayFinal result = ByteArrayFinal.getInstance(bytes);
 				return this.reverse ? result.reverse() : result;
 			}
 			case HEX: {
@@ -134,57 +139,59 @@ public class LongArrayToString
 					throw new IllegalArgumentException();
 				}
 				int subLength = 2 + this.delimiter.length();
-				long[] longs = new long[(string.length() + this.delimiter.length()) / subLength];
-				for (int i = 0; i < longs.length; i++) {
-					longs[i] = (long) Integer.parseInt(string.substring(i * subLength, i * subLength + 2), 16);
+				byte[] bytes = new byte[(string.length() + this.delimiter.length()) / subLength];
+				for (int i = 0; i < bytes.length; i++) {
+					bytes[i] = (byte) Integer.parseInt(string.substring(i * subLength, i * subLength + 2), 16);
 				}
-				LongArray result = LongArray.getInstance(longs);
+				ByteArrayFinal result = ByteArrayFinal.getInstance(bytes);
 				return this.reverse ? result.reverse() : result;
 			}
+			case BASE64:
+				return ByteArrayFinal.getInstance(DatatypeConverter.parseBase64Binary(string));
 			default:
 				// impossible case
 				throw new IllegalStateException();
 		}
 	}
 
-	public static LongArrayToString getInstance() {
-		return LongArrayToString.getInstance(LongArrayToString.Radix.HEX, false);
+	public static ByteArrayFinalToString getInstance() {
+		return ByteArrayFinalToString.getInstance(ByteArrayFinalToString.Radix.HEX, false);
 	}
 
-	public static LongArrayToString getInstance(Radix radix) {
-		return LongArrayToString.getInstance(radix, false);
+	public static ByteArrayFinalToString getInstance(Radix radix) {
+		return ByteArrayFinalToString.getInstance(radix, false);
 	}
 
-	public static LongArrayToString getInstance(boolean reverse) {
-		return LongArrayToString.getInstance(LongArrayToString.Radix.HEX, reverse);
+	public static ByteArrayFinalToString getInstance(boolean reverse) {
+		return ByteArrayFinalToString.getInstance(ByteArrayFinalToString.Radix.HEX, reverse);
 	}
 
-	public static LongArrayToString getInstance(Radix radix, boolean reverse) {
-		if (radix == null) {
+	public static ByteArrayFinalToString getInstance(Radix radix, boolean reverse) {
+		if (radix == null || (radix == Radix.BASE64 && reverse)) {
 			throw new IllegalArgumentException();
 		}
-		return new LongArrayToString(radix, reverse);
+		return new ByteArrayFinalToString(radix, reverse);
 	}
 
-	public static LongArrayToString getInstance(String delimiter) {
-		return LongArrayToString.getInstance(Radix.HEX, delimiter, false);
+	public static ByteArrayFinalToString getInstance(String delimiter) {
+		return ByteArrayFinalToString.getInstance(Radix.HEX, delimiter, false);
 	}
 
-	public static LongArrayToString getInstance(String delimiter, boolean reverse) {
-		return LongArrayToString.getInstance(Radix.HEX, delimiter, reverse);
+	public static ByteArrayFinalToString getInstance(String delimiter, boolean reverse) {
+		return ByteArrayFinalToString.getInstance(Radix.HEX, delimiter, reverse);
 	}
 
-	public static LongArrayToString getInstance(Radix radix, String delimiter) {
-		return LongArrayToString.getInstance(radix, delimiter, false);
+	public static ByteArrayFinalToString getInstance(Radix radix, String delimiter) {
+		return ByteArrayFinalToString.getInstance(radix, delimiter, false);
 	}
 
-	public static LongArrayToString getInstance(Radix radix, String delimiter, boolean reverse) {
-		if (radix == null || delimiter == null || delimiter.length() != 1
+	public static ByteArrayFinalToString getInstance(Radix radix, String delimiter, boolean reverse) {
+		if (radix == null || radix == Radix.BASE64 || delimiter == null || delimiter.length() != 1
 			   || (radix == Radix.BINARY && "01".indexOf(delimiter.charAt(0)) >= 0)
 			   || (radix == Radix.HEX && "0123456789ABCDEFabcdef".indexOf(delimiter.charAt(0)) >= 0)) {
 			throw new IllegalArgumentException();
 		}
-		return new LongArrayToString(radix, reverse, delimiter);
+		return new ByteArrayFinalToString(radix, reverse, delimiter);
 	}
 
 }

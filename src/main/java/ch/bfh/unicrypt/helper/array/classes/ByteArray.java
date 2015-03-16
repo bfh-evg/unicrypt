@@ -76,7 +76,7 @@ public class ByteArray
 	}
 
 	protected ByteArray(byte[] bytes, int arrayLength, int rangeOffset, boolean reverse, int trailer, int header, int rangeLength) {
-		super(ByteArray.class, ByteArray.ALL_ZERO, arrayLength, rangeOffset, rangeLength, trailer, header, reverse);
+		super(ByteArray.class, ALL_ZERO, arrayLength, rangeOffset, rangeLength, trailer, header, reverse);
 		this.bytes = bytes;
 		if (bytes.length <= 1 && trailer == 0 && header == 0) {
 			this.uniform = true;

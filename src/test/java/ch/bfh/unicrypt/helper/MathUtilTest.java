@@ -436,213 +436,135 @@ public class MathUtilTest {
 	}
 
 	@Test
-	public void testGetByte() {
-		long l = 0x0123456789ABCDEFL;
-		byte[] bytes = {(byte) 0xEF, (byte) 0xCD, (byte) 0xAB, (byte) 0x89, (byte) 0x67, (byte) 0x45, (byte) 0x23, (byte) 0x01};
-		for (int i = 0; i < 8; i++) {
-			Assert.assertEquals(bytes[i], MathUtil.getByte(l, i));
-		}
-	}
-
-	@Test
-	public void testSetByte() {
-		long l = 0x0123456789ABCDEFL;
-		for (int i = 0; i < 8; i++) {
-			Assert.assertEquals((byte) 0xFF, MathUtil.getByte(MathUtil.setByte(l, i), i));
-		}
-	}
-
-	@Test
-	public void testClearByte() {
-		long l = 0x0123456789ABCDEFL;
-		for (int i = 0; i < 8; i++) {
-			Assert.assertEquals((byte) 0, MathUtil.getByte(MathUtil.clearByte(l, i), i));
-		}
-	}
-
-	@Test
-	public void testReplaceByte() {
-		long l = 0x0123456789ABCDEFL;
-		byte b = (byte) 0x5A;
-		for (int i = 0; i < 8; i++) {
-			Assert.assertEquals(b, MathUtil.getByte(MathUtil.replaceByte(l, i, b), i));
-		}
-	}
-
-	@Test
-	public void testFillWithByte() {
-		byte b = (byte) 0x5A;
-		long l = MathUtil.fillWithByte(b);
-		for (int i = 0; i < 8; i++) {
-			Assert.assertEquals(b, MathUtil.getByte(l, i));
-		}
-	}
-
-	@Test
-	public void testShiftBytesLeft() {
-		long l = 0x0123456789ABCDEFL;
-		Assert.assertEquals(0x0123456789ABCDEFL, MathUtil.shiftBytesLeft(l, 0));
-		Assert.assertEquals(0x23456789ABCDEF00L, MathUtil.shiftBytesLeft(l, 1));
-		Assert.assertEquals(0x456789ABCDEF0000L, MathUtil.shiftBytesLeft(l, 2));
-		Assert.assertEquals(0x6789ABCDEF000000L, MathUtil.shiftBytesLeft(l, 3));
-		Assert.assertEquals(0x89ABCDEF00000000L, MathUtil.shiftBytesLeft(l, 4));
-		Assert.assertEquals(0xABCDEF0000000000L, MathUtil.shiftBytesLeft(l, 5));
-		Assert.assertEquals(0xCDEF000000000000L, MathUtil.shiftBytesLeft(l, 6));
-		Assert.assertEquals(0xEF00000000000000L, MathUtil.shiftBytesLeft(l, 7));
-	}
-
-	@Test
-	public void testShiftBytesRight() {
-		long l = 0x0123456789ABCDEFL;
-		Assert.assertEquals(0x0123456789ABCDEFL, MathUtil.shiftBytesRight(l, 0));
-		Assert.assertEquals(0x0123456789ABCDL, MathUtil.shiftBytesRight(l, 1));
-		Assert.assertEquals(0x0123456789ABL, MathUtil.shiftBytesRight(l, 2));
-		Assert.assertEquals(0x0123456789L, MathUtil.shiftBytesRight(l, 3));
-		Assert.assertEquals(0x01234567L, MathUtil.shiftBytesRight(l, 4));
-		Assert.assertEquals(0x012345L, MathUtil.shiftBytesRight(l, 5));
-		Assert.assertEquals(0x0123L, MathUtil.shiftBytesRight(l, 6));
-		Assert.assertEquals(0x01L, MathUtil.shiftBytesRight(l, 7));
-	}
-
-	@Test
-	public void testByteMask() {
-		for (int i = 0; i < 8; i++) {
-			Assert.assertEquals(0xFFL << (i * 8), MathUtil.byteMask(i));
-		}
-	}
-
-	@Test
 	public void testGetBit() {
-		long l0 = 0L;
-		long l1 = 0xFFFFFFFFFFFFFFFFL;
-		for (int i = 0; i < 64; i++) {
-			Assert.assertEquals(false, MathUtil.getBit(l0, i));
-			Assert.assertEquals(true, MathUtil.getBit(l1, i));
+		byte b = (byte) 0x86;
+		boolean[] booleans = {false, true, true, false, false, false, false, true};
+		for (int i = 0; i < 8; i++) {
+			Assert.assertEquals(booleans[i], MathUtil.getBit(b, i));
 		}
 	}
 
 	@Test
 	public void testSetBit() {
-		long l = 0x0123456789ABCDEFL;
-		for (int i = 0; i < 64; i++) {
-			Assert.assertEquals(true, MathUtil.getBit(MathUtil.setBit(l, i), i));
+		byte b = (byte) 0x86;
+		for (int i = 0; i < 8; i++) {
+			Assert.assertEquals(true, MathUtil.getBit(MathUtil.setBit(b, i), i));
 		}
 	}
 
 	@Test
 	public void testClearBit() {
-		long l = 0x0123456789ABCDEFL;
-		for (int i = 0; i < 64; i++) {
-			Assert.assertEquals(false, MathUtil.getBit(MathUtil.clearBit(l, i), i));
+		byte b = (byte) 0x86;
+		for (int i = 0; i < 8; i++) {
+			Assert.assertEquals(false, MathUtil.getBit(MathUtil.clearBit(b, i), i));
 		}
 	}
 
 	@Test
 	public void testReplaceBit() {
-		long l = 0x0123456789ABCDEFL;
-		for (int i = 0; i < 64; i++) {
-			Assert.assertEquals(false, MathUtil.getBit(MathUtil.replaceBit(l, i, false), i));
-			Assert.assertEquals(true, MathUtil.getBit(MathUtil.replaceBit(l, i, true), i));
+		byte b = (byte) 0x86;
+		for (int i = 0; i < 8; i++) {
+			Assert.assertEquals(true, MathUtil.getBit(MathUtil.replaceBit(b, i, true), i));
+			Assert.assertEquals(false, MathUtil.getBit(MathUtil.replaceBit(b, i, false), i));
 		}
 	}
 
 	@Test
-	public void testFillWithBit() {
-		long l0 = MathUtil.fillWithBit(false);
-		long l1 = MathUtil.fillWithBit(true);
-		for (int i = 0; i < 64; i++) {
-			Assert.assertEquals(false, MathUtil.getBit(l0, i));
-			Assert.assertEquals(true, MathUtil.getBit(l1, i));
-		}
+	public void testReverse() {
+		Assert.assertEquals((byte) 0x61, MathUtil.reverse((byte) 0x86));
+		Assert.assertEquals((byte) 0x00, MathUtil.reverse((byte) 0x00));
+		Assert.assertEquals((byte) 0xFF, MathUtil.reverse((byte) 0xFF));
 	}
 
 	@Test
-	public void testShiftBitsLeft() {
-		long l = 0x0123456789ABCDEFL;
-		for (int i = 0; i < 64; i++) {
-			Assert.assertEquals(l, MathUtil.shiftBitsLeft(0x0123456789ABCDEFL, i));
-			l = l * 2;
-		}
+	public void testShiftLeft() {
+		byte b = (byte) 0x86;
+		Assert.assertEquals((byte) 0x86, MathUtil.shiftLeft(b, 0));
+		Assert.assertEquals((byte) 0x0C, MathUtil.shiftLeft(b, 1));
+		Assert.assertEquals((byte) 0x18, MathUtil.shiftLeft(b, 2));
+		Assert.assertEquals((byte) 0x30, MathUtil.shiftLeft(b, 3));
+		Assert.assertEquals((byte) 0x60, MathUtil.shiftLeft(b, 4));
+		Assert.assertEquals((byte) 0xC0, MathUtil.shiftLeft(b, 5));
+		Assert.assertEquals((byte) 0x80, MathUtil.shiftLeft(b, 6));
+		Assert.assertEquals((byte) 0x00, MathUtil.shiftLeft(b, 7));
+		Assert.assertEquals((byte) 0x00, MathUtil.shiftLeft(b, 8));
 	}
 
 	@Test
-	public void testShiftBitsRight() {
-		long l = 0x0123456789ABCDEFL;
-		for (int i = 0; i < 64; i++) {
-			Assert.assertEquals(l, MathUtil.shiftBitsRight(0x0123456789ABCDEFL, i));
-			l = l / 2;
-		}
-	}
-
-	@Test
-	public void testBitMask() {
-		Assert.assertEquals(0x1L, MathUtil.bitMask(0));
-		Assert.assertEquals(0x2L, MathUtil.bitMask(1));
-		Assert.assertEquals(0x4L, MathUtil.bitMask(2));
-		Assert.assertEquals(0x8000000000000000L, MathUtil.bitMask(63));
+	public void testShiftRight() {
+		byte b = (byte) 0x86;
+		Assert.assertEquals((byte) 0x86, MathUtil.shiftRight(b, 0));
+		Assert.assertEquals((byte) 0x43, MathUtil.shiftRight(b, 1));
+		Assert.assertEquals((byte) 0x21, MathUtil.shiftRight(b, 2));
+		Assert.assertEquals((byte) 0x10, MathUtil.shiftRight(b, 3));
+		Assert.assertEquals((byte) 0x08, MathUtil.shiftRight(b, 4));
+		Assert.assertEquals((byte) 0x04, MathUtil.shiftRight(b, 5));
+		Assert.assertEquals((byte) 0x02, MathUtil.shiftRight(b, 6));
+		Assert.assertEquals((byte) 0x01, MathUtil.shiftRight(b, 7));
+		Assert.assertEquals((byte) 0x00, MathUtil.shiftRight(b, 8));
 	}
 
 	@Test
 	public void testXor() {
-		long lp = 0x0123456789ABCDEFL;
-		long ln = 0xFEDCBA9876543210L;
-		long l0 = MathUtil.fillWithBit(false);
-		long l1 = MathUtil.fillWithBit(true);
-		for (long l : new long[]{lp, ln, l0, l1}) {
-			Assert.assertEquals(l0, MathUtil.xor(l, l));
-			Assert.assertEquals(l, MathUtil.xor(l, l0));
-			Assert.assertEquals(l, MathUtil.xor(l0, l));
-			Assert.assertEquals(MathUtil.not(l), MathUtil.xor(l, l1));
-			Assert.assertEquals(MathUtil.not(l), MathUtil.xor(l1, l));
+		byte bp = (byte) 0x86;
+		byte bn = (byte) 0x79;
+		byte b0 = (byte) 0;
+		byte b1 = (byte) 0xFF;
+		for (byte b : new byte[]{bp, bn, b0, b1}) {
+			Assert.assertEquals(b0, MathUtil.xor(b, b));
+			Assert.assertEquals(b, MathUtil.xor(b, b0));
+			Assert.assertEquals(b, MathUtil.xor(b0, b));
+			Assert.assertEquals(MathUtil.not(b), MathUtil.xor(b, b1));
+			Assert.assertEquals(MathUtil.not(b), MathUtil.xor(b1, b));
 		}
-		Assert.assertEquals(l1, MathUtil.xor(lp, ln));
-		Assert.assertEquals(l1, MathUtil.xor(ln, lp));
+		Assert.assertEquals(b1, MathUtil.xor(bp, bn));
+		Assert.assertEquals(b1, MathUtil.xor(bn, bp));
 	}
 
 	@Test
 	public void testAnd() {
-		long lp = 0x0123456789ABCDEFL;
-		long ln = 0xFEDCBA9876543210L;
-		long l0 = MathUtil.fillWithBit(false);
-		long l1 = MathUtil.fillWithBit(true);
-		for (long l : new long[]{lp, ln, l0, l1}) {
-			Assert.assertEquals(l, MathUtil.and(l, l));
-			Assert.assertEquals(l0, MathUtil.and(l, l0));
-			Assert.assertEquals(l0, MathUtil.and(l0, l));
-			Assert.assertEquals(l, MathUtil.and(l, l1));
-			Assert.assertEquals(l, MathUtil.and(l1, l));
+		byte bp = (byte) 0x86;
+		byte bn = (byte) 0x79;
+		byte b0 = (byte) 0;
+		byte b1 = (byte) 0xFF;
+		for (byte b : new byte[]{bp, bn, b0, b1}) {
+			Assert.assertEquals(b, MathUtil.and(b, b));
+			Assert.assertEquals(b0, MathUtil.and(b, b0));
+			Assert.assertEquals(b0, MathUtil.and(b0, b));
+			Assert.assertEquals(b, MathUtil.and(b, b1));
+			Assert.assertEquals(b, MathUtil.and(b1, b));
 		}
-		Assert.assertEquals(l0, MathUtil.and(lp, ln));
-		Assert.assertEquals(l0, MathUtil.and(ln, lp));
+		Assert.assertEquals(b0, MathUtil.and(bp, bn));
+		Assert.assertEquals(b0, MathUtil.and(bn, bp));
 	}
 
 	@Test
 	public void testOr() {
-		long lp = 0x0123456789ABCDEFL;
-		long ln = 0xFEDCBA9876543210L;
-		long l0 = MathUtil.fillWithBit(false);
-		long l1 = MathUtil.fillWithBit(true);
-		for (long l : new long[]{lp, ln, l0, l1}) {
-			Assert.assertEquals(l, MathUtil.or(l, l));
-			Assert.assertEquals(l, MathUtil.or(l, l0));
-			Assert.assertEquals(l, MathUtil.or(l0, l));
-			Assert.assertEquals(l1, MathUtil.or(l, l1));
-			Assert.assertEquals(l1, MathUtil.or(l1, l));
+		byte bp = (byte) 0x86;
+		byte bn = (byte) 0x79;
+		byte b0 = (byte) 0;
+		byte b1 = (byte) 0xFF;
+		for (byte b : new byte[]{bp, bn, b0, b1}) {
+			Assert.assertEquals(b, MathUtil.or(b, b));
+			Assert.assertEquals(b, MathUtil.or(b, b0));
+			Assert.assertEquals(b, MathUtil.or(b0, b));
+			Assert.assertEquals(b1, MathUtil.or(b, b1));
+			Assert.assertEquals(b1, MathUtil.or(b1, b));
 		}
-		Assert.assertEquals(l1, MathUtil.or(lp, ln));
-		Assert.assertEquals(l1, MathUtil.or(ln, lp));
+		Assert.assertEquals(b1, MathUtil.or(bp, bn));
+		Assert.assertEquals(b1, MathUtil.or(bn, bp));
 	}
 
 	@Test
 	public void testNot() {
-		long lp = 0x0123456789ABCDEFL;
-		long ln = 0xFEDCBA9876543210L;
-		long l0 = MathUtil.fillWithBit(false);
-		long l1 = MathUtil.fillWithBit(true);
-		Assert.assertEquals(ln, MathUtil.not(lp));
-		Assert.assertEquals(lp, MathUtil.not(ln));
-		Assert.assertEquals(l1, MathUtil.not(l0));
-		Assert.assertEquals(l0, MathUtil.not(l1));
+		byte bp = (byte) 0x86;
+		byte bn = (byte) 0x79;
+		byte b0 = (byte) 0;
+		byte b1 = (byte) 0xFF;
+		Assert.assertEquals(bn, MathUtil.not(bp));
+		Assert.assertEquals(bp, MathUtil.not(bn));
+		Assert.assertEquals(b1, MathUtil.not(b0));
+		Assert.assertEquals(b0, MathUtil.not(b1));
 	}
 
 	@Test

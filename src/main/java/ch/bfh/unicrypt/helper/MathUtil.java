@@ -62,20 +62,16 @@ public final class MathUtil {
 	public static final BigInteger THREE = BigInteger.valueOf(3);
 	public static final BigInteger FOUR = BigInteger.valueOf(4);
 
-	private static final long LONG_ZERO = 0L;
-	private static final long LONG_ONE = 0xFFFFFFFFFFFFFFFFL;
-	private static final long LONG_BIT = 1L;
-	private static final long LONG_BYTE = 0xFFL;
+	private static final byte BYTE_ZERO = (byte) 0;
+	private static final byte BYTE_ONE = (byte) 0xFF;
 
-	private static final long[] BYTE_MASKS = new long[Long.SIZE / Byte.SIZE];
-	private static final long[] BIT_MASKS = new long[Long.SIZE];
+	private static final byte[] BIT_MASKS = new byte[Byte.SIZE];
+	private static final byte[] BIT_MASKS_INV = new byte[Byte.SIZE];
 
 	static {
-		for (int i = 0; i < Long.SIZE / Byte.SIZE; i++) {
-			BYTE_MASKS[i] = LONG_BYTE << (i * Byte.SIZE);
-		}
-		for (int i = 0; i < Long.SIZE; i++) {
-			BIT_MASKS[i] = LONG_BIT << i;
+		for (int i = 0; i < Byte.SIZE; i++) {
+			BIT_MASKS[i] = (byte) (1 << i);
+			BIT_MASKS_INV[i] = (byte) ~(1 << i);
 		}
 	}
 
@@ -558,21 +554,20 @@ public final class MathUtil {
 		return x.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
 	}
 
-	// DEPRECATED!!! (these operations will be removed)
 	// Bit operations on byte
 	public static boolean getBit(byte b, int i) {
-		return and(b, byteBitMask(i)) != 0;
+		return and(b, BIT_MASKS[i]) != 0;
 	}
 
 	public static byte setBit(byte b, int i) {
-		return (byte) or(b, byteBitMask(i));
+		return or(b, BIT_MASKS[i]);
 	}
 
 	public static byte clearBit(byte b, int i) {
-		return (byte) and(b, not(byteBitMask(i)));
+		return and(b, BIT_MASKS_INV[i]);
 	}
 
-	public static long replaceBit(byte b, int i, boolean bit) {
+	public static byte replaceBit(byte b, int i, boolean bit) {
 		if (bit) {
 			return setBit(b, i);
 		} else {
@@ -580,125 +575,36 @@ public final class MathUtil {
 		}
 	}
 
-	public static byte shiftBitsLeft(byte b, int n) {
-		return (byte) (b << n);
+	public static byte reverse(byte b) {
+		return (byte) (Integer.reverse(b & 0xFF) >>> (Integer.SIZE - Byte.SIZE));
 	}
 
-	public static byte shiftBitsRight(byte b, int n) {
-		return (byte) (b >>> n);
+	public static byte shiftLeft(byte b, int n) {
+		return (byte) ((b & 0xFF) << n);
 	}
 
-	public static byte byteBitMask(int i) {
-		return (byte) (1 << i);
+	public static byte shiftRight(byte b, int n) {
+		return (byte) ((b & 0xFF) >>> n);
 	}
 
 	public static byte xor(byte b1, byte b2) {
-		return (byte) (b1 ^ b2);
+		return (byte) ((b1 & 0xFF) ^ (b2 & 0xFF));
 	}
 
 	public static byte and(byte b1, byte b2) {
-		return (byte) (b1 & b2);
+		return (byte) ((b1 & 0xFF) & (b2 & 0xFF));
 	}
 
 	public static byte or(byte b1, byte b2) {
-		return (byte) (b1 | b2);
+		return (byte) ((b1 & 0xFF) | (b2 & 0xFF));
 	}
 
 	public static byte not(byte b) {
-		return (byte) ~b;
-	}
-
-	// byte operations on long
-	public static byte getByte(long l, int i) {
-		return (byte) shiftBytesRight(and(l, BYTE_MASKS[i]), i);
-	}
-
-	public static long setByte(long l, int i) {
-		return or(l, BYTE_MASKS[i]);
-	}
-
-	public static long clearByte(long l, int i) {
-		return and(l, not(BYTE_MASKS[i]));
-	}
-
-	public static long replaceByte(long l, int i, byte b) {
-		return or(clearByte(l, i), shiftBytesLeft(b, i));
-	}
-
-	public static long fillWithByte(byte b) {
-		long l = LONG_ZERO;
-		for (int i = 0; i <= (Long.SIZE / Byte.SIZE); i++) {
-			l = or(l, shiftBytesLeft(b, i));
-		}
-		return l;
-	}
-
-	public static long shiftBytesLeft(long l, int n) {
-		return l << (n * Byte.SIZE);
-	}
-
-	public static long shiftBytesRight(long l, int n) {
-		return l >>> (n * Byte.SIZE);
-	}
-
-	public static long byteMask(int i) {
-		return BYTE_MASKS[i];
-	}
-
-	// bit operations on long
-	public static boolean getBit(long l, int i) {
-		return and(l, BIT_MASKS[i]) != LONG_ZERO;
-	}
-
-	public static long setBit(long l, int i) {
-		return or(l, BIT_MASKS[i]);
-	}
-
-	public static long clearBit(long l, int i) {
-		return and(l, not(BIT_MASKS[i]));
-	}
-
-	public static long replaceBit(long l, int i, boolean b) {
-		if (b) {
-			return setBit(l, i);
-		} else {
-			return clearBit(l, i);
-		}
-	}
-
-	public static long fillWithBit(boolean b) {
-		return b ? LONG_ONE : LONG_ZERO;
-	}
-
-	public static long shiftBitsLeft(long l, int n) {
-		return l << n;
-	}
-
-	public static long shiftBitsRight(long l, int n) {
-		return l >>> n;
-	}
-
-	public static long bitMask(int i) {
-		return BIT_MASKS[i];
-	}
-
-	public static long xor(long l1, long l2) {
-		return l1 ^ l2;
-	}
-
-	public static long and(long l1, long l2) {
-		return l1 & l2;
-	}
-
-	public static long or(long l1, long l2) {
-		return l1 | l2;
-	}
-
-	public static long not(long l) {
-		return ~l;
+		return (byte) ~(b & 0xFF);
 	}
 
 	// mathematical modulo and divide working for positive and negative values
+	// Java8: use floorMod and floorDiv to handle negative values properly
 	public static int modulo(int i, int n) {
 		return ((i % n) + n) % n;
 	}
