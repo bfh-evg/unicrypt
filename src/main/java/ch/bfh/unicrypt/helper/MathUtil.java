@@ -579,26 +579,32 @@ public final class MathUtil {
 		return (byte) (Integer.reverse(b & 0xFF) >>> (Integer.SIZE - Byte.SIZE));
 	}
 
+	// JAVA8: use toUnsignedInt(byte x)
 	public static byte shiftLeft(byte b, int n) {
 		return (byte) ((b & 0xFF) << n);
 	}
 
+	// JAVA8: use toUnsignedInt(byte x)
 	public static byte shiftRight(byte b, int n) {
 		return (byte) ((b & 0xFF) >>> n);
 	}
 
+	// JAVA8: use toUnsignedInt(byte x)
 	public static byte xor(byte b1, byte b2) {
 		return (byte) ((b1 & 0xFF) ^ (b2 & 0xFF));
 	}
 
+	// JAVA8: use toUnsignedInt(byte x)
 	public static byte and(byte b1, byte b2) {
 		return (byte) ((b1 & 0xFF) & (b2 & 0xFF));
 	}
 
+	// JAVA8: use toUnsignedInt(byte x)
 	public static byte or(byte b1, byte b2) {
 		return (byte) ((b1 & 0xFF) | (b2 & 0xFF));
 	}
 
+	// JAVA8: use toUnsignedInt(byte x)
 	public static byte not(byte b) {
 		return (byte) ~(b & 0xFF);
 	}

@@ -127,7 +127,7 @@ public class PolynomialMembershipProofSystemTest {
 	@Test
 	public void testPolynomialMembershipProofSystem3() {
 
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance(7));
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZModPrime Z_q = (ZModPrime) G_q.getZModOrder();
 

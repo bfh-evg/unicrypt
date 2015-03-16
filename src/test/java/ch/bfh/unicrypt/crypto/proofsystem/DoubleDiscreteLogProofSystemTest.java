@@ -155,7 +155,7 @@ public class DoubleDiscreteLogProofSystemTest {
 	@Test
 	public void testDoubleDiscreteLogProofSystem3() {
 
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance(7));
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
 		final CyclicGroup G_p = GStarModPrime.getInstance(O1, P1);
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);

@@ -69,7 +69,8 @@ public class FiniteByteArrayToBigInteger
 		BigInteger result = BigInteger.ZERO;
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
 		for (int i = 0; i < length; i++) {
-			int intValue = value.getIntAt(i);
+			// JAVA8: use toUnsignedInt(byte x)
+			int intValue = value.getAt(i) & 0xFF;
 			if (i < length - this.minLength) {
 				intValue++;
 			}

@@ -169,7 +169,7 @@ public class PermutationCommitmentProofSystemTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance(7));
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 5;

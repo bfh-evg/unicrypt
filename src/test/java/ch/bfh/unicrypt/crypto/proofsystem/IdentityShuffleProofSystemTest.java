@@ -86,7 +86,7 @@ public class IdentityShuffleProofSystemTest {
 		final ZMod Z_q = G_q.getZModOrder();
 		final RandomOracle ro = PseudoRandomOracle.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance(7));
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
 
 		final int size = 5;
 		final Element alpha = Z_q.getElement(4);

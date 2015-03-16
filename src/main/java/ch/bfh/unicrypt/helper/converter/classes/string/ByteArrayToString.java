@@ -100,8 +100,9 @@ public class ByteArrayToString
 				StringBuilder sb = new StringBuilder(byteArray.getLength() * 3);
 				String delim = "";
 				for (Byte b : this.reverse ? byteArray.reverse() : byteArray) {
+					int i = b & 0xFF;
 					sb.append(delim);
-					sb.append(String.format("%02X", b));
+					sb.append(String.format("%02X", i));
 					delim = this.delimiter;
 				}
 				return sb.toString();

@@ -106,9 +106,9 @@ public class OutputFeedbackRandomByteSequence
 	 */
 	protected void update(ByteArray freshData) {
 		if (freshData != null) {
-			setInternalState(getInternalState().xorFillZero(freshData));
+			setInternalState(getInternalState().xor(freshData, false));
 		}
-		setInternalState(getInternalState().xorFillZero(getInternalState().getHashValue(this.hashAlgorithm)));
+		setInternalState(getInternalState().xor(getInternalState().getHashValue(this.hashAlgorithm), false));
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class OutputFeedbackRandomByteSequence
 	 */
 	protected ByteArray update() {
 		ByteArray[] full = getInternalState().getHashValue(this.hashAlgorithm).split(this.forwardSecurityInBytes);
-		setInternalState(getInternalState().xorFillZero(full[0]));
+		setInternalState(getInternalState().xor(full[0], false));
 
 		//Careful: Due to the underlying implementation of ByteArray, this  leaks information within the internal array.
 		return full[1];
@@ -132,7 +132,7 @@ public class OutputFeedbackRandomByteSequence
 	}
 
 	@Override
-	public void setSeed(ByteArray seed) {
+	public final void setSeed(ByteArray seed) {
 		setInternalState(seed.getHashValue(this.hashAlgorithm));
 	}
 
