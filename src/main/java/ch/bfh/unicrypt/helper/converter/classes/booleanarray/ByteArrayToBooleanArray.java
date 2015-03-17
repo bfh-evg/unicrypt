@@ -44,31 +44,30 @@ package ch.bfh.unicrypt.helper.converter.classes.booleanarray;
 import ch.bfh.unicrypt.helper.array.classes.BooleanArray;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBooleanArrayConverter;
-import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class BigIntegerToBooleanArray
-	   extends AbstractBooleanArrayConverter<BigInteger> {
+public class ByteArrayToBooleanArray
+	   extends AbstractBooleanArrayConverter<ByteArray> {
 
-	protected BigIntegerToBooleanArray() {
-		super(BigInteger.class);
+	protected ByteArrayToBooleanArray() {
+		super(ByteArray.class);
 	}
 
 	@Override
-	public BooleanArray abstractConvert(BigInteger bigInteger) {
-		return BooleanArray.getInstance(ByteArray.getInstance(bigInteger.toByteArray()));
+	public BooleanArray abstractConvert(ByteArray byteArray) {
+		return BooleanArray.getInstance(byteArray);
 	}
 
 	@Override
-	public BigInteger abstractReconvert(BooleanArray booleanArray) {
-		return new BigInteger(booleanArray.getByteArray().getBytes());
+	public ByteArray abstractReconvert(BooleanArray booleanArray) {
+		return booleanArray.getByteArray();
 	}
 
-	public static BigIntegerToBooleanArray getInstance() {
-		return new BigIntegerToBooleanArray();
+	public static ByteArrayToBooleanArray getInstance() {
+		return new ByteArrayToBooleanArray();
 	}
 
 }

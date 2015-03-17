@@ -55,12 +55,10 @@ public class FiniteByteArrayToBigInteger
 	   extends AbstractBigIntegerConverter<ByteArray> {
 
 	private final int minLength;
-	private final int maxLength;
 
-	protected FiniteByteArrayToBigInteger(int minLength, int maxLength) {
+	protected FiniteByteArrayToBigInteger(int minLength) {
 		super(ByteArray.class);
 		this.minLength = minLength;
-		this.maxLength = maxLength;
 	}
 
 	@Override
@@ -69,8 +67,7 @@ public class FiniteByteArrayToBigInteger
 		BigInteger result = BigInteger.ZERO;
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
 		for (int i = 0; i < length; i++) {
-			// JAVA8: use toUnsignedInt(byte x)
-			int intValue = value.getAt(i) & 0xFF;
+			int intValue = value.getIntAt(i);
 			if (i < length - this.minLength) {
 				intValue++;
 			}
@@ -93,12 +90,8 @@ public class FiniteByteArrayToBigInteger
 		return ByteArray.getInstance(byteList);
 	}
 
-	public static FiniteByteArrayToBigInteger getInstance(int length) {
-		return FiniteByteArrayToBigInteger.getInstance(length, length);
-	}
-
-	public static FiniteByteArrayToBigInteger getInstance(int minLength, int maxLength) {
-		return new FiniteByteArrayToBigInteger(minLength, maxLength);
+	public static FiniteByteArrayToBigInteger getInstance(int minLength) {
+		return new FiniteByteArrayToBigInteger(minLength);
 	}
 
 }

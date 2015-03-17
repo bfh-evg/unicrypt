@@ -49,8 +49,7 @@ import java.util.Collection;
 
 /**
  * This class is provides an implementation for immutable arrays of type {@code boolean}/{@code Boolean}. For maximal
- * performance of binary operations, the boolean values are internally stored in a {@link ByteArray} instance. It's
- * sister class {@link ByteArray} is implemented similarly.
+ * performance of binary operations, the boolean values are internally stored in a {@link ByteArray} instance.
  * <p>
  * @see ByteArray
  */
@@ -61,7 +60,7 @@ public class BooleanArray
 	private final ByteArray byteArray;
 
 	private BooleanArray(ByteArray byteArray, int length) {
-		this(byteArray, length, 0, 0, 0, length);
+		this(byteArray, length, 0);
 	}
 
 	private BooleanArray(ByteArray byteArray, int length, int rangeOffset) {

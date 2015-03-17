@@ -120,7 +120,9 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetInstance(this.length + n, this.rangeOffset, this.rangeLength, this.trailer + n, this.header);
+		int newLength = this.length + n;
+		int newTrailer = this.trailer + n;
+		return this.abstractGetInstance(newLength, this.rangeOffset, this.rangeLength, newTrailer, this.header);
 	}
 
 	@Override
@@ -128,7 +130,9 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetInstance(this.length + n, this.rangeOffset, this.rangeLength, this.trailer, this.header + n);
+		int newLength = this.length + n;
+		int newHeader = this.header + n;
+		return this.abstractGetInstance(newLength, this.rangeOffset, this.rangeLength, this.trailer, newHeader);
 	}
 
 	@Override
@@ -136,7 +140,10 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 		if (n < 0 || m < 0) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetInstance(this.length + n + m, this.rangeOffset, this.rangeLength, this.trailer + n, this.header + m);
+		int newLength = this.length + n + m;
+		int newTrailer = this.trailer + n;
+		int newHeader = this.header + m;
+		return this.abstractGetInstance(newLength, this.rangeOffset, this.rangeLength, newTrailer, newHeader);
 	}
 
 	@Override

@@ -64,6 +64,9 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	protected int length;
 	protected int rangeOffset;
 	protected boolean reverse;
+
+	// A flag indicating whether all elements in the array are identical. The wrapper class Boolean is used
+	// to allow the value null for the case that the flag has not yet been computed.
 	protected Boolean uniform = null;
 
 	protected AbstractImmutableArray(Class valueClass, int length, int rangeOffset, boolean reverse) {

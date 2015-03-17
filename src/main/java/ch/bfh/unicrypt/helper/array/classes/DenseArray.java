@@ -63,6 +63,7 @@ public class DenseArray<V extends Object>
 
 	protected DenseArray(V value, int length) {
 		this(new Object[]{value}, length, 0, false);
+		this.uniform = true;
 	}
 
 	protected DenseArray(Object[] values) {
@@ -72,9 +73,6 @@ public class DenseArray<V extends Object>
 	protected DenseArray(Object[] values, int length, int rangeOffset, boolean reverse) {
 		super(DenseArray.class, length, rangeOffset, reverse);
 		this.values = values;
-		if (values.length <= 1) {
-			this.uniform = true;
-		}
 	}
 
 	/**
@@ -163,7 +161,7 @@ public class DenseArray<V extends Object>
 		if (fillValue == null || length < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new DenseArray(new Object[]{fillValue}, length, 0, false);
+		return new DenseArray(fillValue, length);
 	}
 
 	@Override

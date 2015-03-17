@@ -54,9 +54,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * This class is provides an implementation for immutable arrays of type {@code byte}/{@code Byte}. Internally, the byte
- * values are stored in an ordinary Java byte array. To inherit the methods from the interface {@link BinaryArray}, it
- * uses the binary representation of the {@code byte} values stored in the array. This class serves as an efficient base
+ * This class is provides an implementation for immutable arrays of type {@code byte}/{@code Byte}. Internally, the
+ * bytes are stored in an ordinary Java byte array. To implement the inherited methods from the interface
+ * {@link BinaryArray}, it uses the binary representation of the byte values. This class serves as an efficient base
  * class for the implementations of {@link BooleanArray}.
  * <p>
  * @see BooleanArray
@@ -72,6 +72,9 @@ public class ByteArray
 	// a static variable for the total number of byte values
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
 
+	// a static varible containing a converter to convert byte arrays to string and back
+	private static final ByteArrayToString STRING_CONVERTER = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|");
+
 	// the internal Java array containing the byte values
 	private byte[] bytes;
 
@@ -80,10 +83,6 @@ public class ByteArray
 
 	// a flag indicating whether the internal byte array is identical to the external
 	private boolean normalized;
-
-	protected ByteArray(byte fillByte, int arrayLength) {
-		this(new byte[]{fillByte}, arrayLength);
-	}
 
 	protected ByteArray(byte[] bytes) {
 		this(bytes, bytes.length);
@@ -97,10 +96,7 @@ public class ByteArray
 		super(ByteArray.class, length, rangeOffset, reverse, ALL_ZERO, trailer, header, rangeLength);
 		this.bytes = bytes;
 		this.byteReversed = byteReversed;
-		if (bytes.length == 1 && length == rangeLength) {
-			this.uniform = true;
-		}
-		this.normalized = (trailer == 0) && (header == 0) && (rangeOffset == 0) && !reverse && byteReversed;
+		this.normalized = (rangeOffset == 0) && (rangeLength == length) && !reverse && !byteReversed;
 	}
 
 	public static ByteArray getInstance() {
@@ -108,13 +104,13 @@ public class ByteArray
 	}
 
 	/**
-	 * Creates a new {@code ByteArray} instance of a given length. Depending on the parameter {@code fillBit}, all its
-	 * bytes are identical to either {@code ALL_ZERO} or {@code ALL_ONE}. This method is a special case of
+	 * Creates a new {@code ByteArray} instance of a given length. Depending on the parameter {@code fillBit}, its bytes
+	 * are all identical to either {@code ALL_ZERO} or {@code ALL_ONE}. This method is a special case of
 	 * {@link ByteArray#getInstance(byte, int)}.
 	 * <p>
-	 * @param fillBit A flag indicating whether the values in the new array are {@code ALL_ZERO} or {@code ALL_ONE}
-	 * @param length  The length of the new array
-	 * @return The new array
+	 * @param fillBit A flag indicating whether the values in the new byte array are {@code ALL_ZERO} or {@code ALL_ONE}
+	 * @param length  The length of the new byte array
+	 * @return The new byte array
 	 */
 	public static ByteArray getInstance(boolean fillBit, int length) {
 		if (fillBit) {
@@ -127,24 +123,24 @@ public class ByteArray
 	/**
 	 * Creates a new {@code ByteArray} instance of a given length. All its values are identical to the given byte.
 	 * <p>
-	 * @param fillByte The byte included in the new array
-	 * @param length   The length of the new array
-	 * @return The new array
+	 * @param fillByte The byte included in the new byte array
+	 * @param length   The length of the new byte array
+	 * @return The new byte array
 	 */
 	public static ByteArray getInstance(byte fillByte, Integer length) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArray(fillByte, length);
+		byte[] bytes = new byte[length];
+		Arrays.fill(bytes, fillByte);
+		return new ByteArray(bytes, length);
 	}
 
 	/**
-	 * Creates a new {@code ByteArray} instance from a given Java array of {@code byte} values. The Java array is copied
-	 * for internal storage. The length and the indices of the values of the resulting array correspond to the given
-	 * Java array.
+	 * Creates a new {@code ByteArray} instance from a given Java byte array by copying its values for internal storage.
 	 * <p>
-	 * @param bytes The Java array of {@code byte} values
-	 * @return The new array
+	 * @param bytes The Java byte array
+	 * @return The new byte array
 	 */
 	public static ByteArray getInstance(byte... bytes) {
 		if (bytes == null) {
@@ -160,11 +156,10 @@ public class ByteArray
 
 	/**
 	 * Transforms a given immutable array of type {@code Byte} into a {@code ByteArray} instance. If the given immutable
-	 * array is already an instance of {@code ByteArray}, it is returned without doing anything. Otherwise, the
-	 * immutable array is transformed into a Java array for internal storage.
+	 * array is already an instance of {@code ByteArray}, it is returned without doing anything.
 	 * <p>
 	 * @param immutableArray The given immutable array
-	 * @return The new array
+	 * @return The new byte array
 	 */
 	public static ByteArray getInstance(ImmutableArray<Byte> immutableArray) {
 		if (immutableArray == null) {
@@ -182,12 +177,11 @@ public class ByteArray
 	}
 
 	/**
-	 * Creates a new {@code ByteArray} instance from a given Java collection of {@code Byte} values. The collection is
-	 * transformed into a Java array for internal storage. The length and the indices of the values of the resulting
-	 * array correspond to the given Java collection.
+	 * Creates a new {@code ByteArray} instance from a given Java collection of {@code Byte} values. The length and
+	 * indices of the bytes in the resulting byte array correspond to the given Java collection.
 	 * <p>
 	 * @param collection The Java collection of {@code Byte} values
-	 * @return The new array
+	 * @return The new byte array
 	 */
 	public static ByteArray getInstance(Collection<Byte> collection) {
 		if (collection == null) {
@@ -202,6 +196,21 @@ public class ByteArray
 			result[i++] = value;
 		}
 		return new ByteArray(result);
+	}
+
+	/**
+	 * Creates a new {@code ByteArray} instance from a given hexadecimal string using the converter defined for this
+	 * class. For example, "03|A2|29|FF|96" creates a byte array of length 5 with bytes 0x03 at index 0, 0xA2 at index
+	 * 1, etc. The same string representation is used by {@link ByteArray#toString()}.
+	 * <p>
+	 * @param hexString The hexadecimal string
+	 * @return The new byte array
+	 */
+	public static ByteArray getInstance(String hexString) {
+		if (hexString == null) {
+			throw new IllegalArgumentException();
+		}
+		return STRING_CONVERTER.reconvert(hexString);
 	}
 
 	public static ByteArray getInstance(ByteArray... byteArrays) {
@@ -222,14 +231,6 @@ public class ByteArray
 		return new ByteArray(byteBuffer.array());
 	}
 
-	// convenience method to construct byte arrays by hex strings (e.g. "03|A2|29|FF|96")
-	public static ByteArray getInstance(String hexString) {
-		if (hexString == null) {
-			throw new IllegalArgumentException();
-		}
-		return ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|").reconvert(hexString);
-	}
-
 	public static ByteArray getRandomInstance(int length) {
 		return ByteArray.getRandomInstance(length, HybridRandomByteSequence.getInstance());
 	}
@@ -241,9 +242,6 @@ public class ByteArray
 		return randomByteSequence.getNextByteArray(length);
 	}
 
-// TODO!!!
-// 	public static ByteArray getInstance(ByteArray... byteArrays) {
-//
 	public ByteArray getHashValue() {
 		return this.getHashValue(HashAlgorithm.getInstance());
 	}
@@ -280,6 +278,10 @@ public class ByteArray
 		return Arrays.copyOf(this.bytes, this.length);
 	}
 
+	public int getIntAt(int index) {
+		return this.getByteAt(index) & 0xFF;
+	}
+
 	// copy of getAt with byte as return type
 	public byte getByteAt(int index) {
 		if (index < 0 || index >= this.length) {
@@ -302,11 +304,10 @@ public class ByteArray
 
 	// copy of abstractGetValueAt with byte as return type
 	private byte abstractGetByteValueAt(int index) {
-		byte result = this.bytes[index % this.bytes.length];
 		if (this.byteReversed) {
-			result = MathUtil.reverse(result);
+			return MathUtil.reverse(this.bytes[index]);
 		}
-		return result;
+		return this.bytes[index];
 	}
 
 	private void normalize() {
@@ -328,17 +329,16 @@ public class ByteArray
 
 	@Override
 	protected String defaultToStringValue() {
-		String str = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|").convert(this);
+		String str = STRING_CONVERTER.convert(this);
 		return "\"" + str + "\"";
 	}
 
 	@Override
 	protected Byte abstractGetValueAt(int index) {
-		byte result = this.bytes[index % this.bytes.length];
 		if (this.byteReversed) {
-			result = MathUtil.reverse(result);
+			return MathUtil.reverse(this.bytes[index]);
 		}
-		return result;
+		return this.bytes[index];
 	}
 
 	// This method has been optimized for performance (and is therefore more complicated than necessary)
@@ -541,39 +541,32 @@ public class ByteArray
 		return MathUtil.and(mask1, mask2);
 	}
 
-	public static void main(String[] args) {
-		byte[] ba1 = new byte[256];
-		byte[] ba2 = new byte[256];
-		ByteArray ban1 = ByteArray.getInstance(ba1);
-		ByteArray ban2 = ByteArray.getInstance(ba2);
-		ByteArray bao1 = ByteArray.getInstance(ba1);
-		ByteArray bao2 = ByteArray.getInstance(ba2);
-
-		int runs = 1000000;
-
-		long t1 = System.nanoTime();
-		for (int i = 0; i < runs; i++) {
-			byte[] ba3 = new byte[256];
-			for (int j = 0; j < 256; j++) {
-				ba3[j] = (byte) (ba1[j] | ba2[j]);
-			}
-		}
-
-		long t2 = System.nanoTime();
-		for (int i = 0; i < runs; i++) {
-			ByteArray ban3 = ban1.or(ban2);
-		}
-
-		long t3 = System.nanoTime();
-		for (int i = 0; i < runs; i++) {
-			ByteArray bao3 = bao1.or(bao2);
-		}
-
-		long t4 = System.nanoTime();
-
-		System.out.println(t2 - t1);
-		System.out.println(t3 - t2);
-		System.out.println(t4 - t3);
-	}
-
+//  // SPEEDTEST
+//	public static void main(String[] args) {
+//		byte[] ba1 = new byte[256];
+//		byte[] ba2 = new byte[256];
+//		ByteArray ban1 = ByteArray.getInstance(ba1);
+//		ByteArray ban2 = ByteArray.getInstance(ba2);
+//
+//		int runs = 1000000;
+//
+//		long t1 = System.nanoTime();
+//		for (int i = 0; i < runs; i++) {
+//			byte[] ba3 = new byte[256];
+//			for (int j = 0; j < 256; j++) {
+//				ba3[j] = (byte) (ba1[j] | ba2[j]);
+//			}
+//		}
+//
+//		long t2 = System.nanoTime();
+//
+//		for (int i = 0; i < runs; i++) {
+//			ByteArray ban3 = ban1.or(ban2);
+//		}
+//
+//		long t3 = System.nanoTime();
+//
+//		System.out.println(t2 - t1);
+//		System.out.println(t3 - t2);
+//	}
 }

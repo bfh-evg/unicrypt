@@ -106,7 +106,7 @@ public class FiniteByteArraySet
 
 	@Override
 	protected BigIntegerConverter<ByteArray> abstractGetBigIntegerConverter() {
-		return FiniteByteArrayToBigInteger.getInstance(this.minLength, this.maxLength);
+		return FiniteByteArrayToBigInteger.getInstance(this.minLength);
 	}
 
 	@Override

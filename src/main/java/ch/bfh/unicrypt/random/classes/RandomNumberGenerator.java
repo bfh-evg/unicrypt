@@ -251,12 +251,17 @@ public class RandomNumberGenerator
 		if (shift == 8) {
 			shift = 0;
 		}
+//		if (isMsbSet) {
+//			bytes[0] = (byte) (((bytes[0] & 0xFF) | 0x80) >> shift);
+//		} else {
+//			bytes[0] = (byte) ((bytes[0] & 0xFF) >> shift);
+//		}
+		// Simplified code
 		if (isMsbSet) {
-			bytes[0] = (byte) (((bytes[0] & 0xFF) | 0x80) >> shift);
-		} else {
-			bytes[0] = (byte) ((bytes[0] & 0xFF) >> shift);
-
+			bytes[0] = MathUtil.setBit(bytes[0], 7);
 		}
+		bytes[0] = MathUtil.shiftRight(bytes[0], shift);
+
 		return new BigInteger(1, bytes);
 	}
 
