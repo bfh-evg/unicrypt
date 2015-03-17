@@ -74,18 +74,36 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 
 	@Override
 	public final W convert(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
+		if (this.isValidInput(value)) {
+			return this.abstractConvert(value);
 		}
-		return this.abstractConvert(value);
+		throw new IllegalArgumentException();
 	}
 
 	@Override
 	public final V reconvert(W value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
+		if (this.isValidOutput(value)) {
+			return this.abstractReconvert(value);
 		}
-		return this.abstractReconvert(value);
+		throw new IllegalArgumentException();
+	}
+
+	@Override
+	public final boolean isValidInput(V value) {
+		return (value != null) && this.defaultIsValidInput(value);
+	}
+
+	@Override
+	public final boolean isValidOutput(W value) {
+		return (value != null) && this.defaultIsValidOutput(value);
+	}
+
+	protected boolean defaultIsValidInput(V value) {
+		return true;
+	}
+
+	protected boolean defaultIsValidOutput(W value) {
+		return true;
 	}
 
 	protected abstract W abstractConvert(V value);

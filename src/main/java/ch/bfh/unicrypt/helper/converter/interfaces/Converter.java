@@ -42,19 +42,70 @@
 package ch.bfh.unicrypt.helper.converter.interfaces;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
- * @param <W>
+ * This generic interface provides two methods for converting instances of an input type {@code V} into instances of an
+ * output type {@code W}, forth and back. Instances of the input type for which
+ * {@link Converter#isValidInput(java.lang.Object)} returns {@code false} can not be converted. Similarly, instances of
+ * the output type for which {@link Converter#isValidOutput(java.lang.Object)} returns {@code false} can not be
+ * converted back.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * <p>
+ * @param <V> The input type
+ * @param <W> The output type
  */
 public interface Converter<V extends Object, W extends Object> {
 
-	public Class<V> getInputClass();
-
-	public Class<W> getOutputClass();
-
+	/**
+	 * Converts the given input value into an output value. An exception is thrown if the input value in invalid.
+	 * <p>
+	 * @param value The input value
+	 * @return The output value
+	 * @see Converter#isValidInput(java.lang.Object)
+	 */
 	public W convert(V value);
 
+	/**
+	 * Converts the given output value back into an input value. An exception is thrown if the output value in invalid.
+	 * <p>
+	 * @param value The input value
+	 * @return The output value
+	 * @see Converter#isValidOutput(java.lang.Object)
+	 */
 	public V reconvert(W value);
+
+	/**
+	 * Checks if a given input value is valid for the conversion.
+	 * <p>
+	 * @param value The input value
+	 * @return {@code true}, if the value is valid, {@code false} otherwise
+	 */
+	public boolean isValidInput(V value);
+
+	/**
+	 * Checks if a given output value is valid for the re-conversion.
+	 * <p>
+	 * @param value The output value
+	 * @return {@code true}, if the output is valid, {@code false} otherwise
+	 */
+	public boolean isValidOutput(W value);
+
+	/**
+	 * Returns the class of the input type {@code V}. This method is needed in {@link ConvertMethod} for technical
+	 * reasons.
+	 * <p>
+	 * @return The input class
+	 * @see ConvertMethod
+	 */
+	public Class<V> getInputClass();
+
+	/**
+	 * Returns the class of the output type {@code W}. This method is needed in {@link ConvertMethod} for technical
+	 * reasons.
+	 * <p>
+	 * @return The output class
+	 * @see ConvertMethod
+	 */
+	public Class<W> getOutputClass();
 
 }

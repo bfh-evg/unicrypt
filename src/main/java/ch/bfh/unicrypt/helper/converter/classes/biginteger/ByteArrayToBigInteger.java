@@ -63,12 +63,14 @@ public class ByteArrayToBigInteger
 
 	@Override
 	public BigInteger abstractConvert(ByteArray value) {
-		// For blocklLength=1, there is 1 bytearray of length 0, 256 of length 1,
-		// 65536 of length 2, etc. Therefore:
+		// For blocklLength=1, there is 1 bytearray of length 0, 256 of length 1, 65536 of length 2, etc. Therefore:
 		//   lenght=0 -> 0
 		//   length=1 -> 1,...,256
 		//   length=2 -> 257,...,65792
-		// etc.
+		// For blocklLength=2, there is 1 bytearray of length 0, 65536 of length 2, etc. Therefore:
+		//   lenght=0 -> 0
+		//   length=2 -> 1,...,65536
+		//   length=4 -> 65536,...
 		BigInteger result = BigInteger.ZERO;
 		if (value.getLength() > 0) {
 			byte[] bytes = new byte[value.getLength()];
