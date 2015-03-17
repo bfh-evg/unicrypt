@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.array;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import java.util.ArrayList;
 import java.util.Iterator;
 import static org.junit.Assert.assertEquals;
@@ -54,7 +53,7 @@ import org.junit.Test;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class ImmutableArrayTest {
+public class DenseArrayTest {
 
 	private static DenseArray<String> a0 = DenseArray.getInstance();
 	private static DenseArray<String> a1 = DenseArray.getInstance("s1", "s2", "s3");
@@ -63,7 +62,7 @@ public class ImmutableArrayTest {
 	private static DenseArray<String> a4;
 	private static DenseArray<String> a5;
 
-	public ImmutableArrayTest() {
+	public DenseArrayTest() {
 		ArrayList list1 = new ArrayList();
 		list1.add("s1");
 		list1.add("s2");

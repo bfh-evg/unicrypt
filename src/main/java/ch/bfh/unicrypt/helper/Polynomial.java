@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper;
 
-import ch.bfh.unicrypt.helper.array.classes.BooleanArray;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class Polynomial<C>
 	/** Holds the coefficients. Might be null if the polynomial is binary. */
 	private final Map<Integer, C> coefficients;
 	/** Holds the coefficients of binary polynomials. Is null if the polynomial is not binary. */
-	private final BooleanArray binaryCoefficients;
+	private final BitArray binaryCoefficients;
 
 	/** Polynomial's zero coefficient. */
 	private final C zeroCoefficient;
@@ -94,20 +94,20 @@ public class Polynomial<C>
 
 		if (isBinary) {
 			if (this.degree == ZERO_POLYNOMIAL_DEGREE) {
-				this.binaryCoefficients = BooleanArray.getInstance();
+				this.binaryCoefficients = BitArray.getInstance();
 			} else {
 				boolean[] bits = new boolean[this.degree + 1];
 				for (Integer index : coefficients.keySet()) {
 					bits[index] = true;
 				}
-				this.binaryCoefficients = BooleanArray.getInstance(bits);
+				this.binaryCoefficients = BitArray.getInstance(bits);
 			}
 		} else {
 			this.binaryCoefficients = null;
 		}
 	}
 
-	private Polynomial(BooleanArray coefficients, C zeroCoefficient, C oneCoefficient) {
+	private Polynomial(BitArray coefficients, C zeroCoefficient, C oneCoefficient) {
 		this.coefficients = null;
 		this.binaryCoefficients = coefficients;
 		this.zeroCoefficient = zeroCoefficient;
@@ -152,7 +152,7 @@ public class Polynomial<C>
 		return this.zeroCoefficient;
 	}
 
-	public BooleanArray getCoefficients() {
+	public BitArray getCoefficients() {
 		if (!this.isBinary()) {
 			throw new UnsupportedOperationException();
 		}
@@ -283,10 +283,10 @@ public class Polynomial<C>
 		if (coefficients == null) {
 			throw new IllegalArgumentException();
 		}
-		return Polynomial.getInstance(BooleanArray.getInstance(coefficients), zeroCoefficient, oneCoefficient);
+		return Polynomial.getInstance(BitArray.getInstance(coefficients), zeroCoefficient, oneCoefficient);
 	}
 
-	public static <C> Polynomial<C> getInstance(BooleanArray coefficients, C zeroCoefficient, C oneCoefficient) {
+	public static <C> Polynomial<C> getInstance(BitArray coefficients, C zeroCoefficient, C oneCoefficient) {
 		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null) {
 			throw new IllegalArgumentException();
 		}

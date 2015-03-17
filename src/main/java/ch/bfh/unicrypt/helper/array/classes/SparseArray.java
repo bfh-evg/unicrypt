@@ -56,6 +56,7 @@ import java.util.Map;
  * <p>
  * @see DenseArray
  * @author Rolf Haenni
+ * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */
 public class SparseArray<V extends Object>

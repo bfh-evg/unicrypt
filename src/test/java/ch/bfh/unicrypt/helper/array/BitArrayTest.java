@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.array;
 
-import ch.bfh.unicrypt.helper.array.classes.BooleanArray;
-import ch.bfh.unicrypt.helper.converter.classes.string.BooleanArrayToString;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,13 +53,13 @@ import org.junit.Test;
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class BooleanArrayTest {
+public class BitArrayTest {
 
-	ArrayList<BooleanArray> booleanArrayList = new ArrayList<BooleanArray>();
+	ArrayList<BitArray> bitArrayList = new ArrayList<BitArray>();
 	ArrayList<BooleanString> booleanStringList = new ArrayList<BooleanString>();
-	BooleanArrayToString converter = BooleanArrayToString.getInstance();
+	BitArrayToString converter = BitArrayToString.getInstance();
 
-	public BooleanArrayTest() {
+	public BitArrayTest() {
 		List<String> stringList = new LinkedList<String>();
 		// trivial cases
 		stringList.add("");
@@ -95,20 +95,20 @@ public class BooleanArrayTest {
 		stringList.add("00011101001010101010010100010111101011010101010101101010100101100001110100101010101001010001011110101101010101010110101010010110");
 		stringList.add("000111010010101010100101000101111010110101010101011010101001011000011101001010101010010100010111101011010101010101101010100101100");
 		for (String string : stringList) {
-			BooleanArray ba = converter.reconvert(string);
+			BitArray ba = converter.reconvert(string);
 			BooleanString bs = new BooleanString(string);
 
-			booleanArrayList.add(ba);
+			bitArrayList.add(ba);
 			booleanStringList.add(bs);
-			booleanArrayList.add(ba.reverse().addPrefixAndSuffix(10, 10).extractRange(5, 15));
+			bitArrayList.add(ba.reverse().addPrefixAndSuffix(10, 10).extractRange(5, 15));
 			booleanStringList.add(bs.reverse().appendPrefixAndSuffix(10, 10).extractRange(5, 15));
 		}
 	}
 
 	@Test
 	public void test_constructor() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			performTest(ba, bs);
@@ -117,8 +117,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_add() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			performTest(ba.add(), bs.add());
@@ -130,11 +130,11 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_append() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba1 = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba1 = bitArrayList.get(i);
 			BooleanString bs1 = booleanStringList.get(i);
-			for (int j = 0; j < booleanArrayList.size(); j++) {
-				BooleanArray ba2 = booleanArrayList.get(j);
+			for (int j = 0; j < bitArrayList.size(); j++) {
+				BitArray ba2 = bitArrayList.get(j);
 				BooleanString bs2 = booleanStringList.get(j);
 
 				performTest(ba1.append(ba2), bs1.append(bs2));
@@ -146,8 +146,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_appendPrefix() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			for (int n = 0; n < 100; n++) {
@@ -158,8 +158,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_appendSuffix() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			for (int n = 0; n < 100; n++) {
@@ -170,8 +170,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_appendPrefixAndSuffix() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			for (int n = 0; n < 66; n++) {
@@ -184,8 +184,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_count() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			performTest(ba.count(), bs.count());
@@ -202,8 +202,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_extract() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			for (int index = 0; index < ba.getLength(); index++) {
@@ -223,8 +223,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_getLength() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			performTest(ba.getLength(), bs.getLength());
@@ -233,8 +233,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_insertAt() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			for (int index = 0; index <= ba.getLength(); index++) {
@@ -247,8 +247,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_remove() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			performTest(ba.removePrefix(), bs.removePrefix());
@@ -268,8 +268,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_replaceAt() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			for (int index = 0; index < ba.getLength(); index++) {
@@ -282,8 +282,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_reverse() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			performTest(ba.reverse(), bs.reverse());
@@ -295,8 +295,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_shift() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			for (int n = -ba.getLength() - 10; n < ba.getLength() + 10; n++) {
@@ -308,8 +308,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_getAt() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			for (int index = 0; index < ba.getLength(); index++) {
@@ -320,8 +320,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_isUniform_isEmpty() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 
 			performTest(ba.isUniform(), bs.isUniform());
@@ -331,8 +331,8 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_isUniform_not() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba = bitArrayList.get(i);
 			BooleanString bs = booleanStringList.get(i);
 			performTest(ba.not(), bs.not());
 			performTest(ba.not().not(), bs);
@@ -342,11 +342,11 @@ public class BooleanArrayTest {
 
 	@Test
 	public void test_andOrXor() {
-		for (int i = 0; i < booleanArrayList.size(); i++) {
-			BooleanArray ba1 = booleanArrayList.get(i);
+		for (int i = 0; i < bitArrayList.size(); i++) {
+			BitArray ba1 = bitArrayList.get(i);
 			BooleanString bs1 = booleanStringList.get(i);
-			for (int j = 0; j < booleanArrayList.size(); j++) {
-				BooleanArray ba2 = booleanArrayList.get(j);
+			for (int j = 0; j < bitArrayList.size(); j++) {
+				BitArray ba2 = bitArrayList.get(j);
 				BooleanString bs2 = booleanStringList.get(j);
 
 				performTest(ba1.and(ba2), bs1.and(bs2));
@@ -372,7 +372,7 @@ public class BooleanArrayTest {
 		Assert.assertEquals(a, b);
 	}
 
-	public void performTest(BooleanArray ba, BooleanString bs) {
+	public void performTest(BitArray ba, BooleanString bs) {
 		Assert.assertEquals(bs.string, converter.convert(ba));
 		Assert.assertEquals(bs.reverse().string, converter.convert(ba.reverse()));
 	}

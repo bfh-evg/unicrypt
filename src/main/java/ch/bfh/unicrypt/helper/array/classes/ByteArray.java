@@ -49,7 +49,6 @@ import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -57,10 +56,11 @@ import java.util.Collection;
  * This class is provides an implementation for immutable arrays of type {@code byte}/{@code Byte}. Internally, the
  * bytes are stored in an ordinary Java byte array. To implement the inherited methods from the interface
  * {@link BinaryArray}, it uses the binary representation of the byte values. This class serves as an efficient base
- * class for the implementations of {@link BooleanArray}.
+ * class for the implementations of {@link BitArray}.
  * <p>
- * @see BooleanArray
+ * @see BitArray
  * @author Rolf Haenni
+ * @version 2.0
  */
 public class ByteArray
 	   extends AbstractBinaryArray<ByteArray, Byte> {
@@ -99,13 +99,18 @@ public class ByteArray
 		this.normalized = (rangeOffset == 0) && (rangeLength == length) && !reverse && !byteReversed;
 	}
 
+	/**
+	 * Creates a new empty byte array of length 0;
+	 * <p>
+	 * @return The new empty byte array
+	 */
 	public static ByteArray getInstance() {
 		return new ByteArray(new byte[0]);
 	}
 
 	/**
-	 * Creates a new {@code ByteArray} instance of a given length. Depending on the parameter {@code fillBit}, its bytes
-	 * are all identical to either {@code ALL_ZERO} or {@code ALL_ONE}. This method is a special case of
+	 * Creates a new byte array of a given length. Depending on the parameter {@code fillBit}, its bytes are all
+	 * identical to either {@code ALL_ZERO} or {@code ALL_ONE}. This method is a special case of
 	 * {@link ByteArray#getInstance(byte, int)}.
 	 * <p>
 	 * @param fillBit A flag indicating whether the values in the new byte array are {@code ALL_ZERO} or {@code ALL_ONE}
@@ -121,7 +126,7 @@ public class ByteArray
 	}
 
 	/**
-	 * Creates a new {@code ByteArray} instance of a given length. All its values are identical to the given byte.
+	 * Creates a new byte array of a given length. All its values are identical to the given byte.
 	 * <p>
 	 * @param fillByte The byte included in the new byte array
 	 * @param length   The length of the new byte array
@@ -137,7 +142,7 @@ public class ByteArray
 	}
 
 	/**
-	 * Creates a new {@code ByteArray} instance from a given Java byte array by copying its values for internal storage.
+	 * Creates a new byte array from a given Java byte array by copying its values for internal storage.
 	 * <p>
 	 * @param bytes The Java byte array
 	 * @return The new byte array
@@ -155,8 +160,8 @@ public class ByteArray
 	}
 
 	/**
-	 * Transforms a given immutable array of type {@code Byte} into a {@code ByteArray} instance. If the given immutable
-	 * array is already an instance of {@code ByteArray}, it is returned without doing anything.
+	 * Transforms a given immutable array of type {@code Byte} into a byte array. If the given immutable array is
+	 * already an instance of {@code ByteArray}, it is returned without doing anything.
 	 * <p>
 	 * @param immutableArray The given immutable array
 	 * @return The new byte array
@@ -177,8 +182,8 @@ public class ByteArray
 	}
 
 	/**
-	 * Creates a new {@code ByteArray} instance from a given Java collection of {@code Byte} values. The length and
-	 * indices of the bytes in the resulting byte array correspond to the given Java collection.
+	 * Creates a new byte array from a given Java collection of {@code Byte} values. The length and indices of the bytes
+	 * in the resulting byte array correspond to the given Java collection.
 	 * <p>
 	 * @param collection The Java collection of {@code Byte} values
 	 * @return The new byte array
@@ -199,9 +204,9 @@ public class ByteArray
 	}
 
 	/**
-	 * Creates a new {@code ByteArray} instance from a given hexadecimal string using the converter defined for this
-	 * class. For example, "03|A2|29|FF|96" creates a byte array of length 5 with bytes 0x03 at index 0, 0xA2 at index
-	 * 1, etc. The same string representation is used by {@link ByteArray#toString()}.
+	 * Creates a new byte array from a given hexadecimal string using the converter defined for this class. For example,
+	 * "03|A2|29|FF|96" creates a byte array of length 5 with bytes 0x03 at index 0, 0xA2 at index 1, etc. The same
+	 * string converter is used by {@link ByteArray#toString()}.
 	 * <p>
 	 * @param hexString The hexadecimal string
 	 * @return The new byte array
@@ -213,6 +218,13 @@ public class ByteArray
 		return STRING_CONVERTER.reconvert(hexString);
 	}
 
+	/**
+	 * Creates a new byte array by concatenating the bytes from multiple given byte arrays. The lenght of the new byte
+	 * array corresponds to the sum of the lengths of the given byte arrays.
+	 * <p>
+	 * @param byteArrays The given byte arrays
+	 * @return The new byte array
+	 */
 	public static ByteArray getInstance(ByteArray... byteArrays) {
 		if (byteArrays == null) {
 			throw new IllegalArgumentException();
@@ -224,17 +236,34 @@ public class ByteArray
 			}
 			length = length + byteArray.getLength();
 		}
-		ByteBuffer byteBuffer = ByteBuffer.allocate(length);
+		byte[] bytes = new byte[length];
+		int index = 0;
 		for (ByteArray byteArray : byteArrays) {
-			byteBuffer.put(byteArray.getBytes());
+			System.arraycopy(byteArray.getBytes(), 0, bytes, index, byteArray.getLength());
+			index = index + byteArray.getLength();
 		}
-		return new ByteArray(byteBuffer.array());
+		return new ByteArray(bytes);
 	}
 
+	/**
+	 * Creates a new random byte array of a given length. It uses the library's standard randomness source to create the
+	 * random bytes.
+	 * <p>
+	 * @param length The length of the random byte array
+	 * @return The new random byte array
+	 */
 	public static ByteArray getRandomInstance(int length) {
 		return ByteArray.getRandomInstance(length, HybridRandomByteSequence.getInstance());
 	}
 
+	/**
+	 * Creates a new random byte array of a given length. It uses a given instance of {@code RandomByteSequence}
+	 * instance as randomness source to create the random bytes.
+	 * <p>
+	 * @param length             The length of the random byte array
+	 * @param randomByteSequence The randomness source
+	 * @return The new random byte array
+	 */
 	public static ByteArray getRandomInstance(int length, RandomByteSequence randomByteSequence) {
 		if (length < 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
@@ -242,10 +271,23 @@ public class ByteArray
 		return randomByteSequence.getNextByteArray(length);
 	}
 
+	/**
+	 * Computes the byte array's hash value using the library's standard hash algorithm. The result is another byte
+	 * array of a fixed length.
+	 * <p>
+	 * @return The hash value of the byte array
+	 */
 	public ByteArray getHashValue() {
 		return this.getHashValue(HashAlgorithm.getInstance());
 	}
 
+	/**
+	 * Computes the byte array's hash value using the the specified hash algorithm. The result is another byte array
+	 * array of a fixed length.
+	 * <p>
+	 * @param hashAlgorithm The hash algorithm used to compute the hash value
+	 * @return The hash value of the byte array
+	 */
 	public ByteArray getHashValue(HashAlgorithm hashAlgorithm) {
 		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
@@ -255,8 +297,8 @@ public class ByteArray
 	}
 
 	/**
-	 * Creates a new {@code ByteArray} instance by reversing the bits of each byte. The order of the values in the array
-	 * remains unchanged. Keeping the order of the bytes in the array distinguishes this method from
+	 * Creates a new byte array by reversing the bits of each byte. The order of the values in the array remains
+	 * unchanged. Keeping the order of the bytes in the array distinguishes this method from
 	 * {@link ByteArray#reverse()}.
 	 * <p>
 	 * @return The new array with the bits in each value reversed
@@ -266,9 +308,9 @@ public class ByteArray
 	}
 
 	/**
-	 * Transforms the {@code ByteArray} instance into a Java {@code byte} array.
+	 * Transforms the byte array into a Java byte array.
 	 * <p>
-	 * @return The resulting Java {@code byte} array
+	 * @return The resulting Java byte array
 	 */
 	public byte[] getBytes() {
 		// normalize for better performance
@@ -278,11 +320,25 @@ public class ByteArray
 		return Arrays.copyOf(this.bytes, this.length);
 	}
 
+	/**
+	 * Converts the (unsigned) byte at some given index in the array into an {@code int} value. This is a convenience
+	 * method to simplify the casting and to avoid common errors with the sign bit.
+	 * <p>
+	 * @param index The given index
+	 * @return The correspond byte converted to {@code int}
+	 */
 	public int getIntAt(int index) {
 		return this.getByteAt(index) & 0xFF;
 	}
 
-	// copy of getAt with byte as return type
+	/**
+	 * This method is a identical to {@link ImmutableArray#getAt(int)} except for the return type ({@code byte} instead
+	 * of the wrapper class {@code Byte}).
+	 * <p>
+	 * @param index The given index
+	 * @return The corresponding byte
+	 * @see ImmutableArray#getAt(int)
+	 */
 	public byte getByteAt(int index) {
 		if (index < 0 || index >= this.length) {
 			throw new IndexOutOfBoundsException();
@@ -310,6 +366,7 @@ public class ByteArray
 		return this.bytes[index];
 	}
 
+	// changes the byte array's internal representation by setting header, trailer, rangeOffset to 0 and byteReversed and reversed to false.
 	private void normalize() {
 		if (!this.normalized) {
 			byte[] newBytes = new byte[this.length];
@@ -355,9 +412,7 @@ public class ByteArray
 		if (this.getClass().isInstance(other)) {
 			// if yes, cast and normalize it for better performance
 			ByteArray otherByteArray = (ByteArray) other;
-			if (!otherByteArray.normalized) {
-				otherByteArray.normalize();
-			}
+			otherByteArray.normalize();
 			// copy the bytes of as suffix
 			System.arraycopy(otherByteArray.bytes, 0, result, this.length, otherByteArray.length);
 		} else {
@@ -466,7 +521,6 @@ public class ByteArray
 				}
 				break;
 		}
-
 		// if necessary fill up new byte array
 		if (maxLength) {
 			byte[] longer = (this.length == max) ? this.bytes : other.bytes;
@@ -499,7 +553,7 @@ public class ByteArray
 		return new ByteArray(result);
 	}
 
-// adds an overall, possibly negative shift
+	// adds an overall, possibly negative shift
 	protected byte getByteAt(int shift, int index, int rangeOffset, int rangeLength) {
 		// Java8: use floorMod and floorDiv to handle negative values properly
 		int shiftMod = MathUtil.modulo(shift, Byte.SIZE);

@@ -39,67 +39,35 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes.string;
+package ch.bfh.unicrypt.helper.converter.classes.bitarray;
 
-import ch.bfh.unicrypt.helper.array.classes.BooleanArray;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBitArrayConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class BooleanArrayToString
-	   extends AbstractStringConverter<BooleanArray> {
+public class ByteArrayToBitArray
+	   extends AbstractBitArrayConverter<ByteArray> {
 
-	private final boolean reverse;
-	private final String regExp;
-
-	protected BooleanArrayToString(boolean reverse) {
-		super(BooleanArray.class);
-		this.reverse = reverse;
-		this.regExp = "^[0-1]*$";
+	protected ByteArrayToBitArray() {
+		super(ByteArray.class);
 	}
 
 	@Override
-	public String abstractConvert(BooleanArray booleanArray) {
-		StringBuilder sb = new StringBuilder(booleanArray.getLength());
-		for (Boolean bit : this.reverse ? booleanArray.reverse() : booleanArray) {
-			sb.append(bit ? "1" : "0");
-		}
-		return sb.toString();
+	public BitArray abstractConvert(ByteArray byteArray) {
+		return BitArray.getInstance(byteArray);
 	}
 
 	@Override
-	public BooleanArray abstractReconvert(String string) {
-		if (!string.matches(this.regExp)) {
-			throw new IllegalArgumentException();
-		}
-		boolean[] bits = new boolean[string.length()];
-		for (int i = 0; i < bits.length; i++) {
-			bits[i] = (string.charAt(i) == '1');
-		}
-		BooleanArray result = BooleanArray.getInstance(bits);
-		return this.reverse ? result.reverse() : result;
+	public ByteArray abstractReconvert(BitArray bitArray) {
+		return bitArray.getByteArray();
 	}
 
-	public static BooleanArrayToString getInstance() {
-		return new BooleanArrayToString(false);
+	public static ByteArrayToBitArray getInstance() {
+		return new ByteArrayToBitArray();
 	}
 
-	public static BooleanArrayToString getInstance(boolean reverse) {
-		return new BooleanArrayToString(reverse);
-	}
-
-//	public static void main(final String[] args) {
-//
-//		BitArrayToString converter1 = BitArrayToString.getInstance();
-//		BitArray ba1 = converter1.reconvert("0010100000101010110011000000");
-//		System.out.println(ba1);
-//		System.out.println(converter1.convert(ba1));
-//
-//		BitArrayToString converter2 = BitArrayToString.getInstance(true);
-//		BitArray ba2 = converter2.reconvert("0010100000101010110011000000");
-//		System.out.println(ba2);
-//		System.out.println(converter2.convert(ba2));
-//	}
 }

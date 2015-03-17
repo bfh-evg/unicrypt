@@ -53,6 +53,7 @@ import java.util.List;
  * This abstract class serves as a base implementation of the {@link ImmutableArray} interface.
  * <p>
  * @author Rolf Haenni
+ * @version 2.0
  * @param <A> The type of a potential non-generic sub-class
  * @param <V> The generic type of the values in the immutable array
  */

@@ -39,45 +39,16 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes.string;
+package ch.bfh.unicrypt.helper.converter.interfaces;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import org.junit.Assert;
-import org.junit.Test;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class ByteArrayToStringTest {
-
-	@Test
-	public void testMain() {
-
-		ByteArray b1 = ByteArray.getInstance("");
-		ByteArray b2 = ByteArray.getInstance("f8");
-		ByteArray b3 = ByteArray.getInstance("00|00");
-		ByteArray b4 = ByteArray.getInstance("01|23|45|67|89|AB|CD|EF");
-
-		ByteArray[] bs = {b1, b2, b3, b4};
-
-		String[] delimiters = {"|", " ", "-", "x"};
-
-		for (String delim : delimiters) {
-			ByteArrayToString c1 = ByteArrayToString.getInstance(ByteArrayToString.Radix.BASE64);
-			ByteArrayToString c2 = ByteArrayToString.getInstance(ByteArrayToString.Radix.BINARY);
-			ByteArrayToString c3 = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX);
-			ByteArrayToString c4 = ByteArrayToString.getInstance(ByteArrayToString.Radix.BINARY, true);
-			ByteArrayToString c5 = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, true);
-			ByteArrayToString c6 = ByteArrayToString.getInstance(ByteArrayToString.Radix.BINARY, delim);
-			ByteArrayToString c7 = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, delim);
-			ByteArrayToString[] cs = {c1, c2, c3, c4, c5, c6, c7};
-			for (ByteArrayToString c : cs) {
-				for (ByteArray b : bs) {
-					Assert.assertEquals(b, c.reconvert(c.convert(b)));
-				}
-			}
-		}
-	}
+public interface BitArrayConverter<V extends Object>
+	   extends Converter<V, BitArray> {
 
 }

@@ -39,37 +39,22 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter;
+package ch.bfh.unicrypt.helper.converter.abstracts;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
-import java.math.BigInteger;
-import java.nio.ByteOrder;
-import org.junit.Assert;
-import org.junit.Test;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.BitArrayConverter;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @param <V>
  */
-public class BigIntegerConverterTest {
+public abstract class AbstractBitArrayConverter<V extends Object>
+	   extends AbstractConverter<V, BitArray>
+	   implements BitArrayConverter<V> {
 
-	public static BigIntegerToByteArray c1 = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
-	public static BigIntegerToByteArray c2 = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN);
-
-	@Test
-	public void testByteArrayConverter() {
-		BigInteger b0 = BigInteger.valueOf(0);
-		BigInteger b1 = BigInteger.valueOf(9);
-		BigInteger b2 = BigInteger.valueOf(200);
-		BigInteger b3 = BigInteger.valueOf(300);
-		for (BigIntegerToByteArray converter : new BigIntegerToByteArray[]{c1, c2}) {
-			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
-				ByteArray ba = converter.convert(bigInteger);
-				Assert.assertEquals(bigInteger, converter.reconvert(ba));
-			}
-
-		}
+	public AbstractBitArrayConverter(Class<V> inputClass) {
+		super(inputClass, BitArray.class);
 	}
 
 }

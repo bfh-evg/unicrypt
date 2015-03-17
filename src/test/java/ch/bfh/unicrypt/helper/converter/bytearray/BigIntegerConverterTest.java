@@ -39,50 +39,37 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes.biginteger;
+package ch.bfh.unicrypt.helper.converter.bytearray;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.array.classes.BooleanArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import java.math.BigInteger;
+import java.nio.ByteOrder;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class BooleanArrayToBigInteger
-	   extends AbstractBigIntegerConverter<BooleanArray> {
+public class BigIntegerConverterTest {
 
-	protected BooleanArrayToBigInteger() {
-		super(BooleanArray.class);
-	}
+	public static BigIntegerToByteArray c1 = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
+	public static BigIntegerToByteArray c2 = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN);
 
-	@Override
-	public BigInteger abstractConvert(BooleanArray value) {
-		// There is 1 boolean array of length 0, 2 of length 1, 4 of length 2, etc. Therefore:
-		//   lenght=0 -> 0,...,0 = 0,...,0 + 0
-		//   length=1 -> 1,...,2 = 0,...,1 + 1
-		//   length=2 -> 3,...,6 = 0,...,3 + 3
-		//   length=3 -> 7,...,14 = 0,...,7 + 7
-		// etc.
-		BigInteger value1 = MathUtil.powerOfTwo(value.getLength()).subtract(BigInteger.ONE);
-		BigInteger value2 = new BigInteger(1, value.getByteArray().getBytes());
-		return value1.add(value2);
-	}
+	@Test
+	public void testByteArrayConverter() {
+		BigInteger b0 = BigInteger.valueOf(0);
+		BigInteger b1 = BigInteger.valueOf(9);
+		BigInteger b2 = BigInteger.valueOf(200);
+		BigInteger b3 = BigInteger.valueOf(300);
+		for (BigIntegerToByteArray converter : new BigIntegerToByteArray[]{c1, c2}) {
+			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
+				ByteArray ba = converter.convert(bigInteger);
+				Assert.assertEquals(bigInteger, converter.reconvert(ba));
+			}
 
-	@Override
-	public BooleanArray abstractReconvert(BigInteger value) {
-		int length = value.add(BigInteger.ONE).bitLength() - 1;
-		BigInteger value1 = MathUtil.powerOfTwo(length).subtract(BigInteger.ONE);
-		BigInteger value2 = value.subtract(value1);
-		byte[] bytes = value2.toByteArray();
-		return BooleanArray.getInstance(ByteArray.getInstance(bytes), length);
-
-	}
-
-	public static BooleanArrayToBigInteger getInstance() {
-		return new BooleanArrayToBigInteger();
+		}
 	}
 
 }

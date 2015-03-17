@@ -39,22 +39,50 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.abstracts;
+package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
-import ch.bfh.unicrypt.helper.array.classes.BooleanArray;
-import ch.bfh.unicrypt.helper.converter.interfaces.BooleanArrayConverter;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import java.math.BigInteger;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
  */
-public abstract class AbstractBooleanArrayConverter<V extends Object>
-	   extends AbstractConverter<V, BooleanArray>
-	   implements BooleanArrayConverter<V> {
+public class BitArrayToBigInteger
+	   extends AbstractBigIntegerConverter<BitArray> {
 
-	public AbstractBooleanArrayConverter(Class<V> inputClass) {
-		super(inputClass, BooleanArray.class);
+	protected BitArrayToBigInteger() {
+		super(BitArray.class);
+	}
+
+	@Override
+	public BigInteger abstractConvert(BitArray value) {
+		// There is 1 boolean array of length 0, 2 of length 1, 4 of length 2, etc. Therefore:
+		//   lenght=0 -> 0,...,0 = 0,...,0 + 0
+		//   length=1 -> 1,...,2 = 0,...,1 + 1
+		//   length=2 -> 3,...,6 = 0,...,3 + 3
+		//   length=3 -> 7,...,14 = 0,...,7 + 7
+		// etc.
+		BigInteger value1 = MathUtil.powerOfTwo(value.getLength()).subtract(BigInteger.ONE);
+		BigInteger value2 = new BigInteger(1, value.getByteArray().getBytes());
+		return value1.add(value2);
+	}
+
+	@Override
+	public BitArray abstractReconvert(BigInteger value) {
+		int length = value.add(BigInteger.ONE).bitLength() - 1;
+		BigInteger value1 = MathUtil.powerOfTwo(length).subtract(BigInteger.ONE);
+		BigInteger value2 = value.subtract(value1);
+		byte[] bytes = value2.toByteArray();
+		return BitArray.getInstance(ByteArray.getInstance(bytes), length);
+
+	}
+
+	public static BitArrayToBigInteger getInstance() {
+		return new BitArrayToBigInteger();
 	}
 
 }

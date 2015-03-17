@@ -1,8 +1,8 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.helper.array.classes.BooleanArray;
-import ch.bfh.unicrypt.helper.converter.classes.booleanarray.ByteArrayToBooleanArray;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.converter.classes.bitarray.ByteArrayToBitArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
@@ -26,13 +26,13 @@ public class ZModToBinaryPolynomialEncoder
 	private final ZMod zMod;
 	private final PolynomialField binaryPolynomial;
 	private final BigIntegerToByteArray converter1;
-	private final ByteArrayToBooleanArray converter2;
+	private final ByteArrayToBitArray converter2;
 
 	private ZModToBinaryPolynomialEncoder(ZMod zMod, PolynomialField binaryPolynomial) {
 		this.zMod = zMod;
 		this.binaryPolynomial = binaryPolynomial;
 		this.converter1 = BigIntegerToByteArray.getInstance();
-		this.converter2 = ByteArrayToBooleanArray.getInstance();
+		this.converter2 = ByteArrayToBitArray.getInstance();
 	}
 
 	@Override
@@ -61,8 +61,8 @@ public class ZModToBinaryPolynomialEncoder
 
 		@Override
 		protected PolynomialElement abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
-			BooleanArray booleanArray = converter2.convert(converter1.convert(element.getValue()));
-			return this.getCoDomain().getElement(booleanArray);
+			BitArray bitArray = converter2.convert(converter1.convert(element.getValue()));
+			return this.getCoDomain().getElement(bitArray);
 		}
 
 	}
@@ -76,8 +76,8 @@ public class ZModToBinaryPolynomialEncoder
 
 		@Override
 		protected ZModElement abstractApply(final PolynomialElement element, final RandomByteSequence randomByteSequence) {
-			BooleanArray booleanArray = element.getValue().getCoefficients();
-			BigInteger bigInteger = converter1.reconvert(converter2.reconvert(booleanArray));
+			BitArray bitArray = element.getValue().getCoefficients();
+			BigInteger bigInteger = converter1.reconvert(converter2.reconvert(bitArray));
 			return this.getCoDomain().getElement(bigInteger.mod(this.getCoDomain().getModulus()));
 		}
 

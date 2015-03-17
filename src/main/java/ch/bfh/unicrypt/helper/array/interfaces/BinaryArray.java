@@ -46,9 +46,8 @@ package ch.bfh.unicrypt.helper.array.interfaces;
  * existing binary arrays. For this to work, the generic type of the array needs to be interpretable as binary data. The
  * generic types for which this interface is intended to be applied are {@link Boolean}, {@link Byte}, and {@link Long}.
  * <p>
- * @see BooleanArray
+ * @see BitArray
  * @see ByteArray
- * @see LongArray
  * @author Rolf Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the binary array
