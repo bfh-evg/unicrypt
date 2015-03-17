@@ -91,10 +91,9 @@ public class BooleanArray
 
 	/**
 	 * Creates a new {@code BooleanArray} instance from a given {@code ByteArray} instance. Its length and boolean
-	 * values correspond to the bits in the binary representation of the given {@code ByteArray} instance. This
-	 * method is a special case of
-	 * {@link BooleanArray#getInstance(ch.bfh.unicrypt.helper.array.classes.ByteArrayFinal, int)} with the length
-	 * computed automatically.
+	 * values correspond to the bits in the binary representation of the given {@code ByteArray} instance. This method
+	 * is a special case of {@link BooleanArray#getInstance(ch.bfh.unicrypt.helper.array.classes.ByteArrayFinal, int)}
+	 * with the length computed automatically.
 	 * <p>
 	 * @param byteArray The given {@code ByteArray} instance
 	 * @return The new boolean array
@@ -210,7 +209,7 @@ public class BooleanArray
 		return result;
 	}
 
-	private ByteArray getByteArrayFinal() {
+	public ByteArray getByteArray() {
 		int arrayLength = MathUtil.divide(this.length - 1, Byte.SIZE) + 1;
 		byte[] bytes = new byte[arrayLength];
 		for (int index = 0; index < arrayLength; index++) {
@@ -269,8 +268,8 @@ public class BooleanArray
 	protected BooleanArray abstractAppend(BooleanArray other) {
 		// make this BooleanArray right-aligned with a ByteArray
 		int shift = (Byte.SIZE - this.length % Byte.SIZE) % Byte.SIZE;
-		ByteArray byteArray1 = this.addPrefix(shift).getByteArrayFinal();
-		ByteArray byteArray2 = other.getByteArrayFinal();
+		ByteArray byteArray1 = this.addPrefix(shift).getByteArray();
+		ByteArray byteArray2 = other.getByteArray();
 		return new BooleanArray(byteArray1.append(byteArray2), this.length + other.length, shift);
 	}
 
@@ -286,8 +285,8 @@ public class BooleanArray
 		// make the shorter BooleanArray right-aligned with a ByteArray
 		int minLength = Math.min(this.length, other.length);
 		int shift = (Byte.SIZE - minLength % Byte.SIZE) % Byte.SIZE;
-		ByteArray byteArray1 = this.addPrefix(shift).getByteArrayFinal();
-		ByteArray byteArray2 = other.addPrefix(shift).getByteArrayFinal();
+		ByteArray byteArray1 = this.addPrefix(shift).getByteArray();
+		ByteArray byteArray2 = other.addPrefix(shift).getByteArray();
 		ByteArray result = byteArray1.abstractAndOrXor(operator, byteArray2, maxLength, fillBit);
 		int newLength = maxLength ? Math.max(this.length, other.length) : minLength;
 		return new BooleanArray(result, newLength, shift);
@@ -295,7 +294,7 @@ public class BooleanArray
 
 	@Override
 	protected BooleanArray abstractNot() {
-		return new BooleanArray(this.getByteArrayFinal().not(), this.length);
+		return new BooleanArray(this.getByteArray().not(), this.length);
 	}
 
 }

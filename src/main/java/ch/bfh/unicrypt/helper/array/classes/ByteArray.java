@@ -131,7 +131,7 @@ public class ByteArray
 	 * @param length   The length of the new array
 	 * @return The new array
 	 */
-	public static ByteArray getInstance(byte fillByte, int length) {
+	public static ByteArray getInstance(byte fillByte, Integer length) {
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}

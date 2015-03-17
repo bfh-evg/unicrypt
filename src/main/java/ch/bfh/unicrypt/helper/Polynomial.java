@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.helper;
 
+import ch.bfh.unicrypt.helper.array.classes.BooleanArray;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
@@ -64,7 +64,7 @@ public class Polynomial<C>
 	/** Holds the coefficients. Might be null if the polynomial is binary. */
 	private final Map<Integer, C> coefficients;
 	/** Holds the coefficients of binary polynomials. Is null if the polynomial is not binary. */
-	private final ByteArray binaryCoefficients;
+	private final BooleanArray binaryCoefficients;
 
 	/** Polynomial's zero coefficient. */
 	private final C zeroCoefficient;
@@ -94,41 +94,28 @@ public class Polynomial<C>
 
 		if (isBinary) {
 			if (this.degree == ZERO_POLYNOMIAL_DEGREE) {
-				this.binaryCoefficients = ByteArray.getInstance();
+				this.binaryCoefficients = BooleanArray.getInstance();
 			} else {
-				byte[] bytes = new byte[(int) Math.ceil((this.degree + 1) / 8.0)];
-				Arrays.fill(bytes, (byte) 0x00);
+				boolean[] bits = new boolean[this.degree + 1];
 				for (Integer index : coefficients.keySet()) {
-					int byteIndex = index / Byte.SIZE;
-					int bitIndex = index % Byte.SIZE;
-					bytes[byteIndex] = (byte) (bytes[byteIndex] | (0x01 << bitIndex));
+					bits[index] = true;
 				}
-				this.binaryCoefficients = ByteArray.getInstance(bytes);
+				this.binaryCoefficients = BooleanArray.getInstance(bits);
 			}
 		} else {
 			this.binaryCoefficients = null;
 		}
 	}
 
-	private Polynomial(ByteArray coefficients, C zeroCoefficient, C oneCoefficient) {
+	private Polynomial(BooleanArray coefficients, C zeroCoefficient, C oneCoefficient) {
 		this.coefficients = null;
 		this.binaryCoefficients = coefficients;
 		this.zeroCoefficient = zeroCoefficient;
 		this.oneCoefficient = oneCoefficient;
-
 		if (coefficients.getLength() == 0) {
 			this.degree = ZERO_POLYNOMIAL_DEGREE;
 		} else {
-			int byteIndex = 0;
-			for (int i = 0; i < this.binaryCoefficients.getLength(); i++) {
-				if (this.binaryCoefficients.getByteAt(i) != 0) {
-					byteIndex = i;
-				}
-			}
-			byte b = coefficients.getByteAt(byteIndex);
-			int bitIndex = Integer.SIZE - Integer.numberOfLeadingZeros(b & 0xff);
-			int d = byteIndex * Byte.SIZE + bitIndex - 1;
-			this.degree = d < 0 ? ZERO_POLYNOMIAL_DEGREE : d;
+			this.degree = coefficients.getLength() - 1;
 		}
 	}
 
@@ -153,7 +140,7 @@ public class Polynomial<C>
 			throw new IllegalArgumentException();
 		}
 		if (this.isBinary()) {
-			if (index < this.binaryCoefficients.getBitLength() && this.binaryCoefficients.getBitAt(index)) {
+			if (index < this.binaryCoefficients.getLength() && this.binaryCoefficients.getAt(index)) {
 				return this.oneCoefficient;
 			}
 		} else {
@@ -165,7 +152,7 @@ public class Polynomial<C>
 		return this.zeroCoefficient;
 	}
 
-	public ByteArray getCoefficients() {
+	public BooleanArray getCoefficients() {
 		if (!this.isBinary()) {
 			throw new UnsupportedOperationException();
 		}
@@ -176,10 +163,8 @@ public class Polynomial<C>
 		if (this.indices == null) {
 			if (this.isBinary()) {
 				ArrayList<Integer> ind = new ArrayList();
-				for (int i = 0; i < this.binaryCoefficients.getBitLength(); i++) {
-					if (this.binaryCoefficients.getBitAt(i)) {
-						ind.add(i);
-					}
+				for (int i : this.binaryCoefficients.getIndices(Boolean.TRUE)) {
+					ind.add(i);
 				}
 				this.indices = DenseArray.getInstance(ind);
 			} else {
@@ -295,6 +280,13 @@ public class Polynomial<C>
 	}
 
 	public static <C> Polynomial<C> getInstance(ByteArray coefficients, C zeroCoefficient, C oneCoefficient) {
+		if (coefficients == null) {
+			throw new IllegalArgumentException();
+		}
+		return Polynomial.getInstance(BooleanArray.getInstance(coefficients), zeroCoefficient, oneCoefficient);
+	}
+
+	public static <C> Polynomial<C> getInstance(BooleanArray coefficients, C zeroCoefficient, C oneCoefficient) {
 		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null) {
 			throw new IllegalArgumentException();
 		}
