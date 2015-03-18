@@ -59,6 +59,19 @@ public class BigIntegerToBigInteger
 		this.fold = fold;
 	}
 
+	public static BigIntegerToBigInteger getInstance() {
+		return BigIntegerToBigInteger.getInstance(false);
+	}
+
+	public static BigIntegerToBigInteger getInstance(boolean fold) {
+		return new BigIntegerToBigInteger(fold);
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		return value.signum() >= 0;
+	}
+
 	@Override
 	protected BigInteger abstractConvert(BigInteger value) {
 		if (this.fold) {
@@ -70,20 +83,9 @@ public class BigIntegerToBigInteger
 	@Override
 	protected BigInteger abstractReconvert(BigInteger value) {
 		if (this.fold) {
-			if (value.signum() >= 0) {
-				return MathUtil.unfold(value);
-			}
-			return null;
+			return MathUtil.unfold(value);
 		}
 		return value;
-	}
-
-	public static BigIntegerToBigInteger getInstance() {
-		return BigIntegerToBigInteger.getInstance(false);
-	}
-
-	public static BigIntegerToBigInteger getInstance(boolean fold) {
-		return new BigIntegerToBigInteger(fold);
 	}
 
 }

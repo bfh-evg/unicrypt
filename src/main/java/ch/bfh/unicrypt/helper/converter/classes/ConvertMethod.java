@@ -47,44 +47,65 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <T>
+ * Instances of this generic class provide multiple converters for the same output type {@code W}. The purpose of this
+ * class is to declare the conversion into values of type {@code W} in one central place, without limiting the
+ * flexibility. Note that {@link ConvertMethod} itself is not a {@link Converter}, it only allows the selection of the
+ * converter to be used for instances of a specific class.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <W> The output type
  */
-public class ConvertMethod<T extends Object>
+public class ConvertMethod<W extends Object>
 	   extends UniCrypt {
 
-	private final Map<Class<?>, Converter<?, T>> converterMap;
+	// a map for storing the converters
+	private final Map<Class<?>, Converter<?, W>> converterMap;
 
 	private ConvertMethod() {
-		this.converterMap = new HashMap<Class<?>, Converter<?, T>>();
+		this.converterMap = new HashMap<Class<?>, Converter<?, W>>();
 	}
 
-	public Converter<?, T> getConverter(Class<?> valueClass) {
-		return this.converterMap.get(valueClass);
-	}
-
-	// should this method be public?
-	private void addConverter(Converter<?, T> converter) {
-		Class<?> valueClass = converter.getInputClass();
-		if (this.converterMap.containsKey(valueClass)) {
-			throw new IllegalArgumentException();
-		}
-		this.converterMap.put(valueClass, converter);
-	}
-
-	public static <T> ConvertMethod getInstance(Converter<?, T>... converters) {
+	/**
+	 * Creates a new converter method of output type {@code W} from a given list of converters of output type {@code W}.
+	 * Each of the given converters must know the class of the input values (if the input class is unknown,
+	 * {@link Converter#getInputClass()} returns {@code null}).
+	 * <p>
+	 * @param <W>        The output type
+	 * @param converters A list of converters
+	 * @return The new converter method
+	 */
+	public static <W> ConvertMethod getInstance(Converter<?, W>... converters) {
 		if (converters == null) {
 			throw new IllegalArgumentException();
 		}
 		ConvertMethod convertMethod = new ConvertMethod();
-		for (Converter<?, T> converter : converters) {
+		for (Converter<?, W> converter : converters) {
 			if (converter == null) {
 				throw new IllegalArgumentException();
 			}
 			convertMethod.addConverter(converter);
 		}
 		return convertMethod;
+	}
+
+	/**
+	 * Selects and returns the converter for input values of a given class. Returns {@code null} if no such converter
+	 * exists.
+	 * <p>
+	 * @param valueClass The class of the input values
+	 * @return The corresponding converter (or {@code null} if no such converter exists)
+	 */
+	public Converter<?, W> getConverter(Class<?> valueClass) {
+		return this.converterMap.get(valueClass);
+	}
+
+	private void addConverter(Converter<?, W> converter) {
+		Class<?> valueClass = converter.getInputClass();
+		if (valueClass == null || this.converterMap.containsKey(valueClass)) {
+			throw new IllegalArgumentException();
+		}
+		this.converterMap.put(valueClass, converter);
 	}
 
 }

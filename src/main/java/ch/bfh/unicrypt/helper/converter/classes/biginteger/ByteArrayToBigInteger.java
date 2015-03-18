@@ -55,10 +55,37 @@ public class ByteArrayToBigInteger
 	   extends AbstractBigIntegerConverter<ByteArray> {
 
 	private final int blockLength;
+	private final int minBlocks;
 
-	protected ByteArrayToBigInteger(int blockLength) {
+	protected ByteArrayToBigInteger(int blockLength, int minBlocks) {
 		super(ByteArray.class);
 		this.blockLength = blockLength;
+		this.minBlocks = minBlocks;
+	}
+
+	public static ByteArrayToBigInteger getInstance() {
+		return ByteArrayToBigInteger.getInstance(1, 0);
+	}
+
+	public static ByteArrayToBigInteger getInstance(int blockLength) {
+		return ByteArrayToBigInteger.getInstance(blockLength, 0);
+	}
+
+	public static ByteArrayToBigInteger getInstance(int blockLength, int minBlocks) {
+		if (blockLength < 1 || minBlocks < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteArrayToBigInteger(blockLength, minBlocks);
+	}
+
+	@Override
+	protected boolean defaultIsValidInput(ByteArray value) {
+		return (value.getLength() % this.blockLength) == 0 && (value.getLength() / this.blockLength) >= minBlocks;
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		return value.signum() >= 0;
 	}
 
 	@Override
@@ -98,14 +125,6 @@ public class ByteArrayToBigInteger
 			value = value.divide(blockSize);
 		}
 		return ByteArray.getInstance(byteList);
-	}
-
-	public static ByteArrayToBigInteger getInstance() {
-		return new ByteArrayToBigInteger(1);
-	}
-
-	public static ByteArrayToBigInteger getInstance(int blockLength) {
-		return new ByteArrayToBigInteger(blockLength);
 	}
 
 }

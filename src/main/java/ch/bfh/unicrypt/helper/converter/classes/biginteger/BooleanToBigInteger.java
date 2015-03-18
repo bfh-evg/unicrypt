@@ -55,6 +55,15 @@ public class BooleanToBigInteger
 		super(Boolean.class);
 	}
 
+	public static BooleanToBigInteger getInstance() {
+		return new BooleanToBigInteger();
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		return value.equals(BigInteger.ZERO) || value.equals(BigInteger.ONE);
+	}
+
 	@Override
 	protected BigInteger abstractConvert(Boolean value) {
 		if (value) {
@@ -68,14 +77,7 @@ public class BooleanToBigInteger
 		if (value.equals(BigInteger.ZERO)) {
 			return false;
 		}
-		if (value.equals(BigInteger.ONE)) {
-			return true;
-		}
-		return null;
-	}
-
-	public static BooleanToBigInteger getInstance() {
-		return new BooleanToBigInteger();
+		return true;
 	}
 
 }

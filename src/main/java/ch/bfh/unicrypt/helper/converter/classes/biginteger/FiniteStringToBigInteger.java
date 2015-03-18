@@ -54,13 +54,11 @@ public class FiniteStringToBigInteger
 
 	private final Alphabet alphabet;
 	private final int minLength;
-	private final int maxLength;
 
-	protected FiniteStringToBigInteger(Alphabet alphabet, int minLength, int maxLength) {
+	protected FiniteStringToBigInteger(Alphabet alphabet, int minLength) {
 		super(String.class);
 		this.alphabet = alphabet;
 		this.minLength = minLength;
-		this.maxLength = maxLength;
 	}
 
 	@Override
@@ -81,19 +79,19 @@ public class FiniteStringToBigInteger
 	@Override
 	protected String abstractReconvert(BigInteger value) {
 		BigInteger size = BigInteger.valueOf(this.alphabet.getSize());
-		StringBuilder strBuilder = new StringBuilder(this.maxLength);
-		while (!value.equals(BigInteger.ZERO) || strBuilder.length() < this.minLength) {
-			if (strBuilder.length() >= this.minLength) {
+		String result = "";
+		while (!value.equals(BigInteger.ZERO) || result.length() < this.minLength) {
+			if (result.length() >= this.minLength) {
 				value = value.subtract(BigInteger.ONE);
 			}
-			strBuilder.append(this.alphabet.getCharacter(value.mod(size).intValue()));
+			result = this.alphabet.getCharacter(value.mod(size).intValue()) + result;
 			value = value.divide(size);
 		}
-		return strBuilder.reverse().toString();
+		return result;
 	}
 
-	public static FiniteStringToBigInteger getInstance(Alphabet alphabet, int minLength, int maxLength) {
-		return new FiniteStringToBigInteger(alphabet, minLength, maxLength);
+	public static FiniteStringToBigInteger getInstance(Alphabet alphabet, int minLength) {
+		return new FiniteStringToBigInteger(alphabet, minLength);
 	}
 
 }

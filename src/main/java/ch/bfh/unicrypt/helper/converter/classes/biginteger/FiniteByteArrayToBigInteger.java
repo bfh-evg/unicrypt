@@ -61,6 +61,15 @@ public class FiniteByteArrayToBigInteger
 		this.minLength = minLength;
 	}
 
+	public static FiniteByteArrayToBigInteger getInstance(int minLength) {
+		return new FiniteByteArrayToBigInteger(minLength);
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		return value.signum() >= 0;
+	}
+
 	@Override
 	protected BigInteger abstractConvert(ByteArray value) {
 		int length = value.getLength();
@@ -88,10 +97,6 @@ public class FiniteByteArrayToBigInteger
 			value = value.divide(size);
 		}
 		return ByteArray.getInstance(byteList);
-	}
-
-	public static FiniteByteArrayToBigInteger getInstance(int minLength) {
-		return new FiniteByteArrayToBigInteger(minLength);
 	}
 
 }

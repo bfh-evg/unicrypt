@@ -91,8 +91,8 @@ public interface Converter<V extends Object, W extends Object> {
 	public boolean isValidOutput(W value);
 
 	/**
-	 * Returns the class of the input type {@code V}. This method is needed in {@link ConvertMethod} for technical
-	 * reasons.
+	 * Returns the class of type {@code V} of the input values, or {@code null} if the class is unknown. This method is
+	 * needed in {@link ConvertMethod} for technical reasons.
 	 * <p>
 	 * @return The input class
 	 * @see ConvertMethod
@@ -100,8 +100,8 @@ public interface Converter<V extends Object, W extends Object> {
 	public Class<V> getInputClass();
 
 	/**
-	 * Returns the class of the output type {@code W}. This method is needed in {@link ConvertMethod} for technical
-	 * reasons.
+	 * Returns the class of type {@code W} of the output values, or {@code null} if the class is unknown. This method is
+	 * needed in {@link ConvertMethod} for technical reasons.
 	 * <p>
 	 * @return The output class
 	 * @see ConvertMethod

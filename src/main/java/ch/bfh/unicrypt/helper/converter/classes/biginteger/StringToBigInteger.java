@@ -54,11 +54,38 @@ public class StringToBigInteger
 
 	private final Alphabet alphabet;
 	private final int blockLength;
+	private final int minBlocks;
 
-	protected StringToBigInteger(Alphabet alphabet, int blockLength) {
+	protected StringToBigInteger(Alphabet alphabet, int blockLength, int minBlocks) {
 		super(String.class);
 		this.alphabet = alphabet;
 		this.blockLength = blockLength;
+		this.minBlocks = minBlocks;
+	}
+
+	public static StringToBigInteger getInstance(Alphabet alphabet) {
+		return StringToBigInteger.getInstance(alphabet, 1, 0);
+	}
+
+	public static StringToBigInteger getInstance(Alphabet alphabet, int blockLength) {
+		return StringToBigInteger.getInstance(alphabet, blockLength, 0);
+	}
+
+	public static StringToBigInteger getInstance(Alphabet alphabet, int blockLength, int minBlocks) {
+		if (alphabet == null || blockLength < 1 || minBlocks < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new StringToBigInteger(alphabet, blockLength, minBlocks);
+	}
+
+	@Override
+	protected boolean defaultIsValidInput(String value) {
+		return this.alphabet.isValid(value) && (value.length() % this.blockLength) == 0 && (value.length() / this.blockLength) >= minBlocks;
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		return value.signum() >= 0;
 	}
 
 	@Override
@@ -79,23 +106,19 @@ public class StringToBigInteger
 
 	@Override
 	protected String abstractReconvert(BigInteger value) {
-		StringBuilder strBuilder = new StringBuilder();
+		String result = "";
 		BigInteger alphabetSize = BigInteger.valueOf(this.alphabet.getSize());
 		BigInteger blockSize = alphabetSize.pow(this.blockLength);
 		while (!value.equals(BigInteger.ZERO)) {
 			value = value.subtract(BigInteger.ONE);
 			BigInteger remainder = value.mod(blockSize);
 			for (int i = 0; i < this.blockLength; i++) {
-				strBuilder.append(this.alphabet.getCharacter(remainder.mod(alphabetSize).intValue()));
+				result = this.alphabet.getCharacter(remainder.mod(alphabetSize).intValue()) + result;
 				remainder = remainder.divide(alphabetSize);
 			}
 			value = value.divide(blockSize);
 		}
-		return strBuilder.reverse().toString();
-	}
-
-	public static StringToBigInteger getInstance(Alphabet alphabet, int blockLength) {
-		return new StringToBigInteger(alphabet, blockLength);
+		return result;
 	}
 
 }

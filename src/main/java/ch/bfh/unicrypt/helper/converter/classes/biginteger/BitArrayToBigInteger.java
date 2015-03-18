@@ -58,6 +58,15 @@ public class BitArrayToBigInteger
 		super(BitArray.class);
 	}
 
+	public static BitArrayToBigInteger getInstance() {
+		return new BitArrayToBigInteger();
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		return value.signum() >= 0;
+	}
+
 	@Override
 	public BigInteger abstractConvert(BitArray value) {
 		// There is 1 boolean array of length 0, 2 of length 1, 4 of length 2, etc. Therefore:
@@ -79,10 +88,6 @@ public class BitArrayToBigInteger
 		byte[] bytes = value2.toByteArray();
 		return BitArray.getInstance(ByteArray.getInstance(bytes), length);
 
-	}
-
-	public static BitArrayToBigInteger getInstance() {
-		return new BitArrayToBigInteger();
 	}
 
 }

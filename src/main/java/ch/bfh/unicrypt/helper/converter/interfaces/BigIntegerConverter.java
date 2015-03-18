@@ -44,9 +44,12 @@ package ch.bfh.unicrypt.helper.converter.interfaces;
 import java.math.BigInteger;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This is a convenience interface for converters from a generic input type {@code V} to {@link BigInteger}. No
+ * functionality is added.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <V> The input type
  */
 public interface BigIntegerConverter<V extends Object>
 	   extends Converter<V, BigInteger> {
