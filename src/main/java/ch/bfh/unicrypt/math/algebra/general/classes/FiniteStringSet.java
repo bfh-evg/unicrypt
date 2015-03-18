@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteStringToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
@@ -102,7 +102,7 @@ public class FiniteStringSet
 
 	@Override
 	protected BigIntegerConverter<String> abstractGetBigIntegerConverter() {
-		return FiniteStringToBigInteger.getInstance(this.alphabet, this.minLength, this.maxLength);
+		return StringToBigInteger.getInstance(this.alphabet, 1, this.minLength);
 	}
 
 	@Override

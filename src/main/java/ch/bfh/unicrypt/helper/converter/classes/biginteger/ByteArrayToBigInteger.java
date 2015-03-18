@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
-import java.util.LinkedList;
 
 /**
  *
@@ -97,34 +96,27 @@ public class ByteArrayToBigInteger
 		// For blocklLength=2, there is 1 bytearray of length 0, 65536 of length 2, etc. Therefore:
 		//   lenght=0 -> 0
 		//   length=2 -> 1,...,65536
-		//   length=4 -> 65536,...
-		BigInteger result = BigInteger.ZERO;
-		if (value.getLength() > 0) {
-			byte[] bytes = new byte[value.getLength()];
-			int amount = bytes.length / this.blockLength;
-			for (int i = 0; i < amount; i++) {
-				bytes[(bytes.length - 1) - (i * this.blockLength)] = 1;
-			}
-			result = new BigInteger(1, bytes);
+		//   length=4 -> 65537,...
+		BigInteger offset = BigInteger.ZERO;
+		int blocks = value.getLength() / this.blockLength;
+		for (int blockIndex = this.minBlocks; blockIndex < blocks; blockIndex++) {
+			offset = offset.add(MathUtil.powerOfTwo(blockIndex * this.blockLength * Byte.SIZE));
 		}
-		return result.add(new BigInteger(1, value.getBytes()));
+		return offset.add(new BigInteger(1, value.reverse().getBytes()));
 	}
 
 	@Override
 	public ByteArray abstractReconvert(BigInteger value) {
-		LinkedList<Byte> byteList = new LinkedList<Byte>();
-		BigInteger byteSize = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger blockSize = MathUtil.powerOfTwo(Byte.SIZE * this.blockLength);
-		while (!value.equals(BigInteger.ZERO)) {
-			value = value.subtract(BigInteger.ONE);
-			BigInteger remainder = value.mod(blockSize);
-			for (int i = 0; i < this.blockLength; i++) {
-				byteList.addFirst(remainder.mod(byteSize).byteValue());
-				remainder = remainder.divide(byteSize);
-			}
-			value = value.divide(blockSize);
+		BigInteger offset = BigInteger.ZERO;
+		int blockIndex = this.minBlocks;
+		while (value.compareTo(offset) >= 0) {
+			value = value.subtract(offset);
+			offset = MathUtil.powerOfTwo(blockIndex * this.blockLength * Byte.SIZE);
+			blockIndex++;
 		}
-		return ByteArray.getInstance(byteList);
+		ByteArray result = ByteArray.getInstance(value.toByteArray()).removePrefix().reverse();
+		int length = (blockIndex - 1) * this.blockLength;
+		return result.addSuffix(length - result.getLength());
 	}
 
 }

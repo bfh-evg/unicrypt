@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import java.math.BigInteger;
@@ -53,10 +54,22 @@ public class PermutationToBigInteger
 	   extends AbstractBigIntegerConverter<Permutation> {
 
 	private final int size;
+	private final BigInteger inputSize;
 
 	protected PermutationToBigInteger(int size) {
 		super(Permutation.class);
 		this.size = size;
+		this.inputSize = MathUtil.factorial(size);
+	}
+
+	@Override
+	protected boolean defaultIsValidInput(Permutation value) {
+		return (value.getSize() == this.size);
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		return value.signum() >= 0 && value.compareTo(this.inputSize) < 0;
 	}
 
 	@Override
@@ -66,14 +79,13 @@ public class PermutationToBigInteger
 
 	@Override
 	protected Permutation abstractReconvert(BigInteger value) {
-		try {
-			return Permutation.getInstance(this.size, value);
-		} catch (Exception e) {
-			return null;
-		}
+		return Permutation.getInstance(this.size, value);
 	}
 
 	public static PermutationToBigInteger getInstance(int size) {
+		if (size < 0) {
+			throw new IllegalArgumentException();
+		}
 		return new PermutationToBigInteger(size);
 	}
 

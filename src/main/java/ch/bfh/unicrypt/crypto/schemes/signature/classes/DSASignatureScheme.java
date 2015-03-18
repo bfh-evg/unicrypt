@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 import ch.bfh.unicrypt.crypto.keygenerator.classes.DiscreteLogarithmKeyGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.abstracts.AbstractRandomizedSignatureScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
@@ -97,7 +97,7 @@ public class DSASignatureScheme<MS extends Set>
 		ProductSet inputSpace = ProductSet.getInstance(this.getSignatureKeySpace(), this.messageSpace, this.randomizationSpace);
 
 		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
-		BigIntegerConverter<ByteArray> converter = FiniteByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
+		BigIntegerConverter<ByteArray> converter = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
 		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
 		ModuloFunction moduloFunction = ModuloFunction.getInstance(N.getInstance(), zMod);
 

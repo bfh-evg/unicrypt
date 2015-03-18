@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts.AbstractNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -110,7 +110,7 @@ public class FiatShamirSigmaChallengeGenerator
 	public static FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId) {
 		HashMethod hashMethod = HashMethod.getInstance();
 		int length = hashMethod.getHashAlgorithm().getHashLength();
-		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, proverId, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
+		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, proverId, hashMethod, ByteArrayToBigInteger.getInstance(length));
 	}
 
 	public static FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
