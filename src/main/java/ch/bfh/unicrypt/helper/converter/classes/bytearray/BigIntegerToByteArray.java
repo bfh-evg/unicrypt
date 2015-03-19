@@ -65,8 +65,8 @@ public class BigIntegerToByteArray
 	}
 
 	@Override
-	public ByteArray abstractConvert(BigInteger bigInteger) {
-		ByteArray result = SafeByteArray.getInstance(bigInteger.toByteArray());
+	public ByteArray abstractConvert(BigInteger value) {
+		ByteArray result = SafeByteArray.getInstance(value.toByteArray());
 		if (this.byteOrder == ByteOrder.LITTLE_ENDIAN) {
 			return result.reverse();
 		}

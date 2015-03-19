@@ -105,8 +105,8 @@ public class ByteArrayToBigInteger
 	}
 
 	@Override
-	protected boolean defaultIsValidInput(ByteArray value) {
-		return (value.getLength() % this.blockLength) == 0 && (value.getLength() / this.blockLength) >= minBlocks;
+	protected boolean defaultIsValidInput(ByteArray byteArray) {
+		return (byteArray.getLength() % this.blockLength) == 0 && (byteArray.getLength() / this.blockLength) >= minBlocks;
 	}
 
 	@Override
@@ -120,22 +120,22 @@ public class ByteArrayToBigInteger
 	 * number of all byte arrays shorter than the input array is computed and added to the integer represented by the
 	 * byte array (unsigned, big endian).
 	 * <p>
-	 * @param value
+	 * @param byteArray
 	 * @return
 	 */
 	@Override
-	public BigInteger abstractConvert(ByteArray value) {
+	public BigInteger abstractConvert(ByteArray byteArray) {
 		BigInteger blockSize = MathUtil.powerOfTwo(this.blockLength * Byte.SIZE);
 
 		// compute the total number of shorter byte arrays
 		BigInteger result = BigInteger.ZERO;
 		BigInteger multipleBlockSize = blockSize.pow(this.minBlocks);
-		for (int blocks = this.minBlocks; blocks < value.getLength() / this.blockLength; blocks++) {
+		for (int blocks = this.minBlocks; blocks < byteArray.getLength() / this.blockLength; blocks++) {
 			result = result.add(multipleBlockSize);
 			multipleBlockSize = multipleBlockSize.multiply(blockSize);
 		}
 		// convert byte array to BigInteger and add it to the result
-		return result.add(new BigInteger(1, value.getBytes()));
+		return result.add(new BigInteger(1, byteArray.getBytes()));
 	}
 
 	@Override

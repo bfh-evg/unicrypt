@@ -64,7 +64,6 @@ public class PermutationToBigIntegerTest {
 			BigInteger value = BigInteger.ZERO;
 			BigInteger maxValue = MathUtil.factorial(i).subtract(BigInteger.ONE);
 			while (value.compareTo(maxValue) <= 0) {
-				System.out.println(value);
 				Assert.assertEquals(value, converter.convert(converter.reconvert(value)));
 				value = value.add(BigInteger.ONE);
 			}

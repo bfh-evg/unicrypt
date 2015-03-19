@@ -39,64 +39,47 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes.biginteger;
+package ch.bfh.unicrypt.helper.converter.classes.bitarray;
 
-import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.Permutation;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBitArrayConverter;
 
 /**
- * This class converts permutations a given size s into non-negative {@code BigInteger} values 0, 1, 2, ... s!-1, using
- * the ranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time".
- * <p>
- * @see Permutation#getRank()
- * @author Rolf Haenni
- * @version 2.0
+ *
+ * @author Rolf Haenni <rolf.haenni@bfh.ch>
  */
-public class PermutationToBigInteger
-	   extends AbstractBigIntegerConverter<Permutation> {
+public class BitArrayToBitArray
+	   extends AbstractBitArrayConverter<BitArray> {
 
-	private final int size;
-	private final BigInteger inputSize;
+	private final boolean reverse;
 
-	protected PermutationToBigInteger(int size) {
-		super(Permutation.class);
-		this.size = size;
-		this.inputSize = MathUtil.factorial(size);
+	public BitArrayToBitArray(boolean reverse) {
+		super(BitArray.class);
+		this.reverse = reverse;
 	}
 
-	/**
-	 * Creates a new {@link PermutationToBigInteger} converter for a given permutation size.
-	 * <p>
-	 * @param size The given size
-	 * @return The new converter
-	 */
-	public static PermutationToBigInteger getInstance(int size) {
-		if (size < 0) {
-			throw new IllegalArgumentException();
+	public static BitArrayToBitArray getInstance() {
+		return new BitArrayToBitArray(false);
+	}
+
+	public static BitArrayToBitArray getInstance(boolean reverse) {
+		return new BitArrayToBitArray(reverse);
+	}
+
+	@Override
+	protected BitArray abstractConvert(BitArray bitArray) {
+		if (this.reverse) {
+			return bitArray.reverse();
 		}
-		return new PermutationToBigInteger(size);
+		return bitArray;
 	}
 
 	@Override
-	protected boolean defaultIsValidInput(Permutation permutation) {
-		return (permutation.getSize() == this.size);
-	}
-
-	@Override
-	protected boolean defaultIsValidOutput(BigInteger value) {
-		return value.signum() >= 0 && value.compareTo(this.inputSize) < 0;
-	}
-
-	@Override
-	protected BigInteger abstractConvert(Permutation permutation) {
-		return permutation.getRank();
-	}
-
-	@Override
-	protected Permutation abstractReconvert(BigInteger value) {
-		return Permutation.getInstance(this.size, value);
+	protected BitArray abstractReconvert(BitArray bitArray) {
+		if (this.reverse) {
+			return bitArray.reverse();
+		}
+		return bitArray;
 	}
 
 }

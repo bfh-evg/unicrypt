@@ -52,34 +52,42 @@ public class ByteArrayToByteArray
 	   extends AbstractByteArrayConverter<ByteArray> {
 
 	private final boolean reverse;
+	private final boolean byteReverse;
 
-	public ByteArrayToByteArray(boolean reverse) {
+	public ByteArrayToByteArray(boolean reverse, boolean byteReverse) {
 		super(ByteArray.class);
 		this.reverse = reverse;
+		this.byteReverse = byteReverse;
+	}
+
+	public static ByteArrayToByteArray getInstance() {
+		return new ByteArrayToByteArray(false, false);
+	}
+
+	public static ByteArrayToByteArray getInstance(boolean reverse) {
+		return new ByteArrayToByteArray(reverse, false);
+	}
+
+	public static ByteArrayToByteArray getInstance(boolean reverse, boolean byteReverse) {
+		return new ByteArrayToByteArray(reverse, byteReverse);
 	}
 
 	@Override
 	protected ByteArray abstractConvert(ByteArray byteArray) {
+		ByteArray result = byteReverse ? byteArray.byteReverse() : byteArray;
 		if (this.reverse) {
-			return byteArray.reverse();
+			return result.reverse();
 		}
-		return byteArray;
+		return result;
 	}
 
 	@Override
 	protected ByteArray abstractReconvert(ByteArray byteArray) {
+		ByteArray result = byteReverse ? byteArray.byteReverse() : byteArray;
 		if (this.reverse) {
-			return byteArray.reverse();
+			return result.reverse();
 		}
-		return byteArray;
-	}
-
-	public static ByteArrayToByteArray getInstance() {
-		return ByteArrayToByteArray.getInstance(false);
-	}
-
-	public static ByteArrayToByteArray getInstance(boolean reverse) {
-		return new ByteArrayToByteArray(reverse);
+		return result;
 	}
 
 }

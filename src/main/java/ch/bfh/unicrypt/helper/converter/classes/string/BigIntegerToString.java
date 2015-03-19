@@ -59,8 +59,8 @@ public class BigIntegerToString
 	}
 
 	@Override
-	public String abstractConvert(BigInteger bigInteger) {
-		return bigInteger.toString(this.radix);
+	public String abstractConvert(BigInteger value) {
+		return value.toString(this.radix);
 	}
 
 	@Override

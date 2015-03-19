@@ -75,9 +75,9 @@ public class BitArrayToBigInteger
 	}
 
 	@Override
-	public BigInteger abstractConvert(BitArray value) {
-		BigInteger value1 = MathUtil.powerOfTwo(value.getLength()).subtract(BigInteger.ONE);
-		BigInteger value2 = new BigInteger(1, value.getByteArray().getBytes());
+	public BigInteger abstractConvert(BitArray bitarray) {
+		BigInteger value1 = MathUtil.powerOfTwo(bitarray.getLength()).subtract(BigInteger.ONE);
+		BigInteger value2 = new BigInteger(1, bitarray.reverse().getByteArray().reverse().getBytes());
 		return value1.add(value2);
 	}
 
@@ -86,9 +86,9 @@ public class BitArrayToBigInteger
 		int length = value.add(BigInteger.ONE).bitLength() - 1;
 		BigInteger value1 = MathUtil.powerOfTwo(length).subtract(BigInteger.ONE);
 		BigInteger value2 = value.subtract(value1);
-		byte[] bytes = value2.toByteArray();
-		return BitArray.getInstance(ByteArray.getInstance(bytes), length);
-
+		ByteArray byteArray = ByteArray.getInstance(value2.toByteArray()).removePrefix();
+		BitArray result = BitArray.getInstance(byteArray.reverse()).reverse();
+		return result.shiftRight(length - result.getLength());
 	}
 
 }

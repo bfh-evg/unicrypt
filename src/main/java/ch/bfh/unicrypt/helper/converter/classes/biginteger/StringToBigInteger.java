@@ -109,8 +109,8 @@ public class StringToBigInteger
 	}
 
 	@Override
-	protected boolean defaultIsValidInput(String value) {
-		return this.alphabet.isValid(value) && (value.length() % this.blockLength) == 0 && (value.length() / this.blockLength) >= minBlocks;
+	protected boolean defaultIsValidInput(String string) {
+		return this.alphabet.isValid(string) && (string.length() % this.blockLength) == 0 && (string.length() / this.blockLength) >= minBlocks;
 	}
 
 	@Override
@@ -119,21 +119,21 @@ public class StringToBigInteger
 	}
 
 	@Override
-	protected BigInteger abstractConvert(String value) {
+	protected BigInteger abstractConvert(String string) {
 		BigInteger alphabetSize = BigInteger.valueOf(this.alphabet.getSize());
 		BigInteger blockSize = alphabetSize.pow(this.blockLength);
 
 		// compute the total number of shorter strings
 		BigInteger result1 = BigInteger.ZERO;
 		BigInteger multipleBlockSize = blockSize.pow(this.minBlocks);
-		for (int i = this.minBlocks; i < value.length() / this.blockLength; i++) {
+		for (int i = this.minBlocks; i < string.length() / this.blockLength; i++) {
 			result1 = result1.add(multipleBlockSize);
 			multipleBlockSize = multipleBlockSize.multiply(blockSize);
 		}
 		// compute the rank of the string among all string of its length
 		BigInteger result2 = BigInteger.ZERO;
-		for (int i = 0; i < value.length(); i++) {
-			int charIndex = this.alphabet.getIndex(value.charAt(i));
+		for (int i = 0; i < string.length(); i++) {
+			int charIndex = this.alphabet.getIndex(string.charAt(i));
 			result2 = result2.multiply(alphabetSize).add(BigInteger.valueOf(charIndex));
 		}
 		return result1.add(result2);

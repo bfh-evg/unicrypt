@@ -56,6 +56,15 @@ public class ByteArrayToBitArray
 		super(ByteArray.class);
 	}
 
+	public static ByteArrayToBitArray getInstance() {
+		return new ByteArrayToBitArray();
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BitArray bitArray) {
+		return bitArray.getLength() % Byte.SIZE == 0;
+	}
+
 	@Override
 	public BitArray abstractConvert(ByteArray byteArray) {
 		return BitArray.getInstance(byteArray);
@@ -64,10 +73,6 @@ public class ByteArrayToBitArray
 	@Override
 	public ByteArray abstractReconvert(BitArray bitArray) {
 		return bitArray.getByteArray();
-	}
-
-	public static ByteArrayToBitArray getInstance() {
-		return new ByteArrayToBitArray();
 	}
 
 }
