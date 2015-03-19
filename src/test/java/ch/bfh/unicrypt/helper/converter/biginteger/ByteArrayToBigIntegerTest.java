@@ -59,16 +59,16 @@ public class ByteArrayToBigIntegerTest {
 	ByteArray ba13 = ByteArray.getInstance("02");
 	ByteArray ba14 = ByteArray.getInstance("FF");
 	ByteArray ba21 = ByteArray.getInstance("00|00");
-	ByteArray ba22 = ByteArray.getInstance("01|00");
-	ByteArray ba23 = ByteArray.getInstance("02|00");
+	ByteArray ba22 = ByteArray.getInstance("00|01");
+	ByteArray ba23 = ByteArray.getInstance("00|02");
 	ByteArray ba24 = ByteArray.getInstance("FF|FF");
 	ByteArray ba31 = ByteArray.getInstance("00|00|00");
-	ByteArray ba32 = ByteArray.getInstance("01|00|00");
-	ByteArray ba33 = ByteArray.getInstance("02|00|00");
+	ByteArray ba32 = ByteArray.getInstance("00|00|01");
+	ByteArray ba33 = ByteArray.getInstance("00|00|02");
 	ByteArray ba34 = ByteArray.getInstance("FF|FF|FF");
 	ByteArray ba41 = ByteArray.getInstance("00|00|00|00");
-	ByteArray ba42 = ByteArray.getInstance("01|00|00|00");
-	ByteArray ba43 = ByteArray.getInstance("02|00|00|00");
+	ByteArray ba42 = ByteArray.getInstance("00|00|00|01");
+	ByteArray ba43 = ByteArray.getInstance("00|00|00|02");
 	ByteArray ba44 = ByteArray.getInstance("FF|FF|FF|FF");
 
 	@Test

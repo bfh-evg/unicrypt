@@ -48,8 +48,10 @@ import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import java.math.BigInteger;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * This class converts bit arrays into non-negative {@code BigInteger} values 0, 1, 2, ...
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class BitArrayToBigInteger
 	   extends AbstractBigIntegerConverter<BitArray> {
@@ -58,6 +60,11 @@ public class BitArrayToBigInteger
 		super(BitArray.class);
 	}
 
+	/**
+	 * Creates a new {@link BitArrayToBigInteger} converter.
+	 * <p>
+	 * @return The new converter
+	 */
 	public static BitArrayToBigInteger getInstance() {
 		return new BitArrayToBigInteger();
 	}
@@ -69,12 +76,6 @@ public class BitArrayToBigInteger
 
 	@Override
 	public BigInteger abstractConvert(BitArray value) {
-		// There is 1 boolean array of length 0, 2 of length 1, 4 of length 2, etc. Therefore:
-		//   lenght=0 -> 0,...,0 = 0,...,0 + 0
-		//   length=1 -> 1,...,2 = 0,...,1 + 1
-		//   length=2 -> 3,...,6 = 0,...,3 + 3
-		//   length=3 -> 7,...,14 = 0,...,7 + 7
-		// etc.
 		BigInteger value1 = MathUtil.powerOfTwo(value.getLength()).subtract(BigInteger.ONE);
 		BigInteger value2 = new BigInteger(1, value.getByteArray().getBytes());
 		return value1.add(value2);

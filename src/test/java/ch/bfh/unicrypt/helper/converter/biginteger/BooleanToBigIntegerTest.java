@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,53 +39,28 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes.biginteger;
+package ch.bfh.unicrypt.helper.converter.biginteger;
 
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BooleanToBigInteger;
 import java.math.BigInteger;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * This class converts the Boolean values {@code false} into {@link BigInteger#ZERO} and {@code true} into
- * {@link BigInteger#ONE}.
- * <p>
- * @author Rolf Haenni
- * @version 2.0
+ *
+ * @author rolfhaenni
  */
-public class BooleanToBigInteger
-	   extends AbstractBigIntegerConverter<Boolean> {
+public class BooleanToBigIntegerTest {
 
-	private BooleanToBigInteger() {
-		super(Boolean.class);
-	}
+	@Test
+	public void testGetInstance() {
 
-	/**
-	 * Creates a new {@link BooleanToBigInteger} converter.
-	 * <p>
-	 * @return The new converter
-	 */
-	public static BooleanToBigInteger getInstance() {
-		return new BooleanToBigInteger();
-	}
+		BooleanToBigInteger converter = BooleanToBigInteger.getInstance();
 
-	@Override
-	protected boolean defaultIsValidOutput(BigInteger value) {
-		return value.equals(BigInteger.ZERO) || value.equals(BigInteger.ONE);
-	}
-
-	@Override
-	protected BigInteger abstractConvert(Boolean value) {
-		if (value) {
-			return BigInteger.ONE;
-		}
-		return BigInteger.ZERO;
-	}
-
-	@Override
-	protected Boolean abstractReconvert(BigInteger value) {
-		if (value.equals(BigInteger.ZERO)) {
-			return false;
-		}
-		return true;
+		Assert.assertEquals(BigInteger.ZERO, converter.convert(false));
+		Assert.assertEquals(BigInteger.ONE, converter.convert(true));
+		Assert.assertFalse(converter.reconvert(BigInteger.ZERO));
+		Assert.assertTrue(converter.reconvert(BigInteger.ONE));
 	}
 
 }

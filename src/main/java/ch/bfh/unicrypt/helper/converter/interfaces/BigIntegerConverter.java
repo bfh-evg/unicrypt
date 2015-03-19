@@ -45,7 +45,8 @@ import java.math.BigInteger;
 
 /**
  * This is a convenience interface for converters from a generic input type {@code V} to {@link BigInteger}. No
- * functionality is added.
+ * functionality is added. The concrete converters provided in this library all enumerate the values from the input type
+ * by non-negative {@link BigInteger} values 0, 1, 2, ...
  * <p>
  * @author Rolf Haenni
  * @version 2.0

@@ -46,25 +46,70 @@ import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * This class {@code BigInteger} values into non-negative {@code BigInteger} values 0, 1, 2, ... There are two operation
+ * modes. In the unrestricted mode, the folding function {@link MathUtil#fold(java.math.BigInteger)} is used to
+ * transform negative into positive integers. In the restricted operation mode, a minimal value m must be specified, and
+ * only values v >= m are converted into v-m >= 0;
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class BigIntegerToBigInteger
 	   extends AbstractBigIntegerConverter<BigInteger> {
 
-	private final boolean fold;
+	// null if no minimal value is specified
+	private final BigInteger minValue;
 
-	protected BigIntegerToBigInteger(boolean fold) {
+	protected BigIntegerToBigInteger() {
+		this(null);
+	}
+
+	protected BigIntegerToBigInteger(BigInteger minValue) {
 		super(BigInteger.class);
-		this.fold = fold;
+		this.minValue = minValue;
 	}
 
+	/**
+	 * Creates a new unrestricted {@link BigIntegerToBigInteger} converter. Negative input values are converted into
+	 * non-negative values.
+	 * <p>
+	 * @return The new converter
+	 */
 	public static BigIntegerToBigInteger getInstance() {
-		return BigIntegerToBigInteger.getInstance(false);
+		return new BigIntegerToBigInteger();
 	}
 
-	public static BigIntegerToBigInteger getInstance(boolean fold) {
-		return new BigIntegerToBigInteger(fold);
+	/**
+	 * This is a convenience method to creates new converters for minimal values of type {@code int}.
+	 * <p>
+	 * @param minValue The minimal value
+	 * @return The new converter
+	 * @see BigIntegerToBigInteger#getInstance(java.math.BigInteger)
+	 */
+	public static BigIntegerToBigInteger getInstance(int minValue) {
+		return BigIntegerToBigInteger.getInstance(BigInteger.valueOf(minValue));
+	}
+
+	/**
+	 * Creates a new {@link BigIntegerToBigInteger} converter for a given minimal value.
+	 * <p>
+	 * @param minValue The minimal value
+	 * @return The new converter
+	 */
+	public static BigIntegerToBigInteger getInstance(BigInteger minValue) {
+		if (minValue == null) {
+			throw new IllegalArgumentException();
+		}
+		return new BigIntegerToBigInteger(minValue);
+	}
+
+	@Override
+	protected boolean defaultIsValidInput(BigInteger value) {
+		if (this.minValue != null) {
+			return value.compareTo(this.minValue) >= 0;
+
+		}
+		return true;
 	}
 
 	@Override
@@ -74,18 +119,20 @@ public class BigIntegerToBigInteger
 
 	@Override
 	protected BigInteger abstractConvert(BigInteger value) {
-		if (this.fold) {
+		if (this.minValue == null) {
 			return MathUtil.fold(value);
+		} else {
+			return value.subtract(this.minValue);
 		}
-		return value;
 	}
 
 	@Override
 	protected BigInteger abstractReconvert(BigInteger value) {
-		if (this.fold) {
+		if (this.minValue == null) {
 			return MathUtil.unfold(value);
+		} else {
+			return value.add(this.minValue);
 		}
-		return value;
 	}
 
 }

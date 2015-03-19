@@ -46,8 +46,14 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import java.math.BigInteger;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * This class converts strings of a given alphabet into non-negative {@code BigInteger} values 0, 1, 2, ... The input
+ * strings can be restricted in two ways. First, it is possible to define a block length. For example, if the block
+ * length equals 2, then only strings of length 0, 2, 4, ... are valid inputs. Second, a minimal number of blocks can be
+ * specified. Again, for blocks of length 2 and with a minimal number of blocks of 3, then only strings of length 6, 8,
+ * 10, ... are valid inputs. An unrestricted input corresponds to block length 1 and minimal number of blocks 0.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class StringToBigInteger
 	   extends AbstractBigIntegerConverter<String> {
@@ -63,14 +69,38 @@ public class StringToBigInteger
 		this.minBlocks = minBlocks;
 	}
 
+	/**
+	 * For a given alphabet, this method creates a new default {@link StringToBigInteger} converter with the block
+	 * length set to 1 and the minimal number of blocks set to 0.
+	 * <p>
+	 * @param alphabet The given alphabet
+	 * @return The new converter
+	 */
 	public static StringToBigInteger getInstance(Alphabet alphabet) {
 		return StringToBigInteger.getInstance(alphabet, 1, 0);
 	}
 
+	/**
+	 * For a given alphabet and a given block length, this method creates a new {@link StringToBigInteger} converter.
+	 * The minimal number of blocks is set to 0.
+	 * <p>
+	 * @param alphabet    The given alphabet
+	 * @param blockLength The block length
+	 * @return The new converter
+	 */
 	public static StringToBigInteger getInstance(Alphabet alphabet, int blockLength) {
 		return StringToBigInteger.getInstance(alphabet, blockLength, 0);
 	}
 
+	/**
+	 * Creates a new {@link StringToBigInteger} converter for a given alphabet, block length, and minimal number of
+	 * blocks. This is the general factory method for this class.
+	 * <p>
+	 * @param alphabet    The given alphabet
+	 * @param blockLength The block length
+	 * @param minBlocks   The minimal number of blocks
+	 * @return The new converter
+	 */
 	public static StringToBigInteger getInstance(Alphabet alphabet, int blockLength, int minBlocks) {
 		if (alphabet == null || blockLength < 1 || minBlocks < 0) {
 			throw new IllegalArgumentException();
@@ -90,33 +120,43 @@ public class StringToBigInteger
 
 	@Override
 	protected BigInteger abstractConvert(String value) {
-		BigInteger value1 = BigInteger.ZERO;
 		BigInteger alphabetSize = BigInteger.valueOf(this.alphabet.getSize());
+		BigInteger blockSize = alphabetSize.pow(this.blockLength);
+
+		// compute the total number of shorter strings
+		BigInteger result1 = BigInteger.ZERO;
+		BigInteger multipleBlockSize = blockSize.pow(this.minBlocks);
+		for (int i = this.minBlocks; i < value.length() / this.blockLength; i++) {
+			result1 = result1.add(multipleBlockSize);
+			multipleBlockSize = multipleBlockSize.multiply(blockSize);
+		}
+		// compute the rank of the string among all string of its length
+		BigInteger result2 = BigInteger.ZERO;
 		for (int i = 0; i < value.length(); i++) {
 			int charIndex = this.alphabet.getIndex(value.charAt(i));
-			value1 = value1.multiply(alphabetSize).add(BigInteger.valueOf(charIndex));
+			result2 = result2.multiply(alphabetSize).add(BigInteger.valueOf(charIndex));
 		}
-		BigInteger value2 = BigInteger.ZERO;
-		BigInteger blockSize = alphabetSize.pow(this.blockLength);
-		for (int i = 0; i < value.length() / this.blockLength; i++) {
-			value2 = value2.multiply(blockSize).add(BigInteger.ONE);
-		}
-		return value1.add(value2);
+		return result1.add(result2);
 	}
 
 	@Override
 	protected String abstractReconvert(BigInteger value) {
-		String result = "";
 		BigInteger alphabetSize = BigInteger.valueOf(this.alphabet.getSize());
 		BigInteger blockSize = alphabetSize.pow(this.blockLength);
-		while (!value.equals(BigInteger.ZERO)) {
-			value = value.subtract(BigInteger.ONE);
-			BigInteger remainder = value.mod(blockSize);
-			for (int i = 0; i < this.blockLength; i++) {
-				result = this.alphabet.getCharacter(remainder.mod(alphabetSize).intValue()) + result;
-				remainder = remainder.divide(alphabetSize);
-			}
-			value = value.divide(blockSize);
+
+		// subtract the total number of shorter strings
+		int blocks = this.minBlocks;
+		BigInteger multipleBlockSize = blockSize.pow(this.minBlocks);
+		while (value.compareTo(multipleBlockSize) >= 0) {
+			value = value.subtract(multipleBlockSize);
+			multipleBlockSize = multipleBlockSize.multiply(blockSize);
+			blocks++;
+		}
+		// convert the resulting value to string
+		String result = "";
+		for (int i = 0; i < blocks * blockLength; i++) {
+			result = this.alphabet.getCharacter(value.mod(alphabetSize).intValue()) + result;
+			value = value.divide(alphabetSize);
 		}
 		return result;
 	}

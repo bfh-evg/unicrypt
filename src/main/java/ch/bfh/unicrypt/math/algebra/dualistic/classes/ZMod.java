@@ -163,7 +163,7 @@ public class ZMod
 
 	@Override
 	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
-		return BigIntegerToBigInteger.getInstance();
+		return BigIntegerToBigInteger.getInstance(0);
 	}
 
 	@Override

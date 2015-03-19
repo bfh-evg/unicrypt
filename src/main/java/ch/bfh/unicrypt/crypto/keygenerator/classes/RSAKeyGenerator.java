@@ -86,15 +86,15 @@ public class RSAKeyGenerator
 	protected Function defaultGetPrivateKeyGenerationFunction() {
 		return CompositeFunction.getInstance(
 			   RandomFunction.getInstance(this.getZStarMod()),
-			   ConvertFunction.getInstance(this.getZStarMod(), this.zMod, BigIntegerToBigInteger.getInstance()));
+			   ConvertFunction.getInstance(this.getZStarMod(), this.zMod, BigIntegerToBigInteger.getInstance(0)));
 	}
 
 	@Override
 	protected Function abstractGetPublicKeyGenerationFunction() {
 		return CompositeFunction.getInstance(
-			   ConvertFunction.getInstance(this.zMod, this.getZStarMod(), BigIntegerToBigInteger.getInstance()),
+			   ConvertFunction.getInstance(this.zMod, this.getZStarMod(), BigIntegerToBigInteger.getInstance(0)),
 			   InvertFunction.getInstance(this.getZStarMod()),
-			   ConvertFunction.getInstance(this.getZStarMod(), this.zMod, BigIntegerToBigInteger.getInstance()));
+			   ConvertFunction.getInstance(this.getZStarMod(), this.zMod, BigIntegerToBigInteger.getInstance(0)));
 	}
 
 	public static RSAKeyGenerator getInstance(ZMod zMod) {

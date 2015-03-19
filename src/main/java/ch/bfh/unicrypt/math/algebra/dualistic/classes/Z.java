@@ -163,7 +163,7 @@ public class Z
 
 	@Override
 	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
-		return BigIntegerToBigInteger.getInstance(true);
+		return BigIntegerToBigInteger.getInstance();
 	}
 
 	@Override
