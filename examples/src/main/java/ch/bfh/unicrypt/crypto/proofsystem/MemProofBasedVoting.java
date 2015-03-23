@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem;
 
-import ch.bfh.unicrypt.crypto.proofsystem.classes.DoubleDescreteLogProofSystem;
+import ch.bfh.unicrypt.crypto.proofsystem.classes.DoubleDiscreteLogProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.EqualityPreimageProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PolynomialMembershipProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
@@ -95,24 +95,49 @@ public class MemProofBasedVoting {
 	final static String P = "132981118064499312972124229719551507064282251442693318094413647002876359530119444044769383265695686373097209253015503887096288112369989708235068428214124661556800389180762828009952422599372290980806417384771730325122099441368051976156139223257233269955912341167062173607119895128870594055324929155200165347329";
 	final static String O = "130321495703209326712681745125160476922996606413839451732525374062818832339517055163873995600381772645635265067955193809354362350122589914070367059649842168325664381397147571449753374147384845161190289037076295718619657452540690936633016438792088604556794094343720930134977497226293182174218430572096162040382421";
 
+	final static int size = 10000;
+
+	//
+	//  #Credentials = 1'000'000
+	// ============================
+	// Voter: Registering...
+	// Voter: Registering done.
+	//   > Time: 10607
+	// Voter: Ballot casting...
+	//   > Time pi_1: 197796
+	//   > Time pi_2: 945
+	//   > Time pi_3: 6
+	// Voter: Ballot casting done.
+	//   > Time: 198753
+	// Start verifying...
+	// Ballot 1 is valid
+	//   > Time: 123580
+	//
+	//
 	public static void main(String[] args) {
 
 		// 0. Preparation
 		final CyclicGroup G_p = GStarModPrime.getInstance(new BigInteger(O, 10), new BigInteger(P, 10));
 		final CyclicGroup G_q = GStarModPrime.getInstance(new BigInteger(P, 10), new BigInteger(Q, 10));
-		final BulletinBoard BB = new BulletinBoard(G_p, G_q, 1, 1000);
+		final BulletinBoard BB = new BulletinBoard(G_p, G_q, 1, size);
 
 		Voter voter = new Voter("Voter X", G_p, G_q, BB);
 
 		// 1. Register
+		long time = System.currentTimeMillis();
 		voter.register();
+		System.out.println("  > Time: " + (System.currentTimeMillis() - time));
 
 		// 2. Cast Ballot
+		time = System.currentTimeMillis();
 		voter.castBallot();
+		System.out.println("  > Time: " + (System.currentTimeMillis() - time));
 
 		// 3. Verify casted ballots
 		Verifier verifier = new Verifier(G_p, G_q, BB);
+		time = System.currentTimeMillis();
 		verifier.verifyBallots();
+		System.out.println("  > Time: " + (System.currentTimeMillis() - time));
 
 	}
 
@@ -157,31 +182,37 @@ public class MemProofBasedVoting {
 
 		public void castBallot() {
 			System.out.println("Voter: Ballot casting...");
-			final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance(7));
+			final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
 			Element v = StringMonoid.getInstance(Alphabet.ALPHANUMERIC).getElement("YES");
 			Element uHat = this.BB.getGHat().selfApply(this.betas.getAt(0));
 
 			// pi_1
+			long time = System.currentTimeMillis();
 			Element uInZp = this.G_p.getZModOrder().getElement(this.u.getBigInteger());
 			Element r = this.G_p.getZModOrder().getRandomElement(randomGenerator);
 			Element cu = this.BB.getComP().commit(uInZp, r);
 
 			PolynomialMembershipProofSystem pmps = PolynomialMembershipProofSystem.getInstance(this.BB.getCredentialPolynomial(), this.BB.getComP());
 			Tuple pi1 = pmps.generate(Tuple.getInstance(uInZp, r), cu);
+			System.out.println("  > Time pi_1: " + (System.currentTimeMillis() - time));
 
 			// pi_2
+			time = System.currentTimeMillis();
 			Element s = this.G_q.getZModOrder().getRandomElement();
 			Tuple m = this.betas.insertAt(0, this.alpha);
 			Element cab = this.BB.getComQ().commit(m, s);
-			DoubleDescreteLogProofSystem ddlps = DoubleDescreteLogProofSystem.getInstance(this.BB.getComP(), this.BB.getComQ(), SECURITY_FACTOR);
+			DoubleDiscreteLogProofSystem ddlps = DoubleDiscreteLogProofSystem.getInstance(this.BB.getComP(), this.BB.getComQ(), SECURITY_FACTOR);
 			Triple pi2 = ddlps.generate(Tuple.getInstance(uInZp, r, s, m), Pair.getInstance(cu, cab));
+			System.out.println("  > Time pi_2: " + (System.currentTimeMillis() - time));
 
 			// pi_3
+			time = System.currentTimeMillis();
 			ProductSet space = (ProductSet) this.BB.getComQ().getCommitmentFunction().getDomain();
 			Function f = CompositeFunction.getInstance(SelectionFunction.getInstance(space, 0, 1), GeneratorFunction.getInstance(this.BB.getGHat()));
 			EqualityPreimageProofSystem apps = EqualityPreimageProofSystem.getInstance(this.BB.getComQ().getCommitmentFunction(), f);
 
 			Triple pi3 = apps.generate(Tuple.getInstance(m, s), Tuple.getInstance(cab, uHat));
+			System.out.println("  > Time pi_3: " + (System.currentTimeMillis() - time));
 
 			Tuple proof = Tuple.getInstance(pi1, pi2, pi3);
 			Tuple ballot = Tuple.getInstance(v, Triple.getInstance(cu, cab, uHat), proof);
@@ -207,7 +238,7 @@ public class MemProofBasedVoting {
 		public void verifyBallots() {
 			System.out.println("Start verifying...");
 			PolynomialMembershipProofSystem pmps = PolynomialMembershipProofSystem.getInstance(this.BB.getCredentialPolynomial(), this.BB.getComP());
-			DoubleDescreteLogProofSystem ddlps = DoubleDescreteLogProofSystem.getInstance(this.BB.getComP(), this.BB.getComQ(), SECURITY_FACTOR);
+			DoubleDiscreteLogProofSystem ddlps = DoubleDiscreteLogProofSystem.getInstance(this.BB.getComP(), this.BB.getComQ(), SECURITY_FACTOR);
 
 			ProductSet space = (ProductSet) this.BB.getComQ().getCommitmentFunction().getDomain();
 			Function f = CompositeFunction.getInstance(SelectionFunction.getInstance(space, 0, 1), GeneratorFunction.getInstance(this.BB.getGHat()));
