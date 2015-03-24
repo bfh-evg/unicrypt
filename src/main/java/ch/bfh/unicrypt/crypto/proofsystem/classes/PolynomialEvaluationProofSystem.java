@@ -272,12 +272,18 @@ public class PolynomialEvaluationProofSystem
 		ZModElement challenge = this.getChallengeGenerator().generate(publicInput, commitment);
 		boolean v = true;
 
+		// Precompute c_j^x
+		Element[] cxVs = new Element[cV.getLength()];
+		for (int i = 0; i < cV.getLength(); i++) {
+			cxVs[i] = cV.getAt(i).selfApply(challenge);
+		}
+
 		for (int i = 0; i < this.d + 1; i++) {
-			v = v && cV.getAt(i).selfApply(challenge).apply(cfV.getAt(i)).isEquivalent(this.pedersenCS.commit(fBarV.getAt(i), rBarV.getAt(i)));
+			v = v && cxVs[i].apply(cfV.getAt(i)).isEquivalent(this.pedersenCS.commit(fBarV.getAt(i), rBarV.getAt(i)));
 		}
 
 		for (int i = 0; i < this.d; i++) {
-			v = v && cV.getAt(i + 1).selfApply(challenge).apply(cV.getAt(i).selfApply(fBarV.getAt(i).invert()).apply(cfuV.getAt(i))).isEquivalent(this.pedersenCS.commit(zModPrime.getZeroElement(), xiBarV.getAt(i)));
+			v = v && cxVs[i + 1].apply(cV.getAt(i).selfApply(fBarV.getAt(i).invert()).apply(cfuV.getAt(i))).isEquivalent(this.pedersenCS.commit(zModPrime.getZeroElement(), xiBarV.getAt(i)));
 		}
 
 		Element left = publicInput.getSecond().selfApply(challenge.power(this.d + 1));
