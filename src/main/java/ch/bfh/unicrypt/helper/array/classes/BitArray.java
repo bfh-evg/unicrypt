@@ -45,6 +45,8 @@ import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Collection;
 
 /**
@@ -89,7 +91,7 @@ public class BitArray
 		if (length < 0) {
 			throw new IllegalArgumentException();
 		}
-		int byteLength = (length + Byte.SIZE - 1) / Byte.SIZE;
+		int byteLength = MathUtil.divideUp(length, Byte.SIZE);
 		return new BitArray(ByteArray.getInstance(fillBit, byteLength), length);
 	}
 
@@ -135,7 +137,7 @@ public class BitArray
 		if (bits == null) {
 			throw new IllegalArgumentException();
 		}
-		int byteLength = (bits.length + Byte.SIZE - 1) / Byte.SIZE;
+		int byteLength = MathUtil.divideUp(bits.length, Byte.SIZE);
 		byte[] bytes = new byte[byteLength];
 		for (int i = 0; i < bits.length; i++) {
 			int byteIndex = i / Byte.SIZE;
@@ -162,7 +164,7 @@ public class BitArray
 		if (immutableArray instanceof BitArray) {
 			return (BitArray) immutableArray;
 		}
-		int byteLength = (immutableArray.getLength() + Byte.SIZE - 1) / Byte.SIZE;
+		int byteLength = MathUtil.divideUp(immutableArray.getLength(), Byte.SIZE);
 		byte[] bytes = new byte[byteLength];
 		for (int i = 0; i < immutableArray.getLength(); i++) {
 			int byteIndex = i / Byte.SIZE;
@@ -186,7 +188,7 @@ public class BitArray
 		if (bits == null) {
 			throw new IllegalArgumentException();
 		}
-		int byteLength = (bits.size() + Byte.SIZE - 1) / Byte.SIZE;
+		int byteLength = MathUtil.divideUp(bits.size(), Byte.SIZE);
 		byte[] bytes = new byte[byteLength];
 		int i = 0;
 		for (Boolean b : bits) {
@@ -214,11 +216,38 @@ public class BitArray
 	}
 
 	/**
+	 * Creates a new random bit array of a given length. It uses the library's standard randomness source to create the
+	 * random bits.
+	 * <p>
+	 * @param length The length of the random bit array
+	 * @return The new random bit array
+	 */
+	public static BitArray getRandomInstance(int length) {
+		return BitArray.getRandomInstance(length, HybridRandomByteSequence.getInstance());
+	}
+
+	/**
+	 * Creates a new random bit array of a given length. It uses a given instance of {@code RandomByteSequence} instance
+	 * as randomness source to create the random bits.
+	 * <p>
+	 * @param length             The length of the random bit array
+	 * @param randomByteSequence The randomness source
+	 * @return The new random bit array
+	 */
+	public static BitArray getRandomInstance(int length, RandomByteSequence randomByteSequence) {
+		if (length < 0 || randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		int byteLength = MathUtil.divideUp(length, Byte.SIZE);
+		return new BitArray(randomByteSequence.getNextByteArray(byteLength), length);
+	}
+
+	/**
 	 * Transforms the bit array into a Java array of {@code boolean} values.
 	 * <p>
 	 * @return The resulting Java array
 	 */
-	public boolean[] getBooleans() {
+	public boolean[] getBits() {
 		boolean[] result = new boolean[this.length];
 		for (int i : this.getAllIndices()) {
 			result[i] = this.abstractGetAt(i);
@@ -234,7 +263,7 @@ public class BitArray
 	 * @return The resulting byte array
 	 */
 	public ByteArray getByteArray() {
-		int length = MathUtil.divide(this.length - 1, Byte.SIZE) + 1;
+		int length = MathUtil.divideUp(this.length, Byte.SIZE);
 		byte[] bytes = new byte[length];
 		for (int index = 0; index < length; index++) {
 			bytes[index] = this.byteArray.getByteAt(this.rangeOffset - this.trailer, index, this.rangeOffset, this.rangeLength);

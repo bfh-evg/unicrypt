@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.Example;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.util.Arrays;
 
 /**
@@ -57,8 +58,8 @@ public class BitArrayExample {
 
 		Example.printLine(bitArray);
 		Example.printLine("Length        ", bitArray.getLength());
-		Example.printLine("Trailing Zeros", bitArray.countPrefix());
-		Example.printLine("Leading Zeros ", bitArray.countSuffix());
+		Example.printLine("Count Prefix  ", bitArray.countPrefix());
+		Example.printLine("Count Suffix  ", bitArray.countSuffix());
 		Example.printLine("Count Zeros   ", bitArray.count(false));
 		Example.printLine("Count Ones    ", bitArray.count(true));
 		Example.printLine("Extract       ", bitArray.extract(2, 9));
@@ -67,23 +68,23 @@ public class BitArrayExample {
 		Example.printLine("Extract Range ", bitArray.extractRange(7, 9));
 		Example.printLine("Get All       ", Arrays.toString(bitArray.getBits()));
 		Example.printLine("RemoveAt      ", bitArray.removeAt(7));
-		Example.printLine("Shif Left     ", bitArray.shiftLeft(3));
+		Example.printLine("Shift Left    ", bitArray.shiftLeft(3));
 		Example.printLine("Shift Right   ", bitArray.shiftRight(3));
 		Example.printLines("Split         ", bitArray.split(2, 4, 10));
-		Example.printLine("Strip L.Zeros ", bitArray.removeSuffix());
-		Example.printLine("Strip T.Zeros ", bitArray.removePrefix());
-		Example.printLine("Strip Prefix  ", bitArray.removePrefix(3));
-		Example.printLine("Strip Suffix  ", bitArray.removeSuffix(3));
+		Example.printLine("Remove Prefix ", bitArray.removePrefix());
+		Example.printLine("Remove Suffix ", bitArray.removeSuffix());
+		Example.printLine("Remove Prefix ", bitArray.removePrefix(3));
+		Example.printLine("Remove Suffix ", bitArray.removeSuffix(3));
 		Example.printLine("Concatenate   ", bitArray.append(bitArray));
 	}
 
 	public static void example2() {
 
 		BitArray bitArray1 = BitArray.getInstance();
-		BitArray bitArray2 = BitArray.getInstance("110101110001111");
-		BitArray bitArray3 = BitArray.getInstance(new boolean[10]);
-		BitArray bitArray4 = BitArray.getInstance(new byte[3]);
-		BitArray bitArray5 = BitArray.getInstance(10);
+		BitArray bitArray2 = BitArray.getInstance(true, true, false, false);
+		BitArray bitArray3 = BitArray.getInstance("110101110001111");
+		BitArray bitArray4 = BitArray.getInstance(new boolean[10]);
+		BitArray bitArray5 = BitArray.getInstance(ByteArray.getInstance(127, -128));
 		BitArray bitArray6 = BitArray.getInstance(false, 10);
 		BitArray bitArray7 = BitArray.getInstance(true, 10);
 		BitArray bitArray8 = BitArray.getRandomInstance(20);

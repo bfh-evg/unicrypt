@@ -609,14 +609,21 @@ public final class MathUtil {
 		return (byte) ~(b & 0xFF);
 	}
 
-	// mathematical modulo and divide working for positive and negative values
-	// Java8: use floorMod and floorDiv to handle negative values properly
+	// mathematical modulo working for positive and negative values
+	// Java8: use Math.floorMod
 	public static int modulo(int i, int n) {
 		return ((i % n) + n) % n;
 	}
 
+	// mathematical divide working for positive and negative values
+	// Java8: use Math.floorDiv
 	public static int divide(int i, int n) {
 		return (i - modulo(i, n)) / n;
+	}
+
+	// divides and rounds up
+	public static int divideUp(int i, int n) {
+		return divide(i + n - 1, n);
 	}
 
 }

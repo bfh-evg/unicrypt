@@ -107,43 +107,7 @@ public class ByteArrayExample {
 		Example.printLine("Append    ", byteArray1.append(byteArray2));
 		Example.printLine("Append    ", byteArray2.append(byteArray1));
 		Example.printLine("ShiftLeft ", byteArray2.shiftLeft(7));
-		Example.printLine("ShiftRight ", byteArray2.shiftRight(7));
-	}
-
-	public static void example5() {
-		ByteArray byteArray1 = ByteArray.getInstance(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}).extract(1, 7);
-
-		Example.printLine(byteArray1);
-		for (int i = 0; i < 16; i++) {
-			Example.printLine("GetBitAt", byteArray1.getBitAt(i));
-		}
-		Example.printLine("0-Bits", byteArray1.countZeroBits());
-		Example.printLine("1-Bits", byteArray1.countOneBits());
-		Example.printLine("Leading Zeros", byteArray1.countLeadingZeroBits());
-		Example.printLine("Trailing Zeros", byteArray1.countTrailingZeroBits());
-
-		ByteArray byteArray2 = byteArray1.reverse();
-
-		Example.printLine(byteArray2);
-		for (int i = 0; i < 16; i++) {
-			Example.printLine("GetBitAt", byteArray2.getBitAt(i));
-		}
-		Example.printLine("Count 0-Bits ", byteArray2.countZeroBits());
-		Example.printLine("Count 1-Bit s", byteArray2.countOneBits());
-		Example.printLine("Leading Zeros", byteArray2.countLeadingZeroBits());
-		Example.printLine("Trailing Zeros", byteArray2.countTrailingZeroBits());
-	}
-
-	public static void example6() {
-		ByteArray byteArray = ByteArray.getInstance(new byte[]{64});
-
-		Example.printLine(byteArray);
-		for (int i = 0; i < 10; i++) {
-			Example.printLine("Left ", byteArray.shiftBitsRight(i));
-		}
-		for (int i = 0; i < 10; i++) {
-			Example.printLine("Right", byteArray.shiftBitsLeft(i));
-		}
+		Example.printLine("ShiftRight", byteArray2.shiftRight(7));
 	}
 
 	public static void main(final String[] args) {

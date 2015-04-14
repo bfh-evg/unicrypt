@@ -160,6 +160,28 @@ public class ByteArray
 	}
 
 	/**
+	 * Creates a new byte array from a given Java integer array by casting its values to byte and copying them for
+	 * internal storage. This is a convenience method for {@link ByteArray#getInstance(byte...)}.
+	 * <p>
+	 * @param integers The Java integer array
+	 * @return The new byte array
+	 */
+	public static ByteArray getInstance(int... integers) {
+		if (integers == null) {
+			throw new IllegalArgumentException();
+		}
+		byte[] result = new byte[integers.length];
+		int i = 0;
+		for (int value : integers) {
+			if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE) {
+				throw new IllegalArgumentException();
+			}
+			result[i++] = (byte) (value & 0xFF);
+		}
+		return new ByteArray(result);
+	}
+
+	/**
 	 * Transforms a given immutable array of type {@code Byte} into a byte array. If the given immutable array is
 	 * already an instance of {@code ByteArray}, it is returned without doing anything.
 	 * <p>
