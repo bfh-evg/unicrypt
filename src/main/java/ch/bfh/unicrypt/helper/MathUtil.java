@@ -46,7 +46,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 /**
- * This is a helper class with some static methods for various mathematical functions.
+ * This is a helper class with some static methods for various mathematical functions. By contract, the methods of this
+ * class do not check the validity of the parameters.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -54,16 +55,13 @@ import java.util.HashSet;
  */
 public final class MathUtil {
 
-	public static final int NUMBER_OF_PRIME_TESTS = 40;
+	private static final int NUMBER_OF_PRIME_TESTS = 40;
 
 	public static final BigInteger ZERO = BigInteger.valueOf(0);
 	public static final BigInteger ONE = BigInteger.valueOf(1);
 	public static final BigInteger TWO = BigInteger.valueOf(2);
 	public static final BigInteger THREE = BigInteger.valueOf(3);
 	public static final BigInteger FOUR = BigInteger.valueOf(4);
-
-	private static final byte BYTE_ZERO = (byte) 0;
-	private static final byte BYTE_ONE = (byte) 0xFF;
 
 	private static final byte[] BIT_MASKS = new byte[Byte.SIZE];
 	private static final byte[] BIT_MASKS_INV = new byte[Byte.SIZE];
@@ -76,70 +74,59 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Returns the value obtained from applying the Euler totient function to an integer {@literal value}.
-	 * <dt><b>Preconditions:</b></dt>
-	 * <dd>{@literal primeFactorSet} is the complete set of prime factors of {@literal value}.</dd>
+	 * Returns the value obtained from applying the Euler totient function to a positive integer. For computing the
+	 * result efficiently, the complete set of prime factors of the input value must be specified.
 	 * <p>
-	 * @param value          The input value
-	 * @param primeFactorSet The prime factors of {@literal value}
+	 * @param value        The input value
+	 * @param primeFactors The prime factors of {@literal value}
 	 * @return the result of applying the Euler totient function to {@literal value}
-	 * @throws IllegalArgumentException if {@literal value} is {@literal null}, {@literal 0}, or negative
-	 * @throws IllegalArgumentException if {@literal primeFactorSet} is null or if {@literal primeFactorSet} contains
-	 *                                  {@literal null}
-	 * @see MathUtil#arePrimeFactors(BigInteger, BigInteger[])
-	 * @see MathUtil#removeDuplicates(BigInteger[])
 	 * @see "Handbook of Applied Cryptography, Fact 2.101 (iii)"
 	 */
-	public static BigInteger eulerFunction(final BigInteger value, final BigInteger... primeFactorSet) {
-		if (value == null || value.signum() == 0 || value.signum() == -1 || primeFactorSet == null) {
-			throw new IllegalArgumentException();
-		}
+	public static BigInteger eulerFunction(final BigInteger value, final BigInteger... primeFactors) {
 		BigInteger product1 = ONE;
 		BigInteger product2 = ONE;
-		for (final BigInteger prime : primeFactorSet) {
-			if (prime == null) {
-				throw new IllegalArgumentException();
-			}
-			product1 = product1.multiply(prime);
-			product2 = product2.multiply(prime.subtract(ONE));
+		for (final BigInteger primeFactor : primeFactors) {
+			product1 = product1.multiply(primeFactor);
+			product2 = product2.multiply(primeFactor.subtract(ONE));
 		}
 		return value.multiply(product2).divide(product1);
 	}
 
 	/**
-	 * Tests if some given BigInteger values are all prime factors of another BigInteger value. The given list of prime
-	 * factors need not be complete.
+	 * Tests if a given integer value is a prime factor of another (positive) integer value.
 	 * <p>
-	 * @param value   The given value
-	 * @param factors A given array of potential prime factors
-	 * @return {@literal true} if all values are prime factors, {@literal false} otherwise
+	 * @param value  The given integer value
+	 * @param factor The potential prime factor
+	 * @return {@literal true} if {@code factor} is a prime factor of {@code value}, {@literal false} otherwise
+	 */
+	public static boolean isPrimeFactor(final BigInteger value, final BigInteger factor) {
+		return isPrime(factor) && value.mod(factor).equals(ZERO);
+	}
+
+	/**
+	 * Tests if some given positive integer values are all prime factors of another (positive) integer value. The given
+	 * list of prime factors needs not to be complete.
+	 * <p>
+	 * @param value   The given integer value
+	 * @param factors The potential prime factors
+	 * @return {@literal true} if all values are prime factors of {@code value}, {@literal false} otherwise
 	 */
 	public static boolean arePrimeFactors(final BigInteger value, final BigInteger... factors) {
-		if (factors == null) {
-			return false;
-		}
 		for (BigInteger factor : factors) {
 			if (!isPrimeFactor(value, factor)) {
 				return false;
 			}
 		}
-		return isPositive(value);
-	}
-
-	private static boolean isPrimeFactor(final BigInteger value, final BigInteger factor) {
-		return isPositive(value) && isPrime(factor) && value.gcd(factor).equals(factor);
+		return true;
 	}
 
 	/**
-	 * Tests if some given BigInteger values are all prime numbers.
+	 * Tests if some given integers are all prime numbers.
 	 * <p>
-	 * @param values A given array of potential prime numbers
+	 * @param values The potential prime numbers
 	 * @return {@literal true} if all values are prime numbers, {@literal false} otherwise
 	 */
 	public static boolean arePrime(final BigInteger... values) {
-		if (values == null) {
-			return false;
-		}
 		for (BigInteger value : values) {
 			if (!isPrime(value)) {
 				return false;
@@ -149,29 +136,43 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Tests if a given BigInteger value is a positive prime number.
+	 * Tests if a given integer value is a prime number.
 	 * <p>
 	 * @param value A potential prime number
-	 * @return {@literal true} if {@literal value} is prime, {@literal false} otherwise
+	 * @return {@literal true} if {@code value} is prime, {@literal false} otherwise
 	 */
 	public static boolean isPrime(final BigInteger value) {
-		return isPositive(value) && value.isProbablePrime(MathUtil.NUMBER_OF_PRIME_TESTS);
+		// BigInteger.isProbablePrime considers "negative primes" as primes
+		return value.signum() > 0 && value.isProbablePrime(MathUtil.NUMBER_OF_PRIME_TESTS);
 	}
 
 	/**
 	 * Tests if a given BigInteger value is a save prime.
 	 * <p>
 	 * @param value A potential save prime
-	 * @return {@literal true} if {@literal value} is a save prime, {@literal false} otherwise
+	 * @return {@literal true} if {@code value} is a save prime, {@literal false} otherwise
 	 */
 	public static boolean isSavePrime(final BigInteger value) {
 		return isPrime(value) && isPrime(value.subtract(ONE).divide(TWO));
 	}
 
+	/**
+	 * Tests if two (positive) integer values are relatively prime.
+	 * <p>
+	 * @param value1 The first integer value
+	 * @param value2 The second integer value
+	 * @return {@literal true} if the input values are relatively prime, {@literal false} otherwise
+	 */
 	public static boolean areRelativelyPrime(BigInteger value1, BigInteger value2) {
 		return value1.gcd(value2).equals(ONE);
 	}
 
+	/**
+	 * Tests if some given (positive) integer values are pairwise relatively prime.
+	 * <p>
+	 * @param values The given integer values
+	 * @return {@literal true} if the input values are pairwise relatively prime, {@literal false} otherwise
+	 */
 	public static boolean areRelativelyPrime(BigInteger... values) {
 		for (int i = 0; i < values.length; i++) {
 			for (int j = i + 1; j < values.length; j++) {
@@ -184,77 +185,23 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Tests if some given BigInteger values are all positive.
-	 * <p>
-	 * @param values A given array of potential positive numbers
-	 * @return {@literal true} if all values are positive, {@literal false} otherwise
-	 */
-	public static boolean arePositive(final BigInteger... values) {
-		if (values == null) {
-			return false;
-		}
-		for (BigInteger value : values) {
-			if (!isPositive(value)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Tests if a given BigInteger value is positive.
-	 * <p>
-	 * @param value A potential positive number
-	 * @return {@literal true} if {@literal value} is positive, {@literal false} otherwise
-	 */
-	public static boolean isPositive(final BigInteger value) {
-		if (value == null) {
-			return false;
-		}
-		return value.signum() == 1;
-	}
-
-	/**
-	 * Tests if some given integer values are all positive.
-	 * <p>
-	 * @param values A given array of potential positive numbers
-	 * @return {@literal true} is all values are positive, {@literal false} otherwise
-	 */
-	public static boolean arePositive(final int... values) {
-		for (int value : values) {
-			if (value <= 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Removes duplicate values from a BigInteger array
+	 * Removes duplicates from a BigInteger array
 	 * <p>
 	 * @param values An array of BigInteger values
 	 * @return the same array of BigInteger values without duplicates
-	 * @throws IllegalArgumentException if {@literal values} is {@literal null}
 	 */
 	public static BigInteger[] removeDuplicates(final BigInteger... values) {
-		if (values == null) {
-			throw new IllegalArgumentException();
-		}
 		final HashSet<BigInteger> hashSet = new HashSet<BigInteger>(Arrays.asList(values));
 		return hashSet.toArray(new BigInteger[hashSet.size()]);
 	}
 
 	/**
-	 * Computes the factorial of some integer value. Returns 1 for input 0.
+	 * Computes the factorial of some (non-negative) integer value. Returns 1 for input 0.
 	 * <p>
 	 * @param value The input value
-	 * @return The factorial of {@literal value}
-	 * @throws IllegalArgumentException if {@literal value} is negative.
+	 * @return The factorial of {@code value}
 	 */
 	public static BigInteger factorial(final int value) {
-		if (value < 0) {
-			throw new IllegalArgumentException();
-		}
 		BigInteger result = ONE;
 		for (int i = 1; i <= value; i++) {
 			result = result.multiply(BigInteger.valueOf(i));
@@ -263,53 +210,31 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Computes the maximum value of a given BigInteger array.
+	 * Computes the elegant pairing function for two non-negative BigInteger values. The mapping can be inverted using
+	 * {@link MathUtil#unpair(java.math.BigInteger)}.
 	 * <p>
-	 * @param values The given BigInteger array
-	 * @return The maximum value
-	 * @throws IllegalArgumentException if {@literal values} is null or empty, or if it contains null
-	 */
-	public static BigInteger maxValue(final BigInteger... values) {
-		if (values == null || values.length == 0) {
-			throw new IllegalArgumentException();
-		}
-		BigInteger maxValue = null;
-		for (final BigInteger value : values) {
-			if (value == null) {
-				throw new IllegalArgumentException();
-			}
-			if (maxValue == null) {
-				maxValue = value;
-			} else {
-				maxValue = maxValue.max(value);
-			}
-		}
-		return maxValue;
-	}
-
-	/**
-	 * Computes the elegant pairing function for two non-negative BigInteger values.
-	 * <p>
+	 * @see MathUtil#unpair(java.math.BigInteger)
 	 * @see <a href="http://szudzik.com/ElegantPairing.pdf">ElegantPairing.pdf</a>
 	 * @param value1 The first value
 	 * @param value2 The second value
 	 * @return The result of applying the elegant pairing function
-	 * @throws IllegalArgumentException if {@literal value1} or {@literal value2} is null or negative
 	 */
 	public static BigInteger pair(BigInteger value1, BigInteger value2) {
-		if (value1 == null || value1.signum() < 0 || value2 == null || value2.signum() < 0) {
-			throw new IllegalArgumentException();
-		}
 		if (value1.compareTo(value2) < 0) {
 			return value2.multiply(value2).add(value1);
 		}
 		return value1.multiply(value1).add(value1).add(value2);
 	}
 
+	/**
+	 * Computes the elegant pairing function for a given list of non-negative {@code int} values. This is a convenience
+	 * method for {@link MathUtil#pairWithSize(java.math.BigInteger...)}.
+	 * <p>
+	 * @param values The given values
+	 * @return The result of applying the elegant pairing function
+	 * @see MathUtil#pair(java.math.BigInteger...)
+	 */
 	public static BigInteger pair(int... values) {
-		if (values == null) {
-			throw new IllegalArgumentException();
-		}
 		BigInteger[] bigIntegers = new BigInteger[values.length];
 		for (int i = 0; i < values.length; i++) {
 			bigIntegers[i] = BigInteger.valueOf(values[i]);
@@ -319,64 +244,55 @@ public final class MathUtil {
 
 	/**
 	 * Computes the elegant pairing function for a given list of non-negative BigInteger values. The order in which the
-	 * binary pairing function is applied is recursively from left to right.
+	 * binary pairing function is applied is recursively from left to right. The mapping can be inverted using
+	 * {@link MathUtil#unpair(java.math.BigInteger, int)}.
 	 * <p>
+	 * @see MathUtil#unpair(java.math.BigInteger, int)
 	 * @see <a href="http://szudzik.com/ElegantPairing.pdf">ElegantPairing.pdf</a>
 	 * @param values The given values
 	 * @return The result of applying the elegant pairing function
-	 * @throws IllegalArgumentException if {@literal values} is null
-	 * @throws IllegalArgumentException if {@literal values} contains null or negative value
 	 */
 	public static BigInteger pair(BigInteger... values) {
-		if (values == null) {
-			throw new IllegalArgumentException();
-		}
-		int n = values.length;
-		if (n == 0) {
+		int length = values.length;
+		if (length == 0) {
 			return ZERO;
 		}
-		if (n == 1) {
+		if (length == 1) {
 			return values[0];
 		}
-		BigInteger[] a = new BigInteger[n / 2 + n % 2];
-		for (int i = 0; i < n / 2; i++) {
-			a[i] = pair(values[2 * i], values[2 * i + 1]);
+		BigInteger[] newValues = new BigInteger[divideUp(length, 2)];
+		for (int i = 0; i < length / 2; i++) {
+			newValues[i] = pair(values[2 * i], values[2 * i + 1]);
 		}
-		if (n % 2 == 1) {
-			a[n / 2] = values[n - 1];
+		if (length % 2 == 1) {
+			newValues[length / 2] = values[length - 1];
 		}
-		return pair(a);
+		return pair(newValues);
 	}
 
 	/**
 	 * Computes the elegant pairing function for a given list of non-negative BigInteger values. The size of the given
-	 * input list is taken as an additional input value.
+	 * input list is taken as an additional top-level input value. The mapping can be inverted using
+	 * {@link MathUtil#unpairWithSize(java.math.BigInteger)}.
 	 * <p>
+	 * @see MathUtil#unpairWithSize(java.math.BigInteger)
 	 * @see <a href="http://szudzik.com/ElegantPairing.pdf">ElegantPairing.pdf</a>
 	 * @param values The given values
 	 * @return The result of applying the elegant pairing function
-	 * @throws IllegalArgumentException if {@literal values} is null
-	 * @throws IllegalArgumentException if {@literal values} contains null or negative value
 	 */
 	public static BigInteger pairWithSize(BigInteger... values) {
-		if (values == null) {
-			throw new IllegalArgumentException();
-		}
 		return pair(pair(values), BigInteger.valueOf(values.length));
 	}
 
 	/**
 	 * Computes the inverse of the binary elegant pairing function for a given non-negative BigInteger value.
 	 * <p>
+	 * @see MathUtil#pair(java.math.BigInteger, java.math.BigInteger)
 	 * @see <a href="http://szudzik.com/ElegantPairing.pdf">ElegantPairing.pdf</a>
 	 * @param value The input value
 	 * @return An array containing the two resulting values
-	 * @throws IllegalArgumentException if {@literal value} is null or negative
 	 */
 	public static BigInteger[] unpair(BigInteger value) {
-		if (value == null || value.signum() < 0) {
-			throw new IllegalArgumentException();
-		}
 		BigInteger x1 = sqrt(value);
 		BigInteger x2 = value.subtract(x1.multiply(x1));
 		if (x1.compareTo(x2) > 0) {
@@ -388,24 +304,16 @@ public final class MathUtil {
 	/**
 	 * Computes the inverse of the n-ary elegant pairing function for a given non-negative BigInteger value.
 	 * <p>
+	 * @see MathUtil#pair(java.math.BigInteger...)
 	 * @see <a href="http://szudzik.com/ElegantPairing.pdf">ElegantPairing.pdf</a>
 	 * @param value The input value
-	 * @param size  The number of resulting values
+	 * @param n     The number of resulting values
 	 * @return An array containing the resulting values
-	 * @throws IllegalArgumentException if {@literal value} is null or negative
-	 * @throws IllegalArgumentException if {@literal size} is negative
 	 */
-	public static BigInteger[] unpair(BigInteger value, int size) {
-		if (size < 0 || value.signum() < 0) {
-			throw new IllegalArgumentException();
-		}
-		BigInteger[] result = new BigInteger[size];
-		if (size == 0) {
-			if (value.signum() > 0) {
-				throw new IllegalArgumentException();
-			}
-		} else {
-			unpair(value, size, 0, result);
+	public static BigInteger[] unpair(BigInteger value, int n) {
+		BigInteger[] result = new BigInteger[n];
+		if (n > 0) {
+			unpair(value, n, 0, result);
 		}
 		return result;
 	}
@@ -424,18 +332,26 @@ public final class MathUtil {
 
 	/**
 	 * Computes the inverse of the n-ary elegant pairing function for a given non-negative BigInteger value, where the
-	 * size is included as additional input value.
+	 * size is included as an additional top-level input value.
 	 * <p>
+	 * @see MathUtil#pairWithSize(java.math.BigInteger...)
 	 * @see <a href="http://szudzik.com/ElegantPairing.pdf">ElegantPairing.pdf</a>
 	 * @param value The input value
 	 * @return An array containing the resulting values
-	 * @throws IllegalArgumentException if {@literal value} is null or negative
 	 */
 	public static BigInteger[] unpairWithSize(BigInteger value) {
 		BigInteger[] values = unpair(value);
 		return unpair(values[0], values[1].intValue());
 	}
 
+	/**
+	 * Applies the folding function to a given integer value. The result is a unique non-negative integer. The mapping
+	 * can be inverted using {@link MathUtil#unfold(java.math.BigInteger)}.
+	 * <p>
+	 * @see MathUtil#unfold(java.math.BigInteger)
+	 * @param value The given integer value
+	 * @return The result of applying the folding function
+	 */
 	public static BigInteger fold(BigInteger value) {
 		if (value.signum() >= 0) {
 			return value.shiftLeft(1);
@@ -443,16 +359,29 @@ public final class MathUtil {
 		return value.negate().shiftLeft(1).subtract(ONE);
 	}
 
+	/**
+	 * Applies the inverse of the folding function to a (non-negative) integer value.
+	 * <p>
+	 * @see MathUtil#fold(java.math.BigInteger)
+	 * @param value The given integer value
+	 * @return The result of applying the unfolding function
+	 */
 	public static BigInteger unfold(BigInteger value) {
-		if (value.signum() == -1) {
-			throw new IllegalArgumentException();
-		}
 		if (value.mod(TWO).equals(ZERO)) {
 			return value.shiftRight(1);
 		}
 		return value.add(ONE).shiftRight(1).negate();
 	}
 
+	/**
+	 * Computes the pairing of a list of arbitrary (positive and negative) integer values. It is a combination of
+	 * {@link MathUtil#fold(java.math.BigInteger)} and {@link MathUtil#pair(java.math.BigInteger...)}. The mapping can
+	 * be inverted using {@link MathUtil#unpairAndUnfold(java.math.BigInteger, int)}.
+	 * <p>
+	 * @see MathUtil#unpairAndUnfold(java.math.BigInteger, int)
+	 * @param values The integer values
+	 * @return The result of applying the pairing function
+	 */
 	public static BigInteger foldAndPair(BigInteger... values) {
 		BigInteger[] foldedValues = new BigInteger[values.length];
 		for (int i = 0; i < values.length; i++) {
@@ -461,65 +390,96 @@ public final class MathUtil {
 		return pair(foldedValues);
 	}
 
+	/**
+	 * Computes the inverse of the binary pairing function for a arbitrary (positive and negative) integer values.
+	 * <p>
+	 * @param value The integer value
+	 * @return An array containing the resulting two values
+	 */
 	public static BigInteger[] unpairAndUnfold(BigInteger value) {
 		return unpairAndUnfold(value, 2);
 	}
 
-	public static BigInteger[] unpairAndUnfold(BigInteger value, int size) {
-		BigInteger[] result = new BigInteger[size];
-		BigInteger[] values = unpair(value, size);
-		for (int i = 0; i < size; i++) {
+	/**
+	 * Computes the inverse of the n-ary pairing function for a arbitrary (positive and negative) integer values.
+	 * <p>
+	 * @see MathUtil#foldAndPair(java.math.BigInteger...)
+	 * @param value The integer value
+	 * @param n     The number of resulting values
+	 * @return An array containing the resulting values
+	 */
+	public static BigInteger[] unpairAndUnfold(BigInteger value, int n) {
+		BigInteger[] result = new BigInteger[n];
+		BigInteger[] values = unpair(value, n);
+		for (int i = 0; i < n; i++) {
 			result[i] = unfold(values[i]);
 		}
 		return result;
 	}
 
+	/**
+	 * Computes 2 to the power of {@code exponent}.
+	 * <p>
+	 * @param exponent The given exponent
+	 * @return 2 to the power of {@code exponent}
+	 */
 	public static BigInteger powerOfTwo(int exponent) {
 		return ONE.shiftLeft(exponent);
 	}
 
-	// This is a helper method to compute the integer square root of a positive BigInteger value.
-	public static BigInteger sqrt(BigInteger n) {
-		// exception if n<0
-		if (n.signum() == -1) {
-			throw new IllegalArgumentException();
-		}
+	/**
+	 * Computes the integer square root of a (non-negative) integer value using Newton's method.
+	 * <p>
+	 * @param value The integer value
+	 * @return The integer square root of the input value
+	 */
+	public static BigInteger sqrt(BigInteger value) {
 		// special case
-		if (n.signum() == 0) {
+		if (value.signum() == 0) {
 			return ZERO;
 		}
 		// first guess
-		BigInteger current = powerOfTwo(n.bitLength() / 2 + 1);
+		BigInteger current = powerOfTwo(value.bitLength() / 2 + 1);
 		BigInteger last;
 		do {
 			last = current;
-			current = last.add(n.divide(last)).shiftRight(1);
+			current = last.add(value.divide(last)).shiftRight(1);
 		} while (last.compareTo(current) > 0);
 		return last;
 	}
 
-	//Tonelli_Shanks algorithm for square root modulo prime p>2
-	//Computes only one solution r, the other solution is p-r
+	/**
+	 * Computes one of the two square roots of a given integer value {@code x} modulo a prime number {@code p}, using
+	 * the Tonelli-Shanks algorithm, for {@code 0<x<p}. It is assumed that such square roots exist, i.e., that {@code x}
+	 * is a quadratic residue (modulo {@code p}). For a sqaure root {@code r}, the second square root is {@code p-r}.
+	 * <p>
+	 * @see MathUtil#hasSqrtModPrime(java.math.BigInteger, java.math.BigInteger)
+	 * @param x The integer value
+	 * @param p The prime modulo
+	 * @return One of the two square roots of {@code x} (modulo {@code p})
+	 */
 	public static BigInteger sqrtModPrime(BigInteger x, BigInteger p) {
 
-		if (!hasSqrtModPrime(x, p)) {
-			throw new IllegalArgumentException("r has no square root");
+		// trivial cases
+		if (p.equals(TWO)) {
+			return ONE;
 		}
-
 		if (p.mod(FOUR).equals(THREE)) {
 			return x.modPow(p.add(ONE).divide(FOUR), p);
 		}
 
-		//z which must be a quadratic non-residue mod p.
+		// compute z, which must be a quadratic non-residue
 		BigInteger z = TWO;
+
 		while (hasSqrtModPrime(z, p)) {
 			z = z.add(ONE);
 		}
 		BigInteger s = ONE;
 		BigInteger q = p.subtract(ONE).divide(TWO);
 
-		//Finding Q
-		while (q.mod(TWO).equals(ZERO)) {
+		// finding q
+		while (q.mod(TWO)
+			   .equals(ZERO)) {
 			q = q.divide(TWO);
 			s = s.add(ONE);
 		}
@@ -529,7 +489,7 @@ public final class MathUtil {
 		BigInteger t = x.modPow(q, p);
 		BigInteger m = s;
 
-		//Loop until t==1
+		// loop until t=1
 		while (!t.equals(ONE)) {
 			BigInteger i = ZERO;
 			while (!ONE.equals(t.modPow(TWO.modPow(i, p), p))) {
@@ -543,30 +503,64 @@ public final class MathUtil {
 			m = i;
 		}
 
-		if (r.modPow(TWO, p).equals(x.mod(p))) {
-			return r;
-		}
-		throw new IllegalArgumentException();
+		return r;
 	}
 
-	//Check if x has a square root mod p>2
+	/**
+	 * Checks if a given integer value {@code x} is a quadratic residue modulo a given prime number {@code p}, for
+	 * {@code 0<x<p}. In that case, {@code x} has corresponding square roots (modulo {@code p}).
+	 * <p>
+	 * @param x The integer value
+	 * @param p The prime modulo
+	 * @return {@literal true} if {@code x} is a quadratic residue (modulo {@code p}), {@literal false} otherwise
+	 * @see MathUtil#sqrtModPrime(java.math.BigInteger, java.math.BigInteger)
+	 */
 	public static boolean hasSqrtModPrime(BigInteger x, BigInteger p) {
 		return x.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
 	}
 
 	// Bit operations on byte
+	/**
+	 * Returns the {@code i}-th bit of a byte.
+	 * <p>
+	 * @param b The given byte
+	 * @param i The index
+	 * @return The bit at index {@code i}
+	 */
 	public static boolean getBit(byte b, int i) {
 		return and(b, BIT_MASKS[i]) != 0;
 	}
 
+	/**
+	 * Sets the {@code i}-th bit of a byte to 1.
+	 * <p>
+	 * @param b The given byte
+	 * @param i The index
+	 * @return The resulting byte
+	 */
 	public static byte setBit(byte b, int i) {
 		return or(b, BIT_MASKS[i]);
 	}
 
+	/**
+	 * Sets the {@code i}-th bit of a byte to 0.
+	 * <p>
+	 * @param b The given byte
+	 * @param i The index
+	 * @return The resulting byte
+	 */
 	public static byte clearBit(byte b, int i) {
 		return and(b, BIT_MASKS_INV[i]);
 	}
 
+	/**
+	 * Replaces the {@code i}-th bit of a byte.
+	 * <p>
+	 * @param b   The given byte
+	 * @param i   The index
+	 * @param bit The new bit
+	 * @return The resulting byte
+	 */
 	public static byte replaceBit(byte b, int i, boolean bit) {
 		if (bit) {
 			return setBit(b, i);
@@ -575,55 +569,113 @@ public final class MathUtil {
 		}
 	}
 
+	/**
+	 * Reverses the bit order of a given byte
+	 * <p>
+	 * @param b The given byte
+	 * @return The resulting byte
+	 */
 	public static byte reverse(byte b) {
 		return (byte) (Integer.reverse(b & 0xFF) >>> (Integer.SIZE - Byte.SIZE));
 	}
 
-	// JAVA8: use toUnsignedInt(byte x)
+	/**
+	 * Shifts the bits of a given byte to the left ({@code n} positions).
+	 * <p>
+	 * @param b The given byte
+	 * @param n The number of positions to shift
+	 * @return The resulting byte
+	 */
 	public static byte shiftLeft(byte b, int n) {
 		return (byte) ((b & 0xFF) << n);
 	}
 
-	// JAVA8: use toUnsignedInt(byte x)
+	/**
+	 * Shifts the bits of a given byte to the right ({@code n} positions).
+	 * <p>
+	 * @param b The given byte
+	 * @param n The number of positions to shift
+	 * @return The resulting byte
+	 */
 	public static byte shiftRight(byte b, int n) {
 		return (byte) ((b & 0xFF) >>> n);
 	}
 
-	// JAVA8: use toUnsignedInt(byte x)
+	/**
+	 * Applies the logical XOR operation to two bytes
+	 * <p>
+	 * @param b1 The first byte
+	 * @param b2 The second byte
+	 * @return The resulting byte
+	 */
 	public static byte xor(byte b1, byte b2) {
 		return (byte) ((b1 & 0xFF) ^ (b2 & 0xFF));
 	}
 
-	// JAVA8: use toUnsignedInt(byte x)
+	/**
+	 * Applies the logical AND operation to two bytes
+	 * <p>
+	 * @param b1 The first byte
+	 * @param b2 The second byte
+	 * @return The resulting byte
+	 */
 	public static byte and(byte b1, byte b2) {
 		return (byte) ((b1 & 0xFF) & (b2 & 0xFF));
 	}
 
-	// JAVA8: use toUnsignedInt(byte x)
+	/**
+	 * Applies the logical OR operation to two bytes
+	 * <p>
+	 * @param b1 The first byte
+	 * @param b2 The second byte
+	 * @return The resulting byte
+	 */
 	public static byte or(byte b1, byte b2) {
 		return (byte) ((b1 & 0xFF) | (b2 & 0xFF));
 	}
 
-	// JAVA8: use toUnsignedInt(byte x)
+	/**
+	 * Applies the logical NOT operation to a given byte
+	 * <p>
+	 * @param b The given byte
+	 * @return The resulting byte
+	 */
 	public static byte not(byte b) {
 		return (byte) ~(b & 0xFF);
 	}
 
-	// mathematical modulo working for positive and negative values
-	// Java8: use Math.floorMod
-	public static int modulo(int i, int n) {
-		return ((i % n) + n) % n;
+	/**
+	 * Computes the "mathematical modulo", which works for positive and negative values.
+	 * <p>
+	 * @param x The given value
+	 * @param n The modulus
+	 * @return The modulo of
+	 */
+	public static int modulo(int x, int n) {
+		return ((x % n) + n) % n;
 	}
 
 	// mathematical divide working for positive and negative values
 	// Java8: use Math.floorDiv
-	public static int divide(int i, int n) {
-		return (i - modulo(i, n)) / n;
+	/**
+	 *
+	 * @param x
+	 * @param n
+	 * @return
+	 */
+	public static int divide(int x, int n) {
+		return (x - modulo(x, n)) / n;
 	}
 
 	// divides and rounds up
-	public static int divideUp(int i, int n) {
-		return divide(i + n - 1, n);
+	/**
+	 *
+	 * @param x
+	 * @param n
+	 * @return
+	 */
+	public static int divideUp(int x, int n) {
+		return divide(x + n - 1, n);
 	}
 
 }

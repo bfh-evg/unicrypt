@@ -75,7 +75,7 @@ public class ByteArrayExample {
 		Example.printLine(byteArray2);
 		Example.printLine(byteArray3);
 
-		Example.printLine("Conc   ", byteArray1.append(byteArray2).append(byteArray3));
+		Example.printLine("Append", byteArray1.append(byteArray2).append(byteArray3));
 	}
 
 	public static void example3() {

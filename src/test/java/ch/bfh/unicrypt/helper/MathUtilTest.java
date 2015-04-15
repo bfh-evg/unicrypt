@@ -66,8 +66,6 @@ public class MathUtilTest {
 	private static final BigInteger TEN = BigInteger.valueOf(10);
 	private static final BigInteger SIXTEEN = BigInteger.valueOf(16);
 	private static final BigInteger[] EMPTY_ARRAY = new BigInteger[]{};
-	private static final BigInteger[] NULL_ARRAY = null;
-	private static final BigInteger NULL_VALUE = null;
 
 	@Test
 	public void testEulerFunction() {
@@ -85,36 +83,6 @@ public class MathUtilTest {
 		Assert.assertEquals(MathUtil.eulerFunction(TEN, new BigInteger[]{TWO, FIVE}), FOUR);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testEulerFunctionException1() {
-		MathUtil.eulerFunction(NULL_VALUE, NULL_ARRAY);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testEulerFunctionException2() {
-		MathUtil.eulerFunction(ONE, NULL_ARRAY);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testEulerFunctionException3() {
-		MathUtil.eulerFunction(NULL_VALUE, EMPTY_ARRAY);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testEulerFunctionException4() {
-		MathUtil.eulerFunction(ZERO, EMPTY_ARRAY);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testEulerFunctionException5() {
-		MathUtil.eulerFunction(MINUS_ONE, EMPTY_ARRAY);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testEulerFunctionException6() {
-		MathUtil.eulerFunction(SIX, new BigInteger[]{THREE, NULL_VALUE, TWO});
-	}
-
 	@Test
 	public void testArePrimeFactors() {
 		Assert.assertTrue(MathUtil.arePrimeFactors(TEN));
@@ -124,12 +92,6 @@ public class MathUtilTest {
 		Assert.assertTrue(MathUtil.arePrimeFactors(TEN, TWO, FIVE, FIVE));
 		Assert.assertFalse(MathUtil.arePrimeFactors(TEN, TWO, SIX));
 		Assert.assertFalse(MathUtil.arePrimeFactors(TEN, TWO, SEVEN));
-		Assert.assertFalse(MathUtil.arePrimeFactors(NULL_VALUE, NULL_ARRAY));
-		Assert.assertFalse(MathUtil.arePrimeFactors(NULL_VALUE, TEN));
-		Assert.assertFalse(MathUtil.arePrimeFactors(TEN, NULL_ARRAY));
-		Assert.assertFalse(MathUtil.arePrimeFactors(ZERO, EMPTY_ARRAY));
-		Assert.assertFalse(MathUtil.arePrimeFactors(MINUS_ONE, EMPTY_ARRAY));
-		Assert.assertFalse(MathUtil.arePrimeFactors(TEN, new BigInteger[]{TWO, NULL_VALUE, FIVE}));
 	}
 
 	@Test
@@ -140,13 +102,10 @@ public class MathUtilTest {
 		Assert.assertTrue(MathUtil.arePrime(TWO, FIVE));
 		Assert.assertTrue(MathUtil.arePrime(TWO, FIVE, FIVE));
 		Assert.assertFalse(MathUtil.arePrime(TWO, SIX));
-		Assert.assertFalse(MathUtil.arePrime(NULL_ARRAY));
-		Assert.assertFalse(MathUtil.arePrime(new BigInteger[]{TWO, NULL_VALUE, FIVE}));
 	}
 
 	@Test
 	public void testIsPrime() {
-		Assert.assertFalse(MathUtil.isPrime(null));
 		Assert.assertFalse(MathUtil.isPrime(ZERO));
 		Assert.assertFalse(MathUtil.isPrime(ONE));
 		Assert.assertTrue(MathUtil.isPrime(TWO));
@@ -158,7 +117,6 @@ public class MathUtilTest {
 
 	@Test
 	public void testIsSavePrime() {
-		Assert.assertFalse(MathUtil.isPrime(null));
 		Assert.assertFalse(MathUtil.isSavePrime(ZERO));
 		Assert.assertFalse(MathUtil.isSavePrime(ONE));
 		Assert.assertFalse(MathUtil.isSavePrime(TWO));
@@ -172,48 +130,11 @@ public class MathUtilTest {
 	}
 
 	@Test
-	public void testArePositiveBigInteger() {
-		Assert.assertTrue(MathUtil.arePositive(EMPTY_ARRAY));
-		Assert.assertTrue(MathUtil.arePositive(new BigInteger[]{TWO, FIVE}));
-		Assert.assertTrue(MathUtil.arePositive(TWO, FIVE));
-		Assert.assertTrue(MathUtil.arePositive(TWO, FIVE, FIVE));
-		Assert.assertFalse(MathUtil.arePositive(ZERO));
-		Assert.assertFalse(MathUtil.arePositive(MINUS_ONE));
-		Assert.assertFalse(MathUtil.arePositive(NULL_ARRAY));
-		Assert.assertFalse(MathUtil.arePositive(new BigInteger[]{TWO, NULL_VALUE, FIVE}));
-	}
-
-	@Test
-	public void testPositive() {
-		Assert.assertTrue(MathUtil.isPositive(ONE));
-		Assert.assertTrue(MathUtil.isPositive(TWO));
-		Assert.assertTrue(MathUtil.isPositive(THREE));
-		Assert.assertFalse(MathUtil.isPositive(ZERO));
-		Assert.assertFalse(MathUtil.isPositive(MINUS_ONE));
-		Assert.assertFalse(MathUtil.isPositive(MINUS_TWO));
-	}
-
-	@Test
-	public void testArePositiveInteger() {
-		Assert.assertTrue(MathUtil.arePositive(new int[]{2, 5}));
-		Assert.assertTrue(MathUtil.arePositive(2, 5));
-		Assert.assertTrue(MathUtil.arePositive(2, 5, 5));
-		Assert.assertFalse(MathUtil.arePositive(0));
-		Assert.assertFalse(MathUtil.arePositive(-1));
-	}
-
-	@Test
 	public void testRemoveDuplicates() {
 		Assert.assertEquals(3, MathUtil.removeDuplicates(TEN, TWO, SEVEN).length);
 		Assert.assertEquals(3, MathUtil.removeDuplicates(TEN, TWO, SEVEN, SEVEN).length);
 		Assert.assertEquals(1, MathUtil.removeDuplicates(SEVEN, SEVEN, SEVEN, SEVEN, SEVEN).length);
 		Assert.assertEquals(2, MathUtil.removeDuplicates(SEVEN, TWO, SEVEN, SEVEN, SEVEN, TWO, SEVEN).length);
-		Assert.assertEquals(1, MathUtil.removeDuplicates(NULL_VALUE, NULL_VALUE, NULL_VALUE).length);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testRemoveDuplicatesException() {
-		MathUtil.removeDuplicates(NULL_ARRAY);
 	}
 
 	@Test
@@ -223,32 +144,6 @@ public class MathUtilTest {
 		Assert.assertEquals(MathUtil.factorial(2), TWO);
 		Assert.assertEquals(MathUtil.factorial(3), SIX);
 		Assert.assertEquals(MathUtil.factorial(4), BigInteger.valueOf(24));
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testFactorialException() {
-		MathUtil.factorial(-1);
-	}
-
-	@Test
-	public void testMax() {
-		Assert.assertEquals(MathUtil.maxValue(new BigInteger[]{ONE}), ONE);
-		Assert.assertEquals(MathUtil.maxValue(new BigInteger[]{ONE, SEVEN, NINE, TWO}), NINE);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testMaxException1() {
-		MathUtil.maxValue(NULL_ARRAY);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testMaxException2() {
-		MathUtil.maxValue(EMPTY_ARRAY);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testMaxException3() {
-		MathUtil.maxValue(new BigInteger[]{ONE, NULL_VALUE, SEVEN});
 	}
 
 	@Test
@@ -279,22 +174,6 @@ public class MathUtilTest {
 
 	@Test
 	public void testAreRelativelyPrime_BigIntegerArr() {
-	}
-
-	@Test
-	public void testArePositive_BigIntegerArr() {
-	}
-
-	@Test
-	public void testIsPositive() {
-	}
-
-	@Test
-	public void testArePositive_intArr() {
-	}
-
-	@Test
-	public void testMaxValue() {
 	}
 
 	@Test
@@ -380,11 +259,6 @@ public class MathUtilTest {
 		Assert.assertEquals(THREE, MathUtil.unfold(SIX));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testUnfoldException() {
-		MathUtil.unfold(MINUS_ONE);
-	}
-
 	@Test
 	public void testFoldAndPair() {
 	}
@@ -410,7 +284,7 @@ public class MathUtilTest {
 
 	@Test
 	public void testSqrtModPrime() {
-		for (BigInteger p : new BigInteger[]{THREE, FIVE, SEVEN, BigInteger.valueOf(97)}) {
+		for (BigInteger p : new BigInteger[]{TWO, THREE, FIVE, SEVEN, BigInteger.valueOf(97)}) {
 			for (int i = 1; i < p.intValue(); i++) {
 				BigInteger bi = BigInteger.valueOf(i);
 				BigInteger bi_square = bi.modPow(TWO, p);
@@ -422,7 +296,7 @@ public class MathUtilTest {
 
 	@Test
 	public void testHasSqrtModPrime() {
-		for (BigInteger p : new BigInteger[]{THREE, FIVE, SEVEN, BigInteger.valueOf(97)}) {
+		for (BigInteger p : new BigInteger[]{TWO, THREE, FIVE, SEVEN, BigInteger.valueOf(97)}) {
 			Set squares = new HashSet<BigInteger>();
 			for (int i = 1; i < p.intValue(); i++) {
 				BigInteger bi = BigInteger.valueOf(i);
@@ -693,6 +567,70 @@ public class MathUtilTest {
 		Assert.assertEquals(0, MathUtil.divide(3, n));
 		Assert.assertEquals(0, MathUtil.divide(4, n));
 		Assert.assertEquals(1, MathUtil.divide(5, n));
+	}
+
+	@Test
+	public void testDivideUp() {
+		int n = 1;
+		Assert.assertEquals(-5, MathUtil.divideUp(-5, n));
+		Assert.assertEquals(-4, MathUtil.divideUp(-4, n));
+		Assert.assertEquals(-3, MathUtil.divideUp(-3, n));
+		Assert.assertEquals(-2, MathUtil.divideUp(-2, n));
+		Assert.assertEquals(-1, MathUtil.divideUp(-1, n));
+		Assert.assertEquals(0, MathUtil.divideUp(0, n));
+		Assert.assertEquals(1, MathUtil.divideUp(1, n));
+		Assert.assertEquals(2, MathUtil.divideUp(2, n));
+		Assert.assertEquals(3, MathUtil.divideUp(3, n));
+		Assert.assertEquals(4, MathUtil.divideUp(4, n));
+		Assert.assertEquals(5, MathUtil.divideUp(5, n));
+		n = 2;
+		Assert.assertEquals(-2, MathUtil.divideUp(-5, n));
+		Assert.assertEquals(-2, MathUtil.divideUp(-4, n));
+		Assert.assertEquals(-1, MathUtil.divideUp(-3, n));
+		Assert.assertEquals(-1, MathUtil.divideUp(-2, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-1, n));
+		Assert.assertEquals(0, MathUtil.divideUp(0, n));
+		Assert.assertEquals(1, MathUtil.divideUp(1, n));
+		Assert.assertEquals(1, MathUtil.divideUp(2, n));
+		Assert.assertEquals(2, MathUtil.divideUp(3, n));
+		Assert.assertEquals(2, MathUtil.divideUp(4, n));
+		Assert.assertEquals(3, MathUtil.divideUp(5, n));
+		n = 3;
+		Assert.assertEquals(-1, MathUtil.divideUp(-5, n));
+		Assert.assertEquals(-1, MathUtil.divideUp(-4, n));
+		Assert.assertEquals(-1, MathUtil.divideUp(-3, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-2, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-1, n));
+		Assert.assertEquals(0, MathUtil.divideUp(0, n));
+		Assert.assertEquals(1, MathUtil.divideUp(1, n));
+		Assert.assertEquals(1, MathUtil.divideUp(2, n));
+		Assert.assertEquals(1, MathUtil.divideUp(3, n));
+		Assert.assertEquals(2, MathUtil.divideUp(4, n));
+		Assert.assertEquals(2, MathUtil.divideUp(5, n));
+		n = 4;
+		Assert.assertEquals(-1, MathUtil.divideUp(-5, n));
+		Assert.assertEquals(-1, MathUtil.divideUp(-4, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-3, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-2, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-1, n));
+		Assert.assertEquals(0, MathUtil.divideUp(0, n));
+		Assert.assertEquals(1, MathUtil.divideUp(1, n));
+		Assert.assertEquals(1, MathUtil.divideUp(2, n));
+		Assert.assertEquals(1, MathUtil.divideUp(3, n));
+		Assert.assertEquals(1, MathUtil.divideUp(4, n));
+		Assert.assertEquals(2, MathUtil.divideUp(5, n));
+		n = 5;
+		Assert.assertEquals(-1, MathUtil.divideUp(-5, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-4, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-3, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-2, n));
+		Assert.assertEquals(0, MathUtil.divideUp(-1, n));
+		Assert.assertEquals(0, MathUtil.divideUp(0, n));
+		Assert.assertEquals(1, MathUtil.divideUp(1, n));
+		Assert.assertEquals(1, MathUtil.divideUp(2, n));
+		Assert.assertEquals(1, MathUtil.divideUp(3, n));
+		Assert.assertEquals(1, MathUtil.divideUp(4, n));
+		Assert.assertEquals(1, MathUtil.divideUp(5, n));
 	}
 
 }
