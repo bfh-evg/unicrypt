@@ -52,9 +52,68 @@ public class Permutation
 	   implements Iterable<Integer> {
 
 	private final int[] permutationVector;
+	private BigInteger rank;
 
 	private Permutation(int[] permutationVector) {
 		this.permutationVector = permutationVector;
+		this.rank = null;
+	}
+
+	public static Permutation getInstance(int size) {
+		if (size < 0) {
+			throw new IllegalArgumentException();
+		}
+		int[] permutationVector = new int[size];
+		for (int i = 0; i < size; i++) {
+			permutationVector[i] = i;
+		}
+		return new Permutation(permutationVector);
+	}
+
+	public static Permutation getInstance(int... permutationVector) {
+		if (permutationVector == null || !isValid(permutationVector)) {
+			throw new IllegalArgumentException();
+		}
+		return new Permutation(permutationVector.clone());
+	}
+
+	// Unranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time"
+	public static Permutation getInstance(int size, BigInteger rank) {
+		if (size < 0 || rank == null || rank.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		int[] permutationVector = new int[size];
+		for (int i = 0; i < size; i++) {
+			permutationVector[i] = i;
+		}
+		for (int i = size; i > 0; i--) {
+			BigInteger iBig = BigInteger.valueOf(i);
+			swap(permutationVector, rank.mod(iBig).intValue(), i - 1);
+			rank = rank.divide(iBig);
+		}
+		// original rank >= factorial(size)
+		if (rank.signum() != 0) {
+			throw new IllegalArgumentException();
+		}
+		return new Permutation(permutationVector);
+	}
+
+	public static Permutation getRandomInstance(int size) {
+		return Permutation.getRandomInstance(size, HybridRandomByteSequence.getInstance());
+	}
+
+	public static Permutation getRandomInstance(int size, RandomByteSequence randomByteSequence) {
+		if (size < 0 || randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		int[] permutationVector = new int[size];
+		int randomIndex;
+		for (int i = 0; i < size; i++) {
+			randomIndex = randomByteSequence.getRandomNumberGenerator().nextInteger(i);
+			permutationVector[i] = permutationVector[randomIndex];
+			permutationVector[randomIndex] = i;
+		}
+		return new Permutation(permutationVector);
 	}
 
 	/**
@@ -69,28 +128,15 @@ public class Permutation
 
 	// Ranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time"
 	public BigInteger getRank() {
-		int size = this.getSize();
-		int[] invertedPermutation = new int[size];
-		for (int i = 0; i < size; i++) {
-			invertedPermutation[this.permutationVector[i]] = i;
+		if (this.rank == null) {
+			int size = this.getSize();
+			int[] invertedPermutation = new int[size];
+			for (int i = 0; i < size; i++) {
+				invertedPermutation[this.permutationVector[i]] = i;
+			}
+			this.rank = computeRank(size, this.permutationVector.clone(), invertedPermutation);
 		}
-		return computeRank(size, this.permutationVector.clone(), invertedPermutation);
-	}
-
-	private static BigInteger computeRank(int n, int[] permutation, int[] invertedPermutation) {
-		if (n <= 1) {
-			return BigInteger.ZERO;
-		}
-		int s = permutation[n - 1];
-		swap(permutation, n - 1, invertedPermutation[n - 1]);
-		swap(invertedPermutation, s, n - 1);
-		return BigInteger.valueOf(s).add(BigInteger.valueOf(n).multiply(computeRank(n - 1, permutation, invertedPermutation)));
-	}
-
-	public static void swap(int[] permutation, int i, int j) {
-		int x = permutation[i];
-		permutation[i] = permutation[j];
-		permutation[j] = x;
+		return this.rank;
 	}
 
 	/**
@@ -108,7 +154,7 @@ public class Permutation
 	}
 
 	public Permutation compose(Permutation other) {
-		if (other == null) {
+		if (other == null || other.getSize() != this.getSize()) {
 			throw new IllegalArgumentException();
 		}
 		int size = this.getSize();
@@ -140,10 +186,7 @@ public class Permutation
 	 * @return {@literal true} if {@literal permutationVector} is a permutation vector, {@literal false} otherwise
 	 * @throws IllegalArgumentException if {@literal permutationVector} is null
 	 */
-	public static boolean isValid(final int[] permutationVector) {
-		if (permutationVector == null) {
-			throw new IllegalArgumentException();
-		}
+	private static boolean isValid(final int[] permutationVector) {
 		final int[] sortedVector = permutationVector.clone();
 		Arrays.sort(sortedVector);
 		for (int i = 0; i < permutationVector.length; i++) {
@@ -207,61 +250,20 @@ public class Permutation
 		return Arrays.equals(this.permutationVector, other.permutationVector);
 	}
 
-	public static Permutation getInstance(int size) {
-		if (size < 0) {
-			throw new IllegalArgumentException();
+	private static BigInteger computeRank(int n, int[] permutation, int[] invertedPermutation) {
+		if (n <= 1) {
+			return BigInteger.ZERO;
 		}
-		int[] permutationVector = new int[size];
-		for (int i = 0; i < size; i++) {
-			permutationVector[i] = i;
-		}
-		return new Permutation(permutationVector);
+		int s = permutation[n - 1];
+		swap(permutation, n - 1, invertedPermutation[n - 1]);
+		swap(invertedPermutation, s, n - 1);
+		return BigInteger.valueOf(s).add(BigInteger.valueOf(n).multiply(computeRank(n - 1, permutation, invertedPermutation)));
 	}
 
-	public static Permutation getInstance(int[] permutationVector) {
-		if (!isValid(permutationVector)) {
-			throw new IllegalArgumentException();
-		}
-		return new Permutation(permutationVector.clone());
-	}
-
-	// Unranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time"
-	public static Permutation getInstance(int size, BigInteger rank) {
-		if (size < 0 || rank.signum() < 0) {
-			throw new IllegalArgumentException();
-		}
-		int[] permutationVector = new int[size];
-		for (int i = 0; i < size; i++) {
-			permutationVector[i] = i;
-		}
-		for (int i = size; i > 0; i--) {
-			BigInteger iBig = BigInteger.valueOf(i);
-			swap(permutationVector, rank.mod(iBig).intValue(), i - 1);
-			rank = rank.divide(iBig);
-		}
-		// original rank >= factorial(size)
-		if (rank.signum() != 0) {
-			throw new IllegalArgumentException();
-		}
-		return new Permutation(permutationVector);
-	}
-
-	public static Permutation getRandomInstance(int size) {
-		return Permutation.getRandomInstance(size, HybridRandomByteSequence.getInstance());
-	}
-
-	public static Permutation getRandomInstance(int size, RandomByteSequence randomByteSequence) {
-		if (size < 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
-		}
-		int[] permutationVector = new int[size];
-		int randomIndex;
-		for (int i = 0; i < size; i++) {
-			randomIndex = randomByteSequence.getRandomNumberGenerator().nextInteger(i);
-			permutationVector[i] = permutationVector[randomIndex];
-			permutationVector[randomIndex] = i;
-		}
-		return new Permutation(permutationVector);
+	private static void swap(int[] permutation, int i, int j) {
+		int x = permutation[i];
+		permutation[i] = permutation[j];
+		permutation[j] = x;
 	}
 
 }

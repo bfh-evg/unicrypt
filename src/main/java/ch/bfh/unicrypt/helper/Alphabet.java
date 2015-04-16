@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -54,7 +55,8 @@ import java.util.Set;
  * @version 2.0
  */
 public class Alphabet
-	   extends UniCrypt {
+	   extends UniCrypt
+	   implements Iterable<Character> {
 
 	public static final Alphabet UNARY = new Alphabet('1', '1');
 	public static final Alphabet BINARY = new Alphabet('0', '1');
@@ -230,6 +232,29 @@ public class Alphabet
 			return this.minChar + "..." + this.maxChar;
 		}
 		return this.characters;
+	}
+
+	@Override
+	public Iterator<Character> iterator() {
+		return new Iterator<Character>() {
+
+			int currentIndex = 0;
+
+			@Override
+			public boolean hasNext() {
+				return currentIndex < getSize();
+			}
+
+			@Override
+			public Character next() {
+				return getCharacter(currentIndex++);
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 
 }
