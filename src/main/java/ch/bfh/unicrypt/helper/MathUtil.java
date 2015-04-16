@@ -121,6 +121,17 @@ public final class MathUtil {
 	}
 
 	/**
+	 * Tests if a given integer value is a prime number.
+	 * <p>
+	 * @param value A potential prime number
+	 * @return {@literal true} if {@code value} is prime, {@literal false} otherwise
+	 */
+	public static boolean isPrime(final BigInteger value) {
+		// BigInteger.isProbablePrime considers "negative primes" as primes
+		return value.signum() > 0 && value.isProbablePrime(MathUtil.NUMBER_OF_PRIME_TESTS);
+	}
+
+	/**
 	 * Tests if some given integers are all prime numbers.
 	 * <p>
 	 * @param values The potential prime numbers
@@ -133,17 +144,6 @@ public final class MathUtil {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Tests if a given integer value is a prime number.
-	 * <p>
-	 * @param value A potential prime number
-	 * @return {@literal true} if {@code value} is prime, {@literal false} otherwise
-	 */
-	public static boolean isPrime(final BigInteger value) {
-		// BigInteger.isProbablePrime considers "negative primes" as primes
-		return value.signum() > 0 && value.isProbablePrime(MathUtil.NUMBER_OF_PRIME_TESTS);
 	}
 
 	/**
@@ -198,12 +198,12 @@ public final class MathUtil {
 	/**
 	 * Computes the factorial of some (non-negative) integer value. Returns 1 for input 0.
 	 * <p>
-	 * @param value The input value
-	 * @return The factorial of {@code value}
+	 * @param x The input value
+	 * @return The factorial of {@code x}
 	 */
-	public static BigInteger factorial(final int value) {
+	public static BigInteger factorial(final int x) {
 		BigInteger result = ONE;
-		for (int i = 1; i <= value; i++) {
+		for (int i = 1; i <= x; i++) {
 			result = result.multiply(BigInteger.valueOf(i));
 		}
 		return result;
@@ -418,32 +418,32 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Computes 2 to the power of {@code exponent}.
+	 * Computes {@code 2^e}.
 	 * <p>
-	 * @param exponent The given exponent
-	 * @return 2 to the power of {@code exponent}
+	 * @param e The given exponent
+	 * @return {@code 2^e}
 	 */
-	public static BigInteger powerOfTwo(int exponent) {
-		return ONE.shiftLeft(exponent);
+	public static BigInteger powerOfTwo(int e) {
+		return ONE.shiftLeft(e);
 	}
 
 	/**
 	 * Computes the integer square root of a (non-negative) integer value using Newton's method.
 	 * <p>
-	 * @param value The integer value
-	 * @return The integer square root of the input value
+	 * @param x The integer value
+	 * @return The integer square root {@code x}
 	 */
-	public static BigInteger sqrt(BigInteger value) {
+	public static BigInteger sqrt(BigInteger x) {
 		// special case
-		if (value.signum() == 0) {
+		if (x.signum() == 0) {
 			return ZERO;
 		}
 		// first guess
-		BigInteger current = powerOfTwo(value.bitLength() / 2 + 1);
+		BigInteger current = powerOfTwo(x.bitLength() / 2 + 1);
 		BigInteger last;
 		do {
 			last = current;
-			current = last.add(value.divide(last)).shiftRight(1);
+			current = last.add(x.divide(last)).shiftRight(1);
 		} while (last.compareTo(current) > 0);
 		return last;
 	}
@@ -602,7 +602,7 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Applies the logical XOR operation to two bytes
+	 * Applies the logical XOR operation to two bytes.
 	 * <p>
 	 * @param b1 The first byte
 	 * @param b2 The second byte
@@ -613,7 +613,7 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Applies the logical AND operation to two bytes
+	 * Applies the logical AND operation to two bytes.
 	 * <p>
 	 * @param b1 The first byte
 	 * @param b2 The second byte
@@ -624,7 +624,7 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Applies the logical OR operation to two bytes
+	 * Applies the logical OR operation to two bytes.
 	 * <p>
 	 * @param b1 The first byte
 	 * @param b2 The second byte
@@ -635,7 +635,7 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Applies the logical NOT operation to a given byte
+	 * Applies the logical NOT operation to a given byte.
 	 * <p>
 	 * @param b The given byte
 	 * @return The resulting byte
@@ -645,37 +645,40 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Computes the "mathematical modulo", which works for positive and negative values.
+	 * Computes the remainder of the Euclidean division applied to two (positive or negative) integers.
 	 * <p>
-	 * @param x The given value
-	 * @param n The modulus
-	 * @return The modulo of
+	 * @param x The given dividend
+	 * @param y The given divisor
+	 * @return The remainder of the Euclidean division
 	 */
-	public static int modulo(int x, int n) {
-		return ((x % n) + n) % n;
+	public static int modulo(int x, int y) {
+		y = Math.abs(y);
+		return ((x % y) + y) % y;
 	}
 
-	// mathematical divide working for positive and negative values
-	// Java8: use Math.floorDiv
 	/**
-	 *
-	 * @param x
-	 * @param n
-	 * @return
+	 * Computes the quotient of the Euclidean division applied to two (positive or negative) integers.
+	 * <p>
+	 * @param x The given dividend
+	 * @param y The given divisor
+	 * @return The quotient of the Euclidean division
 	 */
-	public static int divide(int x, int n) {
-		return (x - modulo(x, n)) / n;
+	public static int divide(int x, int y) {
+		return (x - modulo(x, y)) / y;
 	}
 
-	// divides and rounds up
 	/**
-	 *
-	 * @param x
-	 * @param n
-	 * @return
+	 * Computes the quotient of two (positive or negative) integers and rounds up the result to the next integer.
+	 * <p>
+	 * @param x The given dividend
+	 * @param y The given divisor
+	 * @return The quotient rounded up to the next integer
 	 */
-	public static int divideUp(int x, int n) {
-		return divide(x + n - 1, n);
+	public static int divideUp(int x, int y) {
+		if (y < 0) {
+			return divideUp(-x, -y);
+		}
+		return divide(x + y - 1, y);
 	}
 
 }

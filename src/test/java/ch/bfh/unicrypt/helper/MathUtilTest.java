@@ -261,14 +261,45 @@ public class MathUtilTest {
 
 	@Test
 	public void testFoldAndPair() {
-	}
+		{
+			BigInteger result = MathUtil.foldAndPair();
+			BigInteger[] values = MathUtil.unpairAndUnfold(result, 0);
+			Assert.assertEquals(0, values.length);
 
-	@Test
-	public void testUnpairAndUnfold_BigInteger() {
-	}
-
-	@Test
-	public void testUnpairAndUnfold_BigInteger_int() {
+		}
+		for (int i = -5; i <= 5; i++) {
+			BigInteger bi = BigInteger.valueOf(i);
+			BigInteger result = MathUtil.foldAndPair(bi);
+			BigInteger[] values = MathUtil.unpairAndUnfold(result, 1);
+			Assert.assertEquals(bi, values[0]);
+		}
+		for (int i = -5; i <= 5; i++) {
+			BigInteger bi = BigInteger.valueOf(i);
+			for (int j = -5; j <= 5; j++) {
+				BigInteger bj = BigInteger.valueOf(j);
+				BigInteger result = MathUtil.foldAndPair(bi, bj);
+				BigInteger[] values = MathUtil.unpairAndUnfold(result);
+				Assert.assertEquals(bi, values[0]);
+				Assert.assertEquals(bj, values[1]);
+				values = MathUtil.unpairAndUnfold(result, 2);
+				Assert.assertEquals(bi, values[0]);
+				Assert.assertEquals(bj, values[1]);
+			}
+		}
+		for (int i = -5; i <= 5; i++) {
+			BigInteger bi = BigInteger.valueOf(i);
+			for (int j = -5; j <= 5; j++) {
+				BigInteger bj = BigInteger.valueOf(j);
+				for (int k = -5; k <= 5; k++) {
+					BigInteger bk = BigInteger.valueOf(k);
+					BigInteger result = MathUtil.foldAndPair(bi, bj, bk);
+					BigInteger[] values = MathUtil.unpairAndUnfold(result, 3);
+					Assert.assertEquals(bi, values[0]);
+					Assert.assertEquals(bj, values[1]);
+					Assert.assertEquals(bk, values[2]);
+				}
+			}
+		}
 	}
 
 	@Test
@@ -503,6 +534,30 @@ public class MathUtilTest {
 		Assert.assertEquals(3, MathUtil.modulo(3, n));
 		Assert.assertEquals(4, MathUtil.modulo(4, n));
 		Assert.assertEquals(0, MathUtil.modulo(5, n));
+		n = -2;
+		Assert.assertEquals(1, MathUtil.modulo(-5, n));
+		Assert.assertEquals(0, MathUtil.modulo(-4, n));
+		Assert.assertEquals(1, MathUtil.modulo(-3, n));
+		Assert.assertEquals(0, MathUtil.modulo(-2, n));
+		Assert.assertEquals(1, MathUtil.modulo(-1, n));
+		Assert.assertEquals(0, MathUtil.modulo(0, n));
+		Assert.assertEquals(1, MathUtil.modulo(1, n));
+		Assert.assertEquals(0, MathUtil.modulo(2, n));
+		Assert.assertEquals(1, MathUtil.modulo(3, n));
+		Assert.assertEquals(0, MathUtil.modulo(4, n));
+		Assert.assertEquals(1, MathUtil.modulo(5, n));
+		n = -5;
+		Assert.assertEquals(0, MathUtil.modulo(-5, n));
+		Assert.assertEquals(1, MathUtil.modulo(-4, n));
+		Assert.assertEquals(2, MathUtil.modulo(-3, n));
+		Assert.assertEquals(3, MathUtil.modulo(-2, n));
+		Assert.assertEquals(4, MathUtil.modulo(-1, n));
+		Assert.assertEquals(0, MathUtil.modulo(0, n));
+		Assert.assertEquals(1, MathUtil.modulo(1, n));
+		Assert.assertEquals(2, MathUtil.modulo(2, n));
+		Assert.assertEquals(3, MathUtil.modulo(3, n));
+		Assert.assertEquals(4, MathUtil.modulo(4, n));
+		Assert.assertEquals(0, MathUtil.modulo(5, n));
 	}
 
 	@Test
@@ -567,6 +622,30 @@ public class MathUtilTest {
 		Assert.assertEquals(0, MathUtil.divide(3, n));
 		Assert.assertEquals(0, MathUtil.divide(4, n));
 		Assert.assertEquals(1, MathUtil.divide(5, n));
+		n = -2;
+		Assert.assertEquals(3, MathUtil.divide(-5, n));
+		Assert.assertEquals(2, MathUtil.divide(-4, n));
+		Assert.assertEquals(2, MathUtil.divide(-3, n));
+		Assert.assertEquals(1, MathUtil.divide(-2, n));
+		Assert.assertEquals(1, MathUtil.divide(-1, n));
+		Assert.assertEquals(0, MathUtil.divide(0, n));
+		Assert.assertEquals(0, MathUtil.divide(1, n));
+		Assert.assertEquals(-1, MathUtil.divide(2, n));
+		Assert.assertEquals(-1, MathUtil.divide(3, n));
+		Assert.assertEquals(-2, MathUtil.divide(4, n));
+		Assert.assertEquals(-2, MathUtil.divide(5, n));
+		n = -5;
+		Assert.assertEquals(1, MathUtil.divide(-5, n));
+		Assert.assertEquals(1, MathUtil.divide(-4, n));
+		Assert.assertEquals(1, MathUtil.divide(-3, n));
+		Assert.assertEquals(1, MathUtil.divide(-2, n));
+		Assert.assertEquals(1, MathUtil.divide(-1, n));
+		Assert.assertEquals(0, MathUtil.divide(0, n));
+		Assert.assertEquals(0, MathUtil.divide(1, n));
+		Assert.assertEquals(0, MathUtil.divide(2, n));
+		Assert.assertEquals(0, MathUtil.divide(3, n));
+		Assert.assertEquals(0, MathUtil.divide(4, n));
+		Assert.assertEquals(-1, MathUtil.divide(5, n));
 	}
 
 	@Test
@@ -631,6 +710,18 @@ public class MathUtilTest {
 		Assert.assertEquals(1, MathUtil.divideUp(3, n));
 		Assert.assertEquals(1, MathUtil.divideUp(4, n));
 		Assert.assertEquals(1, MathUtil.divideUp(5, n));
+		n = -2;
+		Assert.assertEquals(3, MathUtil.divideUp(-5, n));
+		Assert.assertEquals(2, MathUtil.divideUp(-4, n));
+		Assert.assertEquals(2, MathUtil.divideUp(-3, n));
+		Assert.assertEquals(1, MathUtil.divideUp(-2, n));
+		Assert.assertEquals(1, MathUtil.divideUp(-1, n));
+		Assert.assertEquals(0, MathUtil.divideUp(0, n));
+		Assert.assertEquals(0, MathUtil.divideUp(1, n));
+		Assert.assertEquals(-1, MathUtil.divideUp(2, n));
+		Assert.assertEquals(-1, MathUtil.divideUp(3, n));
+		Assert.assertEquals(-2, MathUtil.divideUp(4, n));
+		Assert.assertEquals(-2, MathUtil.divideUp(5, n));
 	}
 
 }
