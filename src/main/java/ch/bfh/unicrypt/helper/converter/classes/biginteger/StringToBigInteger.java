@@ -110,7 +110,7 @@ public class StringToBigInteger
 
 	@Override
 	protected boolean defaultIsValidInput(String string) {
-		return this.alphabet.isValid(string) && (string.length() % this.blockLength) == 0 && (string.length() / this.blockLength) >= minBlocks;
+		return this.alphabet.containsAll(string) && (string.length() % this.blockLength) == 0 && (string.length() / this.blockLength) >= minBlocks;
 	}
 
 	@Override

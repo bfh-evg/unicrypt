@@ -77,7 +77,7 @@ public class Permutation
 		return computeRank(size, this.permutationVector.clone(), invertedPermutation);
 	}
 
-	public static BigInteger computeRank(int n, int[] permutation, int[] invertedPermutation) {
+	private static BigInteger computeRank(int n, int[] permutation, int[] invertedPermutation) {
 		if (n <= 1) {
 			return BigInteger.ZERO;
 		}
@@ -93,22 +93,6 @@ public class Permutation
 		permutation[j] = x;
 	}
 
-//		// code copied from http://rosettacode.org/wiki/Permutations/Rank_of_a_permutation
-//		int n = this.getSize();
-//		BitSet usedDigits = new BitSet();
-//		BigInteger rank = BigInteger.ZERO;
-//		for (int i = 0; i < n; i++) {
-//			rank = rank.multiply(BigInteger.valueOf(n - i));
-//			int digit = 0;
-//			int v = -1;
-//			while ((v = usedDigits.nextClearBit(v + 1)) < this.permutationVector[i]) {
-//				digit++;
-//			}
-//			usedDigits.set(v);
-//			rank = rank.add(BigInteger.valueOf(digit));
-//		}
-//		return rank;
-//}
 	/**
 	 * Returns the result of applying the permutation vector to a given index.
 	 * <p>

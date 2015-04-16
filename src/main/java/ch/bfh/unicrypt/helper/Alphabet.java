@@ -41,52 +41,90 @@
  */
 package ch.bfh.unicrypt.helper;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch
+ * This class implements the mathematical concept of an alphabet as a finite set of characters. The characters in the
+ * set are numbered from {@code 0} to {@code s-1}, where {@code s} denotes the size of the set. Multiple commonly used
+ * alphabets are pre-defined.
+ * <p>
+ * @author R. Haenni
+ * @author R. E. Koenig
+ * @version 2.0
  */
 public class Alphabet
 	   extends UniCrypt {
 
-	public static final Alphabet UNARY = Alphabet.getInstance('1', '1');
-	public static final Alphabet BINARY = Alphabet.getInstance('0', '1');
-	public static final Alphabet OCTAL = Alphabet.getInstance('0', '7');
-	public static final Alphabet DECIMAL = Alphabet.getInstance('0', '9');
-	public static final Alphabet HEXADECIMAL = Alphabet.getInstance("0123456789ABCDEF", "[0-9A-F]");
-	public static final Alphabet LOWER_CASE = Alphabet.getInstance('a', 'z');
-	public static final Alphabet UPPER_CASE = Alphabet.getInstance('A', 'Z');
-	public static final Alphabet LETTERS = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", "[A-Za-z]");
-	public static final Alphabet ALPHANUMERIC = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "[A-Za-z0-9]");
-	public static final Alphabet BASE64 = Alphabet.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\+\\/", "[A-Za-z0-9\\+\\/]");
-	public static final Alphabet PRINTABLE_ASCII = Alphabet.getInstance('\u0020', '\u007E');
-	public static final Alphabet UNICODE_BMP = Alphabet.getInstance('\u0000', '\uFFFF');
+	public static final Alphabet UNARY = new Alphabet('1', '1');
+	public static final Alphabet BINARY = new Alphabet('0', '1');
+	public static final Alphabet OCTAL = new Alphabet('0', '7');
+	public static final Alphabet DECIMAL = new Alphabet('0', '9');
+	public static final Alphabet HEXADECIMAL = new Alphabet("0123456789ABCDEF");
+	public static final Alphabet LOWER_CASE = new Alphabet('a', 'z');
+	public static final Alphabet UPPER_CASE = new Alphabet('A', 'Z');
+	public static final Alphabet LETTERS = new Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+	public static final Alphabet ALPHANUMERIC = new Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+	public static final Alphabet BASE64 = new Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\+\\/");
+	public static final Alphabet PRINTABLE_ASCII = new Alphabet('\u0020', '\u007E');
+	public static final Alphabet UNICODE_BMP = new Alphabet('\u0000', '\uFFFF');
 
 	private final String characters;
-	private final String regExp;
-	private final char minChar;
-	private final char maxChar;
+	private final Character minChar;
+	private final Character maxChar;
 
 	protected Alphabet(String characters) {
 		this.characters = characters;
-		this.regExp = null;
-		this.minChar = '\u0000';
-		this.maxChar = '\u0000';
-	}
-
-	protected Alphabet(String characters, String regExp) {
-		this.characters = characters;
-		this.regExp = "^(" + regExp + ")*$";
-		this.minChar = '\u0000';
-		this.maxChar = '\u0000';
+		this.minChar = null;
+		this.maxChar = null;
 	}
 
 	protected Alphabet(char minChar, char maxChar) {
 		this.characters = null;
-		this.regExp = null;
 		this.minChar = minChar;
 		this.maxChar = maxChar;
 	}
 
+	/**
+	 * Creates a new alphabet containing all characters of a given string.
+	 * <p>
+	 * @param characters The given string
+	 * @return The new alphabet
+	 */
+	public static Alphabet getInstance(String characters) {
+		if (characters == null) {
+			throw new IllegalArgumentException();
+		}
+		Set<Character> charSet = new HashSet<Character>();
+		for (char c : characters.toCharArray()) {
+			charSet.add(c);
+		}
+		if (characters.length() != charSet.size()) {
+			throw new IllegalArgumentException();
+		}
+		return new Alphabet(characters);
+	}
+
+	/**
+	 * Creates a new alphabet containing all characters within the indicated bounds, i.e., larger or equal to
+	 * {@code minChar} and smaller or equal to {@code maxChar}.
+	 * <p>
+	 * @param minChar The lower bound
+	 * @param maxChar The upper bound
+	 * @return The new alphabet
+	 */
+	public static Alphabet getInstance(char minChar, char maxChar) {
+		if (minChar > maxChar) {
+			throw new IllegalArgumentException();
+		}
+		return new Alphabet(minChar, maxChar);
+	}
+
+	/**
+	 * Returns the size of the alphabet.
+	 * <p>
+	 * @return The size of the alphabet
+	 */
 	public int getSize() {
 		if (this.characters == null) {
 			return (int) this.maxChar - (int) this.minChar + 1;
@@ -94,52 +132,75 @@ public class Alphabet
 		return this.characters.length();
 	}
 
-	public char getCharacter(int i) {
-		if (i < 0 || i >= this.getSize()) {
+	/**
+	 * Checks if a character is in the alphabet.
+	 * <p>
+	 * @param character The given character
+	 * @return {@literal true}, if {@code c} is in the alphabet, {@literal false} otherwise
+	 */
+	public boolean contains(char character) {
+		if (this.characters == null) {
+			return character >= this.minChar && character <= this.maxChar;
+		}
+		return this.characters.lastIndexOf(character) >= 0;
+	}
+
+	/**
+	 * Checks if every character of a given string is in the alphabet.
+	 * <p>
+	 * @param string The given string
+	 * @return {@literal true}, if every character from {@code string} is in the alphabet, {@literal false} otherwise
+	 */
+	public boolean containsAll(String string) {
+		if (string == null) {
+			throw new IllegalArgumentException();
+		}
+		for (int i = 0; i < string.length(); i++) {
+			if (!this.contains(string.charAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Returns the character in the alphabet with index {@code i}.
+	 * <p>
+	 * @param index The index
+	 * @return The corresponding character
+	 */
+	public char getCharacter(int index) {
+		if (index < 0 || index >= this.getSize()) {
 			throw new IndexOutOfBoundsException();
 		}
 		if (this.characters == null) {
-			return (char) (this.minChar + i);
+			return (char) (this.minChar + index);
 		}
-		return this.characters.charAt(i);
+		return this.characters.charAt(index);
 	}
 
-	public boolean contains(char c) {
-		if (this.characters == null) {
-			return c >= this.minChar && c <= this.maxChar;
-		}
-		return this.characters.lastIndexOf(c) >= 0;
-	}
-
-	public int getIndex(char c) {
-		if (!this.contains(c)) {
+	/**
+	 * Returns the index of a given character
+	 * <p>
+	 * @param character The given character
+	 * @return The corresponding index
+	 */
+	public int getIndex(char character) {
+		if (!this.contains(character)) {
 			throw new IllegalArgumentException();
 		}
 		if (this.characters == null) {
-			return (int) c - (int) this.minChar;
+			return (int) character - (int) this.minChar;
 		}
-		return this.characters.lastIndexOf(c);
-	}
-
-	public boolean isValid(String string) {
-		if (this.regExp == null) {
-			for (int i = 0; i < string.length(); i++) {
-				if (!this.contains(string.charAt(i))) {
-					return false;
-				}
-			}
-			return true;
-		} else {
-			return string.matches("^(" + this.regExp + ")*$");
-		}
+		return this.characters.lastIndexOf(character);
 	}
 
 	@Override
 	public int hashCode() {
 		int hash = 5;
 		hash = 41 * hash + (this.characters != null ? this.characters.hashCode() : 0);
-		hash = 41 * hash + this.minChar;
-		hash = 41 * hash + this.maxChar;
+		hash = 41 * hash + (this.minChar != null ? this.minChar.hashCode() : 0);
+		hash = 41 * hash + (this.maxChar != null ? this.maxChar.hashCode() : 0);
 		return hash;
 	}
 
@@ -152,31 +213,15 @@ public class Alphabet
 			return false;
 		}
 		final Alphabet other = (Alphabet) obj;
-		if ((this.characters == null) ? (other.characters != null) : !this.characters.equals(other.characters)) {
+		if (this.getSize() != other.getSize()) {
 			return false;
 		}
-		if (this.minChar != other.minChar) {
-			return false;
+		for (int i = 0; i < this.getSize(); i++) {
+			if (this.getCharacter(i) != other.getCharacter(i)) {
+				return false;
+			}
 		}
-		return this.maxChar == other.maxChar;
-	}
-
-	public static Alphabet getInstance(String characters) {
-		return new Alphabet(characters);
-	}
-
-	public static Alphabet getInstance(String characters, String regExp) {
-		if (characters == null) {
-			throw new IllegalArgumentException();
-		}
-		return new Alphabet(characters, regExp);
-	}
-
-	public static Alphabet getInstance(char minChar, char maxChar) {
-		if (minChar > maxChar) {
-			throw new IllegalArgumentException();
-		}
-		return new Alphabet(minChar, maxChar);
+		return true;
 	}
 
 	@Override

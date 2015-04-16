@@ -85,7 +85,7 @@ public class StringMonoid
 
 	@Override
 	protected boolean abstractContains(String value) {
-		return value.length() % this.getBlockLength() == 0 && this.getAlphabet().isValid(value);
+		return value.length() % this.getBlockLength() == 0 && this.getAlphabet().containsAll(value);
 	}
 
 	@Override

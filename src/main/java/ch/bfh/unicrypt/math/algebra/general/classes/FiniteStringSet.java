@@ -92,7 +92,7 @@ public class FiniteStringSet
 
 	@Override
 	protected boolean abstractContains(String value) {
-		return value.length() >= this.minLength && value.length() <= this.maxLength && this.getAlphabet().isValid(value);
+		return value.length() >= this.minLength && value.length() <= this.maxLength && this.getAlphabet().containsAll(value);
 	}
 
 	@Override
