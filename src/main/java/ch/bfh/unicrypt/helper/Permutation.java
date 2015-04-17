@@ -47,6 +47,13 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
 
+/**
+ * Instances of this class represent permutations {@code p:{0,...,size-1}->{0,...,size-1}} of a given {@code size}.
+ * Internally, the objects store corresponding permutation vectors describing the mapping.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ */
 public class Permutation
 	   extends UniCrypt
 	   implements Iterable<Integer> {
@@ -54,11 +61,21 @@ public class Permutation
 	private final int[] permutationVector;
 	private BigInteger rank;
 
-	private Permutation(int[] permutationVector) {
+	private Permutation(int[] permutationVector, BigInteger rank) {
 		this.permutationVector = permutationVector;
-		this.rank = null;
+		this.rank = rank;
 	}
 
+	private Permutation(int[] permutationVector) {
+		this(permutationVector, null);
+	}
+
+	/**
+	 * Returns the identity permutation {@code 0->0, 1->1, ..., (size-1)->(size-1)} of a given {@code size>=0}.
+	 * <p>
+	 * @param size The size of the permutation
+	 * @return The new permutation
+	 */
 	public static Permutation getInstance(int size) {
 		if (size < 0) {
 			throw new IllegalArgumentException();
@@ -70,14 +87,36 @@ public class Permutation
 		return new Permutation(permutationVector);
 	}
 
-	public static Permutation getInstance(int... permutationVector) {
-		if (permutationVector == null || !isValid(permutationVector)) {
+	/**
+	 * This is the standard method for creating new permutations based on a given permutation vector. For example, the
+	 * vector {@code [2,1,3,0]} defines a mapping {@code 0->2, 1->1, 2->3, 3->0}.
+	 * <p>
+	 * @param permutationVector The given permutation vector
+	 * @return The new permutation
+	 */
+	public static Permutation getInstance(int[] permutationVector) {
+		if (permutationVector == null) {
 			throw new IllegalArgumentException();
+		}
+		final int[] sortedVector = permutationVector.clone();
+		Arrays.sort(sortedVector);
+		for (int i = 0; i < sortedVector.length; i++) {
+			if (sortedVector[i] != i) {
+				throw new IllegalArgumentException();
+			}
 		}
 		return new Permutation(permutationVector.clone());
 	}
 
-	// Unranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time"
+	/**
+	 * Computes the rank of a given permutation using the algorithm by Myrvold and Ruskey: "Ranking and Unranking
+	 * Permutations in Linear Time". The integers from {@code 0} to {@code size!-1} are valid ranks.
+	 * <p>
+	 * @param size The size of the permutation
+	 * @param rank The given rank
+	 * @return The new permutation
+	 * @see Permutation#getRank()
+	 */
 	public static Permutation getInstance(int size, BigInteger rank) {
 		if (size < 0 || rank == null || rank.signum() < 0) {
 			throw new IllegalArgumentException();
@@ -86,22 +125,36 @@ public class Permutation
 		for (int i = 0; i < size; i++) {
 			permutationVector[i] = i;
 		}
+		BigInteger r = rank;
 		for (int i = size; i > 0; i--) {
 			BigInteger iBig = BigInteger.valueOf(i);
-			swap(permutationVector, rank.mod(iBig).intValue(), i - 1);
-			rank = rank.divide(iBig);
+			swap(permutationVector, r.mod(iBig).intValue(), i - 1);
+			r = r.divide(iBig);
 		}
 		// original rank >= factorial(size)
-		if (rank.signum() != 0) {
+		if (r.signum() != 0) {
 			throw new IllegalArgumentException();
 		}
-		return new Permutation(permutationVector);
+		return new Permutation(permutationVector, rank);
 	}
 
+	/**
+	 * Creates a random permutation of a given size using the library's default source of randomness.
+	 * <p>
+	 * @param size The size of the permutation
+	 * @return The new permutation
+	 */
 	public static Permutation getRandomInstance(int size) {
 		return Permutation.getRandomInstance(size, HybridRandomByteSequence.getInstance());
 	}
 
+	/**
+	 * Creates a random permutation of a given size using a given source of randomness.
+	 * <p>
+	 * @param size               The size of the permutation
+	 * @param randomByteSequence The given source of randomness
+	 * @return The new permutation
+	 */
 	public static Permutation getRandomInstance(int size, RandomByteSequence randomByteSequence) {
 		if (size < 0 || randomByteSequence == null) {
 			throw new IllegalArgumentException();
@@ -117,16 +170,22 @@ public class Permutation
 	}
 
 	/**
-	 * Returns the size of the permutation element, which is the length of the corresponding permutation vector. The
-	 * size of a permutation element is the same as the size of the corresponding group.
+	 * Returns the size of the permutation, which corresponds to the length of the corresponding permutation vector.
 	 * <p>
-	 * @return The size of the permutation element
+	 * @return The size of the permutation
 	 */
 	public int getSize() {
 		return this.permutationVector.length;
 	}
 
-	// Ranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time"
+	//
+	/**
+	 * Computes and returns the rank of the permutation using the ranking algorithm by Myrvold and Ruskey: "Ranking and
+	 * Unranking Permutations in Linear Time". The result is an integer in the range {@code [0,size!-1]}.
+	 * <p>
+	 * @return The rank of the permutation
+	 * @see Permutation#getInstance(int, java.math.BigInteger)
+	 */
 	public BigInteger getRank() {
 		if (this.rank == null) {
 			int size = this.getSize();
@@ -140,19 +199,26 @@ public class Permutation
 	}
 
 	/**
-	 * Returns the result of applying the permutation vector to a given index.
+	 * Returns the result of applying the permutation to some input value.
 	 * <p>
-	 * @param index The given index
-	 * @return The permuted index
-	 * @throw IndexOutOfBoundsException if {@code index} is negative or greater than {@code getSize()-1}
+	 * @param value The given input value
+	 * @return The permuted value
+	 * @throw IndexOutOfBoundsException if {@code value} is negative or greater than {@code getSize()-1}
 	 */
-	public int permute(int index) {
-		if (index < 0 || index >= this.getSize()) {
+	public int permute(int value) {
+		if (value < 0 || value >= this.getSize()) {
 			throw new IndexOutOfBoundsException();
 		}
-		return this.permutationVector[index];
+		return this.permutationVector[value];
 	}
 
+	/**
+	 * Takes two permutations of the same size as input and computes their composition. The result is a new permutation
+	 * of the same size.
+	 * <p>
+	 * @param other The second permutation
+	 * @return The new composed permutation
+	 */
 	public Permutation compose(Permutation other) {
 		if (other == null || other.getSize() != this.getSize()) {
 			throw new IllegalArgumentException();
@@ -165,6 +231,11 @@ public class Permutation
 		return new Permutation(vector);
 	}
 
+	/**
+	 * Computes and returns the inverted permutation.
+	 * <p>
+	 * @return The inverted permutation
+	 */
 	public Permutation invert() {
 		int size = this.getSize();
 		final int[] vector = new int[size];
@@ -172,29 +243,6 @@ public class Permutation
 			vector[this.permute(i)] = i;
 		}
 		return new Permutation(vector);
-	}
-
-	public int[] getPermutationVector() {
-		return this.permutationVector.clone();
-	}
-
-	/**
-	 * Checks if an array of integers is a permutation vector, i.e., a permutation of the values from 0 to n-1. For
-	 * example {3,0,1,2,4} but not {1,4,3,2}.
-	 * <p>
-	 * @param permutationVector The given array of integers to test
-	 * @return {@literal true} if {@literal permutationVector} is a permutation vector, {@literal false} otherwise
-	 * @throws IllegalArgumentException if {@literal permutationVector} is null
-	 */
-	private static boolean isValid(final int[] permutationVector) {
-		final int[] sortedVector = permutationVector.clone();
-		Arrays.sort(sortedVector);
-		for (int i = 0; i < permutationVector.length; i++) {
-			if (sortedVector[i] != i) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	@Override
