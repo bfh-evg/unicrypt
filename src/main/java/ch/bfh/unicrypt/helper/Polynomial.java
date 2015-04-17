@@ -122,12 +122,14 @@ public class Polynomial<C>
 	}
 
 	/**
-	 *
+	 * Constructs a new polynomial from the entries of a given map of type {@code <Integer, C>}. Corresponding values of
+	 * type {@code C} need to be declared for the coefficients 0 and 1.
+	 * <p>
 	 * @param <C>             The coefficient type of the resulting polynomial
-	 * @param coefficients
-	 * @param zeroCoefficient
-	 * @param oneCoefficient
-	 * @return
+	 * @param coefficients    The map containing the coefficients
+	 * @param zeroCoefficient The value for the coefficient 0
+	 * @param oneCoefficient  The value for the coefficient 1
+	 * @return The new polynomial
 	 */
 	public static <C> Polynomial<C> getInstance(Map<Integer, C> coefficients, C zeroCoefficient, C oneCoefficient) {
 		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null || zeroCoefficient.equals(oneCoefficient)) {
@@ -138,12 +140,14 @@ public class Polynomial<C>
 	}
 
 	/**
-	 *
+	 * Constructs a new polynomial from the entries of a given array of type {@code C[]}. Corresponding values of type
+	 * {@code C} need to be declared for the coefficients 0 and 1.
+	 * <p>
 	 * @param <C>             The coefficient type of the resulting polynomial
-	 * @param coefficients
-	 * @param zeroCoefficient
-	 * @param oneCoefficient
-	 * @return
+	 * @param coefficients    The array containing the coefficients
+	 * @param zeroCoefficient The value for the coefficient 0
+	 * @param oneCoefficient  The value for the coefficient 1
+	 * @return The new polynomial
 	 */
 	public static <C> Polynomial<C> getInstance(C[] coefficients, C zeroCoefficient, C oneCoefficient) {
 		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null || zeroCoefficient.equals(oneCoefficient)) {
@@ -154,12 +158,14 @@ public class Polynomial<C>
 	}
 
 	/**
-	 *
+	 * Constructs a new polynomial for a given {@code BitArray} containing coefficients 0 and 1. Corresponding values of
+	 * type {@code C} need to be declared for the coefficients 0 and 1.
+	 * <p>
 	 * @param <C>             The coefficient type of the resulting polynomial
-	 * @param coefficients
-	 * @param zeroCoefficient
-	 * @param oneCoefficient
-	 * @return
+	 * @param coefficients    The bit array containing the coefficients
+	 * @param zeroCoefficient The value for the coefficient 0
+	 * @param oneCoefficient  The value for the coefficient 1
+	 * @return The new polynomial
 	 */
 	public static <C> Polynomial<C> getInstance(BitArray coefficients, C zeroCoefficient, C oneCoefficient) {
 		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null || zeroCoefficient.equals(oneCoefficient)) {
@@ -230,6 +236,11 @@ public class Polynomial<C>
 		return this.zeroCoefficient;
 	}
 
+	/**
+	 * Returns the bit array representing the coefficients of a polynomial consisting only of coefficients 0 and 1.
+	 * <p>
+	 * @return The bit array representing the coefficients.
+	 */
 	public BitArray getCoefficients() {
 		if (!this.isBinary()) {
 			throw new UnsupportedOperationException();
@@ -251,9 +262,9 @@ public class Polynomial<C>
 	}
 
 	/**
-	 * Creates and returns a new polynomial containing only a single term from the given polynomial.
+	 * Creates and returns a new polynomial containing only a single coefficient from the given polynomial.
 	 * <p>
-	 * @param index The index of the term
+	 * @param index The index of the coefficient
 	 * @return The new polynomial
 	 */
 	public final Polynomial<C> getTerm(int index) {
