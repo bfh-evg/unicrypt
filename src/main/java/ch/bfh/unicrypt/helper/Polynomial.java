@@ -42,52 +42,54 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import java.util.ArrayList;
-import java.util.HashMap;
+import ch.bfh.unicrypt.helper.array.classes.SparseArray;
 import java.util.Map;
-import java.util.TreeSet;
 
 /**
- *
- * @author philipp
- * @param <C>
+ * Instances of this class represent polynomials {@code P(x)} with coefficients of a generic type. The internal
+ * representation of the coefficients is optimized. If all the coefficients are either 0 or 1 (corresponding values of
+ * the generic type must be declared), then an instance of {@link BitArray} is used internally, otherwise an instance of
+ * {@link SparseArray}. Besides getter methods for the coefficients and the degree of the polynomial, no additional
+ * functionality is provided.
+ * <p>
+ * @author P. Locher
+ * @author R. Haenni
+ * @version 2.0
+ * @param <C> The generic type of the polynomial coefficients
  */
 public class Polynomial<C>
 	   extends UniCrypt {
 
 	public static final int ZERO_POLYNOMIAL_DEGREE = -1;
 
-	/** Polynomial's degree. */
+	// the polynomial's degree
 	private final int degree;
-	/** Holds the coefficients. Might be null if the polynomial is binary. */
-	private final Map<Integer, C> coefficients;
-	/** Holds the coefficients of binary polynomials. Is null if the polynomial is not binary. */
+
+	// holds the non-zero coefficients, might be null if the polynomial is binary
+	private final SparseArray<C> coefficients;
+
+	// holds the coefficients of binary polynomials, might be null if the polynomial is not binary
 	private final BitArray binaryCoefficients;
 
-	/** Polynomial's zero coefficient. */
+	// polynomial's zero coefficient
 	private final C zeroCoefficient;
-	/** Polynomial's one coefficient. */
+
+	// polynomial's one coefficient
 	private final C oneCoefficient;
 
-	/** Holds the indices of the non zero coefficients. */
-	private DenseArray<Integer> indices;
-
-	private Polynomial(Map<Integer, C> coefficients, C zeroCoefficient, C oneCoefficient) {
+	private Polynomial(SparseArray<C> coefficients, C zeroCoefficient, C oneCoefficient) {
 		this.coefficients = coefficients;
 		this.zeroCoefficient = zeroCoefficient;
 		this.oneCoefficient = oneCoefficient;
 
-		int maxIndex = 0;
+		int maxIndex = -1;
 		boolean isBinary = true;
-		for (Integer index : coefficients.keySet()) {
+		for (Integer index : coefficients.getIndicesExcept()) {
 			maxIndex = Math.max(maxIndex, index);
-			isBinary = this.oneCoefficient.equals(coefficients.get(index)) && isBinary;
+			isBinary = isBinary && this.oneCoefficient.equals(coefficients.getAt(index));
 		}
-		if (maxIndex == 0) {
-			C c = coefficients.get(0);
-			this.degree = c == null || zeroCoefficient.equals(c) ? ZERO_POLYNOMIAL_DEGREE : maxIndex;
+		if (maxIndex == -1) {
+			this.degree = ZERO_POLYNOMIAL_DEGREE;
 		} else {
 			this.degree = maxIndex;
 		}
@@ -97,7 +99,7 @@ public class Polynomial<C>
 				this.binaryCoefficients = BitArray.getInstance();
 			} else {
 				boolean[] bits = new boolean[this.degree + 1];
-				for (Integer index : coefficients.keySet()) {
+				for (Integer index : coefficients.getIndicesExcept()) {
 					bits[index] = true;
 				}
 				this.binaryCoefficients = BitArray.getInstance(bits);
@@ -119,34 +121,110 @@ public class Polynomial<C>
 		}
 	}
 
+	/**
+	 *
+	 * @param <C>             The coefficient type of the resulting polynomial
+	 * @param coefficients
+	 * @param zeroCoefficient
+	 * @param oneCoefficient
+	 * @return
+	 */
+	public static <C> Polynomial<C> getInstance(Map<Integer, C> coefficients, C zeroCoefficient, C oneCoefficient) {
+		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null || zeroCoefficient.equals(oneCoefficient)) {
+			throw new IllegalArgumentException();
+		}
+		SparseArray<C> sparseArray = SparseArray.getInstance(zeroCoefficient, coefficients);
+		return new Polynomial<C>(sparseArray.removeSuffix(), zeroCoefficient, oneCoefficient);
+	}
+
+	/**
+	 *
+	 * @param <C>             The coefficient type of the resulting polynomial
+	 * @param coefficients
+	 * @param zeroCoefficient
+	 * @param oneCoefficient
+	 * @return
+	 */
+	public static <C> Polynomial<C> getInstance(C[] coefficients, C zeroCoefficient, C oneCoefficient) {
+		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null || zeroCoefficient.equals(oneCoefficient)) {
+			throw new IllegalArgumentException();
+		}
+		SparseArray<C> sparseArray = SparseArray.getInstance(zeroCoefficient, coefficients);
+		return new Polynomial<C>(sparseArray.removeSuffix(), zeroCoefficient, oneCoefficient);
+	}
+
+	/**
+	 *
+	 * @param <C>             The coefficient type of the resulting polynomial
+	 * @param coefficients
+	 * @param zeroCoefficient
+	 * @param oneCoefficient
+	 * @return
+	 */
+	public static <C> Polynomial<C> getInstance(BitArray coefficients, C zeroCoefficient, C oneCoefficient) {
+		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null || zeroCoefficient.equals(oneCoefficient)) {
+			throw new IllegalArgumentException();
+		}
+		return new Polynomial<C>(coefficients.removeSuffix(), zeroCoefficient, oneCoefficient);
+	}
+
+	/**
+	 * Returns the degree of the polynomial, or {@link Polynomial#ZERO_POLYNOMIAL_DEGREE} for {@code P(x)=0}.
+	 * <p>
+	 * @return The degree of the polynomial.
+	 */
 	public int getDegree() {
 		return this.degree;
 	}
 
-	public boolean isBinary() {
-		return this.binaryCoefficients != null;
-	}
-
-	public boolean isZeroPolynomial() {
+	/**
+	 * Checks if all coefficients of the polynomial are 0, which is the case for {@code P(x)=0}.
+	 * <p>
+	 * @return {@literal true} for {@code P(x)=0}, {@literal false} otherwise
+	 */
+	public boolean isZero() {
 		return this.degree == ZERO_POLYNOMIAL_DEGREE;
 	}
 
+	/**
+	 * Checks the polynomial is monic, i.e., if the highest order coefficient of the polynomial is 1.
+	 * <p>
+	 * @return {@literal true} if the the polynomial is monic, {@literal false} otherwise
+	 */
 	public boolean isMonic() {
-		return !this.isZeroPolynomial() && this.oneCoefficient.equals(this.getCoefficient(this.degree));
+		return !this.isZero() && this.oneCoefficient.equals(this.getCoefficient(this.degree));
 	}
 
+	/**
+	 * Counts and returns the number of coefficients different from 0.
+	 * <p>
+	 * @return The number of coefficients different from 0
+	 */
+	public int countCoefficients() {
+		if (this.isBinary()) {
+			return this.binaryCoefficients.countExcept();
+		} else {
+			return this.coefficients.countExcept();
+		}
+	}
+
+	/**
+	 * Returns the coefficient at some given index.
+	 * <p>
+	 * @param index The given index
+	 * @return The corresponding coefficient
+	 */
 	public C getCoefficient(int index) {
 		if (index < 0) {
-			throw new IllegalArgumentException();
+			throw new IndexOutOfBoundsException();
 		}
 		if (this.isBinary()) {
 			if (index < this.binaryCoefficients.getLength() && this.binaryCoefficients.getAt(index)) {
 				return this.oneCoefficient;
 			}
 		} else {
-			C coefficient = this.coefficients.get(index);
-			if (coefficient != null) {
-				return coefficient;
+			if (index < this.coefficients.getLength()) {
+				return this.coefficients.getAt(index);
 			}
 		}
 		return this.zeroCoefficient;
@@ -159,29 +237,31 @@ public class Polynomial<C>
 		return this.binaryCoefficients;
 	}
 
-	public final DenseArray<Integer> getIndices() {
-		if (this.indices == null) {
-			if (this.isBinary()) {
-				ArrayList<Integer> ind = new ArrayList();
-				for (int i : this.binaryCoefficients.getIndices(Boolean.TRUE)) {
-					ind.add(i);
-				}
-				this.indices = DenseArray.getInstance(ind);
-			} else {
-				TreeSet ind = new TreeSet(this.coefficients.keySet());
-				this.indices = DenseArray.getInstance(ind);
-			}
+	/**
+	 * Returns iterable collection of indices with a coefficients different from 0.
+	 * <p>
+	 * @return The iterable collection of indices
+	 */
+	public final Iterable<Integer> getCoefficientIndices() {
+		if (this.isBinary()) {
+			return binaryCoefficients.getIndicesExcept();
+		} else {
+			return coefficients.getIndicesExcept();
 		}
-		return this.indices;
 	}
 
+	/**
+	 * Creates and returns a new polynomial containing only a single term from the given polynomial.
+	 * <p>
+	 * @param index The index of the term
+	 * @return The new polynomial
+	 */
 	public final Polynomial<C> getTerm(int index) {
 		if (index < 0) {
 			throw new IllegalArgumentException();
 		}
-		HashMap map = new HashMap(1);
-		map.put(index, this.getCoefficient(index));
-		return new Polynomial(map, this.zeroCoefficient, this.oneCoefficient);
+		SparseArray sparseArray = SparseArray.getInstance(this.zeroCoefficient, index, this.getCoefficient(index));
+		return new Polynomial(sparseArray, this.zeroCoefficient, this.oneCoefficient);
 	}
 
 	@Override
@@ -217,10 +297,11 @@ public class Polynomial<C>
 		String result = "f(x)=";
 
 		String separator = "";
-		if (this.getIndices().getLength() == 0) {
+		Iterable<Integer> indices = this.getCoefficientIndices();
+		if (!indices.iterator().hasNext()) {
 			result += this.coefficientToString(this.zeroCoefficient);
 		}
-		for (Integer index : this.getIndices()) {
+		for (Integer index : indices) {
 			C coefficient = this.getCoefficient(index);
 			if (coefficient != this.zeroCoefficient || this.getDegree() == 0) {
 				result += separator;
@@ -244,53 +325,8 @@ public class Polynomial<C>
 		return coefficient.toString();
 	}
 
-	public static <C> Polynomial<C> getInstance(Map<Integer, C> coefficients, C zeroCoefficient, C oneCoefficient) {
-		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null) {
-			throw new IllegalArgumentException();
-		}
-		Map<Integer, C> result = new HashMap<Integer, C>();
-		for (Integer i : coefficients.keySet()) {
-			C coeff = coefficients.get(i);
-			if (coeff == null) {
-				throw new IllegalArgumentException();
-			}
-			if (!coeff.equals(zeroCoefficient)) {
-				result.put(i, coeff);
-			}
-		}
-		return new Polynomial<C>(result, zeroCoefficient, oneCoefficient);
-	}
-
-	public static <C> Polynomial<C> getInstance(C[] coefficients, C zeroCoefficient, C oneCoefficient) {
-		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null) {
-			throw new IllegalArgumentException();
-		}
-
-		Map<Integer, C> result = new HashMap<Integer, C>();
-		for (int i = 0; i < coefficients.length; i++) {
-			C coeff = coefficients[i];
-			if (coeff == null) {
-				throw new IllegalArgumentException();
-			}
-			if (!coeff.equals(zeroCoefficient)) {
-				result.put(i, coeff);
-			}
-		}
-		return new Polynomial<C>(result, zeroCoefficient, oneCoefficient);
-	}
-
-	public static <C> Polynomial<C> getInstance(ByteArray coefficients, C zeroCoefficient, C oneCoefficient) {
-		if (coefficients == null) {
-			throw new IllegalArgumentException();
-		}
-		return Polynomial.getInstance(BitArray.getInstance(coefficients), zeroCoefficient, oneCoefficient);
-	}
-
-	public static <C> Polynomial<C> getInstance(BitArray coefficients, C zeroCoefficient, C oneCoefficient) {
-		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null) {
-			throw new IllegalArgumentException();
-		}
-		return new Polynomial<C>(coefficients.removeSuffix(), zeroCoefficient, oneCoefficient);
+	private boolean isBinary() {
+		return this.binaryCoefficients != null;
 	}
 
 }

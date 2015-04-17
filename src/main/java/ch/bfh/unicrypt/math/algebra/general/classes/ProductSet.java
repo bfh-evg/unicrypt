@@ -302,6 +302,11 @@ public class ProductSet
 	}
 
 	@Override
+	public int countExcept(Set set) {
+		return this.sets.countExcept(set);
+	}
+
+	@Override
 	public int countPrefix(Set set) {
 		return this.sets.countPrefix(set);
 	}

@@ -98,14 +98,12 @@ public class PolynomialSemiRingTest {
 		}
 
 		PolynomialElement p = ring0.getElement(Tuple.getInstance(z.getElement(0), z.getElement(1), z.getElement(2), z.getElement(3)));
-		assertFalse(p.getValue().isBinary());
 		assertEquals(0, p.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(1, p.getValue().getCoefficient(1).getValue().intValue());
 		assertEquals(2, p.getValue().getCoefficient(2).getValue().intValue());
 		assertEquals(3, p.getValue().getCoefficient(3).getValue().intValue());
 
 		PolynomialElement p2 = ring2.getElement(Tuple.getInstance(zmod2.getElement(0), zmod2.getElement(1), zmod2.getElement(1), zmod2.getElement(1)));
-		assertTrue(p2.getValue().isBinary());
 		assertEquals(0, p2.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(1, p2.getValue().getCoefficient(1).getValue().intValue());
 		assertEquals(1, p2.getValue().getCoefficient(2).getValue().intValue());

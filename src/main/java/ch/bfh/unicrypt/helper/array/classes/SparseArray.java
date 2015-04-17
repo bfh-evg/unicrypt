@@ -135,7 +135,7 @@ public class SparseArray<V extends Object>
 		Map<Integer, V> newMap = new HashMap();
 		for (Integer i : map.keySet()) {
 			V value = map.get(i);
-			if (value == null || i >= length) {
+			if (value == null || i < 0 || i >= length) {
 				throw new IllegalArgumentException();
 			}
 			if (!value.equals(defaultValue)) {
@@ -143,6 +143,21 @@ public class SparseArray<V extends Object>
 			}
 		}
 		return new SparseArray<V>(newMap, length, defaultValue);
+	}
+
+	/**
+	 * Creates a new sparse array with a single non-default value at some index.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param index        The index of the value
+	 * @param value        The given value
+	 * @return The new sparse array
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, int index, V value) {
+		Map<Integer, V> map = new HashMap<Integer, V>(1);
+		map.put(index, value);
+		return SparseArray.getInstance(defaultValue, map);
 	}
 
 	/**

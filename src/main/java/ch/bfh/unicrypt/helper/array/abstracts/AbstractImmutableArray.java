@@ -163,6 +163,11 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
+	public final int countExcept(V value) {
+		return this.getLength() - this.count(value);
+	}
+
+	@Override
 	public final int countPrefix(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();

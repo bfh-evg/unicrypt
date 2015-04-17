@@ -98,6 +98,11 @@ public class CompositeEncoder
 	}
 
 	@Override
+	public int countExcept(Encoder encoder) {
+		return this.encoders.countExcept(encoder);
+	}
+
+	@Override
 	public int countPrefix(Encoder encoder) {
 		return this.encoders.countPrefix(encoder);
 	}

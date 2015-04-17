@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.helper;
 
 /**
  * Instances of this generic class represent points {@code (x,y)} in a two-dimensional space over the generic type,
- * including a special point of infinity. Besides the getter methods for the x- and y-coordinates, no functionality is
+ * including a special point of infinity. Besides getter methods for the x- and y-coordinates, no functionality is
  * provided. This class is a helper class for the implementation of elliptic curves.
  * <p>
  * @author R. Haenni
@@ -64,7 +64,7 @@ public class Point<T>
 	/**
 	 * Creates a point for given x- and y-coordinates.
 	 * <p>
-	 * @param <T> The type of the resulting point
+	 * @param <T> The type of the resulting point coordinates
 	 * @param x   The x-coordinate
 	 * @param y   The y-coordinate
 	 * @return The new point
@@ -79,7 +79,7 @@ public class Point<T>
 	/**
 	 * Creates the special point of infinity of the given type.
 	 * <p>
-	 * @param <T> The type of resulting point
+	 * @param <T> The type of resulting point coordinates
 	 * @return The point of infinity
 	 */
 	public static <T> Point<T> getInstance() {

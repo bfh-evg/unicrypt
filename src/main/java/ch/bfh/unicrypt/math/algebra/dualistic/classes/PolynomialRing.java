@@ -81,7 +81,7 @@ public class PolynomialRing
 
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap<Integer, DualisticElement<BigInteger>>();
 		Polynomial<? extends DualisticElement<BigInteger>> polynomial = ((PolynomialElement) element).getValue();
-		for (Integer i : polynomial.getIndices()) {
+		for (Integer i : polynomial.getCoefficientIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
 		}
 		return this.getElementUnchecked(coefficientMap);

@@ -86,6 +86,14 @@ public interface DefaultValueArray<V extends Object>
 	public int count();
 
 	/**
+	 * Counts the number of element in the array different from the default value.
+	 * <p>
+	 * @return The number of occurrences
+	 * @see ImmutableArray#count(java.lang.Object)
+	 */
+	public int countExcept();
+
+	/**
 	 * Counts the number of consecutive occurrences of the default value in the array prefix.
 	 * <p>
 	 * @return The number of occurrences

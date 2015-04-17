@@ -70,16 +70,16 @@ public class PolynomialElement
 			if (semiRing.getZeroElement().isEquivalent(element)) {
 				return this.getValue().getCoefficient(0);
 			} else {
-				return (this.getValue().getIndices().getLength() % 2) == 0 ? semiRing.getZeroElement() : semiRing.getOneElement();
+				return (this.getValue().countCoefficients() % 2) == 0 ? semiRing.getZeroElement() : semiRing.getOneElement();
 			}
 		}
 
 		// TBD! (n*x^2 < q*x^3    with x = log(modulus), n = order of poly and q = number of non-zero terms in poly)
 		int n = this.getValue().getDegree();
-		int q = this.getValue().getIndices().getLength();
+		int q = this.getValue().countCoefficients();
 		if (n > 0 && ((double) q / n) < 0.01) {
 			DualisticElement<BigInteger> result = this.getSet().getSemiRing().getZeroElement();
-			for (Integer index : this.getValue().getIndices()) {
+			for (Integer index : this.getValue().getCoefficientIndices()) {
 				result = result.add(this.getValue().getCoefficient(index).multiply(element.power(index)));
 			}
 			return result;

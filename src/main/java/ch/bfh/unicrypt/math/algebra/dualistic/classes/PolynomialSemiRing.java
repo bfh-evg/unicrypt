@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
@@ -214,7 +213,7 @@ public class PolynomialSemiRing
 
 	@Override
 	protected boolean abstractContains(Polynomial value) {
-		DenseArray<Integer> indices = value.getIndices();
+		Iterable<Integer> indices = value.getCoefficientIndices();
 		for (int i : indices) {
 			if (!(Element.class.isInstance(value.getCoefficient(i)) && this.getSemiRing().contains((Element) value.getCoefficient(i)))) {
 				return false;
@@ -268,7 +267,7 @@ public class PolynomialSemiRing
 		// TODO Optimize for binary
 		Polynomial<? extends DualisticElement<BigInteger>> polynomial = element.getValue();
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap();
-		for (Integer i : polynomial.getIndices()) {
+		for (Integer i : polynomial.getCoefficientIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).selfApply(posAmount));
 		}
 		return this.getElementUnchecked(coefficientMap);
@@ -284,10 +283,10 @@ public class PolynomialSemiRing
 			return this.getElementUnchecked(coefficients);
 		} else {
 			Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap();
-			for (Integer i : polynomial1.getIndices()) {
+			for (Integer i : polynomial1.getCoefficientIndices()) {
 				coefficientMap.put(i, polynomial1.getCoefficient(i));
 			}
-			for (Integer i : polynomial2.getIndices()) {
+			for (Integer i : polynomial2.getCoefficientIndices()) {
 				DualisticElement<BigInteger> coefficient = coefficientMap.get(i);
 				if (coefficient == null) {
 					coefficientMap.put(i, polynomial2.getCoefficient(i));
@@ -344,8 +343,8 @@ public class PolynomialSemiRing
 
 	protected Map<Integer, DualisticElement<BigInteger>> multiplyNonBinary(Polynomial<? extends DualisticElement<BigInteger>> polynomial1, Polynomial<? extends DualisticElement<BigInteger>> polynomial2) {
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap = new HashMap();
-		for (Integer i : polynomial1.getIndices()) {
-			for (Integer j : polynomial2.getIndices()) {
+		for (Integer i : polynomial1.getCoefficientIndices()) {
+			for (Integer j : polynomial2.getCoefficientIndices()) {
 				Integer k = i + j;
 				DualisticElement<BigInteger> coefficient = polynomial1.getCoefficient(i).multiply(polynomial2.getCoefficient(j));
 				DualisticElement<BigInteger> newCoefficient = coefficientMap.get(k);

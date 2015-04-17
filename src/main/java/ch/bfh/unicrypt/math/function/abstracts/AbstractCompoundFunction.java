@@ -109,6 +109,11 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
+	public int countExcept(Function function) {
+		return this.functions.countExcept(function);
+	}
+
+	@Override
 	public int countPrefix(Function function) {
 		return this.functions.countPrefix(function);
 	}

@@ -41,8 +41,7 @@
  */
 package ch.bfh.unicrypt.helper;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -68,16 +67,16 @@ public class PolynomialTest {
 	public PolynomialTest() {
 		p0 = Polynomial.getInstance(new Integer[]{}, 0, 1);
 		p1 = Polynomial.getInstance(new Integer[]{1, 2, 0, 3}, 0, 1);
-		p2 = Polynomial.getInstance(new HashMap(), 0, 1);
+		p2 = Polynomial.getInstance(new Integer[]{}, 0, 1);
 		HashMap map = new HashMap();
 		map.put(0, 1);
 		map.put(1, 2);
 		map.put(3, 3);
 		p3 = Polynomial.getInstance(map, 0, 1);
 
-		p4 = Polynomial.getInstance(ByteArray.getInstance(), 0, 1);
-		p5 = Polynomial.getInstance(ByteArray.getInstance((byte) 0x0b), 0, 1);  // 0000 1011 -> 1+x+x^3
-		p6 = Polynomial.getInstance(ByteArray.getInstance((byte) 0xa8, (byte) 0xc4), 0, 1);  // 1100 0100 1010 1000
+		p4 = Polynomial.getInstance(BitArray.getInstance(), 0, 1); // p(x) = 0
+		p5 = Polynomial.getInstance(BitArray.getInstance("1101"), 0, 1);  // p(x) = 1+x+x^3
+		p6 = Polynomial.getInstance(BitArray.getInstance("0001010100100011"), 0, 1); // p(x) = x^3+x^5+x^7+x^10+x^14+x^15
 		p7 = Polynomial.getInstance(new Integer[]{1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0}, 0, 1);
 	}
 
@@ -102,7 +101,7 @@ public class PolynomialTest {
 		assertEquals("Polynomial[f(x)=1+X^2+X^3+X^6+X^8+X^9+X^10+X^12]", p7.toString());
 
 		//System.out.println(Polynomial.getInstance(ByteArray.getInstance(0x01)));
-		assertEquals("Polynomial[f(x)=1]", Polynomial.getInstance(ByteArray.getInstance((byte) 0x01), 0, 1).toString());
+		assertEquals("Polynomial[f(x)=1]", Polynomial.getInstance(BitArray.getInstance("1"), 0, 1).toString());
 		//System.out.println(Polynomial.getInstance(new Integer[]{6}, 0, 1));
 		assertEquals("Polynomial[f(x)=6]", Polynomial.getInstance(new Integer[]{6}, 0, 1).toString());
 	}
@@ -118,38 +117,29 @@ public class PolynomialTest {
 		assertEquals(15, p6.getDegree());
 		assertEquals(12, p7.getDegree());
 
-		assertEquals(Polynomial.ZERO_POLYNOMIAL_DEGREE, Polynomial.getInstance(ByteArray.getInstance((byte) 0x00), 0, 1).getDegree());
+		assertEquals(Polynomial.ZERO_POLYNOMIAL_DEGREE, Polynomial.getInstance(BitArray.getInstance(""), 0, 1).getDegree());
+		assertEquals(Polynomial.ZERO_POLYNOMIAL_DEGREE, Polynomial.getInstance(BitArray.getInstance("0"), 0, 1).getDegree());
+		assertEquals(3, Polynomial.getInstance(BitArray.getInstance("001100"), 0, 1).getDegree());
 		assertEquals(Polynomial.ZERO_POLYNOMIAL_DEGREE, Polynomial.getInstance(new Integer[]{0}, 0, 1).getDegree());
 		assertEquals(0, Polynomial.getInstance(new Integer[]{4}, 0, 1).getDegree());
-		assertEquals(0, Polynomial.getInstance(ByteArray.getInstance((byte) 0x01), 0, 1).getDegree());
-		assertEquals(1, Polynomial.getInstance(ByteArray.getInstance((byte) 0x02), 0, 1).getDegree());
-		assertEquals(7, Polynomial.getInstance(ByteArray.getInstance((byte) 0xb4), 0, 1).getDegree());
-		assertEquals(8, Polynomial.getInstance(ByteArray.getInstance((byte) 0xb4, (byte) 0x01), 0, 1).getDegree());
-		assertEquals(15, Polynomial.getInstance(ByteArray.getInstance((byte) 0x01, (byte) 0xb4), 0, 1).getDegree());
-	}
-
-	@Test
-	public void testIsBinary() {
-		assertTrue(p0.isBinary());
-		assertFalse(p1.isBinary());
-		assertTrue(p2.isBinary());
-		assertFalse(p3.isBinary());
-		assertTrue(p4.isBinary());
-		assertTrue(p5.isBinary());
-		assertTrue(p6.isBinary());
-		assertTrue(p7.isBinary());
+		assertEquals(0, Polynomial.getInstance(BitArray.getInstance("1"), 0, 1).getDegree());
+		assertEquals(1, Polynomial.getInstance(BitArray.getInstance("01"), 0, 1).getDegree());
+		assertEquals(7, Polynomial.getInstance(BitArray.getInstance("11100001"), 0, 1).getDegree());
+		assertEquals(8, Polynomial.getInstance(BitArray.getInstance("110000011"), 0, 1).getDegree());
+		assertEquals(13, Polynomial.getInstance(BitArray.getInstance("00110101001101"), 0, 1).getDegree());
+		assertEquals(13, Polynomial.getInstance(BitArray.getInstance("0011010100110100000"), 0, 1).getDegree());
 	}
 
 	@Test
 	public void testIsZeroPolynomial() {
-		assertTrue(p0.isZeroPolynomial());
-		assertFalse(p1.isZeroPolynomial());
-		assertTrue(p2.isZeroPolynomial());
-		assertFalse(p3.isZeroPolynomial());
-		assertTrue(p4.isZeroPolynomial());
-		assertFalse(p5.isZeroPolynomial());
-		assertFalse(p6.isZeroPolynomial());
-		assertFalse(p7.isZeroPolynomial());
+		assertTrue(p0.isZero());
+		assertFalse(p1.isZero());
+		assertTrue(p2.isZero());
+		assertFalse(p3.isZero());
+		assertTrue(p4.isZero());
+		assertFalse(p5.isZero());
+		assertFalse(p6.isZero());
+		assertFalse(p7.isZero());
 	}
 
 	@Test
@@ -211,17 +201,16 @@ public class PolynomialTest {
 
 	}
 
-	@Test
-	public void testGetIndices() {
-		assertEquals(DenseArray.getInstance(new Integer[0]), p0.getIndices());
-		assertEquals(DenseArray.getInstance(0, 1, 3), p1.getIndices());
-		assertEquals(DenseArray.getInstance(new Integer[0]), p2.getIndices());
-		assertEquals(DenseArray.getInstance(0, 1, 3), p3.getIndices());
-		assertEquals(DenseArray.getInstance(new Integer[0]), p4.getIndices());
-		assertEquals(DenseArray.getInstance(0, 1, 3), p5.getIndices());
-		assertEquals(DenseArray.getInstance(3, 5, 7, 10, 14, 15), p6.getIndices());
-	}
-
+//	@Test
+//	public void testGetIndices() {
+//		assertEquals(DenseArray.getInstance(new Integer[0]), p0.getCoefficientIndices());
+//		assertEquals(DenseArray.getInstance(0, 1, 3), p1.getCoefficientIndices());
+//		assertEquals(DenseArray.getInstance(new Integer[0]), p2.getCoefficientIndices());
+//		assertEquals(DenseArray.getInstance(0, 1, 3), p3.getCoefficientIndices());
+//		assertEquals(DenseArray.getInstance(new Integer[0]), p4.getCoefficientIndices());
+//		assertEquals(DenseArray.getInstance(0, 1, 3), p5.getCoefficientIndices());
+//		assertEquals(DenseArray.getInstance(3, 5, 7, 10, 14, 15), p6.getCoefficientIndices());
+//	}
 	@Test
 	public void testEquals() {
 		assertTrue(p0.equals(p2));
@@ -234,8 +223,9 @@ public class PolynomialTest {
 		assertFalse(p5.equals(Polynomial.getInstance(new Integer[]{1, 1, 0, 1, 1}, 0, 1)));
 		assertFalse(p5.equals(Polynomial.getInstance(new Integer[]{1, 1}, 0, 1)));
 		assertFalse(p6.equals(p5));
-		assertTrue(p6.equals(Polynomial.getInstance(ByteArray.getInstance((byte) 0xa8, (byte) 0xc4), 0, 1)));
-		assertFalse(p6.equals(Polynomial.getInstance(ByteArray.getInstance((byte) 0xa8, (byte) 0xc3), 0, 1)));
+		assertTrue(p6.equals(Polynomial.getInstance(BitArray.getInstance("0001010100100011"), 0, 1)));
+		assertTrue(p6.equals(Polynomial.getInstance(BitArray.getInstance("00010101001000110000"), 0, 1)));
+		assertFalse(p6.equals(Polynomial.getInstance(BitArray.getInstance("0001010100100001"), 0, 1)));
 	}
 
 }

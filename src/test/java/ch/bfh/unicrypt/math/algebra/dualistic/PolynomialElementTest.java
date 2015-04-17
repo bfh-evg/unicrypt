@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
 import ch.bfh.unicrypt.helper.Polynomial;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
@@ -98,7 +98,7 @@ public class PolynomialElementTest {
 		assertEquals(zmod2.getOneElement(), p2.evaluate(zmod2.getElement(0)));
 		assertEquals(zmod2.getOneElement(), p2.evaluate(zmod2.getElement(1)));
 
-		p2 = ring2.getElement(Polynomial.getInstance(ByteArray.getInstance(), zmod2.getZeroElement(), zmod2.getOneElement()));
+		p2 = ring2.getElement(Polynomial.getInstance(BitArray.getInstance(), zmod2.getZeroElement(), zmod2.getOneElement()));
 		assertEquals(zmod2.getZeroElement(), p2.evaluate(zmod2.getElement(0)));
 		assertEquals(zmod2.getZeroElement(), p2.evaluate(zmod2.getElement(1)));
 

@@ -95,7 +95,7 @@ public interface ImmutableArray<V extends Object>
 	public Iterable<Integer> getIndices(V value);
 
 	/**
-	 * Returns an iterable collection of all array indices for which the stored values does not mathc with the given
+	 * Returns an iterable collection of all array indices for which the stored values does not match with the given
 	 * value.
 	 * <p>
 	 * @param value The given value
@@ -110,10 +110,20 @@ public interface ImmutableArray<V extends Object>
 	 * <p>
 	 * @param value The given value
 	 * @return The number of occurrences
+	 * @see ImmutableArray#countExcept(java.lang.Object)
 	 * @see ImmutableArray#countPrefix(java.lang.Object)
 	 * @see ImmutableArray#countSuffix(java.lang.Object)
 	 */
 	public int count(V value);
+
+	/**
+	 * Counts the number of values in the array that are different from a given value.
+	 * <p>
+	 * @param value The given value
+	 * @return The number of occurrences
+	 * @see ImmutableArray#count(java.lang.Object)
+	 */
+	public int countExcept(V value);
 
 	/**
 	 * Counts the number of consecutive occurrences of a given value in the array prefix.

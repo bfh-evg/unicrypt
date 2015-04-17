@@ -92,6 +92,11 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 	}
 
 	@Override
+	public final int countExcept() {
+		return this.getLength() - this.count();
+	}
+
+	@Override
 	public final int countPrefix() {
 		return this.countPrefix(this.defaultValue);
 	}

@@ -101,6 +101,11 @@ public class Tuple
 	}
 
 	@Override
+	public int countExcept(Element element) {
+		return this.getValue().countExcept(element);
+	}
+
+	@Override
 	public int countPrefix(Element element) {
 		return this.getValue().countPrefix(element);
 	}
