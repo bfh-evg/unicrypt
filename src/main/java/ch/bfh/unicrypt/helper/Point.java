@@ -43,9 +43,13 @@
 package ch.bfh.unicrypt.helper;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <T>
+ * Instances of this generic class represent points {@code (x,y)} in a two-dimensional space over the generic type,
+ * including a special point of infinity. Besides the getter methods for the x- and y-coordinates, no functionality is
+ * provided. This class is a helper class for the implementation of elliptic curves.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <T> The generic type of the two-dimensional space
  */
 public class Point<T>
 	   extends UniCrypt {
@@ -57,10 +61,45 @@ public class Point<T>
 		this.y = y;
 	}
 
+	/**
+	 * Creates a point for given x- and y-coordinates.
+	 * <p>
+	 * @param <T> The type of the resulting point
+	 * @param x   The x-coordinate
+	 * @param y   The y-coordinate
+	 * @return The new point
+	 */
+	public static <T> Point<T> getInstance(T x, T y) {
+		if (x == null || y == null) {
+			throw new IllegalArgumentException();
+		}
+		return new Point<T>(x, y);
+	}
+
+	/**
+	 * Creates the special point of infinity of the given type.
+	 * <p>
+	 * @param <T> The type of resulting point
+	 * @return The point of infinity
+	 */
+	public static <T> Point<T> getInstance() {
+		return new Point<T>((T) null, (T) null);
+	}
+
+	/**
+	 * Returns the point's x-coordinate (or {@code null} in case of the pint of infinity}.
+	 * <p>
+	 * @return The x-coordinate
+	 */
 	public T getX() {
 		return x;
 	}
 
+	/**
+	 * Returns the point's y-coordinate (or {@code null} in case of the pint of infinity}.
+	 * <p>
+	 * @return The y-coordinate
+	 */
 	public T getY() {
 		return y;
 	}
@@ -89,17 +128,6 @@ public class Point<T>
 			return false;
 		}
 		return true;
-	}
-
-	public static <T> Point<T> getInstance() {
-		return new Point<T>((T) null, (T) null);
-	}
-
-	public static <T> Point<T> getInstance(T x, T y) {
-		if (x == null || y == null) {
-			throw new IllegalArgumentException();
-		}
-		return new Point<T>(x, y);
 	}
 
 }
