@@ -47,12 +47,14 @@ import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
 import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+
 import java.math.BigInteger;
 /**
  * 
@@ -156,9 +158,13 @@ public class ZModToECZModPrimeEncoder
 			}
 			
 			if(firstOption){
-				ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
-				ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
-				return ecPrime.getElement(x, y);
+				ECZModElement[] y=ecPrime.getY(x);
+				ZModElement y1 = y[0].getY();
+				ZModElement y2 = y[1].getY();
+				if (isBigger(y1, y2)) {
+					return y[0];
+				}
+				return y[1];
 			}
 			
 			
@@ -204,11 +210,14 @@ public class ZModToECZModPrimeEncoder
 				count++;
 			}
 			
+			ECZModElement[] y=ecPrime.getY(x);
+			ZModElement y1=y[0].getY();
+			ZModElement y2=y[1].getY();
 			
-			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
-			ZModElement y = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
-			y=y.invert();
-			return ecPrime.getElement(x, y);
+			if(isBigger(y1, y2)){
+				return y[1];
+			}
+			return y[0];
 			
 			
 		}
@@ -236,13 +245,12 @@ public class ZModToECZModPrimeEncoder
 			ZModPrime zModPrime=this.getDomain().getFiniteField();
 			int msgSpace=zModPrime.getOrder().toString(2).length();
 			
-			ZModElement x=(ZModElement) element.getX();
-			ZModElement y=(ZModElement) element.getY();
+			ZModElement x= element.getX();
+			ZModElement y= element.getY();
+			ZModElement y1=element.invert().getY();
+
 			
-			ZModElement y1 = x.power(3).add(ecPrime.getA().multiply(x)).add(ecPrime.getB());
-			ZModElement yEnc = zModPrime.getElement(MathUtil.sqrtModPrime(y1.getValue(), zModPrime.getModulus()));
-			
-			BigInteger x1=element.getX().getBigInteger();
+			BigInteger x1=x.getBigInteger();
 			
 			
 			BigInteger c=x1.subtract(x1.shiftRight(2).shiftLeft(2));
@@ -259,7 +267,7 @@ public class ZModToECZModPrimeEncoder
 			
 			x1=x1.shiftRight(shift+2);
 			
-			if(y.isEquivalent(yEnc)){
+			if(y.isEquivalent(getBiggerY(y1, y))){
 				return zModPrime.getElement(x1);
 				
 			}
@@ -269,6 +277,35 @@ public class ZModToECZModPrimeEncoder
 			
 		}
 
+	}
+	
+	/**
+	 * Compares the two polynomial elements and return the element with the most significant coefficient not in common.
+	 * <p>
+	 * @param y1
+	 * @param y2
+	 * @return
+	 */
+	public static ZModElement getBiggerY(ZModElement y1, ZModElement y2) {
+		int c=y1.getValue().compareTo(y2.getValue());
+		
+		if(c==1){
+			return y1;
+		}
+		else{
+			return y2;
+		}
+	}
+
+	/**
+	 * Compares y1 and y2 and returns if y1 is bigger then y2 -> getBiggerY
+	 * <p>
+	 * @param y1
+	 * @param y2
+	 * @return
+	 */
+	public static boolean isBigger(ZModElement y1, ZModElement y2) {
+		return y1.isEquivalent(getBiggerY(y1, y2));
 	}
 
 }

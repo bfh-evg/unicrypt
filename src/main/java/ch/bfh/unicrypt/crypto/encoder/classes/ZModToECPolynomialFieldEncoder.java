@@ -117,10 +117,10 @@ public class ZModToECPolynomialFieldEncoder
 				PolynomialElement y1 = y[0].getY();
 				PolynomialElement y2 = y[1].getY();
 				if (isBigger(y1, y2)) {
-					return ec.getElement(x, y1);
+					return y[0];
 
 				}
-				return ec.getElement(x, y2);
+				return y[1];
 			} else {
 
 				zModElement = element.invert();
@@ -162,9 +162,9 @@ public class ZModToECPolynomialFieldEncoder
 				PolynomialElement y2 = y[1].getY();
 
 				if (isBigger(y1, y2)) {
-					return ec.getElement(x, y2);
+					return y[1];
 				}
-				return ec.getElement(x, y1);
+				return y[0];
 			}
 
 		}

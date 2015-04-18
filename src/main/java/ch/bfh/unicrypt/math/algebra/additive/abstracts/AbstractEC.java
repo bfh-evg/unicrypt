@@ -156,6 +156,14 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 		}
 		return this.abstractGetElement(Point.getInstance((D) xValue, (D) yValue));
 	}
+	
+	/**
+	 * Return the two possible y-coordinates for a given valid x-coordinate
+	 * <p>
+	 * @param x x-coordinate of point
+	 * @return
+	 */
+	public abstract EE[] getY(D xValue);
 
 	@Override
 	protected BigInteger abstractGetOrder() {

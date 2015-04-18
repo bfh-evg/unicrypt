@@ -44,10 +44,12 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+
 import java.math.BigInteger;
 
 /**
@@ -56,6 +58,11 @@ import java.math.BigInteger;
  */
 public class ECZModPrime
 	   extends AbstractEC<ZModPrime, BigInteger, ZModElement, ECZModElement> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5442792676496187516L;
 
 	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
@@ -88,6 +95,16 @@ public class ECZModPrime
 	@Override
 	protected ECZModElement abstractGetElement(Point<ZModElement> value) {
 		return new ECZModElement(this, value);
+	}
+	
+	@Override
+	public ECZModElement[] getY(ZModElement xValue) {
+		ZModElement y1 = xValue.power(3).add(this.getA().multiply(xValue)).add(this.getB());
+		ZModElement y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y1.getValue(), this.getFiniteField().getModulus()));
+		ECZModElement e1=this.getElement(xValue, y);
+		ECZModElement e2=e1.invert();
+		ECZModElement[] e={e1,e2};
+		return e;
 	}
 
 	@Override
@@ -259,5 +276,7 @@ public class ECZModPrime
 
 		return ECZModPrime.getInstance(field, a, b, gx, gy, order, h);
 	}
+
+
 
 }

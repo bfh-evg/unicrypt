@@ -4,10 +4,7 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BitArrayToBigInteger;
-import ch.bfh.unicrypt.helper.converter.classes.bitarray.ByteArrayToBitArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -26,6 +23,10 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public class ZModToBinaryPolynomialEncoder
 	   extends AbstractEncoder<ZMod, ZModElement, PolynomialField, PolynomialElement> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4567955434932946745L;
 	private final ZMod zMod;
 	private final PolynomialField binaryPolynomial;
 	private final BitArrayToBigInteger bitToBigIntConverter;
@@ -56,6 +57,11 @@ public class ZModToBinaryPolynomialEncoder
 	class EncodingFunction
 		   extends AbstractFunction<EncodingFunction, ZMod, ZModElement, PolynomialField, PolynomialElement> {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4841419729018910939L;
+
 		protected EncodingFunction(final ZMod domain, final PolynomialField coDomain) {
 			super(domain, coDomain);
 		}
@@ -70,6 +76,12 @@ public class ZModToBinaryPolynomialEncoder
 
 	class DecodingFunction
 		   extends AbstractFunction<DecodingFunction, PolynomialField, PolynomialElement, ZMod, ZModElement> {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8382498527678953467L;
+
 
 		protected DecodingFunction(final PolynomialField domain, final ZMod coDomain) {
 			super(domain, coDomain);

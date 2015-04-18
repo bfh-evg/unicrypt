@@ -113,7 +113,7 @@ Klaus Pommerening</p>
 		PolynomialElement l = this.getFiniteField().solveQuadradicEquation(t);
 
 		ECPolynomialElement y1 = this.getElement(x, l.add(l.getSet().getOneElement()).multiply(x));
-		ECPolynomialElement y2 = this.getElement(x, l.multiply(x));
+		ECPolynomialElement y2 = y1.invert();
 		ECPolynomialElement[] y = {y1, y2};
 		return y;
 	}
