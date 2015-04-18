@@ -1,7 +1,11 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
+import java.math.BigInteger;
+
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.BitArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bitarray.ByteArrayToBitArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
@@ -11,7 +15,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
 
 /**
  * Encodes a ZModElement as a binary polynomial by taking the bit-array representation of the ZModElement to create the
@@ -25,14 +28,12 @@ public class ZModToBinaryPolynomialEncoder
 
 	private final ZMod zMod;
 	private final PolynomialField binaryPolynomial;
-	private final BigIntegerToByteArray converter1;
-	private final ByteArrayToBitArray converter2;
+	private final BitArrayToBigInteger bitToBigIntConverter;
 
 	private ZModToBinaryPolynomialEncoder(ZMod zMod, PolynomialField binaryPolynomial) {
 		this.zMod = zMod;
 		this.binaryPolynomial = binaryPolynomial;
-		this.converter1 = BigIntegerToByteArray.getInstance();
-		this.converter2 = ByteArrayToBitArray.getInstance();
+		this.bitToBigIntConverter = BitArrayToBigInteger.getInstance();
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class ZModToBinaryPolynomialEncoder
 
 		@Override
 		protected PolynomialElement abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
-			BitArray bitArray = converter2.convert(converter1.convert(element.getValue()));
+			BitArray bitArray = bitToBigIntConverter.reconvert(element.getValue());
 			return this.getCoDomain().getElement(bitArray);
 		}
 
@@ -76,9 +77,9 @@ public class ZModToBinaryPolynomialEncoder
 
 		@Override
 		protected ZModElement abstractApply(final PolynomialElement element, final RandomByteSequence randomByteSequence) {
-			BitArray bitArray = element.getValue().getCoefficients();
-			BigInteger bigInteger = converter1.reconvert(converter2.reconvert(bitArray));
-			return this.getCoDomain().getElement(bigInteger.mod(this.getCoDomain().getModulus()));
+			BitArray bitArray = element.getValue().getCoefficients();		
+			BigInteger bigInt= bitToBigIntConverter.convert(bitArray);
+			return this.getCoDomain().getElement(bigInt.mod(this.getCoDomain().getModulus()));
 		}
 
 	}
