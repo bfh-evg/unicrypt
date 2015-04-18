@@ -1,4 +1,4 @@
-package ch.bhf.unicrypt.crypto.encoder;
+package ch.bfh.unicrypt.crypto.encoder;
 
 import static org.junit.Assert.*;
 

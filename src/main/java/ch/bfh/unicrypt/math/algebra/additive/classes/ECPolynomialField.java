@@ -102,6 +102,8 @@ Klaus Pommerening</p>
 
 	/**
 	 * Return the two possible y-coordinates for a given valid x-coordinate
+	 * The procedure is described in "Mapping an Arbitrary Message to an 
+	 * Elliptic Curve when Defined over GF (2 n )" p.172
 	 * <p>
 	 * @param x x-coordinate of point
 	 * @return
