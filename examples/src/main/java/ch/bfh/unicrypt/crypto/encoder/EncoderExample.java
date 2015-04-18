@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.crypto.encoder;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECPolynomialFieldEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECZModPrimeEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModPrimeToECPolynomialFieldEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModPrimeToECZModPrimeEncoder;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -71,7 +71,7 @@ public class EncoderExample {
 		ZModPrime z = ZModPrime.getInstance(ec.getOrder());
 
 		// Create encoders
-		ZModToECPolynomialFieldEncoder encoder1 = ZModToECPolynomialFieldEncoder.getInstance(z, ec,15);
+		ZModPrimeToECPolynomialFieldEncoder encoder1 = ZModPrimeToECPolynomialFieldEncoder.getInstance(z, ec,15);
 
 
 
@@ -96,7 +96,7 @@ public class EncoderExample {
 		ECZModPrime ec = ECZModPrime.getInstance(SECECCParamsFp.secp160r1);
 
 		// Create encoders
-		ZModToECZModPrimeEncoder encoder1 = ZModToECZModPrimeEncoder.getInstance(ec,15);
+		ZModPrimeToECZModPrimeEncoder encoder1 = ZModPrimeToECZModPrimeEncoder.getInstance(ec,15);
 
 		// Encode and decode message
 		Element message = encoder1.getDomain().getElement(123456);

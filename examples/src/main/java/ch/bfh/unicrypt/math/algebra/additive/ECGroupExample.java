@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.additive;
 
 import ch.bfh.unicrypt.Example;
-import ch.bfh.unicrypt.crypto.encoder.classes.ZModToECPolynomialFieldEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModPrimeToECPolynomialFieldEncoder;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModElement;

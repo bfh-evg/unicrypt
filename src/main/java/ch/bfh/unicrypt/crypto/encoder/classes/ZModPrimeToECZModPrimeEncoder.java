@@ -61,7 +61,7 @@ import java.math.BigInteger;
  * @author Christian Lutz
  *
  */
-public class ZModToECZModPrimeEncoder
+public class ZModPrimeToECZModPrimeEncoder
 	   extends AbstractEncoder<ZModPrime, ZModElement, ECZModPrime, ECZModElement>
 	   implements ProbabilisticEncoder {
 
@@ -73,7 +73,7 @@ public class ZModToECZModPrimeEncoder
 	private final ECZModPrime ec;
 	private final ZModPrime zModPrime;
 	
-	protected ZModToECZModPrimeEncoder(ECZModPrime ec,int shift) {
+	protected ZModPrimeToECZModPrimeEncoder(ECZModPrime ec,int shift) {
 		this.ec = ec;
 		this.zModPrime=ec.getFiniteField();
 		this.shift=shift;
@@ -89,11 +89,11 @@ public class ZModToECZModPrimeEncoder
 		return new ECDecodingFunction(ec, this.zModPrime,this.shift);
 	}
 
-	public static ZModToECZModPrimeEncoder getInstance(final ECZModPrime ec,int shift) {
+	public static ZModPrimeToECZModPrimeEncoder getInstance(final ECZModPrime ec,int shift) {
 		if (ec == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ZModToECZModPrimeEncoder(ec,shift);
+		return new ZModPrimeToECZModPrimeEncoder(ec,shift);
 	}
 
 	static class ECEncodingFunction

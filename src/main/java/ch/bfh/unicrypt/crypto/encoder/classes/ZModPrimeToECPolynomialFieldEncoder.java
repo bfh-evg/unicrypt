@@ -13,7 +13,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
-public class ZModToECPolynomialFieldEncoder
+public class ZModPrimeToECPolynomialFieldEncoder
 	   extends AbstractEncoder<ZModPrime, ZModElement, ECPolynomialField, ECPolynomialElement>
 	   implements ProbabilisticEncoder {
 
@@ -25,7 +25,7 @@ public class ZModToECPolynomialFieldEncoder
 	private final ECPolynomialField ecPoly;
 	private int shift;
 
-	private ZModToECPolynomialFieldEncoder(ZModPrime zMod, ECPolynomialField ecPoly, int shift) {
+	private ZModPrimeToECPolynomialFieldEncoder(ZModPrime zMod, ECPolynomialField ecPoly, int shift) {
 		super();
 		this.zMod = zMod;
 		this.ecPoly = ecPoly;
@@ -42,11 +42,11 @@ public class ZModToECPolynomialFieldEncoder
 		return new ECF2mDecodingFunction(this.getCoDomain(), this.getDomain(), shift);
 	}
 
-	public static ZModToECPolynomialFieldEncoder getInstance(final ZModPrime zMod, final ECPolynomialField ec, int shift) {
+	public static ZModPrimeToECPolynomialFieldEncoder getInstance(final ZModPrime zMod, final ECPolynomialField ec, int shift) {
 		if (ec == null || zMod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ZModToECPolynomialFieldEncoder(zMod, ec, shift);
+		return new ZModPrimeToECPolynomialFieldEncoder(zMod, ec, shift);
 	}
 
 	static class ECF2mEncodingFunction
