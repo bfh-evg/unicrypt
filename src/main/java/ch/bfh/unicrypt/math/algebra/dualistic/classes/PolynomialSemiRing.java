@@ -75,6 +75,13 @@ public class PolynomialSemiRing
 		this.semiRing = semiRing;
 	}
 
+	public static PolynomialSemiRing getInstance(SemiRing semiRing) {
+		if (semiRing == null) {
+			throw new IllegalArgumentException();
+		}
+		return new PolynomialSemiRing(semiRing);
+	}
+
 	public SemiRing getSemiRing() {
 		return this.semiRing;
 	}
@@ -327,16 +334,14 @@ public class PolynomialSemiRing
 			c1 = c2;
 			c2 = tmp;
 		}
-		BitArray zero = BitArray.getInstance(); // an empty boolean array
+		BitArray zero = BitArray.getInstance(); // an empty bitarray
 		BitArray result = zero;
 		while (!c2.equals(zero)) {
 			if (c2.getAt(0)) {
 				result = result.xor(c1, false);
 			}
-			// removeSuffix was added to avoid an endless loop in PolynomialFieldTest
-			// the problem could probably be avoided by working with BitArray
-			c1 = c1.shiftRight(1).removeSuffix();
-			c2 = c2.shiftLeft(1).removeSuffix();
+			c1 = c1.shiftRight(1);
+			c2 = c2.shiftLeft(1);
 		}
 		return result;
 	}
@@ -368,16 +373,6 @@ public class PolynomialSemiRing
 	@Override
 	protected BigInteger abstractGetOrder() {
 		return Set.INFINITE_ORDER;
-	}
-
-	//
-	// STATIC FACTORY METHODS
-	//
-	public static PolynomialSemiRing getInstance(SemiRing semiRing) {
-		if (semiRing == null) {
-			throw new IllegalArgumentException();
-		}
-		return new PolynomialSemiRing(semiRing);
 	}
 
 }
