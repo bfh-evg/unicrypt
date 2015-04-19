@@ -246,12 +246,12 @@ public class Permutation
 	}
 
 	@Override
-	protected String defaultToStringName() {
+	protected String defaultToStringType() {
 		return "";
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		String str = Arrays.toString(this.permutationVector);
 		return "(" + str.substring(1, str.length() - 1) + ")";
 	}

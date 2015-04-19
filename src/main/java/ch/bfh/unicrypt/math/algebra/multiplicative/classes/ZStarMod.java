@@ -142,7 +142,7 @@ public class ZStarMod
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getModulus().toString();
 	}
 

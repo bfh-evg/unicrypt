@@ -148,7 +148,7 @@ public class GStarMod
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getModulus().toString() + "," + this.getOrder().toString();
 	}
 

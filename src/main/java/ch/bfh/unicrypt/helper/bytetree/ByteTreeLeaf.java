@@ -71,7 +71,7 @@ public class ByteTreeLeaf
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.value.toString();
 	}
 

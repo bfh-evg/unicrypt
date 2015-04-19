@@ -76,7 +76,7 @@ public class SingletonGroup
 	// The following protected methods override the default implementation from {@code AbstractGroup}
 	//
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getValue().toString();
 	}
 

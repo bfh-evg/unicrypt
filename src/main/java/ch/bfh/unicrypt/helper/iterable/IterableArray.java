@@ -83,7 +83,7 @@ public class IterableArray<T>
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return Arrays.toString(this.array);
 	}
 

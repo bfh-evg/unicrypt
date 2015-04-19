@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.array;
 import ch.bfh.unicrypt.helper.array.classes.SparseArray;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -95,6 +96,63 @@ public class SparseArrayTest {
 				}
 
 			}
+		}
+	}
+
+	@Test
+	public void testCount() {
+		SparseArray<String> sa = SparseArray.getInstance("", "a", "b", "", "c", "", "", "e", "a");
+		Assert.assertEquals(3, sa.count());
+		Assert.assertEquals(2, sa.count("a"));
+		Assert.assertEquals(0, sa.count("x"));
+		Assert.assertEquals(5, sa.countExcept());
+		Assert.assertEquals(6, sa.countExcept("a"));
+		{
+			int i = 0;
+			for (Integer index : sa.getAllIndices()) {
+				i++;
+			}
+			Assert.assertEquals(8, i);
+		}
+	}
+
+	@Test
+	public void testIndices() {
+		SparseArray<String> sa = SparseArray.getInstance("", "a", "b", "", "c", "", "", "e", "a");
+		{
+			int i = 0;
+			for (Integer index : sa.getAllIndices()) {
+				i++;
+			}
+			Assert.assertEquals(8, i);
+		}
+		{
+			int i = 0;
+			for (Integer index : sa.getIndices()) {
+				i++;
+			}
+			Assert.assertEquals(3, i);
+		}
+		{
+			int i = 0;
+			for (Integer index : sa.getIndices("a")) {
+				i++;
+			}
+			Assert.assertEquals(2, i);
+		}
+		{
+			int i = 0;
+			for (Integer index : sa.getIndicesExcept()) {
+				i++;
+			}
+			Assert.assertEquals(5, i);
+		}
+		{
+			int i = 0;
+			for (Integer index : sa.getIndicesExcept("a")) {
+				i++;
+			}
+			Assert.assertEquals(6, i);
 		}
 	}
 

@@ -457,12 +457,12 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	}
 
 	@Override
-	protected String defaultToStringName() {
+	protected String defaultToStringType() {
 		return this.getClass().getSimpleName();
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.value.toString();
 	}
 

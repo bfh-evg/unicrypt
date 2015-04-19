@@ -106,7 +106,7 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getSecretKeySpace().toString();
 	}
 

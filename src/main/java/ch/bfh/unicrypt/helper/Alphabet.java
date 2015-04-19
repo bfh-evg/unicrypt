@@ -227,7 +227,7 @@ public class Alphabet
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		if (this.characters == null) {
 			return this.minChar + "..." + this.maxChar;
 		}

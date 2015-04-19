@@ -44,8 +44,11 @@ package ch.bfh.unicrypt.helper;
 import java.io.Serializable;
 
 /**
- *
- * @author rolfhaenni
+ * This is the base class for all classes in this library. Its main purpose is providing a consistent string
+ * representations by pre-defining {@link Object#toString()}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public abstract class UniCrypt
 	   implements Serializable {
@@ -54,8 +57,8 @@ public abstract class UniCrypt
 
 	@Override
 	public final String toString() {
-		String str1 = this.defaultToStringName();
-		String str2 = this.defaultToStringValue();
+		String str1 = this.defaultToStringType();
+		String str2 = this.defaultToStringContent();
 		if (str1.length() == 0) {
 			return str2;
 		}
@@ -65,15 +68,13 @@ public abstract class UniCrypt
 		return str1 + "[" + str2 + "]";
 	}
 
-	public final String toStringValue() {
-		return this.defaultToStringValue();
-	}
-
-	protected String defaultToStringName() {
+	// default implementation for producing a string describing the type of the object
+	protected String defaultToStringType() {
 		return this.getClass().getSimpleName();
 	}
 
-	protected String defaultToStringValue() {
+	// default implementation for producing a string describing the content of the object
+	protected String defaultToStringContent() {
 		return "";
 	}
 

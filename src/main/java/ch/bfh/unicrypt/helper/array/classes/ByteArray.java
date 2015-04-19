@@ -407,7 +407,7 @@ public class ByteArray
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		String str = STRING_CONVERTER.convert(this);
 		return "\"" + str + "\"";
 	}

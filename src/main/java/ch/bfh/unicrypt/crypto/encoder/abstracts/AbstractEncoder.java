@@ -91,7 +91,7 @@ public abstract class AbstractEncoder<D extends Set, DE extends Element, C exten
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getDomain() + " <=> " + this.getCoDomain();
 	}
 

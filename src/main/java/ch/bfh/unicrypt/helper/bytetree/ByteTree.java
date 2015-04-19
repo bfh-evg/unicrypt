@@ -159,7 +159,7 @@ public abstract class ByteTree
 	}
 
 	@Override
-	protected String defaultToStringName() {
+	protected String defaultToStringType() {
 		return ByteTree.class.getSimpleName();
 	}
 

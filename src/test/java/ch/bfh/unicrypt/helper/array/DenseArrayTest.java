@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.array;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -182,6 +183,47 @@ public class DenseArrayTest {
 		list1.add(null);
 		list1.add("s3");
 		DenseArray a = DenseArray.getInstance(list1);
+	}
+
+	@Test
+	public void testCount() {
+		DenseArray<String> da = DenseArray.getInstance("a", "b", "", "c", "", "", "e", "a");
+		Assert.assertEquals(2, da.count("a"));
+		Assert.assertEquals(0, da.count("x"));
+		Assert.assertEquals(6, da.countExcept("a"));
+		{
+			int i = 0;
+			for (Integer index : da.getAllIndices()) {
+				i++;
+			}
+			Assert.assertEquals(8, i);
+		}
+	}
+
+	@Test
+	public void testIndices() {
+		DenseArray<String> sa = DenseArray.getInstance("", "a", "b", "", "c", "", "", "e", "a");
+		{
+			int i = 0;
+			for (Integer index : sa.getAllIndices()) {
+				i++;
+			}
+			Assert.assertEquals(9, i);
+		}
+		{
+			int i = 0;
+			for (Integer index : sa.getIndices("a")) {
+				i++;
+			}
+			Assert.assertEquals(2, i);
+		}
+		{
+			int i = 0;
+			for (Integer index : sa.getIndicesExcept("a")) {
+				i++;
+			}
+			Assert.assertEquals(7, i);
+		}
 	}
 
 }
