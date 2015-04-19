@@ -41,13 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
-import ch.bfh.unicrypt.helper.distribution.UniformDistribution;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
-import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
@@ -67,35 +63,6 @@ public class ZTest {
 		} catch (UnsupportedOperationException e) {
 		}
 
-		z = Z.getInstance(UniformDistribution.getInstance(BigInteger.valueOf(10)));
-		for (int i = 0; i < 100; i++) {
-			ZElement e = z.getRandomElement();
-			assertTrue(e.getValue().intValue() >= 0 && e.getValue().intValue() <= 10);
-		}
-
-		z = Z.getInstance(BigInteger.valueOf(11));
-		for (int i = 0; i < 100; i++) {
-			ZElement e = z.getRandomElement();
-			assertTrue(e.getValue().intValue() >= 0 && e.getValue().intValue() <= 10);
-		}
-
-		z = Z.getInstance(UniformDistribution.getInstance(BigInteger.valueOf(-10), BigInteger.valueOf(10)));
-		for (int i = 0; i < 100; i++) {
-			ZElement e = z.getRandomElement();
-			assertTrue(e.getValue().intValue() >= -10 && e.getValue().intValue() <= 10);
-		}
-
-		z = Z.getInstance(UniformDistribution.getInstance(4));
-		for (int i = 0; i < 100; i++) {
-			ZElement e = z.getRandomElement();
-			assertTrue(e.getValue().intValue() >= 0 && e.getValue().intValue() <= 15);
-		}
-
-		z = Z.getInstance(UniformDistribution.getInstance(5, 5));
-		for (int i = 0; i < 100; i++) {
-			ZElement e = z.getRandomElement();
-			assertTrue(e.getValue().intValue() >= 15 && e.getValue().intValue() <= 31);
-		}
 	}
 
 	@Test
@@ -104,29 +71,12 @@ public class ZTest {
 		Z z2 = Z.getInstance();
 		assertEquals(z1, z2);
 
-		z1 = Z.getInstance(UniformDistribution.getInstance(0, 5));
-		z2 = Z.getInstance(UniformDistribution.getInstance(5));
-		assertEquals(z1, z2);
-
-		z1 = Z.getInstance(UniformDistribution.getInstance(0, 5));
-		z2 = Z.getInstance(UniformDistribution.getInstance(3, 5));
-		assertNotSame(z1, z2);
 	}
 
 	@Test
 	public void testIsEquivalent() {
 		Z z1 = Z.getInstance();
 		Z z2 = Z.getInstance();
-		assertTrue(z1.isEquivalent(z2));
-
-		z2 = Z.getInstance(UniformDistribution.getInstance(5));
-		assertTrue(z1.isEquivalent(z2));
-
-		z1 = Z.getInstance(UniformDistribution.getInstance(0, 5));
-		assertTrue(z1.isEquivalent(z2));
-
-		z1 = Z.getInstance(UniformDistribution.getInstance(0, 5));
-		z2 = Z.getInstance(UniformDistribution.getInstance(3, 5));
 		assertTrue(z1.isEquivalent(z2));
 
 		ZMod zmod = ZMod.getInstance(32);
