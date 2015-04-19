@@ -232,7 +232,7 @@ public class Tuple
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		String result = "";
 		String separator = "";
 		for (Element element : this) {

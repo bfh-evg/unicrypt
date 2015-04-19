@@ -92,7 +92,7 @@ public class AbstractECElement<V extends Object, DE extends DualisticElement<V>,
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		if (this.infinity) {
 			return "Infinity";
 		} else {

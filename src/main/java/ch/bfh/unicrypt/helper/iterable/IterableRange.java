@@ -84,7 +84,7 @@ public class IterableRange
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.from + "..." + this.to;
 	}
 

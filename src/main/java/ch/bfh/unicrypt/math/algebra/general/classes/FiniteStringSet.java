@@ -136,7 +136,7 @@ public class FiniteStringSet
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getAlphabet().toString() + "^{" + this.minLength + "..." + this.maxLength + "}";
 	}
 

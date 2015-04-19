@@ -94,7 +94,7 @@ public abstract class AbstractPaddingScheme<MS extends ConcatenativeSemiGroup, M
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return "" + this.messageSpace.getBlockLength();
 	}
 

@@ -214,7 +214,7 @@ public class PolynomialSemiRing
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getSemiRing().toString();
 	}
 

@@ -221,7 +221,7 @@ public class DenseArray<V extends Object>
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		String str = "";
 		String delimiter = "";
 		for (int i : this.getAllIndices()) {

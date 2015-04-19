@@ -92,7 +92,7 @@ public class Point<T>
 	 * @return The x-coordinate
 	 */
 	public T getX() {
-		return x;
+		return this.x;
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class Point<T>
 	 * @return The y-coordinate
 	 */
 	public T getY() {
-		return y;
+		return this.y;
 	}
 
 	@Override
@@ -128,6 +128,14 @@ public class Point<T>
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		if (this.x == null) {
+			return "INFINITY";
+		}
+		return this.x + "," + this.y;
 	}
 
 }

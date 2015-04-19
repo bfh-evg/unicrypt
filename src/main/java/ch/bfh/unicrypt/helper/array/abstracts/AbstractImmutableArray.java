@@ -350,7 +350,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	protected final String defaultToStringName() {
+	protected final String defaultToStringType() {
 		return "";
 	}
 

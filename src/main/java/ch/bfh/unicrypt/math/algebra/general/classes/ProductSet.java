@@ -476,7 +476,7 @@ public class ProductSet
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		if (this.isEmpty()) {
 			return "";
 		}

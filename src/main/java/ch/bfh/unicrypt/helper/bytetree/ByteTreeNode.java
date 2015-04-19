@@ -91,7 +91,7 @@ public class ByteTreeNode
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.byteTrees.toString();
 	}
 

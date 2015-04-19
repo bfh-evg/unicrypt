@@ -250,7 +250,7 @@ public class SparseArray<V extends Object>
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		if (this.isEmpty()) {
 			return "[]";
 		}
