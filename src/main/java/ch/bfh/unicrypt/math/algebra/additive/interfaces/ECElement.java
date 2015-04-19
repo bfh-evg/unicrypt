@@ -5,5 +5,8 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 
 public interface ECElement<V, E extends DualisticElement<V>>
 	   extends AdditiveElement<Point<E>> {
+	
+	public E getY();
+	public E getX();
 
 }
