@@ -46,6 +46,13 @@ import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+/**
+ * Each instance of this class represents a prime factorization {@code x=p1^e1*...*pN^eN} of a positive integer
+ * {@code x>0}. The prime factors and exponents must be given when creating the instance.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ */
 public class Factorization
 	   extends UniCrypt {
 
@@ -59,16 +66,99 @@ public class Factorization
 		this.exponents = exponents;
 	}
 
+	/**
+	 * Creates a prime factorization {@code x=p} consisting of a single prime number {@code p}.
+	 * <p>
+	 * @param primeFactor The single prime factor
+	 * @return The new factorization
+	 */
+	public static Factorization getInstance(BigInteger primeFactor) {
+		return Factorization.getInstance(new BigInteger[]{primeFactor});
+	}
+
+	/**
+	 * Creates a prime factorization {@code x=p^e}.
+	 * <p>
+	 * @param primeFactor The single prime factor
+	 * @param exponent    The corresponding exponent
+	 * @return The new factorization
+	 */
+	public static Factorization getInstance(BigInteger primeFactor, int exponent) {
+		return Factorization.getInstance(new BigInteger[]{primeFactor}, new int[]{exponent});
+	}
+
+	/**
+	 * Creates a new prime factorization {@code x=p1*...*pN}.
+	 * <p>
+	 * @param primeFactors The prime factors
+	 * @return The new factorization
+	 */
+	public static Factorization getInstance(BigInteger... primeFactors) {
+		if (primeFactors == null) {
+			throw new IllegalArgumentException();
+		}
+		int[] exponents = new int[primeFactors.length];
+		Arrays.fill(exponents, 1);
+		return Factorization.getInstance(primeFactors, exponents);
+	}
+
+	/**
+	 * Create a new prime factorization {@code x=p1^e1*...*pN^eN} based on the prime numbers {@code p1,...,pN} and
+	 * corresponding exponents {@code e1,...,eN}. This is the general factor method for this class.
+	 * <p>
+	 * @param primeFactors The prime factors
+	 * @param exponents    The corresponding exponents
+	 * @return The new factorization
+	 */
+	public static Factorization getInstance(BigInteger[] primeFactors, int[] exponents) {
+		if (primeFactors == null || exponents == null || primeFactors.length != exponents.length) {
+			throw new IllegalArgumentException();
+		}
+		BigInteger value = BigInteger.ONE;
+		for (int i = 0; i < primeFactors.length; i++) {
+			if (primeFactors[i] == null || !MathUtil.isPrime(primeFactors[i]) || exponents[i] < 1) {
+				throw new IllegalArgumentException();
+			}
+			value = value.multiply(primeFactors[i].pow(exponents[i]));
+		}
+		BigInteger[] newPrimeFactors = MathUtil.removeDuplicates(primeFactors);
+		int newLength = newPrimeFactors.length;
+		int[] newExponents = new int[newLength];
+		for (int i = 0; i < newLength; i++) {
+			for (int j = 0; j < primeFactors.length; j++) {
+				if (newPrimeFactors[i].equals(primeFactors[j])) {
+					newExponents[i] = newExponents[i] + exponents[j];
+				}
+			}
+		}
+		return new Factorization(value, newPrimeFactors, newExponents);
+	}
+
+	/**
+	 * Returns the value that corresponds to the prime factorization.
+	 * <p>
+	 * @return The value
+	 */
 	public BigInteger getValue() {
 		return this.value;
 	}
 
+	/**
+	 * Returns an array containing the prime factors.
+	 * <p>
+	 * @return The prime factors
+	 */
 	public BigInteger[] getPrimeFactors() {
-		return this.primeFactors;
+		return this.primeFactors.clone();
 	}
 
+	/**
+	 * Returns an array containing the exponents.
+	 * <p>
+	 * @return The exponents
+	 */
 	public int[] getExponents() {
-		return this.exponents;
+		return this.exponents.clone();
 	}
 
 	@Override
@@ -93,51 +183,6 @@ public class Factorization
 		}
 		final Factorization other = (Factorization) obj;
 		return this.value == other.value || (this.value != null && this.value.equals(other.value));
-	}
-
-	public static Factorization getInstance() {
-		return Factorization.getInstance(new BigInteger[]{});
-	}
-
-	public static Factorization getInstance(BigInteger primeFactor) {
-		return Factorization.getInstance(new BigInteger[]{primeFactor});
-	}
-
-	public static Factorization getInstance(BigInteger primeFactor, int exponent) {
-		return Factorization.getInstance(new BigInteger[]{primeFactor}, new int[]{exponent});
-	}
-
-	public static Factorization getInstance(BigInteger... primeFactors) {
-		if (primeFactors == null) {
-			throw new IllegalArgumentException();
-		}
-		int[] exponents = new int[primeFactors.length];
-		Arrays.fill(exponents, 1);
-		return Factorization.getInstance(primeFactors, exponents);
-	}
-
-	public static Factorization getInstance(BigInteger[] primeFactors, int[] exponents) {
-		if (primeFactors == null || exponents == null || primeFactors.length != exponents.length) {
-			throw new IllegalArgumentException();
-		}
-		BigInteger value = BigInteger.ONE;
-		for (int i = 0; i < primeFactors.length; i++) {
-			if (primeFactors[i] == null || !MathUtil.isPrime(primeFactors[i]) || exponents[i] < 1) {
-				throw new IllegalArgumentException();
-			}
-			value = value.multiply(primeFactors[i].pow(exponents[i]));
-		}
-		BigInteger[] newPrimeFactors = MathUtil.removeDuplicates(primeFactors);
-		int newLength = newPrimeFactors.length;
-		int[] newExponents = new int[newLength];
-		for (int i = 0; i < newLength; i++) {
-			for (int j = 0; j < primeFactors.length; j++) {
-				if (newPrimeFactors[i].equals(primeFactors[j])) {
-					newExponents[i] = newExponents[i] + exponents[j];
-				}
-			}
-		}
-		return new Factorization(value, newPrimeFactors, newExponents);
 	}
 
 }
