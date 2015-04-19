@@ -4,10 +4,9 @@ import java.math.BigInteger;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
-import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -20,16 +19,16 @@ import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, AbstractEC, AbstractECElement> {
+public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, EC, ECElement> {
 
 	private ZModPrime zModPrime;
-	private AbstractEC ec;
+	private EC ec;
 	private AbstractEncoder encoder;
 	private int shift;
 	
 	
 	
-	public ECEncoder(ZModPrime zModPrime, AbstractEC ec,int shift) {
+	public ECEncoder(ZModPrime zModPrime, EC ec,int shift) {
 		super();
 		this.zModPrime = zModPrime;
 		this.ec = ec;
@@ -54,14 +53,14 @@ public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, AbstractE
 		return new DecodingFunction(ec, zModPrime, this.shift, encoder);
 	}
 	
-	public static ECEncoder getInstance(ZModPrime zModPrime, AbstractEC ec, int shift){
+	public static ECEncoder getInstance(ZModPrime zModPrime, EC ec, int shift){
 		return new ECEncoder(zModPrime, ec, shift);
 	}
 	
-	static class EncodingFunction extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, AbstractEC, ECElement>{
+	static class EncodingFunction extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, EC, ECElement>{
 		private int shift;
 		private AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder;
-		protected EncodingFunction(ZModPrime domain, AbstractEC coDomain,int shift, AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder) {
+		protected EncodingFunction(ZModPrime domain, EC coDomain,int shift, AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder) {
 			super(domain, coDomain);
 			this.shift=shift;
 			this.encoder=encoder;
@@ -74,7 +73,7 @@ public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, AbstractE
 			boolean firstOption = true;
 			
 			ZModPrime zModPrime = this.getDomain();
-			AbstractEC ec = this.getCoDomain();
+			EC ec = this.getCoDomain();
 
 			int msgSpace = zModPrime.getOrder().toString(2).length();
 			int msgBitLength = element.getValue().toString(2).length() + 2;
@@ -174,7 +173,7 @@ public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, AbstractE
 		
 	}
 	
-	static class DecodingFunction extends AbstractFunction<DecodingFunction, AbstractEC, AbstractECElement, ZModPrime, ZModElement>{
+	static class DecodingFunction extends AbstractFunction<DecodingFunction, EC, ECElement, ZModPrime, ZModElement>{
 
 		private int shift;
 		private AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder;
@@ -188,15 +187,15 @@ public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, AbstractE
 		}
 
 		@Override
-		protected ZModElement abstractApply(AbstractECElement element,
+		protected ZModElement abstractApply(ECElement element,
 				RandomByteSequence randomByteSequence) {
 			ZModPrime zModPrime = this.getCoDomain();
-			AbstractEC ec = this.getDomain();
+			EC ec = this.getDomain();
 			int msgSpace = zModPrime.getOrder().toString(2).length();
 
 			DualisticElement x = element.getX();
 			DualisticElement y = element.getY();
-			DualisticElement y1 = ((AbstractECElement) element.invert()).getY();
+			DualisticElement y1 = element.invert().getY();
 
 			BigInteger x1 = encoder.decode(x).getBigInteger();
 
