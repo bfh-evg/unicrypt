@@ -42,24 +42,33 @@
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
 import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+
 import java.math.BigInteger;
 
 /**
- * TODO This interface represents an elliptic curve. Its set of points creates an additive group so that adding two
- * points creates another point.
+ * TODO This interface represents an elliptic curve. Its set of points creates
+ * an additive group so that adding two points creates another point.
  * <p>
+ * 
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V> Generic type of values stored in the elements of the elliptic curve
+ * @param <V>
+ *            Generic type of values stored in the elements of the elliptic
+ *            curve
  * @param <E>
  */
-public interface EC<V extends Object, E extends DualisticElement<V>>
-	   extends AdditiveCyclicGroup<Point<E>> {
+public interface EC<V extends Object, E extends DualisticElement<V>> extends
+		AdditiveCyclicGroup<Point<E>> {
 
 	/**
 	 * Returns the finite Field of this elliptic curve
 	 * <p>
+	 * 
 	 * @return The finite field of this elliptic curve
 	 */
 	public FiniteField<V> getFiniteField();
@@ -67,6 +76,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	/**
 	 * Returns the co-efficient a of this elliptic curve.
 	 * <p>
+	 * 
 	 * @return The co-efficient a
 	 */
 	public E getA();
@@ -74,6 +84,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	/**
 	 * Returns the co-efficient b of this elliptic curve.
 	 * <p>
+	 * 
 	 * @return The co-efficient b
 	 */
 	public E getB();
@@ -81,37 +92,155 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	/**
 	 * Returns the cofactor of this elliptic curve.
 	 * <p>
+	 * 
 	 * @return The cofactor
 	 */
 	public BigInteger getCoFactor();
 
 	/**
-	 * TODO Returns {@code true} if this elliptic curve lies on the given x co-ordinate.
+	 * TODO Returns {@code true} if this elliptic curve lies on the given x
+	 * co-ordinate.
 	 * <p>
-	 * @param xValue The given x value
-	 * @return {@code true} if this elliptic curve lies on the given x co-ordinate
-	 * @throws IllegalArgumentException if {@code xValue} do not belong to the finite field
+	 * 
+	 * @param xValue
+	 *            The given x value
+	 * @return {@code true} if this elliptic curve lies on the given x
+	 *         co-ordinate
+	 * @throws IllegalArgumentException
+	 *             if {@code xValue} do not belong to the finite field
 	 */
 	public boolean contains(E xValue);
 
 	/**
-	 * TODO Returns {@code true} if the given x and y value are the co-ordinates for a point on this elliptic curve.
+	 * TODO Returns {@code true} if the given x and y value are the co-ordinates
+	 * for a point on this elliptic curve.
 	 * <p>
-	 * @param xValue The given xValue
-	 * @param yValue The given yValue
-	 * @return {@code true} if xValue and yValue form a point on this elliptic curve.
-	 * @throws IllegalArgumentException if {@code xValue} or {@code yValue} do not belong to the finite field
+	 * 
+	 * @param xValue
+	 *            The given xValue
+	 * @param yValue
+	 *            The given yValue
+	 * @return {@code true} if xValue and yValue form a point on this elliptic
+	 *         curve.
+	 * @throws IllegalArgumentException
+	 *             if {@code xValue} or {@code yValue} do not belong to the
+	 *             finite field
 	 */
 	public boolean contains(E xValue, E yValue);
 
 	/**
 	 * TODO Returns the corresponding point for a given x and y value.
 	 * <p>
-	 * @param xValue The given xValue
-	 * @param yValue The given yValue
+	 * 
+	 * @param xValue
+	 *            The given xValue
+	 * @param yValue
+	 *            The given yValue
 	 * @return The corresponding point for a given x and y value
-	 * @throws IllegalArgumentException if {@code xValue} or {@code yValue} do not belong to this elliptic curve
+	 * @throws IllegalArgumentException
+	 *             if {@code xValue} or {@code yValue} do not belong to this
+	 *             elliptic curve
 	 */
 	public ECElement<V, E> getElement(E xValue, E yValue);
+	
+	public ECElement<V, E>[] getY(E xValue);
+	
+	
+	//The following methods are overwritten from AdditiveSemiGroup with an adapted return type
+
+	@Override
+	public ECElement<V, E> add(Element element1, Element element2);
+
+	@Override
+	public ECElement<V, E> add(Element... elements);
+
+	@Override
+	public ECElement<V, E> add(Iterable<Element> elements);
+
+	@Override
+	public ECElement<V, E> times(Element element, BigInteger amount);
+
+	@Override
+	public ECElement<V, E> times(Element element, Element<BigInteger> amount);
+
+	@Override
+	public ECElement<V, E> times(Element element, int amount);
+
+	@Override
+	public ECElement<V, E> timesTwo(Element element);
+
+	// The following methods are overridden from Set with an adapted return type
+	@Override
+	public ECElement<V, E> getElementFrom(int value);
+
+	@Override
+	public ECElement<V, E> getElementFrom(BigInteger value);
+
+	@Override
+	public ECElement<V, E> getElementFrom(ByteTree byteTree);
+
+	@Override
+	public ECElement<V, E> getRandomElement();
+
+	@Override
+	public ECElement<V, E> getRandomElement(
+			RandomByteSequence randomByteSequence);
+
+	// The following methods are overridden from SemiGroup with an adapted
+	// return type
+	@Override
+	public ECElement<V, E> apply(Element element1, Element element2);
+
+	@Override
+	public ECElement<V, E> apply(Element... elements);
+
+	@Override
+	public ECElement<V, E> selfApply(Element element, BigInteger amount);
+
+	@Override
+	public ECElement<V, E> selfApply(Element element, Element<BigInteger> amount);
+
+	@Override
+	public ECElement<V, E> selfApply(Element element, int amount);
+
+	@Override
+	public ECElement<V, E> selfApply(Element element);
+
+	@Override
+	public ECElement<V, E> multiSelfApply(Element[] elements,
+			BigInteger[] amounts);
+
+	
+	
+	
+	// The following methods are overridden from Monoid with an adapted return
+	// type
+	@Override
+	public ECElement<V, E> invert(Element element);
+
+	@Override
+	public ECElement<V, E> applyInverse(Element element1, Element element2);
+
+	@Override
+	public ECElement<V, E> getIdentityElement();
+
+	// The following methods are overridden from Group with an adapted return
+	// type
+	@Override
+	public ECElement<V, E> getDefaultGenerator();
+
+	@Override
+	public ECElement<V, E> getRandomGenerator();
+
+	@Override
+	public ECElement<V, E> getRandomGenerator(
+			RandomByteSequence randomByteSequence);
+
+	@Override
+	public ECElement<V, E> getIndependentGenerator(int index);
+
+	@Override
+	public ECElement<V, E> getIndependentGenerator(int index,
+			ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }
