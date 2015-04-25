@@ -46,9 +46,14 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <T>
+ * This class is a wrapper class for Java arrays for making them iterable. It thus offers an inexpensive way of creating
+ * (finite) iterators over arrays without copying the array elements to a collection. Note that instances of this class
+ * are not safe against modifications of the original array after their construction. Also, they do not prevent the
+ * original array from containing and the resulting iterators from returning the value {@code null}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <T> The generic type of the elements in the array
  */
 public class IterableArray<T>
 	   extends UniCrypt
@@ -58,6 +63,38 @@ public class IterableArray<T>
 
 	private IterableArray(T[] array) {
 		this.array = array;
+	}
+
+	/**
+	 * Creates a new iterable array from a given Java array.
+	 * <p>
+	 * @param <T>   The generic type of the array
+	 * @param array The given array
+	 * @return The new iterable array
+	 */
+	public static <T> IterableArray<T> getInstance(T... array) {
+		if (array == null) {
+			throw new IllegalArgumentException();
+		}
+		return new IterableArray<T>(array);
+	}
+
+	/**
+	 * Checks if the number of elements in the iterable array is 0.
+	 * <p>
+	 * @return {@literal true} if the number of elements is 0, {@literal false} otherwise
+	 */
+	public boolean isEmpty() {
+		return this.array.length == 0;
+	}
+
+	/**
+	 * Returns the number of elements in the iterable array.
+	 * <p>
+	 * @return The number of elements
+	 */
+	public int getLength() {
+		return this.array.length;
 	}
 
 	@Override
@@ -79,19 +116,31 @@ public class IterableArray<T>
 			public void remove() {
 				throw new UnsupportedOperationException();
 			}
+
 		};
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		return Arrays.hashCode(array);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final IterableArray<?> other = (IterableArray<?>) obj;
+		return Arrays.equals(this.array, other.array);
 	}
 
 	@Override
 	protected String defaultToStringContent() {
 		return Arrays.toString(this.array);
-	}
-
-	public static <T> IterableArray<T> getInstance(T[] array) {
-		if (array == null) {
-			throw new IllegalArgumentException();
-		}
-		return new IterableArray<T>(array);
 	}
 
 }

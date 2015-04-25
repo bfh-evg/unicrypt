@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper;
 
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import java.util.Arrays;
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -65,14 +66,26 @@ public class PolynomialTest {
 	private static Polynomial<Integer> p7;
 
 	public PolynomialTest() {
+		try {
+			p0 = Polynomial.getInstance(new Integer[]{}, 0, 0);
+			fail();
+		} catch (Exception e) {
+		}
 		p0 = Polynomial.getInstance(new Integer[]{}, 0, 1);
 		p1 = Polynomial.getInstance(new Integer[]{1, 2, 0, 3}, 0, 1);
-		p2 = Polynomial.getInstance(new Integer[]{}, 0, 1);
+		p2 = Polynomial.getInstance(new Integer[]{0, 0, 0}, 0, 1);
+
 		HashMap map = new HashMap();
 		map.put(0, 1);
 		map.put(1, 2);
 		map.put(3, 3);
 		p3 = Polynomial.getInstance(map, 0, 1);
+		map.put(-3, 4);
+		try {
+			p3 = Polynomial.getInstance(map, 0, 1);
+			fail();
+		} catch (Exception e) {
+		}
 
 		p4 = Polynomial.getInstance(BitArray.getInstance(), 0, 1); // p(x) = 0
 		p5 = Polynomial.getInstance(BitArray.getInstance("1101"), 0, 1);  // p(x) = 1+x+x^3
@@ -85,21 +98,19 @@ public class PolynomialTest {
 		//System.out.println(p0);
 		assertEquals("Polynomial[f(x)=0]", p0.toString());
 		//System.out.println(p1);
-		assertEquals("Polynomial[f(x)=1+2X+3X^3]", p1.toString());
+		assertEquals("Polynomial[f(x)=1+2x+3x^3]", p1.toString());
 		//System.out.println(p2);
 		assertEquals("Polynomial[f(x)=0]", p2.toString());
 		//System.out.println(p3);
-		assertEquals("Polynomial[f(x)=1+2X+3X^3]", p3.toString());
+		assertEquals("Polynomial[f(x)=1+2x+3x^3]", p3.toString());
 		//System.out.println(p4);
 		assertEquals("Polynomial[f(x)=0]", p4.toString());
 		//System.out.println(p5);
-		assertEquals("Polynomial[f(x)=1+X+X^3]", p5.toString());
+		assertEquals("Polynomial[f(x)=1+x+x^3]", p5.toString());
 		//System.out.println(p6);
-		assertEquals("Polynomial[f(x)=X^3+X^5+X^7+X^10+X^14+X^15]", p6.toString());
-
+		assertEquals("Polynomial[f(x)=x^3+x^5+x^7+x^10+x^14+x^15]", p6.toString());
 		//System.out.println(p7);
-		assertEquals("Polynomial[f(x)=1+X^2+X^3+X^6+X^8+X^9+X^10+X^12]", p7.toString());
-
+		assertEquals("Polynomial[f(x)=1+x^2+x^3+x^6+x^8+x^9+x^10+x^12]", p7.toString());
 		//System.out.println(Polynomial.getInstance(ByteArray.getInstance(0x01)));
 		assertEquals("Polynomial[f(x)=1]", Polynomial.getInstance(BitArray.getInstance("1"), 0, 1).toString());
 		//System.out.println(Polynomial.getInstance(new Integer[]{6}, 0, 1));
@@ -195,22 +206,36 @@ public class PolynomialTest {
 			fail();
 		} catch (UnsupportedOperationException e) {
 		}
-//		assertArrayEquals(ByteArray.getInstance().getBytes(), p4.getCoefficients().getBytes());
-//		assertArrayEquals(ByteArray.getInstance((byte) 0x0b).getBytes(), p5.getCoefficients().getBytes());
-//		assertArrayEquals(ByteArray.getInstance((byte) 0x4d, (byte) 0x17).getBytes(), p7.getCoefficients().getBytes());
-
+		assertEquals(BitArray.getInstance(), p4.getCoefficients());
+		assertEquals(BitArray.getInstance("1101"), p5.getCoefficients());
+		assertEquals(BitArray.getInstance("1011001011101"), p7.getCoefficients());
 	}
 
-//	@Test
-//	public void testGetIndices() {
-//		assertEquals(DenseArray.getInstance(new Integer[0]), p0.getCoefficientIndices());
-//		assertEquals(DenseArray.getInstance(0, 1, 3), p1.getCoefficientIndices());
-//		assertEquals(DenseArray.getInstance(new Integer[0]), p2.getCoefficientIndices());
-//		assertEquals(DenseArray.getInstance(0, 1, 3), p3.getCoefficientIndices());
-//		assertEquals(DenseArray.getInstance(new Integer[0]), p4.getCoefficientIndices());
-//		assertEquals(DenseArray.getInstance(0, 1, 3), p5.getCoefficientIndices());
-//		assertEquals(DenseArray.getInstance(3, 5, 7, 10, 14, 15), p6.getCoefficientIndices());
-//	}
+	@Test
+	public void testGetIndices() {
+		for (int i : p0.getCoefficientIndices()) {
+			assertFalse(Arrays.binarySearch(new Integer[]{}, i) == -1);
+		}
+		for (int i : p1.getCoefficientIndices()) {
+			assertFalse(Arrays.binarySearch(new Integer[]{0, 1, 3}, i) == -1);
+		}
+		for (int i : p2.getCoefficientIndices()) {
+			assertFalse(Arrays.binarySearch(new Integer[]{}, i) == -1);
+		}
+		for (int i : p3.getCoefficientIndices()) {
+			assertFalse(Arrays.binarySearch(new Integer[]{0, 1, 3}, i) == -1);
+		}
+		for (int i : p4.getCoefficientIndices()) {
+			assertFalse(Arrays.binarySearch(new Integer[]{}, i) == -1);
+		}
+		for (int i : p5.getCoefficientIndices()) {
+			assertFalse(Arrays.binarySearch(new Integer[]{0, 1, 3}, i) == -1);
+		}
+		for (int i : p6.getCoefficientIndices()) {
+			assertFalse(Arrays.binarySearch(new Integer[]{3, 5, 7, 10, 14, 15}, i) == -1);
+		}
+	}
+
 	@Test
 	public void testEquals() {
 		assertTrue(p0.equals(p2));

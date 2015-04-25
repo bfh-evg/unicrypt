@@ -45,9 +45,11 @@ import ch.bfh.unicrypt.helper.UniCrypt;
 import java.util.Iterator;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <T>
+ * Instances of this class offer an inexpensive way of creating iterators over a finite range of integers. If the upper
+ * bound of the range is smaller than the lower bound of the range, then the range is empty.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public class IterableRange
 	   extends UniCrypt
@@ -59,6 +61,37 @@ public class IterableRange
 	private IterableRange(int from, int to) {
 		this.from = from;
 		this.to = to;
+	}
+
+	/**
+	 * /**
+	 * Creates a new iterable range for given upper and lower integer bounds. The result is an empty range, if the upper
+	 * bound is smaller than the lower bound.
+	 * <p>
+	 * @param from The lower bound
+	 * @param to   The upper bound
+	 * @return The new iterable range
+	 */
+	public static IterableRange getInstance(int from, int to) {
+		return new IterableRange(from, to);
+	}
+
+	/**
+	 * Returns the number of elements in the iterable range.
+	 * <p>
+	 * @return The number of elements
+	 */
+	public int getLength() {
+		return Math.max(0, this.to - this.from + 1);
+	}
+
+	/**
+	 * Checks if the number of elements in the iterable range is 0.
+	 * <p>
+	 * @return {@literal true} if the number of elements is 0, {@literal false} otherwise
+	 */
+	public boolean isEmpty() {
+		return this.to - this.from + 1 <= 0;
 	}
 
 	@Override
@@ -80,19 +113,40 @@ public class IterableRange
 			public void remove() {
 				throw new UnsupportedOperationException();
 			}
+
 		};
 	}
 
 	@Override
-	protected String defaultToStringContent() {
-		return this.from + "..." + this.to;
+	public int hashCode() {
+		int hash = this.getLength();
+		return hash;
 	}
 
-	public static IterableRange getInstance(int from, int to) {
-		if (to < from - 1) {
-			throw new IllegalArgumentException();
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
 		}
-		return new IterableRange(from, to);
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final IterableRange other = (IterableRange) obj;
+		if (this.getLength() != other.getLength()) {
+			return false;
+		}
+		if (this.getLength() == 0) {
+			return true;
+		}
+		return (this.from == other.from);
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		if (this.isEmpty()) {
+			return "";
+		}
+		return this.from + "..." + this.to;
 	}
 
 }

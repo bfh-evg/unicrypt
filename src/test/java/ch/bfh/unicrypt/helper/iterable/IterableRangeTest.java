@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,54 +39,45 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.factorization;
+package ch.bfh.unicrypt.helper.iterable;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class PrimePair
-	   extends Factorization {
+public class IterableRangeTest {
 
-	protected PrimePair(Prime prime1, Prime prime2) {
-		this(prime1.getValue(), prime2.getValue());
-	}
-
-	protected PrimePair(BigInteger prime1, BigInteger prime2) {
-		super(prime1.multiply(prime2), new BigInteger[]{prime1, prime2}, new int[]{1, 1});
-	}
-
-	public BigInteger getFirst() {
-		return this.getPrimeFactors()[0];
-	}
-
-	public BigInteger getSecond() {
-		return this.getPrimeFactors()[1];
-	}
-
-	public static PrimePair getInstance(BigInteger prime1, BigInteger prime2) {
-		Prime pr1 = Prime.getInstance(prime1);
-		Prime pr2 = Prime.getInstance(prime2);
-		return PrimePair.getInstance(pr1, pr2);
-	}
-
-	public static PrimePair getInstance(Prime prime1, Prime prime2) {
-		if (prime1 == null || prime2 == null || prime1.equals(prime2)) {
-			throw new IllegalArgumentException();
+	@Test
+	public void generalTest() {
+		IterableRange ir0 = IterableRange.getInstance(0, -3);
+		IterableRange ir1 = IterableRange.getInstance(3, 2);
+		IterableRange ir2 = IterableRange.getInstance(2, 2);
+		IterableRange ir3 = IterableRange.getInstance(2, 5);
+		IterableRange ir4 = IterableRange.getInstance(3, 6);
+		assertEquals(0, ir0.getLength());
+		assertEquals(0, ir1.getLength());
+		assertEquals(1, ir2.getLength());
+		assertEquals(4, ir3.getLength());
+		assertEquals(4, ir4.getLength());
+		assertEquals(ir0, ir1);
+		assertEquals(ir2, ir2);
+		assertFalse(ir2.equals(ir3));
+		assertFalse(ir2.equals(ir4));
+		assertFalse(ir0.iterator().hasNext());
+		assertFalse(ir1.iterator().hasNext());
+		assertTrue(ir2.iterator().hasNext());
+		assertTrue(ir3.iterator().hasNext());
+		assertTrue(ir4.iterator().hasNext());
+		int j = 2;
+		for (int i : ir3) {
+			assertEquals(i, j);
+			j++;
 		}
-		return new PrimePair(prime1, prime2);
-	}
-
-	public static PrimePair getRandomInstance(int bitLength) {
-		return PrimePair.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
-	}
-
-	public static PrimePair getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		return PrimePair.getInstance(Prime.getRandomInstance(bitLength, randomByteSequence), Prime.getRandomInstance(bitLength, randomByteSequence));
 	}
 
 }

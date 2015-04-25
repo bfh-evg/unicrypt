@@ -242,14 +242,14 @@ public class Polynomial<C>
 	 * @return The bit array representing the coefficients.
 	 */
 	public BitArray getCoefficients() {
-		if (!this.isBinary()) {
-			throw new UnsupportedOperationException();
+		if (this.isBinary()) {
+			return this.binaryCoefficients;
 		}
-		return this.binaryCoefficients;
+		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * Returns iterable collection of indices with a coefficients different from 0.
+	 * Returns an iterable collection of indices with a coefficients different from 0.
 	 * <p>
 	 * @return The iterable collection of indices
 	 */
@@ -320,7 +320,7 @@ public class Polynomial<C>
 					result += this.coefficientToString(coefficient);
 				}
 				if (index > 0) {
-					result += index == 1 ? "X" : "X^" + index;
+					result += index == 1 ? "x" : "x^" + index;
 				}
 				separator = "+";
 			}

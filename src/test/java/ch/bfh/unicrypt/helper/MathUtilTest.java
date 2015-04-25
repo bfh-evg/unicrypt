@@ -117,16 +117,16 @@ public class MathUtilTest {
 
 	@Test
 	public void testIsSavePrime() {
-		Assert.assertFalse(MathUtil.isSavePrime(ZERO));
-		Assert.assertFalse(MathUtil.isSavePrime(ONE));
-		Assert.assertFalse(MathUtil.isSavePrime(TWO));
-		Assert.assertFalse(MathUtil.isSavePrime(THREE));
-		Assert.assertFalse(MathUtil.isSavePrime(FOUR));
-		Assert.assertTrue(MathUtil.isSavePrime(FIVE));
-		Assert.assertFalse(MathUtil.isSavePrime(SIX));
-		Assert.assertTrue(MathUtil.isSavePrime(SEVEN));
-		Assert.assertFalse(MathUtil.isSavePrime(MINUS_ONE));
-		Assert.assertFalse(MathUtil.isSavePrime(MINUS_TWO));
+		Assert.assertFalse(MathUtil.isSafePrime(ZERO));
+		Assert.assertFalse(MathUtil.isSafePrime(ONE));
+		Assert.assertFalse(MathUtil.isSafePrime(TWO));
+		Assert.assertFalse(MathUtil.isSafePrime(THREE));
+		Assert.assertFalse(MathUtil.isSafePrime(FOUR));
+		Assert.assertTrue(MathUtil.isSafePrime(FIVE));
+		Assert.assertFalse(MathUtil.isSafePrime(SIX));
+		Assert.assertTrue(MathUtil.isSafePrime(SEVEN));
+		Assert.assertFalse(MathUtil.isSafePrime(MINUS_ONE));
+		Assert.assertFalse(MathUtil.isSafePrime(MINUS_TWO));
 	}
 
 	@Test

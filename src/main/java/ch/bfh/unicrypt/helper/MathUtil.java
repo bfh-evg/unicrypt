@@ -121,6 +121,17 @@ public final class MathUtil {
 	}
 
 	/**
+	 * Tests if a given integer value is a prime number. This is a convenience method for
+	 * {@link MathUtil#isPrime(java.math.BigInteger)}.
+	 * <p>
+	 * @param value A potential prime number
+	 * @return {@literal true} if {@code value} is prime, {@literal false} otherwise
+	 */
+	public static boolean isPrime(final int value) {
+		return MathUtil.isPrime(BigInteger.valueOf(value));
+	}
+
+	/**
 	 * Tests if a given integer value is a prime number.
 	 * <p>
 	 * @param value A potential prime number
@@ -147,12 +158,23 @@ public final class MathUtil {
 	}
 
 	/**
+	 * Tests if a given integer value is a safe prime. This is a convenience method for
+	 * {@link MathUtil#isSafePrime(java.math.BigInteger)}.
+	 * <p>
+	 * @param value A potential safe prime
+	 * @return {@literal true} if {@code value} is a safe prime, {@literal false} otherwise
+	 */
+	public static boolean isSafePrime(final int value) {
+		return MathUtil.isSafePrime(BigInteger.valueOf(value));
+	}
+
+	/**
 	 * Tests if a given BigInteger value is a save prime.
 	 * <p>
-	 * @param value A potential save prime
-	 * @return {@literal true} if {@code value} is a save prime, {@literal false} otherwise
+	 * @param value A potential safe prime
+	 * @return {@literal true} if {@code value} is a safe prime, {@literal false} otherwise
 	 */
-	public static boolean isSavePrime(final BigInteger value) {
+	public static boolean isSafePrime(final BigInteger value) {
 		return isPrime(value) && isPrime(value.subtract(ONE).divide(TWO));
 	}
 

@@ -47,8 +47,12 @@ import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
 
 /**
- *
- * @author rolfhaenni
+ * Each instance of this class represents a safe prime number, i.e., a value {@code p} such that {@code (p-1)/2} is
+ * prime. This class is a specialization of {@link Prime}.
+ * <p>
+ * @see Prime
+ * @author R. Haenni
+ * @version 2.0
  */
 public class SafePrime
 	   extends Prime {
@@ -57,21 +61,49 @@ public class SafePrime
 		super(safePrime);
 	}
 
+	/**
+	 * Creates a new safe prime from a given integer value of type {@code int}. This method is a convenience method for
+	 * {@link SafePrime#getInstance(java.math.BigInteger)}. Throws an exception if the given integer is not a safe
+	 * prime.
+	 * <p>
+	 * @param safePrime The given integer value
+	 * @return The new safe prime
+	 */
 	public static SafePrime getInstance(int safePrime) {
 		return SafePrime.getInstance(BigInteger.valueOf(safePrime));
 	}
 
+	/**
+	 * Creates a new safe prime from a given integer value of type {@link BigInteger}. Throws an exception if the given
+	 * integer is not a safe prime.
+	 * <p>
+	 * @param safePrime The given integer value
+	 * @return The new safe prime
+	 */
 	public static SafePrime getInstance(BigInteger safePrime) {
-		if (!MathUtil.isSavePrime(safePrime)) {
+		if (safePrime == null || !MathUtil.isSafePrime(safePrime)) {
 			throw new IllegalArgumentException();
 		}
 		return new SafePrime(safePrime);
 	}
 
+	/**
+	 * Creates a new random safe prime of a given bit length using the library's default source of randomness.
+	 * <p>
+	 * @param bitLength The bit length
+	 * @return The new safe prime
+	 */
 	public static SafePrime getRandomInstance(int bitLength) {
 		return SafePrime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
+	/**
+	 * Creates a new random safe prime of a given bit length using a given source of randomness.
+	 * <p>
+	 * @param bitLength          The bit length
+	 * @param randomByteSequence The given source of randomness
+	 * @return The new safe prime
+	 */
 	public static SafePrime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();

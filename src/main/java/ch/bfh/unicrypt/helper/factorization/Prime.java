@@ -47,8 +47,12 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- *
- * @author rolfhaenni
+ * Each instance of this class represents a prime number. This class is a specialization of {@link SpecialFactorization}
+ * for the borderline case of a single prime factor {@code p} with exponent {@code 0}.
+ * <p>
+ * @see SpecialFactorization
+ * @author R. Haenni
+ * @version 2.0
  */
 public class Prime
 	   extends SpecialFactorization {
@@ -57,21 +61,51 @@ public class Prime
 		super(prime, new BigInteger[]{prime}, new int[]{1});
 	}
 
+	/**
+	 * Creates a new prime from a given integer value of type {@code int}. This method is a convenience method for
+	 * {@link Prime#getInstance(java.math.BigInteger)}. Throws an exception if the given integer is not prime.
+	 * <p>
+	 * @param prime The given integer value
+	 * @return The new prime
+	 */
 	public static Prime getInstance(int prime) {
 		return Prime.getInstance(BigInteger.valueOf(prime));
 	}
 
+	/**
+	 * Creates a new prime from a given integer value of type {@link BigInteger}. Throws an exception if the given
+	 * integer is not prime.
+	 * <p>
+	 * @param prime The given integer value
+	 * @return The new prime
+	 */
 	public static Prime getInstance(BigInteger prime) {
 		if (prime == null || !MathUtil.isPrime(prime)) {
 			throw new IllegalArgumentException();
 		}
+		if (MathUtil.isPrime(prime.subtract(BigInteger.ONE).divide(MathUtil.TWO))) {
+			return new SafePrime(prime);
+		}
 		return new Prime(prime);
 	}
 
+	/**
+	 * Creates a new random prime of a given bit length using the library's default source of randomness.
+	 * <p>
+	 * @param bitLength The bit length
+	 * @return The new prime
+	 */
 	public static Prime getRandomInstance(int bitLength) {
 		return Prime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
+	/**
+	 * Creates a new random prime of a given bit length using a given source of randomness.
+	 * <p>
+	 * @param bitLength          The bit length
+	 * @param randomByteSequence The given source of randomness
+	 * @return The new prime
+	 */
 	public static Prime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
 		if (randomByteSequence == null) {
 			throw new IllegalArgumentException();

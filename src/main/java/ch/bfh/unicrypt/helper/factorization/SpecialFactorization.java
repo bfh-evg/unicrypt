@@ -41,16 +41,21 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
+import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import java.math.BigInteger;
 
 /**
- * This is the general static factory method for this class. Returns a new instance for the general case n=p^k or
- * n=2p^k, where p is prime and k>=1 (for p>2) or k=1 (for p=2).
+ * Instances of this class represent factorizations of the form {@code n=2}, {@code n=4}, {@code n=p^k}, or
+ * {@code n=2p^k}, where {@code p>2} is prime and {@code k>=1}. These are the values, for which the group of integers
+ * modulo {@code n} is cyclic. Such factorizations are needed to construct instances of {@link GStarMod}, which
+ * represent such groups and corresponding sub-groups.
  * <p>
- * @throws IllegalArgumentException if {@code prime} is null or not prime
- * @throws IllegalArgumentException if {@code exponent<1}
- * @
- * throws IllegalArgumentException if {@code prime=2} and {@code exponent>1}
+ * @author R. Haenni
+ * @version 2.0
+ * @see "Handbook of Applied Cryptography, Fact 2.132 (i)"
+ * @see GStarMod
+ * @see Factorization
  */
 public class SpecialFactorization
 	   extends Factorization {
@@ -59,32 +64,109 @@ public class SpecialFactorization
 		super(value, primeFactors, exponents);
 	}
 
-	public static SpecialFactorization getInstance(BigInteger primeFactor) {
-		return SpecialFactorization.getInstance(primeFactor, 1, false);
+	/**
+	 * Returns a new special factorization for a single prime factor {@code p>=2}. The return type is {@link Prime}, a
+	 * sub-class of {@link SpecialFactorization}.
+	 * <p>
+	 * @param primeFactor The single prime factor
+	 * @return The new special factorization
+	 */
+	public static Prime getInstance(BigInteger primeFactor) {
+		return Prime.getInstance(primeFactor);
 	}
 
+	/**
+	 * Returns a new special factorization of the form {@code n=2}, {@code n=4}, {@code n=p^k} for a single prime factor
+	 * {@code p>2} and {@code k>=1}. For {code k=1}, the type of the returned result is {@link Prime}.
+	 * <p>
+	 * @param primeFactor The single prime factor
+	 * @param exponent    The exponent
+	 * @return The new special factorization
+	 */
 	public static SpecialFactorization getInstance(BigInteger primeFactor, int exponent) {
 		return SpecialFactorization.getInstance(primeFactor, exponent, false);
 	}
 
-	public static SpecialFactorization getInstance(BigInteger primeFactor, boolean doubling) {
-		return SpecialFactorization.getInstance(primeFactor, 1, doubling);
+	/**
+	 * Returns a new special factorization of the form {@code n=p} or {@code n=2p} for a prime factor {@code p>=2}. In
+	 * the first case, the type of the returned result is {@link Prime}.
+	 * <p>
+	 * @param primeFactor The prime factor
+	 * @param timesTwo    A flag indicating whether {@code 2} is a second prime factor.
+	 * @return The new special factorization
+	 */
+	public static SpecialFactorization getInstance(BigInteger primeFactor, boolean timesTwo) {
+		return SpecialFactorization.getInstance(primeFactor, 1, timesTwo);
 	}
 
-	public static SpecialFactorization getInstance(BigInteger primeFactor, int exponent, boolean doubling) {
+	/**
+	 * This method covers the general case consisting of {@code n=2}, {@code n=4}, {@code n=p^k}, or {@code n=2p^k},
+	 * where {@code p>2} is prime and {@code k>=1}. If {@code n} is prime (first case, third case with {@code k=1}), the
+	 * type of the returned result is {@link Prime}.
+	 * <p>
+	 * @param primeFactor The prime factor
+	 * @param exponent    The exponent
+	 * @param timesTwo    A flag indicating whether {@code 2} is a second prime factor.
+	 * @return The new special factorization
+	 */
+	public static SpecialFactorization getInstance(BigInteger primeFactor, int exponent, boolean timesTwo) {
+		if (primeFactor == null || !MathUtil.isPrime(primeFactor) || exponent < 1) {
+			throw new IllegalArgumentException();
+		}
+		if (primeFactor.equals(MathUtil.TWO)) {
+			if (timesTwo) {
+				exponent++;
+				timesTwo = false;
+			}
+			if (exponent > 2) {
+				throw new IllegalArgumentException();
+			}
+		}
+		if (exponent == 1 && !timesTwo) {
+			if (MathUtil.isPrime(primeFactor.subtract(BigInteger.ONE).divide(MathUtil.TWO))) {
+				return new SafePrime(primeFactor);
+			}
+			return new Prime(primeFactor);
+		}
 		BigInteger[] primeFactors;
 		int[] exponents;
-		BigInteger value;
-		if (doubling) {
-			value = primeFactor.pow(exponent).multiply(BigInteger.valueOf(2));
-			primeFactors = new BigInteger[]{primeFactor, BigInteger.valueOf(2)};
+		BigInteger value = primeFactor.pow(exponent);
+		if (timesTwo) {
+			primeFactors = new BigInteger[]{primeFactor, MathUtil.TWO};
 			exponents = new int[]{exponent, 1};
+			value = value.multiply(MathUtil.TWO);
 		} else {
-			value = primeFactor.pow(exponent);
 			primeFactors = new BigInteger[]{primeFactor};
 			exponents = new int[]{exponent};
 		}
 		return new SpecialFactorization(value, primeFactors, exponents);
+	}
+
+	/**
+	 * Returns the prime factor.
+	 * <p>
+	 * @return The prime factor
+	 */
+	public BigInteger getPrimeFactor() {
+		return this.primeFactors[0];
+	}
+
+	/**
+	 * Returns the exponent of the prime factor.
+	 * <p>
+	 * @return The exponent
+	 */
+	public int getExponent() {
+		return this.exponents[0];
+	}
+
+	/**
+	 * Returns the flag indicating whether the 2 is a second prime factor.
+	 * <p>
+	 * @return The flag
+	 */
+	public boolean timesTwo() {
+		return this.primeFactors.length == 2;
 	}
 
 }

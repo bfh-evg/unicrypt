@@ -56,9 +56,9 @@ import java.util.Arrays;
 public class Factorization
 	   extends UniCrypt {
 
-	private final BigInteger value;
-	private final BigInteger[] primeFactors;
-	private final int[] exponents;
+	protected final BigInteger value;
+	protected final BigInteger[] primeFactors;
+	protected final int[] exponents;
 
 	protected Factorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {
 		this.value = value;
@@ -131,6 +131,12 @@ public class Factorization
 				}
 			}
 		}
+		if (newLength == 1 && newExponents[0] == 1) {
+			return new Prime(newPrimeFactors[0]);
+		}
+		if (newLength == 2 && newExponents[0] == 1 && newExponents[1] == 1) {
+			return new PrimePair(newPrimeFactors[0], newPrimeFactors[1]);
+		}
 		return new Factorization(value, newPrimeFactors, newExponents);
 	}
 
@@ -169,7 +175,7 @@ public class Factorization
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		hash = 89 * hash + (this.value != null ? this.value.hashCode() : 0);
+		hash = 89 * hash + this.value.hashCode();
 		return hash;
 	}
 
@@ -182,7 +188,7 @@ public class Factorization
 			return false;
 		}
 		final Factorization other = (Factorization) obj;
-		return this.value == other.value || (this.value != null && this.value.equals(other.value));
+		return this.value.equals(other.value);
 	}
 
 }
