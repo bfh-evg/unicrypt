@@ -113,7 +113,6 @@ public class SafePrimeTest {
 		}
 		for (int i = 1; i < 10; i++) {
 			SafePrime p = SafePrime.getRandomInstance(6);
-			System.out.println(p);
 			assertTrue(p.getValue().intValue() == 47 || p.getValue().intValue() == 59);
 		}
 	}
