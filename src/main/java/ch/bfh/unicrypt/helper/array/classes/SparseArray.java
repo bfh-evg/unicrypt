@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -172,8 +173,25 @@ public class SparseArray<V extends Object>
 	 * @see DenseArray#getInstance(java.lang.Object...)
 	 */
 	public static <V> SparseArray<V> getInstance(V defaultValue, V... values) {
+		return SparseArray.getInstance(defaultValue, IterableArray.getInstance(values));
+	}
+
+	/**
+	 * Creates a new sparse array from a given iterable sequence of values. If the given sequence of values is already a
+	 * sparse array, it is returned without doing anything. Otherwise, the sequence is transformed into a map for
+	 * internal storage.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param values       The given iterable sequence of values
+	 * @return The new sparse array
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, Iterable<V> values) {
 		if (defaultValue == null || values == null) {
 			throw new IllegalArgumentException();
+		}
+		if (values instanceof SparseArray) {
+			return (SparseArray) values; // defaultValue is ignored
 		}
 		Map<Integer, V> map = new HashMap<Integer, V>();
 		int i = 0;
@@ -186,33 +204,7 @@ public class SparseArray<V extends Object>
 			}
 			i++;
 		}
-		return new SparseArray<V>(map, values.length, defaultValue);
-	}
-
-	/**
-	 * Transforms a given immutable array into a sparse array. If the given immutable array is already a sparse array,
-	 * it is returned without doing anything. Otherwise, the array is transformed into a map for internal storage.
-	 * <p>
-	 * @param <V>            The generic type of the new array
-	 * @param defaultValue   The default value of the new array
-	 * @param immutableArray The given immutable array
-	 * @return The new sparse array
-	 */
-	public static <V> SparseArray<V> getInstance(V defaultValue, ImmutableArray<V> immutableArray) {
-		if (defaultValue == null || immutableArray == null) {
-			throw new IllegalArgumentException();
-		}
-		if (immutableArray instanceof SparseArray) {
-			return (SparseArray) immutableArray; // defaultValue is ignored
-		}
-		Map<Integer, V> map = new HashMap<Integer, V>();
-		int i = 0;
-		for (V value : immutableArray) {
-			if (!value.equals(defaultValue)) {
-				map.put(i++, value);
-			}
-		}
-		return new SparseArray<V>(map, immutableArray.getLength(), defaultValue);
+		return new SparseArray<V>(map, i, defaultValue);
 	}
 
 	@Override

@@ -47,8 +47,10 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * Each instance of this class represents a prime factorization {@code x=p1^e1*...*pN^eN} of a positive integer
- * {@code x>0}. The prime factors and exponents must be given when creating the instance.
+ * Each instance of this class represents a prime factorization {@code n=p1^e1*...*pN^eN} of a positive integer
+ * {@code x>0}. The prime factors and exponents must be given when creating the instance. Specialized classes
+ * {@link SpecialFactorization}, {@link PrimePair}, {@link Prime}, and {@link SafePrime} exist for several borderline
+ * case..
  * <p>
  * @author R. Haenni
  * @version 2.0
@@ -67,28 +69,7 @@ public class Factorization
 	}
 
 	/**
-	 * Creates a prime factorization {@code x=p} consisting of a single prime number {@code p}.
-	 * <p>
-	 * @param primeFactor The single prime factor
-	 * @return The new factorization
-	 */
-	public static Factorization getInstance(BigInteger primeFactor) {
-		return Factorization.getInstance(new BigInteger[]{primeFactor});
-	}
-
-	/**
-	 * Creates a prime factorization {@code x=p^e}.
-	 * <p>
-	 * @param primeFactor The single prime factor
-	 * @param exponent    The corresponding exponent
-	 * @return The new factorization
-	 */
-	public static Factorization getInstance(BigInteger primeFactor, int exponent) {
-		return Factorization.getInstance(new BigInteger[]{primeFactor}, new int[]{exponent});
-	}
-
-	/**
-	 * Creates a new prime factorization {@code x=p1*...*pN}.
+	 * Creates a new prime factorization {@code n=p1*...*pN}.
 	 * <p>
 	 * @param primeFactors The prime factors
 	 * @return The new factorization
@@ -103,7 +84,7 @@ public class Factorization
 	}
 
 	/**
-	 * Create a new prime factorization {@code x=p1^e1*...*pN^eN} based on the prime numbers {@code p1,...,pN} and
+	 * Create a new prime factorization {@code n=p1^e1*...*pN^eN} based on the prime numbers {@code p1,...,pN} and
 	 * corresponding exponents {@code e1,...,eN}. This is the general factor method for this class.
 	 * <p>
 	 * @param primeFactors The prime factors
@@ -184,11 +165,11 @@ public class Factorization
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
+		if (obj instanceof Factorization) {
+			final Factorization other = (Factorization) obj;
+			return this.value.equals(other.value);
 		}
-		final Factorization other = (Factorization) obj;
-		return this.value.equals(other.value);
+		return false;
 	}
 
 }

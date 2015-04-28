@@ -70,32 +70,6 @@ public class FactorizationTest {
 	}
 
 	@Test
-	public void testGetInstance_BigInteger_int() {
-		{
-			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(7), 1);
-			Assert.assertEquals(BigInteger.valueOf(7), f1.getValue());
-			Assert.assertEquals(BigInteger.valueOf(7), f1.getPrimeFactors()[0]);
-			Assert.assertEquals(1, f1.getExponents()[0]);
-		}
-		{
-			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(7), 2);
-			Assert.assertEquals(BigInteger.valueOf(49), f1.getValue());
-			Assert.assertEquals(BigInteger.valueOf(7), f1.getPrimeFactors()[0]);
-			Assert.assertEquals(2, f1.getExponents()[0]);
-		}
-		try {
-			Factorization f2 = Factorization.getInstance(BigInteger.valueOf(8), 1);
-			fail();
-		} catch (Exception e) {
-		}
-		try {
-			Factorization f2 = Factorization.getInstance(BigInteger.valueOf(7), 0);
-			fail();
-		} catch (Exception e) {
-		}
-	}
-
-	@Test
 	public void testGetInstance_BigIntegerArr() {
 		{
 			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(7), BigInteger.valueOf(3));
@@ -122,13 +96,28 @@ public class FactorizationTest {
 	@Test
 	public void testEquals() {
 		{
-			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(3), BigInteger.valueOf(3), BigInteger.valueOf(3));
-			Factorization f2 = Factorization.getInstance(BigInteger.valueOf(3), 3);
+			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(3), BigInteger.valueOf(7), BigInteger.valueOf(3));
+			Factorization f2 = Factorization.getInstance(new BigInteger[]{BigInteger.valueOf(3), BigInteger.valueOf(7)}, new int[]{2, 1});
 			Assert.assertEquals(f1, f2);
 		}
 		{
-			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(3), BigInteger.valueOf(7), BigInteger.valueOf(3));
-			Factorization f2 = Factorization.getInstance(new BigInteger[]{BigInteger.valueOf(3), BigInteger.valueOf(7)}, new int[]{2, 1});
+			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(5));
+			Factorization f2 = Prime.getInstance(BigInteger.valueOf(5));
+			Assert.assertEquals(f1, f2);
+		}
+		{
+			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(5), BigInteger.valueOf(5));
+			Factorization f2 = SpecialFactorization.getInstance(BigInteger.valueOf(5), 2);
+			Assert.assertEquals(f1, f2);
+		}
+		{
+			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(5), BigInteger.valueOf(5), BigInteger.valueOf(2));
+			Factorization f2 = SpecialFactorization.getInstance(BigInteger.valueOf(5), 2, true);
+			Assert.assertEquals(f1, f2);
+		}
+		{
+			Factorization f1 = Factorization.getInstance(BigInteger.valueOf(5), BigInteger.valueOf(7));
+			Factorization f2 = PrimePair.getInstance(7, 5);
 			Assert.assertEquals(f1, f2);
 		}
 	}

@@ -50,7 +50,6 @@ import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * This class is provides an implementation for immutable arrays of type {@code byte}/{@code Byte}. Internally, the
@@ -182,47 +181,33 @@ public class ByteArray
 	}
 
 	/**
-	 * Transforms a given immutable array of type {@code Byte} into a byte array. If the given immutable array is
-	 * already an instance of {@code ByteArray}, it is returned without doing anything.
+	 * Creates a new byte array from a given iterable sequence of bytes. If the given sequence of bytes is already a
+	 * byte array, it is returned without doing anything. Otherwise, the sequence is transformed into a Java byte array
+	 * for internal storage.
 	 * <p>
-	 * @param immutableArray The given immutable array
+	 * @param values The Java collection of {@code Byte} values
 	 * @return The new byte array
 	 */
-	public static ByteArray getInstance(ImmutableArray<Byte> immutableArray) {
-		if (immutableArray == null) {
+	public static ByteArray getInstance(Iterable<Byte> values) {
+		if (values == null) {
 			throw new IllegalArgumentException();
 		}
-		if (immutableArray instanceof ByteArray) {
-			return (ByteArray) immutableArray;
+		if (values instanceof ByteArray) {
+			return (ByteArray) values;
 		}
-		byte[] result = new byte[immutableArray.getLength()];
-		int i = 0;
-		for (byte value : immutableArray) {
-			result[i++] = value;
-		}
-		return new ByteArray(result);
-	}
-
-	/**
-	 * Creates a new byte array from a given Java collection of {@code Byte} values. The length and indices of the bytes
-	 * in the resulting byte array correspond to the given Java collection.
-	 * <p>
-	 * @param collection The Java collection of {@code Byte} values
-	 * @return The new byte array
-	 */
-	public static ByteArray getInstance(Collection<Byte> collection) {
-		if (collection == null) {
-			throw new IllegalArgumentException();
-		}
-		byte[] result = new byte[collection.size()];
-		int i = 0;
-		for (Byte value : collection) {
+		int length = 0;
+		for (Byte value : values) {
 			if (value == null) {
 				throw new IllegalArgumentException();
 			}
-			result[i++] = value;
+			length++;
 		}
-		return new ByteArray(result);
+		byte[] array = new byte[length];
+		int i = 0;
+		for (Byte value : values) {
+			array[i++] = value;
+		}
+		return new ByteArray(array);
 	}
 
 	/**

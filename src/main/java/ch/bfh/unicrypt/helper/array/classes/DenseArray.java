@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import java.util.Collection;
+import ch.bfh.unicrypt.helper.iterable.IterableArray;
 
 /**
  * This class is a default implementation of the {@link ImmutableArray} interface. It is optimized for arrays for which
@@ -86,62 +86,35 @@ public class DenseArray<V extends Object>
 	 * @see SparseArray#getInstance(java.lang.Object, java.lang.Object...)
 	 */
 	public static <V> DenseArray<V> getInstance(V... values) {
+		return DenseArray.getInstance(IterableArray.getInstance(values));
+	}
+
+	/**
+	 * Creates a new dense array from a given iterable sequence of values. If the given sequence of values is already a
+	 * dense array, it is returned without doing anything. Otherwise, the sequence is transformed into a Java array for
+	 * internal storage.
+	 * <p>
+	 * @param <V>    The generic type of the new array
+	 * @param values The given iterable sequence of values
+	 * @return The new dense array
+	 */
+	public static <V> DenseArray<V> getInstance(Iterable<V> values) {
 		if (values == null) {
 			throw new IllegalArgumentException();
 		}
-		Object[] newArray = new Object[values.length];
-		int i = 0;
+		if (values instanceof DenseArray) {
+			return (DenseArray) values;
+		}
+		int length = 0;
 		for (V value : values) {
 			if (value == null) {
 				throw new IllegalArgumentException();
 			}
-			newArray[i++] = value;
+			length++;
 		}
-		return new DenseArray<V>(newArray);
-	}
-
-	/**
-	 * Transforms a given immutable array into a dense array. If the given immutable array is already a dense array, it
-	 * is returned without doing anything. Otherwise, the array is transformed into a Java array for internal storage.
-	 * <p>
-	 * @param <V>            The generic type of the new array
-	 * @param immutableArray The given immutable array
-	 * @return The new sparse array
-	 */
-	public static <V> DenseArray<V> getInstance(ImmutableArray<V> immutableArray) {
-		if (immutableArray == null) {
-			throw new IllegalArgumentException();
-		}
-		if (immutableArray instanceof DenseArray) {
-			return (DenseArray) immutableArray;
-		}
-		Object[] array = new Object[immutableArray.getLength()];
+		Object[] array = new Object[length];
 		int i = 0;
-		for (V value : immutableArray) {
-			array[i++] = value;
-		}
-		return new DenseArray<V>(array);
-	}
-
-	/**
-	 * Transforms a given Java collection into a dense array. The collection is transformed into a Java array for
-	 * internal storage. The length and the indices of the values of the resulting dense array correspond to the given
-	 * Java collection.
-	 * <p>
-	 * @param <V>        The generic type of the new array
-	 * @param collection The given Java collection
-	 * @return The new sparse array
-	 */
-	public static <V> DenseArray<V> getInstance(Collection<V> collection) {
-		if (collection == null) {
-			throw new IllegalArgumentException();
-		}
-		Object[] array = new Object[collection.size()];
-		int i = 0;
-		for (V value : collection) {
-			if (value == null) {
-				throw new IllegalArgumentException();
-			}
+		for (V value : values) {
 			array[i++] = value;
 		}
 		return new DenseArray<V>(array);
