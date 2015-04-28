@@ -90,7 +90,7 @@ public class TrueRandomByteSequenceExample {
 	public static void example3() {
 		System.out.println("Use a strongest (in relation to the used cryptographic hash function) true random 'generator' for ephemeral keys.");
 		System.out.println("The initial seeding is a blocking method");
-		TrueRandomByteSequence random = HybridRandomByteSequence.getInstance(HashAlgorithm.getInstance(), HashAlgorithm.getInstance().getHashLength() - 1, HashAlgorithm.getInstance().getHashLength());
+		TrueRandomByteSequence random = HybridRandomByteSequence.getInstance(HashAlgorithm.getInstance(), HashAlgorithm.getInstance().getByteLength() - 1, HashAlgorithm.getInstance().getByteLength());
 
 		System.out.println("The refresh of the internal state is non-blocking");
 		System.out.println("Security (Backward) in bits: " + random.getBackwardSecurityInBytes() * 8);

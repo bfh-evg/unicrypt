@@ -79,23 +79,23 @@ public class FiatShamirChallengeGenerator
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace) {
 		HashMethod hashMethod = HashMethod.getInstance();
-		int length = hashMethod.getHashAlgorithm().getHashLength();
+		int length = hashMethod.getHashAlgorithm().getByteLength();
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, hashMethod, ByteArrayToBigInteger.getInstance(length));
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId) {
 		HashMethod hashMethod = HashMethod.getInstance();
-		int length = hashMethod.getHashAlgorithm().getHashLength();
+		int length = hashMethod.getHashAlgorithm().getByteLength();
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, hashMethod, ByteArrayToBigInteger.getInstance(length));
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, HashMethod hashMethod) {
-		int length = hashMethod.getHashAlgorithm().getHashLength();
+		int length = hashMethod.getHashAlgorithm().getByteLength();
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, hashMethod, ByteArrayToBigInteger.getInstance(length));
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, HashMethod hashMethod) {
-		int length = hashMethod.getHashAlgorithm().getHashLength();
+		int length = hashMethod.getHashAlgorithm().getByteLength();
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, hashMethod, ByteArrayToBigInteger.getInstance(length));
 	}
 

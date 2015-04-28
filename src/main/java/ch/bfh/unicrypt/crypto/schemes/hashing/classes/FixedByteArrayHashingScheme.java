@@ -57,7 +57,7 @@ public class FixedByteArrayHashingScheme<MS extends Set>
 	private final HashMethod hashMethod;
 
 	protected FixedByteArrayHashingScheme(MS messageSpace, HashMethod hashMethod) {
-		super(messageSpace, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getHashLength()));
+		super(messageSpace, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength()));
 		this.hashMethod = hashMethod;
 	}
 

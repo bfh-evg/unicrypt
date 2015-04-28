@@ -103,7 +103,7 @@ public class HybridRandomByteSequence
 	public static HybridRandomByteSequence getInstance() {
 		if (DEFAULT == null) {
 			HashAlgorithm defaultHashAlgorithm = HashAlgorithm.getInstance();
-			DEFAULT = HybridRandomByteSequence.getInstance(defaultHashAlgorithm, defaultHashAlgorithm.getHashLength() / 2, defaultHashAlgorithm.getHashLength());
+			DEFAULT = HybridRandomByteSequence.getInstance(defaultHashAlgorithm, defaultHashAlgorithm.getByteLength() / 2, defaultHashAlgorithm.getByteLength());
 		}
 		return DEFAULT;
 	}
@@ -112,7 +112,7 @@ public class HybridRandomByteSequence
 		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		if (forwardSecurityInBytes < 0 || forwardSecurityInBytes > hashAlgorithm.getHashLength() - 1) {
+		if (forwardSecurityInBytes < 0 || forwardSecurityInBytes > hashAlgorithm.getByteLength() - 1) {
 			throw new IllegalArgumentException();
 		}
 		if (securityParameterInBytes < 0) {

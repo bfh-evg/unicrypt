@@ -109,7 +109,7 @@ public class FiatShamirSigmaChallengeGenerator
 	 */
 	public static FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId) {
 		HashMethod hashMethod = HashMethod.getInstance();
-		int length = hashMethod.getHashAlgorithm().getHashLength();
+		int length = hashMethod.getHashAlgorithm().getByteLength();
 		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, proverId, hashMethod, ByteArrayToBigInteger.getInstance(length));
 	}
 

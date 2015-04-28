@@ -155,7 +155,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 
 	private Function getHashConvertModuloFunction(ZMod zMod) {
 		HashFunction hashFunction = HashFunction.getInstance(ProductSet.getInstance(this.messageSpace, this.cyclicGroup), this.hashMethod);
-		BigIntegerConverter<ByteArray> converter = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
+		BigIntegerConverter<ByteArray> converter = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getByteLength());
 		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
 		ModuloFunction moduloFunction = ModuloFunction.getInstance(N.getInstance(), zMod);
 

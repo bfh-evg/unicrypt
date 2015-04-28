@@ -44,15 +44,20 @@ package ch.bfh.unicrypt.helper.hash;
 import ch.bfh.unicrypt.helper.UniCrypt;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instances of this class represent hash algorithms such as SHA1 or SHA256. This class is a wrapper class for
+ * {@link MessageDigest} with method names adjusted to the conventions of UniCrypt. A hash algorithm maps arbitrary Java
+ * byte arrays into fixed-length byte arrays. The resulting byte array is called hash value of the input.
+ * <p>
+ * @author R. Haenni
+ * @author R. E. Koenig
+ * @version 2.0
  */
 public class HashAlgorithm
 	   extends UniCrypt {
 
-//	public static HashAlgorithm MD2 = new HashAlgorithm("MD2"); Not supported by Android (OpenSSL implementation)
 	public static HashAlgorithm MD5 = new HashAlgorithm("MD5");
 	public static HashAlgorithm SHA1 = new HashAlgorithm("SHA-1");
 	public static HashAlgorithm SHA256 = new HashAlgorithm("SHA-256");
@@ -69,6 +74,12 @@ public class HashAlgorithm
 		}
 	}
 
+	/**
+	 * Returns the hash value of a given byte array.
+	 * <p>
+	 * @param bytes The given byte array
+	 * @return The hash value of the given byte array
+	 */
 	public byte[] getHashValue(byte[] bytes) {
 		if (bytes == null) {
 			throw new IllegalArgumentException();
@@ -76,6 +87,14 @@ public class HashAlgorithm
 		return this.messageDigest.digest(bytes);
 	}
 
+	/**
+	 * Returns the hash value of some bytes extracted from a given byte array.
+	 * <p>
+	 * @param bytes  The given byte array
+	 * @param offset The offset to start from in the given byte array
+	 * @param length The number of bytes to use, starting at {@code offset}
+	 * @return The hash value of the bytes extracted from the given byte array
+	 */
 	public byte[] getHashValue(byte[] bytes, int offset, int length) {
 		if (bytes == null || offset < 0 || offset + length > bytes.length) {
 			throw new IllegalArgumentException();
@@ -84,13 +103,54 @@ public class HashAlgorithm
 		return this.messageDigest.digest();
 	}
 
-	// length of hash values in bytes
-	public int getHashLength() {
+	/**
+	 * Returns the byte length (number of bytes) of the hash values returned by this hash algorithm.
+	 * <p>
+	 * @return The byte length
+	 */
+	public int getByteLength() {
 		return this.messageDigest.getDigestLength();
 	}
 
+	/**
+	 * Returns the bit length (number of bits) of the hash values returned by this hash algorithm.
+	 * <p>
+	 * @return The bit length
+	 */
+	public int getBitLength() {
+		return this.getByteLength() * Byte.SIZE;
+	}
+
+	/**
+	 * Returns the library's default hash algorithm SHA-256.
+	 * <p>
+	 * @return The default hash algorithm
+	 */
 	public static HashAlgorithm getInstance() {
 		return HashAlgorithm.SHA256;
+	}
+
+	/**
+	 * Returns the hash algorithm that corresponds to the algorithm name specified as a string. The supported algorithm
+	 * names are: {@code "MD5"}, {@code "SHA1"}, {@code "SHA256"}, {@code "SHA384"}, and {@code "SHA512"}.
+	 * <p>
+	 * @param algorithmName The name of the hash algorithm.
+	 * @return
+	 */
+	public static HashAlgorithm getInstance(String algorithmName) {
+		switch (Arrays.binarySearch(new String[]{"MD5", "SHA1", "SHA256", "SHA384", "SHA512"}, algorithmName)) {
+			case 0:
+				return HashAlgorithm.MD5;
+			case 1:
+				return HashAlgorithm.SHA1;
+			case 2:
+				return HashAlgorithm.SHA256;
+			case 3:
+				return HashAlgorithm.SHA384;
+			case 4:
+				return HashAlgorithm.SHA512;
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override

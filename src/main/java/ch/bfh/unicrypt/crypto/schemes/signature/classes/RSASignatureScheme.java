@@ -117,7 +117,7 @@ public class RSASignatureScheme<MS extends Set>
 
 	private Function getSelectHashConvertModuloFunction(ProductSet inputSpace) {
 		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
-		BigIntegerConverter<ByteArray> converter = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getHashLength());
+		BigIntegerConverter<ByteArray> converter = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getByteLength());
 		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
 		ModuloFunction moduloFunction = ModuloFunction.getInstance(N.getInstance(), this.zMod);
 

@@ -112,7 +112,7 @@ public class HashFunction
 		if (domain == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new HashFunction(domain, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getHashLength()), hashMethod);
+		return new HashFunction(domain, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength()), hashMethod);
 	}
 
 }

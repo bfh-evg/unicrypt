@@ -85,7 +85,7 @@ public class CounterModeRandomByteSequence
 	protected CounterModeRandomByteSequence(HashAlgorithm hashAlgorithm, final ByteArray seed) {
 		this.hashAlgorithm = hashAlgorithm;
 		//The following lines are needed in order to speed up calculation of randomBytes. @see#fillRandomByteBuffer
-		this.randomByteBuffer = new byte[hashAlgorithm.getHashLength()];
+		this.randomByteBuffer = new byte[hashAlgorithm.getByteLength()];
 		setSeed(seed);
 	}
 

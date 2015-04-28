@@ -214,7 +214,7 @@ public class OutputFeedbackRandomByteSequence
 	}
 
 	public static OutputFeedbackRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, ByteArray seed) {
-		return OutputFeedbackRandomByteSequence.getInstance(HashAlgorithm.getInstance(), HashAlgorithm.getInstance().getHashLength() / 2, seed);
+		return OutputFeedbackRandomByteSequence.getInstance(HashAlgorithm.getInstance(), HashAlgorithm.getInstance().getByteLength() / 2, seed);
 	}
 
 	public static OutputFeedbackRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, ByteArray seed) {
@@ -224,7 +224,7 @@ public class OutputFeedbackRandomByteSequence
 		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		if (forwardSecurityInBytes < 0 || forwardSecurityInBytes > hashAlgorithm.getHashLength() - 1) {
+		if (forwardSecurityInBytes < 0 || forwardSecurityInBytes > hashAlgorithm.getByteLength() - 1) {
 			throw new IllegalArgumentException();
 		}
 		return new OutputFeedbackRandomByteSequence(hashAlgorithm, forwardSecurityInBytes, seed);

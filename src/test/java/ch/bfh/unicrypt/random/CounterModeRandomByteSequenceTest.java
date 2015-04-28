@@ -112,7 +112,7 @@ public class CounterModeRandomByteSequenceTest {
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
 		int counter = instance.getCounter();
 		Assert.assertTrue(0 == counter);
-		instance.getNextByteArray(HashAlgorithm.getInstance().getHashLength());
+		instance.getNextByteArray(HashAlgorithm.getInstance().getByteLength());
 		counter = instance.getCounter();
 		Assert.assertTrue(1 == counter);
 		instance.getNextByteArray(1);
@@ -229,7 +229,7 @@ public class CounterModeRandomByteSequenceTest {
 	@Ignore
 	public void testNextBytesDigestBytes() {
 		// System.out.println("abstractNextBytes");
-		int byteArrayLength = HashAlgorithm.getInstance().getHashLength();
+		int byteArrayLength = HashAlgorithm.getInstance().getByteLength();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 //		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 //		byte[] result = instance.getNextByteArray(byteArrayLength);
@@ -243,7 +243,7 @@ public class CounterModeRandomByteSequenceTest {
 	@Ignore
 	public void testNextBytesTwiceDigestBytes() {
 		// System.out.println("abstractNextBytes");
-		int byteArrayLength = HashAlgorithm.getInstance().getHashLength();
+		int byteArrayLength = HashAlgorithm.getInstance().getByteLength();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		instance.getNextByteArray(byteArrayLength);
 //		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getValue().getBytes();
