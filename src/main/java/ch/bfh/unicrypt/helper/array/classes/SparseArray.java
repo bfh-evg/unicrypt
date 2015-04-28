@@ -279,7 +279,7 @@ public class SparseArray<V extends Object>
 	}
 
 	@Override
-	protected SparseArray<V> abstractInsertAt(int index, V newObject) {
+	protected SparseArray<V> abstractInsertAt(int index, V value) {
 		Map<Integer, V> newMap = new HashMap<Integer, V>();
 		for (int i : this.getIndicesExcept()) {
 			if (i < index) {
@@ -288,22 +288,22 @@ public class SparseArray<V extends Object>
 				newMap.put(i + 1, this.abstractGetAt(i));
 			}
 		}
-		if (!newObject.equals(this.defaultValue)) {
-			newMap.put(index, newObject);
+		if (!value.equals(this.defaultValue)) {
+			newMap.put(index, value);
 		}
 		return new SparseArray<V>(newMap, this.length + 1, this.defaultValue);
 	}
 
 	@Override
-	protected SparseArray<V> abstractReplaceAt(int index, V newObject) {
+	protected SparseArray<V> abstractReplaceAt(int index, V value) {
 		Map<Integer, V> newMap = new HashMap<Integer, V>();
 		for (int i : this.getIndicesExcept()) {
 			if (i != index) {
 				newMap.put(i, this.abstractGetAt(i));
 			}
 		}
-		if (!newObject.equals(this.defaultValue)) {
-			newMap.put(index, newObject);
+		if (!value.equals(this.defaultValue)) {
+			newMap.put(index, value);
 		}
 		return new SparseArray<V>(newMap, this.length, this.defaultValue);
 	}

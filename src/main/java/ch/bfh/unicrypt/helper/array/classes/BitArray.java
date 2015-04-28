@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.util.Collection;
 
 /**
  * This class is provides an implementation for immutable arrays of type {@code boolean}/{@code Boolean}. For maximal
@@ -137,67 +136,53 @@ public class BitArray
 		if (bits == null) {
 			throw new IllegalArgumentException();
 		}
-		int byteLength = MathUtil.divideUp(bits.length, Byte.SIZE);
+		int bitLength = bits.length;
+		int byteLength = MathUtil.divideUp(bitLength, Byte.SIZE);
 		byte[] bytes = new byte[byteLength];
-		for (int i = 0; i < bits.length; i++) {
+		for (int i = 0; i < bitLength; i++) {
 			int byteIndex = i / Byte.SIZE;
 			int bitIndex = i % Byte.SIZE;
 			if (bits[i]) {
 				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
 			}
 		}
-		return new BitArray(ByteArray.getInstance(bytes), bits.length);
+		return new BitArray(ByteArray.getInstance(bytes), bitLength);
 	}
 
 	/**
-	 * Transforms a given immutable array of type {@code Boolean} into a bit array. If the given immutable array is
-	 * already an instance of {@code BitArray}, it is returned without doing anything. Otherwise, the immutable array is
-	 * transformed into a {@code ByteArray} instance for internal storage.
+	 * Creates a new bit array from a given iterable sequence of bits. If the given sequence of bits is already a bit
+	 * array, it is returned without doing anything. Otherwise, the sequence is transformed into a Java byte array for
+	 * internal storage.
 	 * <p>
-	 * @param immutableArray The given immutable array
+	 * @param bits The iterable sequence of bits
 	 * @return The new bit array
 	 */
-	public static BitArray getInstance(ImmutableArray<Boolean> immutableArray) {
-		if (immutableArray == null) {
-			throw new IllegalArgumentException();
-		}
-		if (immutableArray instanceof BitArray) {
-			return (BitArray) immutableArray;
-		}
-		int byteLength = MathUtil.divideUp(immutableArray.getLength(), Byte.SIZE);
-		byte[] bytes = new byte[byteLength];
-		for (int i = 0; i < immutableArray.getLength(); i++) {
-			int byteIndex = i / Byte.SIZE;
-			int bitIndex = i % Byte.SIZE;
-			if (immutableArray.getAt(i)) {
-				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
-			}
-		}
-		return new BitArray(ByteArray.getInstance(bytes), immutableArray.getLength());
-	}
-
-	/**
-	 * Creates a new bit array from a given Java collection of type {@code Boolean}. The boolean values of the
-	 * collection are copied into a {@code ByteArray} instance for internal storage. The length and the indices of the
-	 * bits of the resulting array correspond to the given Java collection.
-	 * <p>
-	 * @param bits The given Java collection
-	 * @return The new bit array
-	 */
-	public static BitArray getInstance(Collection<Boolean> bits) {
+	public static BitArray getInstance(Iterable<Boolean> bits) {
 		if (bits == null) {
 			throw new IllegalArgumentException();
 		}
-		int byteLength = MathUtil.divideUp(bits.size(), Byte.SIZE);
+		if (bits instanceof BitArray) {
+			return (BitArray) bits;
+		}
+		int bitLength = 0;
+		for (Boolean bit : bits) {
+			if (bit == null) {
+				throw new IllegalArgumentException();
+			}
+			bitLength++;
+		}
+		int byteLength = MathUtil.divideUp(bitLength, Byte.SIZE);
 		byte[] bytes = new byte[byteLength];
 		int i = 0;
-		for (Boolean b : bits) {
+		for (Boolean bit : bits) {
 			int byteIndex = i / Byte.SIZE;
 			int bitIndex = i % Byte.SIZE;
-			bytes[byteIndex] = MathUtil.replaceBit(bytes[byteIndex], bitIndex, b);
+			if (bit) {
+				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
+			}
 			i++;
 		}
-		return new BitArray(ByteArray.getInstance(bytes), bits.size());
+		return new BitArray(ByteArray.getInstance(bytes), bitLength);
 	}
 
 	/**

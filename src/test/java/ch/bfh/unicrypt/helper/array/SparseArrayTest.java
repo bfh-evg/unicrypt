@@ -63,6 +63,8 @@ public class SparseArrayTest {
 		sparseArrays.add(sparseArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(SparseArray.getInstance(0, new Integer[]{255, 255})));
 		sparseArrays.add(sparseArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(SparseArray.getInstance(255, 2)));
 		sparseArrays.add(sparseArray.extract(3, 6).removeAt(3).reverse().append(SparseArray.getInstance(0, new Integer[]{255, 255})).shiftRight(3));
+		sparseArrays.add(SparseArray.getInstance(0, new Integer[]{0, 0, 0, 8, 7, 5, 4, 3, 255, 254}).replaceAt(9, 255));
+		sparseArrays.add(SparseArray.getInstance(0, new Integer[]{0, 0, 0, 8, 7, 5, 4, 255, 255}).insertAt(7, 3));
 
 		for (SparseArray<Integer> s1 : sparseArrays) {
 			for (SparseArray<Integer> s2 : sparseArrays) {
@@ -97,6 +99,18 @@ public class SparseArrayTest {
 
 			}
 		}
+	}
+
+	@Test
+	public void testSparseArray() {
+		SparseArray<String> a = SparseArray.getInstance("", 12, "Test");
+		Assert.assertEquals(13, a.getLength());
+		Assert.assertEquals("", a.getAt(0));
+		Assert.assertEquals("Test", a.getAt(12));
+
+		SparseArray<String> b = SparseArray.getInstance("", a);
+		Assert.assertEquals(a, b);
+		Assert.assertSame(a, b);
 	}
 
 	@Test

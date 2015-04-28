@@ -150,12 +150,7 @@ public class ByteArray
 		if (bytes == null) {
 			throw new IllegalArgumentException();
 		}
-		byte[] result = new byte[bytes.length];
-		int i = 0;
-		for (byte value : bytes) {
-			result[i++] = value;
-		}
-		return new ByteArray(result);
+		return new ByteArray(bytes.clone());
 	}
 
 	/**
@@ -169,15 +164,15 @@ public class ByteArray
 		if (integers == null) {
 			throw new IllegalArgumentException();
 		}
-		byte[] result = new byte[integers.length];
+		byte[] bytes = new byte[integers.length];
 		int i = 0;
-		for (int value : integers) {
-			if (value > Byte.MAX_VALUE || value < Byte.MIN_VALUE) {
+		for (int integer : integers) {
+			if (integer > Byte.MAX_VALUE || integer < Byte.MIN_VALUE) {
 				throw new IllegalArgumentException();
 			}
-			result[i++] = (byte) (value & 0xFF);
+			bytes[i++] = (byte) (integer & 0xFF);
 		}
-		return new ByteArray(result);
+		return new ByteArray(bytes);
 	}
 
 	/**
@@ -185,27 +180,27 @@ public class ByteArray
 	 * byte array, it is returned without doing anything. Otherwise, the sequence is transformed into a Java byte array
 	 * for internal storage.
 	 * <p>
-	 * @param values The Java collection of {@code Byte} values
+	 * @param bytes The iterable sequence of bytes
 	 * @return The new byte array
 	 */
-	public static ByteArray getInstance(Iterable<Byte> values) {
-		if (values == null) {
+	public static ByteArray getInstance(Iterable<Byte> bytes) {
+		if (bytes == null) {
 			throw new IllegalArgumentException();
 		}
-		if (values instanceof ByteArray) {
-			return (ByteArray) values;
+		if (bytes instanceof ByteArray) {
+			return (ByteArray) bytes;
 		}
 		int length = 0;
-		for (Byte value : values) {
-			if (value == null) {
+		for (Byte singleByte : bytes) {
+			if (singleByte == null) {
 				throw new IllegalArgumentException();
 			}
 			length++;
 		}
 		byte[] array = new byte[length];
 		int i = 0;
-		for (Byte value : values) {
-			array[i++] = value;
+		for (Byte singleByte : bytes) {
+			array[i++] = singleByte;
 		}
 		return new ByteArray(array);
 	}
