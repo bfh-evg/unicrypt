@@ -58,10 +58,10 @@ public class HashAlgorithmTest {
 	public void HashAlgorithmTest() {
 
 		assertSame(HashAlgorithm.MD5, HashAlgorithm.getInstance("MD5"));
-		assertSame(HashAlgorithm.SHA1, HashAlgorithm.getInstance("SHA1"));
-		assertSame(HashAlgorithm.SHA256, HashAlgorithm.getInstance("SHA256"));
-		assertSame(HashAlgorithm.SHA384, HashAlgorithm.getInstance("SHA384"));
-		assertSame(HashAlgorithm.SHA512, HashAlgorithm.getInstance("SHA512"));
+		assertSame(HashAlgorithm.SHA1, HashAlgorithm.getInstance("SHA-1"));
+		assertSame(HashAlgorithm.SHA256, HashAlgorithm.getInstance("SHA-256"));
+		assertSame(HashAlgorithm.SHA384, HashAlgorithm.getInstance("SHA-384"));
+		assertSame(HashAlgorithm.SHA512, HashAlgorithm.getInstance("SHA-512"));
 		try {
 			HashAlgorithm.getInstance("");
 			fail();
@@ -77,6 +77,11 @@ public class HashAlgorithmTest {
 		Assert.assertEquals(256, HashAlgorithm.SHA256.getBitLength());
 		Assert.assertEquals(384, HashAlgorithm.SHA384.getBitLength());
 		Assert.assertEquals(512, HashAlgorithm.SHA512.getBitLength());
+		Assert.assertEquals("MD5", HashAlgorithm.MD5.getAlgorithmName());
+		Assert.assertEquals("SHA-1", HashAlgorithm.SHA1.getAlgorithmName());
+		Assert.assertEquals("SHA-256", HashAlgorithm.SHA256.getAlgorithmName());
+		Assert.assertEquals("SHA-384", HashAlgorithm.SHA384.getAlgorithmName());
+		Assert.assertEquals("SHA-512", HashAlgorithm.SHA512.getAlgorithmName());
 	}
 
 	@Test

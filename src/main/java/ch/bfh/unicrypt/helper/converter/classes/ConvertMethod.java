@@ -75,7 +75,7 @@ public class ConvertMethod<W extends Object>
 	 * @param converters A list of converters
 	 * @return The new converter method
 	 */
-	public static <W> ConvertMethod getInstance(Converter<?, W>... converters) {
+	public static <W> ConvertMethod<W> getInstance(Converter<?, W>... converters) {
 		if (converters == null) {
 			throw new IllegalArgumentException();
 		}
@@ -106,6 +106,33 @@ public class ConvertMethod<W extends Object>
 			throw new IllegalArgumentException();
 		}
 		this.converterMap.put(valueClass, converter);
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		hash = 37 * hash + (this.converterMap != null ? this.converterMap.hashCode() : 0);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final ConvertMethod<?> other = (ConvertMethod<?>) obj;
+		if (this.converterMap.size() != other.converterMap.size()) {
+			return false;
+		}
+		for (Class c : this.converterMap.keySet()) {
+			if (!this.getConverter(c).equals(other.getConverter(c))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

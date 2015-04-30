@@ -47,7 +47,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 /**
- * Instances of this class represent hash algorithms such as SHA1 or SHA256. This class is a wrapper class for
+ * Instances of this class represent hash algorithms such as SHA-1 or SHA-256. This class is a wrapper class for
  * {@link MessageDigest} with method names adjusted to the conventions of UniCrypt. A hash algorithm maps arbitrary Java
  * byte arrays into fixed-length byte arrays. The resulting byte array is called hash value of the input.
  * <p>
@@ -58,20 +58,50 @@ import java.util.Arrays;
 public class HashAlgorithm
 	   extends UniCrypt {
 
+	/**
+	 * The MD5 hash algorithm.
+	 */
 	public static HashAlgorithm MD5 = new HashAlgorithm("MD5");
+
+	/**
+	 * The SHA-1 hash algorithm.
+	 */
 	public static HashAlgorithm SHA1 = new HashAlgorithm("SHA-1");
+
+	/**
+	 * The SHA-256 hash algorithm.
+	 */
 	public static HashAlgorithm SHA256 = new HashAlgorithm("SHA-256");
+
+	/**
+	 * The SHA-384 hash algorithm.
+	 */
 	public static HashAlgorithm SHA384 = new HashAlgorithm("SHA-384");
+
+	/**
+	 * The SHA-512 hash algorithm.
+	 */
 	public static HashAlgorithm SHA512 = new HashAlgorithm("SHA-512");
 
 	private final MessageDigest messageDigest;
+	private final String algorithmName;
 
 	private HashAlgorithm(String algorithmName) {
+		this.algorithmName = algorithmName;
 		try {
 			this.messageDigest = MessageDigest.getInstance(algorithmName);
 		} catch (final NoSuchAlgorithmException e) {
 			throw new IllegalArgumentException();
 		}
+	}
+
+	/**
+	 * Returns the name of the hash algorithm.
+	 * <p>
+	 * @return The name of the hash algorithm
+	 */
+	public String getAlgorithmName() {
+		return this.algorithmName;
 	}
 
 	/**
@@ -132,13 +162,13 @@ public class HashAlgorithm
 
 	/**
 	 * Returns the hash algorithm that corresponds to the algorithm name specified as a string. The supported algorithm
-	 * names are: {@code "MD5"}, {@code "SHA1"}, {@code "SHA256"}, {@code "SHA384"}, and {@code "SHA512"}.
+	 * names are: {@code "MD5"}, {@code "SHA-1"}, {@code "SHA-256"}, {@code "SHA-384"}, and {@code "SHA-512"}.
 	 * <p>
 	 * @param algorithmName The name of the hash algorithm.
 	 * @return
 	 */
 	public static HashAlgorithm getInstance(String algorithmName) {
-		switch (Arrays.binarySearch(new String[]{"MD5", "SHA1", "SHA256", "SHA384", "SHA512"}, algorithmName)) {
+		switch (Arrays.binarySearch(new String[]{"MD5", "SHA-1", "SHA-256", "SHA-384", "SHA-512"}, algorithmName)) {
 			case 0:
 				return HashAlgorithm.MD5;
 			case 1:
@@ -155,7 +185,24 @@ public class HashAlgorithm
 
 	@Override
 	protected String defaultToStringContent() {
-		return this.messageDigest.getAlgorithm();
+		return this.algorithmName;
+	}
+
+	@Override
+	public int hashCode() {
+		return 7 * this.algorithmName.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final HashAlgorithm other = (HashAlgorithm) obj;
+		return this.algorithmName.equals(other.algorithmName);
 	}
 
 }
