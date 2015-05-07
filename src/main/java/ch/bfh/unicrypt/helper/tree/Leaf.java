@@ -39,46 +39,81 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.tree;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+import ch.bfh.unicrypt.helper.aggregator.Aggregator;
+import ch.bfh.unicrypt.helper.iterable.IterableValue;
+import java.util.Iterator;
 
 /**
- *
- * @author rolfhaenni
+ * An instance of this class represents a leaf of a {@link Tree}. Every leaf stores a value of a generic type {@code V}.
+ * The recursive definition of a tree implies that a leaf is a tree on its own.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the value stored in the leaf
+ * @see Tree
+ * @see Node
  */
-public class IterableArrayTest {
+public class Leaf<V>
+	   extends Tree<V> {
 
-	@Test
-	public void generalTest() {
-		IterableArray<Integer> ia0 = IterableArray.getInstance();
-		IterableArray<Integer> ia1 = IterableArray.getInstance(new Integer[]{});
-		IterableArray<Integer> ia2 = IterableArray.getInstance(2);
-		IterableArray<Integer> ia3 = IterableArray.getInstance(2, 3, 4, 5);
-		IterableArray<Integer> ia4 = IterableArray.getInstance(3, 4, 5, 6);
-		assertEquals(ia0, ia1);
-		assertEquals(ia2, ia2);
-		assertFalse(ia2.equals(ia3));
-		assertFalse(ia2.equals(ia4));
-		assertFalse(ia0.iterator().hasNext());
-		assertFalse(ia1.iterator().hasNext());
-		assertTrue(ia2.iterator().hasNext());
-		assertTrue(ia3.iterator().hasNext());
-		assertTrue(ia4.iterator().hasNext());
-		int j = 2;
-		for (int i : ia3) {
-			assertEquals(i, j);
-			j++;
+	private final V value;
+
+	private Leaf(V value) {
+		this.value = value;
+	}
+
+	/**
+	 * Creates a new leaf storing a given value.
+	 * <p>
+	 * @param <V>   The generic type of the given value and the resulting leaf
+	 * @param value The given value
+	 * @return The new leaf
+	 */
+	public static <V> Leaf<V> getInstance(V value) {
+		if (value == null) {
+			throw new IllegalArgumentException();
 		}
-		try {
-			IterableArray.getInstance((Integer[]) null);
-			fail();
-		} catch (Exception e) {
+		return new Leaf<V>(value);
+	}
+
+	/**
+	 * Returns the value stored in the leaf.
+	 * <p>
+	 * @return The value stored in the leaf
+	 */
+	public V getValue() {
+		return this.value;
+	}
+
+	@Override
+	public V abstractAggregate(Aggregator<V> aggregator) {
+		return aggregator.aggregate(this.value);
+	}
+
+	@Override
+	public Iterator<V> iterator() {
+		return IterableValue.getInstance(this.value).iterator();
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 97 * hash + this.value.hashCode();
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
 		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Leaf<?> other = (Leaf<?>) obj;
+		return this.value.equals(other.value);
 	}
 
 }

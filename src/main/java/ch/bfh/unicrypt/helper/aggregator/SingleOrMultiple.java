@@ -39,46 +39,52 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+package ch.bfh.unicrypt.helper.aggregator;
 
 /**
  *
  * @author rolfhaenni
+ * @param <V>
  */
-public class IterableArrayTest {
+public class SingleOrMultiple<V> {
 
-	@Test
-	public void generalTest() {
-		IterableArray<Integer> ia0 = IterableArray.getInstance();
-		IterableArray<Integer> ia1 = IterableArray.getInstance(new Integer[]{});
-		IterableArray<Integer> ia2 = IterableArray.getInstance(2);
-		IterableArray<Integer> ia3 = IterableArray.getInstance(2, 3, 4, 5);
-		IterableArray<Integer> ia4 = IterableArray.getInstance(3, 4, 5, 6);
-		assertEquals(ia0, ia1);
-		assertEquals(ia2, ia2);
-		assertFalse(ia2.equals(ia3));
-		assertFalse(ia2.equals(ia4));
-		assertFalse(ia0.iterator().hasNext());
-		assertFalse(ia1.iterator().hasNext());
-		assertTrue(ia2.iterator().hasNext());
-		assertTrue(ia3.iterator().hasNext());
-		assertTrue(ia4.iterator().hasNext());
-		int j = 2;
-		for (int i : ia3) {
-			assertEquals(i, j);
-			j++;
+	private final V value;
+	private final Iterable<V> values;
+
+	private SingleOrMultiple(V value) {
+		this.value = value;
+		this.values = null;
+	}
+
+	private SingleOrMultiple(Iterable<V> values) {
+		this.value = null;
+		this.values = values;
+	}
+
+	public static <V> SingleOrMultiple<V> getInstance(V value) {
+		if (value == null) {
+			throw new IllegalArgumentException();
 		}
-		try {
-			IterableArray.getInstance((Integer[]) null);
-			fail();
-		} catch (Exception e) {
+		return new SingleOrMultiple<V>(value);
+	}
+
+	public static <V> SingleOrMultiple<V> getInstance(Iterable<V> values) {
+		if (values == null) {
+			throw new IllegalArgumentException();
 		}
+		return new SingleOrMultiple<V>(values);
+	}
+
+	public boolean isSingle() {
+		return (this.values == null);
+	}
+
+	public V getValue() {
+		return this.value;
+	}
+
+	public Iterable<V> getValues() {
+		return this.values;
 	}
 
 }

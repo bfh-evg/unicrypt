@@ -41,44 +41,57 @@
  */
 package ch.bfh.unicrypt.helper.iterable;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+import java.util.Iterator;
 
 /**
- *
- * @author rolfhaenni
+ * Instances of this class offer a simple way of creating iterators over a single value.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the value and the iterator
  */
-public class IterableArrayTest {
+public class IterableValue<V>
+	   implements Iterable<V> {
 
-	@Test
-	public void generalTest() {
-		IterableArray<Integer> ia0 = IterableArray.getInstance();
-		IterableArray<Integer> ia1 = IterableArray.getInstance(new Integer[]{});
-		IterableArray<Integer> ia2 = IterableArray.getInstance(2);
-		IterableArray<Integer> ia3 = IterableArray.getInstance(2, 3, 4, 5);
-		IterableArray<Integer> ia4 = IterableArray.getInstance(3, 4, 5, 6);
-		assertEquals(ia0, ia1);
-		assertEquals(ia2, ia2);
-		assertFalse(ia2.equals(ia3));
-		assertFalse(ia2.equals(ia4));
-		assertFalse(ia0.iterator().hasNext());
-		assertFalse(ia1.iterator().hasNext());
-		assertTrue(ia2.iterator().hasNext());
-		assertTrue(ia3.iterator().hasNext());
-		assertTrue(ia4.iterator().hasNext());
-		int j = 2;
-		for (int i : ia3) {
-			assertEquals(i, j);
-			j++;
-		}
-		try {
-			IterableArray.getInstance((Integer[]) null);
-			fail();
-		} catch (Exception e) {
-		}
+	private final V value;
+
+	private IterableValue(V value) {
+		this.value = value;
+	}
+
+	/**
+	 * Return a new iterator which iterates over the given single value.
+	 * <p>
+	 * @param <V>   The generic type of the value and the resulting iterator
+	 * @param value The given value
+	 * @return The iterator over the given value
+	 */
+	public static <V> IterableValue<V> getInstance(V value) {
+		return new IterableValue<V>(value);
+	}
+
+	@Override
+	public Iterator<V> iterator() {
+		return new Iterator<V>() {
+
+			private boolean next = true;
+
+			@Override
+			public boolean hasNext() {
+				return this.next;
+			}
+
+			@Override
+			public V next() {
+				next = false;
+				return value;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 
 }

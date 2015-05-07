@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.hash;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -105,16 +106,29 @@ public class HashAlgorithm
 	}
 
 	/**
-	 * Returns the hash value of a given byte array.
+	 * Returns the hash value of a given Java byte array.
 	 * <p>
-	 * @param bytes The given byte array
-	 * @return The hash value of the given byte array
+	 * @param bytes The given Java byte array
+	 * @return The hash value of the given Java byte array
 	 */
 	public byte[] getHashValue(byte[] bytes) {
 		if (bytes == null) {
 			throw new IllegalArgumentException();
 		}
 		return this.messageDigest.digest(bytes);
+	}
+
+	/**
+	 * Returns the hash value of a given byte array.
+	 * <p>
+	 * @param byteArray The given byte array
+	 * @return The hash value of the given byte array
+	 */
+	public ByteArray getHashValue(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new IllegalArgumentException();
+		}
+		return byteArray.getHashValue(this);
 	}
 
 	/**

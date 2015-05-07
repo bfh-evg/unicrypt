@@ -79,24 +79,6 @@ public class IterableArray<T>
 		return new IterableArray<T>(array);
 	}
 
-	/**
-	 * Checks if the number of elements in the iterable array is 0.
-	 * <p>
-	 * @return {@literal true} if the number of elements is 0, {@literal false} otherwise
-	 */
-	public boolean isEmpty() {
-		return this.array.length == 0;
-	}
-
-	/**
-	 * Returns the number of elements in the iterable array.
-	 * <p>
-	 * @return The number of elements
-	 */
-	public int getLength() {
-		return this.array.length;
-	}
-
 	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {

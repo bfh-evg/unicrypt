@@ -39,45 +39,64 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.aggregator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.iterable.IterableArray;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public class IterableArrayTest {
+public class BigIntegerAggregator
+	   extends Aggregator<BigInteger> {
 
-	@Test
-	public void generalTest() {
-		IterableArray<Integer> ia0 = IterableArray.getInstance();
-		IterableArray<Integer> ia1 = IterableArray.getInstance(new Integer[]{});
-		IterableArray<Integer> ia2 = IterableArray.getInstance(2);
-		IterableArray<Integer> ia3 = IterableArray.getInstance(2, 3, 4, 5);
-		IterableArray<Integer> ia4 = IterableArray.getInstance(3, 4, 5, 6);
-		assertEquals(ia0, ia1);
-		assertEquals(ia2, ia2);
-		assertFalse(ia2.equals(ia3));
-		assertFalse(ia2.equals(ia4));
-		assertFalse(ia0.iterator().hasNext());
-		assertFalse(ia1.iterator().hasNext());
-		assertTrue(ia2.iterator().hasNext());
-		assertTrue(ia3.iterator().hasNext());
-		assertTrue(ia4.iterator().hasNext());
-		int j = 2;
-		for (int i : ia3) {
-			assertEquals(i, j);
-			j++;
+	public static BigIntegerAggregator getInstance() {
+		return new BigIntegerAggregator();
+	}
+
+	// leaves are marked with 0 bit
+	@Override
+	public BigInteger abstractAggregate(BigInteger value) {
+		return value.multiply(MathUtil.TWO);
+	}
+
+	// nodes are marked with 1 bit
+	@Override
+	public BigInteger abstractAggregate(Iterable<BigInteger> values, int length) {
+		BigInteger[] valueArray = new BigInteger[length];
+		int i = 0;
+		for (BigInteger value : values) {
+			valueArray[i] = value;
+			i++;
 		}
-		try {
-			IterableArray.getInstance((Integer[]) null);
-			fail();
-		} catch (Exception e) {
+		return MathUtil.pairWithSize(valueArray).multiply(MathUtil.TWO).add(MathUtil.ONE);
+	}
+
+	@Override
+	protected boolean abstractIsSingle(BigInteger value) {
+		return value.mod(MathUtil.TWO).equals(MathUtil.ZERO);
+	}
+
+	@Override
+	protected BigInteger abstractDisaggregateSingle(BigInteger value) {
+		return value.divide(MathUtil.TWO);
+	}
+
+	@Override
+	protected Iterable<BigInteger> abstractDisaggregateMultiple(BigInteger value) {
+		return IterableArray.getInstance(MathUtil.unpairWithSize(value.subtract(MathUtil.ONE).divide(MathUtil.TWO)));
+	}
+
+	public static void main(String[] args) {
+		BigInteger b1 = BigInteger.valueOf(15);
+		BigInteger b2 = BigInteger.valueOf(20);
+		BigInteger b3 = BigInteger.valueOf(4);
+		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
+		SingleOrMultiple<BigInteger> result = aggregator.disaggregate(aggregator.aggregate(b1, b2, b3));
+		for (BigInteger value : result.getValues()) {
+			System.out.println(value);
 		}
 	}
 

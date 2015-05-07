@@ -41,44 +41,24 @@
  */
 package ch.bfh.unicrypt.helper.iterable;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import junit.framework.Assert;
 import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class IterableArrayTest {
+public class IterableValueTest {
 
 	@Test
-	public void generalTest() {
-		IterableArray<Integer> ia0 = IterableArray.getInstance();
-		IterableArray<Integer> ia1 = IterableArray.getInstance(new Integer[]{});
-		IterableArray<Integer> ia2 = IterableArray.getInstance(2);
-		IterableArray<Integer> ia3 = IterableArray.getInstance(2, 3, 4, 5);
-		IterableArray<Integer> ia4 = IterableArray.getInstance(3, 4, 5, 6);
-		assertEquals(ia0, ia1);
-		assertEquals(ia2, ia2);
-		assertFalse(ia2.equals(ia3));
-		assertFalse(ia2.equals(ia4));
-		assertFalse(ia0.iterator().hasNext());
-		assertFalse(ia1.iterator().hasNext());
-		assertTrue(ia2.iterator().hasNext());
-		assertTrue(ia3.iterator().hasNext());
-		assertTrue(ia4.iterator().hasNext());
-		int j = 2;
-		for (int i : ia3) {
-			assertEquals(i, j);
-			j++;
+	public void testGetInstance() {
+		IterableValue<String> iv = IterableValue.getInstance("Hello");
+		int i = 0;
+		for (String s : iv) {
+			Assert.assertEquals("Hello", s);
+			i++;
 		}
-		try {
-			IterableArray.getInstance((Integer[]) null);
-			fail();
-		} catch (Exception e) {
-		}
+		Assert.assertEquals(1, i);
 	}
 
 }

@@ -76,12 +76,7 @@ public class IterableRange
 		return new IterableRange(from, to);
 	}
 
-	/**
-	 * Returns the number of elements in the iterable range.
-	 * <p>
-	 * @return The number of elements
-	 */
-	public int getLength() {
+	private int getLength() {
 		return Math.max(0, this.to - this.from + 1);
 	}
 
@@ -119,7 +114,9 @@ public class IterableRange
 
 	@Override
 	public int hashCode() {
-		int hash = this.getLength();
+		int hash = 7;
+		hash = 41 * hash + this.getLength();
+		hash = 41 * hash + this.from;
 		return hash;
 	}
 

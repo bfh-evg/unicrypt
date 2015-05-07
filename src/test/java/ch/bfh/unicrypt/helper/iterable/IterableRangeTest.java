@@ -59,11 +59,6 @@ public class IterableRangeTest {
 		IterableRange ir2 = IterableRange.getInstance(2, 2);
 		IterableRange ir3 = IterableRange.getInstance(2, 5);
 		IterableRange ir4 = IterableRange.getInstance(3, 6);
-		assertEquals(0, ir0.getLength());
-		assertEquals(0, ir1.getLength());
-		assertEquals(1, ir2.getLength());
-		assertEquals(4, ir3.getLength());
-		assertEquals(4, ir4.getLength());
 		assertEquals(ir0, ir1);
 		assertEquals(ir2, ir2);
 		assertFalse(ir2.equals(ir3));

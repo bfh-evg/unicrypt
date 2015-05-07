@@ -39,46 +39,43 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.aggregator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 
 /**
  *
  * @author rolfhaenni
  */
-public class IterableArrayTest {
+public class HashValueAggregator
+	   extends Aggregator<ByteArray> {
 
-	@Test
-	public void generalTest() {
-		IterableArray<Integer> ia0 = IterableArray.getInstance();
-		IterableArray<Integer> ia1 = IterableArray.getInstance(new Integer[]{});
-		IterableArray<Integer> ia2 = IterableArray.getInstance(2);
-		IterableArray<Integer> ia3 = IterableArray.getInstance(2, 3, 4, 5);
-		IterableArray<Integer> ia4 = IterableArray.getInstance(3, 4, 5, 6);
-		assertEquals(ia0, ia1);
-		assertEquals(ia2, ia2);
-		assertFalse(ia2.equals(ia3));
-		assertFalse(ia2.equals(ia4));
-		assertFalse(ia0.iterator().hasNext());
-		assertFalse(ia1.iterator().hasNext());
-		assertTrue(ia2.iterator().hasNext());
-		assertTrue(ia3.iterator().hasNext());
-		assertTrue(ia4.iterator().hasNext());
-		int j = 2;
-		for (int i : ia3) {
-			assertEquals(i, j);
-			j++;
-		}
-		try {
-			IterableArray.getInstance((Integer[]) null);
-			fail();
-		} catch (Exception e) {
-		}
+	private HashAlgorithm hashAlgorithm;
+
+	@Override
+	public ByteArray abstractAggregate(ByteArray value) {
+		return value.getHashValue(this.hashAlgorithm);
+	}
+
+	@Override
+	public ByteArray abstractAggregate(Iterable<ByteArray> values, int length) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	protected boolean abstractIsSingle(ByteArray value) {
+		throw new UnsupportedOperationException("Aggregation can not be inverted.");
+	}
+
+	@Override
+	protected ByteArray abstractDisaggregateSingle(ByteArray value) {
+		throw new UnsupportedOperationException("Aggregation can not be inverted.");
+	}
+
+	@Override
+	protected Iterable<ByteArray> abstractDisaggregateMultiple(ByteArray value) {
+		throw new UnsupportedOperationException("Aggregation can not be inverted.");
 	}
 
 }

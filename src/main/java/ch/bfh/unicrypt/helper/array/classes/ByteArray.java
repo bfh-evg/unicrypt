@@ -294,7 +294,8 @@ public class ByteArray
 		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}
-		byte[] hash = hashAlgorithm.getHashValue(this.getBytes());
+		this.normalize();
+		byte[] hash = hashAlgorithm.getHashValue(this.bytes);
 		return new ByteArray(hash);
 	}
 
@@ -316,9 +317,7 @@ public class ByteArray
 	 */
 	public byte[] getBytes() {
 		// normalize for better performance
-		if (!this.normalized) {
-			this.normalize();
-		}
+		this.normalize();
 		return Arrays.copyOf(this.bytes, this.length);
 	}
 

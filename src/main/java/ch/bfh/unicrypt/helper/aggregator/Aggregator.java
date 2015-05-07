@@ -39,46 +39,70 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.aggregator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.iterable.IterableArray;
+import java.util.Collection;
 
 /**
  *
  * @author rolfhaenni
+ * @param <V>
  */
-public class IterableArrayTest {
+public abstract class Aggregator<V> {
 
-	@Test
-	public void generalTest() {
-		IterableArray<Integer> ia0 = IterableArray.getInstance();
-		IterableArray<Integer> ia1 = IterableArray.getInstance(new Integer[]{});
-		IterableArray<Integer> ia2 = IterableArray.getInstance(2);
-		IterableArray<Integer> ia3 = IterableArray.getInstance(2, 3, 4, 5);
-		IterableArray<Integer> ia4 = IterableArray.getInstance(3, 4, 5, 6);
-		assertEquals(ia0, ia1);
-		assertEquals(ia2, ia2);
-		assertFalse(ia2.equals(ia3));
-		assertFalse(ia2.equals(ia4));
-		assertFalse(ia0.iterator().hasNext());
-		assertFalse(ia1.iterator().hasNext());
-		assertTrue(ia2.iterator().hasNext());
-		assertTrue(ia3.iterator().hasNext());
-		assertTrue(ia4.iterator().hasNext());
-		int j = 2;
-		for (int i : ia3) {
-			assertEquals(i, j);
-			j++;
+	public final V aggregate(V value) {
+		if (value == null) {
+			throw new IllegalArgumentException();
 		}
-		try {
-			IterableArray.getInstance((Integer[]) null);
-			fail();
-		} catch (Exception e) {
+		return this.abstractAggregate(value);
+	}
+
+	public final V aggregate(V... values) {
+		return this.aggregate(IterableArray.getInstance(values));
+	}
+
+	public final V aggregate(Iterable<V> values) {
+		if (values == null) {
+			throw new IllegalArgumentException();
+		}
+		int length;
+		if (values instanceof ImmutableArray) {
+			length = ((ImmutableArray) values).getLength();
+		} else if (values instanceof Collection) {
+			length = ((Collection) values).size();
+		} else {
+			length = 0;
+			for (V value : values) {
+				if (value == null) {
+					throw new IllegalArgumentException();
+				}
+				length++;
+			}
+		}
+		return this.abstractAggregate(values, length);
+	}
+
+	public final SingleOrMultiple<V> disaggregate(V value) {
+		if (value == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.abstractIsSingle(value)) {
+			return SingleOrMultiple.getInstance(this.abstractDisaggregateSingle(value));
+		} else {
+			return SingleOrMultiple.getInstance(this.abstractDisaggregateMultiple(value));
 		}
 	}
+
+	protected abstract V abstractAggregate(V value);
+
+	protected abstract V abstractAggregate(Iterable<V> values, int size);
+
+	protected abstract boolean abstractIsSingle(V value);
+
+	protected abstract V abstractDisaggregateSingle(V value);
+
+	protected abstract Iterable<V> abstractDisaggregateMultiple(V value);
 
 }
