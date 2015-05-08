@@ -39,19 +39,24 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.aggregator;
+package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
+import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import java.util.Collection;
 
 /**
- *
- * @author rolfhaenni
- * @param <V>
+ * This abstract class serves as a base implementation for concrete {@link Aggregator} classes.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the values precessed by the aggregator
  */
-public abstract class Aggregator<V> {
+public abstract class AbstractAggregator<V>
+	   implements Aggregator<V> {
 
+	@Override
 	public final V aggregate(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
@@ -59,10 +64,12 @@ public abstract class Aggregator<V> {
 		return this.abstractAggregate(value);
 	}
 
+	@Override
 	public final V aggregate(V... values) {
 		return this.aggregate(IterableArray.getInstance(values));
 	}
 
+	@Override
 	public final V aggregate(Iterable<V> values) {
 		if (values == null) {
 			throw new IllegalArgumentException();
@@ -84,25 +91,8 @@ public abstract class Aggregator<V> {
 		return this.abstractAggregate(values, length);
 	}
 
-	public final SingleOrMultiple<V> disaggregate(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this.abstractIsSingle(value)) {
-			return SingleOrMultiple.getInstance(this.abstractDisaggregateSingle(value));
-		} else {
-			return SingleOrMultiple.getInstance(this.abstractDisaggregateMultiple(value));
-		}
-	}
-
 	protected abstract V abstractAggregate(V value);
 
 	protected abstract V abstractAggregate(Iterable<V> values, int size);
-
-	protected abstract boolean abstractIsSingle(V value);
-
-	protected abstract V abstractDisaggregateSingle(V value);
-
-	protected abstract Iterable<V> abstractDisaggregateMultiple(V value);
 
 }

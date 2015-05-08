@@ -39,86 +39,45 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.tree;
+package ch.bfh.unicrypt.helper.aggregator.interfaces;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.iterable.IterableValue;
-import java.util.Iterator;
+import ch.bfh.unicrypt.helper.tree.Tree;
 
 /**
- * An instance of this class represents a leaf of a {@link Tree}. Every leaf stores a value of a generic type {@code V}.
- * The recursive definition of a tree implies that a leaf is a tree on its own.
+ * The purpose of an aggregator is to aggregate the values stored in a {@link Tree} of type {@code V} into a single
+ * value of type {@code V}. An aggregator is thus required each time the method {@link Tree#aggregate(Aggregator)} is
+ * called. For this, each aggregator provides two distinct operations: the conversion of the value stored in some leaf
+ * of the tree and the conversion of the values obtained from the children of some node in the tree.
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @param <V> The generic type of the value stored in the leaf
+ * @param <V> The generic type of the values precessed by the aggregator
  * @see Tree
- * @see Node
  */
-public class Leaf<V>
-	   extends Tree<V> {
-
-	private final V value;
-
-	private Leaf(V value) {
-		this.value = value;
-	}
+public interface Aggregator<V> {
 
 	/**
-	 * Creates a new leaf storing a given value.
+	 * Performs the aggregation of a single value, if necessary (in some cases single values need not to be processed).
 	 * <p>
-	 * @param <V>   The generic type of the given value and the resulting leaf
 	 * @param value The given value
-	 * @return The new leaf
+	 * @return The aggregated value
 	 */
-	public static <V> Leaf<V> getInstance(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		return new Leaf<V>(value);
-	}
+	public V aggregate(V value);
 
 	/**
-	 * Returns the value stored in the leaf.
+	 * Performs the aggregation of multiple values given as a Java array.
 	 * <p>
-	 * @return The value stored in the leaf
+	 * @param values The given values
+	 * @return The aggregated value
 	 */
-	public V getValue() {
-		return this.value;
-	}
+	public V aggregate(V... values);
 
-	@Override
-	public V abstractAggregate(Aggregator<V> aggregator) {
-		return aggregator.aggregate(this.value);
-	}
-
-	@Override
-	public Iterator<V> iterator() {
-		return IterableValue.getInstance(this.value).iterator();
-	}
-
-	@Override
-	protected String defaultToStringContent() {
-		return this.value.toString();
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 7;
-		hash = 97 * hash + this.value.hashCode();
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Leaf<?> other = (Leaf<?>) obj;
-		return this.value.equals(other.value);
-	}
+	/**
+	 * Performs the aggregation of multiple values given as an iterable collection.
+	 * <p>
+	 * @param values The given iterable collection of values
+	 * @return The aggregated value
+	 */
+	public V aggregate(Iterable<V> values);
 
 }

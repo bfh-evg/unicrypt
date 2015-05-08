@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.iterable;
 
 import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -51,219 +52,165 @@ import org.junit.Test;
 public class IterableStringTest {
 
 	@Test
-	public void generalTestWithoutDefaultEscape() {
-		{
-			IterableString is = IterableString.getInstance("");
-			String[] results = new String[]{};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("Hello");
-			String[] results = new String[]{"Hello"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("Hello|World");
-			String[] results = new String[]{"Hello", "World"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("|");
-			String[] results = new String[]{"", ""};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("||");
-			String[] results = new String[]{"", "", ""};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("|Hello|");
-			String[] results = new String[]{"", "Hello", ""};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-	}
-
-	@Test
 	public void generalTestWithDefaultEscape() {
-		{
-			IterableString is = IterableString.getInstance("Hello\\|World");
-			String[] results = new String[]{"Hello\\|World"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("\\|\\|\\|");
-			String[] results = new String[]{"\\|\\|\\|"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("\\||\\|\\|");
-			String[] results = new String[]{"\\|", "\\|\\|"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("\\\\||\\|\\|");
-			String[] results = new String[]{"\\\\", "", "\\|\\|"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
+
+		IterableString is = IterableString.getInstance("");
+		String[] results = new String[]{};
+		performTest(is, results);
+
+		is = IterableString.getInstance("Hello");
+		results = new String[]{"Hello"};
+		performTest(is, results);
+
+		is = IterableString.getInstance("Hello|World");
+		results = new String[]{"Hello", "World"};
+		performTest(is, results);
+
+		is = IterableString.getInstance("|");
+		results = new String[]{"", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance("||");
+		results = new String[]{"", "", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance("|Hello|");
+		results = new String[]{"", "Hello", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance("Hello\\|World");
+		results = new String[]{"Hello\\|World"};
+		performTest(is, results);
+
+		is = IterableString.getInstance("\\|\\|\\|");
+		results = new String[]{"\\|\\|\\|"};
+		performTest(is, results);
+
+		is = IterableString.getInstance("\\||\\|\\|");
+		results = new String[]{"\\|", "\\|\\|"};
+		performTest(is, results);
+
+		is = IterableString.getInstance("\\\\||\\|\\|");
+		results = new String[]{"\\\\", "", "\\|\\|"};
+		performTest(is, results);
 	}
 
 	@Test
-	public void generalTestWithoutEscape() {
-		{
-			IterableString is = IterableString.getInstance("", '/', '>');
-			String[] results = new String[]{};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("Hello", '/', '>');
-			String[] results = new String[]{"Hello"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("Hello/World", '/', '>');
-			String[] results = new String[]{"Hello", "World"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("/", '/', '>');
-			String[] results = new String[]{"", ""};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("//", '/', '>');
-			String[] results = new String[]{"", "", ""};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
-		{
-			IterableString is = IterableString.getInstance("/Hello/", '/', '>');
-			String[] results = new String[]{"", "Hello", ""};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
+	public void generalTestWithOtherEscape() {
+		IterableString is = IterableString.getInstance("", '/', '>');
+		String[] results = new String[]{};
+		performTest(is, results);
+
+		is = IterableString.getInstance("Hello", '/', '>');
+		results = new String[]{"Hello"};
+		performTest(is, results);
+
+		is = IterableString.getInstance("Hello/World", '/', '>');
+		results = new String[]{"Hello", "World"};
+		performTest(is, results);
+
+		is = IterableString.getInstance("/", '/', '>');
+		results = new String[]{"", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance("//", '/', '>');
+		results = new String[]{"", "", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance("/Hello/", '/', '>');
+		results = new String[]{"", "Hello", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance("Hello>/World", '/', '>');
+		results = new String[]{"Hello>/World"};
+		performTest(is, results);
+
+		is = IterableString.getInstance(">/>/>/", '/', '>');
+		results = new String[]{">/>/>/"};
+		performTest(is, results);
+
+		is = IterableString.getInstance(">//>/>/", '/', '>');
+		results = new String[]{">/", ">/>/"};
+		performTest(is, results);
+
+		is = IterableString.getInstance(">>//>/>/", '/', '>');
+		results = new String[]{">>", "", ">/>/"};
+		performTest(is, results);
 	}
 
 	@Test
-	public void generalTestWithEscape() {
-		{
-			IterableString is = IterableString.getInstance("Hello>/World", '/', '>');
-			String[] results = new String[]{"Hello>/World"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
+	public void generalTestWithNoEscape() {
+		IterableString is = IterableString.getInstance("", '/');
+		String[] results = new String[]{};
+		performTest(is, results);
+
+		is = IterableString.getInstance("Hello", '/');
+		results = new String[]{"Hello"};
+		performTest(is, results);
+
+		is = IterableString.getInstance("Hello/World", '/');
+		results = new String[]{"Hello", "World"};
+		performTest(is, results);
+
+		is = IterableString.getInstance("/", '/');
+		results = new String[]{"", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance("//", '/');
+		results = new String[]{"", "", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance("/Hello/", '/');
+		results = new String[]{"", "Hello", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance("Hello>/World", '/');
+		results = new String[]{"Hello>", "World"};
+		performTest(is, results);
+
+		is = IterableString.getInstance(">/>/>/", '/');
+		results = new String[]{">", ">", ">", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance(">//>/>/", '/');
+		results = new String[]{">", "", ">", ">", ""};
+		performTest(is, results);
+
+		is = IterableString.getInstance(">>//>/>/", '/');
+		results = new String[]{">>", "", ">", ">", ""};
+		performTest(is, results);
+	}
+
+	@Test
+	public void generalTestNested() {
+		IterableString is = IterableString.getInstance("[Hello]|[World|Hello]|[World]|!", '|', '[', ']');
+		String[] results = new String[]{"[Hello]", "[World|Hello]", "[World]", "!"};
+		performTest(is, results);
+
+		try {
+			is = IterableString.getInstance("[Hello]|[World|Hello]]|[World]|!", '|', '[', ']');
+			results = new String[]{"[Hello]", "[World|Hello]", "[World]", "!"};
+			performTest(is, results);
+			fail();
+		} catch (Exception e) {
 		}
-		{
-			IterableString is = IterableString.getInstance(">/>/>/", '/', '>');
-			String[] results = new String[]{">/>/>/"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
+
+		try {
+			is = IterableString.getInstance("[Hello]|[World|Hello]|[World]|[!", '|', '[', ']');
+			results = new String[]{"[Hello]", "[World|Hello]", "[World]", "!"};
+			performTest(is, results);
+			fail();
+		} catch (Exception e) {
 		}
-		{
-			IterableString is = IterableString.getInstance(">//>/>/", '/', '>');
-			String[] results = new String[]{">/", ">/>/"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
+	}
+
+	private void performTest(IterableString is, String[] results) {
+		int i = 0;
+		for (String string : is) {
+			Assert.assertEquals(results[i], string);
+			i++;
 		}
-		{
-			IterableString is = IterableString.getInstance(">>//>/>/", '/', '>');
-			String[] results = new String[]{">>", "", ">/>/"};
-			int i = 0;
-			for (String string : is) {
-				Assert.assertEquals(results[i], string);
-				i++;
-			}
-			Assert.assertEquals(results.length, i);
-		}
+		Assert.assertEquals(results.length, i);
 	}
 
 }

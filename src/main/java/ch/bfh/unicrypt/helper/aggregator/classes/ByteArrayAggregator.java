@@ -39,86 +39,41 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.tree;
+package ch.bfh.unicrypt.helper.aggregator.classes;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.iterable.IterableValue;
-import java.util.Iterator;
+import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
- * An instance of this class represents a leaf of a {@link Tree}. Every leaf stores a value of a generic type {@code V}.
- * The recursive definition of a tree implies that a leaf is a tree on its own.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @param <V> The generic type of the value stored in the leaf
- * @see Tree
- * @see Node
+ *
+ * @author rolfhaenni
  */
-public class Leaf<V>
-	   extends Tree<V> {
+public class ByteArrayAggregator
+	   extends AbstractInvertibleAggregator<ByteArray> {
 
-	private final V value;
-
-	private Leaf(V value) {
-		this.value = value;
-	}
-
-	/**
-	 * Creates a new leaf storing a given value.
-	 * <p>
-	 * @param <V>   The generic type of the given value and the resulting leaf
-	 * @param value The given value
-	 * @return The new leaf
-	 */
-	public static <V> Leaf<V> getInstance(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		return new Leaf<V>(value);
-	}
-
-	/**
-	 * Returns the value stored in the leaf.
-	 * <p>
-	 * @return The value stored in the leaf
-	 */
-	public V getValue() {
-		return this.value;
+	@Override
+	public ByteArray abstractAggregate(ByteArray value) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public V abstractAggregate(Aggregator<V> aggregator) {
-		return aggregator.aggregate(this.value);
+	public ByteArray abstractAggregate(Iterable<ByteArray> values, int length) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Iterator<V> iterator() {
-		return IterableValue.getInstance(this.value).iterator();
+	protected boolean abstractIsSingle(ByteArray value) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	protected String defaultToStringContent() {
-		return this.value.toString();
+	protected ByteArray abstractDisaggregateSingle(ByteArray value) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public int hashCode() {
-		int hash = 7;
-		hash = 97 * hash + this.value.hashCode();
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Leaf<?> other = (Leaf<?>) obj;
-		return this.value.equals(other.value);
+	protected Iterable<ByteArray> abstractDisaggregateMultiple(ByteArray value) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

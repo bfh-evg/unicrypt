@@ -178,6 +178,7 @@ public class MathUtilTest {
 
 	@Test
 	public void testPairUnpair() {
+		Assert.assertEquals(0, MathUtil.unpair(MathUtil.pair(EMPTY_ARRAY), 0).length);
 		for (int i = 0; i <= 5; i++) {
 			BigInteger bi = BigInteger.valueOf(i);
 			Assert.assertEquals(bi, MathUtil.unpair(MathUtil.pair(bi), 1)[0]);
@@ -234,6 +235,11 @@ public class MathUtilTest {
 					Assert.assertEquals(bk, MathUtil.unpairWithSize(MathUtil.pairWithSize(bi, bj, bk))[2]);
 				}
 			}
+		}
+		for (int i = 0; i < 1000; i++) {
+			BigInteger[] values = MathUtil.unpairWithSize(BigInteger.valueOf(i));
+			BigInteger result = MathUtil.pairWithSize(values);
+			Assert.assertEquals(BigInteger.valueOf(i), result);
 		}
 	}
 

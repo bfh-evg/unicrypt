@@ -294,8 +294,8 @@ public final class MathUtil {
 
 	/**
 	 * Computes the elegant pairing function for a given list of non-negative BigInteger values. The size of the given
-	 * input list is taken as an additional top-level input value. The mapping can be inverted using
-	 * {@link MathUtil#unpairWithSize(java.math.BigInteger)}.
+	 * input list is taken as an additional top-level input value. The value 0 is reserved for an empty list. The
+	 * mapping can be inverted using {@link MathUtil#unpairWithSize(java.math.BigInteger)}.
 	 * <p>
 	 * @see MathUtil#unpairWithSize(java.math.BigInteger)
 	 * @see <a href="http://szudzik.com/ElegantPairing.pdf">ElegantPairing.pdf</a>
@@ -303,7 +303,10 @@ public final class MathUtil {
 	 * @return The result of applying the elegant pairing function
 	 */
 	public static BigInteger pairWithSize(BigInteger... values) {
-		return pair(pair(values), BigInteger.valueOf(values.length));
+		if (values.length == 0) {
+			return ZERO;
+		}
+		return pair(pair(values), BigInteger.valueOf(values.length - 1)).add(ONE);
 	}
 
 	/**
@@ -362,8 +365,11 @@ public final class MathUtil {
 	 * @return An array containing the resulting values
 	 */
 	public static BigInteger[] unpairWithSize(BigInteger value) {
-		BigInteger[] values = unpair(value);
-		return unpair(values[0], values[1].intValue());
+		if (value.equals(ZERO)) {
+			return new BigInteger[0];
+		}
+		BigInteger[] values = unpair(value.subtract(ONE));
+		return unpair(values[0], values[1].intValue() + 1);
 	}
 
 	/**

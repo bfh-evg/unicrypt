@@ -39,40 +39,38 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.aggregator;
+package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.aggregator.SingleOrMultiple;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
 
 /**
- *
- * @author rolfhaenni
+ * This abstract class serves as a base implementation for concrete {@link InvertibleAggregator} classes.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the values precessed by the invertible aggregator
  */
-public class ByteArrayAggregator
-	   extends Aggregator<ByteArray> {
+public abstract class AbstractInvertibleAggregator<V>
+	   extends AbstractAggregator<V>
+	   implements InvertibleAggregator<V> {
 
 	@Override
-	public ByteArray abstractAggregate(ByteArray value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public final SingleOrMultiple<V> disaggregate(V value) {
+		if (value == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.abstractIsSingle(value)) {
+			return SingleOrMultiple.getInstance(this.abstractDisaggregateSingle(value));
+		} else {
+			return SingleOrMultiple.getInstance(this.abstractDisaggregateMultiple(value));
+		}
 	}
 
-	@Override
-	public ByteArray abstractAggregate(Iterable<ByteArray> values, int length) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+	protected abstract boolean abstractIsSingle(V value);
 
-	@Override
-	protected boolean abstractIsSingle(ByteArray value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+	protected abstract V abstractDisaggregateSingle(V value);
 
-	@Override
-	protected ByteArray abstractDisaggregateSingle(ByteArray value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	protected Iterable<ByteArray> abstractDisaggregateMultiple(ByteArray value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+	protected abstract Iterable<V> abstractDisaggregateMultiple(V value);
 
 }

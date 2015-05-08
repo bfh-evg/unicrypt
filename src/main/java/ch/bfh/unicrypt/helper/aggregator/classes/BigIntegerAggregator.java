@@ -39,86 +39,67 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.tree;
+package ch.bfh.unicrypt.helper.aggregator.classes;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.iterable.IterableValue;
-import java.util.Iterator;
+import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.aggregator.SingleOrMultiple;
+import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
+import ch.bfh.unicrypt.helper.iterable.IterableArray;
+import java.math.BigInteger;
 
 /**
- * An instance of this class represents a leaf of a {@link Tree}. Every leaf stores a value of a generic type {@code V}.
- * The recursive definition of a tree implies that a leaf is a tree on its own.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @param <V> The generic type of the value stored in the leaf
- * @see Tree
- * @see Node
+ *
+ * @author rolfhaenni
  */
-public class Leaf<V>
-	   extends Tree<V> {
+public class BigIntegerAggregator
+	   extends AbstractInvertibleAggregator<BigInteger> {
 
-	private final V value;
-
-	private Leaf(V value) {
-		this.value = value;
+	public static BigIntegerAggregator getInstance() {
+		return new BigIntegerAggregator();
 	}
 
-	/**
-	 * Creates a new leaf storing a given value.
-	 * <p>
-	 * @param <V>   The generic type of the given value and the resulting leaf
-	 * @param value The given value
-	 * @return The new leaf
-	 */
-	public static <V> Leaf<V> getInstance(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
+	// leaves are marked with 0 bit
+	@Override
+	public BigInteger abstractAggregate(BigInteger value) {
+		return value.multiply(MathUtil.TWO);
+	}
+
+	// nodes are marked with 1 bit
+	@Override
+	public BigInteger abstractAggregate(Iterable<BigInteger> values, int length) {
+		BigInteger[] valueArray = new BigInteger[length];
+		int i = 0;
+		for (BigInteger value : values) {
+			valueArray[i] = value;
+			i++;
 		}
-		return new Leaf<V>(value);
-	}
-
-	/**
-	 * Returns the value stored in the leaf.
-	 * <p>
-	 * @return The value stored in the leaf
-	 */
-	public V getValue() {
-		return this.value;
+		return MathUtil.pairWithSize(valueArray).multiply(MathUtil.TWO).add(MathUtil.ONE);
 	}
 
 	@Override
-	public V abstractAggregate(Aggregator<V> aggregator) {
-		return aggregator.aggregate(this.value);
+	protected boolean abstractIsSingle(BigInteger value) {
+		return value.mod(MathUtil.TWO).equals(MathUtil.ZERO);
 	}
 
 	@Override
-	public Iterator<V> iterator() {
-		return IterableValue.getInstance(this.value).iterator();
+	protected BigInteger abstractDisaggregateSingle(BigInteger value) {
+		return value.divide(MathUtil.TWO);
 	}
 
 	@Override
-	protected String defaultToStringContent() {
-		return this.value.toString();
+	protected Iterable<BigInteger> abstractDisaggregateMultiple(BigInteger value) {
+		return IterableArray.getInstance(MathUtil.unpairWithSize(value.subtract(MathUtil.ONE).divide(MathUtil.TWO)));
 	}
 
-	@Override
-	public int hashCode() {
-		int hash = 7;
-		hash = 97 * hash + this.value.hashCode();
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
+	public static void main(String[] args) {
+		BigInteger b1 = BigInteger.valueOf(15);
+		BigInteger b2 = BigInteger.valueOf(20);
+		BigInteger b3 = BigInteger.valueOf(4);
+		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
+		SingleOrMultiple<BigInteger> result = aggregator.disaggregate(aggregator.aggregate(b1, b2, b3));
+		for (BigInteger value : result.getValues()) {
+			System.out.println(value);
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Leaf<?> other = (Leaf<?>) obj;
-		return this.value.equals(other.value);
 	}
 
 }

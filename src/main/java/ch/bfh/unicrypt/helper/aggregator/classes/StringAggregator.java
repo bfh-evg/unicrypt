@@ -39,18 +39,17 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.aggregator;
+package ch.bfh.unicrypt.helper.aggregator.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableString;
-import java.util.regex.Matcher;
 
 /**
  *
  * @author rolfhaenni
  */
 public class StringAggregator
-	   extends Aggregator<String> {
+	   extends AbstractInvertibleAggregator<String> {
 
 	private final char escapeCharacter;
 	private final char openingParenthesis;
@@ -68,7 +67,7 @@ public class StringAggregator
 		return new StringAggregator('\\', '[', ']', '|');
 	}
 
-	public static StringAggregator getInstance(char escapeCharacter, char openingParenthesis, char closingParenthesis, char separator) {
+	public static StringAggregator getInstance(char openingParenthesis, char closingParenthesis, char separator, char escapeCharacter) {
 		if (escapeCharacter == openingParenthesis || escapeCharacter == closingParenthesis || escapeCharacter == separator
 			   || openingParenthesis == closingParenthesis || openingParenthesis == separator || closingParenthesis == separator) {
 			throw new IllegalArgumentException();
@@ -122,28 +121,15 @@ public class StringAggregator
 			throw new IllegalArgumentException();
 		}
 		value = value.substring(1, value.length() - 1);
-		return IterableString.getInstance(value, this.separator, this.escapeCharacter);
+		return IterableString.getInstance(value, this.separator, this.openingParenthesis, this.closingParenthesis, this.escapeCharacter);
 	}
 
 	private String escape(String str, char c) {
-		return str.replaceAll("\\" + c, Matcher.quoteReplacement("" + this.escapeCharacter + c));
+		return str.replace("" + c, "" + this.escapeCharacter + c);
 	}
 
 	private String invertEscape(String str, char c) {
-		return str.replaceAll("\\" + this.escapeCharacter + c, Matcher.quoteReplacement("" + c));
-	}
-
-	public static void main(String[] args) {
-		StringAggregator sa1 = StringAggregator.getInstance();
-		System.out.println(sa1.aggregate("Hello\\[]|>()/"));
-		System.out.println(sa1.aggregate(DenseArray.getInstance("Hallo", "Velo")));
-		StringAggregator sa2 = StringAggregator.getInstance('>', '(', ')', '/');
-		System.out.println(sa2.aggregate("Hello\\[]|>()/"));
-		System.out.println(sa2.aggregate(DenseArray.getInstance("Hallo", "Velo")));
-		SingleOrMultiple<String> result = sa2.disaggregate(sa2.aggregate("Hallo", "Velo"));
-		for (String str : result.getValues()) {
-			System.out.println(str);
-		}
+		return str.replace("" + this.escapeCharacter + c, "" + c);
 	}
 
 }

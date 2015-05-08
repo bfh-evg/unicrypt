@@ -41,10 +41,16 @@
  */
 package ch.bfh.unicrypt.helper.aggregator;
 
+import ch.bfh.unicrypt.helper.aggregator.interfaces.InvertibleAggregator;
+
 /**
- *
- * @author rolfhaenni
- * @param <V>
+ * Instances of this class are containers for storing either a single value or an iterable collection of values of a
+ * generic type {@code V}. The main usage of this class is the return value of the method
+ * {@link InvertibleAggregator#disaggregate(java.lang.Object)}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the values
  */
 public class SingleOrMultiple<V> {
 
@@ -61,6 +67,13 @@ public class SingleOrMultiple<V> {
 		this.values = values;
 	}
 
+	/**
+	 * Creates a new instance from a single value.
+	 * <p>
+	 * @param <V>   The generic type of the value
+	 * @param value The given value
+	 * @return The new instance
+	 */
 	public static <V> SingleOrMultiple<V> getInstance(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
@@ -68,6 +81,13 @@ public class SingleOrMultiple<V> {
 		return new SingleOrMultiple<V>(value);
 	}
 
+	/**
+	 * Creates a new instance from an iterable collection of values.
+	 * <p>
+	 * @param <V>    The generic type of the values
+	 * @param values The given iterable collection of values
+	 * @return The new instance
+	 */
 	public static <V> SingleOrMultiple<V> getInstance(Iterable<V> values) {
 		if (values == null) {
 			throw new IllegalArgumentException();
@@ -75,15 +95,36 @@ public class SingleOrMultiple<V> {
 		return new SingleOrMultiple<V>(values);
 	}
 
+	/**
+	 * Checks if the instance contains a single value or multiple values.
+	 * <p>
+	 * @return {@literal true}, if the instance contains a single value, {@literal false} otherwise
+	 */
 	public boolean isSingle() {
 		return (this.values == null);
 	}
 
+	/**
+	 * Return the single value (if one exists).
+	 * <p>
+	 * @return The single value
+	 */
 	public V getValue() {
+		if (this.value == null) {
+			throw new UnsupportedOperationException();
+		};
 		return this.value;
 	}
 
+	/**
+	 * Returns the iterable collection of values (if one exists).
+	 * <p>
+	 * @return The iterable collection
+	 */
 	public Iterable<V> getValues() {
+		if (this.values == null) {
+			throw new UnsupportedOperationException();
+		};
 		return this.values;
 	}
 

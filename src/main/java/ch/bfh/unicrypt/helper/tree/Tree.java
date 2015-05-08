@@ -41,9 +41,10 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.aggregator.Aggregator;
+import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.aggregator.SingleOrMultiple;
-import ch.bfh.unicrypt.helper.aggregator.StringAggregator;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.InvertibleAggregator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +62,7 @@ import java.util.List;
  * @see Leaf
  */
 public abstract class Tree<V>
+	   extends UniCrypt
 	   implements Iterable<V> {
 
 	/**
@@ -73,7 +75,7 @@ public abstract class Tree<V>
 	 * @param aggregator      The aggregator specifying the conversion.
 	 * @return The new tree
 	 */
-	public static <V> Tree<V> getInstance(V aggregatedValue, Aggregator<V> aggregator) {
+	public static <V> Tree<V> getInstance(V aggregatedValue, InvertibleAggregator<V> aggregator) {
 		if (aggregatedValue == null || aggregator == null) {
 			throw new IllegalArgumentException();
 		}
@@ -111,26 +113,16 @@ public abstract class Tree<V>
 		return this instanceof Leaf;
 	}
 
-	protected abstract V abstractAggregate(Aggregator<V> aggregator);
-
-	public static void main(String[] args) {
-		Tree<String> l1 = Leaf.getInstance("One");
-		Tree<String> l2 = Leaf.getInstance("Two");
-		Tree<String> l3 = Leaf.getInstance("Three");
-		Tree<String> l4 = Leaf.getInstance("Four");
-		Tree<String> l5 = Leaf.getInstance("Five");
-		Tree<String> l6 = Leaf.getInstance("Six");
-		Tree<String> l7 = Leaf.getInstance("Seven");
-		Tree<String> l8 = Leaf.getInstance("Eight");
-		Tree<String> l9 = Leaf.getInstance("Nine");
-		Tree<String> n1 = Node.getInstance(l1, l2, l3);
-		Tree<String> n2 = Node.getInstance(l4, l5);
-		Tree<String> n3 = Node.getInstance(l6, l7, l8);
-		Tree<String> n4 = Node.getInstance(n1, n2, l9);
-		Tree<String> root = Node.getInstance(n3, n4);
-		StringAggregator sa = StringAggregator.getInstance();
-		System.out.println(root.aggregate(sa));
-//		[[Six|Seven|Eight]|[[One|Two|Three]|[Four|Five]|Nine]]
+	@Override
+	protected String defaultToStringType() {
+		return "Tree";
 	}
+
+	@Override
+	protected String defaultToStringContent() {
+		return "";
+	}
+
+	protected abstract V abstractAggregate(Aggregator<V> aggregator);
 
 }

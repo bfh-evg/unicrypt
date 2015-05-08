@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.aggregator;
+package ch.bfh.unicrypt.helper.aggregator.classes;
 
+import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 
@@ -49,7 +50,7 @@ import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
  * @author rolfhaenni
  */
 public class HashValueAggregator
-	   extends Aggregator<ByteArray> {
+	   extends AbstractAggregator<ByteArray> {
 
 	private HashAlgorithm hashAlgorithm;
 
@@ -61,21 +62,6 @@ public class HashValueAggregator
 	@Override
 	public ByteArray abstractAggregate(Iterable<ByteArray> values, int length) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	protected boolean abstractIsSingle(ByteArray value) {
-		throw new UnsupportedOperationException("Aggregation can not be inverted.");
-	}
-
-	@Override
-	protected ByteArray abstractDisaggregateSingle(ByteArray value) {
-		throw new UnsupportedOperationException("Aggregation can not be inverted.");
-	}
-
-	@Override
-	protected Iterable<ByteArray> abstractDisaggregateMultiple(ByteArray value) {
-		throw new UnsupportedOperationException("Aggregation can not be inverted.");
 	}
 
 }

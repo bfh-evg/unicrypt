@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.aggregator.Aggregator;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import java.util.Iterator;
 
@@ -133,33 +133,35 @@ public class Node<V>
 	@Override
 	public Iterator<V> iterator() {
 
-		final Iterator<Tree<V>> childrenIterator = this.children.iterator();
-
 		return new Iterator<V>() {
 
-			Tree<V> currentChild = null;
-			Iterator<V> currentIterator = null;
+			Iterator<Tree<V>> childrenIterator = children.iterator();
+			Tree<V> child = null;
+			Iterator<V> childIterator = null;
 
 			{
 				if (childrenIterator.hasNext()) {
-					this.currentChild = childrenIterator.next();
-					this.currentIterator = this.currentChild.iterator();
+					do {
+						this.child = childrenIterator.next();
+						this.childIterator = this.child.iterator();
+					} while (!childIterator.hasNext() && childrenIterator.hasNext());
 				}
-
 			}
 
 			@Override
 			public boolean hasNext() {
-				return currentChild != null && currentIterator.hasNext();
+				return child != null && childIterator.hasNext();
 			}
 
 			@Override
 			public V next() {
-				V next = currentIterator.next();
-				if (!currentIterator.hasNext()) {
+				V next = childIterator.next();
+				if (!childIterator.hasNext()) {
 					if (childrenIterator.hasNext()) {
-						this.currentChild = childrenIterator.next();
-						this.currentIterator = this.currentChild.iterator();
+						do {
+							this.child = childrenIterator.next();
+							this.childIterator = this.child.iterator();
+						} while (!childIterator.hasNext() && childrenIterator.hasNext());
 					}
 				}
 				return next;
@@ -174,6 +176,17 @@ public class Node<V>
 	}
 
 	@Override
+	protected String defaultToStringContent() {
+		String sep = "";
+		String result = "[";
+		for (Tree<V> child : this.children) {
+			result = result + sep + child.defaultToStringContent();
+			sep = "|";
+		}
+		return result + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		int hash = 7;
 		hash = 11 * hash + this.children.hashCode();
@@ -182,6 +195,9 @@ public class Node<V>
 
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
 		if (obj == null) {
 			return false;
 		}
@@ -189,7 +205,16 @@ public class Node<V>
 			return false;
 		}
 		final Node<?> other = (Node<?>) obj;
-		return this.children.equals(other.children);
+		return equalIterators(this.children.iterator(), other.children.iterator());
+	}
+
+	private static boolean equalIterators(Iterator<?> it1, Iterator<?> it2) {
+		while (it1.hasNext() && it2.hasNext()) {
+			if (!it1.next().equals(it2.next())) {
+				return false;
+			}
+		}
+		return (!it1.hasNext() && !it2.hasNext());
 	}
 
 }
