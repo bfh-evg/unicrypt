@@ -127,7 +127,7 @@ public class Node<V>
 				};
 			}
 		};
-		return aggregator.aggregate(childrenValues);
+		return aggregator.aggregateNode(childrenValues);
 	}
 
 	@Override

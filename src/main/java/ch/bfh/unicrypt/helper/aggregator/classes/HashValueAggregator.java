@@ -55,12 +55,12 @@ public class HashValueAggregator
 	private HashAlgorithm hashAlgorithm;
 
 	@Override
-	public ByteArray abstractAggregate(ByteArray value) {
+	protected ByteArray abstractAggregateLeaf(ByteArray value) {
 		return value.getHashValue(this.hashAlgorithm);
 	}
 
 	@Override
-	public ByteArray abstractAggregate(Iterable<ByteArray> values, int length) {
+	protected ByteArray abstractAggregateNode(Iterable<ByteArray> values, int length) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

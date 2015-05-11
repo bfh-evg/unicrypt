@@ -42,31 +42,48 @@
 package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.aggregator.SingleOrMultiple;
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import java.math.BigInteger;
 
 /**
- *
- * @author rolfhaenni
+ * The single instance of this class specifies the invertible aggregation of a tree of non-negative {@code BigInteger}
+ * values. Leaves are marked by setting the least significant bit to 0 (by multiplying the value by 2). Similarly, nodes
+ * are marked by setting the least significant bit to 1 (by multiplying the value by 2 and adding 1). The values
+ * obtained from the children of a node are aggregated using {@link MathUtil#pairWithSize(java.math.BigInteger...)}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public class BigIntegerAggregator
 	   extends AbstractInvertibleAggregator<BigInteger> {
 
+	private static BigIntegerAggregator instance = null;
+
+	/**
+	 * Return the single instance of this class.
+	 * <p>
+	 * @return The single instance of this class
+	 */
 	public static BigIntegerAggregator getInstance() {
-		return new BigIntegerAggregator();
+		if (BigIntegerAggregator.instance == null) {
+			BigIntegerAggregator.instance = new BigIntegerAggregator();
+		}
+		return BigIntegerAggregator.instance;
 	}
 
 	// leaves are marked with 0 bit
 	@Override
-	public BigInteger abstractAggregate(BigInteger value) {
+	protected BigInteger abstractAggregateLeaf(BigInteger value) {
+		if (value.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
 		return value.multiply(MathUtil.TWO);
 	}
 
 	// nodes are marked with 1 bit
 	@Override
-	public BigInteger abstractAggregate(Iterable<BigInteger> values, int length) {
+	protected BigInteger abstractAggregateNode(Iterable<BigInteger> values, int length) {
 		BigInteger[] valueArray = new BigInteger[length];
 		int i = 0;
 		for (BigInteger value : values) {
@@ -77,29 +94,23 @@ public class BigIntegerAggregator
 	}
 
 	@Override
-	protected boolean abstractIsSingle(BigInteger value) {
+	protected boolean abstractIsLeaf(BigInteger value) {
 		return value.mod(MathUtil.TWO).equals(MathUtil.ZERO);
 	}
 
 	@Override
-	protected BigInteger abstractDisaggregateSingle(BigInteger value) {
+	protected boolean abstractIsNode(BigInteger value) {
+		return value.mod(MathUtil.TWO).equals(MathUtil.ONE);
+	}
+
+	@Override
+	protected BigInteger abstractDisaggregateLeaf(BigInteger value) {
 		return value.divide(MathUtil.TWO);
 	}
 
 	@Override
-	protected Iterable<BigInteger> abstractDisaggregateMultiple(BigInteger value) {
+	protected Iterable<BigInteger> abstractDisaggregateNode(BigInteger value) {
 		return IterableArray.getInstance(MathUtil.unpairWithSize(value.subtract(MathUtil.ONE).divide(MathUtil.TWO)));
-	}
-
-	public static void main(String[] args) {
-		BigInteger b1 = BigInteger.valueOf(15);
-		BigInteger b2 = BigInteger.valueOf(20);
-		BigInteger b3 = BigInteger.valueOf(4);
-		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
-		SingleOrMultiple<BigInteger> result = aggregator.disaggregate(aggregator.aggregate(b1, b2, b3));
-		for (BigInteger value : result.getValues()) {
-			System.out.println(value);
-		}
 	}
 
 }

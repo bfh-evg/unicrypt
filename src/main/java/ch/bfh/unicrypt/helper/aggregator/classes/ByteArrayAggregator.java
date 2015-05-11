@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import java.nio.ByteBuffer;
 
 /**
  *
@@ -51,29 +52,52 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 public class ByteArrayAggregator
 	   extends AbstractInvertibleAggregator<ByteArray> {
 
+	private static final byte LEAF_IDENTIFIER = (byte) 0x01;
+	private static final byte NODE_IDENTIFIER = (byte) 0x00;
+	private static final int PREFIX_LENGTH = 5;
+
 	@Override
-	public ByteArray abstractAggregate(ByteArray value) {
+	protected ByteArray abstractAggregateLeaf(ByteArray value) {
+		ByteBuffer buffer = ByteBuffer.allocate(PREFIX_LENGTH + value.getLength());
+		buffer.put(LEAF_IDENTIFIER);
+		buffer.putInt(value.getLength());
+		buffer.put(value.getBytes());
+		return new SafeByteArray(buffer.array());
+	}
+
+	@Override
+	protected ByteArray abstractAggregateNode(Iterable<ByteArray> values, int length) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public ByteArray abstractAggregate(Iterable<ByteArray> values, int length) {
+	protected boolean abstractIsLeaf(ByteArray value) {
+		return value.getLength() >= PREFIX_LENGTH && value.getAt(0) == LEAF_IDENTIFIER;
+	}
+
+	@Override
+	protected boolean abstractIsNode(ByteArray value) {
+		return value.getLength() >= PREFIX_LENGTH && value.getAt(0) == NODE_IDENTIFIER;
+	}
+
+	@Override
+	protected ByteArray abstractDisaggregateLeaf(ByteArray value) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	protected boolean abstractIsSingle(ByteArray value) {
+	protected Iterable<ByteArray> abstractDisaggregateNode(ByteArray value) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
-	@Override
-	protected ByteArray abstractDisaggregateSingle(ByteArray value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+}
+// this local class allows creating instances of ByteArray without copying the array
 
-	@Override
-	protected Iterable<ByteArray> abstractDisaggregateMultiple(ByteArray value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+class SafeByteArray
+	   extends ByteArray {
+
+	protected SafeByteArray(byte[] bytes) {
+		super(bytes);
 	}
 
 }

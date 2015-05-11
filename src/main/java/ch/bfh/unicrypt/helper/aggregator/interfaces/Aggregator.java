@@ -44,10 +44,10 @@ package ch.bfh.unicrypt.helper.aggregator.interfaces;
 import ch.bfh.unicrypt.helper.tree.Tree;
 
 /**
- * The purpose of an aggregator is to aggregate the values stored in a {@link Tree} of type {@code V} into a single
+ * The purpose of an aggregator is to aggregateNode the values stored in a {@link Tree} of type {@code V} into a single
  * value of type {@code V}. An aggregator is thus required each time the method {@link Tree#aggregate(Aggregator)} is
  * called. For this, each aggregator provides two distinct operations: the conversion of the value stored in some leaf
- * of the tree and the conversion of the values obtained from the children of some node in the tree.
+ * of the tree and the conversion of the aggregated values obtained from the children of some node in the tree.
  * <p>
  * @author R. Haenni
  * @version 2.0
@@ -57,27 +57,28 @@ import ch.bfh.unicrypt.helper.tree.Tree;
 public interface Aggregator<V> {
 
 	/**
-	 * Performs the aggregation of a single value, if necessary (in some cases single values need not to be processed).
+	 * Performs the aggregation of a single value stored in a leaf (in some cases single values need not to be
+	 * processed).
 	 * <p>
 	 * @param value The given value
 	 * @return The aggregated value
 	 */
-	public V aggregate(V value);
+	public V aggregateLeaf(V value);
 
 	/**
-	 * Performs the aggregation of multiple values given as a Java array.
+	 * Performs the aggregation of multiple aggregated values obtained from the children of some node.
 	 * <p>
-	 * @param values The given values
+	 * @param values The given Java array of aggregated values
 	 * @return The aggregated value
 	 */
-	public V aggregate(V... values);
+	public V aggregateNode(V... values);
 
 	/**
-	 * Performs the aggregation of multiple values given as an iterable collection.
+	 * Performs the aggregation of multiple aggregated values obtained from the children of some node.
 	 * <p>
-	 * @param values The given iterable collection of values
+	 * @param values The given iterable collection of aggregated values
 	 * @return The aggregated value
 	 */
-	public V aggregate(Iterable<V> values);
+	public V aggregateNode(Iterable<V> values);
 
 }

@@ -41,16 +41,16 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.interfaces;
 
-import ch.bfh.unicrypt.helper.aggregator.SingleOrMultiple;
 import ch.bfh.unicrypt.helper.tree.Tree;
 
 /**
- * An invertible aggregator is an aggregator with an additional method {@link InvertibleAggregator#disaggregate(Object)}
- * for converting an aggregated value back to the original input. The purpose of an invertible aggregator is to help
- * re-constructing a tree from a single aggregated value using {@link Tree#getInstance(Object, InvertibleAggregator)}.
- * In this process, the additional method {@link InvertibleAggregator#disaggregate(Object)} produces either a single
- * value (to be stored in a leaf) or multiple values (to be processed further to construct the children of a node). The
- * necessary flexibility of the return value is provided by the class {@link SingleOrMultiple}.
+ * An invertible aggregator is an aggregator with an additional method
+ * {@link InvertibleAggregator#disaggregateLeaf(Object)} for converting an aggregated value back to the original input.
+ * The purpose of an invertible aggregator is to help re-constructing a tree from a single aggregated value using
+ * {@link Tree#getInstance(Object, InvertibleAggregator)}. In this process, the additional method
+ * {@link InvertibleAggregator#disaggregateLeaf(Object)} produces a single value to be stored in a leaf. Similarly, the
+ * method {@link InvertibleAggregator#disaggregateNode(Object)} produces multiple values to be processed further to
+ * construct the children of a node.
  * <p>
  * @author R. Haenni
  * @version 2.0
@@ -67,6 +67,30 @@ public interface InvertibleAggregator<V>
 	 * @param value The given aggregated value
 	 * @return The result of inverting the aggregation
 	 */
-	public SingleOrMultiple<V> disaggregate(V value);
+	public V disaggregateLeaf(V value);
+
+	/**
+	 * Inverts the aggregation for a given input value. The result is either a single value or multiple values.
+	 * <p>
+	 * @param value The given aggregated value
+	 * @return The result of inverting the aggregation
+	 */
+	public Iterable<V> disaggregateNode(V value);
+
+	/**
+	 * Checks if a given value represents a leaf.
+	 * <p>
+	 * @param value The given value
+	 * @return {@literal true}, if the value represents a leaf, {@literal false} otherwise
+	 */
+	public boolean isLeaf(V value);
+
+	/**
+	 * Checks if a given value represents a node.
+	 * <p>
+	 * @param value The given value
+	 * @return {@literal true}, if the value represents a node, {@literal false} otherwise
+	 */
+	public boolean isNode(V value);
 
 }

@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
-import ch.bfh.unicrypt.helper.aggregator.SingleOrMultiple;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
 
 /**
@@ -56,21 +55,43 @@ public abstract class AbstractInvertibleAggregator<V>
 	   implements InvertibleAggregator<V> {
 
 	@Override
-	public final SingleOrMultiple<V> disaggregate(V value) {
+	public final V disaggregateLeaf(V value) {
+		if (value == null || !this.abstractIsLeaf(value)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractDisaggregateLeaf(value);
+	}
+
+	@Override
+	public final Iterable<V> disaggregateNode(V value) {
+		if (value == null || this.abstractIsLeaf(value)) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractDisaggregateNode(value);
+	}
+
+	@Override
+	public final boolean isLeaf(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.abstractIsSingle(value)) {
-			return SingleOrMultiple.getInstance(this.abstractDisaggregateSingle(value));
-		} else {
-			return SingleOrMultiple.getInstance(this.abstractDisaggregateMultiple(value));
-		}
+		return abstractIsLeaf(value);
 	}
 
-	protected abstract boolean abstractIsSingle(V value);
+	@Override
+	public final boolean isNode(V value) {
+		if (value == null) {
+			throw new IllegalArgumentException();
+		}
+		return abstractIsNode(value);
+	}
 
-	protected abstract V abstractDisaggregateSingle(V value);
+	protected abstract boolean abstractIsLeaf(V value);
 
-	protected abstract Iterable<V> abstractDisaggregateMultiple(V value);
+	protected abstract boolean abstractIsNode(V value);
+
+	protected abstract V abstractDisaggregateLeaf(V value);
+
+	protected abstract Iterable<V> abstractDisaggregateNode(V value);
 
 }

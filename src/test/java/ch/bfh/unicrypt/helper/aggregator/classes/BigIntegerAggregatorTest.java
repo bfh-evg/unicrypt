@@ -39,60 +39,54 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.aggregator.abstracts;
+package ch.bfh.unicrypt.helper.aggregator.classes;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.iterable.IterableArray;
-import java.util.Collection;
+import ch.bfh.unicrypt.helper.MathUtil;
+import java.math.BigInteger;
+import org.junit.Assert;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 
 /**
- * This abstract class serves as a base implementation for concrete {@link Aggregator} classes.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @param <V> The generic type of the values precessed by the aggregator
+ *
+ * @author rolfhaenni
  */
-public abstract class AbstractAggregator<V>
-	   implements Aggregator<V> {
+public class BigIntegerAggregatorTest {
 
-	@Override
-	public final V aggregateLeaf(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
+	@Test
+	public void BigIntegerAggregatorTestLeaf() {
+		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
+		for (int i = 0; i < 100; i++) {
+			BigInteger value = BigInteger.valueOf(i);
+			BigInteger aggregatedValue = aggregator.aggregateLeaf(value);
+			Assert.assertTrue(aggregator.isLeaf(aggregatedValue));
+			Assert.assertFalse(aggregator.isNode(aggregatedValue));
+			Assert.assertEquals(value.multiply(MathUtil.TWO), aggregatedValue);
+			Assert.assertEquals(value, aggregator.disaggregateLeaf(aggregatedValue));
 		}
-		return this.abstractAggregateLeaf(value);
+		try {
+			aggregator.disaggregateLeaf(BigInteger.ONE);
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
-	@Override
-	public final V aggregateNode(V... values) {
-		return this.aggregateNode(IterableArray.getInstance(values));
-	}
-
-	@Override
-	public final V aggregateNode(Iterable<V> values) {
-		if (values == null) {
-			throw new IllegalArgumentException();
+	@Test
+	public void BigIntegerAggregatorTestNode() {
+		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
+		for (int i = 1; i < 100; i = i + 2) {
+			BigInteger aggregatedValue = BigInteger.valueOf(i);
+			Assert.assertFalse(aggregator.isLeaf(aggregatedValue));
+			Assert.assertTrue(aggregator.isNode(aggregatedValue));
+			Iterable<BigInteger> values = aggregator.disaggregateNode(aggregatedValue);
+			Assert.assertEquals(MathUtil.ONE, aggregatedValue.mod(MathUtil.TWO));
+			Assert.assertEquals(aggregatedValue, aggregator.aggregateNode(values));
 		}
-		int length;
-		if (values instanceof ImmutableArray) {
-			length = ((ImmutableArray) values).getLength();
-		} else if (values instanceof Collection) {
-			length = ((Collection) values).size();
-		} else {
-			length = 0;
-			for (V value : values) {
-				if (value == null) {
-					throw new IllegalArgumentException();
-				}
-				length++;
-			}
+		try {
+			aggregator.disaggregateNode(BigInteger.ZERO);
+			fail();
+		} catch (Exception e) {
 		}
-		return this.abstractAggregateNode(values, length);
 	}
-
-	protected abstract V abstractAggregateLeaf(V value);
-
-	protected abstract V abstractAggregateNode(Iterable<V> values, int size);
 
 }

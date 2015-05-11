@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.aggregator.SingleOrMultiple;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.InvertibleAggregator;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,16 +78,18 @@ public abstract class Tree<V>
 		if (aggregatedValue == null || aggregator == null) {
 			throw new IllegalArgumentException();
 		}
-		SingleOrMultiple<V> result = aggregator.disaggregate(aggregatedValue);
-		if (result.isSingle()) {
-			return Leaf.getInstance(result.getValue());
-		} else {
-			List<Tree<V>> subTrees = new ArrayList<Tree<V>>();
-			for (V value : result.getValues()) {
-				subTrees.add(Tree.getInstance(value, aggregator));
-			}
-			return Node.getInstance(subTrees);
+		if (aggregator.isLeaf(aggregatedValue)) {
+			V value = aggregator.disaggregateLeaf(aggregatedValue);
+			return Leaf.getInstance(value);
 		}
+		if (aggregator.isNode(aggregatedValue)) {
+			List<Tree<V>> nodes = new ArrayList<Tree<V>>();
+			for (V value : aggregator.disaggregateNode(aggregatedValue)) {
+				nodes.add(Tree.getInstance(value, aggregator));
+			}
+			return Node.getInstance(nodes);
+		}
+		throw new IllegalArgumentException();
 	}
 
 	/**

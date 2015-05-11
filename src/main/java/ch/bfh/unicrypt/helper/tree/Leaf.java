@@ -89,7 +89,7 @@ public class Leaf<V>
 
 	@Override
 	public V abstractAggregate(Aggregator<V> aggregator) {
-		return aggregator.aggregate(this.value);
+		return aggregator.aggregateLeaf(this.value);
 	}
 
 	@Override

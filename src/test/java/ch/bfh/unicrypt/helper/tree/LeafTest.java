@@ -56,7 +56,7 @@ public class LeafTest {
 	public void generalLeafTest() {
 
 		StringAggregator aggregator1 = StringAggregator.getInstance();
-		StringAggregator aggregator2 = StringAggregator.getInstance('>', '(', ')', '/');
+		StringAggregator aggregator2 = StringAggregator.getInstance('\'', '>', '(', ')', '/');
 
 		String[] strings = new String[]{"Hello", "", "\\", "|", "||", "\\|", "\\\\", "[", "]", "\\[]|\\\\|[\\]"};
 

@@ -45,48 +45,80 @@ import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableString;
 
 /**
- *
- * @author rolfhaenni
+ * Instance of this class specify the invertible aggregation of a tree of strings. The aggregation of a node consists in
+ * separating the aggregated strings obtained from the children with separator character and surrounding them by an
+ * opening and closing parenthesis. Corresponding characters can be chosen freely (the default characters are
+ * {@code '|'}, {@code '['}, and {@code ']'}, respectively). To avoid conflicts with the strings contained in the
+ * leaves, an escape character needs to be specified (the default escape character is {@code '\'}). The aggregation of a
+ * leaf consists in adding the escape character to each conflict and surrounding the string by quotes (the default quote
+ * character is {@code '"'}).
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public class StringAggregator
 	   extends AbstractInvertibleAggregator<String> {
 
-	private final char escapeCharacter;
+	private static StringAggregator defaultInstance = null;
+
+	private final char quoteCharacter;
 	private final char openingParenthesis;
 	private final char closingParenthesis;
 	private final char separator;
+	private final char escapeCharacter;
 
-	private StringAggregator(char escapeCharacter, char openingParenthesis, char closingParenthesis, char separator) {
-		this.escapeCharacter = escapeCharacter;
+	private StringAggregator(char quoteCharacter, char openingParenthesis, char closingParenthesis, char separator, char escapeCharacter) {
+		this.quoteCharacter = quoteCharacter;
 		this.openingParenthesis = openingParenthesis;
 		this.closingParenthesis = closingParenthesis;
 		this.separator = separator;
+		this.escapeCharacter = escapeCharacter;
 	}
 
+	/**
+	 * Returns the default instance of this class with the default quote, separator, parenthesis, and escape characters.
+	 * <p>
+	 * @return The default instance of this class
+	 */
 	public static StringAggregator getInstance() {
-		return new StringAggregator('\\', '[', ']', '|');
+		if (StringAggregator.defaultInstance == null) {
+			StringAggregator.defaultInstance = new StringAggregator('"', '[', ']', '|', '\\');
+		}
+		return StringAggregator.defaultInstance;
 	}
 
-	public static StringAggregator getInstance(char openingParenthesis, char closingParenthesis, char separator, char escapeCharacter) {
-		if (escapeCharacter == openingParenthesis || escapeCharacter == closingParenthesis || escapeCharacter == separator
+	/**
+	 * Returns a new instance of this class for given quote, separator, parenthesis, and escape characters.
+	 * <p>
+	 * @param quoteChar          The quote character
+	 * @param openingParenthesis The opening parenthesis
+	 * @param closingParenthesis The closing parenthesis
+	 * @param separator          The separator character
+	 * @param escapeCharacter    The escape character
+	 * @return The new instance of this class
+	 */
+	public static StringAggregator getInstance(char quoteChar, char openingParenthesis, char closingParenthesis, char separator, char escapeCharacter) {
+		if (quoteChar == openingParenthesis || quoteChar == closingParenthesis || quoteChar == separator || quoteChar == escapeCharacter
+			   || escapeCharacter == openingParenthesis || escapeCharacter == closingParenthesis || escapeCharacter == separator
 			   || openingParenthesis == closingParenthesis || openingParenthesis == separator || closingParenthesis == separator) {
 			throw new IllegalArgumentException();
 		}
-		return new StringAggregator(escapeCharacter, openingParenthesis, closingParenthesis, separator);
+		return new StringAggregator(quoteChar, openingParenthesis, closingParenthesis, separator, escapeCharacter);
 	}
 
 	@Override
-	public String abstractAggregate(String value) {
+	protected String abstractAggregateLeaf(String value) {
 		// escape character must be escaped first!
 		value = this.escape(value, this.escapeCharacter);
+		value = this.escape(value, this.quoteCharacter);
 		value = this.escape(value, this.openingParenthesis);
 		value = this.escape(value, this.closingParenthesis);
 		value = this.escape(value, this.separator);
-		return value;
+		return this.quoteCharacter + value + this.quoteCharacter;
 	}
 
 	@Override
-	public String abstractAggregate(Iterable<String> values, int length) {
+	protected String abstractAggregateNode(Iterable<String> values, int length) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.openingParenthesis);
 		for (String value : values) {
@@ -101,25 +133,29 @@ public class StringAggregator
 	}
 
 	@Override
-	protected boolean abstractIsSingle(String value) {
-		return value.length() == 0 || value.charAt(0) != this.openingParenthesis;
+	protected boolean abstractIsLeaf(String value) {
+		return value.length() >= 2 && value.charAt(0) == this.quoteCharacter && value.charAt(value.length() - 1) == this.quoteCharacter;
 	}
 
 	@Override
-	protected String abstractDisaggregateSingle(String value) {
+	protected boolean abstractIsNode(String value) {
+		return value.length() >= 2 && value.charAt(0) == this.openingParenthesis && value.charAt(value.length() - 1) == this.closingParenthesis;
+	}
+
+	@Override
+	protected String abstractDisaggregateLeaf(String value) {
+		value = value.substring(1, value.length() - 1);
 		// escape character must be de-escaped last!
-		value = this.invertEscape(value, this.separator);
-		value = this.invertEscape(value, this.closingParenthesis);
+		value = this.invertEscape(value, this.quoteCharacter);
 		value = this.invertEscape(value, this.openingParenthesis);
+		value = this.invertEscape(value, this.closingParenthesis);
+		value = this.invertEscape(value, this.separator);
 		value = this.invertEscape(value, this.escapeCharacter);
 		return value;
 	}
 
 	@Override
-	protected Iterable<String> abstractDisaggregateMultiple(String value) {
-		if (value.charAt(value.length() - 1) != this.closingParenthesis) {
-			throw new IllegalArgumentException();
-		}
+	protected Iterable<String> abstractDisaggregateNode(String value) {
 		value = value.substring(1, value.length() - 1);
 		return IterableString.getInstance(value, this.separator, this.openingParenthesis, this.closingParenthesis, this.escapeCharacter);
 	}
