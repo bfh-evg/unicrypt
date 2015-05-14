@@ -596,32 +596,4 @@ public class ByteArray
 		return MathUtil.and(mask1, mask2);
 	}
 
-//  // SPEEDTEST
-//	public static void main(String[] args) {
-//		byte[] ba1 = new byte[256];
-//		byte[] ba2 = new byte[256];
-//		ByteArray ban1 = ByteArray.getInstance(ba1);
-//		ByteArray ban2 = ByteArray.getInstance(ba2);
-//
-//		int runs = 1000000;
-//
-//		long t1 = System.nanoTime();
-//		for (int i = 0; i < runs; i++) {
-//			byte[] ba3 = new byte[256];
-//			for (int j = 0; j < 256; j++) {
-//				ba3[j] = (byte) (ba1[j] | ba2[j]);
-//			}
-//		}
-//
-//		long t2 = System.nanoTime();
-//
-//		for (int i = 0; i < runs; i++) {
-//			ByteArray ban3 = ban1.or(ban2);
-//		}
-//
-//		long t3 = System.nanoTime();
-//
-//		System.out.println(t2 - t1);
-//		System.out.println(t3 - t2);
-//	}
 }

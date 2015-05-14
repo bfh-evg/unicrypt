@@ -39,59 +39,42 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.aggregator.abstracts;
+package ch.bfh.unicrypt.helper.aggregator;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
+import ch.bfh.unicrypt.helper.aggregator.classes.HashValueAggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * This abstract class serves as a base implementation for the {@link InvertibleAggregator} interface.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @param <V> The generic type of the values precessed by the invertible aggregator
+ *
+ * @author rolfhaenni
  */
-public abstract class AbstractInvertibleAggregator<V>
-	   extends AbstractAggregator<V>
-	   implements InvertibleAggregator<V> {
+public class HashValueAggregatorTest {
 
-	@Override
-	public final V disaggregateLeaf(V value) {
-		if (value == null || !this.abstractIsLeaf(value)) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractDisaggregateLeaf(value);
+	@Test
+	public void test() {
+
+		ByteArray b0 = ByteArray.getInstance();
+		ByteArray b1 = ByteArray.getInstance(0);
+		ByteArray b2 = ByteArray.getInstance(0, 1);
+
+		ByteArray h0 = b0.getHashValue();
+		ByteArray h1 = b1.getHashValue();
+		ByteArray h2 = b2.getHashValue();
+
+		HashValueAggregator agr1 = HashValueAggregator.getInstance();
+		HashValueAggregator agr2 = HashValueAggregator.getInstance(HashAlgorithm.MD5);
+
+		Assert.assertEquals(agr1.getHashAlgorithm().getByteLength(), agr1.aggregateLeaf(b1).getLength());
+		Assert.assertEquals(agr2.getHashAlgorithm().getByteLength(), agr2.aggregateLeaf(b1).getLength());
+
+		Assert.assertEquals(agr1.getHashAlgorithm().getByteLength(), agr1.aggregateNode(b0, b1, b2).getLength());
+		Assert.assertEquals(agr2.getHashAlgorithm().getByteLength(), agr2.aggregateNode(b0, b1, b2).getLength());
+
+		Assert.assertEquals(h0.append(h1).append(h2).getHashValue(), agr1.aggregateNode(h0, h1, h2));
+
 	}
-
-	@Override
-	public final Iterable<V> disaggregateNode(V value) {
-		if (value == null || this.abstractIsLeaf(value)) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractDisaggregateNode(value);
-	}
-
-	@Override
-	public final boolean isLeaf(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		return abstractIsLeaf(value);
-	}
-
-	@Override
-	public final boolean isNode(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		return abstractIsNode(value);
-	}
-
-	protected abstract boolean abstractIsLeaf(V value);
-
-	protected abstract boolean abstractIsNode(V value);
-
-	protected abstract V abstractDisaggregateLeaf(V value);
-
-	protected abstract Iterable<V> abstractDisaggregateNode(V value);
 
 }

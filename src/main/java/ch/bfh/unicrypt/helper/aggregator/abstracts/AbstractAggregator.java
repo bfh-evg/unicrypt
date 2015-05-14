@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import java.util.Collection;
 
 /**
- * This abstract class serves as a base implementation for concrete {@link Aggregator} classes.
+ * This abstract class serves as a base implementation for the {@link Aggregator} interface.
  * <p>
  * @author R. Haenni
  * @version 2.0

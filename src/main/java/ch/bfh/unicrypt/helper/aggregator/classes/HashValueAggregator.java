@@ -46,13 +46,59 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 
 /**
- *
- * @author rolfhaenni
+ * Instances of this class perform the aggregation of a tree of {@code ByteArray} values by recursively applying a hash
+ * algorithm to its leaves and nodes. For a hash algorithm {@code Hash}, a tree with two children {@code l1} and
+ * {@code l2} is aggregated into {@code Hash(Hash(l1)|Hash(l2))}, where {@code |} denotes concatenation. This operation
+ * is not invertible.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @see HashAlgorithm
  */
 public class HashValueAggregator
 	   extends AbstractAggregator<ByteArray> {
 
-	private HashAlgorithm hashAlgorithm;
+	private final HashAlgorithm hashAlgorithm;
+
+	private static HashValueAggregator defaultInstance = null;
+
+	private HashValueAggregator(HashAlgorithm hashAlgorithm) {
+		this.hashAlgorithm = hashAlgorithm;
+	}
+
+	/**
+	 * Returns the default instance of this class, which is based on the library's default hash algorithm.
+	 * <p>
+	 * @return The default instance
+	 */
+	public static HashValueAggregator getInstance() {
+		if (HashValueAggregator.defaultInstance == null) {
+			HashValueAggregator.defaultInstance = new HashValueAggregator(HashAlgorithm.getInstance());
+		}
+		return HashValueAggregator.defaultInstance;
+	}
+
+	/**
+	 * Returns a new instance of this class for a given hash algorithm.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @return The new instance
+	 */
+	public static HashValueAggregator getInstance(HashAlgorithm hashAlgorithm) {
+		if (hashAlgorithm == null) {
+			throw new IllegalArgumentException();
+		}
+		return new HashValueAggregator(hashAlgorithm);
+	}
+
+	/**
+	 * Returns the hash algorithm of this aggregator.
+	 * <p>
+	 * @return The hash algorithm
+	 */
+	public HashAlgorithm getHashAlgorithm() {
+		return this.hashAlgorithm;
+	}
 
 	@Override
 	protected ByteArray abstractAggregateLeaf(ByteArray value) {
@@ -61,7 +107,13 @@ public class HashValueAggregator
 
 	@Override
 	protected ByteArray abstractAggregateNode(Iterable<ByteArray> values, int length) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		ByteArray[] byteArrays = new ByteArray[length];
+		int i = 0;
+		for (ByteArray value : values) {
+			byteArrays[i] = value;
+			i++;
+		}
+		return ByteArray.getInstance(byteArrays).getHashValue(this.hashAlgorithm);
 	}
 
 }
