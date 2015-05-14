@@ -75,7 +75,7 @@ public class ByteArray
 	private static final ByteArrayToString STRING_CONVERTER = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|");
 
 	// the internal Java array containing the byte values
-	private byte[] bytes;
+	protected byte[] bytes;
 
 	// a flag that indicates whether the bits of each byte value have been reversed
 	private boolean byteReversed;

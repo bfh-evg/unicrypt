@@ -42,7 +42,9 @@
 package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
+import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -168,6 +170,29 @@ public class NodeTest {
 			Tree<BigInteger> tree = Tree.getInstance(BigInteger.valueOf(i), aggregator);
 			Assert.assertEquals(i, tree.aggregate(aggregator).intValue());
 		}
+	}
+
+	@Test
+	public void generalNodeTest4() {
+		Tree<ByteArray> l1 = Leaf.getInstance(ByteArray.getInstance(1));
+		Tree<ByteArray> l2 = Leaf.getInstance(ByteArray.getInstance(1, 2));
+		Tree<ByteArray> l3 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3));
+		Tree<ByteArray> l4 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4));
+		Tree<ByteArray> l5 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5));
+		Tree<ByteArray> l6 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6));
+		Tree<ByteArray> l7 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6, 7));
+		Tree<ByteArray> l8 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8));
+		Tree<ByteArray> l9 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8, 9));
+		Tree<ByteArray> n1 = Node.getInstance(l1, l2, l3);
+		Tree<ByteArray> n2 = Node.getInstance(l4, l5);
+		Tree<ByteArray> n3 = Node.getInstance(l6, l7, l8);
+		Tree<ByteArray> n4 = Node.getInstance(n1, n2, l9);
+		Tree<ByteArray> n5 = Node.getInstance();
+		Tree<ByteArray> root = Node.getInstance(n3, n4, n5);
+		ByteArrayAggregator aggregator = ByteArrayAggregator.getInstance();
+		Tree<ByteArray> result = Tree.getInstance(root.aggregate(aggregator), aggregator);
+		Assert.assertEquals(result, root);
+		Assert.assertEquals(result.aggregate(aggregator), root.aggregate(aggregator));
 	}
 
 }

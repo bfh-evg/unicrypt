@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.aggregator.classes;
+package ch.bfh.unicrypt.helper.aggregator;
 
+import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

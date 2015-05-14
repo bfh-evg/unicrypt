@@ -43,18 +43,44 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 
 /**
- *
- * @author rolfhaenni
+ * The single instance of this class specifies the invertible aggregation of a tree of {@code ByteArray} values. Leaves
+ * are prefixed with 5 additional bytes: a marker byte {@code 0x00}, plus four bytes for representing the length of the
+ * byte array (big-endian). For example, {@code "00|00|00|00|05|A0|BC|89|C1|09"} is the result of the aggregating a leaf
+ * storing the byte array {@code "A0|BC|89|C1|09"} of length {@code 0x05=5}. Nodes are treated similarly. The
+ * concatenation of the byte arrays obtained from all children is prefixed with 5 additional bytes: a marker byte
+ * {@code 0x01}, plus four bytes for representing the total length of the concatenated children byte arrays. For
+ * example, a node with two identical children {@code "00|00|00|00|05|A0|BC|89|C1|09"} results in
+ * {@code "01|00|00|00|14|00|00|00|05|A0|BC|89|C1|0900|00|00|00|05|A0|BC|89|C1|09"}, where {@code 0x14=20} is the length
+ * of the concatenation of the two inputs of length {@code 0x0A=10}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public class ByteArrayAggregator
 	   extends AbstractInvertibleAggregator<ByteArray> {
 
-	private static final byte LEAF_IDENTIFIER = (byte) 0x01;
-	private static final byte NODE_IDENTIFIER = (byte) 0x00;
-	private static final int PREFIX_LENGTH = 5;
+	private static final byte LEAF_IDENTIFIER = (byte) 0x00;
+	private static final byte NODE_IDENTIFIER = (byte) 0x01;
+	private static final int PREFIX_LENGTH = 1 + Integer.SIZE / Byte.SIZE;
+
+	private static ByteArrayAggregator instance = null;
+
+	/**
+	 * Return the single instance of this class.
+	 * <p>
+	 * @return The single instance of this class
+	 */
+	public static ByteArrayAggregator getInstance() {
+		if (ByteArrayAggregator.instance == null) {
+			ByteArrayAggregator.instance = new ByteArrayAggregator();
+		}
+		return ByteArrayAggregator.instance;
+	}
 
 	@Override
 	protected ByteArray abstractAggregateLeaf(ByteArray value) {
@@ -67,7 +93,19 @@ public class ByteArrayAggregator
 
 	@Override
 	protected ByteArray abstractAggregateNode(Iterable<ByteArray> values, int length) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		ByteArray[] byteArrays = new ByteArray[length + 1];
+		int i = 1;
+		int byteLength = 0;
+		for (ByteArray value : values) {
+			byteArrays[i] = value;
+			byteLength = byteLength + value.getLength();
+			i++;
+		}
+		ByteBuffer buffer = ByteBuffer.allocate(PREFIX_LENGTH);
+		buffer.put(NODE_IDENTIFIER);
+		buffer.putInt(byteLength);
+		byteArrays[0] = new SafeByteArray(buffer.array());
+		return ByteArray.getInstance(byteArrays);
 	}
 
 	@Override
@@ -82,22 +120,50 @@ public class ByteArrayAggregator
 
 	@Override
 	protected ByteArray abstractDisaggregateLeaf(ByteArray value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return value.removePrefix(PREFIX_LENGTH);
 	}
 
 	@Override
-	protected Iterable<ByteArray> abstractDisaggregateNode(ByteArray value) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	protected Iterable<ByteArray> abstractDisaggregateNode(final ByteArray value) {
+		return new Iterable<ByteArray>() {
+
+			@Override
+			public Iterator<ByteArray> iterator() {
+				return new Iterator<ByteArray>() {
+
+					int currentIndex = PREFIX_LENGTH;
+
+					@Override
+					public boolean hasNext() {
+						return currentIndex < value.getLength();
+					}
+
+					@Override
+					public ByteArray next() {
+						ByteArray prefix = value.extract(currentIndex, PREFIX_LENGTH);
+						int byteLength = new BigInteger(1, prefix.removePrefix(1).getBytes()).intValue();
+						ByteArray next = value.extract(currentIndex, PREFIX_LENGTH + byteLength);
+						currentIndex = currentIndex + PREFIX_LENGTH + byteLength;
+						return next;
+					}
+				};
+			}
+		};
 	}
 
-}
-// this local class allows creating instances of ByteArray without copying the array
+	// this local class allows creating instances of ByteArray without copying the underlying byte array
+	protected static class SafeByteArray
+		   extends ByteArray {
 
-class SafeByteArray
-	   extends ByteArray {
+		protected SafeByteArray(byte[] bytes) {
+			super(bytes);
+		}
 
-	protected SafeByteArray(byte[] bytes) {
-		super(bytes);
+		@Override
+		public byte[] getBytes() {
+			return this.bytes;
+		}
+
 	}
 
 }
