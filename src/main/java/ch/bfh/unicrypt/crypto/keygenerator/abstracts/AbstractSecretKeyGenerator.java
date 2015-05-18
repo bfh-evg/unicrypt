@@ -50,6 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.RandomFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
+import ch.bfh.unicrypt.random.classes.OutputFeedbackRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Element>
@@ -91,7 +92,13 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 			throw new IllegalArgumentException();
 		}
 		ByteArray seed = converter.convert(password).append(salt);
-		return this.generateSecretKey(HybridRandomByteSequence.getInstance(seed));
+		//Here we use a random byte sequence generator that is deterministic and feeds itsself with its output.
+		//According to http://en.wikipedia.org/wiki/PBKDF2 the feedback should at least be repeated 1000 times.
+		OutputFeedbackRandomByteSequence pseudoRandomByteSequence = OutputFeedbackRandomByteSequence.getInstance(seed);
+		for (int i = 0; i < 1000; i++) {
+			pseudoRandomByteSequence.setSeed(pseudoRandomByteSequence.getNextByteArray(pseudoRandomByteSequence.getForwardSecurityInBytes()));
+		}
+		return this.generateSecretKey(pseudoRandomByteSequence);
 	}
 
 	@Override
@@ -110,4 +117,5 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 	protected String defaultToStringContent() {
 		return this.getSecretKeySpace().toString();
 	}
+
 }

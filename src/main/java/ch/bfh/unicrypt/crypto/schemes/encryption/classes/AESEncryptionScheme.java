@@ -209,6 +209,27 @@ public class AESEncryptionScheme
 
 	}
 
+	/**
+	 * Convenience method in order to easily get a secret AES-key given a password
+	 * <p>
+	 * @param password
+	 * @return
+	 */
+	public FiniteByteArrayElement getPasswordBasedKey(String password) {
+		return super.getSecretKeyGenerator().generateSecretKey(password);
+	}
+
+	/**
+	 * Convenience method in order to easily get a secret AES-key given a password and a salt
+	 * <p>
+	 * @param password
+	 * @param salt
+	 * @return
+	 */
+	public FiniteByteArrayElement getPasswordBasedKey(String password, ByteArray salt) {
+		return super.getSecretKeyGenerator().generateSecretKey(password, salt);
+	}
+
 	public static AESEncryptionScheme getInstance() {
 		return AESEncryptionScheme.getInstance(AESEncryptionScheme.DEFAULT_KEY_LENGTH, AESEncryptionScheme.DEFAULT_MODE, AESEncryptionScheme.DEFAULT_IV);
 	}
