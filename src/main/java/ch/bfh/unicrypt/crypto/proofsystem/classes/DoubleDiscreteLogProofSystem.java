@@ -80,7 +80,9 @@ public class DoubleDiscreteLogProofSystem
 
 	private final int k;
 
-	private DoubleDiscreteLogProofSystem(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
+	private DoubleDiscreteLogProofSystem(final SigmaChallengeGenerator challengeGenerator,
+		   final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS,
+		   final int k) {
 		super(challengeGenerator);
 		this.pedersenCS = pedersenCS;
 		this.generalizedPedersenCS = generalizedPedersenCS;
@@ -94,20 +96,26 @@ public class DoubleDiscreteLogProofSystem
 		this.k = k;
 	}
 
-	public static DoubleDiscreteLogProofSystem getInstance(final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
+	public static DoubleDiscreteLogProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
+		   final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
 		if (pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+		SigmaChallengeGenerator challengeGenerator =
+			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return DoubleDiscreteLogProofSystem.getInstance(challengeGenerator, pedersenCS, generalizedPedersenCS, k);
 	}
 
-	public static DoubleDiscreteLogProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS, final int k) {
+	public static DoubleDiscreteLogProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
+		   final PedersenCommitmentScheme pedersenCS, final GeneralizedPedersenCommitmentScheme generalizedPedersenCS,
+		   final int k) {
 		if (challengeGenerator == null || pedersenCS == null || generalizedPedersenCS == null || k <= 1) {
 			throw new IllegalArgumentException();
 		}
-		// TBD: Check instance of ZModPrime or check whether order is prime and store a Z_p and Z_q as ZMod instead of ZModPrime
-		if (!(pedersenCS.getCyclicGroup().getZModOrder() instanceof ZModPrime) || !(generalizedPedersenCS.getCyclicGroup().getZModOrder() instanceof ZModPrime)) {
+		// TBD: Check instance of ZModPrime or check whether order is prime and store a Z_p and Z_q as ZMod
+		// instead of ZModPrime
+		if (!(pedersenCS.getCyclicGroup().getZModOrder() instanceof ZModPrime) ||
+			   !(generalizedPedersenCS.getCyclicGroup().getZModOrder() instanceof ZModPrime)) {
 			throw new IllegalArgumentException();
 		}
 		BigInteger p = pedersenCS.getCyclicGroup().getOrder();
@@ -130,7 +138,8 @@ public class DoubleDiscreteLogProofSystem
 	@Override
 	protected ProductGroup abstractGetPrivateInputSpace() {
 		// x, r \in Z_p and s, m1....mL \in Z_q
-		return ProductGroup.getInstance(this.Z_p, this.Z_p, this.Z_q, ProductGroup.getInstance(this.Z_q, this.generalizedPedersenCS.getSize()));
+		return ProductGroup.getInstance(this.Z_p, this.Z_p, this.Z_q,
+										ProductGroup.getInstance(this.Z_q, this.generalizedPedersenCS.getSize()));
 	}
 
 	@Override
@@ -147,7 +156,8 @@ public class DoubleDiscreteLogProofSystem
 	@Override
 	public ProductGroup getCommitmentSpace() {
 		// T \in G_p, T1_1...T1_k \in G_p and T2_1 ... T2_k \in G_q
-		return ProductGroup.getInstance(this.G_p, ProductGroup.getInstance(this.G_p, this.k), ProductGroup.getInstance(this.G_q, this.k));
+		return ProductGroup.getInstance(this.G_p, ProductGroup.getInstance(this.G_p, this.k),
+										ProductGroup.getInstance(this.G_q, this.k));
 	}
 
 	@Override
@@ -170,7 +180,8 @@ public class DoubleDiscreteLogProofSystem
 	}
 
 	private Function getRepresentationFunction() {
-		return ((ProductFunction) ((CompositeFunction) this.generalizedPedersenCS.getCommitmentFunction()).getAt(0)).getAt(0);
+		return ((ProductFunction) ((CompositeFunction) this.generalizedPedersenCS.getCommitmentFunction())
+																								.getAt(0)).getAt(0);
 	}
 
 	@Override
@@ -262,16 +273,17 @@ public class DoubleDiscreteLogProofSystem
 
 		for (int i = 0; i < this.k; i++) {
 			int bit = ci.testBit(i) ? 1 : 0;
-			v = v && T2.getAt(i).isEquivalent(D.selfApply(bit).apply(this.generalizedPedersenCS.commit(zMV.getAt(i), zSV.getAt(i))));
+			v = v && T2.getAt(i).isEquivalent(D.selfApply(bit).apply(this.generalizedPedersenCS.commit(zMV.getAt(i),
+																									   zSV.getAt(i))));
 			Element x = this.Z_p.getElement(repF.apply(zMV.getAt(i)).getBigInteger());
 			if (bit == 0) {
 				v = v && T1.getAt(i).isEquivalent(this.pedersenCS.commit(x, zRV.getAt(i)));
 			} else {
-				v = v && T1.getAt(i).isEquivalent(C.selfApply(x).apply(this.pedersenCS.getRandomizationGenerator().selfApply(zRV.getAt(i))));
+				v = v && T1.getAt(i).isEquivalent(C.selfApply(x).apply(this.pedersenCS.getRandomizationGenerator()
+																							.selfApply(zRV.getAt(i))));
 			}
 		}
 
 		return v;
 	}
-
 }

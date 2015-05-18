@@ -90,7 +90,8 @@ public class ZModToGStarModSafePrimeEncoder
 		}
 
 		@Override
-		protected GStarModElement abstractApply(final ZModElement element, final RandomByteSequence randomByteSequence) {
+		protected GStarModElement abstractApply(final ZModElement element,
+			   final RandomByteSequence randomByteSequence) {
 			final BigInteger value = element.getValue().add(BigInteger.ONE);
 			final GStarModSafePrime coDomain = this.getCoDomain();
 			if (coDomain.contains(value)) {
@@ -109,7 +110,8 @@ public class ZModToGStarModSafePrimeEncoder
 		}
 
 		@Override
-		protected ZModElement abstractApply(final GStarModElement element, final RandomByteSequence randomByteSequence) {
+		protected ZModElement abstractApply(final GStarModElement element,
+			   final RandomByteSequence randomByteSequence) {
 			final BigInteger value = element.getValue();
 			final GStarModSafePrime domain = this.getDomain();
 			if (value.compareTo(domain.getOrder()) <= 0) {
@@ -119,5 +121,4 @@ public class ZModToGStarModSafePrimeEncoder
 		}
 
 	}
-
 }

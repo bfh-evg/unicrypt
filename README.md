@@ -1,4 +1,5 @@
-unicrypt
+UniCrypt
 ========
 
-unicrypt library release 2.1 development branch.
+UniCrypt(tm): Cryptographic framework allowing the implementation of
+cryptographic protocols, e.g. e-voting.

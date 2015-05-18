@@ -1,6 +1,45 @@
+/*
+ * UniCrypt
+ *
+ *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Security in the Information Society (RISIS), E-Voting Group (EVG)
+ *  Quellgasse 21, CH-2501 Biel, Switzerland
+ *
+ *  Licensed under Dual License consisting of:
+ *  1. GNU Affero General Public License (AGPL) v3
+ *  and
+ *  2. Commercial license
+ *
+ *
+ *  1. This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *  2. Licensees holding valid commercial licenses for UniCrypt may use this file in
+ *   accordance with the commercial license agreement provided with the
+ *   Software or, alternatively, in accordance with the terms contained in
+ *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
+ *   Security in the Information Society (RISIS), E-Voting Group (EVG)
+ *   Quellgasse 21, CH-2501 Biel, Switzerland.
+ *
+ *
+ *   For further information contact <e-mail: unicrypt@bfh.ch>
+ *
+ *
+ * Redistributions of files must retain the above copyright notice.
+ */
 package ch.bfh.unicrypt.crypto.encoder.classes;
-
-import java.math.BigInteger;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
@@ -18,60 +57,63 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.math.BigInteger;
 
-public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, EC, ECElement> {
+public class ECEncoder
+	   extends AbstractEncoder<ZModPrime, ZModElement, EC, ECElement> {
 
 	private ZModPrime zModPrime;
 	private EC ec;
 	private AbstractEncoder encoder;
 	private int shift;
-	
-	
-	
-	public ECEncoder(ZModPrime zModPrime, EC ec,int shift) {
+
+	public ECEncoder(ZModPrime zModPrime, EC ec, int shift) {
 		super();
 		this.zModPrime = zModPrime;
 		this.ec = ec;
-		this.shift=shift;
-		
-		if(ECPolynomialField.class.isInstance(ec)){
-			ZMod zmod=ZMod.getInstance(ec.getOrder());
-			encoder=ZModToBinaryPolynomialEncoder.getInstance(zmod,(PolynomialField) ec.getFiniteField());
-		}
-		else if(ECZModPrime.class.isInstance(ec)){
-			encoder=ZModToZmodPrime.getInstance((ZMod)ec.getFiniteField(), (ZModPrime)ec.getFiniteField());
+		this.shift = shift;
+
+		if (ECPolynomialField.class.isInstance(ec)) {
+			ZMod zmod = ZMod.getInstance(ec.getOrder());
+			encoder = ZModToBinaryPolynomialEncoder.getInstance(zmod, (PolynomialField) ec.getFiniteField());
+		} else if (ECZModPrime.class.isInstance(ec)) {
+			encoder = ZModToZmodPrime.getInstance((ZMod) ec.getFiniteField(), (ZModPrime) ec.getFiniteField());
 		}
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new EncodingFunction(this.zModPrime, this.ec,this.shift, encoder);
+		return new EncodingFunction(this.zModPrime, this.ec, this.shift, encoder);
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
 		return new DecodingFunction(ec, zModPrime, this.shift, encoder);
 	}
-	
-	public static ECEncoder getInstance(ZModPrime zModPrime, EC ec, int shift){
+
+	public static ECEncoder getInstance(ZModPrime zModPrime, EC ec, int shift) {
 		return new ECEncoder(zModPrime, ec, shift);
 	}
-	
-	static class EncodingFunction extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, EC, ECElement>{
+
+	static class EncodingFunction
+		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, EC, ECElement> {
+
 		private int shift;
 		private AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder;
-		protected EncodingFunction(ZModPrime domain, EC coDomain,int shift, AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder) {
+
+		protected EncodingFunction(ZModPrime domain, EC coDomain, int shift,
+			   AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder) {
 			super(domain, coDomain);
-			this.shift=shift;
-			this.encoder=encoder;
+			this.shift = shift;
+			this.encoder = encoder;
 		}
 
 		@Override
 		protected ECElement abstractApply(ZModElement element,
-				RandomByteSequence randomByteSequence) {
-			
+			   RandomByteSequence randomByteSequence) {
+
 			boolean firstOption = true;
-			
+
 			ZModPrime zModPrime = this.getDomain();
 			EC ec = this.getCoDomain();
 
@@ -100,15 +142,15 @@ public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, EC, ECEle
 			ZModElement zModElement = this.getDomain().getElement(e);
 			DualisticElement x = encoder.encode(zModElement);
 			ZModElement stepp = zModPrime.getElement(4);
-			
+
 			int count = 0;
 			while (!ec.contains(x)) {
 				if (count >= (1 << shift)) {
-					firstOption=false;
+					firstOption = false;
 				}
 
 				zModElement = zModElement.add(stepp);
-				
+
 				x = encoder.encode(zModElement);
 				count++;
 
@@ -170,25 +212,26 @@ public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, EC, ECEle
 			}
 
 		}
-		
+
 	}
-	
-	static class DecodingFunction extends AbstractFunction<DecodingFunction, EC, ECElement, ZModPrime, ZModElement>{
+
+	static class DecodingFunction
+		   extends AbstractFunction<DecodingFunction, EC, ECElement, ZModPrime, ZModElement> {
 
 		private int shift;
 		private AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder;
-		
-		protected DecodingFunction(Set domain, Set coDomain, int shift, AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder) {
-			super(domain, coDomain);	
-			this.shift=shift;
-			this.encoder=encoder;
-		
-		
+
+		protected DecodingFunction(Set domain, Set coDomain, int shift,
+			   AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder) {
+			super(domain, coDomain);
+			this.shift = shift;
+			this.encoder = encoder;
+
 		}
 
 		@Override
 		protected ZModElement abstractApply(ECElement element,
-				RandomByteSequence randomByteSequence) {
+			   RandomByteSequence randomByteSequence) {
 			ZModPrime zModPrime = this.getCoDomain();
 			EC ec = this.getDomain();
 			int msgSpace = zModPrime.getOrder().toString(2).length();
@@ -217,15 +260,14 @@ public class ECEncoder extends AbstractEncoder<ZModPrime, ZModElement, EC, ECEle
 				return zModPrime.getElement(x1).invert();
 			}
 		}
-		
-	}
-	
-	public static DualisticElement getBiggerY(DualisticElement y1, DualisticElement y2){
-		return y1;
-	}
-	
-	public static boolean isBigger(DualisticElement y1, DualisticElement y2){
-		return y1.isEquivalent(getBiggerY(y1, y2));
+
 	}
 
+	public static DualisticElement getBiggerY(DualisticElement y1, DualisticElement y2) {
+		return y1;
+	}
+
+	public static boolean isBigger(DualisticElement y1, DualisticElement y2) {
+		return y1.isEquivalent(getBiggerY(y1, y2));
+	}
 }

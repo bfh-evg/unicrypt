@@ -1,4 +1,3 @@
-
 <!--
 UniCrypt
 
@@ -52,24 +51,21 @@ Redistributions of files must retain the above copyright notice.
 	<name>unicrypt2</name>
 	<url>https://github.com/bfh-evg/unicrypt</url>
 
+	<licenses>
+		<license>
+			<name>GNU Affero General Public License (AGPL) v3</name>
+			<url>http://www.gnu.org/licenses/</url>
+		</license>
+		<license>
+			<name>Bern University of Applied Sciences (BFH), RISIS</name>
+			<url>http://www.ti.bfh.ch/risis</url>
+		</license>
+	</licenses>
+
 	<developers>
-		<developer>
-			<id>due1</id>
-			<name>Eric Dubuis</name>
-			<!-- <email><![CDATA[http://www.google.com/recaptcha/mailhide/d?k=015DwOEx8g5kLmbHmS51UU_g==&c=R2u82Jejkk_pqRGBdCEeEfldyHOQHpA8SpTNdnvdRBM=]]></email> -->
-			<email>http://bit.ly/10risQL</email>
-			<url>https://prof.ti.bfh.ch/due1</url>
-			<organization>Berner Fachhochschule / RISIS</organization>
-			<organizationUrl>http://www.ti.bfh.ch/risis</organizationUrl>
-			<roles>
-				<role>software architect</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
 		<developer>
 			<id>rolfhaenni</id>
 			<name>Rolf Haenni</name>
-			<!-- <email><![CDATA[http://www.google.com/recaptcha/mailhide/d?k=015DwOEx8g5kLmbHmS51UU_g==&c=nHikvhFWZENReyZN3zPaXqczGDUaQFNTe-A_B5V-m1s=]]></email> -->
 			<email>http://bit.ly/ZxrBoc</email>
 			<url>https://prof.ti.bfh.ch/hnr1</url>
 			<organization>Berner Fachhochschule / RISIS</organization>
@@ -85,7 +81,6 @@ Redistributions of files must retain the above copyright notice.
 		<developer>
 			<id>knr1</id>
 			<name>Reto E. Koenig</name>
-			<!-- <email><![CDATA[http://www.google.com/recaptcha/mailhide/d?k=015DwOEx8g5kLmbHmS51UU_g==&c=Y7CBVzdOlNacgCCb4pIrgyfof2GiTx7IyhGO8k6n6hc=]]></email> -->
 			<email>http://bit.ly/14KclfR</email>
 			<url>https://prof.ti.bfh.ch/knr1</url>
 			<organization>Berner Fachhochschule / RISIS</organization>
@@ -99,23 +94,8 @@ Redistributions of files must retain the above copyright notice.
 			<timezone>+1</timezone>
 		</developer>
 		<developer>
-			<id>sevhau</id>
-			<name>Severin Hauser</name>
-			<!-- <email><![CDATA[http://www.google.com/recaptcha/mailhide/d?k=015DwOEx8g5kLmbHmS51UU_g==&c=IwzXjNSkKdFrv8qDgZ1QCmJ98_kPosSi8vSm8P_31LM=]]></email> -->
-			<email>http://bit.ly/10rj1tL</email>
-			<url>https://staff.ti.bfh.ch/hss3</url>
-			<organization>Berner Fachhochschule / RISIS</organization>
-			<organizationUrl>http://www.ti.bfh.ch/risis</organizationUrl>
-			<roles>
-				<role>software developer</role>
-				<role>server administrator</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
 			<id>philoc</id>
 			<name>Philipp Locher</name>
-			<!-- <email><![CDATA[http://www.google.com/recaptcha/mailhide/d?k=015DwOEx8g5kLmbHmS51UU_g==&c=pT1zCVX90-jAHv0In0YiKVVTRtQEr4Z4nto41vxgg_E=]]></email> -->
 			<email>http://bit.ly/ZxrNDS</email>
 			<url>https://staff.ti.bfh.ch/lhp2</url>
 			<organization>Berner Fachhochschule / RISIS</organization>
@@ -129,7 +109,6 @@ Redistributions of files must retain the above copyright notice.
 		<developer>
 			<id>chrigulutz</id>
 			<name>Christian Lutz</name>
-			<!-- <email><![CDATA[http://www.google.com/recaptcha/mailhide/d?k\07501q-KMjt_I3LLUkQPfIOHuBQ\75\75\46c\75NhhLVlgzCxf5I2iUhd2ER2MG5kkZCzIzChTvfOht_wI\075]]></email> -->
 			<email>http://bit.ly/1295TP4</email>
 			<organization>University Fribourg</organization>
 			<organizationUrl>http://www.unifr.ch</organizationUrl>
@@ -138,26 +117,56 @@ Redistributions of files must retain the above copyright notice.
 			</roles>
 			<timezone>+1</timezone>
 		</developer>
+		<developer>
+			<id>sevhau</id>
+			<name>Severin Hauser</name>
+			<email>http://bit.ly/10rj1tL</email>
+			<url>https://staff.ti.bfh.ch/hss3</url>
+			<organization>Berner Fachhochschule / RISIS</organization>
+			<organizationUrl>http://www.ti.bfh.ch/risis</organizationUrl>
+			<roles>
+				<role>software developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>due1</id>
+			<name>Eric Dubuis</name>
+			<email>http://bit.ly/10risQL</email>
+			<url>https://prof.ti.bfh.ch/due1</url>
+			<organization>Berner Fachhochschule / RISIS</organization>
+			<organizationUrl>http://risis.ti.bfh.ch/</organizationUrl>
+			<roles>
+				<role>repository coordinator</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
 	</developers>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<scm>
+		<connection>scm:git:git@github.com/bfh-evg/unicrypt.git</connection>
+		<developerConnection>scm:git:git@github.com/bfh-evg/unicrypt.git</developerConnection>
+		<url>ghttps://github.com/bfh-evg/unicrypt</url>
+	</scm>
 
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>org.jacoco.core</artifactId>
-			<version>0.6.0.201210061924</version>
+			<version>0.7.4.201502262128</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 	<build>
 		<plugins>
@@ -170,29 +179,42 @@ Redistributions of files must retain the above copyright notice.
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<!-- <plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.6.0.201210061924</version>
+			<plugin>
+				<!-- See: http://bit.ly/1hIKf5Z -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.4</version>
 				<executions>
 					<execution>
+						<id>attach-sources</id>
 						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>package</phase>
-						<goals>
-							<goal>report</goal>
+							<goal>jar</goal>
 						</goals>
 					</execution>
 				</executions>
-			</plugin> -->
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.3</version>
+				<configuration>
+					<!-- See: http://bit.ly/1EWR4gK -->
+					<additionalparam>-Xdoclint:none</additionalparam>
+				</configuration>
+				<executions>
+					<!-- See: http://bit.ly/1hIKf5Z -->
+					<execution>
+						<id>attach-javadoc</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.0.201403182114</version>
+				<version>0.7.4.201502262128</version>
 				<executions>
 					<execution>
 						<goals>
@@ -211,18 +233,19 @@ Redistributions of files must retain the above copyright notice.
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.2</version>
+				<version>3.4</version>
 				<configuration>
 					<reportPlugins>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-project-info-reports-plugin</artifactId>
-							<version>2.4</version>
+							<version>2.8</version>
 							<configuration>
 								<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
 								<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 							</configuration>
 							<reports>
+								<report>index</report>
 								<report>dependencies</report>
 								<report>project-team</report>
 								<report>mailing-list</report>
@@ -236,12 +259,16 @@ Redistributions of files must retain the above copyright notice.
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-javadoc-plugin</artifactId>
-							<version>2.8</version>
+							<version>2.10.3</version>
+							<configuration>
+								<!-- See: http://bit.ly/1EWR4gK -->
+								<additionalparam>-Xdoclint:none</additionalparam>
+							</configuration>
 						</plugin>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-surefire-report-plugin</artifactId>
-							<version>2.13</version>
+							<version>2.18.1</version>
 							<reportSets>
 								<reportSet>
 									<reports>
@@ -254,7 +281,7 @@ Redistributions of files must retain the above copyright notice.
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-jxr-plugin</artifactId>
-							<version>2.3</version>
+							<version>2.5</version>
 						</plugin>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
@@ -277,7 +304,7 @@ Redistributions of files must retain the above copyright notice.
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-checkstyle-plugin</artifactId>
-							<version>2.9.1</version>
+							<version>2.15</version>
 							<configuration>
 								<configLocation>src/checkstyle/checkstyle-configuration.xml</configLocation>
 								<headerLocation>src/checkstyle/checkstyle-header.txt</headerLocation>

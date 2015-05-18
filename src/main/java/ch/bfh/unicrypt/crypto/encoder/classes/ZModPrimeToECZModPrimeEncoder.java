@@ -44,20 +44,17 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
-import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-
 import java.math.BigInteger;
 /**
- * 
+ *
  * @author Christian Lutz
  *
  */
@@ -66,13 +63,13 @@ public class ZModPrimeToECZModPrimeEncoder
 	   implements ProbabilisticEncoder {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	protected int shift;
 	private final ECZModPrime ec;
 	private final ZModPrime zModPrime;
-	
+
 	protected ZModPrimeToECZModPrimeEncoder(ECZModPrime ec,int shift) {
 		this.ec = ec;
 		this.zModPrime=ec.getFiniteField();
@@ -100,7 +97,7 @@ public class ZModPrimeToECZModPrimeEncoder
 		   extends AbstractFunction<ECEncodingFunction, ZModPrime, ZModElement, ECZModPrime, ECZModElement> {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 		private int shift;
@@ -117,10 +114,10 @@ public class ZModPrimeToECZModPrimeEncoder
 
 			int msgSpace=zModPrime.getOrder().toString(2).length();
 			int msgBitLength=element.getValue().toString(2).length()+2;
-			
+
 			BigInteger c;
-			
-			
+
+
 			if(msgSpace/3>msgBitLength){
 				c=BigInteger.ZERO;
 				this.shift=msgSpace/3*2;
@@ -136,7 +133,7 @@ public class ZModPrimeToECZModPrimeEncoder
 			else{
 				c=new BigInteger("3");
 			}
-			
+
 			BigInteger e = element.getValue();
 			e = e.shiftLeft(shift+2);
 			e=e.add(c);
@@ -156,7 +153,7 @@ public class ZModPrimeToECZModPrimeEncoder
 				x = x.add(stepp);
 				count++;
 			}
-			
+
 			if(firstOption){
 				ECZModElement[] y=ecPrime.getY(x);
 				ZModElement y1 = y[0].getY();
@@ -166,11 +163,11 @@ public class ZModPrimeToECZModPrimeEncoder
 				}
 				return y[1];
 			}
-			
-			
+
+
 			element=element.invert();
 			msgBitLength=element.getValue().toString(2).length();
-			
+
 			if(msgSpace/3>msgBitLength){
 				c=BigInteger.ZERO;
 				this.shift=msgSpace/3*2;
@@ -186,20 +183,20 @@ public class ZModPrimeToECZModPrimeEncoder
 			else{
 				c=new BigInteger("3");
 			}
-			
+
 			e = element.getValue();
 			e = e.shiftLeft(shift+2);
 			e=e.add(c);
 
 
-			
-			
+
+
 			if (!zModPrime.contains(e)) {
 				throw new ProbabilisticEncodingException(e + " can not be encoded");
 			}
 
 			x = zModPrime.getElement(e);
-			
+
 
 			count = 0;
 			while (!ecPrime.contains(x)) {
@@ -209,19 +206,19 @@ public class ZModPrimeToECZModPrimeEncoder
 				x = x.add(stepp);
 				count++;
 			}
-			
+
 			ECZModElement[] y=ecPrime.getY(x);
 			ZModElement y1=y[0].getY();
 			ZModElement y2=y[1].getY();
-			
+
 			if(isBigger(y1, y2)){
 				return y[1];
 			}
 			return y[0];
-			
-			
+
+
 		}
-					
+
 
 	}
 
@@ -229,11 +226,11 @@ public class ZModPrimeToECZModPrimeEncoder
 		   extends AbstractFunction<ECDecodingFunction, ECZModPrime, ECZModElement, ZMod, ZModElement> {
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 		private int shift;
-		
+
 		protected ECDecodingFunction(ECZModPrime domain, ZMod coDomain,int shift) {
 			super(domain, coDomain);
 			this.shift=shift;
@@ -244,17 +241,17 @@ public class ZModPrimeToECZModPrimeEncoder
 			ECZModPrime ecPrime = this.getDomain();
 			ZModPrime zModPrime=this.getDomain().getFiniteField();
 			int msgSpace=zModPrime.getOrder().toString(2).length();
-			
+
 			ZModElement x= element.getX();
 			ZModElement y= element.getY();
 			ZModElement y1=element.invert().getY();
 
-			
+
 			BigInteger x1=x.getBigInteger();
-			
-			
+
+
 			BigInteger c=x1.subtract(x1.shiftRight(2).shiftLeft(2));
-			
+
 			if(c.equals(BigInteger.ZERO)){
 				this.shift=msgSpace/3*2;
 			}
@@ -264,21 +261,21 @@ public class ZModPrimeToECZModPrimeEncoder
 			else if (c.equals(new BigInteger("2"))) {
 				this.shift=msgSpace/3;
 			}
-			
+
 			x1=x1.shiftRight(shift+2);
-			
+
 			if(y.isEquivalent(getBiggerY(y1, y))){
 				return zModPrime.getElement(x1);
-				
+
 			}
 			else{
 				return zModPrime.getElement(x1).invert();
 			}
-			
+
 		}
 
 	}
-	
+
 	/**
 	 * Compares the two polynomial elements and return the element with the most significant coefficient not in common.
 	 * <p>
@@ -288,7 +285,7 @@ public class ZModPrimeToECZModPrimeEncoder
 	 */
 	public static ZModElement getBiggerY(ZModElement y1, ZModElement y2) {
 		int c=y1.getValue().compareTo(y2.getValue());
-		
+
 		if(c==1){
 			return y1;
 		}
@@ -307,5 +304,4 @@ public class ZModPrimeToECZModPrimeEncoder
 	public static boolean isBigger(ZModElement y1, ZModElement y2) {
 		return y1.isEquivalent(getBiggerY(y1, y2));
 	}
-
 }

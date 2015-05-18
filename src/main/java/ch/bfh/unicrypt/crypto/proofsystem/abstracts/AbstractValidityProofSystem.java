@@ -143,7 +143,8 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 
 	@Override
 	protected Triple abstractGenerate(Pair privateInput, PUE publicInput, RandomByteSequence randomByteSequence) {
-		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput), randomByteSequence);
+		return this.getOrProofGenerator().generate(privateInput, this.createProofImages(publicInput),
+																 randomByteSequence);
 	}
 
 	@Override
@@ -166,7 +167,8 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 
 	private OrProofSystem getOrProofGenerator() {
 		if (this.orProofSystem == null) {
-			this.orProofSystem = OrProofSystem.getInstance(this.getChallengeGenerator(), this.getPreimageProofFunction());
+			this.orProofSystem = OrProofSystem.getInstance(this.getChallengeGenerator(),
+														   this.getPreimageProofFunction());
 		}
 		return this.orProofSystem;
 	}
@@ -175,9 +177,10 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 
 		// proofFunction = composite( sharedDomainFunction(selction(0), setMembershipProofFunction), deltaFunction)
 		final ProductSet setMembershipPFDomain = (ProductSet) this.getSetMembershipProofFunction().getDomain();
-		final Function proofFunction = CompositeFunction.getInstance(SharedDomainFunction.getInstance(SelectionFunction.getInstance(setMembershipPFDomain, 0),
-																									  this.getSetMembershipProofFunction()),
-																	 this.getDeltaFunction());
+		final Function proofFunction =
+			   CompositeFunction.getInstance(SharedDomainFunction.getInstance(
+					  SelectionFunction.getInstance(setMembershipPFDomain, 0),
+							this.getSetMembershipProofFunction()), this.getDeltaFunction());
 
 		// proofFunction_x = composite( multiIdentity(1), proofFunction.partiallyApply(x, 0))
 		final Function[] proofFunctions = new Function[this.members.getOrder().intValue()];
@@ -194,5 +197,4 @@ public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE ext
 	protected abstract Function abstractGetSetMembershipFunction();
 
 	protected abstract Function abstractGetDeltaFunction();
-
 }

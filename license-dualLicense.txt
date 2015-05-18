@@ -3,7 +3,7 @@ ${licenseFirst}
 </#if>
 ${licensePrefix}UniCrypt
 ${licensePrefix}
-${licensePrefix} UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+${licensePrefix} UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
 ${licensePrefix} Copyright (C) ${date?date?string("yyyy")} Bern University of Applied Sciences (BFH), Research Institute for
 ${licensePrefix} Security in the Information Society (RISIS), E-Voting Group (EVG)
 ${licensePrefix} Quellgasse 21, CH-2501 Biel, Switzerland

@@ -48,7 +48,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
-public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element>
+public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Element, PUS extends Set,
+	   PUE extends Element>
 	   extends AbstractProofSystem<PRS, PRE, PUS, PUE, ProductSet, Triple>
 	   implements SigmaProofSystem {
 

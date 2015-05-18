@@ -53,7 +53,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 public class AndPreimageProofSystem
 	   extends AbstractPreimageProofSystem<ProductSemiGroup, Tuple, ProductSemiGroup, Tuple, ProductFunction> {
 
-	protected AndPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+	protected AndPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator,
+		   final ProductFunction proofFunction) {
 		super(challengeGenerator, proofFunction);
 	}
 
@@ -62,19 +63,24 @@ public class AndPreimageProofSystem
 	}
 
 	public static AndPreimageProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator =
+			   RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return AndPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
-	public static AndPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
+	public static AndPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
+		   final Function... proofFunctions) {
 		return AndPreimageProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
 	}
 
-	public static AndPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
-		return AndPreimageProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
+	public static AndPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
+		   final Function proofFunction, int arity) {
+		return AndPreimageProofSystem.getInstance(challengeGenerator,
+												  ProductFunction.getInstance(proofFunction, arity));
 	}
 
-	public static AndPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+	public static AndPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
+		   final ProductFunction proofFunction) {
 		if (challengeGenerator == null || proofFunction == null || proofFunction.getArity() < 1
 			   || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
@@ -84,5 +90,4 @@ public class AndPreimageProofSystem
 		}
 		return new AndPreimageProofSystem(challengeGenerator, proofFunction);
 	}
-
 }

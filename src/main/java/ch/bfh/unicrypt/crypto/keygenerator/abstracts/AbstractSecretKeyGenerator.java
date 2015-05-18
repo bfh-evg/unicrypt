@@ -76,7 +76,8 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 
 	@Override
 	public KE generateSecretKey(RandomByteSequence randomByteSequence) {
-		return (KE) this.getSecretKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
+		return (KE) this.getSecretKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(),
+																randomByteSequence);
 	}
 
 	@Override
@@ -109,5 +110,4 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 	protected String defaultToStringContent() {
 		return this.getSecretKeySpace().toString();
 	}
-
 }

@@ -52,7 +52,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
+public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup,
+	   PUE extends Element, F extends Function>
 	   extends AbstractSigmaProofSystem<PRS, PRE, PUS, PUE>
 	   implements PreimageProofSystem {
 
@@ -109,7 +110,8 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	}
 
 	@Override
-	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput, final RandomByteSequence randomByteSequence) {
+	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput,
+		   final RandomByteSequence randomByteSequence) {
 		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
 		final Element commitment = this.getPreimageProofFunction().apply(randomElement);
 		final Element challenge = this.getChallengeGenerator().generate(publicInput, commitment);
@@ -133,10 +135,11 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	 * <p>
 	 * @return true if the challenge space does match otherwise false.
 	 */
-	protected static boolean checkChallengeSpace(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction) {
+	protected static boolean checkChallengeSpace(final SigmaChallengeGenerator challengeGenerator,
+		   final Function proofFunction) {
 		return (proofFunction == null || challengeGenerator == null
-			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator.getChallengeSpace()));
+			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator
+					  .getChallengeSpace()));
 
 	}
-
 }

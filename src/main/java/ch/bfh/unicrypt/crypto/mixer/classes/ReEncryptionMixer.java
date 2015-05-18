@@ -77,7 +77,8 @@ public class ReEncryptionMixer
 	}
 
 	static public ReEncryptionMixer getInstance(ReEncryptionScheme reEncryptionScheme, Element publicKey, int size) {
-		if (reEncryptionScheme == null || publicKey == null || !reEncryptionScheme.getEncryptionKeySpace().contains(publicKey) || size < 0) {
+		if (reEncryptionScheme == null || publicKey == null
+			   || !reEncryptionScheme.getEncryptionKeySpace().contains(publicKey) || size < 0) {
 			throw new IllegalArgumentException();
 		}
 		return new ReEncryptionMixer(reEncryptionScheme, publicKey, size);
