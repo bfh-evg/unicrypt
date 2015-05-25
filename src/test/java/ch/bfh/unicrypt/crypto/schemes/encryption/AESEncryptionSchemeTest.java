@@ -77,4 +77,93 @@ public class AESEncryptionSchemeTest {
 		Assert.assertEquals(encryptedMessage, expectedEncryption);
 	}
 
+	@Test
+	public void testPasswordSameKeys() {
+		AESEncryptionScheme aes = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+		Element<ByteArray> key = aes.getSecretKeyGenerator().generateSecretKey("This is the Test");
+
+		AESEncryptionScheme aes2 = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+		Element<ByteArray> key2 = aes2.getSecretKeyGenerator().generateSecretKey("This is the Test");
+		Assert.assertEquals(key, key2);
+	}
+
+	@Test
+	public void testPasswordDifferentKeys() {
+		AESEncryptionScheme aes = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+		Element<ByteArray> key = aes.getSecretKeyGenerator().generateSecretKey("This is the Test");
+
+		AESEncryptionScheme aes2 = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+		Element<ByteArray> key2 = aes2.getSecretKeyGenerator().generateSecretKey("Thas is the Test");
+		Assert.assertFalse(key.equals(key2));
+	}
+
+	@Test
+	public void testEncryptionDecryptionWithPassword() {
+		AESEncryptionScheme aes = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+		Element<ByteArray> message = aes.getMessageSpace().getElement("f3|44|81|ec|3c|c6|27|ba|cd|5d|c3|fb|08|f2|73|e6|97|98|c4|64|0b|ad|75|c7|c3|22|7d|b9|10|17|4e|72|96|ab|5c|2f|f6|12|d9|df|aa|e8|c3|1f|30|c4|21|68|6a|11|8a|87|45|19|e6|4e|99|63|79|8a|50|3f|1d|35|cb|9f|ce|ec|81|28|6c|a3|e9|89|bd|97|9b|0c|b2|84|b2|6a|eb|18|74|e4|7c|a8|35|8f|f2|23|78|f0|91|44|58|c8|e0|0b|26|31|68|6d|54|ea|b8|4b|91|f0|ac|a1");
+		Element<ByteArray> key = aes.getPasswordBasedKey("This is the Test");
+		Element<ByteArray> encryptedMessage = aes.encrypt(key, message);
+
+		AESEncryptionScheme aes2 = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+
+		Element<ByteArray> expectedMessage = aes2.decrypt(key, encryptedMessage);
+		Assert.assertEquals(message, expectedMessage);
+	}
+
+	@Test
+	public void testEncryptionDecryptionWithSamePasswords() {
+		AESEncryptionScheme aes = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+		Element<ByteArray> message = aes.getMessageSpace().getElement("f3|44|81|ec|3c|c6|27|ba|cd|5d|c3|fb|08|f2|73|e6|97|98|c4|64|0b|ad|75|c7|c3|22|7d|b9|10|17|4e|72|96|ab|5c|2f|f6|12|d9|df|aa|e8|c3|1f|30|c4|21|68|6a|11|8a|87|45|19|e6|4e|99|63|79|8a|50|3f|1d|35|cb|9f|ce|ec|81|28|6c|a3|e9|89|bd|97|9b|0c|b2|84|b2|6a|eb|18|74|e4|7c|a8|35|8f|f2|23|78|f0|91|44|58|c8|e0|0b|26|31|68|6d|54|ea|b8|4b|91|f0|ac|a1");
+		Element<ByteArray> key = aes.getPasswordBasedKey("This is the Test");
+		Element<ByteArray> encryptedMessage = aes.encrypt(key, message);
+
+		AESEncryptionScheme aes2 = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+		Element<ByteArray> key2 = aes2.getPasswordBasedKey("This is the Test");
+		Element<ByteArray> expectedMessage = aes2.decrypt(key2, encryptedMessage);
+		Assert.assertEquals(message, expectedMessage);
+	}
+
+	@Test
+	public void testEncryptionDecryptionWithDifferentPasswords() {
+		AESEncryptionScheme aes = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+		Element<ByteArray> message = aes.getMessageSpace().getElement("f3|44|81|ec|3c|c6|27|ba|cd|5d|c3|fb|08|f2|73|e6|97|98|c4|64|0b|ad|75|c7|c3|22|7d|b9|10|17|4e|72|96|ab|5c|2f|f6|12|d9|df|aa|e8|c3|1f|30|c4|21|68|6a|11|8a|87|45|19|e6|4e|99|63|79|8a|50|3f|1d|35|cb|9f|ce|ec|81|28|6c|a3|e9|89|bd|97|9b|0c|b2|84|b2|6a|eb|18|74|e4|7c|a8|35|8f|f2|23|78|f0|91|44|58|c8|e0|0b|26|31|68|6d|54|ea|b8|4b|91|f0|ac|a1");
+		Element<ByteArray> key = aes.getPasswordBasedKey("This is the Test");
+		Element<ByteArray> encryptedMessage = aes.encrypt(key, message);
+
+		AESEncryptionScheme aes2 = AESEncryptionScheme.getInstance(
+			   AESEncryptionScheme.KeyLength.KEY128,
+			   AESEncryptionScheme.Mode.ECB,
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
+		Element<ByteArray> key2 = aes2.getPasswordBasedKey("That is the Test");
+		Element<ByteArray> expectedMessage = aes2.decrypt(key2, encryptedMessage);
+		Assert.assertFalse(message.equals(expectedMessage));
+	}
+
 }
