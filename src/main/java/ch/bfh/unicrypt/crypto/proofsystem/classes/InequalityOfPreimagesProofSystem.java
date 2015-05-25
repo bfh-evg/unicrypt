@@ -77,29 +77,38 @@ public class InequalityOfPreimagesProofSystem
 	private final Function firstFunction;
 	private final Function secondFunction;
 
-	protected InequalityOfPreimagesProofSystem(final SigmaChallengeGenerator challengeGenerator, final Function firstFunction, final Function secondFunction) {
+	protected InequalityOfPreimagesProofSystem(final SigmaChallengeGenerator challengeGenerator,
+		   final Function firstFunction, final Function secondFunction) {
 		this.challengeGenerator = challengeGenerator;
 		this.firstFunction = firstFunction;
 		this.secondFunction = secondFunction;
 	}
 
-	public static InequalityOfPreimagesProofSystem getInstance(final Function firstFunction, final Function secondFunction) {
+	public static InequalityOfPreimagesProofSystem getInstance(final Function firstFunction,
+		   final Function secondFunction) {
 		return InequalityOfPreimagesProofSystem.getInstance((Element) null, firstFunction, secondFunction);
 	}
 
-	public static InequalityOfPreimagesProofSystem getInstance(final Element proverId, final Function firstFunction, final Function secondFunction) {
-		SigmaChallengeGenerator challengeGenerator = InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
+	public static InequalityOfPreimagesProofSystem getInstance(final Element proverId, final Function firstFunction,
+		   final Function secondFunction) {
+		SigmaChallengeGenerator challengeGenerator =
+			   InequalityOfPreimagesProofSystem
+					  .createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
 		return InequalityOfPreimagesProofSystem.getInstance(challengeGenerator, firstFunction, secondFunction);
 	}
 
-	public static InequalityOfPreimagesProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function firstFunction, final Function secondFunction) {
-		if (challengeGenerator == null || firstFunction == null || secondFunction == null || !firstFunction.getDomain().isEquivalent(secondFunction.getDomain())
-			   || !firstFunction.getDomain().isSemiGroup() || !firstFunction.getCoDomain().isCyclic() || !secondFunction.getCoDomain().isCyclic()) {
+	public static InequalityOfPreimagesProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
+		   final Function firstFunction, final Function secondFunction) {
+		if (challengeGenerator == null || firstFunction == null || secondFunction == null
+			   || !firstFunction.getDomain().isEquivalent(secondFunction.getDomain())
+			   || !firstFunction.getDomain().isSemiGroup() || !firstFunction.getCoDomain().isCyclic()
+			   || !secondFunction.getCoDomain().isCyclic()) {
 			throw new IllegalArgumentException();
 		}
 
 		ProductSet codomain = ProductSet.getInstance(secondFunction.getCoDomain(), firstFunction.getCoDomain());
-		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
+		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(),
+														  secondFunction.getDomain()).getMinimalOrder());
 		if (!cs.isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Challenge spaces of challenge generator does not match.");
 		}
@@ -108,9 +117,12 @@ public class InequalityOfPreimagesProofSystem
 
 	// Service method to prove inequality fo descrete logarithms
 	// f1(x) = g1^x, f2(x) = g2^x
-	public static InequalityOfPreimagesProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Element firstGenerator, final Element secondGenerator) {
-		if (firstGenerator == null || secondGenerator == null || !firstGenerator.getSet().isEquivalent(secondGenerator.getSet())
-			   || !firstGenerator.getSet().isCyclic() || !firstGenerator.isGenerator() || !secondGenerator.isGenerator()) {
+	public static InequalityOfPreimagesProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
+		   final Element firstGenerator, final Element secondGenerator) {
+		if (firstGenerator == null || secondGenerator == null
+			   || !firstGenerator.getSet().isEquivalent(secondGenerator.getSet())
+			   || !firstGenerator.getSet().isCyclic() || !firstGenerator.isGenerator()
+			   || !secondGenerator.isGenerator()) {
 			throw new IllegalArgumentException();
 		}
 		Function f1 = GeneratorFunction.getInstance(firstGenerator);
@@ -126,7 +138,8 @@ public class InequalityOfPreimagesProofSystem
 
 	@Override
 	protected ProductGroup abstractGetPublicInputSpace() {
-		return ProductGroup.getInstance((Group) this.getFirstFunction().getCoDomain(), (Group) this.getSecondFunction().getCoDomain());
+		return ProductGroup.getInstance((Group) this.getFirstFunction().getCoDomain(),
+										(Group) this.getSecondFunction().getCoDomain());
 	}
 
 	@Override
@@ -139,9 +152,10 @@ public class InequalityOfPreimagesProofSystem
 	}
 
 	public ProductSet getPreimageProofSpace() {
-		return ProductSet.getInstance(ProductGroup.getInstance(this.getFirstFunction().getCoDomain(), this.getSecondFunction().getCoDomain()),
-									  this.getChallengeSpace(),
-									  ProductGroup.getInstance(this.getPrivateInputSpace(), 2));
+		return ProductSet.getInstance(ProductGroup.getInstance(this.getFirstFunction().getCoDomain(),
+										this.getSecondFunction().getCoDomain()),
+										this.getChallengeSpace(),
+										ProductGroup.getInstance(this.getPrivateInputSpace(), 2));
 	}
 
 	public Triple getPreimageProof(Pair proof) {
@@ -194,10 +208,12 @@ public class InequalityOfPreimagesProofSystem
 		SigmaProofSystem preimageProofGenerator = this.createPreimageProofGenerator(publicInput);
 		boolean v = preimageProofGenerator.verify(
 			   this.getPreimageProof(proof),
-			   Tuple.getInstance(this.getProofCommitment(proof), ((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement()));
+			   Tuple.getInstance(this.getProofCommitment(proof),
+								 ((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement()));
 
 		// 2. Check C != 1
-		boolean c = !this.getProofCommitment(proof).isEquivalent(((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement());
+		boolean c = !this.getProofCommitment(proof).isEquivalent(
+			   ((CyclicGroup) this.getFirstFunction().getCoDomain()).getIdentityElement());
 
 		return v && c;
 	}
@@ -219,32 +235,43 @@ public class InequalityOfPreimagesProofSystem
 	// f(a,b) = f(a)/y^b                               |==> f(a,b) = g1^a/g2^b
 	private Function createSinglePreimageProofFunction(ProductSet domain, Function f, Element y) {
 		return CompositeFunction.getInstance(
-			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(domain, 0), f),
+			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(domain, 0),
+																			  f),
 												CompositeFunction.getInstance(SelectionFunction.getInstance(domain, 1),
 																			  GeneratorFunction.getInstance(y))),
 			   ApplyInverseFunction.getInstance((Group) f.getCoDomain()));
 	}
 
-	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {
-		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, PseudoRandomOracle.DEFAULT);
+	public static RandomOracleSigmaChallengeGenerator
+	   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {
+		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
+																			PseudoRandomOracle.DEFAULT);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final Element proverId) {
-		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId, PseudoRandomOracle.DEFAULT);
+	public static RandomOracleSigmaChallengeGenerator
+	   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
+			  final Element proverId) {
+		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
+																				proverId, PseudoRandomOracle.DEFAULT);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final RandomOracle randomOracle) {
-		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction, (Element) null, randomOracle);
+	public static RandomOracleSigmaChallengeGenerator
+	   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
+			  final RandomOracle randomOracle) {
+		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
+																				(Element) null, randomOracle);
 	}
 
-	public static RandomOracleSigmaChallengeGenerator createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction, final Element proverId, final RandomOracle randomOracle) {
+	public static RandomOracleSigmaChallengeGenerator
+	   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
+			  final Element proverId, final RandomOracle randomOracle) {
 		if (firstFunction == null || secondFunction == null || randomOracle == null
 			   || !firstFunction.getCoDomain().isSemiGroup() || !secondFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
-		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(), secondFunction.getDomain()).getMinimalOrder());
+		ZMod cs = ZMod.getInstance(ProductSet.getInstance(firstFunction.getDomain(),
+														  secondFunction.getDomain()).getMinimalOrder());
 		return RandomOracleSigmaChallengeGenerator.getInstance(cs, proverId, randomOracle);
 
 	}
-
 }

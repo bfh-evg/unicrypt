@@ -63,7 +63,8 @@ public class GeneralizedPedersenCommitmentScheme
 	private final Tuple messageGenerators;
 	private final int size;
 
-	protected GeneralizedPedersenCommitmentScheme(CyclicGroup cyclicGroup, int size, Element randomizationGenerator, Tuple messageGenerators) {
+	protected GeneralizedPedersenCommitmentScheme(CyclicGroup cyclicGroup, int size, Element randomizationGenerator,
+		   Tuple messageGenerators) {
 		super(ProductSet.getInstance(cyclicGroup.getZModOrder(), size), cyclicGroup, cyclicGroup.getZModOrder());
 		this.cyclicGroup = cyclicGroup;
 		this.size = size;
@@ -102,10 +103,12 @@ public class GeneralizedPedersenCommitmentScheme
 	}
 
 	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size) {
-		return GeneralizedPedersenCommitmentScheme.getInstance(cyclicGroup, size, ReferenceRandomByteSequence.getInstance());
+		return GeneralizedPedersenCommitmentScheme
+			   .getInstance(cyclicGroup, size, ReferenceRandomByteSequence.getInstance());
 	}
 
-	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size, ReferenceRandomByteSequence referenceRandomByteSequence) {
+	public static GeneralizedPedersenCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size,
+		   ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (cyclicGroup == null || size < 1 || referenceRandomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
@@ -124,14 +127,15 @@ public class GeneralizedPedersenCommitmentScheme
 	 * @param messageGenerators
 	 * @return
 	 */
-	public static GeneralizedPedersenCommitmentScheme getInstance(final Element randomizationGenerator, final Tuple messageGenerators) {
+	public static GeneralizedPedersenCommitmentScheme getInstance(final Element randomizationGenerator,
+		   final Tuple messageGenerators) {
 		if (randomizationGenerator == null || messageGenerators == null || !randomizationGenerator.getSet().isCyclic()
-			   || messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform() || !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
+			   || messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform()
+			   || !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
 			throw new IllegalArgumentException();
 		}
 		CyclicGroup cycicGroup = (CyclicGroup) randomizationGenerator.getSet();
 		int size = messageGenerators.getArity();
 		return new GeneralizedPedersenCommitmentScheme(cycicGroup, size, randomizationGenerator, messageGenerators);
 	}
-
 }

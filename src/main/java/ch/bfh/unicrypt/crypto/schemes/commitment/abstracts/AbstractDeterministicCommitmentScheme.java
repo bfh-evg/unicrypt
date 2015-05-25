@@ -60,7 +60,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <CS> Commitment space
  * @param <CE> Commitment element
  */
-public abstract class AbstractDeterministicCommitmentScheme<MS extends Set, ME extends Element, CS extends Set, CE extends Element>
+public abstract class AbstractDeterministicCommitmentScheme<MS extends Set, ME extends Element, CS extends Set,
+	   CE extends Element>
 	   extends AbstractCommitmentScheme<MS, CS>
 	   implements DeterministicCommitmentScheme {
 
@@ -82,10 +83,10 @@ public abstract class AbstractDeterministicCommitmentScheme<MS extends Set, ME e
 	protected Function abstractGetDecommitmentFunction() {
 		ProductSet decommitmentDomain = ProductSet.getInstance(this.messageSpace, this.commitmentSpace);
 		return CompositeFunction.getInstance(
-			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(decommitmentDomain, 0),
+			   SharedDomainFunction.getInstance(CompositeFunction
+					  .getInstance(SelectionFunction.getInstance(decommitmentDomain, 0),
 																			  this.getCommitmentFunction()),
 												SelectionFunction.getInstance(decommitmentDomain, 1)),
 			   EqualityFunction.getInstance(this.getCommitmentSpace()));
 	}
-
 }

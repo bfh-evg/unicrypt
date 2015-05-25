@@ -61,7 +61,8 @@ public class PedersenCommitmentScheme
 	private final Element randomizationGenerator;
 	private final Element messageGenerator;
 
-	protected PedersenCommitmentScheme(CyclicGroup cyclicGroup, Element randomizationGenerator, Element messageGenerator) {
+	protected PedersenCommitmentScheme(CyclicGroup cyclicGroup, Element randomizationGenerator,
+		   Element messageGenerator) {
 		super(cyclicGroup.getZModOrder(), cyclicGroup, cyclicGroup.getZModOrder());
 		this.cyclicGroup = cyclicGroup;
 		this.randomizationGenerator = randomizationGenerator;
@@ -92,7 +93,8 @@ public class PedersenCommitmentScheme
 		return PedersenCommitmentScheme.getInstance(cyclicGroup, ReferenceRandomByteSequence.getInstance());
 	}
 
-	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup, ReferenceRandomByteSequence referenceRandomByteSequence) {
+	public static PedersenCommitmentScheme getInstance(CyclicGroup cyclicGroup,
+		   ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (cyclicGroup == null || referenceRandomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
@@ -109,5 +111,4 @@ public class PedersenCommitmentScheme
 		}
 		return new PedersenCommitmentScheme((CyclicGroup) generator1.getSet(), generator1, generator2);
 	}
-
 }

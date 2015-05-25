@@ -57,7 +57,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  * @param <DKS> Decryption key space
  * @param <KG>  Key pair generator
  */
-public abstract class AbstractAsymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, EKS extends Set, DKS extends Set, KG extends KeyPairGenerator>
+public abstract class AbstractAsymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set,
+	   EE extends Element, EKS extends Set, DKS extends Set, KG extends KeyPairGenerator>
 	   extends AbstractEncryptionScheme<MS, ME, ES, EE>
 	   implements AsymmetricEncryptionScheme {
 
