@@ -47,8 +47,8 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import java.math.BigInteger;
 
 /**
- * This class converts permutations a given size s into non-negative {@code BigInteger} values 0, 1, 2, ... s!-1, using
- * the ranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time".
+ * Instances of this class convert permutations of a given size {@code s} into non-negative {@code BigInteger} values {@code 0, 1, 2,
+ * ... s!-1}, using the ranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in Linear Time".
  * <p>
  * @see Permutation#getRank()
  * @author Rolf Haenni
@@ -58,12 +58,12 @@ public class PermutationToBigInteger
 	   extends AbstractBigIntegerConverter<Permutation> {
 
 	private final int size;
-	private final BigInteger inputSize;
+	private BigInteger inputSize; // factorial of size
 
 	protected PermutationToBigInteger(int size) {
 		super(Permutation.class);
 		this.size = size;
-		this.inputSize = MathUtil.factorial(size);
+		this.inputSize = null; // lazy factorial computation
 	}
 
 	/**
@@ -86,6 +86,9 @@ public class PermutationToBigInteger
 
 	@Override
 	protected boolean defaultIsValidOutput(BigInteger value) {
+		if (this.inputSize == null) {
+			this.inputSize = MathUtil.factorial(size);
+		}
 		return value.signum() >= 0 && value.compareTo(this.inputSize) < 0;
 	}
 

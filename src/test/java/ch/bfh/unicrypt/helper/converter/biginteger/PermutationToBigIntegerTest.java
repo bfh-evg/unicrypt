@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.PermutationToBigInteger;
 import java.math.BigInteger;
 import junit.framework.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -66,6 +67,16 @@ public class PermutationToBigIntegerTest {
 			while (value.compareTo(maxValue) <= 0) {
 				Assert.assertEquals(value, converter.convert(converter.reconvert(value)));
 				value = value.add(BigInteger.ONE);
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(40320));
+				fail();
+			} catch (Exception e) {
 			}
 
 		}

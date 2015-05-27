@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import java.math.BigInteger;
 import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -91,6 +92,11 @@ public class ByteArrayToBigIntegerTest {
 			Assert.assertEquals(exp, result);
 			Assert.assertEquals(bas[i], converter.reconvert(result));
 		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
 	@Test
@@ -109,6 +115,11 @@ public class ByteArrayToBigIntegerTest {
 			Assert.assertEquals(exp, result);
 			Assert.assertEquals(bas[i], converter.reconvert(result));
 		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
 	@Test
@@ -124,6 +135,11 @@ public class ByteArrayToBigIntegerTest {
 			BigInteger result = converter.convert(bas[i]);
 			Assert.assertEquals(exp, result);
 			Assert.assertEquals(bas[i], converter.reconvert(result));
+		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
 		}
 	}
 
@@ -146,6 +162,11 @@ public class ByteArrayToBigIntegerTest {
 			Assert.assertEquals(exp, result);
 			Assert.assertEquals(bas[i], converter.reconvert(result));
 		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
 	@Test
@@ -165,6 +186,11 @@ public class ByteArrayToBigIntegerTest {
 			Assert.assertEquals(exp, result);
 			Assert.assertEquals(bas[i], converter.reconvert(result));
 		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
 	@Test
@@ -181,6 +207,11 @@ public class ByteArrayToBigIntegerTest {
 			BigInteger result = converter.convert(bas[i]);
 			Assert.assertEquals(exp, result);
 			Assert.assertEquals(bas[i], converter.reconvert(result));
+		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
 		}
 	}
 
@@ -199,6 +230,11 @@ public class ByteArrayToBigIntegerTest {
 			Assert.assertEquals(exp, result);
 			Assert.assertEquals(bas[i], converter.reconvert(result));
 		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
 	@Test
@@ -213,6 +249,11 @@ public class ByteArrayToBigIntegerTest {
 			BigInteger result = converter.convert(bas[i]);
 			Assert.assertEquals(exp, result);
 			Assert.assertEquals(bas[i], converter.reconvert(result));
+		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
 		}
 	}
 
@@ -229,6 +270,11 @@ public class ByteArrayToBigIntegerTest {
 			Assert.assertEquals(exp, result);
 			Assert.assertEquals(bas[i], converter.reconvert(result));
 		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
 	@Test
@@ -239,6 +285,11 @@ public class ByteArrayToBigIntegerTest {
 				for (int k = 0; k < 100000; k++) {
 					BigInteger value = BigInteger.valueOf(k);
 					Assert.assertEquals(value, converter.convert(converter.reconvert(value)));
+				}
+				try {
+					converter.reconvert(BigInteger.valueOf(-1));
+					fail();
+				} catch (Exception e) {
 				}
 			}
 		}

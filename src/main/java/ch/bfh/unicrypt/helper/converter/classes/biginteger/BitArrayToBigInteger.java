@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import java.math.BigInteger;
 
 /**
- * This class converts bit arrays into non-negative {@code BigInteger} values 0, 1, 2, ...
+ * The single instance of this class converts bit arrays into non-negative {@code BigInteger} values 0, 1, 2, ...
  * <p>
  * @author Rolf Haenni
  * @version 2.0
@@ -56,17 +56,22 @@ import java.math.BigInteger;
 public class BitArrayToBigInteger
 	   extends AbstractBigIntegerConverter<BitArray> {
 
+	private static BitArrayToBigInteger instance = null;
+
 	protected BitArrayToBigInteger() {
 		super(BitArray.class);
 	}
 
 	/**
-	 * Creates a new {@link BitArrayToBigInteger} converter.
+	 * Returns the single instance of this class.
 	 * <p>
-	 * @return The new converter
+	 * @return The single instance
 	 */
 	public static BitArrayToBigInteger getInstance() {
-		return new BitArrayToBigInteger();
+		if (instance == null) {
+			instance = new BitArrayToBigInteger();
+		}
+		return instance;
 	}
 
 	@Override

@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BitArrayToBigInteger;
 import java.math.BigInteger;
 import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -97,6 +98,11 @@ public class BitArrayToBigIntegerTest {
 		for (int k = 0; k < 1000000; k++) {
 			BigInteger value = BigInteger.valueOf(k);
 			Assert.assertEquals(value, converter.convert(converter.reconvert(value)));
+		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
 		}
 	}
 

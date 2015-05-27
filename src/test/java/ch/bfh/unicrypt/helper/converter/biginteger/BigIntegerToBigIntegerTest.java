@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.converter.biginteger;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import java.math.BigInteger;
 import junit.framework.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -89,6 +90,17 @@ public class BigIntegerToBigIntegerTest {
 			BigInteger k = BigInteger.valueOf(i);
 			Assert.assertEquals(k, converter.reconvert(converter.convert(k)));
 
+		}
+
+		try {
+			converter.convert(BigInteger.valueOf(4));
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			converter.reconvert(BigInteger.valueOf(-1));
+			fail();
+		} catch (Exception e) {
 		}
 	}
 

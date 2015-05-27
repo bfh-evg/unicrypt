@@ -45,10 +45,12 @@ import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
- * @param <W>
+ * This abstract class serves as a base implementation of the {@link Converter} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <V> The input type
+ * @param <W> The output type
  */
 public abstract class AbstractConverter<V extends Object, W extends Object>
 	   extends UniCrypt

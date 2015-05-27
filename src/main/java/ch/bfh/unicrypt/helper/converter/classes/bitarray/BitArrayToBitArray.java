@@ -45,23 +45,37 @@ import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBitArrayConverter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instance of this class convert {@code BitArray} values into {@code BitArray} values. There are two operating modes,
+ * one in which the bit arrays remain unchanged and one in which the bit arrays are reversed.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class BitArrayToBitArray
 	   extends AbstractBitArrayConverter<BitArray> {
 
 	private final boolean reverse;
 
-	public BitArrayToBitArray(boolean reverse) {
+	private BitArrayToBitArray(boolean reverse) {
 		super(BitArray.class);
 		this.reverse = reverse;
 	}
 
+	/**
+	 * Returns a new default {@link BitArrayToBitArray} converter, which leaves the bit arrays unchanged.
+	 * <p>
+	 * @return The default converter
+	 */
 	public static BitArrayToBitArray getInstance() {
 		return new BitArrayToBitArray(false);
 	}
 
+	/**
+	 * Returns a new {@link BitArrayToBitArray} converter, which reverses the bit arrays.
+	 * <p>
+	 * @param reverse
+	 * @return The new converter
+	 */
 	public static BitArrayToBitArray getInstance(boolean reverse) {
 		return new BitArrayToBitArray(reverse);
 	}

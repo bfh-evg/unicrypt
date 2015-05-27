@@ -46,11 +46,11 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import java.math.BigInteger;
 
 /**
- * This class converts strings of a given alphabet into non-negative {@code BigInteger} values 0, 1, 2, ... The input
- * strings can be restricted in two ways. First, it is possible to define a block length. For example, if the block
- * length equals 2, then only strings of length 0, 2, 4, ... are valid inputs. Second, a minimal number of blocks can be
- * specified. Again, for blocks of length 2 and with a minimal number of blocks of 3, then only strings of length 6, 8,
- * 10, ... are valid inputs. An unrestricted input corresponds to block length 1 and minimal number of blocks 0.
+ * Instances of this class convert strings of a given alphabet into non-negative {@code BigInteger} values 0, 1, 2, ...
+ * The input strings can be restricted in two ways. First, it is possible to define a block length. For example, if the
+ * block length equals 2, then only strings of length 0, 2, 4, ... are valid inputs. Second, a minimal number of blocks
+ * can be specified. Again, for blocks of length 2 and with a minimal number of blocks of 3, then only strings of length
+ * 6, 8, 10, ... are valid inputs. An unrestricted input corresponds to block length 1 and minimal number of blocks 0.
  * <p>
  * @author Rolf Haenni
  * @version 2.0

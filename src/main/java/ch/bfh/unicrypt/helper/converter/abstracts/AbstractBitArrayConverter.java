@@ -45,9 +45,11 @@ import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BitArrayConverter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This abstract class serves as a base implementation of the {@link BitArrayConverter} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <V> The input type
  */
 public abstract class AbstractBitArrayConverter<V extends Object>
 	   extends AbstractConverter<V, BitArray>

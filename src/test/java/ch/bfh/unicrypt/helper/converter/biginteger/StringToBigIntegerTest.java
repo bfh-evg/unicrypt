@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import java.math.BigInteger;
 import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -111,6 +112,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s20, s210, s211, s220, s221, s222, s223, s230, s231, s232, s233, s234, s235, s236, s237, s240};
@@ -120,6 +126,11 @@ public class StringToBigIntegerTest {
 				BigInteger value = BigInteger.valueOf(i);
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
 			}
 		}
 		{
@@ -146,6 +157,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s20, s220, s221, s222, s223, s240};
@@ -156,6 +172,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s30, s320, s321, s322, s323, s324, s325, s326, s327, s328};
@@ -165,6 +186,11 @@ public class StringToBigIntegerTest {
 				BigInteger value = BigInteger.valueOf(i);
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -181,6 +207,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s20, s230, s231, s232, s233, s234, s235, s236, s237};
@@ -191,6 +222,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s30, s330};
@@ -200,6 +236,11 @@ public class StringToBigIntegerTest {
 				BigInteger value = BigInteger.valueOf(i);
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -216,6 +257,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s210, s211, s220, s221, s222, s223, s230, s231, s232, s233, s234, s235, s236, s237, s240};
@@ -226,6 +272,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s310, s311, s312, s320, s321, s322, s323, s324, s325, s326, s327, s328, s330};
@@ -235,6 +286,11 @@ public class StringToBigIntegerTest {
 				BigInteger value = BigInteger.valueOf(i);
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -251,6 +307,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s220, s221, s222, s223, s230, s231, s232, s233, s234, s235, s236, s237, s240};
@@ -261,6 +322,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s320, s321, s322, s323, s324, s325, s326, s327, s328, s330};
@@ -270,6 +336,11 @@ public class StringToBigIntegerTest {
 				BigInteger value = BigInteger.valueOf(i);
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -286,6 +357,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s230, s231, s232, s233, s234, s235, s236, s237, s240};
@@ -296,6 +372,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s330};
@@ -305,6 +386,11 @@ public class StringToBigIntegerTest {
 				BigInteger value = BigInteger.valueOf(i);
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -321,6 +407,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s220, s221, s222, s223, s240};
@@ -331,6 +422,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s320, s321, s322, s323, s324, s325, s326, s327, s328};
@@ -340,6 +436,11 @@ public class StringToBigIntegerTest {
 				BigInteger value = BigInteger.valueOf(i);
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -356,6 +457,11 @@ public class StringToBigIntegerTest {
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
 			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
+			}
 		}
 		{
 			String[] strings = {s240};
@@ -365,6 +471,11 @@ public class StringToBigIntegerTest {
 				BigInteger value = BigInteger.valueOf(i);
 				Assert.assertEquals(value, converter.convert(s));
 				i++;
+			}
+			try {
+				converter.reconvert(BigInteger.valueOf(-1));
+				fail();
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -378,6 +489,11 @@ public class StringToBigIntegerTest {
 					for (int k = 0; k < 300; k++) {
 						BigInteger value = BigInteger.valueOf(k);
 						Assert.assertEquals(value, converter.convert(converter.reconvert(value)));
+					}
+					try {
+						converter.reconvert(BigInteger.valueOf(-1));
+						fail();
+					} catch (Exception e) {
 					}
 				}
 			}
