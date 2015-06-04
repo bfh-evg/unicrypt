@@ -49,8 +49,9 @@ import java.nio.charset.StandardCharsets;
 /**
  * Instances of this class convert strings into {@code ByteArray} values using the standard Java conversion method
  * implemented in {@link String#getBytes(Charset)} and {@link String#String(byte[], Charset)}. The default converter
- * uses Java's default character set {@link Charset#defaultCharset()}. A converter for any other standard character set
- * defined in {@link StandardCharsets} can be created.
+ * uses Java's default character set {@link Charset#defaultCharset()}. A converter for any of the following Unicode
+ * character sets can be created: {@code UTF-8}, {@code UTF-16}, {@code UTF-16BE}, {@code UTF-16LE},
+ * {@code UTF-32}, {@code UTF-32BE}, {@code UTF-32LE}.
  * <p>
  * @author Rolf Haenni
  * @version 2.0
@@ -59,11 +60,15 @@ import java.nio.charset.StandardCharsets;
 public class StringToByteArray
 	   extends AbstractByteArrayConverter<String> {
 
-	private final Charset charset;
+	static final String[] UNICODE_CHARSETS = {"UTF-8", "UTF-16", "UTF-16BE", "UTF-16LE", "UTF-32", "UTF-32BE", "UTF-32LE"};
 
-	private StringToByteArray(Charset charset) {
+	private final Charset charset;
+	private final int minBytesPerCharacter; // the minimal number of bytes needed to encode a single character
+
+	private StringToByteArray(Charset charset, int minBytesPerCharacter) {
 		super(String.class);
 		this.charset = charset;
+		this.minBytesPerCharacter = minBytesPerCharacter;
 	}
 
 	/**
@@ -72,36 +77,62 @@ public class StringToByteArray
 	 * @return The default instance
 	 */
 	public static StringToByteArray getInstance() {
-		return new StringToByteArray(Charset.defaultCharset());
-	}
-
-	private static boolean isStandardCharset(Charset charset) {
-		return charset == StandardCharsets.ISO_8859_1
-			   || charset == StandardCharsets.US_ASCII
-			   || charset == StandardCharsets.UTF_16
-			   || charset == StandardCharsets.UTF_16BE
-			   || charset == StandardCharsets.UTF_16LE
-			   || charset == StandardCharsets.UTF_8;
+		return StringToByteArray.getInstance(Charset.defaultCharset());
 	}
 
 	/**
-	 * Returns a new instance for a given standard character set.
+	 * Returns a new instance for a given name of a Unicode character set.
 	 * <p>
-	 * @param standardCharset The given standard character set
+	 * @param charsetName The given name of the Unicode character set
 	 * @return The new instance
 	 */
-	public static StringToByteArray getInstance(Charset standardCharset) {
-		if (standardCharset == null || !isStandardCharset(standardCharset)) {
+	public static StringToByteArray getInstance(String charsetName) {
+		if (charsetName == null || !isUnicodeCharset(charsetName)) {
 			throw new IllegalArgumentException();
 		}
-		return new StringToByteArray(standardCharset);
+		return new StringToByteArray(Charset.forName(charsetName), getMinBytes(charsetName));
+
+	}
+
+	/**
+	 * Returns a new instance for a given Unicode character set.
+	 * <p>
+	 * @param charset The given Unicode character set
+	 * @return The new instance
+	 */
+	public static StringToByteArray getInstance(Charset charset) {
+		if (charset == null || !isUnicodeCharset(charset.name())) {
+			throw new IllegalArgumentException();
+		}
+		return new StringToByteArray(charset, getMinBytes(charset.name()));
+	}
+
+	private static boolean isUnicodeCharset(String charsetName) {
+		for (String unicodeCharset : UNICODE_CHARSETS) {
+			if (unicodeCharset.equals(charsetName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static int getMinBytes(String charsetName) {
+		if (charsetName.equals("UTF-8")) {
+			return 1;
+		}
+		if (charsetName.startsWith("UTF-16")) {
+			return 2;
+		}
+		if (charsetName.startsWith("UTF-32")) {
+			return 4;
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override
 	protected boolean defaultIsValidOutput(ByteArray byteArray) {
-		// not all byte arrays are valid for re-conversion in a given character set,
-		// but performing corresponding tests is too expensive
-		return true;
+		// not all byte arrays are valid for re-conversion, but performing corresponding tests is too expensive
+		return byteArray.getLength() % this.minBytesPerCharacter == 0;
 	}
 
 	@Override

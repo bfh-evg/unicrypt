@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.converter.biginteger;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import java.math.BigInteger;
-import junit.framework.Assert;
+import org.junit.Assert;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 

@@ -41,10 +41,12 @@
  */
 package ch.bfh.unicrypt.helper.converter.bytearray;
 
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import junit.framework.Assert;
+import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -54,6 +56,10 @@ import org.junit.Test;
 public class StringToByteArrayTest {
 
 	String[] strings = {"", "x"};//, "ä", "\\", "\t", "\b", "\n", "\r", "\'", "\"", "\\\t\b\n\r\'\"", "Hello World"};
+
+	Charset[] charsets = new Charset[]{StandardCharsets.UTF_8,
+		StandardCharsets.UTF_16, StandardCharsets.UTF_16BE, StandardCharsets.UTF_16LE,
+		Charset.forName("UTF-32"), Charset.forName("UTF-32BE"), Charset.forName("UTF-32LE")};
 
 	@Test
 	public void stringToByteArrayTest1() {
@@ -66,14 +72,34 @@ public class StringToByteArrayTest {
 
 	@Test
 	public void stringToByteArrayTest2() {
-		for (Charset charset : new Charset[]{StandardCharsets.ISO_8859_1, StandardCharsets.US_ASCII, StandardCharsets.UTF_16,
-			StandardCharsets.UTF_16BE, StandardCharsets.UTF_16LE, StandardCharsets.UTF_8}) {
+		for (Charset charset : charsets) {
 			StringToByteArray converter = StringToByteArray.getInstance(charset);
 			for (String s : strings) {
-				Assert.assertEquals(s, converter.reconvert(converter.convert(s)));
+				ByteArray ba = converter.convert(s);
+				Assert.assertEquals(s, converter.reconvert(ba));
+				if (charset != StandardCharsets.UTF_8) {
+					try {
+						converter.reconvert(ba.add());
+						fail();
+					} catch (Exception e) {
+					}
+				}
 			}
 		}
+	}
 
+	@Test
+	public void stringToByteArrayTest3() {
+		try {
+			StringToByteArray.getInstance(StandardCharsets.ISO_8859_1);
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			StringToByteArray.getInstance("");
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
 }
