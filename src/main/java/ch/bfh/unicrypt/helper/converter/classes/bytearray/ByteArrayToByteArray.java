@@ -45,36 +45,61 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instance of this class convert {@code ByteArray} values into {@code ByteArray} values. There are four operating
+ * modes, one in which the byte arrays remain unchanged, one in which the bytes of the byte arrays are reversed, one in
+ * which the bits of the bytes in the byte arrays are reversed, and one in which both the bytes and the bits in the byte
+ * arrays are reversed.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class ByteArrayToByteArray
 	   extends AbstractByteArrayConverter<ByteArray> {
 
 	private final boolean reverse;
-	private final boolean byteReverse;
+	private final boolean bitReverse;
 
-	public ByteArrayToByteArray(boolean reverse, boolean byteReverse) {
+	private ByteArrayToByteArray(boolean reverse, boolean bitReverse) {
 		super(ByteArray.class);
 		this.reverse = reverse;
-		this.byteReverse = byteReverse;
+		this.bitReverse = bitReverse;
 	}
 
+	/**
+	 * Returns a new default {@link ByteArrayToByteArray} converter, which leaves the byte arrays unchanged.
+	 * <p>
+	 * @return The default converter
+	 */
 	public static ByteArrayToByteArray getInstance() {
 		return new ByteArrayToByteArray(false, false);
 	}
 
+	/**
+	 * Returns a new {@link ByteArrayToByteArray} converter for a given flag {@code reverse} indicating if the byte
+	 * arrays are reversed. The bits remain unchanged.
+	 * <p>
+	 * @param reverse The flag indicating if the byte arrays are reversed
+	 * @return The new converter
+	 */
 	public static ByteArrayToByteArray getInstance(boolean reverse) {
 		return new ByteArrayToByteArray(reverse, false);
 	}
 
-	public static ByteArrayToByteArray getInstance(boolean reverse, boolean byteReverse) {
-		return new ByteArrayToByteArray(reverse, byteReverse);
+	/**
+	 * Returns a new {@link ByteArrayToByteArray} converter for a given flag {@code reverse} indicating if the bytes are
+	 * reversed and another flag {@code bitReverse} indicating if the bits in each byte are reversed.
+	 * <p>
+	 * @param reverse    A flag indicating if the bytes are reversed
+	 * @param bitReverse A flag indicating if the bits in each byte are reversed
+	 * @return The new converter
+	 */
+	public static ByteArrayToByteArray getInstance(boolean reverse, boolean bitReverse) {
+		return new ByteArrayToByteArray(reverse, bitReverse);
 	}
 
 	@Override
 	protected ByteArray abstractConvert(ByteArray byteArray) {
-		ByteArray result = byteReverse ? byteArray.byteReverse() : byteArray;
+		ByteArray result = this.bitReverse ? byteArray.bitReverse() : byteArray;
 		if (this.reverse) {
 			return result.reverse();
 		}
@@ -83,7 +108,7 @@ public class ByteArrayToByteArray
 
 	@Override
 	protected ByteArray abstractReconvert(ByteArray byteArray) {
-		ByteArray result = byteReverse ? byteArray.byteReverse() : byteArray;
+		ByteArray result = this.bitReverse ? byteArray.bitReverse() : byteArray;
 		if (this.reverse) {
 			return result.reverse();
 		}

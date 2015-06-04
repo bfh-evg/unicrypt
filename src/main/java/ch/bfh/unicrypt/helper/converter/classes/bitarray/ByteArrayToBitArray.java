@@ -46,18 +46,31 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBitArrayConverter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * The single instance of this class converts {@code ByteArray} values into {@code BitArray} values. The bits contained
+ * in the byte array and the order of the bits remain unchanged.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class ByteArrayToBitArray
 	   extends AbstractBitArrayConverter<ByteArray> {
+
+	private static ByteArrayToBitArray instance = null;
 
 	protected ByteArrayToBitArray() {
 		super(ByteArray.class);
 	}
 
+	/**
+	 * Returns the single instance of this class.
+	 * <p>
+	 * @return The single instance
+	 */
 	public static ByteArrayToBitArray getInstance() {
-		return new ByteArrayToBitArray();
+		if (instance == null) {
+			instance = new ByteArrayToBitArray();
+		}
+		return instance;
 	}
 
 	@Override

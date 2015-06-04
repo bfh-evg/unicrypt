@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,62 +39,41 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes.bitarray;
+package ch.bfh.unicrypt.helper.converter.bytearray;
 
-import ch.bfh.unicrypt.helper.array.classes.BitArray;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBitArrayConverter;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import junit.framework.Assert;
+import org.junit.Test;
 
 /**
- * Instance of this class convert {@code BitArray} values into {@code BitArray} values. There are two operating modes,
- * one in which the bit arrays remain unchanged and one in which the bit arrays are reversed.
- * <p>
- * @author Rolf Haenni
- * @version 2.0
+ *
+ * @author rolfhaenni
  */
-public class BitArrayToBitArray
-	   extends AbstractBitArrayConverter<BitArray> {
+public class StringToByteArrayTest {
 
-	private final boolean reverse;
+	String[] strings = {"", "x"};//, "ä", "\\", "\t", "\b", "\n", "\r", "\'", "\"", "\\\t\b\n\r\'\"", "Hello World"};
 
-	private BitArrayToBitArray(boolean reverse) {
-		super(BitArray.class);
-		this.reverse = reverse;
-	}
+	@Test
+	public void stringToByteArrayTest1() {
 
-	/**
-	 * Returns a new default {@link BitArrayToBitArray} converter, which leaves the bit arrays unchanged.
-	 * <p>
-	 * @return The default converter
-	 */
-	public static BitArrayToBitArray getInstance() {
-		return new BitArrayToBitArray(false);
-	}
-
-	/**
-	 * Returns a new {@link BitArrayToBitArray} converter for a given flag {@code reverse} indicating if the byte arrays
-	 * are reversed.
-	 * <p>
-	 * @param reverse The flag indicating if the byte arrays are reversed
-	 * @return The new converter
-	 */
-	public static BitArrayToBitArray getInstance(boolean reverse) {
-		return new BitArrayToBitArray(reverse);
-	}
-
-	@Override
-	protected BitArray abstractConvert(BitArray bitArray) {
-		if (this.reverse) {
-			return bitArray.reverse();
+		StringToByteArray converter = StringToByteArray.getInstance();
+		for (String s : strings) {
+			Assert.assertEquals(s, converter.reconvert(converter.convert(s)));
 		}
-		return bitArray;
 	}
 
-	@Override
-	protected BitArray abstractReconvert(BitArray bitArray) {
-		if (this.reverse) {
-			return bitArray.reverse();
+	@Test
+	public void stringToByteArrayTest2() {
+		for (Charset charset : new Charset[]{StandardCharsets.ISO_8859_1, StandardCharsets.US_ASCII, StandardCharsets.UTF_16,
+			StandardCharsets.UTF_16BE, StandardCharsets.UTF_16LE, StandardCharsets.UTF_8}) {
+			StringToByteArray converter = StringToByteArray.getInstance(charset);
+			for (String s : strings) {
+				Assert.assertEquals(s, converter.reconvert(converter.convert(s)));
+			}
 		}
-		return bitArray;
+
 	}
 
 }

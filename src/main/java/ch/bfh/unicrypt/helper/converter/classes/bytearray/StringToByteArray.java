@@ -44,10 +44,17 @@ package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instances of this class convert strings into {@code ByteArray} values using the standard Java conversion method
+ * implemented in {@link String#getBytes(Charset)} and {@link String#String(byte[], Charset)}. The default converter
+ * uses Java's default character set {@link Charset#defaultCharset()}. A converter for any other standard character set
+ * defined in {@link StandardCharsets} can be created.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @see StandardCharsets
  */
 public class StringToByteArray
 	   extends AbstractByteArrayConverter<String> {
@@ -59,6 +66,44 @@ public class StringToByteArray
 		this.charset = charset;
 	}
 
+	/**
+	 * Returns the default instance of this class using {@link Charset#defaultCharset()} as character set.
+	 * <p>
+	 * @return The default instance
+	 */
+	public static StringToByteArray getInstance() {
+		return new StringToByteArray(Charset.defaultCharset());
+	}
+
+	private static boolean isStandardCharset(Charset charset) {
+		return charset == StandardCharsets.ISO_8859_1
+			   || charset == StandardCharsets.US_ASCII
+			   || charset == StandardCharsets.UTF_16
+			   || charset == StandardCharsets.UTF_16BE
+			   || charset == StandardCharsets.UTF_16LE
+			   || charset == StandardCharsets.UTF_8;
+	}
+
+	/**
+	 * Returns a new instance for a given standard character set.
+	 * <p>
+	 * @param standardCharset The given standard character set
+	 * @return The new instance
+	 */
+	public static StringToByteArray getInstance(Charset standardCharset) {
+		if (standardCharset == null || !isStandardCharset(standardCharset)) {
+			throw new IllegalArgumentException();
+		}
+		return new StringToByteArray(standardCharset);
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(ByteArray byteArray) {
+		// not all byte arrays are valid for re-conversion in a given character set,
+		// but performing corresponding tests is too expensive
+		return true;
+	}
+
 	@Override
 	protected ByteArray abstractConvert(String string) {
 		return SafeByteArray.getInstance(string.getBytes(this.charset));
@@ -67,17 +112,6 @@ public class StringToByteArray
 	@Override
 	protected String abstractReconvert(ByteArray byteArray) {
 		return new String(byteArray.getBytes(), charset);
-	}
-
-	public static StringToByteArray getInstance() {
-		return new StringToByteArray(Charset.defaultCharset());
-	}
-
-	public static StringToByteArray getInstance(Charset charset) {
-		if (charset == null) {
-			throw new IllegalArgumentException();
-		}
-		return new StringToByteArray(charset);
 	}
 
 }

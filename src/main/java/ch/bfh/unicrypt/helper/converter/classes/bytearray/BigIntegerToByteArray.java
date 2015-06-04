@@ -47,21 +47,49 @@ import java.math.BigInteger;
 import java.nio.ByteOrder;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instances of this class convert {@code BigInteger} values into {@code ByteArray} values of {@code length>0} using the
+ * standard Java conversion method implemented in {@link BigInteger#toByteArray()} and
+ * {@link BigInteger#BigInteger(byte[])}. The {@code BigInteger} values can be positive or negative. There are two modes
+ * of operation: the default mode using big-endian byte order and the alternative mode using little-endian byte order.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class BigIntegerToByteArray
 	   extends AbstractByteArrayConverter<BigInteger> {
 
-	private transient final ByteOrder byteOrder; //TODO not serializable
+	private final ByteOrder byteOrder;
 
 	protected BigIntegerToByteArray(ByteOrder byteOrder) {
 		super(BigInteger.class);
 		this.byteOrder = byteOrder;
 	}
 
-	public ByteOrder getByteOrder() {
-		return byteOrder;
+	/**
+	 * Returns the default instance of this class using big-endian byte order.
+	 * <p>
+	 * @return The default instance
+	 */
+	public static BigIntegerToByteArray getInstance() {
+		return BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
+	}
+
+	/**
+	 * Returns a new instance of this class for a given byte order.
+	 * <p>
+	 * @param byteOrder The given byte order
+	 * @return The resulting instance
+	 */
+	public static BigIntegerToByteArray getInstance(ByteOrder byteOrder) {
+		if (byteOrder == null) {
+			throw new IllegalArgumentException();
+		}
+		return new BigIntegerToByteArray(byteOrder);
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(ByteArray byteArray) {
+		return byteArray.getLength() > 0;
 	}
 
 	@Override
@@ -82,17 +110,6 @@ public class BigIntegerToByteArray
 			bytes = byteArray.getBytes();
 		}
 		return new BigInteger(bytes);
-	}
-
-	public static BigIntegerToByteArray getInstance() {
-		return BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
-	}
-
-	public static BigIntegerToByteArray getInstance(ByteOrder byteOrder) {
-		if (byteOrder == null) {
-			throw new IllegalArgumentException();
-		}
-		return new BigIntegerToByteArray(byteOrder);
 	}
 
 }
