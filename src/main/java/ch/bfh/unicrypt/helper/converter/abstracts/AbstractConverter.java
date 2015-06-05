@@ -59,7 +59,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 	private final Class<V> inputClass;
 	private final Class<W> outputClass;
 
-	public AbstractConverter(Class<V> inputClass, Class<W> outputClass) {
+	protected AbstractConverter(Class<V> inputClass, Class<W> outputClass) {
 		this.inputClass = inputClass;
 		this.outputClass = outputClass;
 	}

@@ -55,7 +55,7 @@ public abstract class AbstractByteArrayConverter<V extends Object>
 	   extends AbstractConverter<V, ByteArray>
 	   implements ByteArrayConverter<V> {
 
-	public AbstractByteArrayConverter(Class<V> inputClass) {
+	protected AbstractByteArrayConverter(Class<V> inputClass) {
 		super(inputClass, ByteArray.class);
 	}
 

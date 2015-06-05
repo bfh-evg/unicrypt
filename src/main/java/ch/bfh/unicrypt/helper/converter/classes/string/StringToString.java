@@ -52,7 +52,7 @@ public class StringToString
 
 	private final boolean reverse;
 
-	public StringToString(boolean reverse) {
+	protected StringToString(boolean reverse) {
 		super(String.class);
 		this.reverse = reverse;
 	}

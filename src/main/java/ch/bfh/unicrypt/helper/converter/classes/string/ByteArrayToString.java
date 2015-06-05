@@ -59,36 +59,50 @@ public class ByteArrayToString
 	};
 
 	private final Radix radix;
-	private final boolean reverse;
 	private final String delimiter;
-	private final String binaryRegExp;
-	private final String hexRegExp;
+	private final boolean upperCase;
+	private String regExp;
 
-	protected ByteArrayToString(Radix radix, boolean reverse) {
+	protected ByteArrayToString(Radix radix, String delimiter, boolean upperCase) {
 		super(ByteArray.class);
 		this.radix = radix;
-		this.reverse = reverse;
-		this.delimiter = "";
-		this.binaryRegExp = "^([0-1]{8}([0-1]{8})*)?$";
-		this.hexRegExp = "^([0-9A-F]{2}([0-9A-F]{2})*)?$";
-	}
-
-	protected ByteArrayToString(Radix radix, boolean reverse, String delimiter) {
-		super(ByteArray.class);
-		this.radix = radix;
-		this.reverse = reverse;
 		this.delimiter = delimiter;
-		this.binaryRegExp = "^([0-1]{8}(\\|[0-1]{8})*)?$";
-		this.hexRegExp = "^([0-9A-F]{2}(\\|[0-9A-F]{2})*)?$";
+		this.upperCase = upperCase;
+		if (radix == Radix.BINARY) {
+			if (delimiter.length() == 0) {
+				this.regExp = "^([0-1]{8})*$";
+			} else {
+				this.regExp = "^([0-1]{8}(\\|[0-1]{8})*)?$";
+			}
+		}
+		if (radix == Radix.HEX) {
+			String range = upperCase ? "[0-9A-F]" : "[0-9a-f]";
+			if (delimiter.length() == 0) {
+				this.regExp = "^(" + range + "{2})*$"; // after replacing delimiters
+			} else {
+				this.regExp = "^(" + range + "{2}(\\|" + range + "{2})*)?$"; // after replacing delimiters
+			}
+		}
+		if (radix == Radix.BASE64) {
+			this.regExp = "^(([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==))?$";
+		}
 	}
 
 	@Override
-	public String abstractConvert(ByteArray byteArray) {
+	protected boolean defaultIsValidOutput(String string) {
+		if (this.delimiter.length() > 0) {
+			string = string.replace(this.delimiter.charAt(0), '|');
+		}
+		return string.matches(this.regExp);
+	}
+
+	@Override
+	protected String abstractConvert(ByteArray byteArray) {
 		switch (this.radix) {
 			case BINARY: {
 				StringBuilder sb = new StringBuilder(byteArray.getLength() * (Byte.SIZE + 1));
 				String delim = "";
-				for (Byte b : this.reverse ? byteArray.reverse() : byteArray) {
+				for (Byte b : byteArray) {
 					int i = b & 0xFF;
 					sb.append(delim);
 					sb.append(String.format("%8s", Integer.toBinaryString(i)).replace(' ', '0'));
@@ -99,10 +113,11 @@ public class ByteArrayToString
 			case HEX: {
 				StringBuilder sb = new StringBuilder(byteArray.getLength() * 3);
 				String delim = "";
-				for (Byte b : this.reverse ? byteArray.reverse() : byteArray) {
+				for (Byte b : byteArray) {
 					int i = b & 0xFF;
 					sb.append(delim);
-					sb.append(String.format("%02X", i));
+					String nextByte = String.format("%02X", i);
+					sb.append(this.upperCase ? nextByte : nextByte.toLowerCase());
 					delim = this.delimiter;
 				}
 				return sb.toString();
@@ -116,35 +131,29 @@ public class ByteArrayToString
 	}
 
 	@Override
-	public ByteArray abstractReconvert(String string) {
+	protected ByteArray abstractReconvert(String string) {
 		if (this.delimiter.length() > 0) {
 			string = string.replace(this.delimiter.charAt(0), '|');
 		}
 		switch (this.radix) {
 			case BINARY: {
-				if (!string.matches(this.binaryRegExp)) {
-					throw new IllegalArgumentException();
-				}
 				int subLength = 8 + this.delimiter.length();
 				byte[] bytes = new byte[(string.length() + this.delimiter.length()) / subLength];
 				for (int i = 0; i < bytes.length; i++) {
 					bytes[i] = (byte) Integer.parseInt(string.substring(i * subLength, i * subLength + 8), 2);
 				}
 				ByteArray result = ByteArray.getInstance(bytes);
-				return this.reverse ? result.reverse() : result;
+				return result;
 			}
 			case HEX: {
 				string = string.toUpperCase();
-				if (!string.matches(this.hexRegExp)) {
-					throw new IllegalArgumentException();
-				}
 				int subLength = 2 + this.delimiter.length();
 				byte[] bytes = new byte[(string.length() + this.delimiter.length()) / subLength];
 				for (int i = 0; i < bytes.length; i++) {
 					bytes[i] = (byte) Integer.parseInt(string.substring(i * subLength, i * subLength + 2), 16);
 				}
 				ByteArray result = ByteArray.getInstance(bytes);
-				return this.reverse ? result.reverse() : result;
+				return result;
 			}
 			case BASE64:
 				return ByteArray.getInstance(DatatypeConverter.parseBase64Binary(string));
@@ -155,43 +164,46 @@ public class ByteArrayToString
 	}
 
 	public static ByteArrayToString getInstance() {
-		return ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, false);
+		return ByteArrayToString.getInstance(Radix.HEX, "", true);
 	}
 
-	public static ByteArrayToString getInstance(Radix radix) {
-		return ByteArrayToString.getInstance(radix, false);
-	}
-
-	public static ByteArrayToString getInstance(boolean reverse) {
-		return ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, reverse);
-	}
-
-	public static ByteArrayToString getInstance(Radix radix, boolean reverse) {
-		if (radix == null || (radix == Radix.BASE64 && reverse)) {
-			throw new IllegalArgumentException();
-		}
-		return new ByteArrayToString(radix, reverse);
+	public static ByteArrayToString getInstance(boolean upperCase) {
+		return ByteArrayToString.getInstance(Radix.HEX, "", upperCase);
 	}
 
 	public static ByteArrayToString getInstance(String delimiter) {
-		return ByteArrayToString.getInstance(Radix.HEX, delimiter, false);
+		return ByteArrayToString.getInstance(Radix.HEX, delimiter, true);
 	}
 
-	public static ByteArrayToString getInstance(String delimiter, boolean reverse) {
-		return ByteArrayToString.getInstance(Radix.HEX, delimiter, reverse);
+	public static ByteArrayToString getInstance(String delimiter, boolean upperCase) {
+		return ByteArrayToString.getInstance(Radix.HEX, delimiter, upperCase);
+	}
+
+	public static ByteArrayToString getInstance(Radix radix) {
+		return ByteArrayToString.getInstance(radix, "", true);
 	}
 
 	public static ByteArrayToString getInstance(Radix radix, String delimiter) {
-		return ByteArrayToString.getInstance(radix, delimiter, false);
+		return ByteArrayToString.getInstance(radix, delimiter, true);
 	}
 
-	public static ByteArrayToString getInstance(Radix radix, String delimiter, boolean reverse) {
-		if (radix == null || radix == Radix.BASE64 || delimiter == null || delimiter.length() != 1
-			   || (radix == Radix.BINARY && "01".indexOf(delimiter.charAt(0)) >= 0)
-			   || (radix == Radix.HEX && "0123456789ABCDEFabcdef".indexOf(delimiter.charAt(0)) >= 0)) {
+	public static ByteArrayToString getInstance(Radix radix, boolean upperCase) {
+		return ByteArrayToString.getInstance(radix, "", upperCase);
+	}
+
+	public static ByteArrayToString getInstance(Radix radix, String delimiter, boolean upperCase) {
+		if (radix == null || delimiter == null || delimiter.length() > 1
+			   || (radix == Radix.BINARY && delimiter.matches("^[0-1]$"))
+			   || (radix == Radix.HEX && delimiter.matches(upperCase ? "^[0-9A-F]$" : "^[0-9a-f]$"))
+			   || (radix == Radix.BASE64 && delimiter.length() > 0)) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteArrayToString(radix, reverse, delimiter);
+		return new ByteArrayToString(radix, delimiter, upperCase);
+	}
+
+	public static void main(String[] x) {
+		ByteArrayToString converter = ByteArrayToString.getInstance(Radix.HEX, "|");
+		converter.reconvert("ff|00");
 	}
 
 }

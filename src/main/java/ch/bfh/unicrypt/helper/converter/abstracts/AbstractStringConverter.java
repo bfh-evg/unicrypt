@@ -54,7 +54,7 @@ public abstract class AbstractStringConverter<V extends Object>
 	   extends AbstractConverter<V, String>
 	   implements StringConverter<V> {
 
-	public AbstractStringConverter(Class<V> inputClass) {
+	protected AbstractStringConverter(Class<V> inputClass) {
 		super(inputClass, String.class);
 	}
 

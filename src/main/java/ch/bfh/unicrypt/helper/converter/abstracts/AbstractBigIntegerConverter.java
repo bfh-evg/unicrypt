@@ -55,7 +55,7 @@ public abstract class AbstractBigIntegerConverter<V extends Object>
 	   extends AbstractConverter<V, BigInteger>
 	   implements BigIntegerConverter<V> {
 
-	public AbstractBigIntegerConverter(Class<V> inputClass) {
+	protected AbstractBigIntegerConverter(Class<V> inputClass) {
 		super(inputClass, BigInteger.class);
 	}
 
