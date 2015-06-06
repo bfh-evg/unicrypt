@@ -46,12 +46,26 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
 import javax.xml.bind.DatatypeConverter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instance of this class convert byte arrays into strings. Three modes of operation are supporting, depending on the
+ * chosen radix for the conversion: {@link Radix#BINARY} (radix=2), {@link Radix#HEX} (radix=16), {@link Radix#BASE64}
+ * (radix=64). The resulting strings represent the bytes in increasing order from left to right. In the modes
+ * {@code BINARY} and {@code HEX}, a delimiter character can be chosen. The default delimiter character is {@code '|'}.
+ * In the mode {@code BINARY}, the bytes are represented by bit strings of length 8 containing characters {@code '0'}
+ * and {@code '1'}. In the mode {@code HEX}, both upper-case letters {@code '0',...,'9','A',...,'F'} or lower-case
+ * letters {@code '0',...,'9','a',...,'f'} are supported. In the mode {@code BASE64}, the byte array is represented by a
+ * string of characters {@code 'A',...,'Z','a',...,'z','0',...,'9','+','/'} (plus suffix {@code "="} or {@code "=="} for
+ * making the string length a multiple of 4). The default mode of operation is {@code HEX} with upper-case letters.
+ * <p>
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class ByteArrayToString
 	   extends AbstractStringConverter<ByteArray> {
 
+	/**
+	 * The enumeration type lists the three supported modes of operation. The default mode is {@code HEX}.
+	 */
 	public enum Radix {
 
 		BINARY, HEX, BASE64
@@ -86,6 +100,88 @@ public class ByteArrayToString
 		if (radix == Radix.BASE64) {
 			this.regExp = "^(([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==))?$";
 		}
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public static ByteArrayToString getInstance() {
+		return ByteArrayToString.getInstance(Radix.HEX, "", true);
+	}
+
+	/**
+	 *
+	 * @param upperCase
+	 * @return
+	 */
+	public static ByteArrayToString getInstance(boolean upperCase) {
+		return ByteArrayToString.getInstance(Radix.HEX, "", upperCase);
+	}
+
+	/**
+	 *
+	 * @param delimiter
+	 * @return
+	 */
+	public static ByteArrayToString getInstance(String delimiter) {
+		return ByteArrayToString.getInstance(Radix.HEX, delimiter, true);
+	}
+
+	/**
+	 *
+	 * @param delimiter
+	 * @param upperCase
+	 * @return
+	 */
+	public static ByteArrayToString getInstance(String delimiter, boolean upperCase) {
+		return ByteArrayToString.getInstance(Radix.HEX, delimiter, upperCase);
+	}
+
+	/**
+	 *
+	 * @param radix
+	 * @return
+	 */
+	public static ByteArrayToString getInstance(Radix radix) {
+		return ByteArrayToString.getInstance(radix, "", true);
+	}
+
+	/**
+	 *
+	 * @param radix
+	 * @param delimiter
+	 * @return
+	 */
+	public static ByteArrayToString getInstance(Radix radix, String delimiter) {
+		return ByteArrayToString.getInstance(radix, delimiter, true);
+	}
+
+	/**
+	 *
+	 * @param radix
+	 * @param upperCase
+	 * @return
+	 */
+	public static ByteArrayToString getInstance(Radix radix, boolean upperCase) {
+		return ByteArrayToString.getInstance(radix, "", upperCase);
+	}
+
+	/**
+	 *
+	 * @param radix
+	 * @param delimiter
+	 * @param upperCase
+	 * @return
+	 */
+	public static ByteArrayToString getInstance(Radix radix, String delimiter, boolean upperCase) {
+		if (radix == null || delimiter == null || delimiter.length() > 1
+			   || (radix == Radix.BINARY && delimiter.matches("^[0-1]$"))
+			   || (radix == Radix.HEX && delimiter.matches(upperCase ? "^[0-9A-F]$" : "^[0-9a-f]$"))
+			   || (radix == Radix.BASE64 && delimiter.length() > 0)) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteArrayToString(radix, delimiter, upperCase);
 	}
 
 	@Override
@@ -161,49 +257,6 @@ public class ByteArrayToString
 				// impossible case
 				throw new IllegalStateException();
 		}
-	}
-
-	public static ByteArrayToString getInstance() {
-		return ByteArrayToString.getInstance(Radix.HEX, "", true);
-	}
-
-	public static ByteArrayToString getInstance(boolean upperCase) {
-		return ByteArrayToString.getInstance(Radix.HEX, "", upperCase);
-	}
-
-	public static ByteArrayToString getInstance(String delimiter) {
-		return ByteArrayToString.getInstance(Radix.HEX, delimiter, true);
-	}
-
-	public static ByteArrayToString getInstance(String delimiter, boolean upperCase) {
-		return ByteArrayToString.getInstance(Radix.HEX, delimiter, upperCase);
-	}
-
-	public static ByteArrayToString getInstance(Radix radix) {
-		return ByteArrayToString.getInstance(radix, "", true);
-	}
-
-	public static ByteArrayToString getInstance(Radix radix, String delimiter) {
-		return ByteArrayToString.getInstance(radix, delimiter, true);
-	}
-
-	public static ByteArrayToString getInstance(Radix radix, boolean upperCase) {
-		return ByteArrayToString.getInstance(radix, "", upperCase);
-	}
-
-	public static ByteArrayToString getInstance(Radix radix, String delimiter, boolean upperCase) {
-		if (radix == null || delimiter == null || delimiter.length() > 1
-			   || (radix == Radix.BINARY && delimiter.matches("^[0-1]$"))
-			   || (radix == Radix.HEX && delimiter.matches(upperCase ? "^[0-9A-F]$" : "^[0-9a-f]$"))
-			   || (radix == Radix.BASE64 && delimiter.length() > 0)) {
-			throw new IllegalArgumentException();
-		}
-		return new ByteArrayToString(radix, delimiter, upperCase);
-	}
-
-	public static void main(String[] x) {
-		ByteArrayToString converter = ByteArrayToString.getInstance(Radix.HEX, "|");
-		converter.reconvert("ff|00");
 	}
 
 }
