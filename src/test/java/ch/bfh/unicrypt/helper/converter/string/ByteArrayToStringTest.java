@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.converter.string;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayToString;
 import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
@@ -116,6 +117,36 @@ public class ByteArrayToStringTest {
 		Assert.assertEquals("f8xf8", c21.convert(b4));
 		Assert.assertEquals("f8Xf8", c22.convert(b4));
 		Assert.assertEquals("f8Af8", c23.convert(b4));
+	}
+
+	@Test
+	public void testGetInstance() {
+
+		try {
+			ByteArrayToString.getInstance("A");
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "A");
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			ByteArrayToString.getInstance(ByteArrayToString.Radix.BINARY, "0");
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			ByteArrayToString.getInstance(ByteArrayToString.Radix.BASE64, "|");
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			ByteArrayToString.getInstance(ByteArrayToString.Radix.BASE64, "");
+		} catch (Exception e) {
+			fail();
+		}
 	}
 
 }

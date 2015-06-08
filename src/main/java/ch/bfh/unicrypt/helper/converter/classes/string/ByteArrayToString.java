@@ -46,16 +46,16 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
 import javax.xml.bind.DatatypeConverter;
 
 /**
- * Instance of this class convert byte arrays into strings. Three modes of operation are supporting, depending on the
+ * Instance of this class convert byte arrays into strings. Three modes of operation are supported, depending on the
  * chosen radix for the conversion: {@link Radix#BINARY} (radix=2), {@link Radix#HEX} (radix=16), {@link Radix#BASE64}
  * (radix=64). The resulting strings represent the bytes in increasing order from left to right. In the modes
- * {@code BINARY} and {@code HEX}, a delimiter character can be chosen. The default delimiter character is {@code '|'}.
- * In the mode {@code BINARY}, the bytes are represented by bit strings of length 8 containing characters {@code '0'}
- * and {@code '1'}. In the mode {@code HEX}, both upper-case letters {@code '0',...,'9','A',...,'F'} or lower-case
- * letters {@code '0',...,'9','a',...,'f'} are supported. In the mode {@code BASE64}, the byte array is represented by a
- * string of characters {@code 'A',...,'Z','a',...,'z','0',...,'9','+','/'} (plus suffix {@code "="} or {@code "=="} for
- * making the string length a multiple of 4). The default mode of operation is {@code HEX} with upper-case letters.
- * <p>
+ * {@code BINARY} and {@code HEX}, a optional delimiter character can be chosen. In the mode {@code BINARY}, the bytes
+ * are represented by bit strings of length 8 containing characters {@code '0'} and {@code '1'}. In the mode
+ * {@code HEX}, both upper-case letters {@code '0',...,'9','A',...,'F'} or lower-case letters
+ * {@code '0',...,'9','a',...,'f'} are supported. In the mode {@code BASE64}, the byte array is represented by a string
+ * of characters {@code 'A',...,'Z','a',...,'z','0',...,'9','+','/'} (plus suffix {@code "="} or {@code "=="} for making
+ * the string length a multiple of 4). The default mode of operation is {@code HEX} with upper-case letters and no
+ * delimiter.
  * <p>
  * @author Rolf Haenni
  * @version 2.0
@@ -64,7 +64,7 @@ public class ByteArrayToString
 	   extends AbstractStringConverter<ByteArray> {
 
 	/**
-	 * The enumeration type lists the three supported modes of operation. The default mode is {@code HEX}.
+	 * This enumeration type lists the three supported modes of operation. The default mode is {@code HEX}.
 	 */
 	public enum Radix {
 
@@ -72,9 +72,16 @@ public class ByteArrayToString
 
 	};
 
+	// the radix of the converter
 	private final Radix radix;
+
+	// the chosen delimiter (only for BINARY and HEX)
 	private final String delimiter;
+
+	// a flag indicating whether upper-case or lower-case letters are used in HEX mode
 	private final boolean upperCase;
+
+	// the regular expression to check if a string is valid for re-conversion
 	private String regExp;
 
 	protected ByteArrayToString(Radix radix, String delimiter, boolean upperCase) {
@@ -103,76 +110,102 @@ public class ByteArrayToString
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the default {@code ByteArrayToString} converter. Its mode is {@code HEX} using upper-case letters. No
+	 * delimiters are added.
+	 * <p>
+	 * @return The default converter.
 	 */
 	public static ByteArrayToString getInstance() {
 		return ByteArrayToString.getInstance(Radix.HEX, "", true);
 	}
 
 	/**
-	 *
-	 * @param upperCase
-	 * @return
+	 * Returns a new {@code ByteArrayToString} converter in {@code HEX} mode. The parameter {@code upperCase} determines
+	 * whether upper-case or lower-case letters are used in the conversion. No delimiters are added.
+	 * <p>
+	 * @param upperCase The flag indicating the use of upper-case or lower-case letters
+	 * @return The new converter
 	 */
 	public static ByteArrayToString getInstance(boolean upperCase) {
 		return ByteArrayToString.getInstance(Radix.HEX, "", upperCase);
 	}
 
 	/**
-	 *
-	 * @param delimiter
-	 * @return
+	 * Returns a new {@code ByteArrayToString} converter in {@code HEX} mode using upper-case letters. The parameter
+	 * {@code delimiter} defines the delimiter symbol. All characters except {@code '0',...,'9','A',...,'F'} are allowed
+	 * as delimiter.
+	 * <p>
+	 * @param delimiter The delimiter symbol
+	 * @return The new converter
 	 */
 	public static ByteArrayToString getInstance(String delimiter) {
 		return ByteArrayToString.getInstance(Radix.HEX, delimiter, true);
 	}
 
 	/**
-	 *
-	 * @param delimiter
-	 * @param upperCase
-	 * @return
+	 * Returns a new {@code ByteArrayToString} converter in {@code HEX} mode. The parameter {@code upperCase} determines
+	 * whether upper-case or lower-case letters are used in the conversion. The parameter {@code delimiter} defines the
+	 * delimiter symbol. All characters except {@code '0',...,'9','A',...,'F'} or {@code '0',...,'9','a',...,'f'} are
+	 * allowed as delimiter, depending on the value of {@code upperCase}.
+	 * <p>
+	 * @param delimiter The delimiter symbol
+	 * @param upperCase The flag indicating the use of upper-case or lower-case letters
+	 * @return The new converter
 	 */
 	public static ByteArrayToString getInstance(String delimiter, boolean upperCase) {
 		return ByteArrayToString.getInstance(Radix.HEX, delimiter, upperCase);
 	}
 
 	/**
-	 *
-	 * @param radix
-	 * @return
+	 * Returns a new {@code ByteArrayToString} converter for a given mode (radix). For {@code HEX}, upper-case letters
+	 * are used in the conversion. No delimiters are added.
+	 * <p>
+	 * @param radix The given radix {@code BINARY}, {@code HEX}, or {@code BASE64}
+	 * @return The new converter
 	 */
 	public static ByteArrayToString getInstance(Radix radix) {
+		if (radix == Radix.BASE64) {
+			return ByteArrayToString.getInstance(radix, "", true);
+		}
 		return ByteArrayToString.getInstance(radix, "", true);
 	}
 
 	/**
-	 *
-	 * @param radix
-	 * @param delimiter
-	 * @return
+	 * Returns a new {@code ByteArrayToString} converter for a given mode (radix). For {@code BINARY} or {@code HEX},
+	 * the parameter {@code delimiter} defines the delimiter symbol. For {@code HEX}, upper-case letters are used in the
+	 * conversion.
+	 * <p>
+	 * @param radix     The given radix {@code BINARY}, {@code HEX}, or {@code BASE64}
+	 * @param delimiter The delimiter symbol
+	 * @return The new converter
 	 */
 	public static ByteArrayToString getInstance(Radix radix, String delimiter) {
 		return ByteArrayToString.getInstance(radix, delimiter, true);
 	}
 
 	/**
-	 *
-	 * @param radix
-	 * @param upperCase
-	 * @return
+	 * Returns a new {@code ByteArrayToString} converter for a given mode (radix). For {@code HEX}, the parameter
+	 * {@code upperCase} determines whether upper-case or lower-case letters are used in the conversion. No delimiters
+	 * are added.
+	 * <p>
+	 * @param radix     The given radix {@code BINARY}, {@code HEX}, or {@code BASE64}
+	 * @param upperCase The flag indicating the use of upper-case or lower-case letters
+	 * @return The new converter
 	 */
 	public static ByteArrayToString getInstance(Radix radix, boolean upperCase) {
 		return ByteArrayToString.getInstance(radix, "", upperCase);
 	}
 
 	/**
-	 *
-	 * @param radix
-	 * @param delimiter
-	 * @param upperCase
-	 * @return
+	 * This is the general method of this class for constructing a new {@code ByteArrayToString} converter. The
+	 * parameter {@code radix} determines the mode. For {@code BINARY} or {@code HEX}, the parameter {@code delimiter}
+	 * defines the delimiter symbol. For {@code HEX}, the parameter {@code upperCase} determines whether upper-case or
+	 * lower-case letters are used in the conversion.
+	 * <p>
+	 * @param radix     The given radix {@code BINARY}, {@code HEX}, or {@code BASE64}
+	 * @param delimiter The delimiter symbol
+	 * @param upperCase The flag indicating the use of upper-case or lower-case letters
+	 * @return The new converter
 	 */
 	public static ByteArrayToString getInstance(Radix radix, String delimiter, boolean upperCase) {
 		if (radix == null || delimiter == null || delimiter.length() > 1

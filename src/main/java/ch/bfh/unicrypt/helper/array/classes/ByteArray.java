@@ -72,7 +72,7 @@ public class ByteArray
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
 
 	// a static varible containing a converter to convert byte arrays to string and back
-	private static final ByteArrayToString STRING_CONVERTER = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|");
+	private static final ByteArrayToString STRING_CONVERTER = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|", true);
 
 	// the internal Java array containing the byte values
 	protected byte[] bytes;

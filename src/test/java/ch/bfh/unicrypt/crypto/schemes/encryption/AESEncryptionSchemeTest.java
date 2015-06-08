@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.schemes.encryption.classes.AESEncryptionScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import junit.framework.Assert;
+import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 
 /**
@@ -69,11 +70,11 @@ public class AESEncryptionSchemeTest {
 		AESEncryptionScheme aes = AESEncryptionScheme.getInstance(
 			   AESEncryptionScheme.KeyLength.KEY128,
 			   AESEncryptionScheme.Mode.ECB,
-			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
-		Element<ByteArray> message = aes.getMessageSpace().getElement("f3|44|81|ec|3c|c6|27|ba|cd|5d|c3|fb|08|f2|73|e6|97|98|c4|64|0b|ad|75|c7|c3|22|7d|b9|10|17|4e|72|96|ab|5c|2f|f6|12|d9|df|aa|e8|c3|1f|30|c4|21|68|6a|11|8a|87|45|19|e6|4e|99|63|79|8a|50|3f|1d|35|cb|9f|ce|ec|81|28|6c|a3|e9|89|bd|97|9b|0c|b2|84|b2|6a|eb|18|74|e4|7c|a8|35|8f|f2|23|78|f0|91|44|58|c8|e0|0b|26|31|68|6d|54|ea|b8|4b|91|f0|ac|a1");
+			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00".toUpperCase()));
+		Element<ByteArray> message = aes.getMessageSpace().getElement("F3|44|81|EC|3C|C6|27|BA|CD|5D|C3|FB|08|F2|73|E6|97|98|C4|64|0B|AD|75|C7|C3|22|7D|B9|10|17|4E|72|96|AB|5C|2F|F6|12|D9|DF|AA|E8|C3|1F|30|C4|21|68|6A|11|8A|87|45|19|E6|4E|99|63|79|8A|50|3F|1D|35|CB|9F|CE|EC|81|28|6C|A3|E9|89|BD|97|9B|0C|B2|84|B2|6A|EB|18|74|E4|7C|A8|35|8F|F2|23|78|F0|91|44|58|C8|E0|0B|26|31|68|6D|54|EA|B8|4B|91|F0|AC|A1");
 		Element<ByteArray> key = aes.getSecretKeyGenerator().getSecretKeySpace().getElement("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00");
 		Element<ByteArray> encryptedMessage = aes.encrypt(key, message);
-		Element<ByteArray> expectedEncryption = aes.getEncryptionSpace().getElement("03|36|76|3e|96|6d|92|59|5a|56|7c|c9|ce|53|7f|5e|a9|a1|63|1b|f4|99|69|54|eb|c0|93|95|7b|23|45|89|ff|4f|83|91|a6|a4|0c|a5|b2|5d|23|be|dd|44|a5|97|dc|43|be|40|be|0e|53|71|2f|7e|2b|f5|ca|70|72|09|92|be|ed|ab|18|95|a9|4f|aa|69|b6|32|e5|cc|47|ce|45|92|64|f4|79|8f|6a|78|ba|cb|89|c1|5e|d3|d6|01|08|a4|e2|ef|ec|8a|8e|33|12|ca|74|60|b9|04|0b|bf");
+		Element<ByteArray> expectedEncryption = aes.getEncryptionSpace().getElement("03|36|76|3E|96|6D|92|59|5A|56|7C|C9|CE|53|7F|5E|A9|A1|63|1B|F4|99|69|54|EB|C0|93|95|7B|23|45|89|FF|4F|83|91|A6|A4|0C|A5|B2|5D|23|BE|DD|44|A5|97|DC|43|BE|40|BE|0E|53|71|2F|7E|2B|F5|CA|70|72|09|92|BE|ED|AB|18|95|A9|4F|AA|69|B6|32|E5|CC|47|CE|45|92|64|F4|79|8F|6A|78|BA|CB|89|C1|5E|D3|D6|01|08|A4|E2|EF|EC|8A|8E|33|12|CA|74|60|B9|04|0B|BF");
 		Assert.assertEquals(encryptedMessage, expectedEncryption);
 	}
 
@@ -115,7 +116,7 @@ public class AESEncryptionSchemeTest {
 			   AESEncryptionScheme.KeyLength.KEY128,
 			   AESEncryptionScheme.Mode.ECB,
 			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
-		Element<ByteArray> message = aes.getMessageSpace().getElement("f3|44|81|ec|3c|c6|27|ba|cd|5d|c3|fb|08|f2|73|e6|97|98|c4|64|0b|ad|75|c7|c3|22|7d|b9|10|17|4e|72|96|ab|5c|2f|f6|12|d9|df|aa|e8|c3|1f|30|c4|21|68|6a|11|8a|87|45|19|e6|4e|99|63|79|8a|50|3f|1d|35|cb|9f|ce|ec|81|28|6c|a3|e9|89|bd|97|9b|0c|b2|84|b2|6a|eb|18|74|e4|7c|a8|35|8f|f2|23|78|f0|91|44|58|c8|e0|0b|26|31|68|6d|54|ea|b8|4b|91|f0|ac|a1");
+		Element<ByteArray> message = aes.getMessageSpace().getElement("F3|44|81|EC|3C|C6|27|BA|CD|5D|C3|FB|08|F2|73|E6|97|98|C4|64|0B|AD|75|C7|C3|22|7D|B9|10|17|4E|72|96|AB|5C|2F|F6|12|D9|DF|AA|E8|C3|1F|30|C4|21|68|6A|11|8A|87|45|19|E6|4E|99|63|79|8A|50|3F|1D|35|CB|9F|CE|EC|81|28|6C|A3|E9|89|BD|97|9B|0C|B2|84|B2|6A|EB|18|74|E4|7C|A8|35|8F|F2|23|78|F0|91|44|58|C8|E0|0B|26|31|68|6D|54|EA|B8|4B|91|F0|AC|A1");
 		Element<ByteArray> key = aes.getPasswordBasedKey("This is the Test");
 		Element<ByteArray> encryptedMessage = aes.encrypt(key, message);
 
@@ -134,7 +135,7 @@ public class AESEncryptionSchemeTest {
 			   AESEncryptionScheme.KeyLength.KEY128,
 			   AESEncryptionScheme.Mode.ECB,
 			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
-		Element<ByteArray> message = aes.getMessageSpace().getElement("f3|44|81|ec|3c|c6|27|ba|cd|5d|c3|fb|08|f2|73|e6|97|98|c4|64|0b|ad|75|c7|c3|22|7d|b9|10|17|4e|72|96|ab|5c|2f|f6|12|d9|df|aa|e8|c3|1f|30|c4|21|68|6a|11|8a|87|45|19|e6|4e|99|63|79|8a|50|3f|1d|35|cb|9f|ce|ec|81|28|6c|a3|e9|89|bd|97|9b|0c|b2|84|b2|6a|eb|18|74|e4|7c|a8|35|8f|f2|23|78|f0|91|44|58|c8|e0|0b|26|31|68|6d|54|ea|b8|4b|91|f0|ac|a1");
+		Element<ByteArray> message = aes.getMessageSpace().getElement("F3|44|81|EC|3C|C6|27|BA|CD|5D|C3|FB|08|F2|73|E6|97|98|C4|64|0B|AD|75|C7|C3|22|7D|B9|10|17|4E|72|96|AB|5C|2F|F6|12|D9|DF|AA|E8|C3|1F|30|C4|21|68|6A|11|8A|87|45|19|E6|4E|99|63|79|8A|50|3F|1D|35|CB|9F|CE|EC|81|28|6C|A3|E9|89|BD|97|9B|0C|B2|84|B2|6A|EB|18|74|E4|7C|A8|35|8F|F2|23|78|F0|91|44|58|C8|E0|0B|26|31|68|6D|54|EA|B8|4B|91|F0|AC|A1");
 		Element<ByteArray> key = aes.getPasswordBasedKey("This is the Test");
 		Element<ByteArray> encryptedMessage = aes.encrypt(key, message);
 
@@ -153,7 +154,7 @@ public class AESEncryptionSchemeTest {
 			   AESEncryptionScheme.KeyLength.KEY128,
 			   AESEncryptionScheme.Mode.ECB,
 			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
-		Element<ByteArray> message = aes.getMessageSpace().getElement("f3|44|81|ec|3c|c6|27|ba|cd|5d|c3|fb|08|f2|73|e6|97|98|c4|64|0b|ad|75|c7|c3|22|7d|b9|10|17|4e|72|96|ab|5c|2f|f6|12|d9|df|aa|e8|c3|1f|30|c4|21|68|6a|11|8a|87|45|19|e6|4e|99|63|79|8a|50|3f|1d|35|cb|9f|ce|ec|81|28|6c|a3|e9|89|bd|97|9b|0c|b2|84|b2|6a|eb|18|74|e4|7c|a8|35|8f|f2|23|78|f0|91|44|58|c8|e0|0b|26|31|68|6d|54|ea|b8|4b|91|f0|ac|a1");
+		Element<ByteArray> message = aes.getMessageSpace().getElement("F3|44|81|EC|3C|C6|27|BA|CD|5D|C3|FB|08|F2|73|E6|97|98|C4|64|0B|AD|75|C7|C3|22|7D|B9|10|17|4E|72|96|AB|5C|2F|F6|12|D9|DF|AA|E8|C3|1F|30|C4|21|68|6A|11|8A|87|45|19|E6|4E|99|63|79|8A|50|3F|1D|35|CB|9F|CE|EC|81|28|6C|A3|E9|89|BD|97|9B|0C|B2|84|B2|6A|EB|18|74|E4|7C|A8|35|8F|F2|23|78|F0|91|44|58|C8|E0|0B|26|31|68|6D|54|EA|B8|4B|91|F0|AC|A1");
 		Element<ByteArray> key = aes.getPasswordBasedKey("This is the Test");
 		Element<ByteArray> encryptedMessage = aes.encrypt(key, message);
 
@@ -163,7 +164,7 @@ public class AESEncryptionSchemeTest {
 			   ByteArray.getInstance("00|00|00|00|00|00|00|00|00|00|00|00|00|00|00|00"));
 		Element<ByteArray> key2 = aes2.getPasswordBasedKey("That is the Test");
 		Element<ByteArray> expectedMessage = aes2.decrypt(key2, encryptedMessage);
-		Assert.assertFalse(message.equals(expectedMessage));
+		assertFalse(message.equals(expectedMessage));
 	}
 
 }

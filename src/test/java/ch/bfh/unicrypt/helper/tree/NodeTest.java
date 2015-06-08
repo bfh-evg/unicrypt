@@ -138,8 +138,6 @@ public class NodeTest {
 		Tree<String> n4 = Node.getInstance(n1, n2, l9);
 		Tree<String> root = Node.getInstance(n3, n4);
 		StringAggregator sa = StringAggregator.getInstance();
-		System.out.println(root);
-		System.out.println(root.aggregate(sa));
 		Assert.assertEquals("[[\"Six\"|\"Seven\"|\"Eight\"]|[[\"One\"|\"Two\"|\"Three\"]|[\"Four\"|\"Five\"]|\"Nine\"]]", root.aggregate(sa));
 		Tree<String> result = Tree.getInstance(root.aggregate(sa), sa);
 		Assert.assertEquals(result, root);
