@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.classes;
 
-import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
+import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableString;
 
 /**
@@ -57,7 +57,7 @@ import ch.bfh.unicrypt.helper.iterable.IterableString;
  * @version 2.0
  */
 public class StringAggregator
-	   extends AbstractInvertibleAggregator<String> {
+	   extends AbstractAggregator<String> {
 
 	private static StringAggregator defaultInstance = null;
 
@@ -68,6 +68,7 @@ public class StringAggregator
 	private final char escapeCharacter;
 
 	private StringAggregator(char quoteCharacter, char openingParenthesis, char closingParenthesis, char separator, char escapeCharacter) {
+		super(String.class);
 		this.quoteCharacter = quoteCharacter;
 		this.openingParenthesis = openingParenthesis;
 		this.closingParenthesis = closingParenthesis;

@@ -59,14 +59,4 @@ public abstract class AbstractByteArrayConverter<V extends Object>
 		super(inputClass, ByteArray.class);
 	}
 
-	// this local class allows creating instances of ByteArray without copying the array
-	protected class SafeByteArray
-		   extends ByteArray {
-
-		protected SafeByteArray(byte[] bytes) {
-			super(bytes);
-		}
-
-	}
-
 }

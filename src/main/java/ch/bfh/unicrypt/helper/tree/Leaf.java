@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableValue;
 import java.util.Iterator;
 
@@ -85,11 +84,6 @@ public class Leaf<V>
 	 */
 	public V getValue() {
 		return this.value;
-	}
-
-	@Override
-	public V abstractAggregate(Aggregator<V> aggregator) {
-		return aggregator.aggregateLeaf(this.value);
 	}
 
 	@Override

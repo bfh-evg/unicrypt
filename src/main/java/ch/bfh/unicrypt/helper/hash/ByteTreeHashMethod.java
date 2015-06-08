@@ -1,7 +1,7 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
  *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
@@ -39,59 +39,28 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.aggregator.abstracts;
+package ch.bfh.unicrypt.helper.hash;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 
 /**
- * This abstract class serves as a base implementation for the {@link InvertibleAggregator} interface.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @param <V> The generic type of the values precessed by the invertible aggregator
+ *
+ * @author rolfhaenni
  */
-public abstract class AbstractInvertibleAggregator<V>
-	   extends AbstractAggregator<V>
-	   implements InvertibleAggregator<V> {
+public class ByteTreeHashMethod
+	   extends TreeHashMethod<ByteArray> {
 
-	@Override
-	public final V disaggregateLeaf(V value) {
-		if (value == null || !this.abstractIsLeaf(value)) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractDisaggregateLeaf(value);
+	protected ByteTreeHashMethod(HashAlgorithm hashAlgorithm, Aggregator<ByteArray> aggregator) {
+		super(hashAlgorithm, aggregator, ByteArrayToByteArray.getInstance());
 	}
 
-	@Override
-	public final Iterable<V> disaggregateNode(V value) {
-		if (value == null || this.abstractIsLeaf(value)) {
+	public ByteTreeHashMethod getInstance(HashAlgorithm hashAlgorithm, Aggregator<ByteArray> aggregator) {
+		if (hashAlgorithm == null || aggregator == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractDisaggregateNode(value);
+		return new ByteTreeHashMethod(hashAlgorithm, aggregator);
 	}
-
-	@Override
-	public final boolean isLeaf(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		return abstractIsLeaf(value);
-	}
-
-	@Override
-	public final boolean isNode(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		return abstractIsNode(value);
-	}
-
-	protected abstract boolean abstractIsLeaf(V value);
-
-	protected abstract boolean abstractIsNode(V value);
-
-	protected abstract V abstractDisaggregateLeaf(V value);
-
-	protected abstract Iterable<V> abstractDisaggregateNode(V value);
 
 }

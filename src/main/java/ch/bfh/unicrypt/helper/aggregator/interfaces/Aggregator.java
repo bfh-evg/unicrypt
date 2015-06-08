@@ -44,41 +44,43 @@ package ch.bfh.unicrypt.helper.aggregator.interfaces;
 import ch.bfh.unicrypt.helper.tree.Tree;
 
 /**
- * The purpose of an aggregator is to aggregateNode the values stored in a {@link Tree} of type {@code V} into a single
- * value of type {@code V}. An aggregator is thus required each time the method {@link Tree#aggregate(Aggregator)} is
- * called. For this, each aggregator provides two distinct operations: the conversion of the value stored in some leaf
- * of the tree and the conversion of the aggregated values obtained from the children of some node in the tree.
+ * The purpose of an aggregator is to aggregate the values stored in a {@link Tree} of type {@code V} into a single
+ * value of type {@code V}, and vice versa, to construct a {@link Tree} of type {@code V} from a single value of type
+ * {@code V}. Each aggregator defines therfore a bijective mapping between type {@link Tree<V>} and {@code V}. To
+ * perform the conversion forth and back, each concrete aggregator class implements two distinct pairs of operations for
+ * the conversion of the value stored in some leaf of the tree and the conversion of the aggregated values obtained from
+ * the children of some node in the tree.
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @param <V> The generic type of the values precessed by the aggregator
+ * @param <V> The generic type of the values processed by the aggregator
  * @see Tree
  */
 public interface Aggregator<V> {
 
 	/**
-	 * Performs the aggregation of a single value stored in a leaf (in some cases single values need not to be
-	 * processed).
+	 * Aggregates a given tree into a single value.
 	 * <p>
-	 * @param value The given value
-	 * @return The aggregated value
+	 * @param tree The given tree
+	 * @return The resulting value
 	 */
-	public V aggregateLeaf(V value);
+	public V aggregate(Tree<V> tree);
 
 	/**
-	 * Performs the aggregation of multiple aggregated values obtained from the children of some node.
+	 * Constructs a new tree from an aggregated value.
 	 * <p>
-	 * @param values The given Java array of aggregated values
-	 * @return The aggregated value
+	 * @param value The aggregated value
+	 * @return The new tree
 	 */
-	public V aggregateNode(V... values);
+	public Tree<V> disaggregate(V value);
 
 	/**
-	 * Performs the aggregation of multiple aggregated values obtained from the children of some node.
+	 * Returns the class of the values of an actual aggregator, or {@code null} if the class is unknown. This method may
+	 * be needed to dispatch between different aggregators.
 	 * <p>
-	 * @param values The given iterable collection of aggregated values
-	 * @return The aggregated value
+	 * @return The input class
+	 * @see ConvertMethod
 	 */
-	public V aggregateNode(Iterable<V> values);
+	public Class<V> getAggregatorClass();
 
 }

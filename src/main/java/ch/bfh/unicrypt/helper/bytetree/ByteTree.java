@@ -255,13 +255,3 @@ public abstract class ByteTree
 	}
 
 }
-
-// this local class allows creating instances of ByteArray without copying the array
-class SafeByteArray
-	   extends ByteArray {
-
-	protected SafeByteArray(byte[] bytes) {
-		super(bytes);
-	}
-
-}

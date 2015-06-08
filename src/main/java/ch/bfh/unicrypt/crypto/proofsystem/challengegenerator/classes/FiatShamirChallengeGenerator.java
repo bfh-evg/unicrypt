@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts.AbstractN
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -54,17 +54,17 @@ import java.math.BigInteger;
 public class FiatShamirChallengeGenerator
 	   extends AbstractNonInteractiveChallengeGenerator<ZMod, ZModElement> {
 
-	private final HashMethod hashMethod;
+	private final ElementHashMethod hashMethod;
 	private final Converter<ByteArray, BigInteger> converter;
 
-	protected FiatShamirChallengeGenerator(ZMod challengeSpace, Element proverId, HashMethod hashMethod,
+	protected FiatShamirChallengeGenerator(ZMod challengeSpace, Element proverId, ElementHashMethod hashMethod,
 		   Converter<ByteArray, BigInteger> converter) {
 		super(challengeSpace, proverId);
 		this.hashMethod = hashMethod;
 		this.converter = converter;
 	}
 
-	public HashMethod getHashMethod() {
+	public ElementHashMethod getHashMethod() {
 		return this.hashMethod;
 	}
 
@@ -80,27 +80,27 @@ public class FiatShamirChallengeGenerator
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace) {
-		HashMethod hashMethod = HashMethod.getInstance();
+		ElementHashMethod hashMethod = ElementHashMethod.getInstance();
 		int length = hashMethod.getHashAlgorithm().getByteLength();
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null,
 														hashMethod, ByteArrayToBigInteger.getInstance(length));
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId) {
-		HashMethod hashMethod = HashMethod.getInstance();
+		ElementHashMethod hashMethod = ElementHashMethod.getInstance();
 		int length = hashMethod.getHashAlgorithm().getByteLength();
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, hashMethod,
 														ByteArrayToBigInteger.getInstance(length));
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, HashMethod hashMethod) {
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, ElementHashMethod hashMethod) {
 		int length = hashMethod.getHashAlgorithm().getByteLength();
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, hashMethod,
 														ByteArrayToBigInteger.getInstance(length));
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
-		   HashMethod hashMethod) {
+		   ElementHashMethod hashMethod) {
 		int length = hashMethod.getHashAlgorithm().getByteLength();
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, hashMethod,
 														ByteArrayToBigInteger.getInstance(length));
@@ -109,20 +109,20 @@ public class FiatShamirChallengeGenerator
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Converter<ByteArray,
 		   BigInteger> converter) {
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null,
-																		HashMethod.getInstance(), converter);
+																		ElementHashMethod.getInstance(), converter);
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
 		   Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, HashMethod.getInstance(), converter);
+		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, ElementHashMethod.getInstance(), converter);
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, HashMethod hashMethod,
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, ElementHashMethod hashMethod,
 		   Converter<ByteArray, BigInteger> converter) {
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, hashMethod, converter);
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, HashMethod hashMethod,
+	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, ElementHashMethod hashMethod,
 		   Converter<ByteArray, BigInteger> converter) {
 		if (challengeSpace == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();

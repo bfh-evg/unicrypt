@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
 import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
@@ -68,14 +68,14 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public class HashFunction
 	   extends AbstractFunction<HashFunction, Set, Element, FixedByteArraySet, FiniteByteArrayElement> {
 
-	private final HashMethod hashMethod;
+	private final ElementHashMethod hashMethod;
 
-	private HashFunction(Set domain, FixedByteArraySet coDomain, HashMethod hashMethod) {
+	private HashFunction(Set domain, FixedByteArraySet coDomain, ElementHashMethod hashMethod) {
 		super(domain, coDomain);
 		this.hashMethod = hashMethod;
 	}
 
-	public HashMethod getHashMethod() {
+	public ElementHashMethod getHashMethod() {
 		return this.hashMethod;
 	}
 
@@ -96,7 +96,7 @@ public class HashFunction
 	 * @return
 	 */
 	public static HashFunction getInstance(Set domain) {
-		return HashFunction.getInstance(domain, HashMethod.getInstance());
+		return HashFunction.getInstance(domain, ElementHashMethod.getInstance());
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class HashFunction
 	 * @return
 	 * @throws IllegalArgumentException if {@literal algorithmName} is null or an unknown hash algorithm name
 	 */
-	public static HashFunction getInstance(Set domain, final HashMethod hashMethod) {
+	public static HashFunction getInstance(Set domain, final ElementHashMethod hashMethod) {
 		if (domain == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}

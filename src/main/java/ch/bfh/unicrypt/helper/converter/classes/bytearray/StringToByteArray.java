@@ -137,7 +137,7 @@ public class StringToByteArray
 
 	@Override
 	protected ByteArray abstractConvert(String string) {
-		return SafeByteArray.getInstance(string.getBytes(this.charset));
+		return new SafeByteArray(string.getBytes(this.charset));
 	}
 
 	@Override

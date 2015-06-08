@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -92,7 +92,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	private Map<Converter<V, BigInteger>, BigInteger> bigIntegers;
 	private Map<Converter<V, String>, String> strings;
 	private Map<Converter<V, ByteArray>, ByteArray> byteArrays;
-	private Map<HashMethod, ByteArray> hashValues;
+	private Map<ElementHashMethod, ByteArray> hashValues;
 
 	protected AbstractElement(final S set, V value) {
 		this.set = set;
@@ -275,16 +275,16 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	public final ByteArray getHashValue() {
-		return this.getHashValue(HashMethod.getInstance());
+		return this.getHashValue(ElementHashMethod.getInstance());
 	}
 
 	@Override
-	public final ByteArray getHashValue(HashMethod hashMethod) {
+	public final ByteArray getHashValue(ElementHashMethod hashMethod) {
 		if (hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 		if (this.hashValues == null) {
-			this.hashValues = new WeakHashMap<HashMethod, ByteArray>();
+			this.hashValues = new WeakHashMap<ElementHashMethod, ByteArray>();
 		}
 		ByteArray hashValue = this.hashValues.get(hashMethod);
 		if (hashValue == null) {

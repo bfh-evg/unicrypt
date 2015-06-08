@@ -43,9 +43,6 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.aggregator.interfaces.InvertibleAggregator;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This is an abstract base class for representing trees containing values of a generic type {@code V} in their leaves.
@@ -74,22 +71,11 @@ public abstract class Tree<V>
 	 * @param aggregator      The aggregator specifying the conversion.
 	 * @return The new tree
 	 */
-	public static <V> Tree<V> getInstance(V aggregatedValue, InvertibleAggregator<V> aggregator) {
+	public static <V> Tree<V> getInstance(V aggregatedValue, Aggregator<V> aggregator) {
 		if (aggregatedValue == null || aggregator == null) {
 			throw new IllegalArgumentException();
 		}
-		if (aggregator.isLeaf(aggregatedValue)) {
-			V value = aggregator.disaggregateLeaf(aggregatedValue);
-			return Leaf.getInstance(value);
-		}
-		if (aggregator.isNode(aggregatedValue)) {
-			List<Tree<V>> nodes = new ArrayList<Tree<V>>();
-			for (V value : aggregator.disaggregateNode(aggregatedValue)) {
-				nodes.add(Tree.getInstance(value, aggregator));
-			}
-			return Node.getInstance(nodes);
-		}
-		throw new IllegalArgumentException();
+		return aggregator.disaggregate(aggregatedValue);
 	}
 
 	/**
@@ -102,7 +88,7 @@ public abstract class Tree<V>
 		if (aggregator == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractAggregate(aggregator);
+		return aggregator.aggregate(this);
 	}
 
 	/**
@@ -123,7 +109,5 @@ public abstract class Tree<V>
 	protected String defaultToStringContent() {
 		return "";
 	}
-
-	protected abstract V abstractAggregate(Aggregator<V> aggregator);
 
 }

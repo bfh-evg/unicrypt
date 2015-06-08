@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import java.util.Iterator;
 
@@ -60,9 +59,11 @@ public class Node<V>
 	   extends Tree<V> {
 
 	private final Iterable<Tree<V>> children;
+	private final int size;
 
-	private Node(Iterable<Tree<V>> children) {
+	private Node(Iterable<Tree<V>> children, int size) {
 		this.children = children;
+		this.size = size;
 	}
 
 	/**
@@ -76,12 +77,14 @@ public class Node<V>
 		if (children == null) {
 			throw new IllegalArgumentException();
 		}
+		int size = 0;
 		for (Tree<V> child : children) {
 			if (child == null) {
 				throw new IllegalArgumentException();
 			}
+			size++;
 		}
-		return new Node<V>(children);
+		return new Node<V>(children, size);
 	}
 
 	/**
@@ -105,29 +108,13 @@ public class Node<V>
 		return this.children;
 	}
 
-	@Override
-	public V abstractAggregate(final Aggregator<V> aggregator) {
-		Iterable<V> childrenValues = new Iterable<V>() {
-
-			@Override
-			public Iterator<V> iterator() {
-				return new Iterator<V>() {
-
-					Iterator<Tree<V>> childrenIterator = children.iterator();
-
-					@Override
-					public boolean hasNext() {
-						return childrenIterator.hasNext();
-					}
-
-					@Override
-					public V next() {
-						return childrenIterator.next().abstractAggregate(aggregator);
-					}
-				};
-			}
-		};
-		return aggregator.aggregateNode(childrenValues);
+	/**
+	 * Returns the node's number of children.
+	 * <p>
+	 * @return The number of children
+	 */
+	public int getSize() {
+		return this.size;
 	}
 
 	@Override
