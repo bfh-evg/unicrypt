@@ -50,6 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
  */
 public class EnumeratedSetElement<V extends Object>
 	   extends AbstractElement<EnumeratedSet<V>, EnumeratedSetElement<V>, V> {
+	private static final long serialVersionUID = 1L;
 
 	protected EnumeratedSetElement(EnumeratedSet<V> set, V value) {
 		super(set, value);

@@ -66,6 +66,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class PermutationFunction
 	   extends AbstractFunction<PermutationFunction, ProductSet, Pair, ProductSet, Tuple> {
+	private static final long serialVersionUID = 1L;
 
 	private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {
 		super(domain, coDomain);
@@ -129,7 +130,9 @@ public class PermutationFunction
 		if (productSet == null || !productSet.isUniform()) {
 			throw new IllegalArgumentException();
 		}
-		return new PermutationFunction(ProductSet.getInstance(productSet, PermutationGroup.getInstance(productSet.getArity())), productSet);
+		return new PermutationFunction(ProductSet.getInstance(productSet,
+															  PermutationGroup.getInstance(productSet.getArity())),
+									   productSet);
 	}
 
 }

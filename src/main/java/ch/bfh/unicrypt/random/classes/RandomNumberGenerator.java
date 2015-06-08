@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
@@ -53,6 +53,7 @@ import java.math.BigInteger;
  */
 public class RandomNumberGenerator
 	   extends UniCrypt {
+	private static final long serialVersionUID = 1L;
 
 	private final RandomByteSequence randomByteSequence;
 

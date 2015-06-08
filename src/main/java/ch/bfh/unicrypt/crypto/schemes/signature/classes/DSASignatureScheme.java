@@ -67,13 +67,16 @@ import ch.bfh.unicrypt.math.function.classes.SelfApplyFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class DSASignatureScheme<MS extends Set>
-	   extends AbstractRandomizedSignatureScheme<MS, Element, ProductGroup, Pair, ZMod, ZMod, CyclicGroup, DiscreteLogarithmKeyGenerator> {
+	   extends AbstractRandomizedSignatureScheme<MS, Element, ProductGroup, Pair, ZMod, ZMod, CyclicGroup,
+	   DiscreteLogarithmKeyGenerator> {
+	private static final long serialVersionUID = 1L;
 
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
 
 	protected DSASignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator, HashMethod hashMethod) {
-		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(), hashMethod);
+		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(),
+																				   hashMethod);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
 	}
@@ -94,11 +97,14 @@ public class DSASignatureScheme<MS extends Set>
 	@Override
 	protected Function abstractGetSignatureFunction() {
 		ZMod zMod = this.cyclicGroup.getZModOrder();
-		ProductSet inputSpace = ProductSet.getInstance(this.getSignatureKeySpace(), this.messageSpace, this.randomizationSpace);
+		ProductSet inputSpace =
+			   ProductSet.getInstance(this.getSignatureKeySpace(), this.messageSpace, this.randomizationSpace);
 
 		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.hashMethod);
-		BigIntegerConverter<ByteArray> converter = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getByteLength());
-		ConvertFunction convertFunction = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
+		BigIntegerConverter<ByteArray> converter =
+			   ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getByteLength());
+		ConvertFunction convertFunction =
+			   ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
 		ModuloFunction moduloFunction = ModuloFunction.getInstance(N.getInstance(), zMod);
 
 		return ProductFunction.getInstance(
@@ -117,7 +123,8 @@ public class DSASignatureScheme<MS extends Set>
 	@Override
 	protected Function abstractGetVerificationFunction() {
 		ZMod zMod = this.cyclicGroup.getZModOrder();
-		ProductSet inputSpace = ProductSet.getInstance(this.getVerificationKeySpace(), this.messageSpace, this.signatureSpace);
+		ProductSet inputSpace =
+			   ProductSet.getInstance(this.getVerificationKeySpace(), this.messageSpace, this.signatureSpace);
 		return null;
 	}
 
@@ -125,7 +132,8 @@ public class DSASignatureScheme<MS extends Set>
 		return DSASignatureScheme.getInstance(messageSpace, cyclicGroup, HashMethod.getInstance());
 	}
 
-	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup, HashMethod hashMethod) {
+	public static <MS extends Set> DSASignatureScheme
+	   getInstance(MS messageSpace, CyclicGroup cyclicGroup, HashMethod hashMethod) {
 		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -136,8 +144,10 @@ public class DSASignatureScheme<MS extends Set>
 		return DSASignatureScheme.getInstance(messageSpace, generator, HashMethod.getInstance());
 	}
 
-	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, Element generator, HashMethod hashMethod) {
-		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator() || hashMethod == null) {
+	public static <MS extends Set> DSASignatureScheme
+	   getInstance(MS messageSpace, Element generator, HashMethod hashMethod) {
+		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()
+			   || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 		return new DSASignatureScheme<MS>(messageSpace, (CyclicGroup) generator.getSet(), generator, hashMethod);

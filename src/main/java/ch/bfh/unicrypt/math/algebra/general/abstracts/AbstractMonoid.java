@@ -59,6 +59,7 @@ import java.math.BigInteger;
 public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements Monoid<V> {
+	private static final long serialVersionUID = 1L;
 
 	private E identityElement;
 

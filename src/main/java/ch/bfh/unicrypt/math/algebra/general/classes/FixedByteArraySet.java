@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -54,6 +54,7 @@ import java.util.Map;
  */
 public class FixedByteArraySet
 	   extends FiniteByteArraySet {
+	private static final long serialVersionUID = 1L;
 
 	private FixedByteArraySet(int length) {
 		super(length, length);

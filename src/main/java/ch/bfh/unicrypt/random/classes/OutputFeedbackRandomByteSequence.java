@@ -73,12 +73,13 @@ public class OutputFeedbackRandomByteSequence
 	private volatile ByteArray internalState;
 	private final int forwardSecurityInBytes;
 
+	// TODO Polish code
 	private ByteArray getInternalState() {
 		while (this.internalState == null) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException ex) {
-				//
+				// TODO Cannot simply ignore this exception!!
 			}
 		}
 		return this.internalState;
@@ -92,7 +93,8 @@ public class OutputFeedbackRandomByteSequence
 	}
 
 	// Random random;
-	protected OutputFeedbackRandomByteSequence(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, final ByteArray seed) {
+	protected OutputFeedbackRandomByteSequence(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes,
+		   final ByteArray seed) {
 		this.hashAlgorithm = hashAlgorithm;
 		this.forwardSecurityInBytes = forwardSecurityInBytes;
 		this.setSeed(seed);
@@ -172,8 +174,9 @@ public class OutputFeedbackRandomByteSequence
 	 * This class allows the access to the protected constructor of ByteArray... This way no copy of the array is
 	 * needed.
 	 */
-	class RandomizedByteArray
+	private class RandomizedByteArray
 		   extends ByteArray {
+		private static final long serialVersionUID = 1L;
 
 		private RandomizedByteArray(byte[] randomBytes) {
 			super(randomBytes);
@@ -197,12 +200,14 @@ public class OutputFeedbackRandomByteSequence
 			return false;
 		}
 		final OutputFeedbackRandomByteSequence other = (OutputFeedbackRandomByteSequence) obj;
-		if (this.hashAlgorithm != other.hashAlgorithm && (this.hashAlgorithm == null || !this.hashAlgorithm.equals(other.hashAlgorithm))) {
+		if (this.hashAlgorithm != other.hashAlgorithm && (this.hashAlgorithm == null
+			   || !this.hashAlgorithm.equals(other.hashAlgorithm))) {
 			return false;
 		}
 		if (this.hashCode() != other.hashCode()) {
 			return false;
 		}
+		// TODO Check redundant "if" statement!
 		if (!this.getInternalState().equals(other.getInternalState())) {
 			return false;
 		}
@@ -214,10 +219,12 @@ public class OutputFeedbackRandomByteSequence
 	}
 
 	public static OutputFeedbackRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, ByteArray seed) {
-		return OutputFeedbackRandomByteSequence.getInstance(HashAlgorithm.getInstance(), HashAlgorithm.getInstance().getByteLength() / 2, seed);
+		return OutputFeedbackRandomByteSequence.getInstance(HashAlgorithm.getInstance(),
+															HashAlgorithm.getInstance().getByteLength() / 2, seed);
 	}
 
-	public static OutputFeedbackRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, ByteArray seed) {
+	public static OutputFeedbackRandomByteSequence getInstance(HashAlgorithm hashAlgorithm,
+		   int forwardSecurityInBytes, ByteArray seed) {
 		if (seed == null) {
 			throw new IllegalArgumentException();
 		}

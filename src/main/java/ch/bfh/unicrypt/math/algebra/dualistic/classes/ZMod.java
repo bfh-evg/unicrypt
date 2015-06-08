@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
-import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -66,6 +65,7 @@ import java.util.Map;
  */
 public class ZMod
 	   extends AbstractCyclicRing<ZModElement, BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	protected final BigInteger modulus;
 
@@ -168,7 +168,8 @@ public class ZMod
 
 	@Override
 	protected ZModElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.modulus.subtract(BigInteger.ONE)));
+		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator()
+			   .nextBigInteger(this.modulus.subtract(BigInteger.ONE)));
 	}
 
 	@Override

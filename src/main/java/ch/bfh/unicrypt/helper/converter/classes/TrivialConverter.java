@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
  */
 public class TrivialConverter<V extends Object>
 	   extends AbstractConverter<V, V> {
+	private static final long serialVersionUID = 1L;
 
 	protected TrivialConverter(Class<V> valueClass) {
 		super(valueClass, valueClass);

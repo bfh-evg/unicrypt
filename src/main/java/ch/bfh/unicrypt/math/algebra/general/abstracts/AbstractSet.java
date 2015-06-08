@@ -88,6 +88,7 @@ import java.util.Iterator;
 public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	   extends UniCrypt
 	   implements Set<V> {
+	private static final long serialVersionUID = 1L;
 
 	private final Class<? extends Object> valueClass;
 	private BigInteger order, lowerBound, upperBound, minimum;
@@ -557,8 +558,8 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractSet<E, V> set = this;
 		return new Iterator<E>() {
-			BigInteger counter = BigInteger.ZERO;
-			BigInteger currentValue = BigInteger.ZERO;
+			private BigInteger counter = BigInteger.ZERO;
+			private BigInteger currentValue = BigInteger.ZERO;
 
 			@Override
 			public boolean hasNext() {

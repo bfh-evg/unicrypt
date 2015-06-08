@@ -60,6 +60,7 @@ import java.math.BigInteger;
  */
 public class ShamirSecretSharingScheme
 	   extends AbstractThresholdSecretSharingScheme<ZModPrime, ZModElement, ProductGroup, Pair> {
+	private static final long serialVersionUID = 1L;
 
 	private final ZModPrime zModPrime;
 	private final PolynomialRing polynomialRing;

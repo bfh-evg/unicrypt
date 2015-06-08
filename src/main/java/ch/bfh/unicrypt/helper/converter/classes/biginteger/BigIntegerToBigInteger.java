@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import java.math.BigInteger;
 
 /**
@@ -57,6 +57,7 @@ import java.math.BigInteger;
  */
 public class BigIntegerToBigInteger
 	   extends AbstractBigIntegerConverter<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	// null if no minimal value is specified
 	private final BigInteger minValue;

@@ -62,6 +62,7 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class ByteArrayToString
 	   extends AbstractStringConverter<ByteArray> {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * This enumeration type lists the three supported modes of operation. The default mode is {@code HEX}.

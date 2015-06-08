@@ -77,6 +77,7 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
  */
 public class HashMethod
 	   extends UniCrypt {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * This enum type lists the three supported modes of computing the hash values of general tree-shaped inputs.
@@ -147,7 +148,8 @@ public class HashMethod
 			return false;
 		}
 		final HashMethod other = (HashMethod) obj;
-		return this.hashAlgorithm.equals(other.hashAlgorithm) && this.convertMethod.equals(other.convertMethod) && this.mode.equals(other.mode);
+		return this.hashAlgorithm.equals(other.hashAlgorithm) && this.convertMethod.equals(other.convertMethod)
+			   && this.mode.equals(other.mode);
 	}
 
 	/**
@@ -156,7 +158,8 @@ public class HashMethod
 	 * @return The new hash method
 	 */
 	public static HashMethod getInstance() {
-		return HashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE);
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.<ByteArray>getInstance(),
+																   Mode.RECURSIVE);
 	}
 
 	/**
@@ -230,7 +233,8 @@ public class HashMethod
 	 * @param mode          The mode
 	 * @return The new hash method
 	 */
-	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ConvertMethod<ByteArray> convertMethod, Mode mode) {
+	public static HashMethod getInstance(HashAlgorithm hashAlgorithm, ConvertMethod<ByteArray> convertMethod,
+		   Mode mode) {
 		if (hashAlgorithm == null || convertMethod == null || mode == null) {
 			throw new IllegalArgumentException();
 		}

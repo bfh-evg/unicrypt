@@ -44,13 +44,11 @@ package ch.bfh.unicrypt.math.function.abstracts;
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.util.Random;
 
 /**
  * This abstract class contains default implementations for most methods of type {@link Function}. For most classes
@@ -67,9 +65,11 @@ import java.util.Random;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractFunction<F extends Function, D extends Set, DE extends Element, C extends Set, CE extends Element>
+public abstract class AbstractFunction<F extends Function, D extends Set, DE extends Element, C extends Set,
+	   CE extends Element>
 	   extends UniCrypt
 	   implements Function {
+	private static final long serialVersionUID = 1L;
 
 	private final D domain;
 	private final C coDomain;

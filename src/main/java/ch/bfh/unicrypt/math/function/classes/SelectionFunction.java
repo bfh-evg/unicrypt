@@ -59,6 +59,7 @@ import java.util.Arrays;
  */
 public class SelectionFunction
 	   extends AbstractFunction<SelectionFunction, ProductSet, Tuple, Set, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private final int[] indices;
 

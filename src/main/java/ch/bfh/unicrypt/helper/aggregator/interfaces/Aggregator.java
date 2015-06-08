@@ -41,8 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.interfaces;
 
-import ch.bfh.unicrypt.helper.tree.Tree;
-
 /**
  * The purpose of an aggregator is to aggregateNode the values stored in a {@link Tree} of type {@code V} into a single
  * value of type {@code V}. An aggregator is thus required each time the method {@link Tree#aggregate(Aggregator)} is

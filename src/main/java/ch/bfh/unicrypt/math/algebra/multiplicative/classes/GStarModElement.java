@@ -52,6 +52,7 @@ import java.math.BigInteger;
 public class GStarModElement
 	   extends AbstractMultiplicativeElement<GStarMod, GStarModElement, BigInteger>
 	   implements MultiplicativeElement<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	protected GStarModElement(final GStarMod gStarMod, final BigInteger value) {
 		super(gStarMod, value);

@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.helper.hash.HashMethod;
-import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -112,7 +111,8 @@ public class HashFunction
 		if (domain == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new HashFunction(domain, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength()), hashMethod);
+		return new HashFunction(domain, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength()),
+			   hashMethod);
 	}
 
 }

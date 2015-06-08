@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public abstract class AbstractRandomByteSequence
 	   implements RandomByteSequence {
 
-	public final RandomNumberGenerator randomNumberGenerator;
+	protected final RandomNumberGenerator randomNumberGenerator;
 
 	protected AbstractRandomByteSequence() {
 		this.randomNumberGenerator = RandomNumberGenerator.getInstance(this);

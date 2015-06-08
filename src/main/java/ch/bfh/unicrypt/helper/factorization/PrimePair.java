@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
@@ -58,6 +57,7 @@ import java.math.BigInteger;
  */
 public class PrimePair
 	   extends Factorization {
+	private static final long serialVersionUID = 1L;
 
 	protected PrimePair(BigInteger prime1, BigInteger prime2) {
 		// the smaller prime factor is stored at index 0, the larger at index 1

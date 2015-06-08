@@ -59,6 +59,7 @@ import ch.bfh.unicrypt.helper.iterable.IterableArray;
  */
 public class DenseArray<V extends Object>
 	   extends AbstractImmutableArray<DenseArray<V>, V> {
+	private static final long serialVersionUID = 1L;
 
 	private final Object[] values;
 

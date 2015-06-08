@@ -57,6 +57,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class RemovalFunction
 	   extends AbstractFunction<RemovalFunction, ProductSet, Tuple, ProductSet, Tuple> {
+	private static final long serialVersionUID = 1L;
 
 	private final int index;
 

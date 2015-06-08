@@ -64,6 +64,7 @@ public class BooleanSet
 
 	public static final BooleanElement TRUE = BooleanSet.getInstance().getElement(true);
 	public static final BooleanElement FALSE = BooleanSet.getInstance().getElement(false);
+	private static final long serialVersionUID = 1L;
 
 	private final BooleanElement trueElement;
 	private final BooleanElement falseElement;

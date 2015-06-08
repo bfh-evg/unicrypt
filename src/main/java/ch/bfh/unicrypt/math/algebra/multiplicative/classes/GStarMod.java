@@ -69,6 +69,7 @@ import java.math.BigInteger;
  */
 public class GStarMod
 	   extends AbstractMultiplicativeCyclicGroup<GStarModElement, BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	private final BigInteger modulus;
 	private final SpecialFactorization moduloFactorization;

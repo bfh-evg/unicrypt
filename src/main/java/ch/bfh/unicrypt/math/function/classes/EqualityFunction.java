@@ -61,6 +61,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class EqualityFunction
 	   extends AbstractFunction<EqualityFunction, ProductSet, Tuple, BooleanSet, BooleanElement> {
+	private static final long serialVersionUID = 1L;
 
 	private EqualityFunction(final ProductSet domain, final BooleanSet coDomain) {
 		super(domain, coDomain);

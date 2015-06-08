@@ -61,6 +61,7 @@ import java.math.BigInteger;
 public class PolynomialField
 	   extends PolynomialRing
 	   implements FiniteField<Polynomial<? extends DualisticElement<BigInteger>>> {
+	private static final long serialVersionUID = 1L;
 
 	private final PolynomialElement irreduciblePolynomial;
 
@@ -110,7 +111,8 @@ public class PolynomialField
 	}
 
 	@Override
-	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero, RandomByteSequence randomByteSequence) {
+	public PolynomialElement getRandomMonicElement(int degree, boolean a0NotZero,
+		   RandomByteSequence randomByteSequence) {
 		if (degree >= this.getDegree()) {
 			throw new IllegalArgumentException();
 		}
@@ -137,7 +139,9 @@ public class PolynomialField
 		if (element1.isEquivalent(this.getZeroElement()) || element2.isEquivalent(this.getZeroElement())) {
 			return this.getZeroElement();
 		}
-		final PolynomialRing ring = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+		final PolynomialRing ring =
+			   PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>)
+					  this.getSemiRing());
 		PolynomialElement result;
 		if (this.isBinary()) {
 			result = ring.getElementUnchecked(multiplyBinary(polynomial1, polynomial2));

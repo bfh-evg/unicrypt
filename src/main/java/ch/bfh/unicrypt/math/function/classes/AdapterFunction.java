@@ -58,6 +58,7 @@ import java.util.Arrays;
  */
 public class AdapterFunction
 	   extends AbstractFunction<AdapterFunction, ProductSet, Tuple, ProductSet, Tuple> {
+	private static final long serialVersionUID = 1L;
 
 	private final int[] indices;
 

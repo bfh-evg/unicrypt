@@ -59,6 +59,7 @@ import java.util.Map;
  */
 public class ByteArrayMonoid
 	   extends AbstractConcatenativeMonoid<ByteArrayElement, ByteArray> {
+	private static final long serialVersionUID = 1L;
 
 	private ByteArrayMonoid(int blockLength) {
 		super(ByteArray.class, blockLength);

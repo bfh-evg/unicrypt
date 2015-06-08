@@ -50,9 +50,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element>
+public abstract class AbstractSecretSharingScheme<MS extends Set, ME extends Element, SS extends Set,
+	   SE extends Element>
 	   extends AbstractScheme<MS>
 	   implements SecretSharingScheme {
+	private static final long serialVersionUID = 1L;
 
 	protected final SS shareSpace;
 	protected final int size;

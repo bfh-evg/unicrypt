@@ -70,6 +70,7 @@ public interface AdditiveCyclicGroup<V extends Object>
 	public AdditiveElement<V> getIndependentGenerator(int index);
 
 	@Override
-	public AdditiveElement<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public AdditiveElement<V> getIndependentGenerator(int index,
+		   ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

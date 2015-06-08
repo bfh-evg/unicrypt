@@ -62,6 +62,7 @@ import java.math.BigInteger;
  */
 public class N
 	   extends AbstractSemiRing<NElement, BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	public N() {
 		super(BigInteger.class);

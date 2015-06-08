@@ -61,6 +61,7 @@ public class BitArray
 
 	// a static varible containing a converter to convert bit arrays to string and back
 	private static final BitArrayToString STRING_CONVERTER = BitArrayToString.getInstance();
+	private static final long serialVersionUID = 1L;
 
 	// the internal ByteArray instance containing the boolean values
 	private final ByteArray byteArray;
@@ -251,7 +252,8 @@ public class BitArray
 		int length = MathUtil.divideUp(this.length, Byte.SIZE);
 		byte[] bytes = new byte[length];
 		for (int index = 0; index < length; index++) {
-			bytes[index] = this.byteArray.getByteAt(this.rangeOffset - this.trailer, index, this.rangeOffset, this.rangeLength);
+			bytes[index] = this.byteArray.getByteAt(this.rangeOffset - this.trailer, index, this.rangeOffset,
+																							this.rangeLength);
 		}
 		return ByteArray.getInstance(bytes);
 	}
@@ -315,7 +317,8 @@ public class BitArray
 	protected BitArray abstractReverse() {
 		// reverse byteArrary, adjust offset, switch trailer and header (reverse is always false)
 		int newOffset = this.byteArray.getLength() * Byte.SIZE - this.rangeOffset - this.rangeLength;
-		return new BitArray(this.byteArray.bitReverse(), this.length, newOffset, this.header, this.trailer, this.rangeLength);
+		return new BitArray(this.byteArray.bitReverse(), this.length, newOffset, this.header, this.trailer,
+			   this.rangeLength);
 	}
 
 	@Override

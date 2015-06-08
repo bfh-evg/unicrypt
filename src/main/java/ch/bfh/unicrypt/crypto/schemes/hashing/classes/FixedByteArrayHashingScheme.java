@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 public class FixedByteArrayHashingScheme<MS extends Set>
 	   extends AbstractHashingScheme<MS, Element, FixedByteArraySet, FiniteByteArrayElement> {
+	private static final long serialVersionUID = 1L;
 
 	private final HashMethod hashMethod;
 

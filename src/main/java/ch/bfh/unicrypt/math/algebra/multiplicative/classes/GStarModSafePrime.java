@@ -57,6 +57,7 @@ public class GStarModSafePrime
 	   extends GStarModPrime {
 
 	private final static Map<BigInteger, GStarModSafePrime> instances = new HashMap<BigInteger, GStarModSafePrime>();
+	private static final long serialVersionUID = 1L;
 
 	protected GStarModSafePrime(SafePrime modulo) {
 		super(modulo, Prime.getInstance(modulo.getValue().subtract(BigInteger.ONE).divide(BigInteger.valueOf(2))));

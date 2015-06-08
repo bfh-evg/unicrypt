@@ -63,6 +63,7 @@ import java.util.List;
 public abstract class Tree<V>
 	   extends UniCrypt
 	   implements Iterable<V> {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates a new tree of type {@code V} from an aggregated value. This method is the inverse of

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
@@ -49,7 +50,6 @@ import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -67,6 +67,7 @@ import java.util.Iterator;
 public class ProductSet
 	   extends AbstractSet<Tuple, DenseArray<Element>>
 	   implements NestedArray<Set> {
+	private static final long serialVersionUID = 1L;
 
 	private final DenseArray<Set> sets;
 

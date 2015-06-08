@@ -61,6 +61,7 @@ public class Polynomial<C>
 	   extends UniCrypt {
 
 	public static final int ZERO_POLYNOMIAL_DEGREE = -1;
+	private static final long serialVersionUID = 1L;
 
 	// the polynomial's degree
 	private final int degree;
@@ -132,7 +133,8 @@ public class Polynomial<C>
 	 * @return The new polynomial
 	 */
 	public static <C> Polynomial<C> getInstance(Map<Integer, C> coefficients, C zeroCoefficient, C oneCoefficient) {
-		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null || zeroCoefficient.equals(oneCoefficient)) {
+		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null
+			   || zeroCoefficient.equals(oneCoefficient)) {
 			throw new IllegalArgumentException();
 		}
 		SparseArray<C> sparseArray = SparseArray.getInstance(zeroCoefficient, coefficients);
@@ -150,7 +152,8 @@ public class Polynomial<C>
 	 * @return The new polynomial
 	 */
 	public static <C> Polynomial<C> getInstance(C[] coefficients, C zeroCoefficient, C oneCoefficient) {
-		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null || zeroCoefficient.equals(oneCoefficient)) {
+		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null
+			   || zeroCoefficient.equals(oneCoefficient)) {
 			throw new IllegalArgumentException();
 		}
 		SparseArray<C> sparseArray = SparseArray.getInstance(zeroCoefficient, coefficients);
@@ -168,7 +171,8 @@ public class Polynomial<C>
 	 * @return The new polynomial
 	 */
 	public static <C> Polynomial<C> getInstance(BitArray coefficients, C zeroCoefficient, C oneCoefficient) {
-		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null || zeroCoefficient.equals(oneCoefficient)) {
+		if (coefficients == null || zeroCoefficient == null || oneCoefficient == null
+			   || zeroCoefficient.equals(oneCoefficient)) {
 			throw new IllegalArgumentException();
 		}
 		return new Polynomial<C>(coefficients.removeSuffix(), zeroCoefficient, oneCoefficient);
@@ -278,7 +282,8 @@ public class Polynomial<C>
 	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 79 * hash + (this.coefficients != null ? this.coefficients.hashCode() : this.binaryCoefficients.hashCode());
+		hash = 79 * hash + (this.coefficients != null ? this.coefficients.hashCode()
+			   : this.binaryCoefficients.hashCode());
 		return hash;
 	}
 
@@ -297,7 +302,8 @@ public class Polynomial<C>
 		}
 
 		if (this.isBinary()) {
-			return this.binaryCoefficients == other.binaryCoefficients || this.binaryCoefficients.equals(other.binaryCoefficients);
+			return this.binaryCoefficients == other.binaryCoefficients ||
+				   this.binaryCoefficients.equals(other.binaryCoefficients);
 		} else {
 			return this.coefficients == other.coefficients || this.coefficients.equals(other.coefficients);
 		}

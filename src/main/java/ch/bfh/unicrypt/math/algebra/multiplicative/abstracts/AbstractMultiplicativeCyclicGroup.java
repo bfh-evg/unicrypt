@@ -57,6 +57,7 @@ import java.math.BigInteger;
 public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractCyclicGroup<E, V>
 	   implements MultiplicativeCyclicGroup<V> {
+	private static final long serialVersionUID = 1L;
 
 	public AbstractMultiplicativeCyclicGroup(Class<? extends Object> valueClass) {
 		super(valueClass);

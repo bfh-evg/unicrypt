@@ -70,7 +70,9 @@ public class CounterModeRandomByteSequence
 	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE pseudoRandomGenerator At each start of the JavaVM this
 	 * generator will restart deterministically. Do not use it for ephemeral keys!
 	 */
-	public static final CounterModeRandomByteSequence DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), DEFAULT_SEED);
+	public static final CounterModeRandomByteSequence DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE =
+		   CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), DEFAULT_SEED);
+	private static final long serialVersionUID = 1L;
 
 	private final HashAlgorithm hashAlgorithm;
 	private ByteArray seed;
@@ -92,7 +94,8 @@ public class CounterModeRandomByteSequence
 	protected byte[] getRandomByteBuffer(int counter) {
 		BigInteger seedAndCountAsNumber = seedAsNumber.add(BigInteger.valueOf(counter));
 		return ByteArray.getInstance(seedAndCountAsNumber.toByteArray()).getHashValue(this.hashAlgorithm).getBytes();
-//		return digest.digest(hashedSeed.append(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getBytes());
+//		return digest.digest(hashedSeed.append(ByteArrayMonoid.getInstance().getElement(counter).
+//		getByteArray()).getBytes());
 	}
 
 	@Override
@@ -105,7 +108,7 @@ public class CounterModeRandomByteSequence
 	}
 
 	@Override
-	public void setSeed(ByteArray seed) {
+	public final void setSeed(ByteArray seed) {
 		if (seed == null) {
 			throw new IllegalArgumentException();
 		}
@@ -168,8 +171,9 @@ public class CounterModeRandomByteSequence
 	/**
 	 * This internal class allows to create a new ByteArray without having to clone the backing byte[]
 	 */
-	class InternalByteArray
+	private class InternalByteArray
 		   extends ByteArray {
+		private static final long serialVersionUID = 1L;
 
 		private InternalByteArray(byte[] bytes) {
 			super(bytes);
@@ -201,7 +205,8 @@ public class CounterModeRandomByteSequence
 			return false;
 		}
 		final CounterModeRandomByteSequence other = (CounterModeRandomByteSequence) obj;
-		if (this.hashAlgorithm != other.hashAlgorithm && (this.hashAlgorithm == null || !this.hashAlgorithm.equals(other.hashAlgorithm))) {
+		if (this.hashAlgorithm != other.hashAlgorithm && (this.hashAlgorithm == null
+			   || !this.hashAlgorithm.equals(other.hashAlgorithm))) {
 			return false;
 		}
 		if (this.hashCode() != other.hashCode()) {
@@ -210,6 +215,7 @@ public class CounterModeRandomByteSequence
 		if (this.counter != other.counter) {
 			return false;
 		}
+		// TODO Check redundant "if" statement!
 		if (this.randomByteBufferPosition != other.randomByteBufferPosition) {
 			return false;
 		}

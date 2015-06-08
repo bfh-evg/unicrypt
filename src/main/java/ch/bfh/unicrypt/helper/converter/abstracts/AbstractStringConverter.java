@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 public abstract class AbstractStringConverter<V extends Object>
 	   extends AbstractConverter<V, String>
 	   implements StringConverter<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected AbstractStringConverter(Class<V> inputClass) {
 		super(inputClass, String.class);

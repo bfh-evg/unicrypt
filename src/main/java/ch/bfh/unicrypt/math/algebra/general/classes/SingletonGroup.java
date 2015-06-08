@@ -56,6 +56,7 @@ import java.util.Map;
  */
 public class SingletonGroup
 	   extends AbstractCyclicGroup<SingletonElement, BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	private final SingletonElement element;
 

@@ -58,9 +58,11 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @param <PS> Padding space
  * @param <PE> Padding element
  */
-public abstract class AbstractPaddingScheme<MS extends ConcatenativeSemiGroup, ME extends ConcatenativeElement, PS extends ConcatenativeSemiGroup, PE extends ConcatenativeElement>
+public abstract class AbstractPaddingScheme<MS extends ConcatenativeSemiGroup, ME extends ConcatenativeElement,
+	   PS extends ConcatenativeSemiGroup, PE extends ConcatenativeElement>
 	   extends AbstractScheme<MS>
 	   implements PaddingScheme {
+	private static final long serialVersionUID = 1L;
 
 	protected final PS paddingSpace;
 	private Function paddingFunction;

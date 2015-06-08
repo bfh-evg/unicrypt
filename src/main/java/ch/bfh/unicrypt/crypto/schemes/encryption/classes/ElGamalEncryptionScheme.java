@@ -65,7 +65,9 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @author rolfhaenni
  */
 public class ElGamalEncryptionScheme
-	   extends AbstractReEncryptionScheme<CyclicGroup, Element, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup, ZMod, DiscreteLogarithmKeyGenerator> {
+	   extends AbstractReEncryptionScheme<CyclicGroup, Element, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup,
+	   ZMod, DiscreteLogarithmKeyGenerator> {
+	private static final long serialVersionUID = 1L;
 
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
@@ -88,9 +90,11 @@ public class ElGamalEncryptionScheme
 
 	@Override
 	protected Function abstractGetEncryptionFunction() {
-		ProductGroup encryptionDomain = ProductGroup.getInstance(this.getEncryptionKeySpace(), this.messageSpace, this.randomizationSpace);
-		return SharedDomainFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(encryptionDomain, 2),
-																			  this.getEncryptionFunctionLeft()),
+		ProductGroup encryptionDomain = ProductGroup.getInstance(this.getEncryptionKeySpace(), this.messageSpace,
+																							   this.randomizationSpace);
+		return SharedDomainFunction.getInstance(CompositeFunction.getInstance(
+			   SelectionFunction.getInstance(encryptionDomain, 2),
+			   this.getEncryptionFunctionLeft()),
 												this.getEncryptionFunctionRight());
 	}
 
@@ -99,9 +103,11 @@ public class ElGamalEncryptionScheme
 		ProductGroup decryptionDomain = ProductGroup.getInstance(this.getDecryptionKeySpace(), this.encryptionSpace);
 		return CompositeFunction.getInstance(
 			   SharedDomainFunction.getInstance(SelectionFunction.getInstance(decryptionDomain, 1, 1),
-												CompositeFunction.getInstance(SharedDomainFunction.getInstance(SelectionFunction.getInstance(decryptionDomain, 1, 0),
-																											   SelectionFunction.getInstance(decryptionDomain, 0)),
-																			  SelfApplyFunction.getInstance(this.cyclicGroup))),
+												CompositeFunction.getInstance(
+													   SharedDomainFunction.getInstance(
+															  SelectionFunction.getInstance(decryptionDomain, 1, 0),
+															  SelectionFunction.getInstance(decryptionDomain, 0)),
+													   SelfApplyFunction.getInstance(this.cyclicGroup))),
 			   ApplyInverseFunction.getInstance(this.cyclicGroup));
 	}
 
@@ -119,11 +125,13 @@ public class ElGamalEncryptionScheme
 
 	public Function getEncryptionFunctionRight() {
 		if (this.encryptionFunctionRight == null) {
-			ProductGroup encryptionDomain = ProductGroup.getInstance(this.getEncryptionKeySpace(), this.messageSpace, this.randomizationSpace);
+			ProductGroup encryptionDomain = ProductGroup.getInstance(this.getEncryptionKeySpace(),
+																	 this.messageSpace, this.randomizationSpace);
 			this.encryptionFunctionRight = CompositeFunction.getInstance(
 				   SharedDomainFunction.getInstance(SelectionFunction.getInstance(encryptionDomain, 1),
-													CompositeFunction.getInstance(RemovalFunction.getInstance(encryptionDomain, 1),
-																				  SelfApplyFunction.getInstance(this.cyclicGroup))),
+													CompositeFunction.getInstance(
+														   RemovalFunction.getInstance(encryptionDomain, 1),
+														   SelfApplyFunction.getInstance(this.cyclicGroup))),
 				   ApplyFunction.getInstance(this.cyclicGroup));
 		}
 		return this.encryptionFunctionRight;
@@ -140,7 +148,7 @@ public class ElGamalEncryptionScheme
 		boolean nul=generator == null;
 		boolean cyclic=generator.getSet().isCyclic();
 		boolean gen=generator.isGenerator();
-		
+
 		if (generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()) {
 			throw new IllegalArgumentException();
 		}

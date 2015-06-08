@@ -58,6 +58,7 @@ import java.util.Map;
 public class ZModPrime
 	   extends ZMod
 	   implements PrimeField<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());

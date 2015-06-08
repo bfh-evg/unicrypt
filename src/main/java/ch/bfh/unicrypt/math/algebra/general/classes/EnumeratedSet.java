@@ -57,6 +57,7 @@ import java.util.Map;
  */
 public class EnumeratedSet<V extends Object>
 	   extends AbstractSet<EnumeratedSetElement<V>, V> {
+	private static final long serialVersionUID = 1L;
 
 	protected final Map<Integer, V> valueMap;
 	protected final Map<V, Integer> indexMap;

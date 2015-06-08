@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -56,6 +56,7 @@ import java.math.BigInteger;
  */
 public class SafePrime
 	   extends Prime {
+	private static final long serialVersionUID = 1L;
 
 	protected SafePrime(BigInteger safePrime) {
 		super(safePrime);

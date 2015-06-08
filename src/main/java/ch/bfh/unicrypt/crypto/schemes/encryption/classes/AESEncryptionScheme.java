@@ -64,7 +64,9 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESEncryptionScheme
-	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement, FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
+	   extends AbstractSymmetricEncryptionScheme<ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement,
+	   FixedByteArraySet, FiniteByteArrayElement, ByteArrayKeyGenerator> {
+	private static final long serialVersionUID = 1L;
 
 	public enum KeyLength {
 
@@ -156,7 +158,8 @@ public class AESEncryptionScheme
 			byte[] encryptedBytes;
 			try {
 				if (mode == Mode.CBC) {
-					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getBytes()));
+					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec,
+													 new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 				}
@@ -190,7 +193,8 @@ public class AESEncryptionScheme
 			byte[] message;
 			try {
 				if (mode == Mode.CBC) {
-					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(initializationVector.getBytes()));
+					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec,
+													 new IvParameterSpec(initializationVector.getBytes()));
 				} else {
 					cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 				}
@@ -231,11 +235,13 @@ public class AESEncryptionScheme
 	}
 
 	public static AESEncryptionScheme getInstance() {
-		return AESEncryptionScheme.getInstance(AESEncryptionScheme.DEFAULT_KEY_LENGTH, AESEncryptionScheme.DEFAULT_MODE, AESEncryptionScheme.DEFAULT_IV);
+		return AESEncryptionScheme.getInstance(AESEncryptionScheme.DEFAULT_KEY_LENGTH, AESEncryptionScheme.DEFAULT_MODE,
+																					   AESEncryptionScheme.DEFAULT_IV);
 	}
 
 	public static AESEncryptionScheme getInstance(KeyLength keyLength, Mode mode, ByteArray initializationVector) {
-		if (keyLength == null || mode == null || initializationVector == null || initializationVector.getLength() != AES_BLOCK_SIZE / Byte.SIZE) {
+		if (keyLength == null || mode == null || initializationVector == null
+			   || initializationVector.getLength() != AES_BLOCK_SIZE / Byte.SIZE) {
 			throw new IllegalArgumentException();
 		}
 		return new AESEncryptionScheme(keyLength, mode, initializationVector);

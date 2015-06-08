@@ -45,9 +45,11 @@ import ch.bfh.unicrypt.crypto.schemes.sharing.interfaces.ThresholdSecretSharingS
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
-public abstract class AbstractThresholdSecretSharingScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element>
+public abstract class AbstractThresholdSecretSharingScheme<MS extends Set, ME extends Element, SS extends Set,
+	   SE extends Element>
 	   extends AbstractSecretSharingScheme<MS, ME, SS, SE>
 	   implements ThresholdSecretSharingScheme {
+	private static final long serialVersionUID = 1L;
 
 	private final int threshold;
 

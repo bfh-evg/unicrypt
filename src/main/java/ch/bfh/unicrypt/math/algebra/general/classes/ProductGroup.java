@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 public class ProductGroup
 	   extends ProductMonoid
 	   implements Group<DenseArray<Element>> {
+	private static final long serialVersionUID = 1L;
 
 	protected ProductGroup(DenseArray<Set> sets) {
 		super(sets);

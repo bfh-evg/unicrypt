@@ -59,6 +59,7 @@ import java.util.Arrays;
  */
 public class MultiIdentityFunction
 	   extends AbstractFunction<MultiIdentityFunction, Set, Element, ProductSet, Tuple> {
+	private static final long serialVersionUID = 1L;
 
 	private MultiIdentityFunction(final Set domain, final ProductSet coDomain) {
 		super(domain, coDomain);

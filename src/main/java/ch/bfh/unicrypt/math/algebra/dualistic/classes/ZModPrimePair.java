@@ -57,7 +57,7 @@ import java.util.Map;
 public class ZModPrimePair
 	   extends ZMod {
 
-	PrimePair primePair;
+	private PrimePair primePair;
 
 	protected ZModPrimePair(PrimePair primePair) {
 		super(primePair.getValue());

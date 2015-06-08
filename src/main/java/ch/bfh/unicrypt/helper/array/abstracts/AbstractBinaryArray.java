@@ -54,6 +54,7 @@ import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 public abstract class AbstractBinaryArray<A extends AbstractBinaryArray<A, V>, V extends Object>
 	   extends AbstractDefaultValueArray<A, V>
 	   implements BinaryArray<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected enum Operator {
 
@@ -61,7 +62,8 @@ public abstract class AbstractBinaryArray<A extends AbstractBinaryArray<A, V>, V
 
 	};
 
-	public AbstractBinaryArray(Class valueClass, int length, int rangeOffset, boolean reverse, V defaultValue, int trailer, int header, int rangeLength) {
+	public AbstractBinaryArray(Class valueClass, int length, int rangeOffset, boolean reverse, V defaultValue,
+		   int trailer, int header, int rangeLength) {
 		super(valueClass, defaultValue, length, rangeOffset, rangeLength, trailer, header, reverse);
 	}
 

@@ -65,7 +65,8 @@ import java.math.BigInteger;
  * @param <D>
  * @param <EE>
  */
-public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D extends DualisticElement<V>, EE extends ECElement<V, D>>
+public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D extends DualisticElement<V>,
+	   EE extends ECElement<V, D>>
 	   extends AbstractAdditiveCyclicGroup<EE, Point<D>>
 	   implements EC<V, D> {
 
@@ -141,7 +142,8 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 
 	@Override
 	public final boolean contains(D xValue, D yValue) {
-		if (xValue == null || yValue == null || !this.getFiniteField().contains(xValue) || !this.getFiniteField().contains(yValue)) {
+		if (xValue == null || yValue == null || !this.getFiniteField().contains(xValue)
+			   || !this.getFiniteField().contains(yValue)) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractContains((D) xValue, (D) yValue);
@@ -156,7 +158,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 		}
 		return this.abstractGetElement(Point.getInstance((D) xValue, (D) yValue));
 	}
-	
+
 	/**
 	 * Return the two possible y-coordinates for a given valid x-coordinate
 	 * <p>

@@ -86,6 +86,7 @@ public abstract class ByteTree
 
 	public final static int LENGTH_OF_INTEGER = Integer.SIZE / Byte.SIZE;
 	public final static int LENGTH_OF_PREAMBLE = LENGTH_OF_INTEGER + 1;
+	private static final long serialVersionUID = 1L;
 
 	protected ByteArray byteArray;
 	protected int length;
@@ -220,7 +221,7 @@ public abstract class ByteTree
 	private static Iterator<ByteArray> getByteArrayIterator(final ByteArray byteArray) {
 		return new Iterator<ByteArray>() {
 
-			ByteArray currentByteArray = byteArray;
+			private ByteArray currentByteArray = byteArray;
 
 			@Override
 			public boolean hasNext() {
@@ -259,6 +260,7 @@ public abstract class ByteTree
 // this local class allows creating instances of ByteArray without copying the array
 class SafeByteArray
 	   extends ByteArray {
+	private static final long serialVersionUID = 1L;
 
 	protected SafeByteArray(byte[] bytes) {
 		super(bytes);

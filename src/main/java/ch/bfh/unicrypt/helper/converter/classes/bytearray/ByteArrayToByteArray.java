@@ -55,6 +55,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
  */
 public class ByteArrayToByteArray
 	   extends AbstractByteArrayConverter<ByteArray> {
+	private static final long serialVersionUID = 1L;
 
 	private final boolean reverse;
 	private final boolean bitReverse;

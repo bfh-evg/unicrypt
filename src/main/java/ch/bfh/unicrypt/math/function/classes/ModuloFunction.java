@@ -79,7 +79,8 @@ public class ModuloFunction
 	// The following protected method implements the abstract method from {@code AbstractFunction}
 	//
 	@Override
-	protected ZModElement abstractApply(final Element<BigInteger> element, final RandomByteSequence randomByteSequence) {
+	protected ZModElement abstractApply(final Element<BigInteger> element,
+		   final RandomByteSequence randomByteSequence) {
 		return this.getCoDomain().getElement(element.getValue().mod(this.getModulus()));
 	}
 

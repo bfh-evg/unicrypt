@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
-import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
@@ -72,7 +71,9 @@ public class ByteArray
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
 
 	// a static varible containing a converter to convert byte arrays to string and back
-	private static final ByteArrayToString STRING_CONVERTER = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|", true);
+	private static final ByteArrayToString STRING_CONVERTER =
+		   ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|", true);
+	private static final long serialVersionUID = 1L;
 
 	// the internal Java array containing the byte values
 	protected byte[] bytes;
@@ -91,7 +92,8 @@ public class ByteArray
 		this(bytes, length, 0, false, 0, 0, length, false);
 	}
 
-	protected ByteArray(byte[] bytes, int length, int rangeOffset, boolean reverse, int trailer, int header, int rangeLength, boolean bitReversed) {
+	protected ByteArray(byte[] bytes, int length, int rangeOffset, boolean reverse, int trailer, int header,
+		   int rangeLength, boolean bitReversed) {
 		super(ByteArray.class, length, rangeOffset, reverse, ALL_ZERO, trailer, header, rangeLength);
 		this.bytes = bytes;
 		this.bitReversed = bitReversed;
@@ -307,7 +309,8 @@ public class ByteArray
 	 * @return The new array with the bits in each value reversed
 	 */
 	public ByteArray bitReverse() {
-		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, !this.bitReversed);
+		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer,
+			   this.rangeLength, !this.bitReversed);
 	}
 
 	/**
@@ -367,7 +370,8 @@ public class ByteArray
 		return this.bytes[index];
 	}
 
-	// changes the byte array's internal representation by setting header, trailer, rangeOffset to 0 and bitReversed and reversed to false.
+	// changes the byte array's internal representation by setting header, trailer, rangeOffset to 0 and
+	// bitReversed and reversed to false.
 	private void normalize() {
 		if (!this.normalized) {
 			byte[] newBytes = new byte[this.length];
@@ -464,13 +468,15 @@ public class ByteArray
 
 	@Override
 	protected ByteArray abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer, int header) {
-		return new ByteArray(this.bytes, length, rangeOffset, this.reverse, trailer, header, rangeLength, this.bitReversed);
+		return new ByteArray(this.bytes, length, rangeOffset, this.reverse, trailer, header,
+			   rangeLength, this.bitReversed);
 	}
 
 	@Override
 	protected ByteArray abstractReverse() {
 		// switch trailer and header
-		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, this.bitReversed);
+		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer,
+			   this.rangeLength, this.bitReversed);
 	}
 
 	// This method has been optimized for performance (and is therefore more complicated than necessary)
@@ -591,8 +597,10 @@ public class ByteArray
 		if (leftIndex > leftDiv && rightIndex > rightDiv) {
 			return ALL_ONE;
 		}
-		byte mask1 = (leftIndex == leftDiv) ? MathUtil.shiftLeft(ALL_ONE, MathUtil.modulo(leftOffset, Byte.SIZE)) : ALL_ONE;
-		byte mask2 = (rightIndex == rightDiv) ? MathUtil.shiftRight(ALL_ONE, MathUtil.modulo(rightOffset, Byte.SIZE)) : ALL_ONE;
+		byte mask1 = (leftIndex == leftDiv) ?
+			   MathUtil.shiftLeft(ALL_ONE, MathUtil.modulo(leftOffset, Byte.SIZE)) : ALL_ONE;
+		byte mask2 = (rightIndex == rightDiv) ?
+			   MathUtil.shiftRight(ALL_ONE, MathUtil.modulo(rightOffset, Byte.SIZE)) : ALL_ONE;
 		return MathUtil.and(mask1, mask2);
 	}
 

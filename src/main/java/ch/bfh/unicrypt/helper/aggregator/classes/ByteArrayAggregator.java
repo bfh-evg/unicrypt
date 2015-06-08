@@ -131,7 +131,7 @@ public class ByteArrayAggregator
 			public Iterator<ByteArray> iterator() {
 				return new Iterator<ByteArray>() {
 
-					int currentIndex = PREFIX_LENGTH;
+					private int currentIndex = PREFIX_LENGTH;
 
 					@Override
 					public boolean hasNext() {

@@ -56,6 +56,7 @@ import java.math.BigInteger;
  */
 public class Prime
 	   extends SpecialFactorization {
+	private static final long serialVersionUID = 1L;
 
 	protected Prime(BigInteger prime) {
 		super(prime, new BigInteger[]{prime}, new int[]{1});

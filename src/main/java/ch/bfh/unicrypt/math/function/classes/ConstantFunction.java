@@ -59,6 +59,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class ConstantFunction
 	   extends AbstractFunction<ConstantFunction, SingletonGroup, SingletonElement, Set, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private final Element element;
 

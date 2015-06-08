@@ -54,7 +54,7 @@ import java.util.Set;
  * @author R. E. Koenig
  * @version 2.0
  */
-public class Alphabet
+ public class Alphabet
 	   extends UniCrypt
 	   implements Iterable<Character> {
 
@@ -66,10 +66,13 @@ public class Alphabet
 	public static final Alphabet LOWER_CASE = new Alphabet('a', 'z');
 	public static final Alphabet UPPER_CASE = new Alphabet('A', 'Z');
 	public static final Alphabet LETTERS = new Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
-	public static final Alphabet ALPHANUMERIC = new Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
-	public static final Alphabet BASE64 = new Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\+\\/");
+	public static final Alphabet ALPHANUMERIC =
+		   new Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+	public static final Alphabet BASE64 =
+		   new Alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\+\\/");
 	public static final Alphabet PRINTABLE_ASCII = new Alphabet('\u0020', '\u007E');
 	public static final Alphabet UNICODE_BMP = new Alphabet('\u0000', '\uFFFF');
+	private static final long serialVersionUID = 1L;
 
 	private final String characters;
 	private final Character minChar;
@@ -238,7 +241,7 @@ public class Alphabet
 	public Iterator<Character> iterator() {
 		return new Iterator<Character>() {
 
-			int currentIndex = 0;
+			private int currentIndex = 0;
 
 			@Override
 			public boolean hasNext() {

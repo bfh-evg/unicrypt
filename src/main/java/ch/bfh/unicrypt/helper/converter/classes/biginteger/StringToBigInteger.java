@@ -57,6 +57,7 @@ import java.math.BigInteger;
  */
 public class StringToBigInteger
 	   extends AbstractBigIntegerConverter<String> {
+	private static final long serialVersionUID = 1L;
 
 	private final Alphabet alphabet;
 	private final int blockLength;
@@ -110,7 +111,8 @@ public class StringToBigInteger
 
 	@Override
 	protected boolean defaultIsValidInput(String string) {
-		return this.alphabet.containsAll(string) && (string.length() % this.blockLength) == 0 && (string.length() / this.blockLength) >= minBlocks;
+		return this.alphabet.containsAll(string) && (string.length() % this.blockLength) == 0
+			   && (string.length() / this.blockLength) >= minBlocks;
 	}
 
 	@Override

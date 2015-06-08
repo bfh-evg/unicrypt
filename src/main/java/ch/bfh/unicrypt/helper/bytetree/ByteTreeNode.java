@@ -56,6 +56,7 @@ public class ByteTreeNode
 	   implements Iterable<ByteTree> {
 
 	public static final byte IDENTIFIER = 0;
+	private static final long serialVersionUID = 1L;
 
 	private final DenseArray<ByteTree> byteTrees;
 

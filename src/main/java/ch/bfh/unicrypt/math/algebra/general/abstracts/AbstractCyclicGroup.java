@@ -68,6 +68,7 @@ import java.util.NoSuchElementException;
 public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object>
 	   extends AbstractGroup<E, V>
 	   implements CyclicGroup<V> {
+	private static final long serialVersionUID = 1L;
 
 	private E defaultGenerator;
 	private final Map<ReferenceRandomByteSequence, ArrayList<E>> generatorLists;
@@ -124,7 +125,8 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	}
 
 	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
+	public final Tuple getIndependentGenerators(int minIndex, int maxIndex,
+		   ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (minIndex < 0 || maxIndex < minIndex) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -177,8 +179,8 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractCyclicGroup<E, V> cyclicGroup = this;
 		return new Iterator<E>() {
-			BigInteger counter = BigInteger.ZERO;
-			E currentElement = cyclicGroup.getIdentityElement();
+			private BigInteger counter = BigInteger.ZERO;
+			private E currentElement = cyclicGroup.getIdentityElement();
 
 			@Override
 			public boolean hasNext() {

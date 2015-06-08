@@ -59,6 +59,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class InvertFunction
 	   extends AbstractFunction<InvertFunction, Group, Element, Group, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private InvertFunction(final Group domain, Group coDomain) {
 		super(domain, coDomain);

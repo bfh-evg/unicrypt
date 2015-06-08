@@ -58,6 +58,7 @@ import java.util.Iterator;
  */
 public class Node<V>
 	   extends Tree<V> {
+	private static final long serialVersionUID = 1L;
 
 	private final Iterable<Tree<V>> children;
 
@@ -113,7 +114,7 @@ public class Node<V>
 			public Iterator<V> iterator() {
 				return new Iterator<V>() {
 
-					Iterator<Tree<V>> childrenIterator = children.iterator();
+					private final Iterator<Tree<V>> childrenIterator = children.iterator();
 
 					@Override
 					public boolean hasNext() {
@@ -135,9 +136,9 @@ public class Node<V>
 
 		return new Iterator<V>() {
 
-			Iterator<Tree<V>> childrenIterator = children.iterator();
-			Tree<V> child = null;
-			Iterator<V> childIterator = null;
+			private final Iterator<Tree<V>> childrenIterator = children.iterator();
+			private Tree<V> child = null;
+			private Iterator<V> childIterator = null;
 
 			{
 				if (childrenIterator.hasNext()) {

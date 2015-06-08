@@ -55,9 +55,11 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this prime field
  * @author rolfhaenni
  */
-public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extends MultiplicativeCyclicGroup, V extends Object>
+public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extends MultiplicativeCyclicGroup,
+	   V extends Object>
 	   extends AbstractCyclicRing<E, V>
 	   implements PrimeField<V> {
+	private static final long serialVersionUID = 1L;
 
 	private M multiplicativeGroup;
 	private BigInteger characteristic;

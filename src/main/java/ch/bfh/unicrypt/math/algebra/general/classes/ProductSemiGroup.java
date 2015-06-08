@@ -55,6 +55,7 @@ import java.math.BigInteger;
 public class ProductSemiGroup
 	   extends ProductSet
 	   implements SemiGroup<DenseArray<Element>> {
+	private static final long serialVersionUID = 1L;
 
 	protected ProductSemiGroup(DenseArray<Set> sets) {
 		super(sets);

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import java.util.Collection;

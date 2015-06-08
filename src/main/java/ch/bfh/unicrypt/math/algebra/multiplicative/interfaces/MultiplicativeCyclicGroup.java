@@ -71,6 +71,7 @@ public interface MultiplicativeCyclicGroup<V extends Object>
 	public MultiplicativeElement<V> getIndependentGenerator(int index);
 
 	@Override
-	public MultiplicativeElement<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public MultiplicativeElement<V> getIndependentGenerator(int index,
+		   ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

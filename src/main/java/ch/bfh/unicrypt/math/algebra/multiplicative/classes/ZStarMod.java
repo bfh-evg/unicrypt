@@ -57,8 +57,8 @@ import java.math.BigInteger;
  * is 1. Every integer in Z*_n is relatively prime to n. The smallest such group is Z*_2 = {1}.
  * <p>
  * @see "Handbook of Applied Cryptography, Definition 2.124"
- * @see <a
- * href="http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n">http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n">Multiplicative group of
+ * integers modulo n</a>
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -66,6 +66,7 @@ import java.math.BigInteger;
  */
 public class ZStarMod
 	   extends AbstractMultiplicativeGroup<ZStarModElement, BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	private final BigInteger modulus;
 	private final Factorization modulusFactorization;
@@ -171,7 +172,8 @@ public class ZStarMod
 	protected ZStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
 		BigInteger randomValue;
 		do {
-			randomValue = randomByteSequence.getRandomNumberGenerator().nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
+			randomValue = randomByteSequence.getRandomNumberGenerator()
+				   .nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
 		} while (!this.contains(randomValue));
 		return this.abstractGetElement(randomValue);
 	}

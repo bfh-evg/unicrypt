@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.InvertibleAggregator;
 
 /**
  * This abstract class serves as a base implementation for the {@link InvertibleAggregator} interface.

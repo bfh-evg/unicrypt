@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Instances of this class convert strings into {@code ByteArray} values using the standard Java conversion method
@@ -60,7 +59,9 @@ import java.nio.charset.StandardCharsets;
 public class StringToByteArray
 	   extends AbstractByteArrayConverter<String> {
 
-	static final String[] UNICODE_CHARSETS = {"UTF-8", "UTF-16", "UTF-16BE", "UTF-16LE", "UTF-32", "UTF-32BE", "UTF-32LE"};
+	static final String[] UNICODE_CHARSETS =
+	{"UTF-8", "UTF-16", "UTF-16BE", "UTF-16LE", "UTF-32", "UTF-32BE", "UTF-32LE"};
+	private static final long serialVersionUID = 1L;
 
 	private final Charset charset;
 	private final int minBytesPerCharacter; // the minimal number of bytes needed to encode a single character

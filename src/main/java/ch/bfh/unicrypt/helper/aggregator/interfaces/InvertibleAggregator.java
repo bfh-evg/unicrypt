@@ -41,8 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.interfaces;
 
-import ch.bfh.unicrypt.helper.tree.Tree;
-
 /**
  * An invertible aggregator is an aggregator with an additional method
  * {@link InvertibleAggregator#disaggregateLeaf(Object)} for converting an aggregated value back to the original input.

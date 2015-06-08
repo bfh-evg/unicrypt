@@ -67,7 +67,8 @@ public class StringAggregator
 	private final char separator;
 	private final char escapeCharacter;
 
-	private StringAggregator(char quoteCharacter, char openingParenthesis, char closingParenthesis, char separator, char escapeCharacter) {
+	private StringAggregator(char quoteCharacter, char openingParenthesis, char closingParenthesis, char separator,
+		   char escapeCharacter) {
 		this.quoteCharacter = quoteCharacter;
 		this.openingParenthesis = openingParenthesis;
 		this.closingParenthesis = closingParenthesis;
@@ -97,10 +98,14 @@ public class StringAggregator
 	 * @param escapeCharacter    The escape character
 	 * @return The new instance of this class
 	 */
-	public static StringAggregator getInstance(char quoteChar, char openingParenthesis, char closingParenthesis, char separator, char escapeCharacter) {
-		if (quoteChar == openingParenthesis || quoteChar == closingParenthesis || quoteChar == separator || quoteChar == escapeCharacter
-			   || escapeCharacter == openingParenthesis || escapeCharacter == closingParenthesis || escapeCharacter == separator
-			   || openingParenthesis == closingParenthesis || openingParenthesis == separator || closingParenthesis == separator) {
+	public static StringAggregator getInstance(char quoteChar, char openingParenthesis, char closingParenthesis,
+		   char separator, char escapeCharacter) {
+		if (quoteChar == openingParenthesis || quoteChar == closingParenthesis || quoteChar == separator
+			   || quoteChar == escapeCharacter
+			   || escapeCharacter == openingParenthesis || escapeCharacter == closingParenthesis
+			   || escapeCharacter == separator
+			   || openingParenthesis == closingParenthesis || openingParenthesis == separator
+			   || closingParenthesis == separator) {
 			throw new IllegalArgumentException();
 		}
 		return new StringAggregator(quoteChar, openingParenthesis, closingParenthesis, separator, escapeCharacter);
@@ -134,12 +139,14 @@ public class StringAggregator
 
 	@Override
 	protected boolean abstractIsLeaf(String value) {
-		return value.length() >= 2 && value.charAt(0) == this.quoteCharacter && value.charAt(value.length() - 1) == this.quoteCharacter;
+		return value.length() >= 2 && value.charAt(0) == this.quoteCharacter
+			   && value.charAt(value.length() - 1) == this.quoteCharacter;
 	}
 
 	@Override
 	protected boolean abstractIsNode(String value) {
-		return value.length() >= 2 && value.charAt(0) == this.openingParenthesis && value.charAt(value.length() - 1) == this.closingParenthesis;
+		return value.length() >= 2 && value.charAt(0) == this.openingParenthesis
+			   && value.charAt(value.length() - 1) == this.closingParenthesis;
 	}
 
 	@Override
@@ -157,7 +164,8 @@ public class StringAggregator
 	@Override
 	protected Iterable<String> abstractDisaggregateNode(String value) {
 		value = value.substring(1, value.length() - 1);
-		return IterableString.getInstance(value, this.separator, this.openingParenthesis, this.closingParenthesis, this.escapeCharacter);
+		return IterableString.getInstance(value, this.separator, this.openingParenthesis, this.closingParenthesis,
+																						  this.escapeCharacter);
 	}
 
 	private String escape(String str, char c) {

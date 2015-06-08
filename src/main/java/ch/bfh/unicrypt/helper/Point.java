@@ -52,6 +52,7 @@ package ch.bfh.unicrypt.helper;
  */
 public class Point<T>
 	   extends UniCrypt {
+	private static final long serialVersionUID = 1L;
 
 	private final T x, y;
 
