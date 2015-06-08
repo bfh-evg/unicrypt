@@ -86,9 +86,9 @@ public class HashAlgorithmTest {
 
 	@Test
 	public void HashAlgorithmTest_HashValue_MD5() {
-		byte[] bytes1 = ByteArray.getInstance("").getBytes();
-		byte[] bytes2 = ByteArray.getInstance("61|62|63").getBytes();
-		byte[] hash1 = ByteArray.getInstance("d4|1d|8c|d9|8f|00|b2|04|e9|80|09|98|ec|f8|42|7e").getBytes();
+		byte[] bytes1 = ByteArray.getInstance("".toUpperCase()).getBytes();
+		byte[] bytes2 = ByteArray.getInstance("61|62|63".toUpperCase()).getBytes();
+		byte[] hash1 = ByteArray.getInstance("d4|1d|8c|d9|8f|00|b2|04|e9|80|09|98|ec|f8|42|7e".toUpperCase()).getBytes();
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.MD5.getHashValue(bytes1)));
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.MD5.getHashValue(bytes2, 0, 0)));
 		try {
@@ -106,11 +106,11 @@ public class HashAlgorithmTest {
 	// test vectors taken from http://www.di-mgt.com.au/sha_testvectors.html
 	@Test
 	public void HashAlgorithmTest_HashValue_SHA1() {
-		byte[] bytes1 = ByteArray.getInstance("").getBytes();
-		byte[] bytes2 = ByteArray.getInstance("61|62|63").getBytes();
-		byte[] bytes3 = ByteArray.getInstance("00|11|61|62|63|22").getBytes();
-		byte[] hash1 = ByteArray.getInstance("da|39|a3|ee|5e|6b|4b|0d|32|55|bf|ef|95|60|18|90|af|d8|07|09").getBytes();
-		byte[] hash2 = ByteArray.getInstance("a9|99|3e|36|47|06|81|6a|ba|3e|25|71|78|50|c2|6c|9c|d0|d8|9d").getBytes();
+		byte[] bytes1 = ByteArray.getInstance("".toUpperCase()).getBytes();
+		byte[] bytes2 = ByteArray.getInstance("61|62|63".toUpperCase()).getBytes();
+		byte[] bytes3 = ByteArray.getInstance("00|11|61|62|63|22".toUpperCase()).getBytes();
+		byte[] hash1 = ByteArray.getInstance("da|39|a3|ee|5e|6b|4b|0d|32|55|bf|ef|95|60|18|90|af|d8|07|09".toUpperCase()).getBytes();
+		byte[] hash2 = ByteArray.getInstance("a9|99|3e|36|47|06|81|6a|ba|3e|25|71|78|50|c2|6c|9c|d0|d8|9d".toUpperCase()).getBytes();
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.SHA1.getHashValue(bytes1)));
 		Assert.assertTrue(Arrays.equals(hash2, HashAlgorithm.SHA1.getHashValue(bytes2)));
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.SHA1.getHashValue(bytes2, 0, 0)));
@@ -119,11 +119,11 @@ public class HashAlgorithmTest {
 
 	@Test
 	public void HashAlgorithmTest_HashValue_SHA256() {
-		byte[] bytes1 = ByteArray.getInstance("").getBytes();
-		byte[] bytes2 = ByteArray.getInstance("61|62|63").getBytes();
-		byte[] bytes3 = ByteArray.getInstance("00|11|61|62|63|22").getBytes();
-		byte[] hash1 = ByteArray.getInstance("e3|b0|c4|42|98|fc|1c|14|9a|fb|f4|c8|99|6f|b9|24|27|ae|41|e4|64|9b|93|4c|a4|95|99|1b|78|52|b8|55").getBytes();
-		byte[] hash2 = ByteArray.getInstance("ba|78|16|bf|8f|01|cf|ea|41|41|40|de|5d|ae|22|23|b0|03|61|a3|96|17|7a|9c|b4|10|ff|61|f2|00|15|ad").getBytes();
+		byte[] bytes1 = ByteArray.getInstance("".toUpperCase()).getBytes();
+		byte[] bytes2 = ByteArray.getInstance("61|62|63".toUpperCase()).getBytes();
+		byte[] bytes3 = ByteArray.getInstance("00|11|61|62|63|22".toUpperCase()).getBytes();
+		byte[] hash1 = ByteArray.getInstance("e3|b0|c4|42|98|fc|1c|14|9a|fb|f4|c8|99|6f|b9|24|27|ae|41|e4|64|9b|93|4c|a4|95|99|1b|78|52|b8|55".toUpperCase()).getBytes();
+		byte[] hash2 = ByteArray.getInstance("ba|78|16|bf|8f|01|cf|ea|41|41|40|de|5d|ae|22|23|b0|03|61|a3|96|17|7a|9c|b4|10|ff|61|f2|00|15|ad".toUpperCase()).getBytes();
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.SHA256.getHashValue(bytes1)));
 		Assert.assertTrue(Arrays.equals(hash2, HashAlgorithm.SHA256.getHashValue(bytes2)));
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.SHA256.getHashValue(bytes2, 0, 0)));
@@ -132,11 +132,11 @@ public class HashAlgorithmTest {
 
 	@Test
 	public void HashAlgorithmTest_HashValue_SHA384() {
-		byte[] bytes1 = ByteArray.getInstance("").getBytes();
-		byte[] bytes2 = ByteArray.getInstance("61|62|63").getBytes();
-		byte[] bytes3 = ByteArray.getInstance("00|11|61|62|63|22").getBytes();
-		byte[] hash1 = ByteArray.getInstance("38|b0|60|a7|51|ac|96|38|4c|d9|32|7e|b1|b1|e3|6a|21|fd|b7|11|14|be|07|43|4c|0c|c7|bf|63|f6|e1|da|27|4e|de|bf|e7|6f|65|fb|d5|1a|d2|f1|48|98|b9|5b").getBytes();
-		byte[] hash2 = ByteArray.getInstance("cb|00|75|3f|45|a3|5e|8b|b5|a0|3d|69|9a|c6|50|07|27|2c|32|ab|0e|de|d1|63|1a|8b|60|5a|43|ff|5b|ed|80|86|07|2b|a1|e7|cc|23|58|ba|ec|a1|34|c8|25|a7").getBytes();
+		byte[] bytes1 = ByteArray.getInstance("".toUpperCase()).getBytes();
+		byte[] bytes2 = ByteArray.getInstance("61|62|63".toUpperCase()).getBytes();
+		byte[] bytes3 = ByteArray.getInstance("00|11|61|62|63|22".toUpperCase()).getBytes();
+		byte[] hash1 = ByteArray.getInstance("38|b0|60|a7|51|ac|96|38|4c|d9|32|7e|b1|b1|e3|6a|21|fd|b7|11|14|be|07|43|4c|0c|c7|bf|63|f6|e1|da|27|4e|de|bf|e7|6f|65|fb|d5|1a|d2|f1|48|98|b9|5b".toUpperCase()).getBytes();
+		byte[] hash2 = ByteArray.getInstance("cb|00|75|3f|45|a3|5e|8b|b5|a0|3d|69|9a|c6|50|07|27|2c|32|ab|0e|de|d1|63|1a|8b|60|5a|43|ff|5b|ed|80|86|07|2b|a1|e7|cc|23|58|ba|ec|a1|34|c8|25|a7".toUpperCase()).getBytes();
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.SHA384.getHashValue(bytes1)));
 		Assert.assertTrue(Arrays.equals(hash2, HashAlgorithm.SHA384.getHashValue(bytes2)));
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.SHA384.getHashValue(bytes2, 0, 0)));
@@ -145,11 +145,11 @@ public class HashAlgorithmTest {
 
 	@Test
 	public void HashAlgorithmTest_HashValue_SHA512() {
-		byte[] bytes1 = ByteArray.getInstance("").getBytes();
-		byte[] bytes2 = ByteArray.getInstance("61|62|63").getBytes();
-		byte[] bytes3 = ByteArray.getInstance("00|11|61|62|63|22").getBytes();
-		byte[] hash1 = ByteArray.getInstance("cf|83|e1|35|7e|ef|b8|bd|f1|54|28|50|d6|6d|80|07|d6|20|e4|05|0b|57|15|dc|83|f4|a9|21|d3|6c|e9|ce|47|d0|d1|3c|5d|85|f2|b0|ff|83|18|d2|87|7e|ec|2f|63|b9|31|bd|47|41|7a|81|a5|38|32|7a|f9|27|da|3e").getBytes();
-		byte[] hash2 = ByteArray.getInstance("dd|af|35|a1|93|61|7a|ba|cc|41|73|49|ae|20|41|31|12|e6|fa|4e|89|a9|7e|a2|0a|9e|ee|e6|4b|55|d3|9a|21|92|99|2a|27|4f|c1|a8|36|ba|3c|23|a3|fe|eb|bd|45|4d|44|23|64|3c|e8|0e|2a|9a|c9|4f|a5|4c|a4|9f").getBytes();
+		byte[] bytes1 = ByteArray.getInstance("".toUpperCase()).getBytes();
+		byte[] bytes2 = ByteArray.getInstance("61|62|63".toUpperCase()).getBytes();
+		byte[] bytes3 = ByteArray.getInstance("00|11|61|62|63|22".toUpperCase()).getBytes();
+		byte[] hash1 = ByteArray.getInstance("cf|83|e1|35|7e|ef|b8|bd|f1|54|28|50|d6|6d|80|07|d6|20|e4|05|0b|57|15|dc|83|f4|a9|21|d3|6c|e9|ce|47|d0|d1|3c|5d|85|f2|b0|ff|83|18|d2|87|7e|ec|2f|63|b9|31|bd|47|41|7a|81|a5|38|32|7a|f9|27|da|3e".toUpperCase()).getBytes();
+		byte[] hash2 = ByteArray.getInstance("dd|af|35|a1|93|61|7a|ba|cc|41|73|49|ae|20|41|31|12|e6|fa|4e|89|a9|7e|a2|0a|9e|ee|e6|4b|55|d3|9a|21|92|99|2a|27|4f|c1|a8|36|ba|3c|23|a3|fe|eb|bd|45|4d|44|23|64|3c|e8|0e|2a|9a|c9|4f|a5|4c|a4|9f".toUpperCase()).getBytes();
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.SHA512.getHashValue(bytes1)));
 		Assert.assertTrue(Arrays.equals(hash2, HashAlgorithm.SHA512.getHashValue(bytes2)));
 		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.SHA512.getHashValue(bytes2, 0, 0)));
@@ -158,11 +158,11 @@ public class HashAlgorithmTest {
 
 	@Test
 	public void HashAlgorithmTest_HashValue_SHA512_ByteArray() {
-		ByteArray bytes1 = ByteArray.getInstance("");
-		ByteArray bytes2 = ByteArray.getInstance("61|62|63");
-		ByteArray bytes3 = ByteArray.getInstance("00|11|61|62|63|22");
-		ByteArray hash1 = ByteArray.getInstance("cf|83|e1|35|7e|ef|b8|bd|f1|54|28|50|d6|6d|80|07|d6|20|e4|05|0b|57|15|dc|83|f4|a9|21|d3|6c|e9|ce|47|d0|d1|3c|5d|85|f2|b0|ff|83|18|d2|87|7e|ec|2f|63|b9|31|bd|47|41|7a|81|a5|38|32|7a|f9|27|da|3e");
-		ByteArray hash2 = ByteArray.getInstance("dd|af|35|a1|93|61|7a|ba|cc|41|73|49|ae|20|41|31|12|e6|fa|4e|89|a9|7e|a2|0a|9e|ee|e6|4b|55|d3|9a|21|92|99|2a|27|4f|c1|a8|36|ba|3c|23|a3|fe|eb|bd|45|4d|44|23|64|3c|e8|0e|2a|9a|c9|4f|a5|4c|a4|9f");
+		ByteArray bytes1 = ByteArray.getInstance("".toUpperCase());
+		ByteArray bytes2 = ByteArray.getInstance("61|62|63".toUpperCase());
+		ByteArray bytes3 = ByteArray.getInstance("00|11|61|62|63|22".toUpperCase());
+		ByteArray hash1 = ByteArray.getInstance("cf|83|e1|35|7e|ef|b8|bd|f1|54|28|50|d6|6d|80|07|d6|20|e4|05|0b|57|15|dc|83|f4|a9|21|d3|6c|e9|ce|47|d0|d1|3c|5d|85|f2|b0|ff|83|18|d2|87|7e|ec|2f|63|b9|31|bd|47|41|7a|81|a5|38|32|7a|f9|27|da|3e".toUpperCase());
+		ByteArray hash2 = ByteArray.getInstance("dd|af|35|a1|93|61|7a|ba|cc|41|73|49|ae|20|41|31|12|e6|fa|4e|89|a9|7e|a2|0a|9e|ee|e6|4b|55|d3|9a|21|92|99|2a|27|4f|c1|a8|36|ba|3c|23|a3|fe|eb|bd|45|4d|44|23|64|3c|e8|0e|2a|9a|c9|4f|a5|4c|a4|9f".toUpperCase());
 		Assert.assertEquals(hash1, HashAlgorithm.SHA512.getHashValue(bytes1));
 		Assert.assertEquals(hash2, HashAlgorithm.SHA512.getHashValue(bytes2));
 	}

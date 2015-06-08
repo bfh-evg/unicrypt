@@ -72,13 +72,13 @@ public class ByteArray
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
 
 	// a static varible containing a converter to convert byte arrays to string and back
-	private static final ByteArrayToString STRING_CONVERTER = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|");
+	private static final ByteArrayToString STRING_CONVERTER = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|", true);
 
 	// the internal Java array containing the byte values
 	protected byte[] bytes;
 
-	// a flag that indicates whether the bits of each byte value have been reversed
-	private boolean byteReversed;
+	// a flag indicating whether the bits of each byte value have been reversed
+	private boolean bitReversed;
 
 	// a flag indicating whether the internal byte array is identical to the external
 	private boolean normalized;
@@ -91,11 +91,11 @@ public class ByteArray
 		this(bytes, length, 0, false, 0, 0, length, false);
 	}
 
-	protected ByteArray(byte[] bytes, int length, int rangeOffset, boolean reverse, int trailer, int header, int rangeLength, boolean byteReversed) {
+	protected ByteArray(byte[] bytes, int length, int rangeOffset, boolean reverse, int trailer, int header, int rangeLength, boolean bitReversed) {
 		super(ByteArray.class, length, rangeOffset, reverse, ALL_ZERO, trailer, header, rangeLength);
 		this.bytes = bytes;
-		this.byteReversed = byteReversed;
-		this.normalized = (rangeOffset == 0) && (rangeLength == length) && !reverse && !byteReversed;
+		this.bitReversed = bitReversed;
+		this.normalized = (rangeOffset == 0) && (rangeLength == length) && !reverse && !bitReversed;
 	}
 
 	/**
@@ -306,8 +306,8 @@ public class ByteArray
 	 * <p>
 	 * @return The new array with the bits in each value reversed
 	 */
-	public ByteArray byteReverse() {
-		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, !this.byteReversed);
+	public ByteArray bitReverse() {
+		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, !this.bitReversed);
 	}
 
 	/**
@@ -361,13 +361,13 @@ public class ByteArray
 
 	// copy of abstractGetValueAt with byte as return type
 	private byte abstractGetByteValueAt(int index) {
-		if (this.byteReversed) {
+		if (this.bitReversed) {
 			return MathUtil.reverse(this.bytes[index]);
 		}
 		return this.bytes[index];
 	}
 
-	// changes the byte array's internal representation by setting header, trailer, rangeOffset to 0 and byteReversed and reversed to false.
+	// changes the byte array's internal representation by setting header, trailer, rangeOffset to 0 and bitReversed and reversed to false.
 	private void normalize() {
 		if (!this.normalized) {
 			byte[] newBytes = new byte[this.length];
@@ -379,7 +379,7 @@ public class ByteArray
 			this.trailer = 0;
 			this.rangeOffset = 0;
 			this.rangeLength = this.length;
-			this.byteReversed = false;
+			this.bitReversed = false;
 			this.reverse = false;
 			this.normalized = true;
 		}
@@ -393,7 +393,7 @@ public class ByteArray
 
 	@Override
 	protected Byte abstractGetValueAt(int index) {
-		if (this.byteReversed) {
+		if (this.bitReversed) {
 			return MathUtil.reverse(this.bytes[index]);
 		}
 		return this.bytes[index];
@@ -464,13 +464,13 @@ public class ByteArray
 
 	@Override
 	protected ByteArray abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer, int header) {
-		return new ByteArray(this.bytes, length, rangeOffset, this.reverse, trailer, header, rangeLength, this.byteReversed);
+		return new ByteArray(this.bytes, length, rangeOffset, this.reverse, trailer, header, rangeLength, this.bitReversed);
 	}
 
 	@Override
 	protected ByteArray abstractReverse() {
 		// switch trailer and header
-		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, this.byteReversed);
+		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer, this.rangeLength, this.bitReversed);
 	}
 
 	// This method has been optimized for performance (and is therefore more complicated than necessary)

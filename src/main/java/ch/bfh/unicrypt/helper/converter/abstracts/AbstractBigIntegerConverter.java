@@ -45,15 +45,17 @@ import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import java.math.BigInteger;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This abstract class serves as a base implementation of the {@link BigIntegerConverter} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <V> The input type
  */
 public abstract class AbstractBigIntegerConverter<V extends Object>
 	   extends AbstractConverter<V, BigInteger>
 	   implements BigIntegerConverter<V> {
 
-	public AbstractBigIntegerConverter(Class<V> inputClass) {
+	protected AbstractBigIntegerConverter(Class<V> inputClass) {
 		super(inputClass, BigInteger.class);
 	}
 

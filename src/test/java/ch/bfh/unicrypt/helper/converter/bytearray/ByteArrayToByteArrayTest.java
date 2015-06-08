@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -42,34 +42,44 @@
 package ch.bfh.unicrypt.helper.converter.bytearray;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
-import java.math.BigInteger;
-import java.nio.ByteOrder;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author rolfhaenni
  */
-public class BigIntegerConverterTest {
+public class ByteArrayToByteArrayTest {
 
-	public static BigIntegerToByteArray c1 = BigIntegerToByteArray.getInstance(ByteOrder.BIG_ENDIAN);
-	public static BigIntegerToByteArray c2 = BigIntegerToByteArray.getInstance(ByteOrder.LITTLE_ENDIAN);
+	ByteArray ba00 = ByteArray.getInstance("");
+	ByteArray ba10 = ByteArray.getInstance("00");
+	ByteArray ba11 = ByteArray.getInstance("01");
+	ByteArray ba12 = ByteArray.getInstance("FE");
+	ByteArray ba13 = ByteArray.getInstance("FF");
+	ByteArray ba20 = ByteArray.getInstance("00|00");
+	ByteArray ba21 = ByteArray.getInstance("00|01");
+	ByteArray ba22 = ByteArray.getInstance("FF|FE");
+	ByteArray ba23 = ByteArray.getInstance("FF|FF");
+	ByteArray ba5 = ByteArray.getInstance((byte) 10, 5);
 
 	@Test
-	public void testByteArrayConverter() {
-		BigInteger b0 = BigInteger.valueOf(0);
-		BigInteger b1 = BigInteger.valueOf(9);
-		BigInteger b2 = BigInteger.valueOf(200);
-		BigInteger b3 = BigInteger.valueOf(300);
-		for (BigIntegerToByteArray converter : new BigIntegerToByteArray[]{c1, c2}) {
-			for (BigInteger bigInteger : new BigInteger[]{b0, b1, b2, b3}) {
-				ByteArray ba = converter.convert(bigInteger);
-				Assert.assertEquals(bigInteger, converter.reconvert(ba));
-			}
+	public void bitArrayToByteArrayTest1() {
 
+		ByteArrayToByteArray c1 = ByteArrayToByteArray.getInstance();
+		ByteArrayToByteArray c2 = ByteArrayToByteArray.getInstance(true);
+		ByteArrayToByteArray c3 = ByteArrayToByteArray.getInstance(true, true);
+		ByteArrayToByteArray c4 = ByteArrayToByteArray.getInstance(false, true);
+
+		for (ByteArray ba1 : new ByteArray[]{ba00, ba10, ba11, ba12, ba13, ba20, ba21, ba22, ba23}) {
+			for (ByteArrayToByteArray converter : new ByteArrayToByteArray[]{c1, c2, c3, c4}) {
+				ByteArray ba2 = converter.convert(ba1);
+				Assert.assertEquals(ba1, converter.reconvert(ba2));
+			}
+			Assert.assertEquals(ba1, c1.convert(c2.convert(c3.convert(c4.convert(ba1)))));
+			Assert.assertEquals(ba1, c1.reconvert(c2.reconvert(c3.reconvert(c4.reconvert(ba1)))));
 		}
+
 	}
 
 }

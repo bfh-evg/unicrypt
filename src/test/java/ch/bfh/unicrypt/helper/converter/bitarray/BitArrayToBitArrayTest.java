@@ -39,39 +39,56 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.biginteger;
+package ch.bfh.unicrypt.helper.converter.bitarray;
 
-import ch.bfh.unicrypt.helper.converter.classes.biginteger.BooleanToBigInteger;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.converter.classes.bitarray.BitArrayToBitArray;
 import org.junit.Assert;
-import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class BooleanToBigIntegerTest {
+public class BitArrayToBitArrayTest {
+
+	BitArray ba0 = BitArray.getInstance("");
+	BitArray ba10 = BitArray.getInstance("0");
+	BitArray ba11 = BitArray.getInstance("1");
+	BitArray ba20 = BitArray.getInstance("00");
+	BitArray ba21 = BitArray.getInstance("01");
+	BitArray ba22 = BitArray.getInstance("10");
+	BitArray ba23 = BitArray.getInstance("11");
+	BitArray ba30 = BitArray.getInstance("000");
+	BitArray ba31 = BitArray.getInstance("001");
+	BitArray ba32 = BitArray.getInstance("010");
+	BitArray ba33 = BitArray.getInstance("011");
+	BitArray ba34 = BitArray.getInstance("100");
+	BitArray ba35 = BitArray.getInstance("101");
+	BitArray ba36 = BitArray.getInstance("110");
+	BitArray ba37 = BitArray.getInstance("111");
+	BitArray ba40 = BitArray.getInstance("0000");
 
 	@Test
-	public void testGetInstance() {
+	public void bitArrayToBitArrayTest1() {
 
-		BooleanToBigInteger converter = BooleanToBigInteger.getInstance();
+		BitArrayToBitArray converter = BitArrayToBitArray.getInstance();
+		for (BitArray ba : new BitArray[]{ba0, ba10, ba11, ba20, ba21, ba22, ba23, ba30, ba31, ba32, ba33, ba34, ba35, ba36, ba37, ba40}) {
+			Assert.assertEquals(ba, converter.convert(ba));
+			Assert.assertEquals(ba, converter.reconvert(ba));
+		}
 
-		Assert.assertEquals(BigInteger.ZERO, converter.convert(false));
-		Assert.assertEquals(BigInteger.ONE, converter.convert(true));
-		Assert.assertFalse(converter.reconvert(BigInteger.ZERO));
-		Assert.assertTrue(converter.reconvert(BigInteger.ONE));
-		try {
-			converter.reconvert(BigInteger.valueOf(-1));
-			fail();
-		} catch (Exception e) {
+	}
+
+	@Test
+	public void bitArrayToBitArrayTest2() {
+
+		BitArrayToBitArray converter = BitArrayToBitArray.getInstance(true); // reverse
+		for (BitArray ba : new BitArray[]{ba0, ba10, ba11, ba20, ba21, ba22, ba23, ba30, ba31, ba32, ba33, ba34, ba35, ba36, ba37, ba40}) {
+			Assert.assertEquals(ba.reverse(), converter.convert(ba));
+			Assert.assertEquals(ba.reverse(), converter.reconvert(ba));
 		}
-		try {
-			converter.reconvert(BigInteger.valueOf(2));
-			fail();
-		} catch (Exception e) {
-		}
+
 	}
 
 }

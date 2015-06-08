@@ -44,17 +44,40 @@ package ch.bfh.unicrypt.helper.converter.classes.string;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instance of this class convert Java strings into Java strings. There are two operating modes, one in which the
+ * strings remain unchanged and one in which they are reversed.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class StringToString
 	   extends AbstractStringConverter<String> {
 
 	private final boolean reverse;
 
-	public StringToString(boolean reverse) {
+	protected StringToString(boolean reverse) {
 		super(String.class);
 		this.reverse = reverse;
+	}
+
+	/**
+	 * Returns a new default {@link StringToString} converter, which leaves the strings unchanged.
+	 * <p>
+	 * @return The default converter
+	 */
+	public static StringToString getInstance() {
+		return StringToString.getInstance(false);
+	}
+
+	/**
+	 * Returns a new {@link StringToString} converter for a given flag {@code reverse} indicating if the input strings
+	 * are reversed.
+	 * <p>
+	 * @param reverse The flag indicating if the input strings are reversed
+	 * @return The new converter
+	 */
+	public static StringToString getInstance(boolean reverse) {
+		return new StringToString(reverse);
 	}
 
 	@Override
@@ -71,14 +94,6 @@ public class StringToString
 			return new StringBuffer(string).reverse().toString();
 		}
 		return string;
-	}
-
-	public static StringToString getInstance() {
-		return StringToString.getInstance(false);
-	}
-
-	public static StringToString getInstance(boolean reverse) {
-		return new StringToString(reverse);
 	}
 
 }

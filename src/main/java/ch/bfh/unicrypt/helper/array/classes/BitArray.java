@@ -315,7 +315,7 @@ public class BitArray
 	protected BitArray abstractReverse() {
 		// reverse byteArrary, adjust offset, switch trailer and header (reverse is always false)
 		int newOffset = this.byteArray.getLength() * Byte.SIZE - this.rangeOffset - this.rangeLength;
-		return new BitArray(this.byteArray.byteReverse(), this.length, newOffset, this.header, this.trailer, this.rangeLength);
+		return new BitArray(this.byteArray.bitReverse(), this.length, newOffset, this.header, this.trailer, this.rangeLength);
 	}
 
 	@Override

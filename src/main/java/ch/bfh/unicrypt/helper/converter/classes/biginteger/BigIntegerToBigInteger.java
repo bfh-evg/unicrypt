@@ -46,10 +46,11 @@ import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
 
 /**
- * This class {@code BigInteger} values into non-negative {@code BigInteger} values 0, 1, 2, ... There are two operation
- * modes. In the unrestricted mode, the folding function {@link MathUtil#fold(java.math.BigInteger)} is used to
- * transform negative into positive integers. In the restricted operation mode, a minimal value m must be specified, and
- * only values v >= m are converted into v-m >= 0;
+ * Instances of this class convert {@code BigInteger} values into non-negative {@code BigInteger} values 0, 1, 2, ...
+ * There are two operation modes. In the unrestricted mode, the folding function
+ * {@link MathUtil#fold(java.math.BigInteger)} is used to transform negative into positive integers. In the restricted
+ * operation mode, a minimal value {@code m} must be specified, and only values {@code v >= m} are converted into v-m >=
+ * 0;
  * <p>
  * @author Rolf Haenni
  * @version 2.0

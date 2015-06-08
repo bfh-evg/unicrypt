@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,62 +39,42 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.classes.bitarray;
+package ch.bfh.unicrypt.helper.converter.bitarray;
 
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBitArrayConverter;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bitarray.ByteArrayToBitArray;
+import org.junit.Assert;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 
 /**
- * Instance of this class convert {@code BitArray} values into {@code BitArray} values. There are two operating modes,
- * one in which the bit arrays remain unchanged and one in which the bit arrays are reversed.
- * <p>
- * @author Rolf Haenni
- * @version 2.0
+ *
+ * @author rolfhaenni
  */
-public class BitArrayToBitArray
-	   extends AbstractBitArrayConverter<BitArray> {
+public class ByteArrayToBitArrayTest {
 
-	private final boolean reverse;
+	ByteArray ba0 = ByteArray.getInstance("");
+	ByteArray ba1 = ByteArray.getInstance("00");
+	ByteArray ba2 = ByteArray.getInstance("FF");
+	ByteArray ba3 = ByteArray.getInstance("00|00");
+	ByteArray ba4 = ByteArray.getInstance("FF|FF");
 
-	private BitArrayToBitArray(boolean reverse) {
-		super(BitArray.class);
-		this.reverse = reverse;
-	}
+	@Test
+	public void byteArrayToBitArrayTest1() {
 
-	/**
-	 * Returns a new default {@link BitArrayToBitArray} converter, which leaves the bit arrays unchanged.
-	 * <p>
-	 * @return The default converter
-	 */
-	public static BitArrayToBitArray getInstance() {
-		return new BitArrayToBitArray(false);
-	}
-
-	/**
-	 * Returns a new {@link BitArrayToBitArray} converter for a given flag {@code reverse} indicating if the byte arrays
-	 * are reversed.
-	 * <p>
-	 * @param reverse The flag indicating if the byte arrays are reversed
-	 * @return The new converter
-	 */
-	public static BitArrayToBitArray getInstance(boolean reverse) {
-		return new BitArrayToBitArray(reverse);
-	}
-
-	@Override
-	protected BitArray abstractConvert(BitArray bitArray) {
-		if (this.reverse) {
-			return bitArray.reverse();
+		ByteArrayToBitArray converter = ByteArrayToBitArray.getInstance();
+		for (ByteArray ba : new ByteArray[]{ba0, ba1, ba2, ba3, ba4}) {
+			Assert.assertEquals(BitArray.getInstance(ba), converter.convert(ba));
+			Assert.assertEquals(ba, converter.reconvert(converter.convert(ba)));
 		}
-		return bitArray;
-	}
 
-	@Override
-	protected BitArray abstractReconvert(BitArray bitArray) {
-		if (this.reverse) {
-			return bitArray.reverse();
+		try {
+			converter.reconvert(BitArray.getInstance("0"));
+			fail();
+		} catch (Exception e) {
 		}
-		return bitArray;
+
 	}
 
 }

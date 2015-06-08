@@ -39,10 +39,12 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.biginteger;
+package ch.bfh.unicrypt.helper.converter.bytearray;
 
-import ch.bfh.unicrypt.helper.converter.classes.biginteger.BooleanToBigInteger;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
 import org.junit.Test;
@@ -51,24 +53,50 @@ import org.junit.Test;
  *
  * @author rolfhaenni
  */
-public class BooleanToBigIntegerTest {
+public class StringToByteArrayTest {
+
+	String[] strings = {"", "x"};//, "ä", "\\", "\t", "\b", "\n", "\r", "\'", "\"", "\\\t\b\n\r\'\"", "Hello World"};
+
+	Charset[] charsets = new Charset[]{StandardCharsets.UTF_8,
+		StandardCharsets.UTF_16, StandardCharsets.UTF_16BE, StandardCharsets.UTF_16LE,
+		Charset.forName("UTF-32"), Charset.forName("UTF-32BE"), Charset.forName("UTF-32LE")};
 
 	@Test
-	public void testGetInstance() {
+	public void stringToByteArrayTest1() {
 
-		BooleanToBigInteger converter = BooleanToBigInteger.getInstance();
+		StringToByteArray converter = StringToByteArray.getInstance();
+		for (String s : strings) {
+			Assert.assertEquals(s, converter.reconvert(converter.convert(s)));
+		}
+	}
 
-		Assert.assertEquals(BigInteger.ZERO, converter.convert(false));
-		Assert.assertEquals(BigInteger.ONE, converter.convert(true));
-		Assert.assertFalse(converter.reconvert(BigInteger.ZERO));
-		Assert.assertTrue(converter.reconvert(BigInteger.ONE));
+	@Test
+	public void stringToByteArrayTest2() {
+		for (Charset charset : charsets) {
+			StringToByteArray converter = StringToByteArray.getInstance(charset);
+			for (String s : strings) {
+				ByteArray ba = converter.convert(s);
+				Assert.assertEquals(s, converter.reconvert(ba));
+				if (charset != StandardCharsets.UTF_8) {
+					try {
+						converter.reconvert(ba.add());
+						fail();
+					} catch (Exception e) {
+					}
+				}
+			}
+		}
+	}
+
+	@Test
+	public void stringToByteArrayTest3() {
 		try {
-			converter.reconvert(BigInteger.valueOf(-1));
+			StringToByteArray.getInstance(StandardCharsets.ISO_8859_1);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			converter.reconvert(BigInteger.valueOf(2));
+			StringToByteArray.getInstance("");
 			fail();
 		} catch (Exception e) {
 		}

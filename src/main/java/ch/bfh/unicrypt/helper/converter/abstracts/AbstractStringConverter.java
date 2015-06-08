@@ -44,15 +44,17 @@ package ch.bfh.unicrypt.helper.converter.abstracts;
 import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This abstract class serves as a base implementation of the {@link StringConverter} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <V> The input type
  */
 public abstract class AbstractStringConverter<V extends Object>
 	   extends AbstractConverter<V, String>
 	   implements StringConverter<V> {
 
-	public AbstractStringConverter(Class<V> inputClass) {
+	protected AbstractStringConverter(Class<V> inputClass) {
 		super(inputClass, String.class);
 	}
 
