@@ -57,9 +57,10 @@ import java.math.BigInteger;
 public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractCyclicGroup<E, V>
 	   implements AdditiveCyclicGroup<V> {
+
 	private static final long serialVersionUID = 1L;
 
-	public AbstractAdditiveCyclicGroup(Class<? extends Object> valueClass) {
+	protected AbstractAdditiveCyclicGroup(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 

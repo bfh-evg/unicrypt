@@ -64,10 +64,10 @@ import java.util.Map;
  * @param <VKS> Verification key space
  * @param <KG>  Key generator
  */
-public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element,
-	   SKS extends Set, VKS extends Set, KG extends KeyPairGenerator>
+public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, SKS extends Set, VKS extends Set, KG extends KeyPairGenerator>
 	   extends AbstractScheme<MS>
 	   implements SignatureScheme {
+
 	private static final long serialVersionUID = 1L;
 
 	protected final SS signatureSpace;
@@ -77,7 +77,7 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 	private Function signatureFunction;
 	private Function verificationFunction;
 
-	public AbstractSignatureScheme(MS messageSpace, SS signatureSpace, ElementHashMethod hashMethod) {
+	protected AbstractSignatureScheme(MS messageSpace, SS signatureSpace, ElementHashMethod hashMethod) {
 		super(messageSpace);
 		this.signatureSpace = signatureSpace;
 		this.hashMethod = hashMethod;

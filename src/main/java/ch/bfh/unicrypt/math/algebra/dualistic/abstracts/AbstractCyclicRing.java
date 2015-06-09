@@ -63,11 +63,12 @@ import java.util.NoSuchElementException;
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractRing<E, V>
 	   implements CyclicRing<V> {
+
 	private static final long serialVersionUID = 1L;
 
 	private E defaultGenerator;
 
-	public AbstractCyclicRing(Class<? extends Object> valueClass) {
+	protected AbstractCyclicRing(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 

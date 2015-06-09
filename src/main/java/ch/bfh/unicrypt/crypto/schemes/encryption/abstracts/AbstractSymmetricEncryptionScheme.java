@@ -57,15 +57,15 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
  * @param <KE> Key element
  * @param <KG> Key generator
  */
-public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set,
-	   EE extends Element, KS extends Set, KE extends Element, KG extends SecretKeyGenerator>
+public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, KS extends Set, KE extends Element, KG extends SecretKeyGenerator>
 	   extends AbstractEncryptionScheme<MS, ME, ES, EE>
 	   implements SymmetricEncryptionScheme {
+
 	private static final long serialVersionUID = 1L;
 
 	private KG keyGenerator;
 
-	public AbstractSymmetricEncryptionScheme(MS messageSpace, ES encryptionSpace) {
+	protected AbstractSymmetricEncryptionScheme(MS messageSpace, ES encryptionSpace) {
 		super(messageSpace, encryptionSpace);
 	}
 

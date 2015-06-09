@@ -60,7 +60,7 @@ public abstract class AbstractCommitmentScheme<MS extends Set, CS extends Set>
 	protected Function commitmentFunction;
 	protected Function decommitmentFunction;
 
-	public AbstractCommitmentScheme(MS messageSpace, CS commitmentSpace) {
+	protected AbstractCommitmentScheme(MS messageSpace, CS commitmentSpace) {
 		super(messageSpace);
 		this.commitmentSpace = commitmentSpace;
 	}

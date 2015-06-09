@@ -58,11 +58,12 @@ import java.math.BigInteger;
 public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V extends Object>
 	   extends AbstractRing<E, V>
 	   implements Field<V> {
+
 	private static final long serialVersionUID = 1L;
 
 	private M multiplicativeGroup;
 
-	public AbstractField(Class<? extends Object> valueClass) {
+	protected AbstractField(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 

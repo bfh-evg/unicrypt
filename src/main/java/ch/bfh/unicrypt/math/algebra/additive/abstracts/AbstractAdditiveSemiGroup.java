@@ -57,9 +57,10 @@ import java.math.BigInteger;
 public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements AdditiveSemiGroup<V> {
+
 	private static final long serialVersionUID = 1L;
 
-	public AbstractAdditiveSemiGroup(Class<? extends Object> valueClass) {
+	protected AbstractAdditiveSemiGroup(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 

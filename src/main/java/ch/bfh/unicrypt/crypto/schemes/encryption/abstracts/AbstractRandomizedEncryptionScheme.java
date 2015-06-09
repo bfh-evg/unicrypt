@@ -61,15 +61,13 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @param <DKS> Decryption key space
  * @param <KG>  Key pair generator
  */
-public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set,
-	   EE extends Element, RS extends Set, RE extends Element, EKS extends Set, DKS extends Set,
-	   KG extends KeyPairGenerator>
+public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, RS extends Set, RE extends Element, EKS extends Set, DKS extends Set, KG extends KeyPairGenerator>
 	   extends AbstractAsymmetricEncryptionScheme<MS, ME, ES, EE, EKS, DKS, KG>
 	   implements RandomizedEncryptionScheme {
 
 	protected final RS randomizationSpace;
 
-	public AbstractRandomizedEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
+	protected AbstractRandomizedEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
 		super(messageSpace, encryptionSpace);
 		this.randomizationSpace = randomizationSpace;
 	}

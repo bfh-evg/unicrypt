@@ -46,10 +46,10 @@ import ch.bfh.unicrypt.helper.tree.Tree;
 /**
  * The purpose of an aggregator is to aggregate the values stored in a {@link Tree} of type {@code V} into a single
  * value of type {@code V}, and vice versa, to construct a {@link Tree} of type {@code V} from a single value of type
- * {@code V}. Each aggregator defines therfore a bijective mapping between type {@link Tree<V>} and {@code V}. To
- * perform the conversion forth and back, each concrete aggregator class implements two distinct pairs of operations for
- * the conversion of the value stored in some leaf of the tree and the conversion of the aggregated values obtained from
- * the children of some node in the tree.
+ * {@code V}. Each aggregator defines therfore a bijective mapping between type {@link Tree}{@code <V>} and {@code V}.
+ * To perform the conversion forth and back, each concrete aggregator class implements two distinct pairs of operations
+ * for the conversion of the value stored in some leaf of the tree and the conversion of the aggregated values obtained
+ * from the children of some node in the tree.
  * <p>
  * @author R. Haenni
  * @version 2.0

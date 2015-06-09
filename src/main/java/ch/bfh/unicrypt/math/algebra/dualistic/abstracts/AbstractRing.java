@@ -56,9 +56,10 @@ import java.math.BigInteger;
 public abstract class AbstractRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractSemiRing<E, V>
 	   implements Ring<V> {
+
 	private static final long serialVersionUID = 1L;
 
-	public AbstractRing(Class<? extends Object> valueClass) {
+	protected AbstractRing(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 

@@ -42,13 +42,9 @@
 package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-<<<<<<< HEAD
-import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableMapper;
 import ch.bfh.unicrypt.helper.iterable.Mapper;
-=======
-import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
->>>>>>> FETCH_HEAD
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
@@ -106,31 +102,7 @@ public abstract class AbstractAggregator<V>
 
 		// Case 2: tree is a node
 		final Node<V> node = (Node<V>) tree;
-<<<<<<< HEAD
 		Iterable<V> values = IterableMapper.getInstance(node.getChildren(), this.mapper1);
-=======
-		Iterable<V> values = new Iterable<V>() {
-
-			@Override
-			public Iterator<V> iterator() {
-				return new Iterator<V>() {
-
-					private Iterator<Tree<V>> childrenIterator = node.getChildren().iterator();
-
-					@Override
-					public boolean hasNext() {
-						return this.childrenIterator.hasNext();
-					}
-
-					@Override
-					public V next() {
-						return aggregate(this.childrenIterator.next());
-					}
-
-				};
-			}
-		};
->>>>>>> FETCH_HEAD
 		return this.abstractAggregateNode(values, node.getSize());
 	}
 
@@ -148,33 +120,8 @@ public abstract class AbstractAggregator<V>
 
 		// Case 2: value represents a node
 		if (this.abstractIsNode(value)) {
-<<<<<<< HEAD
 			Iterable<V> values = this.abstractDisaggregateNode(value);
 			Iterable<Tree<V>> trees = IterableMapper.getInstance(values, this.mapper2);
-=======
-			Iterable<Tree<V>> trees = new Iterable<Tree<V>>() {
-
-				@Override
-				public Iterator<Tree<V>> iterator() {
-					return new Iterator<Tree<V>>() {
-
-						private Iterator<V> valueIterator = abstractDisaggregateNode(value).iterator();
-
-						@Override
-						public boolean hasNext() {
-							return this.valueIterator.hasNext();
-						}
-
-						@Override
-						public Tree<V> next() {
-							return disaggregate(this.valueIterator.next());
-						}
-
-					};
-				}
-
-			};
->>>>>>> FETCH_HEAD
 			return Node.getInstance(trees);
 		}
 

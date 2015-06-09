@@ -55,14 +55,13 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <PS> Padding space
  * @param <PE> Padding element
  */
-public abstract class AbstractReversiblePaddingScheme<MS extends ConcatenativeSemiGroup,
-	   ME extends ConcatenativeElement, PS extends ConcatenativeSemiGroup, PE extends ConcatenativeElement>
+public abstract class AbstractReversiblePaddingScheme<MS extends ConcatenativeSemiGroup, ME extends ConcatenativeElement, PS extends ConcatenativeSemiGroup, PE extends ConcatenativeElement>
 	   extends AbstractPaddingScheme<MS, ME, PS, PE>
 	   implements ReversiblePaddingScheme {
 
 	private Function unpaddingFunction;
 
-	public AbstractReversiblePaddingScheme(MS messageSpace, PS paddingSpace) {
+	protected AbstractReversiblePaddingScheme(MS messageSpace, PS paddingSpace) {
 		super(messageSpace, paddingSpace);
 	}
 

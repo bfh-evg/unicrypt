@@ -180,7 +180,7 @@ public class HashAlgorithm
 	 * names are: {@code "MD5"}, {@code "SHA-1"}, {@code "SHA-256"}, {@code "SHA-384"}, and {@code "SHA-512"}.
 	 * <p>
 	 * @param algorithmName The name of the hash algorithm.
-	 * @return
+	 * @return The new hash method
 	 */
 	public static HashAlgorithm getInstance(String algorithmName) {
 		switch (Arrays.binarySearch(new String[]{"MD5", "SHA-1", "SHA-256", "SHA-384", "SHA-512"}, algorithmName)) {

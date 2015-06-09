@@ -58,11 +58,12 @@ import java.math.BigInteger;
 public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractAdditiveMonoid<E, V>
 	   implements SemiRing<V> {
+
 	private static final long serialVersionUID = 1L;
 
 	private E one;
 
-	public AbstractSemiRing(Class<? extends Object> valueClass) {
+	protected AbstractSemiRing(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 

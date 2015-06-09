@@ -58,7 +58,7 @@ public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V exte
 	   extends AbstractGroup<E, V>
 	   implements AdditiveGroup<V> {
 
-	public AbstractAdditiveGroup(Class<? extends Object> valueClass) {
+	protected AbstractAdditiveGroup(Class<? extends Object> valueClass) {
 		super(valueClass);
 	}
 

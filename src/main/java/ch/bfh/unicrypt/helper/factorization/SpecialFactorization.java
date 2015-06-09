@@ -58,6 +58,7 @@ import java.math.BigInteger;
  */
 public class SpecialFactorization
 	   extends Factorization {
+
 	private static final long serialVersionUID = 1L;
 
 	protected SpecialFactorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {

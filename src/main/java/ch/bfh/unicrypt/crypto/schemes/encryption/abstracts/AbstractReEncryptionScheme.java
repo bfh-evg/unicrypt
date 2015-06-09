@@ -69,24 +69,22 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @param <DKS> Decryption key space
  * @param <KG>  Key pair generator
  */
-public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends Element, ES extends Monoid,
-	   EE extends Element, RS extends Monoid, RE extends Element, EKS extends Set, DKS extends Set,
-	   KG extends KeyPairGenerator>
+public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends Element, ES extends Monoid, EE extends Element, RS extends Monoid, RE extends Element, EKS extends Set, DKS extends Set, KG extends KeyPairGenerator>
 	   extends AbstractRandomizedEncryptionScheme<MS, ME, ES, EE, RS, RE, EKS, DKS, KG>
 	   implements ReEncryptionScheme {
 
 	private Function identityEncryptionFunction;
 	private Function reEncryptionFunction;
 
-	public AbstractReEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
+	protected AbstractReEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
 		super(messageSpace, encryptionSpace, randomizationSpace);
 	}
 
 	@Override
 	public final Function getIdentityEncryptionFunction() {
 		if (this.identityEncryptionFunction == null) {
-			this.identityEncryptionFunction =
-				   this.getEncryptionFunction().partiallyApply(this.getMessageSpace().getIdentityElement(), 1);
+			this.identityEncryptionFunction
+				   = this.getEncryptionFunction().partiallyApply(this.getMessageSpace().getIdentityElement(), 1);
 		}
 		return this.identityEncryptionFunction;
 	}
@@ -95,12 +93,12 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 	public final Function getReEncryptionFunction() {
 		if (this.reEncryptionFunction == null) {
 			ProductSet inputSpace = ProductSet.getInstance(this.getEncryptionKeySpace(), this.getEncryptionSpace(),
-																						 this.getRandomizationSpace());
+														   this.getRandomizationSpace());
 			this.reEncryptionFunction = CompositeFunction.getInstance(
 				   SharedDomainFunction.getInstance(SelectionFunction.getInstance(inputSpace, 1),
 													CompositeFunction.getInstance(
-															RemovalFunction.getInstance(inputSpace, 1),
-															this.getIdentityEncryptionFunction())),
+														   RemovalFunction.getInstance(inputSpace, 1),
+														   this.getIdentityEncryptionFunction())),
 				   ApplyFunction.getInstance(this.getEncryptionSpace()));
 		}
 		return this.reEncryptionFunction;
@@ -121,4 +119,5 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 	public final EE reEncrypt(final Element publicKey, final Element ciphertext, final Element randomization) {
 		return (EE) this.getReEncryptionFunction().apply(publicKey, ciphertext, randomization);
 	}
+
 }

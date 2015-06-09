@@ -65,8 +65,7 @@ import java.math.BigInteger;
  * @param <D>
  * @param <EE>
  */
-public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D extends DualisticElement<V>,
-	   EE extends ECElement<V, D>>
+public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D extends DualisticElement<V>, EE extends ECElement<V, D>>
 	   extends AbstractAdditiveCyclicGroup<EE, Point<D>>
 	   implements EC<V, D> {
 
@@ -159,12 +158,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 		return this.abstractGetElement(Point.getInstance((D) xValue, (D) yValue));
 	}
 
-	/**
-	 * Return the two possible y-coordinates for a given valid x-coordinate
-	 * <p>
-	 * @param x x-coordinate of point
-	 * @return
-	 */
+	@Override
 	public abstract EE[] getY(D xValue);
 
 	@Override

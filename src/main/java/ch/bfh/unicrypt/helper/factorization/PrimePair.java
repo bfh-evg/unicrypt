@@ -57,6 +57,7 @@ import java.math.BigInteger;
  */
 public class PrimePair
 	   extends Factorization {
+
 	private static final long serialVersionUID = 1L;
 
 	protected PrimePair(BigInteger prime1, BigInteger prime2) {
@@ -84,8 +85,8 @@ public class PrimePair
 
 	/**
 	 * Creates a new prime pair from two given integer values of type {@code int}. This method is a convenience method
-	 * for {@link PrimePair#getInstance(java.math.BigInteger)}. Throws an exception if one of the given integers is not
-	 * prime or if they are equal.
+	 * for {@link PrimePair#getInstance(BigInteger, BigInteger)}. Throws an exception if one of the given integers is
+	 * not prime or if they are equal.
 	 * <p>
 	 * @param prime1 The first integer value
 	 * @param prime2 The second integer value

@@ -51,18 +51,17 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
- * TODO This interface represents an elliptic curve. Its set of points creates
- * an additive group so that adding two points creates another point.
+ * TODO This interface represents an elliptic curve. Its set of points creates an additive group so that adding two
+ * points creates another point.
  * <p>
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
- *            Generic type of values stored in the elements of the elliptic
- *            curve
+ * @param <V> Generic type of values stored in the elements of the elliptic curve
  * @param <E>
  */
-public interface EC<V extends Object, E extends DualisticElement<V>> extends
-		AdditiveCyclicGroup<Point<E>> {
+public interface EC<V extends Object, E extends DualisticElement<V>>
+	   extends
+	   AdditiveCyclicGroup<Point<E>> {
 
 	/**
 	 * Returns the finite Field of this elliptic curve
@@ -97,33 +96,23 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	public BigInteger getCoFactor();
 
 	/**
-	 * TODO Returns {@code true} if this elliptic curve lies on the given x
-	 * co-ordinate.
+	 * TODO Returns {@code true} if this elliptic curve lies on the given x co-ordinate.
 	 * <p>
 	 *
-	 * @param xValue
-	 *            The given x value
-	 * @return {@code true} if this elliptic curve lies on the given x
-	 *         co-ordinate
-	 * @throws IllegalArgumentException
-	 *             if {@code xValue} do not belong to the finite field
+	 * @param xValue The given x value
+	 * @return {@code true} if this elliptic curve lies on the given x co-ordinate
+	 * @throws IllegalArgumentException if {@code xValue} do not belong to the finite field
 	 */
 	public boolean contains(E xValue);
 
 	/**
-	 * TODO Returns {@code true} if the given x and y value are the co-ordinates
-	 * for a point on this elliptic curve.
+	 * TODO Returns {@code true} if the given x and y value are the co-ordinates for a point on this elliptic curve.
 	 * <p>
 	 *
-	 * @param xValue
-	 *            The given xValue
-	 * @param yValue
-	 *            The given yValue
-	 * @return {@code true} if xValue and yValue form a point on this elliptic
-	 *         curve.
-	 * @throws IllegalArgumentException
-	 *             if {@code xValue} or {@code yValue} do not belong to the
-	 *             finite field
+	 * @param xValue The given xValue
+	 * @param yValue The given yValue
+	 * @return {@code true} if xValue and yValue form a point on this elliptic curve.
+	 * @throws IllegalArgumentException if {@code xValue} or {@code yValue} do not belong to the finite field
 	 */
 	public boolean contains(E xValue, E yValue);
 
@@ -131,22 +120,22 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	 * TODO Returns the corresponding point for a given x and y value.
 	 * <p>
 	 *
-	 * @param xValue
-	 *            The given xValue
-	 * @param yValue
-	 *            The given yValue
+	 * @param xValue The given xValue
+	 * @param yValue The given yValue
 	 * @return The corresponding point for a given x and y value
-	 * @throws IllegalArgumentException
-	 *             if {@code xValue} or {@code yValue} do not belong to this
-	 *             elliptic curve
+	 * @throws IllegalArgumentException if {@code xValue} or {@code yValue} do not belong to this elliptic curve
 	 */
 	public ECElement<V, E> getElement(E xValue, E yValue);
 
+	/**
+	 * Return the two possible y-coordinates for a given valid x-coordinate
+	 * <p>
+	 * @param xValue x-coordinate of point
+	 * @return
+	 */
 	public ECElement<V, E>[] getY(E xValue);
 
-
 	//The following methods are overwritten from AdditiveSemiGroup with an adapted return type
-
 	@Override
 	public ECElement<V, E> add(Element element1, Element element2);
 
@@ -183,7 +172,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 
 	@Override
 	public ECElement<V, E> getRandomElement(
-			RandomByteSequence randomByteSequence);
+		   RandomByteSequence randomByteSequence);
 
 	// The following methods are overridden from SemiGroup with an adapted
 	// return type
@@ -207,10 +196,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 
 	@Override
 	public ECElement<V, E> multiSelfApply(Element[] elements,
-			BigInteger[] amounts);
-
-
-
+		   BigInteger[] amounts);
 
 	// The following methods are overridden from Monoid with an adapted return
 	// type
@@ -233,13 +219,13 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 
 	@Override
 	public ECElement<V, E> getRandomGenerator(
-			RandomByteSequence randomByteSequence);
+		   RandomByteSequence randomByteSequence);
 
 	@Override
 	public ECElement<V, E> getIndependentGenerator(int index);
 
 	@Override
 	public ECElement<V, E> getIndependentGenerator(int index,
-			ReferenceRandomByteSequence referenceRandomByteSequence);
+		   ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

@@ -71,8 +71,8 @@ public class ByteArray
 	public static final int BYTE_ORDER = 1 << Byte.SIZE;
 
 	// a static varible containing a converter to convert byte arrays to string and back
-	private static final ByteArrayToString STRING_CONVERTER =
-		   ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|", true);
+	private static final ByteArrayToString STRING_CONVERTER
+		   = ByteArrayToString.getInstance(ByteArrayToString.Radix.HEX, "|", true);
 	private static final long serialVersionUID = 1L;
 
 	// the internal Java array containing the byte values
@@ -112,7 +112,7 @@ public class ByteArray
 	/**
 	 * Creates a new byte array of a given length. Depending on the parameter {@code fillBit}, its bytes are all
 	 * identical to either {@code ALL_ZERO} or {@code ALL_ONE}. This method is a special case of
-	 * {@link ByteArray#getInstance(byte, int)}.
+	 * {@link ByteArray#getInstance(byte, Integer)}.
 	 * <p>
 	 * @param fillBit A flag indicating whether the values in the new byte array are {@code ALL_ZERO} or {@code ALL_ONE}
 	 * @param length  The length of the new byte array
@@ -310,7 +310,7 @@ public class ByteArray
 	 */
 	public ByteArray bitReverse() {
 		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer,
-			   this.rangeLength, !this.bitReversed);
+							 this.rangeLength, !this.bitReversed);
 	}
 
 	/**
@@ -469,14 +469,14 @@ public class ByteArray
 	@Override
 	protected ByteArray abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer, int header) {
 		return new ByteArray(this.bytes, length, rangeOffset, this.reverse, trailer, header,
-			   rangeLength, this.bitReversed);
+							 rangeLength, this.bitReversed);
 	}
 
 	@Override
 	protected ByteArray abstractReverse() {
 		// switch trailer and header
 		return new ByteArray(this.bytes, this.length, this.rangeOffset, !this.reverse, this.header, this.trailer,
-			   this.rangeLength, this.bitReversed);
+							 this.rangeLength, this.bitReversed);
 	}
 
 	// This method has been optimized for performance (and is therefore more complicated than necessary)
@@ -597,10 +597,10 @@ public class ByteArray
 		if (leftIndex > leftDiv && rightIndex > rightDiv) {
 			return ALL_ONE;
 		}
-		byte mask1 = (leftIndex == leftDiv) ?
-			   MathUtil.shiftLeft(ALL_ONE, MathUtil.modulo(leftOffset, Byte.SIZE)) : ALL_ONE;
-		byte mask2 = (rightIndex == rightDiv) ?
-			   MathUtil.shiftRight(ALL_ONE, MathUtil.modulo(rightOffset, Byte.SIZE)) : ALL_ONE;
+		byte mask1 = (leftIndex == leftDiv)
+			   ? MathUtil.shiftLeft(ALL_ONE, MathUtil.modulo(leftOffset, Byte.SIZE)) : ALL_ONE;
+		byte mask2 = (rightIndex == rightDiv)
+			   ? MathUtil.shiftRight(ALL_ONE, MathUtil.modulo(rightOffset, Byte.SIZE)) : ALL_ONE;
 		return MathUtil.and(mask1, mask2);
 	}
 

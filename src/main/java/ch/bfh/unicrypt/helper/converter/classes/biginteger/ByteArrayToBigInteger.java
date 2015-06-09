@@ -59,6 +59,7 @@ import java.math.BigInteger;
  */
 public class ByteArrayToBigInteger
 	   extends AbstractBigIntegerConverter<ByteArray> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final int blockLength;
@@ -127,7 +128,7 @@ public class ByteArrayToBigInteger
 	 * @return
 	 */
 	@Override
-	public BigInteger abstractConvert(ByteArray byteArray) {
+	protected BigInteger abstractConvert(ByteArray byteArray) {
 		BigInteger blockSize = MathUtil.powerOfTwo(this.blockLength * Byte.SIZE);
 
 		// compute the total number of shorter byte arrays
@@ -142,7 +143,7 @@ public class ByteArrayToBigInteger
 	}
 
 	@Override
-	public ByteArray abstractReconvert(BigInteger value) {
+	protected ByteArray abstractReconvert(BigInteger value) {
 		BigInteger blockSize = MathUtil.powerOfTwo(this.blockLength * Byte.SIZE);
 
 		// subtract the total number of shorter byte arrays
