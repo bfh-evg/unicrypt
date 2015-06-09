@@ -99,8 +99,8 @@ public abstract class ByteTree
 	public final ByteArray getByteArray() {
 		if (this.byteArray == null) {
 			ByteBuffer buffer = ByteBuffer.allocate(this.length);
-			ByteArray byteArray = new SafeByteArray(buffer.array());
-			this.constructByteArray(buffer, byteArray);
+			ByteArray sbArray = new SafeByteArray(buffer.array());
+			this.constructByteArray(buffer, sbArray);
 		}
 		return this.byteArray;
 	}

@@ -74,8 +74,10 @@ public class DSASignatureScheme<MS extends Set>
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
 
-	protected DSASignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator, ElementHashMethod hashMethod) {
-		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(), hashMethod);
+	protected DSASignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator,
+		   ElementHashMethod hashMethod) {
+		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(),
+																				   hashMethod);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
 	}
@@ -131,7 +133,8 @@ public class DSASignatureScheme<MS extends Set>
 		return DSASignatureScheme.getInstance(messageSpace, cyclicGroup, ElementHashMethod.getInstance());
 	}
 
-	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup, ElementHashMethod hashMethod) {
+	public static <MS extends Set> DSASignatureScheme
+	   getInstance(MS messageSpace, CyclicGroup cyclicGroup, ElementHashMethod hashMethod) {
 		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -142,8 +145,10 @@ public class DSASignatureScheme<MS extends Set>
 		return DSASignatureScheme.getInstance(messageSpace, generator, ElementHashMethod.getInstance());
 	}
 
-	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, Element generator, ElementHashMethod hashMethod) {
-		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator() || hashMethod == null) {
+	public static <MS extends Set> DSASignatureScheme
+	   getInstance(MS messageSpace, Element generator, ElementHashMethod hashMethod) {
+		if (messageSpace == null || generator == null || !generator.getSet().isCyclic()
+			   || !generator.isGenerator() || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 		return new DSASignatureScheme<MS>(messageSpace, (CyclicGroup) generator.getSet(), generator, hashMethod);

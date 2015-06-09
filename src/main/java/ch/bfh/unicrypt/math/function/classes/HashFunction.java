@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
-import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -68,6 +66,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class HashFunction
 	   extends AbstractFunction<HashFunction, Set, Element, FixedByteArraySet, FiniteByteArrayElement> {
+	private static final long serialVersionUID = 1L;
 
 	private final ElementHashMethod hashMethod;
 

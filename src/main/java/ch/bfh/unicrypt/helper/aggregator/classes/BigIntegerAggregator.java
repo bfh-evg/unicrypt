@@ -59,6 +59,7 @@ public class BigIntegerAggregator
 	   extends AbstractAggregator<BigInteger> {
 
 	private static BigIntegerAggregator instance = null;
+	private static final long serialVersionUID = 1L;
 
 	private BigIntegerAggregator() {
 		super(BigInteger.class);

@@ -136,7 +136,8 @@ public class RSASignatureScheme<MS extends Set>
 		return RSASignatureScheme.getInstance(messageSpace, zMod, ElementHashMethod.getInstance());
 	}
 
-	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZMod zMod, ElementHashMethod hashMethod) {
+	public static <MS extends Set> RSASignatureScheme
+	   getInstance(MS messageSpace, ZMod zMod, ElementHashMethod hashMethod) {
 		if (messageSpace == null || zMod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -157,7 +158,8 @@ public class RSASignatureScheme<MS extends Set>
 		return RSASignatureScheme.getInstance(messageSpace, key.getSet());
 	}
 
-	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZModElement key, ElementHashMethod hashMethod) {
+	public static <MS extends Set> RSASignatureScheme
+	   getInstance(MS messageSpace, ZModElement key, ElementHashMethod hashMethod) {
 		if (messageSpace == null || key == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}

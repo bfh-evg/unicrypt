@@ -42,15 +42,11 @@
 package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import java.util.Iterator;
-import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.iterable.IterableArray;
-import java.util.Collection;
 
 /**
  * This abstract class serves as a base implementation for the {@link Aggregator} interface.
@@ -74,7 +70,6 @@ public abstract class AbstractAggregator<V>
 		return this.aggregatorClass;
 	}
 
-	@Override
 	public V aggregate(Tree<V> tree) {
 		if (tree == null) {
 			throw new IllegalArgumentException();
@@ -94,7 +89,7 @@ public abstract class AbstractAggregator<V>
 			public Iterator<V> iterator() {
 				return new Iterator<V>() {
 
-					Iterator<Tree<V>> childrenIterator = node.getChildren().iterator();
+					private Iterator<Tree<V>> childrenIterator = node.getChildren().iterator();
 
 					@Override
 					public boolean hasNext() {
@@ -132,7 +127,7 @@ public abstract class AbstractAggregator<V>
 				public Iterator<Tree<V>> iterator() {
 					return new Iterator<Tree<V>>() {
 
-						Iterator<V> valueIterator = abstractDisaggregateNode(value).iterator();
+						private Iterator<V> valueIterator = abstractDisaggregateNode(value).iterator();
 
 						@Override
 						public boolean hasNext() {

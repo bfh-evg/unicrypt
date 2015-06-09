@@ -79,7 +79,8 @@ public class FixedByteArrayHashingScheme<MS extends Set>
 		return FixedByteArrayHashingScheme.<ByteArrayMonoid>getInstance(ByteArrayMonoid.getInstance(), hashMethod);
 	}
 
-	public static <MS extends Set> FixedByteArrayHashingScheme getInstance(MS messageSpace, ElementHashMethod hashMethod) {
+	public static <MS extends Set>
+	   FixedByteArrayHashingScheme getInstance(MS messageSpace, ElementHashMethod hashMethod) {
 		if (messageSpace == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}

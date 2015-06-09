@@ -60,6 +60,7 @@ public class StringAggregator
 	   extends AbstractAggregator<String> {
 
 	private static StringAggregator defaultInstance = null;
+	private static final long serialVersionUID = 1L;
 
 	private final char quoteCharacter;
 	private final char openingParenthesis;
@@ -67,7 +68,8 @@ public class StringAggregator
 	private final char separator;
 	private final char escapeCharacter;
 
-	private StringAggregator(char quoteCharacter, char openingParenthesis, char closingParenthesis, char separator, char escapeCharacter) {
+	private StringAggregator(char quoteCharacter, char openingParenthesis, char closingParenthesis, char separator,
+		   char escapeCharacter) {
 		super(String.class);
 		this.quoteCharacter = quoteCharacter;
 		this.openingParenthesis = openingParenthesis;

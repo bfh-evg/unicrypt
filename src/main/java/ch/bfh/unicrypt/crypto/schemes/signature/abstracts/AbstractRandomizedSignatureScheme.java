@@ -69,7 +69,8 @@ public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME exten
 
 	protected final RS randomizationSpace;
 
-	public AbstractRandomizedSignatureScheme(MS messageSpace, SS signatureSpace, RS randomizationSpace, ElementHashMethod hashMethod) {
+	public AbstractRandomizedSignatureScheme(MS messageSpace, SS signatureSpace, RS randomizationSpace,
+		   ElementHashMethod hashMethod) {
 		super(messageSpace, signatureSpace, hashMethod);
 		this.randomizationSpace = randomizationSpace;
 	}

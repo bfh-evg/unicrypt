@@ -82,8 +82,10 @@ public class SchnorrSignatureScheme<MS extends Set>
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
 
-	protected SchnorrSignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator, ElementHashMethod hashMethod) {
-		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(), hashMethod);
+	protected SchnorrSignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator,
+		   ElementHashMethod hashMethod) {
+		super(messageSpace,
+			  ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(), hashMethod);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
 	}
@@ -173,7 +175,8 @@ public class SchnorrSignatureScheme<MS extends Set>
 		return SchnorrSignatureScheme.getInstance(messageSpace, cyclicGroup, ElementHashMethod.getInstance());
 	}
 
-	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup, ElementHashMethod hashMethod) {
+	public static <MS extends Set> SchnorrSignatureScheme
+	   getInstance(MS messageSpace, CyclicGroup cyclicGroup, ElementHashMethod hashMethod) {
 		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -184,8 +187,10 @@ public class SchnorrSignatureScheme<MS extends Set>
 		return SchnorrSignatureScheme.getInstance(messageSpace, generator, ElementHashMethod.getInstance());
 	}
 
-	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, Element generator, ElementHashMethod hashMethod) {
-		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator() || hashMethod == null) {
+	public static <MS extends Set> SchnorrSignatureScheme
+	   getInstance(MS messageSpace, Element generator, ElementHashMethod hashMethod) {
+		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()
+			   || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 		return new SchnorrSignatureScheme<MS>(messageSpace, (CyclicGroup) generator.getSet(), generator, hashMethod);
