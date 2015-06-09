@@ -54,6 +54,7 @@ import java.math.BigInteger;
 public abstract class AbstractBigIntegerConverter<V extends Object>
 	   extends AbstractConverter<V, BigInteger>
 	   implements BigIntegerConverter<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected AbstractBigIntegerConverter(Class<V> inputClass) {
 		super(inputClass, BigInteger.class);

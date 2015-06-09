@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBitArrayConverter;
  */
 public class BitArrayToBitArray
 	   extends AbstractBitArrayConverter<BitArray> {
+	private static final long serialVersionUID = 1L;
 
 	private final boolean reverse;
 

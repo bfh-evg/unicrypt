@@ -70,11 +70,13 @@ public class HybridRandomByteSequence
 	 * @param forwardSecurityInBytes
 	 * @param backwardSecurityInBytes
 	 */
-	protected HybridRandomByteSequence(final HashAlgorithm hashAlgorithm, final int forwardSecurityInBytes, final int backwardSecurityInBytes) {
+	protected HybridRandomByteSequence(final HashAlgorithm hashAlgorithm, final int forwardSecurityInBytes,
+		   final int backwardSecurityInBytes) {
 		super(hashAlgorithm, forwardSecurityInBytes, ByteArray.getInstance());
 
 		this.backwardSecurityInBytes = backwardSecurityInBytes;
-		HybridRandomByteSequence.super.setSeed(HybridRandomByteSequence.this.getDistributionSampler().getDistributionSamples(backwardSecurityInBytes));
+		HybridRandomByteSequence.super.setSeed(HybridRandomByteSequence.this.getDistributionSampler()
+			   .getDistributionSamples(backwardSecurityInBytes));
 	}
 
 	@Override
@@ -103,12 +105,15 @@ public class HybridRandomByteSequence
 	public static HybridRandomByteSequence getInstance() {
 		if (DEFAULT == null) {
 			HashAlgorithm defaultHashAlgorithm = HashAlgorithm.getInstance();
-			DEFAULT = HybridRandomByteSequence.getInstance(defaultHashAlgorithm, defaultHashAlgorithm.getByteLength() / 2, defaultHashAlgorithm.getByteLength());
+			DEFAULT = HybridRandomByteSequence.getInstance(defaultHashAlgorithm,
+														   defaultHashAlgorithm.getByteLength() / 2,
+														   defaultHashAlgorithm.getByteLength());
 		}
 		return DEFAULT;
 	}
 
-	public static HybridRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes, int securityParameterInBytes) {
+	public static HybridRandomByteSequence getInstance(HashAlgorithm hashAlgorithm, int forwardSecurityInBytes,
+		   int securityParameterInBytes) {
 		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
 		}

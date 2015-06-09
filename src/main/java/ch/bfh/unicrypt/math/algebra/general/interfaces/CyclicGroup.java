@@ -135,7 +135,8 @@ public interface CyclicGroup<V extends Object>
 	 * @param referenceRandomByteSequence
 	 * @return
 	 */
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public Tuple getIndependentGenerators(int minIndex, int maxIndex,
+		   ReferenceRandomByteSequence referenceRandomByteSequence);
 
 	/**
 	 * TODO Checks if a given element is a generator of this cyclic group.

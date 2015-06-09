@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**

@@ -54,13 +54,15 @@ import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
 abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueArray<A, V>, V extends Object>
 	   extends AbstractImmutableArray<A, V>
 	   implements DefaultValueArray<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected final V defaultValue;
 	protected int trailer; // number of trailing zeros not included in byteArray
 	protected int header; // number of leading zeros not included in byteArray
 	protected int rangeLength; // rangeLength = length - header - trailer
 
-	protected AbstractDefaultValueArray(Class valueClass, V defaultValue, int length, int rangeOffset, int rangeLength, int trailer, int header, boolean reverse) {
+	protected AbstractDefaultValueArray(Class valueClass, V defaultValue, int length, int rangeOffset, int rangeLength,
+		   int trailer, int header, boolean reverse) {
 		super(valueClass, length, rangeOffset, reverse);
 		this.defaultValue = defaultValue;
 		this.trailer = trailer;

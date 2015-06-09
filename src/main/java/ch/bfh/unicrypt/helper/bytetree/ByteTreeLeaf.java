@@ -53,6 +53,7 @@ public class ByteTreeLeaf
 	   extends ByteTree {
 
 	public static final byte IDENTIFIER = 1;
+	private static final long serialVersionUID = 1L;
 
 	private final ByteArray value;
 

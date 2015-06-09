@@ -76,7 +76,8 @@ public class PolynomialEvaluationProofSystem
 	// D = 2^(d+1) - 1 ==> d = ceil(log(D + 1)) - 1 = floor(log(D))
 	private final int d;
 
-	private PolynomialEvaluationProofSystem(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+	private PolynomialEvaluationProofSystem(final SigmaChallengeGenerator challengeGenerator,
+		   final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
 		super(challengeGenerator);
 		this.pedersenCS = pedersenCS;
 		this.polynomial = polynomial;
@@ -87,21 +88,26 @@ public class PolynomialEvaluationProofSystem
 		this.d = (int) Math.floor(Math.log(polynomial.getValue().getDegree()) / Math.log(2));
 	}
 
-	public static final PolynomialEvaluationProofSystem getInstance(final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+	public static final PolynomialEvaluationProofSystem getInstance(final PolynomialElement polynomial,
+		   final PedersenCommitmentScheme pedersenCS) {
 		if (pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+		SigmaChallengeGenerator challengeGenerator =
+			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
-	public static final PolynomialEvaluationProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+	public static final PolynomialEvaluationProofSystem
+	   getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial,
+			  final PedersenCommitmentScheme pedersenCS) {
 
 		if (challengeGenerator == null || polynomial == null || pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
 		// TBD: Check instance of ZModPrime or check whether order is prime and store a ZMod instead of ZModPrime
-		if (!(polynomial.getSet().getSemiRing() instanceof ZModPrime) || pedersenCS.getCyclicGroup().getOrder() != polynomial.getSet().getSemiRing().getOrder()) {
+		if (!(polynomial.getSet().getSemiRing() instanceof ZModPrime)
+			   || pedersenCS.getCyclicGroup().getOrder() != polynomial.getSet().getSemiRing().getOrder()) {
 			throw new IllegalArgumentException();
 		}
 		if (!challengeGenerator.getChallengeSpace().isEquivalent(pedersenCS.getMessageSpace())) {
@@ -245,7 +251,8 @@ public class PolynomialEvaluationProofSystem
 
 		Element[] xiBarVs = new Element[this.d];
 		for (int i = 0; i < xiBarVs.length; i++) {
-			xiBarVs[i] = rV.getAt(i + 1).selfApply(challenge).apply(fBarV.getAt(i).selfApply(rV.getAt(i)).invert()).apply(xiV.getAt(i));
+			xiBarVs[i] = rV.getAt(i + 1).selfApply(challenge)
+				   .apply(fBarV.getAt(i).selfApply(rV.getAt(i)).invert()).apply(xiV.getAt(i));
 		}
 		Tuple xiBarV = Tuple.getInstance(xiBarVs);
 
@@ -283,7 +290,9 @@ public class PolynomialEvaluationProofSystem
 		}
 
 		for (int i = 0; i < this.d; i++) {
-			v = v && cxVs[i + 1].apply(cV.getAt(i).selfApply(fBarV.getAt(i).invert()).apply(cfuV.getAt(i))).isEquivalent(this.pedersenCS.commit(zModPrime.getZeroElement(), xiBarV.getAt(i)));
+			v = v && cxVs[i + 1].apply(cV.getAt(i).selfApply(fBarV.getAt(i).invert())
+				   .apply(cfuV.getAt(i))).isEquivalent(
+						  this.pedersenCS.commit(zModPrime.getZeroElement(), xiBarV.getAt(i)));
 		}
 
 		Element left = publicInput.getSecond().selfApply(challenge.power(this.d + 1));
@@ -331,7 +340,8 @@ public class PolynomialEvaluationProofSystem
 				// left node
 				int nextDegree = degree + (int) Math.pow(2, level - 1);
 				if (nextDegree <= polynomial.getValue().getDegree()) {
-					PolynomialElement yPoly = polynomial.getSet().getElement(Tuple.getInstance(fV.getAt(level - 1), uV.getAt(level - 1)));
+					PolynomialElement yPoly =
+						   polynomial.getSet().getElement(Tuple.getInstance(fV.getAt(level - 1), uV.getAt(level - 1)));
 					Node1 left = new Node1(level - 1, nextDegree, poly.multiply(yPoly), uV, fV, result);
 				}
 			}
@@ -360,7 +370,8 @@ public class PolynomialEvaluationProofSystem
 				// left node
 				int nextDegree = degree + (int) Math.pow(2, level - 1);
 				if (nextDegree <= polynomial.getValue().getDegree()) {
-					Node2 left = new Node2(level - 1, nextDegree, value.multiply(fBarV.getAt(level - 1)), fBarV, x, result);
+					Node2 left =
+						   new Node2(level - 1, nextDegree, value.multiply(fBarV.getAt(level - 1)), fBarV, x, result);
 				}
 			}
 		}

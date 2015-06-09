@@ -52,6 +52,7 @@ import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 public class AbstractKeyGenerator
 	   extends UniCrypt
 	   implements KeyGenerator {
+	private static final long serialVersionUID = 1L;
 
 	// needed to convert password into seed
 	protected StringToByteArray converter;

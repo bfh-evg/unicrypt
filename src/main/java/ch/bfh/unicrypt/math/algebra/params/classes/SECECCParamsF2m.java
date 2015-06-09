@@ -165,7 +165,7 @@ public enum SECECCParamsF2m
 				  "03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE661CE18FF55987308059B186823851EC7DD9CA1161DE93D5174D66E8382E9BB2FE84E47",
 				  "2");
 
-	public String polynom, a, b, gx, gy, order, h;
+	private String polynom, a, b, gx, gy, order, h;
 
 	private SECECCParamsF2m(String polynom, String a, String b, String gx,
 		   String gy, String order, String h) {
@@ -214,22 +214,22 @@ public enum SECECCParamsF2m
 
 	@Override
 	public PolynomialElement getA() {
-		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(a).getValue());
+		return getFiniteField().getElement(getPolynomeFromString(a).getValue());
 	}
 
 	@Override
 	public PolynomialElement getB() {
-		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(b).getValue());
+		return getFiniteField().getElement(getPolynomeFromString(b).getValue());
 	}
 
 	@Override
 	public PolynomialElement getGx() {
-		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(gx).getValue());
+		return getFiniteField().getElement(getPolynomeFromString(gx).getValue());
 	}
 
 	@Override
 	public PolynomialElement getGy() {
-		return (PolynomialElement) getFiniteField().getElement(getPolynomeFromString(gy).getValue());
+		return getFiniteField().getElement(getPolynomeFromString(gy).getValue());
 	}
 
 	@Override

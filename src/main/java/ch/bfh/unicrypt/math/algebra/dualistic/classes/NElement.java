@@ -52,6 +52,7 @@ import java.math.BigInteger;
 public class NElement
 	   extends AbstractDualisticElement<N, NElement, BigInteger>
 	   implements DualisticElement<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	protected NElement(final N n, final BigInteger value) {
 		super(n, value);

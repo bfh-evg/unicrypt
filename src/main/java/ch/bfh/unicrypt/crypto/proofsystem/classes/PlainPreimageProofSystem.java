@@ -60,12 +60,15 @@ public class PlainPreimageProofSystem
 	}
 
 	public static PlainPreimageProofSystem getInstance(final Element proverId, final Function proofFunction) {
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator =
+			   RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return PlainPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
-	public static PlainPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction) {
-		if (challengeGenerator == null || proofFunction == null || !proofFunction.getDomain().isSemiGroup() || !proofFunction.getCoDomain().isSemiGroup()) {
+	public static PlainPreimageProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
+		   final Function proofFunction) {
+		if (challengeGenerator == null || proofFunction == null || !proofFunction.getDomain().isSemiGroup()
+			   || !proofFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
 		}
 		if (PlainPreimageProofSystem.checkChallengeSpace(challengeGenerator, proofFunction)) {
@@ -74,5 +77,4 @@ public class PlainPreimageProofSystem
 
 		return new PlainPreimageProofSystem(challengeGenerator, proofFunction);
 	}
-
 }

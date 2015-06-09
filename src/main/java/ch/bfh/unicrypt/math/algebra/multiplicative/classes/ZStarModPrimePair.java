@@ -56,6 +56,7 @@ public class ZStarModPrimePair
 	   extends ZStarMod {
 
 	private final static Map<BigInteger, ZStarModPrimePair> instances = new HashMap<BigInteger, ZStarModPrimePair>();
+	private static final long serialVersionUID = 1L;
 
 	protected ZStarModPrimePair(PrimePair primePair) {
 		super(primePair);

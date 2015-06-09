@@ -96,7 +96,9 @@ public abstract class AbstractSecretKeyGenerator<KS extends Set, KE extends Elem
 		//According to http://en.wikipedia.org/wiki/PBKDF2 the feedback should at least be repeated 1000 times.
 		OutputFeedbackRandomByteSequence pseudoRandomByteSequence = OutputFeedbackRandomByteSequence.getInstance(seed);
 		for (int i = 0; i < 1000; i++) {
-			pseudoRandomByteSequence.setSeed(pseudoRandomByteSequence.getNextByteArray(pseudoRandomByteSequence.getForwardSecurityInBytes()));
+			pseudoRandomByteSequence.setSeed(
+				   pseudoRandomByteSequence.getNextByteArray(
+						  pseudoRandomByteSequence.getForwardSecurityInBytes()));
 		}
 		return this.generateSecretKey(pseudoRandomByteSequence);
 	}

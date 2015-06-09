@@ -57,6 +57,7 @@ public class BitArrayToString
 
 	// used to check strings before reconverting
 	private static final String REGEXP = "^[0-1]*$";
+	private static final long serialVersionUID = 1L;
 
 	// a flag indicating the mode of operation (left-to-right / right-to-left)
 	private final boolean reverse;

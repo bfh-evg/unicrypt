@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
-import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -58,6 +58,7 @@ import java.math.BigInteger;
  */
 public class FiniteByteArraySet
 	   extends AbstractSet<FiniteByteArrayElement, ByteArray> {
+	private static final long serialVersionUID = 1L;
 
 	private final int minLength;
 	private final int maxLength;
@@ -121,8 +122,10 @@ public class FiniteByteArraySet
 
 	@Override
 	protected FiniteByteArrayElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		// this seems to be unnecessarly complicated, but is needed to generate shorter byte arrays with equal probability
-		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+		// this seems to be unnecessarly complicated, but is needed to generate shorter
+		// byte arrays with equal probability
+		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator()
+			   .nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 
 	@Override

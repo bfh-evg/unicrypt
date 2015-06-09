@@ -54,9 +54,12 @@ import java.util.HashMap;
  * @author rolfhaenni
  */
 public class PolynomialElement
-	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement, Polynomial<? extends DualisticElement<BigInteger>>> {
+	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement,
+	   Polynomial<? extends DualisticElement<BigInteger>>> {
+	private static final long serialVersionUID = 1L;
 
-	protected PolynomialElement(final PolynomialSemiRing semiRing, Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
+	protected PolynomialElement(final PolynomialSemiRing semiRing,
+		   Polynomial<? extends DualisticElement<BigInteger>> polynomial) {
 		super(semiRing, polynomial);
 	}
 
@@ -70,7 +73,8 @@ public class PolynomialElement
 			if (semiRing.getZeroElement().isEquivalent(element)) {
 				return this.getValue().getCoefficient(0);
 			} else {
-				return (this.getValue().countCoefficients() % 2) == 0 ? semiRing.getZeroElement() : semiRing.getOneElement();
+				return (this.getValue().countCoefficients() % 2) == 0
+					   ? semiRing.getZeroElement() : semiRing.getOneElement();
 			}
 		}
 

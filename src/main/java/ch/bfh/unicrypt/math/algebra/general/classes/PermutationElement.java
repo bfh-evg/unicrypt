@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.Permutation;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.helper.Permutation;
 
 /**
  *
@@ -52,6 +52,7 @@ import ch.bfh.unicrypt.helper.Permutation;
 public class PermutationElement
 	   extends AbstractElement<PermutationGroup, PermutationElement, Permutation>
 	   implements Element<Permutation> {
+	private static final long serialVersionUID = 1L;
 
 	protected PermutationElement(final PermutationGroup group, final Permutation permutation) {
 		super(group, permutation);

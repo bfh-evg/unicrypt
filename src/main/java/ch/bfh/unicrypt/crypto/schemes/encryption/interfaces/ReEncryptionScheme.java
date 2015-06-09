@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.crypto.schemes.encryption.interfaces;
 
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
@@ -80,7 +80,8 @@ public interface ReEncryptionScheme
 	 * @param randomGenerator
 	 * @return
 	 */
-	public Element reEncrypt(final Element encryptionKey, final Element ciphertext, RandomByteSequence randomByteSequence);
+	public Element reEncrypt(final Element encryptionKey, final Element ciphertext,
+		   RandomByteSequence randomByteSequence);
 
 	/**
 	 *

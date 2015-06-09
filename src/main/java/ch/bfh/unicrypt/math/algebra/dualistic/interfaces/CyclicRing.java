@@ -72,6 +72,7 @@ public interface CyclicRing<V extends Object>
 	public DualisticElement<V> getIndependentGenerator(int index);
 
 	@Override
-	public DualisticElement<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public DualisticElement<V> getIndependentGenerator(int index,
+		   ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

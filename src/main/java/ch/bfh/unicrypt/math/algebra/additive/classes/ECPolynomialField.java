@@ -58,7 +58,8 @@ import java.math.BigInteger;
  * @author Christian Lutz
  */
 public class ECPolynomialField
-	   extends AbstractEC<PolynomialField, Polynomial<? extends DualisticElement<BigInteger>>, PolynomialElement, ECPolynomialElement> {
+	   extends AbstractEC<PolynomialField, Polynomial<? extends DualisticElement<BigInteger>>,
+	   PolynomialElement, ECPolynomialElement> {
 
 	/**
 	 *
@@ -77,8 +78,9 @@ public class ECPolynomialField
 	}
 
 	/**
-	 * <p>Checks if an element x is a valid x-value of an element of the elliptic curve. True only if trace(x+a+b/x^2)=0. Source: Quadratic Equations in Finite Fields of Characteristic 2
-Klaus Pommerening</p>
+	 * <p>Checks if an element x is a valid x-value of an element of the elliptic curve.
+	 * True only if trace(x+a+b/x^2)=0.<br>
+	 * Source: Quadratic Equations in Finite Fields of Characteristic 2 Klaus Pommerening</p>
 	 */
 	@Override
 	protected boolean abstractContains(PolynomialElement x) {
@@ -102,7 +104,7 @@ Klaus Pommerening</p>
 
 	/**
 	 * Return the two possible y-coordinates for a given valid x-coordinate
-	 * The procedure is described in "Mapping an Arbitrary Message to an 
+	 * The procedure is described in "Mapping an Arbitrary Message to an
 	 * Elliptic Curve when Defined over GF (2 n )" p.172
 	 * <p>
 	 * @param x x-coordinate of point
@@ -235,7 +237,8 @@ Klaus Pommerening</p>
 	 * @return
 	 * @throws Exception
 	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b,
+		   BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, givenOrder, coFactor);
 
 		if (newInstance.isValid()) {
@@ -258,7 +261,8 @@ Klaus Pommerening</p>
 	 * @return
 	 * @throws Exception
 	 */
-	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b, PolynomialElement gx, PolynomialElement gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECPolynomialField getInstance(PolynomialField f, PolynomialElement a, PolynomialElement b,
+		   PolynomialElement gx, PolynomialElement gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECPolynomialField newInstance = new ECPolynomialField(f, a, b, gx, gy, givenOrder, coFactor);
 
 		if (newInstance.isValid()) {
@@ -285,8 +289,8 @@ Klaus Pommerening</p>
 
 	/**
 	 * <p>Returns the trace of an polynomial of characteristic 2
-	 * Source;: Quadratic Equations in Finite Fields of 
-	 * Characteristic 2 Klaus Pommerening 
+	 * Source;: Quadratic Equations in Finite Fields of
+	 * Characteristic 2 Klaus Pommerening
 	 * May 2000 – english version February 2012, Page 2</p>
 	 * <p>
 	 * @param x
@@ -298,14 +302,14 @@ Klaus Pommerening</p>
 		int deg = ec.getFiniteField().getDegree();
 		PolynomialElement trace=x;
 		PolynomialElement tmp=x;
-		
+
 		for (int i = 1; i < deg; i++) {
 			tmp=tmp.square();
 			trace=trace.add(tmp);
 		}
-				
+
 		DualisticElement<BigInteger> trace_Dualistic=trace.getValue().getCoefficient(0);
-		return trace_Dualistic;	
+		return trace_Dualistic;
 	}
 
 }

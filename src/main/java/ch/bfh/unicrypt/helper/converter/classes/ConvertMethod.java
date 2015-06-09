@@ -58,6 +58,7 @@ import java.util.Map;
  */
 public class ConvertMethod<W extends Object>
 	   extends UniCrypt {
+	private static final long serialVersionUID = 1L;
 
 	// a map for storing the converters
 	private final Map<Class<?>, Converter<?, W>> converterMap;

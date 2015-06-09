@@ -58,6 +58,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class RandomFunction
 	   extends AbstractFunction<RandomFunction, SingletonGroup, SingletonElement, Set, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private RandomFunction(final Set coDomain) {
 		super(SingletonGroup.getInstance(), coDomain);

@@ -61,13 +61,16 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @param <VKS> Verification key space
  * @param <KG>  Key generator
  */
-public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SKS extends Set, VKS extends Set, KG extends KeyPairGenerator>
+public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set,
+	   SE extends Element, RS extends Set, SKS extends Set, VKS extends Set, KG extends KeyPairGenerator>
 	   extends AbstractSignatureScheme<MS, ME, SS, SE, SKS, VKS, KG>
 	   implements RandomizedSignatureScheme {
+	private static final long serialVersionUID = 1L;
 
 	protected final RS randomizationSpace;
 
-	public AbstractRandomizedSignatureScheme(MS messageSpace, SS signatureSpace, RS randomizationSpace, ElementHashMethod hashMethod) {
+	public AbstractRandomizedSignatureScheme(MS messageSpace, SS signatureSpace, RS randomizationSpace,
+		   ElementHashMethod hashMethod) {
 		super(messageSpace, signatureSpace, hashMethod);
 		this.randomizationSpace = randomizationSpace;
 	}

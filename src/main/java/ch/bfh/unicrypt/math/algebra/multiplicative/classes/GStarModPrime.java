@@ -54,7 +54,9 @@ import java.util.Map;
 public class GStarModPrime
 	   extends GStarMod {
 
-	private final static Map<BigInteger, Map<BigInteger, GStarModPrime>> instanceMaps = new HashMap<BigInteger, Map<BigInteger, GStarModPrime>>();
+	private final static Map<BigInteger, Map<BigInteger, GStarModPrime>> instanceMaps =
+		   new HashMap<BigInteger, Map<BigInteger, GStarModPrime>>();
+	private static final long serialVersionUID = 1L;
 
 	protected GStarModPrime(Prime modulus, Prime orderFactor) {
 		super(modulus, orderFactor);

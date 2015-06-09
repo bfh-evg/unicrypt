@@ -56,6 +56,7 @@ import java.util.Iterator;
 public class Tuple
 	   extends AbstractElement<ProductSet, Tuple, DenseArray<Element>>
 	   implements NestedArray<Element> {
+	private static final long serialVersionUID = 1L;
 
 	protected Tuple(final ProductSet set, final DenseArray<Element> elements) {
 		super(set, elements);
@@ -163,7 +164,8 @@ public class Tuple
 
 	@Override
 	public Tuple extractRange(int fromIndex, int toIndex) {
-		return Tuple.getInstance(this.getSet().extractRange(fromIndex, toIndex), this.getValue().extractRange(fromIndex, toIndex));
+		return Tuple.getInstance(this.getSet().extractRange(fromIndex, toIndex),
+								 this.getValue().extractRange(fromIndex, toIndex));
 	}
 
 	@Override
@@ -183,7 +185,8 @@ public class Tuple
 
 	@Override
 	public Tuple removeRange(int fromIndex, int toIndex) {
-		return Tuple.getInstance(this.getSet().removeRange(fromIndex, toIndex), this.getValue().removeRange(fromIndex, toIndex));
+		return Tuple.getInstance(this.getSet().removeRange(fromIndex, toIndex),
+								 this.getValue().removeRange(fromIndex, toIndex));
 	}
 
 	@Override
@@ -193,7 +196,8 @@ public class Tuple
 
 	@Override
 	public Tuple insertAt(int index, Element element) {
-		return Tuple.getInstance(this.getSet().insertAt(index, element.getSet()), this.getValue().insertAt(index, element));
+		return Tuple.getInstance(this.getSet().insertAt(index, element.getSet()),
+								 this.getValue().insertAt(index, element));
 	}
 
 	@Override
@@ -208,7 +212,8 @@ public class Tuple
 
 	@Override
 	public Tuple replaceAt(int index, Element element) {
-		return Tuple.getInstance(this.getSet().replaceAt(index, element.getSet()), this.getValue().replaceAt(index, element));
+		return Tuple.getInstance(this.getSet().replaceAt(index, element.getSet()),
+								 this.getValue().replaceAt(index, element));
 	}
 
 	@Override

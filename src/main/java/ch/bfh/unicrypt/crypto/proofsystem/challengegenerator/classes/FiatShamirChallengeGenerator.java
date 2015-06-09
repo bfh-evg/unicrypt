@@ -114,7 +114,8 @@ public class FiatShamirChallengeGenerator
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
 		   Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirChallengeGenerator.getInstance(challengeSpace, proverId, ElementHashMethod.getInstance(), converter);
+		return FiatShamirChallengeGenerator
+			   .getInstance(challengeSpace, proverId, ElementHashMethod.getInstance(), converter);
 	}
 
 	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, ElementHashMethod hashMethod,
@@ -122,7 +123,8 @@ public class FiatShamirChallengeGenerator
 		return FiatShamirChallengeGenerator.getInstance(challengeSpace, (Element) null, hashMethod, converter);
 	}
 
-	public static FiatShamirChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, ElementHashMethod hashMethod,
+	public static FiatShamirChallengeGenerator
+	   getInstance(ZMod challengeSpace, Element proverId, ElementHashMethod hashMethod,
 		   Converter<ByteArray, BigInteger> converter) {
 		if (challengeSpace == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();

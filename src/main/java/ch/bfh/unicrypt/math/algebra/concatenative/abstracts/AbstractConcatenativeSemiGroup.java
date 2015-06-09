@@ -59,6 +59,7 @@ import java.math.BigInteger;
 public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements ConcatenativeSemiGroup<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected final int blockLength;
 

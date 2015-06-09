@@ -65,7 +65,8 @@ public class SecureRandomSampler
 
 	private int securityParameterInBytes;
 
-	public SecureRandomSampler(DistributionSamplerCollector distributionSamplerCollector1, int minimumUpdateInMilliseconds) {
+	public SecureRandomSampler(DistributionSamplerCollector distributionSamplerCollector1,
+		   int minimumUpdateInMilliseconds) {
 		if (distributionSamplerCollector1 == null) {
 			throw new IllegalArgumentException();
 		}
@@ -88,7 +89,7 @@ public class SecureRandomSampler
 	}
 
 	@Override
-	public void setSamplingState(boolean isSampling) {
+	final public void setSamplingState(boolean isSampling) {
 		if (isSampling && sampler != null) {
 			return;
 		}
@@ -109,7 +110,7 @@ public class SecureRandomSampler
 		return this.sampler != null;
 	}
 
-	class Sampler
+	private class Sampler
 		   extends TimerTask {
 
 		@Override
@@ -126,6 +127,7 @@ public class SecureRandomSampler
 	 * @param amountOfBytes
 	 * @return ByteArrayElement containing the desired amount of 'random' bytes.
 	 */
+	@Override
 	public ByteArray getDistributionSample(int amountOfBytes) {
 		if (amountOfBytes < 1) {
 			throw new IllegalArgumentException();

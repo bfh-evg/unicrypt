@@ -57,6 +57,7 @@ import java.math.BigInteger;
 public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractMonoid<E, V>
 	   implements MultiplicativeMonoid<V> {
+	private static final long serialVersionUID = 1L;
 
 	public AbstractMultiplicativeMonoid(Class<? extends Object> valueClass) {
 		super(valueClass);

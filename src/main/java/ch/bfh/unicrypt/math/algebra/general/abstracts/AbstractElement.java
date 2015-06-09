@@ -170,7 +170,8 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Converter<V, BigInteger> converter = (Converter<V, BigInteger>) convertMethod.getConverter(this.value.getClass());
+		Converter<V, BigInteger> converter =
+			   (Converter<V, BigInteger>) convertMethod.getConverter(this.value.getClass());
 		if (converter == null) {
 			return this.getBigInteger();
 		}

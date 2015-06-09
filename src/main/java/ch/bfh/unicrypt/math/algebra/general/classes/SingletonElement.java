@@ -52,6 +52,7 @@ import java.math.BigInteger;
 public class SingletonElement
 	   extends AbstractElement<SingletonGroup, SingletonElement, BigInteger>
 	   implements Element<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	protected SingletonElement(final SingletonGroup group, BigInteger value) {
 		super(group, value);

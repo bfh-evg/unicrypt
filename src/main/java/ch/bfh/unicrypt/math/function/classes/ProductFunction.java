@@ -62,6 +62,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public final class ProductFunction
 	   extends AbstractCompoundFunction<ProductFunction, ProductSet, Tuple, ProductSet, Tuple> {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * This is the general constructor of this class. It takes a list of functions as input and produces the

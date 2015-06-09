@@ -48,14 +48,13 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-
 import java.math.BigInteger;
 
 /**
  * TODO This interface represents an elliptic curve. Its set of points creates
  * an additive group so that adding two points creates another point.
  * <p>
- * 
+ *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  *            Generic type of values stored in the elements of the elliptic
@@ -68,7 +67,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	/**
 	 * Returns the finite Field of this elliptic curve
 	 * <p>
-	 * 
+	 *
 	 * @return The finite field of this elliptic curve
 	 */
 	public FiniteField<V> getFiniteField();
@@ -76,7 +75,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	/**
 	 * Returns the co-efficient a of this elliptic curve.
 	 * <p>
-	 * 
+	 *
 	 * @return The co-efficient a
 	 */
 	public E getA();
@@ -84,7 +83,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	/**
 	 * Returns the co-efficient b of this elliptic curve.
 	 * <p>
-	 * 
+	 *
 	 * @return The co-efficient b
 	 */
 	public E getB();
@@ -92,7 +91,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	/**
 	 * Returns the cofactor of this elliptic curve.
 	 * <p>
-	 * 
+	 *
 	 * @return The cofactor
 	 */
 	public BigInteger getCoFactor();
@@ -101,7 +100,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	 * TODO Returns {@code true} if this elliptic curve lies on the given x
 	 * co-ordinate.
 	 * <p>
-	 * 
+	 *
 	 * @param xValue
 	 *            The given x value
 	 * @return {@code true} if this elliptic curve lies on the given x
@@ -115,7 +114,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	 * TODO Returns {@code true} if the given x and y value are the co-ordinates
 	 * for a point on this elliptic curve.
 	 * <p>
-	 * 
+	 *
 	 * @param xValue
 	 *            The given xValue
 	 * @param yValue
@@ -131,7 +130,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	/**
 	 * TODO Returns the corresponding point for a given x and y value.
 	 * <p>
-	 * 
+	 *
 	 * @param xValue
 	 *            The given xValue
 	 * @param yValue
@@ -142,10 +141,10 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	 *             elliptic curve
 	 */
 	public ECElement<V, E> getElement(E xValue, E yValue);
-	
+
 	public ECElement<V, E>[] getY(E xValue);
-	
-	
+
+
 	//The following methods are overwritten from AdditiveSemiGroup with an adapted return type
 
 	@Override
@@ -210,9 +209,9 @@ public interface EC<V extends Object, E extends DualisticElement<V>> extends
 	public ECElement<V, E> multiSelfApply(Element[] elements,
 			BigInteger[] amounts);
 
-	
-	
-	
+
+
+
 	// The following methods are overridden from Monoid with an adapted return
 	// type
 	@Override

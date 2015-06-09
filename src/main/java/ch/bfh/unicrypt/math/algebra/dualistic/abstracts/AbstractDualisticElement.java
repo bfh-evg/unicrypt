@@ -60,6 +60,7 @@ import java.math.BigInteger;
 public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends DualisticElement<V>, V extends Object>
 	   extends AbstractAdditiveElement<S, E, V>
 	   implements DualisticElement<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected AbstractDualisticElement(final S ring, final V value) {
 		super(ring, value);

@@ -60,6 +60,7 @@ import java.util.List;
 abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V extends Object>
 	   extends UniCrypt
 	   implements ImmutableArray<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected Class valueClass;
 	protected int length;
@@ -358,7 +359,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	public final Iterator<V> iterator() {
 		return new Iterator<V>() {
 
-			int currentIndex = 0;
+			private int currentIndex = 0;
 
 			@Override
 			public boolean hasNext() {

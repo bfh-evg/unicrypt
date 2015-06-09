@@ -45,8 +45,6 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
@@ -65,6 +63,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class AdditionFunction
 	   extends AbstractFunction<AdditionFunction, ProductSemiGroup, Tuple, AdditiveSemiGroup, AdditiveElement> {
+	private static final long serialVersionUID = 1L;
 
 	private AdditionFunction(final ProductSemiGroup domain, final AdditiveSemiGroup coDomain) {
 		super(domain, coDomain);

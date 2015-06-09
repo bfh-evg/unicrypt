@@ -44,12 +44,10 @@ package ch.bfh.unicrypt.math.algebra.additive.classes;
 import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.params.interfaces.StandardECZModParams;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-
 import java.math.BigInteger;
 
 /**
@@ -60,15 +58,17 @@ public class ECZModPrime
 	   extends AbstractEC<ZModPrime, BigInteger, ZModElement, ECZModElement> {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -5442792676496187516L;
 
-	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger givenOrder, BigInteger coFactor) {
+	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy,
+		   BigInteger givenOrder, BigInteger coFactor) {
 		super(finiteField, a, b, gx, gy, givenOrder, coFactor);
 	}
 
-	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, BigInteger givenOrder, BigInteger coFactor) {
+	protected ECZModPrime(ZModPrime finiteField, ZModElement a, ZModElement b, BigInteger givenOrder,
+		   BigInteger coFactor) {
 		super(finiteField, a, b, givenOrder, coFactor);
 	}
 
@@ -96,11 +96,12 @@ public class ECZModPrime
 	protected ECZModElement abstractGetElement(Point<ZModElement> value) {
 		return new ECZModElement(this, value);
 	}
-	
+
 	@Override
 	public ECZModElement[] getY(ZModElement xValue) {
 		ZModElement y1 = xValue.power(3).add(this.getA().multiply(xValue)).add(this.getB());
-		ZModElement y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y1.getValue(), this.getFiniteField().getModulus()));
+		ZModElement y = this.getFiniteField().getElement(MathUtil.sqrtModPrime(y1.getValue(),
+																			   this.getFiniteField().getModulus()));
 		ECZModElement e1=this.getElement(xValue, y);
 		ECZModElement e2=e1.invert();
 		ECZModElement[] e={e1,e2};
@@ -200,7 +201,7 @@ public class ECZModPrime
 		c62 = !getOrder().equals(this.getFiniteField().getModulus());
 		return c11 && c21 && c22 && c23 && c24 && c3 && c4 && c5 && c61 && c62;
 	}
-	
+
 	/**
 	 * Private method implements selfApply to check if a ECZmodElement is a valid generator
 	 * @param element
@@ -229,7 +230,8 @@ public class ECZModPrime
 	 * @return
 	 * @throws Exception
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, BigInteger givenOrder,
+		   BigInteger coFactor) throws Exception {
 
 		ECZModPrime newInstance = new ECZModPrime(f, a, b, givenOrder, coFactor);
 		if (newInstance.isValid()) {
@@ -252,7 +254,8 @@ public class ECZModPrime
 	 * @return
 	 * @throws Exception
 	 */
-	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy, BigInteger givenOrder, BigInteger coFactor) throws Exception {
+	public static ECZModPrime getInstance(ZModPrime f, ZModElement a, ZModElement b, ZModElement gx, ZModElement gy,
+		   BigInteger givenOrder, BigInteger coFactor) throws Exception {
 		ECZModPrime newInstance = new ECZModPrime(f, a, b, gx, gy, givenOrder, coFactor);
 		if (newInstance.isValid()) {
 			return newInstance;

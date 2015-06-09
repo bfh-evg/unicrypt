@@ -54,6 +54,7 @@ import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 public abstract class AbstractByteArrayConverter<V extends Object>
 	   extends AbstractConverter<V, ByteArray>
 	   implements ByteArrayConverter<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected AbstractByteArrayConverter(Class<V> inputClass) {
 		super(inputClass, ByteArray.class);

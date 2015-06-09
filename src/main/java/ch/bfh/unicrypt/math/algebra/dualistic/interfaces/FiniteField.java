@@ -32,6 +32,8 @@
  *   a written agreement between you and Bern University of Applied Sciences (BFH), Research Institute for
  *   Security in the Information Society (RISIS), E-Voting Group (EVG)
  *   Quellgasse 21, CH-2501 Biel, Switzerland.
+ *
+ *
  *   For further information contact <e-mail: unicrypt@bfh.ch>
  *
  *

@@ -62,27 +62,28 @@ public class HashAlgorithm
 	/**
 	 * The MD5 hash algorithm.
 	 */
-	public static HashAlgorithm MD5 = new HashAlgorithm("MD5");
+	public static final HashAlgorithm MD5 = new HashAlgorithm("MD5");
 
 	/**
 	 * The SHA-1 hash algorithm.
 	 */
-	public static HashAlgorithm SHA1 = new HashAlgorithm("SHA-1");
+	public static final HashAlgorithm SHA1 = new HashAlgorithm("SHA-1");
 
 	/**
 	 * The SHA-256 hash algorithm.
 	 */
-	public static HashAlgorithm SHA256 = new HashAlgorithm("SHA-256");
+	public static final HashAlgorithm SHA256 = new HashAlgorithm("SHA-256");
 
 	/**
 	 * The SHA-384 hash algorithm.
 	 */
-	public static HashAlgorithm SHA384 = new HashAlgorithm("SHA-384");
+	public static final HashAlgorithm SHA384 = new HashAlgorithm("SHA-384");
 
 	/**
 	 * The SHA-512 hash algorithm.
 	 */
-	public static HashAlgorithm SHA512 = new HashAlgorithm("SHA-512");
+	public static final HashAlgorithm SHA512 = new HashAlgorithm("SHA-512");
+	private static final long serialVersionUID = 1L;
 
 	private final MessageDigest messageDigest;
 	private final String algorithmName;

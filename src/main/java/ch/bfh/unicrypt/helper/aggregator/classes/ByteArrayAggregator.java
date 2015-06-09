@@ -69,6 +69,7 @@ public class ByteArrayAggregator
 	private static final int PREFIX_LENGTH = 1 + Integer.SIZE / Byte.SIZE;
 
 	private static ByteArrayAggregator instance = null;
+	private static final long serialVersionUID = 1L;
 
 	private ByteArrayAggregator() {
 		super(ByteArray.class);
@@ -135,7 +136,7 @@ public class ByteArrayAggregator
 			public Iterator<ByteArray> iterator() {
 				return new Iterator<ByteArray>() {
 
-					int currentIndex = PREFIX_LENGTH;
+					private int currentIndex = PREFIX_LENGTH;
 
 					@Override
 					public boolean hasNext() {

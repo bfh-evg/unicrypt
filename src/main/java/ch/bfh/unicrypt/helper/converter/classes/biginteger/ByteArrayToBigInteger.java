@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
+import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -59,6 +59,7 @@ import java.math.BigInteger;
  */
 public class ByteArrayToBigInteger
 	   extends AbstractBigIntegerConverter<ByteArray> {
+	private static final long serialVersionUID = 1L;
 
 	private final int blockLength;
 	private final int minBlocks;
@@ -107,7 +108,8 @@ public class ByteArrayToBigInteger
 
 	@Override
 	protected boolean defaultIsValidInput(ByteArray byteArray) {
-		return (byteArray.getLength() % this.blockLength) == 0 && (byteArray.getLength() / this.blockLength) >= minBlocks;
+		return (byteArray.getLength() % this.blockLength) == 0
+			   && (byteArray.getLength() / this.blockLength) >= minBlocks;
 	}
 
 	@Override

@@ -52,6 +52,7 @@ import java.math.BigInteger;
 public class ZElement
 	   extends AbstractDualisticElement<Z, ZElement, BigInteger>
 	   implements DualisticElement<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	protected ZElement(final Z z, final BigInteger value) {
 		super(z, value);

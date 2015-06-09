@@ -62,6 +62,7 @@ import java.util.Map;
  */
 public class SparseArray<V extends Object>
 	   extends AbstractDefaultValueArray<SparseArray<V>, V> {
+	private static final long serialVersionUID = 1L;
 
 	private final Map<Integer, V> map;
 
@@ -69,7 +70,8 @@ public class SparseArray<V extends Object>
 		this(map, length, 0, false, defaultValue, 0, 0, length);
 	}
 
-	private SparseArray(Map<Integer, V> map, int length, int rangeOffset, boolean reverse, V defaultValue, int trailer, int header, int rangeLength) {
+	private SparseArray(Map<Integer, V> map, int length, int rangeOffset, boolean reverse, V defaultValue, int trailer,
+		   int header, int rangeLength) {
 		super(SparseArray.class, defaultValue, length, rangeOffset, rangeLength, trailer, header, reverse);
 		this.map = map;
 		if (map.isEmpty() || (map.size() == 1 && length == rangeLength)) {
@@ -311,12 +313,15 @@ public class SparseArray<V extends Object>
 	@Override
 	protected SparseArray<V> abstractReverse() {
 		// switch trailer and header
-		return new SparseArray<V>(this.map, this.length, this.rangeOffset, !this.reverse, this.defaultValue, this.header, this.trailer, this.rangeLength);
+		return new SparseArray<V>(this.map, this.length, this.rangeOffset, !this.reverse, this.defaultValue,
+			   this.header, this.trailer, this.rangeLength);
 	}
 
 	@Override
-	protected SparseArray<V> abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer, int header) {
-		return new SparseArray<V>(this.map, length, rangeOffset, this.reverse, this.defaultValue, trailer, header, rangeLength);
+	protected SparseArray<V> abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer,
+		   int header) {
+		return new SparseArray<V>(this.map, length, rangeOffset, this.reverse, this.defaultValue, trailer, header,
+			   rangeLength);
 	}
 
 	private int getIndex(int rangeIndex) {

@@ -60,6 +60,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public final class CompositeFunction
 	   extends AbstractCompoundFunction<CompositeFunction, Set, Element, Set, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private CompositeFunction(Set domain, Set coDomain, final DenseArray<Function> functions) {
 		super(domain, coDomain, functions);

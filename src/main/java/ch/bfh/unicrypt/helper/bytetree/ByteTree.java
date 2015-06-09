@@ -86,6 +86,7 @@ public abstract class ByteTree
 
 	public final static int LENGTH_OF_INTEGER = Integer.SIZE / Byte.SIZE;
 	public final static int LENGTH_OF_PREAMBLE = LENGTH_OF_INTEGER + 1;
+	private static final long serialVersionUID = 1L;
 
 	protected ByteArray byteArray;
 	protected int length;
@@ -98,8 +99,8 @@ public abstract class ByteTree
 	public final ByteArray getByteArray() {
 		if (this.byteArray == null) {
 			ByteBuffer buffer = ByteBuffer.allocate(this.length);
-			ByteArray byteArray = new SafeByteArray(buffer.array());
-			this.constructByteArray(buffer, byteArray);
+			ByteArray sbArray = new SafeByteArray(buffer.array());
+			this.constructByteArray(buffer, sbArray);
 		}
 		return this.byteArray;
 	}
@@ -220,7 +221,7 @@ public abstract class ByteTree
 	private static Iterator<ByteArray> getByteArrayIterator(final ByteArray byteArray) {
 		return new Iterator<ByteArray>() {
 
-			ByteArray currentByteArray = byteArray;
+			private ByteArray currentByteArray = byteArray;
 
 			@Override
 			public boolean hasNext() {

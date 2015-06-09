@@ -56,6 +56,7 @@ import java.util.LinkedHashSet;
  */
 public class Subset
 	   extends AbstractSet<Element<Object>, Object> {
+	private static final long serialVersionUID = 1L;
 
 	private final Set superSet;
 	private final LinkedHashSet<Element<Object>> elementSet;

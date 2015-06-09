@@ -57,6 +57,7 @@ import java.nio.ByteOrder;
  */
 public class BigIntegerToByteArray
 	   extends AbstractByteArrayConverter<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	private final ByteOrder byteOrder;
 

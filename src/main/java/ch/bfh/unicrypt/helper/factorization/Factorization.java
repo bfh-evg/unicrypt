@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.UniCrypt;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -57,6 +57,7 @@ import java.util.Arrays;
  */
 public class Factorization
 	   extends UniCrypt {
+	private static final long serialVersionUID = 1L;
 
 	protected final BigInteger value;
 	protected final BigInteger[] primeFactors;

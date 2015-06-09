@@ -63,6 +63,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class ApplyInverseFunction
 	   extends AbstractFunction<ApplyInverseFunction, ProductGroup, Pair, Group, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private ApplyInverseFunction(final ProductGroup domain, final Group coDomain) {
 		super(domain, coDomain);

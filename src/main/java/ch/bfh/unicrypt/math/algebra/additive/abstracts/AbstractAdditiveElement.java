@@ -61,9 +61,11 @@ import java.math.BigInteger;
  * <p>
  * @author rolfhaenni
  */
-public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E extends AdditiveElement<V>, V extends Object>
+public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>,
+	   E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractElement<S, E, V>
 	   implements AdditiveElement<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected AbstractAdditiveElement(final S semiGroup, final V value) {
 		super(semiGroup, value);

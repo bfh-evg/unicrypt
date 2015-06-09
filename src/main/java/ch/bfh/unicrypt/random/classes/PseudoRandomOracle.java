@@ -55,6 +55,7 @@ public class PseudoRandomOracle
 	   extends AbstractRandomOracle {
 
 	public static final RandomOracle DEFAULT = PseudoRandomOracle.getInstance(HashAlgorithm.getInstance());
+	private static final long serialVersionUID = 1L;
 
 	private final WeakHashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
 	private final HashAlgorithm hashAlgorithm;
@@ -72,7 +73,8 @@ public class PseudoRandomOracle
 	@Override
 	protected ReferenceRandomByteSequence abstractGetReferenceRandomByteSequence(ByteArray query) {
 		if (!this.referenceRandomByteSequence.containsKey(query)) {
-			this.referenceRandomByteSequence.put(query, ReferenceRandomByteSequence.getInstance(getHashAlgorithm(), query));
+			this.referenceRandomByteSequence.put(query,
+												 ReferenceRandomByteSequence.getInstance(getHashAlgorithm(), query));
 		}
 		ReferenceRandomByteSequence referenceString = this.referenceRandomByteSequence.get(query);
 		referenceString.reset();

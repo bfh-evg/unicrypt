@@ -58,6 +58,7 @@ import java.math.BigInteger;
  */
 public class BigIntegerToString
 	   extends AbstractStringConverter<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	// a value between 2 and 36
 	private final int radix;

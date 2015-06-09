@@ -75,7 +75,8 @@ public class PolynomialMembershipProofSystem
 	final private Subset members;
 	final private PolynomialEvaluationProofSystem pepsi;
 
-	private PolynomialMembershipProofSystem(final SigmaChallengeGenerator challengeGenerator, final Subset members, final PedersenCommitmentScheme pedersenCS) {
+	private PolynomialMembershipProofSystem(final SigmaChallengeGenerator challengeGenerator, final Subset members,
+		   final PedersenCommitmentScheme pedersenCS) {
 		super(challengeGenerator);
 
 		this.members = members;
@@ -85,27 +86,34 @@ public class PolynomialMembershipProofSystem
 			roots[i++] = member;
 		}
 
-		PolynomialElement polynomial = PolynomialSemiRing.getInstance((ZModPrime) members.getSuperset()).getElementByRoots(Tuple.getInstance(roots));
+		PolynomialElement polynomial =
+			   PolynomialSemiRing.getInstance((ZModPrime) members.getSuperset())
+					  .getElementByRoots(Tuple.getInstance(roots));
 		this.pepsi = PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
-	private PolynomialMembershipProofSystem(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+	private PolynomialMembershipProofSystem(final SigmaChallengeGenerator challengeGenerator,
+		   final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
 		super(challengeGenerator);
 		this.members = null;
 		this.pepsi = PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
-	public static final PolynomialMembershipProofSystem getInstance(final Subset members, final PedersenCommitmentScheme pedersenCS) {
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+	public static final PolynomialMembershipProofSystem getInstance(final Subset members,
+		   final PedersenCommitmentScheme pedersenCS) {
+		SigmaChallengeGenerator challengeGenerator =
+			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, members, pedersenCS);
 	}
 
-	public static final PolynomialMembershipProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Subset members, final PedersenCommitmentScheme pedersenCS) {
+	public static final PolynomialMembershipProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator,
+		   final Subset members, final PedersenCommitmentScheme pedersenCS) {
 
 		if (challengeGenerator == null || members == null || pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
-		if (!(members.getSuperset() instanceof ZModPrime) || pedersenCS.getCyclicGroup().getOrder() != members.getSuperset().getOrder()) {
+		if (!(members.getSuperset() instanceof ZModPrime)
+			   || pedersenCS.getCyclicGroup().getOrder() != members.getSuperset().getOrder()) {
 			throw new IllegalArgumentException();
 		}
 		if (!challengeGenerator.getChallengeSpace().isEquivalent(pedersenCS.getMessageSpace())) {
@@ -115,17 +123,22 @@ public class PolynomialMembershipProofSystem
 		return new PolynomialMembershipProofSystem(challengeGenerator, members, pedersenCS);
 	}
 
-	public static final PolynomialMembershipProofSystem getInstance(final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+	public static final PolynomialMembershipProofSystem getInstance(final PolynomialElement polynomial,
+		   final PedersenCommitmentScheme pedersenCS) {
+		SigmaChallengeGenerator challengeGenerator =
+			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
-	public static final PolynomialMembershipProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial, final PedersenCommitmentScheme pedersenCS) {
+	public static final PolynomialMembershipProofSystem
+	   getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial,
+			  final PedersenCommitmentScheme pedersenCS) {
 
 		if (challengeGenerator == null || polynomial == null || pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
-		if (!(polynomial.getSet().getSemiRing() instanceof ZModPrime) || pedersenCS.getCyclicGroup().getOrder() != polynomial.getSet().getSemiRing().getOrder()) {
+		if (!(polynomial.getSet().getSemiRing() instanceof ZModPrime)
+			   || pedersenCS.getCyclicGroup().getOrder() != polynomial.getSet().getSemiRing().getOrder()) {
 			throw new IllegalArgumentException();
 		}
 		if (!challengeGenerator.getChallengeSpace().isEquivalent(pedersenCS.getMessageSpace())) {

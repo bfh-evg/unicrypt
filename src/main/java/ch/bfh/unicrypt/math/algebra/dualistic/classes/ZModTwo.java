@@ -53,6 +53,7 @@ public class ZModTwo
 
 	public static final ZModElement ZERO = ZModTwo.getInstance().getElement(0);
 	public static final ZModElement ONE = ZModTwo.getInstance().getElement(1);
+	private static final long serialVersionUID = 1L;
 
 	protected ZModTwo() {
 		super(Prime.getInstance(2));

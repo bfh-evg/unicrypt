@@ -51,9 +51,9 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
  * <p>
  * First, input objects may have different types, for example {@link String}, {@link BigInteger}, {@link Permutation},
  * etc. To compute hash values of such general input objects, they need to be converted to byte arrays first. Each
- * instance of {@link ElementHashMethod} provides therefore its own {@link ConvertMethod} object of type {@link ByteArray},
- * which handles the conversion. Let {@code b=bytes(x)} denote the conversion of an input {@code x} into a byte array
- * {@code b}.
+ * instance of {@link ElementHashMethod} provides therefore its own {@link ConvertMethod} object of type
+ * {@link ByteArray}, which handles the conversion. Let {@code b=bytes(x)} denote the conversion of an input
+ * {@code x} into a byte array {@code b}.
  * <p>
  * Second, input objects may have an internal structure such as a list or a tree. In this class, we consider general
  * tree-shaped structures, which can be handled in different ways when it comes to computing hash values. Three
@@ -147,7 +147,8 @@ public class ElementHashMethod
 			return false;
 		}
 		final ElementHashMethod other = (ElementHashMethod) obj;
-		return this.hashAlgorithm.equals(other.hashAlgorithm) && this.convertMethod.equals(other.convertMethod) && this.mode.equals(other.mode);
+		return this.hashAlgorithm.equals(other.hashAlgorithm) && this.convertMethod.equals(other.convertMethod)
+			   && this.mode.equals(other.mode);
 	}
 
 	/**
@@ -156,7 +157,8 @@ public class ElementHashMethod
 	 * @return The new hash method
 	 */
 	public static ElementHashMethod getInstance() {
-		return ElementHashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE);
+		return ElementHashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.<ByteArray>getInstance(),
+																		  Mode.RECURSIVE);
 	}
 
 	/**
@@ -230,7 +232,8 @@ public class ElementHashMethod
 	 * @param mode          The mode
 	 * @return The new hash method
 	 */
-	public static ElementHashMethod getInstance(HashAlgorithm hashAlgorithm, ConvertMethod<ByteArray> convertMethod, Mode mode) {
+	public static ElementHashMethod
+	   getInstance(HashAlgorithm hashAlgorithm, ConvertMethod<ByteArray> convertMethod,Mode mode) {
 		if (hashAlgorithm == null || convertMethod == null || mode == null) {
 			throw new IllegalArgumentException();
 		}

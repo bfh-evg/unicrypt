@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 public class FiniteStringElement
 	   extends AbstractElement<FiniteStringSet, FiniteStringElement, String>
 	   implements Element<String> {
+	private static final long serialVersionUID = 1L;
 
 	protected FiniteStringElement(final FiniteStringSet set, final String string) {
 		super(set, string);

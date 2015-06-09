@@ -54,8 +54,9 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class GeneratorFunction
 	   extends AbstractFunction<GeneratorFunction, ZMod, ZModElement, CyclicGroup, Element> {
+	private static final long serialVersionUID = 1L;
 
-	Element generator;
+	private Element generator;
 
 	public GeneratorFunction(ZMod domain, CyclicGroup coDomain, Element generator) {
 		super(domain, coDomain);

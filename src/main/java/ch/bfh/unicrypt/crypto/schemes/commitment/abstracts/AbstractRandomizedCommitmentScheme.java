@@ -62,7 +62,8 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
  * @param <CE> Commitment element
  * @param <RS> Randomization space
  */
-public abstract class AbstractRandomizedCommitmentScheme<MS extends Set, ME extends Element, CS extends Set, CE extends Element, RS extends Set>
+public abstract class AbstractRandomizedCommitmentScheme<MS extends Set, ME extends Element, CS extends Set,
+	   CE extends Element, RS extends Set>
 	   extends AbstractCommitmentScheme<MS, CS>
 	   implements RandomizedCommitmentScheme {
 
@@ -90,12 +91,13 @@ public abstract class AbstractRandomizedCommitmentScheme<MS extends Set, ME exte
 
 	@Override
 	protected Function abstractGetDecommitmentFunction() {
-		ProductSet decommitmentDomain = ProductSet.getInstance(this.messageSpace, this.randomizationSpace, this.commitmentSpace);
+		ProductSet decommitmentDomain =
+			   ProductSet.getInstance(this.messageSpace, this.randomizationSpace, this.commitmentSpace);
 		return CompositeFunction.getInstance(
-			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(AdapterFunction.getInstance(decommitmentDomain, 0, 1),
+			   SharedDomainFunction.getInstance(CompositeFunction
+					  .getInstance(AdapterFunction.getInstance(decommitmentDomain, 0, 1),
 																			  this.getCommitmentFunction()),
 												SelectionFunction.getInstance(decommitmentDomain, 2)),
 			   EqualityFunction.getInstance(this.getCommitmentSpace()));
 	}
-
 }

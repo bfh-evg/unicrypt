@@ -54,6 +54,7 @@ import java.math.BigInteger;
 public abstract class AbstractRandomOracle
 	   extends UniCrypt
 	   implements RandomOracle {
+	private static final long serialVersionUID = 1L;
 
 	protected AbstractRandomOracle() {
 	}

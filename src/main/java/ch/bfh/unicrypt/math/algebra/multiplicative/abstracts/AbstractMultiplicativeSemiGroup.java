@@ -57,6 +57,7 @@ import java.math.BigInteger;
 public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements MultiplicativeSemiGroup<V> {
+	private static final long serialVersionUID = 1L;
 
 	public AbstractMultiplicativeSemiGroup(Class<? extends Object> valueClass) {
 		super(valueClass);

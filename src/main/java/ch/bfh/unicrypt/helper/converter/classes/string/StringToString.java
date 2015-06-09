@@ -52,6 +52,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
  */
 public class StringToString
 	   extends AbstractStringConverter<String> {
+	private static final long serialVersionUID = 1L;
 
 	private final boolean reverse;
 

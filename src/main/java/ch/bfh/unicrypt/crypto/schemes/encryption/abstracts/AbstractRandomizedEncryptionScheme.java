@@ -61,7 +61,9 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @param <DKS> Decryption key space
  * @param <KG>  Key pair generator
  */
-public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set, EE extends Element, RS extends Set, RE extends Element, EKS extends Set, DKS extends Set, KG extends KeyPairGenerator>
+public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME extends Element, ES extends Set,
+	   EE extends Element, RS extends Set, RE extends Element, EKS extends Set, DKS extends Set,
+	   KG extends KeyPairGenerator>
 	   extends AbstractAsymmetricEncryptionScheme<MS, ME, ES, EE, EKS, DKS, KG>
 	   implements RandomizedEncryptionScheme {
 
@@ -89,7 +91,8 @@ public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME exte
 
 	@Override
 	public final EE encrypt(Element encryptionKey, Element message, Element randomization) {
-		if (!this.getEncryptionKeySpace().contains(encryptionKey) || !this.getMessageSpace().contains(message) || !this.getRandomizationSpace().contains(randomization)) {
+		if (!this.getEncryptionKeySpace().contains(encryptionKey) || !this.getMessageSpace().contains(message)
+			   || !this.getRandomizationSpace().contains(randomization)) {
 			throw new IllegalArgumentException();
 		}
 		return (EE) this.getEncryptionFunction().apply(encryptionKey, message, randomization);

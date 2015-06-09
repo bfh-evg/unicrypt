@@ -54,9 +54,11 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this finite field
  * @author rolfhaenni
  */
-public abstract class AbstractFiniteField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V extends Object>
+public abstract class AbstractFiniteField<E extends DualisticElement<V>,
+	   M extends MultiplicativeGroup, V extends Object>
 	   extends AbstractField<E, M, V>
 	   implements FiniteField<V> {
+	private static final long serialVersionUID = 1L;
 
 	private BigInteger characteristic;
 

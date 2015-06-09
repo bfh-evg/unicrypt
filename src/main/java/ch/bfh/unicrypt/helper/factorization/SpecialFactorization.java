@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.factorization;
 
 import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import java.math.BigInteger;
 
 /**
@@ -59,6 +58,7 @@ import java.math.BigInteger;
  */
 public class SpecialFactorization
 	   extends Factorization {
+	private static final long serialVersionUID = 1L;
 
 	protected SpecialFactorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {
 		super(value, primeFactors, exponents);

@@ -57,6 +57,7 @@ import java.math.BigInteger;
  */
 public class FiniteStringSet
 	   extends AbstractSet<FiniteStringElement, String> {
+	private static final long serialVersionUID = 1L;
 
 	private final Alphabet alphabet;
 	private final int minLength;
@@ -92,7 +93,8 @@ public class FiniteStringSet
 
 	@Override
 	protected boolean abstractContains(String value) {
-		return value.length() >= this.minLength && value.length() <= this.maxLength && this.getAlphabet().containsAll(value);
+		return value.length() >= this.minLength && value.length() <= this.maxLength
+			   && this.getAlphabet().containsAll(value);
 	}
 
 	@Override
@@ -117,13 +119,15 @@ public class FiniteStringSet
 
 	@Override
 	protected FiniteStringElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator()
+			   .nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 
 	@Override
 	protected boolean abstractEquals(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
-		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength && this.maxLength == other.maxLength;
+		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength
+			   && this.maxLength == other.maxLength;
 	}
 
 	@Override

@@ -56,6 +56,7 @@ public class ByteArrayToBitArray
 	   extends AbstractBitArrayConverter<ByteArray> {
 
 	private static ByteArrayToBitArray instance = null;
+	private static final long serialVersionUID = 1L;
 
 	protected ByteArrayToBitArray() {
 		super(ByteArray.class);

@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
@@ -57,9 +56,11 @@ import java.math.BigInteger;
  * @param <V> Generic type of value stored in this element
  * @author rolfhaennip
  */
-public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>, E extends ConcatenativeElement<V>, V extends Object>
+public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>,
+	   E extends ConcatenativeElement<V>, V extends Object>
 	   extends AbstractElement<S, E, V>
 	   implements ConcatenativeElement<V> {
+	private static final long serialVersionUID = 1L;
 
 	protected AbstractConcatenativeElement(final S semiGroup, final V value) {
 		super(semiGroup, value);

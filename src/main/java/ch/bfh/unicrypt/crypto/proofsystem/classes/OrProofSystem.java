@@ -73,22 +73,27 @@ public class OrProofSystem
 	}
 
 	public static OrProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
-		SigmaChallengeGenerator challengeGenerator = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator =
+			   RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return OrProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
-	public static OrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
+	public static OrProofSystem
+	   getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
 		return OrProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
 	}
 
-	public static OrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
+	public static OrProofSystem
+	   getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
 		return OrProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
 	}
 
-	public static OrProofSystem getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+	public static OrProofSystem
+	   getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
 		if (challengeGenerator == null || proofFunction == null
 			   || proofFunction.getArity() < 2
-			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator.getChallengeSpace())) {
+			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder())
+					  .isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException();
 		}
 		return new OrProofSystem(challengeGenerator, proofFunction);
@@ -116,13 +121,15 @@ public class OrProofSystem
 	@Override
 	protected ProductSet abstractGetProofSpace() {
 		return ProductSet.getInstance(this.getCommitmentSpace(),
-									  ProductSet.getInstance(this.getChallengeSpace(), this.getProofFunction().getArity()),
+									  ProductSet.getInstance(this.getChallengeSpace(),
+															 this.getProofFunction().getArity()),
 									  this.getResponseSpace());
 	}
 
 	@Override
 	protected ProductSet abstractGetPrivateInputSpace() {
-		return ProductSet.getInstance(this.getProofFunction().getDomain(), ZMod.getInstance(this.getProofFunction().getArity()));
+		return ProductSet.getInstance(this.getProofFunction().getDomain(),
+									  ZMod.getInstance(this.getProofFunction().getArity()));
 	}
 
 	@Override
@@ -131,14 +138,15 @@ public class OrProofSystem
 	}
 
 	public Pair createPrivateInput(Element secret, int index) {
-		if (index < 0 || index >= this.getProofFunction().getArity() || !this.getProofFunction().getAt(index).getDomain().contains(secret)) {
+		if (index < 0 || index >= this.getProofFunction().getArity()
+			   || !this.getProofFunction().getAt(index).getDomain().contains(secret)) {
 			throw new IllegalArgumentException();
 		}
 		Tuple domainElements = ((ProductMonoid) this.getProofFunction().getDomain()).getIdentityElement();
 		domainElements = domainElements.replaceAt(index, secret);
 
 		return (Pair) this.getPrivateInputSpace().getElement(domainElements,
-															 ZMod.getInstance(this.getProofFunction().getArity()).getElement(index));
+											ZMod.getInstance(this.getProofFunction().getArity()).getElement(index));
 	}
 
 	@Override
@@ -184,7 +192,8 @@ public class OrProofSystem
 		commitments[index] = proofFunc.getAt(index).apply(randomElement);
 
 		// - Create overall proof challenge
-		final ZModElement challenge = this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
+		final ZModElement challenge =
+			   this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
 		// - Calculate challenge based on the overall challenge and the chosen challenges for the simulated proofs
 		challenges[index] = challenge.subtract(sumOfChallenges);
 		// - finally compute response element
@@ -227,5 +236,4 @@ public class OrProofSystem
 		// Proof is valid!
 		return true;
 	}
-
 }

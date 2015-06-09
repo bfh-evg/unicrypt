@@ -58,6 +58,7 @@ import java.util.Iterator;
 public class IterableArray<T>
 	   extends UniCrypt
 	   implements Iterable<T> {
+	private static final long serialVersionUID = 1L;
 
 	private final T[] array;
 

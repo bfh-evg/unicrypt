@@ -56,6 +56,7 @@ import java.util.Iterator;
  */
 public class Leaf<V>
 	   extends Tree<V> {
+	private static final long serialVersionUID = 1L;
 
 	private final V value;
 

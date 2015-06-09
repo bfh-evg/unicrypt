@@ -63,6 +63,7 @@ import java.util.NoSuchElementException;
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
 	   extends AbstractRing<E, V>
 	   implements CyclicRing<V> {
+	private static final long serialVersionUID = 1L;
 
 	private E defaultGenerator;
 
@@ -117,7 +118,8 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	}
 
 	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
+	public final Tuple getIndependentGenerators(int minIndex, int maxIndex,
+		   ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (minIndex < 0 || maxIndex < minIndex) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -160,8 +162,8 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
 		final AbstractCyclicRing<E, V> cyclicRing = this;
 		return new Iterator<E>() {
-			BigInteger counter = BigInteger.ZERO;
-			E currentElement = cyclicRing.getIdentityElement();
+			private BigInteger counter = BigInteger.ZERO;
+			private E currentElement = cyclicRing.getIdentityElement();
 
 			@Override
 			public boolean hasNext() {
