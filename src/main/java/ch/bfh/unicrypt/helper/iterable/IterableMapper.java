@@ -39,28 +39,66 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.hash;
+package ch.bfh.unicrypt.helper.iterable;
 
-import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
+import java.util.Iterator;
 
 /**
- *
- * @author rolfhaenni
+ * This generic class applies a {@link Mapper}{@code <V,W>} to the values of an iterable collection of values of type
+ * {@code V}. The result is a new iterable collection of values of type {@code W}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the input iterable collection
+ * @param <W> The generic type of this iterable collection
+ * @see Mapper
  */
-public class ByteTreeHashMethod
-	   extends TreeHashMethod<ByteArray> {
+public class IterableMapper<V, W>
+	   implements Iterable<W> {
 
-	protected ByteTreeHashMethod(HashAlgorithm hashAlgorithm, Aggregator<ByteArray> aggregator) {
-		super(hashAlgorithm, aggregator, ByteArrayToByteArray.getInstance());
+	final private Iterable<V> values;
+	final private Mapper<V, W> mapper;
+
+	protected IterableMapper(Iterable<V> values, Mapper<V, W> mapper) {
+		this.values = values;
+		this.mapper = mapper;
 	}
 
-	public ByteTreeHashMethod getInstance(HashAlgorithm hashAlgorithm, Aggregator<ByteArray> aggregator) {
-		if (hashAlgorithm == null || aggregator == null) {
+	/**
+	 * Returns a new instance of this class, which represents the iterable collection of values obtained by applying a
+	 * given mapper to the values of a given iterable collection.
+	 * <p>
+	 * @param <V>    The generic type of the input iterable collection
+	 * @param <W>    The generic type of the new iterable collection
+	 * @param values The input iterable collection
+	 * @param mapper The mapper applied to the input values
+	 * @return The new iterable collection of type {@code W}
+	 */
+	public static <V, W> IterableMapper<V, W> getInstance(Iterable<V> values, Mapper<V, W> mapper) {
+		if (values == null || mapper == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ByteTreeHashMethod(hashAlgorithm, aggregator);
+		return new IterableMapper<V, W>(values, mapper);
+	}
+
+	@Override
+	public Iterator<W> iterator() {
+		return new Iterator<W>() {
+
+			private final Iterator<V> iterator = values.iterator();
+
+			@Override
+			public boolean hasNext() {
+				return iterator.hasNext();
+			}
+
+			@Override
+			public W next() {
+				return mapper.map(iterator.next());
+			}
+
+		};
+
 	}
 
 }

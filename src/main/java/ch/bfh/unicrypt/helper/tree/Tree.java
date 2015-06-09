@@ -64,7 +64,7 @@ public abstract class Tree<V>
 	/**
 	 * Creates a new tree of type {@code V} from an aggregated value. This method is the inverse of
 	 * {@link Tree#aggregate(Aggregator)}. Throws an exception, if the construction of the tree fails for the given
-	 * input.
+	 * input. Calling this method is identical to calling {@link Aggregator#disaggregate(Object)}.
 	 * <p>
 	 * @param <V>             The generic type of the given aggregated value and the resulting tree
 	 * @param aggregatedValue The aggregated value
@@ -79,7 +79,8 @@ public abstract class Tree<V>
 	}
 
 	/**
-	 * Aggregates the values stored in the leaves of the tree into a single value of type {@code V}.
+	 * Aggregates the values stored in the leaves of the tree into a single value of type {@code V}. Calling this method
+	 * is identical to calling {@link Aggregator#aggregate(Tree)}.
 	 * <p>
 	 * @param aggregator The aggregator specifying the conversion.
 	 * @return The aggregated value

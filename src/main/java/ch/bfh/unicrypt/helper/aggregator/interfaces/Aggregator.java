@@ -59,7 +59,7 @@ import ch.bfh.unicrypt.helper.tree.Tree;
 public interface Aggregator<V> {
 
 	/**
-	 * Aggregates a given tree into a single value.
+	 * Aggregates a given tree into a single value of type {@code V}.
 	 * <p>
 	 * @param tree The given tree
 	 * @return The resulting value
@@ -67,7 +67,9 @@ public interface Aggregator<V> {
 	public V aggregate(Tree<V> tree);
 
 	/**
-	 * Constructs a new tree from an aggregated value.
+	 * Constructs a new tree from an aggregated value. This method is the inverse of
+	 * {@link Aggregator#aggregate(Tree)}.Throws an exception, if the construction of the tree fails for the given
+	 * input.
 	 * <p>
 	 * @param value The aggregated value
 	 * @return The new tree

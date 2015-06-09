@@ -59,6 +59,27 @@ import org.junit.Test;
 public class StringAggregatorTest {
 
 	@Test
+	public void stringAggregatorTest() {
+		Tree<String> l1 = Leaf.getInstance("Hello");
+		Tree<String> l2 = Leaf.getInstance("World");
+		Tree<String> l3 = Leaf.getInstance("Universe");
+		Tree<String> n1 = Node.getInstance(l1, l2);
+		Tree<String> n2 = Node.getInstance(n1, l2);
+		Tree<String> n3 = Node.getInstance();
+		Tree<String> n4 = Node.getInstance(n1, n2, n3, l3);
+		Tree<String> n5 = Node.getInstance(n4);
+
+		StringAggregator aggregator1 = StringAggregator.getInstance();
+		StringAggregator aggregator2 = StringAggregator.getInstance('\'', '<', '>', '*', '-');
+
+		for (StringAggregator aggregator : new StringAggregator[]{aggregator1, aggregator2}) {
+			for (Tree<String> tree : new Tree[]{l1, l2, l3, n1, n2, n3, n4, n5}) {
+				Assert.assertEquals(tree, aggregator.disaggregate(aggregator.aggregate(tree)));
+			}
+		}
+	}
+
+	@Test
 	public void stringAggregatorTestLeaf() {
 
 		StringAggregator aggregator1 = StringAggregator.getInstance();
