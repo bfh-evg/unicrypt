@@ -41,6 +41,12 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
+import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.*;
+import ch.bfh.unicrypt.helper.tree.Leaf;
+import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.tree.Tree;
+import java.util.Iterator;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
@@ -54,45 +60,111 @@ import java.util.Collection;
  * @param <V> The generic type of the values precessed by the aggregator
  */
 public abstract class AbstractAggregator<V>
+	   extends UniCrypt
 	   implements Aggregator<V> {
 
+	private final Class<V> aggregatorClass;
+
+	protected AbstractAggregator(Class<V> aggregatorClass) {
+		this.aggregatorClass = aggregatorClass;
+	}
+
 	@Override
-	public final V aggregateLeaf(V value) {
+	public Class<V> getAggregatorClass() {
+		return this.aggregatorClass;
+	}
+
+	@Override
+	public V aggregate(Tree<V> tree) {
+		if (tree == null) {
+			throw new IllegalArgumentException();
+		}
+
+		// Case 1: tree is a leaf
+		if (tree.isLeaf()) {
+			Leaf<V> leaf = (Leaf<V>) tree;
+			return this.abstractAggregateLeaf(leaf.getValue());
+		}
+
+		// Case 2: tree is a node
+		final Node<V> node = (Node<V>) tree;
+		Iterable<V> values = new Iterable<V>() {
+
+			@Override
+			public Iterator<V> iterator() {
+				return new Iterator<V>() {
+
+					Iterator<Tree<V>> childrenIterator = node.getChildren().iterator();
+
+					@Override
+					public boolean hasNext() {
+						return this.childrenIterator.hasNext();
+					}
+
+					@Override
+					public V next() {
+						return aggregate(this.childrenIterator.next());
+					}
+
+				};
+			}
+		};
+		return this.abstractAggregateNode(values, node.getSize());
+	}
+
+	@Override
+	public Tree<V> disaggregate(final V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractAggregateLeaf(value);
-	}
 
-	@Override
-	public final V aggregateNode(V... values) {
-		return this.aggregateNode(IterableArray.getInstance(values));
-	}
-
-	@Override
-	public final V aggregateNode(Iterable<V> values) {
-		if (values == null) {
-			throw new IllegalArgumentException();
+		// Case 1: value represents a leaf
+		if (this.abstractIsLeaf(value)) {
+			V result = this.abstractDisaggregateLeaf(value);
+			return Leaf.getInstance(result);
 		}
-		int length;
-		if (values instanceof ImmutableArray) {
-			length = ((ImmutableArray) values).getLength();
-		} else if (values instanceof Collection) {
-			length = ((Collection) values).size();
-		} else {
-			length = 0;
-			for (V value : values) {
-				if (value == null) {
-					throw new IllegalArgumentException();
+
+		// Case 2: value represents a node
+		if (this.abstractIsNode(value)) {
+			Iterable<Tree<V>> trees = new Iterable<Tree<V>>() {
+
+				@Override
+				public Iterator<Tree<V>> iterator() {
+					return new Iterator<Tree<V>>() {
+
+						Iterator<V> valueIterator = abstractDisaggregateNode(value).iterator();
+
+						@Override
+						public boolean hasNext() {
+							return this.valueIterator.hasNext();
+						}
+
+						@Override
+						public Tree<V> next() {
+							return disaggregate(this.valueIterator.next());
+						}
+
+					};
 				}
-				length++;
-			}
+
+			};
+			return Node.getInstance(trees);
 		}
-		return this.abstractAggregateNode(values, length);
+
+		// Case 3: value represents not a leaf and not a node
+		throw new IllegalArgumentException();
 	}
+
+	protected abstract boolean abstractIsLeaf(V value);
+
+	protected abstract boolean abstractIsNode(V value);
 
 	protected abstract V abstractAggregateLeaf(V value);
 
 	protected abstract V abstractAggregateNode(Iterable<V> values, int size);
+
+	protected abstract V abstractDisaggregateLeaf(V value);
+
+	protected abstract Iterable<V> abstractDisaggregateNode(V value);
 
 }

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.classes;
 
-import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
+import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -62,13 +62,17 @@ import java.util.Iterator;
  * @version 2.0
  */
 public class ByteArrayAggregator
-	   extends AbstractInvertibleAggregator<ByteArray> {
+	   extends AbstractAggregator<ByteArray> {
 
 	private static final byte LEAF_IDENTIFIER = (byte) 0x00;
 	private static final byte NODE_IDENTIFIER = (byte) 0x01;
 	private static final int PREFIX_LENGTH = 1 + Integer.SIZE / Byte.SIZE;
 
 	private static ByteArrayAggregator instance = null;
+
+	private ByteArrayAggregator() {
+		super(ByteArray.class);
+	}
 
 	/**
 	 * Return the single instance of this class.
@@ -149,21 +153,6 @@ public class ByteArrayAggregator
 				};
 			}
 		};
-	}
-
-	// this local class allows creating instances of ByteArray without copying the underlying byte array
-	protected static class SafeByteArray
-		   extends ByteArray {
-
-		protected SafeByteArray(byte[] bytes) {
-			super(bytes);
-		}
-
-		@Override
-		public byte[] getBytes() {
-			return this.bytes;
-		}
-
 	}
 
 }

@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.crypto.schemes.encryption;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.AESEncryptionScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import junit.framework.Assert;
+import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 

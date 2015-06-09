@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import java.math.BigInteger;
 import java.nio.ByteOrder;
-import junit.framework.Assert;
+import org.junit.Assert;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 

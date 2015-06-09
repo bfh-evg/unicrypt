@@ -256,14 +256,3 @@ public abstract class ByteTree
 	}
 
 }
-
-// this local class allows creating instances of ByteArray without copying the array
-class SafeByteArray
-	   extends ByteArray {
-	private static final long serialVersionUID = 1L;
-
-	protected SafeByteArray(byte[] bytes) {
-		super(bytes);
-	}
-
-}

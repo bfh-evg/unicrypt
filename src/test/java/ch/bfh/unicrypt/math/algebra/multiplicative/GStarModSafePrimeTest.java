@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

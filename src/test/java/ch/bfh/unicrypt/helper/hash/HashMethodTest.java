@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.helper.hash;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
-import ch.bfh.unicrypt.helper.hash.HashMethod.Mode;
+import ch.bfh.unicrypt.helper.hash.ElementHashMethod.Mode;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -56,14 +56,14 @@ public class HashMethodTest {
 
 	@Test
 	public void HashMethodTest() {
-		HashMethod h1 = HashMethod.getInstance();
-		HashMethod h2 = HashMethod.getInstance(Mode.RECURSIVE);
-		HashMethod h3 = HashMethod.getInstance(HashAlgorithm.SHA256);
-		HashMethod h4 = HashMethod.getInstance(ConvertMethod.<ByteArray>getInstance());
-		HashMethod h5 = HashMethod.getInstance(HashAlgorithm.SHA256, Mode.RECURSIVE);
-		HashMethod h6 = HashMethod.getInstance(ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE);
-		HashMethod h7 = HashMethod.getInstance(HashAlgorithm.SHA256, ConvertMethod.<ByteArray>getInstance());
-		HashMethod h8 = HashMethod.getInstance(HashAlgorithm.SHA256, ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE
+		ElementHashMethod h1 = ElementHashMethod.getInstance();
+		ElementHashMethod h2 = ElementHashMethod.getInstance(Mode.RECURSIVE);
+		ElementHashMethod h3 = ElementHashMethod.getInstance(HashAlgorithm.SHA256);
+		ElementHashMethod h4 = ElementHashMethod.getInstance(ConvertMethod.<ByteArray>getInstance());
+		ElementHashMethod h5 = ElementHashMethod.getInstance(HashAlgorithm.SHA256, Mode.RECURSIVE);
+		ElementHashMethod h6 = ElementHashMethod.getInstance(ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE);
+		ElementHashMethod h7 = ElementHashMethod.getInstance(HashAlgorithm.SHA256, ConvertMethod.<ByteArray>getInstance());
+		ElementHashMethod h8 = ElementHashMethod.getInstance(HashAlgorithm.SHA256, ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE
 		);
 		assertEquals(h8, h1);
 		assertEquals(h8, h2);
@@ -79,7 +79,7 @@ public class HashMethodTest {
 		assertEquals(HashAlgorithm.SHA256, h1.getHashAlgorithm());
 
 		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance(BigIntegerToByteArray.getInstance());
-		HashMethod h = HashMethod.getInstance(HashAlgorithm.MD5, convertMethod, Mode.BYTETREE);
+		ElementHashMethod h = ElementHashMethod.getInstance(HashAlgorithm.MD5, convertMethod, Mode.BYTETREE);
 		assertEquals(convertMethod, h.getConvertMethod());
 		assertEquals(Mode.BYTETREE, h.getMode());
 		assertEquals(HashAlgorithm.MD5, h.getHashAlgorithm());

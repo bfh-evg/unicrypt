@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -82,10 +82,8 @@ public class SchnorrSignatureScheme<MS extends Set>
 	private final CyclicGroup cyclicGroup;
 	private final Element generator;
 
-	protected SchnorrSignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator,
-		   HashMethod hashMethod) {
-		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(),
-																				   hashMethod);
+	protected SchnorrSignatureScheme(MS messageSpace, CyclicGroup cyclicGroup, Element generator, ElementHashMethod hashMethod) {
+		super(messageSpace, ProductSet.getInstance(cyclicGroup.getZModOrder(), 2), cyclicGroup.getZModOrder(), hashMethod);
 		this.cyclicGroup = cyclicGroup;
 		this.generator = generator;
 	}
@@ -172,11 +170,10 @@ public class SchnorrSignatureScheme<MS extends Set>
 	}
 
 	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup) {
-		return SchnorrSignatureScheme.getInstance(messageSpace, cyclicGroup, HashMethod.getInstance());
+		return SchnorrSignatureScheme.getInstance(messageSpace, cyclicGroup, ElementHashMethod.getInstance());
 	}
 
-	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup,
-		   HashMethod hashMethod) {
+	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, CyclicGroup cyclicGroup, ElementHashMethod hashMethod) {
 		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -184,13 +181,11 @@ public class SchnorrSignatureScheme<MS extends Set>
 	}
 
 	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, Element generator) {
-		return SchnorrSignatureScheme.getInstance(messageSpace, generator, HashMethod.getInstance());
+		return SchnorrSignatureScheme.getInstance(messageSpace, generator, ElementHashMethod.getInstance());
 	}
 
-	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, Element generator,
-		   HashMethod hashMethod) {
-		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator()
-			   || hashMethod == null) {
+	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, Element generator, ElementHashMethod hashMethod) {
+		if (messageSpace == null || generator == null || !generator.getSet().isCyclic() || !generator.isGenerator() || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
 		return new SchnorrSignatureScheme<MS>(messageSpace, (CyclicGroup) generator.getSet(), generator, hashMethod);

@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
@@ -71,7 +71,7 @@ public class RSASignatureScheme<MS extends Set>
 
 	private final ZMod zMod;
 
-	protected RSASignatureScheme(MS messageSpace, ZMod zMod, HashMethod hashMethod) {
+	protected RSASignatureScheme(MS messageSpace, ZMod zMod, ElementHashMethod hashMethod) {
 		super(messageSpace, zMod, hashMethod);
 		this.zMod = zMod;
 	}
@@ -133,10 +133,10 @@ public class RSASignatureScheme<MS extends Set>
 	}
 
 	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZMod zMod) {
-		return RSASignatureScheme.getInstance(messageSpace, zMod, HashMethod.getInstance());
+		return RSASignatureScheme.getInstance(messageSpace, zMod, ElementHashMethod.getInstance());
 	}
 
-	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZMod zMod, HashMethod hashMethod) {
+	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZMod zMod, ElementHashMethod hashMethod) {
 		if (messageSpace == null || zMod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
@@ -157,8 +157,7 @@ public class RSASignatureScheme<MS extends Set>
 		return RSASignatureScheme.getInstance(messageSpace, key.getSet());
 	}
 
-	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZModElement key,
-		   HashMethod hashMethod) {
+	public static <MS extends Set> RSASignatureScheme getInstance(MS messageSpace, ZModElement key, ElementHashMethod hashMethod) {
 		if (messageSpace == null || key == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}

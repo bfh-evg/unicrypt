@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
@@ -69,8 +69,7 @@ public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME exten
 
 	protected final RS randomizationSpace;
 
-	public AbstractRandomizedSignatureScheme(MS messageSpace, SS signatureSpace, RS randomizationSpace,
-		   HashMethod hashMethod) {
+	public AbstractRandomizedSignatureScheme(MS messageSpace, SS signatureSpace, RS randomizationSpace, ElementHashMethod hashMethod) {
 		super(messageSpace, signatureSpace, hashMethod);
 		this.randomizationSpace = randomizationSpace;
 	}

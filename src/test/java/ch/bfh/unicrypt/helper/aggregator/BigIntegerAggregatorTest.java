@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.aggregator;
 
 import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
+import ch.bfh.unicrypt.helper.tree.Leaf;
 import java.math.BigInteger;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
@@ -59,32 +60,21 @@ public class BigIntegerAggregatorTest {
 		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
 		for (int i = 0; i < 100; i++) {
 			BigInteger value = BigInteger.valueOf(i);
-			BigInteger aggregatedValue = aggregator.aggregateLeaf(value);
-			Assert.assertTrue(aggregator.isLeaf(aggregatedValue));
-			Assert.assertFalse(aggregator.isNode(aggregatedValue));
+			BigInteger aggregatedValue = aggregator.aggregate(Leaf.getInstance(value));
 			Assert.assertEquals(value.multiply(MathUtil.TWO), aggregatedValue);
-			Assert.assertEquals(value, aggregator.disaggregateLeaf(aggregatedValue));
-		}
-		try {
-			aggregator.disaggregateLeaf(BigInteger.ONE);
-			fail();
-		} catch (Exception e) {
+			Assert.assertEquals(Leaf.getInstance(value), aggregator.disaggregate(aggregatedValue));
 		}
 	}
 
 	@Test
 	public void BigIntegerAggregatorTestNode() {
 		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
-		for (int i = 1; i < 100; i = i + 2) {
+		for (int i = 0; i < 100; i++) {
 			BigInteger aggregatedValue = BigInteger.valueOf(i);
-			Assert.assertFalse(aggregator.isLeaf(aggregatedValue));
-			Assert.assertTrue(aggregator.isNode(aggregatedValue));
-			Iterable<BigInteger> values = aggregator.disaggregateNode(aggregatedValue);
-			Assert.assertEquals(MathUtil.ONE, aggregatedValue.mod(MathUtil.TWO));
-			Assert.assertEquals(aggregatedValue, aggregator.aggregateNode(values));
+			Assert.assertEquals(aggregatedValue, aggregator.aggregate(aggregator.disaggregate(aggregatedValue)));
 		}
 		try {
-			aggregator.disaggregateNode(BigInteger.ZERO);
+			aggregator.disaggregate(BigInteger.valueOf(-1));
 			fail();
 		} catch (Exception e) {
 		}

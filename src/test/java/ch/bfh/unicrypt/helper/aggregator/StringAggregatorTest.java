@@ -42,6 +42,9 @@
 package ch.bfh.unicrypt.helper.aggregator;
 
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
+import ch.bfh.unicrypt.helper.tree.Leaf;
+import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -65,10 +68,8 @@ public class StringAggregatorTest {
 
 		for (String value : strings) {
 			for (StringAggregator aggregator : new StringAggregator[]{aggregator1, aggregator2}) {
-				String aggregatedValue = aggregator.aggregateLeaf(value);
-				Assert.assertTrue(aggregator.isLeaf(aggregatedValue));
-				Assert.assertFalse(aggregator.isNode(aggregatedValue));
-				Assert.assertEquals(value, aggregator.disaggregateLeaf(aggregatedValue));
+				String aggregatedValue = aggregator.aggregate(Leaf.getInstance(value));
+				Assert.assertEquals(Leaf.getInstance(value), aggregator.disaggregate(aggregatedValue));
 			}
 		}
 	}
@@ -81,11 +82,13 @@ public class StringAggregatorTest {
 		String[] strings = new String[]{"\"\"", "[]", "[\"Hello\"|\"World\"]"};
 
 		for (Set<String> values : getStringSets(strings)) {
+			List<Tree<String>> trees = new ArrayList<Tree<String>>();
+			for (String value : values) {
+				trees.add(Leaf.getInstance(value));
+			}
 			for (StringAggregator aggregator : new StringAggregator[]{aggregator1, aggregator2}) {
-				String aggregatedValue = aggregator.aggregateNode(values);
-				Assert.assertTrue(aggregator.isNode(aggregatedValue));
-				Assert.assertFalse(aggregator.isLeaf(aggregatedValue));
-				Iterable<String> result = aggregator.disaggregateNode(aggregatedValue);
+				String aggregatedValue = aggregator.aggregate(Node.getInstance(trees));
+				Iterable<String> result = aggregator.disaggregate(aggregatedValue);
 				int i = 0;
 				for (String x : result) {
 					Assert.assertTrue(values.contains(x));

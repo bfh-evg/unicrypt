@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractInvertibleAggregator;
+import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import java.math.BigInteger;
 
@@ -56,9 +56,13 @@ import java.math.BigInteger;
  * @version 2.0
  */
 public class BigIntegerAggregator
-	   extends AbstractInvertibleAggregator<BigInteger> {
+	   extends AbstractAggregator<BigInteger> {
 
 	private static BigIntegerAggregator instance = null;
+
+	private BigIntegerAggregator() {
+		super(BigInteger.class);
+	}
 
 	/**
 	 * Return the single instance of this class.

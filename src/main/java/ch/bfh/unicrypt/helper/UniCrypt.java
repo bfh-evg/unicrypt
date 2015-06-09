@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper;
 
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.io.Serializable;
 
 /**
@@ -76,6 +77,21 @@ public abstract class UniCrypt
 	// default implementation for producing a string describing the content of the object
 	protected String defaultToStringContent() {
 		return "";
+	}
+
+	// this local class allows creating instances of ByteArray without copying the underlying byte array
+	protected static class SafeByteArray
+		   extends ByteArray {
+
+		public SafeByteArray(byte[] bytes) {
+			super(bytes);
+		}
+
+		@Override
+		public byte[] getBytes() {
+			return this.bytes;
+		}
+
 	}
 
 }

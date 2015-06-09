@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.SignatureScheme;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -71,13 +71,13 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 	private static final long serialVersionUID = 1L;
 
 	protected final SS signatureSpace;
-	protected final HashMethod hashMethod;
+	protected final ElementHashMethod hashMethod;
 	protected final Map<StringToByteArray, KG> keyPairGenerators;
 
 	private Function signatureFunction;
 	private Function verificationFunction;
 
-	public AbstractSignatureScheme(MS messageSpace, SS signatureSpace, HashMethod hashMethod) {
+	public AbstractSignatureScheme(MS messageSpace, SS signatureSpace, ElementHashMethod hashMethod) {
 		super(messageSpace);
 		this.signatureSpace = signatureSpace;
 		this.hashMethod = hashMethod;
@@ -85,7 +85,7 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 	}
 
 	@Override
-	public HashMethod getHashMethod() {
+	public ElementHashMethod getHashMethod() {
 		return this.hashMethod;
 	}
 

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.hashing.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.hashing.abstracts.AbstractHashingScheme;
-import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
@@ -55,14 +55,14 @@ public class FixedByteArrayHashingScheme<MS extends Set>
 	   extends AbstractHashingScheme<MS, Element, FixedByteArraySet, FiniteByteArrayElement> {
 	private static final long serialVersionUID = 1L;
 
-	private final HashMethod hashMethod;
+	private final ElementHashMethod hashMethod;
 
-	protected FixedByteArrayHashingScheme(MS messageSpace, HashMethod hashMethod) {
+	protected FixedByteArrayHashingScheme(MS messageSpace, ElementHashMethod hashMethod) {
 		super(messageSpace, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength()));
 		this.hashMethod = hashMethod;
 	}
 
-	public HashMethod getHashMethod() {
+	public ElementHashMethod getHashMethod() {
 		return this.hashMethod;
 	}
 
@@ -72,14 +72,14 @@ public class FixedByteArrayHashingScheme<MS extends Set>
 	}
 
 	public static <MS extends Set> FixedByteArrayHashingScheme getInstance(MS messageSpace) {
-		return FixedByteArrayHashingScheme.<MS>getInstance(messageSpace, HashMethod.getInstance());
+		return FixedByteArrayHashingScheme.<MS>getInstance(messageSpace, ElementHashMethod.getInstance());
 	}
 
-	public static FixedByteArrayHashingScheme getInstance(HashMethod hashMethod) {
+	public static FixedByteArrayHashingScheme getInstance(ElementHashMethod hashMethod) {
 		return FixedByteArrayHashingScheme.<ByteArrayMonoid>getInstance(ByteArrayMonoid.getInstance(), hashMethod);
 	}
 
-	public static <MS extends Set> FixedByteArrayHashingScheme getInstance(MS messageSpace, HashMethod hashMethod) {
+	public static <MS extends Set> FixedByteArrayHashingScheme getInstance(MS messageSpace, ElementHashMethod hashMethod) {
 		if (messageSpace == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}

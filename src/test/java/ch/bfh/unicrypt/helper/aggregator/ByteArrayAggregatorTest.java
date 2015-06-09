@@ -43,7 +43,9 @@ package ch.bfh.unicrypt.helper.aggregator;
 
 import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import junit.framework.Assert;
+import ch.bfh.unicrypt.helper.tree.Leaf;
+import ch.bfh.unicrypt.helper.tree.Node;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -62,73 +64,55 @@ public class ByteArrayAggregatorTest {
 
 		ByteArrayAggregator agr = ByteArrayAggregator.getInstance();
 
-		ByteArray l0 = agr.aggregateLeaf(b0);
-		ByteArray l1 = agr.aggregateLeaf(b1);
-		ByteArray l2 = agr.aggregateLeaf(b2);
-		ByteArray l3 = agr.aggregateLeaf(b3);
+		ByteArray l0 = agr.aggregate(Leaf.getInstance(b0));
+		ByteArray l1 = agr.aggregate(Leaf.getInstance(b1));
+		ByteArray l2 = agr.aggregate(Leaf.getInstance(b2));
+		ByteArray l3 = agr.aggregate(Leaf.getInstance(b3));
 
 		Assert.assertEquals(ByteArray.getInstance(0, 0, 0, 0, 0), l0);
 		Assert.assertEquals(ByteArray.getInstance(0, 0, 0, 0, 1, 1), l1);
 		Assert.assertEquals(ByteArray.getInstance(0, 0, 0, 0, 2, 1, 2), l2);
 		Assert.assertEquals(ByteArray.getInstance(0, 0, 0, 0, 3, 1, 2, 3), l3);
 
-		Assert.assertEquals(b0, agr.disaggregateLeaf(l0));
-		Assert.assertEquals(b1, agr.disaggregateLeaf(l1));
-		Assert.assertEquals(b2, agr.disaggregateLeaf(l2));
-		Assert.assertEquals(b3, agr.disaggregateLeaf(l3));
+		Assert.assertEquals(Leaf.getInstance(b0), agr.disaggregate(l0));
+		Assert.assertEquals(Leaf.getInstance(b1), agr.disaggregate(l1));
+		Assert.assertEquals(Leaf.getInstance(b2), agr.disaggregate(l2));
+		Assert.assertEquals(Leaf.getInstance(b3), agr.disaggregate(l3));
 
-		Assert.assertTrue(agr.isLeaf(l0));
-		Assert.assertTrue(agr.isLeaf(l1));
-		Assert.assertTrue(agr.isLeaf(l2));
-		Assert.assertTrue(agr.isLeaf(l3));
-
-		Assert.assertFalse(agr.isNode(l0));
-		Assert.assertFalse(agr.isNode(l1));
-		Assert.assertFalse(agr.isNode(l2));
-		Assert.assertFalse(agr.isNode(l3));
 	}
 
 	@Test
 	public void ByteArrayAggregatorTestNode() {
 
-		ByteArray b0 = ByteArray.getInstance();
-		ByteArray b1 = ByteArray.getInstance(1);
-		ByteArray b2 = ByteArray.getInstance(1, 2);
-		ByteArray b3 = ByteArray.getInstance(1, 2, 3);
-
 		ByteArrayAggregator agr = ByteArrayAggregator.getInstance();
 
-		ByteArray l0 = agr.aggregateLeaf(b0);
-		ByteArray l1 = agr.aggregateLeaf(b1);
-		ByteArray l2 = agr.aggregateLeaf(b2);
-		ByteArray l3 = agr.aggregateLeaf(b3);
+		Leaf<ByteArray> b0 = Leaf.getInstance(ByteArray.getInstance());
+		Leaf<ByteArray> b1 = Leaf.getInstance(ByteArray.getInstance(1));
+		Leaf<ByteArray> b2 = Leaf.getInstance(ByteArray.getInstance(1, 2));
+		Leaf<ByteArray> b3 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3));
 
-		ByteArray n1 = agr.aggregateNode();
-		ByteArray n2 = agr.aggregateNode(l0);
-		ByteArray n3 = agr.aggregateNode(l1);
-		ByteArray n4 = agr.aggregateNode(l0, l1);
-		ByteArray n5 = agr.aggregateNode(l0, l1, l2);
-		ByteArray n6 = agr.aggregateNode(l0, l1, l2, l0);
-		ByteArray n7 = agr.aggregateNode(n1, n2, n3, n4, n5, n6);
-		ByteArray n8 = agr.aggregateNode(n7, n6, n1);
+		Node<ByteArray> c1 = Node.getInstance();
+		Node<ByteArray> c2 = Node.getInstance(b0);
+		Node<ByteArray> c3 = Node.getInstance(b1);
+		Node<ByteArray> c4 = Node.getInstance(b0, b1);
+		Node<ByteArray> c5 = Node.getInstance(b0, b1, b2);
+		Node<ByteArray> c6 = Node.getInstance(b0, b1, b2, b0);
+		Node<ByteArray> c7 = Node.getInstance(c1, c2, c3, c4, c5, c6);
+		Node<ByteArray> c8 = Node.getInstance(c7, c6, c1);
 
-		Assert.assertTrue(agr.isNode(n1));
-		Assert.assertTrue(agr.isNode(n2));
-		Assert.assertTrue(agr.isNode(n3));
-		Assert.assertTrue(agr.isNode(n4));
-		Assert.assertTrue(agr.isNode(n5));
-		Assert.assertTrue(agr.isNode(n6));
-		Assert.assertTrue(agr.isNode(n7));
-		Assert.assertTrue(agr.isNode(n8));
+		ByteArray l0 = agr.aggregate(b0);
+		ByteArray l1 = agr.aggregate(b1);
+		ByteArray l2 = agr.aggregate(b2);
+		ByteArray l3 = agr.aggregate(b3);
 
-		Assert.assertFalse(agr.isLeaf(n1));
-		Assert.assertFalse(agr.isLeaf(n2));
-		Assert.assertFalse(agr.isLeaf(n3));
-		Assert.assertFalse(agr.isLeaf(n4));
-		Assert.assertFalse(agr.isLeaf(n5));
-		Assert.assertFalse(agr.isLeaf(n6));
-		Assert.assertFalse(agr.isLeaf(n7));
-		Assert.assertFalse(agr.isLeaf(n8));
+		ByteArray n1 = agr.aggregate(c1);
+		ByteArray n2 = agr.aggregate(c2);
+		ByteArray n3 = agr.aggregate(c3);
+		ByteArray n4 = agr.aggregate(c4);
+		ByteArray n5 = agr.aggregate(c5);
+		ByteArray n6 = agr.aggregate(c6);
+		ByteArray n7 = agr.aggregate(c7);
+		ByteArray n8 = agr.aggregate(c8);
 
 		Assert.assertEquals(ByteArray.getInstance(1, 0, 0, 0, 0), n1);
 		Assert.assertEquals(ByteArray.getInstance(1, 0, 0, 0, 5, 0, 0, 0, 0, 0), n2);
@@ -136,14 +120,14 @@ public class ByteArrayAggregatorTest {
 		Assert.assertEquals(ByteArray.getInstance(1, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1), n4);
 		Assert.assertEquals(ByteArray.getInstance(1, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 2, 1, 2), n5);
 
-		Assert.assertEquals(n1, agr.aggregateNode(agr.disaggregateNode(n1)));
-		Assert.assertEquals(n2, agr.aggregateNode(agr.disaggregateNode(n2)));
-		Assert.assertEquals(n3, agr.aggregateNode(agr.disaggregateNode(n3)));
-		Assert.assertEquals(n4, agr.aggregateNode(agr.disaggregateNode(n4)));
-		Assert.assertEquals(n5, agr.aggregateNode(agr.disaggregateNode(n5)));
-		Assert.assertEquals(n6, agr.aggregateNode(agr.disaggregateNode(n6)));
-		Assert.assertEquals(n7, agr.aggregateNode(agr.disaggregateNode(n7)));
-		Assert.assertEquals(n8, agr.aggregateNode(agr.disaggregateNode(n8)));
+		Assert.assertEquals(n1, agr.aggregate(agr.disaggregate(n1)));
+		Assert.assertEquals(n2, agr.aggregate(agr.disaggregate(n2)));
+		Assert.assertEquals(n3, agr.aggregate(agr.disaggregate(n3)));
+		Assert.assertEquals(n4, agr.aggregate(agr.disaggregate(n4)));
+		Assert.assertEquals(n5, agr.aggregate(agr.disaggregate(n5)));
+		Assert.assertEquals(n6, agr.aggregate(agr.disaggregate(n6)));
+		Assert.assertEquals(n7, agr.aggregate(agr.disaggregate(n7)));
+		Assert.assertEquals(n8, agr.aggregate(agr.disaggregate(n8)));
 	}
 
 }

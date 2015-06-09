@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
 import java.math.BigInteger;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
