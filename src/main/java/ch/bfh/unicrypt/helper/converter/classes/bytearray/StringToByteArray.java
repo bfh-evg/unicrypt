@@ -59,8 +59,8 @@ import java.nio.charset.Charset;
 public class StringToByteArray
 	   extends AbstractByteArrayConverter<String> {
 
-	static final String[] UNICODE_CHARSETS =
-	{"UTF-8", "UTF-16", "UTF-16BE", "UTF-16LE", "UTF-32", "UTF-32BE", "UTF-32LE"};
+	static final String[] UNICODE_CHARSETS
+		   = {"UTF-8", "UTF-16", "UTF-16BE", "UTF-16LE", "UTF-32", "UTF-32BE", "UTF-32LE"};
 	private static final long serialVersionUID = 1L;
 
 	private final Charset charset;
@@ -78,7 +78,7 @@ public class StringToByteArray
 	 * @return The default instance
 	 */
 	public static StringToByteArray getInstance() {
-		return StringToByteArray.getInstance(Charset.defaultCharset());
+		return StringToByteArray.getInstance("UTF-8");
 	}
 
 	/**
