@@ -67,6 +67,7 @@ import java.util.Iterator;
 public class ProductSet
 	   extends AbstractSet<Tuple, DenseArray<Element>>
 	   implements NestedArray<Set> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final DenseArray<Set> sets;

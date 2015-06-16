@@ -60,7 +60,7 @@ public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeEleme
 
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractMultiplicativeMonoid(Class<? extends Object> valueClass) {
+	protected AbstractMultiplicativeMonoid(Class<?> valueClass) {
 		super(valueClass);
 	}
 

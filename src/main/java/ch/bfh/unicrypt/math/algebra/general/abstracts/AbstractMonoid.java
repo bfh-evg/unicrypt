@@ -59,11 +59,12 @@ import java.math.BigInteger;
 public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 	   extends AbstractSemiGroup<E, V>
 	   implements Monoid<V> {
+
 	private static final long serialVersionUID = 1L;
 
 	private E identityElement;
 
-	protected AbstractMonoid(Class<? extends Object> valueClass) {
+	protected AbstractMonoid(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -77,7 +78,7 @@ public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 
 	@Override
 	public final boolean isIdentityElement(final Element element) {
-		return this.areEquivalent(element, this.getIdentityElement());
+		return element.isEquivalent(this.getIdentityElement());
 	}
 
 	//

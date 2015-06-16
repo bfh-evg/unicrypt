@@ -56,13 +56,14 @@ import java.util.LinkedHashSet;
  */
 public class Subset
 	   extends AbstractSet<Element<Object>, Object> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Set superSet;
 	private final LinkedHashSet<Element<Object>> elementSet;
 
 	protected Subset(Set superSet, LinkedHashSet<Element<Object>> elements) {
-		super(Element.class);
+		super(superSet.getValueClass());
 		this.superSet = superSet;
 		this.elementSet = elements;
 	}
@@ -78,7 +79,7 @@ public class Subset
 	}
 
 	@Override
-	protected boolean defaultContains(final Element element) {
+	protected boolean defaultContains(final Element<Object> element) {
 		return this.elementSet.contains(element);
 	}
 

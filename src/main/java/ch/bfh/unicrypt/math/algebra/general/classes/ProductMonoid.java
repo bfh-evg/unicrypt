@@ -54,6 +54,7 @@ import java.math.BigInteger;
 public class ProductMonoid
 	   extends ProductSemiGroup
 	   implements Monoid<DenseArray<Element>> {
+
 	private static final long serialVersionUID = 1L;
 
 	private Tuple identityElement;
@@ -167,7 +168,7 @@ public class ProductMonoid
 
 	@Override
 	public boolean isIdentityElement(Element element) {
-		return this.areEquivalent(element, this.getIdentityElement());
+		return element.isEquivalent(this.getIdentityElement());
 	}
 
 	@Override

@@ -64,7 +64,7 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
 
 	protected final int blockLength;
 
-	protected AbstractConcatenativeSemiGroup(Class<? extends Object> valueClass, int blockLength) {
+	protected AbstractConcatenativeSemiGroup(Class<?> valueClass, int blockLength) {
 		super(valueClass);
 		this.blockLength = blockLength;
 	}

@@ -64,7 +64,7 @@ public abstract class AbstractPrimeField<E extends DualisticElement<V>, M extend
 	private M multiplicativeGroup;
 	private BigInteger characteristic;
 
-	protected AbstractPrimeField(Class<? extends Object> valueClass) {
+	protected AbstractPrimeField(Class<?> valueClass) {
 		super(valueClass);
 	}
 

@@ -68,12 +68,13 @@ import java.util.NoSuchElementException;
 public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object>
 	   extends AbstractGroup<E, V>
 	   implements CyclicGroup<V> {
+
 	private static final long serialVersionUID = 1L;
 
 	private E defaultGenerator;
 	private final Map<ReferenceRandomByteSequence, ArrayList<E>> generatorLists;
 
-	protected AbstractCyclicGroup(Class<? extends Object> valueClass) {
+	protected AbstractCyclicGroup(Class<?> valueClass) {
 		super(valueClass);
 		this.generatorLists = new HashMap<ReferenceRandomByteSequence, ArrayList<E>>();
 	}

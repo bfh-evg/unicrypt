@@ -60,7 +60,7 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, 
 
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractAdditiveCyclicGroup(Class<? extends Object> valueClass) {
+	protected AbstractAdditiveCyclicGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 

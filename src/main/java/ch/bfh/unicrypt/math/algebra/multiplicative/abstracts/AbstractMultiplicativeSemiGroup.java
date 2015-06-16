@@ -60,7 +60,7 @@ public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeEl
 
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractMultiplicativeSemiGroup(Class<? extends Object> valueClass) {
+	protected AbstractMultiplicativeSemiGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 

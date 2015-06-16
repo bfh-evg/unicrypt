@@ -68,7 +68,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 
 	private E defaultGenerator;
 
-	protected AbstractCyclicRing(Class<? extends Object> valueClass) {
+	protected AbstractCyclicRing(Class<?> valueClass) {
 		super(valueClass);
 	}
 

@@ -60,7 +60,7 @@ public abstract class AbstractMultiplicativeCyclicGroup<E extends Multiplicative
 
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractMultiplicativeCyclicGroup(Class<? extends Object> valueClass) {
+	protected AbstractMultiplicativeCyclicGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 

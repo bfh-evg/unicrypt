@@ -244,17 +244,6 @@ public class BooleanSetTest {
 	}
 
 	/**
-	 * Test of areEquivalent method, of class BooleanSet.
-	 */
-	@Test
-	public void testAreEqual() {
-//		System.out.println("areEquivalent");
-		BooleanSet expResult = null;
-		Assert.assertTrue((BooleanSet.getInstance().areEquivalent(BooleanSet.TRUE, BooleanSet.TRUE)));
-		Assert.assertTrue(!(BooleanSet.getInstance().areEquivalent(BooleanSet.FALSE, BooleanSet.TRUE)));
-	}
-
-	/**
 	 * Test of contains method, of class BooleanSet.
 	 */
 	@Test

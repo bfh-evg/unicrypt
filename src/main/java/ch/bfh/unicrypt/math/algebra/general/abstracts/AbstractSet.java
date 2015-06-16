@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
@@ -61,6 +60,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
+import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -75,7 +75,10 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
- * This abstract class provides a basis implementation for the interface Set.
+ * This abstract class provides a base implementation for the interface {@link Set}. Non-abstract sub-classes need to
+ * specify the two generic types {@code E} and {@code V} and all abstract methods. In some sub-classes, it might be
+ * necessary to override some default methods. Every abstract method has a name starting with {@code abstract...} and
+ * every default method has a name starting with {@code default...}.
  * <p>
  * @param <E> Generic type of elements of this set
  * @param <V> Generic type of values stored in the elements of this set
@@ -88,16 +91,21 @@ import java.util.Iterator;
 public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	   extends UniCrypt
 	   implements Set<V> {
+
 	private static final long serialVersionUID = 1L;
 
-	private final Class<? extends Object> valueClass;
+	// the class of the values used to represent elements of this set
+	private final Class<?> valueClass;
+
+	// various variables for storing information about the order of this set
 	private BigInteger order, lowerBound, upperBound, minimum;
 
+	// the default converters used to convert elements into BigInteger, String, and ByteArray
 	private BigIntegerConverter<V> bigIntegerConverter;
 	private StringConverter<V> stringConverter;
 	private ByteArrayConverter<V> byteArrayConverter;
 
-	protected AbstractSet(Class<? extends Object> valueClass) {
+	protected AbstractSet(Class<?> valueClass) {
 		this.valueClass = valueClass;
 	}
 
@@ -153,7 +161,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final boolean isProduct() {
-		return this instanceof ImmutableArray;
+		return this instanceof ProductSet;
 	}
 
 	@Override
@@ -244,11 +252,27 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final boolean contains(Element element) {
+	public final boolean contains(Element<?> element) {
 		if (element == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultContains(element);
+		if (!this.valueClass.isInstance(element.getValue())) {
+			return false;
+		}
+		return this.defaultContains((Element<V>) element);
+	}
+
+	@Override
+	public final E getRandomElement() {
+		return this.abstractGetRandomElement(HybridRandomByteSequence.getInstance());
+	}
+
+	@Override
+	public final E getRandomElement(RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractGetRandomElement(randomByteSequence);
 	}
 
 	@Override
@@ -279,7 +303,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Converter<V, BigInteger> converter = (Converter<V, BigInteger>) convertMethod.getConverter(this.getClass());
+		Converter<V, BigInteger> converter = (Converter<V, BigInteger>) convertMethod.getConverter(this.valueClass);
 		if (converter == null) {
 			return this.getElementFrom(bigInteger);
 		}
@@ -309,7 +333,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Converter<V, String> converter = (Converter<V, String>) convertMethod.getConverter(this.getClass());
+		Converter<V, String> converter = (Converter<V, String>) convertMethod.getConverter(this.valueClass);
 		if (converter == null) {
 			return this.getElementFrom(string);
 		}
@@ -339,7 +363,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Converter<V, ByteArray> converter = (Converter<V, ByteArray>) convertMethod.getConverter(this.getClass());
+		Converter<V, ByteArray> converter = (Converter<V, ByteArray>) convertMethod.getConverter(this.valueClass);
 		if (converter == null) {
 			return this.getElementFrom(byteArray);
 		}
@@ -367,19 +391,6 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E getRandomElement() {
-		return this.abstractGetRandomElement(HybridRandomByteSequence.getInstance());
-	}
-
-	@Override
-	public final E getRandomElement(RandomByteSequence randomByteSequence) {
-		if (randomByteSequence == null) {
-			throw new IllegalArgumentException();
-		}
-		return this.abstractGetRandomElement(randomByteSequence);
-	}
-
-	@Override
 	public final BigIntegerConverter<V> getBigIntegerConverter() {
 		if (this.bigIntegerConverter == null) {
 			this.bigIntegerConverter = this.abstractGetBigIntegerConverter();
@@ -404,15 +415,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final boolean areEquivalent(final Element element1, final Element element2) {
-		if (!this.contains(element1) || !this.contains(element2)) {
-			throw new IllegalArgumentException();
-		}
-		return element1.isEquivalent(element2);
-	}
-
-	@Override
-	public final boolean isEquivalent(final Set other) {
+	public final boolean isEquivalent(final Set<?> other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
 		}
@@ -436,7 +439,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 			@Override
 			public Iterator<E> iterator() {
-				return getIterator();
+				return defaultGetIterator(getOrder());
 			}
 
 		};
@@ -451,20 +454,15 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 			@Override
 			public Iterator<E> iterator() {
-				return getIterator(n);
+				return defaultGetIterator(BigInteger.valueOf(n).min(getOrder()));
 			}
 
 		};
 	}
 
 	@Override
-	public final Iterator<E> getIterator() {
-		return this.defaultGetIterator(this.getOrder());
-	}
-
-	@Override
-	public final Iterator<E> getIterator(int n) {
-		return this.defaultGetIterator(BigInteger.valueOf(n).min(this.getOrder()));
+	public Class<?> getValueClass() {
+		return this.valueClass;
 	}
 
 	@Override
@@ -487,24 +485,21 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.abstractEquals((Set) other);
 	}
 
-	//
-	// The following protected methods are default implementations for sets.
-	// They may need to be changed in certain sub-classes.
-	//
 	protected BigInteger defaultGetOrderLowerBound() {
-		return BigInteger.ZERO;
+		return BigInteger.ONE;
 	}
 
 	protected BigInteger defaultGetOrderUpperBound() {
 		return Set.INFINITE_ORDER;
 	}
 
+	// this method is different only for ProductSet
 	protected BigInteger defaultGetMinimalOrder() {
 		return this.getOrderLowerBound();
 	}
 
 	// this method is different only for Subset
-	protected boolean defaultContains(final Element element) {
+	protected boolean defaultContains(final Element<V> element) {
 		return this.isEquivalent(element.getSet());
 	}
 
@@ -551,7 +546,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		};
 	}
 
-	protected boolean defaultIsEquivalent(Set set) {
+	protected boolean defaultIsEquivalent(Set<?> set) {
 		return this.abstractEquals(set);
 	}
 
@@ -584,18 +579,9 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 				return element;
 			}
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-
 		};
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct
-	// sub-class.
-	//
 	protected abstract BigInteger abstractGetOrder();
 
 	protected abstract boolean abstractContains(V value);

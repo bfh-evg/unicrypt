@@ -63,7 +63,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 
 	private E one;
 
-	protected AbstractSemiRing(Class<? extends Object> valueClass) {
+	protected AbstractSemiRing(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -135,7 +135,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 
 	@Override
 	public boolean isOneElement(final Element element) {
-		return this.areEquivalent(element, this.getOneElement());
+		return element.isEquivalent(this.getOneElement());
 	}
 
 //

@@ -64,7 +64,7 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 
 	protected final int blockLength;
 
-	protected AbstractConcatenativeMonoid(Class<? extends Object> valueClass, int blockLength) {
+	protected AbstractConcatenativeMonoid(Class<?> valueClass, int blockLength) {
 		super(valueClass);
 		this.blockLength = blockLength;
 	}

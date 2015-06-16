@@ -63,7 +63,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 
 	private M multiplicativeGroup;
 
-	protected AbstractField(Class<? extends Object> valueClass) {
+	protected AbstractField(Class<?> valueClass) {
 		super(valueClass);
 	}
 

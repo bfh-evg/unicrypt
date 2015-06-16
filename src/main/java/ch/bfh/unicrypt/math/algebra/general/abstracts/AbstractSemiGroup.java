@@ -60,9 +60,10 @@ import java.math.BigInteger;
 public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	   extends AbstractSet<E, V>
 	   implements SemiGroup<V> {
+
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractSemiGroup(Class<? extends Object> valueClass) {
+	protected AbstractSemiGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 

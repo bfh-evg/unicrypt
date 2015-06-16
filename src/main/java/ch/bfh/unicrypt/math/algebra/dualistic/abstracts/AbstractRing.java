@@ -59,7 +59,7 @@ public abstract class AbstractRing<E extends DualisticElement<V>, V extends Obje
 
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractRing(Class<? extends Object> valueClass) {
+	protected AbstractRing(Class<?> valueClass) {
 		super(valueClass);
 	}
 

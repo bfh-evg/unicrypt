@@ -60,7 +60,7 @@ public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V ext
 
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractAdditiveMonoid(Class<? extends Object> valueClass) {
+	protected AbstractAdditiveMonoid(Class<?> valueClass) {
 		super(valueClass);
 	}
 

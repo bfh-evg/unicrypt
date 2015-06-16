@@ -65,6 +65,7 @@ import java.math.BigInteger;
  */
 public class Z
 	   extends AbstractCyclicRing<ZElement, BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	private Z() {
@@ -99,11 +100,6 @@ public class Z
 			return this.getDefaultGenerator();
 		}
 		return this.getDefaultGenerator().invert();
-	}
-
-	@Override
-	protected boolean defaultIsEquivalent(Set set) {
-		return true;
 	}
 
 	//

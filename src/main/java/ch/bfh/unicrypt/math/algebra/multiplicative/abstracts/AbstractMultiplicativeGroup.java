@@ -58,7 +58,7 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
 	   extends AbstractGroup<E, V>
 	   implements MultiplicativeGroup<V> {
 
-	protected AbstractMultiplicativeGroup(Class<? extends Object> valueClass) {
+	protected AbstractMultiplicativeGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 

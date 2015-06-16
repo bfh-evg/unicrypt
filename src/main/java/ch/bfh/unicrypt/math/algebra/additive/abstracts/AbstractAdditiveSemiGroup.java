@@ -60,7 +60,7 @@ public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V 
 
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractAdditiveSemiGroup(Class<? extends Object> valueClass) {
+	protected AbstractAdditiveSemiGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 

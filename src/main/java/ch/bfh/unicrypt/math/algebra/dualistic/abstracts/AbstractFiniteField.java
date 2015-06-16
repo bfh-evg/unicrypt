@@ -62,7 +62,7 @@ public abstract class AbstractFiniteField<E extends DualisticElement<V>, M exten
 
 	private BigInteger characteristic;
 
-	protected AbstractFiniteField(Class<? extends Object> valueClass) {
+	protected AbstractFiniteField(Class<?> valueClass) {
 		super(valueClass);
 	}
 

@@ -52,174 +52,198 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.Iterator;
 
 /**
  * This interface represents the concept of a non-empty mathematical set of elements. The number of elements in the set
- * is called order of this set. The order may be infinite or unknown. TODO It is assumed that each element of a set
- * corresponds to a unique BigInteger or integer value. Therefore, the interface provides methods for converting
- * elements into corresponding BigInteger or integer values and back.
+ * is called order. The order may be infinite or unknown. The main functionality of this interface is constructing new
+ * elements, using {@link Set#getElement(Object)}, and checking whether a given element belongs to the set or not, using
+ * {@link Set#contains(Element)}. Further functionalities such as operations between elements are added in
+ * sub-interfaces such as {@link Monoid}, {@link Group}, {@link Ring}, or {@link Field}.
+ * <p>
+ * Elements of a set are created by constructing instances of {@link Element}{@code <V>}. To construct a new element, an
+ * object of the generic type {@code V} representing the element needs to be provided. The object is called the
+ * element's value. The concrete type of these values depends on the actual set, to which the element belongs to.
+ * <p>
+ * Independently of the generic type {@code V} of a set, it is assumed that each element of this set can be converted
+ * into a unique {@link BigInteger}, {@link String}, or {@link ByteArray} value, and vice versa, that corresponding
+ * elements can be constructed from such {@link BigInteger}, {@link String}, or {@link ByteArray} values. For this, each
+ * set provides default converters (instances of {@link BigIntegerConverter}, {@link StringConverter}, and
+ * {@link ByteArrayConverter}), which handle the conversion.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of values stored in the elements of this set
+ * @param <V> Generic type of the values representing the elements of this set
+ * @see Element
  */
 public interface Set<V extends Object> {
 
 	/**
-	 * A constant value that represents an infinite order.
+	 * A constant value representing an infinite order.
 	 */
 	public static final BigInteger INFINITE_ORDER = BigInteger.valueOf(-1);
+
 	/**
-	 * A constant value that represents an unknown order.
+	 * A constant value representing an unknown order.
 	 */
 	public static final BigInteger UNKNOWN_ORDER = BigInteger.valueOf(-2);
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link SemiGroup}.
+	 * Returns {@literal true}, if this set is an instance of {@link SemiGroup}.
 	 * <p>
-	 * @return {@code true} if this set is a semigroup
+	 * @return {@literal true}, if this set is a semigroup, {@literal false} otherwise
 	 */
 	public boolean isSemiGroup();
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link Monoid}.
+	 * Returns {@literal true}, if this set is an instance of {@link Monoid}.
 	 * <p>
-	 * @return {@code true} if this set is a monoid
+	 * @return {@literal true}, if this set is a monoid, {@literal false} otherwise
 	 */
 	public boolean isMonoid();
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link Group}.
+	 * Returns {@literal true}, if this set is an instance of {@link Group}.
 	 * <p>
-	 * @return {@code true} if this set is a group
+	 * @return {@literal true}, if this set is a group, {@literal false} otherwise
 	 */
 	public boolean isGroup();
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link SemiRing}.
+	 * Returns {@literal true}, if this set is an instance of {@link SemiRing}.
 	 * <p>
-	 * @return {@code true} if this set is a semiring
+	 * @return {@literal true}, if this set is a semiring, {@literal false} otherwise
 	 */
 	public boolean isSemiRing();
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link Ring}.
+	 * Returns {@literal true}, if this set is an instance of {@link Ring}.
 	 * <p>
-	 * @return {@code true} if this set is a ring
+	 * @return {@literal true}, if this set is a ring, {@literal false} otherwise
 	 */
 	public boolean isRing();
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link Field}.
+	 * Returns {@literal true}, if this set is an instance of {@link Field}.
 	 * <p>
-	 * @return {@code true} if this set is a field
+	 * @return {@literal true}, if this set is a field, {@literal false} otherwise
 	 */
 	public boolean isField();
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link CyclicGroup}.
+	 * Returns {@literal true}, if this set is an instance of {@link CyclicGroup}.
 	 * <p>
-	 * @return {@code true} if this set is cyclic
+	 * @return {@literal true}, if this set is a cyclic group, {@literal false} otherwise
 	 */
 	public boolean isCyclic();
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link AdditiveSemiGroup}.
+	 * Returns {@literal true}, if this set is an instance of {@link AdditiveSemiGroup}.
 	 * <p>
-	 * @return {@code true} if this set is additive
+	 * @return {@literal true}, if this set has an additive operator, {@literal false} otherwise
 	 */
 	public boolean isAdditive();
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link MultiplicativeSemiGroup}.
+	 * Returns {@literal true}, if this set is an instance of {@link MultiplicativeSemiGroup}.
 	 * <p>
-	 * @return {@code true} if this set is multiplicative
+	 * @return {@literal true}, if this set has a multiplicative operator, {@literal false} otherwise
 	 */
 	public boolean isMultiplicative();
 
 	/**
-	 * Returns {@code true} if this set is an instance of {@link ConcatenativeSemiGroup}.
+	 * Returns {@literal true}, if this set is an instance of {@link ConcatenativeSemiGroup}.
 	 * <p>
-	 * @return {@code true} if this set is concatenative
+	 * @return {@literal true}, if this set has a concatenative operator, {@literal false} otherwise
 	 */
 	public boolean isConcatenative();
 
 	/**
-	 * Returns {@code true} if this set is a cartesian product
+	 * Returns {@literal true}, if this set is an instance of {@link ProductSet}, i.e., if this set is a Cartesian
+	 * product of other sets.
 	 * <p>
-	 * @return {@code true} if this set is a product set
+	 * @return {@literal true}, if this set is a product set, {@literal false} otherwise
 	 */
 	public boolean isProduct();
 
 	/**
-	 * Returns {@code true} if this set is of finite order.
+	 * Returns {@literal true}, if this set is of finite order.
 	 * <p>
-	 * @return {@code true} if this set is finite
+	 * @return {@literal true}, if this set is finite, {@literal false} otherwise
+	 * @see getOrder()
 	 */
 	public boolean isFinite();
 
 	/**
-	 * Returns {@code true} if this set has a known order.
+	 * Returns {@literal true}, if the order of this set is known.
 	 * <p>
-	 * @return {@code true} if this set has a known order
+	 * @return {@literal true}, if if the order is known, {@literal false} otherwise
+	 * @see getOrder()
 	 */
 	public boolean hasKnownOrder();
 
 	/**
-	 * Returns the set order. If the set order is unknown, {@link #UNKNOWN_ORDER} is returned. If the set order is
-	 * infinite, {@link #INFINITE_ORDER} is returned.
+	 * Returns the set order. Since only non-empty sets are considered, the order is always greater than 0. If the set
+	 * order is unknown, {@link #UNKNOWN_ORDER} is returned. If the set order is infinite, {@link #INFINITE_ORDER} is
+	 * returned.
 	 * <p>
 	 * @see "Handbook of Applied Cryptography, Definition 2.163"
 	 * @return The set order
+	 * @see getOrderLowerBound()
+	 * @see getOrderUpperBound()
 	 */
 	public BigInteger getOrder();
 
 	/**
-	 * TODO Returns a lower bound for the set order in case the exact set order is unknown. The least return value is 0
-	 * (?). Otherwise, if the exact set order is known (or infinite), the exact set order is returned.
+	 * Returns a lower bound for the set order in case the exact set order is unknown. The least return value is 1. If
+	 * the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
 	 * @return A lower bound for the set order
+	 * @see getOrder()
+	 * @see getOrderUpperBound()
 	 */
 	public BigInteger getOrderLowerBound();
 
 	/**
-	 * TODO Returns an upper bound for the set order in case the exact set order is unknown. The heighest return value
-	 * is -1. Otherwise, if the exact set order is known (or infinite), the exact set order is returned.
+	 * Returns an upper bound for the set order in case the exact set order is unknown. The highest return value is
+	 * {@link #INFINITE_ORDER}. If the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
-	 * @return A upper bound for the set order
+	 * @return An upper bound for the set order
+	 * @see getOrder()
+	 * @see getOrderLowerBound()
 	 */
 	public BigInteger getOrderUpperBound();
 
 	/**
-	 * TODO Returns the minimal order of this set. entweder order oder min. coumpound (recursive)
+	 * If this set is a Cartesian product of sets, the order of the smallest of its sets is returned. Otherwise, the
+	 * result of calling this method is equivalent to {@link Set#getOrderLowerBound()}.
 	 * <p>
 	 * @return The minimal order of this set
+	 * @see getOrderLowerBound()
 	 */
 	public BigInteger getMinimalOrder();
 
 	/**
 	 * Checks if the set is of order 1.
 	 * <p>
-	 * @return {@code true} if the order is 1
+	 * @return {@literal true}, if the order is 1, {@literal false} otherwise
 	 */
 	public boolean isSingleton();
 
 	/**
-	 * TODO Returns an additive integer group of type {@link ZMod} with the same set order. For this to work, the set
-	 * order must be finite and known.
+	 * Returns the ring of integers modulo the set order, i.e., an instance of {@link ZMod} with the same set order. For
+	 * this to work, the set order must be finite and known.
 	 * <p>
-	 * @return The resulting additive group.
+	 * @return The resulting ring of integers modulo the set order
 	 * @throws UnsupportedOperationException if the set order is infinite or unknown
 	 */
 	public ZMod getZModOrder();
 
 	/**
-	 * Returns an multiplicative integer set of type {@link ZMod} with the same set order. For this to work, the set
-	 * order must be finite and known. TODO teilerfremd
+	 * Returns the multiplicative group of integers modulo the set order, i.e., an instance of {@link ZStarMod} of order
+	 * {@code phi(n)}. For this to work, the set order must be finite and known.
 	 * <p>
-	 * @return The resulting multiplicative group.
+	 * @return The resulting multiplicative group
 	 * @throws UnsupportedOperationException if the set order is infinite or unknown
 	 */
 	public ZStarMod getZStarModOrder();
@@ -228,26 +252,113 @@ public interface Set<V extends Object> {
 	 * Checks if a given element belongs to this set.
 	 * <p>
 	 * @param element The given element
-	 * @return {@code true} if {@literal element} belongs to this set
+	 * @return {@literal true}, if {@literal element} belongs to this set, {@literal false} otherwise
 	 */
-	public boolean contains(Element element);
+	public boolean contains(Element<?> element);
 
 	/**
-	 * TODO Checks if a given value belongs to this set.
+	 * Checks if a given value represents an element of this set. If this is the case, the value can be used to
+	 * construct the element using {@link getElement(Object)}.
 	 * <p>
 	 * @param value The given value
-	 * @return {@code true} if {@literal value} belongs to this set
+	 * @return {@literal true}, if the value represents an element of this set, {@literal false} otherwise
+	 * @see getElement(Object)
 	 */
 	public boolean contains(V value);
 
 	/**
-	 * TODO Returns the corresponding {@link Element} for the given {@literal value}.
+	 * Returns the corresponding element for a given value (if such an element exists).
 	 * <p>
 	 * @param value The given value
-	 * @return the corresponding element for the given value
-	 * @throws IllegalArgumentException if this set does not contain {@literal value}
+	 * @return The element represented by the value
+	 * @throws IllegalArgumentException if the value does not represent an element of this set
+	 * @see contains(Object)
 	 */
 	public Element<V> getElement(V value);
+
+	/**
+	 * Returns a random element using the library's default random byte sequence. For sets of finite order, the element
+	 * is selected uniformly at random. For sets of infinite order, an {@link UnsupportedOperationException} is thrown.
+	 * <p>
+	 * @return A random element from the set
+	 * @throws UnsupportedOperationException
+	 */
+	public Element<V> getRandomElement();
+
+	/**
+	 * Selects and returns a random set element using a given random byte sequence. For sets of finite order, the
+	 * element is selected uniformly at random. For sets of infinite order, an {@link UnsupportedOperationException} is
+	 * thrown.
+	 * <p>
+	 * @param randomByteSequence The given random byte sequence
+	 * @return A random element from the set
+	 * @throws UnsupportedOperationException
+	 */
+	public Element<V> getRandomElement(RandomByteSequence randomByteSequence);
+
+	/**
+	 * Checks if two sets are mathematically equivalent.
+	 * <p>
+	 * @true} if this set is equal to a given Set.
+	 * <p>
+	 * @param set The given Set.
+	 * @return {@literal true} if this set is equal
+	 */
+	public boolean isEquivalent(Set<?> set);
+
+	/**
+	 * Returns an iterable collection of all elements from this set. The size of this collection may be infinite. The
+	 * order in which the elements appear in the iterable collection is unspecified.
+	 * <p>
+	 * @return An iterable collection
+	 */
+	public Iterable<? extends Element<V>> getElements();
+
+	/**
+	 * Returns an iterable collection of some elements from this set. The number of element in the iterable collection
+	 * is given as parameter. Their order is unspecified.
+	 * <p>
+	 * @param n The number of element in the resulting iterable collection
+	 * @return An iterable collection
+	 */
+	public Iterable<? extends Element<V>> getElements(int n);
+
+	/**
+	 * Returns the class of the values representing the elements of this set.
+	 * <p>
+	 * @return The corresponding class
+	 */
+	public Class<?> getValueClass();
+
+	/**
+	 * Returns the default {@link BigIntegerConverter} of this class. It is used to convert elements of this class into
+	 * {@link BigInteger} and, vice versa, to construct elements of this class from {@link BigInteger} values.
+	 * <p>
+	 * @return The default {@link BigInteger} converter
+	 * @see Set#getElementFrom(BigInteger)
+	 * @see Element#getBigInteger()
+	 */
+	public BigIntegerConverter<V> getBigIntegerConverter();
+
+	/**
+	 * Returns the default {@link StringConverter} of this class. It is used to convert elements of this class into
+	 * {@link String} and, vice versa, to construct elements of this class from {@link String} values.
+	 * <p>
+	 * @return The default {@link String} converter
+	 * @see Set#getElementFrom(String)
+	 * @see Element#getString()
+	 */
+	public StringConverter<V> getStringConverter();
+
+	/**
+	 * Returns the default {@link ByteArrayConverter} of this class. It is used to convert elements of this class into
+	 * {@link ByteArray} and, vice versa, to construct elements of this class from {@link ByteArray} values.
+	 * <p>
+	 * @return The default {@link ByteArray} converter
+	 * @see Set#getElementFrom(ByteArray)
+	 * @see Element#getByteArray()
+	 */
+	public ByteArrayConverter<V> getByteArrayConverter();
 
 	/**
 	 * Creates and returns the element that corresponds to a given integer (if one exists). Returns {@literal null}
@@ -267,14 +378,43 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(BigInteger bigInteger);
 
+	/**
+	 *
+	 * @param bigInteger
+	 * @param converter
+	 * @return
+	 */
 	public Element<V> getElementFrom(BigInteger bigInteger, Converter<V, BigInteger> converter);
 
+	/**
+	 *
+	 * @param bigInteger
+	 * @param convertMethod
+	 * @return
+	 */
 	public Element<V> getElementFrom(BigInteger bigInteger, ConvertMethod<BigInteger> convertMethod);
 
+	/**
+	 *
+	 * @param string
+	 * @return
+	 */
 	public Element<V> getElementFrom(String string);
 
+	/**
+	 *
+	 * @param string
+	 * @param converter
+	 * @return
+	 */
 	public Element<V> getElementFrom(String string, Converter<V, String> converter);
 
+	/**
+	 *
+	 * @param string
+	 * @param convertMethod
+	 * @return
+	 */
 	public Element<V> getElementFrom(String string, ConvertMethod<String> convertMethod);
 
 	/**
@@ -285,6 +425,12 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteArray byteArray);
 
+	/**
+	 *
+	 * @param byteArray
+	 * @param converter
+	 * @return
+	 */
 	public Element<V> getElementFrom(ByteArray byteArray, Converter<V, ByteArray> converter);
 
 	/**
@@ -305,6 +451,12 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree);
 
+	/**
+	 *
+	 * @param byteTree
+	 * @param converter
+	 * @return
+	 */
 	public Element<V> getElementFrom(ByteTree byteTree, Converter<V, ByteArray> converter);
 
 	/**
@@ -315,68 +467,5 @@ public interface Set<V extends Object> {
 	 * @return
 	 */
 	public Element<V> getElementFrom(ByteTree byteTree, ConvertMethod<ByteArray> convertMethod);
-
-	/**
-	 * Selects and returns a random group element using the default random generator. For finite order set, it is
-	 * selected uniformly at random. For sets of infinite or unknown order, the underlying probability distribution is
-	 * not further specified.
-	 * <p>
-	 * @return A random element from the set
-	 */
-	public Element<V> getRandomElement();
-
-	/**
-	 * Selects and returns a random set element using a given random generator. If no random generator is specified,
-	 * i.e., if {@literal random} is null, then the system-wide random generator is taken. For finite order set, it is
-	 * selected uniformly at random. For sets of infinite or unknown order, the underlying probability distribution is
-	 * not generally specified.
-	 * <p>
-	 * @param randomByteSequence Either {@literal null} or a given random generator
-	 * @return A random element from the set
-	 */
-	public Element<V> getRandomElement(RandomByteSequence randomByteSequence);
-
-	/**
-	 * Checks if two given elements of this set are equal.
-	 * <p>
-	 * @param element1 The first element
-	 * @param element2 The second element
-	 * @return {@code true} if the elements are equal and belong to the group
-	 */
-	public boolean areEquivalent(Element element1, Element element2);
-
-	/**
-	 * TODO Returns {
-	 * <p>
-	 * @true} if this set is equal to a given Set.
-	 * <p>
-	 * @param set The given Set.
-	 * @return {@code true} if this set is equal
-	 */
-	public boolean isEquivalent(Set set);
-
-	public BigIntegerConverter<V> getBigIntegerConverter();
-
-	public StringConverter<V> getStringConverter();
-
-	public ByteArrayConverter<V> getByteArrayConverter();
-
-	/**
-	 * TODO
-	 * <p>
-	 * @return
-	 */
-	public Iterable<? extends Element<V>> getElements();
-
-	public Iterable<? extends Element<V>> getElements(int n);
-
-	/**
-	 * TODO
-	 * <p>
-	 * @return
-	 */
-	public Iterator<? extends Element<V>> getIterator();
-
-	public Iterator<? extends Element<V>> getIterator(int n);
 
 }
