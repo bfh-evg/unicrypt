@@ -45,15 +45,11 @@ import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.bytetree.ByteTreeLeaf;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
+import ch.bfh.unicrypt.helper.converter.classes.CompositeConverter;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -101,9 +97,9 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	private BigInteger order, lowerBound, upperBound, minimum;
 
 	// the default converters used to convert elements into BigInteger, String, and ByteArray
-	private BigIntegerConverter<V> bigIntegerConverter;
-	private StringConverter<V> stringConverter;
-	private ByteArrayConverter<V> byteArrayConverter;
+	private Converter<V, BigInteger> bigIntegerConverter;
+	private Converter<V, String> stringConverter;
+	private Converter<V, ByteArray> byteArrayConverter;
 
 	protected AbstractSet(Class<?> valueClass) {
 		this.valueClass = valueClass;
@@ -391,7 +387,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final BigIntegerConverter<V> getBigIntegerConverter() {
+	public final Converter<V, BigInteger> getBigIntegerConverter() {
 		if (this.bigIntegerConverter == null) {
 			this.bigIntegerConverter = this.abstractGetBigIntegerConverter();
 		}
@@ -399,7 +395,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public StringConverter<V> getStringConverter() {
+	public Converter<V, String> getStringConverter() {
 		if (this.stringConverter == null) {
 			this.stringConverter = this.defaultGetStringConverter();
 		}
@@ -407,7 +403,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public ByteArrayConverter<V> getByteArrayConverter() {
+	public Converter<V, ByteArray> getByteArrayConverter() {
 		if (this.byteArrayConverter == null) {
 			this.byteArrayConverter = this.defaultGetByteArrayConverter();
 		}
@@ -512,38 +508,12 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return null;
 	}
 
-	protected StringConverter<V> defaultGetStringConverter() {
-		return new AbstractStringConverter<V>(null) {
-
-			private final StringConverter<BigInteger> converter = BigIntegerToString.getInstance();
-
-			@Override
-			protected String abstractConvert(V value) {
-				return this.converter.convert(getBigIntegerConverter().convert(value));
-			}
-
-			@Override
-			protected V abstractReconvert(String value) {
-				return getBigIntegerConverter().reconvert(this.converter.reconvert(value));
-			}
-		};
+	protected Converter<V, String> defaultGetStringConverter() {
+		return CompositeConverter.getInstance(this.getBigIntegerConverter(), BigIntegerToString.getInstance());
 	}
 
-	protected ByteArrayConverter<V> defaultGetByteArrayConverter() {
-		return new AbstractByteArrayConverter<V>(null) {
-
-			private final ByteArrayConverter<BigInteger> converter = BigIntegerToByteArray.getInstance();
-
-			@Override
-			protected ByteArray abstractConvert(V value) {
-				return this.converter.convert(getBigIntegerConverter().convert(value));
-			}
-
-			@Override
-			protected V abstractReconvert(ByteArray value) {
-				return getBigIntegerConverter().reconvert(this.converter.reconvert(value));
-			}
-		};
+	protected Converter<V, ByteArray> defaultGetByteArrayConverter() {
+		return CompositeConverter.getInstance(this.getBigIntegerConverter(), BigIntegerToByteArray.getInstance());
 	}
 
 	protected boolean defaultIsEquivalent(Set<?> set) {
@@ -590,7 +560,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	protected abstract E abstractGetRandomElement(RandomByteSequence randomByteSequence);
 
-	protected abstract BigIntegerConverter<V> abstractGetBigIntegerConverter();
+	protected abstract Converter<V, BigInteger> abstractGetBigIntegerConverter();
 
 	protected abstract boolean abstractEquals(Set set);
 

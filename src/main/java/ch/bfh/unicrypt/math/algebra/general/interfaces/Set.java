@@ -338,7 +338,7 @@ public interface Set<V extends Object> {
 	 * @see Set#getElementFrom(BigInteger)
 	 * @see Element#getBigInteger()
 	 */
-	public BigIntegerConverter<V> getBigIntegerConverter();
+	public Converter<V, BigInteger> getBigIntegerConverter();
 
 	/**
 	 * Returns the default {@link StringConverter} of this class. It is used to convert elements of this class into
@@ -348,7 +348,7 @@ public interface Set<V extends Object> {
 	 * @see Set#getElementFrom(String)
 	 * @see Element#getString()
 	 */
-	public StringConverter<V> getStringConverter();
+	public Converter<V, String> getStringConverter();
 
 	/**
 	 * Returns the default {@link ByteArrayConverter} of this class. It is used to convert elements of this class into
@@ -358,7 +358,7 @@ public interface Set<V extends Object> {
 	 * @see Set#getElementFrom(ByteArray)
 	 * @see Element#getByteArray()
 	 */
-	public ByteArrayConverter<V> getByteArrayConverter();
+	public Converter<V, ByteArray> getByteArrayConverter();
 
 	/**
 	 * Creates and returns the element that corresponds to a given integer (if one exists). Returns {@literal null}
