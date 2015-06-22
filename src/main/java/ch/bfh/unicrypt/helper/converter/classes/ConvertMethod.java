@@ -56,8 +56,9 @@ import java.util.Map;
  * @version 2.0
  * @param <W> The output type
  */
-public class ConvertMethod<W extends Object>
+public class ConvertMethod<W>
 	   extends UniCrypt {
+
 	private static final long serialVersionUID = 1L;
 
 	// a map for storing the converters
