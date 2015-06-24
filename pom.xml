@@ -44,11 +44,11 @@ Redistributions of files must retain the above copyright notice.
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ch.bfh.unicrypt</groupId>
-	<artifactId>unicrypt2</artifactId>
+	<artifactId>unicrypt</artifactId>
 	<version>2.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>unicrypt2</name>
+	<name>unicrypt</name>
 	<url>https://github.com/bfh-evg/unicrypt</url>
 
 	<licenses>
