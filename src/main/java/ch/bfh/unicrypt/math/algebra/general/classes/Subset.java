@@ -59,10 +59,10 @@ public class Subset
 
 	private static final long serialVersionUID = 1L;
 
-	private final Set superSet;
+	private final Set<?> superSet;
 	private final LinkedHashSet<Element<Object>> elementSet;
 
-	protected Subset(Set superSet, LinkedHashSet<Element<Object>> elements) {
+	protected Subset(Set<?> superSet, LinkedHashSet<Element<Object>> elements) {
 		super(superSet.getValueClass());
 		this.superSet = superSet;
 		this.elementSet = elements;
@@ -111,7 +111,9 @@ public class Subset
 
 	@Override
 	protected Converter<Object, BigInteger> abstractGetBigIntegerConverter() {
-		return this.superSet.getBigIntegerConverter();
+		// TODO: return proper converter
+		// return this.superSet.getBigIntegerConverter();
+		return null;
 	}
 
 	@Override

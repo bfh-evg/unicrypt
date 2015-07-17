@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
@@ -61,13 +62,13 @@ import java.math.BigInteger;
  * <p>
  * @author rolfhaenni
  */
-public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>,
-	   E extends AdditiveElement<V>, V extends Object>
+public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E extends AdditiveElement<V>, V extends Object>
 	   extends AbstractElement<S, E, V>
 	   implements AdditiveElement<V> {
+
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractAdditiveElement(final S semiGroup, final V value) {
+	protected AbstractAdditiveElement(final AbstractSet<E, V> semiGroup, final V value) {
 		super(semiGroup, value);
 	}
 

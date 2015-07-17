@@ -53,6 +53,7 @@ import java.math.BigInteger;
  */
 public class RandomNumberGenerator
 	   extends UniCrypt {
+
 	private static final long serialVersionUID = 1L;
 
 	private final RandomByteSequence randomByteSequence;
@@ -93,9 +94,9 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random integer beween 0 and Integer.MAX_VALUE.
+	 * Generates a random integer between 0 and Integer.MAX_VALUE.
 	 * <p>
-	 * @return The random int
+	 * @return The random integer
 	 */
 	public final int nextInteger() {
 		return this.nextInteger(Integer.MAX_VALUE);
@@ -155,8 +156,8 @@ public class RandomNumberGenerator
 		if (maxValue == null || maxValue.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
-		BigInteger randomValue;
 		int bitLength = maxValue.bitLength();
+		BigInteger randomValue;
 		do {
 			randomValue = this.internalNextBigInteger(bitLength, false);
 		} while (randomValue.compareTo(maxValue) > 0);
@@ -206,12 +207,23 @@ public class RandomNumberGenerator
 	 * @see "Handbook of Applied Cryptography, Algorithm 4.86"
 	 */
 	public final BigInteger nextSavePrime(int bitLength) {
+		if (bitLength < 2) {
+			throw new IllegalArgumentException();
+		}
+		// Special case with safe primes p=5 or p=7 not satisfying p mod 12 = 11
+		if (bitLength == 3) {
+			if (this.nextBoolean()) {
+				return BigInteger.valueOf(5);
+			} else {
+				return BigInteger.valueOf(7);
+			}
+		}
 		BigInteger prime;
 		BigInteger savePrime;
 		do {
 			prime = this.nextPrime(bitLength - 1);
 			savePrime = prime.shiftLeft(1).add(BigInteger.ONE);
-		} while (!MathUtil.isPrime(savePrime));
+		} while (!savePrime.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) || !MathUtil.isPrime(savePrime));
 		return savePrime;
 	}
 
@@ -245,19 +257,13 @@ public class RandomNumberGenerator
 		if (bitLength < 1) {
 			return BigInteger.ZERO;
 		}
-		int amountOfBytes = (int) Math.ceil(bitLength / 8.0);
+		int amountOfBytes = MathUtil.divideUp(bitLength, 8);
 		byte[] bytes = this.nextBytes(amountOfBytes);
 
 		int shift = 8 - (bitLength % 8);
 		if (shift == 8) {
 			shift = 0;
 		}
-//		if (isMsbSet) {
-//			bytes[0] = (byte) (((bytes[0] & 0xFF) | 0x80) >> shift);
-//		} else {
-//			bytes[0] = (byte) ((bytes[0] & 0xFF) >> shift);
-//		}
-		// Simplified code
 		if (isMsbSet) {
 			bytes[0] = MathUtil.setBit(bytes[0], 7);
 		}

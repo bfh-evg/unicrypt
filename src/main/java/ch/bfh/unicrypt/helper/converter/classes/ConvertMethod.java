@@ -102,6 +102,25 @@ public class ConvertMethod<W>
 		return this.converterMap.get(valueClass);
 	}
 
+	/**
+	 * Selects and returns the converter for input values of a given class. Returns the given default converter, if no
+	 * suitable converter exists.
+	 * <p>
+	 * @param valueClass       The class of the input values
+	 * @param defaultConverter The given default converter
+	 * @return The corresponding converter (or the default converter if no such converter exists)
+	 */
+	public Converter<?, W> getConverter(Class<?> valueClass, Converter<?, W> defaultConverter) {
+		if (defaultConverter == null) {
+			throw new IllegalArgumentException();
+		}
+		Converter<?, W> converter = this.getConverter(valueClass);
+		if (converter == null) {
+			return defaultConverter;
+		}
+		return converter;
+	}
+
 	private void addConverter(Converter<?, W> converter) {
 		Class<?> valueClass = converter.getInputClass();
 		if (valueClass == null || this.converterMap.containsKey(valueClass)) {

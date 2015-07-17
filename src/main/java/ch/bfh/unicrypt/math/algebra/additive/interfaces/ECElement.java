@@ -46,71 +46,70 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
-public interface ECElement<V, E extends DualisticElement<V>>
-	   extends AdditiveElement<Point<E>> {
+public interface ECElement<V, DE extends DualisticElement<V>>
+	   extends AdditiveElement<Point<DE>> {
 
 	/**
 	 * @see Group#apply(Element, Element)
 	 */
-	public ECElement<V,E> add(Element element);
+	public ECElement<V, DE> add(Element element);
 
 	/**
 	 * @see Group#applyInverse(Element, Element)
 	 */
-	public ECElement<V,E> subtract(Element element);
+	public ECElement<V, DE> subtract(Element element);
 
 	/**
 	 * @see Group#selfApply(Element, BigInteger)
 	 */
-	public ECElement<V,E> times(BigInteger amount);
+	public ECElement<V, DE> times(BigInteger amount);
 
 	/**
 	 * @see Group#selfApply(Element, Element)
 	 */
-	public ECElement<V,E> times(Element<BigInteger> amount);
+	public ECElement<V, DE> times(Element<BigInteger> amount);
 
 	/**
 	 * @see Group#selfApply(Element, int)
 	 */
-	public ECElement<V,E> times(int amount);
+	public ECElement<V, DE> times(int amount);
 
 	/**
 	 * @see Group#selfApply(Element)
 	 */
-	public ECElement<V,E> timesTwo();
+	public ECElement<V, DE> timesTwo();
 
 	/**
 	 * @see Group#negate(Element)
 	 */
-	public ECElement<V,E> negate();
+	public ECElement<V, DE> negate();
 
 	public boolean isZero();
 
 	// The following methods are overridden from Element with an adapted return type
-
+	@Override
+	public ECElement<V, DE> apply(Element element);
 
 	@Override
-	public ECElement<V,E> apply(Element element);
+	public ECElement<V, DE> applyInverse(Element element);
 
 	@Override
-	public ECElement<V,E> applyInverse(Element element);
+	public ECElement<V, DE> selfApply(BigInteger amount);
 
 	@Override
-	public ECElement<V,E> selfApply(BigInteger amount);
+	public ECElement<V, DE> selfApply(Element<BigInteger> amount);
 
 	@Override
-	public ECElement<V,E> selfApply(Element<BigInteger> amount);
+	public ECElement<V, DE> selfApply(int amount);
 
 	@Override
-	public ECElement<V,E> selfApply(int amount);
+	public ECElement<V, DE> selfApply();
 
 	@Override
-	public ECElement<V,E> selfApply();
+	public ECElement<V, DE> invert();
 
-	@Override
-	public ECElement<V,E> invert();
+	public DE getY();
 
-	public E getY();
-	public E getX();
+	public DE getX();
 
 }

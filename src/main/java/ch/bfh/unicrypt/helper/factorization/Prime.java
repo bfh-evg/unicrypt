@@ -56,6 +56,7 @@ import java.math.BigInteger;
  */
 public class Prime
 	   extends SpecialFactorization {
+
 	private static final long serialVersionUID = 1L;
 
 	protected Prime(BigInteger prime) {
@@ -88,6 +89,44 @@ public class Prime
 			return new SafePrime(prime);
 		}
 		return new Prime(prime);
+	}
+
+	/**
+	 * Returns the smallest prime greater or equal to {@code lowerBound}.
+	 * <p>
+	 * @param lowerBound The lower bound
+	 * @return The new prime
+	 */
+	public static Prime getNextInstance(BigInteger lowerBound) {
+		if (lowerBound == null) {
+			throw new IllegalArgumentException();
+		}
+		BigInteger prime;
+		if (lowerBound.compareTo(BigInteger.valueOf(2)) <= 0) {
+			prime = MathUtil.TWO;
+		} else {
+			prime = lowerBound;
+			if (prime.mod(MathUtil.TWO).equals(MathUtil.ZERO)) {
+				prime = prime.add(MathUtil.ONE);
+			}
+		}
+		while (!MathUtil.isPrime(prime)) {
+			prime = prime.add(MathUtil.TWO);
+		}
+		return new Prime(prime);
+	}
+
+	/**
+	 * Returns the smallest prime of a given bit length.
+	 * <p>
+	 * @param bitLength The given bit length
+	 * @return The new prime
+	 */
+	public static Prime getNextInstance(int bitLength) {
+		if (bitLength < 2) {
+			throw new IllegalArgumentException();
+		}
+		return Prime.getNextInstance(MathUtil.powerOfTwo(bitLength - 1));
 	}
 
 	/**

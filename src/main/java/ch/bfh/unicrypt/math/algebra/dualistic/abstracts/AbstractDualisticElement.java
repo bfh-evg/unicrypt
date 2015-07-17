@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
@@ -60,9 +61,10 @@ import java.math.BigInteger;
 public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends DualisticElement<V>, V extends Object>
 	   extends AbstractAdditiveElement<S, E, V>
 	   implements DualisticElement<V> {
+
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractDualisticElement(final S ring, final V value) {
+	protected AbstractDualisticElement(final AbstractSet<E, V> ring, final V value) {
 		super(ring, value);
 	}
 

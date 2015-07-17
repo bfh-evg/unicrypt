@@ -56,6 +56,7 @@ import java.math.BigInteger;
  */
 public class SafePrime
 	   extends Prime {
+
 	private static final long serialVersionUID = 1L;
 
 	protected SafePrime(BigInteger safePrime) {
@@ -89,6 +90,44 @@ public class SafePrime
 	}
 
 	/**
+	 * Returns the smallest safe prime greater or equal to {@code lowerBound}.
+	 * <p>
+	 * @param lowerBound The lower bound
+	 * @return The new safe prime
+	 */
+	public static SafePrime getNextInstance(BigInteger lowerBound) {
+		if (lowerBound == null) {
+			throw new IllegalArgumentException();
+		}
+		BigInteger twelve = BigInteger.valueOf(12);
+		BigInteger safePrime;
+		if (lowerBound.compareTo(BigInteger.valueOf(5)) <= 0) {
+			safePrime = BigInteger.valueOf(5);
+		} else if (lowerBound.compareTo(BigInteger.valueOf(7)) <= 0) {
+			safePrime = BigInteger.valueOf(7);
+		} else {
+			safePrime = lowerBound.add(twelve.subtract(lowerBound.mod(twelve))).subtract(BigInteger.ONE);
+		}
+		while (!MathUtil.isSafePrime(safePrime)) {
+			safePrime = safePrime.add(twelve);
+		}
+		return new SafePrime(safePrime);
+	}
+
+	/**
+	 * Returns the smallest safe prime of a given bit length.
+	 * <p>
+	 * @param bitLength The given bit length
+	 * @return The new safe prime
+	 */
+	public static SafePrime getNextInstance(int bitLength) {
+		if (bitLength < 3) {
+			throw new IllegalArgumentException();
+		}
+		return SafePrime.getNextInstance(MathUtil.powerOfTwo(bitLength - 1));
+	}
+
+	/**
 	 * Creates a new random safe prime of a given bit length using the library's default source of randomness.
 	 * <p>
 	 * @param bitLength The bit length
@@ -110,6 +149,12 @@ public class SafePrime
 			throw new IllegalArgumentException();
 		}
 		return new SafePrime(randomByteSequence.getRandomNumberGenerator().nextSavePrime(bitLength));
+	}
+
+	public static void main(String[] args) {
+		for (int i = 3; i < 100; i++) {
+			System.out.println(SafePrime.getNextInstance(i));
+		}
 	}
 
 }

@@ -44,10 +44,7 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -66,9 +63,7 @@ import java.math.BigInteger;
  * <p>
  * Independently of the generic type {@code V} of a set, it is assumed that each element of this set can be converted
  * into a unique {@link BigInteger}, {@link String}, or {@link ByteArray} value, and vice versa, that corresponding
- * elements can be constructed from such {@link BigInteger}, {@link String}, or {@link ByteArray} values. For this, each
- * set provides default converters (instances of {@link BigIntegerConverter}, {@link StringConverter}, and
- * {@link ByteArrayConverter}), which handle the conversion.
+ * elements can be constructed from such {@link BigInteger}, {@link String}, or {@link ByteArray} values.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -329,36 +324,6 @@ public interface Set<V extends Object> {
 	 * @return The corresponding class
 	 */
 	public Class<?> getValueClass();
-
-	/**
-	 * Returns the default {@link BigIntegerConverter} of this class. It is used to convert elements of this class into
-	 * {@link BigInteger} and, vice versa, to construct elements of this class from {@link BigInteger} values.
-	 * <p>
-	 * @return The default {@link BigInteger} converter
-	 * @see Set#getElementFrom(BigInteger)
-	 * @see Element#getBigInteger()
-	 */
-	public Converter<V, BigInteger> getBigIntegerConverter();
-
-	/**
-	 * Returns the default {@link StringConverter} of this class. It is used to convert elements of this class into
-	 * {@link String} and, vice versa, to construct elements of this class from {@link String} values.
-	 * <p>
-	 * @return The default {@link String} converter
-	 * @see Set#getElementFrom(String)
-	 * @see Element#getString()
-	 */
-	public Converter<V, String> getStringConverter();
-
-	/**
-	 * Returns the default {@link ByteArrayConverter} of this class. It is used to convert elements of this class into
-	 * {@link ByteArray} and, vice versa, to construct elements of this class from {@link ByteArray} values.
-	 * <p>
-	 * @return The default {@link ByteArray} converter
-	 * @see Set#getElementFrom(ByteArray)
-	 * @see Element#getByteArray()
-	 */
-	public Converter<V, ByteArray> getByteArrayConverter();
 
 	/**
 	 * Creates and returns the element that corresponds to a given integer (if one exists). Returns {@literal null}

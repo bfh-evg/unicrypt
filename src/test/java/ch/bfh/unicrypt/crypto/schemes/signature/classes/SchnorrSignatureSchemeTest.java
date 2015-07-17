@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.signature.classes;
 
 import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.factorization.SafePrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -85,7 +86,7 @@ public class SchnorrSignatureSchemeTest {
 
 	@Test
 	public void testSignVerify2() {
-		GStarModSafePrime g_q = GStarModSafePrime.getRandomInstance(128);
+		GStarModSafePrime g_q = GStarModSafePrime.getInstance(SafePrime.getRandomInstance(128));
 		GStarModElement g = g_q.getDefaultGenerator();
 
 		SchnorrSignatureScheme<StringMonoid> schnorr = SchnorrSignatureScheme.getInstance(StringMonoid.getInstance(Alphabet.BASE64), g);

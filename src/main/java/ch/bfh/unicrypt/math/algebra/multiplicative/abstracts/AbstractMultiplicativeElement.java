@@ -42,7 +42,9 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
@@ -58,13 +60,13 @@ import java.math.BigInteger;
  * @param <V> Generic type of value stored in this element
  * @author rolfhaenni
  */
-public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup<V>,
-	   E extends MultiplicativeElement<V>, V extends Object>
+public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup<V>, E extends MultiplicativeElement<V>, V extends Object>
 	   extends AbstractElement<S, E, V>
 	   implements MultiplicativeElement<V> {
+
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractMultiplicativeElement(final S semiGroup, final V value) {
+	protected AbstractMultiplicativeElement(final AbstractSet<E, V> semiGroup, final V value) {
 		super(semiGroup, value);
 	}
 
