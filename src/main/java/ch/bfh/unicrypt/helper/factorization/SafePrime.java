@@ -42,8 +42,7 @@
 package ch.bfh.unicrypt.helper.factorization;
 
 import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import java.math.BigInteger;
 
 /**
@@ -95,7 +94,7 @@ public class SafePrime
 	 * @param lowerBound The lower bound
 	 * @return The new safe prime
 	 */
-	public static SafePrime getNextInstance(BigInteger lowerBound) {
+	public static SafePrime getFirstInstance(BigInteger lowerBound) {
 		if (lowerBound == null) {
 			throw new IllegalArgumentException();
 		}
@@ -107,9 +106,9 @@ public class SafePrime
 			safePrime = BigInteger.valueOf(7);
 		} else {
 			safePrime = lowerBound.add(twelve.subtract(lowerBound.mod(twelve))).subtract(BigInteger.ONE);
-		}
-		while (!MathUtil.isSafePrime(safePrime)) {
-			safePrime = safePrime.add(twelve);
+			while (!MathUtil.isSafePrime(safePrime)) {
+				safePrime = safePrime.add(twelve);
+			}
 		}
 		return new SafePrime(safePrime);
 	}
@@ -120,11 +119,11 @@ public class SafePrime
 	 * @param bitLength The given bit length
 	 * @return The new safe prime
 	 */
-	public static SafePrime getNextInstance(int bitLength) {
+	public static SafePrime getFirstInstance(int bitLength) {
 		if (bitLength < 3) {
 			throw new IllegalArgumentException();
 		}
-		return SafePrime.getNextInstance(MathUtil.powerOfTwo(bitLength - 1));
+		return SafePrime.getFirstInstance(MathUtil.powerOfTwo(bitLength - 1));
 	}
 
 	/**
@@ -134,27 +133,35 @@ public class SafePrime
 	 * @return The new safe prime
 	 */
 	public static SafePrime getRandomInstance(int bitLength) {
-		return SafePrime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
+		return SafePrime.getRandomInstance(bitLength, RandomNumberGenerator.getInstance().getInstance());
 	}
 
 	/**
 	 * Creates a new random safe prime of a given bit length using a given source of randomness.
 	 * <p>
-	 * @param bitLength          The bit length
-	 * @param randomByteSequence The given source of randomness
+	 * @param bitLength             The bit length
+	 * @param randomNumberGenerator The given random number generator
 	 * @return The new safe prime
 	 */
-	public static SafePrime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		if (randomByteSequence == null) {
+	public static SafePrime getRandomInstance(int bitLength, RandomNumberGenerator randomNumberGenerator) {
+		if (bitLength < 3 || randomNumberGenerator == null) {
 			throw new IllegalArgumentException();
 		}
-		return new SafePrime(randomByteSequence.getRandomNumberGenerator().nextSavePrime(bitLength));
-	}
-
-	public static void main(String[] args) {
-		for (int i = 3; i < 100; i++) {
-			System.out.println(SafePrime.getNextInstance(i));
+		// Special case with safe primes p=5 or p=7 not satisfying p mod 12 = 11
+		if (bitLength == 3) {
+			if (randomNumberGenerator.nextBoolean()) {
+				return new SafePrime(BigInteger.valueOf(5));
+			} else {
+				return new SafePrime(BigInteger.valueOf(7));
+			}
 		}
+		BigInteger prime;
+		BigInteger safePrime;
+		do {
+			prime = randomNumberGenerator.nextBigInteger(bitLength - 1);
+			safePrime = prime.shiftLeft(1).add(BigInteger.ONE);
+		} while (!safePrime.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) || !MathUtil.isPrime(prime) || !MathUtil.isPrime(safePrime));
+		return new SafePrime(safePrime);
 	}
 
 }

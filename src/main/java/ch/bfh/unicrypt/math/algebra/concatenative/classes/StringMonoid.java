@@ -114,7 +114,7 @@ public class StringMonoid
 		char[] chars = new char[length];
 		for (int i = 0; i < length; i++) {
 			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomNumberGenerator()
-				   .nextInteger(this.getAlphabet().getSize() - 1));
+				   .nextInt(this.getAlphabet().getSize() - 1));
 		}
 		return this.abstractGetElement(new String(chars));
 	}

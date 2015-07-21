@@ -92,12 +92,17 @@ public class GStarModPrime
 		return instance;
 	}
 
-	public static GStarModPrime getInstance(final int modulus, final int orderFactor) {
+	public static GStarModPrime getInstance(final int modulus, int orderFactor) {
 		return GStarModPrime.getInstance(BigInteger.valueOf(modulus), BigInteger.valueOf(orderFactor));
 	}
 
 	public static GStarModPrime getInstance(final BigInteger modulus, BigInteger orderFactor) {
 		return GStarModPrime.getInstance(Prime.getInstance(modulus), Prime.getInstance(orderFactor));
+	}
+
+	public static GStarModPrime getFirstInstance(final int bitLength1, final int bitLength2) {
+		Prime orderFactor = Prime.getFirstInstance(bitLength2);
+		return GStarModPrime.getInstance(Prime.getFirstInstance(bitLength1, orderFactor), orderFactor);
 	}
 
 }

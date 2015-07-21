@@ -66,6 +66,7 @@ import java.math.BigInteger;
  */
 public class ZStarMod
 	   extends AbstractMultiplicativeGroup<ZStarModElement, BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final BigInteger modulus;

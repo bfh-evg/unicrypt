@@ -81,35 +81,22 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random byte[] of size length where each byte carries a value of -128 and 127 (inclusive).
+	 * Generates a random {@code int} value between 0 and Integer.MAX_VALUE.
 	 * <p>
-	 * @param length
-	 * @return The random byte[] value
+	 * @return The random {@code int} value
 	 */
-	public final byte[] nextBytes(int length) {
-		if (length < 0) {
-			throw new IllegalArgumentException();
-		}
-		return this.randomByteSequence.getNextByteArray(length).getBytes();
+	public final int nextInt() {
+		return this.nextInt(Integer.MAX_VALUE);
 	}
 
 	/**
-	 * Generates a random integer between 0 and Integer.MAX_VALUE.
-	 * <p>
-	 * @return The random integer
-	 */
-	public final int nextInteger() {
-		return this.nextInteger(Integer.MAX_VALUE);
-	}
-
-	/**
-	 * Generates a random integer between 0 and {@literal maxValue} (inclusive).
+	 * Generates a random {@code int} value between 0 and {@literal maxValue} (inclusive).
 	 * <p>
 	 * @param maxValue The maximal value
-	 * @return The random integer
+	 * @return The random {@code int} value
 	 * @throws IllegalArgumentException if {@literal maxValue < 0}
 	 */
-	public final int nextInteger(int maxValue) {
+	public final int nextInt(int maxValue) {
 		if (maxValue < 0) {
 			throw new IllegalArgumentException();
 		}//This is a slow implementation.
@@ -117,15 +104,51 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random integer between {@literal minValue} (inclusive) and {@literal maxValue} (inclusive).
+	 * Generates a random {@code int} value between {@literal minValue} (inclusive) and {@literal maxValue} (inclusive).
 	 * <p>
 	 * @param minValue The minimal value
 	 * @param maxValue The maximal value
-	 * @return The random integer
+	 * @return The random {@code int} value
 	 * @throws IllegalArgumentException if {@literal maxValue < minValue}
 	 */
-	public final int nextInteger(int minValue, int maxValue) {
-		return this.nextInteger(maxValue - minValue) + minValue;
+	public final int nextInt(int minValue, int maxValue) {
+		return this.nextInt(maxValue - minValue) + minValue;
+	}
+
+	/**
+	 * Generates a random {@code long} value between 0 and Long.MAX_VALUE.
+	 * <p>
+	 * @return The random {@code long} value
+	 */
+	public final long nextLong() {
+		return this.nextLong(Long.MAX_VALUE);
+	}
+
+	/**
+	 * Generates a random {@code long} value between 0 and {@literal maxValue} (inclusive).
+	 * <p>
+	 * @param maxValue The maximal value
+	 * @return The random {@code long} value
+	 * @throws IllegalArgumentException if {@literal maxValue < 0}
+	 */
+	public final long nextLong(long maxValue) {
+		if (maxValue < 0) {
+			throw new IllegalArgumentException();
+		}//This is a slow implementation.
+		return this.nextBigInteger(BigInteger.valueOf(maxValue)).longValue();
+	}
+
+	/**
+	 * Generates a random {@code long} value between {@literal minValue} (inclusive) and {@literal maxValue}
+	 * (inclusive).
+	 * <p>
+	 * @param minValue The minimal value
+	 * @param maxValue The maximal value
+	 * @return The random {@code long} value
+	 * @throws IllegalArgumentException if {@literal maxValue < minValue}
+	 */
+	public final long nextLong(long minValue, long maxValue) {
+		return this.nextLong(maxValue - minValue) + minValue;
 	}
 
 	/**
@@ -180,85 +203,12 @@ public class RandomNumberGenerator
 		return this.nextBigInteger(maxValue.subtract(minValue)).add(minValue);
 	}
 
-	/**
-	 * Generates a random BigInteger value of a certain bit length that is probably prime with high certainty.
-	 * <p>
-	 * @param bitLength The given bit length
-	 * @return The random BigInteger prime number
-	 * @throws IllegalArgumentException if {@literal bitLength < 2}
-	 */
-	public final BigInteger nextPrime(int bitLength) {
-		if (bitLength < 2) {
-			throw new IllegalArgumentException();
-		}
-		BigInteger prime;
-		do {
-			prime = this.internalNextBigInteger(bitLength, true);
-		} while (!MathUtil.isPrime(prime));
-		return prime;
-	}
-
-	/**
-	 * Generates a random BigInteger value of a certain bit length that is a save prime with high certainty.
-	 * <p>
-	 * @param bitLength The given bit length
-	 * @return The random BigInteger save prime
-	 * @throws IllegalArgumentException if {@literal bitLength < 3}
-	 * @see "Handbook of Applied Cryptography, Algorithm 4.86"
-	 */
-	public final BigInteger nextSavePrime(int bitLength) {
-		if (bitLength < 2) {
-			throw new IllegalArgumentException();
-		}
-		// Special case with safe primes p=5 or p=7 not satisfying p mod 12 = 11
-		if (bitLength == 3) {
-			if (this.nextBoolean()) {
-				return BigInteger.valueOf(5);
-			} else {
-				return BigInteger.valueOf(7);
-			}
-		}
-		BigInteger prime;
-		BigInteger savePrime;
-		do {
-			prime = this.nextPrime(bitLength - 1);
-			savePrime = prime.shiftLeft(1).add(BigInteger.ONE);
-		} while (!savePrime.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) || !MathUtil.isPrime(savePrime));
-		return savePrime;
-	}
-
-	/**
-	 * Generates a pair of distinct random BigInteger values of respective bit lengths such that both values are
-	 * probably prime with high certainty and such that the second divides the first minus one.
-	 * <p>
-	 * @param bitLength1 The bit length of the first random prime
-	 * @param bitLength2 The bit length of the second random prime
-	 * @return A BigInteger array containing the two primes
-	 * @throws IllegalArgumentException if {@literal bitLength1 <= bitLength2} or {@literal bitLengh2<2}
-	 */
-	public final BigInteger[] nextPrimePair(int bitLength1, int bitLength2) {
-		if (bitLength1 <= bitLength2 || bitLength2 < 2) {
-			throw new IllegalArgumentException();
-		}
-		BigInteger k;
-		BigInteger prime1, prime2;
-		BigInteger minValue, maxValue;
-		do {
-			prime2 = this.nextPrime(bitLength2);
-			minValue = MathUtil.powerOfTwo(bitLength1 - 1);
-			maxValue = MathUtil.powerOfTwo(bitLength1).subtract(BigInteger.ONE);
-			k = this.nextBigInteger(minValue.divide(prime2).add(BigInteger.ONE), maxValue.divide(prime2));
-			prime1 = prime2.multiply(k).add(BigInteger.ONE);
-		} while (!MathUtil.isPrime(prime1));
-		return new BigInteger[]{prime1, prime2};
-	}
-
 	private BigInteger internalNextBigInteger(int bitLength, boolean isMsbSet) {
 		if (bitLength < 1) {
 			return BigInteger.ZERO;
 		}
 		int amountOfBytes = MathUtil.divideUp(bitLength, 8);
-		byte[] bytes = this.nextBytes(amountOfBytes);
+		byte[] bytes = this.randomByteSequence.getNextByteArray(amountOfBytes).getBytes();
 
 		int shift = 8 - (bitLength % 8);
 		if (shift == 8) {
@@ -270,6 +220,10 @@ public class RandomNumberGenerator
 		bytes[0] = MathUtil.shiftRight(bytes[0], shift);
 
 		return new BigInteger(1, bytes);
+	}
+
+	public static RandomNumberGenerator getInstance() {
+		return RandomNumberGenerator.getInstance(HybridRandomByteSequence.getInstance());
 	}
 
 	public static RandomNumberGenerator getInstance(RandomByteSequence randomByteSequence) {

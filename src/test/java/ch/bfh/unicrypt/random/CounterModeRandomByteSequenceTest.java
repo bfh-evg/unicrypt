@@ -262,7 +262,7 @@ public class CounterModeRandomByteSequenceTest {
 		boolean maxReached = false;
 		HashSet<Integer> numbers = new HashSet<Integer>();
 		for (int i = 0; i < 100000; i++) {
-			int result = instance.getRandomNumberGenerator().nextInteger(1023);
+			int result = instance.getRandomNumberGenerator().nextInt(1023);
 			numbers.add(result);
 			if (result == 1023) {
 				maxReached = true;
@@ -378,21 +378,6 @@ public class CounterModeRandomByteSequenceTest {
 		Assert.assertTrue(maxReached);
 		Assert.assertTrue("Amount: " + numbers.size(), numbers.size() == 256);
 
-	}
-
-	/**
-	 * Test of abstractNextPrime method, of class CounterModeRandomByteSequence.
-	 */
-	@Test
-	public void testAbstractNextPrime8() {
-		// System.out.println("abstractNextPrime");
-		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
-		HashSet<BigInteger> primes = new HashSet<BigInteger>();
-		for (int i = 0; i < 10000; i++) {
-			BigInteger result = instance.getRandomNumberGenerator().nextPrime(8);
-			primes.add(result);
-		}
-		Assert.assertTrue("Size: " + primes.size(), primes.size() == 23);
 	}
 
 }

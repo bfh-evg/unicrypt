@@ -65,6 +65,7 @@ import java.util.Map;
  */
 public class ZMod
 	   extends AbstractCyclicRing<ZModElement, BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected final BigInteger modulus;

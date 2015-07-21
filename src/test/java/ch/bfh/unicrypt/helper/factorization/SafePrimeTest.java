@@ -117,4 +117,33 @@ public class SafePrimeTest {
 		}
 	}
 
+	@Test
+	public void testGetFirstInstance_int() {
+		try {
+			SafePrime p = SafePrime.getFirstInstance(1);
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			SafePrime p = SafePrime.getFirstInstance(2);
+			fail();
+		} catch (Exception e) {
+		}
+		SafePrime p;
+		p = SafePrime.getFirstInstance(3);
+		assertEquals(5, p.getValue().intValue());
+
+		p = SafePrime.getFirstInstance(4);
+		assertEquals(11, p.getValue().intValue());
+
+		p = SafePrime.getFirstInstance(5);
+		assertEquals(23, p.getValue().intValue());
+
+		p = SafePrime.getFirstInstance(6);
+		assertEquals(47, p.getValue().intValue());
+
+		p = SafePrime.getFirstInstance(7);
+		assertEquals(83, p.getValue().intValue());
+	}
+
 }

@@ -42,8 +42,7 @@
 package ch.bfh.unicrypt.helper.factorization;
 
 import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import java.math.BigInteger;
 
 /**
@@ -64,8 +63,8 @@ public class Prime
 	}
 
 	/**
-	 * Creates a new prime from a given integer value of type {@code int}. This method is a convenience method for
-	 * {@link Prime#getInstance(java.math.BigInteger)}. Throws an exception if the given integer is not prime.
+	 * Creates a new prime number from a given integer value of type {@code int}. This method is a convenience method
+	 * for {@link Prime#getInstance(BigInteger)}. Throws an exception if the given integer is not prime.
 	 * <p>
 	 * @param prime The given integer value
 	 * @return The new prime
@@ -75,8 +74,8 @@ public class Prime
 	}
 
 	/**
-	 * Creates a new prime from a given integer value of type {@link BigInteger}. Throws an exception if the given
-	 * integer is not prime.
+	 * Creates a new prime number from a given integer value of type {@link BigInteger}. Throws an exception if the
+	 * given integer is not prime.
 	 * <p>
 	 * @param prime The given integer value
 	 * @return The new prime
@@ -85,72 +84,155 @@ public class Prime
 		if (prime == null || !MathUtil.isPrime(prime)) {
 			throw new IllegalArgumentException();
 		}
-		if (MathUtil.isPrime(prime.subtract(BigInteger.ONE).divide(MathUtil.TWO))) {
-			return new SafePrime(prime);
-		}
-		return new Prime(prime);
+		return Prime.privateGetInstance(prime);
 	}
 
 	/**
-	 * Returns the smallest prime greater or equal to {@code lowerBound}.
-	 * <p>
-	 * @param lowerBound The lower bound
-	 * @return The new prime
-	 */
-	public static Prime getNextInstance(BigInteger lowerBound) {
-		if (lowerBound == null) {
-			throw new IllegalArgumentException();
-		}
-		BigInteger prime;
-		if (lowerBound.compareTo(BigInteger.valueOf(2)) <= 0) {
-			prime = MathUtil.TWO;
-		} else {
-			prime = lowerBound;
-			if (prime.mod(MathUtil.TWO).equals(MathUtil.ZERO)) {
-				prime = prime.add(MathUtil.ONE);
-			}
-		}
-		while (!MathUtil.isPrime(prime)) {
-			prime = prime.add(MathUtil.TWO);
-		}
-		return new Prime(prime);
-	}
-
-	/**
-	 * Returns the smallest prime of a given bit length.
+	 * Returns the smallest prime number of a given bit length.
 	 * <p>
 	 * @param bitLength The given bit length
 	 * @return The new prime
 	 */
-	public static Prime getNextInstance(int bitLength) {
+	public static Prime getFirstInstance(int bitLength) {
 		if (bitLength < 2) {
 			throw new IllegalArgumentException();
 		}
-		return Prime.getNextInstance(MathUtil.powerOfTwo(bitLength - 1));
+		return Prime.getFirstInstance(MathUtil.powerOfTwo(bitLength - 1));
 	}
 
 	/**
-	 * Creates a new random prime of a given bit length using the library's default source of randomness.
+	 * Returns the smallest prime number greater or equal to {@code lowerBound}.
+	 * <p>
+	 * @param lowerBound The lower bound
+	 * @return The new prime
+	 */
+	public static Prime getFirstInstance(BigInteger lowerBound) {
+		if (lowerBound == null) {
+			throw new IllegalArgumentException();
+		}
+		BigInteger candidate;
+		if (lowerBound.compareTo(BigInteger.valueOf(2)) <= 0) {
+			candidate = MathUtil.TWO;
+		} else {
+			candidate = lowerBound;
+			if (candidate.mod(MathUtil.TWO).equals(MathUtil.ZERO)) {
+				candidate = candidate.add(MathUtil.ONE);
+			}
+		}
+		while (!MathUtil.isPrime(candidate)) {
+			candidate = candidate.add(MathUtil.TWO);
+		}
+		return Prime.privateGetInstance(candidate);
+	}
+
+	/**
+	 * Returns the smallest prime number of a given bit length such that {@code divisor} divides the prime number minus
+	 * one.
+	 * <p>
+	 * @param bitLength The given bit length
+	 * @param divisor   The given divisor
+	 * @return The new prime
+	 */
+	public static Prime getFirstInstance(int bitLength, BigInteger divisor) {
+		return Prime.getFirstInstance(bitLength, Prime.getInstance(divisor));
+	}
+
+	/**
+	 * Returns the smallest prime number of a given bit length such that {@code divisor} divides the prime number minus
+	 * one.
+	 * <p>
+	 * @param bitLength The given bit length
+	 * @param divisor   The given divisor
+	 * @return The new prime
+	 */
+	public static Prime getFirstInstance(int bitLength, Prime divisor) {
+		if (divisor == null) {
+			throw new IllegalArgumentException();
+		}
+		Prime prime = Prime.getFirstInstance(MathUtil.powerOfTwo(bitLength - 1), divisor);
+		if (prime.getValue().bitLength() > bitLength) {
+			throw new IllegalArgumentException();
+		}
+		return prime;
+	}
+
+	/**
+	 * Returns the smallest prime number greater or equal to {@code lowerBound} such that {@code divisor} divides the
+	 * prime number minus one.
+	 * <p>
+	 * @param lowerBound The lower bound
+	 * @param divisor    The given divisor
+	 * @return The new prime
+	 */
+	public static Prime getFirstInstance(BigInteger lowerBound, BigInteger divisor) {
+		return Prime.getFirstInstance(lowerBound, Prime.getInstance(divisor));
+	}
+
+	/**
+	 * Returns the smallest prime number greater or equal to {@code lowerBound} such that {@code divisor} divides the
+	 * prime number minus one.
+	 * <p>
+	 * @param lowerBound The lower bound
+	 * @param divisor    The given divisor
+	 * @return The new prime
+	 */
+	public static Prime getFirstInstance(BigInteger lowerBound, Prime divisor) {
+		if (lowerBound == null || divisor == null) {
+			throw new IllegalArgumentException();
+		}
+		BigInteger primeDivisor = divisor.getValue();
+		if (primeDivisor.equals(MathUtil.TWO)) {
+			return Prime.getFirstInstance(lowerBound.max(MathUtil.THREE));
+		}
+		BigInteger doublePrimeDivisor = primeDivisor.shiftLeft(1);
+		// the smallest possible value is 2*divisor+1
+		lowerBound = lowerBound.max(doublePrimeDivisor.add(MathUtil.ONE));
+		// compute the smallest possible candidate
+		BigInteger candidate;
+		if (lowerBound.mod(doublePrimeDivisor).equals(MathUtil.ONE)) {
+			candidate = lowerBound;
+		} else {
+			candidate = lowerBound.subtract(MathUtil.ONE).divide(doublePrimeDivisor).add(MathUtil.ONE).multiply(doublePrimeDivisor).add(MathUtil.ONE);
+		}
+		while (!MathUtil.isPrime(candidate)) {
+			candidate = candidate.add(doublePrimeDivisor);
+		}
+		return Prime.privateGetInstance(candidate);
+	}
+
+	/**
+	 * Creates a new random prime number of a given bit length using the library's default source of randomness.
 	 * <p>
 	 * @param bitLength The bit length
 	 * @return The new prime
 	 */
 	public static Prime getRandomInstance(int bitLength) {
-		return Prime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
+		return Prime.getRandomInstance(bitLength, RandomNumberGenerator.getInstance());
 	}
 
 	/**
-	 * Creates a new random prime of a given bit length using a given source of randomness.
+	 * Creates a new random prime number of a given bit length using a given source of randomness.
 	 * <p>
-	 * @param bitLength          The bit length
-	 * @param randomByteSequence The given source of randomness
+	 * @param bitLength             The bit length
+	 * @param randomNumberGenerator The given source of randomness
 	 * @return The new prime
 	 */
-	public static Prime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		if (randomByteSequence == null) {
+	public static Prime getRandomInstance(int bitLength, RandomNumberGenerator randomNumberGenerator) {
+		if (bitLength < 2 || randomNumberGenerator == null) {
 			throw new IllegalArgumentException();
 		}
-		return Prime.getInstance(randomByteSequence.getRandomNumberGenerator().nextPrime(bitLength));
+		BigInteger candidate;
+		do {
+			candidate = randomNumberGenerator.nextBigInteger(bitLength);
+		} while (!MathUtil.isPrime(candidate));
+		return Prime.privateGetInstance(candidate);
+	}
+
+	private static Prime privateGetInstance(BigInteger prime) {
+		if (MathUtil.isPrime(prime.subtract(BigInteger.ONE).divide(MathUtil.TWO))) {
+			return new SafePrime(prime);
+		}
+		return new Prime(prime);
 	}
 
 }

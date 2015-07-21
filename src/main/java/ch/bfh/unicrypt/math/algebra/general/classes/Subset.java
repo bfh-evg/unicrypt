@@ -123,7 +123,7 @@ public class Subset
 
 	@Override
 	protected Element abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		int randomIndex = randomByteSequence.getRandomNumberGenerator().nextInteger(this.elementSet.size() - 1);
+		int randomIndex = randomByteSequence.getRandomNumberGenerator().nextInt(this.elementSet.size() - 1);
 		int i = 0;
 		for (Element element : this.getElements()) {
 			if (i == randomIndex) {

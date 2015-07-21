@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -58,7 +59,7 @@ public class GStarModSafePrimeTest {
 
 	@Test
 	public void testIteration() {
-		GStarModSafePrime set = GStarModSafePrime.getInstance(23);
+		GStarModSafePrime set = GStarModSafePrime.getInstance(BigInteger.valueOf(23));
 		for (Element element : set.getElements()) {
 //			System.out.println(element);
 		}
@@ -67,7 +68,7 @@ public class GStarModSafePrimeTest {
 	@Test
 	public void testGetIndependentGenerators1() {
 		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
-		GStarModSafePrime set = GStarModSafePrime.getInstance(23);
+		GStarModSafePrime set = GStarModSafePrime.getInstance(BigInteger.valueOf(23));
 		Element g1 = set.getIndependentGenerator(3, rrs);
 		Element g2 = set.getIndependentGenerator(5, rrs);
 		Element g3 = set.getIndependentGenerator(2, rrs);
@@ -91,7 +92,7 @@ public class GStarModSafePrimeTest {
 	@Test
 	public void testGetIndependentGenerators2() {
 		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance(new byte[]{2, 5}));
-		GStarModSafePrime set = GStarModSafePrime.getInstance(23);
+		GStarModSafePrime set = GStarModSafePrime.getInstance(BigInteger.valueOf(23));
 		Element g1 = set.getIndependentGenerator(3, rrs);
 		Element g2 = set.getIndependentGenerator(5, rrs);
 		Element g3 = set.getIndependentGenerator(2, rrs);

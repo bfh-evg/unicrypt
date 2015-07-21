@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.DoubleDiscreteLogProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.factorization.SafePrime;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
@@ -68,9 +67,9 @@ import org.junit.Test;
  */
 public class DoubleDiscreteLogProofSystemTest {
 
-	final static int Q1 = 83;     // Q1               (prime)
-	final static int P1 = 167;    // P1 =  2*Q1+1     (prime)
-	final static int O1 = 2339;   // O1 = 15*P1+1     (prime)
+	final static String Q1 = "83";     // Q1               (prime)
+	final static String P1 = "167";    // P1 =  2*Q1+1     (prime)
+	final static String O1 = "2339";   // O1 = 15*P1+1     (prime)
 
 	//                               Q2               (prime)
 	final static String Q2 = "44029592011280554637067270297569196376551445501032604370128853948420151648611";
@@ -81,9 +80,9 @@ public class DoubleDiscreteLogProofSystemTest {
 
 	@Test
 	public void testDoubleDiscreteLogProofSystem() {
-		final CyclicGroup G_p = GStarModPrime.getInstance(O1, P1);
+		final CyclicGroup G_p = GStarModPrime.getInstance(new BigInteger(O1), new BigInteger(P1));
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
+		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P1));
 		final ZModPrime Z_q = (ZModPrime) G_q.getZModOrder();
 
 		final Element g = G_p.getElement(BigInteger.valueOf(912));
@@ -157,9 +156,9 @@ public class DoubleDiscreteLogProofSystemTest {
 	public void testDoubleDiscreteLogProofSystem3() {
 
 		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
-		final CyclicGroup G_p = GStarModPrime.getInstance(O1, P1);
+		final CyclicGroup G_p = GStarModPrime.getInstance(new BigInteger(O1), new BigInteger(P1));
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
+		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P1));
 		final ZModPrime Z_q = (ZModPrime) G_q.getZModOrder();
 
 		final Element g = G_p.getElement(BigInteger.valueOf(912));

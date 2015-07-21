@@ -163,7 +163,7 @@ public class Permutation
 		int[] permutationVector = new int[size];
 		int randomIndex;
 		for (int i = 0; i < size; i++) {
-			randomIndex = randomByteSequence.getRandomNumberGenerator().nextInteger(i);
+			randomIndex = randomByteSequence.getRandomNumberGenerator().nextInt(i);
 			permutationVector[i] = permutationVector[randomIndex];
 			permutationVector[randomIndex] = i;
 		}

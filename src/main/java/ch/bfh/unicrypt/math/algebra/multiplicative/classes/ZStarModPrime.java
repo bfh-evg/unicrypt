@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
@@ -148,12 +147,8 @@ public class ZStarModPrime
 		return ZStarModPrime.getInstance(Prime.getInstance(modulus));
 	}
 
-	public static ZStarModPrime getRandomInstance(int bitLength) {
-		return ZStarModPrime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
-	}
-
-	public static ZStarModPrime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		return ZStarModPrime.getInstance(Prime.getRandomInstance(bitLength, randomByteSequence));
+	public static ZStarModPrime getFirstInstance(int bitLength) {
+		return ZStarModPrime.getInstance(Prime.getFirstInstance(bitLength));
 	}
 
 }

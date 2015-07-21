@@ -50,7 +50,6 @@ import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme
 import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.helper.Alphabet;
 import ch.bfh.unicrypt.helper.Permutation;
-import ch.bfh.unicrypt.helper.factorization.SafePrime;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -327,7 +326,7 @@ public class ShuffleProofSystemTest {
 		Tuple uV = uVSpace.getRandomElement();
 		Element[] uPrimes = new Element[size];
 		for (int i = 0; i < size; i++) {
-			uPrimes[i] = encryptionScheme.reEncrypt(encryptionPK, uV.getAt(i), rV.getAt(i)); //uV.getAt(i).apply(Tuple.getInstance(g.selfApply(rV.getAt(i)), encryptionPK.selfApply(rV.getAt(i))));
+			uPrimes[i] = encryptionScheme.reEncrypt(encryptionPK, uV.getAt(i), rV.getAt(i)); //uV.getAt(i).apply(Tuple.getFirstInstance(g.selfApply(rV.getAt(i)), encryptionPK.selfApply(rV.getAt(i))));
 		}
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q_Enc, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 

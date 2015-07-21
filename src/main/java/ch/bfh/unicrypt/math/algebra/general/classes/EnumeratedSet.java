@@ -101,7 +101,7 @@ public class EnumeratedSet<V extends Object>
 
 	@Override
 	protected EnumeratedSetElement<V> abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		int index = randomByteSequence.getRandomNumberGenerator().nextInteger(this.getOrder().intValue() - 1);
+		int index = randomByteSequence.getRandomNumberGenerator().nextInt(this.getOrder().intValue() - 1);
 		return this.abstractGetElement(this.valueMap.get(index));
 	}
 
