@@ -204,7 +204,7 @@ public class DoubleDiscreteLogProofSystem
 			rhoSVs[i] = this.Z_q.getRandomElement(randomByteSequence);
 			rhoRVs[i] = this.Z_p.getRandomElement(randomByteSequence);
 
-			T1Vs[i] = this.pedersenCS.commit(this.Z_p.getElement(repF.apply(rhoMVs[i]).getBigInteger()), rhoRVs[i]);
+			T1Vs[i] = this.pedersenCS.commit(this.Z_p.getElement(repF.apply(rhoMVs[i]).convertToBigInteger()), rhoRVs[i]);
 			T2Vs[i] = this.generalizedPedersenCS.commit(rhoMVs[i], rhoSVs[i]);
 		}
 
@@ -218,7 +218,7 @@ public class DoubleDiscreteLogProofSystem
 		Element r = secretInput.getAt(1);
 		Element s = secretInput.getAt(2);
 		Tuple mV = (Tuple) secretInput.getAt(3);
-		BigInteger ci = c.getBigInteger();
+		BigInteger ci = c.convertToBigInteger();
 
 		Element zX = rhoX.apply(x.selfApply(c).invert());
 		Element zR = rhoR.apply(r.selfApply(c).invert());
@@ -266,7 +266,7 @@ public class DoubleDiscreteLogProofSystem
 		Tuple zRV = (Tuple) response.getAt(3);
 
 		Element c = this.getChallengeGenerator().generate(publicInput, commitment);
-		BigInteger ci = c.getBigInteger();
+		BigInteger ci = c.convertToBigInteger();
 		Function repF = this.getRepresentationFunction();
 
 		boolean v = T.isEquivalent(C.selfApply(c).apply(this.pedersenCS.commit(zXR.getFirst(), zXR.getSecond())));
@@ -275,7 +275,7 @@ public class DoubleDiscreteLogProofSystem
 			int bit = ci.testBit(i) ? 1 : 0;
 			v = v && T2.getAt(i).isEquivalent(D.selfApply(bit).apply(this.generalizedPedersenCS.commit(zMV.getAt(i),
 																									   zSV.getAt(i))));
-			Element x = this.Z_p.getElement(repF.apply(zMV.getAt(i)).getBigInteger());
+			Element x = this.Z_p.getElement(repF.apply(zMV.getAt(i)).convertToBigInteger());
 			if (bit == 0) {
 				v = v && T1.getAt(i).isEquivalent(this.pedersenCS.commit(x, zRV.getAt(i)));
 			} else {

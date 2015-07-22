@@ -51,9 +51,9 @@ public interface SigmaChallengeGenerator
 	@Override
 	public ZMod getChallengeSpace();
 
-	public ZModElement generate(Element publicInput, Element commitment);
+	public ZModElement generate(Element<?> publicInput, Element<?> commitment);
 
 	@Override
-	public ZModElement generate(Element input);
+	public ZModElement generate(Element<?> input);
 
 }

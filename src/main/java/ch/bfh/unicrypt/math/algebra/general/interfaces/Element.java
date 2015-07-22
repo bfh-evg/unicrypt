@@ -41,10 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
 import ch.bfh.unicrypt.helper.tree.Tree;
@@ -128,70 +127,17 @@ public interface Element<V extends Object> {
 	 */
 	public V getValue();
 
-	/**
-	 * TODO Returns the positive BigInteger value that corresponds this element.
-	 * <p>
-	 * @return The corresponding BigInteger value
-	 */
-	public BigInteger getBigInteger();
+	public <W> W convertTo(Converter<V, W> converter);
 
-	public BigInteger getBigInteger(Converter<V, BigInteger> convert);
+	public <W> W convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
-	public BigInteger getBigInteger(ConvertMethod<BigInteger> convertMethod);
+	public <W> Tree<W> convertTo(ConvertMethod<W> convertMethod);
 
-	public String getString();
+	public BigInteger convertToBigInteger();
 
-	public String getString(Converter<V, String> convert);
+	public ByteArray convertToByteArray();
 
-	public String getString(ConvertMethod<String> convertMethod);
-
-	/**
-	 * TODO Returns the corresponding {@link ByteArray} of this element.
-	 * <p>
-	 * @return The corresponding ByteArray
-	 */
-	public ByteArray getByteArray();
-
-	/**
-	 * TODO Returns the corresponding {@link ByteArray} of this Element with the help of a a given
-	 * {@link BigIntegerToByteArray}.
-	 * <p>
-	 * @param converter
-	 * @return The corresponding ByteArray
-	 */
-	public ByteArray getByteArray(Converter<V, ByteArray> converter);
-
-	public ByteArray getByteArray(ConvertMethod<ByteArray> convertMethod);
-
-	public Tree<String> getStringTree();
-
-	public Tree<String> getStringTree(ConvertMethod<String> convertMethod);
-
-	public Tree<BigInteger> getBigIntegerTree();
-
-	public Tree<BigInteger> getBigIntegerTree(ConvertMethod<BigInteger> convertMethod);
-
-	public Tree<ByteArray> getByteArrayTree();
-
-	public Tree<ByteArray> getByteArrayTree(ConvertMethod<ByteArray> convertMethod);
-
-	/**
-	 * TODO Returns the corresponding {@link ByteTree} of this Element.
-	 * <p>
-	 * @return The corresponding ByteTree
-	 */
-	public ByteTree getByteTree();
-
-	public ByteTree getByteTree(Converter<V, ByteArray> converter);
-
-	/**
-	 * TODO Returns the corresponding {@link ByteTree} of this Element with the help of a given
-	 * {@link BigIntegerToByteArray}.
-	 * <p>
-	 * @param convertMethod
-	 * @return The corresponding ByteTree
-	 */
-	public ByteTree getByteTree(ConvertMethod<ByteArray> convertMethod);
+	public String convertToString();
 
 	/**
 	 * TODO

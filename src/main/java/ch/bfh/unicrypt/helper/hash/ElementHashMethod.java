@@ -52,8 +52,8 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
  * First, input objects may have different types, for example {@link String}, {@link BigInteger}, {@link Permutation},
  * etc. To compute hash values of such general input objects, they need to be converted to byte arrays first. Each
  * instance of {@link ElementHashMethod} provides therefore its own {@link ConvertMethod} object of type
- * {@link ByteArray}, which handles the conversion. Let {@code b=bytes(x)} denote the conversion of an input
- * {@code x} into a byte array {@code b}.
+ * {@link ByteArray}, which handles the conversion. Let {@code b=bytes(x)} denote the conversion of an input {@code x}
+ * into a byte array {@code b}.
  * <p>
  * Second, input objects may have an internal structure such as a list or a tree. In this class, we consider general
  * tree-shaped structures, which can be handled in different ways when it comes to computing hash values. Three
@@ -157,8 +157,8 @@ public class ElementHashMethod
 	 * @return The new hash method
 	 */
 	public static ElementHashMethod getInstance() {
-		return ElementHashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.<ByteArray>getInstance(),
-																		  Mode.RECURSIVE);
+		return ElementHashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.getInstance(ByteArray.class),
+											 Mode.RECURSIVE);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class ElementHashMethod
 	 * @return The new hash method
 	 */
 	public static ElementHashMethod getInstance(HashAlgorithm hashAlgorithm) {
-		return ElementHashMethod.getInstance(hashAlgorithm, ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE);
+		return ElementHashMethod.getInstance(hashAlgorithm, ConvertMethod.getInstance(ByteArray.class), Mode.RECURSIVE);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class ElementHashMethod
 	 * @return The new hash method
 	 */
 	public static ElementHashMethod getInstance(Mode mode) {
-		return ElementHashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.<ByteArray>getInstance(), mode);
+		return ElementHashMethod.getInstance(HashAlgorithm.getInstance(), ConvertMethod.getInstance(ByteArray.class), mode);
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class ElementHashMethod
 	 * @return The new hash method
 	 */
 	public static ElementHashMethod getInstance(HashAlgorithm hashAlgorithm, Mode mode) {
-		return ElementHashMethod.getInstance(hashAlgorithm, ConvertMethod.<ByteArray>getInstance(), mode);
+		return ElementHashMethod.getInstance(hashAlgorithm, ConvertMethod.getInstance(ByteArray.class), mode);
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class ElementHashMethod
 	 * @return The new hash method
 	 */
 	public static ElementHashMethod
-	   getInstance(HashAlgorithm hashAlgorithm, ConvertMethod<ByteArray> convertMethod,Mode mode) {
+		   getInstance(HashAlgorithm hashAlgorithm, ConvertMethod<ByteArray> convertMethod, Mode mode) {
 		if (hashAlgorithm == null || convertMethod == null || mode == null) {
 			throw new IllegalArgumentException();
 		}

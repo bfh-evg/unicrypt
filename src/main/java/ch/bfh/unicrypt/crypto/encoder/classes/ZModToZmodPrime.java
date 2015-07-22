@@ -97,7 +97,7 @@ public class ZModToZmodPrime extends AbstractEncoder<ZMod, ZModElement, ZModPrim
 		protected ZModElement abstractApply(ZModElement element,
 				RandomByteSequence randomByteSequence) {
 
-			return this.getCoDomain().getElement(element.getBigInteger());
+			return this.getCoDomain().getElement(element.convertToBigInteger());
 		}
 
 	}

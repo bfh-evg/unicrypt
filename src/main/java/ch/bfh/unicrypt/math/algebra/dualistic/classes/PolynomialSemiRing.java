@@ -259,7 +259,7 @@ public class PolynomialSemiRing
 				int degree = polynomial.getDegree();
 				BigInteger[] values = new BigInteger[degree + 1];
 				for (int i = 0; i <= degree; i++) {
-					values[i] = polynomial.getCoefficient(i).getBigInteger();
+					values[i] = polynomial.getCoefficient(i).convertToBigInteger();
 				}
 				return MathUtil.pairWithSize(values);
 			}

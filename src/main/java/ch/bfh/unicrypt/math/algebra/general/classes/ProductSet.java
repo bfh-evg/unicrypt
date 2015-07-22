@@ -176,7 +176,7 @@ public class ProductSet
 				BigInteger[] bigIntegers = new BigInteger[getLength()];
 				int i = 0;
 				for (Element element : elements) {
-					bigIntegers[i] = element.getBigInteger();
+					bigIntegers[i] = element.convertToBigInteger();
 					i++;
 				}
 				return MathUtil.pair(bigIntegers);

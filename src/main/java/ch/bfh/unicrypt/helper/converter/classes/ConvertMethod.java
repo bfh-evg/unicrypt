@@ -61,32 +61,53 @@ public class ConvertMethod<W>
 
 	private static final long serialVersionUID = 1L;
 
+	private final Class<W> outputClass;
+
 	// a map for storing the converters
 	private final Map<Class<?>, Converter<?, W>> converterMap;
 
-	private ConvertMethod() {
+	private ConvertMethod(Class<W> outputClass) {
+		this.outputClass = outputClass;
 		this.converterMap = new HashMap<Class<?>, Converter<?, W>>();
 	}
 
 	/**
-	 * Creates a new converter method of output type {@code W} from a given list of converters of output type {@code W}.
-	 * Each of the given converters must know the class of the input values (if the input class is unknown,
-	 * {@link Converter#getInputClass()} returns {@code null}).
+	 * Creates a new converter method from a given converter.
 	 * <p>
-	 * @param <W>        The output type
-	 * @param converters A list of converters
+	 * @param <W>       The output type
+	 * @param converter The given converter
 	 * @return The new converter method
 	 */
-	public static <W> ConvertMethod<W> getInstance(Converter<?, W>... converters) {
-		if (converters == null) {
+	public static <W> ConvertMethod<W> getInstance(Converter<?, W> converter) {
+		if (converter == null) {
 			throw new IllegalArgumentException();
 		}
-		ConvertMethod convertMethod = new ConvertMethod();
+		return ConvertMethod.getInstance(converter.getOutputClass(), converter);
+	}
+
+	/**
+	 * Creates a new converter method of output type {@code W} from a given list of converters of output type {@code W}.
+	 * Each of the given converters must know the class of the input values, and these classes must be distinct.
+	 * <p>
+	 * @param <W>         The output type
+	 * @param outputClass The class of the output values
+	 * @param converters  A list of converters
+	 * @return The new converter method
+	 */
+	public static <W> ConvertMethod<W> getInstance(Class<W> outputClass, Converter<?, W>... converters) {
+		if (outputClass == null || converters == null) {
+			throw new IllegalArgumentException();
+		}
+		ConvertMethod convertMethod = new ConvertMethod(outputClass);
 		for (Converter<?, W> converter : converters) {
 			if (converter == null) {
 				throw new IllegalArgumentException();
 			}
-			convertMethod.addConverter(converter);
+			Class<?> inputClass = converter.getInputClass();
+			if (inputClass == null || convertMethod.converterMap.containsKey(inputClass) || !outputClass.equals(converter.getOutputClass())) {
+				throw new IllegalArgumentException();
+			}
+			convertMethod.converterMap.put(inputClass, converter);
 		}
 		return convertMethod;
 	}
@@ -95,38 +116,43 @@ public class ConvertMethod<W>
 	 * Selects and returns the converter for input values of a given class. Returns {@code null} if no such converter
 	 * exists.
 	 * <p>
+	 * @param <V>        The generic type of the input class
 	 * @param valueClass The class of the input values
 	 * @return The corresponding converter (or {@code null} if no such converter exists)
 	 */
-	public Converter<?, W> getConverter(Class<?> valueClass) {
-		return this.converterMap.get(valueClass);
+	public <V> Converter<V, W> getConverter(Class<V> valueClass) {
+		return (Converter<V, W>) this.converterMap.get(valueClass);
 	}
 
 	/**
 	 * Selects and returns the converter for input values of a given class. Returns the given default converter, if no
 	 * suitable converter exists.
 	 * <p>
+	 * @param <V>              The generic type of the input class
 	 * @param valueClass       The class of the input values
 	 * @param defaultConverter The given default converter
 	 * @return The corresponding converter (or the default converter if no such converter exists)
 	 */
-	public Converter<?, W> getConverter(Class<?> valueClass, Converter<?, W> defaultConverter) {
-		if (defaultConverter == null) {
-			throw new IllegalArgumentException();
-		}
-		Converter<?, W> converter = this.getConverter(valueClass);
+	public <V> Converter<V, W> getConverter(Class<V> valueClass, Converter<V, W> defaultConverter) {
+		Converter<V, W> converter = this.getConverter(valueClass);
 		if (converter == null) {
+			if (defaultConverter == null) {
+				throw new IllegalArgumentException();
+			}
 			return defaultConverter;
 		}
 		return converter;
 	}
 
-	private void addConverter(Converter<?, W> converter) {
-		Class<?> valueClass = converter.getInputClass();
-		if (valueClass == null || this.converterMap.containsKey(valueClass)) {
-			throw new IllegalArgumentException();
-		}
-		this.converterMap.put(valueClass, converter);
+	/**
+	 * Returns the class of type {@code W} of the output values, or {@code null} if the class is unknown. This method is
+	 * needed in {@link ConvertMethod} for technical reasons.
+	 * <p>
+	 * @return The output class
+	 * @see ConvertMethod
+	 */
+	public Class<W> getOutputClass() {
+		return this.outputClass;
 	}
 
 	@Override

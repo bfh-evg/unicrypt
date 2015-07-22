@@ -81,7 +81,7 @@ public class ByteArrayElementTest {
 	}
 
 	/**
-	 * Test of getByteArray method, of class ByteArrayElement.
+	 * Test of convertToByteArray method, of class ByteArrayElement.
 	 */
 	@Test
 	public void testGetByteArray() {
@@ -89,10 +89,10 @@ public class ByteArrayElementTest {
 		Element<ByteArray> element = bam.getElement(new byte[]{(byte) -1, (byte) 2, (byte) 3});
 		Element<ByteArray> element2 = bam.getElement(element.getValue());
 		Assert.assertEquals("Should be: " + element, element, element2);
-//		System.out.println("getByteArray");
+//		System.out.println("convertToByteArray");
 //		ByteArrayElement instance = null;
 //		byte[] expResult = null;
-//		byte[] result = instance.getByteArray();
+//		byte[] result = instance.convertToByteArray();
 //		assertArrayEquals(expResult, result);
 //		// TODO review the generated test code and remove the default call to fail.
 //		fail("The test case is a prototype.");

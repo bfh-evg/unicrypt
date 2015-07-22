@@ -56,7 +56,7 @@ public abstract class AbstractSigmaChallengeGenerator
 	}
 
 	@Override
-	public ZModElement generate(Element publicInput, Element commitment) {
+	public ZModElement generate(Element<?> publicInput, Element<?> commitment) {
 		return this.generate(Pair.getInstance(publicInput, commitment));
 	}
 

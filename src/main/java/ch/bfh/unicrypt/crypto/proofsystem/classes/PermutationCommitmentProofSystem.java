@@ -200,7 +200,7 @@ public class PermutationCommitmentProofSystem
 		Element[] ePrimeVs = new Element[ePrimeV.getLength()];
 		for (int i = 0; i < ePrimeVs.length; i++) {
 			ePrimeVs[i] =
-				   cyclicGroup.getZModOrder().getElement(ePrimeV.getAt(i).getBigInteger().mod(cyclicGroup.getOrder()));
+				   cyclicGroup.getZModOrder().getElement(ePrimeV.getAt(i).convertToBigInteger().mod(cyclicGroup.getOrder()));
 		}
 		ePrimeV = Tuple.getInstance(ePrimeVs);
 
@@ -242,7 +242,7 @@ public class PermutationCommitmentProofSystem
 		}
 		// - p_(N+3) = c_N/h^(prod(e))                                                        [1]
 		// TODO: Clean Fix!
-		Element eProd = this.cyclicGroup.getZModOrder().getElement(eV.getAt(0).getBigInteger()
+		Element eProd = this.cyclicGroup.getZModOrder().getElement(eV.getAt(0).convertToBigInteger()
 			   .mod(this.cyclicGroup.getOrder()));
 		for (int i = 1; i < this.size; i++) {
 			eProd = eProd.selfApply(eV.getAt(i));

@@ -59,11 +59,11 @@ public class HashMethodTest {
 		ElementHashMethod h1 = ElementHashMethod.getInstance();
 		ElementHashMethod h2 = ElementHashMethod.getInstance(Mode.RECURSIVE);
 		ElementHashMethod h3 = ElementHashMethod.getInstance(HashAlgorithm.SHA256);
-		ElementHashMethod h4 = ElementHashMethod.getInstance(ConvertMethod.<ByteArray>getInstance());
+		ElementHashMethod h4 = ElementHashMethod.getInstance(ConvertMethod.getInstance(ByteArray.class));
 		ElementHashMethod h5 = ElementHashMethod.getInstance(HashAlgorithm.SHA256, Mode.RECURSIVE);
-		ElementHashMethod h6 = ElementHashMethod.getInstance(ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE);
-		ElementHashMethod h7 = ElementHashMethod.getInstance(HashAlgorithm.SHA256, ConvertMethod.<ByteArray>getInstance());
-		ElementHashMethod h8 = ElementHashMethod.getInstance(HashAlgorithm.SHA256, ConvertMethod.<ByteArray>getInstance(), Mode.RECURSIVE
+		ElementHashMethod h6 = ElementHashMethod.getInstance(ConvertMethod.getInstance(ByteArray.class), Mode.RECURSIVE);
+		ElementHashMethod h7 = ElementHashMethod.getInstance(HashAlgorithm.SHA256, ConvertMethod.getInstance(ByteArray.class));
+		ElementHashMethod h8 = ElementHashMethod.getInstance(HashAlgorithm.SHA256, ConvertMethod.getInstance(ByteArray.class), Mode.RECURSIVE
 		);
 		assertEquals(h8, h1);
 		assertEquals(h8, h2);
@@ -74,7 +74,7 @@ public class HashMethodTest {
 		assertEquals(h8, h7);
 		assertEquals(h8, h8);
 
-		assertEquals(ConvertMethod.getInstance(), h1.getConvertMethod());
+		assertEquals(ConvertMethod.getInstance(ByteArray.class), h1.getConvertMethod());
 		assertEquals(Mode.RECURSIVE, h1.getMode());
 		assertEquals(HashAlgorithm.SHA256, h1.getHashAlgorithm());
 

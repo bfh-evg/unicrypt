@@ -65,13 +65,13 @@ public abstract class AbstractNonInteractiveSigmaChallengeGenerator
 	}
 
 	@Override
-	protected final ZModElement abstractGenerate(Element input) {
+	protected final ZModElement abstractGenerate(Element<?> input) {
 		Element newInput = (this.proverId == null)
 			   ? input
 			   : Pair.getInstance(input, this.proverId);
 		return this.abstractAbstractGenerate(newInput);
 	}
 
-	protected abstract ZModElement abstractAbstractGenerate(Element input);
+	protected abstract ZModElement abstractAbstractGenerate(Element<?> input);
 
 }

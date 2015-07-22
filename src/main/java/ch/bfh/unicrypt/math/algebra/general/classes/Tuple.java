@@ -41,19 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
-import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.iterable.IterableMapper;
-import ch.bfh.unicrypt.helper.iterable.Mapper;
-import ch.bfh.unicrypt.helper.tree.Node;
-import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
@@ -237,30 +230,6 @@ public class Tuple
 			result[i] = Tuple.getInstance(elementArray[i]);
 		}
 		return result;
-	}
-
-	@Override
-	protected Tree<BigInteger> defaultGetBigIntegerTree(final ConvertMethod<BigInteger> convertMethod) {
-		Iterable<Tree<BigInteger>> bigIntegerTrees = IterableMapper.getInstance(this, new Mapper<Element, Tree<BigInteger>>() {
-
-			@Override
-			public Tree<BigInteger> map(Element element) {
-				return element.getBigIntegerTree(convertMethod);
-			}
-		});
-		return Node.getInstance(bigIntegerTrees);
-	}
-
-	@Override
-	protected Tree<ByteArray> defaultGetByteArrayTree(final ConvertMethod<ByteArray> convertMethod) {
-		Iterable<Tree<ByteArray>> byteArrayTrees = IterableMapper.getInstance(this, new Mapper<Element, Tree<ByteArray>>() {
-
-			@Override
-			public Tree<ByteArray> map(Element element) {
-				return element.getByteArrayTree(convertMethod);
-			}
-		});
-		return Node.getInstance(byteArrayTrees);
 	}
 
 	@Override

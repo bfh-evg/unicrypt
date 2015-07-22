@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts.AbstractNonInteractiveChallengeGenerator;
+import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -50,17 +52,19 @@ import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
-public class RandomOracleChallengeGenerator
-	   extends AbstractNonInteractiveChallengeGenerator {
+public class RandomOracleChallengeGenerator<CS extends Set, CE extends Element>
+	   extends AbstractNonInteractiveChallengeGenerator<CS, CE> {
 
 	protected final RandomOracle randomOracle;
 	protected final ConvertMethod<ByteArray> convertMethod;
+	protected final Aggregator<ByteArray> aggregator;
 
-	protected RandomOracleChallengeGenerator(Set challengeSpace, Element proverId, final RandomOracle randomOracle,
-		   ConvertMethod<ByteArray> convertMethod) {
+	protected RandomOracleChallengeGenerator(CS challengeSpace, Element proverId, final RandomOracle randomOracle,
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		super(challengeSpace, proverId);
 		this.randomOracle = randomOracle;
 		this.convertMethod = convertMethod;
+		this.aggregator = aggregator;
 	}
 
 	public RandomOracle getRandomOracle() {
@@ -72,56 +76,57 @@ public class RandomOracleChallengeGenerator
 	}
 
 	@Override
-	protected Element abstractAbstractGenerate(Element input) {
+	protected CE abstractAbstractGenerate(Element<?> input) {
 		ReferenceRandomByteSequence randomByteSequence = this.randomOracle.getReferenceRandomByteSequence(
-			   input.getByteArray(this.convertMethod));
-		return this.getChallengeSpace().getRandomElement(randomByteSequence);
+			   input.convertTo(this.convertMethod, this.aggregator));
+		return (CE) this.getChallengeSpace().getRandomElement(randomByteSequence);
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null,
-								PseudoRandomOracle.getInstance(), ConvertMethod.<ByteArray>getInstance());
+														  PseudoRandomOracle.getInstance(), ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, PseudoRandomOracle.getInstance(),
-								ConvertMethod.<ByteArray>getInstance());
+														  ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle,
-								ConvertMethod.<ByteArray>getInstance());
+														  ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId,
 		   RandomOracle randomOracle) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, randomOracle,
-								ConvertMethod.<ByteArray>getInstance());
+														  ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace,
-		   ConvertMethod<ByteArray> convertMethod) {
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null,
-								PseudoRandomOracle.getInstance(), convertMethod);
+														  PseudoRandomOracle.getInstance(), convertMethod, aggregator);
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId,
-		   ConvertMethod<ByteArray> convertMethod) {
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId,
-								PseudoRandomOracle.getInstance(), convertMethod);
+														  PseudoRandomOracle.getInstance(), convertMethod, aggregator);
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle,
-		   ConvertMethod<ByteArray> convertMethod) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle, convertMethod);
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle, convertMethod, aggregator);
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId,
-		   RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod) {
-		if (challengeSpace == null || randomOracle == null || convertMethod == null) {
+		   RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
+		if (challengeSpace == null || randomOracle == null || convertMethod == null || aggregator == null) {
 			throw new IllegalArgumentException();
 		}
-		return new RandomOracleChallengeGenerator(challengeSpace, proverId, randomOracle, convertMethod);
+		return new RandomOracleChallengeGenerator(challengeSpace, proverId, randomOracle, convertMethod, aggregator);
 	}
+
 }

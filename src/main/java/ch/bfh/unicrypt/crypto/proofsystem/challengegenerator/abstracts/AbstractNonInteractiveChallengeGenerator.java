@@ -64,14 +64,14 @@ public abstract class AbstractNonInteractiveChallengeGenerator<CS extends Set, C
 	}
 
 	@Override
-	protected final CE abstractGenerate(Element input) {
-		Element newInput = (this.proverId == null)
+	protected final CE abstractGenerate(Element<?> input) {
+		Element<?> newInput = (this.proverId == null)
 			   ? input
 			   : Pair.getInstance(input, this.proverId);
 		return this.abstractAbstractGenerate(newInput);
 	}
 
 	// a "second-order" abstract method is required here
-	protected abstract CE abstractAbstractGenerate(Element input);
+	protected abstract CE abstractAbstractGenerate(Element<?> input);
 
 }

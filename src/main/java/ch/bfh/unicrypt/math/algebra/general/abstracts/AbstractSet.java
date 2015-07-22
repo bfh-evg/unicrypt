@@ -368,13 +368,13 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final E getElementFrom(ByteTree byteTree) {
-		ConvertMethod<ByteArray> convertMethod = ConvertMethod.<ByteArray>getInstance();
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance(ByteArray.class);
 		return this.getElementFrom(byteTree, convertMethod);
 	}
 
 	@Override
 	public final E getElementFrom(ByteTree byteTree, Converter<V, ByteArray> converter) {
-		ConvertMethod<ByteArray> convertMethod = ConvertMethod.<ByteArray>getInstance(converter);
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance(ByteArray.class, converter);
 		return this.getElementFrom(byteTree, convertMethod);
 	}
 
@@ -457,6 +457,23 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.abstractEquals((Set) other);
 	}
 
+	protected <W> Converter<V, W> getConverter(ConvertMethod<W> convertMethod) {
+		Converter<V, W> converter = convertMethod.getConverter((Class<V>) this.getValueClass());
+		if (converter == null) {
+			Class<W> outputClass = convertMethod.getOutputClass();
+			if (outputClass == String.class) {
+				converter = (Converter<V, W>) this.getStringConverter();
+			} else if (outputClass == BigInteger.class) {
+				converter = (Converter<V, W>) this.getBigIntegerConverter();
+			} else if (outputClass == ByteArray.class) {
+				converter = (Converter<V, W>) this.getByteArrayConverter();
+			} else {
+				throw new IllegalArgumentException();
+			}
+		}
+		return converter;
+	}
+
 	protected final Converter<V, BigInteger> getBigIntegerConverter() {
 		if (this.bigIntegerConverter == null) {
 			this.bigIntegerConverter = this.abstractGetBigIntegerConverter();
@@ -464,18 +481,18 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return this.bigIntegerConverter;
 	}
 
-	protected Converter<V, String> getStringConverter() {
-		if (this.stringConverter == null) {
-			this.stringConverter = this.defaultGetStringConverter();
-		}
-		return this.stringConverter;
-	}
-
 	protected Converter<V, ByteArray> getByteArrayConverter() {
 		if (this.byteArrayConverter == null) {
 			this.byteArrayConverter = this.defaultGetByteArrayConverter();
 		}
 		return this.byteArrayConverter;
+	}
+
+	protected Converter<V, String> getStringConverter() {
+		if (this.stringConverter == null) {
+			this.stringConverter = this.defaultGetStringConverter();
+		}
+		return this.stringConverter;
 	}
 
 	protected BigInteger defaultGetOrderLowerBound() {

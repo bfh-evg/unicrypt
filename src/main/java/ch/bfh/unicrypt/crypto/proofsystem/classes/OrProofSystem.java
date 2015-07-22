@@ -153,7 +153,7 @@ public class OrProofSystem
 	protected Triple abstractGenerate(Pair privateInput, Tuple publicInput, RandomByteSequence randomByteSequence) {
 
 		// Extract secret input value and index from private input
-		final int index = privateInput.getSecond().getBigInteger().intValue();
+		final int index = privateInput.getSecond().convertToBigInteger().intValue();
 		final Element secret = ((Tuple) privateInput.getFirst()).getAt(index);
 
 		final ProductFunction proofFunc = this.getProofFunction();

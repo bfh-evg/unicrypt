@@ -48,6 +48,6 @@ public interface ChallengeGenerator {
 
 	public Set getChallengeSpace();
 
-	public Element generate(Element input);
+	public Element generate(Element<?> input);
 
 }

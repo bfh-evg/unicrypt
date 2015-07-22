@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts.AbstractNonInteractiveSigmaChallengeGenerator;
+import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -57,12 +59,14 @@ public class RandomOracleSigmaChallengeGenerator
 
 	protected final RandomOracle randomOracle;
 	protected final ConvertMethod<ByteArray> convertMethod;
+	protected final Aggregator<ByteArray> aggregator;
 
 	protected RandomOracleSigmaChallengeGenerator(ZMod challengeSpace, Element proverId,
-		   final RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod) {
+		   final RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		super(challengeSpace, proverId);
 		this.randomOracle = randomOracle;
 		this.convertMethod = convertMethod;
+		this.aggregator = aggregator;
 	}
 
 	public RandomOracle getRandomOracle() {
@@ -70,105 +74,106 @@ public class RandomOracleSigmaChallengeGenerator
 	}
 
 	@Override
-	protected ZModElement abstractAbstractGenerate(Element input) {
-		ReferenceRandomByteSequence randomByteSequence =
-			   this.randomOracle.getReferenceRandomByteSequence(input.getByteArray(this.convertMethod));
+	protected ZModElement abstractAbstractGenerate(Element<?> input) {
+		ReferenceRandomByteSequence randomByteSequence
+			   = this.randomOracle.getReferenceRandomByteSequence(input.convertTo(this.convertMethod, this.aggregator));
 		return this.getChallengeSpace().getRandomElement(randomByteSequence);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null,
-									PseudoRandomOracle.getInstance(), ConvertMethod.<ByteArray>getInstance());
+															   PseudoRandomOracle.getInstance(), ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, proverId,
-									PseudoRandomOracle.getInstance(), ConvertMethod.<ByteArray>getInstance());
+															   PseudoRandomOracle.getInstance(), ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace, RandomOracle randomOracle) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null,
-									randomOracle, ConvertMethod.<ByteArray>getInstance());
+															   randomOracle, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
 		   RandomOracle randomOracle) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, proverId,
-									randomOracle, ConvertMethod.<ByteArray>getInstance());
+															   randomOracle, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace,
-		   ConvertMethod<ByteArray> convertMethod) {
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null,
-									PseudoRandomOracle.getInstance(), convertMethod);
+															   PseudoRandomOracle.getInstance(), convertMethod, aggregator);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
-		   ConvertMethod<ByteArray> convertMethod) {
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, proverId,
-									PseudoRandomOracle.getInstance(), convertMethod);
+															   PseudoRandomOracle.getInstance(), convertMethod, aggregator);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace, RandomOracle randomOracle,
-		   ConvertMethod<ByteArray> convertMethod) {
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null,
-									randomOracle, convertMethod);
+															   randomOracle, convertMethod, aggregator);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId,
-		   RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod) {
-		if (challengeSpace == null || randomOracle == null || convertMethod == null) {
+		   RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
+		if (challengeSpace == null || randomOracle == null || convertMethod == null || aggregator == null) {
 			throw new IllegalArgumentException();
 		}
-		return new RandomOracleSigmaChallengeGenerator(challengeSpace, proverId, randomOracle, convertMethod);
+		return new RandomOracleSigmaChallengeGenerator(challengeSpace, proverId, randomOracle, convertMethod, aggregator);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(function, (Element) null,
-									PseudoRandomOracle.getInstance(), ConvertMethod.<ByteArray>getInstance());
+															   PseudoRandomOracle.getInstance(), ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function, Element proverId) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(function, proverId, PseudoRandomOracle.getInstance(),
-									ConvertMethod.<ByteArray>getInstance());
+															   ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function, RandomOracle randomOracle) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(function, (Element) null, randomOracle,
-									ConvertMethod.<ByteArray>getInstance());
+															   ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function, Element proverId,
 		   RandomOracle randomOracle) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(function, proverId, randomOracle,
-									ConvertMethod.<ByteArray>getInstance());
+															   ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function,
-		   ConvertMethod<ByteArray> convertMethod) {
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(function, (Element) null,
-									PseudoRandomOracle.getInstance(), convertMethod);
+															   PseudoRandomOracle.getInstance(), convertMethod, aggregator);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function, Element proverId,
-		   ConvertMethod<ByteArray> convertMethod) {
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		return RandomOracleSigmaChallengeGenerator.getInstance(function, proverId,
-									PseudoRandomOracle.getInstance(), convertMethod);
+															   PseudoRandomOracle.getInstance(), convertMethod, aggregator);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function, RandomOracle randomOracle,
-		   ConvertMethod<ByteArray> convertMethod) {
-		return RandomOracleSigmaChallengeGenerator.getInstance(function, (Element) null, randomOracle, convertMethod);
+		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
+		return RandomOracleSigmaChallengeGenerator.getInstance(function, (Element) null, randomOracle, convertMethod, aggregator);
 
 	}
 
 	public static RandomOracleSigmaChallengeGenerator getInstance(Function function, Element proverId,
-		   RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod) {
+		   RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		if (function == null || !function.getCoDomain().isSemiGroup() || randomOracle == null
-			   || convertMethod == null) {
+			   || convertMethod == null || aggregator == null) {
 			throw new IllegalArgumentException();
 		}
 		ZMod challengeSpace = ZMod.getInstance(function.getDomain().getMinimalOrder());
-		return new RandomOracleSigmaChallengeGenerator(challengeSpace, proverId, randomOracle, convertMethod);
+		return new RandomOracleSigmaChallengeGenerator(challengeSpace, proverId, randomOracle, convertMethod, aggregator);
 	}
+
 }

@@ -60,13 +60,13 @@ public abstract class AbstractChallengeGenerator<CS extends Set, CE extends Elem
 	}
 
 	@Override
-	public final CE generate(Element input) {
+	public final CE generate(Element<?> input) {
 		if (input == null) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractGenerate(input);
 	}
 
-	protected abstract CE abstractGenerate(Element input);
+	protected abstract CE abstractGenerate(Element<?> input);
 
 }

@@ -178,7 +178,7 @@ public class GStarMod
 	@Override
 	protected GStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
 		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomByteSequence);
-		return this.getElement(randomElement.power(this.getCoFactor()).getBigInteger());
+		return this.getElement(randomElement.power(this.getCoFactor()).convertToBigInteger());
 // VERSION WITH OPTIMIZED EFFICIENCY BUT LACK OF INDEPENDENCE
 //    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
 //      // Method 1

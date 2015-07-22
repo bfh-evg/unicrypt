@@ -240,7 +240,7 @@ public class ECEncoder
 			DualisticElement y = element.getY();
 			DualisticElement y1 = element.invert().getY();
 
-			BigInteger x1 = encoder.decode(x).getBigInteger();
+			BigInteger x1 = encoder.decode(x).convertToBigInteger();
 
 			BigInteger c = x1.subtract(x1.shiftRight(2).shiftLeft(2));
 

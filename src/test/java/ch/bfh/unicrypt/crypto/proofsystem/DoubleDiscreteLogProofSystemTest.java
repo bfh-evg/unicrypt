@@ -100,7 +100,7 @@ public class DoubleDiscreteLogProofSystemTest {
 		Element m1 = Z_q.getElement(7);
 		Element m2 = Z_q.getElement(13);
 
-		Element x = Z_p.getElement(h1.selfApply(m1).apply(h2.selfApply(m2)).getBigInteger());
+		Element x = Z_p.getElement(h1.selfApply(m1).apply(h2.selfApply(m2)).convertToBigInteger());
 
 		Element r = Z_p.getElement(BigInteger.valueOf(38));
 		Element s = Z_q.getElement(BigInteger.valueOf(45));
@@ -134,7 +134,7 @@ public class DoubleDiscreteLogProofSystemTest {
 
 		Tuple m = gpcs.getMessageSpace().getRandomElement();
 
-		Element x = Z_p.getElement(((ProductFunction) ((CompositeFunction) gpcs.getCommitmentFunction()).getAt(0)).getAt(0).apply(m).getBigInteger());
+		Element x = Z_p.getElement(((ProductFunction) ((CompositeFunction) gpcs.getCommitmentFunction()).getAt(0)).getAt(0).apply(m).convertToBigInteger());
 
 		Element r = Z_p.getRandomElement();
 		Element s = Z_q.getRandomElement();
@@ -176,7 +176,7 @@ public class DoubleDiscreteLogProofSystemTest {
 		Element m1 = Z_q.getElement(7);
 		Element m2 = Z_q.getElement(13);
 
-		Element x = Z_p.getElement(h1.selfApply(m1).apply(h2.selfApply(m2)).getBigInteger());
+		Element x = Z_p.getElement(h1.selfApply(m1).apply(h2.selfApply(m2)).convertToBigInteger());
 
 		Element r = Z_p.getElement(BigInteger.valueOf(38));
 		Element s = Z_q.getElement(BigInteger.valueOf(45));

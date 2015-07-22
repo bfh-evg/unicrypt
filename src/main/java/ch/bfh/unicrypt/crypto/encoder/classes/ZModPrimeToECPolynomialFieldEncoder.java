@@ -244,7 +244,7 @@ public class ZModPrimeToECPolynomialFieldEncoder
 			PolynomialElement y = element.getY();
 			PolynomialElement y1 = element.invert().getY();
 
-			BigInteger x1 = enc.decode(x).getBigInteger();
+			BigInteger x1 = enc.decode(x).convertToBigInteger();
 
 			BigInteger c = x1.subtract(x1.shiftRight(2).shiftLeft(2));
 
@@ -277,8 +277,8 @@ public class ZModPrimeToECPolynomialFieldEncoder
 	 */
 	public static PolynomialElement getBiggerY(PolynomialElement y1, PolynomialElement y2) {
 		int deg = y1.add(y2).getValue().getDegree();
-		BigInteger y1Coeff = y1.getValue().getCoefficient(deg).getBigInteger();
-		BigInteger y2Coeff = y2.getValue().getCoefficient(deg).getBigInteger();
+		BigInteger y1Coeff = y1.getValue().getCoefficient(deg).convertToBigInteger();
+		BigInteger y2Coeff = y2.getValue().getCoefficient(deg).convertToBigInteger();
 
 		if (y1Coeff.compareTo(y2Coeff) > 0) {
 			return y1;

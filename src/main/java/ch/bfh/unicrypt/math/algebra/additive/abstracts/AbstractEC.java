@@ -185,7 +185,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 				if (point.equals(infinityPoint)) {
 					return BigInteger.ZERO;
 				}
-				return MathUtil.pair(point.getX().getBigInteger(), point.getY().getBigInteger()).add(BigInteger.ONE);
+				return MathUtil.pair(point.getX().convertToBigInteger(), point.getY().convertToBigInteger()).add(BigInteger.ONE);
 			}
 
 			@Override
@@ -226,7 +226,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 	protected EE abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		if (this.getDefaultGenerator() != null) {
 			ZMod r = ZMod.getInstance(this.getFiniteField().getOrder());
-			return this.selfApply(this.getDefaultGenerator(), r.getRandomElement().getBigInteger());
+			return this.selfApply(this.getDefaultGenerator(), r.getRandomElement().convertToBigInteger());
 		} else {
 			return this.getRandomElementWithoutGenerator(randomByteSequence);
 		}

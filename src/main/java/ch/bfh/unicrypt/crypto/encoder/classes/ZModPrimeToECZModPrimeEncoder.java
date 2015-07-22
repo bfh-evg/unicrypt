@@ -247,7 +247,7 @@ public class ZModPrimeToECZModPrimeEncoder
 			ZModElement y1=element.invert().getY();
 
 
-			BigInteger x1=x.getBigInteger();
+			BigInteger x1=x.convertToBigInteger();
 
 
 			BigInteger c=x1.subtract(x1.shiftRight(2).shiftLeft(2));
