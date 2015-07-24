@@ -41,9 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
@@ -61,13 +66,25 @@ public interface SemiRing<V extends Object>
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public DualisticElement<V> getElementFrom(int value);
+	public <W> DualisticElement<V> getElementFrom(W value, Converter<V, W> converter);
 
 	@Override
-	public DualisticElement<V> getElementFrom(BigInteger value);
+	public <W> DualisticElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
 	@Override
-	public DualisticElement<V> getElementFrom(ByteTree byteTree);
+	public <W> DualisticElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+
+	@Override
+	public DualisticElement<V> getElementFrom(int integer);
+
+	@Override
+	public DualisticElement<V> getElementFrom(BigInteger bigInteger);
+
+	@Override
+	public DualisticElement<V> getElementFrom(ByteArray byteArray);
+
+	@Override
+	public DualisticElement<V> getElementFrom(String string);
 
 	@Override
 	public DualisticElement<V> getRandomElement();

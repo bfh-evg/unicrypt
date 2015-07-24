@@ -41,12 +41,22 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
+import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
+import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.iterable.IterableMapper;
+import ch.bfh.unicrypt.helper.iterable.Mapper;
+import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
@@ -235,6 +245,33 @@ public class Tuple
 	@Override
 	public Iterator<Element> iterator() {
 		return this.getValue().iterator();
+	}
+
+	@Override
+	protected final <W> Tree<W> defaultConvertTo(final ConvertMethod<W> convertMethod) {
+		Iterable<Tree<W>> stringTrees = IterableMapper.getInstance(this, new Mapper<Element, Tree<W>>() {
+
+			@Override
+			public Tree<W> map(Element element) {
+				return element.convertTo(convertMethod);
+			}
+		});
+		return Node.getInstance(stringTrees);
+	}
+
+	@Override
+	protected BigInteger defaultConvertToBigInteger() {
+		return this.convertTo(ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.getInstance());
+	}
+
+	@Override
+	protected ByteArray defaultConvertToByteArray() {
+		return this.convertTo(ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
+	}
+
+	@Override
+	protected String defaultConvertToString() {
+		return this.convertTo(ConvertMethod.getInstance(String.class), StringAggregator.getInstance());
 	}
 
 	@Override

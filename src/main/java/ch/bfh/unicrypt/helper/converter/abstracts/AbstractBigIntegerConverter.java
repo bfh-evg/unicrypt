@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.converter.abstracts;
 
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
 import java.math.BigInteger;
 
 /**
@@ -52,8 +51,8 @@ import java.math.BigInteger;
  * @param <V> The input type
  */
 public abstract class AbstractBigIntegerConverter<V extends Object>
-	   extends AbstractConverter<V, BigInteger>
-	   implements BigIntegerConverter<V> {
+	   extends AbstractConverter<V, BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected AbstractBigIntegerConverter(Class<V> inputClass) {

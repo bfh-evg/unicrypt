@@ -43,8 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -90,7 +89,7 @@ public class Z
 	}
 
 	@Override
-	protected StringConverter<BigInteger> defaultGetStringConverter() {
+	protected Converter<BigInteger, String> defaultGetStringConverter() {
 		return BigIntegerToString.getInstance();
 	}
 
@@ -147,7 +146,7 @@ public class Z
 	}
 
 	@Override
-	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
+	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance();
 	}
 

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -57,6 +57,7 @@ import java.util.Map;
  */
 public class EnumeratedSet<V extends Object>
 	   extends AbstractSet<EnumeratedSetElement<V>, V> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected final Map<Integer, V> valueMap;
@@ -84,7 +85,7 @@ public class EnumeratedSet<V extends Object>
 	}
 
 	@Override
-	protected BigIntegerConverter<V> abstractGetBigIntegerConverter() {
+	protected Converter<V, BigInteger> abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<V>(null) { // class parameter not needed
 
 			@Override

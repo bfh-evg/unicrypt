@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
@@ -149,10 +149,12 @@ public interface Element<V extends Object> {
 	/**
 	 * TODO
 	 * <p>
+	 * @param <W>
+	 * @param convertMethod
 	 * @param hashMethod
 	 * @return
 	 */
-	public ByteArray getHashValue(ElementHashMethod hashMethod);
+	public <W> ByteArray getHashValue(ConvertMethod<W> convertMethod, HashMethod<W> hashMethod);
 
 	/**
 	 * Checks if this element is mathematically equivalent to the given element. For this, they need to belong to the

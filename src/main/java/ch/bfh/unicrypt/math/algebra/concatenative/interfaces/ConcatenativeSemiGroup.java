@@ -41,7 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -169,13 +173,25 @@ public interface ConcatenativeSemiGroup<V extends Object>
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public ConcatenativeElement<V> getElementFrom(int value);
+	public <W> ConcatenativeElement<V> getElementFrom(W value, Converter<V, W> converter);
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(BigInteger value);
+	public <W> ConcatenativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(ByteTree byteTree);
+	public <W> ConcatenativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+
+	@Override
+	public ConcatenativeElement<V> getElementFrom(int integer);
+
+	@Override
+	public ConcatenativeElement<V> getElementFrom(BigInteger bigInteger);
+
+	@Override
+	public ConcatenativeElement<V> getElementFrom(ByteArray byteArray);
+
+	@Override
+	public ConcatenativeElement<V> getElementFrom(String string);
 
 	@Override
 	public ConcatenativeElement<V> getRandomElement();

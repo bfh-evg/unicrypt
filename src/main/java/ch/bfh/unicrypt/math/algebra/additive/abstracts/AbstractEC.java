@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.Point;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -172,7 +172,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 	}
 
 	@Override
-	protected BigIntegerConverter<Point<D>> abstractGetBigIntegerConverter() {
+	protected Converter<Point<D>, BigInteger> abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<Point<D>>(null) { // class parameter not needed
 
 			/**

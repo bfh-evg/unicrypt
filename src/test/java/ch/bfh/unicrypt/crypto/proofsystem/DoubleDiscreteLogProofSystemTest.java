@@ -58,6 +58,7 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.random.classes.CounterModeRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -67,9 +68,9 @@ import org.junit.Test;
  */
 public class DoubleDiscreteLogProofSystemTest {
 
-	final static String Q1 = "83";     // Q1               (prime)
-	final static String P1 = "167";    // P1 =  2*Q1+1     (prime)
-	final static String O1 = "2339";   // O1 = 15*P1+1     (prime)
+	final static int Q1 = 83;     // Q1               (prime)
+	final static int P1 = 167;    // P1 =  2*Q1+1     (prime)
+	final static int O1 = 2339;   // O1 = 15*P1+1     (prime)
 
 	//                               Q2               (prime)
 	final static String Q2 = "44029592011280554637067270297569196376551445501032604370128853948420151648611";
@@ -80,9 +81,9 @@ public class DoubleDiscreteLogProofSystemTest {
 
 	@Test
 	public void testDoubleDiscreteLogProofSystem() {
-		final CyclicGroup G_p = GStarModPrime.getInstance(new BigInteger(O1), new BigInteger(P1));
+		final CyclicGroup G_p = GStarModPrime.getInstance(O1, P1);
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P1));
+		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZModPrime Z_q = (ZModPrime) G_q.getZModOrder();
 
 		final Element g = G_p.getElement(BigInteger.valueOf(912));
@@ -156,9 +157,9 @@ public class DoubleDiscreteLogProofSystemTest {
 	public void testDoubleDiscreteLogProofSystem3() {
 
 		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
-		final CyclicGroup G_p = GStarModPrime.getInstance(new BigInteger(O1), new BigInteger(P1));
+		final CyclicGroup G_p = GStarModPrime.getInstance(O1, P1);
 		final ZModPrime Z_p = (ZModPrime) G_p.getZModOrder();
-		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P1));
+		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZModPrime Z_q = (ZModPrime) G_q.getZModOrder();
 
 		final Element g = G_p.getElement(BigInteger.valueOf(912));
@@ -189,17 +190,17 @@ public class DoubleDiscreteLogProofSystemTest {
 		Tuple secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(Z_q.getElement(16), m2));
 		Triple proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
 		boolean verify = ddlps.verify(proofInvalid, publicInput);
-		assertTrue(!verify);
+		assertFalse(verify);
 
 		secretInputInvalid = Tuple.getInstance(x, r, Z_q.getElement(5), Tuple.getInstance(m1, m2));
 		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
 		verify = ddlps.verify(proofInvalid, publicInput);
-		assertTrue(!verify);
+		assertFalse(verify);
 
 		secretInputInvalid = Tuple.getInstance(x, Z_p.getElement(5), s, Tuple.getInstance(m1, m2));
 		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
 		verify = ddlps.verify(proofInvalid, publicInput);
-		assertTrue(!verify);
+		assertFalse(verify);
 	}
 
 }

@@ -41,7 +41,9 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
+import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -66,16 +68,23 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class HashFunction
 	   extends AbstractFunction<HashFunction, Set, Element, FixedByteArraySet, FiniteByteArrayElement> {
+
 	private static final long serialVersionUID = 1L;
 
-	private final ElementHashMethod hashMethod;
+	private final ConvertMethod convertMethod;
+	private final HashMethod hashMethod;
 
-	private HashFunction(Set domain, FixedByteArraySet coDomain, ElementHashMethod hashMethod) {
+	private HashFunction(Set domain, FixedByteArraySet coDomain, ConvertMethod convertMethod, HashMethod hashMethod) {
 		super(domain, coDomain);
+		this.convertMethod = convertMethod;
 		this.hashMethod = hashMethod;
 	}
 
-	public ElementHashMethod getHashMethod() {
+	public ConvertMethod getConvertMethod() {
+		return this.convertMethod;
+	}
+
+	public HashMethod getHashMethod() {
 		return this.hashMethod;
 	}
 
@@ -86,7 +95,7 @@ public class HashFunction
 
 	@Override
 	protected FiniteByteArrayElement abstractApply(final Element element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().getElement(element.getHashValue(this.hashMethod));
+		return this.getCoDomain().getElement(element.getHashValue(this.convertMethod, this.hashMethod));
 	}
 
 	/**
@@ -96,7 +105,7 @@ public class HashFunction
 	 * @return
 	 */
 	public static HashFunction getInstance(Set domain) {
-		return HashFunction.getInstance(domain, ElementHashMethod.getInstance());
+		return HashFunction.getInstance(domain, ConvertMethod.getInstance(), HashMethod.getInstance());
 	}
 
 	/**
@@ -104,16 +113,17 @@ public class HashFunction
 	 * accordingly.
 	 * <p>
 	 * @param domain
-	 * @param hashMethod The name of the hash algorithm
+	 * @param convertMethod
+	 * @param hashMethod    The name of the hash algorithm
 	 * @return
 	 * @throws IllegalArgumentException if {@literal algorithmName} is null or an unknown hash algorithm name
 	 */
-	public static HashFunction getInstance(Set domain, final ElementHashMethod hashMethod) {
-		if (domain == null || hashMethod == null) {
+	public static <V> HashFunction getInstance(Set domain, ConvertMethod<V> convertMethod, final HashMethod<V> hashMethod) {
+		if (domain == null || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new HashFunction(domain, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength()),
-			   hashMethod);
+		FixedByteArraySet set = FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength());
+		return new HashFunction(domain, set, convertMethod, hashMethod);
 	}
 
 }

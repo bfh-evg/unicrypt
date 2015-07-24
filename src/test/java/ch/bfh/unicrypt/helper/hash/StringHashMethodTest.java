@@ -78,7 +78,7 @@ public class StringHashMethodTest {
 		ByteArray hash4 = hashAlgorithm.getHashValue(ByteArray.getInstance());
 		ByteArray hash5 = hashAlgorithm.getHashValue(hash3.append(hash4));
 
-		HashMethod<String> hashMethod = StringHashMethod.getInstance(hashAlgorithm, converter);
+		HashMethod<String> hashMethod = HashMethod.getInstance(hashAlgorithm, converter);
 
 		Assert.assertEquals(hash1, hashMethod.getHashValue(t1));
 		Assert.assertEquals(hash2, hashMethod.getHashValue(t2));
@@ -92,7 +92,7 @@ public class StringHashMethodTest {
 	public void ByteArrayHashMethodTest2() {
 
 		StringAggregator aggregator = StringAggregator.getInstance();
-		HashMethod<String> hashMethod = StringHashMethod.getInstance(hashAlgorithm, aggregator, converter);
+		HashMethod<String> hashMethod = HashMethod.getInstance(hashAlgorithm, aggregator, converter);
 
 		String b1 = aggregator.aggregate(t1);
 		String b2 = aggregator.aggregate(t2);

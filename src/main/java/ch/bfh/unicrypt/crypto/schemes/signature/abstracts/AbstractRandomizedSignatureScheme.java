@@ -43,7 +43,8 @@ package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.RandomizedSignatureScheme;
-import ch.bfh.unicrypt.helper.hash.ElementHashMethod;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
@@ -61,17 +62,16 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @param <VKS> Verification key space
  * @param <KG>  Key generator
  */
-public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set,
-	   SE extends Element, RS extends Set, SKS extends Set, VKS extends Set, KG extends KeyPairGenerator>
+public abstract class AbstractRandomizedSignatureScheme<MS extends Set, ME extends Element, SS extends Set, SE extends Element, RS extends Set, SKS extends Set, VKS extends Set, KG extends KeyPairGenerator>
 	   extends AbstractSignatureScheme<MS, ME, SS, SE, SKS, VKS, KG>
 	   implements RandomizedSignatureScheme {
+
 	private static final long serialVersionUID = 1L;
 
 	protected final RS randomizationSpace;
 
-	public AbstractRandomizedSignatureScheme(MS messageSpace, SS signatureSpace, RS randomizationSpace,
-		   ElementHashMethod hashMethod) {
-		super(messageSpace, signatureSpace, hashMethod);
+	public AbstractRandomizedSignatureScheme(MS messageSpace, SS signatureSpace, RS randomizationSpace, ConvertMethod convertMethod, HashMethod hashMethod) {
+		super(messageSpace, signatureSpace, convertMethod, hashMethod);
 		this.randomizationSpace = randomizationSpace;
 	}
 

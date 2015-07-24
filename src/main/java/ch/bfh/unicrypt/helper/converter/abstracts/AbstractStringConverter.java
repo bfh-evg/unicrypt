@@ -41,8 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.converter.abstracts;
 
-import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
-
 /**
  * This abstract class serves as a base implementation of the {@link StringConverter} interface.
  * <p>
@@ -51,8 +49,8 @@ import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
  * @param <V> The input type
  */
 public abstract class AbstractStringConverter<V extends Object>
-	   extends AbstractConverter<V, String>
-	   implements StringConverter<V> {
+	   extends AbstractConverter<V, String> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected AbstractStringConverter(Class<V> inputClass) {

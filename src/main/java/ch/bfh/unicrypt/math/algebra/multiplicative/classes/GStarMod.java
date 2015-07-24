@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
 import ch.bfh.unicrypt.helper.factorization.SpecialFactorization;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -69,6 +69,7 @@ import java.math.BigInteger;
  */
 public class GStarMod
 	   extends AbstractMultiplicativeCyclicGroup<GStarModElement, BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final BigInteger modulus;
@@ -171,7 +172,7 @@ public class GStarMod
 	}
 
 	@Override
-	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
+	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance(0);
 	}
 

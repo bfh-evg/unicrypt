@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.converter.classes;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +70,10 @@ public class ConvertMethod<W>
 	private ConvertMethod(Class<W> outputClass) {
 		this.outputClass = outputClass;
 		this.converterMap = new HashMap<Class<?>, Converter<?, W>>();
+	}
+
+	public static ConvertMethod<ByteArray> getInstance() {
+		return ConvertMethod.getInstance(ByteArray.class);
 	}
 
 	/**

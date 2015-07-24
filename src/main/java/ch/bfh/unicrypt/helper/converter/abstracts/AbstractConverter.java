@@ -43,6 +43,11 @@ package ch.bfh.unicrypt.helper.converter.abstracts;
 
 import ch.bfh.unicrypt.helper.UniCrypt;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.iterable.IterableMapper;
+import ch.bfh.unicrypt.helper.iterable.Mapper;
+import ch.bfh.unicrypt.helper.tree.Leaf;
+import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.tree.Tree;
 
 /**
  * This abstract class serves as a base implementation of the {@link Converter} interface.
@@ -88,6 +93,46 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 			return this.abstractReconvert(value);
 		}
 		throw new IllegalArgumentException();
+	}
+
+	@Override
+	public Tree<W> convert(Tree<V> tree) {
+		if (tree.isLeaf()) {
+			Leaf<V> leaf = (Leaf<V>) tree;
+			return Leaf.getInstance(this.convert(leaf.getValue()));
+		} else {
+			Node<V> node = (Node<V>) tree;
+			final Converter<V, W> converter = this;
+			Iterable<Tree<W>> children = IterableMapper.getInstance(node.getChildren(), new Mapper<Tree<V>, Tree<W>>() {
+
+				@Override
+				public Tree<W> map(Tree<V> value) {
+					return converter.convert(value);
+				}
+
+			});
+			return Node.getInstance(children);
+		}
+	}
+
+	@Override
+	public Tree<V> reconvert(Tree<W> tree) {
+		if (tree.isLeaf()) {
+			Leaf<W> leaf = (Leaf<W>) tree;
+			return Leaf.getInstance(this.reconvert(leaf.getValue()));
+		} else {
+			Node<W> node = (Node<W>) tree;
+			final Converter<V, W> converter = this;
+			Iterable<Tree<V>> children = IterableMapper.getInstance(node.getChildren(), new Mapper<Tree<W>, Tree<V>>() {
+
+				@Override
+				public Tree<V> map(Tree<W> value) {
+					return converter.reconvert(value);
+				}
+
+			});
+			return Node.getInstance(children);
+		}
 	}
 
 	@Override

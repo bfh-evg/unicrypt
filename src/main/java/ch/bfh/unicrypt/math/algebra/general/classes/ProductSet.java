@@ -42,14 +42,17 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
+import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
+import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -168,53 +171,8 @@ public class ProductSet
 	}
 
 	@Override
-	protected BigIntegerConverter<DenseArray<Element>> abstractGetBigIntegerConverter() {
-		return new AbstractBigIntegerConverter<DenseArray<Element>>(null) { // class parameter not needed
-
-			@Override
-			protected BigInteger abstractConvert(DenseArray<Element> elements) {
-				BigInteger[] bigIntegers = new BigInteger[getLength()];
-				int i = 0;
-				for (Element element : elements) {
-					bigIntegers[i] = element.convertToBigInteger();
-					i++;
-				}
-				return MathUtil.pair(bigIntegers);
-			}
-
-			@Override
-			protected DenseArray<Element> abstractReconvert(BigInteger bigInteger) {
-				BigInteger[] values = MathUtil.unpair(bigInteger, getLength());
-				Element[] elements = new Element[getLength()];
-				int i = 0;
-				for (BigInteger value : values) {
-					elements[i] = getAt(i).getElementFrom(value);
-					i++;
-				}
-				return DenseArray.getInstance(elements);
-			}
-		};
-	}
-
-	@Override
-	protected Tuple defaultGetElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
-		if (!byteTree.isLeaf()) {
-			int length = this.getLength();
-			DenseArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
-			if (byteTrees.getLength() == length) {
-				Element[] elements = new Element[length];
-				for (int i : this.getAllIndices()) {
-					elements[i] = this.getAt(i).getElementFrom(byteTrees.getAt(i), convertMethod);
-					if (elements[i] == null) {
-						// no such element
-						return null;
-					}
-				}
-				return this.abstractGetElement(DenseArray.getInstance(elements));
-			}
-		}
-		// no such element
-		return null;
+	protected Converter<DenseArray<Element>, BigInteger> abstractGetBigIntegerConverter() {
+		return null; // this method is not needed in this class
 	}
 
 	@Override
@@ -248,6 +206,39 @@ public class ProductSet
 			hash = 47 * hash + this.getAt(i).hashCode();
 		}
 		return hash;
+	}
+
+	@Override
+	protected <W> Tuple defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) {
+		if (tree.isLeaf()) {
+			throw new IllegalArgumentException();
+		}
+		Node<W> node = (Node<W>) tree;
+		if (this.getLength() != node.getSize()) {
+			throw new IllegalArgumentException();
+		}
+		Element[] elements = new Element[this.getLength()];
+		int i = 0;
+		for (Tree<W> child : node.getChildren()) {
+			elements[i] = this.getAt(i).getElementFrom(child, convertMethod);
+			i++;
+		}
+		return this.getElement(DenseArray.getInstance(elements));
+	}
+
+	@Override
+	protected Tuple defaultGetElementFrom(BigInteger value) {
+		return this.getElementFrom(value, ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.getInstance());
+	}
+
+	@Override
+	protected Tuple defaultGetElementFrom(ByteArray value) {
+		return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
+	}
+
+	@Override
+	protected Tuple defaultGetElementFrom(String value) {
+		return this.getElementFrom(value, ConvertMethod.getInstance(String.class), StringAggregator.getInstance());
 	}
 
 	@Override

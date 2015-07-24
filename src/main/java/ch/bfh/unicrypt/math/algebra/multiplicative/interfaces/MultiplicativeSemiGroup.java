@@ -41,7 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -131,17 +135,28 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	public MultiplicativeElement<V> productOfPowers(Element[] elements, BigInteger[] amounts);
 
 	// The following methods are overridden from Set with an adapted return type
+	//
 	@Override
-	public MultiplicativeElement<V> getElementFrom(int value);
+	public <W> MultiplicativeElement<V> getElementFrom(W value, Converter<V, W> converter);
 
 	@Override
-	public MultiplicativeElement<V> getElementFrom(BigInteger value);
+	public <W> MultiplicativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
 	@Override
-	public MultiplicativeElement<V> getElementFrom(ByteTree byteTree);
+	public <W> MultiplicativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
 
-//	@Override
-//	public MultiplicativeElement<V> getElementFrom(Element element);
+	@Override
+	public MultiplicativeElement<V> getElementFrom(int integer);
+
+	@Override
+	public MultiplicativeElement<V> getElementFrom(BigInteger bigInteger);
+
+	@Override
+	public MultiplicativeElement<V> getElementFrom(ByteArray byteArray);
+
+	@Override
+	public MultiplicativeElement<V> getElementFrom(String string);
+
 	@Override
 	public MultiplicativeElement<V> getRandomElement();
 

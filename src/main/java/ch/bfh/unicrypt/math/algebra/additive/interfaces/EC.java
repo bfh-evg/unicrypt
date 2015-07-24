@@ -42,7 +42,11 @@
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
 import ch.bfh.unicrypt.helper.Point;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -159,13 +163,25 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 
 	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public ECElement<V, E> getElementFrom(int value);
+	public <W> ECElement<V, E> getElementFrom(W value, Converter<Point<E>, W> converter);
 
 	@Override
-	public ECElement<V, E> getElementFrom(BigInteger value);
+	public <W> ECElement<V, E> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
 	@Override
-	public ECElement<V, E> getElementFrom(ByteTree byteTree);
+	public <W> ECElement<V, E> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+
+	@Override
+	public ECElement<V, E> getElementFrom(int integer);
+
+	@Override
+	public ECElement<V, E> getElementFrom(BigInteger bigInteger);
+
+	@Override
+	public ECElement<V, E> getElementFrom(ByteArray byteArray);
+
+	@Override
+	public ECElement<V, E> getElementFrom(String string);
 
 	@Override
 	public ECElement<V, E> getRandomElement();

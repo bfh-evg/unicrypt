@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -62,6 +62,7 @@ import java.math.BigInteger;
  */
 public class N
 	   extends AbstractSemiRing<NElement, BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	public N() {
@@ -125,7 +126,7 @@ public class N
 	}
 
 	@Override
-	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
+	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
 		return BigIntegerToBigInteger.getInstance(0);
 	}
 

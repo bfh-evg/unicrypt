@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.converter.abstracts;
 
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
-import ch.bfh.unicrypt.helper.converter.interfaces.BitArrayConverter;
 
 /**
  * This abstract class serves as a base implementation of the {@link BitArrayConverter} interface.
@@ -52,8 +51,8 @@ import ch.bfh.unicrypt.helper.converter.interfaces.BitArrayConverter;
  * @param <V> The input type
  */
 public abstract class AbstractBitArrayConverter<V extends Object>
-	   extends AbstractConverter<V, BitArray>
-	   implements BitArrayConverter<V> {
+	   extends AbstractConverter<V, BitArray> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected AbstractBitArrayConverter(Class<V> inputClass) {

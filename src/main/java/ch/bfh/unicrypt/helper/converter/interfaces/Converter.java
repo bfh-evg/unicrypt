@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.converter.interfaces;
 
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.tree.Tree;
+
 /**
  * This generic interface provides two methods for converting instances of an input type {@code V} into instances of an
  * output type {@code W}, forth and back. Instances of the input type for which
@@ -57,7 +60,7 @@ package ch.bfh.unicrypt.helper.converter.interfaces;
 public interface Converter<V extends Object, W extends Object> {
 
 	/**
-	 * Converts the given input value into an output value. An exception is thrown if the input value in invalid.
+	 * Converts the given input value into an output value. An exception is thrown if the input value is invalid.
 	 * <p>
 	 * @param value The input value
 	 * @return The output value
@@ -66,13 +69,32 @@ public interface Converter<V extends Object, W extends Object> {
 	public W convert(V value);
 
 	/**
-	 * Converts the given output value back into an input value. An exception is thrown if the output value in invalid.
+	 * Converts the given output value back into an input value. An exception is thrown if the output value is invalid.
 	 * <p>
 	 * @param value The input value
 	 * @return The output value
 	 * @see Converter#isValidOutput(java.lang.Object)
 	 */
 	public V reconvert(W value);
+
+	/**
+	 * Converts the given tree of input values into a tree of output values. An exception is thrown if one of the input
+	 * values is invalid.
+	 * <p>
+	 * @param tree The tree of input values
+	 * @return The tree of output values
+	 */
+	public Tree<W> convert(Tree<V> tree);
+
+	/**
+	 * Converts the given tree of output values back into a tree of input values. An exception is thrown if one of the
+	 * output values is invalid.
+	 * <p>
+	 * @param tree The input value
+	 * @return The output value
+	 * @see Converter#isValidOutput(java.lang.Object)
+	 */
+	public Tree<V> reconvert(Tree<W> tree);
 
 	/**
 	 * Checks if a given input value is valid for the conversion.

@@ -79,7 +79,7 @@ public class BigIntegerHashMethodTest {
 		ByteArray hash4 = hashAlgorithm.getHashValue(ByteArray.getInstance());
 		ByteArray hash5 = hashAlgorithm.getHashValue(hash3.append(hash4));
 
-		HashMethod<BigInteger> hashMethod = BigIntegerHashMethod.getInstance(hashAlgorithm, converter);
+		HashMethod<BigInteger> hashMethod = HashMethod.getInstance(hashAlgorithm, converter);
 
 		Assert.assertEquals(hash1, hashMethod.getHashValue(t1));
 		Assert.assertEquals(hash2, hashMethod.getHashValue(t2));
@@ -93,7 +93,7 @@ public class BigIntegerHashMethodTest {
 	public void ByteArrayHashMethodTest2() {
 
 		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
-		HashMethod<BigInteger> hashMethod = BigIntegerHashMethod.getInstance(hashAlgorithm, aggregator, converter);
+		HashMethod<BigInteger> hashMethod = HashMethod.getInstance(hashAlgorithm, aggregator, converter);
 
 		BigInteger b1 = aggregator.aggregate(t1);
 		BigInteger b2 = aggregator.aggregate(t2);

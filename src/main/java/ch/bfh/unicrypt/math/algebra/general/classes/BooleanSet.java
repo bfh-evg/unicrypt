@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BooleanToBigInteger;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -101,7 +101,7 @@ public class BooleanSet
 	}
 
 	@Override
-	protected BigIntegerConverter<Boolean> abstractGetBigIntegerConverter() {
+	protected Converter<Boolean, BigInteger> abstractGetBigIntegerConverter() {
 		return BooleanToBigInteger.getInstance();
 	}
 

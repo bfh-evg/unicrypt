@@ -76,7 +76,7 @@ public class ByteArrayHashMethodTest {
 		ByteArray hash4 = hashAlgorithm.getHashValue(ByteArray.getInstance());
 		ByteArray hash5 = hashAlgorithm.getHashValue(hash3.append(hash4));
 
-		HashMethod<ByteArray> hashMethod = ByteArrayHashMethod.getInstance(hashAlgorithm);
+		HashMethod<ByteArray> hashMethod = HashMethod.getInstance(hashAlgorithm);
 
 		Assert.assertEquals(hash1, hashMethod.getHashValue(t1));
 		Assert.assertEquals(hash2, hashMethod.getHashValue(t2));
@@ -90,7 +90,7 @@ public class ByteArrayHashMethodTest {
 	public void ByteArrayHashMethodTest2() {
 
 		ByteArrayAggregator aggregator = ByteArrayAggregator.getInstance();
-		HashMethod<ByteArray> hashMethod = ByteArrayHashMethod.getInstance(hashAlgorithm, aggregator);
+		HashMethod<ByteArray> hashMethod = HashMethod.getInstance(hashAlgorithm, aggregator);
 
 		ByteArray b1 = aggregator.aggregate(t1);
 		ByteArray b2 = aggregator.aggregate(t2);
