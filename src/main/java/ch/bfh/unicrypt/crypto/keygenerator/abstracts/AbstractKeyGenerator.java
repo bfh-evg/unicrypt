@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.keygenerator.abstracts;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyGenerator;
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 
 /**

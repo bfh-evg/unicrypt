@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,72 +39,62 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.bytetree;
+package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import java.nio.ByteBuffer;
+import ch.bfh.unicrypt.helper.math.Alphabet;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
- * @author Reto E. Koenig <reto.koenig@bfh.ch>
+ * @author rolfhaenni
  */
-public class ByteTreeLeaf
-	   extends ByteTree {
+public class AlphabetTest {
 
-	public static final byte IDENTIFIER = 1;
-	private static final long serialVersionUID = 1L;
-
-	private final ByteArray value;
-
-	protected ByteTreeLeaf(ByteArray value) {
-		this.value = value;
-		this.length = LENGTH_OF_PREAMBLE + value.getLength();
+	public AlphabetTest() {
 	}
 
-	protected ByteTreeLeaf(ByteArray value, ByteArray byteArray) {
-		this(value);
-		this.byteArray = byteArray;
-	}
+	@Test
+	public void generalTest() {
+		Alphabet a1 = Alphabet.ALPHANUMERIC;
+		Alphabet a2 = Alphabet.getInstance("");
+		Alphabet a3 = Alphabet.getInstance("x");
+		Alphabet a4 = Alphabet.getInstance("xyz");
+		Alphabet a5 = Alphabet.getInstance('a', 'g');
+		Alphabet a6 = Alphabet.getInstance("abcdefg");
+		Alphabet a7 = Alphabet.UNICODE_BMP;
 
-	public ByteArray getValue() {
-		return this.value;
-	}
+		for (Alphabet alphabet : new Alphabet[]{a1, a2, a3, a4, a5, a6, a7}) {
 
-	@Override
-	protected String defaultToStringContent() {
-		return this.value.toString();
-	}
+			String allChars = "";
 
-	@Override
-	protected ByteArray abstractGetRecursiveHashValue(HashAlgorithm hashAlgorithm) {
-		return this.value.getHashValue(hashAlgorithm);
-	}
+			for (int i = 0; i < alphabet.getSize(); i++) {
+				char c = alphabet.getCharacter(i);
+				Assert.assertTrue(alphabet.contains(c));
+				Assert.assertEquals(i, alphabet.getIndex(c));
+				allChars = allChars + c;
+			}
+			Assert.assertTrue(alphabet.containsAll(""));
+			Assert.assertTrue(alphabet.containsAll(allChars));
+			if (alphabet != a7) {
+				Assert.assertFalse(alphabet.containsAll("*"));
+			}
 
-	@Override
-	protected void abstractConstructByteArray(ByteBuffer buffer, ByteArray byteArray) {
-		buffer.put(IDENTIFIER);
-		buffer.putInt(this.value.getLength());
-		buffer.put(this.value.getBytes());
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 5;
-		hash = 17 * hash + this.value.hashCode();
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final ByteTreeLeaf other = (ByteTreeLeaf) obj;
-		return this.value.equals(other.value);
+		Assert.assertFalse(a5.equals(a1));
+		Assert.assertFalse(a5.equals(a2));
+		Assert.assertFalse(a5.equals(a3));
+		Assert.assertFalse(a5.equals(a4));
+		Assert.assertTrue(a5.equals(a5));
+		Assert.assertTrue(a5.equals(a6));
+		Assert.assertFalse(a5.equals(a7));
+		Assert.assertEquals(62, a1.getSize());
+		Assert.assertEquals(0, a2.getSize());
+		Assert.assertEquals(1, a3.getSize());
+		Assert.assertEquals(3, a4.getSize());
+		Assert.assertEquals(7, a5.getSize());
+		Assert.assertEquals(7, a6.getSize());
+		Assert.assertEquals(65536, a7.getSize());
 	}
 
 }

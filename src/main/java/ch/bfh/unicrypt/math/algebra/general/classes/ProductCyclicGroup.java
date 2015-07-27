@@ -59,6 +59,7 @@ import java.util.NoSuchElementException;
 public class ProductCyclicGroup
 	   extends ProductGroup
 	   implements CyclicGroup<DenseArray<Element>> {
+
 	private static final long serialVersionUID = 1L;
 
 	private Tuple defaultGenerator;
@@ -140,37 +141,6 @@ public class ProductCyclicGroup
 	@Override
 	public ProductCyclicGroup[] split(int... indices) {
 		return (ProductCyclicGroup[]) super.split(indices);
-	}
-
-	@Override
-	protected Iterator<Tuple> defaultGetIterator(final BigInteger maxCounter) {
-		final ProductCyclicGroup productCyclicGroup = this;
-		return new Iterator<Tuple>() {
-			private BigInteger counter = BigInteger.ZERO;
-			private Tuple currentTuple = productCyclicGroup.getIdentityElement();
-
-			@Override
-			public boolean hasNext() {
-				return this.counter.compareTo(maxCounter) < 0;
-			}
-
-			@Override
-			public Tuple next() {
-				if (this.hasNext()) {
-					this.counter = this.counter.add(BigInteger.ONE);
-					Tuple nextElement = this.currentTuple;
-					this.currentTuple =
-						   productCyclicGroup.apply(this.currentTuple, productCyclicGroup.getDefaultGenerator());
-					return nextElement;
-				}
-				throw new NoSuchElementException();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
 	}
 
 	@Override

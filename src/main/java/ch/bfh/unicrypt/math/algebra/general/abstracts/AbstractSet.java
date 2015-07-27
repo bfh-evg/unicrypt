@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.CompositeConverter;
@@ -49,6 +49,7 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.iterable.IterablePrefix;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -377,7 +378,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 			@Override
 			public Iterator<E> iterator() {
-				return defaultGetIterator(null);
+				return defaultGetIterator();
 			}
 
 		};
@@ -388,14 +389,14 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new Iterable<E>() {
+		return IterablePrefix.getInstance(new Iterable<E>() {
 
 			@Override
 			public Iterator<E> iterator() {
-				return defaultGetIterator(BigInteger.valueOf(n));
+				return defaultGetIterator();
 			}
 
-		};
+		}, n);
 	}
 
 	@Override
@@ -522,23 +523,16 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	// some sets allow a more efficient itertation method than this one
-	protected Iterator<E> defaultGetIterator(BigInteger maxCounter) {
+	protected Iterator<E> defaultGetIterator() {
 		final AbstractSet<E, V> set = this;
-		if (set.isFinite()) {
-			if (maxCounter == null) {
-				maxCounter = set.getOrderLowerBound();
-			} else {
-				maxCounter = maxCounter.min(set.getOrderLowerBound());
-			}
-		}
-		final BigInteger max = maxCounter;
 		return new Iterator<E>() {
 			private BigInteger counter = BigInteger.ZERO;
 			private BigInteger currentValue = BigInteger.ZERO;
+			private final BigInteger maxCounter = set.isFinite() ? set.getOrderLowerBound() : null;
 
 			@Override
 			public boolean hasNext() {
-				return !set.isFinite() && counter.compareTo(max) < 0;
+				return maxCounter != null && counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override

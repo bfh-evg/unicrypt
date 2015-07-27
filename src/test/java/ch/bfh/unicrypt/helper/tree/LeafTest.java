@@ -43,7 +43,14 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
 import java.math.BigInteger;
+import java.util.Iterator;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -51,6 +58,22 @@ import org.junit.Test;
  * @author rolfhaenni
  */
 public class LeafTest {
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
 
 	@Test
 	public void generalLeafTest() {
@@ -77,5 +100,6 @@ public class LeafTest {
 		Assert.assertFalse(leaf1.equals(leaf3));
 		Assert.assertFalse(leaf1.equals(leaf4));
 	}
+
 
 }

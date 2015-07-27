@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.math;
 
+import ch.bfh.unicrypt.helper.math.Permutation;
 import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;

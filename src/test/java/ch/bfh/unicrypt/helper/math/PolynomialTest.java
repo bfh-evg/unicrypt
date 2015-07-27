@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.math;
 
+import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import java.util.Arrays;
 import java.util.HashMap;

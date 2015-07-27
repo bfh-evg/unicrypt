@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
-import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;

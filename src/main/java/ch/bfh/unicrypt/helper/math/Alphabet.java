@@ -39,8 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.math;
 
+import ch.bfh.unicrypt.UniCrypt;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;

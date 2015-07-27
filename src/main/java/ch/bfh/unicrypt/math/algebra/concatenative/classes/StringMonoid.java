@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;

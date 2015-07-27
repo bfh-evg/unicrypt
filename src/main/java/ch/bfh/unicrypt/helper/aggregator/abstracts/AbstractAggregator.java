@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.iterable.IterableMapper;
-import ch.bfh.unicrypt.helper.iterable.Mapper;
+import ch.bfh.unicrypt.helper.iterable.IterableMapping;
+import ch.bfh.unicrypt.helper.iterable.Mapping;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
@@ -60,12 +60,12 @@ public abstract class AbstractAggregator<V>
 	   extends UniCrypt
 	   implements Aggregator<V> {
 
-	private final Mapper<Tree<V>, V> mapper1;
-	private final Mapper<V, Tree<V>> mapper2;
+	private final Mapping<Tree<V>, V> mapping1;
+	private final Mapping<V, Tree<V>> mapping2;
 	private final Class<V> aggregatorClass;
 
 	protected AbstractAggregator(Class<V> aggregatorClass) {
-		mapper1 = new Mapper<Tree<V>, V>() {
+		this.mapping1 = new Mapping<Tree<V>, V>() {
 
 			@Override
 			public V map(Tree<V> tree) {
@@ -73,7 +73,7 @@ public abstract class AbstractAggregator<V>
 			}
 
 		};
-		this.mapper2 = new Mapper<V, Tree<V>>() {
+		this.mapping2 = new Mapping<V, Tree<V>>() {
 
 			@Override
 			public Tree<V> map(V value) {
@@ -102,7 +102,7 @@ public abstract class AbstractAggregator<V>
 
 		// Case 2: tree is a node
 		final Node<V> node = (Node<V>) tree;
-		Iterable<V> values = IterableMapper.getInstance(node.getChildren(), this.mapper1);
+		Iterable<V> values = IterableMapping.getInstance(node.getChildren(), this.mapping1);
 		return this.abstractAggregateNode(values, node.getSize());
 	}
 
@@ -121,7 +121,7 @@ public abstract class AbstractAggregator<V>
 		// Case 2: value represents a node
 		if (this.abstractIsNode(value)) {
 			Iterable<V> values = this.abstractDisaggregateNode(value);
-			Iterable<Tree<V>> trees = IterableMapper.getInstance(values, this.mapper2);
+			Iterable<Tree<V>> trees = IterableMapping.getInstance(values, this.mapping2);
 			return Node.getInstance(trees);
 		}
 

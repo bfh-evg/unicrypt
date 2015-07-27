@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;

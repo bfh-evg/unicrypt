@@ -39,11 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.bytetree;
+package ch.bfh.unicrypt.helper.tree;
 
+import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -51,40 +51,25 @@ import org.junit.Test;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ByteTreeTest {
+public class ByteArrayTreeTest {
 
-	public static ByteTree b0 = ByteTree.getInstance(ByteArray.getInstance("00|00"));
-	public static ByteTree b1 = ByteTree.getInstance(ByteArray.getInstance("12|34"));
-	public static ByteTree b2 = ByteTree.getInstance(ByteArray.getInstance("56|78|90"));
-	public static ByteTree b12 = ByteTree.getInstance(b1, b2);
-	public static ByteTree b012 = ByteTree.getInstance(b0, b12);
+	public static Tree<ByteArray> b0 = Leaf.getInstance(ByteArray.getInstance("00|00"));
+	public static Tree<ByteArray> b1 = Leaf.getInstance(ByteArray.getInstance("12|34"));
+	public static Tree<ByteArray> b2 = Leaf.getInstance(ByteArray.getInstance("56|78|90"));
+	public static Tree<ByteArray> b12 = Node.getInstance(b1, b2);
+	public static Tree<ByteArray> b012 = Node.getInstance(b0, b12);
+	
+	public static Aggregator<ByteArray> aggregator = ByteArrayAggregator.getInstance();
 
-	public ByteTreeTest() {
-	}
 
 	@Test
 	public void testGetByteArray() {
-		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|02|00|00"), b0.getByteArray());
-		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|02|12|34"), b1.getByteArray());
-		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|03|56|78|90"), b2.getByteArray());
-		Assert.assertEquals(ByteArray.getInstance("00|00|00|00|02|01|00|00|00|02|12|34|01|00|00|00|03|56|78|90"), b12.getByteArray());
-		Assert.assertEquals(ByteArray.getInstance("00|00|00|00|02|01|00|00|00|02|00|00|00|00|00|00|02|01|00|00|00|02|12|34|01|00|00|00|03|56|78|90"), b012.getByteArray());
+		Assert.assertEquals(ByteArray.getInstance("00|00|00|00|02|00|00"), b0.aggregate(aggregator));
+		Assert.assertEquals(ByteArray.getInstance("00|00|00|00|02|12|34"), b1.aggregate(aggregator));
+		Assert.assertEquals(ByteArray.getInstance("00|00|00|00|03|56|78|90"), b2.aggregate(aggregator));
+		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|0F|00|00|00|00|02|12|34|00|00|00|00|03|56|78|90"), b12.aggregate(aggregator));
+		Assert.assertEquals(ByteArray.getInstance("01|00|00|00|1B|00|00|00|00|02|00|00|01|00|00|00|0F|00|00|00|00|02|12|34|00|00|00|00|03|56|78|90"), b012.aggregate(aggregator));
 	}
 
-	@Test
-	public void testGetInstance_ByteArray() {
-		Assert.assertEquals(b0, ByteTree.getInstanceFrom(b0.getByteArray()));
-		Assert.assertEquals(b1, ByteTree.getInstanceFrom(b1.getByteArray()));
-		Assert.assertEquals(b2, ByteTree.getInstanceFrom(b2.getByteArray()));
-		Assert.assertEquals(b12, ByteTree.getInstanceFrom(b12.getByteArray()));
-		Assert.assertEquals(b012, ByteTree.getInstanceFrom(b012.getByteArray()));
-	}
-
-	@Test
-	public void testGetInstance_GetHashValue() {
-		ByteArray h0 = b0.getRecursiveHashValue();
-		ByteArray h12 = b12.getRecursiveHashValue();
-		Assert.assertEquals(h0.append(h12).getHashValue(), b012.getRecursiveHashValue());
-	}
 
 }

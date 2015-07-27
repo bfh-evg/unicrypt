@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.abstracts;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;

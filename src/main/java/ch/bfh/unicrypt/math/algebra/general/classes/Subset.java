@@ -73,8 +73,7 @@ public class Subset
 	}
 
 	@Override
-	protected Iterator<Element<Object>> defaultGetIterator(final BigInteger maxCounter) {
-		// maxCounter is ignored here, because the subset are usually very small
+	protected Iterator<Element<Object>> defaultGetIterator() {
 		return this.elementSet.iterator();
 	}
 

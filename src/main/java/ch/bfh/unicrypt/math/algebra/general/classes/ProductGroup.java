@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 public class ProductGroup
 	   extends ProductMonoid
 	   implements Group<DenseArray<Element>> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected ProductGroup(DenseArray<Set> sets) {
@@ -167,56 +168,5 @@ public class ProductGroup
 	public final Tuple applyInverse(Element element1, Element element2) {
 		return this.apply(element1, this.invert(element2));
 	}
-//
-	// STATIC FACTORY METHODS
-	//
 
-//	/**
-//	 * This is a static factory method to construct a composed group without calling respective constructors. The input
-//	 * groups are given as an array.
-//	 * <p/>
-//	 * @param groups The array of input groups
-//	 * @return The corresponding composed group
-//	 * @throws IllegalArgumentException if {@literal groups} is null or contains null
-//	 */
-//	public static ProductGroup getInstance(final Group... groups) {
-//		if (groups == null) {
-//			throw new IllegalArgumentException();
-//		}
-//		boolean isCyclic = false;
-//		if (groups.length > 0) {
-//			boolean uniform = true;
-//			Group first = groups[0];
-//			for (final Group group : groups) {
-//				if (group == null) {
-//					throw new IllegalArgumentException();
-//				}
-//				if (!group.isEquivalent(first)) {
-//					uniform = false;
-//				}
-//				isCyclic = isCyclic && group.isCyclic();
-//			}
-//			if (uniform) {
-//				return ProductGroup.getInstance(first, groups.length);
-//			}
-//		}
-//		if (isCyclic) {
-//			CyclicGroup[] cGroups = Arrays.copyOf(groups, groups.length, CyclicGroup[].class);
-//			return ProductCyclicGroup.getInstance(cGroups);
-//		}
-//		return new ProductGroup(groups);
-//	}
-//
-//	public static ProductGroup getInstance(final Group group, int arity) {
-//		if ((group == null) || (arity < 0)) {
-//			throw new IllegalArgumentException();
-//		}
-//		if (group.isCyclic() && arity < 2) {
-//			return ProductCyclicGroup.getInstance((CyclicGroup) group, arity);
-//		}
-//		if (arity == 0) {
-//			return new ProductGroup(new Group[]{});
-//		}
-//		return new ProductGroup(group, arity);
-//	}
 }

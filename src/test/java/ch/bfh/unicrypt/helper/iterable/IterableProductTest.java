@@ -1,7 +1,7 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
  *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
@@ -39,33 +39,60 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.iterable;
 
-import org.junit.Assert;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class PointTest {
-
-	public PointTest() {
-	}
+public class IterableProductTest {
 
 	@Test
-	public void generalTest() {
-		Point<Integer> p1 = Point.getInstance(3, 4);
-		Point<Integer> p2 = Point.getInstance(3, 4);
-		Point<Integer> p3 = Point.getInstance(3, 5);
-		Assert.assertEquals((Integer) 3, p1.getX());
-		Assert.assertEquals((Integer) 4, p1.getY());
-		Assert.assertTrue(p1.equals(p1));
-		Assert.assertTrue(p1.equals(p2));
-		Assert.assertFalse(p1.equals(p3));
-		Point<Integer> p4 = Point.getInstance();
-		Assert.assertEquals(null, p4.getX());
-		Assert.assertEquals(null, p4.getY());
+	public void testGeneralTest() {
+		IterableArray<Integer> it0 = IterableArray.getInstance();
+		IterableRange it1 = IterableRange.getInstance(0, 5);
+		IterableRange it2 = IterableRange.getInstance(0, 4);
+		IterableArray<Integer> it3 = IterableArray.getInstance(0, 1);
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : IterableProduct.<Integer>getInstance()) {
+				counter++;
+			}
+			assertEquals(1, counter);
+		}
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : IterableProduct.getInstance(it1, it2, it3)) {
+				counter++;
+			}
+			assertEquals(60, counter);
+		}
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : IterableProduct.getInstance(it0)) {
+				counter++;
+			}
+			assertEquals(0, counter);
+		}
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : IterableProduct.getInstance(it1, it0, it2)) {
+				counter++;
+			}
+			assertEquals(0, counter);
+		}
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : IterableProduct.getInstance(it0, it0, it0)) {
+				counter++;
+			}
+			assertEquals(0, counter);
+		}
+
 	}
 
 }

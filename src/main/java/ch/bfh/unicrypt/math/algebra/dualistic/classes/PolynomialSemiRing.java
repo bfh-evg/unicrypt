@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.Polynomial;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;

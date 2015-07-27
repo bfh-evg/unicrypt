@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.signature;
 
 import ch.bfh.unicrypt.crypto.schemes.signature.classes.SchnorrSignatureScheme;
-import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.factorization.SafePrime;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;

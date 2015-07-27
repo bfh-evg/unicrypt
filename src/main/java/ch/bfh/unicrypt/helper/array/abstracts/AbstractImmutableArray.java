@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.array.abstracts;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.iterable.IterableRange;
 import java.lang.reflect.Array;

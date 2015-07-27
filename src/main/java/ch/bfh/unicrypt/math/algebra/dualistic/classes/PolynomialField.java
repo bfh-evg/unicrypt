@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.Polynomial;
+import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;

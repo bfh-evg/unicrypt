@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.iterable;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import java.util.Arrays;
 import java.util.Iterator;
 

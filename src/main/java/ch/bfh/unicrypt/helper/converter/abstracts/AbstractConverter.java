@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.helper.converter.abstracts;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.iterable.IterableMapper;
-import ch.bfh.unicrypt.helper.iterable.Mapper;
+import ch.bfh.unicrypt.helper.iterable.IterableMapping;
+import ch.bfh.unicrypt.helper.iterable.Mapping;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
@@ -103,7 +103,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 		} else {
 			Node<V> node = (Node<V>) tree;
 			final Converter<V, W> converter = this;
-			Iterable<Tree<W>> children = IterableMapper.getInstance(node.getChildren(), new Mapper<Tree<V>, Tree<W>>() {
+			Iterable<Tree<W>> children = IterableMapping.getInstance(node.getChildren(), new Mapping<Tree<V>, Tree<W>>() {
 
 				@Override
 				public Tree<W> map(Tree<V> value) {
@@ -123,7 +123,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 		} else {
 			Node<W> node = (Node<W>) tree;
 			final Converter<V, W> converter = this;
-			Iterable<Tree<V>> children = IterableMapper.getInstance(node.getChildren(), new Mapper<Tree<W>, Tree<V>>() {
+			Iterable<Tree<V>> children = IterableMapping.getInstance(node.getChildren(), new Mapping<Tree<W>, Tree<V>>() {
 
 				@Override
 				public Tree<V> map(Tree<W> value) {

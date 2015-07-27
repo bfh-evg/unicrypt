@@ -39,20 +39,59 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt;
+
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import java.io.Serializable;
 
 /**
- * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
- * type {@code W}. The main usage of this interface is in the class {@link IterableMapper}.
+ * This is the base class for all classes in this library. Its main purpose is providing a consistent string
+ * representations by pre-defining {@link Object#toString()}.
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @param <V> The generic type of the input value
- * @param <W> The generic type of the output value
- * @see IterableMapper
  */
-public interface Mapper<V, W> {
+public abstract class UniCrypt
+	   implements Serializable {
 
-	public W map(V value);
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public final String toString() {
+		String str1 = this.defaultToStringType();
+		String str2 = this.defaultToStringContent();
+		if (str1.length() == 0) {
+			return str2;
+		}
+		if (str2.length() == 0) {
+			return str1;
+		}
+		return str1 + "[" + str2 + "]";
+	}
+
+	// default implementation for producing a string describing the type of the object
+	protected String defaultToStringType() {
+		return this.getClass().getSimpleName();
+	}
+
+	// default implementation for producing a string describing the content of the object
+	protected String defaultToStringContent() {
+		return "";
+	}
+
+	// this local class allows creating instances of ByteArray without copying the underlying byte array
+	protected static class SafeByteArray
+		   extends ByteArray {
+
+		public SafeByteArray(byte[] bytes) {
+			super(bytes);
+		}
+
+		@Override
+		public byte[] getBytes() {
+			return this.bytes;
+		}
+
+	}
 
 }

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.signature;
 
 import ch.bfh.unicrypt.crypto.schemes.signature.classes.RSASignatureScheme;
-import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;

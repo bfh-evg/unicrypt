@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
-import ch.bfh.unicrypt.helper.Polynomial;
+import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;

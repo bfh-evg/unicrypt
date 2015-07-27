@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,27 +39,69 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.math.algebra.general.classes;
+package ch.bfh.unicrypt.helper.iterable;
 
-import ch.bfh.unicrypt.helper.math.Permutation;
-import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class PermutationElement
-	   extends AbstractElement<PermutationGroup, PermutationElement, Permutation>
-	   implements Element<Permutation> {
-	private static final long serialVersionUID = 1L;
+public class IterableMappingTest {
 
-	protected PermutationElement(final PermutationGroup group, final Permutation permutation) {
-		super(group, permutation);
+	@Test
+	public void iterableMappingTest1() {
+
+		IterableRange range = IterableRange.getInstance(0, 10);
+
+		Iterable<Integer> newRange = IterableMapping.getInstance(range, new Mapping<Integer, Integer>() {
+
+			@Override
+			public Integer map(Integer value) {
+				return value + 1;
+			}
+		});
+
+		Integer i = 1;
+		for (Integer value : newRange) {
+			Assert.assertEquals(i, value);
+			i++;
+		}
+
+		// run the same test twice to check correct use of iterators
+		i = 1;
+		for (Integer value : newRange) {
+			Assert.assertEquals(i, value);
+			i++;
+		}
 	}
 
-	public int getSize() {
-		return this.getValue().getSize();
+	@Test
+	public void iterableMappingTest2() {
+
+		IterableArray range = IterableArray.getInstance(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+
+		Iterable<Integer> newRange = IterableMapping.getInstance(range, new Mapping<Integer, Integer>() {
+
+			@Override
+			public Integer map(Integer value) {
+				return value + 1;
+			}
+		});
+
+		Integer i = 1;
+		for (Integer value : newRange) {
+			Assert.assertEquals(i, value);
+			i++;
+		}
+
+		// run the same test twice to check correct use of iterators
+		i = 1;
+		for (Integer value : newRange) {
+			Assert.assertEquals(i, value);
+			i++;
+		}
 	}
 
 }

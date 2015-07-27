@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;

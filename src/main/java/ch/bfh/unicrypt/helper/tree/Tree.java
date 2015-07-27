@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 
 /**

@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractEC;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;

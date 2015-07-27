@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.classes;
 
-import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import java.math.BigInteger;

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,35 +39,64 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.crypto.schemes.scheme.abstracts;
+package ch.bfh.unicrypt.helper.iterable;
 
-import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
 import ch.bfh.unicrypt.UniCrypt;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import java.util.Iterator;
 
 /**
- *
- * @author rolfhaenni
- * @param <MS>
+ * This generic class selects the first {@code n} elements (prefix) from a given iterable collection of values of type
+ * {@code V}. The result is a new iterable collection of values of type {@code V}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the iterable collection
  */
-public abstract class AbstractScheme<MS extends Set>
+public class IterablePrefix<V>
 	   extends UniCrypt
-	   implements Scheme {
+	   implements Iterable<V> {
 
-	protected final MS messageSpace;
+	private final Iterable<V> iterable;
+	private final int maxCounter;
 
-	protected AbstractScheme(MS messageSpace) {
-		this.messageSpace = messageSpace;
+	protected IterablePrefix(Iterable<V> iterable, int maxCounter) {
+		this.maxCounter = maxCounter;
+		this.iterable = iterable;
 	}
 
 	@Override
-	public final MS getMessageSpace() {
-		return this.messageSpace;
+	public Iterator<V> iterator() {
+		return new Iterator<V>() {
+
+			private final Iterator<V> iterator = iterable.iterator();
+			private int counter = 0;
+
+			@Override
+			public boolean hasNext() {
+				return this.counter < maxCounter && this.iterator.hasNext();
+			}
+
+			@Override
+			public V next() {
+				this.counter = this.counter + 1;
+				return this.iterator.next();
+			}
+
+		};
 	}
 
-	@Override
-	protected String defaultToStringContent() {
-		return this.getMessageSpace().toString();
+	/**
+	 *
+	 * @param <V>      The generic type of the iterable collection
+	 * @param iterable The given iterable collection
+	 * @param n        The number of elements in the new iterable collection
+	 * @return The new iterable collection
+	 */
+	public static <V> IterablePrefix<V> getInstance(Iterable<V> iterable, int n) {
+		if (iterable == null || n < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new IterablePrefix<V>(iterable, n);
 	}
 
 }

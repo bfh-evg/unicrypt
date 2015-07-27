@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import java.math.BigInteger;
 

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.hash;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;

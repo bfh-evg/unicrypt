@@ -39,7 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.math;
+
+import ch.bfh.unicrypt.UniCrypt;
 
 /**
  * Instances of this generic class represent points {@code (x,y)} in a two-dimensional space over the generic type,

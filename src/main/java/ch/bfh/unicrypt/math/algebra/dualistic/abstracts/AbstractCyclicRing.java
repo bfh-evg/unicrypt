@@ -160,15 +160,16 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	}
 
 	@Override
-	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
-		final AbstractCyclicRing<E, V> cyclicRing = this;
+	protected Iterator<E> defaultGetIterator() {
+		final AbstractCyclicRing<E, V> set = this;
 		return new Iterator<E>() {
 			private BigInteger counter = BigInteger.ZERO;
-			private E currentElement = cyclicRing.getIdentityElement();
+			private E currentElement = set.getIdentityElement();
+			private final BigInteger maxCounter = set.isFinite() ? set.getOrderLowerBound() : null;
 
 			@Override
 			public boolean hasNext() {
-				return counter.compareTo(maxCounter) < 0;
+				return maxCounter != null && this.counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override
@@ -176,7 +177,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
 					E nextElement = this.currentElement;
-					this.currentElement = cyclicRing.apply(this.currentElement, cyclicRing.getDefaultGenerator());
+					this.currentElement = set.apply(this.currentElement, set.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();

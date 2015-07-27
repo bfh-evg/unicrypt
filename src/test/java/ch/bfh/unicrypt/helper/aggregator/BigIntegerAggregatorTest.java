@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.aggregator;
 
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import java.math.BigInteger;

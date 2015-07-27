@@ -177,15 +177,16 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	}
 
 	@Override
-	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
-		final AbstractCyclicGroup<E, V> cyclicGroup = this;
+	protected Iterator<E> defaultGetIterator() {
+		final AbstractCyclicGroup<E, V> set = this;
 		return new Iterator<E>() {
 			private BigInteger counter = BigInteger.ZERO;
-			private E currentElement = cyclicGroup.getIdentityElement();
+			private E currentElement = set.getIdentityElement();
+			private final BigInteger maxCounter = set.isFinite() ? set.getOrderLowerBound() : null;
 
 			@Override
 			public boolean hasNext() {
-				return this.counter.compareTo(maxCounter) < 0;
+				return maxCounter != null && this.counter.compareTo(maxCounter) < 0;
 			}
 
 			@Override
@@ -193,7 +194,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 				if (this.hasNext()) {
 					this.counter = this.counter.add(BigInteger.ONE);
 					E nextElement = this.currentElement;
-					this.currentElement = cyclicGroup.apply(this.currentElement, cyclicGroup.getDefaultGenerator());
+					this.currentElement = set.apply(this.currentElement, set.getDefaultGenerator());
 					return nextElement;
 				}
 				throw new NoSuchElementException();

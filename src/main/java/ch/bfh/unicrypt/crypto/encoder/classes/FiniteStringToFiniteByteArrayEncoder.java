@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.BigIntegerConvertFunction;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArraySet;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringElement;

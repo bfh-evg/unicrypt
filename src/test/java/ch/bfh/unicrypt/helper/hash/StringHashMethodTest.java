@@ -41,7 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.hash;
 
+import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.tree.Leaf;
@@ -72,6 +74,7 @@ public class StringHashMethodTest {
 	@Test
 	public void ByteArrayHashMethodTest1() {
 
+		// CRH
 		ByteArray hash1 = hashAlgorithm.getHashValue(converter.convert(string1));
 		ByteArray hash2 = hashAlgorithm.getHashValue(converter.convert(string2));
 		ByteArray hash3 = hashAlgorithm.getHashValue(hash1.append(hash2));
@@ -91,6 +94,32 @@ public class StringHashMethodTest {
 	@Test
 	public void ByteArrayHashMethodTest2() {
 
+		// CAH
+		Aggregator<ByteArray> aggregator = ByteArrayAggregator.getInstance();
+		HashMethod<String> hashMethod = HashMethod.getInstance(hashAlgorithm, converter, aggregator);
+
+		ByteArray b1 = converter.convert(string1);
+		ByteArray b2 = converter.convert(string2);
+
+		Tree<ByteArray> bt1 = Leaf.getInstance(b1);
+		Tree<ByteArray> bt2 = Leaf.getInstance(b2);
+
+		Tree<ByteArray> bt3 = Node.getInstance(bt1, bt2);
+		Tree<ByteArray> bt4 = Node.getInstance();
+		Tree<ByteArray> bt5 = Node.getInstance(bt3, bt4);
+
+		Assert.assertEquals(hashAlgorithm.getHashValue(aggregator.aggregate(bt1)), hashMethod.getHashValue(t1));
+		Assert.assertEquals(hashAlgorithm.getHashValue(aggregator.aggregate(bt2)), hashMethod.getHashValue(t2));
+		Assert.assertEquals(hashAlgorithm.getHashValue(aggregator.aggregate(bt3)), hashMethod.getHashValue(t3));
+		Assert.assertEquals(hashAlgorithm.getHashValue(aggregator.aggregate(bt4)), hashMethod.getHashValue(t4));
+		Assert.assertEquals(hashAlgorithm.getHashValue(aggregator.aggregate(bt5)), hashMethod.getHashValue(t5));
+
+	}
+
+	@Test
+	public void ByteArrayHashMethodTest3() {
+
+		// ACH
 		StringAggregator aggregator = StringAggregator.getInstance();
 		HashMethod<String> hashMethod = HashMethod.getInstance(hashAlgorithm, aggregator, converter);
 

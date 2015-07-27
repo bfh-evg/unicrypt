@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 

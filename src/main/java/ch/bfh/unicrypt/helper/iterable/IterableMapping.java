@@ -44,41 +44,41 @@ package ch.bfh.unicrypt.helper.iterable;
 import java.util.Iterator;
 
 /**
- * This generic class applies a {@link Mapper}{@code <V,W>} to the values of an iterable collection of values of type
+ * This generic class applies a {@link Mapping}{@code <V,W>} to the values of an iterable collection of values of type
  * {@code V}. The result is a new iterable collection of values of type {@code W}.
  * <p>
  * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the input iterable collection
  * @param <W> The generic type of this iterable collection
- * @see Mapper
+ * @see Mapping
  */
-public class IterableMapper<V, W>
+public class IterableMapping<V, W>
 	   implements Iterable<W> {
 
 	final private Iterable<V> values;
-	final private Mapper<V, W> mapper;
+	final private Mapping<V, W> mapping;
 
-	protected IterableMapper(Iterable<V> values, Mapper<V, W> mapper) {
+	protected IterableMapping(Iterable<V> values, Mapping<V, W> mapping) {
 		this.values = values;
-		this.mapper = mapper;
+		this.mapping = mapping;
 	}
 
 	/**
 	 * Returns a new instance of this class, which represents the iterable collection of values obtained by applying a
-	 * given mapper to the values of a given iterable collection.
+	 * given mapping to the values of a given iterable collection.
 	 * <p>
-	 * @param <V>    The generic type of the input iterable collection
-	 * @param <W>    The generic type of the new iterable collection
-	 * @param values The input iterable collection
-	 * @param mapper The mapper applied to the input values
+	 * @param <V>     The generic type of the input iterable collection
+	 * @param <W>     The generic type of the new iterable collection
+	 * @param values  The input iterable collection
+	 * @param mapping The mapping applied to the input values
 	 * @return The new iterable collection of type {@code W}
 	 */
-	public static <V, W> IterableMapper<V, W> getInstance(Iterable<V> values, Mapper<V, W> mapper) {
-		if (values == null || mapper == null) {
+	public static <V, W> IterableMapping<V, W> getInstance(Iterable<V> values, Mapping<V, W> mapping) {
+		if (values == null || mapping == null) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableMapper<V, W>(values, mapper);
+		return new IterableMapping<V, W>(values, mapping);
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class IterableMapper<V, W>
 
 			@Override
 			public W next() {
-				return mapper.map(iterator.next());
+				return mapping.map(iterator.next());
 			}
 
 		};

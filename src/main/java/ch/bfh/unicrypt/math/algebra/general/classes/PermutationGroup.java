@@ -41,8 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.PermutationToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;

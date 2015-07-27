@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.hash;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

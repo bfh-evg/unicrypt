@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,59 +39,34 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper;
+package ch.bfh.unicrypt.helper.math;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import java.io.Serializable;
+import ch.bfh.unicrypt.helper.math.Point;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * This is the base class for all classes in this library. Its main purpose is providing a consistent string
- * representations by pre-defining {@link Object#toString()}.
- * <p>
- * @author R. Haenni
- * @version 2.0
+ *
+ * @author rolfhaenni
  */
-public abstract class UniCrypt
-	   implements Serializable {
+public class PointTest {
 
-	private static final long serialVersionUID = 1L;
-
-	@Override
-	public final String toString() {
-		String str1 = this.defaultToStringType();
-		String str2 = this.defaultToStringContent();
-		if (str1.length() == 0) {
-			return str2;
-		}
-		if (str2.length() == 0) {
-			return str1;
-		}
-		return str1 + "[" + str2 + "]";
+	public PointTest() {
 	}
 
-	// default implementation for producing a string describing the type of the object
-	protected String defaultToStringType() {
-		return this.getClass().getSimpleName();
-	}
-
-	// default implementation for producing a string describing the content of the object
-	protected String defaultToStringContent() {
-		return "";
-	}
-
-	// this local class allows creating instances of ByteArray without copying the underlying byte array
-	protected static class SafeByteArray
-		   extends ByteArray {
-
-		public SafeByteArray(byte[] bytes) {
-			super(bytes);
-		}
-
-		@Override
-		public byte[] getBytes() {
-			return this.bytes;
-		}
-
+	@Test
+	public void generalTest() {
+		Point<Integer> p1 = Point.getInstance(3, 4);
+		Point<Integer> p2 = Point.getInstance(3, 4);
+		Point<Integer> p3 = Point.getInstance(3, 5);
+		Assert.assertEquals((Integer) 3, p1.getX());
+		Assert.assertEquals((Integer) 4, p1.getY());
+		Assert.assertTrue(p1.equals(p1));
+		Assert.assertTrue(p1.equals(p2));
+		Assert.assertFalse(p1.equals(p3));
+		Point<Integer> p4 = Point.getInstance();
+		Assert.assertEquals(null, p4.getX());
+		Assert.assertEquals(null, p4.getY());
 	}
 
 }

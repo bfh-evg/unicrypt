@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;

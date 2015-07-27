@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;

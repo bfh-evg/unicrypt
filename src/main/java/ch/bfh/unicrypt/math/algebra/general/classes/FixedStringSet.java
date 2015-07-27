@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.math.Alphabet;
 import java.math.BigInteger;
 
 /**
