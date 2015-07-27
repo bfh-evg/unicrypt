@@ -53,18 +53,19 @@ import java.math.BigInteger;
 
 /**
  * This interface represents the concept of a non-empty mathematical set of elements. The number of elements in the set
- * is called order. The order may be infinite or unknown. The main functionality of this interface is constructing new
- * elements, using {@link Set#getElement(Object)}, and checking whether a given element belongs to the set or not, using
- * {@link Set#contains(Element)}. Further functionalities such as operations between elements are added in
- * sub-interfaces such as {@link Monoid}, {@link Group}, {@link Ring}, or {@link Field}.
+ * is called order. The order may be infinite or unknown. The main functionality of this interface is the construction
+ * of new elements, using {@link Set#getElement(Object)}, and checking whether a given element belongs to the set or
+ * not, using {@link Set#contains(Element)}. Further functionalities such as applying set operations to elements are
+ * added in sub-interfaces such as {@link Monoid}, {@link Group}, {@link Ring}, or {@link Field}.
  * <p>
  * Elements of a set are created by constructing instances of {@link Element}{@code <V>}. To construct a new element, an
- * object of the generic type {@code V} representing the element needs to be provided. The object is called the
- * element's value. The concrete type of these values depends on the actual set, to which the element belongs to.
+ * object of the generic type {@code V} representing the element needs to be provided. This object is called the
+ * element's value. The concrete type of these values depends on the actual set, to which the element belongs to. The
+ * most common types are {@link BigInteger}, {@link String}, and {@link ByteArray}.
  * <p>
- * Independently of the generic type {@code V} of a set, it is assumed that each element of this set can be converted
- * into a unique {@link BigInteger}, {@link String}, or {@link ByteArray} value, and vice versa, that corresponding
- * elements can be constructed from such {@link BigInteger}, {@link String}, or {@link ByteArray} values.
+ * Independently of the generic type {@code V} of a set, it is assumed that each element of the set can be converted
+ * into a unique {@link BigInteger}, {@link String}, or {@link ByteArray} value, and that corresponding elements can be
+ * constructed from such {@link BigInteger}, {@link String}, or {@link ByteArray} values.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -155,8 +156,7 @@ public interface Set<V extends Object> {
 	public boolean isConcatenative();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link ProductSet}, i.e., if this set is a Cartesian
-	 * product of other sets.
+	 * Returns {@literal true}, if this set represents a Cartesian product of other sets.
 	 * <p>
 	 * @return {@literal true}, if this set is a product set, {@literal false} otherwise
 	 */
@@ -227,20 +227,20 @@ public interface Set<V extends Object> {
 	public boolean isSingleton();
 
 	/**
-	 * Returns the ring of integers modulo the set order, i.e., an instance of {@link ZMod} with the same set order. For
-	 * this to work, the set order must be finite and known.
+	 * Returns the ring of integers modulo the set order, i.e., an instance of {@link ZMod} with the same order. For
+	 * this to work, the set order must be finite and known. For sets of infinite or unknown order, an
+	 * {@link UnsupportedOperationException} is thrown.
 	 * <p>
 	 * @return The resulting ring of integers modulo the set order
-	 * @throws UnsupportedOperationException if the set order is infinite or unknown
 	 */
 	public ZMod getZModOrder();
 
 	/**
 	 * Returns the multiplicative group of integers modulo the set order, i.e., an instance of {@link ZStarMod} of order
-	 * {@code phi(n)}. For this to work, the set order must be finite and known.
+	 * {@code phi(n)}. For this to work, the set order must be finite and known. For sets of infinite or unknown order,
+	 * an {@link UnsupportedOperationException} is thrown.
 	 * <p>
 	 * @return The resulting multiplicative group
-	 * @throws UnsupportedOperationException if the set order is infinite or unknown
 	 */
 	public ZStarMod getZStarModOrder();
 
@@ -263,21 +263,20 @@ public interface Set<V extends Object> {
 	public boolean contains(V value);
 
 	/**
-	 * Returns the corresponding element for a given value (if such an element exists).
+	 * Returns the corresponding element for a given value, if such an element exists.
 	 * <p>
 	 * @param value The given value
 	 * @return The element represented by the value
-	 * @throws IllegalArgumentException if the value does not represent an element of this set
 	 * @see contains(Object)
 	 */
 	public Element<V> getElement(V value);
 
 	/**
-	 * Returns a random element using the library's default random byte sequence. For sets of finite order, the element
-	 * is selected uniformly at random. For sets of infinite order, an {@link UnsupportedOperationException} is thrown.
+	 * Selects and returns a random set element using the library's default random byte sequence. For sets of finite
+	 * order, the element is selected uniformly at random. For sets of infinite order, an
+	 * {@link UnsupportedOperationException} is thrown.
 	 * <p>
 	 * @return A random element from the set
-	 * @throws UnsupportedOperationException
 	 */
 	public Element<V> getRandomElement();
 
@@ -288,14 +287,11 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param randomByteSequence The given random byte sequence
 	 * @return A random element from the set
-	 * @throws UnsupportedOperationException
 	 */
 	public Element<V> getRandomElement(RandomByteSequence randomByteSequence);
 
 	/**
 	 * Checks if two sets are mathematically equivalent.
-	 * <p>
-	 * @true} if this set is equal to a given Set.
 	 * <p>
 	 * @param set The given Set.
 	 * @return {@literal true} if this set is equal
