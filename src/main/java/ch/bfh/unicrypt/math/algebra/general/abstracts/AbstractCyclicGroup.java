@@ -182,11 +182,10 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 		return new Iterator<E>() {
 			private BigInteger counter = BigInteger.ZERO;
 			private E currentElement = set.getIdentityElement();
-			private final BigInteger maxCounter = set.isFinite() ? set.getOrderLowerBound() : null;
 
 			@Override
 			public boolean hasNext() {
-				return maxCounter != null && this.counter.compareTo(maxCounter) < 0;
+				return !set.isFinite() || this.counter.compareTo(set.getOrderLowerBound()) < 0;
 			}
 
 			@Override

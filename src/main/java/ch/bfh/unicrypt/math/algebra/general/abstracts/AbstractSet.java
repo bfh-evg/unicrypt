@@ -528,11 +528,10 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return new Iterator<E>() {
 			private BigInteger counter = BigInteger.ZERO;
 			private BigInteger currentValue = BigInteger.ZERO;
-			private final BigInteger maxCounter = set.isFinite() ? set.getOrderLowerBound() : null;
 
 			@Override
 			public boolean hasNext() {
-				return maxCounter != null && counter.compareTo(maxCounter) < 0;
+				return !set.isFinite() || this.counter.compareTo(set.getOrderLowerBound()) < 0;
 			}
 
 			@Override
