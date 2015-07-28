@@ -41,18 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative;
 
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -60,25 +52,6 @@ import org.junit.Test;
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
 public class ByteArrayElementTest {
-
-	public ByteArrayElementTest() {
-	}
-
-	@BeforeClass
-	public static void setUpClass() {
-	}
-
-	@AfterClass
-	public static void tearDownClass() {
-	}
-
-	@Before
-	public void setUp() {
-	}
-
-	@After
-	public void tearDown() {
-	}
 
 	/**
 	 * Test of convertToByteArray method, of class ByteArrayElement.
@@ -88,38 +61,7 @@ public class ByteArrayElementTest {
 		ByteArrayMonoid bam = ByteArrayMonoid.getInstance(3);
 		Element<ByteArray> element = bam.getElement(new byte[]{(byte) -1, (byte) 2, (byte) 3});
 		Element<ByteArray> element2 = bam.getElement(element.getValue());
-		Assert.assertEquals("Should be: " + element, element, element2);
-//		System.out.println("convertToByteArray");
-//		ByteArrayElement instance = null;
-//		byte[] expResult = null;
-//		byte[] result = instance.convertToByteArray();
-//		assertArrayEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-//		byte[] bytes = new byte[]{(byte) -1, (byte) 2, (byte) 3};
-//		BigInteger value1 = BigInteger.ZERO;
-//		//BigInteger byteSize = BigInteger.valueOf(1 << Byte.SIZE);
-//		for (byte b : bytes) {
-//			int intValue = b & 0xFF;
-//			value1 = value1.shiftLeft(Byte.SIZE).add(BigInteger.valueOf(intValue));
-//		}
-//		BigInteger value1 = new BigInteger(1, bytes);
-//		System.out.println(value1);
-	}
-
-	/**
-	 * Test of getLength method, of class ByteArrayElement.
-	 */
-	@Test
-	@Ignore
-	public void testGetLength() {
-//		System.out.println("getLength");
-		ByteArrayElement instance = null;
-		int expResult = 0;
-		int result = instance.getLength();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		Assert.assertEquals(element, element2);
 	}
 
 }

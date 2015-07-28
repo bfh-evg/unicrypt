@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.factorization;
 import ch.bfh.unicrypt.helper.map.HashMap2D;
 import ch.bfh.unicrypt.helper.map.Map2D;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModPrime;
 import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import java.math.BigInteger;
 
@@ -81,21 +82,30 @@ public class Prime
 		Prime.instances.put(3072, 256, new Prime(new BigInteger("2904802997684979031429751266652287185343487588181447618330743076143601865498555112868668022266559203625663078877490258721995264797270023560831442836093516200516055819853220249422024925494525813600122382903520906197364840270012052413988292184690761146180604389522384946371612875869038489784405654789562755666546621759776892408153190790080930100123746284224075121257652224788593802068214369290495086275786967073127915183202957500434821866026609283416272645553951861415817069299793203345162979862593723584529770402506155104819505875374380008547680367117472878708136497428006654308479264979152338818509590797044264172530642931949135881728647441773319439777155807723223165099627191170008146028545375587766944080959493647795765768349350646133842732758718957895411577422317390130051445859016247698037520949742756905563488653739484537428521855358075060716204433164749666917562781919225495884397992008274673412368259180131087873830227"), new BigInteger("57896044618658097711785492504343953926634992332820282019728792003956564820063")));
 	}
 
+	// a prime factor of p-1
 	private BigInteger orderFactor;
 
+	// 2 is a special case
 	protected Prime() {
 		this(MathUtil.TWO, null);
 	}
 
+	// unknown order factor
 	protected Prime(BigInteger prime) {
 		this(prime, MathUtil.TWO);
 	}
 
+	// known order factor
 	protected Prime(BigInteger prime, BigInteger orderFactor) {
 		super(prime, new BigInteger[]{prime}, new int[]{1});
 		this.orderFactor = orderFactor;
 	}
 
+	/**
+	 * Returns the known prime factor of {@code p-1}, or {@code null} for {@code p=2}.
+	 * <p>
+	 * @return The prime factor
+	 */
 	public Prime getOrderFactor() {
 		return Prime.getInstance(this.orderFactor);
 	}
@@ -142,6 +152,15 @@ public class Prime
 		return Prime.getFirstInstance(bitLength, 2);
 	}
 
+	/**
+	 * Returns the smallest prime number {@code p} of a given bit length such that {@code p-1} divides the smallest
+	 * possible prime number of another given bit length. Such primes are required in
+	 * {@link GStarModPrime#getInstance(int, int)}.
+	 * <p>
+	 * @param bitLength1 The bit length of {@code p}
+	 * @param bitLength2 The bit length of the factor of {@code p-1}
+	 * @return The new prime
+	 */
 	public static Prime getFirstInstance(int bitLength1, int bitLength2) {
 		if (bitLength1 < 2 || bitLength2 < 2 || (bitLength1 == 2 && bitLength2 > 2) || (bitLength1 > 2 && bitLength1 <= bitLength2)) {
 			throw new IllegalArgumentException();
