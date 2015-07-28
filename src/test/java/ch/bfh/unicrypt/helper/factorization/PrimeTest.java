@@ -67,9 +67,6 @@ public class PrimeTest {
 				assertEquals(1, p.getExponents()[0]);
 				assertEquals(1, p.getExponents().length);
 				assertEquals(p, Prime.getInstance(BigInteger.valueOf(i)));
-				if (MathUtil.isSafePrime(i)) {
-					assertEquals(SafePrime.class, p.getClass());
-				}
 			} else {
 				try {
 					Prime p = Prime.getInstance(i);
@@ -116,22 +113,6 @@ public class PrimeTest {
 	}
 
 	@Test
-	public void testGetNextInstance_BigInteger() {
-		assertEquals(2, Prime.getFirstInstance(BigInteger.valueOf(0)).getValue().intValue());
-		assertEquals(2, Prime.getFirstInstance(BigInteger.valueOf(1)).getValue().intValue());
-		assertEquals(2, Prime.getFirstInstance(BigInteger.valueOf(2)).getValue().intValue());
-		assertEquals(3, Prime.getFirstInstance(BigInteger.valueOf(3)).getValue().intValue());
-		assertEquals(5, Prime.getFirstInstance(BigInteger.valueOf(4)).getValue().intValue());
-		assertEquals(5, Prime.getFirstInstance(BigInteger.valueOf(5)).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(6)).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(7)).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(8)).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(9)).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(10)).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(11)).getValue().intValue());
-	}
-
-	@Test
 	public void testGetNextInstance_int() {
 		try {
 			Prime.getFirstInstance(1);
@@ -147,117 +128,55 @@ public class PrimeTest {
 	}
 
 	@Test
-	public void testGetNextInstance_BigInteger_BigInteger() {
-		BigInteger prime = BigInteger.valueOf(2);
-		assertEquals(3, Prime.getFirstInstance(BigInteger.valueOf(0), prime).getValue().intValue());
-		assertEquals(3, Prime.getFirstInstance(BigInteger.valueOf(1), prime).getValue().intValue());
-		assertEquals(3, Prime.getFirstInstance(BigInteger.valueOf(2), prime).getValue().intValue());
-		assertEquals(3, Prime.getFirstInstance(BigInteger.valueOf(3), prime).getValue().intValue());
-		assertEquals(5, Prime.getFirstInstance(BigInteger.valueOf(4), prime).getValue().intValue());
-		assertEquals(5, Prime.getFirstInstance(BigInteger.valueOf(5), prime).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(6), prime).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(7), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(8), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(9), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(10), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(11), prime).getValue().intValue());
-		assertEquals(13, Prime.getFirstInstance(BigInteger.valueOf(12), prime).getValue().intValue());
-		assertEquals(13, Prime.getFirstInstance(BigInteger.valueOf(13), prime).getValue().intValue());
-		assertEquals(17, Prime.getFirstInstance(BigInteger.valueOf(14), prime).getValue().intValue());
-		assertEquals(17, Prime.getFirstInstance(BigInteger.valueOf(15), prime).getValue().intValue());
-		assertEquals(17, Prime.getFirstInstance(BigInteger.valueOf(16), prime).getValue().intValue());
-		assertEquals(17, Prime.getFirstInstance(BigInteger.valueOf(17), prime).getValue().intValue());
-		assertEquals(19, Prime.getFirstInstance(BigInteger.valueOf(18), prime).getValue().intValue());
-
-		prime = BigInteger.valueOf(3);
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(0), prime).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(1), prime).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(2), prime).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(3), prime).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(4), prime).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(5), prime).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(6), prime).getValue().intValue());
-		assertEquals(7, Prime.getFirstInstance(BigInteger.valueOf(7), prime).getValue().intValue());
-		assertEquals(13, Prime.getFirstInstance(BigInteger.valueOf(8), prime).getValue().intValue());
-		assertEquals(13, Prime.getFirstInstance(BigInteger.valueOf(9), prime).getValue().intValue());
-		assertEquals(13, Prime.getFirstInstance(BigInteger.valueOf(10), prime).getValue().intValue());
-		assertEquals(13, Prime.getFirstInstance(BigInteger.valueOf(11), prime).getValue().intValue());
-		assertEquals(13, Prime.getFirstInstance(BigInteger.valueOf(12), prime).getValue().intValue());
-		assertEquals(13, Prime.getFirstInstance(BigInteger.valueOf(13), prime).getValue().intValue());
-		assertEquals(19, Prime.getFirstInstance(BigInteger.valueOf(14), prime).getValue().intValue());
-
-		prime = BigInteger.valueOf(5);
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(0), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(1), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(2), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(3), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(4), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(5), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(6), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(7), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(8), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(9), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(10), prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(BigInteger.valueOf(11), prime).getValue().intValue());
-		assertEquals(31, Prime.getFirstInstance(BigInteger.valueOf(12), prime).getValue().intValue());
-		assertEquals(31, Prime.getFirstInstance(BigInteger.valueOf(13), prime).getValue().intValue());
-		assertEquals(31, Prime.getFirstInstance(BigInteger.valueOf(14), prime).getValue().intValue());
-	}
-
-	@Test
-	public void testGetNextInstance_int_BigInteger() {
-		BigInteger prime = BigInteger.valueOf(2);
+	public void testGetNextInstance_int_int() {
 		try {
-			Prime.getFirstInstance(1, prime);
-			fail();
-		} catch (Exception e) {
-		}
-		assertEquals(3, Prime.getFirstInstance(2, prime).getValue().intValue());
-		assertEquals(5, Prime.getFirstInstance(3, prime).getValue().intValue());
-		assertEquals(11, Prime.getFirstInstance(4, prime).getValue().intValue());
-		assertEquals(17, Prime.getFirstInstance(5, prime).getValue().intValue());
-		assertEquals(37, Prime.getFirstInstance(6, prime).getValue().intValue());
-		assertEquals(67, Prime.getFirstInstance(7, prime).getValue().intValue());
-
-		prime = BigInteger.valueOf(3);
-		try {
-			Prime.getFirstInstance(1, prime);
+			Prime.getFirstInstance(1, 1);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			Prime.getFirstInstance(2, prime);
-			fail();
-		} catch (Exception e) {
-		}
-		assertEquals(7, Prime.getFirstInstance(3, prime).getValue().intValue());
-		assertEquals(13, Prime.getFirstInstance(4, prime).getValue().intValue());
-		assertEquals(19, Prime.getFirstInstance(5, prime).getValue().intValue());
-		assertEquals(37, Prime.getFirstInstance(6, prime).getValue().intValue());
-		assertEquals(67, Prime.getFirstInstance(7, prime).getValue().intValue());
-		assertEquals(139, Prime.getFirstInstance(8, prime).getValue().intValue());
-
-		prime = BigInteger.valueOf(5);
-		try {
-			Prime.getFirstInstance(1, prime);
+			Prime.getFirstInstance(2, 1);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			Prime.getFirstInstance(2, prime);
+			Prime.getFirstInstance(1, 2);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			Prime.getFirstInstance(3, prime);
+			Prime.getFirstInstance(3, 3);
 			fail();
 		} catch (Exception e) {
 		}
-		assertEquals(11, Prime.getFirstInstance(4, prime).getValue().intValue());
-		assertEquals(31, Prime.getFirstInstance(5, prime).getValue().intValue());
-		assertEquals(41, Prime.getFirstInstance(6, prime).getValue().intValue());
-		assertEquals(71, Prime.getFirstInstance(7, prime).getValue().intValue());
-		assertEquals(131, Prime.getFirstInstance(8, prime).getValue().intValue());
+		assertEquals(3, Prime.getFirstInstance(2, 2).getValue().intValue());
+		assertEquals(5, Prime.getFirstInstance(3, 2).getValue().intValue());
+		assertEquals(11, Prime.getFirstInstance(4, 2).getValue().intValue());
+		assertEquals(11, Prime.getFirstInstance(4, 3).getValue().intValue());
+		assertEquals(17, Prime.getFirstInstance(5, 2).getValue().intValue());
+		assertEquals(31, Prime.getFirstInstance(5, 3).getValue().intValue());
+		assertEquals(23, Prime.getFirstInstance(5, 4).getValue().intValue());
+		assertEquals(37, Prime.getFirstInstance(6, 2).getValue().intValue());
+		assertEquals(41, Prime.getFirstInstance(6, 3).getValue().intValue());
+		try {
+			Prime.getFirstInstance(6, 4);
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			Prime.getFirstInstance(6, 5);
+			fail();
+		} catch (Exception e) {
+		}
+		assertEquals(67, Prime.getFirstInstance(7, 2).getValue().intValue());
+		assertEquals(71, Prime.getFirstInstance(7, 3).getValue().intValue());
+		assertEquals(67, Prime.getFirstInstance(7, 4).getValue().intValue());
+		assertEquals(103, Prime.getFirstInstance(7, 5).getValue().intValue());
+		try {
+			Prime.getFirstInstance(7, 6);
+			fail();
+		} catch (Exception e) {
+		}
 	}
 
 }

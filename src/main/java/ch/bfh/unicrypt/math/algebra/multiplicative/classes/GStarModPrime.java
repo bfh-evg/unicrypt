@@ -101,8 +101,8 @@ public class GStarModPrime
 	}
 
 	public static GStarModPrime getFirstInstance(final int bitLength1, final int bitLength2) {
-		Prime orderFactor = Prime.getFirstInstance(bitLength2);
-		return GStarModPrime.getInstance(Prime.getFirstInstance(bitLength1, orderFactor), orderFactor);
+		Prime prime = Prime.getFirstInstance(bitLength1, bitLength2);
+		return GStarModPrime.getInstance(prime, prime.getOrderFactor());
 	}
 
 }
