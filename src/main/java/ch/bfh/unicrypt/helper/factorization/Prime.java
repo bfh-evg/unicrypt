@@ -44,6 +44,8 @@ package ch.bfh.unicrypt.helper.factorization;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Each instance of this class represents a prime number. This class is a specialization of {@link SpecialFactorization}
@@ -57,6 +59,7 @@ public class Prime
 	   extends SpecialFactorization {
 
 	private static final long serialVersionUID = 1L;
+	private static final Map<Integer, Prime> instances = new HashMap<Integer, Prime>();
 
 	protected Prime(BigInteger prime) {
 		super(prime, new BigInteger[]{prime}, new int[]{1});
@@ -84,7 +87,10 @@ public class Prime
 		if (prime == null || !MathUtil.isPrime(prime)) {
 			throw new IllegalArgumentException();
 		}
-		return Prime.privateGetInstance(prime);
+		if (MathUtil.isPrime(prime.subtract(BigInteger.ONE).divide(MathUtil.TWO))) {
+			return new SafePrime(prime);
+		}
+		return new Prime(prime);
 	}
 
 	/**
@@ -97,7 +103,12 @@ public class Prime
 		if (bitLength < 2) {
 			throw new IllegalArgumentException();
 		}
-		return Prime.getFirstInstance(MathUtil.powerOfTwo(bitLength - 1));
+		Prime prime = Prime.instances.get(bitLength);
+		if (prime == null) {
+			prime = Prime.getFirstInstance(MathUtil.powerOfTwo(bitLength - 1));
+			Prime.instances.put(bitLength, prime);
+		}
+		return prime;
 	}
 
 	/**
@@ -122,7 +133,7 @@ public class Prime
 		while (!MathUtil.isPrime(candidate)) {
 			candidate = candidate.add(MathUtil.TWO);
 		}
-		return Prime.privateGetInstance(candidate);
+		return Prime.getInstance(candidate);
 	}
 
 	/**
@@ -197,7 +208,7 @@ public class Prime
 		while (!MathUtil.isPrime(candidate)) {
 			candidate = candidate.add(doublePrimeDivisor);
 		}
-		return Prime.privateGetInstance(candidate);
+		return Prime.getInstance(candidate);
 	}
 
 	/**
@@ -225,14 +236,7 @@ public class Prime
 		do {
 			candidate = randomNumberGenerator.nextBigInteger(bitLength);
 		} while (!MathUtil.isPrime(candidate));
-		return Prime.privateGetInstance(candidate);
-	}
-
-	private static Prime privateGetInstance(BigInteger prime) {
-		if (MathUtil.isPrime(prime.subtract(BigInteger.ONE).divide(MathUtil.TWO))) {
-			return new SafePrime(prime);
-		}
-		return new Prime(prime);
+		return Prime.getInstance(candidate);
 	}
 
 }
