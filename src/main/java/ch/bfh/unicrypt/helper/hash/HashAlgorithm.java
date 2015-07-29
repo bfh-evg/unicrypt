@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 /**
  * Instances of this class represent hash algorithms such as SHA-1 or SHA-256. This class is a wrapper class for
@@ -58,11 +57,6 @@ import java.util.Arrays;
  */
 public class HashAlgorithm
 	   extends UniCrypt {
-
-	/**
-	 * The MD5 hash algorithm.
-	 */
-	public static final HashAlgorithm MD5 = new HashAlgorithm("MD5");
 
 	/**
 	 * The SHA-1 hash algorithm.
@@ -183,16 +177,13 @@ public class HashAlgorithm
 
 	/**
 	 * Returns the hash algorithm that corresponds to the algorithm name specified as a string. The supported algorithm
-	 * names are: {@code "MD5"}, {@code "SHA-1"}, {@code "SHA-224"}, {@code "SHA-256"}, {@code "SHA-384"}, and
-	 * {@code "SHA-512"}.
+	 * names are: {@code "SHA-1"}, {@code "SHA-224"}, {@code "SHA-256"}, {@code "SHA-384"}, and {@code "SHA-512"}.
 	 * <p>
 	 * @param algorithmName The name of the hash algorithm.
 	 * @return The new hash method
 	 */
 	public static HashAlgorithm getInstance(String algorithmName) {
 		switch (algorithmName) {
-			case "MD5":
-				return HashAlgorithm.MD5;
 			case "SHA-1":
 				return HashAlgorithm.SHA1;
 			case "SHA-224":

@@ -57,7 +57,6 @@ public class HashAlgorithmTest {
 	@Test
 	public void HashAlgorithmTest() {
 
-		assertSame(HashAlgorithm.MD5, HashAlgorithm.getInstance("MD5"));
 		assertSame(HashAlgorithm.SHA1, HashAlgorithm.getInstance("SHA-1"));
 		assertSame(HashAlgorithm.SHA256, HashAlgorithm.getInstance("SHA-256"));
 		assertSame(HashAlgorithm.SHA384, HashAlgorithm.getInstance("SHA-384"));
@@ -67,40 +66,18 @@ public class HashAlgorithmTest {
 			fail();
 		} catch (Exception e) {
 		}
-		Assert.assertEquals(16, HashAlgorithm.MD5.getByteLength());
 		Assert.assertEquals(20, HashAlgorithm.SHA1.getByteLength());
 		Assert.assertEquals(32, HashAlgorithm.SHA256.getByteLength());
 		Assert.assertEquals(48, HashAlgorithm.SHA384.getByteLength());
 		Assert.assertEquals(64, HashAlgorithm.SHA512.getByteLength());
-		Assert.assertEquals(128, HashAlgorithm.MD5.getBitLength());
 		Assert.assertEquals(160, HashAlgorithm.SHA1.getBitLength());
 		Assert.assertEquals(256, HashAlgorithm.SHA256.getBitLength());
 		Assert.assertEquals(384, HashAlgorithm.SHA384.getBitLength());
 		Assert.assertEquals(512, HashAlgorithm.SHA512.getBitLength());
-		Assert.assertEquals("MD5", HashAlgorithm.MD5.getAlgorithmName());
 		Assert.assertEquals("SHA-1", HashAlgorithm.SHA1.getAlgorithmName());
 		Assert.assertEquals("SHA-256", HashAlgorithm.SHA256.getAlgorithmName());
 		Assert.assertEquals("SHA-384", HashAlgorithm.SHA384.getAlgorithmName());
 		Assert.assertEquals("SHA-512", HashAlgorithm.SHA512.getAlgorithmName());
-	}
-
-	@Test
-	public void HashAlgorithmTest_HashValue_MD5() {
-		byte[] bytes1 = ByteArray.getInstance("".toUpperCase()).getBytes();
-		byte[] bytes2 = ByteArray.getInstance("61|62|63".toUpperCase()).getBytes();
-		byte[] hash1 = ByteArray.getInstance("d4|1d|8c|d9|8f|00|b2|04|e9|80|09|98|ec|f8|42|7e".toUpperCase()).getBytes();
-		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.MD5.getHashValue(bytes1)));
-		Assert.assertTrue(Arrays.equals(hash1, HashAlgorithm.MD5.getHashValue(bytes2, 0, 0)));
-		try {
-			HashAlgorithm.MD5.getHashValue(bytes2, -2, 0);
-			fail();
-		} catch (Exception e) {
-		}
-		try {
-			HashAlgorithm.MD5.getHashValue(bytes2, 1, 5);
-			fail();
-		} catch (Exception e) {
-		}
 	}
 
 	// test vectors taken from http://www.di-mgt.com.au/sha_testvectors.html
