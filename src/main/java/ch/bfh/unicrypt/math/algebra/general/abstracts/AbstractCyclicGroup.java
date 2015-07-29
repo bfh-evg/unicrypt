@@ -76,7 +76,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 	protected AbstractCyclicGroup(Class<?> valueClass) {
 		super(valueClass);
-		this.generatorLists = new HashMap<ReferenceRandomByteSequence, ArrayList<E>>();
+		this.generatorLists = new HashMap<>();
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 		}
 		ArrayList<E> generatorList = this.generatorLists.get(referenceRandomByteSequence);
 		if (generatorList == null) {
-			generatorList = new ArrayList<E>();
+			generatorList = new ArrayList<>();
 			this.generatorLists.put(referenceRandomByteSequence, generatorList);
 		}
 		if (maxIndex >= generatorList.size()) {

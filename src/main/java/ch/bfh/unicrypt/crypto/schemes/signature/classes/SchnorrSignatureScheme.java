@@ -180,7 +180,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new SchnorrSignatureScheme<MS>(messageSpace, cyclicGroup, cyclicGroup.getDefaultGenerator(), convertMethod, hashMethod);
+		return new SchnorrSignatureScheme<>(messageSpace, cyclicGroup, cyclicGroup.getDefaultGenerator(), convertMethod, hashMethod);
 	}
 
 	public static <MS extends Set> SchnorrSignatureScheme getInstance(MS messageSpace, Element generator) {
@@ -193,7 +193,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 			   || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new SchnorrSignatureScheme<MS>(messageSpace, (CyclicGroup) generator.getSet(), generator, convertMethod, hashMethod);
+		return new SchnorrSignatureScheme<>(messageSpace, (CyclicGroup) generator.getSet(), generator, convertMethod, hashMethod);
 	}
 
 }

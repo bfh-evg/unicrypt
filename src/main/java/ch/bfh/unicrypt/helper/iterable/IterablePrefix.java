@@ -96,7 +96,7 @@ public class IterablePrefix<V>
 		if (iterable == null || n < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new IterablePrefix<V>(iterable, n);
+		return new IterablePrefix<>(iterable, n);
 	}
 
 }

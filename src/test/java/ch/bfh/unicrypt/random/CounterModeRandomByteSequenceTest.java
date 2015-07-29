@@ -260,7 +260,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<Integer> numbers = new HashSet<Integer>();
+		HashSet<Integer> numbers = new HashSet<>();
 		for (int i = 0; i < 100000; i++) {
 			int result = instance.getRandomNumberGenerator().nextInt(1023);
 			numbers.add(result);
@@ -294,7 +294,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBigInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
+		HashSet<BigInteger> numbers = new HashSet<>();
 		for (int i = 0; i < 10000; i++) {
 			BigInteger result = instance.getRandomNumberGenerator().nextBigInteger(10);
 			numbers.add(result);
@@ -316,7 +316,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBigInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
+		HashSet<BigInteger> numbers = new HashSet<>();
 		for (int i = 0; i < 10000; i++) {
 			BigInteger result = instance.getRandomNumberGenerator().nextBigInteger(8);
 			numbers.add(result);
@@ -339,7 +339,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBigInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
+		HashSet<BigInteger> numbers = new HashSet<>();
 		for (int i = 0; i < 100000; i++) {
 			BigInteger result = instance.getRandomNumberGenerator().nextBigInteger(BigInteger.valueOf(1023));
 			numbers.add(result);
@@ -363,7 +363,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBigInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
+		HashSet<BigInteger> numbers = new HashSet<>();
 
 		for (int i = 0; i < 10000; i++) {
 			BigInteger result = instance.getRandomNumberGenerator().nextBigInteger(BigInteger.valueOf(255));

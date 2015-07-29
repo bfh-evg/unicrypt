@@ -78,7 +78,7 @@ public class IterableMapping<V, W>
 		if (values == null || mapping == null) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableMapping<V, W>(values, mapping);
+		return new IterableMapping<>(values, mapping);
 	}
 
 	@Override

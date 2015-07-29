@@ -164,7 +164,7 @@ public class PermutationGroup
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<Integer, PermutationGroup> instances = new HashMap<Integer, PermutationGroup>();
+	private static final Map<Integer, PermutationGroup> instances = new HashMap<>();
 
 	/**
 	 * Returns a the unique instance of this class for a given non-negative permutation size.

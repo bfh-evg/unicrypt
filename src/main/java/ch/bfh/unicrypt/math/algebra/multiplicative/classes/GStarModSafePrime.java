@@ -54,7 +54,7 @@ import java.util.Map;
 public class GStarModSafePrime
 	   extends GStarModPrime {
 
-	private final static Map<BigInteger, GStarModSafePrime> instances = new HashMap<BigInteger, GStarModSafePrime>();
+	private final static Map<BigInteger, GStarModSafePrime> instances = new HashMap<>();
 	private static final long serialVersionUID = 1L;
 
 	protected GStarModSafePrime(SafePrime modulo) {

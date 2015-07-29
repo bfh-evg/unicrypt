@@ -59,7 +59,6 @@ public enum SECECCParamsF2m
 
 	//TODO: remove sectTest
 	//sectTest("13", "3", "1", "8", "d", "10", "2"),
-
 	sect113r1(
 		   "20000000000000000000000000201", "003088250CA6E7C7FE649CE85820F7",
 		   "00E8BEE4D3E2260744188BE0E9C723", "009D73616F35F4AB1407D73562C10F",
@@ -182,7 +181,7 @@ public enum SECECCParamsF2m
 		BigInteger bitString = new BigInteger(p, 16);
 
 		// Read bits and create a BigInteger ArrayList
-		ArrayList<BigInteger> arrayBigInteger = new ArrayList<BigInteger>();
+		ArrayList<BigInteger> arrayBigInteger = new ArrayList<>();
 		for (Character s : bitString.toString(2).toCharArray()) {
 			arrayBigInteger.add(0, new BigInteger(s.toString()));
 

@@ -76,7 +76,7 @@ public abstract class Tree<V>
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Leaf<V>(value);
+		return new Leaf<>(value);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public abstract class Tree<V>
 			}
 			size++;
 		}
-		return new Node<V>(children, size);
+		return new Node<>(children, size);
 	}
 
 	/**

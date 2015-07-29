@@ -139,7 +139,7 @@ public class Polynomial<C>
 			throw new IllegalArgumentException();
 		}
 		SparseArray<C> sparseArray = SparseArray.getInstance(zeroCoefficient, coefficients);
-		return new Polynomial<C>(sparseArray.removeSuffix(), zeroCoefficient, oneCoefficient);
+		return new Polynomial<>(sparseArray.removeSuffix(), zeroCoefficient, oneCoefficient);
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class Polynomial<C>
 			throw new IllegalArgumentException();
 		}
 		SparseArray<C> sparseArray = SparseArray.getInstance(zeroCoefficient, coefficients);
-		return new Polynomial<C>(sparseArray.removeSuffix(), zeroCoefficient, oneCoefficient);
+		return new Polynomial<>(sparseArray.removeSuffix(), zeroCoefficient, oneCoefficient);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class Polynomial<C>
 			   || zeroCoefficient.equals(oneCoefficient)) {
 			throw new IllegalArgumentException();
 		}
-		return new Polynomial<C>(coefficients.removeSuffix(), zeroCoefficient, oneCoefficient);
+		return new Polynomial<>(coefficients.removeSuffix(), zeroCoefficient, oneCoefficient);
 	}
 
 	/**
@@ -303,8 +303,8 @@ public class Polynomial<C>
 		}
 
 		if (this.isBinary()) {
-			return this.binaryCoefficients == other.binaryCoefficients ||
-				   this.binaryCoefficients.equals(other.binaryCoefficients);
+			return this.binaryCoefficients == other.binaryCoefficients
+				   || this.binaryCoefficients.equals(other.binaryCoefficients);
 		} else {
 			return this.coefficients == other.coefficients || this.coefficients.equals(other.coefficients);
 		}

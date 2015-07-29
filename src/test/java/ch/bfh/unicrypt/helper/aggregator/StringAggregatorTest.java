@@ -103,7 +103,7 @@ public class StringAggregatorTest {
 		String[] strings = new String[]{"\"\"", "[]", "[\"Hello\"|\"World\"]"};
 
 		for (Set<String> values : getStringSets(strings)) {
-			List<Tree<String>> trees = new ArrayList<Tree<String>>();
+			List<Tree<String>> trees = new ArrayList<>();
 			for (String value : values) {
 				trees.add(Tree.getInstance(value));
 			}
@@ -121,16 +121,16 @@ public class StringAggregatorTest {
 	}
 
 	public static List<Set<String>> getStringSets(String[] inputSet) {
-		List<Set<String>> subSets = new ArrayList<Set<String>>();
+		List<Set<String>> subSets = new ArrayList<>();
 		for (String addToSets : inputSet) {
-			List<Set<String>> newSets = new ArrayList<Set<String>>();
+			List<Set<String>> newSets = new ArrayList<>();
 			for (Set<String> curSet : subSets) {
-				Set<String> copyPlusNew = new HashSet<String>();
+				Set<String> copyPlusNew = new HashSet<>();
 				copyPlusNew.addAll(curSet);
 				copyPlusNew.add(addToSets);
 				newSets.add(copyPlusNew);
 			}
-			Set<String> newValSet = new HashSet<String>();
+			Set<String> newValSet = new HashSet<>();
 			newValSet.add(addToSets);
 			newSets.add(newValSet);
 			subSets.addAll(newSets);

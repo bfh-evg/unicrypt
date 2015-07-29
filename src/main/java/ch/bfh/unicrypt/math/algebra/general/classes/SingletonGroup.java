@@ -152,7 +152,7 @@ public class SingletonGroup
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<BigInteger, SingletonGroup> instances = new HashMap<BigInteger, SingletonGroup>();
+	private static final Map<BigInteger, SingletonGroup> instances = new HashMap<>();
 
 	public static SingletonGroup getInstance(final BigInteger value) {
 		if (value == null) {

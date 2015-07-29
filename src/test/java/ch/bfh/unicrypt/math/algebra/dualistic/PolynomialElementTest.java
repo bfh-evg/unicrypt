@@ -80,7 +80,7 @@ public class PolynomialElementTest {
 		p = ring0.getElement(Tuple.getInstance(z.getElement(0), z.getElement(2)));
 		assertEquals(z.getElement(6), p.evaluate(z.getElement(3)));
 
-		HashMap map = new HashMap<Integer, ZElement>();
+		HashMap map = new HashMap<>();
 		map.put(0, z.getElement(1));
 		map.put(1001, z.getElement(48));
 		p = ring0.getElement(Polynomial.getInstance(map, z.getZeroElement(), z.getOneElement()));

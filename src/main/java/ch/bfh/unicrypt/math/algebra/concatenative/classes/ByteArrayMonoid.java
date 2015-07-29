@@ -136,7 +136,7 @@ public class ByteArrayMonoid
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<Integer, ByteArrayMonoid> instances = new HashMap<Integer, ByteArrayMonoid>();
+	private static final Map<Integer, ByteArrayMonoid> instances = new HashMap<>();
 
 	public static ByteArrayMonoid getInstance() {
 		return ByteArrayMonoid.getInstance(1);

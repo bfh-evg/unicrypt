@@ -204,7 +204,7 @@ public class ZMod
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<BigInteger, ZMod> instances = new HashMap<BigInteger, ZMod>();
+	private static final Map<BigInteger, ZMod> instances = new HashMap<>();
 
 	public static ZMod getInstance(final int modulus) {
 		return ZMod.getInstance(BigInteger.valueOf(modulus));

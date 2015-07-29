@@ -54,6 +54,7 @@ import ch.bfh.unicrypt.UniCrypt;
  */
 public class Point<T>
 	   extends UniCrypt {
+
 	private static final long serialVersionUID = 1L;
 
 	private final T x, y;
@@ -75,7 +76,7 @@ public class Point<T>
 		if (x == null || y == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Point<T>(x, y);
+		return new Point<>(x, y);
 	}
 
 	/**
@@ -85,7 +86,7 @@ public class Point<T>
 	 * @return The point of infinity
 	 */
 	public static <T> Point<T> getInstance() {
-		return new Point<T>((T) null, (T) null);
+		return new Point<>((T) null, (T) null);
 	}
 
 	/**

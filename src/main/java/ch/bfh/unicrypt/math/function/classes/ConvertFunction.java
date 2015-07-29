@@ -60,6 +60,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class ConvertFunction<V extends Object, W extends Object>
 	   extends AbstractFunction<ConvertFunction, Set<V>, Element<V>, Set<W>, Element<W>> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Converter<V, W> converter;
@@ -88,11 +89,11 @@ public class ConvertFunction<V extends Object, W extends Object>
 	 */
 	public static <V, W> ConvertFunction<V, W> getInstance(final Set<V> domain, final Set<W> coDomain,
 		   Converter<V, W> converter) {
-		return new ConvertFunction<V, W>(domain, coDomain, converter);
+		return new ConvertFunction<>(domain, coDomain, converter);
 	}
 
 	public static <V> ConvertFunction<V, V> getInstance(Set<V> domain, Set<V> coDomain) {
-		return new ConvertFunction<V, V>(domain, coDomain, TrivialConverter.<V>getInstance());
+		return new ConvertFunction<>(domain, coDomain, TrivialConverter.<V>getInstance());
 	}
 
 }

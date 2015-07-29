@@ -84,7 +84,7 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 		this.signatureSpace = signatureSpace;
 		this.convertMethod = convertMethod;
 		this.hashMethod = hashMethod;
-		this.keyPairGenerators = new HashMap<StringToByteArray, KG>();
+		this.keyPairGenerators = new HashMap<>();
 	}
 
 	@Override

@@ -164,7 +164,7 @@ public class PolynomialSemiRing
 			throw new IllegalArgumentException();
 		}
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap
-			   = new HashMap<Integer, DualisticElement<BigInteger>>();
+			   = new HashMap<>();
 		for (int i = 0; i <= degree; i++) {
 			DualisticElement<BigInteger> coefficient = this.getSemiRing().getRandomElement(randomByteSequence);
 			if (!coefficient.isZero()) {
@@ -184,7 +184,7 @@ public class PolynomialSemiRing
 			throw new IllegalArgumentException();
 		}
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap
-			   = new HashMap<Integer, DualisticElement<BigInteger>>();
+			   = new HashMap<>();
 		for (int i = 0; i <= degree - 1; i++) {
 			DualisticElement<BigInteger> coefficient = this.getSemiRing().getRandomElement(randomByteSequence);
 			while (i == 0 && a0NotZero && coefficient.isZero()) {
@@ -389,7 +389,7 @@ public class PolynomialSemiRing
 	@Override
 	protected PolynomialElement abstractGetOne() {
 		Map<Integer, DualisticElement<BigInteger>> coefficientMap
-			   = new HashMap<Integer, DualisticElement<BigInteger>>();
+			   = new HashMap<>();
 		coefficientMap.put(0, this.getSemiRing().getOneElement());
 		return getElementUnchecked(coefficientMap);
 	}

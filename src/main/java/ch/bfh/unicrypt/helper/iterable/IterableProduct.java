@@ -157,10 +157,10 @@ public class IterableProduct<V>
 			throw new IllegalArgumentException();
 		}
 		if (iterables.isEmpty()) {
-			return new IterableProduct<V>();
+			return new IterableProduct<>();
 		}
 		Iterable<V> iterable = iterables.getFirst();
-		return new IterableProduct<V>(iterable, IterableProduct.getInstance(iterables.removeAt(0)));
+		return new IterableProduct<>(iterable, IterableProduct.getInstance(iterables.removeAt(0)));
 	}
 
 }

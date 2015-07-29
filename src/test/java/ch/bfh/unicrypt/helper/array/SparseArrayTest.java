@@ -58,7 +58,7 @@ public class SparseArrayTest {
 	public void generalTest() {
 
 		SparseArray<Integer> sparseArray = SparseArray.getInstance(0, new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-		List<SparseArray<Integer>> sparseArrays = new ArrayList<SparseArray<Integer>>();
+		List<SparseArray<Integer>> sparseArrays = new ArrayList<>();
 		sparseArrays.add(SparseArray.getInstance(0, new Integer[]{0, 0, 0, 8, 7, 5, 4, 3, 255, 255}));
 		sparseArrays.add(sparseArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(SparseArray.getInstance(0, new Integer[]{255, 255})));
 		sparseArrays.add(sparseArray.reverse().extract(1, 6).shiftRight(3).removeAt(5).append(SparseArray.getInstance(255, 2)));

@@ -61,7 +61,7 @@ public class HashMap2D<K1, K2, V>
 	private final Map<K1, Map<K2, V>> hashMaps;
 
 	private HashMap2D() {
-		this.hashMaps = new HashMap<K1, Map<K2, V>>();
+		this.hashMaps = new HashMap<>();
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class HashMap2D<K1, K2, V>
 	public void put(K1 key1, K2 key2, V value) {
 		Map<K2, V> hashMap = this.hashMaps.get(key1);
 		if (hashMap == null) {
-			hashMap = new HashMap<K2, V>();
+			hashMap = new HashMap<>();
 			this.hashMaps.put(key1, hashMap);
 		}
 		hashMap.put(key2, value);
@@ -92,7 +92,7 @@ public class HashMap2D<K1, K2, V>
 	 * @return The new 2-dimensional hash map
 	 */
 	public static <K1, K2, V> HashMap2D<K1, K2, V> getInstance() {
-		return new HashMap2D<K1, K2, V>();
+		return new HashMap2D<>();
 	}
 
 }

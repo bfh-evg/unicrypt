@@ -55,12 +55,12 @@ import org.junit.Test;
  */
 public class BitArrayTest {
 
-	ArrayList<BitArray> bitArrayList = new ArrayList<BitArray>();
-	ArrayList<BooleanString> booleanStringList = new ArrayList<BooleanString>();
+	ArrayList<BitArray> bitArrayList = new ArrayList<>();
+	ArrayList<BooleanString> booleanStringList = new ArrayList<>();
 	BitArrayToString converter = BitArrayToString.getInstance();
 
 	public BitArrayTest() {
-		List<String> stringList = new LinkedList<String>();
+		List<String> stringList = new LinkedList<>();
 		// trivial cases
 		stringList.add("");
 		stringList.add("0");

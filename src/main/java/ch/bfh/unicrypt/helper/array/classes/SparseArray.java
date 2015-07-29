@@ -62,6 +62,7 @@ import java.util.Map;
  */
 public class SparseArray<V extends Object>
 	   extends AbstractDefaultValueArray<SparseArray<V>, V> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Map<Integer, V> map;
@@ -145,7 +146,7 @@ public class SparseArray<V extends Object>
 				newMap.put(i, value);
 			}
 		}
-		return new SparseArray<V>(newMap, length, defaultValue);
+		return new SparseArray<>(newMap, length, defaultValue);
 	}
 
 	/**
@@ -158,7 +159,7 @@ public class SparseArray<V extends Object>
 	 * @return The new sparse array
 	 */
 	public static <V> SparseArray<V> getInstance(V defaultValue, int index, V value) {
-		Map<Integer, V> map = new HashMap<Integer, V>(1);
+		Map<Integer, V> map = new HashMap<>(1);
 		map.put(index, value);
 		return SparseArray.getInstance(defaultValue, map);
 	}
@@ -195,7 +196,7 @@ public class SparseArray<V extends Object>
 		if (values instanceof SparseArray) {
 			return (SparseArray) values; // defaultValue is ignored
 		}
-		Map<Integer, V> map = new HashMap<Integer, V>();
+		Map<Integer, V> map = new HashMap<>();
 		int i = 0;
 		for (V value : values) {
 			if (value == null) {
@@ -206,7 +207,7 @@ public class SparseArray<V extends Object>
 			}
 			i++;
 		}
-		return new SparseArray<V>(map, i, defaultValue);
+		return new SparseArray<>(map, i, defaultValue);
 	}
 
 	@Override
@@ -215,7 +216,7 @@ public class SparseArray<V extends Object>
 		if (this.defaultValue.equals(value)) {
 			return super.defaultGetIndices(value);
 		}
-		List<Integer> result = new LinkedList<Integer>();
+		List<Integer> result = new LinkedList<>();
 		for (Integer i : this.map.keySet()) {
 			if (i >= this.rangeOffset && i < this.rangeOffset + this.rangeLength) {
 				if (this.map.get(i).equals(value)) {
@@ -232,7 +233,7 @@ public class SparseArray<V extends Object>
 		if (!this.defaultValue.equals(value)) {
 			return super.defaultGetIndicesExcept(value);
 		}
-		List<Integer> result = new LinkedList<Integer>();
+		List<Integer> result = new LinkedList<>();
 		for (Integer i : this.map.keySet()) {
 			if (i >= this.rangeOffset && i < this.rangeOffset + this.length - this.header - this.trailer) {
 				if (!this.map.get(i).equals(this.defaultValue)) {
@@ -270,19 +271,19 @@ public class SparseArray<V extends Object>
 
 	@Override
 	protected SparseArray abstractAppend(ImmutableArray<V> other) {
-		Map<Integer, V> newMap = new HashMap<Integer, V>();
+		Map<Integer, V> newMap = new HashMap<>();
 		for (int i : this.getIndicesExcept()) {
 			newMap.put(i, this.abstractGetAt(i));
 		}
 		for (int i : other.getIndicesExcept(this.defaultValue)) {
 			newMap.put(this.length + i, other.getAt(i));
 		}
-		return new SparseArray<V>(newMap, this.length + other.getLength(), this.defaultValue);
+		return new SparseArray<>(newMap, this.length + other.getLength(), this.defaultValue);
 	}
 
 	@Override
 	protected SparseArray<V> abstractInsertAt(int index, V value) {
-		Map<Integer, V> newMap = new HashMap<Integer, V>();
+		Map<Integer, V> newMap = new HashMap<>();
 		for (int i : this.getIndicesExcept()) {
 			if (i < index) {
 				newMap.put(i, this.abstractGetAt(i));
@@ -293,12 +294,12 @@ public class SparseArray<V extends Object>
 		if (!value.equals(this.defaultValue)) {
 			newMap.put(index, value);
 		}
-		return new SparseArray<V>(newMap, this.length + 1, this.defaultValue);
+		return new SparseArray<>(newMap, this.length + 1, this.defaultValue);
 	}
 
 	@Override
 	protected SparseArray<V> abstractReplaceAt(int index, V value) {
-		Map<Integer, V> newMap = new HashMap<Integer, V>();
+		Map<Integer, V> newMap = new HashMap<>();
 		for (int i : this.getIndicesExcept()) {
 			if (i != index) {
 				newMap.put(i, this.abstractGetAt(i));
@@ -307,21 +308,21 @@ public class SparseArray<V extends Object>
 		if (!value.equals(this.defaultValue)) {
 			newMap.put(index, value);
 		}
-		return new SparseArray<V>(newMap, this.length, this.defaultValue);
+		return new SparseArray<>(newMap, this.length, this.defaultValue);
 	}
 
 	@Override
 	protected SparseArray<V> abstractReverse() {
 		// switch trailer and header
-		return new SparseArray<V>(this.map, this.length, this.rangeOffset, !this.reverse, this.defaultValue,
-			   this.header, this.trailer, this.rangeLength);
+		return new SparseArray<>(this.map, this.length, this.rangeOffset, !this.reverse, this.defaultValue,
+								 this.header, this.trailer, this.rangeLength);
 	}
 
 	@Override
 	protected SparseArray<V> abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer,
 		   int header) {
-		return new SparseArray<V>(this.map, length, rangeOffset, this.reverse, this.defaultValue, trailer, header,
-			   rangeLength);
+		return new SparseArray<>(this.map, length, rangeOffset, this.reverse, this.defaultValue, trailer, header,
+								 rangeLength);
 	}
 
 	private int getIndex(int rangeIndex) {

@@ -152,7 +152,7 @@ public class Subset
 			throw new IllegalArgumentException();
 		}
 		// A LinkedHashSet retains the order
-		LinkedHashSet<Element<Object>> hashSet = new LinkedHashSet<Element<Object>>();
+		LinkedHashSet<Element<Object>> hashSet = new LinkedHashSet<>();
 		for (Element element : elements) {
 			if (element == null || !superSet.contains(element)) {
 				throw new IllegalArgumentException();

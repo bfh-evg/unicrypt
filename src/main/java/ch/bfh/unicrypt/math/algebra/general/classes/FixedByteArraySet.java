@@ -54,6 +54,7 @@ import java.util.Map;
  */
 public class FixedByteArraySet
 	   extends FiniteByteArraySet {
+
 	private static final long serialVersionUID = 1L;
 
 	private FixedByteArraySet(int length) {
@@ -70,7 +71,7 @@ public class FixedByteArraySet
 		return this.abstractGetElement(ByteArray.getRandomInstance(this.getLength(), randomByteSequence));
 	}
 
-	private static final Map<Integer, FixedByteArraySet> instances = new HashMap<Integer, FixedByteArraySet>();
+	private static final Map<Integer, FixedByteArraySet> instances = new HashMap<>();
 
 	public static FixedByteArraySet getInstance(final int length) {
 		if (length < 0) {
@@ -79,7 +80,7 @@ public class FixedByteArraySet
 		FixedByteArraySet instance = FixedByteArraySet.instances.get(Integer.valueOf(length));
 		if (instance == null) {
 			instance = new FixedByteArraySet(length);
-			FixedByteArraySet.instances.put(Integer.valueOf(length), instance);
+			FixedByteArraySet.instances.put(length, instance);
 		}
 		return instance;
 	}

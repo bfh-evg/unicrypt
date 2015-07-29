@@ -59,7 +59,7 @@ public class ZStarModPrime
 	   extends ZStarMod
 	   implements MultiplicativeCyclicGroup<BigInteger> {
 
-	private final static Map<BigInteger, ZStarModPrime> instances = new HashMap<BigInteger, ZStarModPrime>();
+	private final static Map<BigInteger, ZStarModPrime> instances = new HashMap<>();
 	private static final long serialVersionUID = 1L;
 
 	protected ZStarModPrime(Prime modulus) {

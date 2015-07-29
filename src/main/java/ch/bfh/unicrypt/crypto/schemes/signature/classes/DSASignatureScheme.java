@@ -138,7 +138,7 @@ public class DSASignatureScheme<MS extends Set>
 		if (messageSpace == null || cyclicGroup == null || !cyclicGroup.isCyclic() || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new DSASignatureScheme<MS>(messageSpace, cyclicGroup, cyclicGroup.getDefaultGenerator(), convertMethod, hashMethod);
+		return new DSASignatureScheme<>(messageSpace, cyclicGroup, cyclicGroup.getDefaultGenerator(), convertMethod, hashMethod);
 	}
 
 	public static <MS extends Set> DSASignatureScheme getInstance(MS messageSpace, Element generator) {
@@ -151,7 +151,7 @@ public class DSASignatureScheme<MS extends Set>
 			   || !generator.isGenerator() || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new DSASignatureScheme<MS>(messageSpace, (CyclicGroup) generator.getSet(), generator, convertMethod, hashMethod);
+		return new DSASignatureScheme<>(messageSpace, (CyclicGroup) generator.getSet(), generator, convertMethod, hashMethod);
 	}
 
 }

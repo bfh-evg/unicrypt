@@ -61,7 +61,7 @@ public class SafePrime
 	private static final long serialVersionUID = 1L;
 
 	// map of smallest safe prime numbers for common bit lenghts
-	private static final Map<Integer, SafePrime> instances = new HashMap<Integer, SafePrime>();
+	private static final Map<Integer, SafePrime> instances = new HashMap<>();
 
 	static {
 		SafePrime.instances.put(128, new SafePrime(new BigInteger("170141183460469231731687303715884114527")));

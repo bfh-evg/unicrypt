@@ -62,7 +62,7 @@ public class PseudoRandomOracle
 
 	protected PseudoRandomOracle(HashAlgorithm hashAlgorithm) {
 		super();
-		this.referenceRandomByteSequence = new WeakHashMap<ByteArray, ReferenceRandomByteSequence>();
+		this.referenceRandomByteSequence = new WeakHashMap<>();
 		this.hashAlgorithm = hashAlgorithm;
 	}
 

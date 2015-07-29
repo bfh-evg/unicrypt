@@ -213,7 +213,7 @@ public final class MathUtil {
 	 * @return the same array of BigInteger values without duplicates
 	 */
 	public static BigInteger[] removeDuplicates(final BigInteger... values) {
-		final HashSet<BigInteger> hashSet = new HashSet<BigInteger>(Arrays.asList(values));
+		final HashSet<BigInteger> hashSet = new HashSet<>(Arrays.asList(values));
 		return hashSet.toArray(new BigInteger[hashSet.size()]);
 	}
 

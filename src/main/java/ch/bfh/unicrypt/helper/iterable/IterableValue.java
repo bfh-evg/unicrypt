@@ -67,7 +67,7 @@ public class IterableValue<V>
 	 * @return The iterator over the given value
 	 */
 	public static <V> IterableValue<V> getInstance(V value) {
-		return new IterableValue<V>(value);
+		return new IterableValue<>(value);
 	}
 
 	@Override

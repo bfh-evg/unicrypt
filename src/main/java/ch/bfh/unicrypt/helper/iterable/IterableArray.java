@@ -58,6 +58,7 @@ import java.util.Iterator;
 public class IterableArray<T>
 	   extends UniCrypt
 	   implements Iterable<T> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final T[] array;
@@ -77,7 +78,7 @@ public class IterableArray<T>
 		if (array == null) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableArray<T>(array);
+		return new IterableArray<>(array);
 	}
 
 	@Override

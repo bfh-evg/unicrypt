@@ -97,7 +97,7 @@ public class ZModPrime
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<BigInteger, ZModPrime> instances = new HashMap<BigInteger, ZModPrime>();
+	private static final Map<BigInteger, ZModPrime> instances = new HashMap<>();
 
 	public static ZModPrime getInstance(final Prime modulus) {
 		if (modulus == null) {

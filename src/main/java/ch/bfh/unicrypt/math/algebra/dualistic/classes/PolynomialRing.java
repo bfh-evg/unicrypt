@@ -60,6 +60,7 @@ import java.util.Map;
 public class PolynomialRing
 	   extends PolynomialSemiRing
 	   implements Ring<Polynomial<? extends DualisticElement<BigInteger>>> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected PolynomialRing(Ring ring) {
@@ -80,8 +81,8 @@ public class PolynomialRing
 			return (PolynomialElement) element;
 		}
 
-		Map<Integer, DualisticElement<BigInteger>> coefficientMap =
-			   new HashMap<Integer, DualisticElement<BigInteger>>();
+		Map<Integer, DualisticElement<BigInteger>> coefficientMap
+			   = new HashMap<>();
 		Polynomial<? extends DualisticElement<BigInteger>> polynomial = ((PolynomialElement) element).getValue();
 		for (Integer i : polynomial.getCoefficientIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
@@ -122,9 +123,8 @@ public class PolynomialRing
 		if (!this.contains(g) || !this.contains(h)) {
 			throw new IllegalArgumentException();
 		}
-		final PolynomialRing ring =
-			   PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>)
-					  this.getSemiRing());
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
 
 		while (!h.isEquivalent(ring.getZeroElement())) {
 			Pair div = longDivision(g, h);
@@ -158,9 +158,8 @@ public class PolynomialRing
 		if (!this.contains(g) || !this.contains(h)) {
 			throw new IllegalArgumentException();
 		}
-		final PolynomialRing ring =
-			   PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>)
-					  this.getSemiRing());
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
 		final PolynomialElement zero = ring.getZeroElement();
 		final PolynomialElement one = ring.getOneElement();
 
@@ -220,17 +219,16 @@ public class PolynomialRing
 		}
 
 		// Create explicitly a ring to work in (the instance might be a field).
-		final PolynomialRing ring =
-			   PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>)
-					  this.getSemiRing());
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
 		final PolynomialElement zero = ring.getZeroElement();
 
 		PolynomialElement q = zero;
 		PolynomialElement r = ring.getElement(g.getValue());
 		PolynomialElement t;
 		while (!r.isEquivalent(zero) && r.getValue().getDegree() >= h.getValue().getDegree()) {
-			DualisticElement<BigInteger> c =
-				   r.getValue().getCoefficient(r.getValue().getDegree()).divide(h.getValue()
+			DualisticElement<BigInteger> c
+				   = r.getValue().getCoefficient(r.getValue().getDegree()).divide(h.getValue()
 						  .getCoefficient(h.getValue().getDegree()));
 			int i = r.getValue().getDegree() - h.getValue().getDegree();
 			HashMap map = new HashMap(1);
@@ -257,9 +255,8 @@ public class PolynomialRing
 		if (!this.contains(f)) {
 			throw new IllegalArgumentException();
 		}
-		final PolynomialRing ring =
-			   PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>)
-					  this.getSemiRing());
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
 		PolynomialElement x = ring.getElement(BigInteger.ZERO, BigInteger.ONE);
 		PolynomialElement u = x;
 		PolynomialElement d;
@@ -322,9 +319,8 @@ public class PolynomialRing
 		if (k.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
-		final PolynomialRing ring =
-			   PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>)
-					  this.getSemiRing());
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
 		PolynomialElement s = ring.getOneElement();
 
 		if (k.signum() == 0) {

@@ -60,6 +60,7 @@ import java.util.List;
 abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V extends Object>
 	   extends UniCrypt
 	   implements ImmutableArray<V> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected Class valueClass;
@@ -122,7 +123,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	protected Iterable<Integer> defaultGetIndices(V value) {
-		List<Integer> result = new LinkedList<Integer>();
+		List<Integer> result = new LinkedList<>();
 		for (int i : this.getAllIndices()) {
 			if (this.abstractGetAt(i).equals(value)) {
 				result.add(i);
@@ -140,7 +141,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
-		List<Integer> result = new LinkedList<Integer>();
+		List<Integer> result = new LinkedList<>();
 		for (int i : this.getAllIndices()) {
 			if (!this.abstractGetAt(i).equals(value)) {
 				result.add(i);

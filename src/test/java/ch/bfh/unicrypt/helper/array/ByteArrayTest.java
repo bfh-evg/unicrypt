@@ -55,15 +55,15 @@ import org.junit.Test;
  */
 public class ByteArrayTest {
 
-	private final ArrayList<ByteArray> byteArrayList = new ArrayList<ByteArray>();
-	private final ArrayList<ByteString> byteStringList = new ArrayList<ByteString>();
+	private final ArrayList<ByteArray> byteArrayList = new ArrayList<>();
+	private final ArrayList<ByteString> byteStringList = new ArrayList<>();
 	private final ByteArrayToString converter = ByteArrayToString.getInstance();
 
 	private final byte BYTE_ZERO = (byte) 0L;
 	private final byte BYTE_ONE = (byte) 0xFFL;
 
 	public ByteArrayTest() {
-		List<String> stringList = new LinkedList<String>();
+		List<String> stringList = new LinkedList<>();
 		// trivial cases
 		stringList.add("");
 		stringList.add("00");

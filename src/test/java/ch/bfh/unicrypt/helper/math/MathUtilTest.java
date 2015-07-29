@@ -335,7 +335,7 @@ public class MathUtilTest {
 	@Test
 	public void testHasSqrtModPrime() {
 		for (BigInteger p : new BigInteger[]{TWO, THREE, FIVE, SEVEN, BigInteger.valueOf(97)}) {
-			Set squares = new HashSet<BigInteger>();
+			Set squares = new HashSet<>();
 			for (int i = 1; i < p.intValue(); i++) {
 				BigInteger bi = BigInteger.valueOf(i);
 				squares.add(bi.modPow(TWO, p));

@@ -81,7 +81,7 @@ public class EnumeratedSet<V extends Object>
 
 	@Override
 	protected EnumeratedSetElement<V> abstractGetElement(V value) {
-		return new EnumeratedSetElement<V>(this, value);
+		return new EnumeratedSetElement<>(this, value);
 	}
 
 	@Override
@@ -128,8 +128,8 @@ public class EnumeratedSet<V extends Object>
 			throw new IllegalArgumentException();
 		}
 		// both maps are needed for efficiency reasons
-		Map<Integer, V> valueMap = new HashMap<Integer, V>();
-		Map<V, Integer> indexMap = new HashMap<V, Integer>();
+		Map<Integer, V> valueMap = new HashMap<>();
+		Map<V, Integer> indexMap = new HashMap<>();
 		int index = 0;
 		for (V value : values) {
 			if (value == null || valueMap.containsValue(value)) {
@@ -139,7 +139,7 @@ public class EnumeratedSet<V extends Object>
 			indexMap.put(value, index);
 			index++;
 		}
-		return new EnumeratedSet<V>(valueMap, indexMap, (Class<V>) values.getClass().getComponentType());
+		return new EnumeratedSet<>(valueMap, indexMap, (Class<V>) values.getClass().getComponentType());
 	}
 
 }

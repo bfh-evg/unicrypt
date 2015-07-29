@@ -84,7 +84,7 @@ public class ZModPrimePair
 		return ZStarModPrimePair.getInstance(this.getPrimePair());
 	}
 
-	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<BigInteger, ZModPrimePair>();
+	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<>();
 
 	public static ZModPrimePair getInstance(final PrimePair primePair) {
 		if (primePair == null) {
