@@ -190,7 +190,7 @@ public abstract class AbstractFunction<F extends Function, D extends Set, DE ext
 	 * @see Element#apply(Element)
 	 * <p>
 	 * @param element            The given input element
-	 * @param randomByteSequence Either {@literal null} or a given random generator
+	 * @param randomByteSequence Either {@code null} or a given random generator
 	 * @return The resulting output element
 	 */
 	protected abstract CE abstractApply(DE element, RandomByteSequence randomByteSequence);

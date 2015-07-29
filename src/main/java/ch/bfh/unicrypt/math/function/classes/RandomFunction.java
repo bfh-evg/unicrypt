@@ -81,7 +81,7 @@ public class RandomFunction
 	 * <p/>
 	 * @param set The given group
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static RandomFunction getInstance(final Set set) {
 		if (set == null) {

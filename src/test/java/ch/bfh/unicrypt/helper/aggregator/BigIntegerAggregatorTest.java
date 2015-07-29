@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.aggregator;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
-import ch.bfh.unicrypt.helper.tree.Leaf;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import java.math.BigInteger;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
@@ -60,9 +60,9 @@ public class BigIntegerAggregatorTest {
 		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
 		for (int i = 0; i < 100; i++) {
 			BigInteger value = BigInteger.valueOf(i);
-			BigInteger aggregatedValue = aggregator.aggregate(Leaf.getInstance(value));
+			BigInteger aggregatedValue = aggregator.aggregate(Tree.getInstance(value));
 			Assert.assertEquals(value.multiply(MathUtil.TWO), aggregatedValue);
-			Assert.assertEquals(Leaf.getInstance(value), aggregator.disaggregate(aggregatedValue));
+			Assert.assertEquals(Tree.getInstance(value), aggregator.disaggregate(aggregatedValue));
 		}
 	}
 

@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.iterable.IterableArray;
 import java.util.Iterator;
 
 /**
@@ -57,47 +56,15 @@ import java.util.Iterator;
  */
 public class Node<V>
 	   extends Tree<V> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Iterable<Tree<V>> children;
 	private final int size;
 
-	private Node(Iterable<Tree<V>> children, int size) {
+	protected Node(Iterable<Tree<V>> children, int size) {
 		this.children = children;
 		this.size = size;
-	}
-
-	/**
-	 * Creates a new node from a given iterable collection of sub-trees (its children) of type {@code V}.
-	 * <p>
-	 * @param <V>      The generic type of the tree
-	 * @param children The given sub-trees
-	 * @return The new node
-	 */
-	public static <V> Node<V> getInstance(Iterable<Tree<V>> children) {
-		if (children == null) {
-			throw new IllegalArgumentException();
-		}
-		int size = 0;
-		for (Tree<V> child : children) {
-			if (child == null) {
-				throw new IllegalArgumentException();
-			}
-			size++;
-		}
-		return new Node<V>(children, size);
-	}
-
-	/**
-	 * Creates a new node from a given array of sub-trees (its children) of type {@code V}. This is a convenience method
-	 * for {@link Node#getInstance(java.lang.Iterable)}.
-	 * <p>
-	 * @param <V>      The generic type of the tree
-	 * @param children The given array of sub-trees
-	 * @return The new node
-	 */
-	public static <V> Node<V> getInstance(Tree<V>... children) {
-		return Node.getInstance(IterableArray.getInstance(children));
 	}
 
 	/**

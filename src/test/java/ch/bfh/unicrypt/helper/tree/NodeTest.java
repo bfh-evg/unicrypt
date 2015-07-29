@@ -81,18 +81,18 @@ public class NodeTest {
 
 	@Test
 	public void generalNodeTest() {
-		Leaf<String> leaf1 = Leaf.getInstance("Hello");
-		Leaf<String> leaf2 = Leaf.getInstance("World");
-		Leaf<String> leaf3 = Leaf.getInstance("!");
+		Leaf<String> leaf1 = Tree.getInstance("Hello");
+		Leaf<String> leaf2 = Tree.getInstance("World");
+		Leaf<String> leaf3 = Tree.getInstance("!");
 
-		Node<String> node1 = Node.getInstance(leaf1, leaf2, leaf3);
-		Node<String> node2 = Node.getInstance(leaf1, leaf2, leaf3);
-		Node<String> node3 = Node.getInstance(node1, node2);
-		Node<String> node4 = Node.getInstance();
-		Node<String> node5 = Node.getInstance(node3, node4, leaf1);
-		Node<String> node6 = Node.getInstance(node3, node4, leaf1);
-		Node<String> node7 = Node.getInstance(node4, node4);
-		Node<String> node8 = Node.getInstance(node7, leaf1, node4, node7);
+		Node<String> node1 = Tree.getInstance(leaf1, leaf2, leaf3);
+		Node<String> node2 = Tree.getInstance(leaf1, leaf2, leaf3);
+		Node<String> node3 = Tree.getInstance(node1, node2);
+		Node<String> node4 = Tree.getInstance();
+		Node<String> node5 = Tree.getInstance(node3, node4, leaf1);
+		Node<String> node6 = Tree.getInstance(node3, node4, leaf1);
+		Node<String> node7 = Tree.getInstance(node4, node4);
+		Node<String> node8 = Tree.getInstance(node7, leaf1, node4, node7);
 
 		Assert.assertTrue(node1.equals(node1));
 		Assert.assertTrue(node1.equals(node2));
@@ -147,20 +147,20 @@ public class NodeTest {
 
 	@Test
 	public void generalNodeTest2() {
-		Tree<String> l1 = Leaf.getInstance("One");
-		Tree<String> l2 = Leaf.getInstance("Two");
-		Tree<String> l3 = Leaf.getInstance("Three");
-		Tree<String> l4 = Leaf.getInstance("Four");
-		Tree<String> l5 = Leaf.getInstance("Five");
-		Tree<String> l6 = Leaf.getInstance("Six");
-		Tree<String> l7 = Leaf.getInstance("Seven");
-		Tree<String> l8 = Leaf.getInstance("Eight");
-		Tree<String> l9 = Leaf.getInstance("Nine");
-		Tree<String> n1 = Node.getInstance(l1, l2, l3);
-		Tree<String> n2 = Node.getInstance(l4, l5);
-		Tree<String> n3 = Node.getInstance(l6, l7, l8);
-		Tree<String> n4 = Node.getInstance(n1, n2, l9);
-		Tree<String> root = Node.getInstance(n3, n4);
+		Tree<String> l1 = Tree.getInstance("One");
+		Tree<String> l2 = Tree.getInstance("Two");
+		Tree<String> l3 = Tree.getInstance("Three");
+		Tree<String> l4 = Tree.getInstance("Four");
+		Tree<String> l5 = Tree.getInstance("Five");
+		Tree<String> l6 = Tree.getInstance("Six");
+		Tree<String> l7 = Tree.getInstance("Seven");
+		Tree<String> l8 = Tree.getInstance("Eight");
+		Tree<String> l9 = Tree.getInstance("Nine");
+		Tree<String> n1 = Tree.getInstance(l1, l2, l3);
+		Tree<String> n2 = Tree.getInstance(l4, l5);
+		Tree<String> n3 = Tree.getInstance(l6, l7, l8);
+		Tree<String> n4 = Tree.getInstance(n1, n2, l9);
+		Tree<String> root = Tree.getInstance(n3, n4);
 		StringAggregator sa = StringAggregator.getInstance();
 		String aggregatedValue = root.aggregate(sa);
 		Assert.assertEquals("[[\"Six\"|\"Seven\"|\"Eight\"]|[[\"One\"|\"Two\"|\"Three\"]|[\"Four\"|\"Five\"]|\"Nine\"]]", aggregatedValue);
@@ -170,21 +170,21 @@ public class NodeTest {
 
 	@Test
 	public void generalNodeTest3() {
-		Tree<BigInteger> l1 = Leaf.getInstance(BigInteger.valueOf(1));
-		Tree<BigInteger> l2 = Leaf.getInstance(BigInteger.valueOf(2));
-		Tree<BigInteger> l3 = Leaf.getInstance(BigInteger.valueOf(3));
-		Tree<BigInteger> l4 = Leaf.getInstance(BigInteger.valueOf(4));
-		Tree<BigInteger> l5 = Leaf.getInstance(BigInteger.valueOf(5));
-		Tree<BigInteger> l6 = Leaf.getInstance(BigInteger.valueOf(6));
-		Tree<BigInteger> l7 = Leaf.getInstance(BigInteger.valueOf(7));
-		Tree<BigInteger> l8 = Leaf.getInstance(BigInteger.valueOf(8));
-		Tree<BigInteger> l9 = Leaf.getInstance(BigInteger.valueOf(9));
-		Tree<BigInteger> n1 = Node.getInstance(l1, l2, l3);
-		Tree<BigInteger> n2 = Node.getInstance(l4, l5);
-		Tree<BigInteger> n3 = Node.getInstance(l6, l7, l8);
-		Tree<BigInteger> n4 = Node.getInstance(n1, n2, l9);
-		Tree<BigInteger> n5 = Node.getInstance();
-		Tree<BigInteger> root = Node.getInstance(n3, n4, n5);
+		Tree<BigInteger> l1 = Tree.getInstance(BigInteger.valueOf(1));
+		Tree<BigInteger> l2 = Tree.getInstance(BigInteger.valueOf(2));
+		Tree<BigInteger> l3 = Tree.getInstance(BigInteger.valueOf(3));
+		Tree<BigInteger> l4 = Tree.getInstance(BigInteger.valueOf(4));
+		Tree<BigInteger> l5 = Tree.getInstance(BigInteger.valueOf(5));
+		Tree<BigInteger> l6 = Tree.getInstance(BigInteger.valueOf(6));
+		Tree<BigInteger> l7 = Tree.getInstance(BigInteger.valueOf(7));
+		Tree<BigInteger> l8 = Tree.getInstance(BigInteger.valueOf(8));
+		Tree<BigInteger> l9 = Tree.getInstance(BigInteger.valueOf(9));
+		Tree<BigInteger> n1 = Tree.getInstance(l1, l2, l3);
+		Tree<BigInteger> n2 = Tree.getInstance(l4, l5);
+		Tree<BigInteger> n3 = Tree.getInstance(l6, l7, l8);
+		Tree<BigInteger> n4 = Tree.getInstance(n1, n2, l9);
+		Tree<BigInteger> n5 = Tree.getInstance();
+		Tree<BigInteger> root = Tree.getInstance(n3, n4, n5);
 		BigIntegerAggregator aggregator = BigIntegerAggregator.getInstance();
 		Tree<BigInteger> result = Tree.getInstance(root.aggregate(aggregator), aggregator);
 		Assert.assertEquals(result, root);
@@ -197,21 +197,21 @@ public class NodeTest {
 
 	@Test
 	public void generalNodeTest4() {
-		Tree<ByteArray> l1 = Leaf.getInstance(ByteArray.getInstance(1));
-		Tree<ByteArray> l2 = Leaf.getInstance(ByteArray.getInstance(1, 2));
-		Tree<ByteArray> l3 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3));
-		Tree<ByteArray> l4 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4));
-		Tree<ByteArray> l5 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5));
-		Tree<ByteArray> l6 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6));
-		Tree<ByteArray> l7 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6, 7));
-		Tree<ByteArray> l8 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8));
-		Tree<ByteArray> l9 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8, 9));
-		Tree<ByteArray> n1 = Node.getInstance(l1, l2, l3);
-		Tree<ByteArray> n2 = Node.getInstance(l4, l5);
-		Tree<ByteArray> n3 = Node.getInstance(l6, l7, l8);
-		Tree<ByteArray> n4 = Node.getInstance(n1, n2, l9);
-		Tree<ByteArray> n5 = Node.getInstance();
-		Tree<ByteArray> root = Node.getInstance(n3, n4, n5);
+		Tree<ByteArray> l1 = Tree.getInstance(ByteArray.getInstance(1));
+		Tree<ByteArray> l2 = Tree.getInstance(ByteArray.getInstance(1, 2));
+		Tree<ByteArray> l3 = Tree.getInstance(ByteArray.getInstance(1, 2, 3));
+		Tree<ByteArray> l4 = Tree.getInstance(ByteArray.getInstance(1, 2, 3, 4));
+		Tree<ByteArray> l5 = Tree.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5));
+		Tree<ByteArray> l6 = Tree.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6));
+		Tree<ByteArray> l7 = Tree.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6, 7));
+		Tree<ByteArray> l8 = Tree.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8));
+		Tree<ByteArray> l9 = Tree.getInstance(ByteArray.getInstance(1, 2, 3, 4, 5, 6, 7, 8, 9));
+		Tree<ByteArray> n1 = Tree.getInstance(l1, l2, l3);
+		Tree<ByteArray> n2 = Tree.getInstance(l4, l5);
+		Tree<ByteArray> n3 = Tree.getInstance(l6, l7, l8);
+		Tree<ByteArray> n4 = Tree.getInstance(n1, n2, l9);
+		Tree<ByteArray> n5 = Tree.getInstance();
+		Tree<ByteArray> root = Tree.getInstance(n3, n4, n5);
 		ByteArrayAggregator aggregator = ByteArrayAggregator.getInstance();
 		Tree<ByteArray> result = Tree.getInstance(root.aggregate(aggregator), aggregator);
 		Assert.assertEquals(result, root);

@@ -71,7 +71,7 @@ public final class SharedDomainFunction
 	 * @param domain
 	 * @param coDomain
 	 * @param functions
-	 * @throws IllegalArgumentException if {@literal functions} is null or contains null
+	 * @throws IllegalArgumentException if {@code functions} is null or contains null
 	 */
 	protected SharedDomainFunction(final Set domain, ProductSet coDomain, DenseArray<Function> functions) {
 		super(domain, coDomain, functions);

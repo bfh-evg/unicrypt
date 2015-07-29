@@ -78,8 +78,8 @@ public final class MathUtil {
 	 * result efficiently, the complete set of prime factors of the input value must be specified.
 	 * <p>
 	 * @param value        The input value
-	 * @param primeFactors The prime factors of {@literal value}
-	 * @return the result of applying the Euler totient function to {@literal value}
+	 * @param primeFactors The prime factors of {@code value}
+	 * @return the result of applying the Euler totient function to {@code value}
 	 * @see "Handbook of Applied Cryptography, Fact 2.101 (iii)"
 	 */
 	public static BigInteger eulerFunction(final BigInteger value, final BigInteger... primeFactors) {
@@ -97,7 +97,7 @@ public final class MathUtil {
 	 * <p>
 	 * @param value  The given integer value
 	 * @param factor The potential prime factor
-	 * @return {@literal true} if {@code factor} is a prime factor of {@code value}, {@literal false} otherwise
+	 * @return {@code true} if {@code factor} is a prime factor of {@code value}, {@code false} otherwise
 	 */
 	public static boolean isPrimeFactor(final BigInteger value, final BigInteger factor) {
 		return isPrime(factor) && value.mod(factor).equals(ZERO);
@@ -109,7 +109,7 @@ public final class MathUtil {
 	 * <p>
 	 * @param value   The given integer value
 	 * @param factors The potential prime factors
-	 * @return {@literal true} if all values are prime factors of {@code value}, {@literal false} otherwise
+	 * @return {@code true} if all values are prime factors of {@code value}, {@code false} otherwise
 	 */
 	public static boolean arePrimeFactors(final BigInteger value, final BigInteger... factors) {
 		for (BigInteger factor : factors) {
@@ -125,7 +125,7 @@ public final class MathUtil {
 	 * {@link MathUtil#isPrime(java.math.BigInteger)}.
 	 * <p>
 	 * @param value A potential prime number
-	 * @return {@literal true} if {@code value} is prime, {@literal false} otherwise
+	 * @return {@code true} if {@code value} is prime, {@code false} otherwise
 	 */
 	public static boolean isPrime(final int value) {
 		return MathUtil.isPrime(BigInteger.valueOf(value));
@@ -135,7 +135,7 @@ public final class MathUtil {
 	 * Tests if a given integer value is a prime number.
 	 * <p>
 	 * @param value A potential prime number
-	 * @return {@literal true} if {@code value} is prime, {@literal false} otherwise
+	 * @return {@code true} if {@code value} is prime, {@code false} otherwise
 	 */
 	public static boolean isPrime(final BigInteger value) {
 		// BigInteger.isProbablePrime considers "negative primes" as primes
@@ -146,7 +146,7 @@ public final class MathUtil {
 	 * Tests if some given integers are all prime numbers.
 	 * <p>
 	 * @param values The potential prime numbers
-	 * @return {@literal true} if all values are prime numbers, {@literal false} otherwise
+	 * @return {@code true} if all values are prime numbers, {@code false} otherwise
 	 */
 	public static boolean arePrime(final BigInteger... values) {
 		for (BigInteger value : values) {
@@ -162,7 +162,7 @@ public final class MathUtil {
 	 * {@link MathUtil#isSafePrime(java.math.BigInteger)}.
 	 * <p>
 	 * @param value A potential safe prime
-	 * @return {@literal true} if {@code value} is a safe prime, {@literal false} otherwise
+	 * @return {@code true} if {@code value} is a safe prime, {@code false} otherwise
 	 */
 	public static boolean isSafePrime(final int value) {
 		return MathUtil.isSafePrime(BigInteger.valueOf(value));
@@ -172,7 +172,7 @@ public final class MathUtil {
 	 * Tests if a given BigInteger value is a save prime.
 	 * <p>
 	 * @param value A potential safe prime
-	 * @return {@literal true} if {@code value} is a safe prime, {@literal false} otherwise
+	 * @return {@code true} if {@code value} is a safe prime, {@code false} otherwise
 	 */
 	public static boolean isSafePrime(final BigInteger value) {
 		return isPrime(value) && isPrime(value.subtract(ONE).divide(TWO));
@@ -183,7 +183,7 @@ public final class MathUtil {
 	 * <p>
 	 * @param value1 The first integer value
 	 * @param value2 The second integer value
-	 * @return {@literal true} if the input values are relatively prime, {@literal false} otherwise
+	 * @return {@code true} if the input values are relatively prime, {@code false} otherwise
 	 */
 	public static boolean areRelativelyPrime(BigInteger value1, BigInteger value2) {
 		return value1.gcd(value2).equals(ONE);
@@ -193,7 +193,7 @@ public final class MathUtil {
 	 * Tests if some given (positive) integer values are pairwise relatively prime.
 	 * <p>
 	 * @param values The given integer values
-	 * @return {@literal true} if the input values are pairwise relatively prime, {@literal false} otherwise
+	 * @return {@code true} if the input values are pairwise relatively prime, {@code false} otherwise
 	 */
 	public static boolean areRelativelyPrime(BigInteger... values) {
 		for (int i = 0; i < values.length; i++) {
@@ -540,7 +540,7 @@ public final class MathUtil {
 	 * <p>
 	 * @param x The integer value
 	 * @param p The prime modulo
-	 * @return {@literal true} if {@code x} is a quadratic residue (modulo {@code p}), {@literal false} otherwise
+	 * @return {@code true} if {@code x} is a quadratic residue (modulo {@code p}), {@code false} otherwise
 	 * @see MathUtil#sqrtModPrime(java.math.BigInteger, java.math.BigInteger)
 	 */
 	public static boolean hasSqrtModPrime(BigInteger x, BigInteger p) {

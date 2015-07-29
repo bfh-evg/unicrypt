@@ -58,12 +58,12 @@ public class ByteArrayHashMethodTest {
 	ByteArray bytes1 = ByteArray.getInstance("");
 	ByteArray bytes2 = ByteArray.getInstance("61|62|63");
 
-	Tree<ByteArray> t1 = Leaf.getInstance(bytes1);
-	Tree<ByteArray> t2 = Leaf.getInstance(bytes2);
+	Tree<ByteArray> t1 = Tree.getInstance(bytes1);
+	Tree<ByteArray> t2 = Tree.getInstance(bytes2);
 
-	Tree<ByteArray> t3 = Node.getInstance(t1, t2);
-	Tree<ByteArray> t4 = Node.getInstance();
-	Tree<ByteArray> t5 = Node.getInstance(t3, t4);
+	Tree<ByteArray> t3 = Tree.getInstance(t1, t2);
+	Tree<ByteArray> t4 = Tree.getInstance();
+	Tree<ByteArray> t5 = Tree.getInstance(t3, t4);
 
 	HashAlgorithm hashAlgorithm = HashAlgorithm.SHA256;
 

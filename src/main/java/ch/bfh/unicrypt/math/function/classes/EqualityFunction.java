@@ -86,7 +86,7 @@ public class EqualityFunction
 	 * <p/>
 	 * @param set The group on which this function operates
 	 * @return The resulting equality function
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static EqualityFunction getInstance(final Set set) {
 		return EqualityFunction.getInstance(set, 2);
@@ -99,8 +99,8 @@ public class EqualityFunction
 	 * @param set   The group on which this function operates
 	 * @param arity The number of input elements to compare
 	 * @return The resulting equality function
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static EqualityFunction getInstance(final Set set, final int arity) {
 		return new EqualityFunction(ProductSet.getInstance(set, arity), BooleanSet.getInstance());

@@ -75,10 +75,10 @@ public class PermutationGroup
 	private final int size;
 
 	/**
-	 * Returns a new instance of this class for a given {@literal size >= 0}.
+	 * Returns a new instance of this class for a given {@code size >= 0}.
 	 * <p>
 	 * @param size The size
-	 * @throws IllegalArgumentException if {@literal size} is negative
+	 * @throws IllegalArgumentException if {@code size} is negative
 	 */
 	private PermutationGroup(final int size) {
 		super(Permutation.class);
@@ -171,7 +171,7 @@ public class PermutationGroup
 	 * <p>
 	 * @param size The size of the permutation
 	 * @return
-	 * @throws IllegalArgumentException if {@literal modulus} is null, zero, or negative
+	 * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
 	 */
 	public static PermutationGroup getInstance(final int size) {
 		if (size < 0) {

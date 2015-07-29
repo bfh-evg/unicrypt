@@ -43,6 +43,8 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.iterable.IterableArray;
+import ch.bfh.unicrypt.helper.iterable.IterableValue;
 
 /**
  * This is an abstract base class for representing trees containing values of a generic type {@code V} in their leaves.
@@ -60,7 +62,69 @@ import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 public abstract class Tree<V>
 	   extends UniCrypt
 	   implements Iterable<V> {
+
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Creates a new leaf storing a given value.
+	 * <p>
+	 * @param <V>   The generic type of the given value and the resulting leaf
+	 * @param value The given value
+	 * @return The new leaf
+	 */
+	public static <V> Leaf<V> getInstance(V value) {
+		if (value == null) {
+			throw new IllegalArgumentException();
+		}
+		return new Leaf<V>(value);
+	}
+
+	/**
+	 * Creates a new node from a single sub-tree (its child) of type {@code V}.
+	 * <p>
+	 * @param <V>   The generic type of the tree
+	 * @param child The given sub-tree
+	 * @return The new node
+	 */
+	public static <V> Node<V> getInstance(Tree<V> child) {
+		if (child == null) {
+			throw new IllegalArgumentException();
+		}
+		return Tree.getInstance(IterableValue.getInstance(child));
+	}
+
+	/**
+	 * Creates a new node from a given iterable collection of sub-trees (its children) of type {@code V}.
+	 * <p>
+	 * @param <V>      The generic type of the tree
+	 * @param children The given sub-trees
+	 * @return The new node
+	 */
+	public static <V> Node<V> getInstance(Iterable<Tree<V>> children) {
+		if (children == null) {
+			throw new IllegalArgumentException();
+		}
+		int size = 0;
+		for (Tree<V> child : children) {
+			if (child == null) {
+				throw new IllegalArgumentException();
+			}
+			size++;
+		}
+		return new Node<V>(children, size);
+	}
+
+	/**
+	 * Creates a new node from a given array of sub-trees (its children) of type {@code V}. This is a convenience method
+	 * for {@link Node#getInstance(java.lang.Iterable)}.
+	 * <p>
+	 * @param <V>      The generic type of the tree
+	 * @param children The given array of sub-trees
+	 * @return The new node
+	 */
+	public static <V> Node<V> getInstance(Tree<V>... children) {
+		return Tree.getInstance(IterableArray.getInstance(children));
+	}
 
 	/**
 	 * Creates a new tree of type {@code V} from an aggregated value. This method is the inverse of
@@ -96,7 +160,7 @@ public abstract class Tree<V>
 	/**
 	 * Checks if the tree is a leaf.
 	 * <p>
-	 * @return {@literal true}, if the tree is a leaf, {@literal false} otherwise
+	 * @return {@code true}, if the tree is a leaf, {@code false} otherwise
 	 */
 	public boolean isLeaf() {
 		return this instanceof Leaf;

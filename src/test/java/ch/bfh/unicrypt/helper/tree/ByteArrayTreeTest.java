@@ -53,11 +53,11 @@ import org.junit.Test;
  */
 public class ByteArrayTreeTest {
 
-	public static Tree<ByteArray> b0 = Leaf.getInstance(ByteArray.getInstance("00|00"));
-	public static Tree<ByteArray> b1 = Leaf.getInstance(ByteArray.getInstance("12|34"));
-	public static Tree<ByteArray> b2 = Leaf.getInstance(ByteArray.getInstance("56|78|90"));
-	public static Tree<ByteArray> b12 = Node.getInstance(b1, b2);
-	public static Tree<ByteArray> b012 = Node.getInstance(b0, b12);
+	public static Tree<ByteArray> b0 = Tree.getInstance(ByteArray.getInstance("00|00"));
+	public static Tree<ByteArray> b1 = Tree.getInstance(ByteArray.getInstance("12|34"));
+	public static Tree<ByteArray> b2 = Tree.getInstance(ByteArray.getInstance("56|78|90"));
+	public static Tree<ByteArray> b12 = Tree.getInstance(b1, b2);
+	public static Tree<ByteArray> b012 = Tree.getInstance(b0, b12);
 	
 	public static Aggregator<ByteArray> aggregator = ByteArrayAggregator.getInstance();
 

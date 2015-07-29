@@ -68,7 +68,7 @@ public class ConstantFunction
 	 * called.
 	 * <p>
 	 * @param element The constant output value of the function
-	 * @throws IllegalArgumentException if {@literal element} is null
+	 * @throws IllegalArgumentException if {@code element} is null
 	 */
 	private ConstantFunction(Set coDomain, Element element) {
 		super(SingletonGroup.getInstance(), coDomain);
@@ -100,7 +100,7 @@ public class ConstantFunction
 	 * <p>
 	 * @param element The given element
 	 * @return The constant function
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static ConstantFunction getInstance(final Element element) {
 		if (element == null) {

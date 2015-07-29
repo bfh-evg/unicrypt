@@ -90,11 +90,11 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random {@code int} value between 0 and {@literal maxValue} (inclusive).
+	 * Generates a random {@code int} value between 0 and {@code maxValue} (inclusive).
 	 * <p>
 	 * @param maxValue The maximal value
 	 * @return The random {@code int} value
-	 * @throws IllegalArgumentException if {@literal maxValue < 0}
+	 * @throws IllegalArgumentException if {@code maxValue < 0}
 	 */
 	public final int nextInt(int maxValue) {
 		if (maxValue < 0) {
@@ -104,12 +104,12 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random {@code int} value between {@literal minValue} (inclusive) and {@literal maxValue} (inclusive).
+	 * Generates a random {@code int} value between {@code minValue} (inclusive) and {@code maxValue} (inclusive).
 	 * <p>
 	 * @param minValue The minimal value
 	 * @param maxValue The maximal value
 	 * @return The random {@code int} value
-	 * @throws IllegalArgumentException if {@literal maxValue < minValue}
+	 * @throws IllegalArgumentException if {@code maxValue < minValue}
 	 */
 	public final int nextInt(int minValue, int maxValue) {
 		return this.nextInt(maxValue - minValue) + minValue;
@@ -125,11 +125,11 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random {@code long} value between 0 and {@literal maxValue} (inclusive).
+	 * Generates a random {@code long} value between 0 and {@code maxValue} (inclusive).
 	 * <p>
 	 * @param maxValue The maximal value
 	 * @return The random {@code long} value
-	 * @throws IllegalArgumentException if {@literal maxValue < 0}
+	 * @throws IllegalArgumentException if {@code maxValue < 0}
 	 */
 	public final long nextLong(long maxValue) {
 		if (maxValue < 0) {
@@ -139,13 +139,13 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random {@code long} value between {@literal minValue} (inclusive) and {@literal maxValue}
+	 * Generates a random {@code long} value between {@code minValue} (inclusive) and {@code maxValue}
 	 * (inclusive).
 	 * <p>
 	 * @param minValue The minimal value
 	 * @param maxValue The maximal value
 	 * @return The random {@code long} value
-	 * @throws IllegalArgumentException if {@literal maxValue < minValue}
+	 * @throws IllegalArgumentException if {@code maxValue < minValue}
 	 */
 	public final long nextLong(long minValue, long maxValue) {
 		return this.nextLong(maxValue - minValue) + minValue;
@@ -156,7 +156,7 @@ public class RandomNumberGenerator
 	 * <p>
 	 * @param bitLength The given bit length
 	 * @return The random BigInteger value
-	 * @throws IllegalArgumentException if {@literal bitLength < 0}
+	 * @throws IllegalArgumentException if {@code bitLength < 0}
 	 */
 	public final BigInteger nextBigInteger(int bitLength) {
 		if (bitLength < 0) {
@@ -169,11 +169,11 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random BigInteger between 0 and {@literal maxValue} (inclusive).
+	 * Generates a random BigInteger between 0 and {@code maxValue} (inclusive).
 	 * <p>
 	 * @param maxValue The maximal value
 	 * @return The random BigInteger value
-	 * @throws IllegalArgumentException if {@literal maxValue} is null or if {@literal maxValue < 0}
+	 * @throws IllegalArgumentException if {@code maxValue} is null or if {@code maxValue < 0}
 	 */
 	public final BigInteger nextBigInteger(BigInteger maxValue) {
 		if (maxValue == null || maxValue.signum() < 0) {
@@ -188,13 +188,13 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random BigInteger value between {@literal minValue} (inclusive) and {@literal maxValue} (inclusive).
+	 * Generates a random BigInteger value between {@code minValue} (inclusive) and {@code maxValue} (inclusive).
 	 * <p>
 	 * @param minValue The minimal value
 	 * @param maxValue The maximal value
 	 * @return The random BigInteger value
-	 * @throws IllegalArgumentException if {@literal minValue} or {@literal maxValue} is null, or if
-	 *                                  {@literal maxValue < minValue}
+	 * @throws IllegalArgumentException if {@code minValue} or {@code maxValue} is null, or if
+	 *                                  {@code maxValue < minValue}
 	 */
 	public final BigInteger nextBigInteger(BigInteger minValue, BigInteger maxValue) {
 		if (minValue == null || maxValue == null) {

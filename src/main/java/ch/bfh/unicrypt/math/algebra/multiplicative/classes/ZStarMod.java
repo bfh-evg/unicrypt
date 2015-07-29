@@ -223,12 +223,12 @@ public class ZStarMod
 	}
 
 	/**
-	 * This is a static factory method to construct a new instance of this class for a given {@literal modulus >= 2}. If
-	 * {@literal modulus} is not prime, then a group of unknown order is returned.
+	 * This is a static factory method to construct a new instance of this class for a given {@code modulus >= 2}. If
+	 * {@code modulus} is not prime, then a group of unknown order is returned.
 	 * <p>
 	 * @param modulus The modulus
 	 * @return
-	 * @throws IllegalArgumentException if {@literal modulus} is null or smaller than 2
+	 * @throws IllegalArgumentException if {@code modulus} is null or smaller than 2
 	 */
 	public static ZStarMod getInstance(final BigInteger modulus) {
 		if (modulus == null || modulus.compareTo(BigInteger.ONE) <= 0) {
@@ -246,8 +246,8 @@ public class ZStarMod
 	 * <p>
 	 * @param modulusFactorization The given prime factorization
 	 * @return
-	 * @throws IllegalArgumentException if {@literal primeFactorization} is null
-	 * @throws IllegalArgumentException if {@literal primeFactorization.getValue()} is 1
+	 * @throws IllegalArgumentException if {@code primeFactorization} is null
+	 * @throws IllegalArgumentException if {@code primeFactorization.getValue()} is 1
 	 */
 	public static ZStarMod getInstance(final Factorization modulusFactorization) {
 		if (modulusFactorization == null || modulusFactorization.getValue().compareTo(BigInteger.ONE) <= 0) {

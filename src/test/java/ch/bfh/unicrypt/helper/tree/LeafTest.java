@@ -84,17 +84,17 @@ public class LeafTest {
 		String[] strings = new String[]{"Hello", "", "\\", "|", "||", "\\|", "\\\\", "[", "]", "\\[]|\\\\|[\\]"};
 
 		for (String string : strings) {
-			Leaf<String> leaf = Leaf.getInstance("Hello");
+			Leaf<String> leaf = Tree.getInstance("Hello");
 			Assert.assertEquals("Hello", leaf.getValue());
 
 			Assert.assertEquals(leaf, Tree.getInstance(leaf.aggregate(aggregator1), aggregator1));
 			Assert.assertEquals(leaf, Tree.getInstance(leaf.aggregate(aggregator2), aggregator2));
 		}
 
-		Leaf<String> leaf1 = Leaf.getInstance("Hello");
-		Leaf<String> leaf2 = Leaf.getInstance("Hello");
-		Leaf<String> leaf3 = Leaf.getInstance("World");
-		Leaf<BigInteger> leaf4 = Leaf.getInstance(BigInteger.ONE);
+		Leaf<String> leaf1 = Tree.getInstance("Hello");
+		Leaf<String> leaf2 = Tree.getInstance("Hello");
+		Leaf<String> leaf3 = Tree.getInstance("World");
+		Leaf<BigInteger> leaf4 = Tree.getInstance(BigInteger.ONE);
 		Assert.assertTrue(leaf1.equals(leaf1));
 		Assert.assertTrue(leaf1.equals(leaf2));
 		Assert.assertFalse(leaf1.equals(leaf3));

@@ -60,12 +60,12 @@ public class BigIntegerHashMethodTest {
 	BigInteger bigint1 = BigInteger.ZERO;
 	BigInteger bigint2 = BigInteger.valueOf(10);
 
-	Tree<BigInteger> t1 = Leaf.getInstance(bigint1);
-	Tree<BigInteger> t2 = Leaf.getInstance(bigint2);
+	Tree<BigInteger> t1 = Tree.getInstance(bigint1);
+	Tree<BigInteger> t2 = Tree.getInstance(bigint2);
 
-	Tree<BigInteger> t3 = Node.getInstance(t1, t2);
-	Tree<BigInteger> t4 = Node.getInstance();
-	Tree<BigInteger> t5 = Node.getInstance(t3, t4);
+	Tree<BigInteger> t3 = Tree.getInstance(t1, t2);
+	Tree<BigInteger> t4 = Tree.getInstance();
+	Tree<BigInteger> t5 = Tree.getInstance(t3, t4);
 
 	HashAlgorithm hashAlgorithm = HashAlgorithm.SHA256;
 	BigIntegerToByteArray converter = BigIntegerToByteArray.getInstance();

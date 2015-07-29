@@ -86,94 +86,94 @@ public interface Set<V extends Object> {
 	public static final BigInteger UNKNOWN_ORDER = BigInteger.valueOf(-2);
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link SemiGroup}.
+	 * Returns {@code true}, if this set is an instance of {@link SemiGroup}.
 	 * <p>
-	 * @return {@literal true}, if this set is a semigroup, {@literal false} otherwise
+	 * @return {@code true}, if this set is a semigroup, {@code false} otherwise
 	 */
 	public boolean isSemiGroup();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link Monoid}.
+	 * Returns {@code true}, if this set is an instance of {@link Monoid}.
 	 * <p>
-	 * @return {@literal true}, if this set is a monoid, {@literal false} otherwise
+	 * @return {@code true}, if this set is a monoid, {@code false} otherwise
 	 */
 	public boolean isMonoid();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link Group}.
+	 * Returns {@code true}, if this set is an instance of {@link Group}.
 	 * <p>
-	 * @return {@literal true}, if this set is a group, {@literal false} otherwise
+	 * @return {@code true}, if this set is a group, {@code false} otherwise
 	 */
 	public boolean isGroup();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link SemiRing}.
+	 * Returns {@code true}, if this set is an instance of {@link SemiRing}.
 	 * <p>
-	 * @return {@literal true}, if this set is a semiring, {@literal false} otherwise
+	 * @return {@code true}, if this set is a semiring, {@code false} otherwise
 	 */
 	public boolean isSemiRing();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link Ring}.
+	 * Returns {@code true}, if this set is an instance of {@link Ring}.
 	 * <p>
-	 * @return {@literal true}, if this set is a ring, {@literal false} otherwise
+	 * @return {@code true}, if this set is a ring, {@code false} otherwise
 	 */
 	public boolean isRing();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link Field}.
+	 * Returns {@code true}, if this set is an instance of {@link Field}.
 	 * <p>
-	 * @return {@literal true}, if this set is a field, {@literal false} otherwise
+	 * @return {@code true}, if this set is a field, {@code false} otherwise
 	 */
 	public boolean isField();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link CyclicGroup}.
+	 * Returns {@code true}, if this set is an instance of {@link CyclicGroup}.
 	 * <p>
-	 * @return {@literal true}, if this set is a cyclic group, {@literal false} otherwise
+	 * @return {@code true}, if this set is a cyclic group, {@code false} otherwise
 	 */
 	public boolean isCyclic();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link AdditiveSemiGroup}.
+	 * Returns {@code true}, if this set is an instance of {@link AdditiveSemiGroup}.
 	 * <p>
-	 * @return {@literal true}, if this set has an additive operator, {@literal false} otherwise
+	 * @return {@code true}, if this set has an additive operator, {@code false} otherwise
 	 */
 	public boolean isAdditive();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link MultiplicativeSemiGroup}.
+	 * Returns {@code true}, if this set is an instance of {@link MultiplicativeSemiGroup}.
 	 * <p>
-	 * @return {@literal true}, if this set has a multiplicative operator, {@literal false} otherwise
+	 * @return {@code true}, if this set has a multiplicative operator, {@code false} otherwise
 	 */
 	public boolean isMultiplicative();
 
 	/**
-	 * Returns {@literal true}, if this set is an instance of {@link ConcatenativeSemiGroup}.
+	 * Returns {@code true}, if this set is an instance of {@link ConcatenativeSemiGroup}.
 	 * <p>
-	 * @return {@literal true}, if this set has a concatenative operator, {@literal false} otherwise
+	 * @return {@code true}, if this set has a concatenative operator, {@code false} otherwise
 	 */
 	public boolean isConcatenative();
 
 	/**
-	 * Returns {@literal true}, if this set represents a Cartesian product of other sets.
+	 * Returns {@code true}, if this set represents a Cartesian product of other sets.
 	 * <p>
-	 * @return {@literal true}, if this set is a product set, {@literal false} otherwise
+	 * @return {@code true}, if this set is a product set, {@code false} otherwise
 	 */
 	public boolean isProduct();
 
 	/**
-	 * Returns {@literal true}, if this set is of finite order.
+	 * Returns {@code true}, if this set is of finite order.
 	 * <p>
-	 * @return {@literal true}, if this set is finite, {@literal false} otherwise
+	 * @return {@code true}, if this set is finite, {@code false} otherwise
 	 * @see getOrder()
 	 */
 	public boolean isFinite();
 
 	/**
-	 * Returns {@literal true}, if the order of this set is known.
+	 * Returns {@code true}, if the order of this set is known.
 	 * <p>
-	 * @return {@literal true}, if if the order is known, {@literal false} otherwise
+	 * @return {@code true}, if if the order is known, {@code false} otherwise
 	 * @see getOrder()
 	 */
 	public boolean hasKnownOrder();
@@ -222,7 +222,7 @@ public interface Set<V extends Object> {
 	/**
 	 * Checks if the set is of order 1.
 	 * <p>
-	 * @return {@literal true}, if the order is 1, {@literal false} otherwise
+	 * @return {@code true}, if the order is 1, {@code false} otherwise
 	 */
 	public boolean isSingleton();
 
@@ -248,7 +248,7 @@ public interface Set<V extends Object> {
 	 * Checks if a given element belongs to this set.
 	 * <p>
 	 * @param element The given element
-	 * @return {@literal true}, if {@literal element} belongs to this set, {@literal false} otherwise
+	 * @return {@code true}, if {@code element} belongs to this set, {@code false} otherwise
 	 */
 	public boolean contains(Element<?> element);
 
@@ -257,7 +257,7 @@ public interface Set<V extends Object> {
 	 * construct the element using {@link getElement(Object)}.
 	 * <p>
 	 * @param value The given value
-	 * @return {@literal true}, if the value represents an element of this set, {@literal false} otherwise
+	 * @return {@code true}, if the value represents an element of this set, {@code false} otherwise
 	 * @see getElement(Object)
 	 */
 	public boolean contains(V value);
@@ -291,10 +291,13 @@ public interface Set<V extends Object> {
 	public Element<V> getRandomElement(RandomByteSequence randomByteSequence);
 
 	/**
-	 * Checks if two sets are mathematically equivalent.
+	 * Checks if two sets are mathematically equivalent. In most cases, this is equivalent to testing two sets for
+	 * equality using {@link Set#equals(java.lang.Object)}, but some mathematically equivalent sets are instances of
+	 * different classes and therefore are not passing the standard Java equality test. Calling this method is the
+	 * recommended way of checking the equality of two sets.
 	 * <p>
-	 * @param set The given Set.
-	 * @return {@literal true} if this set is equal
+	 * @param set The given Set
+	 * @return {@code true}, if the two sets are mathematically equivalent, {@code false} otherwise
 	 */
 	public boolean isEquivalent(Set<?> set);
 
@@ -302,13 +305,13 @@ public interface Set<V extends Object> {
 	 * Returns an iterable collection of all elements from this set. The size of this collection may be infinite. The
 	 * order in which the elements appear in the iterable collection is unspecified.
 	 * <p>
-	 * @return An iterable collection
+	 * @return An iterable collection of all elements
 	 */
 	public Iterable<? extends Element<V>> getElements();
 
 	/**
-	 * Returns an iterable collection of some elements from this set. The number of element in the iterable collection
-	 * is given as parameter. Their order is unspecified.
+	 * Returns an iterable collection of some elements from this set. The maximal number of elements in the iterable
+	 * collection is given as parameter. Their order is unspecified.
 	 * <p>
 	 * @param n The number of element in the resulting iterable collection
 	 * @return An iterable collection
@@ -322,43 +325,68 @@ public interface Set<V extends Object> {
 	 */
 	public Class<?> getValueClass();
 
+	/**
+	 *
+	 * @param <W>
+	 * @param value
+	 * @param converter
+	 * @return
+	 */
 	public <W> Element<V> getElementFrom(W value, Converter<V, W> converter);
-
-	public <W> Element<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
-
-	public <W> Element<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
-
-	/**
-	 * Creates and returns the element that corresponds to a given integer (if one exists). Returns {@literal null}
-	 * otherwise.
-	 * <p>
-	 * @param integer The given integer value
-	 * @return The corresponding element, or {@literal null} if no such element exists
-	 */
-	public Element<V> getElementFrom(int integer);
-
-	/**
-	 * Creates and returns the element that corresponds to a given BigInteger value (if one exists). Returns
-	 * {@literal null} otherwise.
-	 * <p>
-	 * @param bigInteger The given BigInteger value
-	 * @return The corresponding element, or {@literal null} if no such element exists
-	 */
-	public Element<V> getElementFrom(BigInteger bigInteger);
-
-	/**
-	 * TODO Returns the corresponding {@link Element} for the given {@link ByteArray} using the default converter.
-	 * <p>
-	 * @param byteArray The given ByteArray
-	 * @return the corresponding element
-	 */
-	public Element<V> getElementFrom(ByteArray byteArray);
 
 	/**
 	 *
-	 * @param string
+	 * @param <W>
+	 * @param value
+	 * @param convertMethod
+	 * @param aggregator
 	 * @return
 	 */
-	public Element<V> getElementFrom(String string);
+	public <W> Element<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
+
+	/**
+	 *
+	 * @param <W>
+	 * @param tree
+	 * @param convertMethod
+	 * @return
+	 */
+	public <W> Element<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+
+	/**
+	 * Creates and returns the element that corresponds to a given {@code int} value using the default conversion method
+	 * (if one exists). Returns {@code null} if no such element exists.
+	 * <p>
+	 * @param value The given {@code int} value
+	 * @return The corresponding element, or {@code null} if no such element exists
+	 */
+	public Element<V> getElementFrom(int value);
+
+	/**
+	 * Creates and returns the element that corresponds to a given {@code BigInteger} value using the default conversion
+	 * method(if one exists). Returns {@code null} if no such element exists.
+	 * <p>
+	 * @param value The given {@code BigInteger} value
+	 * @return The corresponding element, or {@code null} if no such element exists
+	 */
+	public Element<V> getElementFrom(BigInteger value);
+
+	/**
+	 * Creates and returns the element that corresponds to a given {@code ByteArray} value using the default conversion
+	 * method(if one exists). Returns {@code null} if no such element exists.
+	 * <p>
+	 * @param value The given {@code ByteArray} value
+	 * @return The corresponding element, or {@code null} if no such element exists
+	 */
+	public Element<V> getElementFrom(ByteArray value);
+
+	/**
+	 * Creates and returns the element that corresponds to a given {@code String} value using the default conversion
+	 * method. Returns {@code null} if no such element exists.
+	 * <p>
+	 * @param value The given {@code String} value
+	 * @return The corresponding element, or {@code null} if no such element exists
+	 */
+	public Element<V> getElementFrom(String value);
 
 }

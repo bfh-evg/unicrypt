@@ -60,14 +60,14 @@ public class StringAggregatorTest {
 
 	@Test
 	public void stringAggregatorTest() {
-		Tree<String> l1 = Leaf.getInstance("Hello");
-		Tree<String> l2 = Leaf.getInstance("World");
-		Tree<String> l3 = Leaf.getInstance("Universe");
-		Tree<String> n1 = Node.getInstance(l1, l2);
-		Tree<String> n2 = Node.getInstance(n1, l2);
-		Tree<String> n3 = Node.getInstance();
-		Tree<String> n4 = Node.getInstance(n1, n2, n3, l3);
-		Tree<String> n5 = Node.getInstance(n4);
+		Tree<String> l1 = Tree.getInstance("Hello");
+		Tree<String> l2 = Tree.getInstance("World");
+		Tree<String> l3 = Tree.getInstance("Universe");
+		Tree<String> n1 = Tree.getInstance(l1, l2);
+		Tree<String> n2 = Tree.getInstance(n1, l2);
+		Tree<String> n3 = Tree.getInstance();
+		Tree<String> n4 = Tree.getInstance(n1, n2, n3, l3);
+		Tree<String> n5 = Tree.getInstance(n4);
 
 		StringAggregator aggregator1 = StringAggregator.getInstance();
 		StringAggregator aggregator2 = StringAggregator.getInstance('\'', '<', '>', '*', '-');
@@ -89,8 +89,8 @@ public class StringAggregatorTest {
 
 		for (String value : strings) {
 			for (StringAggregator aggregator : new StringAggregator[]{aggregator1, aggregator2}) {
-				String aggregatedValue = aggregator.aggregate(Leaf.getInstance(value));
-				Assert.assertEquals(Leaf.getInstance(value), aggregator.disaggregate(aggregatedValue));
+				String aggregatedValue = aggregator.aggregate(Tree.getInstance(value));
+				Assert.assertEquals(Tree.getInstance(value), aggregator.disaggregate(aggregatedValue));
 			}
 		}
 	}
@@ -105,10 +105,10 @@ public class StringAggregatorTest {
 		for (Set<String> values : getStringSets(strings)) {
 			List<Tree<String>> trees = new ArrayList<Tree<String>>();
 			for (String value : values) {
-				trees.add(Leaf.getInstance(value));
+				trees.add(Tree.getInstance(value));
 			}
 			for (StringAggregator aggregator : new StringAggregator[]{aggregator1, aggregator2}) {
-				String aggregatedValue = aggregator.aggregate(Node.getInstance(trees));
+				String aggregatedValue = aggregator.aggregate(Tree.getInstance(trees));
 				Iterable<String> result = aggregator.disaggregate(aggregatedValue);
 				int i = 0;
 				for (String x : result) {

@@ -142,7 +142,7 @@ import java.util.Set;
 	 * Checks if a character is in the alphabet.
 	 * <p>
 	 * @param character The given character
-	 * @return {@literal true}, if {@code c} is in the alphabet, {@literal false} otherwise
+	 * @return {@code true}, if {@code c} is in the alphabet, {@code false} otherwise
 	 */
 	public boolean contains(char character) {
 		if (this.characters == null) {
@@ -155,7 +155,7 @@ import java.util.Set;
 	 * Checks if every character of a given string is in the alphabet.
 	 * <p>
 	 * @param string The given string
-	 * @return {@literal true}, if every character from {@code string} is in the alphabet, {@literal false} otherwise
+	 * @return {@code true}, if every character from {@code string} is in the alphabet, {@code false} otherwise
 	 */
 	public boolean containsAll(String string) {
 		if (string == null) {

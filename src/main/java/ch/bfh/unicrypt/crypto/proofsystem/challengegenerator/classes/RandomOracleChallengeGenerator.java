@@ -84,23 +84,23 @@ public class RandomOracleChallengeGenerator<CS extends Set, CE extends Element>
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null,
-														  PseudoRandomOracle.getInstance(), ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
+														  PseudoRandomOracle.getInstance(), ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, PseudoRandomOracle.getInstance(),
-														  ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
+														  ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle,
-														  ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
+														  ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId,
 		   RandomOracle randomOracle) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, randomOracle,
-														  ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
+														  ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
 
 	}
 

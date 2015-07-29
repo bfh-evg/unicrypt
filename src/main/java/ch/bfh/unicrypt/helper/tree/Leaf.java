@@ -56,26 +56,13 @@ import java.util.Iterator;
  */
 public class Leaf<V>
 	   extends Tree<V> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final V value;
 
-	private Leaf(V value) {
+	protected Leaf(V value) {
 		this.value = value;
-	}
-
-	/**
-	 * Creates a new leaf storing a given value.
-	 * <p>
-	 * @param <V>   The generic type of the given value and the resulting leaf
-	 * @param value The given value
-	 * @return The new leaf
-	 */
-	public static <V> Leaf<V> getInstance(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
-		}
-		return new Leaf<V>(value);
 	}
 
 	/**

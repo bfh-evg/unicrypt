@@ -79,7 +79,7 @@ public class ApplyFunction
 	 * <p/>
 	 * @param semiGroup
 	 * @return The resulting function
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static ApplyFunction getInstance(final SemiGroup semiGroup) {
 		return ApplyFunction.getInstance(semiGroup, 2);
@@ -92,8 +92,8 @@ public class ApplyFunction
 	 * @param semiGroup The group on which this function operates
 	 * @param arity     The number of input elements
 	 * @return The resulting function
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static ApplyFunction getInstance(final SemiGroup semiGroup, final int arity) {
 		if (semiGroup == null || arity < 0) {

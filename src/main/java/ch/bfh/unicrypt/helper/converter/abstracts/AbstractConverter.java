@@ -99,7 +99,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 	public Tree<W> convert(Tree<V> tree) {
 		if (tree.isLeaf()) {
 			Leaf<V> leaf = (Leaf<V>) tree;
-			return Leaf.getInstance(this.convert(leaf.getValue()));
+			return Tree.getInstance(this.convert(leaf.getValue()));
 		} else {
 			Node<V> node = (Node<V>) tree;
 			final Converter<V, W> converter = this;
@@ -111,7 +111,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 				}
 
 			});
-			return Node.getInstance(children);
+			return Tree.getInstance(children);
 		}
 	}
 
@@ -119,7 +119,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 	public Tree<V> reconvert(Tree<W> tree) {
 		if (tree.isLeaf()) {
 			Leaf<W> leaf = (Leaf<W>) tree;
-			return Leaf.getInstance(this.reconvert(leaf.getValue()));
+			return Tree.getInstance(this.reconvert(leaf.getValue()));
 		} else {
 			Node<W> node = (Node<W>) tree;
 			final Converter<V, W> converter = this;
@@ -131,7 +131,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 				}
 
 			});
-			return Node.getInstance(children);
+			return Tree.getInstance(children);
 		}
 	}
 

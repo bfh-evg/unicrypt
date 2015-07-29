@@ -91,7 +91,7 @@ public class PowerFunction
 	 * <p/>
 	 * @param multiplicativeSemiGroup The underlying group
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup) {
 		if (multiplicativeSemiGroup == null) {
@@ -111,8 +111,8 @@ public class PowerFunction
 	 * @param multiplicativeSemiGroup The underlying group
 	 * @param amountSet
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code amountGroup} is negative
 	 */
 	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup,
 		   final Set<BigInteger> amountSet) {

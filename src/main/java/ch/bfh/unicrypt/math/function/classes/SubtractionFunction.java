@@ -79,8 +79,8 @@ public class SubtractionFunction
 	 * <p/>
 	 * @param additiveGroup
 	 * @return The resulting function
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static SubtractionFunction getInstance(final AdditiveGroup additiveGroup) {
 		if (additiveGroup == null) {

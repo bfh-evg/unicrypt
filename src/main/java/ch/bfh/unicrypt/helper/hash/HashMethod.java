@@ -298,7 +298,7 @@ public class HashMethod<V>
 	}
 
 	/**
-	 * Returns the aggregator used in an a ACH hash method, or {@literal null} for CRH or CAH.
+	 * Returns the aggregator used in an a ACH hash method, or {@code null} for CRH or CAH.
 	 * <p>
 	 * @return The aggregator
 	 */
@@ -307,7 +307,7 @@ public class HashMethod<V>
 	}
 
 	/**
-	 * Returns the aggregator used in an a CAH hash method, or {@literal null} for CRH or ACH.
+	 * Returns the aggregator used in an a CAH hash method, or {@code null} for CRH or ACH.
 	 * <p>
 	 * @return The aggregator
 	 */

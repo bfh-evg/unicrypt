@@ -266,8 +266,8 @@ public class GStarMod
 	 * @param moduloFactorization
 	 * @param orderFactorization
 	 * @return
-	 * @throws IllegalArgumentException if {@literal moduloFactorization} or {@literal orderFactorization} is null
-	 * @throws IllegalArgumentException if the value of {@literal orderFactorization} does not divide phi(n)
+	 * @throws IllegalArgumentException if {@code moduloFactorization} or {@code orderFactorization} is null
+	 * @throws IllegalArgumentException if the value of {@code orderFactorization} does not divide phi(n)
 	 */
 	public static GStarMod getInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
 		GStarMod group = new GStarMod(moduloFactorization, orderFactorization);

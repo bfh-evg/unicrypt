@@ -75,9 +75,9 @@ public class PartiallyAppliedFunction
 	 * @param parentFunction The given function
 	 * @param parameter      The given parameter to fix
 	 * @param index          The index of the parameter to fix
-	 * @throws IllegalArgumentException  if the {@literal function} is null or not a ProductGroup
-	 * @throws IndexOutOfBoundsException if the {@literal index} is negative or > the arity of the function's domain
-	 * @throws IllegalArgumentException  if the {@literal element} is not an element of the corresponding group
+	 * @throws IllegalArgumentException  if the {@code function} is null or not a ProductGroup
+	 * @throws IndexOutOfBoundsException if the {@code index} is negative or > the arity of the function's domain
+	 * @throws IllegalArgumentException  if the {@code element} is not an element of the corresponding group
 	 */
 	private PartiallyAppliedFunction(final ProductSet domain, final Set coDomain, final Function parentFunction,
 		   final Element parameter, final int index) {
@@ -88,7 +88,7 @@ public class PartiallyAppliedFunction
 	}
 
 	/**
-	 * Returns the parent function from which {@literal this} function has been derived.
+	 * Returns the parent function from which {@code this} function has been derived.
 	 * <p>
 	 * @return The parent function
 	 */
@@ -97,7 +97,7 @@ public class PartiallyAppliedFunction
 	}
 
 	/**
-	 * Returns the input element that has been used to derive {@literal this} function from the parent function.
+	 * Returns the input element that has been used to derive {@code this} function from the parent function.
 	 * <p>
 	 * @return The input element
 	 */
@@ -106,7 +106,7 @@ public class PartiallyAppliedFunction
 	}
 
 	/**
-	 * Returns the index of the parameter that has been fixed to derive {@literal this} function from the parent
+	 * Returns the index of the parameter that has been fixed to derive {@code this} function from the parent
 	 * function.
 	 * <p>
 	 * @return The index of the input element
@@ -151,9 +151,9 @@ public class PartiallyAppliedFunction
 	 * @param element        The given parameter to fix
 	 * @param index          The index of the parameter to fix
 	 * @return
-	 * @throws IllegalArgumentException  if the {@literal function} is null or not a ProductGroup
-	 * @throws IndexOutOfBoundsException if the {@literal index} is negative or > the arity of the function's domain
-	 * @throws IllegalArgumentException  if the {@literal element} is not an element of the corresponding group
+	 * @throws IllegalArgumentException  if the {@code function} is null or not a ProductGroup
+	 * @throws IndexOutOfBoundsException if the {@code index} is negative or > the arity of the function's domain
+	 * @throws IllegalArgumentException  if the {@code element} is not an element of the corresponding group
 	 */
 	public static PartiallyAppliedFunction getInstance(final Function parentFunction, final Element element,
 		   final int index) {

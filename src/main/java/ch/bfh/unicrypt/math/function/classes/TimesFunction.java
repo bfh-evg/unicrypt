@@ -91,7 +91,7 @@ public class TimesFunction
 	 * <p/>
 	 * @param additiveSemiGroup The underlying group
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup) {
 		if (additiveSemiGroup == null) {
@@ -111,8 +111,8 @@ public class TimesFunction
 	 * @param additiveSemiGroup The underlying group
 	 * @param amountSet
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code amountGroup} is negative
 	 */
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup,
 		   final Set<BigInteger> amountSet) {

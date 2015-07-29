@@ -84,7 +84,7 @@ public class IterableRange
 	/**
 	 * Checks if the number of elements in the iterable range is 0.
 	 * <p>
-	 * @return {@literal true} if the number of elements is 0, {@literal false} otherwise
+	 * @return {@code true} if the number of elements is 0, {@code false} otherwise
 	 */
 	public boolean isEmpty() {
 		return this.to - this.from + 1 <= 0;

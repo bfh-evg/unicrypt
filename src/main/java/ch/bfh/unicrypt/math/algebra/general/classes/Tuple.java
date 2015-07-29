@@ -256,7 +256,7 @@ public class Tuple
 				return element.convertTo(convertMethod);
 			}
 		});
-		return Node.getInstance(stringTrees);
+		return Tree.getInstance(stringTrees);
 	}
 
 	@Override
@@ -266,7 +266,7 @@ public class Tuple
 
 	@Override
 	protected ByteArray defaultConvertToByteArray() {
-		return this.convertTo(ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
+		return this.convertTo(ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
 	}
 
 	@Override
@@ -292,7 +292,7 @@ public class Tuple
 	 * <p/>
 	 * @param elements The array of input elements
 	 * @return The corresponding tuple element
-	 * @throws IllegalArgumentException if {@literal elements} is null or contains null
+	 * @throws IllegalArgumentException if {@code elements} is null or contains null
 	 */
 	public static Tuple getInstance(DenseArray<Element> elements) {
 		if (elements == null || elements.getLength() < 0) {

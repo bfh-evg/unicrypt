@@ -72,37 +72,42 @@ public class ConvertMethod<W>
 		this.converterMap = new HashMap<Class<?>, Converter<?, W>>();
 	}
 
+	/**
+	 * Creates a new empty converter method of output type {@code ByteArray}.
+	 * <p>
+	 * @return The new converter method
+	 */
 	public static ConvertMethod<ByteArray> getInstance() {
-		return ConvertMethod.getInstance(ByteArray.class);
+		return new ConvertMethod(ByteArray.class);
 	}
 
 	/**
-	 * Creates a new converter method from a given converter.
+	 * Creates a new empty converter method of output type {@code W} from a given output class of type type {@code W}.
 	 * <p>
-	 * @param <W>       The output type
-	 * @param converter The given converter
+	 * @param <W>         The output type
+	 * @param outputClass The class of the output values
 	 * @return The new converter method
 	 */
-	public static <W> ConvertMethod<W> getInstance(Converter<?, W> converter) {
-		if (converter == null) {
+	public static <W> ConvertMethod<W> getInstance(Class<W> outputClass) {
+		if (outputClass == null) {
 			throw new IllegalArgumentException();
 		}
-		return ConvertMethod.getInstance(converter.getOutputClass(), converter);
+		return new ConvertMethod(outputClass);
 	}
 
 	/**
 	 * Creates a new converter method of output type {@code W} from a given list of converters of output type {@code W}.
 	 * Each of the given converters must know the class of the input values, and these classes must be distinct.
 	 * <p>
-	 * @param <W>         The output type
-	 * @param outputClass The class of the output values
-	 * @param converters  A list of converters
+	 * @param <W>        The output type
+	 * @param converters The given converters
 	 * @return The new converter method
 	 */
-	public static <W> ConvertMethod<W> getInstance(Class<W> outputClass, Converter<?, W>... converters) {
-		if (outputClass == null || converters == null) {
+	public static <W> ConvertMethod<W> getInstance(Converter<?, W>... converters) {
+		if (converters == null || converters.length == 0 || converters[0] == null || converters[0].getOutputClass() == null) {
 			throw new IllegalArgumentException();
 		}
+		Class<W> outputClass = converters[0].getOutputClass();
 		ConvertMethod convertMethod = new ConvertMethod(outputClass);
 		for (Converter<?, W> converter : converters) {
 			if (converter == null) {

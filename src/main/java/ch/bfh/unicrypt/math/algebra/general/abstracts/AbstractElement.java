@@ -176,7 +176,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	@Override
 	public final ByteArray getHashValue() {
-		return this.getHashValue(ConvertMethod.getInstance(ByteArray.class), HashMethod.getInstance());
+		return this.getHashValue(ConvertMethod.getInstance(), HashMethod.getInstance());
 	}
 
 	@Override
@@ -338,7 +338,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	// this method is overriden in Tuple
 	protected <W> Tree<W> defaultConvertTo(final ConvertMethod<W> convertMethod) {
 		Converter<V, W> converter = this.set.getConverter(convertMethod);
-		return Leaf.getInstance(converter.convert(this.value));
+		return Tree.getInstance(converter.convert(this.value));
 	}
 
 	// this method is overriden in Tuple

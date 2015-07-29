@@ -55,23 +55,23 @@ public class TreeTest {
 	@Test
 	public void test() {
 
-		Tree<BigInteger> l1 = Leaf.getInstance(BigInteger.valueOf(5));
-		Tree<BigInteger> l2 = Leaf.getInstance(BigInteger.valueOf(15));
-		Tree<BigInteger> l3 = Leaf.getInstance(BigInteger.valueOf(27));
-		Tree<BigInteger> n1 = Node.getInstance(l1, l2);
-		Tree<BigInteger> n2 = Node.getInstance(n1, l3);
-		Tree<BigInteger> n3 = Node.getInstance(n2);
-		Tree<BigInteger> n4 = Node.getInstance(n3, Node.<BigInteger>getInstance());
+		Tree<BigInteger> l1 = Tree.getInstance(BigInteger.valueOf(5));
+		Tree<BigInteger> l2 = Tree.getInstance(BigInteger.valueOf(15));
+		Tree<BigInteger> l3 = Tree.getInstance(BigInteger.valueOf(27));
+		Tree<BigInteger> n1 = Tree.getInstance(l1, l2);
+		Tree<BigInteger> n2 = Tree.getInstance(n1, l3);
+		Tree<BigInteger> n3 = Tree.getInstance(n2);
+		Tree<BigInteger> n4 = Tree.getInstance(n3, Node.<BigInteger>getInstance());
 
 		Tree<String> st = BigIntegerToString.getInstance().convert(n4);
 
-		Tree<String> sl1 = Leaf.getInstance("5");
-		Tree<String> sl2 = Leaf.getInstance("15");
-		Tree<String> sl3 = Leaf.getInstance("27");
-		Tree<String> sn1 = Node.getInstance(sl1, sl2);
-		Tree<String> sn2 = Node.getInstance(sn1, sl3);
-		Tree<String> sn3 = Node.getInstance(sn2);
-		Tree<String> sn4 = Node.getInstance(sn3, Node.<String>getInstance());
+		Tree<String> sl1 = Tree.getInstance("5");
+		Tree<String> sl2 = Tree.getInstance("15");
+		Tree<String> sl3 = Tree.getInstance("27");
+		Tree<String> sn1 = Tree.getInstance(sl1, sl2);
+		Tree<String> sn2 = Tree.getInstance(sn1, sl3);
+		Tree<String> sn3 = Tree.getInstance(sn2);
+		Tree<String> sn4 = Tree.getInstance(sn3, Node.<String>getInstance());
 
 		assertEquals(sn4, BigIntegerToString.getInstance().convert(n4));
 	}

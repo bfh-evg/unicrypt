@@ -61,12 +61,12 @@ public class StringHashMethodTest {
 	String string1 = "";
 	String string2 = "61|62|63";
 
-	Tree<String> t1 = Leaf.getInstance(string1);
-	Tree<String> t2 = Leaf.getInstance(string2);
+	Tree<String> t1 = Tree.getInstance(string1);
+	Tree<String> t2 = Tree.getInstance(string2);
 
-	Tree<String> t3 = Node.getInstance(t1, t2);
-	Tree<String> t4 = Node.getInstance();
-	Tree<String> t5 = Node.getInstance(t3, t4);
+	Tree<String> t3 = Tree.getInstance(t1, t2);
+	Tree<String> t4 = Tree.getInstance();
+	Tree<String> t5 = Tree.getInstance(t3, t4);
 
 	HashAlgorithm hashAlgorithm = HashAlgorithm.SHA256;
 	StringToByteArray converter = StringToByteArray.getInstance();
@@ -101,12 +101,12 @@ public class StringHashMethodTest {
 		ByteArray b1 = converter.convert(string1);
 		ByteArray b2 = converter.convert(string2);
 
-		Tree<ByteArray> bt1 = Leaf.getInstance(b1);
-		Tree<ByteArray> bt2 = Leaf.getInstance(b2);
+		Tree<ByteArray> bt1 = Tree.getInstance(b1);
+		Tree<ByteArray> bt2 = Tree.getInstance(b2);
 
-		Tree<ByteArray> bt3 = Node.getInstance(bt1, bt2);
-		Tree<ByteArray> bt4 = Node.getInstance();
-		Tree<ByteArray> bt5 = Node.getInstance(bt3, bt4);
+		Tree<ByteArray> bt3 = Tree.getInstance(bt1, bt2);
+		Tree<ByteArray> bt4 = Tree.getInstance();
+		Tree<ByteArray> bt5 = Tree.getInstance(bt3, bt4);
 
 		Assert.assertEquals(hashAlgorithm.getHashValue(aggregator.aggregate(bt1)), hashMethod.getHashValue(t1));
 		Assert.assertEquals(hashAlgorithm.getHashValue(aggregator.aggregate(bt2)), hashMethod.getHashValue(t2));

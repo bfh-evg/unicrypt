@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -64,20 +65,20 @@ public class ByteArrayAggregatorTest {
 
 		ByteArrayAggregator agr = ByteArrayAggregator.getInstance();
 
-		ByteArray l0 = agr.aggregate(Leaf.getInstance(b0));
-		ByteArray l1 = agr.aggregate(Leaf.getInstance(b1));
-		ByteArray l2 = agr.aggregate(Leaf.getInstance(b2));
-		ByteArray l3 = agr.aggregate(Leaf.getInstance(b3));
+		ByteArray l0 = agr.aggregate(Tree.getInstance(b0));
+		ByteArray l1 = agr.aggregate(Tree.getInstance(b1));
+		ByteArray l2 = agr.aggregate(Tree.getInstance(b2));
+		ByteArray l3 = agr.aggregate(Tree.getInstance(b3));
 
 		Assert.assertEquals(ByteArray.getInstance(0, 0, 0, 0, 0), l0);
 		Assert.assertEquals(ByteArray.getInstance(0, 0, 0, 0, 1, 1), l1);
 		Assert.assertEquals(ByteArray.getInstance(0, 0, 0, 0, 2, 1, 2), l2);
 		Assert.assertEquals(ByteArray.getInstance(0, 0, 0, 0, 3, 1, 2, 3), l3);
 
-		Assert.assertEquals(Leaf.getInstance(b0), agr.disaggregate(l0));
-		Assert.assertEquals(Leaf.getInstance(b1), agr.disaggregate(l1));
-		Assert.assertEquals(Leaf.getInstance(b2), agr.disaggregate(l2));
-		Assert.assertEquals(Leaf.getInstance(b3), agr.disaggregate(l3));
+		Assert.assertEquals(Tree.getInstance(b0), agr.disaggregate(l0));
+		Assert.assertEquals(Tree.getInstance(b1), agr.disaggregate(l1));
+		Assert.assertEquals(Tree.getInstance(b2), agr.disaggregate(l2));
+		Assert.assertEquals(Tree.getInstance(b3), agr.disaggregate(l3));
 
 	}
 
@@ -86,19 +87,19 @@ public class ByteArrayAggregatorTest {
 
 		ByteArrayAggregator agr = ByteArrayAggregator.getInstance();
 
-		Leaf<ByteArray> b0 = Leaf.getInstance(ByteArray.getInstance());
-		Leaf<ByteArray> b1 = Leaf.getInstance(ByteArray.getInstance(1));
-		Leaf<ByteArray> b2 = Leaf.getInstance(ByteArray.getInstance(1, 2));
-		Leaf<ByteArray> b3 = Leaf.getInstance(ByteArray.getInstance(1, 2, 3));
+		Leaf<ByteArray> b0 = Tree.getInstance(ByteArray.getInstance());
+		Leaf<ByteArray> b1 = Tree.getInstance(ByteArray.getInstance(1));
+		Leaf<ByteArray> b2 = Tree.getInstance(ByteArray.getInstance(1, 2));
+		Leaf<ByteArray> b3 = Tree.getInstance(ByteArray.getInstance(1, 2, 3));
 
-		Node<ByteArray> c1 = Node.getInstance();
-		Node<ByteArray> c2 = Node.getInstance(b0);
-		Node<ByteArray> c3 = Node.getInstance(b1);
-		Node<ByteArray> c4 = Node.getInstance(b0, b1);
-		Node<ByteArray> c5 = Node.getInstance(b0, b1, b2);
-		Node<ByteArray> c6 = Node.getInstance(b0, b1, b2, b0);
-		Node<ByteArray> c7 = Node.getInstance(c1, c2, c3, c4, c5, c6);
-		Node<ByteArray> c8 = Node.getInstance(c7, c6, c1);
+		Node<ByteArray> c1 = Tree.getInstance();
+		Node<ByteArray> c2 = Tree.getInstance(b0);
+		Node<ByteArray> c3 = Tree.getInstance(b1);
+		Node<ByteArray> c4 = Tree.getInstance(b0, b1);
+		Node<ByteArray> c5 = Tree.getInstance(b0, b1, b2);
+		Node<ByteArray> c6 = Tree.getInstance(b0, b1, b2, b0);
+		Node<ByteArray> c7 = Tree.getInstance(c1, c2, c3, c4, c5, c6);
+		Node<ByteArray> c8 = Tree.getInstance(c7, c6, c1);
 
 		ByteArray l0 = agr.aggregate(b0);
 		ByteArray l1 = agr.aggregate(b1);

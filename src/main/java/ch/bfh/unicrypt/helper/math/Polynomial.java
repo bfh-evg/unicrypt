@@ -191,7 +191,7 @@ public class Polynomial<C>
 	/**
 	 * Checks if all coefficients of the polynomial are 0, which is the case for {@code P(x)=0}.
 	 * <p>
-	 * @return {@literal true} for {@code P(x)=0}, {@literal false} otherwise
+	 * @return {@code true} for {@code P(x)=0}, {@code false} otherwise
 	 */
 	public boolean isZero() {
 		return this.degree == ZERO_POLYNOMIAL_DEGREE;
@@ -200,7 +200,7 @@ public class Polynomial<C>
 	/**
 	 * Checks the polynomial is monic, i.e., if the highest order coefficient of the polynomial is 1.
 	 * <p>
-	 * @return {@literal true} if the the polynomial is monic, {@literal false} otherwise
+	 * @return {@code true} if the the polynomial is monic, {@code false} otherwise
 	 */
 	public boolean isMonic() {
 		return !this.isZero() && this.oneCoefficient.equals(this.getCoefficient(this.degree));

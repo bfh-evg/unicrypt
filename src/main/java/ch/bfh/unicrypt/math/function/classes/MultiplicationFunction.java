@@ -86,8 +86,8 @@ public class MultiplicationFunction
 	 * @param multiplicativeSemiGroup The group on which this function operates
 	 * @param arity                   The number of input elements
 	 * @return The resulting function
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static MultiplicationFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup,
 		   final int arity) {

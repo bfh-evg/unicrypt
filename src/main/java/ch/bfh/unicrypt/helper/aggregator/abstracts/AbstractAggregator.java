@@ -115,14 +115,14 @@ public abstract class AbstractAggregator<V>
 		// Case 1: value represents a leaf
 		if (this.abstractIsLeaf(value)) {
 			V result = this.abstractDisaggregateLeaf(value);
-			return Leaf.getInstance(result);
+			return Tree.getInstance(result);
 		}
 
 		// Case 2: value represents a node
 		if (this.abstractIsNode(value)) {
 			Iterable<V> values = this.abstractDisaggregateNode(value);
 			Iterable<Tree<V>> trees = IterableMapping.getInstance(values, this.mapping2);
-			return Node.getInstance(trees);
+			return Tree.getInstance(trees);
 		}
 
 		// Case 3: value represents not a leaf and not a node
