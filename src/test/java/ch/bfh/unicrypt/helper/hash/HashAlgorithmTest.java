@@ -118,6 +118,15 @@ public class HashAlgorithmTest {
 	}
 
 	@Test
+	public void HashAlgorithmTest_HashValue_SHA224() {
+		byte[] bytes1 = ByteArray.getInstance("".toUpperCase()).getBytes();
+		byte[] bytes2 = ByteArray.getInstance("61|62|63".toUpperCase()).getBytes();
+		byte[] hash1 = ByteArray.getInstance("d1|4a|02|8c|2a|3a|2b|c9|47|61|02|bb|28|82|34|c4|15|a2|b0|1f|82|8e|a6|2a|c5|b3|e4|2f".toUpperCase()).getBytes();
+		Assert.assertArrayEquals(hash1, HashAlgorithm.SHA224.getHashValue(bytes1));
+		Assert.assertArrayEquals(hash1, HashAlgorithm.SHA224.getHashValue(bytes2, 0, 0));
+	}
+
+	@Test
 	public void HashAlgorithmTest_HashValue_SHA256() {
 		byte[] bytes1 = ByteArray.getInstance("".toUpperCase()).getBytes();
 		byte[] bytes2 = ByteArray.getInstance("61|62|63".toUpperCase()).getBytes();

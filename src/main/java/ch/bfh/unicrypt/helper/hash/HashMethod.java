@@ -93,22 +93,22 @@ public class HashMethod<V>
 	private static final long serialVersionUID = 1L;
 
 	// the hash algorithm applied to the byte arrays
-	protected final HashAlgorithm hashAlgorithm;
+	private final HashAlgorithm hashAlgorithm;
 
 	// the converter used to convert values of the generic type V into byte arrays
-	protected final Converter<V, ByteArray> converter;
+	private final Converter<V, ByteArray> converter;
 
 	// the aggregator used in ACH
-	protected final Aggregator<V> valueAggregator;
+	private final Aggregator<V> valueAggregator;
 
 	// the aggregator used in CAH
-	protected final Aggregator<ByteArray> byteArrayAggregator;
+	private final Aggregator<ByteArray> byteArrayAggregator;
 
 	// the seleced mode (CRH, ACH, CAH)
-	protected final Mode mode;
+	private final Mode mode;
 
 	// Case 1: CRH (convert, mode hash)
-	protected HashMethod(HashAlgorithm hashAlgorithm, Converter<V, ByteArray> converter) {
+	private HashMethod(HashAlgorithm hashAlgorithm, Converter<V, ByteArray> converter) {
 		this.hashAlgorithm = hashAlgorithm;
 		this.converter = converter;
 		this.valueAggregator = null; // valueAggregator is not needed in CRH
@@ -134,18 +134,39 @@ public class HashMethod<V>
 		this.mode = Mode.CAH;
 	}
 
+	/**
+	 * Returns a new CRH hash method using the default hash algorithm. The byte array converter is given as parameter.
+	 * <p>
+	 * @return The new hash method
+	 */
 	public static HashMethod<ByteArray> getInstance() {
-		return HashMethod.getInstance(ByteArrayToByteArray.getInstance());
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), ByteArrayToByteArray.getInstance());
 	}
 
+	/**
+	 *
+	 * @param hashAlgorithm The given hash algorithm
+	 * @return The new hash method
+	 */
 	public static HashMethod<ByteArray> getInstance(HashAlgorithm hashAlgorithm) {
 		return HashMethod.getInstance(hashAlgorithm, ByteArrayToByteArray.getInstance());
 	}
 
+	/**
+	 *
+	 * @param aggregator The given aggregator
+	 * @return The new hash method
+	 */
 	public static HashMethod<ByteArray> getInstance(Aggregator<ByteArray> aggregator) {
-		return HashMethod.getInstance(aggregator, ByteArrayToByteArray.getInstance());
+		return HashMethod.getInstance(HashAlgorithm.getInstance(), aggregator, ByteArrayToByteArray.getInstance());
 	}
 
+	/**
+	 *
+	 * @param hashAlgorithm The given hash algorithm
+	 * @param aggregator    The given aggregator
+	 * @return The new hash method
+	 */
 	public static HashMethod<ByteArray> getInstance(HashAlgorithm hashAlgorithm, Aggregator<ByteArray> aggregator) {
 		return HashMethod.getInstance(hashAlgorithm, aggregator, ByteArrayToByteArray.getInstance());
 	}
@@ -181,7 +202,7 @@ public class HashMethod<V>
 	 * hash method uses the default hash algorithm.
 	 * <p>
 	 * @param <V>        The generic type of the new hash method
-	 * @param aggregator The given valueAggregator
+	 * @param aggregator The given aggregator
 	 * @param converter  The given ByteArray converter
 	 * @return The new hash method
 	 */
@@ -195,7 +216,7 @@ public class HashMethod<V>
 	 * <p>
 	 * @param <V>           The generic type of the new hash method
 	 * @param hashAlgorithm The given hash algorithm
-	 * @param aggregator    The given valueAggregator
+	 * @param aggregator    The given aggregator
 	 * @param converter     The given ByteArray converter
 	 * @return The new hash method
 	 */

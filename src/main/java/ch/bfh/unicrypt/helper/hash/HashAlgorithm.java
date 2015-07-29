@@ -70,6 +70,11 @@ public class HashAlgorithm
 	public static final HashAlgorithm SHA1 = new HashAlgorithm("SHA-1");
 
 	/**
+	 * The SHA-224 hash algorithm.
+	 */
+	public static final HashAlgorithm SHA224 = new HashAlgorithm("SHA-224");
+
+	/**
 	 * The SHA-256 hash algorithm.
 	 */
 	public static final HashAlgorithm SHA256 = new HashAlgorithm("SHA-256");
@@ -83,6 +88,7 @@ public class HashAlgorithm
 	 * The SHA-512 hash algorithm.
 	 */
 	public static final HashAlgorithm SHA512 = new HashAlgorithm("SHA-512");
+
 	private static final long serialVersionUID = 1L;
 
 	private final MessageDigest messageDigest;
@@ -177,22 +183,25 @@ public class HashAlgorithm
 
 	/**
 	 * Returns the hash algorithm that corresponds to the algorithm name specified as a string. The supported algorithm
-	 * names are: {@code "MD5"}, {@code "SHA-1"}, {@code "SHA-256"}, {@code "SHA-384"}, and {@code "SHA-512"}.
+	 * names are: {@code "MD5"}, {@code "SHA-1"}, {@code "SHA-224"}, {@code "SHA-256"}, {@code "SHA-384"}, and
+	 * {@code "SHA-512"}.
 	 * <p>
 	 * @param algorithmName The name of the hash algorithm.
 	 * @return The new hash method
 	 */
 	public static HashAlgorithm getInstance(String algorithmName) {
-		switch (Arrays.binarySearch(new String[]{"MD5", "SHA-1", "SHA-256", "SHA-384", "SHA-512"}, algorithmName)) {
-			case 0:
+		switch (algorithmName) {
+			case "MD5":
 				return HashAlgorithm.MD5;
-			case 1:
+			case "SHA-1":
 				return HashAlgorithm.SHA1;
-			case 2:
+			case "SHA-224":
+				return HashAlgorithm.SHA224;
+			case "SHA-256":
 				return HashAlgorithm.SHA256;
-			case 3:
+			case "SHA-384":
 				return HashAlgorithm.SHA384;
-			case 4:
+			case "SHA-512":
 				return HashAlgorithm.SHA512;
 		}
 		throw new IllegalArgumentException();
