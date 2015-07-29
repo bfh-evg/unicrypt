@@ -125,23 +125,20 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 		return this.defaultMultiSelfApply(elements, amounts);
 	}
 
-	//
-	// The following protected methods are default implementations for sets.
-	// They may need to be changed in certain sub-classes.
-	//
+	// This method is overriden in AbstractMonoid
 	protected E defaultApply(final Iterable<Element> elements) {
 		if (!elements.iterator().hasNext()) {
 			throw new IllegalArgumentException();
 		}
-		E result = null;
+		Element result = null;
 		for (Element element : elements) {
 			if (result == null) {
-				result = (E) element;
+				result = element;
 			} else {
 				result = this.apply(result, element);
 			}
 		}
-		return result;
+		return (E) result;
 	}
 
 	protected E defaultSelfApply(E element, BigInteger amount) {

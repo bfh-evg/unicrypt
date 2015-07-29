@@ -64,13 +64,14 @@ import java.math.BigInteger;
  * most common types are {@link BigInteger}, {@link String}, and {@link ByteArray}.
  * <p>
  * Independently of the generic type {@code V} of a set, it is assumed that each element of the set can be converted
- * into a unique {@link BigInteger}, {@link String}, or {@link ByteArray} value, and that corresponding elements can be
- * constructed from such {@link BigInteger}, {@link String}, or {@link ByteArray} values.
+ * into unique {@link BigInteger}, {@link String}, or {@link ByteArray} values, and that corresponding elements can be
+ * constructed from such {@link BigInteger}, {@link String}, or {@link ByteArray} values. This is the recommended way of
+ * converting the mathematical objects of the library into common Java objects.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V> Generic type of the values representing the elements of this set
+ * @param <V> Generic type of the values representing the elements of a set
  * @see Element
  */
 public interface Set<V extends Object> {
@@ -228,8 +229,8 @@ public interface Set<V extends Object> {
 
 	/**
 	 * Returns the ring of integers modulo the set order, i.e., an instance of {@link ZMod} with the same order. For
-	 * this to work, the set order must be finite and known. For sets of infinite or unknown order, an
-	 * {@link UnsupportedOperationException} is thrown.
+	 * this to work, the set order must be finite and known. For sets of infinite or unknown order, an exception is
+	 * thrown.
 	 * <p>
 	 * @return The resulting ring of integers modulo the set order
 	 */
@@ -238,7 +239,7 @@ public interface Set<V extends Object> {
 	/**
 	 * Returns the multiplicative group of integers modulo the set order, i.e., an instance of {@link ZStarMod} of order
 	 * {@code phi(n)}. For this to work, the set order must be finite and known. For sets of infinite or unknown order,
-	 * an {@link UnsupportedOperationException} is thrown.
+	 * an exception is thrown.
 	 * <p>
 	 * @return The resulting multiplicative group
 	 */
@@ -273,8 +274,7 @@ public interface Set<V extends Object> {
 
 	/**
 	 * Selects and returns a random set element using the library's default random byte sequence. For sets of finite
-	 * order, the element is selected uniformly at random. For sets of infinite order, an
-	 * {@link UnsupportedOperationException} is thrown.
+	 * order, the element is selected uniformly at random. For sets of infinite order, an exception is thrown.
 	 * <p>
 	 * @return A random element from the set
 	 */
@@ -282,8 +282,7 @@ public interface Set<V extends Object> {
 
 	/**
 	 * Selects and returns a random set element using a given random byte sequence. For sets of finite order, the
-	 * element is selected uniformly at random. For sets of infinite order, an {@link UnsupportedOperationException} is
-	 * thrown.
+	 * element is selected uniformly at random. For sets of infinite order, an exception is thrown.
 	 * <p>
 	 * @param randomByteSequence The given random byte sequence
 	 * @return A random element from the set

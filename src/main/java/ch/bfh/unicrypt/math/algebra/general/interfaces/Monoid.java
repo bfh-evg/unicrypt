@@ -42,12 +42,11 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 /**
- * TODO This interface represents the mathematical concept of a monoid. A monoid is a semigroup that has a neutral
- * element. It is therefore implemented as a specialization of {@link SemiGroup}.Every element has an inverse element,
- * and the monoid itself has a unique identity element.
+ * This interface represents the mathematical concept of a monoid. A monoid is a semigroup with a unique identity
+ * element. It is therefore implemented as a specialization of {@link SemiGroup}.
  * <p>
  *
- * @param <V> Generic type of values stored in the elements of this monoid
+ * @param <V> Generic type of the values representing the elements of a monoid
  * @see "Handbook of Applied Cryptography, Definition 2.162"
  * <p>
  * @author R. Haenni
@@ -60,7 +59,7 @@ public interface Monoid<V extends Object>
 	/**
 	 * Returns the monoid's unique identity element.
 	 * <p>
-	 * @return The identity element.
+	 * @return The identity element
 	 */
 	public Element<V> getIdentityElement();
 

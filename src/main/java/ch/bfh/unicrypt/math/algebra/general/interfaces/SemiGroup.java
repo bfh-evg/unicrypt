@@ -44,10 +44,10 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
 import java.math.BigInteger;
 
 /**
- * TODO This interface represents the mathematical concept of a semigroup. It defines a set of elements and an
- * associative (but not necessarily commutative) binary operation. It is implemented as a specialization of {@link Set}.
+ * This interface represents the mathematical concept of a semigroup. It defines a set of elements and an associative
+ * (but not necessarily commutative) binary operation. It is implemented as a specialization of {@link Set}.
  * <p>
- * @param <V> Generic type of values stored in the elements of this semigroup
+ * @param <V> Generic type of the values representing the elements of a semigroup
  * @see "Handbook of Applied Cryptography, Definition 2.162"
  * <p>
  * @author R. Haenni
@@ -58,83 +58,83 @@ public interface SemiGroup<V extends Object>
 	   extends Set<V> {
 
 	/**
-	 * Applies the binary group operation to two semigroup elements (in the given order).
+	 * Applies the binary operation to two elements (in the given order).
 	 * <p>
-	 * @param element1 The first semigroup element
-	 * @param element2 The second semigroup element
-	 * @return The result of applying the semigroup operation to the two input elements
-	 * <p>
-	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the semigroup
-   * */
+	 * @param element1 The first element
+	 * @param element2 The second element
+	 * @return The result of applying the binary operation to the two input elements
+	 */
 	public Element<V> apply(Element element1, Element element2);
 
 	/**
-	 * Applies the binary group operation pair-wise sequentially to multiple elements (in the given order). Returns the
-	 * identity element, if the given list of elements is empty.
+	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
+	 * as an array. If the array contains a single element, it is returned without applying the operation. If the given
+	 * collection is empty, an exception is thrown.
 	 * <p>
 	 * @param elements A given array of elements
 	 * @return The result of applying the operation to the input elements
-	 * @throws IllegalArgumentException if one of the elements in {@code elements} does not belong to the semigroup
 	 */
 	public Element<V> apply(Element... elements);
 
+	/**
+	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
+	 * as an iterable collection. If the collection contains a single element, it is returned without applying the
+	 * operation. If the given collection is empty, an exception is thrown.
+	 * <p>
+	 * @param elements A given collection of elements
+	 * @return The result of applying the operation to the input elements
+	 */
 	public Element<V> apply(Iterable<Element> elements);
 
 	/**
-	 * Applies the binary group operation repeatedly to {@code amount} many instances of a given semigroup element. If
-	 * {@code amount} equals 0, then the identity element is returned. If {@code amount} is negative, then the
-	 * corresponding positive value is applied to the inverse of the given element. If the semigroup is finite and if
-	 * its order is known to be {@code q}, then {
+	 * Applies the binary operation repeatedly to {@code amount} many instances of a given element. If {@code amount=1},
+	 * the element is returned without applying the operation. If {@code amount<1}, an exception is thrown.
 	 * <p>
-	 * @amount} can be replaced by {@code amount mod q}.
-	 * @param element The given group element
+	 * @param element A given element
 	 * @param amount  The number of instances of the input element
-	 * @return The result of applying the group operation multiple times to the input element
-	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
-	 */
-	public Element<V> selfApply(Element element, BigInteger amount);
-
-	/**
-	 * Same as {@link #Group.selfApply(Element, BigInteger)}, except that the amount is given as an {@link Element}
-	 * object, which can always be converted into a BigInteger value.
-	 * <p>
-	 * @param element A given group element
-	 * @param amount  The number of instances of the input element given as an {@link Element} object
-	 * @return The result of applying the group operation multiple times to the input element
-	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
-	 */
-	public Element<V> selfApply(Element element, Element<BigInteger> amount);
-
-	/**
-	 * Same as {@link #Group.selfApply(Element, BigInteger)}, except that the amount is given as an {@code int} value.
-	 * <p>
-	 * @param element A given group element
-	 * @param amount  The number of instances of the input element
-	 * @return The result of applying the operation multiple times to the input element TODO
-	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
+	 * @return The result of applying the operation multiple times to the input element
 	 */
 	public Element<V> selfApply(Element element, int amount);
 
 	/**
-	 * Applies the group operation to two instances of a given semigroup element. This is equivalent to
-	 * {@code selfApply(element, 2)}.
+	 * Applies the binary operation repeatedly to {@code amount} many instances of a given element. If {@code amount=1},
+	 * the element is returned without applying the operation. If {@code amount<1}, an exception is thrown.
 	 * <p>
-	 * @param element A given group element
-	 * @return The result of applying the group operation to the input element TODO
-	 * @throws IllegalArgumentException if {@code element} does not belong to the semigroup
+	 * @param element The given element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of applying the operation multiple times to the input element
+	 */
+	public Element<V> selfApply(Element element, BigInteger amount);
+
+	/**
+	 * Same as {@link SemiGroup#selfApply(Element, BigInteger)}, except that the amount is given as an
+	 * {@link Element}{@code <BigInteger>}, from which a {@code BigInteger} value can be extracted using
+	 * {@link Element#getValue()}.
+	 * <p>
+	 * @param element A given element
+	 * @param amount  The number of instances of the input element
+	 * @return The result of applying the operation multiple times to the input element
+	 */
+	public Element<V> selfApply(Element element, Element<BigInteger> amount);
+
+	/**
+	 * Applies the group operation to two instances of a given element. This is equivalent to
+	 * {@link SemiGroup#selfApply(Element, int)} for {@code amount=2}.
+	 * <p>
+	 * @param element A given element
+	 * @return The result of applying the group operation to the input element
 	 */
 	public Element<V> selfApply(Element element);
 
 	/**
-	 * Applies the binary operation pair-wise sequentially to the results of computing
-	 * {@link #selfApply(Element, BigInteger)} multiple times. In an additive group, this operation is sometimes called
-	 * 'weighed sum', and 'product-of-powers' in a multiplicative group.
+	 * Applies the binary operation sequentially to the results of computing {@link #selfApply(Element, BigInteger)}
+	 * multiple times. This operation is sometimes called 'weighed sum' or 'product-of-powers', depending on whether the
+	 * operation is an addition or multiplication. If the two input lists are not of equal length, an exception is
+	 * thrown.
 	 * <p>
 	 * @param elements A given array of elements
 	 * @param amounts  Corresponding amounts
 	 * @return The result of this operation
-	 * @throws IllegalArgumentException if one of the elements of {@code elements} does not belong to the semigroup
-	 * @throws IllegalArgumentException if {@code elements} and {@code amounts} have different lengths
 	 */
 	public Element<V> multiSelfApply(Element[] elements, BigInteger[] amounts);
 
