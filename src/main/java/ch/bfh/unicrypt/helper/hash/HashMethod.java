@@ -135,7 +135,7 @@ public class HashMethod<V>
 	}
 
 	/**
-	 * Returns a new CRH hash method using the default hash algorithm. The byte array converter is given as parameter.
+	 * Returns a new CRH hash method of type {@code ByteArray}, using the default hash algorithm.
 	 * <p>
 	 * @return The new hash method
 	 */
@@ -144,7 +144,8 @@ public class HashMethod<V>
 	}
 
 	/**
-	 *
+	 * Returns a new CRH hash method of type {@code ByteArray}, using a given hash algorithm.
+	 * <p>
 	 * @param hashAlgorithm The given hash algorithm
 	 * @return The new hash method
 	 */
@@ -153,7 +154,9 @@ public class HashMethod<V>
 	}
 
 	/**
-	 *
+	 * Returns a new ACH/CAH hash method of type {@code ByteArray}, using the default hash algorithm and a given byte
+	 * array aggregator.
+	 * <p>
 	 * @param aggregator The given aggregator
 	 * @return The new hash method
 	 */
@@ -162,7 +165,9 @@ public class HashMethod<V>
 	}
 
 	/**
-	 *
+	 * Returns a new ACH/CAH hash method of type {@code ByteArray}, using a given hash algorithm and a given byte array
+	 * aggregator
+	 * <p>
 	 * @param hashAlgorithm The given hash algorithm
 	 * @param aggregator    The given aggregator
 	 * @return The new hash method
