@@ -39,75 +39,60 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- * Instances of this class offer an inexpensive way of creating iterators over a finite range of integers. If the upper
- * bound of the range is smaller than the lower bound of the range, then the range is empty.
+ * This class is a wrapper class for Java arrays for making them iterable. It thus offers an inexpensive way of creating
+ * (finite) iterators over arrays without copying the array elements to a collection. Note that instances of this class
+ * are not safe against modifications of the original array after their construction. Also, they do not prevent the
+ * original array from containing and the resulting iterators from returning the value {@code null}.
  * <p>
  * @author R. Haenni
  * @version 2.0
+ * @param <V> The generic type of the elements in the array
  */
-public class IterableRange
-	   extends UniCrypt
-	   implements Iterable<Integer> {
-	private static final long serialVersionUID = 1L;
+public class ArraySequence<V>
+	   extends AbstractSequence<V> {
 
-	private final int from;
-	private final int to;
+	private final V[] array;
 
-	private IterableRange(int from, int to) {
-		this.from = from;
-		this.to = to;
+	protected ArraySequence(V[] array) {
+		super(BigInteger.valueOf(array.length));
+		this.array = array;
 	}
 
 	/**
-	 * /**
-	 * Creates a new iterable range for given upper and lower integer bounds. The result is an empty range, if the upper
-	 * bound is smaller than the lower bound.
+	 * Creates a new iterable array from a given Java array.
 	 * <p>
-	 * @param from The lower bound
-	 * @param to   The upper bound
-	 * @return The new iterable range
+	 * @param <T>   The generic type of the array
+	 * @param array The given array
+	 * @return The new iterable array
 	 */
-	public static IterableRange getInstance(int from, int to) {
-		return new IterableRange(from, to);
-	}
-
-	private int getLength() {
-		return Math.max(0, this.to - this.from + 1);
-	}
-
-	/**
-	 * Checks if the number of elements in the iterable range is 0.
-	 * <p>
-	 * @return {@code true} if the number of elements is 0, {@code false} otherwise
-	 */
-	public boolean isEmpty() {
-		return this.to - this.from + 1 <= 0;
+	public static <T> ArraySequence<T> getInstance(T... array) {
+		if (array == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ArraySequence<>(array);
 	}
 
 	@Override
-	public Iterator<Integer> iterator() {
-		return new Iterator<Integer>() {
-			private int pos = from;
+	public Iterator<V> iterator() {
+		return new Iterator<V>() {
+			private int pos = 0;
 
 			@Override
 			public boolean hasNext() {
-				return pos <= to;
+				return pos < array.length;
 			}
 
 			@Override
-			public Integer next() {
-				return pos++;
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
+			public V next() {
+				return array[pos++];
 			}
 
 		};
@@ -115,10 +100,8 @@ public class IterableRange
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 41 * hash + this.getLength();
-		hash = 41 * hash + this.from;
-		return hash;
+		int hash = 3;
+		return Arrays.hashCode(array);
 	}
 
 	@Override
@@ -129,22 +112,13 @@ public class IterableRange
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final IterableRange other = (IterableRange) obj;
-		if (this.getLength() != other.getLength()) {
-			return false;
-		}
-		if (this.getLength() == 0) {
-			return true;
-		}
-		return (this.from == other.from);
+		final ArraySequence<?> other = (ArraySequence<?>) obj;
+		return Arrays.equals(this.array, other.array);
 	}
 
 	@Override
 	protected String defaultToStringContent() {
-		if (this.isEmpty()) {
-			return "";
-		}
-		return this.from + "..." + this.to;
+		return Arrays.toString(this.array);
 	}
 
 }

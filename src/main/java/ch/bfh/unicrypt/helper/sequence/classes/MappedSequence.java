@@ -39,11 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable.classes;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.helper.iterable.interfaces.Mapping;
-import ch.bfh.unicrypt.helper.iterable.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.iterable.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
@@ -65,20 +65,8 @@ public class MappedSequence<V, W>
 	final private Mapping<V, W> mapping;
 
 	protected MappedSequence(Iterable<V> values, Mapping<V, W> mapping) {
-		super(Sequence.UNKNOWN);
+		super(AbstractSequence.computeLength(values));
 		this.values = values;
-		this.mapping = mapping;
-	}
-
-	protected MappedSequence(Collection<V> collection, Mapping<V, W> mapping) {
-		super(BigInteger.valueOf(collection.size()));
-		this.values = collection;
-		this.mapping = mapping;
-	}
-
-	protected MappedSequence(Sequence<V> sequence, Mapping<V, W> mapping) {
-		super(sequence.getLength());
-		this.values = sequence;
 		this.mapping = mapping;
 	}
 
@@ -116,7 +104,6 @@ public class MappedSequence<V, W>
 			}
 
 		};
-
 	}
 
 }

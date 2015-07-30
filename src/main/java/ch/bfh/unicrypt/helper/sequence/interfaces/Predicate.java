@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,60 +39,23 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence.interfaces;
 
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import java.math.BigInteger;
 
 /**
- *
- * @author rolfhaenni
+ * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
+ * type {@code W}. The main usage of this interface is in the class {@link IterableMapping}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the input value
+ * @see IterableMapping
  */
-public class IterableProductTest {
+public interface Predicate<V> {
 
-	@Test
-	public void testGeneralTest() {
-		IterableArray<Integer> it0 = IterableArray.getInstance();
-		IterableRange it1 = IterableRange.getInstance(0, 5);
-		IterableRange it2 = IterableRange.getInstance(0, 4);
-		IterableArray<Integer> it3 = IterableArray.getInstance(0, 1);
-		{
-			int counter = 0;
-			for (DenseArray<Integer> i : IterableProduct.<Integer>getInstance()) {
-				counter++;
-			}
-			assertEquals(1, counter);
-		}
-		{
-			int counter = 0;
-			for (DenseArray<Integer> i : IterableProduct.getInstance(it1, it2, it3)) {
-				counter++;
-			}
-			assertEquals(60, counter);
-		}
-		{
-			int counter = 0;
-			for (DenseArray<Integer> i : IterableProduct.getInstance(it0)) {
-				counter++;
-			}
-			assertEquals(0, counter);
-		}
-		{
-			int counter = 0;
-			for (DenseArray<Integer> i : IterableProduct.getInstance(it1, it0, it2)) {
-				counter++;
-			}
-			assertEquals(0, counter);
-		}
-		{
-			int counter = 0;
-			for (DenseArray<Integer> i : IterableProduct.getInstance(it0, it0, it0)) {
-				counter++;
-			}
-			assertEquals(0, counter);
-		}
+	public boolean check(V value);
 
-	}
+	public BigInteger getLength();
 
 }

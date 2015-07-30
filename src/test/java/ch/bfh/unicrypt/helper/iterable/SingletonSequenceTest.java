@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.iterable;
 
-import ch.bfh.unicrypt.helper.iterable.classes.SingletonSequence;
+import ch.bfh.unicrypt.helper.sequence.classes.SingletonSequence;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,23 +39,40 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable.interfaces;
+package ch.bfh.unicrypt.helper.sequence.interfaces;
 
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import java.math.BigInteger;
 
 /**
- * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
- * type {@code W}. The main usage of this interface is in the class {@link IterableMapping}.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @param <V> The generic type of the input value
- * @see IterableMapping
+ *
+ * @author rolfhaenni
+ * @param <V>
  */
-public interface Predicate<V> {
+public interface Sequence<V>
+	   extends Iterable<V> {
 
-	public boolean check(V value);
+	public static final BigInteger INFINITE = BigInteger.valueOf(-1);
+	public static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
+
+	public boolean isEmpty();
 
 	public BigInteger getLength();
+
+	public int count(Predicate<V> predicate);
+
+	public V select(Predicate<V> predicate);
+
+	public V select(Predicate<V> predicate, int n);
+
+	public <W> Sequence<W> map(Mapping<V, W> mapping);
+
+	public Sequence<V> filter(Predicate<V> predicate);
+
+	public Sequence<V> shorten(int n);
+
+	public Sequence<V> shorten(BigInteger n);
+
+	public Sequence<DenseArray<V>> group(int n);
 
 }

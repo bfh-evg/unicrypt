@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.iterable.IterableRange;
+import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -111,7 +111,7 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 
 	@Override
 	public final Iterable<Integer> getAllIndices() {
-		return IterableRange.getInstance(0, this.length - 1);
+		return IntegerSequence.getInstance(0, this.length - 1);
 	}
 
 	@Override

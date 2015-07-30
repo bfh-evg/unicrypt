@@ -39,9 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable.classes;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.helper.iterable.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -61,7 +61,7 @@ public class BigIntegerSequence
 	private final BigInteger from;
 	private final BigInteger to;
 
-	private BigIntegerSequence(BigInteger from, BigInteger to) {
+	protected BigIntegerSequence(BigInteger from, BigInteger to) {
 		super(MathUtil.ZERO.max(to.subtract(from).add(MathUtil.ONE)));
 		this.from = from;
 		this.to = to;

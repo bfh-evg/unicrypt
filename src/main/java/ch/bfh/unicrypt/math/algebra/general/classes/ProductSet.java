@@ -51,9 +51,9 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.iterable.IterableMapping;
-import ch.bfh.unicrypt.helper.iterable.IterableProduct;
-import ch.bfh.unicrypt.helper.iterable.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
+import ch.bfh.unicrypt.helper.sequence.classes.ProductSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -483,14 +483,14 @@ public class ProductSet
 
 	@Override
 	protected Iterator<Tuple> defaultGetIterator() {
-		return IterableMapping.getInstance(IterableProduct.getInstance(DenseArray.getInstance(IterableMapping.getInstance(this.sets, new Mapping<Set, Iterable<Element>>() {
+		return ProductSequence.getInstance(MappedSequence.getInstance(this.sets, new Mapping<Set, Iterable<Element>>() {
 
 			@Override
 			public Iterable<Element> map(Set set) {
 				return set.getElements();
 			}
 
-		}))), new Mapping<DenseArray<Element>, Tuple>() {
+		})).map(new Mapping<DenseArray<Element>, Tuple>() {
 
 			@Override
 			public Tuple map(DenseArray<Element> value) {

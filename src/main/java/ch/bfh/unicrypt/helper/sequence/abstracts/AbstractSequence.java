@@ -39,16 +39,20 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable.abstracts;
+package ch.bfh.unicrypt.helper.sequence.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
-import ch.bfh.unicrypt.helper.iterable.interfaces.Mapping;
-import ch.bfh.unicrypt.helper.iterable.interfaces.Predicate;
-import ch.bfh.unicrypt.helper.iterable.classes.FilteredSequence;
-import ch.bfh.unicrypt.helper.iterable.classes.MappedSequence;
-import ch.bfh.unicrypt.helper.iterable.classes.ShortenedSequence;
-import ch.bfh.unicrypt.helper.iterable.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
+import ch.bfh.unicrypt.helper.sequence.classes.FilteredSequence;
+import ch.bfh.unicrypt.helper.sequence.classes.GroupedSequence;
+import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
+import ch.bfh.unicrypt.helper.sequence.classes.ShortenedSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
+import java.util.Collection;
 
 /**
  *
@@ -138,11 +142,22 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
-	public final Sequence<Sequence<V>> group(int n) {
+	public final Sequence<DenseArray<V>> group(int n) {
 		if (n < 1) {
 			throw new IllegalArgumentException();
 		}
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return GroupedSequence.getInstance(this, n);
+	}
+
+	// helper method used to compute the length of something that is iterable
+	protected static <V> BigInteger computeLength(Iterable<V> values) {
+		if (values instanceof Sequence) {
+			return ((Sequence<V>) values).getLength();
+		}
+		if (values instanceof Collection) {
+			return BigInteger.valueOf(((Collection<V>) values).size());
+		}
+		return Sequence.UNKNOWN;
 	}
 
 }

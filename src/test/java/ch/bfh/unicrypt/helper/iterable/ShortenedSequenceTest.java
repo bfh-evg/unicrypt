@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.iterable;
 
-import ch.bfh.unicrypt.helper.iterable.classes.BigIntegerSequence;
-import ch.bfh.unicrypt.helper.iterable.classes.ShortenedSequence;
-import ch.bfh.unicrypt.helper.iterable.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.classes.BigIntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.classes.ShortenedSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -73,13 +73,12 @@ public class ShortenedSequenceTest {
 			for (BigInteger i : newSequence) {
 				counter++;
 			}
-//			assertEquals(1, counter);
+			assertEquals(1, counter);
 		}
 		{
 			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 10);
 			int counter = 0;
 			for (BigInteger i : newSequence) {
-				System.out.println(i);
 				counter++;
 			}
 			assertEquals(10, counter);

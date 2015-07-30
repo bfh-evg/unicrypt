@@ -39,66 +39,62 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.UniCrypt;
-import java.util.Arrays;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
- * This class is a wrapper class for Java arrays for making them iterable. It thus offers an inexpensive way of creating
- * (finite) iterators over arrays without copying the array elements to a collection. Note that instances of this class
- * are not safe against modifications of the original array after their construction. Also, they do not prevent the
- * original array from containing and the resulting iterators from returning the value {@code null}.
+ * Instances of this class offer an inexpensive way of creating iterators over a finite range of integers. If the upper
+ * bound of the range is smaller than the lower bound of the range, then the range is empty.
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @param <T> The generic type of the elements in the array
  */
-public class IterableArray<T>
-	   extends UniCrypt
-	   implements Iterable<T> {
+public class IntegerSequence
+	   extends AbstractSequence<Integer> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final T[] array;
+	private final int from;
+	private final int to;
 
-	private IterableArray(T[] array) {
-		this.array = array;
+	protected IntegerSequence(Integer from, Integer to) {
+		super(BigInteger.valueOf(Math.max(to - from + 1, 0)));
+		this.from = from;
+		this.to = to;
 	}
 
 	/**
-	 * Creates a new iterable array from a given Java array.
+	 * /**
+	 * Creates a new iterable range for given upper and lower integer bounds. The result is an empty range, if the upper
+	 * bound is smaller than the lower bound.
 	 * <p>
-	 * @param <T>   The generic type of the array
-	 * @param array The given array
-	 * @return The new iterable array
+	 * @param from The lower bound
+	 * @param to   The upper bound
+	 * @return The new iterable range
 	 */
-	public static <T> IterableArray<T> getInstance(T... array) {
-		if (array == null) {
-			throw new IllegalArgumentException();
-		}
-		return new IterableArray<>(array);
+	public static IntegerSequence getInstance(int from, int to) {
+		return new IntegerSequence(from, to);
 	}
 
 	@Override
-	public Iterator<T> iterator() {
-		return new Iterator<T>() {
-			private int pos = 0;
+	public Iterator<Integer> iterator() {
+		return new Iterator<Integer>() {
+			private int currentValue = from;
 
 			@Override
 			public boolean hasNext() {
-				return pos < array.length;
+				return this.currentValue <= to;
 			}
 
 			@Override
-			public T next() {
-				return array[pos++];
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
+			public Integer next() {
+				Integer value = currentValue;
+				this.currentValue = this.currentValue + 1;
+				return value;
 			}
 
 		};
@@ -106,8 +102,10 @@ public class IterableArray<T>
 
 	@Override
 	public int hashCode() {
-		int hash = 3;
-		return Arrays.hashCode(array);
+		int hash = 7;
+		hash = 41 * hash + this.getLength().intValue();
+		hash = 41 * hash + this.from;
+		return hash;
 	}
 
 	@Override
@@ -118,13 +116,22 @@ public class IterableArray<T>
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final IterableArray<?> other = (IterableArray<?>) obj;
-		return Arrays.equals(this.array, other.array);
+		final IntegerSequence other = (IntegerSequence) obj;
+		if (!this.getLength().equals(other.getLength())) {
+			return false;
+		}
+		if (this.getLength().signum() == 0) {
+			return true;
+		}
+		return (this.from == other.from);
 	}
 
 	@Override
 	protected String defaultToStringContent() {
-		return Arrays.toString(this.array);
+		if (this.isEmpty()) {
+			return "";
+		}
+		return this.from + "..." + this.to;
 	}
 
 }

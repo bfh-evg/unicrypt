@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable.interfaces;
+package ch.bfh.unicrypt.helper.sequence.interfaces;
 
 /**
  * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of

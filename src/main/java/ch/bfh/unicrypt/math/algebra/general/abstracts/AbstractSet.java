@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.iterable.IterablePrefix;
+import ch.bfh.unicrypt.helper.sequence.classes.ShortenedSequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -389,7 +389,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
-		return IterablePrefix.getInstance(new Iterable<E>() {
+		return ShortenedSequence.getInstance(new Iterable<E>() {
 
 			@Override
 			public Iterator<E> iterator() {

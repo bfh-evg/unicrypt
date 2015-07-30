@@ -39,9 +39,14 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.helper.iterable.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
+import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -51,51 +56,68 @@ import java.util.Iterator;
  * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the input iterable collection
- * @param <W> The generic type of this iterable collection
  * @see Mapping
  */
-public class IterableMapping<V, W>
-	   implements Iterable<W> {
+public class FilteredSequence<V>
+	   extends AbstractSequence<V>
+	   implements Sequence<V> {
 
 	final private Iterable<V> values;
-	final private Mapping<V, W> mapping;
+	final private Predicate<V> predicate;
 
-	protected IterableMapping(Iterable<V> values, Mapping<V, W> mapping) {
+	protected FilteredSequence(Iterable<V> values, Predicate<V> predicate) {
+		super(FilteredSequence.computeLength(values));
 		this.values = values;
-		this.mapping = mapping;
+		this.predicate = predicate;
+	}
+
+	protected static <V> BigInteger computeLength(Iterable<V> values) {
+		BigInteger length = AbstractSequence.computeLength(values);
+		if (length.signum() == 0) {
+			return length;
+		}
+		return Sequence.UNKNOWN;
 	}
 
 	/**
 	 * Returns a new instance of this class, which represents the iterable collection of values obtained by applying a
 	 * given mapping to the values of a given iterable collection.
 	 * <p>
-	 * @param <V>     The generic type of the input iterable collection
-	 * @param <W>     The generic type of the new iterable collection
-	 * @param values  The input iterable collection
-	 * @param mapping The mapping applied to the input values
+	 * @param <V>        The generic type of the input iterable collection
+	 * @param values     The input iterable collection
+	 * @param predictate The mapping applied to the input values
 	 * @return The new iterable collection of type {@code W}
 	 */
-	public static <V, W> IterableMapping<V, W> getInstance(Iterable<V> values, Mapping<V, W> mapping) {
-		if (values == null || mapping == null) {
+	public static <V> FilteredSequence<V> getInstance(Iterable<V> values, Predicate<V> predictate) {
+		if (values == null || predictate == null) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableMapping<>(values, mapping);
+		return new FilteredSequence<>(values, predictate);
 	}
 
 	@Override
-	public Iterator<W> iterator() {
-		return new Iterator<W>() {
+	public Iterator<V> iterator() {
+		return new Iterator<V>() {
 
 			private final Iterator<V> iterator = values.iterator();
+			V nextValue = null;
 
 			@Override
 			public boolean hasNext() {
-				return iterator.hasNext();
+				return nextValue != null;
 			}
 
 			@Override
-			public W next() {
-				return mapping.map(iterator.next());
+			public V next() {
+				V result = this.nextValue;
+				this.nextValue = null;
+				while (this.nextValue == null && this.iterator.hasNext()) {
+					V value = this.iterator.next();
+					if (predicate.check(value)) {
+						this.nextValue = value;
+					}
+				}
+				return result;
 			}
 
 		};

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.helper.iterable.IterableArray;
+import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -80,7 +80,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultMultiply(IterableArray.getInstance(elements));
+		return this.defaultMultiply(ArraySequence.getInstance(elements));
 	}
 
 	@Override

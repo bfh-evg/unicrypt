@@ -39,9 +39,10 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.util.Iterator;
 
 /**
@@ -62,9 +63,9 @@ import java.util.Iterator;
  * @author R. Haenni
  * @version 2.0
  */
-public class IterableString
-	   extends UniCrypt
-	   implements Iterable<String> {
+public class StringSequence
+	   extends AbstractSequence<String> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final String string;
@@ -77,14 +78,16 @@ public class IterableString
 	private final boolean escaped;
 	private char escapeChar;
 
-	private IterableString(String string, char separator) {
+	protected StringSequence(String string, char separator) {
+		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
 		this.nested = false;
 		this.escaped = false;
 	}
 
-	private IterableString(String string, char separator, char escapeChar) {
+	protected StringSequence(String string, char separator, char escapeChar) {
+		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
 		this.nested = false;
@@ -92,7 +95,8 @@ public class IterableString
 		this.escapeChar = escapeChar;
 	}
 
-	private IterableString(String string, char separator, char openingParentesis, char closingParenthesis) {
+	protected StringSequence(String string, char separator, char openingParentesis, char closingParenthesis) {
+		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
 		this.nested = true;
@@ -101,8 +105,8 @@ public class IterableString
 		this.escaped = false;
 	}
 
-	private IterableString(String string, char separator, char openingParentesis, char closingParenthesis,
-		   char escapeChar) {
+	protected StringSequence(String string, char separator, char openingParentesis, char closingParenthesis, char escapeChar) {
+		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
 		this.nested = true;
@@ -118,8 +122,8 @@ public class IterableString
 	 * @param string The given string
 	 * @return The new iterable string
 	 */
-	public static IterableString getInstance(String string) {
-		return IterableString.getInstance(string, '|', '\\');
+	public static StringSequence getInstance(String string) {
+		return StringSequence.getInstance(string, '|', '\\');
 	}
 
 	/**
@@ -129,11 +133,11 @@ public class IterableString
 	 * @param separator The given separation character
 	 * @return The new iterable string
 	 */
-	public static IterableString getInstance(String string, char separator) {
+	public static StringSequence getInstance(String string, char separator) {
 		if (string == null) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableString(string, separator);
+		return new StringSequence(string, separator);
 	}
 
 	/**
@@ -144,11 +148,11 @@ public class IterableString
 	 * @param escapeChar The escape character
 	 * @return The new iterable string
 	 */
-	public static IterableString getInstance(String string, char separator, char escapeChar) {
+	public static StringSequence getInstance(String string, char separator, char escapeChar) {
 		if (string == null || separator == escapeChar) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableString(string, separator, escapeChar);
+		return new StringSequence(string, separator, escapeChar);
 	}
 
 	/**
@@ -160,13 +164,13 @@ public class IterableString
 	 * @param closingParenthesis The given closing parenthesis
 	 * @return The new iterable string
 	 */
-	public static IterableString getInstance(String string, char separator, char openingParenthesis,
+	public static StringSequence getInstance(String string, char separator, char openingParenthesis,
 		   char closingParenthesis) {
 		if (string == null || separator == openingParenthesis || separator == closingParenthesis
 			   || openingParenthesis == closingParenthesis) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableString(string, separator, openingParenthesis, closingParenthesis);
+		return new StringSequence(string, separator, openingParenthesis, closingParenthesis);
 	}
 
 	/**
@@ -180,7 +184,7 @@ public class IterableString
 	 * @param escapeChar         The given escape character
 	 * @return The new iterable string
 	 */
-	public static IterableString getInstance(String string, char separator, char openingParenthesis,
+	public static StringSequence getInstance(String string, char separator, char openingParenthesis,
 		   char closingParenthesis, char escapeChar) {
 		if (string == null || separator == openingParenthesis || separator == closingParenthesis
 			   || separator == escapeChar
@@ -188,7 +192,7 @@ public class IterableString
 			   || closingParenthesis == escapeChar) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableString(string, separator, openingParenthesis, closingParenthesis, escapeChar);
+		return new StringSequence(string, separator, openingParenthesis, closingParenthesis, escapeChar);
 	}
 
 	private boolean isEscaped(int index) {
@@ -281,7 +285,7 @@ public class IterableString
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final IterableString other = (IterableString) obj;
+		final StringSequence other = (StringSequence) obj;
 		return this.string.equals(other.string) && this.separator == other.separator
 			   && this.openingParenthesis == other.openingParenthesis
 			   && this.closingParenthesis == other.closingParenthesis && this.escapeChar == other.escapeChar;

@@ -181,8 +181,7 @@ public interface Set<V extends Object> {
 
 	/**
 	 * Returns the set order. Since only non-empty sets are considered, the order is always greater than 0. If the set
-	 * order is unknown, {@link #UNKNOWN} is returned. If the set order is infinite, {@link #INFINITE} is
-	 * returned.
+	 * order is unknown, {@link #UNKNOWN} is returned. If the set order is infinite, {@link #INFINITE} is returned.
 	 * <p>
 	 * @see "Handbook of Applied Cryptography, Definition 2.163"
 	 * @return The set order

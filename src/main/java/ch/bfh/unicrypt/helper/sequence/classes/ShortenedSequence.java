@@ -39,10 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable.classes;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.helper.iterable.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.iterable.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -59,28 +60,17 @@ import java.util.Iterator;
 public class ShortenedSequence<V>
 	   extends AbstractSequence<V> {
 
-	private final Iterable<V> iterable;
+	private final Iterable<V> values;
 	private final BigInteger n;
 
-	protected ShortenedSequence(Iterable<V> iterable, BigInteger n) {
-		super(computeLength(Sequence.UNKNOWN, n));
-		this.iterable = iterable;
+	protected ShortenedSequence(Iterable<V> values, BigInteger n) {
+		super(ShortenedSequence.computeLength(values, n));
+		this.values = values;
 		this.n = n;
 	}
 
-	protected ShortenedSequence(Collection<V> collection, BigInteger n) {
-		super(computeLength(BigInteger.valueOf(collection.size()), n));
-		this.iterable = collection;
-		this.n = n;
-	}
-
-	protected ShortenedSequence(Sequence<V> sequence, BigInteger n) {
-		super(computeLength(sequence.getLength(), n));
-		this.iterable = sequence;
-		this.n = n;
-	}
-
-	private static BigInteger computeLength(BigInteger length, BigInteger n) {
+	protected static <V> BigInteger computeLength(Iterable<V> values, BigInteger n) {
+		BigInteger length = AbstractSequence.computeLength(values);
 		if (length.equals(Sequence.INFINITE) || n.signum() == 0) {
 			return n;
 		}
@@ -90,11 +80,29 @@ public class ShortenedSequence<V>
 		return length.min(n);
 	}
 
+	/**
+	 *
+	 * @param <V>    The generic type of the iterable collection
+	 * @param values The given iterable collection
+	 * @param n      The number of elements in the new iterable collection
+	 * @return The new iterable collection
+	 */
+	public static <V> ShortenedSequence<V> getInstance(Iterable<V> values, int n) {
+		return ShortenedSequence.getInstance(values, BigInteger.valueOf(n));
+	}
+
+	public static <V> ShortenedSequence<V> getInstance(Iterable<V> values, BigInteger n) {
+		if (values == null || n == null || n.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new ShortenedSequence<>(values, n);
+	}
+
 	@Override
 	public Iterator<V> iterator() {
 		return new Iterator<V>() {
 
-			private final Iterator<V> iterator = iterable.iterator();
+			private final Iterator<V> iterator = values.iterator();
 			private BigInteger counter = MathUtil.ZERO;
 
 			@Override
@@ -109,24 +117,6 @@ public class ShortenedSequence<V>
 			}
 
 		};
-	}
-
-	/**
-	 *
-	 * @param <V>      The generic type of the iterable collection
-	 * @param iterable The given iterable collection
-	 * @param n        The number of elements in the new iterable collection
-	 * @return The new iterable collection
-	 */
-	public static <V> ShortenedSequence<V> getInstance(Iterable<V> iterable, int n) {
-		return ShortenedSequence.getInstance(iterable, BigInteger.valueOf(n));
-	}
-
-	public static <V> ShortenedSequence<V> getInstance(Iterable<V> iterable, BigInteger n) {
-		if (iterable == null || n == null || n.signum() < 0) {
-			throw new IllegalArgumentException();
-		}
-		return new ShortenedSequence<>(iterable, n);
 	}
 
 }

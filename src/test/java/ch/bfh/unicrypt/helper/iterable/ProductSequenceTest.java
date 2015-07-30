@@ -39,39 +39,63 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable.interfaces;
+package ch.bfh.unicrypt.helper.iterable;
 
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.classes.ProductSequence;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
- * @param <V>
  */
-public interface Sequence<V>
-	   extends Iterable<V> {
+public class ProductSequenceTest {
 
-	public static final BigInteger INFINITE = BigInteger.valueOf(-1);
-	public static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
+	@Test
+	public void testGeneralTest() {
+		ArraySequence<Integer> it0 = ArraySequence.getInstance();
+		IntegerSequence it1 = IntegerSequence.getInstance(0, 5);
+		IntegerSequence it2 = IntegerSequence.getInstance(0, 4);
+		ArraySequence<Integer> it3 = ArraySequence.getInstance(0, 1);
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : ProductSequence.<Integer>getInstance()) {
+				counter++;
+			}
+			assertEquals(1, counter);
+		}
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : ProductSequence.getInstance(it1, it2, it3)) {
+				counter++;
+			}
+			assertEquals(60, counter);
+		}
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : ProductSequence.getInstance(it0)) {
+				counter++;
+			}
+			assertEquals(0, counter);
+		}
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : ProductSequence.getInstance(it1, it0, it2)) {
+				counter++;
+			}
+			assertEquals(0, counter);
+		}
+		{
+			int counter = 0;
+			for (DenseArray<Integer> i : ProductSequence.getInstance(it0, it0, it0)) {
+				counter++;
+			}
+			assertEquals(0, counter);
+		}
 
-	public boolean isEmpty();
-
-	public BigInteger getLength();
-
-	public int count(Predicate<V> predicate);
-
-	public V select(Predicate<V> predicate);
-
-	public V select(Predicate<V> predicate, int n);
-
-	public <W> Sequence<W> map(Mapping<V, W> mapping);
-
-	public Sequence<V> filter(Predicate<V> predicate);
-
-	public Sequence<V> shorten(int n);
-
-	public Sequence<V> shorten(BigInteger n);
-
-	public Sequence<Sequence<V>> group(int n);
+	}
 
 }

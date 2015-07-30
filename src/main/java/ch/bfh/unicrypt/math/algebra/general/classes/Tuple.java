@@ -49,8 +49,8 @@ import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.iterable.IterableMapping;
-import ch.bfh.unicrypt.helper.iterable.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -258,7 +258,7 @@ public class Tuple
 
 	@Override
 	protected final <W> Tree<W> defaultConvertTo(final ConvertMethod<W> convertMethod) {
-		Iterable<Tree<W>> stringTrees = IterableMapping.getInstance(this, new Mapping<Element, Tree<W>>() {
+		Iterable<Tree<W>> stringTrees = MappedSequence.getInstance(this, new Mapping<Element, Tree<W>>() {
 
 			@Override
 			public Tree<W> map(Element element) {

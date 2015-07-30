@@ -39,12 +39,12 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable.classes;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.iterable.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.iterable.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -73,26 +73,14 @@ public class ProductSequence<V>
 
 	// the general case of the recursion
 	protected ProductSequence(Iterable<V> values, ProductSequence<V> productSequence) {
-		super(computeLength(Sequence.UNKNOWN, productSequence.getLength()));
+		super(ProductSequence.computeLength(values, productSequence));
 		this.values = values;
 		this.productSequence = productSequence;
 	}
 
-	// the general case of the recursion for a collection
-	protected ProductSequence(Collection<V> collection, ProductSequence<V> productSequence) {
-		super(computeLength(BigInteger.valueOf(collection.size()), productSequence.getLength()));
-		this.values = collection;
-		this.productSequence = productSequence;
-	}
-
-	// the general case of the recursion for a collection
-	protected ProductSequence(Sequence<V> sequence, ProductSequence<V> productSequence) {
-		super(computeLength(sequence.getLength(), productSequence.getLength()));
-		this.values = sequence;
-		this.productSequence = productSequence;
-	}
-
-	private static BigInteger computeLength(BigInteger length1, BigInteger length2) {
+	protected static <V> BigInteger computeLength(Iterable<V> values, ProductSequence<V> productSequence) {
+		BigInteger length1 = AbstractSequence.computeLength(values);
+		BigInteger length2 = AbstractSequence.computeLength(productSequence);
 		if (length1.equals(Sequence.INFINITE) || length2.equals(Sequence.INFINITE)) {
 			return Sequence.INFINITE;
 		}

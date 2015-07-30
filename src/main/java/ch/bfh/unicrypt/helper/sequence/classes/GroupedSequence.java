@@ -1,7 +1,7 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
  *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
@@ -39,58 +39,74 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
+import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Instances of this class offer a simple way of creating iterators over a single value.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @param <V> The generic type of the value and the iterator
+ *
+ * @author rolfhaenni
+ * @param <V>
  */
-public class IterableValue<V>
-	   implements Iterable<V> {
+public class GroupedSequence<V>
+	   extends AbstractSequence<DenseArray<V>> {
 
-	private final V value;
+	private final Iterable<V> values;
+	private final int n;
 
-	private IterableValue(V value) {
-		this.value = value;
+	protected GroupedSequence(Iterable<V> values, int n) {
+		super(GroupedSequence.computeLength(values, n));
+		this.values = values;
+		this.n = n;
 	}
 
-	/**
-	 * Return a new iterator which iterates over the given single value.
-	 * <p>
-	 * @param <V>   The generic type of the value and the resulting iterator
-	 * @param value The given value
-	 * @return The iterator over the given value
-	 */
-	public static <V> IterableValue<V> getInstance(V value) {
-		return new IterableValue<>(value);
+	protected static <V> BigInteger computeLength(Iterable<V> values, int n) {
+		BigInteger length = AbstractSequence.computeLength(values);
+		if (length.equals(Sequence.INFINITE)) {
+			return Sequence.INFINITE;
+		}
+		if (length.equals(Sequence.UNKNOWN)) {
+			return Sequence.UNKNOWN;
+		}
+		return MathUtil.divideUp(length, BigInteger.valueOf(n));
+	}
+
+	public static <V> GroupedSequence<V> getInstance(Iterable<V> values, int n) {
+		if (values == null || n < 1) {
+			throw new IllegalArgumentException();
+		}
+		return new GroupedSequence<>(values, n);
 	}
 
 	@Override
-	public Iterator<V> iterator() {
-		return new Iterator<V>() {
+	public Iterator<DenseArray<V>> iterator() {
+		return new Iterator<DenseArray<V>>() {
 
-			private boolean next = true;
+			private final Iterator<V> iterator = values.iterator();
 
 			@Override
 			public boolean hasNext() {
-				return this.next;
+				return this.iterator.hasNext();
 			}
 
 			@Override
-			public V next() {
-				next = false;
-				return value;
+			public DenseArray<V> next() {
+				int i = 0;
+				DenseArray<V> result = DenseArray.getInstance();
+				while (i < n && this.iterator.hasNext()) {
+					result = result.add(this.iterator.next());
+					i++;
+				}
+				return result;
 			}
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
 		};
 	}
 

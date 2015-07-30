@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.iterable.IterableValue;
+import ch.bfh.unicrypt.helper.sequence.classes.SingletonSequence;
 import java.util.Iterator;
 
 /**
@@ -76,7 +76,7 @@ public class Leaf<V>
 
 	@Override
 	public Iterator<V> iterator() {
-		return IterableValue.getInstance(this.value).iterator();
+		return SingletonSequence.getInstance(this.value).iterator();
 	}
 
 	@Override

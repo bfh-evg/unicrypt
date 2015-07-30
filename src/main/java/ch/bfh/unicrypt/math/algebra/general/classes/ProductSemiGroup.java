@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.iterable.IterableArray;
+import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -55,6 +55,7 @@ import java.math.BigInteger;
 public class ProductSemiGroup
 	   extends ProductSet
 	   implements SemiGroup<DenseArray<Element>> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected ProductSemiGroup(DenseArray<Set> sets) {
@@ -169,7 +170,7 @@ public class ProductSemiGroup
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultApply(IterableArray.getInstance(elements));
+		return this.defaultApply(ArraySequence.getInstance(elements));
 	}
 
 	@Override

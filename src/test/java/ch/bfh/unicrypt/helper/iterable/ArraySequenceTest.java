@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.iterable;
 
-import ch.bfh.unicrypt.helper.iterable.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

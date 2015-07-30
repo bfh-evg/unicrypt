@@ -696,6 +696,17 @@ public final class MathUtil {
 	}
 
 	/**
+	 * Computes the quotient of the Euclidean division applied to two (positive or negative) BigIntger values.
+	 * <p>
+	 * @param x The given dividend
+	 * @param y The given divisor
+	 * @return The quotient of the Euclidean division
+	 */
+	public static BigInteger divide(BigInteger x, BigInteger y) {
+		return x.subtract(x.mod(y)).divide(y);
+	}
+
+	/**
 	 * Computes the quotient of two (positive or negative) integers and rounds up the result to the next integer.
 	 * <p>
 	 * @param x The given dividend
@@ -707,6 +718,21 @@ public final class MathUtil {
 			return divideUp(-x, -y);
 		}
 		return divide(x + y - 1, y);
+	}
+
+	/**
+	 * Computes the quotient of two (positive or negative) integers and rounds up the result to the next BigInteger
+	 * value.
+	 * <p>
+	 * @param x The given dividend
+	 * @param y The given divisor
+	 * @return The quotient rounded up to the next integer
+	 */
+	public static BigInteger divideUp(BigInteger x, BigInteger y) {
+		if (y.signum() < 0) {
+			return divideUp(x.negate(), y.negate());
+		}
+		return divide(x.add(y).subtract(ONE), y);
 	}
 
 }

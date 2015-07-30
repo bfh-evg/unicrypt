@@ -1,7 +1,7 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
@@ -39,64 +39,62 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.util.Iterator;
 
 /**
- * This generic class selects the first {@code n} elements (prefix) from a given iterable collection of values of type
- * {@code V}. The result is a new iterable collection of values of type {@code V}.
+ * Instances of this class offer a simple way of creating iterators over a single value.
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @param <V> The generic type of the iterable collection
+ * @param <V> The generic type of the value and the iterator
  */
-public class IterablePrefix<V>
-	   extends UniCrypt
-	   implements Iterable<V> {
+public class SingletonSequence<V>
+	   extends AbstractSequence<V> {
 
-	private final Iterable<V> iterable;
-	private final int maxCounter;
+	private final V value;
 
-	protected IterablePrefix(Iterable<V> iterable, int maxCounter) {
-		this.maxCounter = maxCounter;
-		this.iterable = iterable;
+	protected SingletonSequence(V value) {
+		super(MathUtil.ONE);
+		this.value = value;
+	}
+
+	/**
+	 * Return a new iterator which iterates over the given single value.
+	 * <p>
+	 * @param <V>   The generic type of the value and the resulting iterator
+	 * @param value The given value
+	 * @return The iterator over the given value
+	 */
+	public static <V> SingletonSequence<V> getInstance(V value) {
+		return new SingletonSequence<>(value);
 	}
 
 	@Override
 	public Iterator<V> iterator() {
 		return new Iterator<V>() {
 
-			private final Iterator<V> iterator = iterable.iterator();
-			private int counter = 0;
+			private boolean next = true;
 
 			@Override
 			public boolean hasNext() {
-				return this.counter < maxCounter && this.iterator.hasNext();
+				return this.next;
 			}
 
 			@Override
 			public V next() {
-				this.counter = this.counter + 1;
-				return this.iterator.next();
+				next = false;
+				return value;
 			}
 
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
 		};
-	}
-
-	/**
-	 *
-	 * @param <V>      The generic type of the iterable collection
-	 * @param iterable The given iterable collection
-	 * @param n        The number of elements in the new iterable collection
-	 * @return The new iterable collection
-	 */
-	public static <V> IterablePrefix<V> getInstance(Iterable<V> iterable, int n) {
-		if (iterable == null || n < 0) {
-			throw new IllegalArgumentException();
-		}
-		return new IterablePrefix<>(iterable, n);
 	}
 
 }
