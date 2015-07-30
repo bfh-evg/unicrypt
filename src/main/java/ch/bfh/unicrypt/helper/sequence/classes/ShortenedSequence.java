@@ -41,12 +41,10 @@
  */
 package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -64,20 +62,8 @@ public class ShortenedSequence<V>
 	private final BigInteger n;
 
 	protected ShortenedSequence(Iterable<V> values, BigInteger n) {
-		super(ShortenedSequence.computeLength(values, n));
 		this.values = values;
 		this.n = n;
-	}
-
-	protected static <V> BigInteger computeLength(Iterable<V> values, BigInteger n) {
-		BigInteger length = AbstractSequence.computeLength(values);
-		if (length.equals(Sequence.INFINITE) || n.signum() == 0) {
-			return n;
-		}
-		if (length.equals(Sequence.UNKNOWN)) {
-			return Sequence.UNKNOWN;
-		}
-		return length.min(n);
 	}
 
 	/**
@@ -117,6 +103,18 @@ public class ShortenedSequence<V>
 			}
 
 		};
+	}
+
+	@Override
+	protected BigInteger abstractGetLength() {
+		BigInteger length = AbstractSequence.computeLength(this.values);
+		if (length.equals(Sequence.INFINITE) || this.n.signum() == 0) {
+			return this.n;
+		}
+		if (length.equals(Sequence.UNKNOWN)) {
+			return Sequence.UNKNOWN;
+		}
+		return length.min(this.n);
 	}
 
 }

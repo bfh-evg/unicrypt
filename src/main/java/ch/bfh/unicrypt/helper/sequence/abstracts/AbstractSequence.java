@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.sequence.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
 import ch.bfh.unicrypt.helper.sequence.classes.FilteredSequence;
@@ -63,11 +62,7 @@ public abstract class AbstractSequence<V>
 	   extends UniCrypt
 	   implements Sequence<V> {
 
-	private final BigInteger length;
-
-	protected AbstractSequence(BigInteger length) {
-		this.length = length;
-	}
+	private BigInteger length;
 
 	@Override
 	public final boolean isEmpty() {
@@ -76,6 +71,9 @@ public abstract class AbstractSequence<V>
 
 	@Override
 	public final BigInteger getLength() {
+		if (this.length == null) {
+			this.length = this.abstractGetLength();
+		}
 		return this.length;
 	}
 
@@ -159,5 +157,7 @@ public abstract class AbstractSequence<V>
 		}
 		return Sequence.UNKNOWN;
 	}
+
+	protected abstract BigInteger abstractGetLength();
 
 }

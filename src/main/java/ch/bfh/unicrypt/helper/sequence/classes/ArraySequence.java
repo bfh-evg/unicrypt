@@ -62,7 +62,6 @@ public class ArraySequence<V>
 	private final V[] array;
 
 	protected ArraySequence(V[] array) {
-		super(BigInteger.valueOf(array.length));
 		this.array = array;
 	}
 
@@ -119,6 +118,11 @@ public class ArraySequence<V>
 	@Override
 	protected String defaultToStringContent() {
 		return Arrays.toString(this.array);
+	}
+
+	@Override
+	protected BigInteger abstractGetLength() {
+		return BigInteger.valueOf(this.array.length);
 	}
 
 }

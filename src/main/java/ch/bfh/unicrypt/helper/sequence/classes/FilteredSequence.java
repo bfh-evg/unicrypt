@@ -42,11 +42,10 @@
 package ch.bfh.unicrypt.helper.sequence.classes;
 
 import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -59,24 +58,14 @@ import java.util.Iterator;
  * @see Mapping
  */
 public class FilteredSequence<V>
-	   extends AbstractSequence<V>
-	   implements Sequence<V> {
+	   extends AbstractSequence<V> {
 
 	final private Iterable<V> values;
 	final private Predicate<V> predicate;
 
 	protected FilteredSequence(Iterable<V> values, Predicate<V> predicate) {
-		super(FilteredSequence.computeLength(values));
 		this.values = values;
 		this.predicate = predicate;
-	}
-
-	protected static <V> BigInteger computeLength(Iterable<V> values) {
-		BigInteger length = AbstractSequence.computeLength(values);
-		if (length.signum() == 0) {
-			return length;
-		}
-		return Sequence.UNKNOWN;
 	}
 
 	/**
@@ -122,6 +111,15 @@ public class FilteredSequence<V>
 
 		};
 
+	}
+
+	@Override
+	protected BigInteger abstractGetLength() {
+		BigInteger length = AbstractSequence.computeLength(this.values);
+		if (length.signum() == 0) {
+			return length;
+		}
+		return Sequence.UNKNOWN;
 	}
 
 }

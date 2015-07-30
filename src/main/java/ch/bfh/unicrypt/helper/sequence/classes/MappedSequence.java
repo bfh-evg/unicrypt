@@ -43,9 +43,7 @@ package ch.bfh.unicrypt.helper.sequence.classes;
 
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -65,7 +63,6 @@ public class MappedSequence<V, W>
 	final private Mapping<V, W> mapping;
 
 	protected MappedSequence(Iterable<V> values, Mapping<V, W> mapping) {
-		super(AbstractSequence.computeLength(values));
 		this.values = values;
 		this.mapping = mapping;
 	}
@@ -104,6 +101,11 @@ public class MappedSequence<V, W>
 			}
 
 		};
+	}
+
+	@Override
+	protected BigInteger abstractGetLength() {
+		return AbstractSequence.computeLength(this.values);
 	}
 
 }

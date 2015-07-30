@@ -43,11 +43,10 @@ package ch.bfh.unicrypt.helper.sequence.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -66,28 +65,14 @@ public class ProductSequence<V>
 
 	// the base case of the recursion
 	protected ProductSequence() {
-		super(MathUtil.ONE);
 		this.values = null;
 		this.productSequence = null;
 	}
 
 	// the general case of the recursion
 	protected ProductSequence(Iterable<V> values, ProductSequence<V> productSequence) {
-		super(ProductSequence.computeLength(values, productSequence));
 		this.values = values;
 		this.productSequence = productSequence;
-	}
-
-	protected static <V> BigInteger computeLength(Iterable<V> values, ProductSequence<V> productSequence) {
-		BigInteger length1 = AbstractSequence.computeLength(values);
-		BigInteger length2 = AbstractSequence.computeLength(productSequence);
-		if (length1.equals(Sequence.INFINITE) || length2.equals(Sequence.INFINITE)) {
-			return Sequence.INFINITE;
-		}
-		if (length1.equals(Sequence.UNKNOWN) || length2.equals(Sequence.UNKNOWN)) {
-			return Sequence.UNKNOWN;
-		}
-		return length1.multiply(length2);
 	}
 
 	@Override
@@ -174,6 +159,22 @@ public class ProductSequence<V>
 		}
 		Iterable<V> values = denseArray.getFirst();
 		return new ProductSequence<>(values, ProductSequence.getInstance(denseArray.removeFirst()));
+	}
+
+	@Override
+	protected BigInteger abstractGetLength() {
+		if (this.values == null) {
+			return MathUtil.ONE;
+		}
+		BigInteger length1 = AbstractSequence.computeLength(this.values);
+		BigInteger length2 = AbstractSequence.computeLength(this.productSequence);
+		if (length1.equals(Sequence.INFINITE) || length2.equals(Sequence.INFINITE)) {
+			return Sequence.INFINITE;
+		}
+		if (length1.equals(Sequence.UNKNOWN) || length2.equals(Sequence.UNKNOWN)) {
+			return Sequence.UNKNOWN;
+		}
+		return length1.multiply(length2);
 	}
 
 }

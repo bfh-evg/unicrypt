@@ -41,8 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.sequence.classes;
 
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
@@ -58,7 +59,6 @@ public class SingletonSequence<V>
 	private final V value;
 
 	protected SingletonSequence(V value) {
-		super(MathUtil.ONE);
 		this.value = value;
 	}
 
@@ -95,6 +95,11 @@ public class SingletonSequence<V>
 				throw new UnsupportedOperationException();
 			}
 		};
+	}
+
+	@Override
+	protected BigInteger abstractGetLength() {
+		return MathUtil.ONE;
 	}
 
 }

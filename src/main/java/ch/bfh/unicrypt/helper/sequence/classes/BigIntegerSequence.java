@@ -62,7 +62,6 @@ public class BigIntegerSequence
 	private final BigInteger to;
 
 	protected BigIntegerSequence(BigInteger from, BigInteger to) {
-		super(MathUtil.ZERO.max(to.subtract(from).add(MathUtil.ONE)));
 		this.from = from;
 		this.to = to;
 	}
@@ -151,6 +150,11 @@ public class BigIntegerSequence
 			return "";
 		}
 		return this.from + "..." + this.to;
+	}
+
+	@Override
+	protected BigInteger abstractGetLength() {
+		return MathUtil.ZERO.max(this.to.subtract(this.from).add(MathUtil.ONE));
 	}
 
 }
