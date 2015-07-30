@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -73,8 +75,19 @@ public class Subset
 	}
 
 	@Override
-	protected Iterator<Element<Object>> defaultGetIterator() {
-		return this.elementSet.iterator();
+	protected Sequence<Element<Object>> defaultGetElements() {
+		return new AbstractSequence<Element<Object>>() {
+
+			@Override
+			protected BigInteger abstractGetLength() {
+				return BigInteger.valueOf(elementSet.size());
+			}
+
+			@Override
+			public Iterator<Element<Object>> iterator() {
+				return elementSet.iterator();
+			}
+		};
 	}
 
 	@Override

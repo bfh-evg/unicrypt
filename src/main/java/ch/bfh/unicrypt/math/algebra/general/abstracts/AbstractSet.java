@@ -49,7 +49,8 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.sequence.classes.ShortenedSequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -373,30 +374,16 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final Iterable<E> getElements() {
-		return new Iterable<E>() {
-
-			@Override
-			public Iterator<E> iterator() {
-				return defaultGetIterator();
-			}
-
-		};
+	public final Sequence<E> getElements() {
+		return this.defaultGetElements();
 	}
 
 	@Override
-	public final Iterable<E> getElements(final int n) {
+	public final Sequence<E> getElements(final int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
-		return ShortenedSequence.getInstance(new Iterable<E>() {
-
-			@Override
-			public Iterator<E> iterator() {
-				return defaultGetIterator();
-			}
-
-		}, n);
+		return this.getElements().shorten(n);
 	}
 
 	@Override
@@ -523,27 +510,39 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	// some sets allow a more efficient itertation method than this one
-	protected Iterator<E> defaultGetIterator() {
+	protected Sequence<E> defaultGetElements() {
 		final AbstractSet<E, V> set = this;
-		return new Iterator<E>() {
-			private BigInteger counter = BigInteger.ZERO;
-			private BigInteger currentValue = BigInteger.ZERO;
+		return new AbstractSequence<E>() {
 
 			@Override
-			public boolean hasNext() {
-				return !set.isFinite() || this.counter.compareTo(set.getOrderLowerBound()) < 0;
+			public Iterator<E> iterator() {
+				return new Iterator<E>() {
+					private BigInteger counter = BigInteger.ZERO;
+					private BigInteger currentValue = BigInteger.ZERO;
+
+					@Override
+					public boolean hasNext() {
+						return !set.isFinite() || this.counter.compareTo(set.getOrderLowerBound()) < 0;
+					}
+
+					@Override
+					public E next() {
+						E element = set.getElementFrom(this.currentValue);
+						while (element == null) {
+							this.currentValue = this.currentValue.add(BigInteger.ONE);
+							element = set.getElementFrom(this.currentValue);
+						}
+						this.counter = this.counter.add(BigInteger.ONE);
+						this.currentValue = this.currentValue.add(BigInteger.ONE);
+						return element;
+					}
+
+				};
 			}
 
 			@Override
-			public E next() {
-				E element = set.getElementFrom(this.currentValue);
-				while (element == null) {
-					this.currentValue = this.currentValue.add(BigInteger.ONE);
-					element = set.getElementFrom(this.currentValue);
-				}
-				this.counter = this.counter.add(BigInteger.ONE);
-				this.currentValue = this.currentValue.add(BigInteger.ONE);
-				return element;
+			protected BigInteger abstractGetLength() {
+				return set.getOrder();
 			}
 
 		};

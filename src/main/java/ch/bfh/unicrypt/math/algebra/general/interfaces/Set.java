@@ -45,9 +45,16 @@ import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
+import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
+import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
@@ -305,7 +312,7 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @return An iterable collection of all elements
 	 */
-	public Iterable<? extends Element<V>> getElements();
+	public Sequence<? extends Element<V>> getElements();
 
 	/**
 	 * Returns an iterable collection of some elements from this set. The maximal number of elements in the iterable
@@ -314,7 +321,7 @@ public interface Set<V extends Object> {
 	 * @param n The number of element in the resulting iterable collection
 	 * @return An iterable collection
 	 */
-	public Iterable<? extends Element<V>> getElements(int n);
+	public Sequence<? extends Element<V>> getElements(int n);
 
 	/**
 	 * Returns the class of the values representing the elements of this set.

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -159,33 +161,44 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 		return this.defaultGetRandomGenerator(referenceRandomByteSequence);
 	}
 
-	@Override
-	protected Iterator<E> defaultGetIterator() {
+	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicRing<E, V> set = this;
-		return new Iterator<E>() {
-			private BigInteger counter = BigInteger.ZERO;
-			private E currentElement = set.getIdentityElement();
+		return new AbstractSequence<E>() {
 
 			@Override
-			public boolean hasNext() {
-				return !set.isFinite() || this.counter.compareTo(set.getOrderLowerBound()) < 0;
+			public Iterator<E> iterator() {
+				return new Iterator<E>() {
+					private BigInteger counter = BigInteger.ZERO;
+					private E currentElement = set.getIdentityElement();
+
+					@Override
+					public boolean hasNext() {
+						return !set.isFinite() || this.counter.compareTo(set.getOrderLowerBound()) < 0;
+					}
+
+					@Override
+					public E next() {
+						if (this.hasNext()) {
+							this.counter = this.counter.add(BigInteger.ONE);
+							E nextElement = this.currentElement;
+							this.currentElement = set.apply(this.currentElement, set.getDefaultGenerator());
+							return nextElement;
+						}
+						throw new NoSuchElementException();
+					}
+
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+				};
 			}
 
 			@Override
-			public E next() {
-				if (this.hasNext()) {
-					this.counter = this.counter.add(BigInteger.ONE);
-					E nextElement = this.currentElement;
-					this.currentElement = set.apply(this.currentElement, set.getDefaultGenerator());
-					return nextElement;
-				}
-				throw new NoSuchElementException();
+			protected BigInteger abstractGetLength() {
+				return set.getOrder();
 			}
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
 		};
 	}
 

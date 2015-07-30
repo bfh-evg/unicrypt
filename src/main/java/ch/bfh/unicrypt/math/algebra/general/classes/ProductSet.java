@@ -54,6 +54,7 @@ import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
 import ch.bfh.unicrypt.helper.sequence.classes.ProductSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -482,11 +483,11 @@ public class ProductSet
 	}
 
 	@Override
-	protected Iterator<Tuple> defaultGetIterator() {
-		return ProductSequence.getInstance(MappedSequence.getInstance(this.sets, new Mapping<Set, Iterable<Element>>() {
+	protected Sequence<Tuple> defaultGetElements() {
+		return ProductSequence.getInstance(MappedSequence.getInstance(this.sets, new Mapping<Set, Sequence<Element>>() {
 
 			@Override
-			public Iterable<Element> map(Set set) {
+			public Sequence<Element> map(Set set) {
 				return set.getElements();
 			}
 
@@ -497,7 +498,7 @@ public class ProductSet
 				return Tuple.getInstance(value);
 			}
 
-		}).iterator();
+		});
 	}
 
 	@Override
