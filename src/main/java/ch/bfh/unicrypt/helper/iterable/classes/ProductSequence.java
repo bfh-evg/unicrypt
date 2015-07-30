@@ -180,12 +180,12 @@ public class ProductSequence<V>
 		if (iterables == null) {
 			throw new IllegalArgumentException();
 		}
-		ImmutableArray<? extends Iterable<V>> array = DenseArray.getInstance(iterables);
-		if (array.isEmpty()) {
+		ImmutableArray<? extends Iterable<V>> denseArray = DenseArray.getInstance(iterables);
+		if (denseArray.isEmpty()) {
 			return new ProductSequence<>();
 		}
-		Iterable<V> iterable = array.getFirst();
-		return new ProductSequence<>(iterable, ProductSequence.getInstance(array.removeFirst()));
+		Iterable<V> values = denseArray.getFirst();
+		return new ProductSequence<>(values, ProductSequence.getInstance(denseArray.removeFirst()));
 	}
 
 }
