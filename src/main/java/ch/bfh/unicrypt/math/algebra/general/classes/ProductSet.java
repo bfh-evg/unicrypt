@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.iterable.IterableMapping;
 import ch.bfh.unicrypt.helper.iterable.IterableProduct;
-import ch.bfh.unicrypt.helper.iterable.Mapping;
+import ch.bfh.unicrypt.helper.iterable.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
@@ -135,10 +135,10 @@ public class ProductSet
 		BigInteger result = BigInteger.ONE;
 		for (Set set : this.sets) {
 			if (!set.isFinite()) {
-				return Set.INFINITE_ORDER;
+				return Set.INFINITE;
 			}
-			if (!set.hasKnownOrder() || result.equals(Set.UNKNOWN_ORDER)) {
-				result = Set.UNKNOWN_ORDER;
+			if (!set.hasKnownOrder() || result.equals(Set.UNKNOWN)) {
+				result = Set.UNKNOWN;
 			} else {
 				result = result.multiply(set.getOrder());
 			}
@@ -389,6 +389,16 @@ public class ProductSet
 	}
 
 	@Override
+	public ProductSet removeFirst() {
+		return ProductSet.getInstance(this.sets.removeFirst());
+	}
+
+	@Override
+	public ProductSet removeLast() {
+		return ProductSet.getInstance(this.sets.removeLast());
+	}
+
+	@Override
 	public ProductSet insertAt(int index, Set set) {
 		return ProductSet.getInstance(this.sets.insertAt(index, set));
 	}
@@ -447,8 +457,8 @@ public class ProductSet
 		}
 		BigInteger result = BigInteger.ONE;
 		for (Set set : this.sets) {
-			if (set.getOrderUpperBound().equals(Set.INFINITE_ORDER)) {
-				return Set.INFINITE_ORDER;
+			if (set.getOrderUpperBound().equals(Set.INFINITE)) {
+				return Set.INFINITE;
 			}
 			result = result.multiply(set.getOrderUpperBound());
 		}

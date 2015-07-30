@@ -39,9 +39,13 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.iterable.classes;
 
 import ch.bfh.unicrypt.helper.iterable.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.iterable.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.iterable.interfaces.Sequence;
+import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -54,14 +58,27 @@ import java.util.Iterator;
  * @param <W> The generic type of this iterable collection
  * @see Mapping
  */
-public class IterableMapping<V, W>
-	   implements Iterable<W> {
+public class MappedSequence<V, W>
+	   extends AbstractSequence<W> {
 
 	final private Iterable<V> values;
 	final private Mapping<V, W> mapping;
 
-	protected IterableMapping(Iterable<V> values, Mapping<V, W> mapping) {
+	protected MappedSequence(Iterable<V> values, Mapping<V, W> mapping) {
+		super(Sequence.UNKNOWN);
 		this.values = values;
+		this.mapping = mapping;
+	}
+
+	protected MappedSequence(Collection<V> collection, Mapping<V, W> mapping) {
+		super(BigInteger.valueOf(collection.size()));
+		this.values = collection;
+		this.mapping = mapping;
+	}
+
+	protected MappedSequence(Sequence<V> sequence, Mapping<V, W> mapping) {
+		super(sequence.getLength());
+		this.values = sequence;
 		this.mapping = mapping;
 	}
 
@@ -75,11 +92,11 @@ public class IterableMapping<V, W>
 	 * @param mapping The mapping applied to the input values
 	 * @return The new iterable collection of type {@code W}
 	 */
-	public static <V, W> IterableMapping<V, W> getInstance(Iterable<V> values, Mapping<V, W> mapping) {
+	public static <V, W> MappedSequence<V, W> getInstance(Iterable<V> values, Mapping<V, W> mapping) {
 		if (values == null || mapping == null) {
 			throw new IllegalArgumentException();
 		}
-		return new IterableMapping<>(values, mapping);
+		return new MappedSequence<>(values, mapping);
 	}
 
 	@Override
@@ -90,12 +107,12 @@ public class IterableMapping<V, W>
 
 			@Override
 			public boolean hasNext() {
-				return iterator.hasNext();
+				return this.iterator.hasNext();
 			}
 
 			@Override
 			public W next() {
-				return mapping.map(iterator.next());
+				return mapping.map(this.iterator.next());
 			}
 
 		};

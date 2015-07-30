@@ -79,12 +79,12 @@ public interface Set<V extends Object> {
 	/**
 	 * A constant value representing an infinite order.
 	 */
-	public static final BigInteger INFINITE_ORDER = BigInteger.valueOf(-1);
+	public static final BigInteger INFINITE = BigInteger.valueOf(-1);
 
 	/**
 	 * A constant value representing an unknown order.
 	 */
-	public static final BigInteger UNKNOWN_ORDER = BigInteger.valueOf(-2);
+	public static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
 
 	/**
 	 * Returns {@code true}, if this set is an instance of {@link SemiGroup}.
@@ -181,7 +181,7 @@ public interface Set<V extends Object> {
 
 	/**
 	 * Returns the set order. Since only non-empty sets are considered, the order is always greater than 0. If the set
-	 * order is unknown, {@link #UNKNOWN_ORDER} is returned. If the set order is infinite, {@link #INFINITE_ORDER} is
+	 * order is unknown, {@link #UNKNOWN} is returned. If the set order is infinite, {@link #INFINITE} is
 	 * returned.
 	 * <p>
 	 * @see "Handbook of Applied Cryptography, Definition 2.163"
@@ -203,7 +203,7 @@ public interface Set<V extends Object> {
 
 	/**
 	 * Returns an upper bound for the set order in case the exact set order is unknown. The highest return value is
-	 * {@link #INFINITE_ORDER}. If the exact set order is known (or infinite), the exact set order is returned.
+	 * {@link #INFINITE}. If the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
 	 * @return An upper bound for the set order
 	 * @see getOrder()

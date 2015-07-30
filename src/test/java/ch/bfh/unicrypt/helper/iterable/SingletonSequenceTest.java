@@ -1,7 +1,7 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
@@ -41,77 +41,25 @@
  */
 package ch.bfh.unicrypt.helper.iterable;
 
-import static org.junit.Assert.assertEquals;
+import ch.bfh.unicrypt.helper.iterable.classes.SingletonSequence;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class IterablePrefixTest {
+public class SingletonSequenceTest {
 
 	@Test
-	public void generalTest() {
-
-		Iterable<Integer> ir = IterableRange.getInstance(1, 100);
-		Iterable<Integer> ip0 = IterablePrefix.getInstance(ir, 0);
-		Iterable<Integer> ip1 = IterablePrefix.getInstance(ir, 1);
-		Iterable<Integer> ip10 = IterablePrefix.getInstance(ir, 10);
-		Iterable<Integer> ip100 = IterablePrefix.getInstance(ir, 100);
-		Iterable<Integer> ip200 = IterablePrefix.getInstance(ir, 200);
-		Iterable<Integer> ip50 = IterablePrefix.getInstance(ip100, 50);
-		Iterable<Integer> ip5 = IterablePrefix.getInstance(ip0, 5);
-
-		{
-			int counter = 0;
-			for (Integer i : ip0) {
-				counter++;
-			}
-			assertEquals(0, counter);
+	public void testGetInstance() {
+		SingletonSequence<String> sequence = SingletonSequence.getInstance("Hello");
+		int i = 0;
+		for (String s : sequence) {
+			Assert.assertEquals("Hello", s);
+			i++;
 		}
-		{
-			int counter = 0;
-			for (Integer i : ip1) {
-				counter++;
-			}
-			assertEquals(1, counter);
-		}
-		{
-			int counter = 0;
-			for (Integer i : ip10) {
-				counter++;
-			}
-			assertEquals(10, counter);
-		}
-		{
-			int counter = 0;
-			for (Integer i : ip100) {
-				counter++;
-			}
-			assertEquals(100, counter);
-		}
-		{
-			int counter = 0;
-			for (Integer i : ip200) {
-				counter++;
-			}
-			assertEquals(100, counter);
-		}
-		{
-			int counter = 0;
-			for (Integer i : ip50) {
-				counter++;
-			}
-			assertEquals(50, counter);
-		}
-		{
-			int counter = 0;
-			for (Integer i : ip5) {
-				counter++;
-			}
-			assertEquals(0, counter);
-		}
-
+		Assert.assertEquals(1, i);
 	}
 
 }

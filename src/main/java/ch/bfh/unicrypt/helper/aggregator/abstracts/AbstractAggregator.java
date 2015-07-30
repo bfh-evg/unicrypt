@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.helper.aggregator.abstracts;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.iterable.IterableMapping;
-import ch.bfh.unicrypt.helper.iterable.Mapping;
+import ch.bfh.unicrypt.helper.iterable.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;

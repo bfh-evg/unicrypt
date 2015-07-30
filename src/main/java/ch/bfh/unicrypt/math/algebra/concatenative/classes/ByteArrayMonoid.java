@@ -85,7 +85,7 @@ public class ByteArrayMonoid
 	//
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return Set.INFINITE_ORDER;
+		return Set.INFINITE;
 	}
 
 	@Override

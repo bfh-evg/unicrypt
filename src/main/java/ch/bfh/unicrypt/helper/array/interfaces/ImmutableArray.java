@@ -289,6 +289,24 @@ public interface ImmutableArray<V extends Object>
 	public ImmutableArray<V> removeAt(int index);
 
 	/**
+	 * Returns a new immutable array obtained by removing the first value. This method is equivalent to
+	 * {@code removeAt(0)}.
+	 * <p>
+	 * @return The new immutable array with the remaining values
+	 * @see ImmutableArray#removeAt(int)
+	 */
+	public ImmutableArray<V> removeFirst();
+
+	/**
+	 * Returns a new immutable array obtained by removing the last value. This method is equivalent to
+	 * {@code removeAt(n-0)}.
+	 * <p>
+	 * @return The new immutable array with the remaining values
+	 * @see ImmutableArray#removeAt(int)
+	 */
+	public ImmutableArray<V> removeLast();
+
+	/**
 	 * Returns a new immutable array with an additional value inserted at the given index. The length is therefore
 	 * increased by 1.
 	 * <p>

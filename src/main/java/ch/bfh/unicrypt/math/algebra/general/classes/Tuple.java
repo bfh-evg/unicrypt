@@ -50,8 +50,7 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.iterable.IterableMapping;
-import ch.bfh.unicrypt.helper.iterable.Mapping;
-import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.iterable.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -203,6 +202,16 @@ public class Tuple
 	@Override
 	public Tuple removeAt(final int index) {
 		return Tuple.getInstance(this.getSet().removeAt(index), this.getValue().removeAt(index));
+	}
+
+	@Override
+	public Tuple removeFirst() {
+		return Tuple.getInstance(this.getSet().removeFirst(), this.getValue().removeFirst());
+	}
+
+	@Override
+	public Tuple removeLast() {
+		return Tuple.getInstance(this.getSet().removeLast(), this.getValue().removeLast());
 	}
 
 	@Override

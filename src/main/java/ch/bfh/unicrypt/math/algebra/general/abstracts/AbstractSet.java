@@ -164,12 +164,12 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	@Override
 	public final boolean isFinite() {
-		return !this.getOrder().equals(Set.INFINITE_ORDER);
+		return !this.getOrder().equals(Set.INFINITE);
 	}
 
 	@Override
 	public final boolean hasKnownOrder() {
-		return !this.getOrder().equals(Set.UNKNOWN_ORDER);
+		return !this.getOrder().equals(Set.UNKNOWN);
 	}
 
 	@Override
@@ -469,7 +469,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 
 	// this method is only called for sets of unknown order
 	protected BigInteger defaultGetOrderUpperBound() {
-		return Set.INFINITE_ORDER;
+		return Set.INFINITE;
 	}
 
 	// this method is different only for ProductSet

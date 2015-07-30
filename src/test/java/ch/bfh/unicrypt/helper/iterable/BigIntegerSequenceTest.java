@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,18 +41,40 @@
  */
 package ch.bfh.unicrypt.helper.iterable;
 
-/**
- * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
- * type {@code W}. The main usage of this interface is in the class {@link IterableMapping}.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @param <V> The generic type of the input value
- * @param <W> The generic type of the output value
- * @see IterableMapping
- */
-public interface Mapping<V, W> {
+import ch.bfh.unicrypt.helper.iterable.classes.BigIntegerSequence;
+import java.math.BigInteger;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
-	public W map(V value);
+/**
+ *
+ * @author rolfhaenni
+ */
+public class BigIntegerSequenceTest {
+
+	@Test
+	public void generalTest() {
+		BigIntegerSequence s0 = BigIntegerSequence.getInstance(0, -3);
+		BigIntegerSequence s1 = BigIntegerSequence.getInstance(3, 2);
+		BigIntegerSequence s2 = BigIntegerSequence.getInstance(2, 2);
+		BigIntegerSequence s3 = BigIntegerSequence.getInstance(2, 5);
+		BigIntegerSequence s4 = BigIntegerSequence.getInstance(3, 6);
+		assertEquals(s0, s1);
+		assertEquals(s2, s2);
+		assertFalse(s2.equals(s3));
+		assertFalse(s2.equals(s4));
+		assertFalse(s0.iterator().hasNext());
+		assertFalse(s1.iterator().hasNext());
+		assertTrue(s2.iterator().hasNext());
+		assertTrue(s3.iterator().hasNext());
+		assertTrue(s4.iterator().hasNext());
+		int j = 2;
+		for (BigInteger i : s3) {
+			assertEquals(j, i.intValue());
+			j++;
+		}
+	}
 
 }

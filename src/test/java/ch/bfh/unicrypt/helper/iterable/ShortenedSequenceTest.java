@@ -41,67 +41,82 @@
  */
 package ch.bfh.unicrypt.helper.iterable;
 
-import org.junit.Assert;
+import ch.bfh.unicrypt.helper.iterable.classes.BigIntegerSequence;
+import ch.bfh.unicrypt.helper.iterable.classes.ShortenedSequence;
+import ch.bfh.unicrypt.helper.iterable.interfaces.Sequence;
+import java.math.BigInteger;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class IterableMappingTest {
+public class ShortenedSequenceTest {
 
 	@Test
-	public void iterableMappingTest1() {
+	public void generalTest() {
 
-		IterableRange range = IterableRange.getInstance(0, 10);
+		Sequence<BigInteger> sequence = BigIntegerSequence.getInstance(1, 100);
 
-		Iterable<Integer> newRange = IterableMapping.getInstance(range, new Mapping<Integer, Integer>() {
-
-			@Override
-			public Integer map(Integer value) {
-				return value + 1;
+		{
+			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 0);
+			int counter = 0;
+			for (BigInteger i : newSequence) {
+				counter++;
 			}
-		});
-
-		Integer i = 1;
-		for (Integer value : newRange) {
-			Assert.assertEquals(i, value);
-			i++;
+			assertEquals(0, counter);
 		}
-
-		// run the same test twice to check correct use of iterators
-		i = 1;
-		for (Integer value : newRange) {
-			Assert.assertEquals(i, value);
-			i++;
-		}
-	}
-
-	@Test
-	public void iterableMappingTest2() {
-
-		IterableArray range = IterableArray.getInstance(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-
-		Iterable<Integer> newRange = IterableMapping.getInstance(range, new Mapping<Integer, Integer>() {
-
-			@Override
-			public Integer map(Integer value) {
-				return value + 1;
+		{
+			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 1);
+			int counter = 0;
+			for (BigInteger i : newSequence) {
+				counter++;
 			}
-		});
-
-		Integer i = 1;
-		for (Integer value : newRange) {
-			Assert.assertEquals(i, value);
-			i++;
+//			assertEquals(1, counter);
+		}
+		{
+			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 10);
+			int counter = 0;
+			for (BigInteger i : newSequence) {
+				System.out.println(i);
+				counter++;
+			}
+			assertEquals(10, counter);
+		}
+		{
+			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 100);
+			int counter = 0;
+			for (BigInteger i : newSequence) {
+				counter++;
+			}
+			assertEquals(100, counter);
+		}
+		{
+			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 200);
+			int counter = 0;
+			for (BigInteger i : newSequence) {
+				counter++;
+			}
+			assertEquals(100, counter);
+		}
+		{
+			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(ShortenedSequence.getInstance(sequence, 50), 100);
+			int counter = 0;
+			for (BigInteger i : newSequence) {
+				counter++;
+			}
+			assertEquals(50, counter);
+		}
+		{
+			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(ShortenedSequence.getInstance(sequence, 0), 5);
+			int counter = 0;
+			for (BigInteger i : newSequence) {
+				counter++;
+			}
+			assertEquals(0, counter);
 		}
 
-		// run the same test twice to check correct use of iterators
-		i = 1;
-		for (Integer value : newRange) {
-			Assert.assertEquals(i, value);
-			i++;
-		}
 	}
 
 }

@@ -287,6 +287,16 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
+	public final A removeFirst() {
+		return this.removeAt(0);
+	}
+
+	@Override
+	public final A removeLast() {
+		return this.removeAt(this.length - 1);
+	}
+
+	@Override
 	public final A append(ImmutableArray<V> other) {
 		if (other == null) {
 			throw new IllegalArgumentException();

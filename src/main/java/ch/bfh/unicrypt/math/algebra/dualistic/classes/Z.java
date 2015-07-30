@@ -132,7 +132,7 @@ public class Z
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return Group.INFINITE_ORDER;
+		return Group.INFINITE;
 	}
 
 	@Override

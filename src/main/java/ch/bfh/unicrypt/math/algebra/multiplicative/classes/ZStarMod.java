@@ -182,7 +182,7 @@ public class ZStarMod
 	@Override
 	protected BigInteger abstractGetOrder() {
 		if (!this.getModulusFactorization().getValue().equals(this.getModulus())) {
-			return Group.UNKNOWN_ORDER;
+			return Group.UNKNOWN;
 		}
 		return MathUtil.eulerFunction(this.getModulus(), this.getModulusFactorization().getPrimeFactors());
 	}

@@ -2,7 +2,7 @@
  * UniCrypt
  *
  *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
+ *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,26 +39,23 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.iterable.interfaces;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.math.BigInteger;
 
 /**
- *
- * @author rolfhaenni
+ * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
+ * type {@code W}. The main usage of this interface is in the class {@link IterableMapping}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the input value
+ * @see IterableMapping
  */
-public class IterableValueTest {
+public interface Predicate<V> {
 
-	@Test
-	public void testGetInstance() {
-		IterableValue<String> iv = IterableValue.getInstance("Hello");
-		int i = 0;
-		for (String s : iv) {
-			Assert.assertEquals("Hello", s);
-			i++;
-		}
-		Assert.assertEquals(1, i);
-	}
+	public boolean check(V value);
+
+	public BigInteger getLength();
 
 }

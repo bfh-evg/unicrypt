@@ -189,6 +189,16 @@ public class CompositeEncoder
 	}
 
 	@Override
+	public CompositeEncoder removeFirst() {
+		return new CompositeEncoder(this.encoders.removeFirst());
+	}
+
+	@Override
+	public CompositeEncoder removeLast() {
+		return new CompositeEncoder(this.encoders.removeLast());
+	}
+
+	@Override
 	public CompositeEncoder insertAt(int index, Encoder encoder) {
 		return new CompositeEncoder(this.encoders.insertAt(index, encoder));
 	}

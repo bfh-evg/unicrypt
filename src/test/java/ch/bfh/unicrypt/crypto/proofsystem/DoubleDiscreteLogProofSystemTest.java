@@ -187,7 +187,7 @@ public class DoubleDiscreteLogProofSystemTest {
 
 		Pair publicInput = Pair.getInstance(C, D);
 
-		Tuple secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(Z_q.getElement(16), m2));
+		Tuple secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(Z_q.getElement(12), m2));
 		Triple proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
 		boolean verify = ddlps.verify(proofInvalid, publicInput);
 		assertFalse(verify);

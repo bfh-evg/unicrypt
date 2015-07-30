@@ -58,10 +58,10 @@ import java.util.Iterator;
  * @param <CE>
  * @author rolfhaenni
  */
-public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set,
-	   DE extends Element, C extends Set, CE extends Element>
+public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<CF, D, DE, C, CE>
 	   implements NestedArray<Function> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected final DenseArray<Function> functions;
@@ -199,6 +199,16 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	@Override
 	public CF removeAt(final int index) {
 		return this.abstractGetInstance(this.functions.removeAt(index));
+	}
+
+	@Override
+	public CF removeFirst() {
+		return this.abstractGetInstance(this.functions.removeFirst());
+	}
+
+	@Override
+	public CF removeLast() {
+		return this.abstractGetInstance(this.functions.removeLast());
 	}
 
 	@Override
