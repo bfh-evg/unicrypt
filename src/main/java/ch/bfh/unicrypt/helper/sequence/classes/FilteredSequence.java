@@ -61,9 +61,9 @@ public class FilteredSequence<V>
 	   extends AbstractSequence<V> {
 
 	final private Iterable<V> values;
-	final private Predicate<V> predicate;
+	final private Predicate<? super V> predicate;
 
-	protected FilteredSequence(Iterable<V> values, Predicate<V> predicate) {
+	protected FilteredSequence(Iterable<V> values, Predicate<? super V> predicate) {
 		this.values = values;
 		this.predicate = predicate;
 	}
@@ -77,7 +77,7 @@ public class FilteredSequence<V>
 	 * @param predictate The mapping applied to the input values
 	 * @return The new iterable collection of type {@code W}
 	 */
-	public static <V> FilteredSequence<V> getInstance(Iterable<V> values, Predicate<V> predictate) {
+	public static <V> FilteredSequence<V> getInstance(Iterable<V> values, Predicate<? super V> predictate) {
 		if (values == null || predictate == null) {
 			throw new IllegalArgumentException();
 		}
@@ -115,7 +115,7 @@ public class FilteredSequence<V>
 
 	@Override
 	protected BigInteger abstractGetLength() {
-		BigInteger length = AbstractSequence.computeLength(this.values);
+		BigInteger length = AbstractSequence.getLength(this.values);
 		if (length.signum() == 0) {
 			return length;
 		}

@@ -60,9 +60,9 @@ public class MappedSequence<V, W>
 	   extends AbstractSequence<W> {
 
 	final private Iterable<V> values;
-	final private Mapping<V, W> mapping;
+	final private Mapping<? super V, ? extends W> mapping;
 
-	protected MappedSequence(Iterable<V> values, Mapping<V, W> mapping) {
+	protected MappedSequence(Iterable<V> values, Mapping<? super V, ? extends W> mapping) {
 		this.values = values;
 		this.mapping = mapping;
 	}
@@ -77,7 +77,7 @@ public class MappedSequence<V, W>
 	 * @param mapping The mapping applied to the input values
 	 * @return The new iterable collection of type {@code W}
 	 */
-	public static <V, W> MappedSequence<V, W> getInstance(Iterable<V> values, Mapping<V, W> mapping) {
+	public static <V, W> MappedSequence<V, W> getInstance(Iterable<V> values, Mapping<? super V, ? extends W> mapping) {
 		if (values == null || mapping == null) {
 			throw new IllegalArgumentException();
 		}
@@ -105,7 +105,7 @@ public class MappedSequence<V, W>
 
 	@Override
 	protected BigInteger abstractGetLength() {
-		return AbstractSequence.computeLength(this.values);
+		return AbstractSequence.getLength(this.values);
 	}
 
 }

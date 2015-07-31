@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence.interfaces;
 
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import java.math.BigInteger;
 
 /**
@@ -59,20 +59,20 @@ public interface Sequence<V>
 
 	public BigInteger getLength();
 
-	public int count(Predicate<V> predicate);
+	public int count(Predicate<? super V> predicate);
 
-	public V select(Predicate<V> predicate);
+	public V find(Predicate<? super V> predicate);
 
-	public V select(Predicate<V> predicate, int n);
+	public V find(Predicate<? super V> predicate, int n);
 
-	public <W> Sequence<W> map(Mapping<V, W> mapping);
+	public <W> Sequence<W> map(Mapping<? super V, ? extends W> mapping);
 
-	public Sequence<V> filter(Predicate<V> predicate);
+	public Sequence<V> filter(Predicate<? super V> predicate);
 
-	public Sequence<V> shorten(int n);
+	public Sequence<V> shorten(int maxLength);
 
-	public Sequence<V> shorten(BigInteger n);
+	public Sequence<V> shorten(BigInteger maxLength);
 
-	public Sequence<DenseArray<V>> group(int n);
+	public Sequence<? extends ImmutableArray<V>> group(int groupLength);
 
 }

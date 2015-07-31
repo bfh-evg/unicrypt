@@ -166,8 +166,8 @@ public class ProductSequence<V>
 		if (this.values == null) {
 			return MathUtil.ONE;
 		}
-		BigInteger length1 = AbstractSequence.computeLength(this.values);
-		BigInteger length2 = AbstractSequence.computeLength(this.productSequence);
+		BigInteger length1 = AbstractSequence.getLength(this.values);
+		BigInteger length2 = AbstractSequence.getLength(this.productSequence);
 		if (length1.equals(Sequence.INFINITE) || length2.equals(Sequence.INFINITE)) {
 			return Sequence.INFINITE;
 		}

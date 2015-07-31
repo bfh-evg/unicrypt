@@ -57,18 +57,18 @@ public class GroupedSequence<V>
 	   extends AbstractSequence<DenseArray<V>> {
 
 	private final Iterable<V> values;
-	private final int n;
+	private final int groupLength;
 
-	protected GroupedSequence(Iterable<V> values, int n) {
+	protected GroupedSequence(Iterable<V> values, int groupLength) {
 		this.values = values;
-		this.n = n;
+		this.groupLength = groupLength;
 	}
 
-	public static <V> GroupedSequence<V> getInstance(Iterable<V> values, int n) {
-		if (values == null || n < 1) {
+	public static <V> GroupedSequence<V> getInstance(Iterable<V> values, int groupLength) {
+		if (values == null || groupLength < 1) {
 			throw new IllegalArgumentException();
 		}
-		return new GroupedSequence<>(values, n);
+		return new GroupedSequence<>(values, groupLength);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class GroupedSequence<V>
 			public DenseArray<V> next() {
 				int i = 0;
 				DenseArray<V> result = DenseArray.getInstance();
-				while (i < n && this.iterator.hasNext()) {
+				while (i < groupLength && this.iterator.hasNext()) {
 					result = result.add(this.iterator.next());
 					i++;
 				}
@@ -98,14 +98,14 @@ public class GroupedSequence<V>
 
 	@Override
 	protected BigInteger abstractGetLength() {
-		BigInteger length = AbstractSequence.computeLength(this.values);
+		BigInteger length = AbstractSequence.getLength(this.values);
 		if (length.equals(Sequence.INFINITE)) {
 			return Sequence.INFINITE;
 		}
 		if (length.equals(Sequence.UNKNOWN)) {
 			return Sequence.UNKNOWN;
 		}
-		return MathUtil.divideUp(length, BigInteger.valueOf(this.n));
+		return MathUtil.divideUp(length, BigInteger.valueOf(this.groupLength));
 	}
 
 }

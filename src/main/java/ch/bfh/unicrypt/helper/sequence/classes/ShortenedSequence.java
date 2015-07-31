@@ -59,29 +59,29 @@ public class ShortenedSequence<V>
 	   extends AbstractSequence<V> {
 
 	private final Iterable<V> values;
-	private final BigInteger n;
+	private final BigInteger maxLength;
 
-	protected ShortenedSequence(Iterable<V> values, BigInteger n) {
+	protected ShortenedSequence(Iterable<V> values, BigInteger maxLength) {
 		this.values = values;
-		this.n = n;
+		this.maxLength = maxLength;
 	}
 
 	/**
 	 *
-	 * @param <V>    The generic type of the iterable collection
-	 * @param values The given iterable collection
-	 * @param n      The number of elements in the new iterable collection
+	 * @param <V>       The generic type of the iterable collection
+	 * @param values    The given iterable collection
+	 * @param maxLength The number of elements in the new iterable collection
 	 * @return The new iterable collection
 	 */
-	public static <V> ShortenedSequence<V> getInstance(Iterable<V> values, int n) {
-		return ShortenedSequence.getInstance(values, BigInteger.valueOf(n));
+	public static <V> ShortenedSequence<V> getInstance(Iterable<V> values, int maxLength) {
+		return ShortenedSequence.getInstance(values, BigInteger.valueOf(maxLength));
 	}
 
-	public static <V> ShortenedSequence<V> getInstance(Iterable<V> values, BigInteger n) {
-		if (values == null || n == null || n.signum() < 0) {
+	public static <V> ShortenedSequence<V> getInstance(Iterable<V> values, BigInteger maxLength) {
+		if (values == null || maxLength == null || maxLength.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new ShortenedSequence<>(values, n);
+		return new ShortenedSequence<>(values, maxLength);
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class ShortenedSequence<V>
 
 			@Override
 			public boolean hasNext() {
-				return this.counter.compareTo(n) < 0 && this.iterator.hasNext();
+				return this.counter.compareTo(maxLength) < 0 && this.iterator.hasNext();
 			}
 
 			@Override
@@ -107,14 +107,14 @@ public class ShortenedSequence<V>
 
 	@Override
 	protected BigInteger abstractGetLength() {
-		BigInteger length = AbstractSequence.computeLength(this.values);
-		if (length.equals(Sequence.INFINITE) || this.n.signum() == 0) {
-			return this.n;
+		BigInteger length = AbstractSequence.getLength(this.values);
+		if (length.equals(Sequence.INFINITE) || this.maxLength.signum() == 0) {
+			return this.maxLength;
 		}
 		if (length.equals(Sequence.UNKNOWN)) {
 			return Sequence.UNKNOWN;
 		}
-		return length.min(this.n);
+		return length.min(this.maxLength);
 	}
 
 }

@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.sequence.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
 import ch.bfh.unicrypt.helper.sequence.classes.FilteredSequence;
@@ -78,7 +79,7 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
-	public final int count(Predicate<V> predicate) {
+	public final int count(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
@@ -95,12 +96,12 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
-	public final V select(Predicate<V> predicate) {
-		return this.select(predicate, 1);
+	public final V find(Predicate<? super V> predicate) {
+		return this.find(predicate, 1);
 	}
 
 	@Override
-	public final V select(Predicate<V> predicate, int n) {
+	public final V find(Predicate<? super V> predicate, int n) {
 		for (V value : this.filter(predicate)) {
 			n--;
 			if (n == 0) {
@@ -111,7 +112,7 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
-	public final <W> MappedSequence<V, W> map(Mapping<V, W> mapping) {
+	public final <W> MappedSequence<V, W> map(Mapping<? super V, ? extends W> mapping) {
 		if (mapping == null) {
 			throw new IllegalArgumentException();
 		}
@@ -119,7 +120,7 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
-	public final FilteredSequence<V> filter(Predicate<V> predicate) {
+	public final FilteredSequence<V> filter(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
@@ -127,37 +128,40 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
-	public final ShortenedSequence<V> shorten(int n) {
-		return this.shorten(BigInteger.valueOf(n));
+	public final ShortenedSequence<V> shorten(int maxLength) {
+		return this.shorten(BigInteger.valueOf(maxLength));
 	}
 
 	@Override
-	public final ShortenedSequence<V> shorten(BigInteger n) {
-		if (n == null || n.signum() < 0) {
+	public final ShortenedSequence<V> shorten(BigInteger maxLength) {
+		if (maxLength == null || maxLength.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
-		return ShortenedSequence.getInstance(this, n);
+		return ShortenedSequence.getInstance(this, maxLength);
 	}
 
 	@Override
-	public final Sequence<DenseArray<V>> group(int n) {
-		if (n < 1) {
+	public final Sequence<DenseArray<V>> group(int groupLength) {
+		if (groupLength < 1) {
 			throw new IllegalArgumentException();
 		}
-		return GroupedSequence.getInstance(this, n);
+		return GroupedSequence.getInstance(this, groupLength);
 	}
+
+	protected abstract BigInteger abstractGetLength();
 
 	// helper method used to compute the length of something that is iterable
-	protected static <V> BigInteger computeLength(Iterable<V> values) {
+	protected static <V> BigInteger getLength(Iterable<V> values) {
 		if (values instanceof Sequence) {
 			return ((Sequence<V>) values).getLength();
 		}
 		if (values instanceof Collection) {
 			return BigInteger.valueOf(((Collection<V>) values).size());
 		}
-		return Sequence.UNKNOWN;
+		if (values.iterator().hasNext()) {
+			return Sequence.UNKNOWN;
+		}
+		return MathUtil.ZERO;
 	}
-
-	protected abstract BigInteger abstractGetLength();
 
 }
