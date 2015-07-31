@@ -45,9 +45,14 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import java.math.BigInteger;
 
 /**
- *
- * @author rolfhaenni
- * @param <V>
+ * This interface represents the concept of an iterable sequence of values similar to streams in Java 8. No means are
+ * provided to directly access or manipulate the values. Computational operations can be described declaratively as a
+ * pipeline. The execution of the pipeline is lazy. The length of a sequence is either finite and known, finite but
+ * unknown, or infinite.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the values contained in the sequence
  */
 public interface Sequence<V>
 	   extends Iterable<V> {

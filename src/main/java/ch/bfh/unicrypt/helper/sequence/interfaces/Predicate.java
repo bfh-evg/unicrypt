@@ -41,21 +41,26 @@
  */
 package ch.bfh.unicrypt.helper.sequence.interfaces;
 
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.sequence.classes.FilteredSequence;
 
 /**
- * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
- * type {@code W}. The main usage of this interface is in the class {@link IterableMapping}.
+ * Classes implementing this interface provide a single method for checking if a predicate holds for a given value. The
+ * main usage of this interface is in the class {@link FilteredSequence} or in the methods
+ * {@link Sequence#filter(Predicate)} or {@link Sequence#find(Predicate)}.
  * <p>
  * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the input value
- * @see IterableMapping
+ * @see FilteredSequence
  */
 public interface Predicate<V> {
 
+	/**
+	 * Checks if the predicate holds for the given value.
+	 * <p>
+	 * @param value The given value
+	 * @return {@code true} if the predicate holds, {@code false} otherwise
+	 */
 	public boolean check(V value);
-
-	public BigInteger getLength();
 
 }
