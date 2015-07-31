@@ -172,7 +172,7 @@ public class DoubleDiscreteLogProofSystemTest {
 		PedersenCommitmentScheme pcs = PedersenCommitmentScheme.getInstance(g, g0);
 		GeneralizedPedersenCommitmentScheme gpcs = GeneralizedPedersenCommitmentScheme.getInstance(h, Tuple.getInstance(h1, h2));
 
-		DoubleDiscreteLogProofSystem ddlps = DoubleDiscreteLogProofSystem.getInstance(pcs, gpcs, 3);
+		DoubleDiscreteLogProofSystem ddlps = DoubleDiscreteLogProofSystem.getInstance(pcs, gpcs, 4);
 
 		Element m1 = Z_q.getElement(7);
 		Element m2 = Z_q.getElement(13);
@@ -187,9 +187,14 @@ public class DoubleDiscreteLogProofSystemTest {
 
 		Pair publicInput = Pair.getInstance(C, D);
 
-		Tuple secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(Z_q.getElement(12), m2));
+		Tuple secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(Z_q.getElement(10), m2));
 		Triple proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
 		boolean verify = ddlps.verify(proofInvalid, publicInput);
+		assertFalse(verify);
+
+		secretInputInvalid = Tuple.getInstance(x, r, s, Tuple.getInstance(m1, Z_q.getElement(12)));
+		proofInvalid = ddlps.generate(secretInputInvalid, publicInput, randomGenerator);
+		verify = ddlps.verify(proofInvalid, publicInput);
 		assertFalse(verify);
 
 		secretInputInvalid = Tuple.getInstance(x, r, Z_q.getElement(5), Tuple.getInstance(m1, m2));
