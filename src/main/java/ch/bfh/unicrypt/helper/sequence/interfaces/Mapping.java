@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
 /**
  * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
  * type {@code W}. The main usage of this interface is in the class {@link MappedSequence} or in the method
- * {@link Sequence#map(ch.bfh.unicrypt.helper.sequence.interfaces.Mapping)}.
+ * {@link Sequence#map(Mapping)}.
  * <p>
  * @author R. Haenni
  * @version 2.0

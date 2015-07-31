@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
 import ch.bfh.unicrypt.helper.sequence.classes.FilteredSequence;
-import ch.bfh.unicrypt.helper.sequence.classes.GroupedSequence;
 import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
@@ -170,7 +169,6 @@ public abstract class AbstractSequence<V>
 
 	@Override
 	public final Sequence<V> shorten(final long maxLength) {
-		final Sequence<V> sequence = this;
 		return this.shorten(BigInteger.valueOf(maxLength));
 	}
 
@@ -184,7 +182,7 @@ public abstract class AbstractSequence<V>
 
 			@Override
 			protected BigInteger abstractGetLength() {
-				BigInteger length = AbstractSequence.getLength(source);
+				BigInteger length = source.getLength();
 				if (length.equals(Sequence.INFINITE) || maxLength.signum() == 0) {
 					return maxLength;
 				}
@@ -229,10 +227,11 @@ public abstract class AbstractSequence<V>
 
 			@Override
 			protected BigInteger abstractGetLength() {
-				if (source.getLength().equals(Sequence.INFINITE)) {
+				BigInteger length = source.getLength();
+				if (length.equals(Sequence.INFINITE)) {
 					return Sequence.INFINITE;
 				}
-				if (source.getLength().equals(Sequence.UNKNOWN)) {
+				if (length.equals(Sequence.UNKNOWN)) {
 					return Sequence.UNKNOWN;
 				}
 				return source.getLength().subtract(BigInteger.valueOf(n)).max(MathUtil.ZERO);
@@ -252,11 +251,50 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
-	public final Sequence<DenseArray<V>> group(int groupLength) {
+	public final Sequence<DenseArray<V>> group(final long groupLength) {
 		if (groupLength < 1) {
 			throw new IllegalArgumentException();
 		}
-		return GroupedSequence.getInstance(this, groupLength);
+		final Sequence<V> source = this;
+		return new AbstractSequence<DenseArray<V>>() {
+
+			@Override
+			protected BigInteger abstractGetLength() {
+				BigInteger length = source.getLength();
+				if (length.equals(Sequence.INFINITE)) {
+					return Sequence.INFINITE;
+				}
+				if (length.equals(Sequence.UNKNOWN)) {
+					return Sequence.UNKNOWN;
+				}
+				return MathUtil.divideUp(length, BigInteger.valueOf(groupLength));
+			}
+
+			@Override
+			public Iterator<DenseArray<V>> iterator() {
+				return new Iterator<DenseArray<V>>() {
+					private final Iterator<V> iterator = source.iterator();
+
+					@Override
+					public boolean hasNext() {
+						return this.iterator.hasNext();
+					}
+
+					@Override
+					public DenseArray<V> next() {
+						long i = 0;
+						DenseArray<V> result = DenseArray.getInstance();
+						while (i < groupLength && this.iterator.hasNext()) {
+							result = result.add(this.iterator.next());
+							i++;
+						}
+						return result;
+					}
+
+				};
+
+			}
+		};
 	}
 
 	protected abstract BigInteger abstractGetLength();
