@@ -59,24 +59,24 @@ import java.util.Iterator;
 public class ArraySequence<V>
 	   extends AbstractSequence<V> {
 
-	private final V[] array;
+	private final V[] source;
 
-	protected ArraySequence(V[] array) {
-		this.array = array;
+	protected ArraySequence(V[] source) {
+		this.source = source;
 	}
 
 	/**
 	 * Creates a new iterable array from a given Java array.
 	 * <p>
-	 * @param <T>   The generic type of the array
-	 * @param array The given array
+	 * @param <T>    The generic type of the array
+	 * @param source The given array
 	 * @return The new iterable array
 	 */
-	public static <T> ArraySequence<T> getInstance(T... array) {
-		if (array == null) {
+	public static <T> ArraySequence<T> getInstance(T... source) {
+		if (source == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ArraySequence<>(array);
+		return new ArraySequence<>(source);
 	}
 
 	@Override
@@ -86,12 +86,12 @@ public class ArraySequence<V>
 
 			@Override
 			public boolean hasNext() {
-				return pos < array.length;
+				return pos < source.length;
 			}
 
 			@Override
 			public V next() {
-				return array[pos++];
+				return source[pos++];
 			}
 
 		};
@@ -100,7 +100,7 @@ public class ArraySequence<V>
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		return Arrays.hashCode(array);
+		return Arrays.hashCode(source);
 	}
 
 	@Override
@@ -112,17 +112,17 @@ public class ArraySequence<V>
 			return false;
 		}
 		final ArraySequence<?> other = (ArraySequence<?>) obj;
-		return Arrays.equals(this.array, other.array);
+		return Arrays.equals(this.source, other.source);
 	}
 
 	@Override
 	protected String defaultToStringContent() {
-		return Arrays.toString(this.array);
+		return Arrays.toString(this.source);
 	}
 
 	@Override
 	protected BigInteger abstractGetLength() {
-		return BigInteger.valueOf(this.array.length);
+		return BigInteger.valueOf(this.source.length);
 	}
 
 }

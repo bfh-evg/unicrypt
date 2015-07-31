@@ -39,10 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.classes.BigIntegerSequence;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -52,15 +51,21 @@ import org.junit.Test;
  *
  * @author rolfhaenni
  */
-public class BigIntegerSequenceTest {
+public class IntegerSequenceTest {
 
 	@Test
 	public void generalTest() {
-		BigIntegerSequence s0 = BigIntegerSequence.getInstance(0, -3);
-		BigIntegerSequence s1 = BigIntegerSequence.getInstance(3, 2);
-		BigIntegerSequence s2 = BigIntegerSequence.getInstance(2, 2);
-		BigIntegerSequence s3 = BigIntegerSequence.getInstance(2, 5);
-		BigIntegerSequence s4 = BigIntegerSequence.getInstance(3, 6);
+		IntegerSequence s0 = IntegerSequence.getInstance(0, -3);
+		IntegerSequence s1 = IntegerSequence.getInstance(3, 2);
+		IntegerSequence s2 = IntegerSequence.getInstance(2, 2);
+		IntegerSequence s3 = IntegerSequence.getInstance(2, 5);
+		IntegerSequence s4 = IntegerSequence.getInstance(3, 6);
+		assertEquals(0, s0.getLength().intValue());
+		assertEquals(0, s1.getLength().intValue());
+		assertEquals(1, s2.getLength().intValue());
+		assertEquals(4, s3.getLength().intValue());
+		assertEquals(4, s4.getLength().intValue());
+
 		assertEquals(s0, s1);
 		assertEquals(s2, s2);
 		assertFalse(s2.equals(s3));
@@ -70,9 +75,9 @@ public class BigIntegerSequenceTest {
 		assertTrue(s2.iterator().hasNext());
 		assertTrue(s3.iterator().hasNext());
 		assertTrue(s4.iterator().hasNext());
-		int j = 2;
-		for (BigInteger i : s3) {
-			assertEquals(j, i.intValue());
+		Integer j = 2;
+		for (Integer i : s3) {
+			assertEquals(j, i);
 			j++;
 		}
 	}

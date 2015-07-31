@@ -61,6 +61,6 @@ public interface Predicate<V> {
 	 * @param value The given value
 	 * @return {@code true} if the predicate holds, {@code false} otherwise
 	 */
-	public boolean check(V value);
+	public boolean test(V value);
 
 }

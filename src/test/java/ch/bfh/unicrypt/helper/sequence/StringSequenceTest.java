@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.sequence.classes.StringSequence;
 import org.junit.Assert;

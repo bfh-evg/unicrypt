@@ -39,73 +39,76 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.classes;
+package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.classes.BigIntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import java.math.BigInteger;
-import java.util.Iterator;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
- * @param <V>
  */
-public class GroupedSequence<V>
-	   extends AbstractSequence<DenseArray<V>> {
+public class MappedSequenceTest {
 
-	private final Iterable<V> source;
-	private final int groupLength;
+	@Test
+	public void generalTest1() {
 
-	protected GroupedSequence(Iterable<V> source, int groupLength) {
-		this.source = source;
-		this.groupLength = groupLength;
-	}
+		BigIntegerSequence sequence = BigIntegerSequence.getInstance(0, 10);
 
-	public static <V> GroupedSequence<V> getInstance(Iterable<V> source, int groupLength) {
-		if (source == null || groupLength < 1) {
-			throw new IllegalArgumentException();
-		}
-		return new GroupedSequence<>(source, groupLength);
-	}
-
-	@Override
-	public Iterator<DenseArray<V>> iterator() {
-		return new Iterator<DenseArray<V>>() {
-
-			private final Iterator<V> iterator = source.iterator();
+		MappedSequence<BigInteger, BigInteger> newSequence = MappedSequence.getInstance(sequence, new Mapping<BigInteger, BigInteger>() {
 
 			@Override
-			public boolean hasNext() {
-				return this.iterator.hasNext();
+			public BigInteger map(BigInteger value) {
+				return value.add(BigInteger.ONE);
 			}
+		});
 
-			@Override
-			public DenseArray<V> next() {
-				int i = 0;
-				DenseArray<V> result = DenseArray.getInstance();
-				while (i < groupLength && this.iterator.hasNext()) {
-					result = result.add(this.iterator.next());
-					i++;
-				}
-				return result;
-			}
+		int i = 1;
+		for (BigInteger value : newSequence) {
+			Assert.assertEquals(i, value.intValue());
+			i++;
+		}
+		Assert.assertEquals(11, newSequence.getLength().intValue());
 
-		};
+		// run the same test twice to check correct use of iterators
+		i = 1;
+		for (BigInteger value : newSequence) {
+			Assert.assertEquals(i, value.intValue());
+			i++;
+		}
 	}
 
-	@Override
-	protected BigInteger abstractGetLength() {
-		BigInteger length = AbstractSequence.getLength(this.source);
-		if (length.equals(Sequence.INFINITE)) {
-			return Sequence.INFINITE;
+	@Test
+	public void generalTest2() {
+
+		ArraySequence sequence = ArraySequence.getInstance(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+
+		MappedSequence<Integer, Integer> newSequence = MappedSequence.getInstance(sequence, new Mapping<Integer, Integer>() {
+
+			@Override
+			public Integer map(Integer value) {
+				return value + 1;
+			}
+		});
+
+		Integer i = 1;
+		for (Integer value : newSequence) {
+			Assert.assertEquals(i, value);
+			i++;
 		}
-		if (length.equals(Sequence.UNKNOWN)) {
-			return Sequence.UNKNOWN;
+		Assert.assertEquals(10, newSequence.getLength().intValue());
+
+		// run the same test twice to check correct use of iterators
+		i = 1;
+		for (Integer value : newSequence) {
+			Assert.assertEquals(i, value);
+			i++;
 		}
-		return MathUtil.divideUp(length, BigInteger.valueOf(this.groupLength));
 	}
 
 }

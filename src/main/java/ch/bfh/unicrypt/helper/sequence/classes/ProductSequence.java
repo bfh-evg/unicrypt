@@ -60,25 +60,25 @@ import java.util.Iterator;
 public class ProductSequence<V>
 	   extends AbstractSequence<DenseArray<V>> {
 
-	private final Iterable<V> values;
-	private final ProductSequence<V> productSequence;
+	private final Iterable<V> source;
+	private final ProductSequence<V> product;
 
 	// the base case of the recursion
 	protected ProductSequence() {
-		this.values = null;
-		this.productSequence = null;
+		this.source = null;
+		this.product = null;
 	}
 
 	// the general case of the recursion
-	protected ProductSequence(Iterable<V> values, ProductSequence<V> productSequence) {
-		this.values = values;
-		this.productSequence = productSequence;
+	protected ProductSequence(Iterable<V> values, ProductSequence<V> product) {
+		this.source = values;
+		this.product = product;
 	}
 
 	@Override
 	public Iterator<DenseArray<V>> iterator() {
 
-		if (this.values == null && this.productSequence == null) {
+		if (this.source == null && this.product == null) {
 			// the base case of the recursion
 			return new Iterator() {
 
@@ -100,8 +100,8 @@ public class ProductSequence<V>
 		// the general case of the recursion
 		return new Iterator() {
 
-			private final Iterator<V> iterator1 = values.iterator();
-			private Iterator<DenseArray<V>> iterator2 = productSequence.iterator();
+			private final Iterator<V> iterator1 = source.iterator();
+			private Iterator<DenseArray<V>> iterator2 = product.iterator();
 			private V item = iterator1.hasNext() ? iterator1.next() : null;
 
 			@Override
@@ -115,7 +115,7 @@ public class ProductSequence<V>
 				DenseArray<V> result = items.insertAt(0, item);
 				if (!this.iterator2.hasNext() && this.iterator1.hasNext()) {
 					this.item = this.iterator1.next();
-					this.iterator2 = productSequence.iterator();
+					this.iterator2 = product.iterator();
 				}
 				return result;
 			}
@@ -126,48 +126,48 @@ public class ProductSequence<V>
 	/**
 	 * Creates and returns an iterable collection of all combinations of elements in the input collections of elements.
 	 * <p>
-	 * @param <V>   The generic type of the given iterable collections of elements
-	 * @param array The given iterable collections of elements
+	 * @param <V>     The generic type of the given iterable collections of elements
+	 * @param sources The given iterable collections of elements
 	 * @return The new iterable collection of all combinations of elements
 	 */
-	public static <V> ProductSequence<V> getInstance(Iterable<V>... array) {
-		if (array == null) {
+	public static <V> ProductSequence<V> getInstance(Iterable<V>... sources) {
+		if (sources == null) {
 			throw new IllegalArgumentException();
 		}
-		for (Iterable<V> iterable : array) {
-			if (iterable == null) {
+		for (Iterable<V> source : sources) {
+			if (source == null) {
 				throw new IllegalArgumentException();
 			}
 		}
-		return ProductSequence.getInstance(ArraySequence.getInstance(array));
+		return ProductSequence.getInstance(ArraySequence.getInstance(sources));
 	}
 
 	/**
 	 * Creates and returns an iterable collection of all combinations of elements in the input collections of elements.
 	 * <p>
-	 * @param <V>       The generic type of the given iterable collections of elements
-	 * @param iterables The given iterable collections of elements
+	 * @param <V>     The generic type of the given iterable collections of elements
+	 * @param sources The given iterable collections of elements
 	 * @return The new iterable collection of all combinations of elements
 	 */
-	public static <V> ProductSequence<V> getInstance(Iterable<? extends Iterable<V>> iterables) {
-		if (iterables == null) {
+	public static <V> ProductSequence<V> getInstance(Iterable<? extends Iterable<V>> sources) {
+		if (sources == null) {
 			throw new IllegalArgumentException();
 		}
-		ImmutableArray<? extends Iterable<V>> denseArray = DenseArray.getInstance(iterables);
+		ImmutableArray<? extends Iterable<V>> denseArray = DenseArray.getInstance(sources);
 		if (denseArray.isEmpty()) {
 			return new ProductSequence<>();
 		}
-		Iterable<V> values = denseArray.getFirst();
-		return new ProductSequence<>(values, ProductSequence.getInstance(denseArray.removeFirst()));
+		Iterable<V> firstSource = denseArray.getFirst();
+		return new ProductSequence<>(firstSource, ProductSequence.getInstance(denseArray.removeFirst()));
 	}
 
 	@Override
 	protected BigInteger abstractGetLength() {
-		if (this.values == null) {
+		if (this.source == null) {
 			return MathUtil.ONE;
 		}
-		BigInteger length1 = AbstractSequence.getLength(this.values);
-		BigInteger length2 = AbstractSequence.getLength(this.productSequence);
+		BigInteger length1 = AbstractSequence.getLength(this.source);
+		BigInteger length2 = AbstractSequence.getLength(this.product);
 		if (length1.equals(Sequence.INFINITE) || length2.equals(Sequence.INFINITE)) {
 			return Sequence.INFINITE;
 		}

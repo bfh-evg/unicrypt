@@ -64,19 +64,27 @@ public interface Sequence<V>
 
 	public BigInteger getLength();
 
+	public int count();
+
 	public int count(Predicate<? super V> predicate);
+
+	public V find();
+
+	public V find(long n);
 
 	public V find(Predicate<? super V> predicate);
 
-	public V find(Predicate<? super V> predicate, int n);
+	public V find(Predicate<? super V> predicate, long n);
 
 	public <W> Sequence<W> map(Mapping<? super V, ? extends W> mapping);
 
 	public Sequence<V> filter(Predicate<? super V> predicate);
 
-	public Sequence<V> shorten(int maxLength);
+	public Sequence<V> shorten(long maxLength);
 
 	public Sequence<V> shorten(BigInteger maxLength);
+
+	public Sequence<V> skip(long n);
 
 	public Sequence<? extends ImmutableArray<V>> group(int groupLength);
 

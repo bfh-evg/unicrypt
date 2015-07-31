@@ -39,60 +39,29 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import ch.bfh.unicrypt.helper.sequence.classes.SingletonSequence;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ArraySequenceTest {
+public class SingletonSequenceTest {
 
 	@Test
-	public void generalTest() {
-		ArraySequence<Integer> ia0 = ArraySequence.getInstance();
-		ArraySequence<Integer> ia1 = ArraySequence.getInstance(new Integer[]{});
-		ArraySequence<Integer> ia2 = ArraySequence.getInstance(2);
-		ArraySequence<Integer> ia3 = ArraySequence.getInstance(2, 3, 4, 5);
-		ArraySequence<Integer> ia4 = ArraySequence.getInstance(3, 4, 5, 6);
-		assertEquals(ia0, ia1);
-		assertEquals(ia2, ia2);
-		assertFalse(ia2.equals(ia3));
-		assertFalse(ia2.equals(ia4));
-		assertFalse(ia0.iterator().hasNext());
-		assertFalse(ia1.iterator().hasNext());
-		assertTrue(ia2.iterator().hasNext());
-		assertTrue(ia3.iterator().hasNext());
-		assertTrue(ia4.iterator().hasNext());
-
-		assertTrue(ia0.isEmpty());
-		assertTrue(ia1.isEmpty());
-		assertFalse(ia2.isEmpty());
-		assertFalse(ia3.isEmpty());
-		assertFalse(ia4.isEmpty());
-
-		assertEquals(0, ia0.getLength().intValue());
-		assertEquals(0, ia1.getLength().intValue());
-		assertEquals(1, ia2.getLength().intValue());
-		assertEquals(4, ia3.getLength().intValue());
-		assertEquals(4, ia4.getLength().intValue());
-
-		int j = 2;
-		for (int i : ia3) {
-			assertEquals(i, j);
-			j++;
+	public void testGetInstance() {
+		SingletonSequence<String> sequence = SingletonSequence.getInstance("Hello");
+		int i = 0;
+		for (String s : sequence) {
+			Assert.assertEquals("Hello", s);
+			i++;
 		}
-		try {
-			ArraySequence.getInstance((Integer[]) null);
-			fail();
-		} catch (Exception e) {
-		}
+		Assert.assertEquals(1, i);
+		Assert.assertEquals(1, sequence.getLength().intValue());
+		Assert.assertEquals(false, sequence.isEmpty());
 	}
 
 }

@@ -59,11 +59,11 @@ import java.util.Iterator;
 public class MappedSequence<V, W>
 	   extends AbstractSequence<W> {
 
-	final private Iterable<V> values;
+	final private Iterable<V> source;
 	final private Mapping<? super V, ? extends W> mapping;
 
-	protected MappedSequence(Iterable<V> values, Mapping<? super V, ? extends W> mapping) {
-		this.values = values;
+	protected MappedSequence(Iterable<V> source, Mapping<? super V, ? extends W> mapping) {
+		this.source = source;
 		this.mapping = mapping;
 	}
 
@@ -73,22 +73,22 @@ public class MappedSequence<V, W>
 	 * <p>
 	 * @param <V>     The generic type of the input iterable collection
 	 * @param <W>     The generic type of the new iterable collection
-	 * @param values  The input iterable collection
+	 * @param source  The input iterable collection
 	 * @param mapping The mapping applied to the input values
 	 * @return The new iterable collection of type {@code W}
 	 */
-	public static <V, W> MappedSequence<V, W> getInstance(Iterable<V> values, Mapping<? super V, ? extends W> mapping) {
-		if (values == null || mapping == null) {
+	public static <V, W> MappedSequence<V, W> getInstance(Iterable<V> source, Mapping<? super V, ? extends W> mapping) {
+		if (source == null || mapping == null) {
 			throw new IllegalArgumentException();
 		}
-		return new MappedSequence<>(values, mapping);
+		return new MappedSequence<>(source, mapping);
 	}
 
 	@Override
 	public Iterator<W> iterator() {
 		return new Iterator<W>() {
 
-			private final Iterator<V> iterator = values.iterator();
+			private final Iterator<V> iterator = source.iterator();
 
 			@Override
 			public boolean hasNext() {
@@ -105,7 +105,7 @@ public class MappedSequence<V, W>
 
 	@Override
 	protected BigInteger abstractGetLength() {
-		return AbstractSequence.getLength(this.values);
+		return AbstractSequence.getLength(this.source);
 	}
 
 }

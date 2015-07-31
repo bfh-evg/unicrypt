@@ -60,11 +60,11 @@ import java.util.Iterator;
 public class FilteredSequence<V>
 	   extends AbstractSequence<V> {
 
-	final private Iterable<V> values;
+	final private Iterable<V> source;
 	final private Predicate<? super V> predicate;
 
-	protected FilteredSequence(Iterable<V> values, Predicate<? super V> predicate) {
-		this.values = values;
+	protected FilteredSequence(Iterable<V> source, Predicate<? super V> predicate) {
+		this.source = source;
 		this.predicate = predicate;
 	}
 
@@ -72,24 +72,26 @@ public class FilteredSequence<V>
 	 * Returns a new instance of this class, which represents the iterable collection of values obtained by applying a
 	 * given mapping to the values of a given iterable collection.
 	 * <p>
-	 * @param <V>        The generic type of the input iterable collection
-	 * @param values     The input iterable collection
-	 * @param predictate The mapping applied to the input values
+	 * @param <V>       The generic type of the input iterable collection
+	 * @param source    The input iterable collection
+	 * @param predicate The mapping applied to the input values
 	 * @return The new iterable collection of type {@code W}
 	 */
-	public static <V> FilteredSequence<V> getInstance(Iterable<V> values, Predicate<? super V> predictate) {
-		if (values == null || predictate == null) {
+	public static <V> FilteredSequence<V> getInstance(Iterable<V> source, Predicate<? super V> predicate) {
+		if (source == null || predicate == null) {
 			throw new IllegalArgumentException();
 		}
-		return new FilteredSequence<>(values, predictate);
+		return new FilteredSequence<>(source, predicate);
 	}
 
 	@Override
 	public Iterator<V> iterator() {
+		final Iterator<V> iterator = this.source.iterator();
+		final V firstValue = FilteredSequence.getNextValue(iterator, this.predicate);
+
 		return new Iterator<V>() {
 
-			private final Iterator<V> iterator = values.iterator();
-			V nextValue = null;
+			private V nextValue = firstValue;
 
 			@Override
 			public boolean hasNext() {
@@ -99,27 +101,32 @@ public class FilteredSequence<V>
 			@Override
 			public V next() {
 				V result = this.nextValue;
-				this.nextValue = null;
-				while (this.nextValue == null && this.iterator.hasNext()) {
-					V value = this.iterator.next();
-					if (predicate.check(value)) {
-						this.nextValue = value;
-					}
-				}
+				this.nextValue = FilteredSequence.getNextValue(iterator, predicate);
 				return result;
 			}
 
 		};
-
 	}
 
 	@Override
+
 	protected BigInteger abstractGetLength() {
-		BigInteger length = AbstractSequence.getLength(this.values);
+		BigInteger length = AbstractSequence.getLength(this.source);
 		if (length.signum() == 0) {
 			return length;
 		}
 		return Sequence.UNKNOWN;
+	}
+
+	private static <V> V getNextValue(Iterator<V> iterator, Predicate<? super V> predicate) {
+		V nextValue = null;
+		while (nextValue == null && iterator.hasNext()) {
+			V value = iterator.next();
+			if (predicate.test(value)) {
+				nextValue = value;
+			}
+		}
+		return nextValue;
 	}
 
 }

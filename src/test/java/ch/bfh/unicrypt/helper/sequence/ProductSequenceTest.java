@@ -39,12 +39,13 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.classes.BigIntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.classes.ShortenedSequence;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.classes.ProductSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
-import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -52,68 +53,58 @@ import org.junit.Test;
  *
  * @author rolfhaenni
  */
-public class ShortenedSequenceTest {
+public class ProductSequenceTest {
 
 	@Test
-	public void generalTest() {
-
-		Sequence<BigInteger> sequence = BigIntegerSequence.getInstance(1, 100);
-
+	public void testGeneralTest() {
+		ArraySequence<Integer> it0 = ArraySequence.getInstance();
+		IntegerSequence it1 = IntegerSequence.getInstance(0, 5);
+		IntegerSequence it2 = IntegerSequence.getInstance(0, 4);
+		ArraySequence<Integer> it3 = ArraySequence.getInstance(0, 1);
 		{
-			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 0);
+			ProductSequence<Integer> seq = ProductSequence.<Integer>getInstance();
 			int counter = 0;
-			for (BigInteger i : newSequence) {
-				counter++;
-			}
-			assertEquals(0, counter);
-		}
-		{
-			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 1);
-			int counter = 0;
-			for (BigInteger i : newSequence) {
+			for (DenseArray<Integer> i : seq) {
 				counter++;
 			}
 			assertEquals(1, counter);
+			assertEquals(1, seq.getLength().intValue());
 		}
 		{
-			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 10);
+			ProductSequence<Integer> seq = ProductSequence.getInstance(it1, it2, it3);
 			int counter = 0;
-			for (BigInteger i : newSequence) {
+			for (DenseArray<Integer> i : seq) {
 				counter++;
 			}
-			assertEquals(10, counter);
+			assertEquals(60, counter);
+			assertEquals(60, seq.getLength().intValue());
 		}
 		{
-			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 100);
+			ProductSequence<Integer> seq = ProductSequence.getInstance(it0);
 			int counter = 0;
-			for (BigInteger i : newSequence) {
-				counter++;
-			}
-			assertEquals(100, counter);
-		}
-		{
-			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(sequence, 200);
-			int counter = 0;
-			for (BigInteger i : newSequence) {
-				counter++;
-			}
-			assertEquals(100, counter);
-		}
-		{
-			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(ShortenedSequence.getInstance(sequence, 50), 100);
-			int counter = 0;
-			for (BigInteger i : newSequence) {
-				counter++;
-			}
-			assertEquals(50, counter);
-		}
-		{
-			Iterable<BigInteger> newSequence = ShortenedSequence.getInstance(ShortenedSequence.getInstance(sequence, 0), 5);
-			int counter = 0;
-			for (BigInteger i : newSequence) {
+			for (DenseArray<Integer> i : seq) {
 				counter++;
 			}
 			assertEquals(0, counter);
+			assertEquals(0, seq.getLength().intValue());
+		}
+		{
+			ProductSequence<Integer> seq = ProductSequence.getInstance(it1, it0, it2);
+			int counter = 0;
+			for (DenseArray<Integer> i : seq) {
+				counter++;
+			}
+			assertEquals(0, counter);
+			assertEquals(0, seq.getLength().intValue());
+		}
+		{
+			ProductSequence<Integer> seq = ProductSequence.getInstance(it0, it0, it0);
+			int counter = 0;
+			for (DenseArray<Integer> i : seq) {
+				counter++;
+			}
+			assertEquals(0, counter);
+			assertEquals(0, seq.getLength().intValue());
 		}
 
 	}

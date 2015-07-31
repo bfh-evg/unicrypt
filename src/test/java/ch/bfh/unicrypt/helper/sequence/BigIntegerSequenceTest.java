@@ -1,7 +1,7 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
  *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
@@ -39,73 +39,47 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.iterable;
+package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
 import ch.bfh.unicrypt.helper.sequence.classes.BigIntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import java.math.BigInteger;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public class MappedSequenceTest {
+public class BigIntegerSequenceTest {
 
 	@Test
-	public void iterableMappingTest1() {
+	public void generalTest() {
+		BigIntegerSequence s0 = BigIntegerSequence.getInstance(0, -3);
+		BigIntegerSequence s1 = BigIntegerSequence.getInstance(3, 2);
+		BigIntegerSequence s2 = BigIntegerSequence.getInstance(2, 2);
+		BigIntegerSequence s3 = BigIntegerSequence.getInstance(2, 5);
+		BigIntegerSequence s4 = BigIntegerSequence.getInstance(3, 6);
+		assertEquals(0, s0.getLength().intValue());
+		assertEquals(0, s1.getLength().intValue());
+		assertEquals(1, s2.getLength().intValue());
+		assertEquals(4, s3.getLength().intValue());
+		assertEquals(4, s4.getLength().intValue());
 
-		BigIntegerSequence sequence = BigIntegerSequence.getInstance(0, 10);
-
-		MappedSequence<BigInteger, BigInteger> newSequence = MappedSequence.getInstance(sequence, new Mapping<BigInteger, BigInteger>() {
-
-			@Override
-			public BigInteger map(BigInteger value) {
-				return value.add(BigInteger.ONE);
-			}
-		});
-
-		int i = 1;
-		for (BigInteger value : newSequence) {
-			Assert.assertEquals(i, value.intValue());
-			i++;
-		}
-
-		// run the same test twice to check correct use of iterators
-		i = 1;
-		for (BigInteger value : newSequence) {
-			Assert.assertEquals(i, value.intValue());
-			i++;
-		}
-	}
-
-	@Test
-	public void iterableMappingTest2() {
-
-		ArraySequence sequence = ArraySequence.getInstance(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-
-		MappedSequence<Integer, Integer> newSequence = MappedSequence.getInstance(sequence, new Mapping<Integer, Integer>() {
-
-			@Override
-			public Integer map(Integer value) {
-				return value + 1;
-			}
-		});
-
-		Integer i = 1;
-		for (Integer value : newSequence) {
-			Assert.assertEquals(i, value);
-			i++;
-		}
-
-		// run the same test twice to check correct use of iterators
-		i = 1;
-		for (Integer value : newSequence) {
-			Assert.assertEquals(i, value);
-			i++;
+		assertEquals(s0, s1);
+		assertEquals(s2, s2);
+		assertFalse(s2.equals(s3));
+		assertFalse(s2.equals(s4));
+		assertFalse(s0.iterator().hasNext());
+		assertFalse(s1.iterator().hasNext());
+		assertTrue(s2.iterator().hasNext());
+		assertTrue(s3.iterator().hasNext());
+		assertTrue(s4.iterator().hasNext());
+		int j = 2;
+		for (BigInteger i : s3) {
+			assertEquals(j, i.intValue());
+			j++;
 		}
 	}
 
