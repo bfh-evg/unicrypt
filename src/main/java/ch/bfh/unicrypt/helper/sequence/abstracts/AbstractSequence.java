@@ -46,7 +46,6 @@ import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
-import ch.bfh.unicrypt.helper.sequence.classes.FilteredSequence;
 import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
@@ -160,11 +159,45 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
-	public final FilteredSequence<V> filter(Predicate<? super V> predicate) {
+	public final Sequence<V> filter(final Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
-		return FilteredSequence.getInstance(this, predicate);
+		final Sequence<V> source = this;
+		return new AbstractSequence<V>() {
+
+			@Override
+			protected BigInteger abstractGetLength() {
+				if (source.isEmpty()) {
+					return MathUtil.ZERO;
+				}
+				return Sequence.UNKNOWN;
+			}
+
+			@Override
+			public Iterator<V> iterator() {
+				final Iterator<V> iterator = source.iterator();
+				final V firstValue = AbstractSequence.getNextValue(iterator, predicate);
+				return new Iterator<V>() {
+
+					private V nextValue = firstValue;
+
+					@Override
+					public boolean hasNext() {
+						return nextValue != null;
+					}
+
+					@Override
+					public V next() {
+						V result = this.nextValue;
+						this.nextValue = AbstractSequence.getNextValue(iterator, predicate);
+						return result;
+					}
+
+				};
+			}
+		};
+
 	}
 
 	@Override
@@ -313,4 +346,51 @@ public abstract class AbstractSequence<V>
 		return MathUtil.ZERO;
 	}
 
+	private static <V> V getNextValue(Iterator<V> iterator, Predicate<? super V> predicate) {
+		V nextValue = null;
+		while (nextValue == null && iterator.hasNext()) {
+			V value = iterator.next();
+			if (predicate.test(value)) {
+				nextValue = value;
+			}
+		}
+		return nextValue;
+	}
+
+//	public static <V> Sequence<V> getInstance(final V... source) {
+//		if (source == null) {
+//			throw new IllegalArgumentException();
+//		}
+//		return new AbstractSequence<V>() {
+//
+//			@Override
+//			protected BigInteger abstractGetLength() {
+//				return BigInteger.valueOf(source.length);
+//			}
+//
+//			@Override
+//			public Iterator<V> iterator() {
+//				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//			}
+//		};
+//	}
+//
+//	public static <V> Sequence<V> getInstance(final ImmutableArray<V> source) {
+//		if (source == null) {
+//			throw new IllegalArgumentException();
+//		}
+//		return new AbstractSequence<V>() {
+//
+//			@Override
+//			protected BigInteger abstractGetLength() {
+//				return BigInteger.valueOf(source.getLength());
+//			}
+//
+//			@Override
+//			public Iterator<V> iterator() {
+//				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//			}
+//
+//		};
+//	}
 }

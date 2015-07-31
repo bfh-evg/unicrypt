@@ -41,12 +41,10 @@
  */
 package ch.bfh.unicrypt.helper.sequence.interfaces;
 
-import ch.bfh.unicrypt.helper.sequence.classes.FilteredSequence;
-
 /**
  * Classes implementing this interface provide a single method for checking if a predicate holds for a given value. The
- * main usage of this interface is in the class {@link FilteredSequence} or in the methods
- * {@link Sequence#filter(Predicate)} or {@link Sequence#find(Predicate)}.
+ * main usage of this interface is in the methods {@link Sequence#filter(Predicate)} or
+ * {@link Sequence#find(Predicate)}.
  * <p>
  * @author R. Haenni
  * @version 2.0
