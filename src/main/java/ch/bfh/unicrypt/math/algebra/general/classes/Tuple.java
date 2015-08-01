@@ -78,67 +78,67 @@ public class Tuple
 
 	@Override
 	public int getLength() {
-		return this.getValue().getLength();
+		return this.value.getLength();
 	}
 
 	@Override
 	public final boolean isEmpty() {
-		return this.getValue().isEmpty();
+		return this.value.isEmpty();
 	}
 
 	@Override
 	public final boolean isUniform() {
-		return this.getValue().isUniform();
+		return this.value.isUniform();
 	}
 
 	@Override
 	public Iterable<Integer> getAllIndices() {
-		return this.getValue().getAllIndices();
+		return this.value.getAllIndices();
 	}
 
 	@Override
 	public Iterable<Integer> getIndices(Element element) {
-		return this.getValue().getIndices(element);
+		return this.value.getIndices(element);
 	}
 
 	@Override
 	public Iterable<Integer> getIndicesExcept(Element element) {
-		return this.getValue().getIndicesExcept(element);
+		return this.value.getIndicesExcept(element);
 	}
 
 	@Override
 	public int count(Element element) {
-		return this.getValue().count(element);
+		return this.value.count(element);
 	}
 
 	@Override
 	public int countExcept(Element element) {
-		return this.getValue().countExcept(element);
+		return this.value.countExcept(element);
 	}
 
 	@Override
 	public int countPrefix(Element element) {
-		return this.getValue().countPrefix(element);
+		return this.value.countPrefix(element);
 	}
 
 	@Override
 	public int countSuffix(Element element) {
-		return this.getValue().countSuffix(element);
+		return this.value.countSuffix(element);
 	}
 
 	@Override
 	public Element getFirst() {
-		return this.getValue().getFirst();
+		return this.value.getFirst();
 	}
 
 	@Override
 	public Element getLast() {
-		return this.getValue().getLast();
+		return this.value.getLast();
 	}
 
 	@Override
 	public Element getAt(int index) {
-		return this.getValue().getAt(index);
+		return this.value.getAt(index);
 	}
 
 	@Override
@@ -159,91 +159,91 @@ public class Tuple
 
 	@Override
 	public Tuple extract(int offset, int length) {
-		return Tuple.getInstance(this.getSet().extract(offset, length), this.getValue().extract(offset, length));
+		return Tuple.getInstance(this.getSet().extract(offset, length), this.value.extract(offset, length));
 	}
 
 	@Override
 	public Tuple extractPrefix(int length) {
-		return Tuple.getInstance(this.getSet().extractPrefix(length), this.getValue().extractPrefix(length));
+		return Tuple.getInstance(this.getSet().extractPrefix(length), this.value.extractPrefix(length));
 	}
 
 	@Override
 	public Tuple extractSuffix(int length) {
-		return Tuple.getInstance(this.getSet().extractSuffix(length), this.getValue().extractSuffix(length));
+		return Tuple.getInstance(this.getSet().extractSuffix(length), this.value.extractSuffix(length));
 	}
 
 	@Override
 	public Tuple extractRange(int fromIndex, int toIndex) {
 		return Tuple.getInstance(this.getSet().extractRange(fromIndex, toIndex),
-								 this.getValue().extractRange(fromIndex, toIndex));
+								 this.value.extractRange(fromIndex, toIndex));
 	}
 
 	@Override
 	public Tuple remove(int offset, int length) {
-		return Tuple.getInstance(this.getSet().remove(offset, length), this.getValue().remove(offset, length));
+		return Tuple.getInstance(this.getSet().remove(offset, length), this.value.remove(offset, length));
 	}
 
 	@Override
 	public Tuple removePrefix(int length) {
-		return Tuple.getInstance(this.getSet().removePrefix(length), this.getValue().removePrefix(length));
+		return Tuple.getInstance(this.getSet().removePrefix(length), this.value.removePrefix(length));
 	}
 
 	@Override
 	public Tuple removeSuffix(int length) {
-		return Tuple.getInstance(this.getSet().removeSuffix(length), this.getValue().removeSuffix(length));
+		return Tuple.getInstance(this.getSet().removeSuffix(length), this.value.removeSuffix(length));
 	}
 
 	@Override
 	public Tuple removeRange(int fromIndex, int toIndex) {
 		return Tuple.getInstance(this.getSet().removeRange(fromIndex, toIndex),
-								 this.getValue().removeRange(fromIndex, toIndex));
+								 this.value.removeRange(fromIndex, toIndex));
 	}
 
 	@Override
 	public Tuple removeAt(final int index) {
-		return Tuple.getInstance(this.getSet().removeAt(index), this.getValue().removeAt(index));
+		return Tuple.getInstance(this.getSet().removeAt(index), this.value.removeAt(index));
 	}
 
 	@Override
 	public Tuple removeFirst() {
-		return Tuple.getInstance(this.getSet().removeFirst(), this.getValue().removeFirst());
+		return Tuple.getInstance(this.getSet().removeFirst(), this.value.removeFirst());
 	}
 
 	@Override
 	public Tuple removeLast() {
-		return Tuple.getInstance(this.getSet().removeLast(), this.getValue().removeLast());
+		return Tuple.getInstance(this.getSet().removeLast(), this.value.removeLast());
 	}
 
 	@Override
 	public Tuple insertAt(int index, Element element) {
 		return Tuple.getInstance(this.getSet().insertAt(index, element.getSet()),
-								 this.getValue().insertAt(index, element));
+								 this.value.insertAt(index, element));
 	}
 
 	@Override
 	public Tuple add(Element element) {
-		return Tuple.getInstance(this.getSet().add(element.getSet()), this.getValue().add(element));
+		return Tuple.getInstance(this.getSet().add(element.getSet()), this.value.add(element));
 	}
 
 	@Override
 	public Tuple append(ImmutableArray<Element> other) {
-		return Tuple.getInstance(this.getValue().append(other));
+		return Tuple.getInstance(this.value.append(other));
 	}
 
 	@Override
 	public Tuple replaceAt(int index, Element element) {
 		return Tuple.getInstance(this.getSet().replaceAt(index, element.getSet()),
-								 this.getValue().replaceAt(index, element));
+								 this.value.replaceAt(index, element));
 	}
 
 	@Override
 	public Tuple reverse() {
-		return Tuple.getInstance(this.getSet().reverse(), this.getValue().reverse());
+		return Tuple.getInstance(this.getSet().reverse(), this.value.reverse());
 	}
 
 	@Override
 	public Tuple[] split(int... indices) {
-		DenseArray<Element>[] elementArray = this.getValue().split(indices);
+		DenseArray<Element>[] elementArray = this.value.split(indices);
 		Tuple[] result = new Tuple[elementArray.length];
 		for (int i = 0; i < elementArray.length; i++) {
 			result[i] = Tuple.getInstance(elementArray[i]);
@@ -258,7 +258,7 @@ public class Tuple
 
 	@Override
 	public Iterator<Element> iterator() {
-		return this.getValue().iterator();
+		return this.value.iterator();
 	}
 
 	@Override

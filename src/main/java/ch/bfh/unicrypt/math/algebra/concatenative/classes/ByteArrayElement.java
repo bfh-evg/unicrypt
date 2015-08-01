@@ -52,6 +52,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElemen
 public class ByteArrayElement
 	   extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement, ByteArray>
 	   implements ConcatenativeElement<ByteArray> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected ByteArrayElement(final ByteArrayMonoid monoid, final ByteArray byteArray) {
@@ -60,7 +61,7 @@ public class ByteArrayElement
 
 	@Override
 	public int getLength() {
-		return this.getValue().getLength();
+		return this.value.getLength();
 	}
 
 }

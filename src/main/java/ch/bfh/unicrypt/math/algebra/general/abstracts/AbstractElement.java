@@ -81,8 +81,8 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 
 	private static final long serialVersionUID = 1L;
 
-	private final AbstractSet<E, V> set;
-	private final V value;
+	protected final AbstractSet<E, V> set;
+	protected final V value;
 
 	protected AbstractElement(final AbstractSet<E, V> set, V value) {
 		this.set = set;

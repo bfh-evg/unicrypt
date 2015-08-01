@@ -54,6 +54,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 public class FiniteByteArrayElement
 	   extends AbstractElement<FiniteByteArraySet, FiniteByteArrayElement, ByteArray>
 	   implements Element<ByteArray> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected FiniteByteArrayElement(final FiniteByteArraySet set, final ByteArray byteArray) {
@@ -61,11 +62,11 @@ public class FiniteByteArrayElement
 	}
 
 	public int getLength() {
-		return this.getValue().getLength();
+		return this.value.getLength();
 	}
 
 	public ByteArrayElement getByteArrayElement() {
-		return ByteArrayMonoid.getInstance().getElement(this.getValue());
+		return ByteArrayMonoid.getInstance().getElement(this.value);
 	}
 
 }

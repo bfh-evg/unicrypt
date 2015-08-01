@@ -51,6 +51,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElemen
 public class StringElement
 	   extends AbstractConcatenativeElement<StringMonoid, StringElement, String>
 	   implements ConcatenativeElement<String> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected StringElement(final StringMonoid monoid, final String string) {
@@ -59,12 +60,12 @@ public class StringElement
 
 	@Override
 	public int getLength() {
-		return this.getValue().length();
+		return this.value.length();
 	}
 
 	@Override
 	protected String defaultToStringContent() {
-		return "\"" + this.getValue() + "\"";
+		return "\"" + this.value + "\"";
 	}
 
 }

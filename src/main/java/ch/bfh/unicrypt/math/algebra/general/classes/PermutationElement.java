@@ -52,6 +52,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 public class PermutationElement
 	   extends AbstractElement<PermutationGroup, PermutationElement, Permutation>
 	   implements Element<Permutation> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected PermutationElement(final PermutationGroup group, final Permutation permutation) {
@@ -59,7 +60,7 @@ public class PermutationElement
 	}
 
 	public int getSize() {
-		return this.getValue().getSize();
+		return this.value.getSize();
 	}
 
 }

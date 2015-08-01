@@ -77,19 +77,21 @@ public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECE
 	}
 
 	// additional convenience getter method to handle to point of infinity
+	@Override
 	public DE getX() {
 		if (this.infinity) {
 			throw new UnsupportedOperationException();
 		}
-		return this.getValue().getX();
+		return this.value.getX();
 	}
 
 	// additional convenience getter method to handle to point of infinity
+	@Override
 	public DE getY() {
 		if (this.infinity) {
 			throw new UnsupportedOperationException();
 		}
-		return this.getValue().getY();
+		return this.value.getY();
 	}
 
 	@Override

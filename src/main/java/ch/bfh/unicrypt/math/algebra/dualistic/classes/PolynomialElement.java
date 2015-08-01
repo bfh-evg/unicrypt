@@ -54,8 +54,8 @@ import java.util.HashMap;
  * @author rolfhaenni
  */
 public class PolynomialElement
-	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement,
-	   Polynomial<? extends DualisticElement<BigInteger>>> {
+	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement, Polynomial<? extends DualisticElement<BigInteger>>> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected PolynomialElement(final PolynomialSemiRing semiRing,
@@ -71,27 +71,27 @@ public class PolynomialElement
 		if (this.getSet().isBinary()) {
 			SemiRing semiRing = this.getSet().getSemiRing();
 			if (semiRing.getZeroElement().isEquivalent(element)) {
-				return this.getValue().getCoefficient(0);
+				return this.value.getCoefficient(0);
 			} else {
-				return (this.getValue().countCoefficients() % 2) == 0
+				return (this.value.countCoefficients() % 2) == 0
 					   ? semiRing.getZeroElement() : semiRing.getOneElement();
 			}
 		}
 
 		// TBD! (n*x^2 < q*x^3    with x = log(modulus), n = order of poly and q = number of non-zero terms in poly)
-		int n = this.getValue().getDegree();
-		int q = this.getValue().countCoefficients();
+		int n = this.value.getDegree();
+		int q = this.value.countCoefficients();
 		if (n > 0 && ((double) q / n) < 0.01) {
 			DualisticElement<BigInteger> result = this.getSet().getSemiRing().getZeroElement();
-			for (Integer index : this.getValue().getCoefficientIndices()) {
-				result = result.add(this.getValue().getCoefficient(index).multiply(element.power(index)));
+			for (Integer index : this.value.getCoefficientIndices()) {
+				result = result.add(this.value.getCoefficient(index).multiply(element.power(index)));
 			}
 			return result;
 		} else {
 			// Horner
 			DualisticElement<BigInteger> r = this.getSet().getSemiRing().getZeroElement();
-			for (int i = this.getValue().getDegree(); i >= 0; i--) {
-				r = r.add(this.getValue().getCoefficient(i));
+			for (int i = this.value.getDegree(); i >= 0; i--) {
+				r = r.add(this.value.getCoefficient(i));
 				if (i > 0) {
 					r = r.multiply(element);
 				}
@@ -122,8 +122,8 @@ public class PolynomialElement
 			throw new IllegalArgumentException();
 		}
 		HashMap map = new HashMap();
-		for (int i = 0; i <= this.getValue().getDegree(); i++) {
-			DualisticElement<BigInteger> c = this.getValue().getCoefficient(i);
+		for (int i = 0; i <= this.value.getDegree(); i++) {
+			DualisticElement<BigInteger> c = this.value.getCoefficient(i);
 			if (!c.isZero()) {
 				map.put(i, c.divide(value));
 			}
