@@ -44,11 +44,10 @@ package ch.bfh.unicrypt.helper.array.abstracts;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.IntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.lang.reflect.Array;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This abstract class serves as a base implementation of the {@link ImmutableArray} interface.
@@ -111,44 +110,32 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	public final Iterable<Integer> getAllIndices() {
+	public final Sequence<Integer> getAllIndices() {
 		return IntegerSequence.getInstance(0, this.length - 1);
 	}
 
 	@Override
-	public final Iterable<Integer> getIndices(V value) {
+	public final Sequence<Integer> getIndices(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
 		return defaultGetIndices(value);
 	}
 
-	protected Iterable<Integer> defaultGetIndices(V value) {
-		List<Integer> result = new LinkedList<>();
-		for (int i : this.getAllIndices()) {
-			if (this.abstractGetAt(i).equals(value)) {
-				result.add(i);
-			}
-		}
-		return result;
+	protected Sequence<Integer> defaultGetIndices(final V value) {
+		return this.getAllIndices().filter(this.equalityTest(value));
 	}
 
 	@Override
-	public final Iterable<Integer> getIndicesExcept(V value) {
+	public final Sequence<Integer> getIndicesExcept(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
 		return defaultGetIndicesExcept(value);
 	}
 
-	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
-		List<Integer> result = new LinkedList<>();
-		for (int i : this.getAllIndices()) {
-			if (!this.abstractGetAt(i).equals(value)) {
-				result.add(i);
-			}
-		}
-		return result;
+	protected Sequence<Integer> defaultGetIndicesExcept(final V value) {
+		return this.getAllIndices().filter(this.equalityTest(value).not());
 	}
 
 	@Override
@@ -156,18 +143,22 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		int result = 0;
-		for (int i : this.getAllIndices()) {
-			if (this.abstractGetAt(i).equals(value)) {
-				result++;
-			}
-		}
-		return result;
+		return (int) this.getAllIndices().count(this.equalityTest(value));
 	}
 
 	@Override
 	public final int countExcept(V value) {
 		return this.getLength() - this.count(value);
+	}
+
+	private Predicate<Integer> equalityTest(final V value) {
+		return new Predicate<Integer>() {
+
+			@Override
+			public boolean test(Integer index) {
+				return abstractGetAt(index).equals(value);
+			}
+		};
 	}
 
 	@Override
@@ -386,11 +377,6 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 			@Override
 			public V next() {
 				return abstractGetAt(this.currentIndex++);
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
 			}
 
 		};

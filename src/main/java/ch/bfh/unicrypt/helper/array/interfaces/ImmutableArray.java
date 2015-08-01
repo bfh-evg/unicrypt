@@ -84,7 +84,7 @@ public interface ImmutableArray<V extends Object>
 	 * @see ImmutableArray#getIndices(java.lang.Object)
 	 * @see ImmutableArray#getIndicesExcept(java.lang.Object)
 	 */
-	public Iterable<Integer> getAllIndices();
+	public Sequence<Integer> getAllIndices();
 
 	/**
 	 * Returns an iterable collection of all array indices for which the stored value matches with the given value.
@@ -94,7 +94,7 @@ public interface ImmutableArray<V extends Object>
 	 * @see ImmutableArray#getAllIndices()
 	 * @see ImmutableArray#getIndicesExcept(java.lang.Object)
 	 */
-	public Iterable<Integer> getIndices(V value);
+	public Sequence<Integer> getIndices(V value);
 
 	/**
 	 * Returns an iterable collection of all array indices for which the stored values does not match with the given
@@ -105,7 +105,7 @@ public interface ImmutableArray<V extends Object>
 	 * @see ImmutableArray#getAllIndices()
 	 * @see ImmutableArray#getIndices(java.lang.Object)
 	 */
-	public Iterable<Integer> getIndicesExcept(V value);
+	public Sequence<Integer> getIndicesExcept(V value);
 
 	/**
 	 * Counts the number of occurrences of a given value in the array.

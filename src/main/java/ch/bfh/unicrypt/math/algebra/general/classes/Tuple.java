@@ -92,17 +92,17 @@ public class Tuple
 	}
 
 	@Override
-	public Iterable<Integer> getAllIndices() {
+	public Sequence<Integer> getAllIndices() {
 		return this.value.getAllIndices();
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(Element element) {
+	public Sequence<Integer> getIndices(Element element) {
 		return this.value.getIndices(element);
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(Element element) {
+	public Sequence<Integer> getIndicesExcept(Element element) {
 		return this.value.getIndicesExcept(element);
 	}
 

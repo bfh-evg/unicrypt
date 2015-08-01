@@ -79,17 +79,17 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public Iterable<Integer> getAllIndices() {
+	public Sequence<Integer> getAllIndices() {
 		return this.encoders.getAllIndices();
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(Encoder encoder) {
+	public Sequence<Integer> getIndices(Encoder encoder) {
 		return this.encoders.getIndices(encoder);
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(Encoder encoder) {
+	public Sequence<Integer> getIndicesExcept(Encoder encoder) {
 		return this.encoders.getIndicesExcept(encoder);
 	}
 

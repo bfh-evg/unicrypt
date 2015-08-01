@@ -212,7 +212,7 @@ public class SparseArray<V extends Object>
 
 	@Override
 	// this method is more efficient than its predecessor
-	protected Iterable<Integer> defaultGetIndices(V value) {
+	protected Sequence<Integer> defaultGetIndices(V value) {
 		if (this.defaultValue.equals(value)) {
 			return super.defaultGetIndices(value);
 		}
@@ -224,12 +224,12 @@ public class SparseArray<V extends Object>
 				}
 			}
 		}
-		return result;
+		return Sequence.getInstance(result);
 	}
 
 	@Override
 	// this method is more efficient than its predecessor
-	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
+	protected Sequence<Integer> defaultGetIndicesExcept(V value) {
 		if (!this.defaultValue.equals(value)) {
 			return super.defaultGetIndicesExcept(value);
 		}
@@ -241,7 +241,7 @@ public class SparseArray<V extends Object>
 				}
 			}
 		}
-		return result;
+		return Sequence.getInstance(result);
 	}
 
 	@Override

@@ -278,17 +278,17 @@ public class ProductSet
 	}
 
 	@Override
-	public Iterable<Integer> getAllIndices() {
+	public Sequence<Integer> getAllIndices() {
 		return this.sets.getAllIndices();
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(Set set) {
+	public Sequence<Integer> getIndices(Set set) {
 		return this.sets.getIndices(set);
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(Set set) {
+	public Sequence<Integer> getIndicesExcept(Set set) {
 		return this.sets.getIndicesExcept(set);
 	}
 

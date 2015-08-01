@@ -92,17 +92,17 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public Iterable<Integer> getAllIndices() {
+	public Sequence<Integer> getAllIndices() {
 		return this.functions.getAllIndices();
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(Function function) {
+	public Sequence<Integer> getIndices(Function function) {
 		return this.functions.getIndices(function);
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(Function function) {
+	public Sequence<Integer> getIndicesExcept(Function function) {
 		return this.functions.getIndicesExcept(function);
 	}
 
