@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -231,6 +232,11 @@ public class CompositeEncoder
 			result[i] = new CompositeEncoder(encoderArray[i]);
 		}
 		return result;
+	}
+
+	@Override
+	public final Sequence<Encoder> getSequence() {
+		return Sequence.getInstance(this.encoders);
 	}
 
 	@Override

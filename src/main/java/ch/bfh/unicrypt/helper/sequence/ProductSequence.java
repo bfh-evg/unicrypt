@@ -39,12 +39,11 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.classes;
+package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
 import java.util.Iterator;
 
@@ -57,7 +56,7 @@ import java.util.Iterator;
  * @param <V> The generic type of the iterable collection
  */
 public class ProductSequence<V>
-	   extends AbstractSequence<DenseArray<V>> {
+	   extends Sequence<DenseArray<V>> {
 
 	private final Sequence<V> sequence;
 	private final ProductSequence<V> productSequence;
@@ -72,6 +71,42 @@ public class ProductSequence<V>
 	protected ProductSequence(Sequence<V> sequence, ProductSequence<V> productSequence) {
 		this.sequence = sequence;
 		this.productSequence = productSequence;
+	}
+
+	/**
+	 * Creates and returns an iterable collection of all combinations of elements in the input collections of elements.
+	 * <p>
+	 * @param <V>     The generic type of the given iterable collections of elements
+	 * @param sources The given iterable collections of elements
+	 * @return The new iterable collection of all combinations of elements
+	 */
+	public static <V> ProductSequence<V> getInstance(Sequence<V>... sources) {
+		if (sources == null) {
+			throw new IllegalArgumentException();
+		}
+		for (Iterable<V> source : sources) {
+			if (source == null) {
+				throw new IllegalArgumentException();
+			}
+		}
+		return ProductSequence.getInstance(Sequence.getInstance(sources));
+	}
+
+	/**
+	 * Creates and returns an iterable collection of all combinations of elements in the input collections of elements.
+	 * <p>
+	 * @param <V>     The generic type of the given iterable collections of elements
+	 * @param sources The given iterable collections of elements
+	 * @return The new iterable collection of all combinations of elements
+	 */
+	public static <V> ProductSequence<V> getInstance(Sequence<? extends Sequence<V>> sources) {
+		if (sources == null) {
+			throw new IllegalArgumentException();
+		}
+		if (sources.isEmpty()) {
+			return new ProductSequence<>();
+		}
+		return new ProductSequence<>(sources.find(), ProductSequence.getInstance(sources.skip()));
 	}
 
 	@Override
@@ -109,9 +144,9 @@ public class ProductSequence<V>
 			}
 
 			@Override
-			public DenseArray<V> next() {
-				DenseArray<V> items = this.iterator2.next();
-				DenseArray<V> result = items.insertAt(0, item);
+			public ImmutableArray<V> next() {
+				ImmutableArray<V> items = this.iterator2.next();
+				ImmutableArray<V> result = items.insertAt(0, item);
 				if (!this.iterator2.hasNext() && this.iterator1.hasNext()) {
 					this.item = this.iterator1.next();
 					this.iterator2 = productSequence.iterator();
@@ -122,49 +157,13 @@ public class ProductSequence<V>
 		};
 	}
 
-	/**
-	 * Creates and returns an iterable collection of all combinations of elements in the input collections of elements.
-	 * <p>
-	 * @param <V>     The generic type of the given iterable collections of elements
-	 * @param sources The given iterable collections of elements
-	 * @return The new iterable collection of all combinations of elements
-	 */
-	public static <V> ProductSequence<V> getInstance(Sequence<V>... sources) {
-		if (sources == null) {
-			throw new IllegalArgumentException();
-		}
-		for (Iterable<V> source : sources) {
-			if (source == null) {
-				throw new IllegalArgumentException();
-			}
-		}
-		return ProductSequence.getInstance(AbstractSequence.getInstance(sources));
-	}
-
-	/**
-	 * Creates and returns an iterable collection of all combinations of elements in the input collections of elements.
-	 * <p>
-	 * @param <V>     The generic type of the given iterable collections of elements
-	 * @param sources The given iterable collections of elements
-	 * @return The new iterable collection of all combinations of elements
-	 */
-	public static <V> ProductSequence<V> getInstance(Sequence<? extends Sequence<V>> sources) {
-		if (sources == null) {
-			throw new IllegalArgumentException();
-		}
-		if (sources.isEmpty()) {
-			return new ProductSequence<>();
-		}
-		return new ProductSequence<>(sources.find(), ProductSequence.getInstance(sources.skip()));
-	}
-
 	@Override
 	protected BigInteger abstractGetLength() {
 		if (this.sequence == null) {
 			return MathUtil.ONE;
 		}
-		BigInteger length1 = AbstractSequence.getLength(this.sequence);
-		BigInteger length2 = AbstractSequence.getLength(this.productSequence);
+		BigInteger length1 = this.sequence.getLength();
+		BigInteger length2 = this.productSequence.getLength();
 		if (length1.equals(Sequence.INFINITE) || length2.equals(Sequence.INFINITE)) {
 			return Sequence.INFINITE;
 		}

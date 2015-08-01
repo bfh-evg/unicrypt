@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;

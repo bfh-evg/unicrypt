@@ -49,9 +49,8 @@ import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.Mapping;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -253,20 +252,25 @@ public class Tuple
 	}
 
 	@Override
+	public final Sequence<Element> getSequence() {
+		return Sequence.getInstance(this.value);
+	}
+
+	@Override
 	public Iterator<Element> iterator() {
 		return this.getValue().iterator();
 	}
 
 	@Override
 	protected final <W> Tree<W> defaultConvertTo(final ConvertMethod<W> convertMethod) {
-		Sequence<Tree<W>> stringTrees = AbstractSequence.getInstance(this).map(new Mapping<Element, Tree<W>>() {
+		Sequence<Tree<W>> trees = this.getSequence().map(new Mapping<Element, Tree<W>>() {
 
 			@Override
 			public Tree<W> map(Element element) {
 				return element.convertTo(convertMethod);
 			}
 		});
-		return Tree.getInstance(stringTrees);
+		return Tree.getInstance(trees);
 	}
 
 	@Override

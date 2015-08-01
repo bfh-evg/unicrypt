@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
 import org.junit.Test;

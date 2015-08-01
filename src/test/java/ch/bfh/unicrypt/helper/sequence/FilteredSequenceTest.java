@@ -42,10 +42,6 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -117,7 +113,7 @@ public class FilteredSequenceTest {
 
 		}
 		{
-			Sequence<Integer> filteredSeq = AbstractSequence.getInstance(3).filter(oddPredicate).filter(primePredicate);
+			Sequence<Integer> filteredSeq = Sequence.getInstance(3).filter(oddPredicate).filter(primePredicate);
 
 			Assert.assertEquals(Sequence.UNKNOWN, filteredSeq.getLength());
 			int i = 0;
@@ -128,7 +124,7 @@ public class FilteredSequenceTest {
 			Assert.assertEquals(1, filteredSeq.count());
 		}
 		{
-			Sequence<Integer> filteredSeq = AbstractSequence.getInstance(4).filter(oddPredicate).filter(primePredicate);
+			Sequence<Integer> filteredSeq = Sequence.getInstance(4).filter(oddPredicate).filter(primePredicate);
 
 			Assert.assertEquals(0, filteredSeq.getLength().intValue());
 			int i = 0;

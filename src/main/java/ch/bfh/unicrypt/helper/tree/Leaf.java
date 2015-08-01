@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.Iterator;
 
 /**
@@ -76,7 +76,7 @@ public class Leaf<V>
 
 	@Override
 	public Iterator<V> iterator() {
-		return AbstractSequence.getInstance(this.value).iterator();
+		return Sequence.getInstance(this.value).iterator();
 	}
 
 	@Override

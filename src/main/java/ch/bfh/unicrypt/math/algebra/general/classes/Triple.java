@@ -50,6 +50,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  */
 public class Triple
 	   extends Tuple {
+
 	private static final long serialVersionUID = 1L;
 
 	protected Triple(final ProductSet set, final DenseArray<Element> elements) {

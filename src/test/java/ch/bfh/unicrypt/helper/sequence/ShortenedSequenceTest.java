@@ -41,8 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.classes.BigIntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

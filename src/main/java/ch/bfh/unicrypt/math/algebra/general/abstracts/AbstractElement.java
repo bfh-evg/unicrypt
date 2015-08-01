@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
-import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
@@ -366,20 +365,4 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		return this.value.toString();
 	}
 
-//	public static void main(String[] args) {
-//		Element e1 = Z.getInstance().getElement(5);
-//		Element e2 = StringMonoid.getInstance(Alphabet.LOWER_CASE).getElement("hello");
-//		Element e12 = Tuple.getInstance(e1, e2);
-//		Element e3 = PermutationGroup.getInstance(5).getRandomElement();
-//		Element e123 = Tuple.getInstance(e12, e3);
-//		System.out.println(e123.convertToBigInteger());
-//		System.out.println(e123.getSet().getElementFrom(e123.convertToBigInteger()));
-//		System.out.println(e123.convertToByteArray());
-//		System.out.println(e123.getSet().getElementFrom(e123.convertToByteArray()));
-//		System.out.println(e123.convertToString());
-//		System.out.println(e123.getSet().getElementFrom(e123.convertToString()));
-//		for (Object e : e123.getSet().getElements(10)) {
-//			System.out.println(e);
-//		}
-//	}
 }

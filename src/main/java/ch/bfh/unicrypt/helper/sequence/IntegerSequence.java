@@ -39,9 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.classes;
+package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
 import java.util.Iterator;
 
@@ -53,7 +53,7 @@ import java.util.Iterator;
  * @version 2.0
  */
 public class IntegerSequence
-	   extends AbstractSequence<Integer> {
+	   extends Sequence<Integer> {
 
 	private static final long serialVersionUID = 1L;
 

@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
-import ch.bfh.unicrypt.helper.sequence.classes.StringSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.StringSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
  * Instance of this class specify the invertible aggregation of a tree of strings. The aggregation of a node consists in

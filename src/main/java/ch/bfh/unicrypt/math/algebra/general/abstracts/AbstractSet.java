@@ -49,8 +49,8 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -512,7 +512,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	// some sets allow a more efficient itertation method than this one
 	protected Sequence<E> defaultGetElements() {
 		final AbstractSet<E, V> set = this;
-		return new AbstractSequence<E>() {
+		return new Sequence<E>() {
 
 			@Override
 			public Iterator<E> iterator() {

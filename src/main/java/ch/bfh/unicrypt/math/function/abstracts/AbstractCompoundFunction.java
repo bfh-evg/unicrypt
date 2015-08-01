@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.function.abstracts;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -244,6 +245,11 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 			result[i] = this.abstractGetInstance(functionArray[i]);
 		}
 		return result;
+	}
+
+	@Override
+	public final Sequence<Function> getSequence() {
+		return Sequence.getInstance(this.functions);
 	}
 
 	@Override

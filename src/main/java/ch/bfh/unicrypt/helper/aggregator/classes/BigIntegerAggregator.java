@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
 
 /**
@@ -116,7 +116,7 @@ public class BigIntegerAggregator
 
 	@Override
 	protected Sequence<BigInteger> abstractDisaggregateNode(BigInteger value) {
-		return AbstractSequence.getInstance(MathUtil.unpairWithSize(value.subtract(MathUtil.ONE).divide(MathUtil.TWO)));
+		return Sequence.getInstance(MathUtil.unpairWithSize(value.subtract(MathUtil.ONE).divide(MathUtil.TWO)));
 	}
 
 }

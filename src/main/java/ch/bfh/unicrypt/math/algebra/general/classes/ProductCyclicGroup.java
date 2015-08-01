@@ -48,9 +48,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  *

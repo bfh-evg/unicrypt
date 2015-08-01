@@ -41,11 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.classes.ProductSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -57,14 +53,14 @@ public class ProductSequenceTest {
 
 	@Test
 	public void testGeneralTest() {
-		Sequence<Integer> it0 = AbstractSequence.getInstance();
+		Sequence<Integer> it0 = Sequence.getInstance();
 		Sequence it1 = IntegerSequence.getInstance(0, 5);
 		Sequence it2 = IntegerSequence.getInstance(0, 4);
-		Sequence<Integer> it3 = AbstractSequence.getInstance(0, 1);
+		Sequence<Integer> it3 = Sequence.getInstance(0, 1);
 		{
 			ProductSequence<Integer> seq = ProductSequence.<Integer>getInstance();
 			int counter = 0;
-			for (DenseArray<Integer> i : seq) {
+			for (ImmutableArray<Integer> i : seq) {
 				counter++;
 			}
 			assertEquals(1, counter);
@@ -73,7 +69,7 @@ public class ProductSequenceTest {
 		{
 			ProductSequence<Integer> seq = ProductSequence.getInstance(it1, it2, it3);
 			int counter = 0;
-			for (DenseArray<Integer> i : seq) {
+			for (ImmutableArray<Integer> i : seq) {
 				counter++;
 			}
 			assertEquals(60, counter);
@@ -82,7 +78,7 @@ public class ProductSequenceTest {
 		{
 			ProductSequence<Integer> seq = ProductSequence.getInstance(it0);
 			int counter = 0;
-			for (DenseArray<Integer> i : seq) {
+			for (ImmutableArray<Integer> i : seq) {
 				counter++;
 			}
 			assertEquals(0, counter);
@@ -91,7 +87,7 @@ public class ProductSequenceTest {
 		{
 			ProductSequence<Integer> seq = ProductSequence.getInstance(it1, it0, it2);
 			int counter = 0;
-			for (DenseArray<Integer> i : seq) {
+			for (ImmutableArray<Integer> i : seq) {
 				counter++;
 			}
 			assertEquals(0, counter);
@@ -100,7 +96,7 @@ public class ProductSequenceTest {
 		{
 			ProductSequence<Integer> seq = ProductSequence.getInstance(it0, it0, it0);
 			int counter = 0;
-			for (DenseArray<Integer> i : seq) {
+			for (ImmutableArray<Integer> i : seq) {
 				counter++;
 			}
 			assertEquals(0, counter);

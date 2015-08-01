@@ -42,9 +42,6 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import org.junit.Assert;
 import org.junit.Test;
 

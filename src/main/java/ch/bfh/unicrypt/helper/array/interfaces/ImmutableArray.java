@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.array.interfaces;
 
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+
 /**
  * This interface represents immutable instances of arrays. The type of the elements in an array is generic. After
  * creating an immutable array, it can no longer be modified. This interface specifies a large set of useful methods for
@@ -361,5 +363,7 @@ public interface ImmutableArray<V extends Object>
 	 * @return The resulting immutable arrays
 	 */
 	public ImmutableArray<V>[] split(int... indices);
+
+	public Sequence<V> getSequence();
 
 }

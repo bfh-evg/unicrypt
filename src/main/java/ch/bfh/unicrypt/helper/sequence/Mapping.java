@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.interfaces;
+package ch.bfh.unicrypt.helper.sequence;
 
 /**
  * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
@@ -51,7 +51,7 @@ package ch.bfh.unicrypt.helper.sequence.interfaces;
  * @param <W> The generic type of the output value
  * @see IterableMapping
  */
-public interface Mapping<V, W> {
+public abstract class Mapping<V, W> {
 
 	/**
 	 * Maps the given value of type {@code V} into a value of type {@code W}.
@@ -59,6 +59,18 @@ public interface Mapping<V, W> {
 	 * @param value The given value
 	 * @return The mapped value
 	 */
-	public W map(V value);
+	public abstract W map(V value);
+
+	public final <X> Mapping<V, X> compose(final Mapping<? super W, X> otherMapping) {
+		final Mapping<V, W> thisMapping = this;
+		return new Mapping<V, X>() {
+
+			@Override
+			public X map(V value) {
+				return otherMapping.map(thisMapping.map(value));
+			}
+
+		};
+	}
 
 }

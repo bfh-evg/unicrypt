@@ -39,15 +39,12 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.abstracts;
+package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
@@ -62,19 +59,20 @@ import java.util.Iterator;
  * @version 2.0
  * @param <V> The generic type of the values contained in the sequence
  */
-public abstract class AbstractSequence<V>
+public abstract class Sequence<V>
 	   extends UniCrypt
-	   implements Sequence<V> {
+	   implements Iterable<V> {
+
+	public static final BigInteger INFINITE = BigInteger.valueOf(-1);
+	public static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
 
 	// the length of the sequence
 	private BigInteger length;
 
-	@Override
 	public final boolean isEmpty() {
 		return this.getLength().signum() == 0;
 	}
 
-	@Override
 	public final BigInteger getLength() {
 		if (this.length == null) {
 			this.length = this.abstractGetLength();
@@ -86,7 +84,6 @@ public abstract class AbstractSequence<V>
 		return this.length;
 	}
 
-	@Override
 	public final long count() {
 		if (this.getLength().equals(Sequence.INFINITE)) {
 			throw new UnsupportedOperationException();
@@ -101,7 +98,6 @@ public abstract class AbstractSequence<V>
 		return this.length.longValue();
 	}
 
-	@Override
 	public final long count(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
@@ -118,12 +114,10 @@ public abstract class AbstractSequence<V>
 		return counter;
 	}
 
-	@Override
 	public final V find() {
 		return this.find(1);
 	}
 
-	@Override
 	public final V find(long n) {
 		if (n < 1) {
 			throw new IllegalArgumentException();
@@ -138,12 +132,10 @@ public abstract class AbstractSequence<V>
 
 	}
 
-	@Override
 	public final V find(Predicate<? super V> predicate) {
 		return this.find(predicate, 1);
 	}
 
-	@Override
 	public final V find(Predicate<? super V> predicate, long n) {
 		if (predicate == null || n < 1) {
 			throw new IllegalArgumentException();
@@ -157,17 +149,28 @@ public abstract class AbstractSequence<V>
 		return null;
 	}
 
-	@Override
+	public final boolean check(Predicate<? super V> predicate) {
+		if (predicate == null) {
+			throw new IllegalArgumentException();
+		}
+		for (V value : this) {
+			if (!predicate.test(value)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public final <W> Sequence<W> map(final Mapping<? super V, ? extends W> mapping) {
 		if (mapping == null) {
 			throw new IllegalArgumentException();
 		}
 		final Sequence<V> source = this;
-		return new AbstractSequence<W>() {
+		return new Sequence<W>() {
 
 			@Override
 			protected BigInteger abstractGetLength() {
-				return AbstractSequence.getLength(source);
+				return source.getLength();
 			}
 
 			@Override
@@ -191,13 +194,12 @@ public abstract class AbstractSequence<V>
 		};
 	}
 
-	@Override
 	public final Sequence<V> filter(final Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
 		final Sequence<V> source = this;
-		return new AbstractSequence<V>() {
+		return new Sequence<V>() {
 
 			@Override
 			protected BigInteger abstractGetLength() {
@@ -212,7 +214,7 @@ public abstract class AbstractSequence<V>
 				return new Iterator<V>() {
 
 					private final Iterator<V> iterator = source.iterator();
-					private V nextValue = AbstractSequence.getNextValue(this.iterator, predicate);
+					private V nextValue = Sequence.getNextValue(this.iterator, predicate);
 
 					@Override
 					public boolean hasNext() {
@@ -222,7 +224,7 @@ public abstract class AbstractSequence<V>
 					@Override
 					public V next() {
 						V result = this.nextValue;
-						this.nextValue = AbstractSequence.getNextValue(this.iterator, predicate);
+						this.nextValue = Sequence.getNextValue(this.iterator, predicate);
 						return result;
 					}
 
@@ -232,18 +234,16 @@ public abstract class AbstractSequence<V>
 
 	}
 
-	@Override
 	public final Sequence<V> shorten(final long maxLength) {
 		return this.shorten(BigInteger.valueOf(maxLength));
 	}
 
-	@Override
 	public final Sequence<V> shorten(final BigInteger maxLength) {
 		if (maxLength == null || maxLength.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
 		final Sequence<V> source = this;
-		return new AbstractSequence<V>() {
+		return new Sequence<V>() {
 
 			@Override
 			protected BigInteger abstractGetLength() {
@@ -281,18 +281,16 @@ public abstract class AbstractSequence<V>
 		};
 	}
 
-	@Override
 	public Sequence<V> skip() {
 		return this.skip(1);
 	}
 
-	@Override
 	public Sequence<V> skip(final long n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
 		final Sequence<V> source = this;
-		return new AbstractSequence<V>() {
+		return new Sequence<V>() {
 
 			@Override
 			protected BigInteger abstractGetLength() {
@@ -319,13 +317,12 @@ public abstract class AbstractSequence<V>
 		};
 	}
 
-	@Override
 	public final Sequence<DenseArray<V>> group(final long groupLength) {
 		if (groupLength < 1) {
 			throw new IllegalArgumentException();
 		}
 		final Sequence<V> source = this;
-		return new AbstractSequence<DenseArray<V>>() {
+		return new Sequence<DenseArray<V>>() {
 
 			@Override
 			protected BigInteger abstractGetLength() {
@@ -369,20 +366,6 @@ public abstract class AbstractSequence<V>
 
 	protected abstract BigInteger abstractGetLength();
 
-	// helper method used to compute the length of various sources
-	protected static <V> BigInteger getLength(Iterable<V> source) {
-		if (source instanceof Sequence) {
-			return ((Sequence<V>) source).getLength();
-		}
-		if (source instanceof Collection) {
-			return BigInteger.valueOf(((Collection<V>) source).size());
-		}
-		if (source.iterator().hasNext()) {
-			return Sequence.UNKNOWN;
-		}
-		return MathUtil.ZERO;
-	}
-
 	private static <V> V getNextValue(Iterator<V> iterator, Predicate<? super V> predicate) {
 		V nextValue = null;
 		while (nextValue == null && iterator.hasNext()) {
@@ -398,7 +381,7 @@ public abstract class AbstractSequence<V>
 		if (source == null) {
 			throw new IllegalArgumentException();
 		}
-		return new AbstractSequence<V>() {
+		return new Sequence<V>() {
 
 			@Override
 			protected BigInteger abstractGetLength() {
@@ -429,22 +412,29 @@ public abstract class AbstractSequence<V>
 		if (source == null) {
 			throw new IllegalArgumentException();
 		}
-		return AbstractSequence.getInstance(source, BigInteger.valueOf(source.getLength()));
+		return new Sequence<V>() {
+
+			@Override
+			protected BigInteger abstractGetLength() {
+				return BigInteger.valueOf(source.getLength());
+			}
+
+			@Override
+			public Iterator<V> iterator() {
+				return source.iterator();
+			}
+		};
 	}
 
 	public static <V> Sequence<V> getInstance(final Collection<V> source) {
 		if (source == null) {
 			throw new IllegalArgumentException();
 		}
-		return AbstractSequence.getInstance(source, BigInteger.valueOf(source.size()));
-	}
-
-	private static <V> Sequence<V> getInstance(final Iterable<V> source, final BigInteger length) {
-		return new AbstractSequence<V>() {
+		return new Sequence<V>() {
 
 			@Override
 			protected BigInteger abstractGetLength() {
-				return length;
+				return BigInteger.valueOf(source.size());
 			}
 
 			@Override

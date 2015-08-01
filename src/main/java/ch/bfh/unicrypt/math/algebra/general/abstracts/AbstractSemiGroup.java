@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
@@ -80,7 +80,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultApply(AbstractSequence.getInstance(elements));
+		return this.defaultApply(Sequence.getInstance(elements));
 	}
 
 	@Override

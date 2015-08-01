@@ -43,7 +43,8 @@ package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.IntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -359,6 +360,11 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	@Override
 	public final A reverse() {
 		return this.abstractReverse();
+	}
+
+	@Override
+	public final Sequence<V> getSequence() {
+		return Sequence.getInstance(this);
 	}
 
 	@Override

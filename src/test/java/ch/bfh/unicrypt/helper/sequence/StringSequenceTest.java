@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.classes.StringSequence;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
 import org.junit.Test;

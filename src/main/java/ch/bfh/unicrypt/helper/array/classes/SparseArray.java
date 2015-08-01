@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -176,7 +176,7 @@ public class SparseArray<V extends Object>
 	 * @see DenseArray#getInstance(java.lang.Object...)
 	 */
 	public static <V> SparseArray<V> getInstance(V defaultValue, V... values) {
-		return SparseArray.getInstance(defaultValue, AbstractSequence.getInstance(values));
+		return SparseArray.getInstance(defaultValue, Sequence.getInstance(values));
 	}
 
 	/**

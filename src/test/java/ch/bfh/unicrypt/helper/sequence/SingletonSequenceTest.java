@@ -41,8 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -54,7 +52,7 @@ public class SingletonSequenceTest {
 
 	@Test
 	public void testGetInstance() {
-		Sequence<String> sequence = AbstractSequence.getInstance("Hello");
+		Sequence<String> sequence = Sequence.getInstance("Hello");
 		int i = 0;
 		for (String s : sequence) {
 			Assert.assertEquals("Hello", s);

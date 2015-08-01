@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.interfaces;
+package ch.bfh.unicrypt.helper.sequence;
 
 /**
  * Classes implementing this interface provide a single method for checking if a predicate holds for a given value. The
@@ -51,7 +51,16 @@ package ch.bfh.unicrypt.helper.sequence.interfaces;
  * @param <V> The generic type of the input value
  * @see FilteredSequence
  */
-public interface Predicate<V> {
+public abstract class Predicate<V> {
+
+	public static final Predicate<Object> NOT_NULL = new Predicate<Object>() {
+
+		@Override
+		public boolean test(Object value) {
+			return value != null;
+		}
+
+	};
 
 	/**
 	 * Checks if the predicate holds for the given value.
@@ -59,6 +68,42 @@ public interface Predicate<V> {
 	 * @param value The given value
 	 * @return {@code true} if the predicate holds, {@code false} otherwise
 	 */
-	public boolean test(V value);
+	public abstract boolean test(V value);
+
+	public final Predicate<V> and(final Predicate<? super V> otherPredicate) {
+		final Predicate<V> thisPredicate = this;
+		return new Predicate<V>() {
+
+			@Override
+			public boolean test(V value) {
+				return thisPredicate.test(value) && otherPredicate.test(value);
+			}
+
+		};
+	}
+
+	public final Predicate<V> or(final Predicate<? super V> otherPredicate) {
+		final Predicate<V> thisPredicate = this;
+		return new Predicate<V>() {
+
+			@Override
+			public boolean test(V value) {
+				return thisPredicate.test(value) || otherPredicate.test(value);
+			}
+
+		};
+	}
+
+	public final Predicate<V> not() {
+		final Predicate<V> thisPredicate = this;
+		return new Predicate<V>() {
+
+			@Override
+			public boolean test(V value) {
+				return !thisPredicate.test(value);
+			}
+
+		};
+	}
 
 }
