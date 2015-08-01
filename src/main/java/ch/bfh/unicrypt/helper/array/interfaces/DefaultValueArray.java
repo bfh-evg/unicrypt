@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.array.interfaces;
 
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+
 /**
  * For some immutable arrays, it is natural to define a default value. The existence of a default value allows to extend
  * the {@link ImmutableArray} interface. This interface is therfore an extension of {@link ImmutableArray} with some
@@ -67,7 +69,7 @@ public interface DefaultValueArray<V extends Object>
 	 * @return An iterable collection of array indices
 	 * @see ImmutableArray#getIndices(java.lang.Object)
 	 */
-	public Iterable<Integer> getIndices();
+	public Sequence<Integer> getIndices();
 
 	/**
 	 * Returns an iterable collection of all array indices for which the stored value differs from the default value.
@@ -75,7 +77,7 @@ public interface DefaultValueArray<V extends Object>
 	 * @return An iterable collection of array indices
 	 * @see ImmutableArray#getIndicesExcept(java.lang.Object)
 	 */
-	public Iterable<Integer> getIndicesExcept();
+	public Sequence<Integer> getIndicesExcept();
 
 	/**
 	 * Counts the number of occurrences of the default value in the array.

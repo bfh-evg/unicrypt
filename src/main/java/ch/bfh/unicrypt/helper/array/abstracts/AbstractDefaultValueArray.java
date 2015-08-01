@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
  * This abstract class serves as a base implementation of the {@link DefaultValueArray} interface.
@@ -54,6 +55,7 @@ import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
 abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueArray<A, V>, V extends Object>
 	   extends AbstractImmutableArray<A, V>
 	   implements DefaultValueArray<V> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected final V defaultValue;
@@ -79,12 +81,12 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 	}
 
 	@Override
-	public final Iterable<Integer> getIndices() {
+	public final Sequence<Integer> getIndices() {
 		return this.getIndices(this.defaultValue);
 	}
 
 	@Override
-	public final Iterable<Integer> getIndicesExcept() {
+	public final Sequence<Integer> getIndicesExcept() {
 		return this.getIndicesExcept(this.defaultValue);
 	}
 

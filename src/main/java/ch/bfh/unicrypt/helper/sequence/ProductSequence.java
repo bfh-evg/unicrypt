@@ -84,7 +84,7 @@ public class ProductSequence<V>
 		if (sources == null) {
 			throw new IllegalArgumentException();
 		}
-		for (Iterable<V> source : sources) {
+		for (Sequence<V> source : sources) {
 			if (source == null) {
 				throw new IllegalArgumentException();
 			}

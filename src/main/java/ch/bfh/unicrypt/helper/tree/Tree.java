@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.helper.tree;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
  * This is an abstract base class for representing trees containing values of a generic type {@code V} in their leaves.
@@ -95,7 +94,7 @@ public abstract class Tree<V>
 
 	/**
 	 * Creates a new node from a given array of sub-trees (its children) of type {@code V}. This is a convenience method
-	 * for {@link Node#getInstance(java.lang.Iterable)}.
+	 * for {@link Node#getInstance(Sequence)}.
 	 * <p>
 	 * @param <V>      The generic type of the tree
 	 * @param children The given array of sub-trees

@@ -49,7 +49,6 @@ package ch.bfh.unicrypt.helper.sequence;
  * @version 2.0
  * @param <V> The generic type of the input value
  * @param <W> The generic type of the output value
- * @see IterableMapping
  */
 public abstract class Mapping<V, W> {
 

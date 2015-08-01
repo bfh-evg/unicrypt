@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.math;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.array.classes.SparseArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.Map;
 
 /**
@@ -258,7 +259,7 @@ public class Polynomial<C>
 	 * <p>
 	 * @return The iterable collection of indices
 	 */
-	public final Iterable<Integer> getCoefficientIndices() {
+	public final Sequence<Integer> getCoefficientIndices() {
 		if (this.isBinary()) {
 			return binaryCoefficients.getIndicesExcept();
 		} else {
@@ -315,7 +316,7 @@ public class Polynomial<C>
 		String result = "f(x)=";
 
 		String separator = "";
-		Iterable<Integer> indices = this.getCoefficientIndices();
+		Sequence<Integer> indices = this.getCoefficientIndices();
 		if (!indices.iterator().hasNext()) {
 			result += this.coefficientToString(this.zeroCoefficient);
 		}
