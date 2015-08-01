@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
-import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -152,11 +151,37 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
-	public final <W> MappedSequence<V, W> map(Mapping<? super V, ? extends W> mapping) {
+	public final <W> Sequence<W> map(final Mapping<? super V, ? extends W> mapping) {
 		if (mapping == null) {
 			throw new IllegalArgumentException();
 		}
-		return MappedSequence.getInstance(this, mapping);
+		final Sequence<V> source = this;
+		return new AbstractSequence<W>() {
+
+			@Override
+			protected BigInteger abstractGetLength() {
+				return AbstractSequence.getLength(source);
+			}
+
+			@Override
+			public Iterator<W> iterator() {
+				return new Iterator<W>() {
+
+					private final Iterator<V> iterator = source.iterator();
+
+					@Override
+					public boolean hasNext() {
+						return this.iterator.hasNext();
+					}
+
+					@Override
+					public W next() {
+						return mapping.map(this.iterator.next());
+					}
+				};
+			}
+
+		};
 	}
 
 	@Override
@@ -177,21 +202,20 @@ public abstract class AbstractSequence<V>
 
 			@Override
 			public Iterator<V> iterator() {
-				final Iterator<V> iterator = source.iterator();
-				final V firstValue = AbstractSequence.getNextValue(iterator, predicate);
 				return new Iterator<V>() {
 
-					private V nextValue = firstValue;
+					private final Iterator<V> iterator = source.iterator();
+					private V nextValue = AbstractSequence.getNextValue(this.iterator, predicate);
 
 					@Override
 					public boolean hasNext() {
-						return nextValue != null;
+						return this.nextValue != null;
 					}
 
 					@Override
 					public V next() {
 						V result = this.nextValue;
-						this.nextValue = AbstractSequence.getNextValue(iterator, predicate);
+						this.nextValue = AbstractSequence.getNextValue(this.iterator, predicate);
 						return result;
 					}
 
@@ -314,6 +338,7 @@ public abstract class AbstractSequence<V>
 			@Override
 			public Iterator<DenseArray<V>> iterator() {
 				return new Iterator<DenseArray<V>>() {
+
 					private final Iterator<V> iterator = source.iterator();
 
 					@Override

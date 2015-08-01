@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.sequence.classes.BigIntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
@@ -61,7 +60,7 @@ public class MappedSequenceTest {
 
 		BigIntegerSequence sequence = BigIntegerSequence.getInstance(0, 10);
 
-		MappedSequence<BigInteger, BigInteger> newSequence = MappedSequence.getInstance(sequence, new Mapping<BigInteger, BigInteger>() {
+		Sequence<BigInteger> newSequence = sequence.map(new Mapping<BigInteger, BigInteger>() {
 
 			@Override
 			public BigInteger map(BigInteger value) {
@@ -89,7 +88,7 @@ public class MappedSequenceTest {
 
 		Sequence<Integer> sequence = AbstractSequence.getInstance(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
 
-		MappedSequence<Integer, Integer> newSequence = MappedSequence.getInstance(sequence, new Mapping<Integer, Integer>() {
+		Sequence<Integer> newSequence = sequence.map(new Mapping<Integer, Integer>() {
 
 			@Override
 			public Integer map(Integer value) {

@@ -94,6 +94,18 @@ public abstract class Tree<V>
 	}
 
 	/**
+	 * Creates a new node from a given array of sub-trees (its children) of type {@code V}. This is a convenience method
+	 * for {@link Node#getInstance(java.lang.Iterable)}.
+	 * <p>
+	 * @param <V>      The generic type of the tree
+	 * @param children The given array of sub-trees
+	 * @return The new node
+	 */
+	public static <V> Node<V> getInstance(Tree<V>... children) {
+		return Tree.getInstance(AbstractSequence.getInstance(children));
+	}
+
+	/**
 	 * Creates a new node from a given iterable collection of sub-trees (its children) of type {@code V}.
 	 * <p>
 	 * @param <V>      The generic type of the tree
@@ -112,18 +124,6 @@ public abstract class Tree<V>
 			size++;
 		}
 		return new Node<>(children, size);
-	}
-
-	/**
-	 * Creates a new node from a given array of sub-trees (its children) of type {@code V}. This is a convenience method
-	 * for {@link Node#getInstance(java.lang.Iterable)}.
-	 * <p>
-	 * @param <V>      The generic type of the tree
-	 * @param children The given array of sub-trees
-	 * @return The new node
-	 */
-	public static <V> Node<V> getInstance(Tree<V>... children) {
-		return Tree.getInstance(AbstractSequence.getInstance(children));
 	}
 
 	/**
