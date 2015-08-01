@@ -41,10 +41,11 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.sequence.classes.BigIntegerSequence;
 import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -86,7 +87,7 @@ public class MappedSequenceTest {
 	@Test
 	public void generalTest2() {
 
-		ArraySequence sequence = ArraySequence.getInstance(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+		Sequence<Integer> sequence = AbstractSequence.getInstance(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
 
 		MappedSequence<Integer, Integer> newSequence = MappedSequence.getInstance(sequence, new Mapping<Integer, Integer>() {
 

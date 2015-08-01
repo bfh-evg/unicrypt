@@ -41,7 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -56,15 +57,11 @@ public class ArraySequenceTest {
 
 	@Test
 	public void generalTest() {
-		ArraySequence<Integer> ia0 = ArraySequence.getInstance();
-		ArraySequence<Integer> ia1 = ArraySequence.getInstance(new Integer[]{});
-		ArraySequence<Integer> ia2 = ArraySequence.getInstance(2);
-		ArraySequence<Integer> ia3 = ArraySequence.getInstance(2, 3, 4, 5);
-		ArraySequence<Integer> ia4 = ArraySequence.getInstance(3, 4, 5, 6);
-		assertEquals(ia0, ia1);
-		assertEquals(ia2, ia2);
-		assertFalse(ia2.equals(ia3));
-		assertFalse(ia2.equals(ia4));
+		Sequence<Integer> ia0 = AbstractSequence.getInstance();
+		Sequence<Integer> ia1 = AbstractSequence.getInstance(new Integer[]{});
+		Sequence<Integer> ia2 = AbstractSequence.getInstance(2);
+		Sequence<Integer> ia3 = AbstractSequence.getInstance(2, 3, 4, 5);
+		Sequence<Integer> ia4 = AbstractSequence.getInstance(3, 4, 5, 6);
 		assertFalse(ia0.iterator().hasNext());
 		assertFalse(ia1.iterator().hasNext());
 		assertTrue(ia2.iterator().hasNext());
@@ -89,7 +86,7 @@ public class ArraySequenceTest {
 			j++;
 		}
 		try {
-			ArraySequence.getInstance((Integer[]) null);
+			AbstractSequence.getInstance((Integer[]) null);
 			fail();
 		} catch (Exception e) {
 		}

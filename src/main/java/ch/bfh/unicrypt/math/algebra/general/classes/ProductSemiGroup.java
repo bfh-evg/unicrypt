@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -170,7 +170,7 @@ public class ProductSemiGroup
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultApply(ArraySequence.getInstance(elements));
+		return this.defaultApply(AbstractSequence.getInstance(elements));
 	}
 
 	@Override

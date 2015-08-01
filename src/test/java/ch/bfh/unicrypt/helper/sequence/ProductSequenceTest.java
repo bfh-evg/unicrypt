@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.sequence.classes.IntegerSequence;
 import ch.bfh.unicrypt.helper.sequence.classes.ProductSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
@@ -57,10 +57,10 @@ public class ProductSequenceTest {
 
 	@Test
 	public void testGeneralTest() {
-		Sequence<Integer> it0 = ArraySequence.getInstance();
+		Sequence<Integer> it0 = AbstractSequence.getInstance();
 		Sequence it1 = IntegerSequence.getInstance(0, 5);
 		Sequence it2 = IntegerSequence.getInstance(0, 4);
-		Sequence<Integer> it3 = ArraySequence.getInstance(0, 1);
+		Sequence<Integer> it3 = AbstractSequence.getInstance(0, 1);
 		{
 			ProductSequence<Integer> seq = ProductSequence.<Integer>getInstance();
 			int counter = 0;

@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.sequence.classes.SingletonSequence;
 
 /**
@@ -123,7 +123,7 @@ public abstract class Tree<V>
 	 * @return The new node
 	 */
 	public static <V> Node<V> getInstance(Tree<V>... children) {
-		return Tree.getInstance(ArraySequence.getInstance(children));
+		return Tree.getInstance(AbstractSequence.getInstance(children));
 	}
 
 	/**

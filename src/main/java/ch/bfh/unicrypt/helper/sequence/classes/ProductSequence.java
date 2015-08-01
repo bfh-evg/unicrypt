@@ -138,7 +138,7 @@ public class ProductSequence<V>
 				throw new IllegalArgumentException();
 			}
 		}
-		return ProductSequence.getInstance(ArraySequence.getInstance(sources));
+		return ProductSequence.getInstance(AbstractSequence.getInstance(sources));
 	}
 
 	/**

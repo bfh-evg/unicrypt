@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.classes.ArraySequence;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 
 /**
  * This class is a default implementation of the {@link ImmutableArray} interface. It is optimized for arrays for which
@@ -88,7 +88,7 @@ public class DenseArray<V extends Object>
 	 * @see SparseArray#getInstance(java.lang.Object, java.lang.Object...)
 	 */
 	public static <V> DenseArray<V> getInstance(V... values) {
-		return DenseArray.getInstance(ArraySequence.getInstance(values));
+		return DenseArray.getInstance(AbstractSequence.getInstance(values));
 	}
 
 	/**
