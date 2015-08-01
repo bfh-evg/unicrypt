@@ -89,11 +89,6 @@ public class SingletonSequence<V>
 				next = false;
 				return value;
 			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
 		};
 	}
 

@@ -57,10 +57,10 @@ public class ProductSequenceTest {
 
 	@Test
 	public void testGeneralTest() {
-		ArraySequence<Integer> it0 = ArraySequence.getInstance();
-		IntegerSequence it1 = IntegerSequence.getInstance(0, 5);
-		IntegerSequence it2 = IntegerSequence.getInstance(0, 4);
-		ArraySequence<Integer> it3 = ArraySequence.getInstance(0, 1);
+		Sequence<Integer> it0 = ArraySequence.getInstance();
+		Sequence it1 = IntegerSequence.getInstance(0, 5);
+		Sequence it2 = IntegerSequence.getInstance(0, 4);
+		Sequence<Integer> it3 = ArraySequence.getInstance(0, 1);
 		{
 			ProductSequence<Integer> seq = ProductSequence.<Integer>getInstance();
 			int counter = 0;

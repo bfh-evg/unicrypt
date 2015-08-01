@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.sequence.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Predicate;
@@ -250,7 +251,11 @@ public abstract class AbstractSequence<V>
 	}
 
 	@Override
+	public Sequence<V> skip() {
+		return this.skip(1);
+	}
 
+	@Override
 	public Sequence<V> skip(final long n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
@@ -265,6 +270,9 @@ public abstract class AbstractSequence<V>
 					return Sequence.INFINITE;
 				}
 				if (length.equals(Sequence.UNKNOWN)) {
+					if (!this.iterator().hasNext()) {
+						return MathUtil.ZERO;
+					}
 					return Sequence.UNKNOWN;
 				}
 				return source.getLength().subtract(BigInteger.valueOf(n)).max(MathUtil.ZERO);
@@ -357,40 +365,64 @@ public abstract class AbstractSequence<V>
 		return nextValue;
 	}
 
-//	public static <V> Sequence<V> getInstance(final V... source) {
-//		if (source == null) {
-//			throw new IllegalArgumentException();
-//		}
-//		return new AbstractSequence<V>() {
-//
-//			@Override
-//			protected BigInteger abstractGetLength() {
-//				return BigInteger.valueOf(source.length);
-//			}
-//
-//			@Override
-//			public Iterator<V> iterator() {
-//				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//			}
-//		};
-//	}
-//
-//	public static <V> Sequence<V> getInstance(final ImmutableArray<V> source) {
-//		if (source == null) {
-//			throw new IllegalArgumentException();
-//		}
-//		return new AbstractSequence<V>() {
-//
-//			@Override
-//			protected BigInteger abstractGetLength() {
-//				return BigInteger.valueOf(source.getLength());
-//			}
-//
-//			@Override
-//			public Iterator<V> iterator() {
-//				throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//			}
-//
-//		};
-//	}
+	public static <V> Sequence<V> getInstance(final V... source) {
+		if (source == null) {
+			throw new IllegalArgumentException();
+		}
+		return new AbstractSequence<V>() {
+
+			@Override
+			protected BigInteger abstractGetLength() {
+				return BigInteger.valueOf(source.length);
+			}
+
+			@Override
+			public Iterator<V> iterator() {
+				return new Iterator<V>() {
+					private int pos = 0;
+
+					@Override
+					public boolean hasNext() {
+						return this.pos < source.length;
+					}
+
+					@Override
+					public V next() {
+						return source[this.pos++];
+					}
+
+				};
+			}
+		};
+	}
+
+	public static <V> Sequence<V> getInstance(final ImmutableArray<V> source) {
+		if (source == null) {
+			throw new IllegalArgumentException();
+		}
+		return AbstractSequence.getInstance(source, BigInteger.valueOf(source.getLength()));
+	}
+
+	public static <V> Sequence<V> getInstance(final Collection<V> source) {
+		if (source == null) {
+			throw new IllegalArgumentException();
+		}
+		return AbstractSequence.getInstance(source, BigInteger.valueOf(source.size()));
+	}
+
+	private static <V> Sequence<V> getInstance(final Iterable<V> source, final BigInteger length) {
+		return new AbstractSequence<V>() {
+
+			@Override
+			protected BigInteger abstractGetLength() {
+				return length;
+			}
+
+			@Override
+			public Iterator<V> iterator() {
+				return source.iterator();
+			}
+		};
+	}
+
 }

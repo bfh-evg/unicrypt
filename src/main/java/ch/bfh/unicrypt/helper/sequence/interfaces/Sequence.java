@@ -84,6 +84,8 @@ public interface Sequence<V>
 
 	public Sequence<V> shorten(BigInteger maxLength);
 
+	public Sequence<V> skip();
+
 	public Sequence<V> skip(long n);
 
 	public Sequence<? extends ImmutableArray<V>> group(long groupLength);

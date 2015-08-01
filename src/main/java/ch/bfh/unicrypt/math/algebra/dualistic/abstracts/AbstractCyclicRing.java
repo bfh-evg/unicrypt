@@ -161,6 +161,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 		return this.defaultGetRandomGenerator(referenceRandomByteSequence);
 	}
 
+	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicRing<E, V> set = this;
 		return new AbstractSequence<E>() {

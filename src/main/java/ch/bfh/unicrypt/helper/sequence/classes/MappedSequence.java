@@ -86,18 +86,17 @@ public class MappedSequence<V, W>
 
 	@Override
 	public Iterator<W> iterator() {
+		final Iterator<V> iterator = this.source.iterator();
 		return new Iterator<W>() {
-
-			private final Iterator<V> iterator = source.iterator();
 
 			@Override
 			public boolean hasNext() {
-				return this.iterator.hasNext();
+				return iterator.hasNext();
 			}
 
 			@Override
 			public W next() {
-				return mapping.map(this.iterator.next());
+				return mapping.map(iterator.next());
 			}
 
 		};

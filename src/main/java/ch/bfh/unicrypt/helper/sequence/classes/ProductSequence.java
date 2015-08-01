@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.helper.sequence.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
@@ -60,25 +59,25 @@ import java.util.Iterator;
 public class ProductSequence<V>
 	   extends AbstractSequence<DenseArray<V>> {
 
-	private final Iterable<V> source;
-	private final ProductSequence<V> product;
+	private final Sequence<V> sequence;
+	private final ProductSequence<V> productSequence;
 
 	// the base case of the recursion
 	protected ProductSequence() {
-		this.source = null;
-		this.product = null;
+		this.sequence = null;
+		this.productSequence = null;
 	}
 
 	// the general case of the recursion
-	protected ProductSequence(Iterable<V> values, ProductSequence<V> product) {
-		this.source = values;
-		this.product = product;
+	protected ProductSequence(Sequence<V> sequence, ProductSequence<V> productSequence) {
+		this.sequence = sequence;
+		this.productSequence = productSequence;
 	}
 
 	@Override
 	public Iterator<DenseArray<V>> iterator() {
 
-		if (this.source == null && this.product == null) {
+		if (this.sequence == null && this.productSequence == null) {
 			// the base case of the recursion
 			return new Iterator() {
 
@@ -100,8 +99,8 @@ public class ProductSequence<V>
 		// the general case of the recursion
 		return new Iterator() {
 
-			private final Iterator<V> iterator1 = source.iterator();
-			private Iterator<DenseArray<V>> iterator2 = product.iterator();
+			private final Iterator<V> iterator1 = sequence.iterator();
+			private Iterator<DenseArray<V>> iterator2 = productSequence.iterator();
 			private V item = iterator1.hasNext() ? iterator1.next() : null;
 
 			@Override
@@ -115,7 +114,7 @@ public class ProductSequence<V>
 				DenseArray<V> result = items.insertAt(0, item);
 				if (!this.iterator2.hasNext() && this.iterator1.hasNext()) {
 					this.item = this.iterator1.next();
-					this.iterator2 = product.iterator();
+					this.iterator2 = productSequence.iterator();
 				}
 				return result;
 			}
@@ -130,7 +129,7 @@ public class ProductSequence<V>
 	 * @param sources The given iterable collections of elements
 	 * @return The new iterable collection of all combinations of elements
 	 */
-	public static <V> ProductSequence<V> getInstance(Iterable<V>... sources) {
+	public static <V> ProductSequence<V> getInstance(Sequence<V>... sources) {
 		if (sources == null) {
 			throw new IllegalArgumentException();
 		}
@@ -149,25 +148,23 @@ public class ProductSequence<V>
 	 * @param sources The given iterable collections of elements
 	 * @return The new iterable collection of all combinations of elements
 	 */
-	public static <V> ProductSequence<V> getInstance(Iterable<? extends Iterable<V>> sources) {
+	public static <V> ProductSequence<V> getInstance(Sequence<? extends Sequence<V>> sources) {
 		if (sources == null) {
 			throw new IllegalArgumentException();
 		}
-		ImmutableArray<? extends Iterable<V>> denseArray = DenseArray.getInstance(sources);
-		if (denseArray.isEmpty()) {
+		if (sources.isEmpty()) {
 			return new ProductSequence<>();
 		}
-		Iterable<V> firstSource = denseArray.getFirst();
-		return new ProductSequence<>(firstSource, ProductSequence.getInstance(denseArray.removeFirst()));
+		return new ProductSequence<>(sources.find(), ProductSequence.getInstance(sources.skip()));
 	}
 
 	@Override
 	protected BigInteger abstractGetLength() {
-		if (this.source == null) {
+		if (this.sequence == null) {
 			return MathUtil.ONE;
 		}
-		BigInteger length1 = AbstractSequence.getLength(this.source);
-		BigInteger length2 = AbstractSequence.getLength(this.product);
+		BigInteger length1 = AbstractSequence.getLength(this.sequence);
+		BigInteger length2 = AbstractSequence.getLength(this.productSequence);
 		if (length1.equals(Sequence.INFINITE) || length2.equals(Sequence.INFINITE)) {
 			return Sequence.INFINITE;
 		}
