@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.aggregator.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
-import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
@@ -104,7 +103,7 @@ public abstract class AbstractAggregator<V>
 
 		// Case 2: tree is a node
 		final Node<V> node = (Node<V>) tree;
-		Sequence<V> values = MappedSequence.getInstance(node.getChildren(), this.mapping1);
+		Sequence<V> values = node.getChildren().map(this.mapping1);
 		return this.abstractAggregateNode(values, node.getSize());
 	}
 
@@ -122,8 +121,7 @@ public abstract class AbstractAggregator<V>
 
 		// Case 2: value represents a node
 		if (this.abstractIsNode(value)) {
-			Iterable<V> values = this.abstractDisaggregateNode(value);
-			Sequence<Tree<V>> trees = MappedSequence.getInstance(values, this.mapping2);
+			Sequence<Tree<V>> trees = this.abstractDisaggregateNode(value).map(this.mapping2);
 			return Tree.getInstance(trees);
 		}
 
@@ -141,6 +139,6 @@ public abstract class AbstractAggregator<V>
 
 	protected abstract V abstractDisaggregateLeaf(V value);
 
-	protected abstract Iterable<V> abstractDisaggregateNode(V value);
+	protected abstract Sequence<V> abstractDisaggregateNode(V value);
 
 }

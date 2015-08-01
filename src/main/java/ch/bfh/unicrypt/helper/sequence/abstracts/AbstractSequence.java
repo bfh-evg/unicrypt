@@ -53,7 +53,10 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * This abstract class serves as a base implementation for various types of sequences.
+ * This interface represents the concept of an iterable sequence of values similar to streams in Java 8. No means are
+ * provided to directly access or manipulate the values. Computational operations can be described declaratively as a
+ * pipeline. The execution of the pipeline is lazy. The length of a sequence is either finite and known, finite but
+ * unknown, or infinite.
  * <p>
  * @author R. Haenni
  * @version 2.0
@@ -75,34 +78,38 @@ public abstract class AbstractSequence<V>
 	public final BigInteger getLength() {
 		if (this.length == null) {
 			this.length = this.abstractGetLength();
+			if (this.length.equals(Sequence.UNKNOWN) && !this.iterator().hasNext()) {
+				this.length = MathUtil.ZERO;
+			}
+			return this.length;
 		}
 		return this.length;
 	}
 
 	@Override
-	public final int count() {
+	public final long count() {
 		if (this.getLength().equals(Sequence.INFINITE)) {
 			throw new UnsupportedOperationException();
 		}
 		if (this.getLength().equals(Sequence.UNKNOWN)) {
-			int counter = 0;
+			long counter = 0;
 			for (V value : this) {
 				counter++;
 			}
 			this.length = BigInteger.valueOf(counter);
 		}
-		return this.length.intValue();
+		return this.length.longValue();
 	}
 
 	@Override
-	public final int count(Predicate<? super V> predicate) {
+	public final long count(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
 		if (this.getLength().equals(Sequence.INFINITE)) {
 			throw new UnsupportedOperationException();
 		}
-		int counter = 0;
+		long counter = 0;
 		for (V value : this) {
 			if (predicate.test(value)) {
 				counter++;
@@ -294,9 +301,6 @@ public abstract class AbstractSequence<V>
 					return Sequence.INFINITE;
 				}
 				if (length.equals(Sequence.UNKNOWN)) {
-					if (!this.iterator().hasNext()) {
-						return MathUtil.ZERO;
-					}
 					return Sequence.UNKNOWN;
 				}
 				return source.getLength().subtract(BigInteger.valueOf(n)).max(MathUtil.ZERO);

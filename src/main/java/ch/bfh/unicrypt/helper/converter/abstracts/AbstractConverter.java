@@ -43,8 +43,8 @@ package ch.bfh.unicrypt.helper.converter.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.sequence.classes.MappedSequence;
 import ch.bfh.unicrypt.helper.sequence.interfaces.Mapping;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
@@ -103,7 +103,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 		} else {
 			Node<V> node = (Node<V>) tree;
 			final Converter<V, W> converter = this;
-			Iterable<Tree<W>> children = MappedSequence.getInstance(node.getChildren(), new Mapping<Tree<V>, Tree<W>>() {
+			Sequence<Tree<W>> children = node.getChildren().map(new Mapping<Tree<V>, Tree<W>>() {
 
 				@Override
 				public Tree<W> map(Tree<V> value) {
@@ -123,7 +123,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 		} else {
 			Node<W> node = (Node<W>) tree;
 			final Converter<V, W> converter = this;
-			Iterable<Tree<V>> children = MappedSequence.getInstance(node.getChildren(), new Mapping<Tree<W>, Tree<V>>() {
+			Sequence<Tree<V>> children = node.getChildren().map(new Mapping<Tree<W>, Tree<V>>() {
 
 				@Override
 				public Tree<V> map(Tree<W> value) {

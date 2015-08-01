@@ -42,8 +42,7 @@
 package ch.bfh.unicrypt.helper.aggregator;
 
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
-import ch.bfh.unicrypt.helper.tree.Leaf;
-import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -108,8 +107,8 @@ public class StringAggregatorTest {
 				trees.add(Tree.getInstance(value));
 			}
 			for (StringAggregator aggregator : new StringAggregator[]{aggregator1, aggregator2}) {
-				String aggregatedValue = aggregator.aggregate(Tree.getInstance(trees));
-				Iterable<String> result = aggregator.disaggregate(aggregatedValue);
+				String aggregatedValue = aggregator.aggregate(Tree.getInstance(AbstractSequence.getInstance(trees)));
+				Tree<String> result = aggregator.disaggregate(aggregatedValue);
 				int i = 0;
 				for (String x : result) {
 					Assert.assertTrue(values.contains(x));

@@ -43,6 +43,8 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -129,8 +131,8 @@ public class ByteArrayAggregator
 	}
 
 	@Override
-	protected Iterable<ByteArray> abstractDisaggregateNode(final ByteArray value) {
-		return new Iterable<ByteArray>() {
+	protected Sequence<ByteArray> abstractDisaggregateNode(final ByteArray value) {
+		return new AbstractSequence<ByteArray>() {
 
 			@Override
 			public Iterator<ByteArray> iterator() {
@@ -152,6 +154,11 @@ public class ByteArrayAggregator
 						return next;
 					}
 				};
+			}
+
+			@Override
+			protected BigInteger abstractGetLength() {
+				return Sequence.UNKNOWN;
 			}
 		};
 	}

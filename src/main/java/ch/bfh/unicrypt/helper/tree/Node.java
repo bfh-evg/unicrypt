@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 import java.util.Iterator;
 
 /**
@@ -59,10 +60,10 @@ public class Node<V>
 
 	private static final long serialVersionUID = 1L;
 
-	private final Iterable<Tree<V>> children;
+	private final Sequence<Tree<V>> children;
 	private final int size;
 
-	protected Node(Iterable<Tree<V>> children, int size) {
+	protected Node(Sequence<Tree<V>> children, int size) {
 		this.children = children;
 		this.size = size;
 	}
@@ -72,7 +73,7 @@ public class Node<V>
 	 * <p>
 	 * @return The node's children
 	 */
-	public Iterable<Tree<V>> getChildren() {
+	public Sequence<Tree<V>> getChildren() {
 		return this.children;
 	}
 

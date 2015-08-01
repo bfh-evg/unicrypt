@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.helper.tree;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.sequence.abstracts.AbstractSequence;
-import ch.bfh.unicrypt.helper.sequence.classes.SingletonSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 
 /**
  * This is an abstract base class for representing trees containing values of a generic type {@code V} in their leaves.
@@ -90,7 +90,7 @@ public abstract class Tree<V>
 		if (child == null) {
 			throw new IllegalArgumentException();
 		}
-		return Tree.getInstance(SingletonSequence.getInstance(child));
+		return Tree.getInstance(AbstractSequence.getInstance(child));
 	}
 
 	/**
@@ -112,7 +112,7 @@ public abstract class Tree<V>
 	 * @param children The given sub-trees
 	 * @return The new node
 	 */
-	public static <V> Node<V> getInstance(Iterable<Tree<V>> children) {
+	public static <V> Node<V> getInstance(Sequence<Tree<V>> children) {
 		if (children == null) {
 			throw new IllegalArgumentException();
 		}

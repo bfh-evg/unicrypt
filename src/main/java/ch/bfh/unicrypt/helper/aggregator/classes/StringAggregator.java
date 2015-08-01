@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.sequence.classes.StringSequence;
+import ch.bfh.unicrypt.helper.sequence.interfaces.Sequence;
 
 /**
  * Instance of this class specify the invertible aggregation of a tree of strings. The aggregation of a node consists in
@@ -164,7 +165,7 @@ public class StringAggregator
 	}
 
 	@Override
-	protected Iterable<String> abstractDisaggregateNode(String value) {
+	protected Sequence<String> abstractDisaggregateNode(String value) {
 		value = value.substring(1, value.length() - 1);
 		return StringSequence.getInstance(value, this.separator, this.openingParenthesis, this.closingParenthesis,
 										  this.escapeCharacter);

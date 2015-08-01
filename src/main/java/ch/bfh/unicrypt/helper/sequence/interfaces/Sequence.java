@@ -64,9 +64,9 @@ public interface Sequence<V>
 
 	public BigInteger getLength();
 
-	public int count();
+	public long count();
 
-	public int count(Predicate<? super V> predicate);
+	public long count(Predicate<? super V> predicate);
 
 	public V find();
 
