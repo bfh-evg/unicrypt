@@ -95,12 +95,12 @@ public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 
 	@Override
 	protected E defaultApply(final Sequence<Element> elements) {
-		final SemiGroup<V> semiGroup = this;
+		final SemiGroup<V> monoid = this;
 		return (E) elements.reduce(new Operation<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {
-				return semiGroup.apply(element1, element2);
+				return monoid.apply(element1, element2);
 			}
 		}, this.getIdentityElement());
 	}

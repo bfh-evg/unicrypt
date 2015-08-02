@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -178,9 +177,10 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 		return this.defaultGetRandomGenerator(referenceRandomByteSequence);
 	}
 
+	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicGroup<E, V> set = this;
-		return new Sequence<E>() {
+		return new Sequence<E>(set.getOrder()) {
 
 			@Override
 			public Iterator<E> iterator() {
@@ -205,11 +205,6 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 					}
 
 				};
-			}
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				return set.getOrder();
 			}
 
 		};

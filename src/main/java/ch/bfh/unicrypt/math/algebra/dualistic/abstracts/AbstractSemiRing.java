@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.Operation;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -150,7 +151,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 
 	protected E defaultMultiply(final Sequence<Element> elements) {
 		final SemiRing<V> semiGroup = this;
-		return (E) elements.reduce(new Operation<Element>() {
+		return (E) elements.filter(Predicate.NOT_NULL).reduce(new Operation<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {

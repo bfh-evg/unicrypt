@@ -61,11 +61,9 @@ public class Node<V>
 	private static final long serialVersionUID = 1L;
 
 	private final Sequence<Tree<V>> children;
-	private final int size;
 
-	protected Node(Sequence<Tree<V>> children, int size) {
+	protected Node(Sequence<Tree<V>> children) {
 		this.children = children;
-		this.size = size;
 	}
 
 	/**
@@ -83,7 +81,7 @@ public class Node<V>
 	 * @return The number of children
 	 */
 	public int getSize() {
-		return this.size;
+		return this.children.getLength().intValue();
 	}
 
 	@Override

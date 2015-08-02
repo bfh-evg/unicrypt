@@ -41,9 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
-import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
@@ -80,6 +77,7 @@ public class StringSequence
 	private char escapeChar;
 
 	protected StringSequence(String string, char separator) {
+		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
 		this.nested = false;
@@ -87,6 +85,7 @@ public class StringSequence
 	}
 
 	protected StringSequence(String string, char separator, char escapeChar) {
+		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
 		this.nested = false;
@@ -95,6 +94,7 @@ public class StringSequence
 	}
 
 	protected StringSequence(String string, char separator, char openingParentesis, char closingParenthesis) {
+		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
 		this.nested = true;
@@ -104,6 +104,7 @@ public class StringSequence
 	}
 
 	protected StringSequence(String string, char separator, char openingParentesis, char closingParenthesis, char escapeChar) {
+		super(Sequence.UNKNOWN);
 		this.string = string;
 		this.separator = separator;
 		this.nested = true;
@@ -291,11 +292,6 @@ public class StringSequence
 	@Override
 	protected String defaultToStringContent() {
 		return this.string;
-	}
-
-	@Override
-	protected BigInteger abstractGetLength() {
-		return Sequence.UNKNOWN;
 	}
 
 }

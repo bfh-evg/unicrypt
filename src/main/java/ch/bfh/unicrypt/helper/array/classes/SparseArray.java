@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -180,28 +181,21 @@ public class SparseArray<V extends Object>
 	}
 
 	/**
-	 * Creates a new sparse array from a given iterable sequence of values. If the given sequence of values is already a
-	 * sparse array, it is returned without doing anything. Otherwise, the sequence is transformed into a map for
-	 * internal storage.
+	 * Creates a new sparse array from a given sequence of values. The sequence is transformed into a map for internal
+	 * storage.
 	 * <p>
 	 * @param <V>          The generic type of the new array
 	 * @param defaultValue The default value of the new array
 	 * @param values       The given iterable sequence of values
 	 * @return The new sparse array
 	 */
-	public static <V> SparseArray<V> getInstance(V defaultValue, Iterable<V> values) {
-		if (defaultValue == null || values == null) {
+	public static <V> SparseArray<V> getInstance(V defaultValue, Sequence<V> values) {
+		if (defaultValue == null || values == null || values.isInfinite()) {
 			throw new IllegalArgumentException();
-		}
-		if (values instanceof SparseArray) {
-			return (SparseArray) values; // defaultValue is ignored
 		}
 		Map<Integer, V> map = new HashMap<>();
 		int i = 0;
-		for (V value : values) {
-			if (value == null) {
-				throw new IllegalArgumentException();
-			}
+		for (V value : values.filter(Predicate.NOT_NULL)) {
 			if (!value.equals(defaultValue)) {
 				map.put(i, value);
 			}

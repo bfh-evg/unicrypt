@@ -58,34 +58,34 @@ public class SkippedSequenceTest {
 
 		Assert.assertFalse(sequence.skip(0).isEmpty());
 		Assert.assertEquals(10, sequence.skip(0).getLength().intValue());
-		Assert.assertEquals(10, sequence.skip(0).count());
+		Assert.assertEquals(10, sequence.skip(0).getLength().intValue());
 		Assert.assertEquals(1, (int) sequence.skip(0).find());
 
 		Assert.assertFalse(sequence.skip(1).isEmpty());
 		Assert.assertEquals(9, sequence.skip(1).getLength().intValue());
-		Assert.assertEquals(9, sequence.skip(1).count());
+		Assert.assertEquals(9, sequence.skip(1).getLength().intValue());
 		Assert.assertEquals(2, (int) sequence.skip(1).find());
 
 		Assert.assertFalse(sequence.skip(9).isEmpty());
 		Assert.assertEquals(1, sequence.skip(9).getLength().intValue());
-		Assert.assertEquals(1, sequence.skip(9).count());
+		Assert.assertEquals(1, sequence.skip(9).getLength().intValue());
 		Assert.assertEquals(10, (int) sequence.skip(9).find());
 
 		Assert.assertTrue(sequence.skip(10).isEmpty());
 		Assert.assertEquals(0, sequence.skip(10).getLength().intValue());
-		Assert.assertEquals(0, sequence.skip(10).count());
+		Assert.assertEquals(0, sequence.skip(10).getLength().intValue());
 		Assert.assertEquals(null, sequence.skip(10).find());
 
 		Assert.assertTrue(sequence.skip(11).isEmpty());
 		Assert.assertEquals(0, sequence.skip(11).getLength().intValue());
-		Assert.assertEquals(0, sequence.skip(11).count());
+		Assert.assertEquals(0, sequence.skip(11).getLength().intValue());
 		Assert.assertEquals(null, sequence.skip(11).find());
 
 		Assert.assertEquals(5, sequence.skip(2).skip(3).getLength().intValue());
-		Assert.assertEquals(5, sequence.skip(2).skip(3).count());
+		Assert.assertEquals(5, sequence.skip(2).skip(3).getLength().intValue());
 		Assert.assertEquals(6, (int) sequence.skip(2).skip(3).find());
 
-		Assert.assertEquals(2, sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).count());
+		Assert.assertEquals(2, sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).getLength().intValue());
 		Assert.assertEquals(9, (int) sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).find());
 
 		// unknown length
@@ -96,8 +96,8 @@ public class SkippedSequenceTest {
 				return true;
 			}
 		});
-		Assert.assertEquals(Sequence.UNKNOWN, seq2.getLength());
-		Assert.assertEquals(Sequence.UNKNOWN, seq2.skip(9).getLength());
+		Assert.assertEquals(10, seq2.getLength().intValue());
+		Assert.assertEquals(1, seq2.skip(9).getLength().intValue());
 		Assert.assertEquals(MathUtil.ZERO, seq2.skip(10).getLength());
 
 	}

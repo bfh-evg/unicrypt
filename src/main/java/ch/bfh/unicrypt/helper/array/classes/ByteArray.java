@@ -43,9 +43,11 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
+import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.util.Arrays;
@@ -185,24 +187,14 @@ public class ByteArray
 	 * @param bytes The iterable sequence of bytes
 	 * @return The new byte array
 	 */
-	public static ByteArray getInstance(Iterable<Byte> bytes) {
-		if (bytes == null) {
+	public static ByteArray getInstance(Sequence<Byte> bytes) {
+		if (bytes == null || bytes.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
-		if (bytes instanceof ByteArray) {
-			return (ByteArray) bytes;
-		}
-		int length = 0;
-		for (Byte singleByte : bytes) {
-			if (singleByte == null) {
-				throw new IllegalArgumentException();
-			}
-			length++;
-		}
-		byte[] array = new byte[length];
+		byte[] array = new byte[bytes.getLength().intValue()];
 		int i = 0;
-		for (Byte singleByte : bytes) {
-			array[i++] = singleByte;
+		for (Byte b : bytes) {
+			array[i++] = b;
 		}
 		return new ByteArray(array);
 	}

@@ -80,48 +80,48 @@ public class FilteredSequenceTest {
 		{
 			Sequence<Integer> filteredSeq = seq.filter(primePredicate);
 
-			Assert.assertEquals(Sequence.UNKNOWN, filteredSeq.getLength());
+			Assert.assertEquals(4, filteredSeq.getLength().intValue());
 			int i = 0;
 			for (Integer prime : filteredSeq) {
 				i++;
 			}
 			Assert.assertEquals(4, i);
 			Assert.assertEquals(4, filteredSeq.count(primePredicate));
-			Assert.assertEquals(4, filteredSeq.count());
+			Assert.assertEquals(4, filteredSeq.getLength().intValue());
 		}
 		{
 			Sequence<Integer> filteredSeq = seq.filter(primePredicate).filter(oddPredicate);
 
-			Assert.assertEquals(Sequence.UNKNOWN, filteredSeq.getLength());
+			Assert.assertEquals(3, filteredSeq.getLength().intValue());
 			int i = 0;
 			for (Integer prime : filteredSeq) {
 				i++;
 			}
 			Assert.assertEquals(3, i);
-			Assert.assertEquals(3, filteredSeq.count());
+			Assert.assertEquals(3, filteredSeq.getLength().intValue());
 		}
 		{
 			Sequence<Integer> filteredSeq = seq.filter(oddPredicate).filter(primePredicate);
 
-			Assert.assertEquals(Sequence.UNKNOWN, filteredSeq.getLength());
+			Assert.assertEquals(3, filteredSeq.getLength().intValue());
 			int i = 0;
 			for (Integer prime : filteredSeq) {
 				i++;
 			}
 			Assert.assertEquals(3, i);
-			Assert.assertEquals(3, filteredSeq.count());
+			Assert.assertEquals(3, filteredSeq.getLength().intValue());
 
 		}
 		{
 			Sequence<Integer> filteredSeq = Sequence.getInstance(3).filter(oddPredicate).filter(primePredicate);
 
-			Assert.assertEquals(Sequence.UNKNOWN, filteredSeq.getLength());
+			Assert.assertEquals(1, filteredSeq.getLength().intValue());
 			int i = 0;
 			for (Integer prime : filteredSeq) {
 				i++;
 			}
 			Assert.assertEquals(1, i);
-			Assert.assertEquals(1, filteredSeq.count());
+			Assert.assertEquals(1, filteredSeq.getLength().intValue());
 		}
 		{
 			Sequence<Integer> filteredSeq = Sequence.getInstance(4).filter(oddPredicate).filter(primePredicate);
@@ -132,7 +132,7 @@ public class FilteredSequenceTest {
 				i++;
 			}
 			Assert.assertEquals(0, i);
-			Assert.assertEquals(0, filteredSeq.count());
+			Assert.assertEquals(0, filteredSeq.getLength().intValue());
 		}
 		{
 			Sequence<Integer> filteredSeq = IntegerSequence.getInstance(4, 3).filter(oddPredicate).filter(primePredicate);
@@ -143,7 +143,7 @@ public class FilteredSequenceTest {
 				i++;
 			}
 			Assert.assertEquals(0, i);
-			Assert.assertEquals(0, filteredSeq.count());
+			Assert.assertEquals(0, filteredSeq.getLength().intValue());
 		}
 	}
 

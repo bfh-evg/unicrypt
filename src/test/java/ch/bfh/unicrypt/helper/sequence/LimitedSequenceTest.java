@@ -64,7 +64,7 @@ public class LimitedSequenceTest {
 			}
 			assertEquals(0, counter);
 			assertEquals(0, newSequence.getLength().intValue());
-			assertEquals(0, newSequence.count());
+			assertEquals(0, newSequence.getLength().intValue());
 		}
 		{
 			Sequence<BigInteger> newSequence = sequence.limit(1);
@@ -74,7 +74,7 @@ public class LimitedSequenceTest {
 			}
 			assertEquals(1, counter);
 			assertEquals(1, newSequence.getLength().intValue());
-			assertEquals(1, newSequence.count());
+			assertEquals(1, newSequence.getLength().intValue());
 		}
 		{
 			Sequence<BigInteger> newSequence = sequence.limit(10);
@@ -84,7 +84,7 @@ public class LimitedSequenceTest {
 			}
 			assertEquals(10, counter);
 			assertEquals(10, newSequence.getLength().intValue());
-			assertEquals(10, newSequence.count());
+			assertEquals(10, newSequence.getLength().intValue());
 		}
 		{
 			Sequence<BigInteger> newSequence = sequence.limit(100);
@@ -94,7 +94,7 @@ public class LimitedSequenceTest {
 			}
 			assertEquals(100, counter);
 			assertEquals(100, newSequence.getLength().intValue());
-			assertEquals(100, newSequence.count());
+			assertEquals(100, newSequence.getLength().intValue());
 		}
 		{
 			Sequence<BigInteger> newSequence = sequence.limit(200);
@@ -104,7 +104,7 @@ public class LimitedSequenceTest {
 			}
 			assertEquals(100, counter);
 			assertEquals(100, newSequence.getLength().intValue());
-			assertEquals(100, newSequence.count());
+			assertEquals(100, newSequence.getLength().intValue());
 		}
 		{
 			Sequence<BigInteger> newSequence = sequence.limit(50).limit(100);
@@ -114,7 +114,7 @@ public class LimitedSequenceTest {
 			}
 			assertEquals(50, counter);
 			assertEquals(50, newSequence.getLength().intValue());
-			assertEquals(50, newSequence.count());
+			assertEquals(50, newSequence.getLength().intValue());
 		}
 		{
 			Sequence<BigInteger> newSequence = sequence.limit(0).limit(5);
@@ -124,7 +124,7 @@ public class LimitedSequenceTest {
 			}
 			assertEquals(0, counter);
 			assertEquals(0, newSequence.getLength().intValue());
-			assertEquals(0, newSequence.count());
+			assertEquals(0, newSequence.getLength().intValue());
 		}
 
 	}

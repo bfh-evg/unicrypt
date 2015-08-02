@@ -43,6 +43,8 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Operation;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -233,19 +235,16 @@ public class ProductSemiGroup
 		return this.abstractGetElement(DenseArray.getInstance(results));
 	}
 
-	protected Tuple defaultApply(final Iterable<Element> elements) {
-		if (!elements.iterator().hasNext()) {
-			throw new IllegalArgumentException();
-		}
-		Element result = null;
-		for (Element element : elements) {
-			if (result == null) {
-				result = element;
-			} else {
-				result = this.apply(result, element);
+	protected Tuple defaultApply(final Sequence<Element> elements) {
+		final ProductSemiGroup semiGroup = this;
+		return (Tuple) elements.filter(Predicate.NOT_NULL).reduce(new Operation<Element>() {
+
+			@Override
+			public Element apply(Element element1, Element element2) {
+				return semiGroup.apply(element1, element2);
 			}
-		}
-		return (Tuple) result;
+
+		});
 	}
 
 	protected Tuple defaultMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {

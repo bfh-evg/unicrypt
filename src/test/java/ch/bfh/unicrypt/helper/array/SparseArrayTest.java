@@ -108,9 +108,8 @@ public class SparseArrayTest {
 		Assert.assertEquals("", a.getAt(0));
 		Assert.assertEquals("Test", a.getAt(12));
 
-		SparseArray<String> b = SparseArray.getInstance("", a);
+		SparseArray<String> b = SparseArray.getInstance("", a.getSequence());
 		Assert.assertEquals(a, b);
-		Assert.assertSame(a, b);
 	}
 
 	@Test

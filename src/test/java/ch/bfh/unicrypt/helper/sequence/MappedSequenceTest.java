@@ -71,7 +71,7 @@ public class MappedSequenceTest {
 		}
 		Assert.assertEquals(11, newSequence.getLength().intValue());
 
-		// run the same test twice to check correct use of iterators
+		// run the same test twice to matchAll correct use of iterators
 		i = 1;
 		for (BigInteger value : newSequence) {
 			Assert.assertEquals(i, value.intValue());
@@ -99,7 +99,7 @@ public class MappedSequenceTest {
 		}
 		Assert.assertEquals(10, newSequence.getLength().intValue());
 
-		// run the same test twice to check correct use of iterators
+		// run the same test twice to matchAll correct use of iterators
 		i = 1;
 		for (Integer value : newSequence) {
 			Assert.assertEquals(i, value);

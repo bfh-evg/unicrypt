@@ -155,10 +155,6 @@ public class ByteArrayAggregator
 				};
 			}
 
-			@Override
-			protected BigInteger abstractGetLength() {
-				return Sequence.UNKNOWN;
-			}
 		};
 	}
 

@@ -63,14 +63,28 @@ public class ProductSequence<V>
 
 	// the base case of the recursion
 	protected ProductSequence() {
+		super(MathUtil.ONE);
 		this.sequence = null;
 		this.productSequence = null;
 	}
 
 	// the general case of the recursion
 	protected ProductSequence(Sequence<V> sequence, ProductSequence<V> productSequence) {
+		super(computeLength(sequence.length, productSequence.length));
 		this.sequence = sequence;
 		this.productSequence = productSequence;
+	}
+
+	private static BigInteger computeLength(BigInteger length1, BigInteger length2) {
+		BigInteger length;
+		if (length1.equals(Sequence.INFINITE) || length2.equals(Sequence.INFINITE)) {
+			return Sequence.INFINITE;
+		}
+		if (length1.equals(Sequence.UNKNOWN) || length2.equals(Sequence.UNKNOWN)) {
+			return Sequence.UNKNOWN;
+		}
+		return length1.multiply(length2);
+
 	}
 
 	/**
@@ -89,7 +103,7 @@ public class ProductSequence<V>
 				throw new IllegalArgumentException();
 			}
 		}
-		return ProductSequence.getInstance(Sequence.getInstance(sources));
+		return ProductSequence.getInstance(Sequence.getInstance(sources).filter(Predicate.NOT_NULL));
 	}
 
 	/**
@@ -155,22 +169,6 @@ public class ProductSequence<V>
 			}
 
 		};
-	}
-
-	@Override
-	protected BigInteger abstractGetLength() {
-		if (this.sequence == null) {
-			return MathUtil.ONE;
-		}
-		BigInteger length1 = this.sequence.getLength();
-		BigInteger length2 = this.productSequence.getLength();
-		if (length1.equals(Sequence.INFINITE) || length2.equals(Sequence.INFINITE)) {
-			return Sequence.INFINITE;
-		}
-		if (length1.equals(Sequence.UNKNOWN) || length2.equals(Sequence.UNKNOWN)) {
-			return Sequence.UNKNOWN;
-		}
-		return length1.multiply(length2);
 	}
 
 }

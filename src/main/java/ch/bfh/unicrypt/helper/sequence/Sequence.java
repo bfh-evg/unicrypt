@@ -63,46 +63,45 @@ public abstract class Sequence<V>
 	   extends UniCrypt
 	   implements Iterable<V> {
 
-	public static final BigInteger INFINITE = BigInteger.valueOf(-1);
-	public static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
+	protected static final BigInteger INFINITE = BigInteger.valueOf(-1);
+	protected static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
 
 	// the length of the sequence
-	private BigInteger length;
+	protected BigInteger length;
+
+	protected Sequence() {
+		this.length = Sequence.UNKNOWN;
+	}
+
+	protected Sequence(BigInteger length) {
+		this.length = length;
+	}
 
 	public final boolean isEmpty() {
-		return this.getLength().signum() == 0;
+		return this.length.equals(MathUtil.ZERO) || (this.length.equals(Sequence.UNKNOWN) && !this.iterator().hasNext());
 	}
 
+	public final boolean isInfinite() {
+		return this.length.equals(Sequence.INFINITE);
+	}
+
+	// possibly expensive
 	public final BigInteger getLength() {
-		if (this.length == null) {
-			this.length = this.abstractGetLength();
-			if (this.length.equals(Sequence.UNKNOWN) && !this.iterator().hasNext()) {
-				this.length = MathUtil.ZERO;
-			}
-			return this.length;
-		}
-		return this.length;
-	}
-
-	public final long count() {
-		if (this.getLength().equals(Sequence.INFINITE)) {
-			throw new UnsupportedOperationException();
-		}
-		if (this.getLength().equals(Sequence.UNKNOWN)) {
+		if (this.length.equals(Sequence.UNKNOWN)) {
 			long counter = 0;
 			for (V value : this) {
 				counter++;
 			}
 			this.length = BigInteger.valueOf(counter);
 		}
-		return this.length.longValue();
+		return this.length;
 	}
 
 	public final long count(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
-		if (this.getLength().equals(Sequence.INFINITE)) {
+		if (this.isInfinite()) {
 			throw new UnsupportedOperationException();
 		}
 		long counter = 0;
@@ -149,7 +148,7 @@ public abstract class Sequence<V>
 		return null;
 	}
 
-	public final boolean check(Predicate<? super V> predicate) {
+	public final boolean matchAll(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
@@ -159,6 +158,18 @@ public abstract class Sequence<V>
 			}
 		}
 		return true;
+	}
+
+	public final boolean matchAny(Predicate<? super V> predicate) {
+		if (predicate == null) {
+			throw new IllegalArgumentException();
+		}
+		for (V value : this) {
+			if (predicate.test(value)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public final V reduce(Operation<V> operation) {
@@ -193,12 +204,7 @@ public abstract class Sequence<V>
 			throw new IllegalArgumentException();
 		}
 		final Sequence<V> source = this;
-		return new Sequence<W>() {
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				return source.getLength();
-			}
+		return new Sequence<W>(source.length) {
 
 			@Override
 			public Iterator<W> iterator() {
@@ -226,15 +232,7 @@ public abstract class Sequence<V>
 			throw new IllegalArgumentException();
 		}
 		final Sequence<V> source = this;
-		return new Sequence<V>() {
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				if (source.isEmpty()) {
-					return MathUtil.ZERO;
-				}
-				return Sequence.UNKNOWN;
-			}
+		return new Sequence<V>(Sequence.UNKNOWN) {
 
 			@Override
 			public Iterator<V> iterator() {
@@ -281,20 +279,16 @@ public abstract class Sequence<V>
 		if (maxLength == null || maxLength.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
+		BigInteger newLength;
+		if (this.length.equals(Sequence.UNKNOWN)) {
+			newLength = Sequence.UNKNOWN;
+		} else if (this.length.equals(Sequence.INFINITE)) {
+			newLength = maxLength;
+		} else {
+			newLength = this.length.min(maxLength);
+		}
 		final Sequence<V> source = this;
-		return new Sequence<V>() {
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				BigInteger length = source.getLength();
-				if (length.equals(Sequence.INFINITE) || maxLength.signum() == 0) {
-					return maxLength;
-				}
-				if (length.equals(Sequence.UNKNOWN)) {
-					return Sequence.UNKNOWN;
-				}
-				return length.min(maxLength);
-			}
+		return new Sequence<V>(newLength) {
 
 			@Override
 			public Iterator<V> iterator() {
@@ -328,20 +322,14 @@ public abstract class Sequence<V>
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
+		BigInteger newLength;
+		if (this.length.equals(Sequence.UNKNOWN) || this.length.equals(Sequence.INFINITE)) {
+			newLength = this.length;
+		} else {
+			newLength = this.getLength().subtract(BigInteger.valueOf(n)).max(MathUtil.ZERO);
+		}
 		final Sequence<V> source = this;
-		return new Sequence<V>() {
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				BigInteger length = source.getLength();
-				if (length.equals(Sequence.INFINITE)) {
-					return Sequence.INFINITE;
-				}
-				if (length.equals(Sequence.UNKNOWN)) {
-					return Sequence.UNKNOWN;
-				}
-				return source.getLength().subtract(BigInteger.valueOf(n)).max(MathUtil.ZERO);
-			}
+		return new Sequence<V>(newLength) {
 
 			@Override
 			public Iterator<V> iterator() {
@@ -360,20 +348,14 @@ public abstract class Sequence<V>
 		if (groupLength < 1) {
 			throw new IllegalArgumentException();
 		}
+		BigInteger newLength;
+		if (this.length.equals(Sequence.UNKNOWN) || this.length.equals(Sequence.INFINITE)) {
+			newLength = this.length;
+		} else {
+			newLength = MathUtil.divideUp(this.length, BigInteger.valueOf(groupLength));
+		}
 		final Sequence<V> source = this;
-		return new Sequence<DenseArray<V>>() {
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				BigInteger length = source.getLength();
-				if (length.equals(Sequence.INFINITE)) {
-					return Sequence.INFINITE;
-				}
-				if (length.equals(Sequence.UNKNOWN)) {
-					return Sequence.UNKNOWN;
-				}
-				return MathUtil.divideUp(length, BigInteger.valueOf(groupLength));
-			}
+		return new Sequence<DenseArray<V>>(newLength) {
 
 			@Override
 			public Iterator<DenseArray<V>> iterator() {
@@ -403,18 +385,11 @@ public abstract class Sequence<V>
 		};
 	}
 
-	protected abstract BigInteger abstractGetLength();
-
 	public static <V> Sequence<V> getInstance(final V... source) {
 		if (source == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Sequence<V>() {
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				return BigInteger.valueOf(source.length);
-			}
+		return new Sequence<V>(BigInteger.valueOf(source.length)) {
 
 			@Override
 			public Iterator<V> iterator() {
@@ -436,16 +411,11 @@ public abstract class Sequence<V>
 		};
 	}
 
-	public static <V> Sequence<V> getInstance(final ImmutableArray<V> source) {
+	public static <V> Sequence<V> getInstance(final Collection<V> source) {
 		if (source == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Sequence<V>() {
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				return BigInteger.valueOf(source.getLength());
-			}
+		return new Sequence<V>(BigInteger.valueOf(source.size())) {
 
 			@Override
 			public Iterator<V> iterator() {
@@ -454,16 +424,11 @@ public abstract class Sequence<V>
 		};
 	}
 
-	public static <V> Sequence<V> getInstance(final Collection<V> source) {
+	public static <V> Sequence<V> getInstance(final ImmutableArray<V> source) {
 		if (source == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Sequence<V>() {
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				return BigInteger.valueOf(source.size());
-			}
+		return new Sequence<V>(BigInteger.valueOf(source.getLength())) {
 
 			@Override
 			public Iterator<V> iterator() {

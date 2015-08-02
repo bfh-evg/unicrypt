@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -62,18 +61,16 @@ public class BigIntegerSequence
 	private final BigInteger to;
 
 	protected BigIntegerSequence(BigInteger from, BigInteger to) {
+		super(MathUtil.ZERO.max(to.subtract(from).add(MathUtil.ONE)));
 		this.from = from;
 		this.to = to;
 	}
 
-	/**
+	/*
 	 * /**
 	 * Creates a new iterable range for given upper and lower integer bounds. The result is an empty range, if the upper
-	 * bound is smaller than the lower bound.
-	 * <p>
-	 * @param from The lower bound
-	 * @param to   The upper bound
-	 * @return The new iterable range
+	 * bound is smaller than the lower bound. <p> @param from The lower bound @param to The upper bound @return The new
+	 * iterable range
 	 */
 	public static BigIntegerSequence getInstance(int from, int to) {
 		return BigIntegerSequence.getInstance(BigInteger.valueOf(from), BigInteger.valueOf(to));
@@ -150,11 +147,6 @@ public class BigIntegerSequence
 			return "";
 		}
 		return this.from + "..." + this.to;
-	}
-
-	@Override
-	protected BigInteger abstractGetLength() {
-		return MathUtil.ZERO.max(this.to.subtract(this.from).add(MathUtil.ONE));
 	}
 
 }

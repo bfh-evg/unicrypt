@@ -43,7 +43,9 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import java.util.Collection;
 
 /**
  * This class is a default implementation of the {@link ImmutableArray} interface. It is optimized for arrays for which
@@ -91,6 +93,10 @@ public class DenseArray<V extends Object>
 		return DenseArray.getInstance(Sequence.getInstance(values));
 	}
 
+	public static <V> DenseArray<V> getInstance(Collection<V> values) {
+		return DenseArray.getInstance(Sequence.getInstance(values));
+	}
+
 	/**
 	 * Creates a new dense array from a given iterable sequence of values. If the given sequence of values is already a
 	 * dense array, it is returned without doing anything. Otherwise, the sequence is transformed into a Java array for
@@ -100,21 +106,12 @@ public class DenseArray<V extends Object>
 	 * @param values The given iterable sequence of values
 	 * @return The new dense array
 	 */
-	public static <V> DenseArray<V> getInstance(Iterable<V> values) {
-		if (values == null) {
+	public static <V> DenseArray<V> getInstance(Sequence<V> values) {
+		if (values == null || values.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
-		if (values instanceof DenseArray) {
-			return (DenseArray) values;
-		}
-		int length = 0;
-		for (V value : values) {
-			if (value == null) {
-				throw new IllegalArgumentException();
-			}
-			length++;
-		}
-		Object[] array = new Object[length];
+		values = values.filter(Predicate.NOT_NULL);
+		Object[] array = new Object[values.getLength().intValue()];
 		int i = 0;
 		for (V value : values) {
 			array[i++] = value;

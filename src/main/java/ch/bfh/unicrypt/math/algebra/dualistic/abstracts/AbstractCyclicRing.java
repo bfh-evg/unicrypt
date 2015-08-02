@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -164,7 +163,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicRing<E, V> set = this;
-		return new Sequence<E>() {
+		return new Sequence<E>(set.getOrder()) {
 
 			@Override
 			public Iterator<E> iterator() {
@@ -193,11 +192,6 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 						throw new UnsupportedOperationException();
 					}
 				};
-			}
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				return set.getOrder();
 			}
 
 		};

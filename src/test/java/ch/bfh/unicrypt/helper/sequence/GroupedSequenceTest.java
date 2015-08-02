@@ -68,47 +68,47 @@ public class GroupedSequenceTest {
 		} catch (Exception e) {
 		}
 
-		Assert.assertEquals(0, seq0.group(1).count());
-		Assert.assertEquals(1, seq1.group(1).count());
-		Assert.assertEquals(9, seq9.group(1).count());
-		Assert.assertEquals(10, seq10.group(1).count());
-		Assert.assertEquals(11, seq11.group(1).count());
-		Assert.assertEquals(100, seq100.group(1).count());
+		Assert.assertEquals(0, seq0.group(1).getLength().intValue());
+		Assert.assertEquals(1, seq1.group(1).getLength().intValue());
+		Assert.assertEquals(9, seq9.group(1).getLength().intValue());
+		Assert.assertEquals(10, seq10.group(1).getLength().intValue());
+		Assert.assertEquals(11, seq11.group(1).getLength().intValue());
+		Assert.assertEquals(100, seq100.group(1).getLength().intValue());
 
-		Assert.assertEquals(0, seq0.group(5).count());
-		Assert.assertEquals(1, seq1.group(5).count());
-		Assert.assertEquals(2, seq9.group(5).count());
-		Assert.assertEquals(2, seq10.group(5).count());
-		Assert.assertEquals(3, seq11.group(5).count());
-		Assert.assertEquals(20, seq100.group(5).count());
+		Assert.assertEquals(0, seq0.group(5).getLength().intValue());
+		Assert.assertEquals(1, seq1.group(5).getLength().intValue());
+		Assert.assertEquals(2, seq9.group(5).getLength().intValue());
+		Assert.assertEquals(2, seq10.group(5).getLength().intValue());
+		Assert.assertEquals(3, seq11.group(5).getLength().intValue());
+		Assert.assertEquals(20, seq100.group(5).getLength().intValue());
 
-		Assert.assertEquals(0, seq0.group(100).count());
-		Assert.assertEquals(1, seq1.group(100).count());
-		Assert.assertEquals(1, seq9.group(100).count());
-		Assert.assertEquals(1, seq10.group(100).count());
-		Assert.assertEquals(1, seq11.group(100).count());
-		Assert.assertEquals(1, seq100.group(100).count());
+		Assert.assertEquals(0, seq0.group(100).getLength().intValue());
+		Assert.assertEquals(1, seq1.group(100).getLength().intValue());
+		Assert.assertEquals(1, seq9.group(100).getLength().intValue());
+		Assert.assertEquals(1, seq10.group(100).getLength().intValue());
+		Assert.assertEquals(1, seq11.group(100).getLength().intValue());
+		Assert.assertEquals(1, seq100.group(100).getLength().intValue());
 
-		Assert.assertEquals(0, seq0.group(1).group(1).count());
-		Assert.assertEquals(1, seq1.group(1).group(1).count());
-		Assert.assertEquals(9, seq9.group(1).group(1).count());
-		Assert.assertEquals(10, seq10.group(1).group(1).count());
-		Assert.assertEquals(11, seq11.group(1).group(1).count());
-		Assert.assertEquals(100, seq100.group(1).group(1).count());
+		Assert.assertEquals(0, seq0.group(1).group(1).getLength().intValue());
+		Assert.assertEquals(1, seq1.group(1).group(1).getLength().intValue());
+		Assert.assertEquals(9, seq9.group(1).group(1).getLength().intValue());
+		Assert.assertEquals(10, seq10.group(1).group(1).getLength().intValue());
+		Assert.assertEquals(11, seq11.group(1).group(1).getLength().intValue());
+		Assert.assertEquals(100, seq100.group(1).group(1).getLength().intValue());
 
-		Assert.assertEquals(0, seq0.group(5).group(1).count());
-		Assert.assertEquals(1, seq1.group(5).group(1).count());
-		Assert.assertEquals(2, seq9.group(5).group(1).count());
-		Assert.assertEquals(2, seq10.group(5).group(1).count());
-		Assert.assertEquals(3, seq11.group(5).group(1).count());
-		Assert.assertEquals(20, seq100.group(5).group(1).count());
+		Assert.assertEquals(0, seq0.group(5).group(1).getLength().intValue());
+		Assert.assertEquals(1, seq1.group(5).group(1).getLength().intValue());
+		Assert.assertEquals(2, seq9.group(5).group(1).getLength().intValue());
+		Assert.assertEquals(2, seq10.group(5).group(1).getLength().intValue());
+		Assert.assertEquals(3, seq11.group(5).group(1).getLength().intValue());
+		Assert.assertEquals(20, seq100.group(5).group(1).getLength().intValue());
 
-		Assert.assertEquals(0, seq0.group(5).group(2).count());
-		Assert.assertEquals(1, seq1.group(5).group(2).count());
-		Assert.assertEquals(1, seq9.group(5).group(2).count());
-		Assert.assertEquals(1, seq10.group(5).group(2).count());
-		Assert.assertEquals(2, seq11.group(5).group(2).count());
-		Assert.assertEquals(10, seq100.group(5).group(2).count());
+		Assert.assertEquals(0, seq0.group(5).group(2).getLength().intValue());
+		Assert.assertEquals(1, seq1.group(5).group(2).getLength().intValue());
+		Assert.assertEquals(1, seq9.group(5).group(2).getLength().intValue());
+		Assert.assertEquals(1, seq10.group(5).group(2).getLength().intValue());
+		Assert.assertEquals(2, seq11.group(5).group(2).getLength().intValue());
+		Assert.assertEquals(10, seq100.group(5).group(2).getLength().intValue());
 
 		Assert.assertEquals(DenseArray.getInstance(1, 2, 3, 4, 5), seq11.group(5).group(2).iterator().next().getFirst());
 	}

@@ -46,6 +46,7 @@ import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -234,7 +235,7 @@ public class PolynomialSemiRing
 
 	@Override
 	protected boolean abstractContains(Polynomial value) {
-		Iterable<Integer> indices = value.getCoefficientIndices();
+		Sequence<Integer> indices = value.getCoefficientIndices();
 		for (int i : indices) {
 			if (!(Element.class.isInstance(value.getCoefficient(i))
 				   && this.getSemiRing().contains((Element) value.getCoefficient(i)))) {

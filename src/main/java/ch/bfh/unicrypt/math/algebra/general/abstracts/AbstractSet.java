@@ -50,7 +50,6 @@ import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
@@ -362,7 +361,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (this == other) {
 			return true;
 		}
-		// check if this.getClass() is a superclass of other.getClass()
+		// matchAll if this.getClass() is a superclass of other.getClass()
 		if (this.getClass().isAssignableFrom(other.getClass())) {
 			return this.defaultIsEquivalent(other);
 		}
@@ -512,7 +511,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	// some sets allow a more efficient itertation method than this one
 	protected Sequence<E> defaultGetElements() {
 		final AbstractSet<E, V> set = this;
-		return new Sequence<E>() {
+		return new Sequence<E>(set.getOrder()) {
 
 			@Override
 			public Iterator<E> iterator() {
@@ -538,11 +537,6 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 					}
 
 				};
-			}
-
-			@Override
-			protected BigInteger abstractGetLength() {
-				return set.getOrder();
 			}
 
 		};

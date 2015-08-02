@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
@@ -158,20 +159,11 @@ public class BitArray
 	 * @param bits The iterable sequence of bits
 	 * @return The new bit array
 	 */
-	public static BitArray getInstance(Iterable<Boolean> bits) {
-		if (bits == null) {
+	public static BitArray getInstance(Sequence<Boolean> bits) {
+		if (bits == null || bits.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
-		if (bits instanceof BitArray) {
-			return (BitArray) bits;
-		}
-		int bitLength = 0;
-		for (Boolean bit : bits) {
-			if (bit == null) {
-				throw new IllegalArgumentException();
-			}
-			bitLength++;
-		}
+		int bitLength = bits.getLength().intValue();
 		int byteLength = MathUtil.divideUp(bitLength, Byte.SIZE);
 		byte[] bytes = new byte[byteLength];
 		int i = 0;
@@ -253,7 +245,7 @@ public class BitArray
 		byte[] bytes = new byte[length];
 		for (int index = 0; index < length; index++) {
 			bytes[index] = this.byteArray.getByteAt(this.rangeOffset - this.trailer, index, this.rangeOffset,
-																							this.rangeLength);
+													this.rangeLength);
 		}
 		return ByteArray.getInstance(bytes);
 	}
@@ -302,7 +294,7 @@ public class BitArray
 
 	@Override
 	protected BitArray abstractAppend(ImmutableArray<Boolean> other) {
-		return this.abstractAppend(BitArray.getInstance(other));
+		return this.abstractAppend(BitArray.getInstance(other.getSequence()));
 	}
 
 	protected BitArray abstractAppend(BitArray other) {
@@ -318,7 +310,7 @@ public class BitArray
 		// reverse byteArrary, adjust offset, switch trailer and header (reverse is always false)
 		int newOffset = this.byteArray.getLength() * Byte.SIZE - this.rangeOffset - this.rangeLength;
 		return new BitArray(this.byteArray.bitReverse(), this.length, newOffset, this.header, this.trailer,
-			   this.rangeLength);
+							this.rangeLength);
 	}
 
 	@Override

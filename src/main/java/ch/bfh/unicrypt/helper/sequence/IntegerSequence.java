@@ -41,7 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
 import java.util.Iterator;
 
@@ -61,6 +60,7 @@ public class IntegerSequence
 	private final int to;
 
 	protected IntegerSequence(Integer from, Integer to) {
+		super(BigInteger.valueOf(Math.max(to - from + 1, 0)));
 		this.from = from;
 		this.to = to;
 	}
@@ -130,11 +130,6 @@ public class IntegerSequence
 			return "";
 		}
 		return this.from + "..." + this.to;
-	}
-
-	@Override
-	protected BigInteger abstractGetLength() {
-		return BigInteger.valueOf(Math.max(this.to - this.from + 1, 0));
 	}
 
 }

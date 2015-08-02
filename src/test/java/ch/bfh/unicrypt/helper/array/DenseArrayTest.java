@@ -60,22 +60,6 @@ public class DenseArrayTest {
 	private static DenseArray<String> a1 = DenseArray.getInstance("s1", "s2", "s3");
 	private static DenseArray<String> a2 = DenseArray.getInstance("s1", "s1", "s1");
 	private static DenseArray<String> a3 = DenseArray.getInstance("s1", 3);
-	private static DenseArray<String> a4;
-	private static DenseArray<String> a5;
-
-	public DenseArrayTest() {
-		ArrayList list1 = new ArrayList();
-		list1.add("s1");
-		list1.add("s2");
-		list1.add("s3");
-		a4 = DenseArray.getInstance(list1);
-
-		ArrayList list2 = new ArrayList();
-		list2.add("s1");
-		list2.add("s1");
-		list2.add("s1");
-		a5 = DenseArray.getInstance(list2);
-	}
 
 	@Test
 	public void testGetLength() {
@@ -83,8 +67,6 @@ public class DenseArrayTest {
 		assertEquals(3, a1.getLength());
 		assertEquals(3, a2.getLength());
 		assertEquals(3, a3.getLength());
-		assertEquals(3, a4.getLength());
-		assertEquals(3, a5.getLength());
 	}
 
 	@Test
@@ -98,11 +80,6 @@ public class DenseArrayTest {
 		assertEquals("s1", a3.getAt(0));
 		assertEquals("s1", a3.getAt(1));
 		assertEquals("s1", a3.getAt(2));
-		assertEquals("s1", a4.getAt(0));
-		assertEquals("s2", a4.getAt(1));
-		assertEquals("s3", a4.getAt(2));
-		assertEquals("s1", a5.getAt(0));
-		assertEquals("s1", a5.getAt(2));
 	}
 
 	@Test
@@ -154,9 +131,6 @@ public class DenseArrayTest {
 		assertTrue(a2.equals(a2));
 		assertTrue(a2.equals(a3));
 		assertTrue(a3.equals(a3));
-		assertTrue(a1.equals(a4));
-		assertTrue(a2.equals(a5));
-		assertTrue(a3.equals(a5));
 
 	}
 
@@ -176,13 +150,14 @@ public class DenseArrayTest {
 		assertEquals(a2.append(a3), a3.append(a2));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testGetInstanceByCollectionException() {
 		ArrayList list1 = new ArrayList();
 		list1.add("s1");
 		list1.add(null);
 		list1.add("s3");
 		DenseArray a = DenseArray.getInstance(list1);
+		assertEquals(2, a.getLength());
 	}
 
 	@Test
