@@ -47,7 +47,8 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
  * This interface represents immutable instances of arrays. The type of the elements in an array is generic. After
  * creating an immutable array, it can no longer be modified. This interface specifies a large set of useful methods for
  * accessing the array values and for creating new arrays from existing ones. The number of values in an immutable array
- * is finite. The values of an array of length n are indexed from 0 to n-1. Immutable arrays are {@link Iterable}.
+ * is finite. The values of an array of length {@code n} are indexed from {@code 0} to {@code n-1}. Immutable arrays are
+ * {@link Iterable}.
  * <p>
  * @author Rolf Haenni
  * @version 2.0
@@ -78,30 +79,29 @@ public interface ImmutableArray<V extends Object>
 	public boolean isUniform();
 
 	/**
-	 * Returns an iterable collection of all array indices from 0 to n-1.
+	 * Returns the sequence of all array indices from 0 to n-1.
 	 * <p>
-	 * @return The iterable collection of all array indices
+	 * @return The sequence of all array indices
 	 * @see ImmutableArray#getIndices(java.lang.Object)
 	 * @see ImmutableArray#getIndicesExcept(java.lang.Object)
 	 */
 	public Sequence<Integer> getAllIndices();
 
 	/**
-	 * Returns an iterable collection of all array indices for which the stored value matches with the given value.
+	 * Returns the sequence of all array indices for which the stored value matches with the given value.
 	 * <p>
 	 * @param value The given value
-	 * @return An iterable collection of array indices
+	 * @return The sequence of array indices
 	 * @see ImmutableArray#getAllIndices()
 	 * @see ImmutableArray#getIndicesExcept(java.lang.Object)
 	 */
 	public Sequence<Integer> getIndices(V value);
 
 	/**
-	 * Returns an iterable collection of all array indices for which the stored values does not match with the given
-	 * value.
+	 * Returns the sequence of all array indices for which the stored values does not match with the given value.
 	 * <p>
 	 * @param value The given value
-	 * @return An iterable collection of array indices.
+	 * @return The sequence of array indices.
 	 * @see ImmutableArray#getAllIndices()
 	 * @see ImmutableArray#getIndices(java.lang.Object)
 	 */

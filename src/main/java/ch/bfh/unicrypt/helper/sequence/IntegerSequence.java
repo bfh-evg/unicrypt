@@ -66,13 +66,12 @@ public class IntegerSequence
 	}
 
 	/**
-	 * /**
-	 * Creates a new iterable range for given upper and lower integer bounds. The result is an empty range, if the upper
-	 * bound is smaller than the lower bound.
+	 * Creates a new integer sequence for given upper and lower integer bounds. The result is an empty range, if the
+	 * upper bound is smaller than the lower bound.
 	 * <p>
 	 * @param from The lower bound
 	 * @param to   The upper bound
-	 * @return The new iterable range
+	 * @return The new integer sequence
 	 */
 	public static IntegerSequence getInstance(int from, int to) {
 		return new IntegerSequence(from, to);

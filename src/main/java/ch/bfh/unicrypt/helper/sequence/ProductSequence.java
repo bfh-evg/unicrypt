@@ -48,12 +48,12 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
- * This generic class generates an iterable collection of all possible combinations of elements of the given iterable
- * collections of elements.
+ * This class allows generating the sequence of all possible combinations of elements of some given input sequences. The
+ * combined values are instances of {@link DenseArray};
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @param <V> The generic type of the iterable collection
+ * @param <V> The generic type of the input sequences
  */
 public class ProductSequence<V>
 	   extends Sequence<DenseArray<V>> {
@@ -88,11 +88,11 @@ public class ProductSequence<V>
 	}
 
 	/**
-	 * Creates and returns an iterable collection of all combinations of elements in the input collections of elements.
+	 * Creates and returns the sequence of all combinations of elements from the input sequences.
 	 * <p>
-	 * @param <V>     The generic type of the given iterable collections of elements
-	 * @param sources The given iterable collections of elements
-	 * @return The new iterable collection of all combinations of elements
+	 * @param <V>     The generic type of the input sequences
+	 * @param sources The input sequences
+	 * @return The new sequence of all combinations of elements
 	 */
 	public static <V> ProductSequence<V> getInstance(Sequence<V>... sources) {
 		if (sources == null) {
@@ -107,11 +107,11 @@ public class ProductSequence<V>
 	}
 
 	/**
-	 * Creates and returns an iterable collection of all combinations of elements in the input collections of elements.
+	 * Creates and returns the sequence of all combinations of elements from the input sequences.
 	 * <p>
-	 * @param <V>     The generic type of the given iterable collections of elements
-	 * @param sources The given iterable collections of elements
-	 * @return The new iterable collection of all combinations of elements
+	 * @param <V>     The generic type of the input sequences
+	 * @param sources The input sequences
+	 * @return The new sequence of all combinations of elements
 	 */
 	public static <V> ProductSequence<V> getInstance(Sequence<? extends Sequence<V>> sources) {
 		if (sources == null) {

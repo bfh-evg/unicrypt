@@ -106,7 +106,7 @@ public abstract class Tree<V>
 	}
 
 	/**
-	 * Creates a new node from a given iterable collection of sub-trees (its children) of type {@code V}.
+	 * Creates a new node from a given sequence of sub-trees (its children) of type {@code V}.
 	 * <p>
 	 * @param <V>      The generic type of the tree
 	 * @param children The given sub-trees

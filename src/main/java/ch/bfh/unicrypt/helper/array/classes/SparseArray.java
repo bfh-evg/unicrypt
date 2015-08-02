@@ -182,11 +182,11 @@ public class SparseArray<V extends Object>
 
 	/**
 	 * Creates a new sparse array from a given sequence of values. The sequence is transformed into a map for internal
-	 * storage.
+	 * storage. Null values are eliminated.
 	 * <p>
 	 * @param <V>          The generic type of the new array
 	 * @param defaultValue The default value of the new array
-	 * @param values       The given iterable sequence of values
+	 * @param values       The given sequence of values
 	 * @return The new sparse array
 	 */
 	public static <V> SparseArray<V> getInstance(V defaultValue, Sequence<V> values) {

@@ -64,17 +64,17 @@ public interface DefaultValueArray<V extends Object>
 	public V getDefault();
 
 	/**
-	 * Returns an iterable collection of all array indices for which the stored value matches with the default value.
+	 * Returns the sequence of all array indices for which the stored value matches with the default value.
 	 * <p>
-	 * @return An iterable collection of array indices
+	 * @return The sequence of array indices
 	 * @see ImmutableArray#getIndices(java.lang.Object)
 	 */
 	public Sequence<Integer> getIndices();
 
 	/**
-	 * Returns an iterable collection of all array indices for which the stored value differs from the default value.
+	 * Returns the sequence of all array indices for which the stored value differs from the default value.
 	 * <p>
-	 * @return An iterable collection of array indices
+	 * @return The sequence of array indices
 	 * @see ImmutableArray#getIndicesExcept(java.lang.Object)
 	 */
 	public Sequence<Integer> getIndicesExcept();

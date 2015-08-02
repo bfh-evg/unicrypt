@@ -255,9 +255,9 @@ public class Polynomial<C>
 	}
 
 	/**
-	 * Returns an iterable collection of indices with a coefficients different from 0.
+	 * Returns the sequence of indices with a coefficients different from 0.
 	 * <p>
-	 * @return The iterable collection of indices
+	 * @return The sequence of indices
 	 */
 	public final Sequence<Integer> getCoefficientIndices() {
 		if (this.isBinary()) {

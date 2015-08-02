@@ -98,12 +98,11 @@ public class DenseArray<V extends Object>
 	}
 
 	/**
-	 * Creates a new dense array from a given iterable sequence of values. If the given sequence of values is already a
-	 * dense array, it is returned without doing anything. Otherwise, the sequence is transformed into a Java array for
-	 * internal storage.
+	 * Creates a new dense array from a given sequence of values. The sequence is transformed into a Java array for
+	 * internal storage. Null values are eliminated.
 	 * <p>
 	 * @param <V>    The generic type of the new array
-	 * @param values The given iterable sequence of values
+	 * @param values The given sequence of values
 	 * @return The new dense array
 	 */
 	public static <V> DenseArray<V> getInstance(Sequence<V> values) {

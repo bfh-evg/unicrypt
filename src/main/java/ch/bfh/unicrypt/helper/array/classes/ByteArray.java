@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.ByteArrayToString;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -180,17 +181,17 @@ public class ByteArray
 	}
 
 	/**
-	 * Creates a new byte array from a given iterable sequence of bytes. If the given sequence of bytes is already a
-	 * byte array, it is returned without doing anything. Otherwise, the sequence is transformed into a Java byte array
-	 * for internal storage.
+	 * Creates a new byte array from a given sequence of bytes. The sequence is transformed into a Java byte array for
+	 * internal storage. Null values are eliminated.
 	 * <p>
-	 * @param bytes The iterable sequence of bytes
+	 * @param bytes The sequence of bytes
 	 * @return The new byte array
 	 */
 	public static ByteArray getInstance(Sequence<Byte> bytes) {
 		if (bytes == null || bytes.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
+		bytes = bytes.filter(Predicate.NOT_NULL);
 		byte[] array = new byte[bytes.getLength().intValue()];
 		int i = 0;
 		for (Byte b : bytes) {

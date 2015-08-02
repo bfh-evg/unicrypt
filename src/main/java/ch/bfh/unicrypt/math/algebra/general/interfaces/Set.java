@@ -307,19 +307,19 @@ public interface Set<V extends Object> {
 	public boolean isEquivalent(Set<?> set);
 
 	/**
-	 * Returns an iterable collection of all elements from this set. The size of this collection may be infinite. The
-	 * order in which the elements appear in the iterable collection is unspecified.
+	 * Returns the sequence of all elements from this set. The size of this collection may be infinite. The order in
+	 * which the elements appear in the sequence is unspecified.
 	 * <p>
-	 * @return An iterable collection of all elements
+	 * @return The sequence of all elements
 	 */
 	public Sequence<? extends Element<V>> getElements();
 
 	/**
-	 * Returns an iterable collection of some elements from this set. The maximal number of elements in the iterable
-	 * collection is given as parameter. Their order is unspecified.
+	 * Returns a sequence of some elements from this set. The maximal number of elements in the sequence is given as
+	 * parameter. Their order is unspecified.
 	 * <p>
-	 * @param n The number of element in the resulting iterable collection
-	 * @return An iterable collection
+	 * @param n The maximal number of element in the resulting sequence
+	 * @return A sequence of elements
 	 */
 	public Sequence<? extends Element<V>> getElements(int n);
 

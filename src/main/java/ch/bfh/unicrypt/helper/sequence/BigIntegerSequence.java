@@ -66,11 +66,13 @@ public class BigIntegerSequence
 		this.to = to;
 	}
 
-	/*
-	 * /**
-	 * Creates a new iterable range for given upper and lower integer bounds. The result is an empty range, if the upper
-	 * bound is smaller than the lower bound. <p> @param from The lower bound @param to The upper bound @return The new
-	 * iterable range
+	/**
+	 * Creates a new BigInteger sequence for given upper and lower integer bounds. The result is an empty range, if the
+	 * upper bound is smaller than the lower bound.
+	 * <p>
+	 * @param from The lower bound
+	 * @param to   The upper bound
+	 * @return The new BigInteger sequence
 	 */
 	public static BigIntegerSequence getInstance(int from, int to) {
 		return BigIntegerSequence.getInstance(BigInteger.valueOf(from), BigInteger.valueOf(to));

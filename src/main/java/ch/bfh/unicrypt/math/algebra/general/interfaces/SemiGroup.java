@@ -90,8 +90,8 @@ public interface SemiGroup<V extends Object>
 
 	/**
 	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
-	 * as an iterable collection. If the collection contains a single element, it is returned without applying the
-	 * operation. If the given collection is empty, an exception is thrown.
+	 * as a sequence. If the collection contains a single element, it is returned without applying the operation. If the
+	 * given collection is empty, an exception is thrown.
 	 * <p>
 	 * @param elements A given collection of elements
 	 * @return The result of applying the operation to the input elements

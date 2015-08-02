@@ -67,7 +67,7 @@ public class Node<V>
 	}
 
 	/**
-	 * Returns an iterable collection of the node's children.
+	 * Returns the sequences of the node's children.
 	 * <p>
 	 * @return The node's children
 	 */

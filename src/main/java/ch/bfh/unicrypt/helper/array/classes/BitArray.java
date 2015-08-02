@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -152,17 +153,17 @@ public class BitArray
 	}
 
 	/**
-	 * Creates a new bit array from a given iterable sequence of bits. If the given sequence of bits is already a bit
-	 * array, it is returned without doing anything. Otherwise, the sequence is transformed into a Java byte array for
-	 * internal storage.
+	 * Creates a new bit array from a given sequence of bits. The sequence is transformed into a Java byte array for
+	 * internal storage. Null values are eliminated.
 	 * <p>
-	 * @param bits The iterable sequence of bits
+	 * @param bits The sequence of bits
 	 * @return The new bit array
 	 */
 	public static BitArray getInstance(Sequence<Boolean> bits) {
 		if (bits == null || bits.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
+		bits = bits.filter(Predicate.NOT_NULL);
 		int bitLength = bits.getLength().intValue();
 		int byteLength = MathUtil.divideUp(bitLength, Byte.SIZE);
 		byte[] bytes = new byte[byteLength];

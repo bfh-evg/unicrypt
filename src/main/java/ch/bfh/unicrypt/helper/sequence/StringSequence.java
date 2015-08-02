@@ -115,21 +115,21 @@ public class StringSequence
 	}
 
 	/**
-	 * Returns a new iterable string for the default separator. Escaping is turned on for the default escape character.
+	 * Returns a new string sequence for the default separator. Escaping is turned on for the default escape character.
 	 * <p>
 	 * @param string The given string
-	 * @return The new iterable string
+	 * @return The new string sequence
 	 */
 	public static StringSequence getInstance(String string) {
 		return StringSequence.getInstance(string, '|', '\\');
 	}
 
 	/**
-	 * Returns a new iterable string for a given separator. Escaping is turned off.
+	 * Returns a new string sequence for a given separator. Escaping is turned off.
 	 * <p>
 	 * @param string    The given string
 	 * @param separator The given separation character
-	 * @return The new iterable string
+	 * @return The new string sequence
 	 */
 	public static StringSequence getInstance(String string, char separator) {
 		if (string == null) {
@@ -139,12 +139,12 @@ public class StringSequence
 	}
 
 	/**
-	 * Returns a new iterable string for a given separator. Escaping is turned on for the given escape character.
+	 * Returns a new string sequence for a given separator. Escaping is turned on for the given escape character.
 	 * <p>
 	 * @param string     The given string
 	 * @param separator  The separation character
 	 * @param escapeChar The escape character
-	 * @return The new iterable string
+	 * @return The new string sequence
 	 */
 	public static StringSequence getInstance(String string, char separator, char escapeChar) {
 		if (string == null || separator == escapeChar) {
@@ -154,13 +154,13 @@ public class StringSequence
 	}
 
 	/**
-	 * Returns a new iterable string for given separator and parenthesis characters. Escaping is turned off.
+	 * Returns a new string sequence for given separator and parenthesis characters. Escaping is turned off.
 	 * <p>
 	 * @param string             The given string
 	 * @param separator          The given separation character
 	 * @param openingParenthesis The given opening parenthesis
 	 * @param closingParenthesis The given closing parenthesis
-	 * @return The new iterable string
+	 * @return The new string sequence
 	 */
 	public static StringSequence getInstance(String string, char separator, char openingParenthesis,
 		   char closingParenthesis) {
@@ -172,7 +172,7 @@ public class StringSequence
 	}
 
 	/**
-	 * Returns a new iterable string for given separator and parenthesis characters. Escaping is turned on for the given
+	 * Returns a new string sequence for given separator and parenthesis characters. Escaping is turned on for the given
 	 * escape character.
 	 * <p>
 	 * @param string             The given string
@@ -180,7 +180,7 @@ public class StringSequence
 	 * @param openingParenthesis The given opening parenthesis
 	 * @param closingParenthesis The given closing parenthesis
 	 * @param escapeChar         The given escape character
-	 * @return The new iterable string
+	 * @return The new string sequence
 	 */
 	public static StringSequence getInstance(String string, char separator, char openingParenthesis,
 		   char closingParenthesis, char escapeChar) {
