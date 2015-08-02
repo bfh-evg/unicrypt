@@ -119,7 +119,7 @@ public class DenseArray<V extends Object>
 		for (V value : values) {
 			array[i++] = value;
 		}
-		return new DenseArray<V>(array);
+		return new DenseArray<>(array);
 	}
 
 	/**

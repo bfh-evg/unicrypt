@@ -135,7 +135,7 @@ public abstract class AbstractAggregator<V>
 
 	protected abstract V abstractAggregateLeaf(V value);
 
-	protected abstract V abstractAggregateNode(Iterable<V> values, int size);
+	protected abstract V abstractAggregateNode(Sequence<V> values, int size);
 
 	protected abstract V abstractDisaggregateLeaf(V value);
 

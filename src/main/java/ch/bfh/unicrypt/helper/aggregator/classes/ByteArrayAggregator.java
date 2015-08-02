@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -99,7 +98,7 @@ public class ByteArrayAggregator
 	}
 
 	@Override
-	protected ByteArray abstractAggregateNode(Iterable<ByteArray> values, int length) {
+	protected ByteArray abstractAggregateNode(Sequence<ByteArray> values, int length) {
 		ByteArray[] byteArrays = new ByteArray[length + 1];
 		int i = 1;
 		int byteLength = 0;

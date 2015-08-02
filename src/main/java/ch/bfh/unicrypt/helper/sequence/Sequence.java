@@ -241,7 +241,7 @@ public abstract class Sequence<V>
 				return new Iterator<V>() {
 
 					private final Iterator<V> iterator = source.iterator();
-					private V nextValue = Sequence.getNextValue(this.iterator, predicate);
+					private V nextValue = source.getNextValue(this.iterator, predicate);
 
 					@Override
 					public boolean hasNext() {
@@ -251,7 +251,7 @@ public abstract class Sequence<V>
 					@Override
 					public V next() {
 						V result = this.nextValue;
-						this.nextValue = Sequence.getNextValue(this.iterator, predicate);
+						this.nextValue = source.getNextValue(this.iterator, predicate);
 						return result;
 					}
 
@@ -259,6 +259,18 @@ public abstract class Sequence<V>
 			}
 		};
 
+	}
+
+	// private helper method for filter
+	private V getNextValue(Iterator<V> iterator, Predicate<? super V> predicate) {
+		V nextValue = null;
+		while (nextValue == null && iterator.hasNext()) {
+			V value = iterator.next();
+			if (predicate.test(value)) {
+				nextValue = value;
+			}
+		}
+		return nextValue;
 	}
 
 	public final Sequence<V> limit(final long maxLength) {
@@ -392,17 +404,6 @@ public abstract class Sequence<V>
 	}
 
 	protected abstract BigInteger abstractGetLength();
-
-	private static <V> V getNextValue(Iterator<V> iterator, Predicate<? super V> predicate) {
-		V nextValue = null;
-		while (nextValue == null && iterator.hasNext()) {
-			V value = iterator.next();
-			if (predicate.test(value)) {
-				nextValue = value;
-			}
-		}
-		return nextValue;
-	}
 
 	public static <V> Sequence<V> getInstance(final V... source) {
 		if (source == null) {

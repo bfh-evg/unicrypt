@@ -44,7 +44,6 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
 
 /**
@@ -89,7 +88,7 @@ public class BigIntegerAggregator
 
 	// nodes are marked with 1 bit
 	@Override
-	protected BigInteger abstractAggregateNode(Iterable<BigInteger> values, int length) {
+	protected BigInteger abstractAggregateNode(Sequence<BigInteger> values, int length) {
 		BigInteger[] valueArray = new BigInteger[length];
 		int i = 0;
 		for (BigInteger value : values) {
