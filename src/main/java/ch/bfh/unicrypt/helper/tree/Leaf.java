@@ -75,8 +75,13 @@ public class Leaf<V>
 	}
 
 	@Override
+	public Sequence<V> getSequence() {
+		return Sequence.getInstance(this.value);
+	}
+
+	@Override
 	public Iterator<V> iterator() {
-		return Sequence.getInstance(this.value).iterator();
+		return this.getSequence().iterator();
 	}
 
 	@Override

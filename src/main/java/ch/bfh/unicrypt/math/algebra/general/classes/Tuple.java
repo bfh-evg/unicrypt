@@ -253,7 +253,7 @@ public class Tuple
 
 	@Override
 	public final Sequence<Element> getSequence() {
-		return Sequence.getInstance(this.value);
+		return this.value.getSequence();
 	}
 
 	@Override

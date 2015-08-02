@@ -58,6 +58,7 @@ import java.util.Iterator;
 public class Permutation
 	   extends UniCrypt
 	   implements Iterable<Integer> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final int[] permutationVector;
@@ -266,12 +267,12 @@ public class Permutation
 
 			@Override
 			public boolean hasNext() {
-				return currentIndex < permutationVector.length;
+				return this.currentIndex < permutationVector.length;
 			}
 
 			@Override
 			public Integer next() {
-				return permutationVector[currentIndex++];
+				return permutationVector[this.currentIndex++];
 			}
 
 			@Override
@@ -308,7 +309,7 @@ public class Permutation
 		swap(permutation, n - 1, invertedPermutation[n - 1]);
 		swap(invertedPermutation, s, n - 1);
 		return BigInteger.valueOf(s).add(BigInteger.valueOf(n).multiply(computeRank(n - 1, permutation,
-																						   invertedPermutation)));
+																					invertedPermutation)));
 	}
 
 	private static void swap(int[] permutation, int i, int j) {

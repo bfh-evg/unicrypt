@@ -249,7 +249,7 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 
 	@Override
 	public final Sequence<Function> getSequence() {
-		return Sequence.getInstance(this.functions);
+		return this.functions.getSequence();
 	}
 
 	@Override

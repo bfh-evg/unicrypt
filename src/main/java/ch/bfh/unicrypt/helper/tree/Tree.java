@@ -159,6 +159,8 @@ public abstract class Tree<V>
 		return this instanceof Leaf;
 	}
 
+	public abstract Sequence<V> getSequence();
+
 	@Override
 	protected String defaultToStringType() {
 		return "Tree";

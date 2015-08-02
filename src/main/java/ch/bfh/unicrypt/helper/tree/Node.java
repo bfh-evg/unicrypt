@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
+import ch.bfh.unicrypt.helper.sequence.Mapping;
+import ch.bfh.unicrypt.helper.sequence.MultiSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.Iterator;
 
@@ -85,48 +87,19 @@ public class Node<V>
 	}
 
 	@Override
+	public Sequence<V> getSequence() {
+		return MultiSequence.getInstance(this.children.map(new Mapping<Tree<V>, Sequence<V>>() {
+
+			@Override
+			public Sequence<V> map(Tree<V> child) {
+				return child.getSequence();
+			}
+		})).append();
+	}
+
+	@Override
 	public Iterator<V> iterator() {
-
-		return new Iterator<V>() {
-
-			private final Iterator<Tree<V>> childrenIterator = children.iterator();
-			private Tree<V> child = null;
-			private Iterator<V> childIterator = null;
-
-			{
-				if (childrenIterator.hasNext()) {
-					do {
-						this.child = childrenIterator.next();
-						this.childIterator = this.child.iterator();
-					} while (!childIterator.hasNext() && childrenIterator.hasNext());
-				}
-			}
-
-			@Override
-			public boolean hasNext() {
-				return child != null && childIterator.hasNext();
-			}
-
-			@Override
-			public V next() {
-				V next = childIterator.next();
-				if (!childIterator.hasNext()) {
-					if (childrenIterator.hasNext()) {
-						do {
-							this.child = childrenIterator.next();
-							this.childIterator = this.child.iterator();
-						} while (!childIterator.hasNext() && childrenIterator.hasNext());
-					}
-				}
-				return next;
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-
+		return this.getSequence().iterator();
 	}
 
 	@Override
@@ -159,16 +132,7 @@ public class Node<V>
 			return false;
 		}
 		final Node<?> other = (Node<?>) obj;
-		return equalIterators(this.children.iterator(), other.children.iterator());
-	}
-
-	private static boolean equalIterators(Iterator<?> it1, Iterator<?> it2) {
-		while (it1.hasNext() && it2.hasNext()) {
-			if (!it1.next().equals(it2.next())) {
-				return false;
-			}
-		}
-		return (!it1.hasNext() && !it2.hasNext());
+		return this.children.equals(other.children);
 	}
 
 }

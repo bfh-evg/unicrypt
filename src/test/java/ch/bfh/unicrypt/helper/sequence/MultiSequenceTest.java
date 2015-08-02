@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -49,16 +50,31 @@ import org.junit.Test;
  *
  * @author rolfhaenni
  */
-public class ProductSequenceTest {
+public class MultiSequenceTest {
+
+	Sequence<Integer> s1 = IntegerSequence.getInstance(1, 5);
+	Sequence<Integer> s2 = IntegerSequence.getInstance(3, 5);
+	Sequence<Integer> s3 = IntegerSequence.getInstance(4, 8);
+	MultiSequence<Integer> ss = MultiSequence.getInstance(s1, s1, s2, s3);
 
 	@Test
-	public void testGeneralTest() {
+	public void testAppend() {
+		for (Integer i : ss.append()) {
+//			System.out.println(i);
+		}
+	}
+
+	@Test
+	public void testJoin() {
+		for (DenseArray<Integer> i : ss.join()) {
+//			System.out.println(i);
+		}
 		Sequence<Integer> it0 = Sequence.getInstance();
-		Sequence it1 = IntegerSequence.getInstance(0, 5);
-		Sequence it2 = IntegerSequence.getInstance(0, 4);
+		Sequence<Integer> it1 = IntegerSequence.getInstance(0, 5);
+		Sequence<Integer> it2 = IntegerSequence.getInstance(0, 4);
 		Sequence<Integer> it3 = Sequence.getInstance(0, 1);
 		{
-			ProductSequence<Integer> seq = ProductSequence.<Integer>getInstance();
+			Sequence<DenseArray<Integer>> seq = MultiSequence.<Integer>getInstance().join();
 			int counter = 0;
 			for (ImmutableArray<Integer> i : seq) {
 				counter++;
@@ -67,7 +83,7 @@ public class ProductSequenceTest {
 			assertEquals(1, seq.getLength().intValue());
 		}
 		{
-			ProductSequence<Integer> seq = ProductSequence.getInstance(it1, it2, it3);
+			Sequence<DenseArray<Integer>> seq = MultiSequence.getInstance(it1, it2, it3).join();
 			int counter = 0;
 			for (ImmutableArray<Integer> i : seq) {
 				counter++;
@@ -76,7 +92,7 @@ public class ProductSequenceTest {
 			assertEquals(60, seq.getLength().intValue());
 		}
 		{
-			ProductSequence<Integer> seq = ProductSequence.getInstance(it0);
+			Sequence<DenseArray<Integer>> seq = MultiSequence.getInstance(it0).join();
 			int counter = 0;
 			for (ImmutableArray<Integer> i : seq) {
 				counter++;
@@ -85,7 +101,7 @@ public class ProductSequenceTest {
 			assertEquals(0, seq.getLength().intValue());
 		}
 		{
-			ProductSequence<Integer> seq = ProductSequence.getInstance(it1, it0, it2);
+			Sequence<DenseArray<Integer>> seq = MultiSequence.getInstance(it1, it0, it2).join();
 			int counter = 0;
 			for (ImmutableArray<Integer> i : seq) {
 				counter++;
@@ -94,7 +110,7 @@ public class ProductSequenceTest {
 			assertEquals(0, seq.getLength().intValue());
 		}
 		{
-			ProductSequence<Integer> seq = ProductSequence.getInstance(it0, it0, it0);
+			Sequence<DenseArray<Integer>> seq = MultiSequence.getInstance(it0, it0, it0).join();
 			int counter = 0;
 			for (ImmutableArray<Integer> i : seq) {
 				counter++;
@@ -103,6 +119,13 @@ public class ProductSequenceTest {
 			assertEquals(0, seq.getLength().intValue());
 		}
 
+	}
+
+	@Test
+	public void testMerge() {
+		for (DenseArray<Integer> i : ss.merge()) {
+//			System.out.println(i);
+		}
 	}
 
 }

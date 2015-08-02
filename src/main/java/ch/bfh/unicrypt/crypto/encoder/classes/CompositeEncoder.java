@@ -236,7 +236,7 @@ public class CompositeEncoder
 
 	@Override
 	public final Sequence<Encoder> getSequence() {
-		return Sequence.getInstance(this.encoders);
+		return this.encoders.getSequence();
 	}
 
 	@Override

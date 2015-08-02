@@ -51,8 +51,8 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.sequence.ProductSequence;
 import ch.bfh.unicrypt.helper.sequence.Mapping;
+import ch.bfh.unicrypt.helper.sequence.MultiSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Node;
 import ch.bfh.unicrypt.helper.tree.Tree;
@@ -435,7 +435,7 @@ public class ProductSet
 
 	@Override
 	public final Sequence<Set> getSequence() {
-		return Sequence.getInstance(this.sets);
+		return this.sets.getSequence();
 	}
 
 	@Override
@@ -488,14 +488,14 @@ public class ProductSet
 
 	@Override
 	protected Sequence<Tuple> defaultGetElements() {
-		return ProductSequence.getInstance(this.getSequence().map(new Mapping<Set, Sequence<Element>>() {
+		return MultiSequence.getInstance(this.getSequence().map(new Mapping<Set, Sequence<Element>>() {
 
 			@Override
 			public Sequence<Element> map(Set set) {
 				return set.getElements();
 			}
 
-		})).map(new Mapping<DenseArray<Element>, Tuple>() {
+		})).join().map(new Mapping<DenseArray<Element>, Tuple>() {
 
 			@Override
 			public Tuple map(DenseArray<Element> value) {

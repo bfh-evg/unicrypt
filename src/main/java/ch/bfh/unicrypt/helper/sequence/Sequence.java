@@ -385,6 +385,18 @@ public abstract class Sequence<V>
 		};
 	}
 
+	public Sequence<V> append(final Sequence<V> other) {
+		return MultiSequence.getInstance(this, other).append();
+	}
+
+	public Sequence<DenseArray<V>> merge(final Sequence<V> other) {
+		return MultiSequence.getInstance(this, other).merge();
+	}
+
+	public Sequence<DenseArray<V>> join(final Sequence<V> other) {
+		return MultiSequence.getInstance(this, other).join();
+	}
+
 	public static <V> Sequence<V> getInstance(final V... source) {
 		if (source == null) {
 			throw new IllegalArgumentException();
@@ -428,13 +440,50 @@ public abstract class Sequence<V>
 		if (source == null) {
 			throw new IllegalArgumentException();
 		}
-		return new Sequence<V>(BigInteger.valueOf(source.getLength())) {
-
+		return new Sequence<V>() {
 			@Override
 			public Iterator<V> iterator() {
-				return source.iterator();
+				return new Iterator<V>() {
+					private int currentIndex = 0;
+
+					@Override
+					public boolean hasNext() {
+						return this.currentIndex < source.getLength();
+					}
+
+					@Override
+					public V next() {
+						return source.getAt(this.currentIndex++);
+					}
+				};
 			}
 		};
+
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final Sequence<?> other = (Sequence<?>) obj;
+		Iterator<V> it1 = this.iterator();
+		Iterator<?> it2 = other.iterator();
+		while (it1.hasNext() && it2.hasNext()) {
+			if (!it1.next().equals(it2.next())) {
+				return false;
+			}
+		}
+		return !it1.hasNext() && !it2.hasNext();
 	}
 
 }

@@ -44,10 +44,10 @@ package ch.bfh.unicrypt.helper.array.interfaces;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
- * This interface represents immutable instances of arrays. The type of the elements in an array is generic. After
- * creating an immutable array, it can no longer be modified. This interface specifies a large set of useful methods for
- * accessing the array values and for creating new arrays from existing ones. The number of values in an immutable array
- * is finite. The values of an array of length {@code n} are indexed from {@code 0} to {@code n-1}. Immutable arrays are
+ * This interface represents immutable instances of arrays. The type of the values in an array is generic. After
+ * creating an immutable array, it can no longer be modified. This interface specifies useful methods for accessing the
+ * array values and for creating new arrays from existing ones. The number of values in an immutable array is finite.
+ * The values of an array of length {@code n} are indexed from {@code 0} to {@code n-1}. Immutable arrays are
  * {@link Iterable}.
  * <p>
  * @author Rolf Haenni

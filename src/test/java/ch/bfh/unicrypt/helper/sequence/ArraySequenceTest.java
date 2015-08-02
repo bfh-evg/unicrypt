@@ -55,7 +55,7 @@ public class ArraySequenceTest {
 
 	@Test
 	public void generalTest() {
-		Sequence<Integer> ia0 = Sequence.getInstance();
+		Sequence<Integer> ia0 = Sequence.<Integer>getInstance();
 		Sequence<Integer> ia1 = Sequence.getInstance(new Integer[]{});
 		Sequence<Integer> ia2 = Sequence.getInstance(2);
 		Sequence<Integer> ia3 = Sequence.getInstance(2, 3, 4, 5);

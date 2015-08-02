@@ -359,27 +359,13 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	protected final String defaultToStringType() {
-		return "";
+	public final Iterator<V> iterator() {
+		return this.getSequence().iterator();
 	}
 
 	@Override
-	public final Iterator<V> iterator() {
-		return new Iterator<V>() {
-
-			private int currentIndex = 0;
-
-			@Override
-			public boolean hasNext() {
-				return this.currentIndex < length;
-			}
-
-			@Override
-			public V next() {
-				return abstractGetAt(this.currentIndex++);
-			}
-
-		};
+	protected final String defaultToStringType() {
+		return "";
 	}
 
 	@Override

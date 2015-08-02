@@ -246,12 +246,12 @@ public class Alphabet
 
 			@Override
 			public boolean hasNext() {
-				return currentIndex < getSize();
+				return this.currentIndex < getSize();
 			}
 
 			@Override
 			public Character next() {
-				return getCharacter(currentIndex++);
+				return getCharacter(this.currentIndex++);
 			}
 
 			@Override

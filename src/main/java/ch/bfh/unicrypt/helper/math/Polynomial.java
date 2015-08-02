@@ -317,7 +317,7 @@ public class Polynomial<C>
 
 		String separator = "";
 		Sequence<Integer> indices = this.getCoefficientIndices();
-		if (!indices.iterator().hasNext()) {
+		if (indices.isEmpty()) {
 			result += this.coefficientToString(this.zeroCoefficient);
 		}
 		for (Integer index : indices) {

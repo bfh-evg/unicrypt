@@ -109,11 +109,6 @@ public class BigIntegerSequence
 				return value;
 			}
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-
 		};
 	}
 
