@@ -49,7 +49,7 @@ import org.junit.Test;
  *
  * @author rolfhaenni
  */
-public class ShortenedSequenceTest {
+public class LimitedSequenceTest {
 
 	@Test
 	public void generalTest() {
@@ -57,7 +57,7 @@ public class ShortenedSequenceTest {
 		Sequence<BigInteger> sequence = BigIntegerSequence.getInstance(1, 100);
 
 		{
-			Sequence<BigInteger> newSequence = sequence.shorten(0);
+			Sequence<BigInteger> newSequence = sequence.limit(0);
 			int counter = 0;
 			for (BigInteger i : newSequence) {
 				counter++;
@@ -67,7 +67,7 @@ public class ShortenedSequenceTest {
 			assertEquals(0, newSequence.count());
 		}
 		{
-			Sequence<BigInteger> newSequence = sequence.shorten(1);
+			Sequence<BigInteger> newSequence = sequence.limit(1);
 			int counter = 0;
 			for (BigInteger i : newSequence) {
 				counter++;
@@ -77,7 +77,7 @@ public class ShortenedSequenceTest {
 			assertEquals(1, newSequence.count());
 		}
 		{
-			Sequence<BigInteger> newSequence = sequence.shorten(10);
+			Sequence<BigInteger> newSequence = sequence.limit(10);
 			int counter = 0;
 			for (BigInteger i : newSequence) {
 				counter++;
@@ -87,7 +87,7 @@ public class ShortenedSequenceTest {
 			assertEquals(10, newSequence.count());
 		}
 		{
-			Sequence<BigInteger> newSequence = sequence.shorten(100);
+			Sequence<BigInteger> newSequence = sequence.limit(100);
 			int counter = 0;
 			for (BigInteger i : newSequence) {
 				counter++;
@@ -97,7 +97,7 @@ public class ShortenedSequenceTest {
 			assertEquals(100, newSequence.count());
 		}
 		{
-			Sequence<BigInteger> newSequence = sequence.shorten(200);
+			Sequence<BigInteger> newSequence = sequence.limit(200);
 			int counter = 0;
 			for (BigInteger i : newSequence) {
 				counter++;
@@ -107,7 +107,7 @@ public class ShortenedSequenceTest {
 			assertEquals(100, newSequence.count());
 		}
 		{
-			Sequence<BigInteger> newSequence = sequence.shorten(50).shorten(100);
+			Sequence<BigInteger> newSequence = sequence.limit(50).limit(100);
 			int counter = 0;
 			for (BigInteger i : newSequence) {
 				counter++;
@@ -117,7 +117,7 @@ public class ShortenedSequenceTest {
 			assertEquals(50, newSequence.count());
 		}
 		{
-			Sequence<BigInteger> newSequence = sequence.shorten(0).shorten(5);
+			Sequence<BigInteger> newSequence = sequence.limit(0).limit(5);
 			int counter = 0;
 			for (BigInteger i : newSequence) {
 				counter++;

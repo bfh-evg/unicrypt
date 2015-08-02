@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.UniCrypt;
+
 /**
  * Classes implementing this interface provide a single method for checking if a predicate holds for a given value. The
  * main usage of this interface is in the methods {@link Sequence#filter(Predicate)} or
@@ -51,7 +53,8 @@ package ch.bfh.unicrypt.helper.sequence;
  * @param <V> The generic type of the input value
  * @see FilteredSequence
  */
-public abstract class Predicate<V> {
+public abstract class Predicate<V>
+	   extends UniCrypt {
 
 	public static final Predicate<Object> NOT_NULL = new Predicate<Object>() {
 

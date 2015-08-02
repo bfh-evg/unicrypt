@@ -383,7 +383,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
-		return this.getElements().shorten(n);
+		return this.getElements().limit(n);
 	}
 
 	@Override

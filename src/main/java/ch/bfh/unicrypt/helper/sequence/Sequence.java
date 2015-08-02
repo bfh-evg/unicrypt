@@ -161,6 +161,33 @@ public abstract class Sequence<V>
 		return true;
 	}
 
+	public final V reduce(Operation<V> operation) {
+		if (operation == null) {
+			throw new IllegalArgumentException();
+		}
+		if (this.isEmpty()) {
+			throw new UnsupportedOperationException();
+		}
+		Iterator<V> iterator = this.iterator();
+		V result = iterator.next();
+		while (iterator.hasNext()) {
+			result = operation.apply(result, iterator.next());
+		}
+		return result;
+	}
+
+	public final V reduce(Operation<V> operation, V identity) {
+		if (operation == null || identity == null) {
+			throw new IllegalArgumentException();
+		}
+		Iterator<V> iterator = this.iterator();
+		V result = identity;
+		while (iterator.hasNext()) {
+			result = operation.apply(result, iterator.next());
+		}
+		return result;
+	}
+
 	public final <W> Sequence<W> map(final Mapping<? super V, ? extends W> mapping) {
 		if (mapping == null) {
 			throw new IllegalArgumentException();
@@ -234,11 +261,11 @@ public abstract class Sequence<V>
 
 	}
 
-	public final Sequence<V> shorten(final long maxLength) {
-		return this.shorten(BigInteger.valueOf(maxLength));
+	public final Sequence<V> limit(final long maxLength) {
+		return this.limit(BigInteger.valueOf(maxLength));
 	}
 
-	public final Sequence<V> shorten(final BigInteger maxLength) {
+	public final Sequence<V> limit(final BigInteger maxLength) {
 		if (maxLength == null || maxLength.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
