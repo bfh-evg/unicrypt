@@ -43,8 +43,10 @@ package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -80,7 +82,9 @@ public interface AdditiveSemiGroup<V extends Object>
 	 */
 	public AdditiveElement<V> add(Element... elements);
 
-	public AdditiveElement<V> add(Iterable<Element> elements);
+	public AdditiveElement<V> add(ImmutableArray<Element> elements);
+
+	public AdditiveElement<V> add(Sequence<Element> elements);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
@@ -166,6 +170,12 @@ public interface AdditiveSemiGroup<V extends Object>
 
 	@Override
 	public AdditiveElement<V> apply(Element... elements);
+
+	@Override
+	public AdditiveElement<V> apply(ImmutableArray<Element> elements);
+
+	@Override
+	public AdditiveElement<V> apply(Sequence<Element> elements);
 
 	@Override
 	public AdditiveElement<V> selfApply(Element element, BigInteger amount);

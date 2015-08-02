@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
@@ -100,7 +102,12 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 	}
 
 	@Override
-	public final E concatenate(final Iterable<Element> elements) {
+	public final E concatenate(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E concatenate(final Sequence<Element> elements) {
 		return this.apply(elements);
 	}
 

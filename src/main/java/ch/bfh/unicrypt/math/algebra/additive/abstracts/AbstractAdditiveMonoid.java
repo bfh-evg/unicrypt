@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
@@ -75,7 +77,12 @@ public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V ext
 	}
 
 	@Override
-	public final E add(final Iterable<Element> elements) {
+	public final E add(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E add(final Sequence<Element> elements) {
 		return this.apply(elements);
 	}
 

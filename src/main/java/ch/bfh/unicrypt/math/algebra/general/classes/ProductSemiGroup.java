@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -170,7 +171,15 @@ public class ProductSemiGroup
 	}
 
 	@Override
-	public final Tuple apply(Iterable<Element> elements) {
+	public final Tuple apply(final ImmutableArray<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultApply(Sequence.getInstance(elements));
+	}
+
+	@Override
+	public final Tuple apply(Sequence<Element> elements) {
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}

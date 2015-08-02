@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Operation;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -84,7 +86,15 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E apply(final Iterable<Element> elements) {
+	public final E apply(final ImmutableArray<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultApply(Sequence.getInstance(elements));
+	}
+
+	@Override
+	public final E apply(final Sequence<Element> elements) {
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
@@ -126,19 +136,15 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	}
 
 	// This method is overriden in AbstractMonoid
-	protected E defaultApply(final Iterable<Element> elements) {
-		if (!elements.iterator().hasNext()) {
-			throw new IllegalArgumentException();
-		}
-		Element result = null;
-		for (Element element : elements) {
-			if (result == null) {
-				result = element;
-			} else {
-				result = this.apply(result, element);
+	protected E defaultApply(final Sequence<Element> elements) {
+		final SemiGroup<V> semiGroup = this;
+		return (E) elements.reduce(new Operation<Element>() {
+
+			@Override
+			public Element apply(Element element1, Element element2) {
+				return semiGroup.apply(element1, element2);
 			}
-		}
-		return (E) result;
+		});
 	}
 
 	protected E defaultSelfApply(E element, BigInteger amount) {

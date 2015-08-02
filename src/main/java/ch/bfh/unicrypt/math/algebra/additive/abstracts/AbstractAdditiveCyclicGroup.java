@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
@@ -75,7 +77,12 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, 
 	}
 
 	@Override
-	public final E add(final Iterable<Element> elements) {
+	public final E add(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E add(final Sequence<Element> elements) {
 		return this.apply(elements);
 	}
 

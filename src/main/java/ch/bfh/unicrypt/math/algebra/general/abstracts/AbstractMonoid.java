@@ -41,8 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.helper.sequence.Operation;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
 
 /**
@@ -91,11 +94,15 @@ public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	protected E defaultApply(final Iterable<Element> elements) {
-		if (!elements.iterator().hasNext()) {
-			return this.getIdentityElement();
-		}
-		return super.defaultApply(elements);
+	protected E defaultApply(final Sequence<Element> elements) {
+		final SemiGroup<V> semiGroup = this;
+		return (E) elements.reduce(new Operation<Element>() {
+
+			@Override
+			public Element apply(Element element1, Element element2) {
+				return semiGroup.apply(element1, element2);
+			}
+		}, this.getIdentityElement());
 	}
 
 	@Override

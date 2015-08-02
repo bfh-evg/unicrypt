@@ -43,8 +43,10 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
 
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -100,6 +102,12 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> apply(Element... elements);
 
 	@Override
+	public DualisticElement<V> apply(ImmutableArray<Element> elements);
+
+	@Override
+	public DualisticElement<V> apply(Sequence<Element> elements);
+
+	@Override
 	public DualisticElement<V> selfApply(Element element, BigInteger amount);
 
 	@Override
@@ -126,7 +134,10 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> add(Element... elements);
 
 	@Override
-	public DualisticElement<V> add(Iterable<Element> elements);
+	public DualisticElement<V> add(ImmutableArray<Element> elements);
+
+	@Override
+	public DualisticElement<V> add(Sequence<Element> elements);
 
 	@Override
 	public DualisticElement<V> times(Element element, BigInteger amount);
@@ -155,7 +166,10 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> multiply(Element... elements);
 
 	@Override
-	public DualisticElement<V> multiply(Iterable<Element> elements);
+	public DualisticElement<V> multiply(ImmutableArray<Element> elements);
+
+	@Override
+	public DualisticElement<V> multiply(Sequence<Element> elements);
 
 	@Override
 	public DualisticElement<V> power(Element element, BigInteger amount);

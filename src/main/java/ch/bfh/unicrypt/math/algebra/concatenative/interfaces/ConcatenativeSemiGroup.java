@@ -43,8 +43,10 @@ package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -104,7 +106,9 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	 */
 	public ConcatenativeElement<V> concatenate(Element... elements);
 
-	public ConcatenativeElement<V> concatenate(Iterable<Element> elements);
+	public ConcatenativeElement<V> concatenate(ImmutableArray<Element> elements);
+
+	public ConcatenativeElement<V> concatenate(Sequence<Element> elements);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
@@ -205,6 +209,12 @@ public interface ConcatenativeSemiGroup<V extends Object>
 
 	@Override
 	public ConcatenativeElement<V> apply(Element... elements);
+
+	@Override
+	public ConcatenativeElement<V> apply(ImmutableArray<Element> elements);
+
+	@Override
+	public ConcatenativeElement<V> apply(Sequence<Element> elements);
 
 	@Override
 	public ConcatenativeElement<V> selfApply(Element element, BigInteger amount);

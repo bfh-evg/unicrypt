@@ -44,8 +44,10 @@ package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
@@ -147,7 +149,10 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	public ECElement<V, E> add(Element... elements);
 
 	@Override
-	public ECElement<V, E> add(Iterable<Element> elements);
+	public ECElement<V, E> add(ImmutableArray<Element> elements);
+
+	@Override
+	public ECElement<V, E> add(Sequence<Element> elements);
 
 	@Override
 	public ECElement<V, E> times(Element element, BigInteger amount);
@@ -197,6 +202,12 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 
 	@Override
 	public ECElement<V, E> apply(Element... elements);
+
+	@Override
+	public ECElement<V, E> apply(ImmutableArray<Element> elements);
+
+	@Override
+	public ECElement<V, E> apply(Sequence<Element> elements);
 
 	@Override
 	public ECElement<V, E> selfApply(Element element, BigInteger amount);

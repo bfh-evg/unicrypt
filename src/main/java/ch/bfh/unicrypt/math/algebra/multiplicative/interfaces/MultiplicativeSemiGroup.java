@@ -43,8 +43,10 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
 import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -80,7 +82,9 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	 */
 	public MultiplicativeElement<V> multiply(Element... elements);
 
-	public MultiplicativeElement<V> multiply(Iterable<Element> elements);
+	public MultiplicativeElement<V> multiply(ImmutableArray<Element> elements);
+
+	public MultiplicativeElement<V> multiply(Sequence<Element> elements);
 
 	/**
 	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
@@ -169,6 +173,12 @@ public interface MultiplicativeSemiGroup<V extends Object>
 
 	@Override
 	public MultiplicativeElement<V> apply(Element... elements);
+
+	@Override
+	public MultiplicativeElement<V> apply(ImmutableArray<Element> elements);
+
+	@Override
+	public MultiplicativeElement<V> apply(Sequence<Element> elements);
 
 	@Override
 	public MultiplicativeElement<V> selfApply(Element element, BigInteger amount);

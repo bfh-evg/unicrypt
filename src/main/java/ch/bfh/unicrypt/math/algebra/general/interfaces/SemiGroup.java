@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
 
 /**
@@ -78,13 +80,23 @@ public interface SemiGroup<V extends Object>
 
 	/**
 	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
+	 * as an array. If the array contains a single element, it is returned without applying the operation. If the given
+	 * collection is empty, an exception is thrown.
+	 * <p>
+	 * @param elements A given array of elements
+	 * @return The result of applying the operation to the input elements
+	 */
+	public Element<V> apply(ImmutableArray<Element> elements);
+
+	/**
+	 * Applies the binary group operation sequentially to multiple elements (in the given order). The elements are given
 	 * as an iterable collection. If the collection contains a single element, it is returned without applying the
 	 * operation. If the given collection is empty, an exception is thrown.
 	 * <p>
 	 * @param elements A given collection of elements
 	 * @return The result of applying the operation to the input elements
 	 */
-	public Element<V> apply(Iterable<Element> elements);
+	public Element<V> apply(Sequence<Element> elements);
 
 	/**
 	 * Applies the binary operation repeatedly to {@code amount} many instances of a given element. If {@code amount=1},
