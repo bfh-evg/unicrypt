@@ -68,7 +68,7 @@ public abstract class AbstractAggregator<V>
 		this.mapping1 = new Mapping<Tree<V>, V>() {
 
 			@Override
-			public V map(Tree<V> tree) {
+			public V apply(Tree<V> tree) {
 				return aggregate(tree);
 			}
 
@@ -76,7 +76,7 @@ public abstract class AbstractAggregator<V>
 		this.mapping2 = new Mapping<V, Tree<V>>() {
 
 			@Override
-			public Tree<V> map(V value) {
+			public Tree<V> apply(V value) {
 				return disaggregate(value);
 			}
 

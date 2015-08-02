@@ -61,15 +61,15 @@ public abstract class Mapping<V, W>
 	 * @param value The given value
 	 * @return The mapped value
 	 */
-	public abstract W map(V value);
+	public abstract W apply(V value);
 
 	public final <X> Mapping<V, X> compose(final Mapping<? super W, X> otherMapping) {
 		final Mapping<V, W> thisMapping = this;
 		return new Mapping<V, X>() {
 
 			@Override
-			public X map(V value) {
-				return otherMapping.map(thisMapping.map(value));
+			public X apply(V value) {
+				return otherMapping.apply(thisMapping.apply(value));
 			}
 
 		};

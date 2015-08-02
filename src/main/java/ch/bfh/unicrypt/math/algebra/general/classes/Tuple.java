@@ -266,7 +266,7 @@ public class Tuple
 		Sequence<Tree<W>> trees = this.getSequence().map(new Mapping<Element, Tree<W>>() {
 
 			@Override
-			public Tree<W> map(Element element) {
+			public Tree<W> apply(Element element) {
 				return element.convertTo(convertMethod);
 			}
 		});

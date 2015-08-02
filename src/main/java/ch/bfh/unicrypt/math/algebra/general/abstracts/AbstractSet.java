@@ -49,6 +49,10 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.Mapping;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Leaf;
 import ch.bfh.unicrypt.helper.tree.Tree;
@@ -70,7 +74,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemi
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.Iterator;
 
 /**
  * This abstract class provides a base implementation for the interface {@link Set}. Non-abstract sub-classes need to
@@ -511,35 +514,18 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	// some sets allow a more efficient itertation method than this one
 	protected Sequence<E> defaultGetElements() {
 		final AbstractSet<E, V> set = this;
-		return new Sequence<E>(set.getOrder()) {
+		Sequence<E> sequence = BigIntegerSequence.getInstance(MathUtil.ZERO).map(new Mapping<BigInteger, E>() {
 
 			@Override
-			public Iterator<E> iterator() {
-				return new Iterator<E>() {
-					private BigInteger counter = BigInteger.ZERO;
-					private BigInteger currentValue = BigInteger.ZERO;
-
-					@Override
-					public boolean hasNext() {
-						return !set.isFinite() || this.counter.compareTo(set.getOrderLowerBound()) < 0;
-					}
-
-					@Override
-					public E next() {
-						E element = set.getElementFrom(this.currentValue);
-						while (element == null) {
-							this.currentValue = this.currentValue.add(BigInteger.ONE);
-							element = set.getElementFrom(this.currentValue);
-						}
-						this.counter = this.counter.add(BigInteger.ONE);
-						this.currentValue = this.currentValue.add(BigInteger.ONE);
-						return element;
-					}
-
-				};
+			public E apply(BigInteger value) {
+				return set.getElementFrom(value);
 			}
 
-		};
+		}).filter(Predicate.NOT_NULL);
+		if (set.isFinite()) {
+			return sequence.limit(set.getOrderLowerBound());
+		}
+		return sequence;
 	}
 
 	protected abstract BigInteger abstractGetOrder();

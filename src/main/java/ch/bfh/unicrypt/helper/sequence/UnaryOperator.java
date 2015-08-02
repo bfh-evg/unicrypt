@@ -48,9 +48,9 @@ import ch.bfh.unicrypt.UniCrypt;
  * @author rolfhaenni
  * @param <V>
  */
-public abstract class Operation<V>
+public abstract class UnaryOperator<V>
 	   extends UniCrypt {
 
-	public abstract V apply(V value1, V value2);
+	public abstract V apply(V value);
 
 }

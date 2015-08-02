@@ -41,20 +41,23 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.UnaryOperator;
+import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 /**
  * This abstract class provides a basis implementation for additive objects of type {@link CyclicGroup}.
@@ -179,42 +182,40 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 	@Override
 	protected Sequence<E> defaultGetElements() {
-		final AbstractCyclicGroup<E, V> set = this;
-		return new Sequence<E>(set.getOrder()) {
+		final AbstractCyclicGroup<E, V> group = this;
+		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<E>() {
 
 			@Override
-			public Iterator<E> iterator() {
-				return new Iterator<E>() {
-					private BigInteger counter = BigInteger.ZERO;
-					private E currentElement = set.getIdentityElement();
-
-					@Override
-					public boolean hasNext() {
-						return !set.isFinite() || this.counter.compareTo(set.getOrderLowerBound()) < 0;
-					}
-
-					@Override
-					public E next() {
-						if (this.hasNext()) {
-							this.counter = this.counter.add(BigInteger.ONE);
-							E nextElement = this.currentElement;
-							this.currentElement = set.apply(this.currentElement, set.getDefaultGenerator());
-							return nextElement;
-						}
-						throw new NoSuchElementException();
-					}
-
-				};
+			public E apply(E element) {
+				return group.apply(group.getDefaultGenerator(), element);
 			}
 
-		};
+		}).limit(new Predicate<E>() {
+
+			@Override
+			public boolean test(E element) {
+				return group.getIdentityElement().equals(element);
+			}
+
+		});
 	}
 
-	//
-	// The following protected abstract methods must be implemented in every direct sub-class
-	//
 	protected abstract E abstractGetDefaultGenerator();
 
 	protected abstract boolean abstractIsGenerator(E element);
+
+	public static void main(String[] args) {
+		GStarModSafePrime group = GStarModSafePrime.getInstance(23);
+		for (Element e : group.getElements()) {
+			System.out.println(e);
+		}
+		FiniteStringSet monoid = FiniteStringSet.getInstance(Alphabet.BINARY, 4);
+		for (Element e : monoid.getElements()) {
+			System.out.println(e);
+		}
+		for (Tuple e : ProductSet.getInstance(group, monoid).getElements(10)) {
+			System.out.println(e);
+		}
+	}
 
 }

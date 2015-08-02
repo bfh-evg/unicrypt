@@ -491,14 +491,14 @@ public class ProductSet
 		return MultiSequence.getInstance(this.getSequence().map(new Mapping<Set, Sequence<Element>>() {
 
 			@Override
-			public Sequence<Element> map(Set set) {
+			public Sequence<Element> apply(Set set) {
 				return set.getElements();
 			}
 
 		})).join().map(new Mapping<DenseArray<Element>, Tuple>() {
 
 			@Override
-			public Tuple map(DenseArray<Element> value) {
+			public Tuple apply(DenseArray<Element> value) {
 				return Tuple.getInstance(value);
 			}
 

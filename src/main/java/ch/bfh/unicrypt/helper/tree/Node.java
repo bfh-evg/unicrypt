@@ -91,7 +91,7 @@ public class Node<V>
 		return MultiSequence.getInstance(this.children.map(new Mapping<Tree<V>, Sequence<V>>() {
 
 			@Override
-			public Sequence<V> map(Tree<V> child) {
+			public Sequence<V> apply(Tree<V> child) {
 				return child.getSequence();
 			}
 		})).append();

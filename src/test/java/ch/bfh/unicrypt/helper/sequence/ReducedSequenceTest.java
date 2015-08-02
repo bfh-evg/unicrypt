@@ -58,7 +58,7 @@ public class ReducedSequenceTest {
 		Sequence<Integer> sequence2 = Sequence.getInstance(1);
 		Sequence<Integer> sequence3 = Sequence.getInstance(1, 2, 3, 4);
 
-		Operation<Integer> plus = new Operation<Integer>() {
+		BinaryOperator<Integer> plus = new BinaryOperator<Integer>() {
 
 			@Override
 			public Integer apply(Integer value1, Integer value2) {
@@ -66,7 +66,7 @@ public class ReducedSequenceTest {
 			}
 		};
 
-		Operation<Integer> times = new Operation<Integer>() {
+		BinaryOperator<Integer> times = new BinaryOperator<Integer>() {
 
 			@Override
 			public Integer apply(Integer value1, Integer value2) {

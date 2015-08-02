@@ -41,70 +41,16 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import java.math.BigInteger;
-import org.junit.Assert;
-import org.junit.Test;
+import ch.bfh.unicrypt.UniCrypt;
 
 /**
  *
  * @author rolfhaenni
+ * @param <V>
  */
-public class MappedSequenceTest {
+public abstract class BinaryOperator<V>
+	   extends UniCrypt {
 
-	@Test
-	public void generalTest1() {
-
-		BigIntegerSequence sequence = BigIntegerSequence.getInstance(0, 10);
-
-		Sequence<BigInteger> newSequence = sequence.map(new Mapping<BigInteger, BigInteger>() {
-
-			@Override
-			public BigInteger apply(BigInteger value) {
-				return value.add(BigInteger.ONE);
-			}
-		});
-
-		int i = 1;
-		for (BigInteger value : newSequence) {
-			Assert.assertEquals(i, value.intValue());
-			i++;
-		}
-		Assert.assertEquals(11, newSequence.getLength().intValue());
-
-		// run the same test twice to matchAll correct use of iterators
-		i = 1;
-		for (BigInteger value : newSequence) {
-			Assert.assertEquals(i, value.intValue());
-			i++;
-		}
-	}
-
-	@Test
-	public void generalTest2() {
-
-		Sequence<Integer> sequence = Sequence.getInstance(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-
-		Sequence<Integer> newSequence = sequence.map(new Mapping<Integer, Integer>() {
-
-			@Override
-			public Integer apply(Integer value) {
-				return value + 1;
-			}
-		});
-
-		Integer i = 1;
-		for (Integer value : newSequence) {
-			Assert.assertEquals(i, value);
-			i++;
-		}
-		Assert.assertEquals(10, newSequence.getLength().intValue());
-
-		// run the same test twice to matchAll correct use of iterators
-		i = 1;
-		for (Integer value : newSequence) {
-			Assert.assertEquals(i, value);
-			i++;
-		}
-	}
+	public abstract V apply(V value1, V value2);
 
 }

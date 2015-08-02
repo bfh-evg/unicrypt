@@ -106,7 +106,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 			Sequence<Tree<W>> children = node.getChildren().map(new Mapping<Tree<V>, Tree<W>>() {
 
 				@Override
-				public Tree<W> map(Tree<V> value) {
+				public Tree<W> apply(Tree<V> value) {
 					return converter.convert(value);
 				}
 
@@ -126,7 +126,7 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 			Sequence<Tree<V>> children = node.getChildren().map(new Mapping<Tree<W>, Tree<V>>() {
 
 				@Override
-				public Tree<V> map(Tree<W> value) {
+				public Tree<V> apply(Tree<W> value) {
 					return converter.reconvert(value);
 				}
 

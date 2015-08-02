@@ -41,7 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.UnaryOperator;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -50,9 +52,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * This abstract class provides a basis implementation for objects of type {@link CyclicRing}.
@@ -162,44 +161,24 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 
 	@Override
 	protected Sequence<E> defaultGetElements() {
-		final AbstractCyclicRing<E, V> set = this;
-		return new Sequence<E>(set.getOrder()) {
+		final AbstractCyclicRing<E, V> ring = this;
+		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<E>() {
 
 			@Override
-			public Iterator<E> iterator() {
-				return new Iterator<E>() {
-					private BigInteger counter = BigInteger.ZERO;
-					private E currentElement = set.getIdentityElement();
-
-					@Override
-					public boolean hasNext() {
-						return !set.isFinite() || this.counter.compareTo(set.getOrderLowerBound()) < 0;
-					}
-
-					@Override
-					public E next() {
-						if (this.hasNext()) {
-							this.counter = this.counter.add(BigInteger.ONE);
-							E nextElement = this.currentElement;
-							this.currentElement = set.apply(this.currentElement, set.getDefaultGenerator());
-							return nextElement;
-						}
-						throw new NoSuchElementException();
-					}
-
-					@Override
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
+			public E apply(E element) {
+				return ring.apply(ring.getDefaultGenerator(), element);
 			}
 
-		};
+		}).limit(new Predicate<E>() {
+
+			@Override
+			public boolean test(E element) {
+				return ring.getIdentityElement().equals(element);
+			}
+
+		});
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct sub-class
-	//
 	protected abstract E abstractGetDefaultGenerator();
 
 	protected abstract boolean abstractIsGenerator(E element);

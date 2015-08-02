@@ -172,7 +172,7 @@ public abstract class Sequence<V>
 		return false;
 	}
 
-	public final V reduce(Operation<V> operation) {
+	public final V reduce(BinaryOperator<V> operation) {
 		if (operation == null) {
 			throw new IllegalArgumentException();
 		}
@@ -187,7 +187,7 @@ public abstract class Sequence<V>
 		return result;
 	}
 
-	public final V reduce(Operation<V> operation, V identity) {
+	public final V reduce(BinaryOperator<V> operation, V identity) {
 		if (operation == null || identity == null) {
 			throw new IllegalArgumentException();
 		}
@@ -219,7 +219,7 @@ public abstract class Sequence<V>
 
 					@Override
 					public W next() {
-						return mapping.map(this.iterator.next());
+						return mapping.apply(this.iterator.next());
 					}
 				};
 			}
@@ -311,6 +311,38 @@ public abstract class Sequence<V>
 				};
 			}
 
+		};
+	}
+
+	public Sequence<V> limit(final Predicate<V> predicate) {
+		if (predicate == null) {
+			throw new IllegalArgumentException();
+		}
+		final Sequence<V> source = this;
+		return new Sequence<V>(Sequence.UNKNOWN) {
+
+			@Override
+			public Iterator<V> iterator() {
+				return new Iterator<V>() {
+
+					private Iterator<V> iterator = source.iterator();
+					private boolean found = false;
+
+					@Override
+					public boolean hasNext() {
+						return !found && iterator.hasNext();
+					}
+
+					@Override
+					public V next() {
+						V value = iterator.next();
+						if (predicate.test(value)) {
+							this.found = true;
+						}
+						return value;
+					}
+				};
+			}
 		};
 	}
 
@@ -459,6 +491,34 @@ public abstract class Sequence<V>
 			}
 		};
 
+	}
+
+	public static <V> Sequence<V> getInstance(final V startValue, final UnaryOperator<V> operator) {
+		if (startValue == null || operator == null) {
+			throw new IllegalArgumentException();
+		}
+		return new Sequence<V>(Sequence.INFINITE) {
+
+			@Override
+			public Iterator<V> iterator() {
+				return new Iterator<V>() {
+
+					V currentValue = startValue;
+
+					@Override
+					public boolean hasNext() {
+						return true;
+					}
+
+					@Override
+					public V next() {
+						V nextValue = this.currentValue;
+						this.currentValue = operator.apply(this.currentValue);
+						return nextValue;
+					}
+				};
+			}
+		};
 	}
 
 	@Override

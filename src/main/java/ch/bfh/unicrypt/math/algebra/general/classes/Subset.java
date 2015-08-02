@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 /**
@@ -75,13 +74,7 @@ public class Subset
 
 	@Override
 	protected Sequence<Element<Object>> defaultGetElements() {
-		return new Sequence<Element<Object>>(BigInteger.valueOf(elementSet.size())) {
-
-			@Override
-			public Iterator<Element<Object>> iterator() {
-				return elementSet.iterator();
-			}
-		};
+		return Sequence.getInstance(elementSet);
 	}
 
 	@Override

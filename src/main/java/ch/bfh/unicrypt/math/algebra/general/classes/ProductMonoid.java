@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.sequence.Operation;
+import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
@@ -176,7 +176,7 @@ public class ProductMonoid
 	@Override
 	public Tuple defaultApply(final Sequence<Element> elements) {
 		final ProductMonoid monoid = this;
-		return (Tuple) elements.reduce(new Operation<Element>() {
+		return (Tuple) elements.reduce(new BinaryOperator<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {

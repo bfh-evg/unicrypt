@@ -60,10 +60,23 @@ public class BigIntegerSequence
 	private final BigInteger from;
 	private final BigInteger to;
 
+	protected BigIntegerSequence(BigInteger from) {
+		super(Sequence.INFINITE);
+		this.from = from;
+		this.to = null;
+	}
+
 	protected BigIntegerSequence(BigInteger from, BigInteger to) {
 		super(MathUtil.ZERO.max(to.subtract(from).add(MathUtil.ONE)));
 		this.from = from;
 		this.to = to;
+	}
+
+	public static BigIntegerSequence getInstance(BigInteger from) {
+		if (from == null) {
+			throw new IllegalArgumentException();
+		}
+		return new BigIntegerSequence(from);
 	}
 
 	/**
@@ -99,7 +112,7 @@ public class BigIntegerSequence
 
 			@Override
 			public boolean hasNext() {
-				return this.currentValue.compareTo(to) <= 0;
+				return to == null || this.currentValue.compareTo(to) <= 0;
 			}
 
 			@Override
