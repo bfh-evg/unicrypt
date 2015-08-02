@@ -41,17 +41,14 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.UnaryOperator;
-import ch.bfh.unicrypt.math.algebra.general.classes.FiniteStringSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -203,19 +200,5 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	protected abstract E abstractGetDefaultGenerator();
 
 	protected abstract boolean abstractIsGenerator(E element);
-
-	public static void main(String[] args) {
-		GStarModSafePrime group = GStarModSafePrime.getInstance(23);
-		for (Element e : group.getElements()) {
-			System.out.println(e);
-		}
-		FiniteStringSet monoid = FiniteStringSet.getInstance(Alphabet.BINARY, 4);
-		for (Element e : monoid.getElements()) {
-			System.out.println(e);
-		}
-		for (Tuple e : ProductSet.getInstance(group, monoid).getElements(10)) {
-			System.out.println(e);
-		}
-	}
 
 }

@@ -150,7 +150,7 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	public <W> MultiplicativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
 
 	@Override
-	public MultiplicativeElement<V> getElementFrom(int integer);
+	public MultiplicativeElement<V> getElementFrom(long integer);
 
 	@Override
 	public MultiplicativeElement<V> getElementFrom(BigInteger bigInteger);

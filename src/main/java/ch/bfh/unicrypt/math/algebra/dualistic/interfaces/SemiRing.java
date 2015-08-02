@@ -77,7 +77,7 @@ public interface SemiRing<V extends Object>
 	public <W> DualisticElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
 
 	@Override
-	public DualisticElement<V> getElementFrom(int integer);
+	public DualisticElement<V> getElementFrom(long integer);
 
 	@Override
 	public DualisticElement<V> getElementFrom(BigInteger bigInteger);

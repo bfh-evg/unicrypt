@@ -295,6 +295,14 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getRandomElement(RandomByteSequence randomByteSequence);
 
+	public Sequence<? extends Element<V>> getRandomElements();
+
+	public Sequence<? extends Element<V>> getRandomElements(long n);
+
+	public Sequence<? extends Element<V>> getRandomElements(RandomByteSequence randomByteSequence);
+
+	public Sequence<? extends Element<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+
 	/**
 	 * Checks if two sets are mathematically equivalent. In most cases, this is equivalent to testing two sets for
 	 * equality using {@link Set#equals(java.lang.Object)}, but some mathematically equivalent sets are instances of
@@ -321,7 +329,7 @@ public interface Set<V extends Object> {
 	 * @param n The maximal number of element in the resulting sequence
 	 * @return A sequence of elements
 	 */
-	public Sequence<? extends Element<V>> getElements(int n);
+	public Sequence<? extends Element<V>> getElements(long n);
 
 	/**
 	 * Returns the class of the values representing the elements of this set.
@@ -365,7 +373,7 @@ public interface Set<V extends Object> {
 	 * @param value The given {@code int} value
 	 * @return The corresponding element, or {@code null} if no such element exists
 	 */
-	public Element<V> getElementFrom(int value);
+	public Element<V> getElementFrom(long value);
 
 	/**
 	 * Creates and returns the element that corresponds to a given {@code BigInteger} value using the default conversion

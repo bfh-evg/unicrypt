@@ -69,11 +69,13 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
+import java.util.Iterator;
 
 /**
  * This abstract class provides a base implementation for the interface {@link Set}. Non-abstract sub-classes need to
@@ -277,6 +279,52 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
+	public final Sequence<E> getRandomElements() {
+		return this.getRandomElements(HybridRandomByteSequence.getInstance());
+	}
+
+	@Override
+	public final Sequence<E> getRandomElements(long n) {
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
+		return this.getRandomElements().limit(n);
+	}
+
+	@Override
+	public final Sequence<E> getRandomElements(final RandomByteSequence randomByteSequence) {
+		if (randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		return new Sequence<E>() {
+
+			@Override
+			public Iterator<E> iterator() {
+				return new Iterator<E>() {
+
+					@Override
+					public boolean hasNext() {
+						return true;
+					}
+
+					@Override
+					public E next() {
+						return abstractGetRandomElement(randomByteSequence);
+					}
+				};
+			}
+		};
+	}
+
+	@Override
+	public final Sequence<E> getRandomElements(long n, final RandomByteSequence randomByteSequence) {
+		if (n < 0 || randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.getRandomElements(randomByteSequence).limit(n);
+	}
+
+	@Override
 	public final <W> E getElementFrom(W value, Converter<V, W> converter) {
 		if (value == null || converter == null) {
 			throw new IllegalArgumentException();
@@ -315,7 +363,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E getElementFrom(int value) {
+	public final E getElementFrom(long value) {
 		return this.defaultGetElementFrom(BigInteger.valueOf(value));
 	}
 
@@ -381,7 +429,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final Sequence<E> getElements(final int n) {
+	public final Sequence<E> getElements(final long n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -541,5 +589,22 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	protected abstract boolean abstractEquals(Set set);
 
 	protected abstract int abstractHashCode();
+
+	public static void main(String[] args) {
+		GStarModSafePrime group = GStarModSafePrime.getInstance(23);
+//		for (Element e : group.getElements()) {
+//			System.out.println(e);
+//		}
+//		FiniteStringSet monoid = FiniteStringSet.getInstance(Alphabet.BINARY, 4);
+//		for (Element e : monoid.getElements()) {
+//			System.out.println(e);
+//		}
+//		for (Tuple e : ProductSet.getInstance(group, monoid).getElements(10)) {
+//			System.out.println(e);
+//		}
+		for (Element e : group.getRandomElements(5)) {
+			System.out.println(e);
+		}
+	}
 
 }

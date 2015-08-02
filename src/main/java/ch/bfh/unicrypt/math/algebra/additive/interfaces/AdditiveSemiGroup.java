@@ -147,7 +147,7 @@ public interface AdditiveSemiGroup<V extends Object>
 	public <W> AdditiveElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
 
 	@Override
-	public AdditiveElement<V> getElementFrom(int integer);
+	public AdditiveElement<V> getElementFrom(long integer);
 
 	@Override
 	public AdditiveElement<V> getElementFrom(BigInteger bigInteger);

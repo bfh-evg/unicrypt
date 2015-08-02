@@ -177,7 +177,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	public <W> ECElement<V, E> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
 
 	@Override
-	public ECElement<V, E> getElementFrom(int integer);
+	public ECElement<V, E> getElementFrom(long integer);
 
 	@Override
 	public ECElement<V, E> getElementFrom(BigInteger bigInteger);

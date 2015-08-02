@@ -186,7 +186,7 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	public <W> ConcatenativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(int integer);
+	public ConcatenativeElement<V> getElementFrom(long integer);
 
 	@Override
 	public ConcatenativeElement<V> getElementFrom(BigInteger bigInteger);
