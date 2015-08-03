@@ -103,7 +103,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 	@Override
 	public final E getIndependentGenerator(int index) {
-		return this.getIndependentGenerator(index, (ReferenceRandomByteSequence) null);
+		return this.getIndependentGenerator(index, ReferenceRandomByteSequence.getInstance());
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 	@Override
 	public final Tuple getIndependentGenerators(int maxIndex) {
-		return this.getIndependentGenerators(maxIndex, (ReferenceRandomByteSequence) null);
+		return this.getIndependentGenerators(maxIndex, ReferenceRandomByteSequence.getInstance());
 	}
 
 	@Override
@@ -123,17 +123,13 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 	@Override
 	public final Tuple getIndependentGenerators(int minIndex, int maxIndex) {
-		return this.getIndependentGenerators(minIndex, maxIndex, (ReferenceRandomByteSequence) null);
+		return this.getIndependentGenerators(minIndex, maxIndex, ReferenceRandomByteSequence.getInstance());
 	}
 
 	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex,
-		   ReferenceRandomByteSequence referenceRandomByteSequence) {
-		if (minIndex < 0 || maxIndex < minIndex) {
+	public final Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
+		if (minIndex < 0 || maxIndex < minIndex || referenceRandomByteSequence == null) {
 			throw new IndexOutOfBoundsException();
-		}
-		if (referenceRandomByteSequence == null) {
-			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		}
 		ArrayList<E> generatorList = this.generatorLists.get(referenceRandomByteSequence);
 		if (generatorList == null) {
