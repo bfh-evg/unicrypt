@@ -111,7 +111,7 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
 	 * @return the same as in {@link #Group.selfApply(Element, int)}
 	 */
-	public MultiplicativeElement<V> power(Element element, int amount);
+	public MultiplicativeElement<V> power(Element element, long amount);
 
 	/**
 	 * Applies the group operation to two instances of a given group element. This is equivalent to
@@ -187,7 +187,7 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	public MultiplicativeElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(Element element, int amount);
+	public MultiplicativeElement<V> selfApply(Element element, long amount);
 
 	@Override
 	public MultiplicativeElement<V> selfApply(Element element);

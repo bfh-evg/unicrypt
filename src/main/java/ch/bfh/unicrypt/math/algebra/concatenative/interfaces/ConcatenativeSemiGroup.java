@@ -135,7 +135,7 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
 	 * @return the same as in {@link #Group.selfApply(Element, int)}
 	 */
-	public ConcatenativeElement<V> selfConcatenate(Element element, int amount);
+	public ConcatenativeElement<V> selfConcatenate(Element element, long amount);
 
 	/**
 	 * Applies the group operation to two instances of a given group element. This is equivalent to
@@ -223,7 +223,7 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	public ConcatenativeElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
-	public ConcatenativeElement<V> selfApply(Element element, int amount);
+	public ConcatenativeElement<V> selfApply(Element element, long amount);
 
 	@Override
 	public ConcatenativeElement<V> selfApply(Element element);

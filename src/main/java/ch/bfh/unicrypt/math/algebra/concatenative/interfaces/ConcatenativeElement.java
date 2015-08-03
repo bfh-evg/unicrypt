@@ -73,7 +73,7 @@ public interface ConcatenativeElement<V extends Object>
 	/**
 	 * @see Group#selfApply(Element, int)
 	 */
-	public ConcatenativeElement<V> selfConcatenate(int amount);
+	public ConcatenativeElement<V> selfConcatenate(long amount);
 
 	/**
 	 * @see Group#selfApply(Element)
@@ -99,7 +99,7 @@ public interface ConcatenativeElement<V extends Object>
 	public ConcatenativeElement<V> selfApply(Element<BigInteger> amount);
 
 	@Override
-	public ConcatenativeElement<V> selfApply(int amount);
+	public ConcatenativeElement<V> selfApply(long amount);
 
 	@Override
 	public ConcatenativeElement<V> selfApply();

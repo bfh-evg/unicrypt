@@ -114,7 +114,7 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> selfApply(Element element, int amount);
+	public DualisticElement<V> selfApply(Element element, long amount);
 
 	@Override
 	public DualisticElement<V> selfApply(Element element);
@@ -146,7 +146,7 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> times(Element element, Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> times(Element element, int amount);
+	public DualisticElement<V> times(Element element, long amount);
 
 	@Override
 	public DualisticElement<V> timesTwo(Element element);
@@ -178,7 +178,7 @@ public interface SemiRing<V extends Object>
 	public DualisticElement<V> power(Element element, Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> power(Element element, int amount);
+	public DualisticElement<V> power(Element element, long amount);
 
 	@Override
 	public DualisticElement<V> square(Element element);

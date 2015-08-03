@@ -96,7 +96,7 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
 	 * @see Group#selfApply(Element, int)
 	 */
 	@Override
-	public final E selfConcatenate(final int amount) {
+	public final E selfConcatenate(final long amount) {
 		return (E) this.getSet().selfConcatenate(this, amount);
 	}
 

@@ -193,9 +193,9 @@ public interface Element<V extends Object> {
 
 	/**
 	 * @param amount
-	 * @return @see Group#selfApply(Element, int)
+	 * @return @see Group#selfApply(Element, long)
 	 */
-	public Element<V> selfApply(int amount);
+	public Element<V> selfApply(long amount);
 
 	/**
 	 * @return @see Group#selfApply(Element)

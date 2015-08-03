@@ -73,7 +73,7 @@ public interface DualisticElement<V extends Object>
 	public DualisticElement<V> selfApply(Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> selfApply(int amount);
+	public DualisticElement<V> selfApply(long amount);
 
 	@Override
 	public DualisticElement<V> selfApply();
@@ -95,7 +95,7 @@ public interface DualisticElement<V extends Object>
 	public DualisticElement<V> times(Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> times(int amount);
+	public DualisticElement<V> times(long amount);
 
 	@Override
 	public DualisticElement<V> timesTwo();
@@ -117,7 +117,7 @@ public interface DualisticElement<V extends Object>
 	public DualisticElement<V> power(Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> power(int amount);
+	public DualisticElement<V> power(long amount);
 
 	@Override
 	public DualisticElement<V> square();

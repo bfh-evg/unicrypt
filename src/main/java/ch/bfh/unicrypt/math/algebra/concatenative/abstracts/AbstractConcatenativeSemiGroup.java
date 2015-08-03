@@ -122,7 +122,7 @@ public abstract class AbstractConcatenativeSemiGroup<E extends ConcatenativeElem
 	}
 
 	@Override
-	public final E selfConcatenate(final Element element, final int amount) {
+	public final E selfConcatenate(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

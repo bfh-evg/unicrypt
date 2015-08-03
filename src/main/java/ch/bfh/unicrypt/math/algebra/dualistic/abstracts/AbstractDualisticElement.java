@@ -84,7 +84,7 @@ public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends 
 	}
 
 	@Override
-	public final E power(final int amount) {
+	public final E power(final long amount) {
 		return (E) this.getSet().power(this, amount);
 	}
 

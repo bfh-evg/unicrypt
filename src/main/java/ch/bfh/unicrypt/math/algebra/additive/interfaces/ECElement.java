@@ -72,7 +72,7 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 	/**
 	 * @see Group#selfApply(Element, int)
 	 */
-	public ECElement<V, DE> times(int amount);
+	public ECElement<V, DE> times(long amount);
 
 	/**
 	 * @see Group#selfApply(Element)
@@ -100,7 +100,7 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 	public ECElement<V, DE> selfApply(Element<BigInteger> amount);
 
 	@Override
-	public ECElement<V, DE> selfApply(int amount);
+	public ECElement<V, DE> selfApply(long amount);
 
 	@Override
 	public ECElement<V, DE> selfApply();

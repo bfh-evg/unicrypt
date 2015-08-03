@@ -210,7 +210,7 @@ public class ProductSemiGroup
 	}
 
 	@Override
-	public final Tuple selfApply(Element element, int amount) {
+	public final Tuple selfApply(Element element, long amount) {
 		return this.selfApply(element, BigInteger.valueOf(amount));
 	}
 

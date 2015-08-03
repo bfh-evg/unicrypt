@@ -161,7 +161,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	public ECElement<V, E> times(Element element, Element<BigInteger> amount);
 
 	@Override
-	public ECElement<V, E> times(Element element, int amount);
+	public ECElement<V, E> times(Element element, long amount);
 
 	@Override
 	public ECElement<V, E> timesTwo(Element element);
@@ -216,7 +216,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	public ECElement<V, E> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
-	public ECElement<V, E> selfApply(Element element, int amount);
+	public ECElement<V, E> selfApply(Element element, long amount);
 
 	@Override
 	public ECElement<V, E> selfApply(Element element);

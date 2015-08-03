@@ -119,7 +119,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	public final E selfApply(final Element element, final int amount) {
+	public final E selfApply(final Element element, final long amount) {
 		return this.selfApply(element, BigInteger.valueOf(amount));
 	}
 

@@ -106,7 +106,7 @@ public interface SemiGroup<V extends Object>
 	 * @param amount  The number of instances of the input element
 	 * @return The result of applying the operation multiple times to the input element
 	 */
-	public Element<V> selfApply(Element element, int amount);
+	public Element<V> selfApply(Element element, long amount);
 
 	/**
 	 * Applies the binary operation repeatedly to {@code amount} many instances of a given element. If {@code amount=1},

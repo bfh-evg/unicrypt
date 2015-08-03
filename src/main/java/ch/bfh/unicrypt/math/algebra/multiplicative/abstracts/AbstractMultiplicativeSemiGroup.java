@@ -97,7 +97,7 @@ public abstract class AbstractMultiplicativeSemiGroup<E extends MultiplicativeEl
 	}
 
 	@Override
-	public final E power(final Element element, final int amount) {
+	public final E power(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

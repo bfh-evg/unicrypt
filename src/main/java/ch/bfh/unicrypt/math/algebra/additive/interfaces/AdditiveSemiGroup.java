@@ -111,7 +111,7 @@ public interface AdditiveSemiGroup<V extends Object>
 	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
 	 * @return the same as in {@link #Group.selfApply(Element, int)}
 	 */
-	public AdditiveElement<V> times(Element element, int amount);
+	public AdditiveElement<V> times(Element element, long amount);
 
 	/**
 	 * Applies the group operation to two instances of a given group element. This is equivalent to
@@ -184,7 +184,7 @@ public interface AdditiveSemiGroup<V extends Object>
 	public AdditiveElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
-	public AdditiveElement<V> selfApply(Element element, int amount);
+	public AdditiveElement<V> selfApply(Element element, long amount);
 
 	@Override
 	public AdditiveElement<V> selfApply(Element element);

@@ -241,7 +241,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	 * @see Group#selfApply(Element, int)
 	 */
 	@Override
-	public final E selfApply(final int amount) {
+	public final E selfApply(final long amount) {
 		if (this.set.isSemiGroup()) {
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);

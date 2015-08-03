@@ -110,7 +110,7 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 	 * @see Group#selfApply(Element, int)
 	 */
 	@Override
-	public final E power(final int amount) {
+	public final E power(final long amount) {
 		return (E) this.getSet().power(this, amount);
 	}
 

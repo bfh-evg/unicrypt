@@ -97,7 +97,7 @@ public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, 
 	}
 
 	@Override
-	public final E times(final Element element, final int amount) {
+	public final E times(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

@@ -95,7 +95,7 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
 	}
 
 	@Override
-	public final E power(final Element element, final int amount) {
+	public final E power(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

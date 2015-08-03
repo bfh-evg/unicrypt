@@ -97,7 +97,7 @@ public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V 
 	}
 
 	@Override
-	public final E times(final Element element, final int amount) {
+	public final E times(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

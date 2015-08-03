@@ -119,7 +119,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 	}
 
 	@Override
-	public E power(Element element, int amount) {
+	public E power(Element element, long amount) {
 		return this.power(element, BigInteger.valueOf(amount));
 	}
 

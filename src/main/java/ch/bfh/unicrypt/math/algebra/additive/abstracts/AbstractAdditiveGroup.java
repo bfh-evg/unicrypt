@@ -95,7 +95,7 @@ public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V exte
 	}
 
 	@Override
-	public final E times(final Element element, final int amount) {
+	public final E times(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 
