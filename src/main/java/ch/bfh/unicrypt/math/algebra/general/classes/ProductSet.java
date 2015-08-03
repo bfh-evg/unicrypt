@@ -536,9 +536,6 @@ public class ProductSet
 		return result;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static ProductSet getInstance(DenseArray<Set> sets) {
 		if (sets == null) {
 			throw new IllegalArgumentException();

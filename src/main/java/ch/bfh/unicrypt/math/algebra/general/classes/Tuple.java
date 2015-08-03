@@ -314,7 +314,7 @@ public class Tuple
 	 * @throws IllegalArgumentException if {@code elements} is null or contains null
 	 */
 	public static Tuple getInstance(DenseArray<Element> elements) {
-		if (elements == null || elements.getLength() < 0) {
+		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
 		ProductSet productSet;
