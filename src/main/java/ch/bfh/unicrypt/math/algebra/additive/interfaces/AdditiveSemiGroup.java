@@ -75,10 +75,10 @@ public interface AdditiveSemiGroup<V extends Object>
 	public AdditiveElement<V> add(Element element1, Element element2);
 
 	/**
-	 * This method is a synonym for {@link #Group.apply(Element...)}.
+	 * This method is a synonym for {@link Group#apply(Element...)}.
 	 * <p>
-	 * @param elements the same as in {@link #Group.apply(Element...)}
-	 * @return the same as in {@link #Group.apply(Element...)}
+	 * @param elements the same as in {@link Group#apply(Element...)}
+	 * @return the same as in {@link Group#apply(Element...)}
 	 */
 	public AdditiveElement<V> add(Element... elements);
 
@@ -87,29 +87,29 @@ public interface AdditiveSemiGroup<V extends Object>
 	public AdditiveElement<V> add(Sequence<Element> elements);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
+	 * This method is a synonym for {@link Group#selfApply(Element, BigInteger)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, BigInteger)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, BigInteger)}
-	 * @return the same as in {@link #Group.selfApply(Element, BigInteger)}
+	 * @param element the same as in {@link Group#selfApply(Element, BigInteger)}
+	 * @param amount  the same as in {@link Group#selfApply(Element, BigInteger)}
+	 * @return the same as in {@link Group#selfApply(Element, BigInteger)}
 	 */
 	public AdditiveElement<V> times(Element element, BigInteger amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, Element)}.
+	 * This method is a synonym for {@link Group#selfApply(Element, Element)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, Element)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, Element)}
-	 * @return the same as in {@link #Group.selfApply(Element, Element)}
+	 * @param element the same as in {@link Group#selfApply(Element, Element)}
+	 * @param amount  the same as in {@link Group#selfApply(Element, Element)}
+	 * @return the same as in {@link Group#selfApply(Element, Element)}
 	 */
 	public AdditiveElement<V> times(Element element, Element<BigInteger> amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, long)}.
+	 * This method is a synonym for {@link Group#selfApply(Element, long)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, long)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, long)}
-	 * @return the same as in {@link #Group.selfApply(Element, long)}
+	 * @param element the same as in {@link Group#selfApply(Element, long)}
+	 * @param amount  the same as in {@link Group#selfApply(Element, long)}
+	 * @return the same as in {@link Group#selfApply(Element, long)}
 	 */
 	public AdditiveElement<V> times(Element element, long amount);
 

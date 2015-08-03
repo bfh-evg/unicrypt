@@ -94,7 +94,7 @@ public class Node<V>
 			public Sequence<V> apply(Tree<V> child) {
 				return child.getSequence();
 			}
-		})).append();
+		})).flatten();
 	}
 
 	@Override

@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.converter.classes.string;
 
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
 import java.math.BigInteger;
-import java.lang.Character;
 
 /**
  * Instances of this class convert {@code BigInteger} values into strings. The radix of the string representation can be
@@ -54,8 +53,8 @@ import java.lang.Character;
  * <p>
  * @author Rolf Haenni
  * @version 2.0
- * @see Character.MIN_RADIX
- * @see Character.MAX_RADIX
+ * @see Character#MIN_RADIX
+ * @see Character#MAX_RADIX
  */
 public class BigIntegerToString
 	   extends AbstractStringConverter<BigInteger> {

@@ -59,7 +59,7 @@ public class MultiSequenceTest {
 
 	@Test
 	public void testAppend() {
-		for (Integer i : ss.append()) {
+		for (Integer i : ss.flatten()) {
 //			System.out.println(i);
 		}
 	}
@@ -123,7 +123,7 @@ public class MultiSequenceTest {
 
 	@Test
 	public void testMerge() {
-		for (DenseArray<Integer> i : ss.merge()) {
+		for (DenseArray<Integer> i : ss.combine()) {
 //			System.out.println(i);
 		}
 	}

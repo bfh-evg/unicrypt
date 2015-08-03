@@ -43,7 +43,6 @@ package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
-import java.util.Iterator;
 
 /**
  * Instances of this class offer an inexpensive way of creating iterators over a finite range of integers. If the upper
@@ -106,8 +105,8 @@ public class BigIntegerSequence
 	}
 
 	@Override
-	public Iterator<BigInteger> iterator() {
-		return new Iterator<BigInteger>() {
+	public ExtendedIterator<BigInteger> iterator() {
+		return new ExtendedIterator<BigInteger>() {
 			private BigInteger currentValue = from;
 
 			@Override

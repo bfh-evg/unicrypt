@@ -41,8 +41,6 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import java.util.Iterator;
-
 /**
  * Instances of this class offer an inexpensive way of creating iterators over substrings of a given string. The
  * substring separation is determined by a separation character. The default separation character is {@code '|'}.
@@ -242,8 +240,8 @@ public class StringSequence
 	}
 
 	@Override
-	public Iterator<String> iterator() {
-		return new Iterator<String>() {
+	public ExtendedIterator<String> iterator() {
+		return new ExtendedIterator<String>() {
 
 			private int currenIndex = -1;
 

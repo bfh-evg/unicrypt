@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.converter.abstracts;
 
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 
 /**
  * This abstract class serves as a base implementation of the {@link Converter} interface for BitArray values.

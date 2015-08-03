@@ -61,16 +61,16 @@ public class MultiSequence<V>
 	}
 
 	@Override
-	public Iterator<Sequence<V>> iterator() {
+	public ExtendedIterator<Sequence<V>> iterator() {
 		return this.sequences.iterator();
 	}
 
-	public Sequence<V> append() {
+	public Sequence<V> flatten() {
 		if (this.sequences.isEmpty()) {
 			return Sequence.getInstance();
 		}
 		final Sequence<V> first = sequences.find();
-		final Sequence<V> rest = MultiSequence.getInstance(sequences.skip()).append();
+		final Sequence<V> rest = MultiSequence.getInstance(sequences.skip()).flatten();
 		BigInteger newLength;
 		if (this.length.equals(Sequence.INFINITE) || rest.length.equals(Sequence.INFINITE)) {
 			newLength = Sequence.INFINITE;
@@ -82,8 +82,8 @@ public class MultiSequence<V>
 		return new Sequence<V>(newLength) {
 
 			@Override
-			public Iterator<V> iterator() {
-				return new Iterator<V>() {
+			public ExtendedIterator<V> iterator() {
+				return new ExtendedIterator<V>() {
 
 					private final Iterator<V> iterator1 = first.iterator();
 					private final Iterator<V> iterator2 = rest.iterator();
@@ -105,13 +105,13 @@ public class MultiSequence<V>
 		};
 	}
 
-	public Sequence<DenseArray<V>> merge() {
+	public Sequence<DenseArray<V>> combine() {
 		if (this.sequences.isEmpty()) {
 			return new Sequence<DenseArray<V>>(Sequence.INFINITE) {
 
 				@Override
-				public Iterator iterator() {
-					return new Iterator<DenseArray<V>>() {
+				public ExtendedIterator iterator() {
+					return new ExtendedIterator<DenseArray<V>>() {
 
 						@Override
 						public boolean hasNext() {
@@ -129,7 +129,7 @@ public class MultiSequence<V>
 			};
 		}
 		final Sequence<V> first = sequences.find();
-		final Sequence<DenseArray<V>> rest = MultiSequence.getInstance(sequences.skip()).merge();
+		final Sequence<DenseArray<V>> rest = MultiSequence.getInstance(sequences.skip()).combine();
 		BigInteger newLength;
 		if (first.length.equals(Sequence.UNKNOWN) || rest.length.equals(Sequence.UNKNOWN)) {
 			newLength = Sequence.INFINITE;
@@ -143,8 +143,8 @@ public class MultiSequence<V>
 		return new Sequence<DenseArray<V>>(newLength) {
 
 			@Override
-			public Iterator<DenseArray<V>> iterator() {
-				return new Iterator<DenseArray<V>>() {
+			public ExtendedIterator<DenseArray<V>> iterator() {
+				return new ExtendedIterator<DenseArray<V>>() {
 
 					private final Iterator<V> firstIterator = first.iterator();
 					private final Iterator<DenseArray<V>> restIterator = rest.iterator();
@@ -180,8 +180,8 @@ public class MultiSequence<V>
 		return new Sequence<DenseArray<V>>(newLength) {
 
 			@Override
-			public Iterator<DenseArray<V>> iterator() {
-				return new Iterator() {
+			public ExtendedIterator<DenseArray<V>> iterator() {
+				return new ExtendedIterator() {
 
 					private Iterator<V> firstIterator = first.iterator();
 					private final Iterator<DenseArray<V>> restIterator = rest.iterator();

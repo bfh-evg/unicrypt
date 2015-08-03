@@ -39,24 +39,19 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.abstracts;
+package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.UniCrypt;
 
 /**
- * This abstract class serves as a base implementation of the {@link Converter} interface for String values.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
- * @param <V> The input type
+ * @param <V> The generic type of the input value
  */
-public abstract class AbstractStringConverter<V extends Object>
-	   extends AbstractConverter<V, String> {
+public abstract class Supplier<V>
+	   extends UniCrypt {
 
-	private static final long serialVersionUID = 1L;
-
-	protected AbstractStringConverter(Class<V> inputClass) {
-		super(inputClass, String.class);
-	}
+	public abstract V get();
 
 }

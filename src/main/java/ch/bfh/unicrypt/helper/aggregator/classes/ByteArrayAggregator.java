@@ -43,10 +43,10 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.sequence.ExtendedIterator;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.util.Iterator;
 
 /**
  * The single instance of this class specifies the invertible aggregation of a tree of {@code ByteArray} values. Leaves
@@ -135,8 +135,8 @@ public class ByteArrayAggregator
 		return new Sequence<ByteArray>() {
 
 			@Override
-			public Iterator<ByteArray> iterator() {
-				return new Iterator<ByteArray>() {
+			public ExtendedIterator<ByteArray> iterator() {
+				return new ExtendedIterator<ByteArray>() {
 
 					private int currentIndex = PREFIX_LENGTH;
 

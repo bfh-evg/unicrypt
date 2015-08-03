@@ -51,6 +51,7 @@ import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.ExtendedIterator;
 import ch.bfh.unicrypt.helper.sequence.Mapping;
 import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
@@ -74,7 +75,6 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemi
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.Iterator;
 
 /**
  * This abstract class provides a base implementation for the interface {@link Set}. Non-abstract sub-classes need to
@@ -298,8 +298,8 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return new Sequence<E>() {
 
 			@Override
-			public Iterator<E> iterator() {
-				return new Iterator<E>() {
+			public ExtendedIterator<E> iterator() {
+				return new ExtendedIterator<E>() {
 
 					@Override
 					public boolean hasNext() {

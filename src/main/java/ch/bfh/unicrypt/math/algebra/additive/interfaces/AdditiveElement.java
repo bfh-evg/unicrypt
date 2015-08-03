@@ -55,37 +55,37 @@ public interface AdditiveElement<V>
 	   extends Element<V> {
 
 	/**
-	 * @see Group#apply(Element, Element)
+	 * @see AdditiveSemiGroup#apply(Element, Element)
 	 */
 	public AdditiveElement<V> add(Element element);
 
 	/**
-	 * @see Group#applyInverse(Element, Element)
+	 * @see AdditiveSemiGroup#applyInverse(Element, Element)
 	 */
 	public AdditiveElement<V> subtract(Element element);
 
 	/**
-	 * @see Group#selfApply(Element, BigInteger)
+	 * @see AdditiveSemiGroup#selfApply(Element, BigInteger)
 	 */
 	public AdditiveElement<V> times(BigInteger amount);
 
 	/**
-	 * @see Group#selfApply(Element, Element)
+	 * @see AdditiveSemiGroup#selfApply(Element, Element)
 	 */
 	public AdditiveElement<V> times(Element<BigInteger> amount);
 
 	/**
-	 * @see Group#selfApply(Element, long)
+	 * @see AdditiveSemiGroup#selfApply(Element, long)
 	 */
 	public AdditiveElement<V> times(long amount);
 
 	/**
-	 * @see Group#selfApply(Element)
+	 * @see AdditiveSemiGroup#selfApply(Element)
 	 */
 	public AdditiveElement<V> timesTwo();
 
 	/**
-	 * @see Group#negate(Element)
+	 * @see AdditiveSemiGroup#negate(Element)
 	 */
 	public AdditiveElement<V> negate();
 

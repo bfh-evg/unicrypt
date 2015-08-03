@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,24 +39,49 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.converter.abstracts;
+package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * This abstract class serves as a base implementation of the {@link Converter} interface for String values.
- * <p>
- * @author Rolf Haenni
- * @version 2.0
- * @param <V> The input type
+ *
+ * @author rolfhaenni
+ * @param <V>
  */
-public abstract class AbstractStringConverter<V extends Object>
-	   extends AbstractConverter<V, String> {
+public abstract class ExtendedIterator<V>
+	   extends UniCrypt
+	   implements Iterator<V> {
 
-	private static final long serialVersionUID = 1L;
+	public final ImmutableArray<V> next(long n) {
+		List<V> values = new ArrayList<>();
+		while (n > 0 && this.hasNext()) {
+			values.add(this.next());
+			n--;
+		}
+		return DenseArray.getInstance(values);
+	}
 
-	protected AbstractStringConverter(Class<V> inputClass) {
-		super(inputClass, String.class);
+	public static <V> ExtendedIterator<V> getInstance(final Iterator<V> iterator) {
+		if (iterator == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ExtendedIterator<V>() {
+
+			@Override
+			public boolean hasNext() {
+				return iterator.hasNext();
+			}
+
+			@Override
+			public V next() {
+				return iterator.next();
+			}
+		};
 	}
 
 }

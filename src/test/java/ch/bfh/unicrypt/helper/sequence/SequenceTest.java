@@ -56,13 +56,18 @@ public class SequenceTest {
 
 			@Override
 			public Integer apply(Integer value) {
-				return 2 * value;
+				return 2 + value;
 			}
 
 		});
-		for (Integer i : seq.limit(10)) {
-//			System.out.println(i);
+		seq = seq.limit(12);
+		for (Integer i : seq) {
+			System.out.println(i);
 		}
+		ExtendedIterator<Integer> iterator = seq.iterator();
+		System.out.println(iterator.next(5));
+		System.out.println(iterator.next(10));
+		System.out.println(iterator.next());
 
 	}
 
