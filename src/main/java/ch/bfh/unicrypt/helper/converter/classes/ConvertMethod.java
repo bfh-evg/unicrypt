@@ -69,7 +69,7 @@ public class ConvertMethod<W>
 
 	private ConvertMethod(Class<W> outputClass) {
 		this.outputClass = outputClass;
-		this.converterMap = new HashMap<Class<?>, Converter<?, W>>();
+		this.converterMap = new HashMap<>();
 	}
 
 	/**

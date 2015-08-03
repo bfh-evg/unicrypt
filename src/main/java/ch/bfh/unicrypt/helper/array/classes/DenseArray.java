@@ -87,7 +87,7 @@ public class DenseArray<V extends Object>
 	 * @param <V>    The generic type of the new array
 	 * @param values The Java array of values
 	 * @return The new sparse array
-	 * @see SparseArray#getInstance(java.lang.Object, java.lang.Object...)
+	 * @see SparseArray#getInstance(Object, Object...)
 	 */
 	public static <V> DenseArray<V> getInstance(V... values) {
 		return DenseArray.getInstance(Sequence.getInstance(values));

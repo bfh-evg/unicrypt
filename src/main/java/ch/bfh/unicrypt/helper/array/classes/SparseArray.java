@@ -174,7 +174,7 @@ public class SparseArray<V extends Object>
 	 * @param defaultValue The default value of the new array
 	 * @param values       The Java array of values
 	 * @return The new sparse array
-	 * @see DenseArray#getInstance(java.lang.Object...)
+	 * @see DenseArray#getInstance(Object...)
 	 */
 	public static <V> SparseArray<V> getInstance(V defaultValue, V... values) {
 		return SparseArray.getInstance(defaultValue, Sequence.getInstance(values));

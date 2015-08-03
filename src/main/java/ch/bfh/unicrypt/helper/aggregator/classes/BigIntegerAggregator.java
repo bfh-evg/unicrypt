@@ -50,7 +50,7 @@ import java.math.BigInteger;
  * The single instance of this class specifies the invertible aggregation of a tree of non-negative {@code BigInteger}
  * values. Leaves are marked by setting the least significant bit to 0 (by multiplying the value by 2). Similarly, nodes
  * are marked by setting the least significant bit to 1 (by multiplying the value by 2 and adding 1). The values
- * obtained from the children of a node are aggregated using {@link MathUtil#pairWithSize(java.math.BigInteger...)}.
+ * obtained from the children of a node are aggregated using {@link MathUtil#pairWithSize(BigInteger...)}.
  * <p>
  * @author R. Haenni
  * @version 2.0

@@ -245,7 +245,7 @@ public class ProductSet
 
 	@Override
 	protected Tuple defaultGetElementFrom(ByteArray value) {
-		return this.getElementFrom(value, ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
+		return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
 	}
 
 	@Override
