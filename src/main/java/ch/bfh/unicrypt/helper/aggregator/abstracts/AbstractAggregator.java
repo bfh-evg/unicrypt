@@ -104,7 +104,7 @@ public abstract class AbstractAggregator<V>
 		// Case 2: tree is a node
 		final Node<V> node = (Node<V>) tree;
 		Sequence<V> values = node.getChildren().map(this.mapping1);
-		return this.abstractAggregateNode(values, node.getSize());
+		return this.abstractAggregateNode(values);
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public abstract class AbstractAggregator<V>
 
 	protected abstract V abstractAggregateLeaf(V value);
 
-	protected abstract V abstractAggregateNode(Sequence<V> values, int size);
+	protected abstract V abstractAggregateNode(Sequence<V> values);
 
 	protected abstract V abstractDisaggregateLeaf(V value);
 

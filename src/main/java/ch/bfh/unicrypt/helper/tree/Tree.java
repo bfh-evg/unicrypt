@@ -159,6 +159,15 @@ public abstract class Tree<V>
 		return this instanceof Leaf;
 	}
 
+	/**
+	 * Checks if the tree is a node (not a leaf).
+	 * <p>
+	 * @return {@code true}, if the tree is a node, {@code false} otherwise
+	 */
+	public boolean isNode() {
+		return this instanceof Node;
+	}
+
 	public abstract Sequence<V> getSequence();
 
 	@Override

@@ -126,7 +126,7 @@ public class StringAggregator
 	}
 
 	@Override
-	protected String abstractAggregateNode(Sequence<String> values, int length) {
+	protected String abstractAggregateNode(Sequence<String> values) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.openingParenthesis);
 		for (String value : values) {

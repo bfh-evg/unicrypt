@@ -98,7 +98,8 @@ public class ByteArrayAggregator
 	}
 
 	@Override
-	protected ByteArray abstractAggregateNode(Sequence<ByteArray> values, int length) {
+	protected ByteArray abstractAggregateNode(Sequence<ByteArray> values) {
+		int length = values.getLength().intValue();
 		ByteArray[] byteArrays = new ByteArray[length + 1];
 		int i = 1;
 		int byteLength = 0;

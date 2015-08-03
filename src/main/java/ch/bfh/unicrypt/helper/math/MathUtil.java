@@ -127,7 +127,7 @@ public final class MathUtil {
 	 * @param value A potential prime number
 	 * @return {@code true} if {@code value} is prime, {@code false} otherwise
 	 */
-	public static boolean isPrime(final int value) {
+	public static boolean isPrime(final long value) {
 		return MathUtil.isPrime(BigInteger.valueOf(value));
 	}
 
@@ -164,7 +164,7 @@ public final class MathUtil {
 	 * @param value A potential safe prime
 	 * @return {@code true} if {@code value} is a safe prime, {@code false} otherwise
 	 */
-	public static boolean isSafePrime(final int value) {
+	public static boolean isSafePrime(final long value) {
 		return MathUtil.isSafePrime(BigInteger.valueOf(value));
 	}
 
@@ -256,7 +256,7 @@ public final class MathUtil {
 	 * @return The result of applying the elegant pairing function
 	 * @see MathUtil#pair(java.math.BigInteger...)
 	 */
-	public static BigInteger pair(int... values) {
+	public static BigInteger pair(long... values) {
 		BigInteger[] bigIntegers = new BigInteger[values.length];
 		for (int i = 0; i < values.length; i++) {
 			bigIntegers[i] = BigInteger.valueOf(values[i]);
@@ -338,7 +338,7 @@ public final class MathUtil {
 	public static BigInteger[] unpair(BigInteger value, int n) {
 		BigInteger[] result = new BigInteger[n];
 		if (n > 0) {
-			unpair(value, n, 0, result);
+			MathUtil.unpair(value, n, 0, result);
 		}
 		return result;
 	}
@@ -348,10 +348,10 @@ public final class MathUtil {
 		if (size == 1) {
 			result[start] = value;
 		} else {
-			BigInteger[] values = unpair(value);
+			BigInteger[] values = MathUtil.unpair(value);
 			int powerOfTwo = 1 << BigInteger.valueOf(size - 1).bitLength() - 1;
-			unpair(values[0], powerOfTwo, start, result);
-			unpair(values[1], size - powerOfTwo, start + powerOfTwo, result);
+			MathUtil.unpair(values[0], powerOfTwo, start, result);
+			MathUtil.unpair(values[1], size - powerOfTwo, start + powerOfTwo, result);
 		}
 	}
 
@@ -721,8 +721,8 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Computes the quotient of two (positive or negative) integers and rounds up the result to the next BigInteger
-	 * value.
+	 * Computes the quotient of two (positive or negative) BigInteger values and rounds up the result to the next
+	 * MathUtil. value.
 	 * <p>
 	 * @param x The given dividend
 	 * @param y The given divisor

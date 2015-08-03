@@ -88,7 +88,8 @@ public class BigIntegerAggregator
 
 	// nodes are marked with 1 bit
 	@Override
-	protected BigInteger abstractAggregateNode(Sequence<BigInteger> values, int length) {
+	protected BigInteger abstractAggregateNode(Sequence<BigInteger> values) {
+		int length = values.getLength().intValue();
 		BigInteger[] valueArray = new BigInteger[length];
 		int i = 0;
 		for (BigInteger value : values) {
