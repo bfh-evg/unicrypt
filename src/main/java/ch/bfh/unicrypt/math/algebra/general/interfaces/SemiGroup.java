@@ -131,7 +131,7 @@ public interface SemiGroup<V extends Object>
 
 	/**
 	 * Applies the group operation to two instances of a given element. This is equivalent to
-	 * {@link SemiGroup#selfApply(Element, int)} for {@code amount=2}.
+	 * {@link SemiGroup#selfApply(Element, long)} for {@code amount=2}.
 	 * <p>
 	 * @param element A given element
 	 * @return The result of applying the group operation to the input element

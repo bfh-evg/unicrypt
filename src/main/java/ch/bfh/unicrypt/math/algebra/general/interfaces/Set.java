@@ -367,10 +367,10 @@ public interface Set<V extends Object> {
 	public <W> Element<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
 
 	/**
-	 * Creates and returns the element that corresponds to a given {@code int} value using the default conversion method
-	 * (if one exists). Returns {@code null} if no such element exists.
+	 * Creates and returns the element that corresponds to a given {@code long} value using the default conversion
+	 * method (if one exists). Returns {@code null} if no such element exists.
 	 * <p>
-	 * @param value The given {@code int} value
+	 * @param value The given {@code long} value
 	 * @return The corresponding element, or {@code null} if no such element exists
 	 */
 	public Element<V> getElementFrom(long value);

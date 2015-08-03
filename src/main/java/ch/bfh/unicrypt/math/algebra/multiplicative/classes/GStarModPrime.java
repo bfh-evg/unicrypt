@@ -71,7 +71,7 @@ public class GStarModPrime
 		return ZStarModPrime.getInstance(this.getOrder());
 	}
 
-	public static GStarModPrime getInstance(final int modulus, int orderFactor) {
+	public static GStarModPrime getInstance(final long modulus, long orderFactor) {
 		return GStarModPrime.getInstance(BigInteger.valueOf(modulus), BigInteger.valueOf(orderFactor));
 	}
 

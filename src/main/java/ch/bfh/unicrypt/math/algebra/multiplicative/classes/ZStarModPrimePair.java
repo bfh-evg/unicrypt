@@ -72,7 +72,7 @@ public class ZStarModPrimePair
 		return instance;
 	}
 
-	public static ZStarModPrimePair getInstance(final int prime1, final int prime2) {
+	public static ZStarModPrimePair getInstance(final long prime1, final long prime2) {
 		return ZStarModPrimePair.getInstance(BigInteger.valueOf(prime1), BigInteger.valueOf(prime2));
 	}
 

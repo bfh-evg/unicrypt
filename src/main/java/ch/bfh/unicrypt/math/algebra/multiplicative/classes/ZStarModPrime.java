@@ -139,7 +139,7 @@ public class ZStarModPrime
 		return instance;
 	}
 
-	public static ZStarModPrime getInstance(final int modulus) {
+	public static ZStarModPrime getInstance(final long modulus) {
 		return ZStarModPrime.getInstance(BigInteger.valueOf(modulus));
 	}
 

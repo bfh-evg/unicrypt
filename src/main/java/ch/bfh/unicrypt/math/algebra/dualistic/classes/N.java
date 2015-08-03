@@ -69,11 +69,11 @@ public class N
 		super(BigInteger.class);
 	}
 
-	public final boolean contains(int integerValue) {
+	public final boolean contains(long integerValue) {
 		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
-	public final NElement getElement(int integerValue) {
+	public final NElement getElement(long integerValue) {
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 

@@ -83,7 +83,7 @@ public class PrimePair
 	}
 
 	/**
-	 * Creates a new prime pair from two given integer values of type {@code int}. This method is a convenience method
+	 * Creates a new prime pair from two given integer values of type {@code long}. This method is a convenience method
 	 * for {@link PrimePair#getInstance(BigInteger, BigInteger)}. Throws an exception if one of the given integers is
 	 * not prime or if they are equal.
 	 * <p>
@@ -91,7 +91,7 @@ public class PrimePair
 	 * @param prime2 The second integer value
 	 * @return The new prime pair
 	 */
-	public static PrimePair getInstance(int prime1, int prime2) {
+	public static PrimePair getInstance(long prime1, long prime2) {
 		return PrimePair.getInstance(Prime.getInstance(prime1), Prime.getInstance(prime2));
 	}
 

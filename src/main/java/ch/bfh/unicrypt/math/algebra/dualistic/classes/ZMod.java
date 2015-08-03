@@ -91,11 +91,11 @@ public class ZMod
 	 * @param integerValue The given integer
 	 * @return {@code true} if this class contains
 	 */
-	public final boolean contains(int integerValue) {
+	public final boolean contains(long integerValue) {
 		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
-	public final ZModElement getElement(int integerValue) {
+	public final ZModElement getElement(long integerValue) {
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
@@ -206,7 +206,7 @@ public class ZMod
 	//
 	private static final Map<BigInteger, ZMod> instances = new HashMap<>();
 
-	public static ZMod getInstance(final int modulus) {
+	public static ZMod getInstance(final long modulus) {
 		return ZMod.getInstance(BigInteger.valueOf(modulus));
 	}
 

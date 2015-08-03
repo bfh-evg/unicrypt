@@ -122,11 +122,11 @@ public class GStarMod
 		return this.superGroup;
 	}
 
-	public final boolean contains(int integerValue) {
+	public final boolean contains(long integerValue) {
 		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
-	public final GStarModElement getElement(int integerValue) {
+	public final GStarModElement getElement(long integerValue) {
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 

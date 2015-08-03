@@ -129,11 +129,11 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	public ConcatenativeElement<V> selfConcatenate(Element element, Element<BigInteger> amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
+	 * This method is a synonym for {@link #Group.selfApply(Element, long)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, int)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
-	 * @return the same as in {@link #Group.selfApply(Element, int)}
+	 * @param element the same as in {@link #Group.selfApply(Element, long)}
+	 * @param amount  the same as in {@link #Group.selfApply(Element, long)}
+	 * @return the same as in {@link #Group.selfApply(Element, long)}
 	 */
 	public ConcatenativeElement<V> selfConcatenate(Element element, long amount);
 

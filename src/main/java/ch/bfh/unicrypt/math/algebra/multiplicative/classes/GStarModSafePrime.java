@@ -78,8 +78,8 @@ public class GStarModSafePrime
 		return instance;
 	}
 
-	public static GStarModSafePrime getInstance(final int modulus) {
-		return GStarModSafePrime.getInstance(SafePrime.getInstance(modulus));
+	public static GStarModSafePrime getInstance(final long modulus) {
+		return GStarModSafePrime.getInstance(BigInteger.valueOf(modulus));
 	}
 
 	public static GStarModSafePrime getInstance(final BigInteger modulus) {

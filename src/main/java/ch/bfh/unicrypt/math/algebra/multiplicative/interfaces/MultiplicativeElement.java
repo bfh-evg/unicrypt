@@ -74,7 +74,7 @@ public interface MultiplicativeElement<V extends Object>
 	public MultiplicativeElement<V> power(Element<BigInteger> amount);
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	public MultiplicativeElement<V> power(long amount);
 

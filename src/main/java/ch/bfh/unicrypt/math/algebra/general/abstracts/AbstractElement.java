@@ -238,7 +238,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	}
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	@Override
 	public final E selfApply(final long amount) {

@@ -82,14 +82,14 @@ public class SafePrime
 	}
 
 	/**
-	 * Creates a new safe prime from a given integer value of type {@code int}. This method is a convenience method for
+	 * Creates a new safe prime from a given integer value of type {@code long}. This method is a convenience method for
 	 * {@link SafePrime#getInstance(java.math.BigInteger)}. Throws an exception if the given integer is not a safe
 	 * prime.
 	 * <p>
 	 * @param safePrime The given integer value
 	 * @return The new safe prime
 	 */
-	public static SafePrime getInstance(int safePrime) {
+	public static SafePrime getInstance(long safePrime) {
 		return SafePrime.getInstance(BigInteger.valueOf(safePrime));
 	}
 

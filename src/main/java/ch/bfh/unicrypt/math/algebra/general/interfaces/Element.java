@@ -157,15 +157,14 @@ public interface Element<V extends Object> {
 	public <W> ByteArray getHashValue(ConvertMethod<W> convertMethod, HashMethod<W> hashMethod);
 
 	/**
-	 * Checks if this element is mathematically equivalent to the given element. For this, they need to belong to the
-	 * same set.
+	 * Checks if this element is mathematically equivalent to the given element. For this, they need to belong to
+	 * equivalent sets and their values must be equal.
 	 * <p>
 	 * @param element The given Element
 	 * @return {@code true} if the element is equivalent to the given element
 	 */
 	public boolean isEquivalent(Element element);
 
-	// The following methods are equivalent to corresponding Set methods
 	/**
 	 * @param element
 	 * @return
@@ -181,6 +180,12 @@ public interface Element<V extends Object> {
 
 	/**
 	 * @param amount
+	 * @return @see Group#selfApply(Element, long)
+	 */
+	public Element<V> selfApply(long amount);
+
+	/**
+	 * @param amount
 	 * @return @see Group#selfApply(Element, BigInteger)
 	 */
 	public Element<V> selfApply(BigInteger amount);
@@ -190,12 +195,6 @@ public interface Element<V extends Object> {
 	 * @return @see Group#selfApply(Element, Element)
 	 */
 	public Element<V> selfApply(Element<BigInteger> amount);
-
-	/**
-	 * @param amount
-	 * @return @see Group#selfApply(Element, long)
-	 */
-	public Element<V> selfApply(long amount);
 
 	/**
 	 * @return @see Group#selfApply(Element)

@@ -71,7 +71,7 @@ public interface ConcatenativeElement<V extends Object>
 	public ConcatenativeElement<V> selfConcatenate(Element<BigInteger> amount);
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	public ConcatenativeElement<V> selfConcatenate(long amount);
 

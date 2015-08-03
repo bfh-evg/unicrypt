@@ -107,7 +107,7 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 	}
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	@Override
 	public final E power(final long amount) {

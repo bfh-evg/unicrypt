@@ -71,11 +71,11 @@ public class Z
 		super(BigInteger.class);
 	}
 
-	public final boolean contains(int integerValue) {
+	public final boolean contains(long integerValue) {
 		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
-	public final ZElement getElement(int integerValue) {
+	public final ZElement getElement(long integerValue) {
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 

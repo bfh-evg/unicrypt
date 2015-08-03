@@ -121,11 +121,11 @@ public class ZStarMod
 		return this.modulusFactorization;
 	}
 
-	public final boolean contains(int integerValue) {
+	public final boolean contains(long integerValue) {
 		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
-	public final ZStarModElement getElement(int integerValue) {
+	public final ZStarModElement getElement(long integerValue) {
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
@@ -218,7 +218,7 @@ public class ZStarMod
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static ZStarMod getInstance(final int modulus) {
+	public static ZStarMod getInstance(final long modulus) {
 		return ZStarMod.getInstance(BigInteger.valueOf(modulus));
 	}
 

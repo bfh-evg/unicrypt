@@ -111,13 +111,13 @@ public class Prime
 	}
 
 	/**
-	 * Creates a new prime number from a given integer value of type {@code int}. This method is a convenience method
+	 * Creates a new prime number from a given integer value of type {@code long}. This method is a convenience method
 	 * for {@link Prime#getInstance(BigInteger)}. Throws an exception if the given integer is not prime.
 	 * <p>
 	 * @param prime The given integer value
 	 * @return The new prime
 	 */
-	public static Prime getInstance(int prime) {
+	public static Prime getInstance(long prime) {
 		return Prime.getInstance(BigInteger.valueOf(prime));
 	}
 

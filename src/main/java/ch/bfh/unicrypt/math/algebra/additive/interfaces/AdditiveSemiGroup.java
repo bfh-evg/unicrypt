@@ -105,11 +105,11 @@ public interface AdditiveSemiGroup<V extends Object>
 	public AdditiveElement<V> times(Element element, Element<BigInteger> amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
+	 * This method is a synonym for {@link #Group.selfApply(Element, long)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, int)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
-	 * @return the same as in {@link #Group.selfApply(Element, int)}
+	 * @param element the same as in {@link #Group.selfApply(Element, long)}
+	 * @param amount  the same as in {@link #Group.selfApply(Element, long)}
+	 * @return the same as in {@link #Group.selfApply(Element, long)}
 	 */
 	public AdditiveElement<V> times(Element element, long amount);
 

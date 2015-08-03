@@ -93,7 +93,7 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
 	}
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	@Override
 	public final E selfConcatenate(final long amount) {

@@ -111,7 +111,7 @@ public class ZModPrime
 		return instance;
 	}
 
-	public static ZModPrime getInstance(final int modulus) {
+	public static ZModPrime getInstance(final long modulus) {
 		return ZModPrime.getInstance(BigInteger.valueOf(modulus));
 	}
 

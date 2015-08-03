@@ -70,7 +70,7 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 	public ECElement<V, DE> times(Element<BigInteger> amount);
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	public ECElement<V, DE> times(long amount);
 

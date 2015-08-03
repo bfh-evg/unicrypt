@@ -74,7 +74,7 @@ public interface AdditiveElement<V>
 	public AdditiveElement<V> times(Element<BigInteger> amount);
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	public AdditiveElement<V> times(long amount);
 
