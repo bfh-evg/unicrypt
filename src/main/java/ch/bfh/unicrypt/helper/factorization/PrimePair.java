@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrimePair;
 import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import java.math.BigInteger;
 

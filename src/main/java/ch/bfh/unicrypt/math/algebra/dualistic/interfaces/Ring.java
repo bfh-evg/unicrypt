@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 /**
  * TODO This interface represents the mathematical concept of a ring. A ring is a semiring where additive operations are
  * a commutative {@link Group}. It is therefore implemented as a specialization of {@link SemiRing}. One familiar
- * example of a ring is the set of integers.
+ * example of a ring is the set of integers. Some return types are updated.
  * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values stored in the elements of this ring
@@ -55,7 +55,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 public interface Ring<V extends Object>
 	   extends SemiRing<V>, AdditiveGroup<V> {
 
-	// The following methods are overridden from AdditiveGroup with an adapted return type
 	@Override
 	public DualisticElement<V> subtract(Element element1, Element element2);
 

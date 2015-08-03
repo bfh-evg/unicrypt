@@ -156,7 +156,7 @@ public class MultiSequence<V>
 
 					@Override
 					public DenseArray<V> next() {
-						return restIterator.next().insertAt(0, firstIterator.next());
+						return restIterator.next().insert(firstIterator.next());
 					}
 				};
 			}
@@ -194,7 +194,7 @@ public class MultiSequence<V>
 
 					@Override
 					public DenseArray<V> next() {
-						DenseArray<V> result = restItem.insertAt(0, this.firstIterator.next());
+						DenseArray<V> result = restItem.insert(this.firstIterator.next());
 						if (!this.firstIterator.hasNext() && this.restIterator.hasNext()) {
 							this.restItem = this.restIterator.next();
 							this.firstIterator = first.iterator();

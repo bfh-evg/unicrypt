@@ -46,7 +46,8 @@ import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
- * This interface represents an additively written {@link CyclicGroup}. No functionality is added.
+ * This interface represents an additively written {@link CyclicGroup}. No functionality is added, only the return types
+ * are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -56,7 +57,6 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public interface AdditiveCyclicGroup<V extends Object>
 	   extends CyclicGroup<V>, AdditiveGroup<V> {
 
-	// The following methods are overridden from Group with an adapted return type
 	@Override
 	public AdditiveElement<V> getDefaultGenerator();
 

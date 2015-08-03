@@ -44,7 +44,7 @@ package ch.bfh.unicrypt.helper.converter.abstracts;
 import java.math.BigInteger;
 
 /**
- * This abstract class serves as a base implementation of the {@link BigIntegerConverter} interface.
+ * This abstract class serves as a base implementation of the {@link Converter} interface for BigInteger values.
  * <p>
  * @author Rolf Haenni
  * @version 2.0

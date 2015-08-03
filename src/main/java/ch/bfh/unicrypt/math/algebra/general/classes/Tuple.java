@@ -221,6 +221,11 @@ public class Tuple
 	}
 
 	@Override
+	public Tuple insert(Element element) {
+		return Tuple.getInstance(this.getSet().insert(element.getSet()), this.value.insert(element));
+	}
+
+	@Override
 	public Tuple add(Element element) {
 		return Tuple.getInstance(this.getSet().add(element.getSet()), this.value.add(element));
 	}

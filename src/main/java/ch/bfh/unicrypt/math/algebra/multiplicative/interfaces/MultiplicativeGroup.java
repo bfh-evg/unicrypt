@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
  * This interface provides the renaming of one group operation for the case of a multiplicatively written {@link Group}.
- * No functionality is added.
+ * No functionality is added. Some return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -73,7 +73,6 @@ public interface MultiplicativeGroup<V extends Object>
 	 */
 	public MultiplicativeElement<V> oneOver(Element element);
 
-	// The following methods are overridden from Monoid with an adapted return type
 	@Override
 	public MultiplicativeElement<V> invert(Element element);
 

@@ -45,7 +45,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {@link Element}. No functionality is added.
+ * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
+ * updated.
  * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values stored in this element
@@ -90,7 +91,6 @@ public interface MultiplicativeElement<V extends Object>
 
 	public boolean isOne();
 
-	// The following methods are overridden from Element with an adapted return type
 	@Override
 	public MultiplicativeSemiGroup<V> getSet();
 

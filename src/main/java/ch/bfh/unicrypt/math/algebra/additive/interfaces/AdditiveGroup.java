@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 
 /**
  * This interface represents an additively written {link Group}. It provides the renaming of one group operation. No
- * functionality is added.
+ * functionality is added. Some return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -57,11 +57,11 @@ public interface AdditiveGroup<V extends Object>
 	   extends Group<V>, AdditiveMonoid<V> {
 
 	/**
-	 * This method is a synonym for {@link #Group.applyInverse(Element, Element)}.
+	 * This method is a synonym for {@link Group#applyInverse(Element, Element)}.
 	 * <p>
-	 * @param element1 the same as in {@link #Group.applyInverse(Element, Element)}
-	 * @param element2 the same as in {@link #Group.applyInverse(Element, Element)}
-	 * @return the same as in {@link #Group.applyInverse(Element, Element)}
+	 * @param element1 the same as in {@link Group#applyInverse(Element, Element)}
+	 * @param element2 the same as in {@link Group#applyInverse(Element, Element)}
+	 * @return the same as in {@link Group#applyInverse(Element, Element)}
 	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
 	 */
 	public AdditiveElement<V> subtract(Element element1, Element element2);
@@ -74,7 +74,6 @@ public interface AdditiveGroup<V extends Object>
 	 */
 	public AdditiveElement<V> negate(Element element);
 
-	// The following methods are overridden from Monoid with an adapted return type
 	@Override
 	public AdditiveElement<V> invert(Element element);
 

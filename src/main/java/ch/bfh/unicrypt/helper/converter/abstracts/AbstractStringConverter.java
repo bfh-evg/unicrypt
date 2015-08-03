@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.helper.converter.abstracts;
 
 /**
- * This abstract class serves as a base implementation of the {@link StringConverter} interface.
+ * This abstract class serves as a base implementation of the {@link Converter} interface for String values.
  * <p>
  * @author Rolf Haenni
  * @version 2.0

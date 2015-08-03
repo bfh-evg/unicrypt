@@ -206,7 +206,7 @@ public class Permutation
 	 * <p>
 	 * @param value The given input value
 	 * @return The permuted value
-	 * @throw IndexOutOfBoundsException if {@code value} is negative or greater than {@code getSize()-1}
+	 * @throws IndexOutOfBoundsException if {@code value} is negative or greater than {@code getSize()-1}
 	 */
 	public int permute(int value) {
 		if (value < 0 || value >= this.getSize()) {

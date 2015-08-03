@@ -205,13 +205,18 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public CompositeEncoder replaceAt(int index, Encoder encoder) {
-		return new CompositeEncoder(this.encoders.replaceAt(index, encoder));
+	public CompositeEncoder insert(Encoder encoder) {
+		return new CompositeEncoder(this.encoders.insert(encoder));
 	}
 
 	@Override
 	public CompositeEncoder add(Encoder encoder) {
 		return new CompositeEncoder(this.encoders.add(encoder));
+	}
+
+	@Override
+	public CompositeEncoder replaceAt(int index, Encoder encoder) {
+		return new CompositeEncoder(this.encoders.replaceAt(index, encoder));
 	}
 
 	@Override

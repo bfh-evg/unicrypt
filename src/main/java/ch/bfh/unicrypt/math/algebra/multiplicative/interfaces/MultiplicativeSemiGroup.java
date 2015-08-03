@@ -55,7 +55,7 @@ import java.math.BigInteger;
 
 /**
  * This interface provides the renaming of some group operations for the case of a multiplicatively written
- * {@link SemiGroup}. No functionality is added.
+ * {@link SemiGroup}. No functionality is added. Some return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -138,8 +138,6 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	 */
 	public MultiplicativeElement<V> productOfPowers(Element[] elements, BigInteger[] amounts);
 
-	// The following methods are overridden from Set with an adapted return type
-	//
 	@Override
 	public <W> MultiplicativeElement<V> getElementFrom(W value, Converter<V, W> converter);
 
@@ -167,7 +165,18 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	@Override
 	public MultiplicativeElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 
-	// The following methods are overridden from SemiGroup with an adapted return type
+	@Override
+	public Sequence<? extends MultiplicativeElement<V>> getRandomElements();
+
+	@Override
+	public Sequence<? extends MultiplicativeElement<V>> getRandomElements(long n);
+
+	@Override
+	public Sequence<? extends MultiplicativeElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends MultiplicativeElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+
 	@Override
 	public MultiplicativeElement<V> apply(Element element1, Element element2);
 

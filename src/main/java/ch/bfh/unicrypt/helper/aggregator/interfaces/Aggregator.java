@@ -81,8 +81,7 @@ public interface Aggregator<V> {
 	 * be needed to dispatch between different aggregators.
 	 * <p>
 	 * @return The input class
-	 * @see ConvertMethod
 	 */
-	public Class<V> getAggregatorClass();
+	public Class<V> getValueClass();
 
 }

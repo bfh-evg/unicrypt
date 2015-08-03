@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.factorization;
 
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
 import java.math.BigInteger;
 
 /**

@@ -93,14 +93,14 @@ public class PolynomialEvaluationProofSystem
 		if (pedersenCS == null) {
 			throw new IllegalArgumentException();
 		}
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
 	public static final PolynomialEvaluationProofSystem
-	   getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial,
-			  final PedersenCommitmentScheme pedersenCS) {
+		   getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial,
+				  final PedersenCommitmentScheme pedersenCS) {
 
 		if (challengeGenerator == null || polynomial == null || pedersenCS == null) {
 			throw new IllegalArgumentException();
@@ -266,7 +266,7 @@ public class PolynomialEvaluationProofSystem
 
 		Tuple commitment = (Tuple) proof.getFirst();
 		Tuple response = (Tuple) proof.getThird();
-		Tuple cV = ((Tuple) commitment.getAt(0)).insertAt(0, publicInput.getFirst());
+		Tuple cV = ((Tuple) commitment.getAt(0)).insert(publicInput.getFirst());
 		Tuple cfV = (Tuple) commitment.getAt(1);
 		Tuple cdV = (Tuple) commitment.getAt(2);
 		Tuple cfuV = (Tuple) commitment.getAt(3);
@@ -340,8 +340,8 @@ public class PolynomialEvaluationProofSystem
 				// left node
 				int nextDegree = degree + (int) Math.pow(2, level - 1);
 				if (nextDegree <= polynomial.getValue().getDegree()) {
-					PolynomialElement yPoly =
-						   polynomial.getSet().getElement(Tuple.getInstance(fV.getAt(level - 1), uV.getAt(level - 1)));
+					PolynomialElement yPoly
+						   = polynomial.getSet().getElement(Tuple.getInstance(fV.getAt(level - 1), uV.getAt(level - 1)));
 					Node1 left = new Node1(level - 1, nextDegree, poly.multiply(yPoly), uV, fV, result);
 				}
 			}
@@ -370,8 +370,8 @@ public class PolynomialEvaluationProofSystem
 				// left node
 				int nextDegree = degree + (int) Math.pow(2, level - 1);
 				if (nextDegree <= polynomial.getValue().getDegree()) {
-					Node2 left =
-						   new Node2(level - 1, nextDegree, value.multiply(fBarV.getAt(level - 1)), fBarV, x, result);
+					Node2 left
+						   = new Node2(level - 1, nextDegree, value.multiply(fBarV.getAt(level - 1)), fBarV, x, result);
 				}
 			}
 		}

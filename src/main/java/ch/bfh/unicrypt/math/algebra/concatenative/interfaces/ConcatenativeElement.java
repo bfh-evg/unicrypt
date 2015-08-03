@@ -45,7 +45,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {@link Element}. No functionality is added.
+ * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
+ * updated.
  * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values of this element
@@ -53,6 +54,10 @@ import java.math.BigInteger;
 public interface ConcatenativeElement<V extends Object>
 	   extends Element<V> {
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getLength();
 
 	/**
@@ -80,9 +85,12 @@ public interface ConcatenativeElement<V extends Object>
 	 */
 	public ConcatenativeElement<V> selfConcatenate();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isEmptyElement();
 
-	// The following methods are overridden from Element with an adapted return type
 	@Override
 	public ConcatenativeSemiGroup getSet();
 

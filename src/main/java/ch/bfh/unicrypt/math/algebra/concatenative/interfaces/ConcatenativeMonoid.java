@@ -44,7 +44,8 @@ package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 
 /**
- * This interface represents an additively written {@link Monoid}. No functionality is added.
+ * This interface represents an additively written {@link Monoid}. No functionality is added, only the return types are
+ * updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -54,7 +55,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 public interface ConcatenativeMonoid<V extends Object>
 	   extends Monoid<V>, ConcatenativeSemiGroup<V> {
 
-	// The following methods are overridden from Monoid with an adapted return type
 	@Override
 	public ConcatenativeElement<V> getIdentityElement();
 

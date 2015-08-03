@@ -122,14 +122,14 @@ public interface DefaultValueArray<V extends Object>
 	public DefaultValueArray<V> insertAt(int index);
 
 	/**
-	 * Returns a new immutable array with a single value replaced by a default value. The length of the array remains
-	 * unchanged.
+	 * Returns a new immutable array with an additional default value inserted at the front. This is equivalent to
+	 * {@code insertAt(0)}.
 	 * <p>
-	 * @param index The index of the value to be replaced
-	 * @return The new immutable array with the replaced value
-	 * @see ImmutableArray#replaceAt(int, java.lang.Object)
+	 * @return The new immutable array with the inserted default value
+	 * @see ImmutableArray#add(java.lang.Object)
+	 * @see DefaultValueArray#insertAt(int)
 	 */
-	public DefaultValueArray<V> replaceAt(int index);
+	public DefaultValueArray<V> insert();
 
 	/**
 	 * Returns a new immutable array with an additional default value inserted at its end. This is equivalent to
@@ -140,6 +140,16 @@ public interface DefaultValueArray<V extends Object>
 	 * @see DefaultValueArray#insertAt(int)
 	 */
 	public DefaultValueArray<V> add();
+
+	/**
+	 * Returns a new immutable array with a single value replaced by a default value. The length of the array remains
+	 * unchanged.
+	 * <p>
+	 * @param index The index of the value to be replaced
+	 * @return The new immutable array with the replaced value
+	 * @see ImmutableArray#replaceAt(int, java.lang.Object)
+	 */
+	public DefaultValueArray<V> replaceAt(int index);
 
 	/**
 	 * Returns a new immutable array by adding a given number of default values as prefix to an existing immutable

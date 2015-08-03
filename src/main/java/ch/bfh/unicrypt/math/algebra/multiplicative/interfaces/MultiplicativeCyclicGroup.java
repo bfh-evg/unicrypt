@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  * This interface provides the renaming of some group operations for the case of a multiplicatively written
- * {@link CyclicGroup}. No functionality is added.
+ * {@link CyclicGroup}. No functionality is added, only the return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -57,7 +57,6 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public interface MultiplicativeCyclicGroup<V extends Object>
 	   extends CyclicGroup<V>, MultiplicativeGroup<V> {
 
-	// The following methods are overridden from Group with an adapted return type
 	@Override
 	public MultiplicativeElement<V> getDefaultGenerator();
 

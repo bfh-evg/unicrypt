@@ -45,7 +45,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 
 /**
- * This interface represents an additively written {@link Monoid}. No functionality is added.
+ * This interface represents an additively written {@link Monoid}. No functionality is added. Some return types are
+ * updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -70,7 +71,6 @@ public interface AdditiveMonoid<V extends Object>
 	 */
 	public boolean isZeroElement(Element element);
 
-	// The following methods are overridden from Monoid with an adapted return type
 	@Override
 	public AdditiveElement<V> getIdentityElement();
 

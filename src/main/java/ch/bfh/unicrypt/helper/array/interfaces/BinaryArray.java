@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.array.interfaces;
 
+import ch.bfh.unicrypt.helper.array.classes.BitArray;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+
 /**
  * This interface extends {@link DefaultValueArray} with some additional methods to perform binary operations on
  * existing binary arrays. For this to work, the generic type of the array needs to be interpretable as binary data. The

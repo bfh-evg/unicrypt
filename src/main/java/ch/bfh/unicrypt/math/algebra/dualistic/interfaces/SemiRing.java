@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
@@ -58,7 +59,8 @@ import java.math.BigInteger;
 /**
  * TODO This interface represents the mathematical concept of a semiring. A semiring is a monoid with a second
  * associative compositions: the first binary operation is called "addition" and is commutative and the second binary
- * operation is called "multiplication". It is implemented as a specialization of {@link Monoid}.
+ * operation is called "multiplication". It is implemented as a specialization of {@link Monoid}. Some return types are
+ * updated.
  * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values stored in the elements of this semiring
@@ -66,7 +68,6 @@ import java.math.BigInteger;
 public interface SemiRing<V extends Object>
 	   extends AdditiveMonoid<V>, MultiplicativeMonoid<V> {
 
-	// The following methods are overridden from Set with an adapted return type
 	@Override
 	public <W> DualisticElement<V> getElementFrom(W value, Converter<V, W> converter);
 
@@ -94,7 +95,18 @@ public interface SemiRing<V extends Object>
 	@Override
 	public DualisticElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 
-	// The following methods are overridden from SemiGroup with an adapted return type
+	@Override
+	public Sequence<? extends DualisticElement<V>> getRandomElements();
+
+	@Override
+	public Sequence<? extends DualisticElement<V>> getRandomElements(long n);
+
+	@Override
+	public Sequence<? extends DualisticElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends DualisticElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+
 	@Override
 	public DualisticElement<V> apply(Element element1, Element element2);
 
@@ -122,11 +134,9 @@ public interface SemiRing<V extends Object>
 	@Override
 	public DualisticElement<V> multiSelfApply(Element[] elements, BigInteger[] amounts);
 
-	// The following methods are overridden from Monoid with an adapted return type
 	@Override
 	public DualisticElement<V> getIdentityElement();
 
-	// The following methods are overridden from AdditiveSemiGroup with an adapted return type
 	@Override
 	public DualisticElement<V> add(Element element1, Element element2);
 
@@ -154,11 +164,9 @@ public interface SemiRing<V extends Object>
 	@Override
 	public DualisticElement<V> sumOfProducts(Element[] elements, BigInteger[] amounts);
 
-	// The following methods are overridden from AdditiveMonoid with an adapted return type
 	@Override
 	public DualisticElement<V> getZeroElement();
 
-	// The following methods are overridden from MultiplicativeSemiGroup with an adapted return type
 	@Override
 	public DualisticElement<V> multiply(Element element1, Element element2);
 
@@ -186,7 +194,6 @@ public interface SemiRing<V extends Object>
 	@Override
 	public DualisticElement<V> productOfPowers(Element[] elements, BigInteger[] amounts);
 
-	// The following methods are overridden from MultiplicativeMonoid with an adapted return type
 	@Override
 	public DualisticElement<V> getOneElement();
 

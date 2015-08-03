@@ -116,13 +116,18 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 	}
 
 	@Override
-	public final A replaceAt(int index) {
-		return this.replaceAt(index, this.defaultValue);
+	public final A insert() {
+		return this.insert(this.defaultValue);
 	}
 
 	@Override
 	public final A add() {
 		return this.add(this.defaultValue);
+	}
+
+	@Override
+	public final A replaceAt(int index) {
+		return this.replaceAt(index, this.defaultValue);
 	}
 
 	@Override

@@ -300,11 +300,6 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	public final A add(V value) {
-		return this.insertAt(this.length, value);
-	}
-
-	@Override
 	public final A insertAt(int index, V value) {
 		if (index < 0 || index > this.length) {
 			throw new IndexOutOfBoundsException();
@@ -313,6 +308,16 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 			throw new IllegalArgumentException();
 		}
 		return this.abstractInsertAt(index, value);
+	}
+
+	@Override
+	public final A insert(V value) {
+		return this.insertAt(0, value);
+	}
+
+	@Override
+	public final A add(V value) {
+		return this.insertAt(this.length, value);
 	}
 
 	@Override

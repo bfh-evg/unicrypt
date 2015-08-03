@@ -142,15 +142,15 @@ public class ByteArrayAggregator
 
 					@Override
 					public boolean hasNext() {
-						return currentIndex < value.getLength();
+						return this.currentIndex < value.getLength();
 					}
 
 					@Override
 					public ByteArray next() {
-						ByteArray prefix = value.extract(currentIndex, PREFIX_LENGTH);
+						ByteArray prefix = value.extract(this.currentIndex, PREFIX_LENGTH);
 						int byteLength = new BigInteger(1, prefix.removePrefix(1).getBytes()).intValue();
-						ByteArray next = value.extract(currentIndex, PREFIX_LENGTH + byteLength);
-						currentIndex = currentIndex + PREFIX_LENGTH + byteLength;
+						ByteArray next = value.extract(this.currentIndex, PREFIX_LENGTH + byteLength);
+						this.currentIndex = this.currentIndex + PREFIX_LENGTH + byteLength;
 						return next;
 					}
 				};

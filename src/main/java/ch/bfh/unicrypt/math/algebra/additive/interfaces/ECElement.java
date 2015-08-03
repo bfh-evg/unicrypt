@@ -46,6 +46,13 @@ import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import java.math.BigInteger;
 
+/**
+ * Some return types are updated.
+ * <p>
+ * @author rolfhaenni
+ * @param <V>
+ * @param <DE>
+ */
 public interface ECElement<V, DE extends DualisticElement<V>>
 	   extends AdditiveElement<Point<DE>> {
 
@@ -86,7 +93,6 @@ public interface ECElement<V, DE extends DualisticElement<V>>
 
 	public boolean isZero();
 
-	// The following methods are overridden from Element with an adapted return type
 	@Override
 	public ECElement<V, DE> apply(Element element);
 

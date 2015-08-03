@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.converter.classes.string;
 
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
 import java.math.BigInteger;
+import java.lang.Character;
 
 /**
  * Instances of this class convert {@code BigInteger} values into strings. The radix of the string representation can be
@@ -58,6 +59,7 @@ import java.math.BigInteger;
  */
 public class BigIntegerToString
 	   extends AbstractStringConverter<BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	// a value between 2 and 36

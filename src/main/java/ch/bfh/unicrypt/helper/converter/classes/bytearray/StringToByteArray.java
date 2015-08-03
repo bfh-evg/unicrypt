@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.helper.converter.classes.bytearray;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Instances of this class convert strings into {@code ByteArray} values using the standard Java conversion method

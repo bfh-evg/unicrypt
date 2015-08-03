@@ -174,7 +174,7 @@ public interface Set<V extends Object> {
 	 * Returns {@code true}, if this set is of finite order.
 	 * <p>
 	 * @return {@code true}, if this set is finite, {@code false} otherwise
-	 * @see getOrder()
+	 * @see #getOrder()
 	 */
 	public boolean isFinite();
 
@@ -182,7 +182,7 @@ public interface Set<V extends Object> {
 	 * Returns {@code true}, if the order of this set is known.
 	 * <p>
 	 * @return {@code true}, if if the order is known, {@code false} otherwise
-	 * @see getOrder()
+	 * @see #getOrder()
 	 */
 	public boolean hasKnownOrder();
 
@@ -192,8 +192,8 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @see "Handbook of Applied Cryptography, Definition 2.163"
 	 * @return The set order
-	 * @see getOrderLowerBound()
-	 * @see getOrderUpperBound()
+	 * @see #getOrderLowerBound()
+	 * @see #getOrderUpperBound()
 	 */
 	public BigInteger getOrder();
 
@@ -202,8 +202,7 @@ public interface Set<V extends Object> {
 	 * the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
 	 * @return A lower bound for the set order
-	 * @see getOrder()
-	 * @see getOrderUpperBound()
+	 * @see #getOrder() getOrderUpperBound()
 	 */
 	public BigInteger getOrderLowerBound();
 
@@ -212,8 +211,8 @@ public interface Set<V extends Object> {
 	 * {@link #INFINITE}. If the exact set order is known (or infinite), the exact set order is returned.
 	 * <p>
 	 * @return An upper bound for the set order
-	 * @see getOrder()
-	 * @see getOrderLowerBound()
+	 * @see #getOrder()
+	 * @see #getOrderLowerBound()
 	 */
 	public BigInteger getOrderUpperBound();
 
@@ -221,8 +220,7 @@ public interface Set<V extends Object> {
 	 * If this set is a Cartesian product of sets, the order of the smallest of its sets is returned. Otherwise, the
 	 * result of calling this method is equivalent to {@link Set#getOrderLowerBound()}.
 	 * <p>
-	 * @return The minimal order of this set
-	 * @see getOrderLowerBound()
+	 * @return The minimal order of this set getOrderLowerBound()
 	 */
 	public BigInteger getMinimalOrder();
 
@@ -264,8 +262,7 @@ public interface Set<V extends Object> {
 	 * construct the element using {@link getElement(Object)}.
 	 * <p>
 	 * @param value The given value
-	 * @return {@code true}, if the value represents an element of this set, {@code false} otherwise
-	 * @see getElement(Object)
+	 * @return {@code true}, if the value represents an element of this set, {@code false} otherwise getElement(Object)
 	 */
 	public boolean contains(V value);
 
@@ -274,7 +271,7 @@ public interface Set<V extends Object> {
 	 * <p>
 	 * @param value The given value
 	 * @return The element represented by the value
-	 * @see contains(Object)
+	 * @see #contains(Object)
 	 */
 	public Element<V> getElement(V value);
 

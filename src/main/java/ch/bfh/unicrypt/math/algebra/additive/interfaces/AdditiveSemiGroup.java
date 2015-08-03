@@ -55,7 +55,7 @@ import java.math.BigInteger;
 
 /**
  * This interface provides the renaming of {@link SemiGroup} methods for the case of an additively written semigroup. No
- * functionality is added.
+ * functionality is added. Some return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -66,11 +66,11 @@ public interface AdditiveSemiGroup<V extends Object>
 	   extends SemiGroup<V> {
 
 	/**
-	 * This method is a synonym for {@link #Group.apply(Element, Element)}.
+	 * This method is a synonym for {@link Group#apply(Element, Element)}.
 	 * <p>
-	 * @param element1 the same as in {@link #Group.apply(Element, Element)}
-	 * @param element2 the same as in {@link #Group.apply(Element, Element)}
-	 * @return the same as in {@link #Group.apply(Element, Element)}
+	 * @param element1 the same as in {@link Group#apply(Element, Element)}
+	 * @param element2 the same as in {@link Group#apply(Element, Element)}
+	 * @return the same as in {@link Group#apply(Element, Element)}
 	 */
 	public AdditiveElement<V> add(Element element1, Element element2);
 
@@ -136,7 +136,6 @@ public interface AdditiveSemiGroup<V extends Object>
 	 */
 	public AdditiveElement<V> sumOfProducts(Element[] elements, BigInteger[] amounts);
 
-	// The following methods are overridden from Set with an adapted return type
 	@Override
 	public <W> AdditiveElement<V> getElementFrom(W value, Converter<V, W> converter);
 
@@ -164,7 +163,18 @@ public interface AdditiveSemiGroup<V extends Object>
 	@Override
 	public AdditiveElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 
-	// The following methods are overridden from SemiGroup with an adapted return type
+	@Override
+	public Sequence<? extends AdditiveElement<V>> getRandomElements();
+
+	@Override
+	public Sequence<? extends AdditiveElement<V>> getRandomElements(long n);
+
+	@Override
+	public Sequence<? extends AdditiveElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends AdditiveElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+
 	@Override
 	public AdditiveElement<V> apply(Element element1, Element element2);
 

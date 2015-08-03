@@ -218,13 +218,18 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public CF replaceAt(int index, Function function) {
-		return this.abstractGetInstance(this.functions.replaceAt(index, function));
+	public CF insert(Function function) {
+		return this.abstractGetInstance(this.functions.insert(function));
 	}
 
 	@Override
 	public CF add(Function function) {
 		return this.abstractGetInstance(this.functions.add(function));
+	}
+
+	@Override
+	public CF replaceAt(int index, Function function) {
+		return this.abstractGetInstance(this.functions.replaceAt(index, function));
 	}
 
 	@Override

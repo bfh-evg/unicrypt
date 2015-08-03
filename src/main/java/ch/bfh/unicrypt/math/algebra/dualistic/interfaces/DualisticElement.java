@@ -48,7 +48,7 @@ import java.math.BigInteger;
 
 /**
  * TODO A dualistic element can be understood as an element that can be additive or multiplicative. It is implemented as
- * a specialization of {@link Element}.
+ * a specialization of {@link Element}. Some return types are updated.
  * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values stored in this element
@@ -56,7 +56,6 @@ import java.math.BigInteger;
 public interface DualisticElement<V extends Object>
 	   extends AdditiveElement<V>, MultiplicativeElement<V> {
 
-	// The following methods are overridden from Element with an adapted return type
 	@Override
 	public SemiRing<V> getSet();
 
@@ -81,7 +80,6 @@ public interface DualisticElement<V extends Object>
 	@Override
 	public DualisticElement<V> invert();
 
-	// The following methods are overridden from AdditiveElement with an adapted return type
 	@Override
 	public DualisticElement<V> add(Element element);
 
@@ -103,7 +101,6 @@ public interface DualisticElement<V extends Object>
 	@Override
 	public DualisticElement<V> negate();
 
-	// The following methods are overridden from MultiplicativeElement with an adapted return type
 	@Override
 	public DualisticElement<V> multiply(Element element);
 

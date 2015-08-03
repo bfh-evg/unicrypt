@@ -58,7 +58,7 @@ import java.math.BigInteger;
 
 /**
  * TODO This interface represents an elliptic curve. Its set of points creates an additive group so that adding two
- * points creates another point.
+ * points creates another point. Some return types are updated.
  * <p>
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
@@ -141,7 +141,6 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	 */
 	public ECElement<V, E>[] getY(E xValue);
 
-	//The following methods are overwritten from AdditiveSemiGroup with an adapted return type
 	@Override
 	public ECElement<V, E> add(Element element1, Element element2);
 
@@ -166,7 +165,6 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	@Override
 	public ECElement<V, E> timesTwo(Element element);
 
-	// The following methods are overridden from Set with an adapted return type
 	@Override
 	public <W> ECElement<V, E> getElementFrom(W value, Converter<Point<E>, W> converter);
 
@@ -192,11 +190,20 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	public ECElement<V, E> getRandomElement();
 
 	@Override
-	public ECElement<V, E> getRandomElement(
-		   RandomByteSequence randomByteSequence);
+	public ECElement<V, E> getRandomElement(RandomByteSequence randomByteSequence);
 
-	// The following methods are overridden from SemiGroup with an adapted
-	// return type
+	@Override
+	public Sequence<? extends ECElement<V, E>> getRandomElements();
+
+	@Override
+	public Sequence<? extends ECElement<V, E>> getRandomElements(long n);
+
+	@Override
+	public Sequence<? extends ECElement<V, E>> getRandomElements(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends ECElement<V, E>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+
 	@Override
 	public ECElement<V, E> apply(Element element1, Element element2);
 
@@ -222,11 +229,8 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	public ECElement<V, E> selfApply(Element element);
 
 	@Override
-	public ECElement<V, E> multiSelfApply(Element[] elements,
-		   BigInteger[] amounts);
+	public ECElement<V, E> multiSelfApply(Element[] elements, BigInteger[] amounts);
 
-	// The following methods are overridden from Monoid with an adapted return
-	// type
 	@Override
 	public ECElement<V, E> invert(Element element);
 
@@ -236,8 +240,6 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	@Override
 	public ECElement<V, E> getIdentityElement();
 
-	// The following methods are overridden from Group with an adapted return
-	// type
 	@Override
 	public ECElement<V, E> getDefaultGenerator();
 
@@ -252,7 +254,6 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	public ECElement<V, E> getIndependentGenerator(int index);
 
 	@Override
-	public ECElement<V, E> getIndependentGenerator(int index,
-		   ReferenceRandomByteSequence referenceRandomByteSequence);
+	public ECElement<V, E> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

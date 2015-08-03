@@ -51,7 +51,6 @@ import ch.bfh.unicrypt.UniCrypt;
  * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the input value
- * @see FilteredSequence
  */
 public abstract class Predicate<V>
 	   extends UniCrypt {

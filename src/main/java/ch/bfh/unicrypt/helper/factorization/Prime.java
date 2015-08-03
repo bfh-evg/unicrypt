@@ -155,7 +155,7 @@ public class Prime
 	/**
 	 * Returns the smallest prime number {@code p} of a given bit length such that {@code p-1} divides the smallest
 	 * possible prime number of another given bit length. Such primes are required in
-	 * {@link GStarModPrime#getInstance(int, int)}.
+	 * {@link GStarModPrime#getInstance(Prime, Prime)}.
 	 * <p>
 	 * @param bitLength1 The bit length of {@code p}
 	 * @param bitLength2 The bit length of the factor of {@code p-1}

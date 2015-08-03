@@ -320,14 +320,14 @@ public interface ImmutableArray<V extends Object>
 	public ImmutableArray<V> insertAt(int index, V value);
 
 	/**
-	 * Returns a new immutable array with a single value replaced by a new one. The length of the array remains
-	 * unchanged.
+	 * Returns a new immutable array with an additional value inserted at the front. This is equivalent to
+	 * {@code insertAt(0, value)}.
 	 * <p>
-	 * @param index The index of the value to be replaced
-	 * @param value The new value replacing the old one
-	 * @return The new immutable array with the replaced value
+	 * @param value The new value to be inserted
+	 * @return The new immutable array with the inserted value
+	 * @see ImmutableArray#insertAt(int, java.lang.Object)
 	 */
-	public ImmutableArray<V> replaceAt(int index, V value);
+	public ImmutableArray<V> insert(V value);
 
 	/**
 	 * Returns a new immutable array with an additional value inserted at its end. This is equivalent to
@@ -338,6 +338,16 @@ public interface ImmutableArray<V extends Object>
 	 * @see ImmutableArray#insertAt(int, java.lang.Object)
 	 */
 	public ImmutableArray<V> add(V value);
+
+	/**
+	 * Returns a new immutable array with a single value replaced by a new one. The length of the array remains
+	 * unchanged.
+	 * <p>
+	 * @param index The index of the value to be replaced
+	 * @param value The new value replacing the old one
+	 * @return The new immutable array with the replaced value
+	 */
+	public ImmutableArray<V> replaceAt(int index, V value);
 
 	/**
 	 * Returns a new immutable array by appending two existing immutable arrays. The length of the new immutable array

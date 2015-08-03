@@ -118,15 +118,10 @@ public class ByteArrayToBigInteger
 		return value.signum() >= 0;
 	}
 
-	/**
-	 * For blocklLength=1, there is 1 byte array of length 0, 256 of length 1, 65536 of length 2, etc. For
-	 * blocklLength=2, there is 1 byte array of length 0, 65536 of length 2, etc. To convert an input byte array, the
-	 * number of all byte arrays shorter than the input array is computed and added to the integer represented by the
-	 * byte array (unsigned, big endian).
-	 * <p>
-	 * @param byteArray
-	 * @return
-	 */
+	// For blocklLength=1, there is 1 byte array of length 0, 256 of length 1, 65536 of length 2, etc. For
+	// blocklLength=2, there is 1 byte array of length 0, 65536 of length 2, etc. To convert an input byte array, the
+	// number of all byte arrays shorter than the input array is computed and added to the integer represented by the
+	// byte array (unsigned, big endian).
 	@Override
 	protected BigInteger abstractConvert(ByteArray byteArray) {
 		BigInteger blockSize = MathUtil.powerOfTwo(this.blockLength * Byte.SIZE);

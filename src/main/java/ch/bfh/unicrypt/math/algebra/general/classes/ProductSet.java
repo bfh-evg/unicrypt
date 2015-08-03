@@ -404,13 +404,18 @@ public class ProductSet
 	}
 
 	@Override
-	public ProductSet replaceAt(int index, Set set) {
-		return ProductSet.getInstance(this.sets.replaceAt(index, set));
+	public ProductSet insert(Set set) {
+		return ProductSet.getInstance(this.sets.insert(set));
 	}
 
 	@Override
 	public ProductSet add(Set set) {
 		return ProductSet.getInstance(this.sets.add(set));
+	}
+
+	@Override
+	public ProductSet replaceAt(int index, Set set) {
+		return ProductSet.getInstance(this.sets.replaceAt(index, set));
 	}
 
 	@Override
