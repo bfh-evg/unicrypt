@@ -43,76 +43,79 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
-import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
-import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
-import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
+import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
+import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
-public class ZModPrimeToECPolynomialFieldEncoder
-	   extends AbstractEncoder<ZModPrime, ZModElement, ECPolynomialField, ECPolynomialElement>
-	   implements ProbabilisticEncoder {
+public class ZModPrimeToEC
+	   extends AbstractEncoder<ZModPrime, ZModElement, EC, ECElement> {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-	private final ZModPrime zMod;
-	private final ECPolynomialField ecPoly;
-	private int shift;
+	private final ZModPrime zModPrime;
+	private final EC ec;
+	private AbstractEncoder encoder;
+	private final int shift;
 
-	private ZModPrimeToECPolynomialFieldEncoder(ZModPrime zMod, ECPolynomialField ecPoly, int shift) {
+	protected ZModPrimeToEC(ZModPrime zModPrime, EC ec, int shift) {
 		super();
-		this.zMod = zMod;
-		this.ecPoly = ecPoly;
+		this.zModPrime = zModPrime;
+		this.ec = ec;
 		this.shift = shift;
+
+		if (ECPolynomialField.class.isInstance(ec)) {
+			ZMod zmod = ZMod.getInstance(ec.getOrder());
+			encoder = ZModToBinaryPolynomialField.getInstance(zmod, (PolynomialField) ec.getFiniteField());
+		} else if (ECZModPrime.class.isInstance(ec)) {
+			encoder = GeneralEncoder.getInstance(ec.getFiniteField(), ec.getFiniteField());
+		}
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new ECF2mEncodingFunction(this.zMod, this.ecPoly, shift);
+		return new EncodingFunction(this.zModPrime, this.ec, this.shift, encoder);
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new ECF2mDecodingFunction(this.getCoDomain(), this.getDomain(), shift);
+		return new DecodingFunction(ec, zModPrime, this.shift, encoder);
 	}
 
-	public static ZModPrimeToECPolynomialFieldEncoder getInstance(final ZModPrime zMod, final ECPolynomialField ec,
-		   int shift) {
-		if (ec == null || zMod == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ZModPrimeToECPolynomialFieldEncoder(zMod, ec, shift);
+	public static ZModPrimeToEC getInstance(ZModPrime zModPrime, EC ec, int shift) {
+		return new ZModPrimeToEC(zModPrime, ec, shift);
 	}
 
-	static class ECF2mEncodingFunction
-		   extends
-		   AbstractFunction<ECF2mEncodingFunction, ZModPrime, ZModElement, ECPolynomialField, ECPolynomialElement> {
+	static class EncodingFunction
+		   extends AbstractFunction<EncodingFunction, ZModPrime, ZModElement, EC, ECElement> {
 
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
 		private int shift;
+		private AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder;
 
-		protected ECF2mEncodingFunction(ZModPrime domain, ECPolynomialField coDomain, int shift) {
+		protected EncodingFunction(ZModPrime domain, EC coDomain, int shift,
+			   AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder) {
 			super(domain, coDomain);
 			this.shift = shift;
+			this.encoder = encoder;
 		}
 
 		@Override
-		protected ECPolynomialElement abstractApply(ZModElement element,
+		protected ECElement abstractApply(ZModElement element,
 			   RandomByteSequence randomByteSequence) {
+
 			boolean firstOption = true;
 
 			ZModPrime zModPrime = this.getDomain();
-			ECPolynomialField ec = this.getCoDomain();
+			EC ec = this.getCoDomain();
 
 			int msgSpace = zModPrime.getOrder().toString(2).length();
 			int msgBitLength = element.getValue().toString(2).length() + 2;
@@ -137,29 +140,26 @@ public class ZModPrimeToECPolynomialFieldEncoder
 			e = e.add(c);
 
 			ZModElement zModElement = this.getDomain().getElement(e);
-
-			ZModToBinaryPolynomialEncoder enc =
-				   ZModToBinaryPolynomialEncoder.getInstance(zModPrime, ec.getFiniteField());
-			PolynomialElement x = enc.encode(zModElement);
+			DualisticElement x = encoder.encode(zModElement);
 			ZModElement stepp = zModPrime.getElement(4);
 
 			int count = 0;
 			while (!ec.contains(x)) {
 				if (count >= (1 << shift)) {
-					firstOption=false;
+					firstOption = false;
 				}
 
 				zModElement = zModElement.add(stepp);
 
-				x = enc.encode(zModElement);
+				x = encoder.encode(zModElement);
 				count++;
 
 			}
 
 			if (firstOption) {
-				ECPolynomialElement[] y = ec.getY(x);
-				PolynomialElement y1 = y[0].getY();
-				PolynomialElement y2 = y[1].getY();
+				ECElement[] y = ec.getY(x);
+				DualisticElement y1 = y[0].getY();
+				DualisticElement y2 = y[1].getY();
 				if (isBigger(y1, y2)) {
 					return y[0];
 
@@ -187,7 +187,7 @@ public class ZModPrimeToECPolynomialFieldEncoder
 				e = e.shiftLeft(shift + 2);
 				e = e.add(c);
 
-				x = enc.encode(zModElement);
+				x = encoder.encode(zModElement);
 
 				count = 0;
 				while (!ec.contains(x)) {
@@ -196,14 +196,14 @@ public class ZModPrimeToECPolynomialFieldEncoder
 					}
 
 					zModElement = zModElement.add(stepp);
-					x = enc.encode(zModElement);
+					x = encoder.encode(zModElement);
 					count++;
 
 				}
 
-				ECPolynomialElement[] y = ec.getY(x);
-				PolynomialElement y1 = y[0].getY();
-				PolynomialElement y2 = y[1].getY();
+				ECElement[] y = ec.getY(x);
+				DualisticElement y1 = y[0].getY();
+				DualisticElement y2 = y[1].getY();
 
 				if (isBigger(y1, y2)) {
 					return y[1];
@@ -215,36 +215,32 @@ public class ZModPrimeToECPolynomialFieldEncoder
 
 	}
 
-	static class ECF2mDecodingFunction
-		   extends
-		   AbstractFunction<ECF2mDecodingFunction, ECPolynomialField, ECPolynomialElement, ZModPrime, ZModElement> {
+	static class DecodingFunction
+		   extends AbstractFunction<DecodingFunction, EC, ECElement, ZModPrime, ZModElement> {
 
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
 		private int shift;
+		private AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder;
 
-		public ECF2mDecodingFunction(ECPolynomialField domain, ZModPrime coDomain, int shift) {
+		protected DecodingFunction(Set domain, Set coDomain, int shift,
+			   AbstractEncoder<ZMod, ZModElement, FiniteField, DualisticElement> encoder) {
 			super(domain, coDomain);
 			this.shift = shift;
+			this.encoder = encoder;
+
 		}
 
 		@Override
-		protected ZModElement abstractApply(ECPolynomialElement element,
+		protected ZModElement abstractApply(ECElement element,
 			   RandomByteSequence randomByteSequence) {
-
 			ZModPrime zModPrime = this.getCoDomain();
-			ECPolynomialField ec = this.getDomain();
+			EC ec = this.getDomain();
 			int msgSpace = zModPrime.getOrder().toString(2).length();
-			ZModToBinaryPolynomialEncoder enc =
-				   ZModToBinaryPolynomialEncoder.getInstance(zModPrime, ec.getFiniteField());
 
-			PolynomialElement x = element.getX();
-			PolynomialElement y = element.getY();
-			PolynomialElement y1 = element.invert().getY();
+			DualisticElement x = element.getX();
+			DualisticElement y = element.getY();
+			DualisticElement y1 = element.invert().getY();
 
-			BigInteger x1 = enc.decode(x).convertToBigInteger();
+			BigInteger x1 = encoder.decode(x).convertToBigInteger();
 
 			BigInteger c = x1.subtract(x1.shiftRight(2).shiftLeft(2));
 
@@ -263,37 +259,16 @@ public class ZModPrimeToECPolynomialFieldEncoder
 			} else {
 				return zModPrime.getElement(x1).invert();
 			}
-
 		}
 
 	}
 
-	/**
-	 * Compares the two polynomial elements and return the element with the most significant coefficient not in common.
-	 * <p>
-	 * @param y1
-	 * @param y2
-	 * @return
-	 */
-	public static PolynomialElement getBiggerY(PolynomialElement y1, PolynomialElement y2) {
-		int deg = y1.add(y2).getValue().getDegree();
-		BigInteger y1Coeff = y1.getValue().getCoefficient(deg).convertToBigInteger();
-		BigInteger y2Coeff = y2.getValue().getCoefficient(deg).convertToBigInteger();
-
-		if (y1Coeff.compareTo(y2Coeff) > 0) {
-			return y1;
-		}
-		return y2;
+	public static DualisticElement getBiggerY(DualisticElement y1, DualisticElement y2) {
+		return y1;
 	}
 
-	/**
-	 * Compares y1 and y2 and returns if y1 is bigger then y2 -> getBiggerY
-	 * <p>
-	 * @param y1
-	 * @param y2
-	 * @return
-	 */
-	public static boolean isBigger(PolynomialElement y1, PolynomialElement y2) {
+	public static boolean isBigger(DualisticElement y1, DualisticElement y2) {
 		return y1.isEquivalent(getBiggerY(y1, y2));
 	}
+
 }

@@ -137,4 +137,6 @@ public interface BinaryArray<V extends Object>
 	 */
 	public BinaryArray<V> not();
 
+	public Class<?> getBaseClass();
+
 }

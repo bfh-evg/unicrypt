@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -41,49 +41,66 @@
  */
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
-import ch.bfh.unicrypt.crypto.encoder.BigIntegerConvertFunction;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
-import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
+import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import java.math.BigInteger;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author rolfhaenni
  */
-public class StringToByteArrayEncoder
-			 extends AbstractEncoder<StringMonoid, StringElement, ByteArrayMonoid, ByteArrayElement> {
+public class GeneralBigIntegerEncoder
+	   extends AbstractEncoder<Set, Element, Set, Element> {
 
-	private final StringMonoid stringMonoid;
+	private final Set domain;
+	private final Set coDomain;
 
-	protected StringToByteArrayEncoder(StringMonoid stringMonoid) {
-		this.stringMonoid = stringMonoid;
-	}
-
-	public StringMonoid getStringMonoid() {
-		return this.stringMonoid;
-	}
-
-	public ByteArrayToStringEncoder getDecoder() {
-		return ByteArrayToStringEncoder.getInstance(this.getStringMonoid());
+	private GeneralBigIntegerEncoder(Set<?> domain, Set<?> coDomain) {
+		this.domain = domain;
+		this.coDomain = coDomain;
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return BigIntegerConvertFunction.getInstance(this.getStringMonoid(), ByteArrayMonoid.getInstance());
+		return new AbstractFunction(this.domain, this.coDomain) {
+
+			@Override
+			protected Element abstractApply(Element element, RandomByteSequence randomByteSequence) {
+				BigInteger bigInteger = element.convertToBigInteger();
+				Element result = coDomain.getElementFrom(bigInteger);
+				if (result == null) {
+					throw new IllegalArgumentException();
+				}
+				return result;
+			}
+		};
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return BigIntegerConvertFunction.getInstance(ByteArrayMonoid.getInstance(), this.getStringMonoid());
+		return new AbstractFunction(this.coDomain, this.domain) {
+
+			@Override
+			protected Element abstractApply(Element element, RandomByteSequence randomByteSequence) {
+				BigInteger bigInteger = element.convertToBigInteger();
+				Element result = domain.getElementFrom(bigInteger);
+				if (result == null) {
+					throw new IllegalArgumentException();
+				}
+				return result;
+			}
+		};
 	}
 
-	public static StringToByteArrayEncoder getInstance(StringMonoid stringMonoid) {
-		if (stringMonoid == null) {
+	public static GeneralBigIntegerEncoder getInstance(Set domain, Set coDomain) {
+		if (domain == null | coDomain == null) {
 			throw new IllegalArgumentException();
 		}
-		return new StringToByteArrayEncoder(stringMonoid);
+		return new GeneralBigIntegerEncoder(domain, coDomain);
 	}
+
 }

@@ -331,4 +331,9 @@ public class BitArray
 		return new BitArray(this.getByteArray().not(), this.length);
 	}
 
+	@Override
+	public Class<?> getBaseClass() {
+		return BitArray.class;
+	}
+
 }

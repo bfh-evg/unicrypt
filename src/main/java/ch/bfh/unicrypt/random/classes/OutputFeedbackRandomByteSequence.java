@@ -162,26 +162,12 @@ public class OutputFeedbackRandomByteSequence
 
 	@Override
 	public ByteArray getNextByteArray(int length) {
-		return new RandomizedByteArray(this.getNextBytes(length));
+		return new SafeByteArray(this.getNextBytes(length));
 	}
 
 	@Override
 	public byte getNextByte() {
 		return this.getNextBytes(1)[0];
-	}
-
-	/**
-	 * This class allows the access to the protected constructor of ByteArray... This way no copy of the array is
-	 * needed.
-	 */
-	private class RandomizedByteArray
-		   extends ByteArray {
-		private static final long serialVersionUID = 1L;
-
-		private RandomizedByteArray(byte[] randomBytes) {
-			super(randomBytes);
-		}
-
 	}
 
 	@Override

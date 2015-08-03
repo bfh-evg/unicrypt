@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import ch.bfh.unicrypt.crypto.encoder.classes.ZModToBinaryPolynomialEncoder;
-import ch.bfh.unicrypt.crypto.encoder.classes.ZModPrimeToECPolynomialFieldEncoder;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModToBinaryPolynomialField;
+import ch.bfh.unicrypt.crypto.encoder.classes.ZModPrimeToECPolynomialField;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
@@ -21,7 +21,7 @@ public class ZModToECPolynomialFieldTest {
 	public void encodeDecodeTest() throws Exception {
 		ECPolynomialField ec=ECPolynomialField.getInstance(SECECCParamsF2m.sect113r1);
 		ZModPrime zmod=ec.getZModOrder();
-		Encoder enc=ZModPrimeToECPolynomialFieldEncoder.getInstance(zmod, ec, 15);
+		Encoder enc=ZModPrimeToECPolynomialField.getInstance(zmod, ec, 15);
 		
 		ZModElement message=zmod.getElement(167);
 		Element encMessage=enc.encode(message);

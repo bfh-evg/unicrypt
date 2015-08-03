@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.random.abstracts;
 
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
@@ -49,6 +50,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
 public abstract class AbstractRandomByteSequence
+	   extends UniCrypt
 	   implements RandomByteSequence {
 
 	protected final RandomNumberGenerator randomNumberGenerator;

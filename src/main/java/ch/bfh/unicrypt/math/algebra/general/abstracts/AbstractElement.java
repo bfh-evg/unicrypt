@@ -186,9 +186,6 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		return hashMethod.getHashValue(this.convertTo(convertMethod));
 	}
 
-	//
-	// The following methods are equivalent to corresponding Set methods
-	//
 	/**
 	 * @see Group#apply(Element, Element)
 	 */
@@ -334,23 +331,23 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		return this.value.equals(other.getValue());
 	}
 
-	// this method is overriden in Tuple
+	// this method is overridden in Tuple
 	protected <W> Tree<W> defaultConvertTo(final ConvertMethod<W> convertMethod) {
 		Converter<V, W> converter = this.set.getConverter(convertMethod);
 		return Tree.getInstance(converter.convert(this.value));
 	}
 
-	// this method is overriden in Tuple
+	// this method is overridden in Tuple
 	protected BigInteger defaultConvertToBigInteger() {
 		return this.convertTo(this.set.getBigIntegerConverter());
 	}
 
-	// this method is overriden in Tuple
+	// this method is overridden in Tuple
 	protected ByteArray defaultConvertToByteArray() {
 		return this.convertTo(this.set.getByteArrayConverter());
 	}
 
-	// this method is overriden in Tuple
+	// this method is overridden in Tuple
 	protected String defaultConvertToString() {
 		return this.convertTo(this.set.getStringConverter());
 	}

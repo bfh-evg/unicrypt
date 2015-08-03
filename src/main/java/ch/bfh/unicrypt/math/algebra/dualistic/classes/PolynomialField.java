@@ -61,6 +61,7 @@ import java.math.BigInteger;
 public class PolynomialField
 	   extends PolynomialRing
 	   implements FiniteField<Polynomial<? extends DualisticElement<BigInteger>>> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final PolynomialElement irreduciblePolynomial;
@@ -82,10 +83,6 @@ public class PolynomialField
 		return this.irreduciblePolynomial.getValue().getDegree();
 	}
 
-	//
-	// The following protected methods override the default implementation from
-	// various super-classes
-	//
 	@Override
 	protected BigInteger abstractGetOrder() {
 		// p^m
@@ -126,8 +123,7 @@ public class PolynomialField
 
 	@Override
 	public MultiplicativeGroup<Polynomial<? extends DualisticElement<BigInteger>>> getMultiplicativeGroup() {
-		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact
-		// 2.229/2.230)
+		// TODO Create muliplicative.classes.FStar (Definition 2.228, Fact 2.229/2.230)
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -139,9 +135,8 @@ public class PolynomialField
 		if (element1.isEquivalent(this.getZeroElement()) || element2.isEquivalent(this.getZeroElement())) {
 			return this.getZeroElement();
 		}
-		final PolynomialRing ring =
-			   PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>)
-					  this.getSemiRing());
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
 		PolynomialElement result;
 		if (this.isBinary()) {
 			result = ring.getElementUnchecked(multiplyBinary(polynomial1, polynomial2));
@@ -202,6 +197,7 @@ public class PolynomialField
 	 * Computes a solution for the quadratic equation z²+z=b for any polynomial basis. Source: AMERICAN NATIONAL
 	 * STANDARD X9.62 D.1.6
 	 * <p>
+	 * @param b
 	 * @return PolynomialElement z which is a solution for the quadratic equation z²+z=b
 	 */
 	public PolynomialElement solveQuadradicEquation(PolynomialElement b) {
@@ -265,28 +261,20 @@ public class PolynomialField
 		return true;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
-	public static <V> PolynomialField getInstance(PrimeField primeField,
-		   int degree) {
-		return getInstance(primeField, degree,
-						   HybridRandomByteSequence.getInstance());
+	public static <V> PolynomialField getInstance(PrimeField primeField, int degree) {
+		return getInstance(primeField, degree, HybridRandomByteSequence.getInstance());
 	}
 
-	public static <V> PolynomialField getInstance(PrimeField primeField,
-		   int degree, RandomByteSequence randomByteSequence) {
+	public static <V> PolynomialField getInstance(PrimeField primeField, int degree, RandomByteSequence randomByteSequence) {
 		if (primeField == null || degree < 1) {
 			throw new IllegalArgumentException();
 		}
 		PolynomialRing ring = PolynomialRing.getInstance(primeField);
-		PolynomialElement irreduciblePolynomial = ring
-			   .findIrreduciblePolynomial(degree, randomByteSequence);
+		PolynomialElement irreduciblePolynomial = ring.findIrreduciblePolynomial(degree, randomByteSequence);
 		return new PolynomialField(primeField, irreduciblePolynomial);
 	}
 
-	public static PolynomialField getInstance(PrimeField primeField,
-		   PolynomialElement irreduciblePolynomial) {
+	public static PolynomialField getInstance(PrimeField primeField, PolynomialElement irreduciblePolynomial) {
 		if (primeField == null
 			   || irreduciblePolynomial == null
 			   || !irreduciblePolynomial.getSet().getSemiRing()

@@ -104,7 +104,7 @@ public abstract class AbstractBinaryArray<A extends AbstractBinaryArray<A, V>, V
 	}
 
 	protected A andOrXor(Operator operator, BinaryArray<V> other, boolean maxLength, boolean fillBit) {
-		if (other == null || !this.getClass().isInstance(other)) {
+		if (other == null || this.getBaseClass() != other.getBaseClass()) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractAndOrXor(operator, (A) other, maxLength, fillBit);

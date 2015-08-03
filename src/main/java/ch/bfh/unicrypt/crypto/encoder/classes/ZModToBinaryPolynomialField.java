@@ -60,7 +60,7 @@ import java.math.BigInteger;
  * @author lutzch
  * <p>
  */
-public class ZModToBinaryPolynomialEncoder
+public class ZModToBinaryPolynomialField
 	   extends AbstractEncoder<ZMod, ZModElement, PolynomialField, PolynomialElement> {
 
 	/**
@@ -68,30 +68,30 @@ public class ZModToBinaryPolynomialEncoder
 	 */
 	private static final long serialVersionUID = -4567955434932946745L;
 	private final ZMod zMod;
-	private final PolynomialField binaryPolynomial;
+	private final PolynomialField binaryPolynomialField;
 	private final BitArrayToBigInteger bitToBigIntConverter;
 
-	private ZModToBinaryPolynomialEncoder(ZMod zMod, PolynomialField binaryPolynomial) {
+	private ZModToBinaryPolynomialField(ZMod zMod, PolynomialField binaryPolynomialField) {
 		this.zMod = zMod;
-		this.binaryPolynomial = binaryPolynomial;
+		this.binaryPolynomialField = binaryPolynomialField;
 		this.bitToBigIntConverter = BitArrayToBigInteger.getInstance();
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new EncodingFunction(this.zMod, this.binaryPolynomial);
+		return new EncodingFunction(this.zMod, this.binaryPolynomialField);
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new DecodingFunction(this.binaryPolynomial, this.zMod);
+		return new DecodingFunction(this.binaryPolynomialField, this.zMod);
 	}
 
-	public static ZModToBinaryPolynomialEncoder getInstance(ZMod zMod, PolynomialField polynomialField) {
-		if (zMod == null || polynomialField == null) {
+	public static ZModToBinaryPolynomialField getInstance(ZMod zMod, PolynomialField binaryPolynomialField) {
+		if (zMod == null || binaryPolynomialField == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ZModToBinaryPolynomialEncoder(zMod, polynomialField);
+		return new ZModToBinaryPolynomialField(zMod, binaryPolynomialField);
 	}
 
 	class EncodingFunction
@@ -123,7 +123,6 @@ public class ZModToBinaryPolynomialEncoder
 		 */
 		private static final long serialVersionUID = 8382498527678953467L;
 
-
 		protected DecodingFunction(final PolynomialField domain, final ZMod coDomain) {
 			super(domain, coDomain);
 		}
@@ -132,7 +131,7 @@ public class ZModToBinaryPolynomialEncoder
 		protected ZModElement abstractApply(final PolynomialElement element,
 			   final RandomByteSequence randomByteSequence) {
 			BitArray bitArray = element.getValue().getCoefficients();
-			BigInteger bigInt= bitToBigIntConverter.convert(bitArray);
+			BigInteger bigInt = bitToBigIntConverter.convert(bitArray);
 			return this.getCoDomain().getElement(bigInt.mod(this.getCoDomain().getModulus()));
 		}
 

@@ -52,12 +52,12 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
-public class ZModToGStarModSafePrimeEncoder
+public class ZModPrimeToGStarModSafePrime
 	   extends AbstractEncoder<ZModPrime, ZModElement, GStarModSafePrime, GStarModElement> {
 
 	private final GStarModSafePrime gStarModSafePrime;
 
-	protected ZModToGStarModSafePrimeEncoder(GStarModSafePrime gStarModSafePrime) {
+	protected ZModPrimeToGStarModSafePrime(GStarModSafePrime gStarModSafePrime) {
 		this.gStarModSafePrime = gStarModSafePrime;
 	}
 
@@ -67,19 +67,19 @@ public class ZModToGStarModSafePrimeEncoder
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new EncodingFunction(this.getGStarModSafePrime().getZModOrder(), this.getGStarModSafePrime());
+		return new EncodingFunction(this.gStarModSafePrime.getZModOrder(), this.gStarModSafePrime);
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new DecodingFunction(this.getGStarModSafePrime(), this.getGStarModSafePrime().getZModOrder());
+		return new DecodingFunction(this.gStarModSafePrime, this.gStarModSafePrime.getZModOrder());
 	}
 
-	public static ZModToGStarModSafePrimeEncoder getInstance(GStarModSafePrime gStarModSafePrime) {
+	public static ZModPrimeToGStarModSafePrime getInstance(GStarModSafePrime gStarModSafePrime) {
 		if (gStarModSafePrime == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ZModToGStarModSafePrimeEncoder(gStarModSafePrime);
+		return new ZModPrimeToGStarModSafePrime(gStarModSafePrime);
 	}
 
 	static class EncodingFunction
@@ -121,4 +121,5 @@ public class ZModToGStarModSafePrimeEncoder
 		}
 
 	}
+
 }

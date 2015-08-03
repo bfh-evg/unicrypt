@@ -75,10 +75,6 @@ public class StringMonoid
 		return StringToString.getInstance();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected BigInteger abstractGetOrder() {
 		return Set.INFINITE;

@@ -145,6 +145,33 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 		return (value != null) && this.defaultIsValidOutput(value);
 	}
 
+	@Override
+	public final Converter<W, V> invert() {
+		final Converter<V, W> converter = this;
+		return new AbstractConverter<W, V>(this.outputClass, this.inputClass) {
+
+			@Override
+			protected V abstractConvert(W value) {
+				return converter.reconvert(value);
+			}
+
+			@Override
+			protected W abstractReconvert(V value) {
+				return converter.convert(value);
+			}
+
+			@Override
+			protected boolean defaultIsValidInput(W value) {
+				return converter.isValidOutput(value);
+			}
+
+			@Override
+			protected boolean defaultIsValidOutput(V value) {
+				return converter.isValidInput(value);
+			}
+		};
+	}
+
 	protected boolean defaultIsValidInput(V value) {
 		return true;
 	}

@@ -331,7 +331,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		}
 		try {
 			V convertedValue = converter.reconvert(value);
-			return this.abstractGetElement(convertedValue);
+			return this.getElement(convertedValue);
 		} catch (Exception e) {
 			return null;
 		}
@@ -526,7 +526,7 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		}
 		W value = ((Leaf<W>) tree).getValue();
 		Converter<V, W> converter = this.getConverter(convertMethod);
-		return this.abstractGetElement(converter.reconvert(value));
+		return this.getElement(converter.reconvert(value));
 	}
 
 	// this method is overridden in ProductSet

@@ -134,7 +134,7 @@ public class ZMod
 
 	@Override
 	protected ZModElement abstractInvert(ZModElement element) {
-		return this.abstractGetElement(this.modulus.subtract(element.getValue()));
+		return this.abstractGetElement(this.modulus.subtract(element.getValue()).mod(this.modulus));
 	}
 
 	@Override

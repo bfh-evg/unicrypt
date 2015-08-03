@@ -130,4 +130,6 @@ public interface Converter<V extends Object, W extends Object> {
 	 */
 	public Class<W> getOutputClass();
 
+	public Converter<W, V> invert();
+
 }

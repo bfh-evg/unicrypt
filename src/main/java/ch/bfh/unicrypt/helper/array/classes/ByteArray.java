@@ -597,4 +597,9 @@ public class ByteArray
 		return MathUtil.and(mask1, mask2);
 	}
 
+	@Override
+	public Class<?> getBaseClass() {
+		return ByteArray.class;
+	}
+
 }
