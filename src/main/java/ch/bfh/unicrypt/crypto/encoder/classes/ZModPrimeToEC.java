@@ -77,7 +77,7 @@ public class ZModPrimeToEC
 			ZMod zmod = ZMod.getInstance(ec.getOrder());
 			encoder = ZModToBinaryPolynomialField.getInstance(zmod, (PolynomialField) ec.getFiniteField());
 		} else if (ECZModPrime.class.isInstance(ec)) {
-			encoder = GeneralEncoder.getInstance(ec.getFiniteField(), ec.getFiniteField());
+			encoder = ValueEncoder.getInstance(ec.getFiniteField(), ec.getFiniteField());
 		}
 	}
 

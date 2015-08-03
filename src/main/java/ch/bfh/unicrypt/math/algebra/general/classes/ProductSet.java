@@ -49,6 +49,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.sequence.Mapping;
@@ -116,10 +117,6 @@ public class ProductSet
 		return this.abstractGetElement(DenseArray.getInstance(elements));
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected BigInteger abstractGetOrder() {
 		if (this.isEmpty()) {
@@ -175,7 +172,19 @@ public class ProductSet
 
 	@Override
 	protected Converter<DenseArray<Element>, BigInteger> abstractGetBigIntegerConverter() {
-		return null; // this method is not needed in this class
+		// this method is only provided for external use, internally the conversion is overridden
+		return new AbstractConverter<DenseArray<Element>, BigInteger>(null, null) {
+
+			@Override
+			protected BigInteger abstractConvert(DenseArray<Element> elements) {
+				return Tuple.getInstance(elements).defaultConvertToBigInteger();
+			}
+
+			@Override
+			protected DenseArray<Element> abstractReconvert(BigInteger value) {
+				return getElementFrom(value).getValue();
+			}
+		};
 	}
 
 	@Override

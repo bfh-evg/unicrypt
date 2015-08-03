@@ -399,4 +399,10 @@ public interface Set<V extends Object> {
 	 */
 	public Element<V> getElementFrom(String value);
 
+	public Converter<V, BigInteger> getBigIntegerConverter();
+
+	public Converter<V, ByteArray> getByteArrayConverter();
+
+	public Converter<V, String> getStringConverter();
+
 }

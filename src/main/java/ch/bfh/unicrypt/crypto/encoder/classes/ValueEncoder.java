@@ -42,7 +42,8 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.TrivialConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -53,15 +54,25 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  *
  * @author rolfhaenni
  */
-public class GeneralByteArrayEncoder
+public class ValueEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element> {
 
 	private final Set domain;
 	private final Set coDomain;
+	private final Converter converter1;
+	private final Converter converter2;
 
-	private GeneralByteArrayEncoder(Set<?> domain, Set<?> coDomain) {
+	public enum DefaultConverter {
+
+		BIG_INTEGER, STRING, BYTE_ARRAY
+
+	};
+
+	private ValueEncoder(Set domain, Set coDomain, Converter converter1, Converter converter2) {
 		this.domain = domain;
 		this.coDomain = coDomain;
+		this.converter1 = converter1;
+		this.converter2 = converter2;
 	}
 
 	@Override
@@ -70,8 +81,8 @@ public class GeneralByteArrayEncoder
 
 			@Override
 			protected Element abstractApply(Element element, RandomByteSequence randomByteSequence) {
-				ByteArray string = element.convertToByteArray();
-				Element result = coDomain.getElementFrom(string);
+				Object value = element.convertTo(converter1);
+				Element result = coDomain.getElementFrom(value, converter2);
 				if (result == null) {
 					throw new IllegalArgumentException();
 				}
@@ -86,8 +97,8 @@ public class GeneralByteArrayEncoder
 
 			@Override
 			protected Element abstractApply(Element element, RandomByteSequence randomByteSequence) {
-				ByteArray string = element.convertToByteArray();
-				Element result = domain.getElementFrom(string);
+				Object value = element.convertTo(converter2);
+				Element result = domain.getElementFrom(value, converter1);
 				if (result == null) {
 					throw new IllegalArgumentException();
 				}
@@ -96,11 +107,50 @@ public class GeneralByteArrayEncoder
 		};
 	}
 
-	public static GeneralByteArrayEncoder getInstance(Set domain, Set coDomain) {
-		if (domain == null | coDomain == null) {
+	public static ValueEncoder getInstance(Set domain, Set coDomain, DefaultConverter mode) {
+		if (domain == null || coDomain == null || mode == null) {
 			throw new IllegalArgumentException();
 		}
-		return new GeneralByteArrayEncoder(domain, coDomain);
+		Converter converter1;
+		Converter converter2;
+		switch (mode) {
+			case BIG_INTEGER:
+				converter1 = domain.getBigIntegerConverter();
+				converter2 = coDomain.getBigIntegerConverter();
+				break;
+			case STRING:
+				converter1 = domain.getStringConverter();
+				converter2 = coDomain.getStringConverter();
+				break;
+			case BYTE_ARRAY:
+				converter1 = domain.getByteArrayConverter();
+				converter2 = coDomain.getByteArrayConverter();
+				break;
+			default:
+				throw new IllegalStateException();
+		}
+		return new ValueEncoder(domain, coDomain, converter1, converter2);
+	}
+
+	public static <V> ValueEncoder getInstance(Set<V> domain, Set<V> coDomain) {
+		if (domain == null || coDomain == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ValueEncoder(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.<V>getInstance());
+	}
+
+	public static <V, W> ValueEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, W> converter) {
+		if (domain == null || coDomain == null || converter == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ValueEncoder(domain, coDomain, converter, TrivialConverter.<W>getInstance());
+	}
+
+	public static <V, W, X> ValueEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> converter1, Converter<W, X> converter2) {
+		if (domain == null || coDomain == null || converter1 == null || converter1 == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ValueEncoder(domain, coDomain, converter1, converter2);
 	}
 
 }

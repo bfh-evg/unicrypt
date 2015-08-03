@@ -69,7 +69,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarMod;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
@@ -478,21 +477,24 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 		return converter;
 	}
 
-	protected final Converter<V, BigInteger> getBigIntegerConverter() {
+	@Override
+	public final Converter<V, BigInteger> getBigIntegerConverter() {
 		if (this.bigIntegerConverter == null) {
 			this.bigIntegerConverter = this.abstractGetBigIntegerConverter();
 		}
 		return this.bigIntegerConverter;
 	}
 
-	protected final Converter<V, ByteArray> getByteArrayConverter() {
+	@Override
+	public final Converter<V, ByteArray> getByteArrayConverter() {
 		if (this.byteArrayConverter == null) {
 			this.byteArrayConverter = this.defaultGetByteArrayConverter();
 		}
 		return this.byteArrayConverter;
 	}
 
-	protected final Converter<V, String> getStringConverter() {
+	@Override
+	public final Converter<V, String> getStringConverter() {
 		if (this.stringConverter == null) {
 			this.stringConverter = this.defaultGetStringConverter();
 		}
@@ -589,22 +591,5 @@ public abstract class AbstractSet<E extends Element<V>, V extends Object>
 	protected abstract boolean abstractEquals(Set set);
 
 	protected abstract int abstractHashCode();
-
-	public static void main(String[] args) {
-		GStarModSafePrime group = GStarModSafePrime.getInstance(23);
-//		for (Element e : group.getElements()) {
-//			System.out.println(e);
-//		}
-//		FiniteStringSet monoid = FiniteStringSet.getInstance(Alphabet.BINARY, 4);
-//		for (Element e : monoid.getElements()) {
-//			System.out.println(e);
-//		}
-//		for (Tuple e : ProductSet.getInstance(group, monoid).getElements(10)) {
-//			System.out.println(e);
-//		}
-		for (Element e : group.getRandomElements(5)) {
-			System.out.println(e);
-		}
-	}
 
 }
