@@ -53,7 +53,7 @@ import java.math.BigInteger;
  * @author rolfhaenni
  * @param <V> Generic type of values stored in this element
  */
-public interface DualisticElement<V extends Object>
+public interface DualisticElement<V>
 	   extends AdditiveElement<V>, MultiplicativeElement<V> {
 
 	@Override

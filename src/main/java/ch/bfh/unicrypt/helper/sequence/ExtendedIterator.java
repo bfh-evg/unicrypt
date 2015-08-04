@@ -44,8 +44,8 @@ package ch.bfh.unicrypt.helper.sequence;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -58,12 +58,32 @@ public abstract class ExtendedIterator<V>
 	   implements Iterator<V> {
 
 	public final ImmutableArray<V> next(long n) {
-		List<V> values = new ArrayList<>();
+		if (n < 1) {
+			throw new IllegalArgumentException();
+		}
+		List<V> values = new LinkedList<>();
 		while (n > 0 && this.hasNext()) {
 			values.add(this.next());
 			n--;
 		}
 		return DenseArray.getInstance(values);
+	}
+
+	public final void skip(long n) {
+		while (n > 0 && this.hasNext()) {
+			this.next();
+			n--;
+		}
+	}
+
+	public final V find(Predicate<? super V> predicate) {
+		while (this.hasNext()) {
+			V value = this.next();
+			if (predicate.test(value)) {
+				return value;
+			}
+		}
+		return null;
 	}
 
 	public static <V> ExtendedIterator<V> getInstance(final Iterator<V> iterator) {

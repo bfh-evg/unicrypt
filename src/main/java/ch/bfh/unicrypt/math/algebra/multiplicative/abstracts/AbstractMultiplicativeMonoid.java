@@ -56,7 +56,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this monoid
  * @author
  */
-public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement<V>, V extends Object>
+public abstract class AbstractMultiplicativeMonoid<E extends MultiplicativeElement<V>, V>
 	   extends AbstractMonoid<E, V>
 	   implements MultiplicativeMonoid<V> {
 

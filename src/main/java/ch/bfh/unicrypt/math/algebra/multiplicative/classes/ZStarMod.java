@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
@@ -182,7 +181,7 @@ public class ZStarMod
 	@Override
 	protected BigInteger abstractGetOrder() {
 		if (!this.getModulusFactorization().getValue().equals(this.getModulus())) {
-			return Group.UNKNOWN;
+			return Set.UNKNOWN;
 		}
 		return MathUtil.eulerFunction(this.getModulus(), this.getModulusFactorization().getPrimeFactors());
 	}

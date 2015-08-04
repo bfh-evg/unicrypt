@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
  * @version 2.0
  * @param <V> The input type
  */
-public abstract class AbstractBitArrayConverter<V extends Object>
+public abstract class AbstractBitArrayConverter<V>
 	   extends AbstractConverter<V, BitArray> {
 
 	private static final long serialVersionUID = 1L;

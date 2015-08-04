@@ -54,7 +54,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @version 2.0
  * @param <V> Generic type of values stored in the elements of this cyclic group
  */
-public interface MultiplicativeCyclicGroup<V extends Object>
+public interface MultiplicativeCyclicGroup<V>
 	   extends CyclicGroup<V>, MultiplicativeGroup<V> {
 
 	@Override

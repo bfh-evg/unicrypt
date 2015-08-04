@@ -50,7 +50,6 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
@@ -63,7 +62,7 @@ import java.math.BigInteger;
  * @version 2.0
  * @param <V> Generic type of values stored in the elements of this semigroup
  */
-public interface ConcatenativeSemiGroup<V extends Object>
+public interface ConcatenativeSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**

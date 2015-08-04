@@ -58,7 +58,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of value stored in this element
  * @author rolfhaennip
  */
-public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>, E extends ConcatenativeElement<V>, V extends Object>
+public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>, E extends ConcatenativeElement<V>, V>
 	   extends AbstractElement<S, E, V>
 	   implements ConcatenativeElement<V> {
 

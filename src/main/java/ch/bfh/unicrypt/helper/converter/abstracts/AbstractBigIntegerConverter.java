@@ -51,7 +51,7 @@ import java.math.BigInteger;
  * @version 2.0
  * @param <V> The input type
  */
-public abstract class AbstractBigIntegerConverter<V extends Object>
+public abstract class AbstractBigIntegerConverter<V>
 	   extends AbstractConverter<V, BigInteger> {
 
 	private static final long serialVersionUID = 1L;

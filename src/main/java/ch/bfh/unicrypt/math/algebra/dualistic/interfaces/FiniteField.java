@@ -50,7 +50,7 @@ import java.math.BigInteger;
  * @author rolfhaenni
  * @param <V>
  */
-public interface FiniteField<V extends Object>
+public interface FiniteField<V>
 	   extends Field<V> {
 
 	/**

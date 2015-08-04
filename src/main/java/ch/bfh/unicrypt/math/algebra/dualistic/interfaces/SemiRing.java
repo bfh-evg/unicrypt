@@ -48,7 +48,6 @@ import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.tree.Tree;
-import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
@@ -65,7 +64,7 @@ import java.math.BigInteger;
  * @author rolfhaenni
  * @param <V> Generic type of values stored in the elements of this semiring
  */
-public interface SemiRing<V extends Object>
+public interface SemiRing<V>
 	   extends AdditiveMonoid<V>, MultiplicativeMonoid<V> {
 
 	@Override

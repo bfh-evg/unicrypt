@@ -153,4 +153,10 @@ public class BigIntegerToString
 		return new BigInteger(string, this.radix);
 	}
 
+	@Override
+	protected String defaultToStringContent() {
+		String c = this.upperCase ? ",uppercase" : ",lowercase";
+		return "" + this.radix + c;
+	}
+
 }

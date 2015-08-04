@@ -51,8 +51,9 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
  * @version 2.0
  * @param <V> The input and output type
  */
-public class TrivialConverter<V extends Object>
+public class TrivialConverter<V>
 	   extends AbstractConverter<V, V> {
+
 	private static final long serialVersionUID = 1L;
 
 	protected TrivialConverter(Class<V> valueClass) {
@@ -79,7 +80,7 @@ public class TrivialConverter<V extends Object>
 	 * @see ConvertMethod
 	 */
 	public static <V> TrivialConverter<V> getInstance() {
-		return new TrivialConverter<V>(null);
+		return new TrivialConverter<>(null);
 	}
 
 	/**
@@ -92,7 +93,7 @@ public class TrivialConverter<V extends Object>
 	 * @see ConvertMethod
 	 */
 	public static <V> TrivialConverter<V> getInstance(Class<V> valueClass) {
-		return new TrivialConverter<V>(valueClass);
+		return new TrivialConverter<>(valueClass);
 	}
 
 }

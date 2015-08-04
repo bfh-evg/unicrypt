@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
  * @author rolfhaenni
  * @param <V> Generic type of values stored in the elements of this ring
  */
-public interface Ring<V extends Object>
+public interface Ring<V>
 	   extends SemiRing<V>, AdditiveGroup<V> {
 
 	@Override

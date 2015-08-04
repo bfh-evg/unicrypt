@@ -56,7 +56,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this group
  * @author
  */
-public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement<V>, V extends Object>
+public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement<V>, V>
 	   extends AbstractGroup<E, V>
 	   implements MultiplicativeGroup<V> {
 

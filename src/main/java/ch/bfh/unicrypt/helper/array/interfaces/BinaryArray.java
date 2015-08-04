@@ -55,7 +55,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
  * @version 2.0
  * @param <V> The generic type of the values in the binary array
  */
-public interface BinaryArray<V extends Object>
+public interface BinaryArray<V>
 	   extends DefaultValueArray<V> {
 
 	/**

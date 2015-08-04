@@ -57,7 +57,7 @@ import ch.bfh.unicrypt.helper.tree.Tree;
  * @param <V> The input type
  * @param <W> The output type
  */
-public abstract class AbstractConverter<V extends Object, W extends Object>
+public abstract class AbstractConverter<V, W>
 	   extends UniCrypt
 	   implements Converter<V, W> {
 

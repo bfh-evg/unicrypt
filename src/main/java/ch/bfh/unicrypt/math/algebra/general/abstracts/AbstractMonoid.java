@@ -59,7 +59,7 @@ import java.math.BigInteger;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
+public abstract class AbstractMonoid<E extends Element<V>, V>
 	   extends AbstractSemiGroup<E, V>
 	   implements Monoid<V> {
 

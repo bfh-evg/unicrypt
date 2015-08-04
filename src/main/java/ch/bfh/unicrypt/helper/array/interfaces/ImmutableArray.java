@@ -48,13 +48,13 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
  * creating an immutable array, it can no longer be modified. This interface specifies useful methods for accessing the
  * array values and for creating new arrays from existing ones. The number of values in an immutable array is finite.
  * The values of an array of length {@code n} are indexed from {@code 0} to {@code n-1}. Immutable arrays are
- * {@link Iterable}.
+ * {@link Iterable}. There are multiple optimized implementations for different needs.
  * <p>
  * @author Rolf Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */
-public interface ImmutableArray<V extends Object>
+public interface ImmutableArray<V>
 	   extends Iterable<V> {
 
 	/**
@@ -374,6 +374,11 @@ public interface ImmutableArray<V extends Object>
 	 */
 	public ImmutableArray<V>[] split(int... indices);
 
+	/**
+	 * Creates and returns a sequence containing all values from the immutable array.
+	 * <p>
+	 * @return The sequence of values
+	 */
 	public Sequence<V> getSequence();
 
 }

@@ -51,7 +51,7 @@ import java.math.BigInteger;
  * @author rolfhaenni
  * @param <V> Generic type of values stored in this element
  */
-public interface MultiplicativeElement<V extends Object>
+public interface MultiplicativeElement<V>
 	   extends Element<V> {
 
 	/**

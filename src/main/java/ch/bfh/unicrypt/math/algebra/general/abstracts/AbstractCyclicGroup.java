@@ -66,7 +66,7 @@ import java.util.Map;
  * TODO
  * @author
  */
-public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object>
+public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 	   extends AbstractGroup<E, V>
 	   implements CyclicGroup<V> {
 

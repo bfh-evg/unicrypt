@@ -62,7 +62,7 @@ import java.math.BigInteger;
  * @version 2.0
  * @param <V> Generic type of values stored in the elements of this semigroup
  */
-public interface AdditiveSemiGroup<V extends Object>
+public interface AdditiveSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**

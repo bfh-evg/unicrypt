@@ -57,7 +57,7 @@ import ch.bfh.unicrypt.helper.tree.Tree;
  * @param <V> The input type
  * @param <W> The output type
  */
-public interface Converter<V extends Object, W extends Object> {
+public interface Converter<V, W> {
 
 	/**
 	 * Converts the given input value into an output value. An exception is thrown if the input value is invalid.

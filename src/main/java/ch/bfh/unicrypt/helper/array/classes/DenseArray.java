@@ -59,7 +59,7 @@ import java.util.Collection;
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */
-public class DenseArray<V extends Object>
+public class DenseArray<V>
 	   extends AbstractImmutableArray<DenseArray<V>, V> {
 
 	private static final long serialVersionUID = 1L;

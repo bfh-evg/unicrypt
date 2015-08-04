@@ -81,7 +81,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of the values representing the elements of a set
  * @see Element
  */
-public interface Set<V extends Object> {
+public interface Set<V> {
 
 	/**
 	 * A constant value representing an infinite order.

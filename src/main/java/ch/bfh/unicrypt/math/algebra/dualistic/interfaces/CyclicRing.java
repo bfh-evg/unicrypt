@@ -56,7 +56,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author rolfhaenni
  * @param <V>
  */
-public interface CyclicRing<V extends Object>
+public interface CyclicRing<V>
 	   extends Ring<V>, AdditiveCyclicGroup<V> {
 
 	@Override

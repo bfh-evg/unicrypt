@@ -60,7 +60,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of value stored in this element
  * @author rolfhaenni
  */
-public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup<V>, E extends MultiplicativeElement<V>, V extends Object>
+public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup<V>, E extends MultiplicativeElement<V>, V>
 	   extends AbstractElement<S, E, V>
 	   implements MultiplicativeElement<V> {
 

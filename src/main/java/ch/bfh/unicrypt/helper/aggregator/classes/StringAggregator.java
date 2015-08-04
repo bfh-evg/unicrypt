@@ -71,7 +71,6 @@ public class StringAggregator
 
 	private StringAggregator(char quoteCharacter, char openingParenthesis, char closingParenthesis, char separator,
 		   char escapeCharacter) {
-		super(String.class);
 		this.quoteCharacter = quoteCharacter;
 		this.openingParenthesis = openingParenthesis;
 		this.closingParenthesis = closingParenthesis;

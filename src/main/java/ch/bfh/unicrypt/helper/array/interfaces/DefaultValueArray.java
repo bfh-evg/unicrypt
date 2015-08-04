@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */
-public interface DefaultValueArray<V extends Object>
+public interface DefaultValueArray<V>
 	   extends ImmutableArray<V> {
 
 	/**

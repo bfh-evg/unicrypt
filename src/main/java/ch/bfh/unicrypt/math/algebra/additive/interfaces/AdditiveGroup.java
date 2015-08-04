@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
  * @version 2.0
  * @param <V> Generic type of values stored in the elements of the group
  */
-public interface AdditiveGroup<V extends Object>
+public interface AdditiveGroup<V>
 	   extends Group<V>, AdditiveMonoid<V> {
 
 	/**

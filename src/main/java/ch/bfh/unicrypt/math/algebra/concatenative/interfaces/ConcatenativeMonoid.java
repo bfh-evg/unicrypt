@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
  * @version 2.0
  * @param <V> Generic type of values stored in the elements of this monoid
  */
-public interface ConcatenativeMonoid<V extends Object>
+public interface ConcatenativeMonoid<V>
 	   extends Monoid<V>, ConcatenativeSemiGroup<V> {
 
 	@Override

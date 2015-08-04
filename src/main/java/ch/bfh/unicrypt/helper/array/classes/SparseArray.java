@@ -61,7 +61,7 @@ import java.util.Map;
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */
-public class SparseArray<V extends Object>
+public class SparseArray<V>
 	   extends AbstractDefaultValueArray<SparseArray<V>, V> {
 
 	private static final long serialVersionUID = 1L;

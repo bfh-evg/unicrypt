@@ -65,7 +65,7 @@ import java.math.BigInteger;
  * @param <D>
  * @param <EE>
  */
-public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D extends DualisticElement<V>, EE extends ECElement<V, D>>
+public abstract class AbstractEC<F extends FiniteField<V>, V, D extends DualisticElement<V>, EE extends ECElement<V, D>>
 	   extends AbstractAdditiveCyclicGroup<EE, Point<D>>
 	   implements EC<V, D> {
 

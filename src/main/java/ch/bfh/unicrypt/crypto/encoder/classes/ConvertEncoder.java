@@ -46,111 +46,92 @@ import ch.bfh.unicrypt.helper.converter.classes.TrivialConverter;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
+import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
  * @author rolfhaenni
  */
-public class ValueEncoder
+public class ConvertEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element> {
 
 	private final Set domain;
 	private final Set coDomain;
-	private final Converter converter1;
-	private final Converter converter2;
+	private final Converter domainConverter;
+	private final Converter coDomainConverter;
 
-	public enum DefaultConverter {
+	public enum Mode {
 
 		BIG_INTEGER, STRING, BYTE_ARRAY
 
 	};
 
-	private ValueEncoder(Set domain, Set coDomain, Converter converter1, Converter converter2) {
+	private ConvertEncoder(Set domain, Set coDomain, Converter domainConverter, Converter coDomainConverter) {
 		this.domain = domain;
 		this.coDomain = coDomain;
-		this.converter1 = converter1;
-		this.converter2 = converter2;
+		this.domainConverter = domainConverter;
+		this.coDomainConverter = coDomainConverter;
 	}
 
 	@Override
 	protected Function abstractGetEncodingFunction() {
-		return new AbstractFunction(this.domain, this.coDomain) {
-
-			@Override
-			protected Element abstractApply(Element element, RandomByteSequence randomByteSequence) {
-				Object value = element.convertTo(converter1);
-				Element result = coDomain.getElementFrom(value, converter2);
-				if (result == null) {
-					throw new IllegalArgumentException();
-				}
-				return result;
-			}
-		};
+		return ConvertFunction.getInstance(this.domain, this.coDomain, this.domainConverter, this.coDomainConverter);
 	}
 
 	@Override
 	protected Function abstractGetDecodingFunction() {
-		return new AbstractFunction(this.coDomain, this.domain) {
-
-			@Override
-			protected Element abstractApply(Element element, RandomByteSequence randomByteSequence) {
-				Object value = element.convertTo(converter2);
-				Element result = domain.getElementFrom(value, converter1);
-				if (result == null) {
-					throw new IllegalArgumentException();
-				}
-				return result;
-			}
-		};
+		return ConvertFunction.getInstance(this.coDomain, this.domain, this.coDomainConverter, this.domainConverter);
 	}
 
-	public static ValueEncoder getInstance(Set domain, Set coDomain, DefaultConverter mode) {
+	@Override
+	protected String defaultToStringContent() {
+		return this.domain.toString() + "," + this.coDomain.toString() + "," + this.domainConverter.toString() + "," + this.coDomainConverter.toString();
+	}
+
+	public static ConvertEncoder getInstance(Set domain, Set coDomain, Mode mode) {
 		if (domain == null || coDomain == null || mode == null) {
 			throw new IllegalArgumentException();
 		}
-		Converter converter1;
-		Converter converter2;
+		Converter domainConverter, coDomainConverter;
 		switch (mode) {
 			case BIG_INTEGER:
-				converter1 = domain.getBigIntegerConverter();
-				converter2 = coDomain.getBigIntegerConverter();
+				domainConverter = domain.getBigIntegerConverter();
+				coDomainConverter = coDomain.getBigIntegerConverter();
 				break;
 			case STRING:
-				converter1 = domain.getStringConverter();
-				converter2 = coDomain.getStringConverter();
+				domainConverter = domain.getStringConverter();
+				coDomainConverter = coDomain.getStringConverter();
 				break;
 			case BYTE_ARRAY:
-				converter1 = domain.getByteArrayConverter();
-				converter2 = coDomain.getByteArrayConverter();
+				domainConverter = domain.getByteArrayConverter();
+				coDomainConverter = coDomain.getByteArrayConverter();
 				break;
 			default:
 				throw new IllegalStateException();
 		}
-		return new ValueEncoder(domain, coDomain, converter1, converter2);
+		return new ConvertEncoder(domain, coDomain, domainConverter, coDomainConverter);
 	}
 
-	public static <V> ValueEncoder getInstance(Set<V> domain, Set<V> coDomain) {
+	public static <V> ConvertEncoder getInstance(Set<V> domain, Set<V> coDomain) {
 		if (domain == null || coDomain == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ValueEncoder(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.<V>getInstance());
+		return new ConvertEncoder(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.<V>getInstance());
 	}
 
-	public static <V, W> ValueEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, W> converter) {
+	public static <V, W> ConvertEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, W> converter) {
 		if (domain == null || coDomain == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ValueEncoder(domain, coDomain, converter, TrivialConverter.<W>getInstance());
+		return new ConvertEncoder(domain, coDomain, converter, TrivialConverter.<W>getInstance());
 	}
 
-	public static <V, W, X> ValueEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> converter1, Converter<W, X> converter2) {
-		if (domain == null || coDomain == null || converter1 == null || converter1 == null) {
+	public static <V, W, X> ConvertEncoder getInstance(Set<V> domain, Set<W> coDomain, Converter<V, X> domainConverter, Converter<W, X> coDomainConverter) {
+		if (domain == null || coDomain == null || domainConverter == null || coDomainConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new ValueEncoder(domain, coDomain, converter1, converter2);
+		return new ConvertEncoder(domain, coDomain, domainConverter, coDomainConverter);
 	}
 
 }

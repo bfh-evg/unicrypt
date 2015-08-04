@@ -62,9 +62,8 @@ public abstract class AbstractAggregator<V>
 
 	private final Mapping<Tree<V>, V> mapping1;
 	private final Mapping<V, Tree<V>> mapping2;
-	private final Class<V> valueClass;
 
-	protected AbstractAggregator(Class<V> valueClass) {
+	protected AbstractAggregator() {
 		this.mapping1 = new Mapping<Tree<V>, V>() {
 
 			@Override
@@ -81,12 +80,6 @@ public abstract class AbstractAggregator<V>
 			}
 
 		};
-		this.valueClass = valueClass;
-	}
-
-	@Override
-	public Class<V> getValueClass() {
-		return this.valueClass;
 	}
 
 	@Override

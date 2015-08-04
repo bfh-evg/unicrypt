@@ -56,7 +56,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this cyclic group
  * @author
  */
-public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, V extends Object>
+public abstract class AbstractAdditiveCyclicGroup<E extends AdditiveElement<V>, V>
 	   extends AbstractCyclicGroup<E, V>
 	   implements AdditiveCyclicGroup<V> {
 

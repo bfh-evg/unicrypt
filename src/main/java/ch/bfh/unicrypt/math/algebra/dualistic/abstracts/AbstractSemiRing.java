@@ -58,7 +58,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this semiring
  * @author rolfhaenni
  */
-public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends Object>
+public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	   extends AbstractAdditiveMonoid<E, V>
 	   implements SemiRing<V> {
 

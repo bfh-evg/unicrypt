@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
  * @param <A> The type of a potential non-generic sub-class
  * @param <V> The generic type of the values in the immutable array with a default value
  */
-abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueArray<A, V>, V extends Object>
+abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueArray<A, V>, V>
 	   extends AbstractImmutableArray<A, V>
 	   implements DefaultValueArray<V> {
 

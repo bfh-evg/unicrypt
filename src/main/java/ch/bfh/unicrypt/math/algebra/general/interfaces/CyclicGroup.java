@@ -59,7 +59,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface CyclicGroup<V extends Object>
+public interface CyclicGroup<V>
 	   extends Group<V> {
 
 	/**

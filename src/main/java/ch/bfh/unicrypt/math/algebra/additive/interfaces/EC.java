@@ -65,7 +65,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of the elliptic curve
  * @param <E>
  */
-public interface EC<V extends Object, E extends DualisticElement<V>>
+public interface EC<V, E extends DualisticElement<V>>
 	   extends
 	   AdditiveCyclicGroup<Point<E>> {
 

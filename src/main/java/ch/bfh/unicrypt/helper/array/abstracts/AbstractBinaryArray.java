@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
  * @param <A> The type of a potential non-generic sub-class
  * @param <V> The generic type of the values in the binary array
  */
-public abstract class AbstractBinaryArray<A extends AbstractBinaryArray<A, V>, V extends Object>
+public abstract class AbstractBinaryArray<A extends AbstractBinaryArray<A, V>, V>
 	   extends AbstractDefaultValueArray<A, V>
 	   implements BinaryArray<V> {
 

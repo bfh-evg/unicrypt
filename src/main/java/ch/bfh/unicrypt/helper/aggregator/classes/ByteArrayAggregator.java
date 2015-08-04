@@ -72,10 +72,6 @@ public class ByteArrayAggregator
 	private static ByteArrayAggregator instance = null;
 	private static final long serialVersionUID = 1L;
 
-	private ByteArrayAggregator() {
-		super(ByteArray.class);
-	}
-
 	/**
 	 * Return the single instance of this class.
 	 * <p>

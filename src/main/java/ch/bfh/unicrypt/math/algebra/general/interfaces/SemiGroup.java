@@ -56,7 +56,7 @@ import java.math.BigInteger;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface SemiGroup<V extends Object>
+public interface SemiGroup<V>
 	   extends Set<V> {
 
 	/**

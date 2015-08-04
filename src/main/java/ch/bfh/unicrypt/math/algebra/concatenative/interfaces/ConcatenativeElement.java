@@ -51,7 +51,7 @@ import java.math.BigInteger;
  * @author rolfhaenni
  * @param <V> Generic type of values of this element
  */
-public interface ConcatenativeElement<V extends Object>
+public interface ConcatenativeElement<V>
 	   extends Element<V> {
 
 	/**

@@ -76,12 +76,4 @@ public interface Aggregator<V> {
 	 */
 	public Tree<V> disaggregate(V value);
 
-	/**
-	 * Returns the class of the values of an actual aggregator, or {@code null} if the class is unknown. This method may
-	 * be needed to dispatch between different aggregators.
-	 * <p>
-	 * @return The input class
-	 */
-	public Class<V> getValueClass();
-
 }

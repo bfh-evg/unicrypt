@@ -55,7 +55,7 @@ import java.util.Map;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  */
-public class EnumeratedSet<V extends Object>
+public class EnumeratedSet<V>
 	   extends AbstractSet<EnumeratedSetElement<V>, V> {
 
 	private static final long serialVersionUID = 1L;

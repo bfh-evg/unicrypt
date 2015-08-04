@@ -57,6 +57,7 @@ import java.math.BigInteger;
  */
 public class BigIntegerToBigInteger
 	   extends AbstractBigIntegerConverter<BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	// null if no minimal value is specified
@@ -88,7 +89,7 @@ public class BigIntegerToBigInteger
 	 * @return The new converter
 	 * @see BigIntegerToBigInteger#getInstance(java.math.BigInteger)
 	 */
-	public static BigIntegerToBigInteger getInstance(int minValue) {
+	public static BigIntegerToBigInteger getInstance(long minValue) {
 		return BigIntegerToBigInteger.getInstance(BigInteger.valueOf(minValue));
 	}
 
@@ -135,6 +136,11 @@ public class BigIntegerToBigInteger
 		} else {
 			return value.add(this.minValue);
 		}
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		return this.minValue.toString();
 	}
 
 }

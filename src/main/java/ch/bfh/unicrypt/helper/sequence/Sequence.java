@@ -238,18 +238,30 @@ public abstract class Sequence<V>
 			public ExtendedIterator<V> iterator() {
 				return new ExtendedIterator<V>() {
 
-					private final Iterator<V> iterator = source.iterator();
-					private V nextValue = source.getNextValue(this.iterator, predicate);
+					private final ExtendedIterator<V> iterator = source.iterator();
+					private V nextValue = null;
+					private boolean terminated = false;
 
 					@Override
 					public boolean hasNext() {
-						return this.nextValue != null;
+						if (this.terminated) {
+							return false;
+						}
+						if (this.nextValue != null) {
+							return true;
+						}
+						this.nextValue = this.iterator.find(predicate);
+						if (this.nextValue == null) {
+							this.terminated = true;
+							return false;
+						}
+						return true;
 					}
 
 					@Override
 					public V next() {
 						V result = this.nextValue;
-						this.nextValue = source.getNextValue(this.iterator, predicate);
+						this.nextValue = null;
 						return result;
 					}
 
@@ -257,18 +269,6 @@ public abstract class Sequence<V>
 			}
 		};
 
-	}
-
-	// private helper method for filter
-	private V getNextValue(Iterator<V> iterator, Predicate<? super V> predicate) {
-		V nextValue = null;
-		while (nextValue == null && iterator.hasNext()) {
-			V value = iterator.next();
-			if (predicate.test(value)) {
-				nextValue = value;
-			}
-		}
-		return nextValue;
 	}
 
 	public final Sequence<V> limit(final long maxLength) {
@@ -325,7 +325,7 @@ public abstract class Sequence<V>
 			public ExtendedIterator<V> iterator() {
 				return new ExtendedIterator<V>() {
 
-					private ExtendedIterator<V> iterator = source.iterator();
+					private final ExtendedIterator<V> iterator = source.iterator();
 					private boolean found = false;
 
 					@Override
@@ -358,7 +358,7 @@ public abstract class Sequence<V>
 		if (this.length.equals(Sequence.UNKNOWN) || this.length.equals(Sequence.INFINITE)) {
 			newLength = this.length;
 		} else {
-			newLength = this.getLength().subtract(BigInteger.valueOf(n)).max(MathUtil.ZERO);
+			newLength = this.length.subtract(BigInteger.valueOf(n)).max(MathUtil.ZERO);
 		}
 		final Sequence<V> source = this;
 		return new Sequence<V>(newLength) {
@@ -366,11 +366,7 @@ public abstract class Sequence<V>
 			@Override
 			public ExtendedIterator<V> iterator() {
 				ExtendedIterator<V> iterator = source.iterator();
-				long i = n;
-				while (i > 0 && iterator.hasNext()) {
-					iterator.next();
-					i--;
-				}
+				iterator.skip(n);
 				return iterator;
 			}
 		};
@@ -519,27 +515,6 @@ public abstract class Sequence<V>
 						V nextValue = this.currentValue;
 						this.currentValue = operator.apply(this.currentValue);
 						return nextValue;
-					}
-				};
-			}
-		};
-	}
-
-	public static <V> Sequence<V> getInstance(final Supplier<V> supplier) {
-		return new Sequence<V>(Sequence.INFINITE) {
-
-			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
-
-					@Override
-					public boolean hasNext() {
-						return true;
-					}
-
-					@Override
-					public V next() {
-						return supplier.get();
 					}
 				};
 			}

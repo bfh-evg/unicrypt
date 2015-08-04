@@ -53,4 +53,15 @@ public abstract class UnaryOperator<V>
 
 	public abstract V apply(V value);
 
+	public static <V> UnaryOperator<V> getInstance() {
+		return new UnaryOperator<V>() {
+
+			@Override
+			public V apply(V value) {
+				return value;
+			}
+
+		};
+	}
+
 }

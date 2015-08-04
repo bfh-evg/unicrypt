@@ -75,7 +75,7 @@ import java.math.BigInteger;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V extends Object>
+public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	   extends UniCrypt
 	   implements Element<V> {
 

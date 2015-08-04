@@ -56,7 +56,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this group
  * @author
  */
-public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V extends Object>
+public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V>
 	   extends AbstractGroup<E, V>
 	   implements AdditiveGroup<V> {
 

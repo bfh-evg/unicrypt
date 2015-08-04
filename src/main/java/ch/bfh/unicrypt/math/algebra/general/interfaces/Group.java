@@ -53,7 +53,7 @@ package ch.bfh.unicrypt.math.algebra.general.interfaces;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface Group<V extends Object>
+public interface Group<V>
 	   extends Monoid<V> {
 
 	/**

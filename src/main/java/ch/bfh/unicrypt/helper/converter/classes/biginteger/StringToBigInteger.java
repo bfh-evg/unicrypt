@@ -57,6 +57,7 @@ import java.math.BigInteger;
  */
 public class StringToBigInteger
 	   extends AbstractBigIntegerConverter<String> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final Alphabet alphabet;
@@ -161,6 +162,11 @@ public class StringToBigInteger
 			value = value.divide(alphabetSize);
 		}
 		return result;
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		return this.alphabet.toString() + "," + this.blockLength + "," + this.minBlocks;
 	}
 
 }

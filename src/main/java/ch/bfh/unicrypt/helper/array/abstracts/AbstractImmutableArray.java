@@ -57,7 +57,7 @@ import java.util.Iterator;
  * @param <A> The type of a potential non-generic sub-class
  * @param <V> The generic type of the values in the immutable array
  */
-abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V extends Object>
+abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V>
 	   extends UniCrypt
 	   implements ImmutableArray<V> {
 

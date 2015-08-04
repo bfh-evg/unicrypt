@@ -89,7 +89,7 @@ public class FiatShamirSigmaChallengeGenerator
 
 	@Override
 	protected ZModElement abstractAbstractGenerate(Element input) {
-		ByteArray hashedInput = input.getHashValue(this.getConvertMethod(), this.hashMethod);
+		ByteArray hashedInput = input.getHashValue(this.convertMethod, this.hashMethod);
 		return this.getChallengeSpace()
 			   .getElement(this.converter.convert(hashedInput).mod(this.challengeSpace.getModulus()));
 	}
@@ -142,6 +142,7 @@ public class FiatShamirSigmaChallengeGenerator
 	 * @param challengeSpace
 	 * @param proverId       other stuff that must be hash with the public input and the commitment to obtain the
 	 *                       challenge
+	 * @param convertMethod
 	 * @param hashMethod     Hash method to use to generate the challenge
 	 * @param converter      the converter to be used after the computation of the hash to convert the obtained byte
 	 *                       array in a big integer representing the challenge

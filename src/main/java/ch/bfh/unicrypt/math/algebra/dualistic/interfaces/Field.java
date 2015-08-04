@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGrou
  * @author rolfhaenni
  * @param <V> Generic type of values stored in the elements of this field
  */
-public interface Field<V extends Object>
+public interface Field<V>
 	   extends Ring<V> {
 
 	/**

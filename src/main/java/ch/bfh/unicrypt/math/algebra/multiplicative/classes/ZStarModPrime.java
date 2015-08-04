@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
@@ -125,6 +126,29 @@ public class ZStarModPrime
 	public boolean isGenerator(Element element) {
 		throw new UnsupportedOperationException("Not supported yet.");
 		// TODO: Implement method.
+	}
+
+	@Override
+	protected Sequence<ZStarModElement> defaultGetElements() {
+		return super.defaultGetElements();
+// same code as in AbstractCyclicGroup
+//		final ZStarModPrime group = this;
+//		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<ZStarModElement>() {
+//
+//			@Override
+//			public ZStarModElement apply(ZStarModElement element) {
+//				return group.apply(group.getDefaultGenerator(), element);
+//			}
+//
+//		}).limit(new Predicate<ZStarModElement>() {
+//
+//			@Override
+//			public boolean test(ZStarModElement element) {
+//
+//				return group.getIdentityElement().equals(element);
+//			}
+//
+//		});
 	}
 
 	public static ZStarModPrime getInstance(final Prime modulus) {

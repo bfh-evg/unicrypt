@@ -58,7 +58,7 @@ import java.math.BigInteger;
  * <p>
  * @author
  */
-public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends DualisticElement<V>, V extends Object>
+public abstract class AbstractDualisticElement<S extends SemiRing<V>, E extends DualisticElement<V>, V>
 	   extends AbstractAdditiveElement<S, E, V>
 	   implements DualisticElement<V> {
 

@@ -73,7 +73,7 @@ import java.math.BigInteger;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface Element<V extends Object> {
+public interface Element<V> {
 
 	/**
 	 * Returns {@code true} if this element is an {@link AdditiveElement}.

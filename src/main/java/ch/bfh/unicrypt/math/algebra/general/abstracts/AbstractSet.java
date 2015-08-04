@@ -90,7 +90,7 @@ import java.math.BigInteger;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractSet<E extends Element<V>, V extends Object>
+public abstract class AbstractSet<E extends Element<V>, V>
 	   extends UniCrypt
 	   implements Set<V> {
 
