@@ -49,6 +49,10 @@ Redistributions of files must retain the above copyright notice.
 	<packaging>jar</packaging>
 
 	<name>unicrypt</name>
+	<description>
+		Cryptographic framework allowing the implementation of
+		cryptographic protocols, e.g. e-voting.
+	</description>
 	<url>https://github.com/bfh-evg/unicrypt</url>
 
 	<licenses>
