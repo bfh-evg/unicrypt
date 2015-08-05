@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -60,7 +60,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import java.math.BigInteger;
-import java.util.HashMap;
 
 /**
  * This abstract class represents the concept an element in a mathematical group. It allows applying the group operation
@@ -76,49 +75,37 @@ import java.util.HashMap;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V extends Object>
+public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	   extends UniCrypt
 	   implements Element<V> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	private final S set;
-	private final V value;
 
-	// the following fields are needed for optimizations
-	private final HashMap<Converter<V, BigInteger>, BigInteger> bigIntegers;
-	private final HashMap<Converter<V, String>, String> strings;
-	private final HashMap<Converter<V, ByteArray>, ByteArray> byteArrays;
-	private final HashMap<HashMethod, ByteArray> hashValues;
+	protected final AbstractSet<E, V> set;
+	protected final V value;
 
-	protected AbstractElement(final S set, V value) {
+	protected AbstractElement(final AbstractSet<E, V> set, V value) {
 		this.set = set;
 		this.value = value;
-		this.bigIntegers = new HashMap<Converter<V, BigInteger>, BigInteger>();
-		this.strings = new HashMap<Converter<V, String>, String>();
-		this.byteArrays = new HashMap<Converter<V, ByteArray>, ByteArray>();
-		this.hashValues = new HashMap<HashMethod, ByteArray>();
 	}
 
 	@Override
-	public boolean isAdditive() {
+	public final boolean isAdditive() {
 		return this instanceof AdditiveElement;
 	}
 
 	@Override
-	public boolean isMultiplicative() {
+	public final boolean isMultiplicative() {
 		return this instanceof MultiplicativeElement;
 	}
 
 	@Override
-	public boolean isConcatenative() {
+	public final boolean isConcatenative() {
 		return this instanceof ConcatenativeElement;
 	}
 
 	@Override
-	public boolean isDualistic() {
+	public final boolean isDualistic() {
 		return this instanceof DualisticElement;
 	}
 
@@ -134,7 +121,7 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	 */
 	@Override
 	public final S getSet() {
-		return this.set;
+		return (S) this.set;
 	}
 
 	/**
@@ -148,160 +135,57 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	}
 
 	@Override
-	public BigInteger getBigInteger() {
-		return this.getBigInteger(this.set.getBigIntegerConverter());
-	}
-
-	@Override
-	public BigInteger getBigInteger(Converter<V, BigInteger> converter) {
+	public final <W> W convertTo(Converter<V, W> converter) {
 		if (converter == null) {
 			throw new IllegalArgumentException();
 		}
-		BigInteger result = this.bigIntegers.get(converter);
-		if (result == null) {
-			result = converter.convert(this.value);
-			this.bigIntegers.put(converter, result);
-		}
-		return result;
+		return converter.convert(this.value);
 	}
 
 	@Override
-	public BigInteger getBigInteger(ConvertMethod<BigInteger> convertMethod) {
+	public final <W> W convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator) {
+		if (convertMethod == null || aggregator == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultConvertTo(convertMethod).aggregate(aggregator);
+	}
+
+	@Override
+	public final <W> Tree<W> convertTo(final ConvertMethod<W> convertMethod) {
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		Converter<V, BigInteger> converter = (Converter<V, BigInteger>) convertMethod.getConverter(this.value.getClass());
-		if (converter == null) {
-			return this.getBigInteger();
-		}
-		return this.getBigInteger(converter);
+		return this.defaultConvertTo(convertMethod);
 	}
 
 	@Override
-	public String getString() {
-		return this.getString(this.set.getStringConverter());
+	public final BigInteger convertToBigInteger() {
+		return this.defaultConvertToBigInteger();
 	}
 
 	@Override
-	public String getString(Converter<V, String> converter) {
-		if (converter == null) {
-			throw new IllegalArgumentException();
-		}
-		String result = this.strings.get(converter);
-		if (result == null) {
-			result = converter.convert(this.value);
-			this.strings.put(converter, result);
-		}
-		return result;
+	public final ByteArray convertToByteArray() {
+		return this.defaultConvertToByteArray();
 	}
 
 	@Override
-	public String getString(ConvertMethod<String> convertMethod) {
-		if (convertMethod == null) {
-			throw new IllegalArgumentException();
-		}
-		Converter<V, String> converter = (Converter<V, String>) convertMethod.getConverter(this.value.getClass());
-		if (converter == null) {
-			return this.getString();
-		}
-		return this.getString(converter);
-	}
-
-	@Override
-	public ByteArray getByteArray() {
-		return this.getByteArray(this.set.getByteArrayConverter());
-	}
-
-	@Override
-	public ByteArray getByteArray(Converter<V, ByteArray> converter) {
-		if (converter == null) {
-			throw new IllegalArgumentException();
-		}
-		ByteArray result = this.byteArrays.get(converter);
-		if (result == null) {
-			result = converter.convert(this.value);
-			this.byteArrays.put(converter, result);
-		}
-		return result;
-	}
-
-	@Override
-	public ByteArray getByteArray(ConvertMethod<ByteArray> convertMethod) {
-		if (convertMethod == null) {
-			throw new IllegalArgumentException();
-		}
-		Converter<V, ByteArray> converter = (Converter<V, ByteArray>) convertMethod.getConverter(this.value.getClass());
-		if (converter == null) {
-			return this.getByteArray();
-		}
-		return this.getByteArray(converter);
-	}
-
-	@Override
-	public ByteTree getByteTree() {
-		ConvertMethod<ByteArray> convertMethod = ConvertMethod.<ByteArray>getInstance();
-		return this.getByteTree(convertMethod);
-	}
-
-	@Override
-	public ByteTree getByteTree(Converter<V, ByteArray> converter) {
-		ConvertMethod<ByteArray> convertMethod = ConvertMethod.<ByteArray>getInstance(converter);
-		return this.getByteTree(convertMethod);
-	}
-
-	@Override
-	public ByteTree getByteTree(ConvertMethod<ByteArray> convertMethod) {
-		if (convertMethod == null) {
-			throw new IllegalArgumentException();
-		}
-		if (this.isTuple()) {
-			Tuple tuple = (Tuple) this;
-			ByteTree[] byteTrees = new ByteTree[tuple.getArity()];
-			int i = 0;
-			for (Element element : tuple) {
-				byteTrees[i++] = element.getByteTree(convertMethod);
-			}
-			return ByteTree.getInstance(byteTrees);
-
-		}
-		return ByteTree.getInstance(this.getByteArray(convertMethod));
+	public final String convertToString() {
+		return this.defaultConvertToString();
 	}
 
 	@Override
 	public final ByteArray getHashValue() {
-		return this.getHashValue(HashMethod.getInstance());
+		return this.getHashValue(ConvertMethod.getInstance(), HashMethod.getInstance());
 	}
 
 	@Override
-	public final ByteArray getHashValue(HashMethod hashMethod) {
-		if (hashMethod == null) {
+	public <W> ByteArray getHashValue(ConvertMethod<W> convertMethod, HashMethod<W> hashMethod) {
+		if (convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray hashValue = this.hashValues.get(hashMethod);
-		if (hashValue == null) {
-			ConvertMethod<ByteArray> convertMethod = hashMethod.getConvertMethod();
-			HashAlgorithm algorithm = hashMethod.getHashAlgorithm();
-			switch (hashMethod.getMode()) {
-				case BYTEARRAY:
-					hashValue = this.getByteArray(convertMethod).getHashValue(algorithm);
-					break;
-				case BYTETREE:
-					hashValue = this.getByteTree(convertMethod).getHashValue(algorithm);
-					break;
-				case RECURSIVE:
-					hashValue = this.getByteTree(convertMethod).getRecursiveHashValue(algorithm);
-					break;
-				default:
-					throw new UnsupportedOperationException();
-			}
-			this.hashValues.put(hashMethod, hashValue);
-		}
-		return hashValue;
+		return hashMethod.getHashValue(this.convertTo(convertMethod));
 	}
 
-	//
-	// The following methods are equivalent to corresponding Set methods
-	//
 	/**
 	 * @see Group#apply(Element, Element)
 	 */
@@ -351,10 +235,10 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 	}
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	@Override
-	public final E selfApply(final int amount) {
+	public final E selfApply(final long amount) {
 		if (this.set.isSemiGroup()) {
 			SemiGroup semiGroup = ((SemiGroup) this.set);
 			return (E) semiGroup.selfApply(this, amount);
@@ -447,13 +331,34 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V 
 		return this.value.equals(other.getValue());
 	}
 
+	// this method is overridden in Tuple
+	protected <W> Tree<W> defaultConvertTo(final ConvertMethod<W> convertMethod) {
+		Converter<V, W> converter = this.set.getConverter(convertMethod);
+		return Tree.getInstance(converter.convert(this.value));
+	}
+
+	// this method is overridden in Tuple
+	protected BigInteger defaultConvertToBigInteger() {
+		return this.convertTo(this.set.getBigIntegerConverter());
+	}
+
+	// this method is overridden in Tuple
+	protected ByteArray defaultConvertToByteArray() {
+		return this.convertTo(this.set.getByteArrayConverter());
+	}
+
+	// this method is overridden in Tuple
+	protected String defaultConvertToString() {
+		return this.convertTo(this.set.getStringConverter());
+	}
+
 	@Override
-	protected String defaultToStringName() {
+	protected String defaultToStringType() {
 		return this.getClass().getSimpleName();
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.value.toString();
 	}
 

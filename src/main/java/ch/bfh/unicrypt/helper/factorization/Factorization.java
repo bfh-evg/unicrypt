@@ -41,17 +41,27 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.UniCrypt;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+/**
+ * Each instance of this class represents a prime factorization {@code n=p1^e1*...*pN^eN} of a positive integer
+ * {@code x>0}. The prime factors and exponents must be given when creating the instance. Specialized classes
+ * {@link SpecialFactorization}, {@link PrimePair}, {@link Prime}, and {@link SafePrime} exist for several borderline
+ * case..
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ */
 public class Factorization
 	   extends UniCrypt {
+	private static final long serialVersionUID = 1L;
 
-	private final BigInteger value;
-	private final BigInteger[] primeFactors;
-	private final int[] exponents;
+	protected final BigInteger value;
+	protected final BigInteger[] primeFactors;
+	protected final int[] exponents;
 
 	protected Factorization(BigInteger value, BigInteger[] primeFactors, int[] exponents) {
 		this.value = value;
@@ -59,54 +69,12 @@ public class Factorization
 		this.exponents = exponents;
 	}
 
-	public BigInteger getValue() {
-		return this.value;
-	}
-
-	public BigInteger[] getPrimeFactors() {
-		return this.primeFactors;
-	}
-
-	public int[] getExponents() {
-		return this.exponents;
-	}
-
-	@Override
-	protected String defaultToStringValue() {
-		return "" + this.getValue();
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 3;
-		hash = 89 * hash + (this.value != null ? this.value.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Factorization other = (Factorization) obj;
-		return this.value == other.value || (this.value != null && this.value.equals(other.value));
-	}
-
-	public static Factorization getInstance() {
-		return Factorization.getInstance(new BigInteger[]{});
-	}
-
-	public static Factorization getInstance(BigInteger primeFactor) {
-		return Factorization.getInstance(new BigInteger[]{primeFactor});
-	}
-
-	public static Factorization getInstance(BigInteger primeFactor, int exponent) {
-		return Factorization.getInstance(new BigInteger[]{primeFactor}, new int[]{exponent});
-	}
-
+	/**
+	 * Creates a new prime factorization {@code n=p1*...*pN}.
+	 * <p>
+	 * @param primeFactors The prime factors
+	 * @return The new factorization
+	 */
 	public static Factorization getInstance(BigInteger... primeFactors) {
 		if (primeFactors == null) {
 			throw new IllegalArgumentException();
@@ -116,6 +84,14 @@ public class Factorization
 		return Factorization.getInstance(primeFactors, exponents);
 	}
 
+	/**
+	 * Create a new prime factorization {@code n=p1^e1*...*pN^eN} based on the prime numbers {@code p1,...,pN} and
+	 * corresponding exponents {@code e1,...,eN}. This is the general factor method for this class.
+	 * <p>
+	 * @param primeFactors The prime factors
+	 * @param exponents    The corresponding exponents
+	 * @return The new factorization
+	 */
 	public static Factorization getInstance(BigInteger[] primeFactors, int[] exponents) {
 		if (primeFactors == null || exponents == null || primeFactors.length != exponents.length) {
 			throw new IllegalArgumentException();
@@ -137,7 +113,64 @@ public class Factorization
 				}
 			}
 		}
+		if (newLength == 1 && newExponents[0] == 1) {
+			return new Prime(newPrimeFactors[0]);
+		}
+		if (newLength == 2 && newExponents[0] == 1 && newExponents[1] == 1) {
+			return new PrimePair(newPrimeFactors[0], newPrimeFactors[1]);
+		}
 		return new Factorization(value, newPrimeFactors, newExponents);
+	}
+
+	/**
+	 * Returns the value that corresponds to the prime factorization.
+	 * <p>
+	 * @return The value
+	 */
+	public BigInteger getValue() {
+		return this.value;
+	}
+
+	/**
+	 * Returns an array containing the prime factors.
+	 * <p>
+	 * @return The prime factors
+	 */
+	public BigInteger[] getPrimeFactors() {
+		return this.primeFactors.clone();
+	}
+
+	/**
+	 * Returns an array containing the exponents.
+	 * <p>
+	 * @return The exponents
+	 */
+	public int[] getExponents() {
+		return this.exponents.clone();
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		return "" + this.getValue();
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		hash = 89 * hash + this.value.hashCode();
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof Factorization) {
+			final Factorization other = (Factorization) obj;
+			return this.value.equals(other.value);
+		}
+		return false;
 	}
 
 }

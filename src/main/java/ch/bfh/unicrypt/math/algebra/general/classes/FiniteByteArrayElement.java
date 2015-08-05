@@ -41,11 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *
@@ -55,16 +55,18 @@ public class FiniteByteArrayElement
 	   extends AbstractElement<FiniteByteArraySet, FiniteByteArrayElement, ByteArray>
 	   implements Element<ByteArray> {
 
+	private static final long serialVersionUID = 1L;
+
 	protected FiniteByteArrayElement(final FiniteByteArraySet set, final ByteArray byteArray) {
 		super(set, byteArray);
 	}
 
 	public int getLength() {
-		return this.getValue().getLength();
+		return this.value.getLength();
 	}
 
 	public ByteArrayElement getByteArrayElement() {
-		return ByteArrayMonoid.getInstance().getElement(this.getValue());
+		return ByteArrayMonoid.getInstance().getElement(this.value);
 	}
 
 }

@@ -43,14 +43,13 @@ package ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.abstracts.AbstractNonInteractiveSigmaChallengeGenerator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteByteArrayToBigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import java.math.BigInteger;
 
 /**
@@ -64,16 +63,23 @@ import java.math.BigInteger;
 public class FiatShamirSigmaChallengeGenerator
 	   extends AbstractNonInteractiveSigmaChallengeGenerator {
 
+	private final ConvertMethod convertMethod;
 	private final HashMethod hashMethod;
 	private final Converter<ByteArray, BigInteger> converter;
 
-	protected FiatShamirSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
-		super(publicInputSpace, commitmentSpace, challengeSpace, proverId);
+	protected FiatShamirSigmaChallengeGenerator(ZMod challengeSpace, Element proverId, ConvertMethod convertMethod, HashMethod hashMethod,
+		   Converter<ByteArray, BigInteger> converter) {
+		super(challengeSpace, proverId);
+		this.convertMethod = convertMethod;
 		this.hashMethod = hashMethod;
 		this.converter = converter;
 	}
 
-	public HashMethod getHashMethod() {
+	public ConvertMethod<?> getConvertMethod() {
+		return this.convertMethod;
+	}
+
+	public HashMethod<?> getHashMethod() {
 		return this.hashMethod;
 	}
 
@@ -83,42 +89,44 @@ public class FiatShamirSigmaChallengeGenerator
 
 	@Override
 	protected ZModElement abstractAbstractGenerate(Element input) {
-		ByteArray hashedInput = input.getHashValue(this.hashMethod);
-		return this.getChallengeSpace().getElement(this.converter.convert(hashedInput).mod(this.challengeSpace.getModulus()));
+		ByteArray hashedInput = input.getHashValue(this.convertMethod, this.hashMethod);
+		return this.getChallengeSpace()
+			   .getElement(this.converter.convert(hashedInput).mod(this.challengeSpace.getModulus()));
 	}
 
-	public static FiatShamirSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace) {
-		return FiatShamirSigmaChallengeGenerator.getInstance(publicInputSpace, commitmentSpace, challengeSpace, (Element) null);
+	public static FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace) {
+		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null);
 	}
 
 	/**
 	 * Creates a SigmaChallenge generator using a hash function to generate the challenge
 	 * <p>
 	 * The generated challenge depends on the public input, the commitment and the other input. These values are
-	 * combined into a triple and hashed together using the given HashMethod. The string called otherInput is converted
-	 * into a string element. To hash the triple (public input, commitment, other input) each of these elements are
-	 * converted using the converters passed in the HashMethod. The result of the HashFunction is converted back to a
-	 * BigInteger using the given converter as a before the methods returns its corresponding value in the challenge
-	 * space.
+	 * combined into a triple and hashed together using the given ElementHashMethod. The string called otherInput is
+	 * converted into a string element. To hash the triple (public input, commitment, other input) each of these
+	 * elements are converted using the converters passed in the ElementHashMethod. The result of the HashFunction is
+	 * converted back to a BigInteger using the given converter as a before the methods returns its corresponding value
+	 * in the challenge space.
 	 * <p>
 	 * This default factory method uses SHA256 as Hash function, Recursive hash mode, big endian as BigIntegerConverter,
 	 * UFT-8 String converter, and standard FiniteByteArrayToBigInteger.
 	 * <p>
-	 * @param publicInputSpace space containing the public input
-	 * @param commitmentSpace  space containing the commitment
 	 * @param challengeSpace
-	 * @param proverId         other stuff that must be hash with the public input and the commitment to obtain the
-	 *                         challenge
+	 * @param proverId       other stuff that must be hash with the public input and the commitment to obtain the
+	 *                       challenge
 	 * @return a challenge generator
 	 */
-	public static FiatShamirSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverId) {
-		HashMethod hashMethod = HashMethod.getInstance();
-		int length = hashMethod.getHashAlgorithm().getHashLength();
-		return FiatShamirSigmaChallengeGenerator.getInstance(publicInputSpace, commitmentSpace, challengeSpace, proverId, hashMethod, FiniteByteArrayToBigInteger.getInstance(length));
+	public static FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId) {
+		ConvertMethod<ByteArray> convertMethod = ConvertMethod.getInstance();
+		HashMethod<ByteArray> hashMethod = HashMethod.getInstance();
+		int hashLength = hashMethod.getHashAlgorithm().getByteLength();
+		Converter<ByteArray, BigInteger> converter = ByteArrayToBigInteger.getInstance(hashLength, 1);
+		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, proverId, convertMethod, hashMethod, converter);
 	}
 
-	public static FiatShamirSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
-		return FiatShamirSigmaChallengeGenerator.getInstance(publicInputSpace, commitmentSpace, challengeSpace, (Element) null, hashMethod, converter);
+	public static <V> FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, ConvertMethod<V> convertMethod, HashMethod<V> hashMethod,
+		   Converter<ByteArray, BigInteger> converter) {
+		return FiatShamirSigmaChallengeGenerator.getInstance(challengeSpace, (Element) null, convertMethod, hashMethod, converter);
 	}
 
 	/**
@@ -126,27 +134,28 @@ public class FiatShamirSigmaChallengeGenerator
 	 * Creates a SigmaChallenge generator using a hash function to generate the challenge
 	 * <p>
 	 * The generated challenge depends on the public input, the commitment and the other input. These values are
-	 * combined into a triple and hashed together using the given HashMethod. The string called otherInput is converted
-	 * into a string element. To hash the triple (public input, commitment, other input) each of these elements are
-	 * converted using the converters passed in the HashMethod. The result of the HashFunction is converted back to a
-	 * BigInteger using the given converter as a before the methods returns its corresponding value in the challenge
-	 * space.
+	 * combined into a triple and hashed together using the given ElementHashMethod. The string called otherInput is
+	 * converted into a string element. To hash the triple (public input, commitment, other input) each of these
+	 * elements are converted using the converters passed in the ElementHashMethod. The result of the HashFunction is
+	 * converted back to a BigInteger using the given converter as a before the methods returns its corresponding value
+	 * in the challenge space.
 	 * <p>
-	 * @param publicInputSpace space containing the public input
-	 * @param commitmentSpace  space containing the commitment
+	 * @param <V>
 	 * @param challengeSpace
-	 * @param proverId         other stuff that must be hash with the public input and the commitment to obtain the
-	 *                         challenge
-	 * @param hashMethod       Hash method to use to generate the challenge
-	 * @param converter        the converter to be used after the computation of the hash to convert the obtained byte
-	 *                         array in a big integer representing the challenge
+	 * @param proverId       other stuff that must be hash with the public input and the commitment to obtain the
+	 *                       challenge
+	 * @param convertMethod
+	 * @param hashMethod     Hash method to use to generate the challenge
+	 * @param converter      the converter to be used after the computation of the hash to convert the obtained byte
+	 *                       array in a big integer representing the challenge
 	 * @return a challenge generator
 	 */
-	public static FiatShamirSigmaChallengeGenerator getInstance(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace, Element proverId, HashMethod hashMethod, Converter<ByteArray, BigInteger> converter) {
-		if (publicInputSpace == null || commitmentSpace == null || challengeSpace == null || hashMethod == null || converter == null) {
+	public static <V> FiatShamirSigmaChallengeGenerator getInstance(ZMod challengeSpace, Element proverId, ConvertMethod<V> convertMethod,
+		   HashMethod<V> hashMethod, Converter<ByteArray, BigInteger> converter) {
+		if (challengeSpace == null || convertMethod == null || hashMethod == null || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new FiatShamirSigmaChallengeGenerator(publicInputSpace, commitmentSpace, challengeSpace, proverId, hashMethod, converter);
+		return new FiatShamirSigmaChallengeGenerator(challengeSpace, proverId, convertMethod, hashMethod, converter);
 	}
 
 }

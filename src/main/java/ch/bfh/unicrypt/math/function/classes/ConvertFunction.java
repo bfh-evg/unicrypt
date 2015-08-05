@@ -55,42 +55,81 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
- * @param <V>
- * @param <W>
  */
-public class ConvertFunction<V extends Object, W extends Object>
-	   extends AbstractFunction<ConvertFunction, Set<V>, Element<V>, Set<W>, Element<W>> {
+public class ConvertFunction
+	   extends AbstractFunction<ConvertFunction, Set, Element, Set, Element> {
 
-	private final Converter<V, W> converter;
+	private static final long serialVersionUID = 1L;
 
-	private ConvertFunction(final Set<V> domain, final Set<W> coDomain, Converter<V, W> converter) {
+	private final Converter domainConverter;
+	private final Converter coDomainConverter;
+
+	public enum Mode {
+
+		BIG_INTEGER, STRING, BYTE_ARRAY
+
+	};
+
+	private ConvertFunction(final Set domain, final Set coDomain, Converter domainConverter, Converter coDomainConverter) {
 		super(domain, coDomain);
-		this.converter = converter;
+		this.domainConverter = domainConverter;
+		this.coDomainConverter = coDomainConverter;
 	}
 
 	@Override
-	protected Element<W> abstractApply(final Element<V> element, final RandomByteSequence randomByteSequence) {
-		return this.getCoDomain().getElement(this.converter.convert(element.getValue()));
+	protected Element abstractApply(Element element, RandomByteSequence randomByteSequence) {
+		Object value = element.convertTo(this.domainConverter);
+		Element result = this.getCoDomain().getElementFrom(value, this.coDomainConverter);
+		if (result == null) {
+			throw new IllegalArgumentException();
+		}
+		return result;
 	}
 
-	/**
-	 * This is the general factory method for this class. It creates an function that converts values from the domain
-	 * into values from the co-domain.
-	 * <p/>
-	 * @param <V>
-	 * @param <W>
-	 * @param domain    The given domain
-	 * @param coDomain  The given co-domain
-	 * @param converter
-	 * @return The resulting function
-	 * @throws IllegalArgumentException if the domain or coDomain is null
-	 */
-	public static <V, W> ConvertFunction<V, W> getInstance(final Set<V> domain, final Set<W> coDomain, Converter<V, W> converter) {
-		return new ConvertFunction<V, W>(domain, coDomain, converter);
+	public static <V> ConvertFunction getInstance(Set<V> domain, Set<V> coDomain) {
+		if (domain == null || coDomain == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ConvertFunction(domain, coDomain, TrivialConverter.<V>getInstance(), TrivialConverter.<V>getInstance());
 	}
 
-	public static <V> ConvertFunction<V, V> getInstance(Set<V> domain, Set<V> coDomain) {
-		return new ConvertFunction<V, V>(domain, coDomain, TrivialConverter.<V>getInstance());
+	public static <V, W> ConvertFunction getInstance(final Set<V> domain, final Set<W> coDomain, Converter<V, W> converter) {
+		if (domain == null || coDomain == null || converter == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ConvertFunction(domain, coDomain, converter, TrivialConverter.<W>getInstance());
+	}
+
+	public static <V, W, X> ConvertFunction getInstance(Set<V> domain, Set<W> domainConverter, Converter<V, X> converter1, Converter<W, X> coDomainConverter) {
+		if (domain == null || domainConverter == null || converter1 == null || coDomainConverter == null) {
+			throw new IllegalArgumentException();
+		}
+		return new ConvertFunction(domain, domainConverter, converter1, coDomainConverter);
+	}
+
+	public static ConvertFunction getInstance(Set domain, Set coDomain, Mode mode) {
+		if (domain == null || coDomain == null || mode == null) {
+			throw new IllegalArgumentException();
+		}
+		Converter converter1;
+		Converter converter2;
+		switch (mode) {
+			case BIG_INTEGER:
+				converter1 = domain.getBigIntegerConverter();
+				converter2 = coDomain.getBigIntegerConverter();
+				break;
+			case STRING:
+				converter1 = domain.getStringConverter();
+				converter2 = coDomain.getStringConverter();
+				break;
+			case BYTE_ARRAY:
+				converter1 = domain.getByteArrayConverter();
+				converter2 = coDomain.getByteArrayConverter();
+				break;
+			default:
+				throw new IllegalStateException();
+		}
+		return new ConvertFunction(domain, coDomain, converter1, converter2);
 	}
 
 }

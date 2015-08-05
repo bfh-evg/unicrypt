@@ -46,14 +46,14 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 
 /**
  * This interface provides the renaming of some group operations for the case of a multiplicatively written
- * {@link Monoid}. No functionality is added.
+ * {@link Monoid}. No functionality is added. Some return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  * @param <V> Generic type of values stored in the elements of this monoid
  */
-public interface MultiplicativeMonoid<V extends Object>
+public interface MultiplicativeMonoid<V>
 	   extends Monoid<V>, MultiplicativeSemiGroup<V> {
 
 	/**
@@ -71,7 +71,6 @@ public interface MultiplicativeMonoid<V extends Object>
 	 */
 	public boolean isOneElement(Element element);
 
-	// The following methods are overridden from Monoid with an adapted return type
 	@Override
 	public MultiplicativeElement<V> getIdentityElement();
 

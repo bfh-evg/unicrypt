@@ -51,14 +51,14 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * of the ring may be obtained by repeatedly applying the operation within the ring or its inverse to g. Each element
  * can be written as a power of g in multiplicative notation, or as a multiple of g in additive notation. This element g
  * is called a generator of the ring. It is therefore implemented as a specialization of {@link Ring} and
- * {@link AdditiveCyclicGroup}.
+ * {@link AdditiveCyclicGroup}. Some return types are updated.
  * <p>
  * @author rolfhaenni
+ * @param <V>
  */
-public interface CyclicRing<V extends Object>
+public interface CyclicRing<V>
 	   extends Ring<V>, AdditiveCyclicGroup<V> {
 
-	// The following methods are overridden from AdditiveCyclicGroup with an adapted return type
 	@Override
 	public DualisticElement<V> getDefaultGenerator();
 
@@ -72,6 +72,7 @@ public interface CyclicRing<V extends Object>
 	public DualisticElement<V> getIndependentGenerator(int index);
 
 	@Override
-	public DualisticElement<V> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
+	public DualisticElement<V> getIndependentGenerator(int index,
+		   ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

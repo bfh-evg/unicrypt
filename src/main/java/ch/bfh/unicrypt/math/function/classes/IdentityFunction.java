@@ -56,6 +56,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class IdentityFunction
 	   extends AbstractFunction<IdentityFunction, Set, Element, Set, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private IdentityFunction(final Set set) {
 		super(set, set);
@@ -78,8 +79,8 @@ public class IdentityFunction
 	 * <p/>
 	 * @param set The given set
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static IdentityFunction getInstance(final Set set) {
 		if (set == null) {

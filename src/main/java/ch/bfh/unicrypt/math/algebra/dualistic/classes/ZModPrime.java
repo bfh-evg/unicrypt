@@ -45,8 +45,6 @@ import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.PrimeField;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrime;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +56,8 @@ import java.util.Map;
 public class ZModPrime
 	   extends ZMod
 	   implements PrimeField<BigInteger> {
+
+	private static final long serialVersionUID = 1L;
 
 	protected ZModPrime(Prime prime) {
 		super(prime.getValue());
@@ -97,7 +97,7 @@ public class ZModPrime
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<BigInteger, ZModPrime> instances = new HashMap<BigInteger, ZModPrime>();
+	private static final Map<BigInteger, ZModPrime> instances = new HashMap<>();
 
 	public static ZModPrime getInstance(final Prime modulus) {
 		if (modulus == null) {
@@ -111,7 +111,7 @@ public class ZModPrime
 		return instance;
 	}
 
-	public static ZModPrime getInstance(final int modulus) {
+	public static ZModPrime getInstance(final long modulus) {
 		return ZModPrime.getInstance(BigInteger.valueOf(modulus));
 	}
 
@@ -119,12 +119,8 @@ public class ZModPrime
 		return ZModPrime.getInstance(Prime.getInstance(modulus));
 	}
 
-	public static ZModPrime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		return ZModPrime.getInstance(Prime.getRandomInstance(bitLength, randomByteSequence));
-	}
-
-	public static ZModPrime getRandomInstance(int bitLength) {
-		return ZModPrime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
+	public static ZModPrime getFirstInstance(int bitLength) {
+		return ZModPrime.getInstance(Prime.getFirstInstance(bitLength));
 	}
 
 	@Override

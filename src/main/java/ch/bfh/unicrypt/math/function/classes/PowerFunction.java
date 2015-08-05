@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
@@ -67,6 +66,7 @@ import java.math.BigInteger;
  */
 public class PowerFunction
 	   extends AbstractFunction<PowerFunction, ProductSet, Pair, MultiplicativeSemiGroup, MultiplicativeElement> {
+	private static final long serialVersionUID = 1L;
 
 	private PowerFunction(final ProductSet domain, final MultiplicativeSemiGroup coDomain) {
 		super(domain, coDomain);
@@ -91,7 +91,7 @@ public class PowerFunction
 	 * <p/>
 	 * @param multiplicativeSemiGroup The underlying group
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup) {
 		if (multiplicativeSemiGroup == null) {
@@ -111,10 +111,11 @@ public class PowerFunction
 	 * @param multiplicativeSemiGroup The underlying group
 	 * @param amountSet
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code amountGroup} is negative
 	 */
-	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup, final Set<BigInteger> amountSet) {
+	public static PowerFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup,
+		   final Set<BigInteger> amountSet) {
 		if (multiplicativeSemiGroup == null || amountSet == null) {
 			throw new IllegalArgumentException();
 		}

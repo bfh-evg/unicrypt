@@ -55,13 +55,15 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this field
  * @author rolfhaenni
  */
-public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V extends Object>
+public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V>
 	   extends AbstractRing<E, V>
 	   implements Field<V> {
 
+	private static final long serialVersionUID = 1L;
+
 	private M multiplicativeGroup;
 
-	public AbstractField(Class<? extends Object> valueClass) {
+	protected AbstractField(Class<?> valueClass) {
 		super(valueClass);
 	}
 

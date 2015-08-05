@@ -45,14 +45,36 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import java.math.BigInteger;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * The single instance of this class converts the Boolean values {@code false} into {@link BigInteger#ZERO} and
+ * {@code true} into {@link BigInteger#ONE}.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class BooleanToBigInteger
 	   extends AbstractBigIntegerConverter<Boolean> {
 
+	private static BooleanToBigInteger instance = null;
+
 	private BooleanToBigInteger() {
 		super(Boolean.class);
+	}
+
+	/**
+	 * Returns the single instance of this class.
+	 * <p>
+	 * @return The single instance
+	 */
+	public static BooleanToBigInteger getInstance() {
+		if (instance == null) {
+			instance = new BooleanToBigInteger();
+		}
+		return instance;
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		return value.equals(BigInteger.ZERO) || value.equals(BigInteger.ONE);
 	}
 
 	@Override
@@ -68,14 +90,7 @@ public class BooleanToBigInteger
 		if (value.equals(BigInteger.ZERO)) {
 			return false;
 		}
-		if (value.equals(BigInteger.ONE)) {
-			return true;
-		}
-		return null;
-	}
-
-	public static BooleanToBigInteger getInstance() {
-		return new BooleanToBigInteger();
+		return true;
 	}
 
 }

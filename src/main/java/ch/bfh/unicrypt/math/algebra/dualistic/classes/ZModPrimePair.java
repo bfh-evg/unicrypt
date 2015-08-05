@@ -44,8 +44,6 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrimePair;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +55,7 @@ import java.util.Map;
 public class ZModPrimePair
 	   extends ZMod {
 
-	PrimePair primePair;
+	private PrimePair primePair;
 
 	protected ZModPrimePair(PrimePair primePair) {
 		super(primePair.getValue());
@@ -69,11 +67,11 @@ public class ZModPrimePair
 	}
 
 	public BigInteger getFirstPrime() {
-		return this.getPrimePair().getFirst();
+		return this.getPrimePair().getSmallerPrimeFactor();
 	}
 
 	public BigInteger getSecondPrime() {
-		return this.getPrimePair().getSecond();
+		return this.getPrimePair().getLargerPrimeFactor();
 	}
 
 	@Override
@@ -86,7 +84,7 @@ public class ZModPrimePair
 		return ZStarModPrimePair.getInstance(this.getPrimePair());
 	}
 
-	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<BigInteger, ZModPrimePair>();
+	private static final Map<BigInteger, ZModPrimePair> instances = new HashMap<>();
 
 	public static ZModPrimePair getInstance(final PrimePair primePair) {
 		if (primePair == null) {
@@ -100,7 +98,7 @@ public class ZModPrimePair
 		return instance;
 	}
 
-	public static ZModPrimePair getInstance(final int prime1, final int prime2) {
+	public static ZModPrimePair getInstance(final long prime1, final long prime2) {
 		return ZModPrimePair.getInstance(BigInteger.valueOf(prime1), BigInteger.valueOf(prime2));
 	}
 
@@ -110,14 +108,6 @@ public class ZModPrimePair
 
 	public static ZModPrimePair getInstance(Prime prime1, Prime prime2) {
 		return new ZModPrimePair(PrimePair.getInstance(prime1, prime2));
-	}
-
-	public static ZModPrimePair getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		return new ZModPrimePair(PrimePair.getRandomInstance(bitLength, randomByteSequence));
-	}
-
-	public static ZModPrimePair getRandomInstance(int bitLength) {
-		return ZModPrimePair.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
 	}
 
 }

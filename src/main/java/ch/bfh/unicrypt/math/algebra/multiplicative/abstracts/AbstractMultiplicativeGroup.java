@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
@@ -54,11 +56,11 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this group
  * @author
  */
-public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement<V>, V extends Object>
+public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElement<V>, V>
 	   extends AbstractGroup<E, V>
 	   implements MultiplicativeGroup<V> {
 
-	public AbstractMultiplicativeGroup(Class<? extends Object> valueClass) {
+	protected AbstractMultiplicativeGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -73,7 +75,12 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
 	}
 
 	@Override
-	public final E multiply(final Iterable<Element> elements) {
+	public final E multiply(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E multiply(final Sequence<Element> elements) {
 		return this.apply(elements);
 	}
 
@@ -88,7 +95,7 @@ public abstract class AbstractMultiplicativeGroup<E extends MultiplicativeElemen
 	}
 
 	@Override
-	public final E power(final Element element, final int amount) {
+	public final E power(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

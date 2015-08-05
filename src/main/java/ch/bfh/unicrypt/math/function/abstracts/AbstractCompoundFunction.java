@@ -43,7 +43,8 @@ package ch.bfh.unicrypt.math.function.abstracts;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
+import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
@@ -60,7 +61,9 @@ import java.util.Iterator;
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<CF, D, DE, C, CE>
-	   implements RecursiveArray<Function> {
+	   implements NestedArray<Function> {
+
+	private static final long serialVersionUID = 1L;
 
 	protected final DenseArray<Function> functions;
 
@@ -89,23 +92,28 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
-	public Iterable<Integer> getAllIndices() {
+	public Sequence<Integer> getAllIndices() {
 		return this.functions.getAllIndices();
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(Function function) {
+	public Sequence<Integer> getIndices(Function function) {
 		return this.functions.getIndices(function);
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(Function function) {
+	public Sequence<Integer> getIndicesExcept(Function function) {
 		return this.functions.getIndicesExcept(function);
 	}
 
 	@Override
 	public int count(Function function) {
 		return this.functions.count(function);
+	}
+
+	@Override
+	public int countExcept(Function function) {
+		return this.functions.countExcept(function);
 	}
 
 	@Override
@@ -195,18 +203,33 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 	}
 
 	@Override
+	public CF removeFirst() {
+		return this.abstractGetInstance(this.functions.removeFirst());
+	}
+
+	@Override
+	public CF removeLast() {
+		return this.abstractGetInstance(this.functions.removeLast());
+	}
+
+	@Override
 	public CF insertAt(int index, Function function) {
 		return this.abstractGetInstance(this.functions.insertAt(index, function));
 	}
 
 	@Override
-	public CF replaceAt(int index, Function function) {
-		return this.abstractGetInstance(this.functions.replaceAt(index, function));
+	public CF insert(Function function) {
+		return this.abstractGetInstance(this.functions.insert(function));
 	}
 
 	@Override
 	public CF add(Function function) {
 		return this.abstractGetInstance(this.functions.add(function));
+	}
+
+	@Override
+	public CF replaceAt(int index, Function function) {
+		return this.abstractGetInstance(this.functions.replaceAt(index, function));
 	}
 
 	@Override
@@ -227,6 +250,11 @@ public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFuncti
 			result[i] = this.abstractGetInstance(functionArray[i]);
 		}
 		return result;
+	}
+
+	@Override
+	public final Sequence<Function> getSequence() {
+		return this.functions.getSequence();
 	}
 
 	@Override

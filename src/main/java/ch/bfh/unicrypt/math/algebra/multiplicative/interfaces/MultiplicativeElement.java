@@ -42,16 +42,16 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {@link Element}. No functionality is added.
+ * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
+ * updated.
  * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values stored in this element
  */
-public interface MultiplicativeElement<V extends Object>
+public interface MultiplicativeElement<V>
 	   extends Element<V> {
 
 	/**
@@ -75,9 +75,9 @@ public interface MultiplicativeElement<V extends Object>
 	public MultiplicativeElement<V> power(Element<BigInteger> amount);
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
-	public MultiplicativeElement<V> power(int amount);
+	public MultiplicativeElement<V> power(long amount);
 
 	/**
 	 * @see Group#selfApply(Element)
@@ -91,7 +91,6 @@ public interface MultiplicativeElement<V extends Object>
 
 	public boolean isOne();
 
-	// The following methods are overridden from Element with an adapted return type
 	@Override
 	public MultiplicativeSemiGroup<V> getSet();
 
@@ -108,7 +107,7 @@ public interface MultiplicativeElement<V extends Object>
 	public MultiplicativeElement<V> selfApply(Element<BigInteger> amount);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(int amount);
+	public MultiplicativeElement<V> selfApply(long amount);
 
 	@Override
 	public MultiplicativeElement<V> selfApply();

@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -55,8 +55,10 @@ import java.util.Map;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  */
-public class EnumeratedSet<V extends Object>
+public class EnumeratedSet<V>
 	   extends AbstractSet<EnumeratedSetElement<V>, V> {
+
+	private static final long serialVersionUID = 1L;
 
 	protected final Map<Integer, V> valueMap;
 	protected final Map<V, Integer> indexMap;
@@ -79,11 +81,11 @@ public class EnumeratedSet<V extends Object>
 
 	@Override
 	protected EnumeratedSetElement<V> abstractGetElement(V value) {
-		return new EnumeratedSetElement<V>(this, value);
+		return new EnumeratedSetElement<>(this, value);
 	}
 
 	@Override
-	protected BigIntegerConverter<V> abstractGetBigIntegerConverter() {
+	protected Converter<V, BigInteger> abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<V>(null) { // class parameter not needed
 
 			@Override
@@ -100,7 +102,7 @@ public class EnumeratedSet<V extends Object>
 
 	@Override
 	protected EnumeratedSetElement<V> abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		int index = randomByteSequence.getRandomNumberGenerator().nextInteger(this.getOrder().intValue() - 1);
+		int index = randomByteSequence.getRandomNumberGenerator().nextInt(this.getOrder().intValue() - 1);
 		return this.abstractGetElement(this.valueMap.get(index));
 	}
 
@@ -116,7 +118,7 @@ public class EnumeratedSet<V extends Object>
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		String str = this.valueMap.values().toString();
 		return str.substring(1, str.length() - 1);
 	}
@@ -126,8 +128,8 @@ public class EnumeratedSet<V extends Object>
 			throw new IllegalArgumentException();
 		}
 		// both maps are needed for efficiency reasons
-		Map<Integer, V> valueMap = new HashMap<Integer, V>();
-		Map<V, Integer> indexMap = new HashMap<V, Integer>();
+		Map<Integer, V> valueMap = new HashMap<>();
+		Map<V, Integer> indexMap = new HashMap<>();
 		int index = 0;
 		for (V value : values) {
 			if (value == null || valueMap.containsValue(value)) {
@@ -137,7 +139,7 @@ public class EnumeratedSet<V extends Object>
 			indexMap.put(value, index);
 			index++;
 		}
-		return new EnumeratedSet<V>(valueMap, indexMap, (Class<V>) values.getClass().getComponentType());
+		return new EnumeratedSet<>(valueMap, indexMap, (Class<V>) values.getClass().getComponentType());
 	}
 
 }

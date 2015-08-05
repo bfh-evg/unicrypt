@@ -42,7 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.iterable.IterableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -55,6 +58,8 @@ import java.math.BigInteger;
 public class ProductSemiGroup
 	   extends ProductSet
 	   implements SemiGroup<DenseArray<Element>> {
+
+	private static final long serialVersionUID = 1L;
 
 	protected ProductSemiGroup(DenseArray<Set> sets) {
 		super(sets);
@@ -154,10 +159,6 @@ public class ProductSemiGroup
 	@Override
 	public final Tuple apply(Element element1, Element element2) {
 		if (!this.contains(element1) || !this.contains(element2)) {
-			System.out.println("ERROR");
-			System.out.println(this);
-			System.out.println(element1);
-			System.out.println(element2);
 			throw new IllegalArgumentException();
 		}
 		return this.abstractApply((Tuple) element1, (Tuple) element2);
@@ -168,11 +169,19 @@ public class ProductSemiGroup
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultApply(IterableArray.getInstance(elements));
+		return this.defaultApply(Sequence.getInstance(elements));
 	}
 
 	@Override
-	public final Tuple apply(Iterable<Element> elements) {
+	public final Tuple apply(final ImmutableArray<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultApply(Sequence.getInstance(elements));
+	}
+
+	@Override
+	public final Tuple apply(Sequence<Element> elements) {
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
@@ -201,7 +210,7 @@ public class ProductSemiGroup
 	}
 
 	@Override
-	public final Tuple selfApply(Element element, int amount) {
+	public final Tuple selfApply(Element element, long amount) {
 		return this.selfApply(element, BigInteger.valueOf(amount));
 	}
 
@@ -226,19 +235,16 @@ public class ProductSemiGroup
 		return this.abstractGetElement(DenseArray.getInstance(results));
 	}
 
-	protected Tuple defaultApply(final Iterable<Element> elements) {
-		if (!elements.iterator().hasNext()) {
-			throw new IllegalArgumentException();
-		}
-		Element result = null;
-		for (Element element : elements) {
-			if (result == null) {
-				result = element;
-			} else {
-				result = this.apply(result, element);
+	protected Tuple defaultApply(final Sequence<Element> elements) {
+		final ProductSemiGroup semiGroup = this;
+		return (Tuple) elements.filter(Predicate.NOT_NULL).reduce(new BinaryOperator<Element>() {
+
+			@Override
+			public Element apply(Element element1, Element element2) {
+				return semiGroup.apply(element1, element2);
 			}
-		}
-		return (Tuple) result;
+
+		});
 	}
 
 	protected Tuple defaultMultiSelfApply(final Element[] elements, final BigInteger[] amounts) {

@@ -41,52 +41,114 @@
  */
 package ch.bfh.unicrypt.helper.factorization;
 
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrimePair;
+import ch.bfh.unicrypt.math.algebra.multiplicative.classes.ZStarModPrimePair;
+import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
 import java.math.BigInteger;
 
 /**
- *
- * @author rolfhaenni
+ * Instances of this class represent factorizations of the form {@code n=pq}, where {@code p} and {@code q} are distinct
+ * prime factors. Such factorizations are needed to construct instances of {@link ZModPrimePair} and
+ * {@link ZStarModPrimePair}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @see ZModPrimePair
+ * @see ZStarModPrimePair
  */
 public class PrimePair
 	   extends Factorization {
 
-	protected PrimePair(Prime prime1, Prime prime2) {
-		this(prime1.getValue(), prime2.getValue());
-	}
+	private static final long serialVersionUID = 1L;
 
 	protected PrimePair(BigInteger prime1, BigInteger prime2) {
-		super(prime1.multiply(prime2), new BigInteger[]{prime1, prime2}, new int[]{1, 1});
+		// the smaller prime factor is stored at index 0, the larger at index 1
+		super(prime1.multiply(prime2), new BigInteger[]{prime1.min(prime2), prime1.max(prime2)}, new int[]{1, 1});
 	}
 
-	public BigInteger getFirst() {
-		return this.getPrimeFactors()[0];
+	/**
+	 * Returns the smaller of the two prime factors.
+	 * <p>
+	 * @return The smaller prime factor
+	 */
+	public BigInteger getSmallerPrimeFactor() {
+		return this.primeFactors[0];
 	}
 
-	public BigInteger getSecond() {
-		return this.getPrimeFactors()[1];
+	/**
+	 * Returns the larger of the two prime factors.
+	 * <p>
+	 * @return The larger prime factor
+	 */
+	public BigInteger getLargerPrimeFactor() {
+		return this.primeFactors[1];
 	}
 
+	/**
+	 * Creates a new prime pair from two given integer values of type {@code long}. This method is a convenience method
+	 * for {@link PrimePair#getInstance(BigInteger, BigInteger)}. Throws an exception if one of the given integers is
+	 * not prime or if they are equal.
+	 * <p>
+	 * @param prime1 The first integer value
+	 * @param prime2 The second integer value
+	 * @return The new prime pair
+	 */
+	public static PrimePair getInstance(long prime1, long prime2) {
+		return PrimePair.getInstance(Prime.getInstance(prime1), Prime.getInstance(prime2));
+	}
+
+	/**
+	 * Creates a new prime pair from two given integer values of type {@code BigInteger}. This method is a convenience
+	 * method for {@link PrimePair#getInstance(Prime, Prime)}. Throws an exception if one of the given integers is not
+	 * prime or if they are equal.
+	 * <p>
+	 * @param prime1 The first integer value
+	 * @param prime2 The second integer value
+	 * @return The new prime pair
+	 */
 	public static PrimePair getInstance(BigInteger prime1, BigInteger prime2) {
-		Prime pr1 = Prime.getInstance(prime1);
-		Prime pr2 = Prime.getInstance(prime2);
-		return PrimePair.getInstance(pr1, pr2);
+		return PrimePair.getInstance(Prime.getInstance(prime1), Prime.getInstance(prime2));
 	}
 
+	/**
+	 * Creates a new prime pair from two distinct primes. Throws an exception if they are equal.
+	 * <p>
+	 * @param prime1 The first prime
+	 * @param prime2 The second prime
+	 * @return The new prime pair
+	 */
 	public static PrimePair getInstance(Prime prime1, Prime prime2) {
 		if (prime1 == null || prime2 == null || prime1.equals(prime2)) {
 			throw new IllegalArgumentException();
 		}
-		return new PrimePair(prime1, prime2);
+		return new PrimePair(prime1.getValue(), prime2.getValue());
 	}
 
+	/**
+	 * Creates a new random prime pair, each prime of a given bit length, using the library's default source of
+	 * randomness.
+	 * <p>
+	 * @param bitLength The bit length
+	 * @return The new prime pair
+	 */
 	public static PrimePair getRandomInstance(int bitLength) {
-		return PrimePair.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
+		return PrimePair.getRandomInstance(bitLength, RandomNumberGenerator.getInstance());
 	}
 
-	public static PrimePair getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		return PrimePair.getInstance(Prime.getRandomInstance(bitLength, randomByteSequence), Prime.getRandomInstance(bitLength, randomByteSequence));
+	/**
+	 * Creates a new random prime pair, each prime of a given bit length, using a given source of randomness.
+	 * <p>
+	 * @param bitLength             The bit length
+	 * @param randomNumberGenerator The given source of randomness
+	 * @return The new prime pair
+	 */
+	public static PrimePair getRandomInstance(int bitLength, RandomNumberGenerator randomNumberGenerator) {
+		Prime prime1 = Prime.getRandomInstance(bitLength, randomNumberGenerator);
+		Prime prime2;
+		do {
+			prime2 = Prime.getRandomInstance(bitLength, randomNumberGenerator);
+		} while (prime1.equals(prime2));
+		return new PrimePair(prime1.getValue(), prime2.getValue());
 	}
 
 }

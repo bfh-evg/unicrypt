@@ -48,9 +48,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  *
@@ -59,6 +56,8 @@ import java.util.NoSuchElementException;
 public class ProductCyclicGroup
 	   extends ProductGroup
 	   implements CyclicGroup<DenseArray<Element>> {
+
+	private static final long serialVersionUID = 1L;
 
 	private Tuple defaultGenerator;
 
@@ -142,36 +141,6 @@ public class ProductCyclicGroup
 	}
 
 	@Override
-	protected Iterator<Tuple> defaultGetIterator(final BigInteger maxCounter) {
-		final ProductCyclicGroup productCyclicGroup = this;
-		return new Iterator<Tuple>() {
-			BigInteger counter = BigInteger.ZERO;
-			Tuple currentTuple = productCyclicGroup.getIdentityElement();
-
-			@Override
-			public boolean hasNext() {
-				return this.counter.compareTo(maxCounter) < 0;
-			}
-
-			@Override
-			public Tuple next() {
-				if (this.hasNext()) {
-					this.counter = this.counter.add(BigInteger.ONE);
-					Tuple nextElement = this.currentTuple;
-					this.currentTuple = productCyclicGroup.apply(this.currentTuple, productCyclicGroup.getDefaultGenerator());
-					return nextElement;
-				}
-				throw new NoSuchElementException();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
-
-	@Override
 	public final Tuple getDefaultGenerator() {
 		if (this.defaultGenerator == null) {
 			Element[] defaultGenerators = new Element[this.getArity()];
@@ -223,7 +192,8 @@ public class ProductCyclicGroup
 	}
 
 	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
+	public final Tuple getIndependentGenerators(int minIndex, int maxIndex,
+		   ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (minIndex < 0 || maxIndex < minIndex) {
 			throw new IndexOutOfBoundsException();
 		}

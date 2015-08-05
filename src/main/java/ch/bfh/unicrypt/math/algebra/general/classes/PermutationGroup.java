@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.PermutationToBigInteger;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -70,13 +70,15 @@ import java.util.Map;
 public class PermutationGroup
 	   extends AbstractGroup<PermutationElement, Permutation> {
 
+	private static final long serialVersionUID = 1L;
+
 	private final int size;
 
 	/**
-	 * Returns a new instance of this class for a given {@literal size >= 0}.
+	 * Returns a new instance of this class for a given {@code size >= 0}.
 	 * <p>
 	 * @param size The size
-	 * @throws IllegalArgumentException if {@literal size} is negative
+	 * @throws IllegalArgumentException if {@code size} is negative
 	 */
 	private PermutationGroup(final int size) {
 		super(Permutation.class);
@@ -98,7 +100,7 @@ public class PermutationGroup
 	// various super-classes
 	//
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return "" + this.getSize();
 	}
 
@@ -122,7 +124,7 @@ public class PermutationGroup
 	}
 
 	@Override
-	protected BigIntegerConverter<Permutation> abstractGetBigIntegerConverter() {
+	protected Converter<Permutation, BigInteger> abstractGetBigIntegerConverter() {
 		return PermutationToBigInteger.getInstance(this.size);
 	}
 
@@ -162,14 +164,14 @@ public class PermutationGroup
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<Integer, PermutationGroup> instances = new HashMap<Integer, PermutationGroup>();
+	private static final Map<Integer, PermutationGroup> instances = new HashMap<>();
 
 	/**
 	 * Returns a the unique instance of this class for a given non-negative permutation size.
 	 * <p>
 	 * @param size The size of the permutation
 	 * @return
-	 * @throws IllegalArgumentException if {@literal modulus} is null, zero, or negative
+	 * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
 	 */
 	public static PermutationGroup getInstance(final int size) {
 		if (size < 0) {

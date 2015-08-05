@@ -51,7 +51,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarModSafePrime;
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.factorization.SafePrime;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -64,7 +65,7 @@ public class ReEncryptionMixerTest {
 	@Test
 	public void testReEncryptionMixer() {
 
-		CyclicGroup G_q = GStarModSafePrime.getRandomInstance(160);
+		CyclicGroup G_q = GStarModSafePrime.getInstance(SafePrime.getRandomInstance(160));
 		Element g = G_q.getDefaultGenerator();
 		Element sk = G_q.getZModOrder().getElement(7);
 		Element pk = g.selfApply(sk);

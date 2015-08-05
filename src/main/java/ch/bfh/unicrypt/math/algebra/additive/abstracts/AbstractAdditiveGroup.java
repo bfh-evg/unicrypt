@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractGroup;
@@ -52,13 +54,13 @@ import java.math.BigInteger;
  * <p>
  * @param <E> Generic type of the elements of this group
  * @param <V> Generic type of values stored in the elements of this group
- * @author
+ * @author rolfhaenni
  */
-public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V extends Object>
+public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V>
 	   extends AbstractGroup<E, V>
 	   implements AdditiveGroup<V> {
 
-	public AbstractAdditiveGroup(Class<? extends Object> valueClass) {
+	protected AbstractAdditiveGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -73,7 +75,12 @@ public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V exte
 	}
 
 	@Override
-	public final E add(final Iterable<Element> elements) {
+	public final E add(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E add(final Sequence<Element> elements) {
 		return this.apply(elements);
 	}
 
@@ -88,7 +95,7 @@ public abstract class AbstractAdditiveGroup<E extends AdditiveElement<V>, V exte
 	}
 
 	@Override
-	public final E times(final Element element, final int amount) {
+	public final E times(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

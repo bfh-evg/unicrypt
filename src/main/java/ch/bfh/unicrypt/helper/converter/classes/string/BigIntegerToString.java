@@ -45,38 +45,118 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
 import java.math.BigInteger;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instances of this class convert {@code BigInteger} values into strings. The radix of the string representation can be
+ * chosen freely between {@code 2} and {@code 36}. The 36 available digits are the characters
+ * {@code '0',...,'9','A',...,'Z'} or {@code '0',...,'9','a',...,'z'}, depending on the chosen mode of operation
+ * (upper-case or lower-case letters). Negative numbers are preceeded by the minus sign {@code '-'}. The default
+ * conversion returns the decimal representation with digits {@code '0',...,'9'}.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @see Character#MIN_RADIX
+ * @see Character#MAX_RADIX
  */
 public class BigIntegerToString
 	   extends AbstractStringConverter<BigInteger> {
 
+	private static final long serialVersionUID = 1L;
+
+	// a value between 2 and 36
 	private final int radix;
 
-	protected BigIntegerToString(int radix) {
+	// flag indicating whether lowe- or upper-case letters are used
+	private final boolean upperCase;
+
+	// used to check strings before reconverting
+	private final String regExp;
+
+	protected BigIntegerToString(int radix, boolean upperCase) {
 		super(BigInteger.class);
 		this.radix = radix;
+		this.upperCase = upperCase;
+		// compute regexp
+		String range;
+		if (radix <= 10) {
+			range = "0-" + (radix - 1);
+		} else {
+			if (radix == 11) {
+				if (upperCase) {
+					range = "0-9A";
+				} else {
+					range = "0-9a";
+				}
+			} else {
+				range = "0-9";
+				if (upperCase) {
+					range = range + "A-" + (char) ('A' + radix - 11);
+				} else {
+					range = range + "a-" + (char) ('a' + radix - 11);
+				}
+			}
+		}
+		this.regExp = "^-?[" + range + "]+$";  // this expression is not perfect, e.g. "0036" or "-0" are accepted
 	}
 
-	@Override
-	public String abstractConvert(BigInteger bigInteger) {
-		return bigInteger.toString(this.radix);
-	}
-
-	@Override
-	public BigInteger abstractReconvert(String string) {
-		return new BigInteger(string, this.radix);
-	}
-
+	/**
+	 * Returns the default {@code BigIntegerToString} converter using ordinary decimal representation.
+	 * <p>
+	 * @return The default converter
+	 */
 	public static BigIntegerToString getInstance() {
-		return BigIntegerToString.getInstance(10);
+		return BigIntegerToString.getInstance(10, true);
 	}
 
+	/**
+	 * Returns a new {@code BigIntegerToString} converter for a given {@code radix=2,...,36}. For {@code radix>10},
+	 * lower-case letters {@code 'a',...,'z'} are used as additional digits.
+	 * <p>
+	 * @param radix The given radix
+	 * @return The new converter
+	 */
 	public static BigIntegerToString getInstance(int radix) {
+		return BigIntegerToString.getInstance(radix, true);
+	}
+
+	/**
+	 * Returns a new {@code BigIntegerToString} converter for a given {@code radix=2,...,36}. For {@code radix>10}, the
+	 * parameter {@code upperCase} indicates whether upper-case letters {@code 'A',...,'Z'} or lower-case letters
+	 * {@code 'a',...,'z'} are used as additional digits.
+	 * <p>
+	 * @param radix     The given radix
+	 * @param upperCase The flag indicating whether upper-case or lower-case letters are used
+	 * @return The new converter
+	 */
+	public static BigIntegerToString getInstance(int radix, boolean upperCase) {
 		if (radix < Character.MIN_RADIX || radix > Character.MAX_RADIX) {
 			throw new IllegalArgumentException();
 		}
-		return new BigIntegerToString(radix);
+		return new BigIntegerToString(radix, upperCase);
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(String string) {
+		return string.matches(this.regExp);
+	}
+
+	@Override
+	protected String abstractConvert(BigInteger value
+	) {
+		String result = value.toString(this.radix);
+		if (this.upperCase) {
+			return result.toUpperCase();
+		}
+		return result;
+	}
+
+	@Override
+	protected BigInteger abstractReconvert(String string) {
+		return new BigInteger(string, this.radix);
+	}
+
+	@Override
+	protected String defaultToStringContent() {
+		String c = this.upperCase ? ",uppercase" : ",lowercase";
+		return "" + this.radix + c;
 	}
 
 }

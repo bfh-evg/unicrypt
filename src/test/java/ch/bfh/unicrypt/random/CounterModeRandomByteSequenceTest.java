@@ -97,7 +97,7 @@ public class CounterModeRandomByteSequenceTest {
 	@Test
 	public void testGetSeed() {
 		// System.out.println("getSeed");
-		ByteArray expSeed = Z.getInstance().getElement(4711).getByteTree().getByteArray();
+		ByteArray expSeed = Z.getInstance().getElement(4711).convertToByteArray();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance(expSeed);
 		ByteArray seed = instance.getSeed();
 		Assert.assertTrue(expSeed.equals(seed));
@@ -112,7 +112,7 @@ public class CounterModeRandomByteSequenceTest {
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
 		int counter = instance.getCounter();
 		Assert.assertTrue(0 == counter);
-		instance.getNextByteArray(HashAlgorithm.getInstance().getHashLength());
+		instance.getNextByteArray(HashAlgorithm.getInstance().getByteLength());
 		counter = instance.getCounter();
 		Assert.assertTrue(1 == counter);
 		instance.getNextByteArray(1);
@@ -229,7 +229,7 @@ public class CounterModeRandomByteSequenceTest {
 	@Ignore
 	public void testNextBytesDigestBytes() {
 		// System.out.println("abstractNextBytes");
-		int byteArrayLength = HashAlgorithm.getInstance().getHashLength();
+		int byteArrayLength = HashAlgorithm.getInstance().getByteLength();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 //		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(0)).getHashValue().getValue().getBytes();
 //		byte[] result = instance.getNextByteArray(byteArrayLength);
@@ -243,7 +243,7 @@ public class CounterModeRandomByteSequenceTest {
 	@Ignore
 	public void testNextBytesTwiceDigestBytes() {
 		// System.out.println("abstractNextBytes");
-		int byteArrayLength = HashAlgorithm.getInstance().getHashLength();
+		int byteArrayLength = HashAlgorithm.getInstance().getByteLength();
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		instance.getNextByteArray(byteArrayLength);
 //		byte[] expResult = Pair.getInstance(CounterModeRandomByteSequence.DEFAULT_SEED, Z.getInstance().getElement(1)).getHashValue().getValue().getBytes();
@@ -260,9 +260,9 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<Integer> numbers = new HashSet<Integer>();
+		HashSet<Integer> numbers = new HashSet<>();
 		for (int i = 0; i < 100000; i++) {
-			int result = instance.getRandomNumberGenerator().nextInteger(1023);
+			int result = instance.getRandomNumberGenerator().nextInt(1023);
 			numbers.add(result);
 			if (result == 1023) {
 				maxReached = true;
@@ -294,7 +294,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBigInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
+		HashSet<BigInteger> numbers = new HashSet<>();
 		for (int i = 0; i < 10000; i++) {
 			BigInteger result = instance.getRandomNumberGenerator().nextBigInteger(10);
 			numbers.add(result);
@@ -316,7 +316,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBigInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
+		HashSet<BigInteger> numbers = new HashSet<>();
 		for (int i = 0; i < 10000; i++) {
 			BigInteger result = instance.getRandomNumberGenerator().nextBigInteger(8);
 			numbers.add(result);
@@ -339,7 +339,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBigInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
+		HashSet<BigInteger> numbers = new HashSet<>();
 		for (int i = 0; i < 100000; i++) {
 			BigInteger result = instance.getRandomNumberGenerator().nextBigInteger(BigInteger.valueOf(1023));
 			numbers.add(result);
@@ -363,7 +363,7 @@ public class CounterModeRandomByteSequenceTest {
 		// System.out.println("abstractNextBigInteger");
 		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
 		boolean maxReached = false;
-		HashSet<BigInteger> numbers = new HashSet<BigInteger>();
+		HashSet<BigInteger> numbers = new HashSet<>();
 
 		for (int i = 0; i < 10000; i++) {
 			BigInteger result = instance.getRandomNumberGenerator().nextBigInteger(BigInteger.valueOf(255));
@@ -378,21 +378,6 @@ public class CounterModeRandomByteSequenceTest {
 		Assert.assertTrue(maxReached);
 		Assert.assertTrue("Amount: " + numbers.size(), numbers.size() == 256);
 
-	}
-
-	/**
-	 * Test of abstractNextPrime method, of class CounterModeRandomByteSequence.
-	 */
-	@Test
-	public void testAbstractNextPrime8() {
-		// System.out.println("abstractNextPrime");
-		CounterModeRandomByteSequence instance = CounterModeRandomByteSequence.getInstance();
-		HashSet<BigInteger> primes = new HashSet<BigInteger>();
-		for (int i = 0; i < 10000; i++) {
-			BigInteger result = instance.getRandomNumberGenerator().nextPrime(8);
-			primes.add(result);
-		}
-		Assert.assertTrue("Size: " + primes.size(), primes.size() == 23);
 	}
 
 }

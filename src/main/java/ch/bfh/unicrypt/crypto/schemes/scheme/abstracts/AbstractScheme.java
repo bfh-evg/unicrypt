@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.scheme.abstracts;
 
 import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
@@ -66,7 +66,7 @@ public abstract class AbstractScheme<MS extends Set>
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getMessageSpace().toString();
 	}
 

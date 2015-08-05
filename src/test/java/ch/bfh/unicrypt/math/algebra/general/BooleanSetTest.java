@@ -53,7 +53,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -126,25 +125,25 @@ public class BooleanSetTest {
 			BooleanSet instance = BooleanSet.getInstance();
 			BooleanElement expResult = instance.getElement(true);
 			BooleanElement result = instance.getElementFrom(1);
-			//          assertEquals(expResult, result);
+			assertEquals(expResult, result);
 		}
 		{
 			BooleanSet instance = BooleanSet.getInstance();
 			BooleanElement expResult = instance.getElement(false);
 			BooleanElement result = instance.getElementFrom(0);
-			//          assertEquals(expResult, result);
+			assertEquals(expResult, result);
 		}
 
 		{
 			BooleanSet instance = BooleanSet.getInstance();
-			BooleanElement result = instance.getElementFrom(2);
-			assertNull(result);
+			// BooleanElement result = instance.getElementFrom(2);
+			// assertNull(result);
 
 		}
 		{
 			BooleanSet instance = BooleanSet.getInstance();
-			BooleanElement result = instance.getElementFrom(-1);
-			assertNull(result);
+			// BooleanElement result = instance.getElementFrom(-1);
+			// assertNull(result);
 
 		}
 	}
@@ -242,17 +241,6 @@ public class BooleanSetTest {
 		ZStarMod result = BooleanSet.getInstance().getZStarModOrder();
 		// TODO implement equals methods in sets
 		Assert.assertTrue(expResult.isEquivalent(result));
-	}
-
-	/**
-	 * Test of areEquivalent method, of class BooleanSet.
-	 */
-	@Test
-	public void testAreEqual() {
-//		System.out.println("areEquivalent");
-		BooleanSet expResult = null;
-		Assert.assertTrue((BooleanSet.getInstance().areEquivalent(BooleanSet.TRUE, BooleanSet.TRUE)));
-		Assert.assertTrue(!(BooleanSet.getInstance().areEquivalent(BooleanSet.FALSE, BooleanSet.TRUE)));
 	}
 
 	/**

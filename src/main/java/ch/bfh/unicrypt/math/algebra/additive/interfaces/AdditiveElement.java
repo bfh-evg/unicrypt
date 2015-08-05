@@ -42,11 +42,11 @@
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {@link Element}. No functionality is added.
+ * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
+ * updated.
  * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values stored in the element
@@ -55,43 +55,42 @@ public interface AdditiveElement<V>
 	   extends Element<V> {
 
 	/**
-	 * @see Group#apply(Element, Element)
+	 * @see AdditiveSemiGroup#add(Element, Element)
 	 */
 	public AdditiveElement<V> add(Element element);
 
 	/**
-	 * @see Group#applyInverse(Element, Element)
+	 * @see AdditiveGroup#subtract(Element, Element)
 	 */
 	public AdditiveElement<V> subtract(Element element);
 
 	/**
-	 * @see Group#selfApply(Element, BigInteger)
+	 * @see AdditiveSemiGroup#times(Element, BigInteger)
 	 */
 	public AdditiveElement<V> times(BigInteger amount);
 
 	/**
-	 * @see Group#selfApply(Element, Element)
+	 * @see AdditiveSemiGroup#times(Element, Element)
 	 */
 	public AdditiveElement<V> times(Element<BigInteger> amount);
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see AdditiveSemiGroup#times(Element, long)
 	 */
-	public AdditiveElement<V> times(int amount);
+	public AdditiveElement<V> times(long amount);
 
 	/**
-	 * @see Group#selfApply(Element)
+	 * @see AdditiveSemiGroup#timesTwo(Element)
 	 */
 	public AdditiveElement<V> timesTwo();
 
 	/**
-	 * @see Group#negate(Element)
+	 * @see AdditiveGroup#negate(Element)
 	 */
 	public AdditiveElement<V> negate();
 
 	public boolean isZero();
 
-	// The following methods are overridden from Element with an adapted return type
 	@Override
 	public AdditiveSemiGroup<V> getSet();
 
@@ -108,7 +107,7 @@ public interface AdditiveElement<V>
 	public AdditiveElement<V> selfApply(Element<BigInteger> amount);
 
 	@Override
-	public AdditiveElement<V> selfApply(int amount);
+	public AdditiveElement<V> selfApply(long amount);
 
 	@Override
 	public AdditiveElement<V> selfApply();

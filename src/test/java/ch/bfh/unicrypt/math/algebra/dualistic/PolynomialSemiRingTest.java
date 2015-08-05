@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
-import ch.bfh.unicrypt.helper.Polynomial;
+import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialSemiRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.Z;
@@ -67,9 +67,9 @@ public class PolynomialSemiRingTest {
 	private static final ZModPrime zmod2 = ZModPrime.getInstance(2);
 	private static final ZModPrime zmod7 = ZModPrime.getInstance(7);
 
-	private static final PolynomialSemiRing<BigInteger> ring0 = PolynomialSemiRing.getInstance(z);
-	private static final PolynomialSemiRing<BigInteger> ring2 = PolynomialSemiRing.getInstance(zmod2);
-	private static final PolynomialSemiRing<BigInteger> ring7 = PolynomialSemiRing.getInstance(zmod7);
+	private static final PolynomialSemiRing ring0 = PolynomialSemiRing.getInstance(z);
+	private static final PolynomialSemiRing ring2 = PolynomialSemiRing.getInstance(zmod2);
+	private static final PolynomialSemiRing ring7 = PolynomialSemiRing.getInstance(zmod7);
 
 	@Test
 	public void testIsBinary() {
@@ -80,11 +80,11 @@ public class PolynomialSemiRingTest {
 
 	@Test
 	public void testGetElementBigInteger() {
-		PolynomialElement<BigInteger> p0 = ring0.getElement(BigInteger.valueOf(2), BigInteger.valueOf(3), BigInteger.valueOf(4), BigInteger.valueOf(2));
+		PolynomialElement p0 = ring0.getElement(BigInteger.valueOf(2), BigInteger.valueOf(3), BigInteger.valueOf(4), BigInteger.valueOf(2));
 		assertEquals(1, p0.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(-2, p0.getValue().getCoefficient(1).getValue().intValue());
 
-		PolynomialElement<BigInteger> p1 = ring7.getElement(BigInteger.valueOf(2), BigInteger.valueOf(3), BigInteger.valueOf(4), BigInteger.valueOf(2));
+		PolynomialElement p1 = ring7.getElement(BigInteger.valueOf(2), BigInteger.valueOf(3), BigInteger.valueOf(4), BigInteger.valueOf(2));
 		assertEquals(2, p1.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(3, p1.getValue().getCoefficient(1).getValue().intValue());
 	}
@@ -97,19 +97,43 @@ public class PolynomialSemiRingTest {
 		} catch (IllegalArgumentException e) {
 		}
 
-		PolynomialElement<BigInteger> p = ring0.getElement(Tuple.getInstance(z.getElement(0), z.getElement(1), z.getElement(2), z.getElement(3)));
-		assertFalse(p.getValue().isBinary());
+		PolynomialElement p = ring0.getElement(Tuple.getInstance(z.getElement(0), z.getElement(1), z.getElement(2), z.getElement(3)));
 		assertEquals(0, p.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(1, p.getValue().getCoefficient(1).getValue().intValue());
 		assertEquals(2, p.getValue().getCoefficient(2).getValue().intValue());
 		assertEquals(3, p.getValue().getCoefficient(3).getValue().intValue());
 
-		PolynomialElement<BigInteger> p2 = ring2.getElement(Tuple.getInstance(zmod2.getElement(0), zmod2.getElement(1), zmod2.getElement(1), zmod2.getElement(1)));
-		assertTrue(p2.getValue().isBinary());
+		PolynomialElement p2 = ring2.getElement(Tuple.getInstance(zmod2.getElement(0), zmod2.getElement(1), zmod2.getElement(1), zmod2.getElement(1)));
 		assertEquals(0, p2.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(1, p2.getValue().getCoefficient(1).getValue().intValue());
 		assertEquals(1, p2.getValue().getCoefficient(2).getValue().intValue());
 		assertEquals(1, p2.getValue().getCoefficient(3).getValue().intValue());
+	}
+
+	@Test
+	public void testGetElementByRoots() {
+		PolynomialElement p = ring7.getElementByRoots(Tuple.getInstance(zmod7.getElement(3), zmod7.getElement(4)));
+
+		assertTrue(p.getValue().getCoefficient(2).isEquivalent(zmod7.getOneElement()));
+		assertTrue(p.getValue().getCoefficient(1).isEquivalent(zmod7.getElement(0)));
+		assertTrue(p.getValue().getCoefficient(0).isEquivalent(zmod7.getElement(5)));
+
+		assertTrue(p.evaluate(zmod7.getElement(3)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(p.evaluate(zmod7.getElement(4)).isEquivalent(zmod7.getZeroElement()));
+
+		p = ring7.getElementByRoots(Tuple.getInstance(zmod7.getElement(2), zmod7.getElement(1), zmod7.getElement(5)));
+
+		assertTrue(p.getValue().getCoefficient(3).isEquivalent(zmod7.getOneElement()));
+		assertTrue(p.getValue().getCoefficient(0).isEquivalent(zmod7.getElement(4)));
+
+		assertTrue(p.evaluate(zmod7.getElement(1)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(p.evaluate(zmod7.getElement(2)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(p.evaluate(zmod7.getElement(5)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(!p.evaluate(zmod7.getElement(0)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(!p.evaluate(zmod7.getElement(3)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(!p.evaluate(zmod7.getElement(4)).isEquivalent(zmod7.getZeroElement()));
+		assertTrue(!p.evaluate(zmod7.getElement(6)).isEquivalent(zmod7.getZeroElement()));
+
 	}
 
 	@Test
@@ -120,7 +144,7 @@ public class PolynomialSemiRingTest {
 		assertFalse(ring7.contains(poly1));
 
 // This test cannot be executed anymore due to more precise generics
-//		Polynomial<BigInteger> poly2 = Polynomial.getInstance(new BigInteger[]{BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(4)},
+//		Polynomial poly2 = Polynomial.getInstance(new BigInteger[]{BigInteger.valueOf(2), BigInteger.valueOf(6), BigInteger.valueOf(4)},
 //															  BigInteger.valueOf(0), BigInteger.valueOf(1));
 //		assertFalse(ring0.contains(poly2));
 	}
@@ -131,9 +155,9 @@ public class PolynomialSemiRingTest {
 												  z.getIdentityElement(), z.getOneElement());
 		Polynomial poly2 = Polynomial.getInstance(new ZElement[]{z.getElement(4), z.getElement(7), z.getElement(4), z.getElement(9)},
 												  z.getIdentityElement(), z.getOneElement());
-		PolynomialElement<BigInteger> e1 = ring0.getElement(poly1);
-		PolynomialElement<BigInteger> e2 = ring0.getElement(poly2);
-		PolynomialElement<BigInteger> e3 = (PolynomialElement) e1.apply(e2);
+		PolynomialElement e1 = ring0.getElement(poly1);
+		PolynomialElement e2 = ring0.getElement(poly2);
+		PolynomialElement e3 = (PolynomialElement) e1.apply(e2);
 
 		assertEquals(5, e3.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(7, e3.getValue().getCoefficient(1).getValue().intValue());
@@ -144,9 +168,9 @@ public class PolynomialSemiRingTest {
 									   zmod7.getIdentityElement(), zmod7.getOneElement());
 		poly2 = Polynomial.getInstance(new ZModElement[]{zmod7.getElement(4), zmod7.getElement(7 % 7), zmod7.getElement(4), zmod7.getElement(5)},
 									   zmod7.getIdentityElement(), zmod7.getOneElement());
-		PolynomialElement<BigInteger> e4 = ring7.getElement(poly1);
-		PolynomialElement<BigInteger> e5 = ring7.getElement(poly2);
-		PolynomialElement<BigInteger> e6 = (PolynomialElement) e4.apply(e5);
+		PolynomialElement e4 = ring7.getElement(poly1);
+		PolynomialElement e5 = ring7.getElement(poly2);
+		PolynomialElement e6 = (PolynomialElement) e4.apply(e5);
 
 		assertEquals(2, e6.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(0, e6.getValue().getCoefficient(1).getValue().intValue());
@@ -174,9 +198,9 @@ public class PolynomialSemiRingTest {
 												  z.getIdentityElement(), z.getOneElement());
 		Polynomial poly2 = Polynomial.getInstance(new ZElement[]{z.getElement(4), z.getElement(7), z.getElement(4), z.getElement(9)},
 												  z.getIdentityElement(), z.getOneElement());
-		PolynomialElement<BigInteger> e1 = ring0.getElement(poly1);
-		PolynomialElement<BigInteger> e2 = ring0.getElement(poly2);
-		PolynomialElement<BigInteger> e3 = (PolynomialElement) e1.multiply(e2);
+		PolynomialElement e1 = ring0.getElement(poly1);
+		PolynomialElement e2 = ring0.getElement(poly2);
+		PolynomialElement e3 = (PolynomialElement) e1.multiply(e2);
 
 		assertEquals(4, e3.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(7, e3.getValue().getCoefficient(1).getValue().intValue());
@@ -189,9 +213,9 @@ public class PolynomialSemiRingTest {
 									   zmod7.getIdentityElement(), zmod7.getOneElement());
 		poly2 = Polynomial.getInstance(new ZModElement[]{zmod7.getElement(4), zmod7.getElement(7 % 7), zmod7.getElement(4), zmod7.getElement(9 % 7)},
 									   zmod7.getIdentityElement(), zmod7.getOneElement());
-		PolynomialElement<BigInteger> e4 = ring7.getElement(poly1);
-		PolynomialElement<BigInteger> e5 = ring7.getElement(poly2);
-		PolynomialElement<BigInteger> e6 = (PolynomialElement) e4.multiply(e5);
+		PolynomialElement e4 = ring7.getElement(poly1);
+		PolynomialElement e5 = ring7.getElement(poly2);
+		PolynomialElement e6 = (PolynomialElement) e4.multiply(e5);
 
 		assertEquals(4, e6.getValue().getCoefficient(0).getValue().intValue());
 		assertEquals(0, e6.getValue().getCoefficient(1).getValue().intValue());

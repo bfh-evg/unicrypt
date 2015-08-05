@@ -76,14 +76,15 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 	private Function identityEncryptionFunction;
 	private Function reEncryptionFunction;
 
-	public AbstractReEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
+	protected AbstractReEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
 		super(messageSpace, encryptionSpace, randomizationSpace);
 	}
 
 	@Override
 	public final Function getIdentityEncryptionFunction() {
 		if (this.identityEncryptionFunction == null) {
-			this.identityEncryptionFunction = this.getEncryptionFunction().partiallyApply(this.getMessageSpace().getIdentityElement(), 1);
+			this.identityEncryptionFunction
+				   = this.getEncryptionFunction().partiallyApply(this.getMessageSpace().getIdentityElement(), 1);
 		}
 		return this.identityEncryptionFunction;
 	}
@@ -91,11 +92,13 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 	@Override
 	public final Function getReEncryptionFunction() {
 		if (this.reEncryptionFunction == null) {
-			ProductSet inputSpace = ProductSet.getInstance(this.getEncryptionKeySpace(), this.getEncryptionSpace(), this.getRandomizationSpace());
+			ProductSet inputSpace = ProductSet.getInstance(this.getEncryptionKeySpace(), this.getEncryptionSpace(),
+														   this.getRandomizationSpace());
 			this.reEncryptionFunction = CompositeFunction.getInstance(
 				   SharedDomainFunction.getInstance(SelectionFunction.getInstance(inputSpace, 1),
-													CompositeFunction.getInstance(RemovalFunction.getInstance(inputSpace, 1),
-																				  this.getIdentityEncryptionFunction())),
+													CompositeFunction.getInstance(
+														   RemovalFunction.getInstance(inputSpace, 1),
+														   this.getIdentityEncryptionFunction())),
 				   ApplyFunction.getInstance(this.getEncryptionSpace()));
 		}
 		return this.reEncryptionFunction;
@@ -107,7 +110,8 @@ public abstract class AbstractReEncryptionScheme<MS extends Monoid, ME extends E
 	}
 
 	@Override
-	public final EE reEncrypt(final Element publicKey, final Element ciphertext, RandomByteSequence randomByteSequence) {
+	public final EE reEncrypt(final Element publicKey, final Element ciphertext,
+		   RandomByteSequence randomByteSequence) {
 		return this.reEncrypt(publicKey, ciphertext, this.getRandomizationSpace().getRandomElement(randomByteSequence));
 	}
 

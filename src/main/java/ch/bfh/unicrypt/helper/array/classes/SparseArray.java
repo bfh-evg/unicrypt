@@ -43,69 +43,203 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This class is a default implementation of the {@link ImmutableArray} interface. It is optimized for sparse arrays
+ * with a designated default value. Internally, the values are stored in a hash map. The implementation is optimized to
+ * provide O(1) running times for most operations. Compared to {@link DenseArray}, if consumes less memory if the
+ * spareness of the array is high.
+ * <p>
+ * @see DenseArray
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <V> The generic type of the values in the immutable array
  */
-public class SparseArray<V extends Object>
+public class SparseArray<V>
 	   extends AbstractDefaultValueArray<SparseArray<V>, V> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final Map<Integer, V> map;
 
-	private SparseArray(V defaultValue, Map<Integer, V> map, int length) {
-		this(defaultValue, map, 0, length, 0, 0, false);
+	private SparseArray(Map<Integer, V> map, int length, V defaultValue) {
+		this(map, length, 0, false, defaultValue, 0, 0, length);
 	}
 
-	private SparseArray(V defaultValue, Map<Integer, V> map, int offset, int length, int trailer, int header, boolean reverse) {
-		super(SparseArray.class, defaultValue, trailer, header, length, offset, reverse);
+	private SparseArray(Map<Integer, V> map, int length, int rangeOffset, boolean reverse, V defaultValue, int trailer,
+		   int header, int rangeLength) {
+		super(SparseArray.class, defaultValue, length, rangeOffset, rangeLength, trailer, header, reverse);
 		this.map = map;
-		if (map.isEmpty()) {
+		if (map.isEmpty() || (map.size() == 1 && length == rangeLength)) {
 			this.uniform = true;
 		}
 	}
 
-	// this method is more efficient than its predecessor
+	/**
+	 * Creates a new sparse array of a given length. All its values are identical to the given default value. This
+	 * method is a special case of {@link SparseArray#getInstance(java.lang.Object, java.util.Map, int)} with a n empty
+	 * map.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param length       The length of the new array
+	 * @return The new sparse array
+	 * @see SparseArray#getInstance(java.lang.Object, java.util.Map, int)
+	 * @see DenseArray#getInstance(java.lang.Object, int)
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, int length) {
+		return SparseArray.getInstance(defaultValue, new HashMap<Integer, V>(), length);
+	}
+
+	/**
+	 * Creates a new sparse array from a given map of (index,value) pairs. The length of the resulting array corresponds
+	 * to the maximum index in the map plus 1. For example, a map of pairs (3,v1), (12,v2), (25,v3) leads to an array of
+	 * length 26 with v1 at index 3, v2 at index 12, and v3 at index 25. All other values with another index correspond
+	 * to the default value. This method is a special case of
+	 * {@link SparseArray#getInstance(java.lang.Object, java.util.Map, int)} with the length set to the maximal index
+	 * plus 1.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param map          The given map of (index,value) pairs
+	 * @return The new sparse array
+	 * @see SparseArray#getInstance(java.lang.Object, java.util.Map, int)
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, Map<Integer, V> map) {
+		if (map == null) {
+			throw new IllegalArgumentException();
+		}
+		int maxIndex = 0;
+		for (Integer i : map.keySet()) {
+			maxIndex = Math.max(maxIndex, i);
+		}
+		return SparseArray.getInstance(defaultValue, map, maxIndex + 1);
+	}
+
+	/**
+	 * Creates a new sparse array from a given map of (index,value) pairs and a given total length. For example, a map
+	 * of pairs (3,v1), (12,v2), (25,v3) and a given length 30 leads to an array of length 30 with v1 at index 3, v2 at
+	 * index 12, and v3 at index 25. All values with another index correspond to the default value.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param map          The given map of (index,value) pairs
+	 * @param length       The length of the new array
+	 * @return The new sparse array
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, Map<Integer, V> map, int length) {
+		if (defaultValue == null || map == null || length < 0) {
+			throw new IllegalArgumentException();
+		}
+		Map<Integer, V> newMap = new HashMap();
+		for (Integer i : map.keySet()) {
+			V value = map.get(i);
+			if (value == null || i < 0 || i >= length) {
+				throw new IllegalArgumentException();
+			}
+			if (!value.equals(defaultValue)) {
+				newMap.put(i, value);
+			}
+		}
+		return new SparseArray<>(newMap, length, defaultValue);
+	}
+
+	/**
+	 * Creates a new sparse array with a single non-default value at some index.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param index        The index of the value
+	 * @param value        The given value
+	 * @return The new sparse array
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, int index, V value) {
+		Map<Integer, V> map = new HashMap<>(1);
+		map.put(index, value);
+		return SparseArray.getInstance(defaultValue, map);
+	}
+
+	/**
+	 * Creates a new sparse array from a given Java array of values. The Java array is transformed into a map for
+	 * internal storage. The length and the indices of the values of the resulting sparse array correspond to the given
+	 * Java array.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param values       The Java array of values
+	 * @return The new sparse array
+	 * @see DenseArray#getInstance(Object...)
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, V... values) {
+		return SparseArray.getInstance(defaultValue, Sequence.getInstance(values));
+	}
+
+	/**
+	 * Creates a new sparse array from a given sequence of values. The sequence is transformed into a map for internal
+	 * storage. Null values are eliminated.
+	 * <p>
+	 * @param <V>          The generic type of the new array
+	 * @param defaultValue The default value of the new array
+	 * @param values       The given sequence of values
+	 * @return The new sparse array
+	 */
+	public static <V> SparseArray<V> getInstance(V defaultValue, Sequence<V> values) {
+		if (defaultValue == null || values == null || values.isInfinite()) {
+			throw new IllegalArgumentException();
+		}
+		Map<Integer, V> map = new HashMap<>();
+		int i = 0;
+		for (V value : values.filter(Predicate.NOT_NULL)) {
+			if (!value.equals(defaultValue)) {
+				map.put(i, value);
+			}
+			i++;
+		}
+		return new SparseArray<>(map, i, defaultValue);
+	}
+
 	@Override
-	protected Iterable<Integer> defaultGetIndices(V value) {
+	// this method is more efficient than its predecessor
+	protected Sequence<Integer> defaultGetIndices(V value) {
 		if (this.defaultValue.equals(value)) {
 			return super.defaultGetIndices(value);
 		}
-		List<Integer> result = new LinkedList<Integer>();
+		List<Integer> result = new LinkedList<>();
 		for (Integer i : this.map.keySet()) {
-			if (i >= this.offset && i < this.offset + this.length - this.header - this.trailer) {
+			if (i >= this.rangeOffset && i < this.rangeOffset + this.rangeLength) {
 				if (this.map.get(i).equals(value)) {
 					result.add(this.getIndex(i));
 				}
 			}
 		}
-		return result;
+		return Sequence.getInstance(result);
 	}
 
-	// this method is more efficient than its predecessor
 	@Override
-	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
+	// this method is more efficient than its predecessor
+	protected Sequence<Integer> defaultGetIndicesExcept(V value) {
 		if (!this.defaultValue.equals(value)) {
 			return super.defaultGetIndicesExcept(value);
 		}
-		List<Integer> result = new LinkedList<Integer>();
+		List<Integer> result = new LinkedList<>();
 		for (Integer i : this.map.keySet()) {
-			if (i >= this.offset && i < this.offset + this.length - this.header - this.trailer) {
+			if (i >= this.rangeOffset && i < this.rangeOffset + this.length - this.header - this.trailer) {
 				if (!this.map.get(i).equals(this.defaultValue)) {
 					result.add(this.getIndex(i));
 				}
 			}
 		}
-		return result;
+		return Sequence.getInstance(result);
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		if (this.isEmpty()) {
 			return "[]";
 		}
@@ -118,88 +252,32 @@ public class SparseArray<V extends Object>
 		return "[" + this.getLength() + ": " + str + "]";
 	}
 
-	public static <T> SparseArray<T> getInstance(T defaultValue, int length) {
-		return SparseArray.getInstance(defaultValue, new HashMap<Integer, T>(), length);
-	}
-
-	public static <T> SparseArray<T> getInstance(T defaultValue, Map<Integer, T> map) {
-		if (map == null) {
-			throw new IllegalArgumentException();
-		}
-		int maxIndex = 0;
-		for (Integer i : map.keySet()) {
-			maxIndex = Math.max(maxIndex, i);
-		}
-		return SparseArray.getInstance(defaultValue, map, maxIndex + 1);
-	}
-
-	public static <T> SparseArray<T> getInstance(T defaultValue, Map<Integer, T> map, int length) {
-		if (defaultValue == null || map == null || length < 0) {
-			throw new IllegalArgumentException();
-		}
-		Map<Integer, T> newMap = new HashMap();
-		for (Integer i : map.keySet()) {
-			T value = map.get(i);
-			if (value == null || i >= length) {
-				throw new IllegalArgumentException();
-			}
-			if (!value.equals(defaultValue)) {
-				newMap.put(i, value);
-			}
-		}
-		return new SparseArray<T>(defaultValue, newMap, length);
-	}
-
-	public static <T> SparseArray<T> getInstance(T defaultValue, T... values) {
-		if (defaultValue == null || values == null) {
-			throw new IllegalArgumentException();
-		}
-		Map<Integer, T> map = new HashMap<Integer, T>();
-		int i = 0;
-		for (T value : values) {
-			if (value == null) {
-				throw new IllegalArgumentException();
-			}
-			if (!value.equals(defaultValue)) {
-				map.put(i, value);
-			}
-			i++;
-		}
-		return new SparseArray<T>(defaultValue, map, values.length);
-	}
-
 	@Override
-	protected V abstractGetAt(int index) {
-		if (this.reverse) {
-			index = this.length - index - 1;
-		}
-		if (index < this.trailer || index >= this.length - this.header) {
-			return this.defaultValue;
-		}
-// JAVA 8
-// return this.map.getOrDefault(index - this.trailer + this.offset, this.defaultValue);
-		V result = this.map.get(index - this.trailer + this.offset);
+	protected V abstractGetValueAt(int index) {
+		V result = this.map.get(index);
 		if (result == null) {
 			return this.defaultValue;
 		}
 		return result;
+		// Simplification for Java 8: replace everything by
+		// return this.map.getOrDefault(this.rangeOffset + index, this.defaultValue);
 	}
 
 	@Override
-	protected SparseArray<V> abstractAppend(ImmutableArray<V> other) {
-		Map<Integer, V> newMap = new HashMap<Integer, V>();
+	protected SparseArray abstractAppend(ImmutableArray<V> other) {
+		Map<Integer, V> newMap = new HashMap<>();
 		for (int i : this.getIndicesExcept()) {
 			newMap.put(i, this.abstractGetAt(i));
 		}
 		for (int i : other.getIndicesExcept(this.defaultValue)) {
 			newMap.put(this.length + i, other.getAt(i));
 		}
-		return new SparseArray<V>(this.defaultValue, newMap, this.length + other.getLength());
+		return new SparseArray<>(newMap, this.length + other.getLength(), this.defaultValue);
 	}
 
 	@Override
-	protected SparseArray<V> abstractInsertAt(int index, V newObject) {
-		Map<Integer, V> newMap = new HashMap<Integer, V>();
+	protected SparseArray<V> abstractInsertAt(int index, V value) {
+		Map<Integer, V> newMap = new HashMap<>();
 		for (int i : this.getIndicesExcept()) {
 			if (i < index) {
 				newMap.put(i, this.abstractGetAt(i));
@@ -207,36 +285,45 @@ public class SparseArray<V extends Object>
 				newMap.put(i + 1, this.abstractGetAt(i));
 			}
 		}
-		if (!newObject.equals(this.defaultValue)) {
-			newMap.put(index, newObject);
+		if (!value.equals(this.defaultValue)) {
+			newMap.put(index, value);
 		}
-		return new SparseArray<V>(this.defaultValue, newMap, this.length + 1);
+		return new SparseArray<>(newMap, this.length + 1, this.defaultValue);
 	}
 
 	@Override
-	protected SparseArray<V> abstractReplaceAt(int index, V newObject) {
-		Map<Integer, V> newMap = new HashMap<Integer, V>();
+	protected SparseArray<V> abstractReplaceAt(int index, V value) {
+		Map<Integer, V> newMap = new HashMap<>();
 		for (int i : this.getIndicesExcept()) {
 			if (i != index) {
 				newMap.put(i, this.abstractGetAt(i));
 			}
 		}
-		if (!newObject.equals(this.defaultValue)) {
-			newMap.put(index, newObject);
+		if (!value.equals(this.defaultValue)) {
+			newMap.put(index, value);
 		}
-		return new SparseArray<V>(this.defaultValue, newMap, this.length);
+		return new SparseArray<>(newMap, this.length, this.defaultValue);
 	}
 
 	@Override
-	protected SparseArray<V> abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
-		return new SparseArray<V>(this.defaultValue, this.map, offset, length, trailer, header, reverse);
+	protected SparseArray<V> abstractReverse() {
+		// switch trailer and header
+		return new SparseArray<>(this.map, this.length, this.rangeOffset, !this.reverse, this.defaultValue,
+								 this.header, this.trailer, this.rangeLength);
 	}
 
-	private int getIndex(int i) {
+	@Override
+	protected SparseArray<V> abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer,
+		   int header) {
+		return new SparseArray<>(this.map, length, rangeOffset, this.reverse, this.defaultValue, trailer, header,
+								 rangeLength);
+	}
+
+	private int getIndex(int rangeIndex) {
 		if (this.reverse) {
-			return this.length - i - 1 + this.offset - this.trailer;
+			return this.rangeLength - rangeIndex - 1 + this.rangeOffset + this.trailer;
 		}
-		return i - this.offset + this.trailer;
+		return rangeIndex - this.rangeOffset + this.trailer;
 	}
 
 }

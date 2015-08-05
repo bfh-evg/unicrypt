@@ -44,8 +44,7 @@ package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.ByteArrayToByteArray;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.ByteArrayConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -59,6 +58,8 @@ import java.util.Map;
  */
 public class ByteArrayMonoid
 	   extends AbstractConcatenativeMonoid<ByteArrayElement, ByteArray> {
+
+	private static final long serialVersionUID = 1L;
 
 	private ByteArrayMonoid(int blockLength) {
 		super(ByteArray.class, blockLength);
@@ -74,7 +75,7 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected ByteArrayConverter<ByteArray> defaultGetByteArrayConverter() {
+	protected Converter<ByteArray, ByteArray> defaultGetByteArrayConverter() {
 		return ByteArrayToByteArray.getInstance();
 	}
 
@@ -84,7 +85,7 @@ public class ByteArrayMonoid
 	//
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return Set.INFINITE_ORDER;
+		return Set.INFINITE;
 	}
 
 	@Override
@@ -98,7 +99,7 @@ public class ByteArrayMonoid
 	}
 
 	@Override
-	protected BigIntegerConverter<ByteArray> abstractGetBigIntegerConverter() {
+	protected Converter<ByteArray, BigInteger> abstractGetBigIntegerConverter() {
 		return ByteArrayToBigInteger.getInstance(this.blockLength);
 	}
 
@@ -135,7 +136,7 @@ public class ByteArrayMonoid
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<Integer, ByteArrayMonoid> instances = new HashMap<Integer, ByteArrayMonoid>();
+	private static final Map<Integer, ByteArrayMonoid> instances = new HashMap<>();
 
 	public static ByteArrayMonoid getInstance() {
 		return ByteArrayMonoid.getInstance(1);

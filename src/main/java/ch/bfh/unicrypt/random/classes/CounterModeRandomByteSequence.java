@@ -49,12 +49,11 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * This PseudoRandomGeneratorCounterMode creates the hash value of the seed and stores this internally as a
- * ByteArrayElement. The hash will be done according to the given hashAlgorithm. Then the internal counter will be
- * created as another ByteArrayElement. These two byteArrayElement will be hashed as in @see
- * AbstractElement#getHashValueValueValue(HashAlgorithm hashAlgorithm); The resulting bytes will be used for
- * pseudoRandomness Please note that this PseudoRandomGenerator does not provide any security at all once the internal
- * state is known. This includes a total lack of forward security.
+ * This PseudoRandomGeneratorCounterMode creates the hash value of the seed internally converted to a positive number +
+ * the value of an internal counter. This resulting hash (given by the according hashAlgorithm) is stored internally as
+ * a ByteArrayElement. The resulting bytes will be used for pseudoRandomness Please note that this PseudoRandomGenerator
+ * does not provide any security at all once the internal state is known. This includes a total lack of forward
+ * security.
  * <p>
  * <p>
  * <p>
@@ -71,10 +70,13 @@ public class CounterModeRandomByteSequence
 	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE pseudoRandomGenerator At each start of the JavaVM this
 	 * generator will restart deterministically. Do not use it for ephemeral keys!
 	 */
-	public static final CounterModeRandomByteSequence DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), DEFAULT_SEED);
+	public static final CounterModeRandomByteSequence DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE =
+		   CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), DEFAULT_SEED);
+	private static final long serialVersionUID = 1L;
 
 	private final HashAlgorithm hashAlgorithm;
 	private ByteArray seed;
+	private BigInteger seedAsNumber;
 	private ByteArray hashedSeed;
 	private int counter;
 	// TODO: Change it to ByteArray when it becomes iterable;
@@ -85,16 +87,15 @@ public class CounterModeRandomByteSequence
 	protected CounterModeRandomByteSequence(HashAlgorithm hashAlgorithm, final ByteArray seed) {
 		this.hashAlgorithm = hashAlgorithm;
 		//The following lines are needed in order to speed up calculation of randomBytes. @see#fillRandomByteBuffer
-		this.randomByteBuffer = new byte[hashAlgorithm.getHashLength()];
+		this.randomByteBuffer = new byte[hashAlgorithm.getByteLength()];
 		setSeed(seed);
 	}
 
 	protected byte[] getRandomByteBuffer(int counter) {
-		//Even though the following is the nice way to program it with unicrypt, it is too expensive. Reason: If the first part of a pair is a big tuple, it has to be hashed each time... Reprogram?!
-		//this.digestBytes=Pair.getInstance(seed,Z.getInstance().getElement(counter)).getHashValue(hashAlgorithm).getByteArray();
-		//-->This is, why the following implementation exists.
-		return hashedSeed.append(ByteArray.getInstance(BigInteger.valueOf(counter).toByteArray())).getHashValue(this.hashAlgorithm).getBytes();
-//		return digest.digest(hashedSeed.append(ByteArrayMonoid.getInstance().getElement(counter).getByteArray()).getBytes());
+		BigInteger seedAndCountAsNumber = seedAsNumber.add(BigInteger.valueOf(counter));
+		return ByteArray.getInstance(seedAndCountAsNumber.toByteArray()).getHashValue(this.hashAlgorithm).getBytes();
+//		return digest.digest(hashedSeed.append(ByteArrayMonoid.getInstance().getElement(counter).
+//		getByteArray()).getBytes());
 	}
 
 	@Override
@@ -107,12 +108,12 @@ public class CounterModeRandomByteSequence
 	}
 
 	@Override
-	public void setSeed(ByteArray seed) {
+	public final void setSeed(ByteArray seed) {
 		if (seed == null) {
 			throw new IllegalArgumentException();
 		}
 		this.seed = seed;
-		this.hashedSeed = seed.getHashValue();
+		this.seedAsNumber = new BigInteger(1, seed.getBytes());
 		this.counter = -1;
 		reset();
 	}
@@ -170,8 +171,9 @@ public class CounterModeRandomByteSequence
 	/**
 	 * This internal class allows to create a new ByteArray without having to clone the backing byte[]
 	 */
-	class InternalByteArray
+	private class InternalByteArray
 		   extends ByteArray {
+		private static final long serialVersionUID = 1L;
 
 		private InternalByteArray(byte[] bytes) {
 			super(bytes);
@@ -203,7 +205,8 @@ public class CounterModeRandomByteSequence
 			return false;
 		}
 		final CounterModeRandomByteSequence other = (CounterModeRandomByteSequence) obj;
-		if (this.hashAlgorithm != other.hashAlgorithm && (this.hashAlgorithm == null || !this.hashAlgorithm.equals(other.hashAlgorithm))) {
+		if (this.hashAlgorithm != other.hashAlgorithm && (this.hashAlgorithm == null
+			   || !this.hashAlgorithm.equals(other.hashAlgorithm))) {
 			return false;
 		}
 		if (this.hashCode() != other.hashCode()) {
@@ -212,6 +215,7 @@ public class CounterModeRandomByteSequence
 		if (this.counter != other.counter) {
 			return false;
 		}
+		// TODO Check redundant "if" statement!
 		if (this.randomByteBufferPosition != other.randomByteBufferPosition) {
 			return false;
 		}

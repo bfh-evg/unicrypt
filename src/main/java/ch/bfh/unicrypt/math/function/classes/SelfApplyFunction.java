@@ -45,7 +45,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -90,7 +89,7 @@ public class SelfApplyFunction
 	 * <p/>
 	 * @param semiGroup The underlying group
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static SelfApplyFunction getInstance(final SemiGroup semiGroup) {
 		if (semiGroup == null) {
@@ -110,8 +109,8 @@ public class SelfApplyFunction
 	 * @param semiGroup The underlying group
 	 * @param amountSet
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code amountGroup} is negative
 	 */
 	public static SelfApplyFunction getInstance(final SemiGroup semiGroup, final Set<BigInteger> amountSet) {
 		if (semiGroup == null || amountSet == null) {

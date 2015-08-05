@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.helper.MathUtil;
-import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
@@ -65,7 +65,7 @@ import java.math.BigInteger;
  * @param <D>
  * @param <EE>
  */
-public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D extends DualisticElement<V>, EE extends ECElement<V, D>>
+public abstract class AbstractEC<F extends FiniteField<V>, V, D extends DualisticElement<V>, EE extends ECElement<V, D>>
 	   extends AbstractAdditiveCyclicGroup<EE, Point<D>>
 	   implements EC<V, D> {
 
@@ -141,7 +141,8 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 
 	@Override
 	public final boolean contains(D xValue, D yValue) {
-		if (xValue == null || yValue == null || !this.getFiniteField().contains(xValue) || !this.getFiniteField().contains(yValue)) {
+		if (xValue == null || yValue == null || !this.getFiniteField().contains(xValue)
+			   || !this.getFiniteField().contains(yValue)) {
 			throw new IllegalArgumentException();
 		}
 		return this.abstractContains((D) xValue, (D) yValue);
@@ -158,6 +159,9 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 	}
 
 	@Override
+	public abstract EE[] getY(D xValue);
+
+	@Override
 	protected BigInteger abstractGetOrder() {
 		return this.givenOrder;
 	}
@@ -168,7 +172,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 	}
 
 	@Override
-	protected BigIntegerConverter<Point<D>> abstractGetBigIntegerConverter() {
+	protected Converter<Point<D>, BigInteger> abstractGetBigIntegerConverter() {
 		return new AbstractBigIntegerConverter<Point<D>>(null) { // class parameter not needed
 
 			/**
@@ -181,7 +185,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 				if (point.equals(infinityPoint)) {
 					return BigInteger.ZERO;
 				}
-				return MathUtil.pair(point.getX().getBigInteger(), point.getY().getBigInteger()).add(BigInteger.ONE);
+				return MathUtil.pair(point.getX().convertToBigInteger(), point.getY().convertToBigInteger()).add(BigInteger.ONE);
 			}
 
 			@Override
@@ -222,7 +226,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 	protected EE abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		if (this.getDefaultGenerator() != null) {
 			ZMod r = ZMod.getInstance(this.getFiniteField().getOrder());
-			return this.selfApply(this.getDefaultGenerator(), r.getRandomElement().getBigInteger());
+			return this.selfApply(this.getDefaultGenerator(), r.getRandomElement().convertToBigInteger());
 		} else {
 			return this.getRandomElementWithoutGenerator(randomByteSequence);
 		}
@@ -294,7 +298,7 @@ public abstract class AbstractEC<F extends FiniteField<V>, V extends Object, D e
 	protected abstract EE getRandomElementWithoutGenerator(RandomByteSequence randomByteSequence);
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getA().getValue() + "," + this.getB().getValue();
 	}
 

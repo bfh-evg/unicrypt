@@ -46,10 +46,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 public interface ChallengeGenerator {
 
-	public Set getInputSpace();
-
 	public Set getChallengeSpace();
 
-	public Element generate(Element input);
+	public Element generate(Element<?> input);
 
 }

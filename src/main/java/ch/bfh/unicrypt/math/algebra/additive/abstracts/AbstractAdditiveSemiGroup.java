@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSemiGroup;
@@ -52,13 +54,15 @@ import java.math.BigInteger;
  * <p>
  * @param <E> Generic type of the elements of this semigroup
  * @param <V> Generic type of values stored in the elements of this semigroup
- * @author
+ * @author rolfhaenni
  */
-public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V extends Object>
+public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V>
 	   extends AbstractSemiGroup<E, V>
 	   implements AdditiveSemiGroup<V> {
 
-	public AbstractAdditiveSemiGroup(Class<? extends Object> valueClass) {
+	private static final long serialVersionUID = 1L;
+
+	protected AbstractAdditiveSemiGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -73,7 +77,12 @@ public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V 
 	}
 
 	@Override
-	public final E add(final Iterable<Element> elements) {
+	public final E add(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E add(final Sequence<Element> elements) {
 		return this.apply(elements);
 	}
 
@@ -88,7 +97,7 @@ public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V 
 	}
 
 	@Override
-	public final E times(final Element element, final int amount) {
+	public final E times(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

@@ -63,7 +63,7 @@ public abstract class AbstractEncryptionScheme<MS extends Set, ME extends Elemen
 	private Function encryptionFunction;
 	private Function decryptionFunction;
 
-	public AbstractEncryptionScheme(MS messageSpace, ES encryptionSpace) {
+	protected AbstractEncryptionScheme(MS messageSpace, ES encryptionSpace) {
 		super(messageSpace);
 		this.encryptionSpace = encryptionSpace;
 	}

@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.WeakHashMap;
 
 /**
  * This is a special 'instance' of a PseudoRandomGeneratorCounterMode which allows to
@@ -61,9 +62,12 @@ public class ReferenceRandomByteSequence
 	 * make it a uses relationship! TODO: Bring in new methods for direct access to a certain position within the
 	 * sequence!
 	 */
-	public static final ReferenceRandomByteSequence DEFAULT = ReferenceRandomByteSequence.getInstance(HashAlgorithm.getInstance(), CounterModeRandomByteSequence.DEFAULT_SEED);
+	public static final ReferenceRandomByteSequence DEFAULT
+		   = ReferenceRandomByteSequence.getInstance(HashAlgorithm.getInstance(),
+													 CounterModeRandomByteSequence.DEFAULT_SEED);
+	private static final long serialVersionUID = 1L;
 
-	private transient HashMap<Integer, byte[]> randomByteBufferMap;
+	private transient WeakHashMap<Integer, byte[]> randomByteBufferMap;
 	private int javaHashValue;
 
 	protected ReferenceRandomByteSequence(HashAlgorithm hashAlgorithm, ByteArray seed) {
@@ -73,7 +77,7 @@ public class ReferenceRandomByteSequence
 	@Override
 	protected byte[] getRandomByteBuffer(int counter) {
 		if (this.randomByteBufferMap == null) {
-			this.randomByteBufferMap = new HashMap<Integer, byte[]>();
+			this.randomByteBufferMap = new WeakHashMap<>();
 		}
 		if (!this.randomByteBufferMap.containsKey(counter)) {
 			this.randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));
@@ -92,7 +96,8 @@ public class ReferenceRandomByteSequence
 	}
 
 	public static ReferenceRandomByteSequence getInstance() {
-		ReferenceRandomByteSequence sequence = new ReferenceRandomByteSequence(HashAlgorithm.getInstance(), DEFAULT_SEED);
+		ReferenceRandomByteSequence sequence
+			   = new ReferenceRandomByteSequence(HashAlgorithm.getInstance(), DEFAULT_SEED);
 		sequence.randomByteBufferMap = DEFAULT.randomByteBufferMap;
 		return sequence;
 	}
@@ -135,8 +140,10 @@ public class ReferenceRandomByteSequence
 		return this.getSeed().equals(other.getSeed());
 	}
 
-	class StatefulCounterModeRandomByteSequence
+	private class StatefulCounterModeRandomByteSequence
 		   extends CounterModeRandomByteSequence {
+
+		private static final long serialVersionUID = 1L;
 
 		private transient HashMap<Integer, byte[]> randomByteBufferMap;
 
@@ -147,7 +154,7 @@ public class ReferenceRandomByteSequence
 		@Override
 		protected byte[] getRandomByteBuffer(int counter) {
 			if (this.randomByteBufferMap == null) {
-				this.randomByteBufferMap = new HashMap<Integer, byte[]>();
+				this.randomByteBufferMap = new HashMap<>();
 			}
 			if (!this.randomByteBufferMap.containsKey(counter)) {
 				this.randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));

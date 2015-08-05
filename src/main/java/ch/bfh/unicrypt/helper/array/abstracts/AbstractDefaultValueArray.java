@@ -42,27 +42,35 @@
 package ch.bfh.unicrypt.helper.array.abstracts;
 
 import ch.bfh.unicrypt.helper.array.interfaces.DefaultValueArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <A>
- * @param <V>
+ * This abstract class serves as a base implementation of the {@link DefaultValueArray} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <A> The type of a potential non-generic sub-class
+ * @param <V> The generic type of the values in the immutable array with a default value
  */
-abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueArray<A, V>, V extends Object>
+abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueArray<A, V>, V>
 	   extends AbstractImmutableArray<A, V>
 	   implements DefaultValueArray<V> {
+
+	private static final long serialVersionUID = 1L;
 
 	protected final V defaultValue;
 	protected int trailer; // number of trailing zeros not included in byteArray
 	protected int header; // number of leading zeros not included in byteArray
+	protected int rangeLength; // rangeLength = length - header - trailer
 
-	protected AbstractDefaultValueArray(Class valueClass, V defaultValue, int trailer, int header, int length, int offset, boolean reverse) {
-		super(valueClass, length, offset, reverse);
+	protected AbstractDefaultValueArray(Class valueClass, V defaultValue, int length, int rangeOffset, int rangeLength,
+		   int trailer, int header, boolean reverse) {
+		super(valueClass, length, rangeOffset, reverse);
 		this.defaultValue = defaultValue;
 		this.trailer = trailer;
 		this.header = header;
-		if (header + trailer == length) {
+		this.rangeLength = rangeLength;
+		if (rangeLength == 0) {
 			this.uniform = true;
 		}
 	}
@@ -73,18 +81,23 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 	}
 
 	@Override
-	public final Iterable<Integer> getIndices() {
+	public final Sequence<Integer> getIndices() {
 		return this.getIndices(this.defaultValue);
 	}
 
 	@Override
-	public final Iterable<Integer> getIndicesExcept() {
+	public final Sequence<Integer> getIndicesExcept() {
 		return this.getIndicesExcept(this.defaultValue);
 	}
 
 	@Override
 	public final int count() {
 		return this.count(this.defaultValue);
+	}
+
+	@Override
+	public final int countExcept() {
+		return this.getLength() - this.count();
 	}
 
 	@Override
@@ -103,8 +116,8 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 	}
 
 	@Override
-	public final A replaceAt(int index) {
-		return this.replaceAt(index, this.defaultValue);
+	public final A insert() {
+		return this.insert(this.defaultValue);
 	}
 
 	@Override
@@ -113,39 +126,39 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 	}
 
 	@Override
-	public final A appendPrefix(int n) {
-		if (n < 0) {
-			throw new IllegalArgumentException();
-		}
-		if (this.reverse) {
-			return this.abstractGetInstance(this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		} else {
-			return this.abstractGetInstance(this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		}
+	public final A replaceAt(int index) {
+		return this.replaceAt(index, this.defaultValue);
 	}
 
 	@Override
-	public final A appendSuffix(int n) {
+	public final A addPrefix(int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
-		if (this.reverse) {
-			return this.abstractGetInstance(this.offset, this.length + n, this.trailer + n, this.header, this.reverse);
-		} else {
-			return this.abstractGetInstance(this.offset, this.length + n, this.trailer, this.header + n, this.reverse);
-		}
+		int newLength = this.length + n;
+		int newTrailer = this.trailer + n;
+		return this.abstractGetInstance(newLength, this.rangeOffset, this.rangeLength, newTrailer, this.header);
 	}
 
 	@Override
-	public final A appendPrefixAndSuffix(int n, int m) {
+	public final A addSuffix(int n) {
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
+		int newLength = this.length + n;
+		int newHeader = this.header + n;
+		return this.abstractGetInstance(newLength, this.rangeOffset, this.rangeLength, this.trailer, newHeader);
+	}
+
+	@Override
+	public final A addPrefixAndSuffix(int n, int m) {
 		if (n < 0 || m < 0) {
 			throw new IllegalArgumentException();
 		}
-		if (this.reverse) {
-			return this.abstractGetInstance(this.offset, this.length + n + m, this.trailer + m, this.header + n, this.reverse);
-		} else {
-			return this.abstractGetInstance(this.offset, this.length + n + m, this.trailer + n, this.header + m, this.reverse);
-		}
+		int newLength = this.length + n + m;
+		int newTrailer = this.trailer + n;
+		int newHeader = this.header + m;
+		return this.abstractGetInstance(newLength, this.rangeOffset, this.rangeLength, newTrailer, newHeader);
 	}
 
 	@Override
@@ -156,6 +169,11 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 	@Override
 	public final A removeSuffix() {
 		return this.removeSuffix(this.countSuffix());
+	}
+
+	@Override
+	public final A removePrefixAndSuffix() {
+		return this.removePrefix().removeSuffix();
 	}
 
 	@Override
@@ -171,25 +189,38 @@ abstract public class AbstractDefaultValueArray<A extends AbstractDefaultValueAr
 		if (n <= 0) {
 			return this.shiftLeft(-n);
 		}
-		return this.appendPrefix(n);
+		return this.addPrefix(n);
 	}
 
 	@Override
-	protected A abstractExtract(int fromIndex, int length) {
-		if (this.reverse) {
-			fromIndex = this.length - fromIndex - length;
+	protected final V abstractGetAt(int index) {
+		if (index < this.trailer || index >= this.length - this.header) {
+			return this.defaultValue;
 		}
-		int newTrailer = Math.min(Math.max(0, this.trailer - fromIndex), length);
-		int newHeader = Math.min(Math.max(0, this.header - (this.length - fromIndex - length)), length);
-		int newOffset = this.offset + Math.max(0, fromIndex - this.trailer);
-		return this.abstractGetInstance(newOffset, length, newTrailer, newHeader, this.reverse);
+		int rangeIndex = index - this.trailer;
+		if (this.reverse) {
+			rangeIndex = this.rangeLength - rangeIndex - 1;
+		}
+		return this.abstractGetValueAt(this.rangeOffset + rangeIndex);
 	}
 
 	@Override
-	protected A abstractReverse() {
-		return this.abstractGetInstance(this.offset, this.length, this.trailer, this.header, !this.reverse);
+	protected A abstractExtract(int index, int length) {
+		// adjust header and trailer
+		int newTrailer = Math.min(Math.max(0, this.trailer - index), length);
+		int newHeader = Math.min(Math.max(0, this.header - (this.length - index - length)), length);
+		int newRangeLength = length - newTrailer - newHeader;
+		// adjust rangeOffset and rangeLength
+		int rangeIndex = Math.max(0, index - this.trailer);
+		if (this.reverse) {
+			rangeIndex = this.rangeLength - rangeIndex - newRangeLength;
+		}
+		// construct instance
+		return this.abstractGetInstance(length, this.rangeOffset + rangeIndex, newRangeLength, newTrailer, newHeader);
 	}
 
-	protected abstract A abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse);
+	abstract protected V abstractGetValueAt(int index);
+
+	protected abstract A abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer, int header);
 
 }

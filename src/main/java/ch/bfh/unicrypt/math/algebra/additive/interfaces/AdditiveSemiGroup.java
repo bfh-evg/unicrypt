@@ -41,7 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -49,61 +55,63 @@ import java.math.BigInteger;
 
 /**
  * This interface provides the renaming of {@link SemiGroup} methods for the case of an additively written semigroup. No
- * functionality is added.
+ * functionality is added. Some return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  * @param <V> Generic type of values stored in the elements of this semigroup
  */
-public interface AdditiveSemiGroup<V extends Object>
+public interface AdditiveSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**
-	 * This method is a synonym for {@link #Group.apply(Element, Element)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element, Element)}.
 	 * <p>
-	 * @param element1 the same as in {@link #Group.apply(Element, Element)}
-	 * @param element2 the same as in {@link #Group.apply(Element, Element)}
-	 * @return the same as in {@link #Group.apply(Element, Element)}
+	 * @param element1 the same as in {@link SemiGroup#apply(Element, Element)}
+	 * @param element2 the same as in {@link SemiGroup#apply(Element, Element)}
+	 * @return the same as in {@link SemiGroup#apply(Element, Element)}
 	 */
 	public AdditiveElement<V> add(Element element1, Element element2);
 
 	/**
-	 * This method is a synonym for {@link #Group.apply(Element...)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element...)}.
 	 * <p>
-	 * @param elements the same as in {@link #Group.apply(Element...)}
-	 * @return the same as in {@link #Group.apply(Element...)}
+	 * @param elements the same as in {@link SemiGroup#apply(Element...)}
+	 * @return the same as in {@link SemiGroup#apply(Element...)}
 	 */
 	public AdditiveElement<V> add(Element... elements);
 
-	public AdditiveElement<V> add(Iterable<Element> elements);
+	public AdditiveElement<V> add(ImmutableArray<Element> elements);
+
+	public AdditiveElement<V> add(Sequence<Element> elements);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, BigInteger)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, BigInteger)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, BigInteger)}
-	 * @return the same as in {@link #Group.selfApply(Element, BigInteger)}
+	 * @param element the same as in {@link SemiGroup#selfApply(Element, BigInteger)}
+	 * @param amount  the same as in {@link SemiGroup#selfApply(Element, BigInteger)}
+	 * @return the same as in {@link SemiGroup#selfApply(Element, BigInteger)}
 	 */
 	public AdditiveElement<V> times(Element element, BigInteger amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, Element)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, Element)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, Element)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, Element)}
-	 * @return the same as in {@link #Group.selfApply(Element, Element)}
+	 * @param element the same as in {@link SemiGroup#selfApply(Element, Element)}
+	 * @param amount  the same as in {@link SemiGroup#selfApply(Element, Element)}
+	 * @return the same as in {@link SemiGroup#selfApply(Element, Element)}
 	 */
 	public AdditiveElement<V> times(Element element, Element<BigInteger> amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, long)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, int)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
-	 * @return the same as in {@link #Group.selfApply(Element, int)}
+	 * @param element the same as in {@link SemiGroup#selfApply(Element, long)}
+	 * @param amount  the same as in {@link SemiGroup#selfApply(Element, long)}
+	 * @return the same as in {@link SemiGroup#selfApply(Element, long)}
 	 */
-	public AdditiveElement<V> times(Element element, int amount);
+	public AdditiveElement<V> times(Element element, long amount);
 
 	/**
 	 * Applies the group operation to two instances of a given group element. This is equivalent to
@@ -128,15 +136,26 @@ public interface AdditiveSemiGroup<V extends Object>
 	 */
 	public AdditiveElement<V> sumOfProducts(Element[] elements, BigInteger[] amounts);
 
-	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public AdditiveElement<V> getElementFrom(int value);
+	public <W> AdditiveElement<V> getElementFrom(W value, Converter<V, W> converter);
 
 	@Override
-	public AdditiveElement<V> getElementFrom(BigInteger value);
+	public <W> AdditiveElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
 	@Override
-	public AdditiveElement<V> getElementFrom(ByteTree byteTree);
+	public <W> AdditiveElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+
+	@Override
+	public AdditiveElement<V> getElementFrom(long integer);
+
+	@Override
+	public AdditiveElement<V> getElementFrom(BigInteger bigInteger);
+
+	@Override
+	public AdditiveElement<V> getElementFrom(ByteArray byteArray);
+
+	@Override
+	public AdditiveElement<V> getElementFrom(String string);
 
 	@Override
 	public AdditiveElement<V> getRandomElement();
@@ -144,12 +163,29 @@ public interface AdditiveSemiGroup<V extends Object>
 	@Override
 	public AdditiveElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 
-	// The following methods are overridden from SemiGroup with an adapted return type
+	@Override
+	public Sequence<? extends AdditiveElement<V>> getRandomElements();
+
+	@Override
+	public Sequence<? extends AdditiveElement<V>> getRandomElements(long n);
+
+	@Override
+	public Sequence<? extends AdditiveElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends AdditiveElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+
 	@Override
 	public AdditiveElement<V> apply(Element element1, Element element2);
 
 	@Override
 	public AdditiveElement<V> apply(Element... elements);
+
+	@Override
+	public AdditiveElement<V> apply(ImmutableArray<Element> elements);
+
+	@Override
+	public AdditiveElement<V> apply(Sequence<Element> elements);
 
 	@Override
 	public AdditiveElement<V> selfApply(Element element, BigInteger amount);
@@ -158,7 +194,7 @@ public interface AdditiveSemiGroup<V extends Object>
 	public AdditiveElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
-	public AdditiveElement<V> selfApply(Element element, int amount);
+	public AdditiveElement<V> selfApply(Element element, long amount);
 
 	@Override
 	public AdditiveElement<V> selfApply(Element element);

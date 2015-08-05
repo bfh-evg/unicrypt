@@ -59,6 +59,7 @@ import java.util.Arrays;
  */
 public class MultiIdentityFunction
 	   extends AbstractFunction<MultiIdentityFunction, Set, Element, ProductSet, Tuple> {
+	private static final long serialVersionUID = 1L;
 
 	private MultiIdentityFunction(final Set domain, final ProductSet coDomain) {
 		super(domain, coDomain);
@@ -88,8 +89,8 @@ public class MultiIdentityFunction
 	 * @param set   The given set
 	 * @param arity The arity of the output element
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static MultiIdentityFunction getInstance(final Set set, final int arity) {
 		if (set == null || arity < 0) {

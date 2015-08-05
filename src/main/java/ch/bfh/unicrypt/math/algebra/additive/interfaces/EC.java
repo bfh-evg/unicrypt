@@ -41,25 +41,38 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.interfaces;
 
-import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.math.Point;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.FiniteField;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
+import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
 /**
  * TODO This interface represents an elliptic curve. Its set of points creates an additive group so that adding two
- * points creates another point.
+ * points creates another point. Some return types are updated.
  * <p>
+ *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V> Generic type of values stored in the elements of the elliptic curve
  * @param <E>
  */
-public interface EC<V extends Object, E extends DualisticElement<V>>
-	   extends AdditiveCyclicGroup<Point<E>> {
+public interface EC<V, E extends DualisticElement<V>>
+	   extends
+	   AdditiveCyclicGroup<Point<E>> {
 
 	/**
 	 * Returns the finite Field of this elliptic curve
 	 * <p>
+	 *
 	 * @return The finite field of this elliptic curve
 	 */
 	public FiniteField<V> getFiniteField();
@@ -67,6 +80,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	/**
 	 * Returns the co-efficient a of this elliptic curve.
 	 * <p>
+	 *
 	 * @return The co-efficient a
 	 */
 	public E getA();
@@ -74,6 +88,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	/**
 	 * Returns the co-efficient b of this elliptic curve.
 	 * <p>
+	 *
 	 * @return The co-efficient b
 	 */
 	public E getB();
@@ -81,6 +96,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	/**
 	 * Returns the cofactor of this elliptic curve.
 	 * <p>
+	 *
 	 * @return The cofactor
 	 */
 	public BigInteger getCoFactor();
@@ -88,6 +104,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	/**
 	 * TODO Returns {@code true} if this elliptic curve lies on the given x co-ordinate.
 	 * <p>
+	 *
 	 * @param xValue The given x value
 	 * @return {@code true} if this elliptic curve lies on the given x co-ordinate
 	 * @throws IllegalArgumentException if {@code xValue} do not belong to the finite field
@@ -97,6 +114,7 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	/**
 	 * TODO Returns {@code true} if the given x and y value are the co-ordinates for a point on this elliptic curve.
 	 * <p>
+	 *
 	 * @param xValue The given xValue
 	 * @param yValue The given yValue
 	 * @return {@code true} if xValue and yValue form a point on this elliptic curve.
@@ -107,11 +125,135 @@ public interface EC<V extends Object, E extends DualisticElement<V>>
 	/**
 	 * TODO Returns the corresponding point for a given x and y value.
 	 * <p>
+	 *
 	 * @param xValue The given xValue
 	 * @param yValue The given yValue
 	 * @return The corresponding point for a given x and y value
 	 * @throws IllegalArgumentException if {@code xValue} or {@code yValue} do not belong to this elliptic curve
 	 */
 	public ECElement<V, E> getElement(E xValue, E yValue);
+
+	/**
+	 * Return the two possible y-coordinates for a given valid x-coordinate
+	 * <p>
+	 * @param xValue x-coordinate of point
+	 * @return
+	 */
+	public ECElement<V, E>[] getY(E xValue);
+
+	@Override
+	public ECElement<V, E> add(Element element1, Element element2);
+
+	@Override
+	public ECElement<V, E> add(Element... elements);
+
+	@Override
+	public ECElement<V, E> add(ImmutableArray<Element> elements);
+
+	@Override
+	public ECElement<V, E> add(Sequence<Element> elements);
+
+	@Override
+	public ECElement<V, E> times(Element element, BigInteger amount);
+
+	@Override
+	public ECElement<V, E> times(Element element, Element<BigInteger> amount);
+
+	@Override
+	public ECElement<V, E> times(Element element, long amount);
+
+	@Override
+	public ECElement<V, E> timesTwo(Element element);
+
+	@Override
+	public <W> ECElement<V, E> getElementFrom(W value, Converter<Point<E>, W> converter);
+
+	@Override
+	public <W> ECElement<V, E> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
+
+	@Override
+	public <W> ECElement<V, E> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+
+	@Override
+	public ECElement<V, E> getElementFrom(long integer);
+
+	@Override
+	public ECElement<V, E> getElementFrom(BigInteger bigInteger);
+
+	@Override
+	public ECElement<V, E> getElementFrom(ByteArray byteArray);
+
+	@Override
+	public ECElement<V, E> getElementFrom(String string);
+
+	@Override
+	public ECElement<V, E> getRandomElement();
+
+	@Override
+	public ECElement<V, E> getRandomElement(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends ECElement<V, E>> getRandomElements();
+
+	@Override
+	public Sequence<? extends ECElement<V, E>> getRandomElements(long n);
+
+	@Override
+	public Sequence<? extends ECElement<V, E>> getRandomElements(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends ECElement<V, E>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+
+	@Override
+	public ECElement<V, E> apply(Element element1, Element element2);
+
+	@Override
+	public ECElement<V, E> apply(Element... elements);
+
+	@Override
+	public ECElement<V, E> apply(ImmutableArray<Element> elements);
+
+	@Override
+	public ECElement<V, E> apply(Sequence<Element> elements);
+
+	@Override
+	public ECElement<V, E> selfApply(Element element, BigInteger amount);
+
+	@Override
+	public ECElement<V, E> selfApply(Element element, Element<BigInteger> amount);
+
+	@Override
+	public ECElement<V, E> selfApply(Element element, long amount);
+
+	@Override
+	public ECElement<V, E> selfApply(Element element);
+
+	@Override
+	public ECElement<V, E> multiSelfApply(Element[] elements, BigInteger[] amounts);
+
+	@Override
+	public ECElement<V, E> invert(Element element);
+
+	@Override
+	public ECElement<V, E> applyInverse(Element element1, Element element2);
+
+	@Override
+	public ECElement<V, E> getIdentityElement();
+
+	@Override
+	public ECElement<V, E> getDefaultGenerator();
+
+	@Override
+	public ECElement<V, E> getRandomGenerator();
+
+	@Override
+	public ECElement<V, E> getRandomGenerator(
+		   RandomByteSequence randomByteSequence);
+
+	@Override
+	public ECElement<V, E> getIndependentGenerator(int index);
+
+	@Override
+	public ECElement<V, E> getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence);
 
 }

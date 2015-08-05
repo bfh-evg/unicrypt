@@ -41,13 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 /**
@@ -57,11 +57,13 @@ import java.util.LinkedHashSet;
 public class Subset
 	   extends AbstractSet<Element<Object>, Object> {
 
-	private final Set superSet;
+	private static final long serialVersionUID = 1L;
+
+	private final Set<?> superSet;
 	private final LinkedHashSet<Element<Object>> elementSet;
 
-	protected Subset(Set superSet, LinkedHashSet<Element<Object>> elements) {
-		super(Element.class);
+	protected Subset(Set<?> superSet, LinkedHashSet<Element<Object>> elements) {
+		super(superSet.getValueClass());
 		this.superSet = superSet;
 		this.elementSet = elements;
 	}
@@ -71,13 +73,12 @@ public class Subset
 	}
 
 	@Override
-	protected Iterator<Element<Object>> defaultGetIterator(final BigInteger maxCounter) {
-		// maxCounter is ignored here, because the subset are usually very small
-		return this.elementSet.iterator();
+	protected Sequence<Element<Object>> defaultGetElements() {
+		return Sequence.getInstance(elementSet);
 	}
 
 	@Override
-	protected boolean defaultContains(final Element element) {
+	protected boolean defaultContains(final Element<Object> element) {
 		return this.elementSet.contains(element);
 	}
 
@@ -108,8 +109,10 @@ public class Subset
 	}
 
 	@Override
-	protected BigIntegerConverter<Object> abstractGetBigIntegerConverter() {
-		return this.superSet.getBigIntegerConverter();
+	protected Converter<Object, BigInteger> abstractGetBigIntegerConverter() {
+		// TODO: return proper converter
+		// return this.superSet.getBigIntegerConverter();
+		return null;
 	}
 
 	@Override
@@ -119,7 +122,7 @@ public class Subset
 
 	@Override
 	protected Element abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		int randomIndex = randomByteSequence.getRandomNumberGenerator().nextInteger(this.elementSet.size() - 1);
+		int randomIndex = randomByteSequence.getRandomNumberGenerator().nextInt(this.elementSet.size() - 1);
 		int i = 0;
 		for (Element element : this.getElements()) {
 			if (i == randomIndex) {
@@ -149,7 +152,7 @@ public class Subset
 			throw new IllegalArgumentException();
 		}
 		// A LinkedHashSet retains the order
-		LinkedHashSet<Element<Object>> hashSet = new LinkedHashSet<Element<Object>>();
+		LinkedHashSet<Element<Object>> hashSet = new LinkedHashSet<>();
 		for (Element element : elements) {
 			if (element == null || !superSet.contains(element)) {
 				throw new IllegalArgumentException();

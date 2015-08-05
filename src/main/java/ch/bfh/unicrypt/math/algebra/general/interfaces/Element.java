@@ -41,12 +41,12 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.AdditiveElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
@@ -55,9 +55,16 @@ import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElem
 import java.math.BigInteger;
 
 /**
- * This abstract class represents the concept of an element in a mathematical group. It allows applying the group
- * operation and other methods from a {@link Group} in a convenient way. Most methods provided by {@link Element} have
- * an equivalent method in {@link Group}.
+ * This interface represents the concept of an element in a mathematical set. Each instance of {@link Element} is
+ * therefore linked to a (unique) instance of {@link Set}. In case the same element is contained in more than one set,
+ * multiple instances need to be created, one for each set membership. In other words, sets are treated as being
+ * disjoint, which may not be true in a strict mathematical sense.
+ * <p>
+ * Each element is internally represented by value of the generic type {@code V}. Elements are usually constructed by
+ * specifying this value.
+ * <p>
+ * For improved convenience, several pairs of equivalent methods exist for {@link Set} and {@link Element} and for
+ * corresponding sub-interfaces. This allows both set-oriented and element-oriented writing of code.
  * <p>
  * @param <V> Generic type of values stored in this element
  * @see Group
@@ -66,7 +73,7 @@ import java.math.BigInteger;
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface Element<V extends Object> {
+public interface Element<V> {
 
 	/**
 	 * Returns {@code true} if this element is an {@link AdditiveElement}.
@@ -120,58 +127,17 @@ public interface Element<V extends Object> {
 	 */
 	public V getValue();
 
-	/**
-	 * TODO Returns the positive BigInteger value that corresponds this element.
-	 * <p>
-	 * @return The corresponding BigInteger value
-	 */
-	public BigInteger getBigInteger();
+	public <W> W convertTo(Converter<V, W> converter);
 
-	public BigInteger getBigInteger(Converter<V, BigInteger> convert);
+	public <W> W convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
-	public BigInteger getBigInteger(ConvertMethod<BigInteger> convertMethod);
+	public <W> Tree<W> convertTo(ConvertMethod<W> convertMethod);
 
-	public String getString();
+	public BigInteger convertToBigInteger();
 
-	public String getString(Converter<V, String> convert);
+	public ByteArray convertToByteArray();
 
-	public String getString(ConvertMethod<String> convertMethod);
-
-	/**
-	 * TODO Returns the corresponding {@link ByteArray} of this element.
-	 * <p>
-	 * @return The corresponding ByteArray
-	 */
-	public ByteArray getByteArray();
-
-	/**
-	 * TODO Returns the corresponding {@link ByteArray} of this Element with the help of a a given
-	 * {@link BigIntegerToByteArray}.
-	 * <p>
-	 * @param converter
-	 * @return The corresponding ByteArray
-	 */
-	public ByteArray getByteArray(Converter<V, ByteArray> converter);
-
-	public ByteArray getByteArray(ConvertMethod<ByteArray> convertMethod);
-
-	/**
-	 * TODO Returns the corresponding {@link ByteTree} of this Element.
-	 * <p>
-	 * @return The corresponding ByteTree
-	 */
-	public ByteTree getByteTree();
-
-	public ByteTree getByteTree(Converter<V, ByteArray> converter);
-
-	/**
-	 * TODO Returns the corresponding {@link ByteTree} of this Element with the help of a given
-	 * {@link BigIntegerToByteArray}.
-	 * <p>
-	 * @param convertMethod
-	 * @return The corresponding ByteTree
-	 */
-	public ByteTree getByteTree(ConvertMethod<ByteArray> convertMethod);
+	public String convertToString();
 
 	/**
 	 * TODO
@@ -183,45 +149,52 @@ public interface Element<V extends Object> {
 	/**
 	 * TODO
 	 * <p>
+	 * @param <W>
+	 * @param convertMethod
 	 * @param hashMethod
 	 * @return
 	 */
-	public ByteArray getHashValue(HashMethod hashMethod);
+	public <W> ByteArray getHashValue(ConvertMethod<W> convertMethod, HashMethod<W> hashMethod);
 
 	/**
-	 * Checks if this element is mathematically equivalent to the given element. For this, they need to belong to the
-	 * same set.
+	 * Checks if this element is mathematically equivalent to the given element. For this, they need to belong to
+	 * equivalent sets and their values must be equal.
 	 * <p>
 	 * @param element The given Element
 	 * @return {@code true} if the element is equivalent to the given element
 	 */
 	public boolean isEquivalent(Element element);
 
-	// The following methods are equivalent to corresponding Set methods
 	/**
-	 * @return @see Group#apply(Element, Element)
+	 * @param element
+	 * @return
+	 * @see Group#apply(Element, Element)
 	 */
 	public Element<V> apply(Element element);
 
 	/**
+	 * @param element
 	 * @return @see Group#applyInverse(Element, Element)
 	 */
 	public Element<V> applyInverse(Element element);
 
 	/**
+	 * @param amount
+	 * @return @see Group#selfApply(Element, long)
+	 */
+	public Element<V> selfApply(long amount);
+
+	/**
+	 * @param amount
 	 * @return @see Group#selfApply(Element, BigInteger)
 	 */
 	public Element<V> selfApply(BigInteger amount);
 
 	/**
+	 * @param amount
 	 * @return @see Group#selfApply(Element, Element)
 	 */
 	public Element<V> selfApply(Element<BigInteger> amount);
-
-	/**
-	 * @return @see Group#selfApply(Element, int)
-	 */
-	public Element<V> selfApply(int amount);
 
 	/**
 	 * @return @see Group#selfApply(Element)

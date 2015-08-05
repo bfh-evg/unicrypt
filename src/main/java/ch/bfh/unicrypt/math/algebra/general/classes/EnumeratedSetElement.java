@@ -48,8 +48,10 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  */
-public class EnumeratedSetElement<V extends Object>
+public class EnumeratedSetElement<V>
 	   extends AbstractElement<EnumeratedSet<V>, EnumeratedSetElement<V>, V> {
+
+	private static final long serialVersionUID = 1L;
 
 	protected EnumeratedSetElement(EnumeratedSet<V> set, V value) {
 		super(set, value);

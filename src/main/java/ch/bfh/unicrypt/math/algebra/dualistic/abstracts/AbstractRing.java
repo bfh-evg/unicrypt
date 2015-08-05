@@ -53,11 +53,13 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this ring
  * @author rolfhaenni
  */
-public abstract class AbstractRing<E extends DualisticElement<V>, V extends Object>
+public abstract class AbstractRing<E extends DualisticElement<V>, V>
 	   extends AbstractSemiRing<E, V>
 	   implements Ring<V> {
 
-	public AbstractRing(Class<? extends Object> valueClass) {
+	private static final long serialVersionUID = 1L;
+
+	protected AbstractRing(Class<?> valueClass) {
 		super(valueClass);
 	}
 

@@ -41,40 +41,68 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
 import java.math.BigInteger;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instances of this class convert permutations of a given size {@code s} into non-negative {@code BigInteger} values
+ * {@code 0, 1, 2, ..., s!-1}, using the ranking algorithm by Myrvold and Ruskey: "Ranking and Unranking Permutations in
+ * Linear Time".
+ * <p>
+ * @see Permutation#getRank()
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class PermutationToBigInteger
 	   extends AbstractBigIntegerConverter<Permutation> {
 
+	private static final long serialVersionUID = 1L;
+
 	private final int size;
+	private BigInteger inputSize; // factorial of size
 
 	protected PermutationToBigInteger(int size) {
 		super(Permutation.class);
 		this.size = size;
+		this.inputSize = null; // lazy factorial computation
+	}
+
+	/**
+	 * Creates a new {@link PermutationToBigInteger} converter for a given permutation size.
+	 * <p>
+	 * @param size The given size
+	 * @return The new converter
+	 */
+	public static PermutationToBigInteger getInstance(int size) {
+		if (size < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new PermutationToBigInteger(size);
 	}
 
 	@Override
-	protected BigInteger abstractConvert(Permutation value) {
-		return value.getRank();
+	protected boolean defaultIsValidInput(Permutation permutation) {
+		return (permutation.getSize() == this.size);
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		if (this.inputSize == null) {
+			this.inputSize = MathUtil.factorial(size);
+		}
+		return value.signum() >= 0 && value.compareTo(this.inputSize) < 0;
+	}
+
+	@Override
+	protected BigInteger abstractConvert(Permutation permutation) {
+		return permutation.getRank();
 	}
 
 	@Override
 	protected Permutation abstractReconvert(BigInteger value) {
-		try {
-			return Permutation.getInstance(this.size, value);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	public static PermutationToBigInteger getInstance(int size) {
-		return new PermutationToBigInteger(size);
+		return Permutation.getInstance(this.size, value);
 	}
 
 }

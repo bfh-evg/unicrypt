@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.factorization.PrimePair;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +53,8 @@ import java.util.Map;
 public class ZStarModPrimePair
 	   extends ZStarMod {
 
-	private final static Map<BigInteger, ZStarModPrimePair> instances = new HashMap<BigInteger, ZStarModPrimePair>();
+	private final static Map<BigInteger, ZStarModPrimePair> instances = new HashMap<>();
+	private static final long serialVersionUID = 1L;
 
 	protected ZStarModPrimePair(PrimePair primePair) {
 		super(primePair);
@@ -73,20 +72,12 @@ public class ZStarModPrimePair
 		return instance;
 	}
 
-	public static ZStarModPrimePair getInstance(final int p, final int q) {
-		return ZStarModPrimePair.getInstance(BigInteger.valueOf(p), BigInteger.valueOf(q));
+	public static ZStarModPrimePair getInstance(final long prime1, final long prime2) {
+		return ZStarModPrimePair.getInstance(BigInteger.valueOf(prime1), BigInteger.valueOf(prime2));
 	}
 
-	public static ZStarModPrimePair getInstance(final BigInteger p, final BigInteger q) {
-		return ZStarModPrimePair.getInstance(PrimePair.getInstance(p, q));
-	}
-
-	public static ZStarModPrimePair getRandomInstance(int bitLength) {
-		return ZStarModPrimePair.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
-	}
-
-	public static ZStarModPrimePair getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		return ZStarModPrimePair.getInstance(PrimePair.getRandomInstance(bitLength, randomByteSequence));
+	public static ZStarModPrimePair getInstance(final BigInteger prime1, final BigInteger prime2) {
+		return ZStarModPrimePair.getInstance(PrimePair.getInstance(prime1, prime2));
 	}
 
 }

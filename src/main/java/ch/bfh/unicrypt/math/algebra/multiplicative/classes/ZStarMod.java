@@ -41,11 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.algebra.multiplicative.abstracts.AbstractMultiplicativeGroup;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
@@ -57,8 +56,8 @@ import java.math.BigInteger;
  * is 1. Every integer in Z*_n is relatively prime to n. The smallest such group is Z*_2 = {1}.
  * <p>
  * @see "Handbook of Applied Cryptography, Definition 2.124"
- * @see <a
- * href="http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n">http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Multiplicative_group_of_integers_modulo_n">Multiplicative group of
+ * integers modulo n</a>
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
@@ -66,6 +65,8 @@ import java.math.BigInteger;
  */
 public class ZStarMod
 	   extends AbstractMultiplicativeGroup<ZStarModElement, BigInteger> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final BigInteger modulus;
 	private final Factorization modulusFactorization;
@@ -119,11 +120,11 @@ public class ZStarMod
 		return this.modulusFactorization;
 	}
 
-	public final boolean contains(int integerValue) {
+	public final boolean contains(long integerValue) {
 		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
-	public final ZStarModElement getElement(int integerValue) {
+	public final ZStarModElement getElement(long integerValue) {
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
@@ -142,7 +143,7 @@ public class ZStarMod
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getModulus().toString();
 	}
 
@@ -163,15 +164,16 @@ public class ZStarMod
 	}
 
 	@Override
-	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
-		return BigIntegerToBigInteger.getInstance();
+	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance(0);
 	}
 
 	@Override
 	protected ZStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
 		BigInteger randomValue;
 		do {
-			randomValue = randomByteSequence.getRandomNumberGenerator().nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
+			randomValue = randomByteSequence.getRandomNumberGenerator()
+				   .nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
 		} while (!this.contains(randomValue));
 		return this.abstractGetElement(randomValue);
 	}
@@ -179,7 +181,7 @@ public class ZStarMod
 	@Override
 	protected BigInteger abstractGetOrder() {
 		if (!this.getModulusFactorization().getValue().equals(this.getModulus())) {
-			return Group.UNKNOWN_ORDER;
+			return Set.UNKNOWN;
 		}
 		return MathUtil.eulerFunction(this.getModulus(), this.getModulusFactorization().getPrimeFactors());
 	}
@@ -215,17 +217,17 @@ public class ZStarMod
 	//
 	// STATIC FACTORY METHODS
 	//
-	public static ZStarMod getInstance(final int modulus) {
+	public static ZStarMod getInstance(final long modulus) {
 		return ZStarMod.getInstance(BigInteger.valueOf(modulus));
 	}
 
 	/**
-	 * This is a static factory method to construct a new instance of this class for a given {@literal modulus >= 2}. If
-	 * {@literal modulus} is not prime, then a group of unknown order is returned.
+	 * This is a static factory method to construct a new instance of this class for a given {@code modulus >= 2}. If
+	 * {@code modulus} is not prime, then a group of unknown order is returned.
 	 * <p>
 	 * @param modulus The modulus
 	 * @return
-	 * @throws IllegalArgumentException if {@literal modulus} is null or smaller than 2
+	 * @throws IllegalArgumentException if {@code modulus} is null or smaller than 2
 	 */
 	public static ZStarMod getInstance(final BigInteger modulus) {
 		if (modulus == null || modulus.compareTo(BigInteger.ONE) <= 0) {
@@ -243,8 +245,8 @@ public class ZStarMod
 	 * <p>
 	 * @param modulusFactorization The given prime factorization
 	 * @return
-	 * @throws IllegalArgumentException if {@literal primeFactorization} is null
-	 * @throws IllegalArgumentException if {@literal primeFactorization.getValue()} is 1
+	 * @throws IllegalArgumentException if {@code primeFactorization} is null
+	 * @throws IllegalArgumentException if {@code primeFactorization.getValue()} is 1
 	 */
 	public static ZStarMod getInstance(final Factorization modulusFactorization) {
 		if (modulusFactorization == null || modulusFactorization.getValue().compareTo(BigInteger.ONE) <= 0) {

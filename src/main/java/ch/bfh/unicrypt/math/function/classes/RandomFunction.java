@@ -58,6 +58,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class RandomFunction
 	   extends AbstractFunction<RandomFunction, SingletonGroup, SingletonElement, Set, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private RandomFunction(final Set coDomain) {
 		super(SingletonGroup.getInstance(), coDomain);
@@ -80,7 +81,7 @@ public class RandomFunction
 	 * <p/>
 	 * @param set The given group
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static RandomFunction getInstance(final Set set) {
 		if (set == null) {

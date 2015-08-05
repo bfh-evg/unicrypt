@@ -42,7 +42,9 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeGroup;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeMonoid;
@@ -58,11 +60,13 @@ import java.math.BigInteger;
  * @param <V> Generic type of value stored in this element
  * @author rolfhaenni
  */
-public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup<V>, E extends MultiplicativeElement<V>, V extends Object>
+public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemiGroup<V>, E extends MultiplicativeElement<V>, V>
 	   extends AbstractElement<S, E, V>
 	   implements MultiplicativeElement<V> {
 
-	protected AbstractMultiplicativeElement(final S semiGroup, final V value) {
+	private static final long serialVersionUID = 1L;
+
+	protected AbstractMultiplicativeElement(final AbstractSet<E, V> semiGroup, final V value) {
 		super(semiGroup, value);
 	}
 
@@ -103,10 +107,10 @@ public abstract class AbstractMultiplicativeElement<S extends MultiplicativeSemi
 	}
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	@Override
-	public final E power(final int amount) {
+	public final E power(final long amount) {
 		return (E) this.getSet().power(this, amount);
 	}
 

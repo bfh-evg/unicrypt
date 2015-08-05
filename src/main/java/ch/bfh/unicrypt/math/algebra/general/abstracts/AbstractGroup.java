@@ -56,11 +56,13 @@ import java.math.BigInteger;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractGroup<E extends Element<V>, V extends Object>
+public abstract class AbstractGroup<E extends Element<V>, V>
 	   extends AbstractMonoid<E, V>
 	   implements Group<V> {
 
-	protected AbstractGroup(Class<? extends Object> valueClass) {
+	private static final long serialVersionUID = 1L;
+
+	protected AbstractGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 

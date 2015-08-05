@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.classes;
 
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -66,6 +66,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class PermutationFunction
 	   extends AbstractFunction<PermutationFunction, ProductSet, Pair, ProductSet, Tuple> {
+	private static final long serialVersionUID = 1L;
 
 	private PermutationFunction(final ProductSet domain, final ProductSet coDomain) {
 		super(domain, coDomain);
@@ -106,8 +107,8 @@ public class PermutationFunction
 	 * @param set   The given group
 	 * @param arity The arity of the tuple elements to permute
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
 	public static PermutationFunction getInstance(final Set set, final int arity) {
 		if (set == null || arity < 0) {
@@ -123,13 +124,15 @@ public class PermutationFunction
 	 * <p/>
 	 * @param productSet The given power group
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static PermutationFunction getInstance(final ProductSet productSet) {
 		if (productSet == null || !productSet.isUniform()) {
 			throw new IllegalArgumentException();
 		}
-		return new PermutationFunction(ProductSet.getInstance(productSet, PermutationGroup.getInstance(productSet.getArity())), productSet);
+		return new PermutationFunction(ProductSet.getInstance(productSet,
+															  PermutationGroup.getInstance(productSet.getArity())),
+									   productSet);
 	}
 
 }

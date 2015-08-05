@@ -68,7 +68,7 @@ public abstract class AbstractRandomizedCommitmentScheme<MS extends Set, ME exte
 
 	protected final RS randomizationSpace;
 
-	public AbstractRandomizedCommitmentScheme(MS messageSpace, CS commitmentSpace, RS randomizationSpace) {
+	protected AbstractRandomizedCommitmentScheme(MS messageSpace, CS commitmentSpace, RS randomizationSpace) {
 		super(messageSpace, commitmentSpace);
 		this.randomizationSpace = randomizationSpace;
 	}
@@ -90,10 +90,12 @@ public abstract class AbstractRandomizedCommitmentScheme<MS extends Set, ME exte
 
 	@Override
 	protected Function abstractGetDecommitmentFunction() {
-		ProductSet decommitmentDomain = ProductSet.getInstance(this.messageSpace, this.randomizationSpace, this.commitmentSpace);
+		ProductSet decommitmentDomain
+			   = ProductSet.getInstance(this.messageSpace, this.randomizationSpace, this.commitmentSpace);
 		return CompositeFunction.getInstance(
-			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(AdapterFunction.getInstance(decommitmentDomain, 0, 1),
-																			  this.getCommitmentFunction()),
+			   SharedDomainFunction.getInstance(CompositeFunction
+					  .getInstance(AdapterFunction.getInstance(decommitmentDomain, 0, 1),
+								   this.getCommitmentFunction()),
 												SelectionFunction.getInstance(decommitmentDomain, 2)),
 			   EqualityFunction.getInstance(this.getCommitmentSpace()));
 	}

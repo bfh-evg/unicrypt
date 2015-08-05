@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.abstracts;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
@@ -54,11 +56,13 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this cyclic group
  * @author
  */
-public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement<V>, V extends Object>
+public abstract class AbstractMultiplicativeCyclicGroup<E extends MultiplicativeElement<V>, V>
 	   extends AbstractCyclicGroup<E, V>
 	   implements MultiplicativeCyclicGroup<V> {
 
-	public AbstractMultiplicativeCyclicGroup(Class<? extends Object> valueClass) {
+	private static final long serialVersionUID = 1L;
+
+	protected AbstractMultiplicativeCyclicGroup(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -73,7 +77,12 @@ public abstract class AbstractMultiplicativeCyclicGroup<E extends Multiplicative
 	}
 
 	@Override
-	public final E multiply(final Iterable<Element> elements) {
+	public final E multiply(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E multiply(final Sequence<Element> elements) {
 		return this.apply(elements);
 	}
 
@@ -88,7 +97,7 @@ public abstract class AbstractMultiplicativeCyclicGroup<E extends Multiplicative
 	}
 
 	@Override
-	public final E power(final Element element, final int amount) {
+	public final E power(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

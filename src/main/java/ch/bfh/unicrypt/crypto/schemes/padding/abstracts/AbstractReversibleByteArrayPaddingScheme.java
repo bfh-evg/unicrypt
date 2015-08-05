@@ -57,6 +57,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public abstract class AbstractReversibleByteArrayPaddingScheme
 	   extends AbstractByteArrayPaddingScheme
 	   implements ReversiblePaddingScheme {
+	private static final long serialVersionUID = 1L;
 
 	private Function unpaddingFunction;
 
@@ -78,7 +79,8 @@ public abstract class AbstractReversibleByteArrayPaddingScheme
 	}
 
 	protected Function abstractGetUnpaddingFunction() {
-		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid, ByteArrayElement>(this.paddingSpace, this.messageSpace) {
+		return new AbstractFunction<Function, ByteArrayMonoid, ByteArrayElement, ByteArrayMonoid,
+			   ByteArrayElement>(this.paddingSpace, this.messageSpace) {
 			@Override
 			protected ByteArrayElement abstractApply(ByteArrayElement element, RandomByteSequence randomByteSequence) {
 				ByteArray byteArray = element.getValue();

@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.UnaryOperator;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -49,9 +52,6 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * This abstract class provides a basis implementation for objects of type {@link CyclicRing}.
@@ -60,13 +60,15 @@ import java.util.NoSuchElementException;
  * @param <V> Generic type of values stored in the elements of this cyclic ring
  * @author rolfhaenni
  */
-public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extends Object>
+public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	   extends AbstractRing<E, V>
 	   implements CyclicRing<V> {
 
+	private static final long serialVersionUID = 1L;
+
 	private E defaultGenerator;
 
-	public AbstractCyclicRing(Class<? extends Object> valueClass) {
+	protected AbstractCyclicRing(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -117,7 +119,8 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	}
 
 	@Override
-	public final Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
+	public final Tuple getIndependentGenerators(int minIndex, int maxIndex,
+		   ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (minIndex < 0 || maxIndex < minIndex) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -157,38 +160,25 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V extend
 	}
 
 	@Override
-	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
-		final AbstractCyclicRing<E, V> cyclicRing = this;
-		return new Iterator<E>() {
-			BigInteger counter = BigInteger.ZERO;
-			E currentElement = cyclicRing.getIdentityElement();
+	protected Sequence<E> defaultGetElements() {
+		final AbstractCyclicRing<E, V> ring = this;
+		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<E>() {
 
 			@Override
-			public boolean hasNext() {
-				return counter.compareTo(maxCounter) < 0;
+			public E apply(E element) {
+				return ring.apply(ring.getDefaultGenerator(), element);
 			}
 
-			@Override
-			public E next() {
-				if (this.hasNext()) {
-					this.counter = this.counter.add(BigInteger.ONE);
-					E nextElement = this.currentElement;
-					this.currentElement = cyclicRing.apply(this.currentElement, cyclicRing.getDefaultGenerator());
-					return nextElement;
-				}
-				throw new NoSuchElementException();
-			}
+		}).limit(new Predicate<E>() {
 
 			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
+			public boolean test(E element) {
+				return ring.getIdentityElement().equals(element);
 			}
-		};
+
+		});
 	}
 
-	//
-	// The following protected abstract method must be implemented in every direct sub-class
-	//
 	protected abstract E abstractGetDefaultGenerator();
 
 	protected abstract boolean abstractIsGenerator(E element);

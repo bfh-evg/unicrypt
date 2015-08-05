@@ -71,7 +71,8 @@ public abstract class AbstractShuffleProofSystem
 	final private int kr;
 	final private Tuple independentGenerators;
 
-	protected AbstractShuffleProofSystem(SigmaChallengeGenerator sigmaChallengeGenerator, ChallengeGenerator eValuesGenerator,
+	protected AbstractShuffleProofSystem(SigmaChallengeGenerator sigmaChallengeGenerator,
+		   ChallengeGenerator eValuesGenerator,
 		   CyclicGroup cyclicGroup, int size, int kr, Tuple independentGenerators) {
 		this.sigmaChallengeGenerator = sigmaChallengeGenerator;
 		this.eValuesGenerator = eValuesGenerator;
@@ -80,7 +81,8 @@ public abstract class AbstractShuffleProofSystem
 		this.kr = kr;
 		this.independentGenerators = independentGenerators;
 
-		this.ke = ((ZMod) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus().subtract(BigInteger.ONE).bitLength();
+		this.ke = ((ZMod) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
+			   .subtract(BigInteger.ONE).bitLength();
 		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(BigInteger.ONE).bitLength();
 	}
 

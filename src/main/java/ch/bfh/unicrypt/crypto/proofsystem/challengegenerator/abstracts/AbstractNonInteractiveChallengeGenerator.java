@@ -46,14 +46,14 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
-public abstract class AbstractNonInteractiveChallengeGenerator<IS extends Set, IE extends Element, CS extends Set, CE extends Element>
-	   extends AbstractChallengeGenerator<IS, IE, CS, CE>
+public abstract class AbstractNonInteractiveChallengeGenerator<CS extends Set, CE extends Element>
+	   extends AbstractChallengeGenerator<CS, CE>
 	   implements NonInteractiveChallengeGenerator {
 
 	protected final Element proverId;
 
-	protected AbstractNonInteractiveChallengeGenerator(IS inputSpace, CS challengeSpace, Element proverId) {
-		super(inputSpace, challengeSpace);
+	protected AbstractNonInteractiveChallengeGenerator(CS challengeSpace, Element proverId) {
+		super(challengeSpace);
 		this.proverId = proverId;
 	}
 
@@ -64,14 +64,14 @@ public abstract class AbstractNonInteractiveChallengeGenerator<IS extends Set, I
 	}
 
 	@Override
-	protected final CE abstractGenerate(IE input) {
-		Element newInput = (this.proverId == null)
+	protected final CE abstractGenerate(Element<?> input) {
+		Element<?> newInput = (this.proverId == null)
 			   ? input
 			   : Pair.getInstance(input, this.proverId);
 		return this.abstractAbstractGenerate(newInput);
 	}
 
 	// a "second-order" abstract method is required here
-	protected abstract CE abstractAbstractGenerate(Element input);
+	protected abstract CE abstractAbstractGenerate(Element<?> input);
 
 }

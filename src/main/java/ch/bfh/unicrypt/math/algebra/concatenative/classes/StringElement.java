@@ -52,18 +52,20 @@ public class StringElement
 	   extends AbstractConcatenativeElement<StringMonoid, StringElement, String>
 	   implements ConcatenativeElement<String> {
 
+	private static final long serialVersionUID = 1L;
+
 	protected StringElement(final StringMonoid monoid, final String string) {
 		super(monoid, string);
 	}
 
 	@Override
 	public int getLength() {
-		return this.getValue().length();
+		return this.value.length();
 	}
 
 	@Override
-	protected String defaultToStringValue() {
-		return "\"" + this.getValue() + "\"";
+	protected String defaultToStringContent() {
+		return "\"" + this.value + "\"";
 	}
 
 }

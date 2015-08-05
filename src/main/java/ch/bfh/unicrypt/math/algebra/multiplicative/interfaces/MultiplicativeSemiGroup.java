@@ -41,7 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.interfaces;
 
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -49,61 +55,63 @@ import java.math.BigInteger;
 
 /**
  * This interface provides the renaming of some group operations for the case of a multiplicatively written
- * {@link SemiGroup}. No functionality is added.
+ * {@link SemiGroup}. No functionality is added. Some return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  * @param <V> Generic type of values stored in the elements of this semigroup
  */
-public interface MultiplicativeSemiGroup<V extends Object>
+public interface MultiplicativeSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**
-	 * This method is a synonym for {@link #Group.apply(Element, Element)}.
+	 * This method is a synonym for {@link Group#apply(Element, Element)}.
 	 * <p>
-	 * @param element1 the same as in {@link #Group.apply(Element, Element)}
-	 * @param element2 the same as in {@link #Group.apply(Element, Element)}
-	 * @return the same as in {@link #Group.apply(Element, Element)}
+	 * @param element1 the same as in {@link Group#apply(Element, Element)}
+	 * @param element2 the same as in {@link Group#apply(Element, Element)}
+	 * @return the same as in {@link Group#apply(Element, Element)}
 	 */
 	public MultiplicativeElement<V> multiply(Element element1, Element element2);
 
 	/**
-	 * This method is a synonym for {@link #Group.apply(Element...)}.
+	 * This method is a synonym for {@link Group#apply(Element...)}.
 	 * <p>
-	 * @param elements the same as in {@link #Group.apply(Element...)}
-	 * @return the same as in {@link #Group.apply(Element...)}
+	 * @param elements the same as in {@link Group#apply(Element...)}
+	 * @return the same as in {@link Group#apply(Element...)}
 	 */
 	public MultiplicativeElement<V> multiply(Element... elements);
 
-	public MultiplicativeElement<V> multiply(Iterable<Element> elements);
+	public MultiplicativeElement<V> multiply(ImmutableArray<Element> elements);
+
+	public MultiplicativeElement<V> multiply(Sequence<Element> elements);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
+	 * This method is a synonym for {@link Group#selfApply(Element, BigInteger)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, BigInteger)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, BigInteger)}
-	 * @return the same as in {@link #Group.selfApply(Element, BigInteger)}
+	 * @param element the same as in {@link Group#selfApply(Element, BigInteger)}
+	 * @param amount  the same as in {@link Group#selfApply(Element, BigInteger)}
+	 * @return the same as in {@link Group#selfApply(Element, BigInteger)}
 	 */
 	public MultiplicativeElement<V> power(Element element, BigInteger amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, Element)}.
+	 * This method is a synonym for {@link Group#selfApply(Element, Element)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, Element)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, Element)}
-	 * @return the same as in {@link #Group.selfApply(Element, Element)}
+	 * @param element the same as in {@link Group#selfApply(Element, Element)}
+	 * @param amount  the same as in {@link Group#selfApply(Element, Element)}
+	 * @return the same as in {@link Group#selfApply(Element, Element)}
 	 */
 	public MultiplicativeElement<V> power(Element element, Element<BigInteger> amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
+	 * This method is a synonym for {@link Group#selfApply(Element, long)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, int)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
-	 * @return the same as in {@link #Group.selfApply(Element, int)}
+	 * @param element the same as in {@link Group#selfApply(Element, long)}
+	 * @param amount  the same as in {@link Group#selfApply(Element, long)}
+	 * @return the same as in {@link Group#selfApply(Element, long)}
 	 */
-	public MultiplicativeElement<V> power(Element element, int amount);
+	public MultiplicativeElement<V> power(Element element, long amount);
 
 	/**
 	 * Applies the group operation to two instances of a given group element. This is equivalent to
@@ -130,30 +138,56 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	 */
 	public MultiplicativeElement<V> productOfPowers(Element[] elements, BigInteger[] amounts);
 
-	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public MultiplicativeElement<V> getElementFrom(int value);
+	public <W> MultiplicativeElement<V> getElementFrom(W value, Converter<V, W> converter);
 
 	@Override
-	public MultiplicativeElement<V> getElementFrom(BigInteger value);
+	public <W> MultiplicativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
 	@Override
-	public MultiplicativeElement<V> getElementFrom(ByteTree byteTree);
+	public <W> MultiplicativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
 
-//	@Override
-//	public MultiplicativeElement<V> getElementFrom(Element element);
+	@Override
+	public MultiplicativeElement<V> getElementFrom(long integer);
+
+	@Override
+	public MultiplicativeElement<V> getElementFrom(BigInteger bigInteger);
+
+	@Override
+	public MultiplicativeElement<V> getElementFrom(ByteArray byteArray);
+
+	@Override
+	public MultiplicativeElement<V> getElementFrom(String string);
+
 	@Override
 	public MultiplicativeElement<V> getRandomElement();
 
 	@Override
 	public MultiplicativeElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 
-	// The following methods are overridden from SemiGroup with an adapted return type
+	@Override
+	public Sequence<? extends MultiplicativeElement<V>> getRandomElements();
+
+	@Override
+	public Sequence<? extends MultiplicativeElement<V>> getRandomElements(long n);
+
+	@Override
+	public Sequence<? extends MultiplicativeElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends MultiplicativeElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+
 	@Override
 	public MultiplicativeElement<V> apply(Element element1, Element element2);
 
 	@Override
 	public MultiplicativeElement<V> apply(Element... elements);
+
+	@Override
+	public MultiplicativeElement<V> apply(ImmutableArray<Element> elements);
+
+	@Override
+	public MultiplicativeElement<V> apply(Sequence<Element> elements);
 
 	@Override
 	public MultiplicativeElement<V> selfApply(Element element, BigInteger amount);
@@ -162,7 +196,7 @@ public interface MultiplicativeSemiGroup<V extends Object>
 	public MultiplicativeElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
-	public MultiplicativeElement<V> selfApply(Element element, int amount);
+	public MultiplicativeElement<V> selfApply(Element element, long amount);
 
 	@Override
 	public MultiplicativeElement<V> selfApply(Element element);

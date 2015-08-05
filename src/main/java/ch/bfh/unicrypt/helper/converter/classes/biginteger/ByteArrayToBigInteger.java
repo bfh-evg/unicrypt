@@ -41,69 +41,118 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
-import ch.bfh.unicrypt.helper.MathUtil;
 import java.math.BigInteger;
-import java.util.LinkedList;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instances of this class convert byte arrays into non-negative {@code BigInteger} values 0, 1, 2, ... The input byte
+ * arrays can be restricted in two ways. First, it is possible to define a block length. For example, if the block
+ * length equals 2, then only byte arrays of length 0, 2, 4, ... are valid inputs. Second, a minimal number of blocks
+ * can be specified. Again, for blocks of length 2 and with a minimal number of blocks of 3, then only byte arrays of
+ * length 6, 8, 10, ... are valid inputs. An unrestricted input corresponds to block length 1 and minimal number of
+ * blocks 0.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class ByteArrayToBigInteger
 	   extends AbstractBigIntegerConverter<ByteArray> {
 
-	private final int blockLength;
+	private static final long serialVersionUID = 1L;
 
-	protected ByteArrayToBigInteger(int blockLength) {
+	private final int blockLength;
+	private final int minBlocks;
+
+	protected ByteArrayToBigInteger(int blockLength, int minBlocks) {
 		super(ByteArray.class);
 		this.blockLength = blockLength;
+		this.minBlocks = minBlocks;
 	}
 
-	@Override
-	public BigInteger abstractConvert(ByteArray value) {
-		// For blocklLength=1, there is 1 bytearray of length 0, 256 of length 1,
-		// 65536 of length 2, etc. Therefore:
-		//   lenght=0 -> 0
-		//   length=1 -> 1,...,256
-		//   length=2 -> 257,...,65792
-		// etc.
-		BigInteger result = BigInteger.ZERO;
-		if (value.getLength() > 0) {
-			byte[] bytes = new byte[value.getLength()];
-			int amount = bytes.length / this.blockLength;
-			for (int i = 0; i < amount; i++) {
-				bytes[(bytes.length - 1) - (i * this.blockLength)] = 1;
-			}
-			result = new BigInteger(1, bytes);
-		}
-		return result.add(new BigInteger(1, value.getBytes()));
-	}
-
-	@Override
-	public ByteArray abstractReconvert(BigInteger value) {
-		LinkedList<Byte> byteList = new LinkedList<Byte>();
-		BigInteger byteSize = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger blockSize = MathUtil.powerOfTwo(Byte.SIZE * this.blockLength);
-		while (!value.equals(BigInteger.ZERO)) {
-			value = value.subtract(BigInteger.ONE);
-			BigInteger remainder = value.mod(blockSize);
-			for (int i = 0; i < this.blockLength; i++) {
-				byteList.addFirst(remainder.mod(byteSize).byteValue());
-				remainder = remainder.divide(byteSize);
-			}
-			value = value.divide(blockSize);
-		}
-		return ByteArray.getInstance(byteList);
-	}
-
+	/**
+	 * Creates a new default {@link ByteArrayToBigInteger} converter with the block length set to 1 and the minimal
+	 * number of blocks set to 0.
+	 * <p>
+	 * @return The new converter
+	 */
 	public static ByteArrayToBigInteger getInstance() {
-		return new ByteArrayToBigInteger(1);
+		return ByteArrayToBigInteger.getInstance(1, 0);
 	}
 
+	/**
+	 * Creates a new {@link ByteArrayToBigInteger} converter for a given block length. The minimal number of blocks is
+	 * set to 0.
+	 * <p>
+	 * @param blockLength The block length
+	 * @return The new converter
+	 */
 	public static ByteArrayToBigInteger getInstance(int blockLength) {
-		return new ByteArrayToBigInteger(blockLength);
+		return ByteArrayToBigInteger.getInstance(blockLength, 0);
+	}
+
+	/**
+	 * Creates a new {@link ByteArrayToBigInteger} converter for a given block length and minimal number of blocks. This
+	 * is the general factory method for this class.
+	 * <p>
+	 * @param blockLength The block length
+	 * @param minBlocks   The minimal number of blocks
+	 * @return The new converter
+	 */
+	public static ByteArrayToBigInteger getInstance(int blockLength, int minBlocks) {
+		if (blockLength < 1 || minBlocks < 0) {
+			throw new IllegalArgumentException();
+		}
+		return new ByteArrayToBigInteger(blockLength, minBlocks);
+	}
+
+	@Override
+	protected boolean defaultIsValidInput(ByteArray byteArray) {
+		return (byteArray.getLength() % this.blockLength) == 0
+			   && (byteArray.getLength() / this.blockLength) >= minBlocks;
+	}
+
+	@Override
+	protected boolean defaultIsValidOutput(BigInteger value) {
+		return value.signum() >= 0;
+	}
+
+	// For blocklLength=1, there is 1 byte array of length 0, 256 of length 1, 65536 of length 2, etc. For
+	// blocklLength=2, there is 1 byte array of length 0, 65536 of length 2, etc. To convert an input byte array, the
+	// number of all byte arrays shorter than the input array is computed and added to the integer represented by the
+	// byte array (unsigned, big endian).
+	@Override
+	protected BigInteger abstractConvert(ByteArray byteArray) {
+		BigInteger blockSize = MathUtil.powerOfTwo(this.blockLength * Byte.SIZE);
+
+		// compute the total number of shorter byte arrays
+		BigInteger result = BigInteger.ZERO;
+		BigInteger multipleBlockSize = blockSize.pow(this.minBlocks);
+		for (int blocks = this.minBlocks; blocks < byteArray.getLength() / this.blockLength; blocks++) {
+			result = result.add(multipleBlockSize);
+			multipleBlockSize = multipleBlockSize.multiply(blockSize);
+		}
+		// convert byte array to BigInteger and add it to the result
+		return result.add(new BigInteger(1, byteArray.getBytes()));
+	}
+
+	@Override
+	protected ByteArray abstractReconvert(BigInteger value) {
+		BigInteger blockSize = MathUtil.powerOfTwo(this.blockLength * Byte.SIZE);
+
+		// subtract the total number of shorter byte arrays
+		int blocks = this.minBlocks;
+		BigInteger multipleBlockSize = blockSize.pow(this.minBlocks);
+		while (value.compareTo(multipleBlockSize) >= 0) {
+			value = value.subtract(multipleBlockSize);
+			multipleBlockSize = multipleBlockSize.multiply(blockSize);
+			blocks++;
+		}
+		// convert the resulting value to ByteArray and remove leading 0 byte for sign
+		ByteArray result = ByteArray.getInstance(value.toByteArray()).removePrefix();
+		// adjust length of result
+		return result.addPrefix(blocks * this.blockLength - result.getLength());
 	}
 
 }

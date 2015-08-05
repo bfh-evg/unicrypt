@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -56,6 +56,8 @@ import java.util.Map;
  */
 public class SingletonGroup
 	   extends AbstractCyclicGroup<SingletonElement, BigInteger> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final SingletonElement element;
 
@@ -76,7 +78,7 @@ public class SingletonGroup
 	// The following protected methods override the default implementation from {@code AbstractGroup}
 	//
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getValue().toString();
 	}
 
@@ -91,8 +93,8 @@ public class SingletonGroup
 	}
 
 	@Override
-	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
-		return BigIntegerToBigInteger.getInstance();
+	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance(0);
 	}
 
 	@Override
@@ -150,7 +152,7 @@ public class SingletonGroup
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<BigInteger, SingletonGroup> instances = new HashMap<BigInteger, SingletonGroup>();
+	private static final Map<BigInteger, SingletonGroup> instances = new HashMap<>();
 
 	public static SingletonGroup getInstance(final BigInteger value) {
 		if (value == null) {

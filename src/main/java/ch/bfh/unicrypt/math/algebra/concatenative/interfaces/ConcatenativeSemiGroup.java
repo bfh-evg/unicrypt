@@ -41,7 +41,13 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
+import ch.bfh.unicrypt.helper.aggregator.interfaces.Aggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -49,14 +55,14 @@ import java.math.BigInteger;
 
 /**
  * This interface provides the renaming of some group operations for the case of an additively written
- * {@link SemiGroup}. No functionality is added.
+ * {@link SemiGroup}. Some return types are updated.
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  * @param <V> Generic type of values stored in the elements of this semigroup
  */
-public interface ConcatenativeSemiGroup<V extends Object>
+public interface ConcatenativeSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**
@@ -84,50 +90,52 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	public ConcatenativeElement<V> getRandomElement(int length, RandomByteSequence randomByteSequence);
 
 	/**
-	 * This method is a synonym for {@link #Group.apply(Element, Element)}.
+	 * This method is a synonym for {@link Group#apply(Element, Element)}.
 	 * <p>
-	 * @param element1 the same as in {@link #Group.apply(Element, Element)}
-	 * @param element2 the same as in {@link #Group.apply(Element, Element)}
-	 * @return the same as in {@link #Group.apply(Element, Element)}
+	 * @param element1 the same as in {@link Group#apply(Element, Element)}
+	 * @param element2 the same as in {@link Group#apply(Element, Element)}
+	 * @return the same as in {@link Group#apply(Element, Element)}
 	 */
 	public ConcatenativeElement<V> concatenate(Element element1, Element element2);
 
 	/**
-	 * This method is a synonym for {@link #Group.apply(Element...)}.
+	 * This method is a synonym for {@link Group#apply(Element...)}.
 	 * <p>
-	 * @param elements the same as in {@link #Group.apply(Element...)}
-	 * @return the same as in {@link #Group.apply(Element...)}
+	 * @param elements the same as in {@link Group#apply(Element...)}
+	 * @return the same as in {@link Group#apply(Element...)}
 	 */
 	public ConcatenativeElement<V> concatenate(Element... elements);
 
-	public ConcatenativeElement<V> concatenate(Iterable<Element> elements);
+	public ConcatenativeElement<V> concatenate(ImmutableArray<Element> elements);
+
+	public ConcatenativeElement<V> concatenate(Sequence<Element> elements);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, BigInteger)}.
+	 * This method is a synonym for {@link Group#selfApply(Element, BigInteger)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, BigInteger)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, BigInteger)}
-	 * @return the same as in {@link #Group.selfApply(Element, BigInteger)}
+	 * @param element the same as in {@link Group#selfApply(Element, BigInteger)}
+	 * @param amount  the same as in {@link Group#selfApply(Element, BigInteger)}
+	 * @return the same as in {@link Group#selfApply(Element, BigInteger)}
 	 */
 	public ConcatenativeElement<V> selfConcatenate(Element element, BigInteger amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, Element)}.
+	 * This method is a synonym for {@link Group#selfApply(Element, Element)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, Element)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, Element)}
-	 * @return the same as in {@link #Group.selfApply(Element, Element)}
+	 * @param element the same as in {@link Group#selfApply(Element, Element)}
+	 * @param amount  the same as in {@link Group#selfApply(Element, Element)}
+	 * @return the same as in {@link Group#selfApply(Element, Element)}
 	 */
 	public ConcatenativeElement<V> selfConcatenate(Element element, Element<BigInteger> amount);
 
 	/**
-	 * This method is a synonym for {@link #Group.selfApply(Element, int)}.
+	 * This method is a synonym for {@link Group#selfApply(Element, long)}.
 	 * <p>
-	 * @param element the same as in {@link #Group.selfApply(Element, int)}
-	 * @param amount  the same as in {@link #Group.selfApply(Element, int)}
-	 * @return the same as in {@link #Group.selfApply(Element, int)}
+	 * @param element the same as in {@link Group#selfApply(Element, long)}
+	 * @param amount  the same as in {@link Group#selfApply(Element, long)}
+	 * @return the same as in {@link Group#selfApply(Element, long)}
 	 */
-	public ConcatenativeElement<V> selfConcatenate(Element element, int amount);
+	public ConcatenativeElement<V> selfConcatenate(Element element, long amount);
 
 	/**
 	 * Applies the group operation to two instances of a given group element. This is equivalent to
@@ -167,15 +175,26 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	 */
 	public boolean isEmptyElement(Element element);
 
-	// The following methods are overridden from Set with an adapted return type
 	@Override
-	public ConcatenativeElement<V> getElementFrom(int value);
+	public <W> ConcatenativeElement<V> getElementFrom(W value, Converter<V, W> converter);
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(BigInteger value);
+	public <W> ConcatenativeElement<V> getElementFrom(W value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
 	@Override
-	public ConcatenativeElement<V> getElementFrom(ByteTree byteTree);
+	public <W> ConcatenativeElement<V> getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod);
+
+	@Override
+	public ConcatenativeElement<V> getElementFrom(long integer);
+
+	@Override
+	public ConcatenativeElement<V> getElementFrom(BigInteger bigInteger);
+
+	@Override
+	public ConcatenativeElement<V> getElementFrom(ByteArray byteArray);
+
+	@Override
+	public ConcatenativeElement<V> getElementFrom(String string);
 
 	@Override
 	public ConcatenativeElement<V> getRandomElement();
@@ -183,12 +202,29 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	@Override
 	public ConcatenativeElement<V> getRandomElement(RandomByteSequence randomByteSequence);
 
-	// The following methods are overridden from SemiGroup with an adapted return type
+	@Override
+	public Sequence<? extends ConcatenativeElement<V>> getRandomElements();
+
+	@Override
+	public Sequence<? extends ConcatenativeElement<V>> getRandomElements(long n);
+
+	@Override
+	public Sequence<? extends ConcatenativeElement<V>> getRandomElements(RandomByteSequence randomByteSequence);
+
+	@Override
+	public Sequence<? extends ConcatenativeElement<V>> getRandomElements(long n, RandomByteSequence randomByteSequence);
+
 	@Override
 	public ConcatenativeElement<V> apply(Element element1, Element element2);
 
 	@Override
 	public ConcatenativeElement<V> apply(Element... elements);
+
+	@Override
+	public ConcatenativeElement<V> apply(ImmutableArray<Element> elements);
+
+	@Override
+	public ConcatenativeElement<V> apply(Sequence<Element> elements);
 
 	@Override
 	public ConcatenativeElement<V> selfApply(Element element, BigInteger amount);
@@ -197,7 +233,7 @@ public interface ConcatenativeSemiGroup<V extends Object>
 	public ConcatenativeElement<V> selfApply(Element element, Element<BigInteger> amount);
 
 	@Override
-	public ConcatenativeElement<V> selfApply(Element element, int amount);
+	public ConcatenativeElement<V> selfApply(Element element, long amount);
 
 	@Override
 	public ConcatenativeElement<V> selfApply(Element element);

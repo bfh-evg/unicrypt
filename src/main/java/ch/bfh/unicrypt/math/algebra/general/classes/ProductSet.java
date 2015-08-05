@@ -41,15 +41,22 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.aggregator.classes.BigIntegerAggregator;
+import ch.bfh.unicrypt.helper.aggregator.classes.ByteArrayAggregator;
+import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
-import ch.bfh.unicrypt.helper.bytetree.ByteTree;
-import ch.bfh.unicrypt.helper.bytetree.ByteTreeNode;
-import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
+import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
 import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Mapping;
+import ch.bfh.unicrypt.helper.sequence.MultiSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.tree.Tree;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
@@ -66,7 +73,9 @@ import java.util.Iterator;
  */
 public class ProductSet
 	   extends AbstractSet<Tuple, DenseArray<Element>>
-	   implements RecursiveArray<Set> {
+	   implements NestedArray<Set> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final DenseArray<Set> sets;
 
@@ -108,10 +117,6 @@ public class ProductSet
 		return this.abstractGetElement(DenseArray.getInstance(elements));
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected BigInteger abstractGetOrder() {
 		if (this.isEmpty()) {
@@ -127,10 +132,10 @@ public class ProductSet
 		BigInteger result = BigInteger.ONE;
 		for (Set set : this.sets) {
 			if (!set.isFinite()) {
-				return Set.INFINITE_ORDER;
+				return Set.INFINITE;
 			}
-			if (!set.hasKnownOrder() || result.equals(Set.UNKNOWN_ORDER)) {
-				result = Set.UNKNOWN_ORDER;
+			if (!set.hasKnownOrder() || result.equals(Set.UNKNOWN)) {
+				result = Set.UNKNOWN;
 			} else {
 				result = result.multiply(set.getOrder());
 			}
@@ -166,53 +171,20 @@ public class ProductSet
 	}
 
 	@Override
-	protected BigIntegerConverter<DenseArray<Element>> abstractGetBigIntegerConverter() {
-		return new AbstractBigIntegerConverter<DenseArray<Element>>(null) { // class parameter not needed
+	protected Converter<DenseArray<Element>, BigInteger> abstractGetBigIntegerConverter() {
+		// this method is only provided for external use, internally the conversion is overridden
+		return new AbstractConverter<DenseArray<Element>, BigInteger>(null, null) {
 
 			@Override
 			protected BigInteger abstractConvert(DenseArray<Element> elements) {
-				BigInteger[] bigIntegers = new BigInteger[getLength()];
-				int i = 0;
-				for (Element element : elements) {
-					bigIntegers[i] = element.getBigInteger();
-					i++;
-				}
-				return MathUtil.pair(bigIntegers);
+				return Tuple.getInstance(elements).defaultConvertToBigInteger();
 			}
 
 			@Override
-			protected DenseArray<Element> abstractReconvert(BigInteger bigInteger) {
-				BigInteger[] values = MathUtil.unpair(bigInteger, getLength());
-				Element[] elements = new Element[getLength()];
-				int i = 0;
-				for (BigInteger value : values) {
-					elements[i] = getAt(i).getElementFrom(value);
-					i++;
-				}
-				return DenseArray.getInstance(elements);
+			protected DenseArray<Element> abstractReconvert(BigInteger value) {
+				return getElementFrom(value).getValue();
 			}
 		};
-	}
-
-	@Override
-	protected Tuple defaultGetElementFrom(ByteTree byteTree, ConvertMethod convertMethod) {
-		if (!byteTree.isLeaf()) {
-			int length = this.getLength();
-			DenseArray<ByteTree> byteTrees = ((ByteTreeNode) byteTree).getByteTrees();
-			if (byteTrees.getLength() == length) {
-				Element[] elements = new Element[length];
-				for (int i : this.getAllIndices()) {
-					elements[i] = this.getAt(i).getElementFrom(byteTrees.getAt(i), convertMethod);
-					if (elements[i] == null) {
-						// no such element
-						return null;
-					}
-				}
-				return this.abstractGetElement(DenseArray.getInstance(elements));
-			}
-		}
-		// no such element
-		return null;
 	}
 
 	@Override
@@ -249,6 +221,39 @@ public class ProductSet
 	}
 
 	@Override
+	protected <W> Tuple defaultGetElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) {
+		if (tree.isLeaf()) {
+			throw new IllegalArgumentException();
+		}
+		Node<W> node = (Node<W>) tree;
+		if (this.getLength() != node.getSize()) {
+			throw new IllegalArgumentException();
+		}
+		Element[] elements = new Element[this.getLength()];
+		int i = 0;
+		for (Tree<W> child : node.getChildren()) {
+			elements[i] = this.getAt(i).getElementFrom(child, convertMethod);
+			i++;
+		}
+		return this.getElement(DenseArray.getInstance(elements));
+	}
+
+	@Override
+	protected Tuple defaultGetElementFrom(BigInteger value) {
+		return this.getElementFrom(value, ConvertMethod.getInstance(BigInteger.class), BigIntegerAggregator.getInstance());
+	}
+
+	@Override
+	protected Tuple defaultGetElementFrom(ByteArray value) {
+		return this.getElementFrom(value, ConvertMethod.getInstance(ByteArray.class), ByteArrayAggregator.getInstance());
+	}
+
+	@Override
+	protected Tuple defaultGetElementFrom(String value) {
+		return this.getElementFrom(value, ConvertMethod.getInstance(String.class), StringAggregator.getInstance());
+	}
+
+	@Override
 	protected boolean defaultIsEquivalent(Set set) {
 		ProductSet other = (ProductSet) set;
 		if (this.getLength() != other.getLength()) {
@@ -282,23 +287,28 @@ public class ProductSet
 	}
 
 	@Override
-	public Iterable<Integer> getAllIndices() {
+	public Sequence<Integer> getAllIndices() {
 		return this.sets.getAllIndices();
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(Set set) {
+	public Sequence<Integer> getIndices(Set set) {
 		return this.sets.getIndices(set);
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(Set set) {
+	public Sequence<Integer> getIndicesExcept(Set set) {
 		return this.sets.getIndicesExcept(set);
 	}
 
 	@Override
 	public int count(Set set) {
 		return this.sets.count(set);
+	}
+
+	@Override
+	public int countExcept(Set set) {
+		return this.sets.countExcept(set);
 	}
 
 	@Override
@@ -388,18 +398,33 @@ public class ProductSet
 	}
 
 	@Override
+	public ProductSet removeFirst() {
+		return ProductSet.getInstance(this.sets.removeFirst());
+	}
+
+	@Override
+	public ProductSet removeLast() {
+		return ProductSet.getInstance(this.sets.removeLast());
+	}
+
+	@Override
 	public ProductSet insertAt(int index, Set set) {
 		return ProductSet.getInstance(this.sets.insertAt(index, set));
 	}
 
 	@Override
-	public ProductSet replaceAt(int index, Set set) {
-		return ProductSet.getInstance(this.sets.replaceAt(index, set));
+	public ProductSet insert(Set set) {
+		return ProductSet.getInstance(this.sets.insert(set));
 	}
 
 	@Override
 	public ProductSet add(Set set) {
 		return ProductSet.getInstance(this.sets.add(set));
+	}
+
+	@Override
+	public ProductSet replaceAt(int index, Set set) {
+		return ProductSet.getInstance(this.sets.replaceAt(index, set));
 	}
 
 	@Override
@@ -420,6 +445,11 @@ public class ProductSet
 			result[i] = ProductSet.getInstance(setArray[i]);
 		}
 		return result;
+	}
+
+	@Override
+	public final Sequence<Set> getSequence() {
+		return this.sets.getSequence();
 	}
 
 	@Override
@@ -446,8 +476,8 @@ public class ProductSet
 		}
 		BigInteger result = BigInteger.ONE;
 		for (Set set : this.sets) {
-			if (set.getOrderUpperBound().equals(Set.INFINITE_ORDER)) {
-				return Set.INFINITE_ORDER;
+			if (set.getOrderUpperBound().equals(Set.INFINITE)) {
+				return Set.INFINITE;
 			}
 			result = result.multiply(set.getOrderUpperBound());
 		}
@@ -471,7 +501,26 @@ public class ProductSet
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected Sequence<Tuple> defaultGetElements() {
+		return MultiSequence.getInstance(this.getSequence().map(new Mapping<Set, Sequence<Element>>() {
+
+			@Override
+			public Sequence<Element> apply(Set set) {
+				return set.getElements();
+			}
+
+		})).join().map(new Mapping<DenseArray<Element>, Tuple>() {
+
+			@Override
+			public Tuple apply(DenseArray<Element> value) {
+				return Tuple.getInstance(value);
+			}
+
+		});
+	}
+
+	@Override
+	protected String defaultToStringContent() {
 		if (this.isEmpty()) {
 			return "";
 		}
@@ -487,9 +536,6 @@ public class ProductSet
 		return result;
 	}
 
-	//
-	// STATIC FACTORY METHODS
-	//
 	public static ProductSet getInstance(DenseArray<Set> sets) {
 		if (sets == null) {
 			throw new IllegalArgumentException();

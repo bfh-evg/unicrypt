@@ -42,7 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.commitment.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.commitment.abstracts.AbstractRandomizedCommitmentScheme;
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
@@ -65,15 +65,18 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 // -> Permutation commitment is equal to the columnwise commitment to a permutation matrix
 //
 public class PermutationCommitmentScheme
-	   extends AbstractRandomizedCommitmentScheme<PermutationGroup, PermutationElement, ProductGroup, Tuple, ProductGroup> {
+	   extends AbstractRandomizedCommitmentScheme<PermutationGroup, PermutationElement, ProductGroup,
+	   Tuple, ProductGroup> {
 
 	private final CyclicGroup cyclicGroup;
 	private final Element randomizationGenerator;
 	private final Tuple messageGenerators;
 	private final int size;
 
-	protected PermutationCommitmentScheme(CyclicGroup cyclicGroup, int size, Element randomizationGenerator, Tuple messageGenerators) {
-		super(PermutationGroup.getInstance(size), ProductGroup.getInstance(cyclicGroup, size), ProductGroup.getInstance(cyclicGroup.getZModOrder(), size));
+	protected PermutationCommitmentScheme(CyclicGroup cyclicGroup, int size, Element randomizationGenerator,
+		   Tuple messageGenerators) {
+		super(PermutationGroup.getInstance(size), ProductGroup.getInstance(cyclicGroup, size),
+												  ProductGroup.getInstance(cyclicGroup.getZModOrder(), size));
 		this.cyclicGroup = cyclicGroup;
 		this.size = size;
 		this.randomizationGenerator = randomizationGenerator;
@@ -82,7 +85,8 @@ public class PermutationCommitmentScheme
 
 	@Override
 	protected Function abstractGetCommitmentFunction() {
-		return new PermutationCommitmentFunction(this.cyclicGroup, this.size, this.randomizationGenerator, this.messageGenerators);
+		return new PermutationCommitmentFunction(this.cyclicGroup, this.size, this.randomizationGenerator,
+			   this.messageGenerators);
 	}
 
 	public CyclicGroup getCyclicGroup() {
@@ -105,7 +109,8 @@ public class PermutationCommitmentScheme
 		return PermutationCommitmentScheme.getInstance(cyclicGroup, size, ReferenceRandomByteSequence.getInstance());
 	}
 
-	public static PermutationCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size, ReferenceRandomByteSequence referenceRandomByteSequence) {
+	public static PermutationCommitmentScheme getInstance(final CyclicGroup cyclicGroup, final int size,
+		   ReferenceRandomByteSequence referenceRandomByteSequence) {
 		if (cyclicGroup == null || size < 1 || referenceRandomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
@@ -116,9 +121,11 @@ public class PermutationCommitmentScheme
 		return new PermutationCommitmentScheme(cyclicGroup, size, randomizationGenerator, messageGenerators);
 	}
 
-	public static PermutationCommitmentScheme getInstance(final Element randomizationGenerator, final Tuple messageGenerators) {
+	public static PermutationCommitmentScheme getInstance(final Element randomizationGenerator,
+		   final Tuple messageGenerators) {
 		if (randomizationGenerator == null || messageGenerators == null || !randomizationGenerator.getSet().isCyclic()
-			   || messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform() || !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
+			   || messageGenerators.getArity() < 1 || !messageGenerators.getSet().isUniform()
+			   || !randomizationGenerator.getSet().isEquivalent(messageGenerators.getFirst().getSet())) {
 			throw new IllegalArgumentException();
 		}
 		CyclicGroup cycicGroup = (CyclicGroup) randomizationGenerator.getSet();
@@ -129,7 +136,8 @@ public class PermutationCommitmentScheme
 	private class PermutationCommitmentFunction
 		   extends AbstractFunction<PermutationCommitmentFunction, ProductSet, Pair, ProductGroup, Tuple> {
 
-		protected PermutationCommitmentFunction(CyclicGroup cyclicGroup, int size, Element randomizationGenerator, Tuple messageGenerators) {
+		protected PermutationCommitmentFunction(CyclicGroup cyclicGroup, int size, Element randomizationGenerator,
+			   Tuple messageGenerators) {
 			super(ProductSet.getInstance(messageSpace, randomizationSpace), commitmentSpace);
 		}
 
@@ -139,11 +147,11 @@ public class PermutationCommitmentScheme
 			final Tuple randomizations = (Tuple) element.getSecond();
 			Element[] ret = new Element[size];
 			for (int i = 0; i < size; i++) {
-				ret[i] = randomizationGenerator.selfApply(randomizations.getAt(i)).apply(messageGenerators.getAt(permutation.permute(i)));
+				ret[i] = randomizationGenerator.selfApply(randomizations.getAt(i)).apply(
+					   messageGenerators.getAt(permutation.permute(i)));
 			}
 			return Tuple.getInstance(ret);
 		}
 
 	}
-
 }

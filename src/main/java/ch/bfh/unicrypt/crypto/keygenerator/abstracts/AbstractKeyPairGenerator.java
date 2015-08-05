@@ -65,7 +65,8 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @param <PUS> Public key space
  * @param <PUE> Public key element
  */
-public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element>
+public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Element, PUS extends Set,
+	   PUE extends Element>
 	   extends AbstractKeyGenerator
 	   implements KeyPairGenerator {
 
@@ -118,7 +119,8 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	 */
 	@Override
 	public final PRE generatePrivateKey(RandomByteSequence randomByteSequence) {
-		return (PRE) this.getPrivateKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
+		return (PRE) this.getPrivateKeyGenerationFunction().apply(SingletonGroup.getInstance().getElement(),
+																  randomByteSequence);
 	}
 
 	/**
@@ -223,7 +225,8 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	 */
 	@Override
 	public Pair generateKeyPair(RandomByteSequence randomByteSequence) {
-		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(), randomByteSequence);
+		return (Pair) this.getKeyPairGenerationFunction().apply(SingletonGroup.getInstance().getElement(),
+																randomByteSequence);
 	}
 
 	/**
@@ -256,7 +259,7 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	 * @return
 	 */
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getPrivateKeySpace().toString() + ", " + this.getPublicKeySpace().toString();
 	}
 
@@ -273,5 +276,4 @@ public abstract class AbstractKeyPairGenerator<PRS extends Set, PRE extends Elem
 	 * @return
 	 */
 	protected abstract Function abstractGetPublicKeyGenerationFunction();
-
 }

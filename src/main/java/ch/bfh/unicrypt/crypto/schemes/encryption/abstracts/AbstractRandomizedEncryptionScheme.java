@@ -67,7 +67,7 @@ public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME exte
 
 	protected final RS randomizationSpace;
 
-	public AbstractRandomizedEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
+	protected AbstractRandomizedEncryptionScheme(MS messageSpace, ES encryptionSpace, RS randomizationSpace) {
 		super(messageSpace, encryptionSpace);
 		this.randomizationSpace = randomizationSpace;
 	}
@@ -89,7 +89,8 @@ public abstract class AbstractRandomizedEncryptionScheme<MS extends Set, ME exte
 
 	@Override
 	public final EE encrypt(Element encryptionKey, Element message, Element randomization) {
-		if (!this.getEncryptionKeySpace().contains(encryptionKey) || !this.getMessageSpace().contains(message) || !this.getRandomizationSpace().contains(randomization)) {
+		if (!this.getEncryptionKeySpace().contains(encryptionKey) || !this.getMessageSpace().contains(message)
+			   || !this.getRandomizationSpace().contains(randomization)) {
 			throw new IllegalArgumentException();
 		}
 		return (EE) this.getEncryptionFunction().apply(encryptionKey, message, randomization);

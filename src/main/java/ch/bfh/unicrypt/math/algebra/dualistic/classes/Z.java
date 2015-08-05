@@ -43,18 +43,12 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
-import ch.bfh.unicrypt.helper.distribution.Distribution;
-import ch.bfh.unicrypt.helper.distribution.InfiniteDistribution;
-import ch.bfh.unicrypt.helper.distribution.UniformDistribution;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * /**
@@ -71,22 +65,17 @@ import java.util.Map;
 public class Z
 	   extends AbstractCyclicRing<ZElement, BigInteger> {
 
-	private final Distribution distribution;
+	private static final long serialVersionUID = 1L;
 
-	private Z(final Distribution distribution) {
+	private Z() {
 		super(BigInteger.class);
-		this.distribution = distribution;
 	}
 
-	public Distribution getDistribution() {
-		return this.distribution;
-	}
-
-	public final boolean contains(int integerValue) {
+	public final boolean contains(long integerValue) {
 		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
-	public final ZElement getElement(int integerValue) {
+	public final ZElement getElement(long integerValue) {
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
@@ -100,7 +89,7 @@ public class Z
 	}
 
 	@Override
-	protected StringConverter<BigInteger> defaultGetStringConverter() {
+	protected Converter<BigInteger, String> defaultGetStringConverter() {
 		return BigIntegerToString.getInstance();
 	}
 
@@ -110,11 +99,6 @@ public class Z
 			return this.getDefaultGenerator();
 		}
 		return this.getDefaultGenerator().invert();
-	}
-
-	@Override
-	protected boolean defaultIsEquivalent(Set set) {
-		return true;
 	}
 
 	//
@@ -148,7 +132,7 @@ public class Z
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return Group.INFINITE_ORDER;
+		return Group.INFINITE;
 	}
 
 	@Override
@@ -162,13 +146,13 @@ public class Z
 	}
 
 	@Override
-	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
-		return BigIntegerToBigInteger.getInstance(true);
+	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance();
 	}
 
 	@Override
 	protected ZElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.getElement(this.distribution.getBigInteger(randomByteSequence));
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -183,19 +167,18 @@ public class Z
 
 	@Override
 	protected boolean abstractEquals(Set set) {
-		Z other = (Z) set;
-		return this.distribution.equals(other.distribution);
+		return true;
 	}
 
 	@Override
 	protected int abstractHashCode() {
-		return this.distribution.hashCode();
+		return 1;
 	}
 
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<Distribution, Z> instances = new HashMap<Distribution, Z>();
+	private static Z instance;
 
 	/**
 	 * Returns the unique instance of this class for an infinite distribution.
@@ -203,54 +186,10 @@ public class Z
 	 * @return An instance of this class.
 	 */
 	public static Z getInstance() {
-		return Z.getInstance(InfiniteDistribution.getInstance());
-	}
-
-	/**
-	 * Returns the unique instance of this class for a uniform distribution over the interval [0,2^{@literal b}-1].
-	 * <p>
-	 * @param b The bit length of the interval of the uniform distribution.
-	 * @return An instance of this class.
-	 * @throws IllegalArgumentException if {@literal b} is negative.
-	 */
-	public static Z getInstance(int b) {
-		if (b < 0) {
-			throw new IllegalArgumentException();
+		if (Z.instance == null) {
+			Z.instance = new Z();
 		}
-		return Z.getInstance(UniformDistribution.getInstance(b));
-	}
-
-	/**
-	 * Returns the unique instance of this class for a uniform distribution over the interval [0,{@literal b}-1].
-	 * <p>
-	 * @param b The upper bound (exclusive) of the interval of the uniform distribution.
-	 * @return An instance of this class.
-	 * @throws IllegalArgumentException if {@literal b} is smaller than one.
-	 */
-	public static Z getInstance(BigInteger b) {
-		if (b == null || b.compareTo(BigInteger.ZERO) < 1) {
-			throw new IllegalArgumentException();
-		}
-		return Z.getInstance(UniformDistribution.getInstance(b.subtract(BigInteger.ONE)));
-	}
-
-	/**
-	 * Returns the unique instance of this class for a given distribution.
-	 * <p>
-	 * @param distribution The distribution for random elements.
-	 * @return An instance of this class.
-	 * @throws IllegalArgumentException if {@literal distribution} is null.
-	 */
-	public static Z getInstance(Distribution distribution) {
-		if (distribution == null) {
-			throw new IllegalArgumentException();
-		}
-		Z instance = Z.instances.get(distribution);
-		if (instance == null) {
-			instance = new Z(distribution);
-			Z.instances.put(distribution, instance);
-		}
-		return instance;
+		return Z.instance;
 	}
 
 }

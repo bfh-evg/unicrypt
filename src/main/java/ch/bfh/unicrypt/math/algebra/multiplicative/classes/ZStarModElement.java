@@ -52,6 +52,7 @@ import java.math.BigInteger;
 public class ZStarModElement
 	   extends AbstractMultiplicativeElement<ZStarMod, ZStarModElement, BigInteger>
 	   implements MultiplicativeElement<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	protected ZStarModElement(final ZStarMod zStarMod, final BigInteger value) {
 		super(zStarMod, value);

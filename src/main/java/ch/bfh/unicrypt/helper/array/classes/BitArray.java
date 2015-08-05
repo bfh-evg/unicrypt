@@ -41,36 +41,191 @@
  */
 package ch.bfh.unicrypt.helper.array.classes;
 
-import ch.bfh.unicrypt.helper.array.abstracts.AbstractDefaultValueArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.array.abstracts.AbstractBinaryArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import ch.bfh.unicrypt.helper.converter.classes.string.BitArrayToString;
-import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * This class is provides an implementation for immutable arrays of type {@code boolean}/{@code Boolean}. For maximal
+ * performance of binary operations, the boolean values are internally stored in a {@link ByteArray} instance.
+ * <p>
+ * @see ByteArray
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class BitArray
-	   extends AbstractDefaultValueArray<BitArray, Boolean> {
+	   extends AbstractBinaryArray<BitArray, Boolean> {
 
-	ByteArray byteArray;
+	// a static varible containing a converter to convert bit arrays to string and back
+	private static final BitArrayToString STRING_CONVERTER = BitArrayToString.getInstance();
+	private static final long serialVersionUID = 1L;
+
+	// the internal ByteArray instance containing the boolean values
+	private final ByteArray byteArray;
 
 	private BitArray(ByteArray byteArray, int length) {
-		this(byteArray, 0, length, 0, 0, false);
+		this(byteArray, length, 0);
 	}
 
-	private BitArray(ByteArray byteArray, int offset, int length, int trailer, int header, boolean reverse) {
-		super(BitArray.class, false, trailer, header, length, offset, reverse);
+	private BitArray(ByteArray byteArray, int length, int rangeOffset) {
+		this(byteArray, length, rangeOffset, 0, 0, length);
+	}
+
+	private BitArray(ByteArray byteArray, int length, int rangeOffset, int trailer, int header, int rangeLength) {
+		// reverse is not used (always false), default value is false
+		super(BitArray.class, length, rangeOffset, false, false, trailer, header, rangeLength);
 		this.byteArray = byteArray;
 	}
 
-	public int getByteLength() {
-		return (this.length + Byte.SIZE - 1) / Byte.SIZE;
+	/**
+	 * Creates a new bit array of a given length with values identical to {@code fillBit}.
+	 * <p>
+	 * @param fillBit The boolean value contained in the new bit array
+	 * @param length  The length of the new bit array
+	 * @return The new bit array
+	 */
+	public static BitArray getInstance(boolean fillBit, int length) {
+		if (length < 0) {
+			throw new IllegalArgumentException();
+		}
+		int byteLength = MathUtil.divideUp(length, Byte.SIZE);
+		return new BitArray(ByteArray.getInstance(fillBit, byteLength), length);
 	}
 
+	/**
+	 * Creates a new bit array from a given {@code ByteArray} instance. Its length and boolean values correspond to the
+	 * bits in the binary representation of the given byte array. This method is a special case of
+	 * {@link BitArray#getInstance(ch.bfh.unicrypt.helper.array.classes.ByteArray, int)} with the length computed
+	 * automatically.
+	 * <p>
+	 * @param byteArray The given byte array
+	 * @return The new bit array
+	 */
+	public static BitArray getInstance(ByteArray byteArray) {
+		if (byteArray == null) {
+			throw new IllegalArgumentException();
+		}
+		return new BitArray(byteArray, byteArray.getLength() * Byte.SIZE);
+	}
+
+	/**
+	 * Creates a new bit array of a given length from a given byte array. Its boolean values correspond to the bits in
+	 * the binary representation of the of the given byte array. Extra bits exceeding the given length are ignored.
+	 * <p>
+	 * @param byteArray The given byte array
+	 * @param length    The length of the new bit array
+	 * @return The new bit array
+	 */
+	public static BitArray getInstance(ByteArray byteArray, int length) {
+		if (byteArray == null || length < 0 || length > byteArray.getLength() * Byte.SIZE) {
+			throw new IllegalArgumentException();
+		}
+		return new BitArray(byteArray, length);
+	}
+
+	/**
+	 * Creates a new bit array from a given Java array of {@code boolean} values. The Java array is copied for internal
+	 * storage. The length and the indices of the values of the resulting array correspond to the given Java array.
+	 * <p>
+	 * @param bits The Java array of {@code boolean} values
+	 * @return The new bit array
+	 */
+	public static BitArray getInstance(boolean... bits) {
+		if (bits == null) {
+			throw new IllegalArgumentException();
+		}
+		int bitLength = bits.length;
+		int byteLength = MathUtil.divideUp(bitLength, Byte.SIZE);
+		byte[] bytes = new byte[byteLength];
+		for (int i = 0; i < bitLength; i++) {
+			int byteIndex = i / Byte.SIZE;
+			int bitIndex = i % Byte.SIZE;
+			if (bits[i]) {
+				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
+			}
+		}
+		return new BitArray(ByteArray.getInstance(bytes), bitLength);
+	}
+
+	/**
+	 * Creates a new bit array from a given sequence of bits. The sequence is transformed into a Java byte array for
+	 * internal storage. Null values are eliminated.
+	 * <p>
+	 * @param bits The sequence of bits
+	 * @return The new bit array
+	 */
+	public static BitArray getInstance(Sequence<Boolean> bits) {
+		if (bits == null || bits.isInfinite()) {
+			throw new IllegalArgumentException();
+		}
+		bits = bits.filter(Predicate.NOT_NULL);
+		int bitLength = bits.getLength().intValue();
+		int byteLength = MathUtil.divideUp(bitLength, Byte.SIZE);
+		byte[] bytes = new byte[byteLength];
+		int i = 0;
+		for (Boolean bit : bits) {
+			int byteIndex = i / Byte.SIZE;
+			int bitIndex = i % Byte.SIZE;
+			if (bit) {
+				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
+			}
+			i++;
+		}
+		return new BitArray(ByteArray.getInstance(bytes), bitLength);
+	}
+
+	/**
+	 * Creates a new bit array from a given bit string using the string converter defined for this class. For example,
+	 * "0111000011" creates a bit array of length 10 with bit 0 (false) at index 0, 1 (true) at index 1, 1 (true) at
+	 * index 2, etc. The same string converter is used by {@link BitArray#toString()}.
+	 * <p>
+	 * @param bitString The bit string
+	 * @return The new bit array
+	 */
+	public static BitArray getInstance(String bitString) {
+		if (bitString == null) {
+			throw new IllegalArgumentException();
+		}
+		return STRING_CONVERTER.reconvert(bitString);
+	}
+
+	/**
+	 * Creates a new random bit array of a given length. It uses the library's standard randomness source to create the
+	 * random bits.
+	 * <p>
+	 * @param length The length of the random bit array
+	 * @return The new random bit array
+	 */
+	public static BitArray getRandomInstance(int length) {
+		return BitArray.getRandomInstance(length, HybridRandomByteSequence.getInstance());
+	}
+
+	/**
+	 * Creates a new random bit array of a given length. It uses a given instance of {@code RandomByteSequence} instance
+	 * as randomness source to create the random bits.
+	 * <p>
+	 * @param length             The length of the random bit array
+	 * @param randomByteSequence The randomness source
+	 * @return The new random bit array
+	 */
+	public static BitArray getRandomInstance(int length, RandomByteSequence randomByteSequence) {
+		if (length < 0 || randomByteSequence == null) {
+			throw new IllegalArgumentException();
+		}
+		int byteLength = MathUtil.divideUp(length, Byte.SIZE);
+		return new BitArray(randomByteSequence.getNextByteArray(byteLength), length);
+	}
+
+	/**
+	 * Transforms the bit array into a Java array of {@code boolean} values.
+	 * <p>
+	 * @return The resulting Java array
+	 */
 	public boolean[] getBits() {
 		boolean[] result = new boolean[this.length];
 		for (int i : this.getAllIndices()) {
@@ -79,188 +234,106 @@ public class BitArray
 		return result;
 	}
 
-	// filled up with trailing zeros
-	public byte[] getBytes() {
-		int byteLength = (this.length + Byte.SIZE - 1) / Byte.SIZE;
-		byte[] result = new byte[byteLength];
-		for (int i = 0; i < byteLength; i++) {
-			result[i] = this.getByteAt(i);
+	/**
+	 * Transforms the bit array into a byte array. If the length of the bit array is not a multiple of 8, the
+	 * corresponding number of extra 0 bits is added. This implies that the resulting byte array can not always be
+	 * transformed back into the same bit array.
+	 * <p>
+	 * @return The resulting byte array
+	 */
+	public ByteArray getByteArray() {
+		int length = MathUtil.divideUp(this.length, Byte.SIZE);
+		byte[] bytes = new byte[length];
+		for (int index = 0; index < length; index++) {
+			bytes[index] = this.byteArray.getByteAt(this.rangeOffset - this.trailer, index, this.rangeOffset,
+													this.rangeLength);
 		}
-		return result;
-	}
-
-	public boolean getBitAt(int index) {
-		if (index < 0 || index >= this.length) {
-			throw new IndexOutOfBoundsException();
-		}
-		return this.abstractGetAt(index);
-	}
-
-	public byte getByteAt(int byteIndex) {
-		byte result = 0;
-		int bitIndex = byteIndex * Byte.SIZE;
-		int maxBitIndex = Math.min(this.length, bitIndex + Byte.SIZE);
-		for (int i = 0; bitIndex < maxBitIndex; i++, bitIndex++) {
-			if (this.abstractGetAt(bitIndex)) {
-				result = MathUtil.setBit(result, i);
-			}
-		}
-		return result;
-	}
-
-	public ByteArray getHashValue() {
-		return this.getHashValue(HashAlgorithm.getInstance());
-	}
-
-	public ByteArray getHashValue(HashAlgorithm hashAlgorithm) {
-		if (hashAlgorithm == null) {
-			throw new IllegalArgumentException();
-		}
-		byte[] hash = hashAlgorithm.getHashValue(this.getBytes());
-		return new ByteArray(hash);
-	}
-
-	public static BitArray getInstance() {
-		return BitArray.getInstance(new boolean[0]);
-	}
-
-	public static BitArray getInstance(int length) {
-		return BitArray.getInstance(false, length);
-	}
-
-	public static BitArray getInstance(boolean fillBit, int length) {
-		if (length < 0) {
-			throw new IllegalArgumentException();
-		}
-		int byteLength = (length + Byte.SIZE - 1) / Byte.SIZE;
-		return new BitArray(ByteArray.getInstance(fillBit, byteLength), length);
-	}
-
-	public static BitArray getInstance(boolean... bits) {
-		if (bits == null) {
-			throw new IllegalArgumentException();
-		}
-		return BitArray.getInstance(bitsToBytes(bits), bits.length);
-	}
-
-	public static BitArray getInstance(byte... bytes) {
-		return BitArray.getInstance(ByteArray.getInstance(bytes));
-	}
-
-	public static BitArray getInstance(byte[] bytes, int length) {
-		return BitArray.getInstance(ByteArray.getInstance(bytes), length);
-	}
-
-	public static BitArray getInstance(ByteArray byteArray) {
-		if (byteArray == null) {
-			throw new IllegalArgumentException();
-		}
-		return new BitArray(byteArray, byteArray.getLength() * Byte.SIZE);
-	}
-
-	public static BitArray getInstance(ByteArray byteArray, int length) {
-		if (byteArray == null || length > byteArray.getLength() * Byte.SIZE) {
-			throw new IllegalArgumentException();
-		}
-		return new BitArray(byteArray, length);
-	}
-
-	// a string of '0's and '1's
-	public static BitArray getInstance(String binaryString) {
-		if (binaryString == null) {
-			throw new IllegalArgumentException();
-		}
-		return BitArrayToString.getInstance().reconvert(binaryString);
-	}
-
-	public static BitArray getRandomInstance(int length) {
-		return BitArray.getRandomInstance(length, HybridRandomByteSequence.getInstance());
-	}
-
-	public static BitArray getRandomInstance(int length, RandomByteSequence randomByteSequence) {
-		if (length < 0 || randomByteSequence == null) {
-			throw new IllegalArgumentException();
-		}
-		int byteLength = (length + Byte.SIZE - 1) / Byte.SIZE;
-		return new BitArray(randomByteSequence.getNextByteArray(byteLength), length);
+		return ByteArray.getInstance(bytes);
 	}
 
 	@Override
-	protected String defaultToStringValue() {
-		String str = BitArrayToString.getInstance().convert(this);
+	protected String defaultToStringContent() {
+		String str = STRING_CONVERTER.convert(this);
 		return "\"" + str + "\"";
 	}
 
 	@Override
-	protected Boolean abstractGetAt(int index) {
-		return this.abstractGetBitAt(index);
+	protected Boolean abstractGetValueAt(int index) {
+		int byteIndex = index / Byte.SIZE;
+		int bitIndex = index % Byte.SIZE;
+		return MathUtil.getBit(this.byteArray.getAt(byteIndex), bitIndex);
 	}
 
-	private boolean abstractGetBitAt(int index) {
-		if (this.reverse) {
-			index = this.length - index - 1;
+	@Override
+	protected BitArray abstractGetInstance(int length, int rangeOffset, int rangeLength, int trailer, int header) {
+		return new BitArray(this.byteArray, length, rangeOffset, trailer, header, rangeLength);
+	}
+
+	@Override
+	protected BitArray abstractInsertAt(int index, Boolean value) {
+		BitArray bitArray1 = this.extractPrefix(index);
+		BitArray bitArray2 = this.extract(index, this.length - index);
+		if (value) {
+			bitArray2 = BitArray.getInstance(true).append(bitArray2);
+		} else {
+			bitArray2 = bitArray2.addPrefix(1);
 		}
-		if (index < this.trailer || index >= this.length - this.header) {
-			return false;
+		return bitArray1.append(bitArray2);
+	}
+
+	@Override
+	protected BitArray abstractReplaceAt(int index, Boolean value) {
+		BitArray bitArray1 = this.extractPrefix(index);
+		BitArray bitArray2 = this.extract(index + 1, this.length - index - 1);
+		if (value) {
+			bitArray2 = BitArray.getInstance(true).append(bitArray2);
+		} else {
+			bitArray2 = bitArray2.addPrefix(1);
 		}
-		index = this.offset + index - this.trailer;
-		int byteIndex = index / Byte.SIZE;
-		byte mask = MathUtil.bitMask(index % Byte.SIZE);
-		return MathUtil.logicalAND(this.byteArray.getByteAt(byteIndex), mask) != 0;
+		return bitArray1.append(bitArray2);
 	}
 
 	@Override
 	protected BitArray abstractAppend(ImmutableArray<Boolean> other) {
-		boolean[] result = new boolean[this.length + other.getLength()];
-		for (int i : this.getAllIndices()) {
-			result[i] = this.getBitAt(i);
-		}
-		for (int i : other.getAllIndices()) {
-			result[this.length + i] = other.getAt(i);
-		}
-		return BitArray.getInstance(result);
+		return this.abstractAppend(BitArray.getInstance(other.getSequence()));
+	}
+
+	protected BitArray abstractAppend(BitArray other) {
+		// make this BitArray right-aligned with a ByteArray
+		int shift = (Byte.SIZE - this.length % Byte.SIZE) % Byte.SIZE;
+		ByteArray byteArray1 = this.addPrefix(shift).getByteArray();
+		ByteArray byteArray2 = other.getByteArray();
+		return new BitArray(byteArray1.append(byteArray2), this.length + other.length, shift);
 	}
 
 	@Override
-	protected BitArray abstractInsertAt(int index, Boolean newBit) {
-		boolean[] result = new boolean[this.length + 1];
-		for (int i : this.getAllIndices()) {
-			if (i < index) {
-				result[i] = this.abstractGetBitAt(i);
-			} else {
-				result[i + 1] = this.abstractGetBitAt(i);
-			}
-		}
-		result[index] = newBit;
-		return BitArray.getInstance(result);
+	protected BitArray abstractReverse() {
+		// reverse byteArrary, adjust offset, switch trailer and header (reverse is always false)
+		int newOffset = this.byteArray.getLength() * Byte.SIZE - this.rangeOffset - this.rangeLength;
+		return new BitArray(this.byteArray.bitReverse(), this.length, newOffset, this.header, this.trailer,
+							this.rangeLength);
 	}
 
 	@Override
-	protected BitArray abstractReplaceAt(int index, Boolean newBit) {
-		boolean[] result = new boolean[this.length];
-		for (int i : this.getAllIndices()) {
-			result[i] = this.abstractGetBitAt(i);
-		}
-		result[index] = newBit;
-		return BitArray.getInstance(result);
+	protected BitArray abstractAndOrXor(Operator operator, BitArray other, boolean maxLength, boolean fillBit) {
+		// make the shorter BitArray right-aligned with a ByteArray
+		int minLength = Math.min(this.length, other.length);
+		int shift = (Byte.SIZE - minLength % Byte.SIZE) % Byte.SIZE;
+		ByteArray byteArray1 = this.addPrefix(shift).getByteArray();
+		ByteArray byteArray2 = other.addPrefix(shift).getByteArray();
+		ByteArray result = byteArray1.abstractAndOrXor(operator, byteArray2, maxLength, fillBit);
+		int newLength = maxLength ? Math.max(this.length, other.length) : minLength;
+		return new BitArray(result, newLength, shift);
 	}
 
 	@Override
-	protected BitArray abstractGetInstance(int offset, int length, int trailer, int header, boolean reverse) {
-		return new BitArray(this.byteArray, offset, length, trailer, header, reverse);
+	protected BitArray abstractNot() {
+		return new BitArray(this.getByteArray().not(), this.length);
 	}
 
-	private static byte[] bitsToBytes(boolean[] bits) {
-		int byteLength = (bits.length + Byte.SIZE - 1) / Byte.SIZE;
-		byte[] bytes = new byte[byteLength];
-		for (int i = 0; i < bits.length; i++) {
-			int byteIndex = i / Byte.SIZE;
-			int bitIndex = i % Byte.SIZE;
-			if (bits[i]) {
-				bytes[byteIndex] = MathUtil.setBit(bytes[byteIndex], bitIndex);
-			}
-		}
-		return bytes;
+	@Override
+	public Class<?> getBaseClass() {
+		return BitArray.class;
 	}
 
 }

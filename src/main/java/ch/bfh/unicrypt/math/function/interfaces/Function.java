@@ -41,9 +41,7 @@
  */
 package ch.bfh.unicrypt.math.function.interfaces;
 
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.PartiallyAppliedFunction;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -75,54 +73,54 @@ public interface Function {
 	 * <p>
 	 * @param element The given input element
 	 * @return The resulting output element
-	 * @throws IllegalArgumentException if {@literal element} is null or not contained in the domain
+	 * @throws IllegalArgumentException if {@code element} is null or not contained in the domain
 	 */
 	public Element apply(Element element);
 
 	/**
 	 * Applies the function to an input element from the domain and returns the resulting output element from the
 	 * co-domain. In case of a randomized function, a random generator can be given as a second parameter. If no random
-	 * generator is specified, i.e., if {@literal random} is null, then the system-wide random generator is taken. If
-	 * the function is deterministic, then {@literal random} is ignored. This is the main the method to implement for
+	 * generator is specified, i.e., if {@code random} is null, then the system-wide random generator is taken. If
+	 * the function is deterministic, then {@code random} is ignored. This is the main the method to implement for
 	 * any type of function.
 	 * <p>
 	 * @param element            The given input element
 	 * @param randomByteSequence
 	 * @return The resulting output element
-	 * @throws IllegalArgumentException if {@literal element} is null or not contained in the domain
+	 * @throws IllegalArgumentException if {@code element} is null or not contained in the domain
 	 */
 	public Element apply(Element element, RandomByteSequence randomByteSequence);
 
 	/**
 	 * This method provides a shortcut for applying a function with multiple input values. The specified elements are
 	 * used to create a corresponding tuple element first, which is then used to call the ordinary method
-	 * {@literal apply(Element element)}.
+	 * {@code apply(Element element)}.
 	 * <p>
 	 * @param elements The given input elements
 	 * @return The resulting output element
-	 * @throws IllegalArgumentException if {@literal elements} is or contains null
-	 * @throws IllegalArgumentException if the elements in {@literal elements} are not contained in the corresponding
+	 * @throws IllegalArgumentException if {@code elements} is or contains null
+	 * @throws IllegalArgumentException if the elements in {@code elements} are not contained in the corresponding
 	 *                                  sub-domains
-	 * @throws IllegalArgumentException if the the length of {@literal elements} is different from
-	 *                                  {@literal getArityIn()}
+	 * @throws IllegalArgumentException if the the length of {@code elements} is different from
+	 *                                  {@code getArityIn()}
 	 */
 	public Element apply(Element... elements);
 
 	/**
 	 * This method provides a shortcut for applying a function with multiple input values. The specified elements are
 	 * used to create a corresponding tuple element first, which is then used to call the ordinary method
-	 * {@literal apply(Element element, Random random)}. In case of a randomized function, a random generator can be
-	 * given as an additional parameter. If no random generator is specified, i.e., if {@literal random} is null, then
-	 * the system-wide random generator is taken. If the function is deterministic, then {@literal random} is ignored.
+	 * {@code apply(Element element, Random random)}. In case of a randomized function, a random generator can be
+	 * given as an additional parameter. If no random generator is specified, i.e., if {@code random} is null, then
+	 * the system-wide random generator is taken. If the function is deterministic, then {@code random} is ignored.
 	 * <p>
 	 * @param elements           The given input elements
-	 * @param randomByteSequence Either {@literal null} or a given random generator
+	 * @param randomByteSequence Either {@code null} or a given random generator
 	 * @return The resulting output element
-	 * @throws IllegalArgumentException if {@literal elements} is or contains null
-	 * @throws IllegalArgumentException if the elements in {@literal elements} are not contained in the corresponding
+	 * @throws IllegalArgumentException if {@code elements} is or contains null
+	 * @throws IllegalArgumentException if the elements in {@code elements} are not contained in the corresponding
 	 *                                  sub-domains
-	 * @throws IllegalArgumentException if the the length of {@literal elements} is different from
-	 *                                  {@literal getArityIn()}
+	 * @throws IllegalArgumentException if the the length of {@code elements} is different from
+	 *                                  {@code getArityIn()}
 	 */
 	public Element apply(Element[] elements, RandomByteSequence randomByteSequence);
 
@@ -149,9 +147,9 @@ public interface Function {
 	 * @param element The given input value
 	 * @param index   The index of the corresponding group in the product (or power group) domain
 	 * @return The resulting partially applied function
-	 * @throws IllegalArgumentException  if {@literal element} is null or not an element of the corresponding sub-domain
+	 * @throws IllegalArgumentException  if {@code element} is null or not an element of the corresponding sub-domain
 	 *                                   group
-	 * @throws IndexOutOfBoundsException if {@literal index} is an invalid index
+	 * @throws IndexOutOfBoundsException if {@code index} is an invalid index
 	 */
 	public PartiallyAppliedFunction partiallyApply(Element element, int index);
 

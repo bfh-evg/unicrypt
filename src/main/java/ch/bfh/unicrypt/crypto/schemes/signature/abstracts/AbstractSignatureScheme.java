@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.schemes.signature.abstracts;
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.scheme.abstracts.AbstractScheme;
 import ch.bfh.unicrypt.crypto.schemes.signature.interfaces.SignatureScheme;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -68,18 +69,27 @@ public abstract class AbstractSignatureScheme<MS extends Set, ME extends Element
 	   extends AbstractScheme<MS>
 	   implements SignatureScheme {
 
+	private static final long serialVersionUID = 1L;
+
 	protected final SS signatureSpace;
+	protected final ConvertMethod convertMethod;
 	protected final HashMethod hashMethod;
 	protected final Map<StringToByteArray, KG> keyPairGenerators;
 
 	private Function signatureFunction;
 	private Function verificationFunction;
 
-	public AbstractSignatureScheme(MS messageSpace, SS signatureSpace, HashMethod hashMethod) {
+	protected AbstractSignatureScheme(MS messageSpace, SS signatureSpace, ConvertMethod convertMethod, HashMethod hashMethod) {
 		super(messageSpace);
 		this.signatureSpace = signatureSpace;
+		this.convertMethod = convertMethod;
 		this.hashMethod = hashMethod;
-		this.keyPairGenerators = new HashMap<StringToByteArray, KG>();
+		this.keyPairGenerators = new HashMap<>();
+	}
+
+	@Override
+	public ConvertMethod getConvertMethod() {
+		return this.convertMethod;
 	}
 
 	@Override

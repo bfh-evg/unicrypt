@@ -60,6 +60,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public final class CompositeFunction
 	   extends AbstractCompoundFunction<CompositeFunction, Set, Element, Set, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private CompositeFunction(Set domain, Set coDomain, final DenseArray<Function> functions) {
 		super(domain, coDomain, functions);
@@ -90,7 +91,7 @@ public final class CompositeFunction
 	 * <p>
 	 * @param functions The given array of functions
 	 * @return The resulting composite function
-	 * @throws IllegalArgumentException if {@literal functions} is null, contains null, or is empty
+	 * @throws IllegalArgumentException if {@code functions} is null, contains null, or is empty
 	 * @throws IllegalArgumentException if the domain of a function is different from the co-domain of the previous
 	 *                                  function
 	 */

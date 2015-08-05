@@ -42,18 +42,22 @@
 package ch.bfh.unicrypt.math.algebra.concatenative.interfaces;
 
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
 
 /**
- * This interface represents an additively written {@link Element}. No functionality is added.
+ * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
+ * updated.
  * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values of this element
  */
-public interface ConcatenativeElement<V extends Object>
+public interface ConcatenativeElement<V>
 	   extends Element<V> {
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getLength();
 
 	/**
@@ -72,18 +76,21 @@ public interface ConcatenativeElement<V extends Object>
 	public ConcatenativeElement<V> selfConcatenate(Element<BigInteger> amount);
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
-	public ConcatenativeElement<V> selfConcatenate(int amount);
+	public ConcatenativeElement<V> selfConcatenate(long amount);
 
 	/**
 	 * @see Group#selfApply(Element)
 	 */
 	public ConcatenativeElement<V> selfConcatenate();
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isEmptyElement();
 
-	// The following methods are overridden from Element with an adapted return type
 	@Override
 	public ConcatenativeSemiGroup getSet();
 
@@ -100,7 +107,7 @@ public interface ConcatenativeElement<V extends Object>
 	public ConcatenativeElement<V> selfApply(Element<BigInteger> amount);
 
 	@Override
-	public ConcatenativeElement<V> selfApply(int amount);
+	public ConcatenativeElement<V> selfApply(long amount);
 
 	@Override
 	public ConcatenativeElement<V> selfApply();

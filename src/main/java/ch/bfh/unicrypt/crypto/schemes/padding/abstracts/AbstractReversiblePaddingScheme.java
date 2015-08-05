@@ -61,7 +61,7 @@ public abstract class AbstractReversiblePaddingScheme<MS extends ConcatenativeSe
 
 	private Function unpaddingFunction;
 
-	public AbstractReversiblePaddingScheme(MS messageSpace, PS paddingSpace) {
+	protected AbstractReversiblePaddingScheme(MS messageSpace, PS paddingSpace) {
 		super(messageSpace, paddingSpace);
 	}
 

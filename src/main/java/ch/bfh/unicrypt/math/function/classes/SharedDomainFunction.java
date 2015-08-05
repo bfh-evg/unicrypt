@@ -62,6 +62,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public final class SharedDomainFunction
 	   extends AbstractCompoundFunction<SharedDomainFunction, Set, Element, ProductSet, Tuple> {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * This is the general constructor of this class. It takes a list of functions as input and produces the
@@ -70,7 +71,7 @@ public final class SharedDomainFunction
 	 * @param domain
 	 * @param coDomain
 	 * @param functions
-	 * @throws IllegalArgumentException if {@literal functions} is null or contains null
+	 * @throws IllegalArgumentException if {@code functions} is null or contains null
 	 */
 	protected SharedDomainFunction(final Set domain, ProductSet coDomain, DenseArray<Function> functions) {
 		super(domain, coDomain, functions);

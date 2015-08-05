@@ -41,7 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.helper.iterable.IterableArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.additive.abstracts.AbstractAdditiveMonoid;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.SemiRing;
@@ -55,13 +58,15 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this semiring
  * @author rolfhaenni
  */
-public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends Object>
+public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 	   extends AbstractAdditiveMonoid<E, V>
 	   implements SemiRing<V> {
 
+	private static final long serialVersionUID = 1L;
+
 	private E one;
 
-	public AbstractSemiRing(Class<? extends Object> valueClass) {
+	protected AbstractSemiRing(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -78,11 +83,19 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.defaultMultiply(IterableArray.getInstance(elements));
+		return this.defaultMultiply(Sequence.getInstance(elements));
 	}
 
 	@Override
-	public E multiply(Iterable<Element> elements) {
+	public E multiply(ImmutableArray<Element> elements) {
+		if (elements == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.defaultMultiply(Sequence.getInstance(elements));
+	}
+
+	@Override
+	public E multiply(Sequence<Element> elements) {
 		if (elements == null) {
 			throw new IllegalArgumentException();
 		}
@@ -106,7 +119,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 	}
 
 	@Override
-	public E power(Element element, int amount) {
+	public E power(Element element, long amount) {
 		return this.power(element, BigInteger.valueOf(amount));
 	}
 
@@ -133,26 +146,18 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V extends 
 
 	@Override
 	public boolean isOneElement(final Element element) {
-		return this.areEquivalent(element, this.getOneElement());
+		return element.isEquivalent(this.getOneElement());
 	}
 
-//
-// The following protected methods are default implementations for sets.
-// They may need to be changed in certain sub-classes.
-//
-	protected E defaultMultiply(final Iterable<Element> elements) {
-		if (!elements.iterator().hasNext()) {
-			return this.getOneElement();
-		}
-		E result = null;
-		for (Element element : elements) {
-			if (result == null) {
-				result = (E) element;
-			} else {
-				result = this.multiply(result, element);
+	protected E defaultMultiply(final Sequence<Element> elements) {
+		final SemiRing<V> semiGroup = this;
+		return (E) elements.filter(Predicate.NOT_NULL).reduce(new BinaryOperator<Element>() {
+
+			@Override
+			public Element apply(Element element1, Element element2) {
+				return semiGroup.multiply(element1, element2);
 			}
-		}
-		return result;
+		}, this.getOneElement());
 	}
 
 	protected E defaultPower(E element, BigInteger amount) {

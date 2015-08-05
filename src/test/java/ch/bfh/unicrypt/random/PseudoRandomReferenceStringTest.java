@@ -57,18 +57,18 @@ public class PseudoRandomReferenceStringTest {
 	@Test
 	public void generalTest() {
 		ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
-		BigInteger prime = rrs.getRandomNumberGenerator().nextPrime(10);
+		BigInteger prime = rrs.getRandomNumberGenerator().nextBigInteger(10);
 		rrs.getRandomNumberGenerator().nextBoolean();
-		rrs.getRandomNumberGenerator().nextBytes(5);
-		rrs.getRandomNumberGenerator().nextBytes(2048);
+		rrs.getRandomNumberGenerator().nextByte();
+		rrs.getRandomNumberGenerator().nextByte();
 		rrs.reset();
-		Assert.assertEquals(prime, rrs.getRandomNumberGenerator().nextPrime(10));
-		rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance(new byte[]{10, 5, 120}));
-		prime = rrs.getRandomNumberGenerator().nextPrime(10);
+		Assert.assertEquals(prime, rrs.getRandomNumberGenerator().nextBigInteger(10));
+		rrs = PseudoRandomOracle.getInstance().query(ByteArray.getInstance(new byte[]{10, 5, 120}));
+		prime = rrs.getRandomNumberGenerator().nextBigInteger(10);
 		rrs.getRandomNumberGenerator().nextBoolean();
-		rrs.getRandomNumberGenerator().nextBytes(5);
+		rrs.getRandomNumberGenerator().nextByte();
 		rrs.reset();
-		Assert.assertEquals(prime, rrs.getRandomNumberGenerator().nextPrime(10));
+		Assert.assertEquals(prime, rrs.getRandomNumberGenerator().nextBigInteger(10));
 	}
 
 }

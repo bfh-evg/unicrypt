@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.N;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -67,6 +66,7 @@ import java.math.BigInteger;
  */
 public class TimesFunction
 	   extends AbstractFunction<TimesFunction, ProductSet, Pair, AdditiveSemiGroup, AdditiveElement> {
+	private static final long serialVersionUID = 1L;
 
 	private TimesFunction(final ProductSet domain, final AdditiveSemiGroup coDomain) {
 		super(domain, coDomain);
@@ -91,7 +91,7 @@ public class TimesFunction
 	 * <p/>
 	 * @param additiveSemiGroup The underlying group
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
+	 * @throws IllegalArgumentException if {@code group} is null
 	 */
 	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup) {
 		if (additiveSemiGroup == null) {
@@ -111,10 +111,11 @@ public class TimesFunction
 	 * @param additiveSemiGroup The underlying group
 	 * @param amountSet
 	 * @return
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal amountGroup} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code amountGroup} is negative
 	 */
-	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup, final Set<BigInteger> amountSet) {
+	public static TimesFunction getInstance(final AdditiveSemiGroup additiveSemiGroup,
+		   final Set<BigInteger> amountSet) {
 		if (additiveSemiGroup == null || amountSet == null) {
 			throw new IllegalArgumentException();
 		}

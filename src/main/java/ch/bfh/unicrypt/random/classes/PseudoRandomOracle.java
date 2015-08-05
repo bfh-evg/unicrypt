@@ -42,10 +42,14 @@
 package ch.bfh.unicrypt.random.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.abstracts.AbstractRandomOracle;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import java.util.HashMap;
+import java.math.BigInteger;
+import java.util.WeakHashMap;
 
 /**
  *
@@ -54,14 +58,16 @@ import java.util.HashMap;
 public class PseudoRandomOracle
 	   extends AbstractRandomOracle {
 
-	public static final RandomOracle DEFAULT = PseudoRandomOracle.getInstance(HashAlgorithm.getInstance());
+	private static final long serialVersionUID = 1L;
 
-	private final HashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequence;
+	private static PseudoRandomOracle instance;
+
+	private final WeakHashMap<ByteArray, ReferenceRandomByteSequence> referenceRandomByteSequences;
 	private final HashAlgorithm hashAlgorithm;
 
-	protected PseudoRandomOracle(HashAlgorithm hashAlgorithm) {
-		super();
-		this.referenceRandomByteSequence = new HashMap<ByteArray, ReferenceRandomByteSequence>();
+	protected PseudoRandomOracle(HashAlgorithm hashAlgorithm, Converter<BigInteger, ByteArray> bigIntegerConverter, Converter<String, ByteArray> stringConverter) {
+		super(bigIntegerConverter, stringConverter);
+		this.referenceRandomByteSequences = new WeakHashMap<>();
 		this.hashAlgorithm = hashAlgorithm;
 	}
 
@@ -69,26 +75,33 @@ public class PseudoRandomOracle
 		return this.hashAlgorithm;
 	}
 
-	//TODO: Warning, this is a memory-hog!
 	@Override
-	protected ReferenceRandomByteSequence abstractGetReferenceRandomByteSequence(ByteArray query) {
-		if (!this.referenceRandomByteSequence.containsKey(query)) {
-			this.referenceRandomByteSequence.put(query, ReferenceRandomByteSequence.getInstance(getHashAlgorithm(), query));
+	protected ReferenceRandomByteSequence abstractQuery(ByteArray input) {
+		ReferenceRandomByteSequence randomByteSequence = this.referenceRandomByteSequences.get(input);
+		if (randomByteSequence == null) {
+			randomByteSequence = ReferenceRandomByteSequence.getInstance(this.hashAlgorithm, input);
+			this.referenceRandomByteSequences.put(input, randomByteSequence);
 		}
-		ReferenceRandomByteSequence referenceString = this.referenceRandomByteSequence.get(query);
-		referenceString.reset();
-		return referenceString;
+		randomByteSequence.reset();
+		return randomByteSequence;
 	}
 
-	public static RandomOracle getInstance() {
-		return PseudoRandomOracle.DEFAULT;
+	public static PseudoRandomOracle getInstance() {
+		if (PseudoRandomOracle.instance == null) {
+			PseudoRandomOracle.instance = PseudoRandomOracle.getInstance(HashAlgorithm.getInstance());
+		}
+		return instance;
 	}
 
-	public static RandomOracle getInstance(HashAlgorithm hashAlgorithm) {
-		if (hashAlgorithm == null) {
+	public static PseudoRandomOracle getInstance(HashAlgorithm hashAlgorithm) {
+		return getInstance(hashAlgorithm, BigIntegerToByteArray.getInstance(), StringToByteArray.getInstance());
+	}
+
+	public static PseudoRandomOracle getInstance(HashAlgorithm hashAlgorithm, Converter<BigInteger, ByteArray> bigIntegerConverter, Converter<String, ByteArray> stringConverter) {
+		if (hashAlgorithm == null || bigIntegerConverter == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PseudoRandomOracle(hashAlgorithm);
+		return new PseudoRandomOracle(hashAlgorithm, bigIntegerConverter, stringConverter);
 	}
 
 }

@@ -61,9 +61,11 @@ public abstract class AbstractSymmetricEncryptionScheme<MS extends Set, ME exten
 	   extends AbstractEncryptionScheme<MS, ME, ES, EE>
 	   implements SymmetricEncryptionScheme {
 
+	private static final long serialVersionUID = 1L;
+
 	private KG keyGenerator;
 
-	public AbstractSymmetricEncryptionScheme(MS messageSpace, ES encryptionSpace) {
+	protected AbstractSymmetricEncryptionScheme(MS messageSpace, ES encryptionSpace) {
 		super(messageSpace, encryptionSpace);
 	}
 

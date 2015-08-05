@@ -45,7 +45,8 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.Challeng
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
-import ch.bfh.unicrypt.helper.Permutation;
+import ch.bfh.unicrypt.helper.math.Permutation;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -102,7 +103,7 @@ public class PermutationCommitmentProofSystemTest {
 	public void testPermutationCommitemntProofGenerator2() {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomOracle ro = PseudoRandomOracle.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 20;
@@ -168,7 +169,7 @@ public class PermutationCommitmentProofSystemTest {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(P1);
 		final ZMod Z_q = G_q.getZModOrder();
-		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance();
+		final RandomByteSequence randomGenerator = CounterModeRandomByteSequence.getInstance(ByteArray.getInstance((byte) 7));
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 5;
@@ -193,7 +194,7 @@ public class PermutationCommitmentProofSystemTest {
 		// Permutation commitment proof generator
 		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(G_q, size, null, 60, 60, 20, rrs);
 
-		// Proof and verify
+		// Proof and verify x
 		// Invalid: Modified permutation
 		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
 		boolean v = pcpg.verify(proof, cPiV);

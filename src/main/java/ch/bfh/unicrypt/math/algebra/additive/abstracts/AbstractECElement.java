@@ -41,19 +41,20 @@
  */
 package ch.bfh.unicrypt.math.algebra.additive.abstracts;
 
-import ch.bfh.unicrypt.helper.Point;
+import ch.bfh.unicrypt.helper.math.Point;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.ECElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 
 /**
  *
  * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>  Type Finite Field ov EC
+ * @param <V>  Type Finite Field of EC
  * @param <DE> Type of FiniteFieldElement
  * @param <EE>
  */
-public class AbstractECElement<V extends Object, DE extends DualisticElement<V>, EE extends ECElement<V, DE>>
+public class AbstractECElement<V, DE extends DualisticElement<V>, EE extends ECElement<V, DE>>
 	   extends AbstractAdditiveElement<EC<V, DE>, EE, Point<DE>>
 	   implements ECElement<V, DE> {
 
@@ -64,35 +65,37 @@ public class AbstractECElement<V extends Object, DE extends DualisticElement<V>,
 	private final boolean infinity;
 
 	// the main constructor
-	protected AbstractECElement(EC<V, DE> ecGroup, Point<DE> value) {
+	protected AbstractECElement(AbstractSet<EE, Point<DE>> ecGroup, Point<DE> value) {
 		super(ecGroup, value);
 		this.infinity = false;
 	}
 
 	// special constructor is necessary for the additional point of infinity
-	protected AbstractECElement(EC<V, DE> ecGroup) {
+	protected AbstractECElement(AbstractSet<EE, Point<DE>> ecGroup) {
 		super(ecGroup, Point.<DE>getInstance());
 		this.infinity = true;
 	}
 
 	// additional convenience getter method to handle to point of infinity
+	@Override
 	public DE getX() {
 		if (this.infinity) {
 			throw new UnsupportedOperationException();
 		}
-		return this.getValue().getX();
+		return this.value.getX();
 	}
 
 	// additional convenience getter method to handle to point of infinity
+	@Override
 	public DE getY() {
 		if (this.infinity) {
 			throw new UnsupportedOperationException();
 		}
-		return this.getValue().getY();
+		return this.value.getY();
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		if (this.infinity) {
 			return "Infinity";
 		} else {

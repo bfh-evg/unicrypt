@@ -61,7 +61,7 @@ public abstract class AbstractHashingScheme<MS extends Set, ME extends Element, 
 	protected Function hashFunction;
 	protected Function checkFunction;
 
-	public AbstractHashingScheme(MS messageSpace, HS hashSpace) {
+	protected AbstractHashingScheme(MS messageSpace, HS hashSpace) {
 		super(messageSpace);
 		this.hashSpace = hashSpace;
 	}

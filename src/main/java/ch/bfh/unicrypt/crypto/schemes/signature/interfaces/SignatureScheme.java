@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.schemes.signature.interfaces;
 
 import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 import ch.bfh.unicrypt.crypto.schemes.scheme.interfaces.Scheme;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -57,7 +58,9 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 public interface SignatureScheme
 	   extends Scheme {
 
-	public HashMethod getHashMethod();
+	public ConvertMethod<?> getConvertMethod();
+
+	public HashMethod<?> getHashMethod();
 
 	public KeyPairGenerator getKeyPairGenerator();
 

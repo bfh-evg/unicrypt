@@ -45,20 +45,13 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.Challeng
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
-public abstract class AbstractChallengeGenerator<IS extends Set, IE extends Element, CS extends Set, CE extends Element>
+public abstract class AbstractChallengeGenerator<CS extends Set, CE extends Element>
 	   implements ChallengeGenerator {
 
-	protected final IS inputSpace;
 	protected final CS challengeSpace;
 
-	protected AbstractChallengeGenerator(IS inputSpace, CS challengeSpace) {
-		this.inputSpace = inputSpace;
+	protected AbstractChallengeGenerator(CS challengeSpace) {
 		this.challengeSpace = challengeSpace;
-	}
-
-	@Override
-	public final Set getInputSpace() {
-		return this.inputSpace;
 	}
 
 	@Override
@@ -67,13 +60,13 @@ public abstract class AbstractChallengeGenerator<IS extends Set, IE extends Elem
 	}
 
 	@Override
-	public final CE generate(Element input) {
-		if (!this.getInputSpace().contains(input)) {
+	public final CE generate(Element<?> input) {
+		if (input == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGenerate((IE) input);
+		return this.abstractGenerate(input);
 	}
 
-	protected abstract CE abstractGenerate(IE input);
+	protected abstract CE abstractGenerate(Element<?> input);
 
 }

@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.factorization.Factorization;
 import ch.bfh.unicrypt.helper.factorization.SpecialFactorization;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -69,6 +69,8 @@ import java.math.BigInteger;
  */
 public class GStarMod
 	   extends AbstractMultiplicativeCyclicGroup<GStarModElement, BigInteger> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final BigInteger modulus;
 	private final SpecialFactorization moduloFactorization;
@@ -120,11 +122,11 @@ public class GStarMod
 		return this.superGroup;
 	}
 
-	public final boolean contains(int integerValue) {
+	public final boolean contains(long integerValue) {
 		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
-	public final GStarModElement getElement(int integerValue) {
+	public final GStarModElement getElement(long integerValue) {
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
@@ -148,7 +150,7 @@ public class GStarMod
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getModulus().toString() + "," + this.getOrder().toString();
 	}
 
@@ -170,14 +172,14 @@ public class GStarMod
 	}
 
 	@Override
-	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
-		return BigIntegerToBigInteger.getInstance();
+	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance(0);
 	}
 
 	@Override
 	protected GStarModElement abstractGetRandomElement(final RandomByteSequence randomByteSequence) {
 		ZStarModElement randomElement = this.getZStarMod().getRandomElement(randomByteSequence);
-		return this.getElement(randomElement.power(this.getCoFactor()).getBigInteger());
+		return this.getElement(randomElement.power(this.getCoFactor()).convertToBigInteger());
 // VERSION WITH OPTIMIZED EFFICIENCY BUT LACK OF INDEPENDENCE
 //    if (this.getOrder().compareTo(this.getCoFactor()) > 0) { // choose between the faster method
 //      // Method 1
@@ -264,8 +266,8 @@ public class GStarMod
 	 * @param moduloFactorization
 	 * @param orderFactorization
 	 * @return
-	 * @throws IllegalArgumentException if {@literal moduloFactorization} or {@literal orderFactorization} is null
-	 * @throws IllegalArgumentException if the value of {@literal orderFactorization} does not divide phi(n)
+	 * @throws IllegalArgumentException if {@code moduloFactorization} or {@code orderFactorization} is null
+	 * @throws IllegalArgumentException if the value of {@code orderFactorization} does not divide phi(n)
 	 */
 	public static GStarMod getInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
 		GStarMod group = new GStarMod(moduloFactorization, orderFactorization);

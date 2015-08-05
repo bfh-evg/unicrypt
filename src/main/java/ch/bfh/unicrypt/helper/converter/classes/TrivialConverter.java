@@ -44,12 +44,17 @@ package ch.bfh.unicrypt.helper.converter.classes;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
+ * This generic class implements a trivial converter from a input type to the same output type {@code V}. The conversion
+ * forth and back passes the values unchanged.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <V> The input and output type
  */
-public class TrivialConverter<V extends Object>
+public class TrivialConverter<V>
 	   extends AbstractConverter<V, V> {
+
+	private static final long serialVersionUID = 1L;
 
 	protected TrivialConverter(Class<V> valueClass) {
 		super(valueClass, valueClass);
@@ -65,12 +70,30 @@ public class TrivialConverter<V extends Object>
 		return value;
 	}
 
+	/**
+	 * Creates a new trivial converter for instances of a given class of type {@code V} without indicating the class of
+	 * the input and output values. For technical reasons, trivial converters created in this way are not compatible
+	 * with {@link ConvertMethod}.
+	 * <p>
+	 * @param <V> The input and output type
+	 * @return The trivial converter
+	 * @see ConvertMethod
+	 */
 	public static <V> TrivialConverter<V> getInstance() {
-		return new TrivialConverter<V>(null);
+		return new TrivialConverter<>(null);
 	}
 
+	/**
+	 * Creates a new trivial converter for instances of a given class of type {@code V}. Indicating the class is needed
+	 * in {@link ConvertMethod} for technical reasons.
+	 * <p>
+	 * @param <V>        The input and output type
+	 * @param valueClass The class of the input and output type
+	 * @return The trivial converter
+	 * @see ConvertMethod
+	 */
 	public static <V> TrivialConverter<V> getInstance(Class<V> valueClass) {
-		return new TrivialConverter<V>(valueClass);
+		return new TrivialConverter<>(valueClass);
 	}
 
 }

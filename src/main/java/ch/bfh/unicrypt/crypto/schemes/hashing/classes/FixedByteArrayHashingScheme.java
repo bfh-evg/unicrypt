@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.schemes.hashing.classes;
 
 import ch.bfh.unicrypt.crypto.schemes.hashing.abstracts.AbstractHashingScheme;
+import ch.bfh.unicrypt.helper.converter.classes.ConvertMethod;
 import ch.bfh.unicrypt.helper.hash.HashMethod;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import ch.bfh.unicrypt.math.algebra.general.classes.FiniteByteArrayElement;
@@ -54,11 +55,19 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 public class FixedByteArrayHashingScheme<MS extends Set>
 	   extends AbstractHashingScheme<MS, Element, FixedByteArraySet, FiniteByteArrayElement> {
 
+	private static final long serialVersionUID = 1L;
+
+	private final ConvertMethod convertMethod;
 	private final HashMethod hashMethod;
 
-	protected FixedByteArrayHashingScheme(MS messageSpace, HashMethod hashMethod) {
-		super(messageSpace, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getHashLength()));
+	protected FixedByteArrayHashingScheme(MS messageSpace, ConvertMethod convertMethod, HashMethod hashMethod) {
+		super(messageSpace, FixedByteArraySet.getInstance(hashMethod.getHashAlgorithm().getByteLength()));
+		this.convertMethod = convertMethod;
 		this.hashMethod = hashMethod;
+	}
+
+	public ConvertMethod getConvertMethod() {
+		return this.convertMethod;
 	}
 
 	public HashMethod getHashMethod() {
@@ -67,22 +76,23 @@ public class FixedByteArrayHashingScheme<MS extends Set>
 
 	@Override
 	protected Function abstractGetHashFunction() {
-		return HashFunction.getInstance(this.messageSpace, this.getHashMethod());
+		return HashFunction.getInstance(this.messageSpace, this.convertMethod, this.getHashMethod());
 	}
 
 	public static <MS extends Set> FixedByteArrayHashingScheme getInstance(MS messageSpace) {
-		return FixedByteArrayHashingScheme.<MS>getInstance(messageSpace, HashMethod.getInstance());
+		return FixedByteArrayHashingScheme.<MS>getInstance(messageSpace, ConvertMethod.getInstance(), HashMethod.getInstance());
 	}
 
-	public static FixedByteArrayHashingScheme getInstance(HashMethod hashMethod) {
-		return FixedByteArrayHashingScheme.<ByteArrayMonoid>getInstance(ByteArrayMonoid.getInstance(), hashMethod);
+	public static FixedByteArrayHashingScheme getInstance(ConvertMethod convertMethod, HashMethod hashMethod) {
+		return FixedByteArrayHashingScheme.getInstance(ByteArrayMonoid.getInstance(), convertMethod, hashMethod);
 	}
 
-	public static <MS extends Set> FixedByteArrayHashingScheme getInstance(MS messageSpace, HashMethod hashMethod) {
-		if (messageSpace == null || hashMethod == null) {
+	public static <MS extends Set>
+		   FixedByteArrayHashingScheme getInstance(MS messageSpace, ConvertMethod convertMethod, HashMethod hashMethod) {
+		if (messageSpace == null || convertMethod == null || hashMethod == null) {
 			throw new IllegalArgumentException();
 		}
-		return new FixedByteArrayHashingScheme(messageSpace, hashMethod);
+		return new FixedByteArrayHashingScheme(messageSpace, convertMethod, hashMethod);
 	}
 
 }

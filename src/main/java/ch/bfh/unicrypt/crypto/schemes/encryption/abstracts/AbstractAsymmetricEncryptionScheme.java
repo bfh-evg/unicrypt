@@ -61,9 +61,11 @@ public abstract class AbstractAsymmetricEncryptionScheme<MS extends Set, ME exte
 	   extends AbstractEncryptionScheme<MS, ME, ES, EE>
 	   implements AsymmetricEncryptionScheme {
 
+	private static final long serialVersionUID = 1L;
+
 	private KG keyPairGenerator;
 
-	public AbstractAsymmetricEncryptionScheme(MS messageSpace, ES encryptionSpace) {
+	protected AbstractAsymmetricEncryptionScheme(MS messageSpace, ES encryptionSpace) {
 		super(messageSpace, encryptionSpace);
 	}
 

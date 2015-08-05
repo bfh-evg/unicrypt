@@ -52,6 +52,7 @@ import java.math.BigInteger;
 public class ZModElement
 	   extends AbstractDualisticElement<ZMod, ZModElement, BigInteger>
 	   implements DualisticElement<BigInteger> {
+	private static final long serialVersionUID = 1L;
 
 	protected ZModElement(final ZMod zMod, final BigInteger value) {
 		super(zMod, value);

@@ -41,23 +41,30 @@
  */
 package ch.bfh.unicrypt.helper.converter.abstracts;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.sequence.Mapping;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.tree.Leaf;
+import ch.bfh.unicrypt.helper.tree.Node;
+import ch.bfh.unicrypt.helper.tree.Tree;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <V>
- * @param <W>
+ * This abstract class serves as a base implementation of the {@link Converter} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <V> The input type
+ * @param <W> The output type
  */
-public abstract class AbstractConverter<V extends Object, W extends Object>
+public abstract class AbstractConverter<V, W>
 	   extends UniCrypt
 	   implements Converter<V, W> {
 
 	private final Class<V> inputClass;
 	private final Class<W> outputClass;
 
-	public AbstractConverter(Class<V> inputClass, Class<W> outputClass) {
+	protected AbstractConverter(Class<V> inputClass, Class<W> outputClass) {
 		this.inputClass = inputClass;
 		this.outputClass = outputClass;
 	}
@@ -74,18 +81,103 @@ public abstract class AbstractConverter<V extends Object, W extends Object>
 
 	@Override
 	public final W convert(V value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
+		if (this.isValidInput(value)) {
+			return this.abstractConvert(value);
 		}
-		return this.abstractConvert(value);
+		throw new IllegalArgumentException();
 	}
 
 	@Override
 	public final V reconvert(W value) {
-		if (value == null) {
-			throw new IllegalArgumentException();
+		if (this.isValidOutput(value)) {
+			return this.abstractReconvert(value);
 		}
-		return this.abstractReconvert(value);
+		throw new IllegalArgumentException();
+	}
+
+	@Override
+	public Tree<W> convert(Tree<V> tree) {
+		if (tree.isLeaf()) {
+			Leaf<V> leaf = (Leaf<V>) tree;
+			return Tree.getInstance(this.convert(leaf.getValue()));
+		} else {
+			Node<V> node = (Node<V>) tree;
+			final Converter<V, W> converter = this;
+			Sequence<Tree<W>> children = node.getChildren().map(new Mapping<Tree<V>, Tree<W>>() {
+
+				@Override
+				public Tree<W> apply(Tree<V> value) {
+					return converter.convert(value);
+				}
+
+			});
+			return Tree.getInstance(children);
+		}
+	}
+
+	@Override
+	public Tree<V> reconvert(Tree<W> tree) {
+		if (tree.isLeaf()) {
+			Leaf<W> leaf = (Leaf<W>) tree;
+			return Tree.getInstance(this.reconvert(leaf.getValue()));
+		} else {
+			Node<W> node = (Node<W>) tree;
+			final Converter<V, W> converter = this;
+			Sequence<Tree<V>> children = node.getChildren().map(new Mapping<Tree<W>, Tree<V>>() {
+
+				@Override
+				public Tree<V> apply(Tree<W> value) {
+					return converter.reconvert(value);
+				}
+
+			});
+			return Tree.getInstance(children);
+		}
+	}
+
+	@Override
+	public final boolean isValidInput(V value) {
+		return (value != null) && this.defaultIsValidInput(value);
+	}
+
+	@Override
+	public final boolean isValidOutput(W value) {
+		return (value != null) && this.defaultIsValidOutput(value);
+	}
+
+	@Override
+	public final Converter<W, V> invert() {
+		final Converter<V, W> converter = this;
+		return new AbstractConverter<W, V>(this.outputClass, this.inputClass) {
+
+			@Override
+			protected V abstractConvert(W value) {
+				return converter.reconvert(value);
+			}
+
+			@Override
+			protected W abstractReconvert(V value) {
+				return converter.convert(value);
+			}
+
+			@Override
+			protected boolean defaultIsValidInput(W value) {
+				return converter.isValidOutput(value);
+			}
+
+			@Override
+			protected boolean defaultIsValidOutput(V value) {
+				return converter.isValidInput(value);
+			}
+		};
+	}
+
+	protected boolean defaultIsValidInput(V value) {
+		return true;
+	}
+
+	protected boolean defaultIsValidOutput(W value) {
+		return true;
 	}
 
 	protected abstract W abstractConvert(V value);

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.Polynomial;
+import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -56,18 +56,19 @@ import java.util.Map;
 /**
  *
  * @author rolfhaenni
- * @param <V>
  */
-public class PolynomialRing<V>
-	   extends PolynomialSemiRing<V>
-	   implements Ring<Polynomial<? extends DualisticElement<V>>> {
+public class PolynomialRing
+	   extends PolynomialSemiRing
+	   implements Ring<Polynomial<? extends DualisticElement<BigInteger>>> {
+
+	private static final long serialVersionUID = 1L;
 
 	protected PolynomialRing(Ring ring) {
 		super(ring);
 	}
 
-	public Ring<V> getRing() {
-		return (Ring<V>) super.getSemiRing();
+	public Ring getRing() {
+		return (Ring) super.getSemiRing();
 	}
 
 	//
@@ -75,31 +76,32 @@ public class PolynomialRing<V>
 	// various super-classes
 	//
 	@Override
-	public PolynomialElement<V> invert(Element element) {
+	public PolynomialElement invert(Element element) {
 		if (this.isBinary()) {
-			return (PolynomialElement<V>) element;
+			return (PolynomialElement) element;
 		}
 
-		Map<Integer, DualisticElement<V>> coefficientMap = new HashMap<Integer, DualisticElement<V>>();
-		Polynomial<? extends DualisticElement<V>> polynomial = ((PolynomialElement<V>) element).getValue();
-		for (Integer i : polynomial.getIndices()) {
+		Map<Integer, DualisticElement<BigInteger>> coefficientMap
+			   = new HashMap<>();
+		Polynomial<? extends DualisticElement<BigInteger>> polynomial = ((PolynomialElement) element).getValue();
+		for (Integer i : polynomial.getCoefficientIndices()) {
 			coefficientMap.put(i, polynomial.getCoefficient(i).negate());
 		}
 		return this.getElementUnchecked(coefficientMap);
 	}
 
 	@Override
-	public PolynomialElement<V> applyInverse(Element element1, Element element2) {
+	public PolynomialElement applyInverse(Element element1, Element element2) {
 		return this.apply(element1, this.invert(element2));
 	}
 
 	@Override
-	public PolynomialElement<V> subtract(Element element1, Element element2) {
+	public PolynomialElement subtract(Element element1, Element element2) {
 		return this.applyInverse(element1, element2);
 	}
 
 	@Override
-	public PolynomialElement<V> negate(Element element) {
+	public PolynomialElement negate(Element element) {
 		return this.invert(element);
 	}
 
@@ -114,24 +116,25 @@ public class PolynomialRing<V>
 	 * @param h h(x) in Z_p[x]
 	 * @return d(x) in Z_p[x]
 	 */
-	public PolynomialElement<V> euclidean(PolynomialElement<V> g, PolynomialElement<V> h) {
+	public PolynomialElement euclidean(PolynomialElement g, PolynomialElement h) {
 		if (!this.getSemiRing().isField()) {
 			throw new UnsupportedOperationException();
 		}
 		if (!this.contains(g) || !this.contains(h)) {
 			throw new IllegalArgumentException();
 		}
-		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
 
 		while (!h.isEquivalent(ring.getZeroElement())) {
 			Pair div = longDivision(g, h);
 			g = h;
-			h = (PolynomialElement<V>) div.getSecond();
+			h = (PolynomialElement) div.getSecond();
 		}
 
 		// Reduce g to be monic
 		if (!g.getValue().isMonic()) {
-			DualisticElement<V> a = g.getValue().getCoefficient(g.getValue().getDegree());
+			DualisticElement<BigInteger> a = g.getValue().getCoefficient(g.getValue().getDegree());
 			g = g.reduce(a);
 		}
 		return g;
@@ -148,16 +151,17 @@ public class PolynomialRing<V>
 	 * @param h h(x) in Z_p[x]
 	 * @return (d(x), s(x), t(x)) with d(x), s(x), r(x) in Z_p[x]
 	 */
-	public Triple extendedEuclidean(PolynomialElement<V> g, PolynomialElement<V> h) {
+	public Triple extendedEuclidean(PolynomialElement g, PolynomialElement h) {
 		if (!this.getSemiRing().isField()) {
 			throw new UnsupportedOperationException();
 		}
 		if (!this.contains(g) || !this.contains(h)) {
 			throw new IllegalArgumentException();
 		}
-		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
-		final PolynomialElement<V> zero = ring.getZeroElement();
-		final PolynomialElement<V> one = ring.getOneElement();
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+		final PolynomialElement zero = ring.getZeroElement();
+		final PolynomialElement one = ring.getOneElement();
 
 		// 1.
 		if (h.isEquivalent(zero)) {
@@ -165,15 +169,15 @@ public class PolynomialRing<V>
 		}
 
 		// 2.
-		PolynomialElement<V> s2 = one, s1 = zero, t2 = zero, t1 = one;
-		PolynomialElement<V> q, r, s, t;
+		PolynomialElement s2 = one, s1 = zero, t2 = zero, t1 = one;
+		PolynomialElement q, r, s, t;
 
 		// 3.
 		while (!h.isEquivalent(zero)) {
 			// 3.1
 			Pair div = longDivision(g, h);
-			q = (PolynomialElement<V>) div.getFirst();
-			r = (PolynomialElement<V>) div.getSecond();
+			q = (PolynomialElement) div.getFirst();
+			r = (PolynomialElement) div.getSecond();
 			// 3.2
 			s = s2.subtract(q.multiply(s1));
 			t = t2.subtract(q.multiply(t1));
@@ -189,7 +193,7 @@ public class PolynomialRing<V>
 		// 4./5.
 		// Reduce gcd to be monic
 		if (!g.getValue().isMonic()) {
-			DualisticElement<V> a = g.getValue().getCoefficient(g.getValue().getDegree());
+			DualisticElement<BigInteger> a = g.getValue().getCoefficient(g.getValue().getDegree());
 			g = g.reduce(a);
 			s2 = s2.reduce(a);
 			t2 = t2.reduce(a);
@@ -206,7 +210,7 @@ public class PolynomialRing<V>
 	 * @param h h(x)in Z_p[x]
 	 * @return (q(x), r(x)) with q(x), r(x) in Z_p[x]
 	 */
-	public Pair longDivision(PolynomialElement<V> g, PolynomialElement<V> h) {
+	public Pair longDivision(PolynomialElement g, PolynomialElement h) {
 		if (!this.getSemiRing().isField()) {
 			throw new UnsupportedOperationException();
 		}
@@ -215,14 +219,17 @@ public class PolynomialRing<V>
 		}
 
 		// Create explicitly a ring to work in (the instance might be a field).
-		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
-		final PolynomialElement<V> zero = ring.getZeroElement();
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+		final PolynomialElement zero = ring.getZeroElement();
 
-		PolynomialElement<V> q = zero;
-		PolynomialElement<V> r = ring.getElement(g.getValue());
-		PolynomialElement<V> t;
+		PolynomialElement q = zero;
+		PolynomialElement r = ring.getElement(g.getValue());
+		PolynomialElement t;
 		while (!r.isEquivalent(zero) && r.getValue().getDegree() >= h.getValue().getDegree()) {
-			DualisticElement<V> c = r.getValue().getCoefficient(r.getValue().getDegree()).divide(h.getValue().getCoefficient(h.getValue().getDegree()));
+			DualisticElement<BigInteger> c
+				   = r.getValue().getCoefficient(r.getValue().getDegree()).divide(h.getValue()
+						  .getCoefficient(h.getValue().getDegree()));
 			int i = r.getValue().getDegree() - h.getValue().getDegree();
 			HashMap map = new HashMap(1);
 			map.put(i, c);
@@ -241,17 +248,18 @@ public class PolynomialRing<V>
 	 * @param f f(x) in Z_p[x] and monic
 	 * @return true if f(x) is irreducible over Z_p
 	 */
-	public boolean isIrreduciblePolynomial(PolynomialElement<V> f) {
+	public boolean isIrreduciblePolynomial(PolynomialElement f) {
 		if (!this.getSemiRing().isField() || f != null && !f.getValue().isMonic()) {
 			throw new UnsupportedOperationException();
 		}
 		if (!this.contains(f)) {
 			throw new IllegalArgumentException();
 		}
-		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
-		PolynomialElement<V> x = ring.getElement(BigInteger.ZERO, BigInteger.ONE);
-		PolynomialElement<V> u = x;
-		PolynomialElement<V> d;
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+		PolynomialElement x = ring.getElement(BigInteger.ZERO, BigInteger.ONE);
+		PolynomialElement u = x;
+		PolynomialElement d;
 		int m = f.getValue().getDegree();
 		BigInteger p = this.getSemiRing().getOrder();
 		for (int i = 1; i <= (m / 2); i++) {
@@ -274,7 +282,7 @@ public class PolynomialRing<V>
 	 * @param randomByteSequence
 	 * @return f(x) in Z_p[x] irreducible over Z_p
 	 */
-	public PolynomialElement<V> findIrreduciblePolynomial(int degree, RandomByteSequence randomByteSequence) {
+	public PolynomialElement findIrreduciblePolynomial(int degree, RandomByteSequence randomByteSequence) {
 		if (!this.getSemiRing().isField()) {
 			throw new UnsupportedOperationException();
 		}
@@ -286,14 +294,14 @@ public class PolynomialRing<V>
 		//      -> see Fact 4.75
 		//
 
-		PolynomialElement<V> f;
+		PolynomialElement f;
 		do {
 			f = this.getRandomMonicElement(degree, true, randomByteSequence);
 		} while (!f.isIrreducible());
 		return f;
 	}
 
-	public PolynomialElement<V> findIrreduciblePolynomial(int degree) {
+	public PolynomialElement findIrreduciblePolynomial(int degree) {
 		return this.findIrreduciblePolynomial(degree, HybridRandomByteSequence.getInstance());
 	}
 
@@ -307,24 +315,25 @@ public class PolynomialRing<V>
 	 * @param f
 	 * @return
 	 */
-	private PolynomialElement<V> squareAndMultiply(PolynomialElement<V> g, BigInteger k, PolynomialElement<V> f) {
+	private PolynomialElement squareAndMultiply(PolynomialElement g, BigInteger k, PolynomialElement f) {
 		if (k.signum() < 0) {
 			throw new IllegalArgumentException();
 		}
-		final PolynomialRing<V> ring = PolynomialRing.getInstance((Ring<V>) this.getSemiRing());
-		PolynomialElement<V> s = ring.getOneElement();
+		final PolynomialRing ring
+			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
+		PolynomialElement s = ring.getOneElement();
 
 		if (k.signum() == 0) {
 			return s;
 		}
-		PolynomialElement<V> t = ring.getElement(g.getValue());
+		PolynomialElement t = ring.getElement(g.getValue());
 		if (k.testBit(0)) {
 			s = t;
 		}
 		for (int i = 1; i <= k.bitLength(); i++) {
-			t = (PolynomialElement<V>) this.longDivision(t.square(), f).getSecond();
+			t = (PolynomialElement) this.longDivision(t.square(), f).getSecond();
 			if (k.testBit(i)) {
-				s = (PolynomialElement<V>) this.longDivision(t.multiply(s), f).getSecond();
+				s = (PolynomialElement) this.longDivision(t.multiply(s), f).getSecond();
 			}
 		}
 		return s;

@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.abstracts;
 
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractMonoid;
@@ -56,13 +58,15 @@ import java.math.BigInteger;
  * @param <V> Generic type of values stored in the elements of this monoid
  * @author
  */
-public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement<V>, V extends Object>
+public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement<V>, V>
 	   extends AbstractMonoid<E, V>
 	   implements ConcatenativeMonoid<V> {
 
+	private static final long serialVersionUID = 1L;
+
 	protected final int blockLength;
 
-	public AbstractConcatenativeMonoid(Class<? extends Object> valueClass, int blockLength) {
+	protected AbstractConcatenativeMonoid(Class<?> valueClass, int blockLength) {
 		super(valueClass);
 		this.blockLength = blockLength;
 	}
@@ -98,7 +102,12 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 	}
 
 	@Override
-	public final E concatenate(final Iterable<Element> elements) {
+	public final E concatenate(final ImmutableArray<Element> elements) {
+		return this.apply(elements);
+	}
+
+	@Override
+	public final E concatenate(final Sequence<Element> elements) {
 		return this.apply(elements);
 	}
 
@@ -113,7 +122,7 @@ public abstract class AbstractConcatenativeMonoid<E extends ConcatenativeElement
 	}
 
 	@Override
-	public final E selfConcatenate(final Element element, final int amount) {
+	public final E selfConcatenate(final Element element, final long amount) {
 		return this.selfApply(element, amount);
 	}
 

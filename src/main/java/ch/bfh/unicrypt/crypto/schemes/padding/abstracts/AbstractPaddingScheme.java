@@ -62,10 +62,12 @@ public abstract class AbstractPaddingScheme<MS extends ConcatenativeSemiGroup, M
 	   extends AbstractScheme<MS>
 	   implements PaddingScheme {
 
+	private static final long serialVersionUID = 1L;
+
 	protected final PS paddingSpace;
 	private Function paddingFunction;
 
-	public AbstractPaddingScheme(MS messageSpace, PS paddingSpace) {
+	protected AbstractPaddingScheme(MS messageSpace, PS paddingSpace) {
 		super(messageSpace);
 		this.paddingSpace = paddingSpace;
 	}
@@ -94,7 +96,7 @@ public abstract class AbstractPaddingScheme<MS extends ConcatenativeSemiGroup, M
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return "" + this.messageSpace.getBlockLength();
 	}
 

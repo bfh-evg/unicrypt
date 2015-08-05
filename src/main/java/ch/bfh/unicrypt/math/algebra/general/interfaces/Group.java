@@ -42,37 +42,35 @@
 package ch.bfh.unicrypt.math.algebra.general.interfaces;
 
 /**
- * TODO This interface represents the mathematical concept of a group. A group is a monoid that has a an inverse
- * element. It is therefore implemented as a specialization of {@link Monoid}.
+ * This interface represents the mathematical concept of a group. A group is a monoid for which inverse elements exist
+ * for all elements in the group. It is therefore implemented as a specialization of {@link Monoid}.
  * <p>
  *
- * @param <V> Generic type of values stored in the elements of this group
+ * @param <V> Generic type of the values representing the elements of a group
  * @see "Handbook of Applied Cryptography, Definition 2.162"
  * <p>
  * @author R. Haenni
  * @author R. E. Koenig
  * @version 2.0
  */
-public interface Group<V extends Object>
+public interface Group<V>
 	   extends Monoid<V> {
 
 	/**
 	 * Computes and returns the inverse of a given group element.
 	 * <p>
-	 * @param element A given group element
+	 * @param element A given element
 	 * @return The inverse element of the input element
-	 * @throws IllegalArgumentException if {@code element} does not belong to the group
 	 */
 	public Element<V> invert(Element element);
 
 	/**
-	 * Applies the binary group operation to the first and the inverse of the second given group element.
+	 * Applies the binary operation to the first and the inverse of the second given group element.
 	 * <p>
-	 * @param element1 The first group element
-	 * @param element2 The second group element
-	 * @return The result of applying the group operation to the two input elements
-	 * @throws IllegalArgumentException if {@code element1} or {@code element2} does not belong to the group
-   * */
+	 * @param element1 The first element
+	 * @param element2 The second element
+	 * @return The result of applying the group operation to the the first and the inverse of the second element
+	 */
 	public Element<V> applyInverse(Element element1, Element element2);
 
 }

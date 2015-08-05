@@ -42,10 +42,10 @@
 package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.factorization.Prime;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeCyclicGroup;
-import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
@@ -60,7 +60,8 @@ public class ZStarModPrime
 	   extends ZStarMod
 	   implements MultiplicativeCyclicGroup<BigInteger> {
 
-	private final static Map<BigInteger, ZStarModPrime> instances = new HashMap<BigInteger, ZStarModPrime>();
+	private final static Map<BigInteger, ZStarModPrime> instances = new HashMap<>();
+	private static final long serialVersionUID = 1L;
 
 	protected ZStarModPrime(Prime modulus) {
 		super(modulus);
@@ -68,52 +69,86 @@ public class ZStarModPrime
 
 	@Override
 	public ZStarModElement getDefaultGenerator() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
 	}
 
 	@Override
 	public ZStarModElement getRandomGenerator() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
 	}
 
 	@Override
 	public ZStarModElement getRandomGenerator(RandomByteSequence randomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
 	}
 
 	@Override
 	public ZStarModElement getIndependentGenerator(int index) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
 	}
 
 	@Override
 	public ZStarModElement getIndependentGenerator(int index, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
 	}
 
 	@Override
 	public Tuple getIndependentGenerators(int maxIndex) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
 	}
 
 	@Override
 	public Tuple getIndependentGenerators(int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
 	}
 
 	@Override
 	public Tuple getIndependentGenerators(int minIndex, int maxIndex) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
 	}
 
 	@Override
-	public Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public Tuple getIndependentGenerators(int minIndex, int maxIndex,
+		   ReferenceRandomByteSequence referenceRandomByteSequence) {
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
 	}
 
 	@Override
 	public boolean isGenerator(Element element) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+		// TODO: Implement method.
+	}
+
+	@Override
+	protected Sequence<ZStarModElement> defaultGetElements() {
+		return super.defaultGetElements();
+// same code as in AbstractCyclicGroup
+//		final ZStarModPrime group = this;
+//		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<ZStarModElement>() {
+//
+//			@Override
+//			public ZStarModElement apply(ZStarModElement element) {
+//				return group.apply(group.getDefaultGenerator(), element);
+//			}
+//
+//		}).limit(new Predicate<ZStarModElement>() {
+//
+//			@Override
+//			public boolean test(ZStarModElement element) {
+//
+//				return group.getIdentityElement().equals(element);
+//			}
+//
+//		});
 	}
 
 	public static ZStarModPrime getInstance(final Prime modulus) {
@@ -128,7 +163,7 @@ public class ZStarModPrime
 		return instance;
 	}
 
-	public static ZStarModPrime getInstance(final int modulus) {
+	public static ZStarModPrime getInstance(final long modulus) {
 		return ZStarModPrime.getInstance(BigInteger.valueOf(modulus));
 	}
 
@@ -136,12 +171,8 @@ public class ZStarModPrime
 		return ZStarModPrime.getInstance(Prime.getInstance(modulus));
 	}
 
-	public static ZStarModPrime getRandomInstance(int bitLength) {
-		return ZStarModPrime.getRandomInstance(bitLength, HybridRandomByteSequence.getInstance());
-	}
-
-	public static ZStarModPrime getRandomInstance(int bitLength, RandomByteSequence randomByteSequence) {
-		return ZStarModPrime.getInstance(Prime.getRandomInstance(bitLength, randomByteSequence));
+	public static ZStarModPrime getFirstInstance(int bitLength) {
+		return ZStarModPrime.getInstance(Prime.getFirstInstance(bitLength));
 	}
 
 }

@@ -52,6 +52,7 @@ public class BooleanElement
 	   extends AbstractElement<BooleanSet, BooleanElement, Boolean>
 
 	   implements Element<Boolean> {
+	private static final long serialVersionUID = 1L;
 
 	protected BooleanElement(final BooleanSet set, final Boolean bit) {
 		super(set, bit);

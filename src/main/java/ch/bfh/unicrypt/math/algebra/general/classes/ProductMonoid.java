@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -54,6 +56,8 @@ import java.math.BigInteger;
 public class ProductMonoid
 	   extends ProductSemiGroup
 	   implements Monoid<DenseArray<Element>> {
+
+	private static final long serialVersionUID = 1L;
 
 	private Tuple identityElement;
 
@@ -166,15 +170,20 @@ public class ProductMonoid
 
 	@Override
 	public boolean isIdentityElement(Element element) {
-		return this.areEquivalent(element, this.getIdentityElement());
+		return element.isEquivalent(this.getIdentityElement());
 	}
 
 	@Override
-	public Tuple defaultApply(final Iterable<Element> elements) {
-		if (!elements.iterator().hasNext()) {
-			return this.getIdentityElement();
-		}
-		return super.defaultApply(elements);
+	public Tuple defaultApply(final Sequence<Element> elements) {
+		final ProductMonoid monoid = this;
+		return (Tuple) elements.reduce(new BinaryOperator<Element>() {
+
+			@Override
+			public Element apply(Element element1, Element element2) {
+				return monoid.apply(element1, element2);
+			}
+
+		}, this.getIdentityElement());
 	}
 
 	@Override

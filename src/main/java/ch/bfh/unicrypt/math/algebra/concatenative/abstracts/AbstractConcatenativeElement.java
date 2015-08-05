@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElemen
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
+import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import java.math.BigInteger;
@@ -57,11 +58,13 @@ import java.math.BigInteger;
  * @param <V> Generic type of value stored in this element
  * @author rolfhaennip
  */
-public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>, E extends ConcatenativeElement<V>, V extends Object>
+public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGroup<V>, E extends ConcatenativeElement<V>, V>
 	   extends AbstractElement<S, E, V>
 	   implements ConcatenativeElement<V> {
 
-	protected AbstractConcatenativeElement(final S semiGroup, final V value) {
+	private static final long serialVersionUID = 1L;
+
+	protected AbstractConcatenativeElement(final AbstractSet<E, V> semiGroup, final V value) {
 		super(semiGroup, value);
 	}
 
@@ -90,10 +93,10 @@ public abstract class AbstractConcatenativeElement<S extends ConcatenativeSemiGr
 	}
 
 	/**
-	 * @see Group#selfApply(Element, int)
+	 * @see Group#selfApply(Element, long)
 	 */
 	@Override
-	public final E selfConcatenate(final int amount) {
+	public final E selfConcatenate(final long amount) {
 		return (E) this.getSet().selfConcatenate(this, amount);
 	}
 

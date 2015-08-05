@@ -64,7 +64,7 @@ public abstract class AbstractDeterministicCommitmentScheme<MS extends Set, ME e
 	   extends AbstractCommitmentScheme<MS, CS>
 	   implements DeterministicCommitmentScheme {
 
-	public AbstractDeterministicCommitmentScheme(MS messageSpace, CS commitmentSpace) {
+	protected AbstractDeterministicCommitmentScheme(MS messageSpace, CS commitmentSpace) {
 		super(messageSpace, commitmentSpace);
 	}
 
@@ -82,8 +82,9 @@ public abstract class AbstractDeterministicCommitmentScheme<MS extends Set, ME e
 	protected Function abstractGetDecommitmentFunction() {
 		ProductSet decommitmentDomain = ProductSet.getInstance(this.messageSpace, this.commitmentSpace);
 		return CompositeFunction.getInstance(
-			   SharedDomainFunction.getInstance(CompositeFunction.getInstance(SelectionFunction.getInstance(decommitmentDomain, 0),
-																			  this.getCommitmentFunction()),
+			   SharedDomainFunction.getInstance(CompositeFunction
+					  .getInstance(SelectionFunction.getInstance(decommitmentDomain, 0),
+								   this.getCommitmentFunction()),
 												SelectionFunction.getInstance(decommitmentDomain, 1)),
 			   EqualityFunction.getInstance(this.getCommitmentSpace()));
 	}

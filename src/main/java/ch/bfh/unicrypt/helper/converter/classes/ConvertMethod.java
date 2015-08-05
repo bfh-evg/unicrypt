@@ -41,50 +41,154 @@
  */
 package ch.bfh.unicrypt.helper.converter.classes;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <T>
+ * Instances of this generic class provide multiple converters for the same output type {@code W}. The purpose of this
+ * class is to declare the conversion into values of type {@code W} in one central place, without limiting the
+ * flexibility. Note that {@link ConvertMethod} itself is not a {@link Converter}, it only allows the selection of the
+ * converter to be used for instances of a specific class.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <W> The output type
  */
-public class ConvertMethod<T extends Object>
+public class ConvertMethod<W>
 	   extends UniCrypt {
 
-	private final Map<Class<?>, Converter<?, T>> converterMap;
+	private static final long serialVersionUID = 1L;
 
-	private ConvertMethod() {
-		this.converterMap = new HashMap<Class<?>, Converter<?, T>>();
+	private final Class<W> outputClass;
+
+	// a map for storing the converters
+	private final Map<Class<?>, Converter<?, W>> converterMap;
+
+	private ConvertMethod(Class<W> outputClass) {
+		this.outputClass = outputClass;
+		this.converterMap = new HashMap<>();
 	}
 
-	public Converter<?, T> getConverter(Class<?> valueClass) {
-		return this.converterMap.get(valueClass);
+	/**
+	 * Creates a new empty converter method of output type {@code ByteArray}.
+	 * <p>
+	 * @return The new converter method
+	 */
+	public static ConvertMethod<ByteArray> getInstance() {
+		return new ConvertMethod(ByteArray.class);
 	}
 
-	// should this method be public?
-	private void addConverter(Converter<?, T> converter) {
-		Class<?> valueClass = converter.getInputClass();
-		if (this.converterMap.containsKey(valueClass)) {
+	/**
+	 * Creates a new empty converter method of output type {@code W} from a given output class of type type {@code W}.
+	 * <p>
+	 * @param <W>         The output type
+	 * @param outputClass The class of the output values
+	 * @return The new converter method
+	 */
+	public static <W> ConvertMethod<W> getInstance(Class<W> outputClass) {
+		if (outputClass == null) {
 			throw new IllegalArgumentException();
 		}
-		this.converterMap.put(valueClass, converter);
+		return new ConvertMethod(outputClass);
 	}
 
-	public static <T> ConvertMethod getInstance(Converter<?, T>... converters) {
-		if (converters == null) {
+	/**
+	 * Creates a new converter method of output type {@code W} from a given list of converters of output type {@code W}.
+	 * Each of the given converters must know the class of the input values, and these classes must be distinct.
+	 * <p>
+	 * @param <W>        The output type
+	 * @param converters The given converters
+	 * @return The new converter method
+	 */
+	public static <W> ConvertMethod<W> getInstance(Converter<?, W>... converters) {
+		if (converters == null || converters.length == 0 || converters[0] == null || converters[0].getOutputClass() == null) {
 			throw new IllegalArgumentException();
 		}
-		ConvertMethod convertMethod = new ConvertMethod();
-		for (Converter<?, T> converter : converters) {
+		Class<W> outputClass = converters[0].getOutputClass();
+		ConvertMethod convertMethod = new ConvertMethod(outputClass);
+		for (Converter<?, W> converter : converters) {
 			if (converter == null) {
 				throw new IllegalArgumentException();
 			}
-			convertMethod.addConverter(converter);
+			Class<?> inputClass = converter.getInputClass();
+			if (inputClass == null || convertMethod.converterMap.containsKey(inputClass) || !outputClass.equals(converter.getOutputClass())) {
+				throw new IllegalArgumentException();
+			}
+			convertMethod.converterMap.put(inputClass, converter);
 		}
 		return convertMethod;
+	}
+
+	/**
+	 * Selects and returns the converter for input values of a given class. Returns {@code null} if no such converter
+	 * exists.
+	 * <p>
+	 * @param valueClass The class of the input values
+	 * @return The corresponding converter (or {@code null} if no such converter exists)
+	 */
+	public Converter<?, W> getConverter(Class<?> valueClass) {
+		return this.converterMap.get(valueClass);
+	}
+
+	/**
+	 * Selects and returns the converter for input values of a given class. Returns the given default converter, if no
+	 * suitable converter exists.
+	 * <p>
+	 * @param <V>              The generic type of the input class
+	 * @param valueClass       The class of the input values
+	 * @param defaultConverter The given default converter
+	 * @return The corresponding converter (or the default converter if no such converter exists)
+	 */
+	public <V> Converter<V, W> getConverter(Class<V> valueClass, Converter<V, W> defaultConverter) {
+		Converter<V, W> converter = (Converter<V, W>) this.getConverter(valueClass);
+		if (converter == null) {
+			if (defaultConverter == null) {
+				throw new IllegalArgumentException();
+			}
+			return defaultConverter;
+		}
+		return converter;
+	}
+
+	/**
+	 * Returns the class of type {@code W} of the output values, or {@code null} if the class is unknown. This method is
+	 * needed in {@link ConvertMethod} for technical reasons.
+	 * <p>
+	 * @return The output class
+	 * @see ConvertMethod
+	 */
+	public Class<W> getOutputClass() {
+		return this.outputClass;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		hash = 37 * hash + (this.converterMap != null ? this.converterMap.hashCode() : 0);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final ConvertMethod<?> other = (ConvertMethod<?>) obj;
+		if (this.converterMap.size() != other.converterMap.size()) {
+			return false;
+		}
+		for (Class c : this.converterMap.keySet()) {
+			if (!this.getConverter(c).equals(other.getConverter(c))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

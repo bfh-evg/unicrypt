@@ -48,15 +48,14 @@ import java.math.BigInteger;
 
 /**
  * TODO A dualistic element can be understood as an element that can be additive or multiplicative. It is implemented as
- * a specialization of {@link Element}.
+ * a specialization of {@link Element}. Some return types are updated.
  * <p>
  * @author rolfhaenni
  * @param <V> Generic type of values stored in this element
  */
-public interface DualisticElement<V extends Object>
+public interface DualisticElement<V>
 	   extends AdditiveElement<V>, MultiplicativeElement<V> {
 
-	// The following methods are overridden from Element with an adapted return type
 	@Override
 	public SemiRing<V> getSet();
 
@@ -73,7 +72,7 @@ public interface DualisticElement<V extends Object>
 	public DualisticElement<V> selfApply(Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> selfApply(int amount);
+	public DualisticElement<V> selfApply(long amount);
 
 	@Override
 	public DualisticElement<V> selfApply();
@@ -81,7 +80,6 @@ public interface DualisticElement<V extends Object>
 	@Override
 	public DualisticElement<V> invert();
 
-	// The following methods are overridden from AdditiveElement with an adapted return type
 	@Override
 	public DualisticElement<V> add(Element element);
 
@@ -95,7 +93,7 @@ public interface DualisticElement<V extends Object>
 	public DualisticElement<V> times(Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> times(int amount);
+	public DualisticElement<V> times(long amount);
 
 	@Override
 	public DualisticElement<V> timesTwo();
@@ -103,7 +101,6 @@ public interface DualisticElement<V extends Object>
 	@Override
 	public DualisticElement<V> negate();
 
-	// The following methods are overridden from MultiplicativeElement with an adapted return type
 	@Override
 	public DualisticElement<V> multiply(Element element);
 
@@ -117,7 +114,7 @@ public interface DualisticElement<V extends Object>
 	public DualisticElement<V> power(Element<BigInteger> amount);
 
 	@Override
-	public DualisticElement<V> power(int amount);
+	public DualisticElement<V> power(long amount);
 
 	@Override
 	public DualisticElement<V> square();

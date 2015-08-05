@@ -45,62 +45,69 @@ import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * Instances of this class convert bit strings into Java strings consisting of characters {@code '0'} and {@code '1'}.
+ * There are two modes of operations. In the default mode, the output strings are constructed from left-to-right,
+ * whereas in the 'reverse' mode, strings are constructed from right-to-left.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
  */
 public class BitArrayToString
 	   extends AbstractStringConverter<BitArray> {
 
+	// used to check strings before reconverting
+	private static final String REGEXP = "^[0-1]*$";
+	private static final long serialVersionUID = 1L;
+
+	// a flag indicating the mode of operation (left-to-right / right-to-left)
 	private final boolean reverse;
-	private final String regExp;
 
 	protected BitArrayToString(boolean reverse) {
 		super(BitArray.class);
 		this.reverse = reverse;
-		this.regExp = "^[0-1]*$";
 	}
 
-	@Override
-	public String abstractConvert(BitArray bitArray) {
-		StringBuilder sb = new StringBuilder(bitArray.getLength() * (Byte.SIZE + 1));
-		for (Boolean bit : this.reverse ? bitArray.reverse() : bitArray) {
-			sb.append(bit ? "1" : "0");
-		}
-		return sb.toString();
-	}
-
-	@Override
-	public BitArray abstractReconvert(String string) {
-		if (!string.matches(this.regExp)) {
-			throw new IllegalArgumentException();
-		}
-		boolean[] bits = new boolean[string.length()];
-		for (int i = 0; i < bits.length; i++) {
-			bits[i] = string.charAt(i) == '1';
-		}
-		BitArray result = BitArray.getInstance(bits);
-		return this.reverse ? result.reverse() : result;
-	}
-
+	/**
+	 * Returns the default {@code BitArrayToString} converter, which constructs the string from left-to-right.
+	 * <p>
+	 * @return The default converter
+	 */
 	public static BitArrayToString getInstance() {
 		return new BitArrayToString(false);
 	}
 
+	/**
+	 * Returns a new {@code BitArrayToString} converter for one of the two modes of operation.
+	 * <p>
+	 * @param reverse A flag indicating the mode of operation
+	 * @return The new converter
+	 */
 	public static BitArrayToString getInstance(boolean reverse) {
 		return new BitArrayToString(reverse);
 	}
 
-	public static void main(final String[] args) {
+	@Override
+	protected boolean defaultIsValidOutput(String string) {
+		return string.matches(REGEXP);
+	}
 
-		BitArrayToString converter1 = BitArrayToString.getInstance();
-		BitArray ba1 = converter1.reconvert("0010100000101010110011000000");
-		System.out.println(ba1);
-		System.out.println(converter1.convert(ba1));
+	@Override
+	protected String abstractConvert(BitArray bitArray) {
+		StringBuilder stringBuilder = new StringBuilder(bitArray.getLength());
+		for (Boolean bit : this.reverse ? bitArray.reverse() : bitArray) {
+			stringBuilder.append(bit ? "1" : "0");
+		}
+		return stringBuilder.toString();
+	}
 
-		BitArrayToString converter2 = BitArrayToString.getInstance(true);
-		BitArray ba2 = converter2.reconvert("0010100000101010110011000000");
-		System.out.println(ba2);
-		System.out.println(converter2.convert(ba2));
+	@Override
+	protected BitArray abstractReconvert(String string) {
+		boolean[] bits = new boolean[string.length()];
+		for (int i = 0; i < bits.length; i++) {
+			bits[i] = (string.charAt(i) == '1');
+		}
+		BitArray result = BitArray.getInstance(bits);
+		return this.reverse ? result.reverse() : result;
 	}
 
 }

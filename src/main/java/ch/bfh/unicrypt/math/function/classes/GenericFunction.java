@@ -58,7 +58,9 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 public class GenericFunction<D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<GenericFunction<D, DE, C, CE>, D, DE, C, CE> {
 
-	Function function;
+	private static final long serialVersionUID = 1L;
+
+	private Function function;
 
 	protected GenericFunction(Function function) {
 		super(function.getDomain(), function.getCoDomain());
@@ -79,11 +81,12 @@ public class GenericFunction<D extends Set, DE extends Element, C extends Set, C
 		return (CE) this.function.apply(element, randomByteSequence);
 	}
 
-	public static <D extends Set, DE extends Element, C extends Set, CE extends Element> GenericFunction<D, DE, C, CE> getInstance(Function function) {
+	public static <D extends Set, DE extends Element, C extends Set, CE extends Element> GenericFunction<D, DE, C, CE>
+		   getInstance(Function function) {
 		if (function == null) {
 			throw new IllegalArgumentException();
 		}
-		return new GenericFunction<D, DE, C, CE>(function);
+		return new GenericFunction<>(function);
 	}
 
 }

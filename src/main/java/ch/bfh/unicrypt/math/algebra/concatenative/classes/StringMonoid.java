@@ -41,11 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative.classes;
 
-import ch.bfh.unicrypt.helper.Alphabet;
+import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.concatenative.abstracts.AbstractConcatenativeMonoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -57,6 +56,8 @@ import java.math.BigInteger;
  */
 public class StringMonoid
 	   extends AbstractConcatenativeMonoid<StringElement, String> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final Alphabet alphabet;
 
@@ -70,22 +71,18 @@ public class StringMonoid
 	}
 
 	@Override
-	protected StringConverter<String> defaultGetStringConverter() {
+	protected Converter<String, String> defaultGetStringConverter() {
 		return StringToString.getInstance();
 	}
 
-	//
-	// The following protected methods implement the abstract methods from
-	// various super-classes
-	//
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return Set.INFINITE_ORDER;
+		return Set.INFINITE;
 	}
 
 	@Override
 	protected boolean abstractContains(String value) {
-		return value.length() % this.getBlockLength() == 0 && this.getAlphabet().isValid(value);
+		return value.length() % this.getBlockLength() == 0 && this.getAlphabet().containsAll(value);
 	}
 
 	@Override
@@ -94,7 +91,7 @@ public class StringMonoid
 	}
 
 	@Override
-	protected BigIntegerConverter<String> abstractGetBigIntegerConverter() {
+	protected Converter<String, BigInteger> abstractGetBigIntegerConverter() {
 		return StringToBigInteger.getInstance(this.alphabet, this.blockLength);
 	}
 
@@ -112,7 +109,8 @@ public class StringMonoid
 	protected final StringElement abstractGetRandomElement(int length, RandomByteSequence randomByteSequence) {
 		char[] chars = new char[length];
 		for (int i = 0; i < length; i++) {
-			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomNumberGenerator().nextInteger(this.getAlphabet().getSize() - 1));
+			chars[i] = this.getAlphabet().getCharacter(randomByteSequence.getRandomNumberGenerator()
+				   .nextInt(this.getAlphabet().getSize() - 1));
 		}
 		return this.abstractGetElement(new String(chars));
 	}

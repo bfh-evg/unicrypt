@@ -45,36 +45,18 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaCha
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
-import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 public abstract class AbstractSigmaChallengeGenerator
-	   extends AbstractChallengeGenerator<ProductSet, Pair, ZMod, ZModElement>
+	   extends AbstractChallengeGenerator<ZMod, ZModElement>
 	   implements SigmaChallengeGenerator {
 
-	protected final Set publicInputSpace;
-	protected final SemiGroup commitmentSpace;
-
-	protected AbstractSigmaChallengeGenerator(Set publicInputSpace, SemiGroup commitmentSpace, ZMod challengeSpace) {
-		super(ProductSet.getInstance(publicInputSpace, commitmentSpace), challengeSpace);
-		this.publicInputSpace = publicInputSpace;
-		this.commitmentSpace = commitmentSpace;
+	protected AbstractSigmaChallengeGenerator(ZMod challengeSpace) {
+		super(challengeSpace);
 	}
 
 	@Override
-	public Set getPublicInputSpace() {
-		return this.publicInputSpace;
-	}
-
-	@Override
-	public SemiGroup getCommitmentSpace() {
-		return this.commitmentSpace;
-	}
-
-	@Override
-	public ZModElement generate(Element publicInput, Element commitment) {
+	public ZModElement generate(Element<?> publicInput, Element<?> commitment) {
 		return this.generate(Pair.getInstance(publicInput, commitment));
 	}
 

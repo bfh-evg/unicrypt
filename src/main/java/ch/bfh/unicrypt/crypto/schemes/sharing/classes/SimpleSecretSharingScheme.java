@@ -53,6 +53,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  */
 public class SimpleSecretSharingScheme
 	   extends AbstractSecretSharingScheme<Group, Element, Group, Element> {
+	private static final long serialVersionUID = 1L;
 
 	private final Group group;
 

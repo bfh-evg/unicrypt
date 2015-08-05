@@ -47,13 +47,10 @@ import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
-import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 public interface SigmaProofSystem
 	   extends ProofSystem {
-
-	public Function getPreimageProofFunction();
 
 	public SigmaChallengeGenerator getChallengeGenerator();
 

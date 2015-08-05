@@ -42,21 +42,56 @@
 package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.interfaces.PreimageProofSystem;
+import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
-	   extends AbstractSigmaProofSystem<PRS, PRE, PUS, PUE, F> {
+public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup,
+	   PUE extends Element, F extends Function>
+	   extends AbstractSigmaProofSystem<PRS, PRE, PUS, PUE>
+	   implements PreimageProofSystem {
 
 	private final F preimageProofFunction;
 
 	protected AbstractPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator, final F function) {
 		super(challengeGenerator);
 		this.preimageProofFunction = function;
+	}
+
+	@Override
+	public final F getPreimageProofFunction() {
+		return this.preimageProofFunction;
+	}
+
+	@Override
+	public final PUE getCommitment(final Triple proof) {
+		return (PUE) super.getCommitment(proof);
+	}
+
+	@Override
+	public final PRE getResponse(final Triple proof) {
+		return (PRE) super.getResponse(proof);
+	}
+
+	@Override
+	public final Set getCommitmentSpace() {
+		return this.getPreimageProofFunction().getCoDomain();
+	}
+
+	@Override
+	public final ZMod getChallengeSpace() {
+		return ZMod.getInstance(this.getPreimageProofFunction().getDomain().getMinimalOrder());
+	}
+
+	@Override
+	public final Set getResponseSpace() {
+		return this.getPreimageProofFunction().getDomain();
 	}
 
 	@Override
@@ -75,12 +110,8 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	}
 
 	@Override
-	protected F abstractGetPreimageProofFunction() {
-		return this.preimageProofFunction;
-	}
-
-	@Override
-	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput, final RandomByteSequence randomByteSequence) {
+	protected final Triple abstractGenerate(final Element secretInput, final Element publicInput,
+		   final RandomByteSequence randomByteSequence) {
 		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
 		final Element commitment = this.getPreimageProofFunction().apply(randomElement);
 		final Element challenge = this.getChallengeGenerator().generate(publicInput, commitment);
@@ -96,4 +127,19 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 		return left.isEquivalent(right);
 	}
 
+	/**
+	 * Checks whether the challenge space of the challenge generator does match with the proof function.
+	 * <p>
+	 * @param challengeGenerator The challenge generator
+	 * @param proofFunction      The proof function
+	 * <p>
+	 * @return true if the challenge space does match otherwise false.
+	 */
+	protected static boolean checkChallengeSpace(final SigmaChallengeGenerator challengeGenerator,
+		   final Function proofFunction) {
+		return (proofFunction == null || challengeGenerator == null
+			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder()).isEquivalent(challengeGenerator
+					  .getChallengeSpace()));
+
+	}
 }

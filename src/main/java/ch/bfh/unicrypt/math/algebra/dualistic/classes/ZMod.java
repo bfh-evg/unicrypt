@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.MathUtil;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -67,6 +67,8 @@ import java.util.Map;
 public class ZMod
 	   extends AbstractCyclicRing<ZModElement, BigInteger> {
 
+	private static final long serialVersionUID = 1L;
+
 	protected final BigInteger modulus;
 
 	protected ZMod(final BigInteger modulus) {
@@ -89,11 +91,11 @@ public class ZMod
 	 * @param integerValue The given integer
 	 * @return {@code true} if this class contains
 	 */
-	public final boolean contains(int integerValue) {
+	public final boolean contains(long integerValue) {
 		return this.contains(BigInteger.valueOf(integerValue));
 	}
 
-	public final ZModElement getElement(int integerValue) {
+	public final ZModElement getElement(long integerValue) {
 		return this.getElement(BigInteger.valueOf(integerValue));
 	}
 
@@ -103,8 +105,7 @@ public class ZMod
 	//
 	@Override
 	protected ZModElement defaultSelfApplyAlgorithm(ZModElement element, BigInteger posAmount) {
-		return this.abstractGetElement(element.getValue().multiply(posAmount));
-//		return this.abstractGetElement(element.getValue().multiply(posAmount).mod(this.modulus));
+		return this.abstractGetElement(element.getValue().multiply(posAmount).mod(this.modulus));
 	}
 
 	@Override
@@ -113,7 +114,7 @@ public class ZMod
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.modulus.toString();
 	}
 
@@ -133,7 +134,7 @@ public class ZMod
 
 	@Override
 	protected ZModElement abstractInvert(ZModElement element) {
-		return this.abstractGetElement(this.modulus.subtract(element.getValue()));
+		return this.abstractGetElement(this.modulus.subtract(element.getValue()).mod(this.modulus));
 	}
 
 	@Override
@@ -163,13 +164,14 @@ public class ZMod
 	}
 
 	@Override
-	protected BigIntegerConverter<BigInteger> abstractGetBigIntegerConverter() {
-		return BigIntegerToBigInteger.getInstance();
+	protected Converter<BigInteger, BigInteger> abstractGetBigIntegerConverter() {
+		return BigIntegerToBigInteger.getInstance(0);
 	}
 
 	@Override
 	protected ZModElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.modulus.subtract(BigInteger.ONE)));
+		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator()
+			   .nextBigInteger(this.modulus.subtract(BigInteger.ONE)));
 	}
 
 	@Override
@@ -202,9 +204,9 @@ public class ZMod
 	//
 	// STATIC FACTORY METHODS
 	//
-	private static final Map<BigInteger, ZMod> instances = new HashMap<BigInteger, ZMod>();
+	private static final Map<BigInteger, ZMod> instances = new HashMap<>();
 
-	public static ZMod getInstance(final int modulus) {
+	public static ZMod getInstance(final long modulus) {
 		return ZMod.getInstance(BigInteger.valueOf(modulus));
 	}
 

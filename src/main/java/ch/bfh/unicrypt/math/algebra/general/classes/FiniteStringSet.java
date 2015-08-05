@@ -41,11 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.Alphabet;
-import ch.bfh.unicrypt.helper.converter.classes.biginteger.FiniteStringToBigInteger;
+import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
-import ch.bfh.unicrypt.helper.converter.interfaces.BigIntegerConverter;
-import ch.bfh.unicrypt.helper.converter.interfaces.StringConverter;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -57,6 +56,8 @@ import java.math.BigInteger;
  */
 public class FiniteStringSet
 	   extends AbstractSet<FiniteStringElement, String> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final Alphabet alphabet;
 	private final int minLength;
@@ -86,13 +87,14 @@ public class FiniteStringSet
 	}
 
 	@Override
-	protected StringConverter<String> defaultGetStringConverter() {
+	protected Converter<String, String> defaultGetStringConverter() {
 		return StringToString.getInstance();
 	}
 
 	@Override
 	protected boolean abstractContains(String value) {
-		return value.length() >= this.minLength && value.length() <= this.maxLength && this.getAlphabet().isValid(value);
+		return value.length() >= this.minLength && value.length() <= this.maxLength
+			   && this.getAlphabet().containsAll(value);
 	}
 
 	@Override
@@ -101,8 +103,8 @@ public class FiniteStringSet
 	}
 
 	@Override
-	protected BigIntegerConverter<String> abstractGetBigIntegerConverter() {
-		return FiniteStringToBigInteger.getInstance(this.alphabet, this.minLength, this.maxLength);
+	protected Converter<String, BigInteger> abstractGetBigIntegerConverter() {
+		return StringToBigInteger.getInstance(this.alphabet, 1, this.minLength);
 	}
 
 	@Override
@@ -117,13 +119,15 @@ public class FiniteStringSet
 
 	@Override
 	protected FiniteStringElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
-		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator().nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator()
+			   .nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
 	}
 
 	@Override
 	protected boolean abstractEquals(final Set set) {
 		final FiniteStringSet other = (FiniteStringSet) set;
-		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength && this.maxLength == other.maxLength;
+		return this.getAlphabet() == other.getAlphabet() && this.minLength == other.minLength
+			   && this.maxLength == other.maxLength;
 	}
 
 	@Override
@@ -136,7 +140,7 @@ public class FiniteStringSet
 	}
 
 	@Override
-	protected String defaultToStringValue() {
+	protected String defaultToStringContent() {
 		return this.getAlphabet().toString() + "^{" + this.minLength + "..." + this.maxLength + "}";
 	}
 

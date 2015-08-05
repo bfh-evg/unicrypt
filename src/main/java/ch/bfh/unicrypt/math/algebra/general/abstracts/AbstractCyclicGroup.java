@@ -41,19 +41,20 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.UnaryOperator;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 /**
  * This abstract class provides a basis implementation for additive objects of type {@link CyclicGroup}.
@@ -65,16 +66,18 @@ import java.util.NoSuchElementException;
  * TODO
  * @author
  */
-public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object>
+public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 	   extends AbstractGroup<E, V>
 	   implements CyclicGroup<V> {
+
+	private static final long serialVersionUID = 1L;
 
 	private E defaultGenerator;
 	private final Map<ReferenceRandomByteSequence, ArrayList<E>> generatorLists;
 
-	protected AbstractCyclicGroup(Class<? extends Object> valueClass) {
+	protected AbstractCyclicGroup(Class<?> valueClass) {
 		super(valueClass);
-		this.generatorLists = new HashMap<ReferenceRandomByteSequence, ArrayList<E>>();
+		this.generatorLists = new HashMap<>();
 	}
 
 	@Override
@@ -100,7 +103,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 	@Override
 	public final E getIndependentGenerator(int index) {
-		return this.getIndependentGenerator(index, (ReferenceRandomByteSequence) null);
+		return this.getIndependentGenerator(index, ReferenceRandomByteSequence.getInstance());
 	}
 
 	@Override
@@ -110,7 +113,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 	@Override
 	public final Tuple getIndependentGenerators(int maxIndex) {
-		return this.getIndependentGenerators(maxIndex, (ReferenceRandomByteSequence) null);
+		return this.getIndependentGenerators(maxIndex, ReferenceRandomByteSequence.getInstance());
 	}
 
 	@Override
@@ -120,20 +123,17 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 
 	@Override
 	public final Tuple getIndependentGenerators(int minIndex, int maxIndex) {
-		return this.getIndependentGenerators(minIndex, maxIndex, (ReferenceRandomByteSequence) null);
+		return this.getIndependentGenerators(minIndex, maxIndex, ReferenceRandomByteSequence.getInstance());
 	}
 
 	@Override
 	public final Tuple getIndependentGenerators(int minIndex, int maxIndex, ReferenceRandomByteSequence referenceRandomByteSequence) {
-		if (minIndex < 0 || maxIndex < minIndex) {
+		if (minIndex < 0 || maxIndex < minIndex || referenceRandomByteSequence == null) {
 			throw new IndexOutOfBoundsException();
-		}
-		if (referenceRandomByteSequence == null) {
-			referenceRandomByteSequence = ReferenceRandomByteSequence.getInstance();
 		}
 		ArrayList<E> generatorList = this.generatorLists.get(referenceRandomByteSequence);
 		if (generatorList == null) {
-			generatorList = new ArrayList<E>();
+			generatorList = new ArrayList<>();
 			this.generatorLists.put(referenceRandomByteSequence, generatorList);
 		}
 		if (maxIndex >= generatorList.size()) {
@@ -174,38 +174,25 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V extends Object
 	}
 
 	@Override
-	protected Iterator<E> defaultGetIterator(final BigInteger maxCounter) {
-		final AbstractCyclicGroup<E, V> cyclicGroup = this;
-		return new Iterator<E>() {
-			BigInteger counter = BigInteger.ZERO;
-			E currentElement = cyclicGroup.getIdentityElement();
+	protected Sequence<E> defaultGetElements() {
+		final AbstractCyclicGroup<E, V> group = this;
+		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<E>() {
 
 			@Override
-			public boolean hasNext() {
-				return this.counter.compareTo(maxCounter) < 0;
+			public E apply(E element) {
+				return group.apply(group.getDefaultGenerator(), element);
 			}
 
-			@Override
-			public E next() {
-				if (this.hasNext()) {
-					this.counter = this.counter.add(BigInteger.ONE);
-					E nextElement = this.currentElement;
-					this.currentElement = cyclicGroup.apply(this.currentElement, cyclicGroup.getDefaultGenerator());
-					return nextElement;
-				}
-				throw new NoSuchElementException();
-			}
+		}).limit(new Predicate<E>() {
 
 			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
+			public boolean test(E element) {
+				return group.getIdentityElement().equals(element);
 			}
-		};
+
+		});
 	}
 
-	//
-	// The following protected abstract methods must be implemented in every direct sub-class
-	//
 	protected abstract E abstractGetDefaultGenerator();
 
 	protected abstract boolean abstractIsGenerator(E element);

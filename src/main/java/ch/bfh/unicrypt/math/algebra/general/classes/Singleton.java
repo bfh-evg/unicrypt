@@ -51,6 +51,8 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 public class Singleton
 	   extends Tuple {
 
+	private static final long serialVersionUID = 1L;
+
 	protected Singleton(final ProductSet set, final DenseArray<Element> elements) {
 		super(set, elements);
 	}

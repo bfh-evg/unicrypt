@@ -41,34 +41,41 @@
  */
 package ch.bfh.unicrypt.helper.array.abstracts;
 
-import ch.bfh.unicrypt.helper.UniCrypt;
+import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.iterable.IterableRange;
+import ch.bfh.unicrypt.helper.sequence.IntegerSequence;
+import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.lang.reflect.Array;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
- *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
- * @param <A>
- * @param <V>
+ * This abstract class serves as a base implementation of the {@link ImmutableArray} interface.
+ * <p>
+ * @author Rolf Haenni
+ * @version 2.0
+ * @param <A> The type of a potential non-generic sub-class
+ * @param <V> The generic type of the values in the immutable array
  */
-abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V extends Object>
+abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A, V>, V>
 	   extends UniCrypt
 	   implements ImmutableArray<V> {
 
+	private static final long serialVersionUID = 1L;
+
 	protected Class valueClass;
 	protected int length;
-	protected int offset;
+	protected int rangeOffset;
 	protected boolean reverse;
+
+	// A flag indicating whether all elements in the array are identical. The wrapper class Boolean is used
+	// to allow the value null for the case that the flag has not yet been computed.
 	protected Boolean uniform = null;
 
-	protected AbstractImmutableArray(Class valueClass, int length, int offset, boolean reverse) {
+	protected AbstractImmutableArray(Class valueClass, int length, int rangeOffset, boolean reverse) {
 		this.valueClass = valueClass;
 		this.length = length;
-		this.offset = offset;
+		this.rangeOffset = rangeOffset;
 		this.reverse = reverse;
 		if (length <= 1) {
 			this.uniform = true;
@@ -103,44 +110,32 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	public final Iterable<Integer> getAllIndices() {
-		return IterableRange.getInstance(0, this.length - 1);
+	public final Sequence<Integer> getAllIndices() {
+		return IntegerSequence.getInstance(0, this.length - 1);
 	}
 
 	@Override
-	public final Iterable<Integer> getIndices(V value) {
+	public final Sequence<Integer> getIndices(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
 		return defaultGetIndices(value);
 	}
 
-	protected Iterable<Integer> defaultGetIndices(V value) {
-		List<Integer> result = new LinkedList<Integer>();
-		for (int i : this.getAllIndices()) {
-			if (this.abstractGetAt(i).equals(value)) {
-				result.add(i);
-			}
-		}
-		return result;
+	protected Sequence<Integer> defaultGetIndices(final V value) {
+		return this.getAllIndices().filter(this.equalityTest(value));
 	}
 
 	@Override
-	public final Iterable<Integer> getIndicesExcept(V value) {
+	public final Sequence<Integer> getIndicesExcept(V value) {
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
 		return defaultGetIndicesExcept(value);
 	}
 
-	protected Iterable<Integer> defaultGetIndicesExcept(V value) {
-		List<Integer> result = new LinkedList<Integer>();
-		for (int i : this.getAllIndices()) {
-			if (!this.abstractGetAt(i).equals(value)) {
-				result.add(i);
-			}
-		}
-		return result;
+	protected Sequence<Integer> defaultGetIndicesExcept(final V value) {
+		return this.getAllIndices().filter(this.equalityTest(value).not());
 	}
 
 	@Override
@@ -148,13 +143,22 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 		if (value == null) {
 			throw new IllegalArgumentException();
 		}
-		int result = 0;
-		for (int i : this.getAllIndices()) {
-			if (this.abstractGetAt(i).equals(value)) {
-				result++;
+		return (int) this.getAllIndices().count(this.equalityTest(value));
+	}
+
+	@Override
+	public final int countExcept(V value) {
+		return this.getLength() - this.count(value);
+	}
+
+	private Predicate<Integer> equalityTest(final V value) {
+		return new Predicate<Integer>() {
+
+			@Override
+			public boolean test(Integer index) {
+				return abstractGetAt(index).equals(value);
 			}
-		}
-		return result;
+		};
 	}
 
 	@Override
@@ -208,14 +212,14 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	public final A extract(int fromIndex, int length) {
-		if (fromIndex < 0 || length < 0 || fromIndex + length > this.length) {
+	public final A extract(int index, int length) {
+		if (index < 0 || length < 0 || index + length > this.length) {
 			throw new IllegalArgumentException();
 		}
-		if (fromIndex == 0 && length == this.length) {
+		if (index == 0 && length == this.length) {
 			return (A) this;
 		}
-		return abstractExtract(fromIndex, length);
+		return abstractExtract(index, length);
 	}
 
 	@Override
@@ -234,19 +238,19 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	public final A remove(int fromIndex, int length) {
-		if (fromIndex < 0 || length < 0 || fromIndex + length > this.length) {
+	public final A remove(int index, int length) {
+		if (index < 0 || length < 0 || index + length > this.length) {
 			throw new IllegalArgumentException();
 		}
 		if (length == 0) {
 			return (A) this;
 		}
-		A prefix = this.extractPrefix(fromIndex);
-		A suffix = this.extractSuffix(this.length - fromIndex - length);
-		if (prefix.getLength() == 0) {
+		A prefix = this.extractPrefix(index);
+		A suffix = this.extractSuffix(this.length - index - length);
+		if (prefix.length == 0) {
 			return suffix;
 		}
-		if (suffix.getLength() == 0) {
+		if (suffix.length == 0) {
 			return prefix;
 		}
 		return prefix.append(suffix);
@@ -275,6 +279,16 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
+	public final A removeFirst() {
+		return this.removeAt(0);
+	}
+
+	@Override
+	public final A removeLast() {
+		return this.removeAt(this.length - 1);
+	}
+
+	@Override
 	public final A append(ImmutableArray<V> other) {
 		if (other == null) {
 			throw new IllegalArgumentException();
@@ -286,11 +300,6 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	public final A add(V value) {
-		return this.insertAt(this.length, value);
-	}
-
-	@Override
 	public final A insertAt(int index, V value) {
 		if (index < 0 || index > this.length) {
 			throw new IndexOutOfBoundsException();
@@ -299,6 +308,16 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 			throw new IllegalArgumentException();
 		}
 		return this.abstractInsertAt(index, value);
+	}
+
+	@Override
+	public final A insert(V value) {
+		return this.insertAt(0, value);
+	}
+
+	@Override
+	public final A add(V value) {
+		return this.insertAt(this.length, value);
 	}
 
 	@Override
@@ -340,31 +359,18 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 	}
 
 	@Override
-	protected final String defaultToStringName() {
-		return "";
+	public final Sequence<V> getSequence() {
+		return Sequence.getInstance(this);
 	}
 
 	@Override
 	public final Iterator<V> iterator() {
-		return new Iterator<V>() {
+		return this.getSequence().iterator();
+	}
 
-			int currentIndex = 0;
-
-			@Override
-			public boolean hasNext() {
-				return currentIndex < length;
-			}
-
-			@Override
-			public V next() {
-				return abstractGetAt(currentIndex++);
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
+	@Override
+	protected final String defaultToStringType() {
+		return "";
 	}
 
 	@Override
@@ -399,14 +405,14 @@ abstract public class AbstractImmutableArray<A extends AbstractImmutableArray<A,
 
 	abstract protected V abstractGetAt(int index);
 
-	abstract protected A abstractExtract(int fromIndex, int length);
+	abstract protected A abstractExtract(int index, int length);
 
 	abstract protected A abstractInsertAt(int index, V value);
 
 	abstract protected A abstractReplaceAt(int index, V value);
 
-	abstract protected A abstractReverse();
-
 	abstract protected A abstractAppend(ImmutableArray<V> other);
+
+	abstract protected A abstractReverse();
 
 }

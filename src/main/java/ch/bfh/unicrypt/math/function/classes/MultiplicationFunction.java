@@ -43,8 +43,6 @@ package ch.bfh.unicrypt.math.function.classes;
 
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSemiGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
-import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeElement;
 import ch.bfh.unicrypt.math.algebra.multiplicative.interfaces.MultiplicativeSemiGroup;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
@@ -64,7 +62,9 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @version 2.0
  */
 public class MultiplicationFunction
-	   extends AbstractFunction<MultiplicationFunction, ProductSemiGroup, Tuple, MultiplicativeSemiGroup, MultiplicativeElement> {
+	   extends AbstractFunction<MultiplicationFunction, ProductSemiGroup, Tuple, MultiplicativeSemiGroup,
+	   MultiplicativeElement> {
+	private static final long serialVersionUID = 1L;
 
 	private MultiplicationFunction(final ProductSemiGroup domain, final MultiplicativeSemiGroup coDomain) {
 		super(domain, coDomain);
@@ -86,14 +86,16 @@ public class MultiplicationFunction
 	 * @param multiplicativeSemiGroup The group on which this function operates
 	 * @param arity                   The number of input elements
 	 * @return The resulting function
-	 * @throws IllegalArgumentException if {@literal group} is null
-	 * @throws IllegalArgumentException if {@literal arity} is negative
+	 * @throws IllegalArgumentException if {@code group} is null
+	 * @throws IllegalArgumentException if {@code arity} is negative
 	 */
-	public static MultiplicationFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup, final int arity) {
+	public static MultiplicationFunction getInstance(final MultiplicativeSemiGroup multiplicativeSemiGroup,
+		   final int arity) {
 		if (multiplicativeSemiGroup == null || arity < 0) {
 			throw new IllegalArgumentException();
 		}
-		return new MultiplicationFunction(ProductSemiGroup.getInstance(multiplicativeSemiGroup, arity), multiplicativeSemiGroup);
+		return new MultiplicationFunction(ProductSemiGroup.getInstance(multiplicativeSemiGroup, arity),
+			   multiplicativeSemiGroup);
 	}
 
 }

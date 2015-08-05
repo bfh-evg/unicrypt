@@ -45,7 +45,8 @@ import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.Encoder;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.array.interfaces.RecursiveArray;
+import ch.bfh.unicrypt.helper.array.interfaces.NestedArray;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.classes.CompositeFunction;
@@ -54,7 +55,7 @@ import java.util.Iterator;
 
 public class CompositeEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element>
-	   implements RecursiveArray<Encoder> {
+	   implements NestedArray<Encoder> {
 
 	private final ImmutableArray<Encoder> encoders;
 
@@ -78,23 +79,28 @@ public class CompositeEncoder
 	}
 
 	@Override
-	public Iterable<Integer> getAllIndices() {
+	public Sequence<Integer> getAllIndices() {
 		return this.encoders.getAllIndices();
 	}
 
 	@Override
-	public Iterable<Integer> getIndices(Encoder encoder) {
+	public Sequence<Integer> getIndices(Encoder encoder) {
 		return this.encoders.getIndices(encoder);
 	}
 
 	@Override
-	public Iterable<Integer> getIndicesExcept(Encoder encoder) {
+	public Sequence<Integer> getIndicesExcept(Encoder encoder) {
 		return this.encoders.getIndicesExcept(encoder);
 	}
 
 	@Override
 	public int count(Encoder encoder) {
 		return this.encoders.count(encoder);
+	}
+
+	@Override
+	public int countExcept(Encoder encoder) {
+		return this.encoders.countExcept(encoder);
 	}
 
 	@Override
@@ -184,18 +190,33 @@ public class CompositeEncoder
 	}
 
 	@Override
+	public CompositeEncoder removeFirst() {
+		return new CompositeEncoder(this.encoders.removeFirst());
+	}
+
+	@Override
+	public CompositeEncoder removeLast() {
+		return new CompositeEncoder(this.encoders.removeLast());
+	}
+
+	@Override
 	public CompositeEncoder insertAt(int index, Encoder encoder) {
 		return new CompositeEncoder(this.encoders.insertAt(index, encoder));
 	}
 
 	@Override
-	public CompositeEncoder replaceAt(int index, Encoder encoder) {
-		return new CompositeEncoder(this.encoders.replaceAt(index, encoder));
+	public CompositeEncoder insert(Encoder encoder) {
+		return new CompositeEncoder(this.encoders.insert(encoder));
 	}
 
 	@Override
 	public CompositeEncoder add(Encoder encoder) {
 		return new CompositeEncoder(this.encoders.add(encoder));
+	}
+
+	@Override
+	public CompositeEncoder replaceAt(int index, Encoder encoder) {
+		return new CompositeEncoder(this.encoders.replaceAt(index, encoder));
 	}
 
 	@Override
@@ -216,6 +237,11 @@ public class CompositeEncoder
 			result[i] = new CompositeEncoder(encoderArray[i]);
 		}
 		return result;
+	}
+
+	@Override
+	public final Sequence<Encoder> getSequence() {
+		return this.encoders.getSequence();
 	}
 
 	@Override

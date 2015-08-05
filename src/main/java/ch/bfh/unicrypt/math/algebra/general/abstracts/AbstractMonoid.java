@@ -41,8 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
+import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
 import java.math.BigInteger;
 
 /**
@@ -56,13 +59,15 @@ import java.math.BigInteger;
  * @author R. E. Koenig
  * @version 2.0
  */
-public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
+public abstract class AbstractMonoid<E extends Element<V>, V>
 	   extends AbstractSemiGroup<E, V>
 	   implements Monoid<V> {
 
+	private static final long serialVersionUID = 1L;
+
 	private E identityElement;
 
-	protected AbstractMonoid(Class<? extends Object> valueClass) {
+	protected AbstractMonoid(Class<?> valueClass) {
 		super(valueClass);
 	}
 
@@ -76,7 +81,7 @@ public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 
 	@Override
 	public final boolean isIdentityElement(final Element element) {
-		return this.areEquivalent(element, this.getIdentityElement());
+		return element.isEquivalent(this.getIdentityElement());
 	}
 
 	//
@@ -89,11 +94,15 @@ public abstract class AbstractMonoid<E extends Element<V>, V extends Object>
 	}
 
 	@Override
-	protected E defaultApply(final Iterable<Element> elements) {
-		if (!elements.iterator().hasNext()) {
-			return this.getIdentityElement();
-		}
-		return super.defaultApply(elements);
+	protected E defaultApply(final Sequence<Element> elements) {
+		final SemiGroup<V> monoid = this;
+		return (E) elements.reduce(new BinaryOperator<Element>() {
+
+			@Override
+			public Element apply(Element element1, Element element2) {
+				return monoid.apply(element1, element2);
+			}
+		}, this.getIdentityElement());
 	}
 
 	@Override
