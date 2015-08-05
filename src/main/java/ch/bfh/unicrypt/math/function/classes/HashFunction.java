@@ -112,6 +112,7 @@ public class HashFunction
 	 * This constructor generates a default hash function for a given hash algorithm name. The co-domain is chosen
 	 * accordingly.
 	 * <p>
+	 * @param <V>
 	 * @param domain
 	 * @param convertMethod
 	 * @param hashMethod    The name of the hash algorithm

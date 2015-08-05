@@ -131,6 +131,8 @@ public interface Element<V> {
 
 	public <W> W convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator);
 
+	public <W, X> X convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter);
+
 	public <W> Tree<W> convertTo(ConvertMethod<W> convertMethod);
 
 	public BigInteger convertToBigInteger();

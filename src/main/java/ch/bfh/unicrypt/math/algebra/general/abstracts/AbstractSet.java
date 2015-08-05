@@ -350,6 +350,20 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	}
 
 	@Override
+	public <W, X> Element<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) {
+		if (value == null || convertMethod == null || aggregator == null || finalConverter == null) {
+			throw new IllegalArgumentException();
+		}
+		try {
+			Tree<W> tree = aggregator.disaggregate(finalConverter.reconvert(value));
+			return this.defaultGetElementFrom(tree, convertMethod);
+		} catch (Exception e) {
+			return null;
+		}
+		
+	}
+
+	@Override
 	public final <W> E getElementFrom(Tree<W> tree, ConvertMethod<W> convertMethod) {
 		if (tree == null || convertMethod == null) {
 			throw new IllegalArgumentException();

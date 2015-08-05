@@ -103,7 +103,7 @@ public class DSASignatureScheme<MS extends Set>
 
 		HashFunction hashFunction = HashFunction.getInstance(this.messageSpace, this.convertMethod, this.hashMethod);
 		Converter<ByteArray, BigInteger> converter
-			   = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getByteLength());
+			   = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getByteLength(), 1);
 		ConvertFunction convertFunction
 			   = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
 		ModuloFunction moduloFunction = ModuloFunction.getInstance(N.getInstance(), zMod);

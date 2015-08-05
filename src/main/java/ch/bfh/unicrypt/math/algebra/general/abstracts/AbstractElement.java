@@ -151,6 +151,14 @@ public abstract class AbstractElement<S extends Set<V>, E extends Element<V>, V>
 	}
 
 	@Override
+	public <W, X> X convertTo(ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter) {
+		if (convertMethod == null || aggregator == null || finalConverter == null) {
+			throw new IllegalArgumentException();
+		}
+		return finalConverter.convert(this.convertTo(convertMethod, aggregator));
+	}
+
+	@Override
 	public final <W> Tree<W> convertTo(final ConvertMethod<W> convertMethod) {
 		if (convertMethod == null) {
 			throw new IllegalArgumentException();

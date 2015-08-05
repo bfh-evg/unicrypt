@@ -357,6 +357,18 @@ public interface Set<V> {
 	/**
 	 *
 	 * @param <W>
+	 * @param <X>
+	 * @param value
+	 * @param convertMethod
+	 * @param aggregator
+	 * @param finalConverter
+	 * @return
+	 */
+	public <W, X> Element<V> getElementFrom(X value, ConvertMethod<W> convertMethod, Aggregator<W> aggregator, Converter<W, X> finalConverter);
+
+	/**
+	 *
+	 * @param <W>
 	 * @param tree
 	 * @param convertMethod
 	 * @return
