@@ -45,7 +45,7 @@ Redistributions of files must retain the above copyright notice.
 
 	<groupId>ch.bfh.unicrypt</groupId>
 	<artifactId>unicrypt</artifactId>
-	<version>2.1-SNAPSHOT</version>
+	<version>2.1</version>
 	<packaging>jar</packaging>
 
 	<name>unicrypt</name>
@@ -58,7 +58,6 @@ Redistributions of files must retain the above copyright notice.
 		</license>
 		<license>
 			<name>Bern University of Applied Sciences (BFH), RISIS</name>
-			<url>http://www.ti.bfh.ch/risis</url>
 		</license>
 	</licenses>
 
