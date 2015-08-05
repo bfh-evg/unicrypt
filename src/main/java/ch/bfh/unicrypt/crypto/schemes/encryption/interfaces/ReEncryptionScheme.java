@@ -77,7 +77,7 @@ public interface ReEncryptionScheme
 	 *
 	 * @param encryptionKey
 	 * @param ciphertext
-	 * @param randomGenerator
+	 * @param randomByteSequence
 	 * @return
 	 */
 	public Element reEncrypt(final Element encryptionKey, final Element ciphertext,

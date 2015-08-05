@@ -99,8 +99,8 @@ public class ReferenceRandomByteSequenceTest {
 	@Test
 	public void testReset() {
 		// System.out.println("testReset");
-		ReferenceRandomByteSequence instance = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("testReset".getBytes()));
-		ReferenceRandomByteSequence instance2 = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("testReset".getBytes()));
+		ReferenceRandomByteSequence instance = PseudoRandomOracle.getInstance().query(ByteArray.getInstance("testReset".getBytes()));
+		ReferenceRandomByteSequence instance2 = PseudoRandomOracle.getInstance().query(ByteArray.getInstance("testReset".getBytes()));
 
 		long time = System.currentTimeMillis();
 		ByteArray expResult = instance.getNextByteArray(100000);

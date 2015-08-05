@@ -91,7 +91,7 @@ public class GStarModSafePrimeTest {
 
 	@Test
 	public void testGetIndependentGenerators2() {
-		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance(new byte[]{2, 5}));
+		ReferenceRandomByteSequence rrs = PseudoRandomOracle.getInstance().query(ByteArray.getInstance(new byte[]{2, 5}));
 		GStarModSafePrime set = GStarModSafePrime.getInstance(BigInteger.valueOf(23));
 		Element g1 = set.getIndependentGenerator(3, rrs);
 		Element g2 = set.getIndependentGenerator(5, rrs);

@@ -80,23 +80,23 @@ public class PedersenCommitmentValidityProofSystem
 
 	public static PedersenCommitmentValidityProofSystem getInstance(final PedersenCommitmentScheme pedersenCS,
 		   final Subset messages, final Element proverId) {
-		SigmaChallengeGenerator challengeGenerator =
-			   PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																		messages.getOrder().intValue(), proverId);
+		SigmaChallengeGenerator challengeGenerator
+			   = PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
+																							  messages.getOrder().intValue(), proverId);
 		return PedersenCommitmentValidityProofSystem.getInstance(challengeGenerator, pedersenCS, messages);
 	}
 
 	public static PedersenCommitmentValidityProofSystem
-	   getInstance(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS,
-			  final Subset messages) {
+		   getInstance(final SigmaChallengeGenerator challengeGenerator, final PedersenCommitmentScheme pedersenCS,
+				  final Subset messages) {
 		if (challengeGenerator == null || pedersenCS == null || messages == null
 			   || messages.getOrder().intValue() < 1) {
 			throw new IllegalArgumentException();
 		}
 
-		final Set codomain =
-			   ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(),
-										messages.getOrder().intValue());
+		final Set codomain
+			   = ProductGroup.getInstance(pedersenCS.getCommitmentFunction().getCoDomain(),
+										  messages.getOrder().intValue());
 		if (!ZMod.getInstance(pedersenCS.getCyclicGroup().getOrder())
 			   .isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException("Spaces of challenge generator don't match!");
@@ -112,7 +112,7 @@ public class PedersenCommitmentValidityProofSystem
 	@Override
 	protected Function abstractGetDeltaFunction() {
 		final ProductSet deltaFunctionDomain = ProductSet.getInstance(this.pedersenCS.getMessageSpace(),
-															this.getSetMembershipProofFunction().getCoDomain());
+																	  this.getSetMembershipProofFunction().getCoDomain());
 		final Function deltaFunction = CompositeFunction.getInstance(
 			   SharedDomainFunction.getInstance(
 					  SelectionFunction.getInstance(deltaFunctionDomain, 1),
@@ -125,29 +125,28 @@ public class PedersenCommitmentValidityProofSystem
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages) {
+		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																numberOfMessages, PseudoRandomOracle.DEFAULT);
+																							numberOfMessages, PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
-			  final Element proverId) {
+		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
+				  final Element proverId) {
 		return PedersenCommitmentValidityProofSystem
-			   .createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId,
-																					 PseudoRandomOracle.DEFAULT);
+			   .createNonInteractiveChallengeGenerator(pedersenCS, numberOfMessages, proverId, PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
-			  final RandomOracle randomOracle) {
+		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
+				  final RandomOracle randomOracle) {
 		return PedersenCommitmentValidityProofSystem.createNonInteractiveChallengeGenerator(pedersenCS,
-																	numberOfMessages, (Element) null, randomOracle);
+																							numberOfMessages, (Element) null, randomOracle);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
-			  final Element proverId, final RandomOracle randomOracle) {
+		   createNonInteractiveChallengeGenerator(final PedersenCommitmentScheme pedersenCS, final int numberOfMessages,
+				  final Element proverId, final RandomOracle randomOracle) {
 		if (pedersenCS == null || numberOfMessages < 1 || randomOracle == null) {
 			throw new IllegalArgumentException();
 		}
@@ -155,4 +154,5 @@ public class PedersenCommitmentValidityProofSystem
 															   proverId, randomOracle);
 
 	}
+
 }

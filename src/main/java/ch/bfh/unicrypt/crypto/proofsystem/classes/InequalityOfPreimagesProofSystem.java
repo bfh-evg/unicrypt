@@ -91,9 +91,9 @@ public class InequalityOfPreimagesProofSystem
 
 	public static InequalityOfPreimagesProofSystem getInstance(final Element proverId, final Function firstFunction,
 		   final Function secondFunction) {
-		SigmaChallengeGenerator challengeGenerator =
-			   InequalityOfPreimagesProofSystem
-					  .createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator
+			   = InequalityOfPreimagesProofSystem
+			   .createNonInteractiveChallengeGenerator(firstFunction, secondFunction, proverId);
 		return InequalityOfPreimagesProofSystem.getInstance(challengeGenerator, firstFunction, secondFunction);
 	}
 
@@ -153,9 +153,9 @@ public class InequalityOfPreimagesProofSystem
 
 	public ProductSet getPreimageProofSpace() {
 		return ProductSet.getInstance(ProductGroup.getInstance(this.getFirstFunction().getCoDomain(),
-										this.getSecondFunction().getCoDomain()),
-										this.getChallengeSpace(),
-										ProductGroup.getInstance(this.getPrivateInputSpace(), 2));
+															   this.getSecondFunction().getCoDomain()),
+									  this.getChallengeSpace(),
+									  ProductGroup.getInstance(this.getPrivateInputSpace(), 2));
 	}
 
 	public Triple getPreimageProof(Pair proof) {
@@ -243,28 +243,28 @@ public class InequalityOfPreimagesProofSystem
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {
+		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction) {
 		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																			PseudoRandomOracle.DEFAULT);
+																					   PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
-			  final Element proverId) {
+		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
+				  final Element proverId) {
 		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																				proverId, PseudoRandomOracle.DEFAULT);
+																					   proverId, PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
-			  final RandomOracle randomOracle) {
+		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
+				  final RandomOracle randomOracle) {
 		return InequalityOfPreimagesProofSystem.createNonInteractiveChallengeGenerator(firstFunction, secondFunction,
-																				(Element) null, randomOracle);
+																					   (Element) null, randomOracle);
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
-			  final Element proverId, final RandomOracle randomOracle) {
+		   createNonInteractiveChallengeGenerator(final Function firstFunction, final Function secondFunction,
+				  final Element proverId, final RandomOracle randomOracle) {
 		if (firstFunction == null || secondFunction == null || randomOracle == null
 			   || !firstFunction.getCoDomain().isSemiGroup() || !secondFunction.getCoDomain().isSemiGroup()) {
 			throw new IllegalArgumentException();
@@ -274,4 +274,5 @@ public class InequalityOfPreimagesProofSystem
 		return RandomOracleSigmaChallengeGenerator.getInstance(cs, proverId, randomOracle);
 
 	}
+
 }

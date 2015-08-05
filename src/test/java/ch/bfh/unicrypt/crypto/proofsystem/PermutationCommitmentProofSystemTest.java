@@ -103,7 +103,7 @@ public class PermutationCommitmentProofSystemTest {
 	public void testPermutationCommitemntProofGenerator2() {
 
 		final CyclicGroup G_q = GStarModSafePrime.getInstance(new BigInteger(P2, 10));
-		final RandomOracle ro = PseudoRandomOracle.DEFAULT;
+		final RandomOracle ro = PseudoRandomOracle.getInstance();
 		final ReferenceRandomByteSequence rrs = ReferenceRandomByteSequence.getInstance();
 
 		final int size = 20;

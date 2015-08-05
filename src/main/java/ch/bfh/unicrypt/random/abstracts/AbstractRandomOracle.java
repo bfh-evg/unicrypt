@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.random.abstracts;
 
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import java.math.BigInteger;
@@ -54,37 +55,51 @@ import java.math.BigInteger;
 public abstract class AbstractRandomOracle
 	   extends UniCrypt
 	   implements RandomOracle {
+
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractRandomOracle() {
+	private final Converter<BigInteger, ByteArray> bigIntegerConverter;
+	private final Converter<String, ByteArray> stringConverter;
+
+	protected AbstractRandomOracle(Converter<BigInteger, ByteArray> bigIntegerConverter, Converter<String, ByteArray> stringConverter) {
+		this.bigIntegerConverter = bigIntegerConverter;
+		this.stringConverter = stringConverter;
 	}
 
 	@Override
-	public final ReferenceRandomByteSequence getReferenceRandomByteSequence() {
-		return this.getReferenceRandomByteSequence(ReferenceRandomByteSequence.DEFAULT_SEED);
+	public final ReferenceRandomByteSequence query() {
+		return this.query(ReferenceRandomByteSequence.DEFAULT_SEED);
 	}
 
 	@Override
-	public final ReferenceRandomByteSequence getReferenceRandomByteSequence(int query) {
-		return this.getReferenceRandomByteSequence(BigInteger.valueOf(query));
+	public final ReferenceRandomByteSequence query(long input) {
+		return this.query(BigInteger.valueOf(input));
 	}
 
 	@Override
-	public final ReferenceRandomByteSequence getReferenceRandomByteSequence(BigInteger query) {
-		if (query == null) {
+	public final ReferenceRandomByteSequence query(BigInteger input) {
+		if (input == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.getReferenceRandomByteSequence(ByteArray.getInstance(query.toByteArray()));
+		return this.query(this.bigIntegerConverter.convert(input));
 	}
 
 	@Override
-	public final ReferenceRandomByteSequence getReferenceRandomByteSequence(ByteArray query) {
-		if (query == null) {
+	public final ReferenceRandomByteSequence query(String input) {
+		if (input == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.abstractGetReferenceRandomByteSequence(query);
+		return this.query(this.stringConverter.convert(input));
 	}
 
-	protected abstract ReferenceRandomByteSequence abstractGetReferenceRandomByteSequence(ByteArray query);
+	@Override
+	public final ReferenceRandomByteSequence query(ByteArray input) {
+		if (input == null) {
+			throw new IllegalArgumentException();
+		}
+		return this.abstractQuery(input);
+	}
+
+	protected abstract ReferenceRandomByteSequence abstractQuery(ByteArray query);
 
 }

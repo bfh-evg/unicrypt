@@ -77,47 +77,36 @@ public class RandomOracleChallengeGenerator<CS extends Set, CE extends Element>
 
 	@Override
 	protected CE abstractAbstractGenerate(Element<?> input) {
-		ReferenceRandomByteSequence randomByteSequence = this.randomOracle.getReferenceRandomByteSequence(
-			   input.convertTo(this.convertMethod, this.aggregator));
+		ByteArray byteArray = input.convertTo(this.convertMethod, this.aggregator);
+		ReferenceRandomByteSequence randomByteSequence = this.randomOracle.query(byteArray);
 		return (CE) this.getChallengeSpace().getRandomElement(randomByteSequence);
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null,
-														  PseudoRandomOracle.getInstance(), ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null);
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, PseudoRandomOracle.getInstance(),
-														  ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle,
-														  ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle);
 	}
 
-	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId,
-		   RandomOracle randomOracle) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, randomOracle,
-														  ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
-
+	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId, RandomOracle randomOracle) {
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, randomOracle, ConvertMethod.getInstance(), ByteArrayAggregator.getInstance());
 	}
 
-	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace,
-		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null,
-														  PseudoRandomOracle.getInstance(), convertMethod, aggregator);
+	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, convertMethod, aggregator);
 	}
 
-	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId,
-		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
-		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId,
-														  PseudoRandomOracle.getInstance(), convertMethod, aggregator);
+	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, Element proverId, ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
+		return RandomOracleChallengeGenerator.getInstance(challengeSpace, proverId, PseudoRandomOracle.getInstance(), convertMethod, aggregator);
 	}
 
-	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle,
-		   ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
+	public static RandomOracleChallengeGenerator getInstance(Set challengeSpace, RandomOracle randomOracle, ConvertMethod<ByteArray> convertMethod, Aggregator<ByteArray> aggregator) {
 		return RandomOracleChallengeGenerator.getInstance(challengeSpace, (Element) null, randomOracle, convertMethod, aggregator);
 	}
 

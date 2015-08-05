@@ -66,19 +66,19 @@ public interface AdditiveSemiGroup<V>
 	   extends SemiGroup<V> {
 
 	/**
-	 * This method is a synonym for {@link Group#apply(Element, Element)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element, Element)}.
 	 * <p>
-	 * @param element1 the same as in {@link Group#apply(Element, Element)}
-	 * @param element2 the same as in {@link Group#apply(Element, Element)}
-	 * @return the same as in {@link Group#apply(Element, Element)}
+	 * @param element1 the same as in {@link SemiGroup#apply(Element, Element)}
+	 * @param element2 the same as in {@link SemiGroup#apply(Element, Element)}
+	 * @return the same as in {@link SemiGroup#apply(Element, Element)}
 	 */
 	public AdditiveElement<V> add(Element element1, Element element2);
 
 	/**
-	 * This method is a synonym for {@link Group#apply(Element...)}.
+	 * This method is a synonym for {@link SemiGroup#apply(Element...)}.
 	 * <p>
-	 * @param elements the same as in {@link Group#apply(Element...)}
-	 * @return the same as in {@link Group#apply(Element...)}
+	 * @param elements the same as in {@link SemiGroup#apply(Element...)}
+	 * @return the same as in {@link SemiGroup#apply(Element...)}
 	 */
 	public AdditiveElement<V> add(Element... elements);
 
@@ -87,29 +87,29 @@ public interface AdditiveSemiGroup<V>
 	public AdditiveElement<V> add(Sequence<Element> elements);
 
 	/**
-	 * This method is a synonym for {@link Group#selfApply(Element, BigInteger)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, BigInteger)}.
 	 * <p>
-	 * @param element the same as in {@link Group#selfApply(Element, BigInteger)}
-	 * @param amount  the same as in {@link Group#selfApply(Element, BigInteger)}
-	 * @return the same as in {@link Group#selfApply(Element, BigInteger)}
+	 * @param element the same as in {@link SemiGroup#selfApply(Element, BigInteger)}
+	 * @param amount  the same as in {@link SemiGroup#selfApply(Element, BigInteger)}
+	 * @return the same as in {@link SemiGroup#selfApply(Element, BigInteger)}
 	 */
 	public AdditiveElement<V> times(Element element, BigInteger amount);
 
 	/**
-	 * This method is a synonym for {@link Group#selfApply(Element, Element)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, Element)}.
 	 * <p>
-	 * @param element the same as in {@link Group#selfApply(Element, Element)}
-	 * @param amount  the same as in {@link Group#selfApply(Element, Element)}
-	 * @return the same as in {@link Group#selfApply(Element, Element)}
+	 * @param element the same as in {@link SemiGroup#selfApply(Element, Element)}
+	 * @param amount  the same as in {@link SemiGroup#selfApply(Element, Element)}
+	 * @return the same as in {@link SemiGroup#selfApply(Element, Element)}
 	 */
 	public AdditiveElement<V> times(Element element, Element<BigInteger> amount);
 
 	/**
-	 * This method is a synonym for {@link Group#selfApply(Element, long)}.
+	 * This method is a synonym for {@link SemiGroup#selfApply(Element, long)}.
 	 * <p>
-	 * @param element the same as in {@link Group#selfApply(Element, long)}
-	 * @param amount  the same as in {@link Group#selfApply(Element, long)}
-	 * @return the same as in {@link Group#selfApply(Element, long)}
+	 * @param element the same as in {@link SemiGroup#selfApply(Element, long)}
+	 * @param amount  the same as in {@link SemiGroup#selfApply(Element, long)}
+	 * @return the same as in {@link SemiGroup#selfApply(Element, long)}
 	 */
 	public AdditiveElement<V> times(Element element, long amount);
 

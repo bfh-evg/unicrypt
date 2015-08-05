@@ -57,13 +57,13 @@ public class PseudoRandomOracleTest {
 	@Test
 	public void generalTest() {
 		RandomOracle ro = PseudoRandomOracle.getInstance();
-		ReferenceRandomByteSequence rrs = ro.getReferenceRandomByteSequence(0);
+		ReferenceRandomByteSequence rrs = ro.query(0);
 		BigInteger prime = rrs.getRandomNumberGenerator().nextBigInteger(10);
 		rrs.getRandomNumberGenerator().nextBoolean();
 		rrs.getRandomNumberGenerator().nextByte();
 		rrs.reset();
 		Assert.assertEquals(prime, rrs.getRandomNumberGenerator().nextBigInteger(10));
-		rrs = ro.getReferenceRandomByteSequence(1);
+		rrs = ro.query(1);
 		prime = rrs.getRandomNumberGenerator().nextBigInteger(10);
 		rrs.getRandomNumberGenerator().nextBoolean();
 		rrs.getRandomNumberGenerator().nextByte();

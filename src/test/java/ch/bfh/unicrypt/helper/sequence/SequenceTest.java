@@ -62,12 +62,12 @@ public class SequenceTest {
 		});
 		seq = seq.limit(12);
 		for (Integer i : seq) {
-			System.out.println(i);
+//			System.out.println(i);
 		}
 		ExtendedIterator<Integer> iterator = seq.iterator();
-		System.out.println(iterator.next(5));
-		System.out.println(iterator.next(10));
-		System.out.println(iterator.next());
+//		System.out.println(iterator.next(5));
+//		System.out.println(iterator.next(10));
+//		System.out.println(iterator.next());
 
 	}
 

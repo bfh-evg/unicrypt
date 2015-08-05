@@ -126,12 +126,11 @@ public class ConvertMethod<W>
 	 * Selects and returns the converter for input values of a given class. Returns {@code null} if no such converter
 	 * exists.
 	 * <p>
-	 * @param <V>        The generic type of the input class
 	 * @param valueClass The class of the input values
 	 * @return The corresponding converter (or {@code null} if no such converter exists)
 	 */
-	public <V> Converter<V, W> getConverter(Class<V> valueClass) {
-		return (Converter<V, W>) this.converterMap.get(valueClass);
+	public Converter<?, W> getConverter(Class<?> valueClass) {
+		return this.converterMap.get(valueClass);
 	}
 
 	/**
@@ -144,7 +143,7 @@ public class ConvertMethod<W>
 	 * @return The corresponding converter (or the default converter if no such converter exists)
 	 */
 	public <V> Converter<V, W> getConverter(Class<V> valueClass, Converter<V, W> defaultConverter) {
-		Converter<V, W> converter = this.getConverter(valueClass);
+		Converter<V, W> converter = (Converter<V, W>) this.getConverter(valueClass);
 		if (converter == null) {
 			if (defaultConverter == null) {
 				throw new IllegalArgumentException();

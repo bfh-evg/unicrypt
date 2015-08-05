@@ -51,12 +51,14 @@ import java.math.BigInteger;
  */
 public interface RandomOracle {
 
-	public ReferenceRandomByteSequence getReferenceRandomByteSequence();
+	public ReferenceRandomByteSequence query();
 
-	public ReferenceRandomByteSequence getReferenceRandomByteSequence(ByteArray query);
+	public ReferenceRandomByteSequence query(long input);
 
-	public ReferenceRandomByteSequence getReferenceRandomByteSequence(int query);
+	public ReferenceRandomByteSequence query(BigInteger input);
 
-	public ReferenceRandomByteSequence getReferenceRandomByteSequence(BigInteger query);
+	public ReferenceRandomByteSequence query(ByteArray input);
+
+	public ReferenceRandomByteSequence query(String input);
 
 }

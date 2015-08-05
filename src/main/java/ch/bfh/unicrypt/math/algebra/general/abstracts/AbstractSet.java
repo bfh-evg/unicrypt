@@ -461,7 +461,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 	}
 
 	protected final <W> Converter<V, W> getConverter(ConvertMethod<W> convertMethod) {
-		Converter<V, W> converter = convertMethod.getConverter((Class<V>) this.getValueClass());
+		Converter<V, W> converter = (Converter<V, W>) convertMethod.getConverter(this.getValueClass());
 		if (converter == null) {
 			Class<W> outputClass = convertMethod.getOutputClass();
 			if (outputClass == String.class) {

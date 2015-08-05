@@ -63,7 +63,7 @@ public class PseudoRandomReferenceStringTest {
 		rrs.getRandomNumberGenerator().nextByte();
 		rrs.reset();
 		Assert.assertEquals(prime, rrs.getRandomNumberGenerator().nextBigInteger(10));
-		rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance(new byte[]{10, 5, 120}));
+		rrs = PseudoRandomOracle.getInstance().query(ByteArray.getInstance(new byte[]{10, 5, 120}));
 		prime = rrs.getRandomNumberGenerator().nextBigInteger(10);
 		rrs.getRandomNumberGenerator().nextBoolean();
 		rrs.getRandomNumberGenerator().nextByte();

@@ -54,7 +54,7 @@ import java.math.BigInteger;
  * <p>
  * @param <E> Generic type of the elements of this semigroup
  * @param <V> Generic type of values stored in the elements of this semigroup
- * @author
+ * @author rolfhaenni
  */
 public abstract class AbstractAdditiveSemiGroup<E extends AdditiveElement<V>, V>
 	   extends AbstractSemiGroup<E, V>

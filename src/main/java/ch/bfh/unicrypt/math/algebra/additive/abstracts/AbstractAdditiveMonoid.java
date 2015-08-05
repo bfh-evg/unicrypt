@@ -54,7 +54,7 @@ import java.math.BigInteger;
  * <p>
  * @param <E> Generic type of elements of this monoid
  * @param <V> Generic type of values stored in the elements of this monoid
- * @author
+ * @author rolfhaenni
  */
 public abstract class AbstractAdditiveMonoid<E extends AdditiveElement<V>, V>
 	   extends AbstractMonoid<E, V>

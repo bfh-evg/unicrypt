@@ -66,7 +66,7 @@ public class PermutationCommitmentTest {
 	public PermutationCommitmentTest() {
 		this.G_q = GStarModSafePrime.getInstance(this.P);
 		this.Z_q = G_q.getZModOrder();
-		rrs = PseudoRandomOracle.getInstance().getReferenceRandomByteSequence(ByteArray.getInstance("X".getBytes()));
+		rrs = PseudoRandomOracle.getInstance().query(ByteArray.getInstance("X".getBytes()));
 		// System.out.println("g0: " + this.G_q.getIndependentGenerator(0, rrs));   //  2  4
 		// System.out.println("g1: " + this.G_q.getIndependentGenerator(1, rrs));   // 16  3
 		// System.out.println("g2: " + this.G_q.getIndependentGenerator(2, rrs));   //  4  9
