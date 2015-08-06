@@ -249,8 +249,8 @@ public final class MathUtil {
 	}
 
 	/**
-	 * Computes the elegant pairing function for a given list of non-negative {@code int} values. This is a convenience
-	 * method for {@link MathUtil#pairWithSize(java.math.BigInteger...)}.
+	 * Computes the elegant pairing function for a given list of non-negative {@code long} values. This is a convenience
+	 * method for {@link MathUtil#pair(java.math.BigInteger...)}.
 	 * <p>
 	 * @param values The given values
 	 * @return The result of applying the elegant pairing function
@@ -290,6 +290,22 @@ public final class MathUtil {
 			newValues[length / 2] = values[length - 1];
 		}
 		return pair(newValues);
+	}
+
+	/**
+	 * Computes the elegant pairing function for a given list of non-negative {@code long} values. This is a convenience
+	 * method for {@link MathUtil#pairWithSize(java.math.BigInteger...)}.
+	 * <p>
+	 * @param values The given values
+	 * @return The result of applying the elegant pairing function
+	 * @see MathUtil#pair(java.math.BigInteger...)
+	 */
+	public static BigInteger pairWithSize(long... values) {
+		BigInteger[] bigIntegers = new BigInteger[values.length];
+		for (int i = 0; i < values.length; i++) {
+			bigIntegers[i] = BigInteger.valueOf(values[i]);
+		}
+		return MathUtil.pairWithSize(bigIntegers);
 	}
 
 	/**
@@ -370,6 +386,17 @@ public final class MathUtil {
 		}
 		BigInteger[] values = unpair(value.subtract(ONE));
 		return unpair(values[0], values[1].intValue() + 1);
+	}
+
+	/**
+	 * Applies the folding function to a given value of type {@code long}. This is a convenience method for
+	 * {@link MathUtil#fold(java.math.BigInteger)}.
+	 * <p>
+	 * @param value The given long value
+	 * @return The result of applying the folding function
+	 */
+	public static BigInteger fold(long value) {
+		return fold(BigInteger.valueOf(value));
 	}
 
 	/**
