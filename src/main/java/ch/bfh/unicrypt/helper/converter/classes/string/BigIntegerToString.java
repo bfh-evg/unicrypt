@@ -133,6 +133,16 @@ public class BigIntegerToString
 		return new BigIntegerToString(radix, upperCase);
 	}
 
+	/**
+	 * This is a convenience method to allow inputs of type {@code long}.
+	 * <p>
+	 * @param value The given value
+	 * @return The resulting byte array
+	 */
+	public String convert(long value) {
+		return this.convert(BigInteger.valueOf(value));
+	}
+
 	@Override
 	protected boolean defaultIsValidOutput(String string) {
 		return string.matches(this.regExp);

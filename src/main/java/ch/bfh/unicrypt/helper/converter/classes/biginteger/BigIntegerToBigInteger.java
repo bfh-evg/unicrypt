@@ -106,6 +106,16 @@ public class BigIntegerToBigInteger
 		return new BigIntegerToBigInteger(minValue);
 	}
 
+	/**
+	 * This is a convenience method to allow inputs of type {@code long}.
+	 * <p>
+	 * @param value The given value
+	 * @return The resulting byte array
+	 */
+	public BigInteger convert(long value) {
+		return this.convert(BigInteger.valueOf(value));
+	}
+
 	@Override
 	protected boolean defaultIsValidInput(BigInteger value) {
 		if (this.minValue != null) {

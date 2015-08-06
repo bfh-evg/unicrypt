@@ -57,6 +57,7 @@ import java.nio.ByteOrder;
  */
 public class BigIntegerToByteArray
 	   extends AbstractByteArrayConverter<BigInteger> {
+
 	private static final long serialVersionUID = 1L;
 
 	private final ByteOrder byteOrder;
@@ -86,6 +87,16 @@ public class BigIntegerToByteArray
 			throw new IllegalArgumentException();
 		}
 		return new BigIntegerToByteArray(byteOrder);
+	}
+
+	/**
+	 * This is a convenience method to allow inputs of type {@code long}.
+	 * <p>
+	 * @param value The given value
+	 * @return The resulting byte array
+	 */
+	public ByteArray convert(long value) {
+		return this.convert(BigInteger.valueOf(value));
 	}
 
 	@Override

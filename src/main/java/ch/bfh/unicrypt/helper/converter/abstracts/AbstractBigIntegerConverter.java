@@ -60,4 +60,14 @@ public abstract class AbstractBigIntegerConverter<V>
 		super(inputClass, BigInteger.class);
 	}
 
+	/**
+	 * This is a convenience method to allow inputs of type {@code long}.
+	 * <p>
+	 * @param value The given value
+	 * @return The resulting byte array
+	 */
+	public V reconvert(long value) {
+		return this.reconvert(BigInteger.valueOf(value));
+	}
+
 }

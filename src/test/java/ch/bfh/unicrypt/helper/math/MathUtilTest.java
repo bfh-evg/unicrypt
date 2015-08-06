@@ -222,6 +222,7 @@ public class MathUtilTest {
 
 	@Test
 	public void testPairUnPairWithSize() {
+		Assert.assertEquals(0, MathUtil.unpairWithSize(MathUtil.pairWithSize()).length);
 		for (int i = 0; i <= 5; i++) {
 			BigInteger bi = BigInteger.valueOf(i);
 			Assert.assertEquals(bi, MathUtil.unpairWithSize(MathUtil.pairWithSize(bi))[0]);
