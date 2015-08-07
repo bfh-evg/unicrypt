@@ -175,7 +175,7 @@ public class ByteArray
 			if (integer > Byte.MAX_VALUE || integer < Byte.MIN_VALUE) {
 				throw new IllegalArgumentException();
 			}
-			bytes[i++] = (byte) (integer & 0xFF);
+			bytes[i++] = MathUtil.getByte(integer);
 		}
 		return new ByteArray(bytes);
 	}

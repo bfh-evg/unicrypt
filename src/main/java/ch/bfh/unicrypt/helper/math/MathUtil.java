@@ -249,6 +249,15 @@ public final class MathUtil {
 	}
 
 	/**
+	 * Returns 0 for the special case of an empty list.
+	 * <p>
+	 * @return 0
+	 */
+	public static BigInteger pair() {
+		return MathUtil.ZERO;
+	}
+
+	/**
 	 * Computes the elegant pairing function for a given list of non-negative {@code long} values. This is a convenience
 	 * method for {@link MathUtil#pair(java.math.BigInteger...)}.
 	 * <p>
@@ -290,6 +299,15 @@ public final class MathUtil {
 			newValues[length / 2] = values[length - 1];
 		}
 		return pair(newValues);
+	}
+
+	/**
+	 * Returns 0 for the special case of an empty list.
+	 * <p>
+	 * @return 0
+	 */
+	public static BigInteger pairWithSize() {
+		return MathUtil.ZERO;
 	}
 
 	/**
@@ -574,7 +592,10 @@ public final class MathUtil {
 		return x.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
 	}
 
-	// Bit operations on byte
+	public static byte getByte(int integer) {
+		return (byte) (integer & 0xFF);
+	}
+
 	/**
 	 * Returns the {@code i}-th bit of a byte.
 	 * <p>
