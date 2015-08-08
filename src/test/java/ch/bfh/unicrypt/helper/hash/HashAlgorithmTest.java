@@ -175,6 +175,16 @@ public class HashAlgorithmTest {
 			ByteArray hash = ByteArray.getInstance("a3|b6|16|74|73|10|0e|e0|6e|0c|79|6c|29|55|55|2b".toUpperCase());
 
 			Assert.assertEquals(hash, HashAlgorithm.SHA256.getHashValue(data, key, 16));
+
+		}
+		// Test from NIST test vector file (not compatible with FIPS 198, but ok for RFC 2104!!!)
+		{
+			ByteArray key = ByteArray.getInstance("ad|44|5d|a4|8d|46|ab|fe|f1|03|f9|c6|c5|47|34|44|ff|bb|ae|90|27|5c|c4|a8|16|2b|be|c0|fe|26|f6|d9".toUpperCase());
+			ByteArray data = ByteArray.getInstance("81|c9|4b|e4|26|ea|f0|18|64|e8|13|a0|3e|46|74|49|1b|61|51|6b|c9|5d|8a|77|c1|5f|03|d0|ad|fc|4a|dc|27|f2|7a|5a|c4|16|5f|f6|51|8e|da|1a|5c|40|87|08|f7|8a|9e|26|b8|34|17|98|04|a3|12|14|8d|4f|75|f2|1a|77|d7|83|87|13|9d|a4|0c|0a|62|93|c2|a5|9d|01|62|43|7d|68|50|4f|18|9e|d9|70|c5|ab|b9|ff|c6|d8|e1|be|2b|08|77|c7|f2|4b|1d|c2|73|b1|76|5b|fc|5c|e6|f4|b8|d9|9a|96|d5|b1|c9|2e|e5|3a|39|f6|85|b3".toUpperCase());
+			ByteArray hash = ByteArray.getInstance("91|bc|35|5f|b0|22|18|25|30|7a|f8|76|d1|14|04|b4|73|22|2d|5a".toUpperCase());
+
+			Assert.assertEquals(hash, HashAlgorithm.SHA1.getHashValue(data, key, 20));
+
 		}
 
 	}

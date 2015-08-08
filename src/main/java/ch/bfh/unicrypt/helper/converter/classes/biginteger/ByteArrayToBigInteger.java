@@ -73,7 +73,7 @@ public class ByteArrayToBigInteger
 
 	/**
 	 * Creates a new default {@link ByteArrayToBigInteger} converter with the block length set to 1 and the minimal
-	 * number of blocks set to 0.
+	 * number of blocks set to 0. This is the default converter for byte arrays of arbitrary length.
 	 * <p>
 	 * @return The new converter
 	 */
@@ -83,13 +83,13 @@ public class ByteArrayToBigInteger
 
 	/**
 	 * Creates a new {@link ByteArrayToBigInteger} converter for a given block length. The minimal number of blocks is
-	 * set to 0.
+	 * set to 1. The is the default converter for blocks of a fixed length.
 	 * <p>
 	 * @param blockLength The block length
 	 * @return The new converter
 	 */
 	public static ByteArrayToBigInteger getInstance(int blockLength) {
-		return ByteArrayToBigInteger.getInstance(blockLength, 0);
+		return ByteArrayToBigInteger.getInstance(blockLength, 1);
 	}
 
 	/**

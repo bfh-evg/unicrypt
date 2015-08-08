@@ -163,7 +163,7 @@ public class SchnorrSignatureScheme<MS extends Set>
 		HashFunction hashFunction = HashFunction.getInstance(ProductSet.getInstance(this.messageSpace,
 																					this.cyclicGroup), this.convertMethod, this.hashMethod);
 		Converter<ByteArray, BigInteger> converter
-			   = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getByteLength(), 1);
+			   = ByteArrayToBigInteger.getInstance(this.hashMethod.getHashAlgorithm().getByteLength());
 		ConvertFunction convertFunction
 			   = ConvertFunction.getInstance(hashFunction.getCoDomain(), N.getInstance(), converter);
 		ModuloFunction moduloFunction = ModuloFunction.getInstance(N.getInstance(), zMod);

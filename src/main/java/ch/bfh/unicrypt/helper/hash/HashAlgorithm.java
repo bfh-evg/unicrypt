@@ -194,7 +194,10 @@ public class HashAlgorithm
 		ByteArray byteArray1 = key.xor(ipad).append(message).getHashValue(this);
 		ByteArray opad = ByteArray.getInstance(MathUtil.getByte(0x5C), this.blockLength);
 		ByteArray byteArray2 = key.xor(opad);
+		// according to RFC 2104
 		return byteArray2.append(byteArray1).getHashValue(this);
+		// according to FIPS 198
+		//return byteArray2.append(byteArray1).append(message).getHashValue(this);
 	}
 
 	/**
