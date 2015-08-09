@@ -39,9 +39,8 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.random.distributionsampler.classes;
+package ch.bfh.unicrypt.random.distributionsampler;
 
-import ch.bfh.unicrypt.random.distributionsampler.interfaces.DistributionSampler;
 import ch.bfh.unicrypt.random.interfaces.TrueRandomByteSequence;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
@@ -60,7 +59,8 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
  * <p>
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DistributionSamplerCollector {
+public class DistributionSamplerCollector
+	   implements DistributionSampler {
 
 	private DistributionSampler dataCollector; //Should be al list of distributionSamplers... one day...
 	private TrueRandomByteSequence sink;
@@ -89,7 +89,8 @@ public class DistributionSamplerCollector {
 	 * @param amountOfBytes
 	 * @return ByteArrayElement containing the desired amount of 'random' bytes.
 	 */
-	public ByteArray getDistributionSamples(int amountOfBytes) {
+	@Override
+	public ByteArray getDistributionSample(int amountOfBytes) {
 		//This will collect all data received from the different distributionSamplers... one day...
 		if (amountOfBytes < 1) {
 			throw new IllegalArgumentException();
@@ -106,6 +107,16 @@ public class DistributionSamplerCollector {
 	protected void finalize() throws Throwable {
 		this.dataCollector.setSamplingState(false);
 		super.finalize();
+	}
+
+	@Override
+	public void setSamplingState(boolean isSampling) {
+		this.dataCollector.setSamplingState(isSampling);
+	}
+
+	@Override
+	public boolean isSampling() {
+		return this.dataCollector.isSampling();
 	}
 
 }

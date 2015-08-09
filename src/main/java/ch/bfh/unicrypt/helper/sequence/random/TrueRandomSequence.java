@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,20 +39,42 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.random.distributionsampler.interfaces;
+package ch.bfh.unicrypt.helper.sequence.random;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.sequence.ByteSequenceIterator;
+import java.security.SecureRandom;
 
 /**
  *
- * @author Reto E. Koenig <reto.koenig@bfh.ch>
+ * @author rolfhaenni
  */
-public interface DistributionSampler {
+public class TrueRandomSequence
+	   extends RandomByteSequence {
 
-	public ByteArray getDistributionSample(int amountOfBytes);
+	final SecureRandom secureRandom;
 
-	public void setSamplingState(boolean isSampling);
+	private TrueRandomSequence() {
+		this.secureRandom = new SecureRandom();
+	}
 
-	public boolean isSampling();
+	@Override
+	public ByteSequenceIterator iterator() {
+		return new ByteSequenceIterator() {
+
+			@Override
+			protected Byte abstractNext() {
+				return secureRandom.generateSeed(1)[0];
+			}
+
+			@Override
+			public boolean hasNext() {
+				return true;
+			}
+		};
+	}
+
+	public static TrueRandomSequence getInstance() {
+		return new TrueRandomSequence();
+	}
 
 }

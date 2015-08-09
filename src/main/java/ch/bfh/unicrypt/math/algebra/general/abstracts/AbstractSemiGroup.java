@@ -42,8 +42,8 @@
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.functions.Operator;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -139,7 +139,7 @@ public abstract class AbstractSemiGroup<E extends Element<V>, V>
 	// This method is overriden in AbstractMonoid
 	protected E defaultApply(final Sequence<Element> elements) {
 		final SemiGroup<V> semiGroup = this;
-		return (E) elements.filter(Predicate.NOT_NULL).reduce(new BinaryOperator<Element>() {
+		return (E) elements.filter(Predicate.NOT_NULL).reduce(new Operator<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {

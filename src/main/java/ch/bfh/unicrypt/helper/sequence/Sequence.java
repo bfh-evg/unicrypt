@@ -41,6 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
+import ch.bfh.unicrypt.helper.sequence.functions.Operator;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
@@ -172,7 +175,7 @@ public abstract class Sequence<V>
 		return false;
 	}
 
-	public final V reduce(BinaryOperator<V> operation) {
+	public final V reduce(Operator<V> operation) {
 		if (operation == null) {
 			throw new IllegalArgumentException();
 		}
@@ -187,7 +190,7 @@ public abstract class Sequence<V>
 		return result;
 	}
 
-	public final V reduce(BinaryOperator<V> operation, V identity) {
+	public final V reduce(Operator<V> operation, V identity) {
 		if (operation == null || identity == null) {
 			throw new IllegalArgumentException();
 		}
@@ -487,7 +490,7 @@ public abstract class Sequence<V>
 
 	}
 
-	public static <V> Sequence<V> getInstance(final V startValue, final UnaryOperator<V> operator) {
+	public static <V> Sequence<V> getInstance(final V startValue, final Mapping<V, V> operator) {
 		if (startValue == null || operator == null) {
 			throw new IllegalArgumentException();
 		}

@@ -39,20 +39,24 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.BigIntegerToByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.biginteger.ByteArrayToBigInteger;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.ByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import java.math.BigInteger;
 
 /**
- *
+ * NIST SP 800-90
+ * <p>
  * @author rolfhaenni
  */
-public class HashValueSequence
-	   extends ByteArraySequence {
+public class HashDRBG
+	   extends Sequence<ByteArray> {
 
 	private static final byte BYTE_ZERO = MathUtil.getByte(0x00);
 	private static final byte BYTE_THREE = MathUtil.getByte(0x03);
@@ -60,9 +64,9 @@ public class HashValueSequence
 	private final HashAlgorithm hashAlgorithm;
 	private final ByteArray seed;
 	private final int seedLength;
-	private final BigIntegerToByteArray converter = BigIntegerToByteArray.getInstance();
+	private final ByteArrayToBigInteger converter;
 
-	private HashValueSequence(HashAlgorithm hashAlgorithm, ByteArray seed) {
+	private HashDRBG(HashAlgorithm hashAlgorithm, ByteArray seed) {
 		super(Sequence.INFINITE);
 		this.hashAlgorithm = hashAlgorithm;
 		this.seed = seed;
@@ -72,6 +76,11 @@ public class HashValueSequence
 		} else {
 			this.seedLength = 888;
 		}
+		this.converter = ByteArrayToBigInteger.getInstance(seedLength / Byte.SIZE);
+	}
+
+	public final ByteSequence getByteSequence() {
+		return ByteSequence.getInstance(this);
 	}
 
 	private ByteArray hashDerivationFunction(ByteArray input) {
@@ -81,20 +90,21 @@ public class HashValueSequence
 			ByteArray hashInput = ByteArray.getInstance(ByteArray.getInstance(MathUtil.getByte(i + 1)), MathUtil.getByteArray(seedLength), input);
 			hashes[i] = this.hashAlgorithm.getHashValue(hashInput);
 		}
-		return ByteArray.getInstance(hashes).extractPrefix(seedLength / Byte.SIZE);
+		return ByteArray.getInstance(hashes).extractPrefix(this.seedLength / Byte.SIZE);
 	}
 
 	private ByteArray byteArraySum(ByteArray b1, ByteArray b2, ByteArray b3, long counter) {
-		BigInteger i1 = this.converter.reconvert(b1);
-		BigInteger i2 = this.converter.reconvert(b2);
-		BigInteger i3 = this.converter.reconvert(b3);
+		BigInteger i1 = this.converter.convert(b1.addPrefix(this.seedLength / Byte.SIZE - b1.getLength()));
+		BigInteger i2 = this.converter.convert(b2.addPrefix(this.seedLength / Byte.SIZE - b2.getLength()));
+		BigInteger i3 = this.converter.convert(b3.addPrefix(this.seedLength / Byte.SIZE - b3.getLength()));
 		BigInteger sum = i1.add(i2).add(i3).add(BigInteger.valueOf(counter)).mod(MathUtil.powerOfTwo(this.seedLength));
-		return this.converter.convert(sum).extractSuffix(seedLength / Byte.SIZE);
+		return this.converter.reconvert(sum);
 	}
 
 	private ByteArray byteArrayAddOne(ByteArray b) {
-		BigInteger sum = converter.reconvert(b).add(MathUtil.ONE).mod(MathUtil.powerOfTwo(this.seedLength));
-		return this.converter.convert(sum).extractSuffix(seedLength / Byte.SIZE);
+		BigInteger i = converter.convert(b.addPrefix(this.seedLength / Byte.SIZE - b.getLength()));
+		BigInteger sum = i.add(MathUtil.ONE).mod(MathUtil.powerOfTwo(this.seedLength));
+		return this.converter.reconvert(sum);
 	}
 
 	@Override
@@ -130,23 +140,23 @@ public class HashValueSequence
 		};
 	}
 
-	public static HashValueSequence getInstance() {
-		return HashValueSequence.getInstance(ByteArray.getInstance());
+	public static HashDRBG getInstance() {
+		return HashDRBG.getInstance(ByteArray.getInstance());
 	}
 
-	public static HashValueSequence getInstance(ByteArray seed) {
-		return HashValueSequence.getInstance(HashAlgorithm.getInstance(), seed);
+	public static HashDRBG getInstance(ByteArray seed) {
+		return HashDRBG.getInstance(HashAlgorithm.getInstance(), seed);
 	}
 
-	public static HashValueSequence getInstance(HashAlgorithm hashAlgorithm) {
-		return HashValueSequence.getInstance(hashAlgorithm, ByteArray.getInstance());
+	public static HashDRBG getInstance(HashAlgorithm hashAlgorithm) {
+		return HashDRBG.getInstance(hashAlgorithm, ByteArray.getInstance());
 	}
 
-	public static HashValueSequence getInstance(HashAlgorithm hashAlgorithm, ByteArray seed) {
+	public static HashDRBG getInstance(HashAlgorithm hashAlgorithm, ByteArray seed) {
 		if (hashAlgorithm == null || seed == null) {
 			throw new IllegalArgumentException();
 		}
-		return new HashValueSequence(hashAlgorithm, seed);
+		return new HashDRBG(hashAlgorithm, seed);
 	}
 
 	public static ByteArray getSeed(ByteArray entropy, ByteArray nonce, ByteArray personalization) {

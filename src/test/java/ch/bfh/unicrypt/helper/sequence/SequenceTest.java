@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import org.junit.Test;
 
 /**
@@ -52,7 +53,7 @@ public class SequenceTest {
 	@Test
 	public void testIteration() {
 
-		Sequence<Integer> seq = Sequence.getInstance(2, new UnaryOperator<Integer>() {
+		Sequence<Integer> seq = Sequence.getInstance(2, new Mapping<Integer, Integer>() {
 
 			@Override
 			public Integer apply(Integer value) {

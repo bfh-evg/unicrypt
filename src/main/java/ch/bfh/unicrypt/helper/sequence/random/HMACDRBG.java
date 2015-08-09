@@ -39,18 +39,22 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.ByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 
 /**
- *
+ * NIST SP 800-90
+ * <p>
  * @author rolfhaenni
  */
-public class HashMacSequence
-	   extends ByteArraySequence {
+public class HMACDRBG
+	   extends Sequence<ByteArray> {
 
 	private static final byte BYTE_ZERO = MathUtil.getByte(0x00);
 	private static final byte BYTE_ONE = MathUtil.getByte(0x01);
@@ -58,10 +62,14 @@ public class HashMacSequence
 	final HashAlgorithm hashAlgorithm;
 	final ByteArray seed;
 
-	private HashMacSequence(HashAlgorithm hashAlgorithm, ByteArray seed) {
+	private HMACDRBG(HashAlgorithm hashAlgorithm, ByteArray seed) {
 		super(Sequence.INFINITE);
 		this.hashAlgorithm = hashAlgorithm;
 		this.seed = seed;
+	}
+
+	public final ByteSequence getByteSequence() {
+		return ByteSequence.getInstance(this);
 	}
 
 	@Override
@@ -105,23 +113,23 @@ public class HashMacSequence
 		};
 	}
 
-	public static HashMacSequence getInstance() {
-		return HashMacSequence.getInstance(ByteArray.getInstance());
+	public static HMACDRBG getInstance() {
+		return HMACDRBG.getInstance(ByteArray.getInstance());
 	}
 
-	public static HashMacSequence getInstance(ByteArray seed) {
-		return HashMacSequence.getInstance(HashAlgorithm.getInstance(), seed);
+	public static HMACDRBG getInstance(ByteArray seed) {
+		return HMACDRBG.getInstance(HashAlgorithm.getInstance(), seed);
 	}
 
-	public static HashMacSequence getInstance(HashAlgorithm hashAlgorithm) {
-		return HashMacSequence.getInstance(hashAlgorithm, ByteArray.getInstance());
+	public static HMACDRBG getInstance(HashAlgorithm hashAlgorithm) {
+		return HMACDRBG.getInstance(hashAlgorithm, ByteArray.getInstance());
 	}
 
-	public static HashMacSequence getInstance(HashAlgorithm hashAlgorithm, ByteArray seed) {
+	public static HMACDRBG getInstance(HashAlgorithm hashAlgorithm, ByteArray seed) {
 		if (hashAlgorithm == null || seed == null) {
 			throw new IllegalArgumentException();
 		}
-		return new HashMacSequence(hashAlgorithm, seed);
+		return new HMACDRBG(hashAlgorithm, seed);
 	}
 
 	public static ByteArray getSeed(ByteArray entropy, ByteArray nonce, ByteArray personalization) {

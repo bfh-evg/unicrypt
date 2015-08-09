@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.functions;
 
 import ch.bfh.unicrypt.UniCrypt;
 
@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.UniCrypt;
  * @author rolfhaenni
  * @param <V>
  */
-public abstract class BinaryOperator<V>
+public abstract class Operator<V>
 	   extends UniCrypt {
 
 	public abstract V apply(V value1, V value2);

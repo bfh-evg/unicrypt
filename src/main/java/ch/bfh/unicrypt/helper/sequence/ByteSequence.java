@@ -60,7 +60,7 @@ public abstract class ByteSequence
 	public abstract ByteSequenceIterator iterator();
 
 	@Override
-	public final ByteArraySequence group(final int groupLength) {
+	public final Sequence<ByteArray> group(final int groupLength) {
 		if (groupLength < 1) {
 			throw new IllegalArgumentException();
 		}
@@ -70,14 +70,14 @@ public abstract class ByteSequence
 		} else {
 			newLength = MathUtil.divideUp(this.length, BigInteger.valueOf(groupLength));
 		}
-		final Sequence<Byte> source = this;
-		return new ByteArraySequence(newLength) {
+		final ByteSequence source = this;
+		return new Sequence<ByteArray>(newLength) {
 
 			@Override
 			public SequenceIterator<ByteArray> iterator() {
 				return new SequenceIterator<ByteArray>() {
 
-					private final SequenceIterator<Byte> iterator = source.iterator();
+					private final ByteSequenceIterator iterator = source.iterator();
 
 					@Override
 					public boolean hasNext() {
@@ -89,18 +89,57 @@ public abstract class ByteSequence
 						int i = 0;
 						byte[] result = new byte[groupLength];
 						while (i < groupLength && this.iterator.hasNext()) {
-							result[i] = this.iterator.next();
+							result[i] = this.iterator.abstractNext();
 							i++;
 						}
 						// extra bytes are truncated
 						return ByteArray.getInstance(result).extractPrefix(i);
 					}
 
+					@Override
+					public void defaultUpdate() {
+						this.iterator.defaultUpdate();
+					}
 				};
 
 			}
+
 		};
 
+	}
+
+	public static ByteSequence getInstance(final Sequence<ByteArray> source) {
+		return new ByteSequence(Sequence.UNKNOWN) {
+
+			@Override
+			public ByteSequenceIterator iterator() {
+				return new ByteSequenceIterator() {
+
+					private final SequenceIterator<ByteArray> iterator = source.iterator();
+					private ByteArray currentByteArray = null;
+					private int currentIndex = 0;
+
+					@Override
+					public boolean hasNext() {
+						return iterator.hasNext() || (this.currentByteArray != null && this.currentIndex < this.currentByteArray.getLength());
+					}
+
+					@Override
+					public Byte abstractNext() {
+						if (this.currentByteArray == null || this.currentIndex == this.currentByteArray.getLength()) {
+							this.currentByteArray = iterator.abstractNext();
+							this.currentIndex = 0;
+						}
+						return this.currentByteArray.getAt(this.currentIndex++);
+					}
+
+					@Override
+					public void defaultUpdate() {
+						this.iterator.defaultUpdate();
+					}
+				};
+			}
+		};
 	}
 
 }

@@ -39,10 +39,9 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.random.distributionsampler.classes;
+package ch.bfh.unicrypt.random.distributionsampler;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.random.distributionsampler.interfaces.DistributionSampler;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Timer;

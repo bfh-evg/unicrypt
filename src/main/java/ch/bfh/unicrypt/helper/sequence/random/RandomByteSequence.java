@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,40 +39,20 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.random;
 
-import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.sequence.ByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
- * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
- * type {@code W}. The main usage of this interface is in the method {@link Sequence#map(Mapping)}.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @param <V> The generic type of the input value
- * @param <W> The generic type of the output value
+ *
+ * @author rolfhaenni
  */
-public abstract class Mapping<V, W>
-	   extends UniCrypt {
+public abstract class RandomByteSequence
+	   extends ByteSequence {
 
-	/**
-	 * Maps the given value of type {@code V} into a value of type {@code W}.
-	 * <p>
-	 * @param value The given value
-	 * @return The mapped value
-	 */
-	public abstract W apply(V value);
-
-	public final <X> Mapping<V, X> compose(final Mapping<? super W, X> otherMapping) {
-		final Mapping<V, W> thisMapping = this;
-		return new Mapping<V, X>() {
-
-			@Override
-			public X apply(V value) {
-				return otherMapping.apply(thisMapping.apply(value));
-			}
-
-		};
+	protected RandomByteSequence() {
+		super(Sequence.INFINITE);
 	}
 
 }

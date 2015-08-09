@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.sequence.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.MultiSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.Iterator;

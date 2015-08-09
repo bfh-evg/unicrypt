@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.UnaryOperator;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
@@ -176,7 +176,7 @@ public abstract class AbstractCyclicGroup<E extends Element<V>, V>
 	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicGroup<E, V> group = this;
-		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<E>() {
+		return Sequence.getInstance(this.getDefaultGenerator(), new Mapping<E, E>() {
 
 			@Override
 			public E apply(E element) {

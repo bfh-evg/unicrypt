@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.helper.sequence.random.PBKD2;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
@@ -78,7 +79,7 @@ public class PBKD2ByteArraySequenceTest {
 		ByteArray expected = ByteArray.getInstance("3d|2e|ec|4f|e4|1c|84|9b|80|c8|d8|36|62|c0|e4|4a|8b|29|1a|96|4c|f2|f0|70|38".toUpperCase());
 		HashAlgorithm algo = HashAlgorithm.SHA1;
 
-		SequenceIterator si = PBKD2ByteArraySequence.getInstance(algo, password, salt, 4096).getByteSequence().iterator();
+		SequenceIterator si = PBKD2.getInstance(algo, password, salt, 4096).getByteSequence().iterator();
 		Assert.assertEquals(expected, si.next(25));
 	}
 

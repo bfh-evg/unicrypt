@@ -39,24 +39,73 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.random.interfaces;
+package ch.bfh.unicrypt.helper.sequence.functions;
 
-import ch.bfh.unicrypt.random.distributionsampler.DistributionSamplerCollector;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.UniCrypt;
 
 /**
- *
- * @author Reto E. Koenig <reto.koenig@bfh.ch>
+ * Classes implementing this interface provide a single method for checking if a predicate holds for a given value. The
+ * main usage of this interface is in the methods {@link Sequence#filter(Predicate)} or
+ * {@link Sequence#find(Predicate)}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the input value
  */
-public interface TrueRandomByteSequence
-	   extends RandomByteSequence {
+public abstract class Predicate<V>
+	   extends UniCrypt {
 
-	public void setFreshData(ByteArray byteArray);
+	public static final Predicate<Object> NOT_NULL = new Predicate<Object>() {
 
-	public int getBackwardSecurityInBytes();
+		@Override
+		public boolean test(Object value) {
+			return value != null;
+		}
 
-	public int getForwardSecurityInBytes();
+	};
 
-	public DistributionSamplerCollector getDistributionSampler();
+	/**
+	 * Checks if the predicate holds for the given value.
+	 * <p>
+	 * @param value The given value
+	 * @return {@code true} if the predicate holds, {@code false} otherwise
+	 */
+	public abstract boolean test(V value);
+
+	public final Predicate<V> and(final Predicate<? super V> otherPredicate) {
+		final Predicate<V> thisPredicate = this;
+		return new Predicate<V>() {
+
+			@Override
+			public boolean test(V value) {
+				return thisPredicate.test(value) && otherPredicate.test(value);
+			}
+
+		};
+	}
+
+	public final Predicate<V> or(final Predicate<? super V> otherPredicate) {
+		final Predicate<V> thisPredicate = this;
+		return new Predicate<V>() {
+
+			@Override
+			public boolean test(V value) {
+				return thisPredicate.test(value) || otherPredicate.test(value);
+			}
+
+		};
+	}
+
+	public final Predicate<V> not() {
+		final Predicate<V> thisPredicate = this;
+		return new Predicate<V>() {
+
+			@Override
+			public boolean test(V value) {
+				return !thisPredicate.test(value);
+			}
+
+		};
+	}
 
 }

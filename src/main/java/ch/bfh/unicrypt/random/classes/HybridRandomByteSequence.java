@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.random.classes;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import ch.bfh.unicrypt.random.distributionsampler.classes.DistributionSamplerCollector;
+import ch.bfh.unicrypt.random.distributionsampler.DistributionSamplerCollector;
 import ch.bfh.unicrypt.random.interfaces.TrueRandomByteSequence;
 
 /**
@@ -76,7 +76,7 @@ public class HybridRandomByteSequence
 
 		this.backwardSecurityInBytes = backwardSecurityInBytes;
 		HybridRandomByteSequence.super.setSeed(HybridRandomByteSequence.this.getDistributionSampler()
-			   .getDistributionSamples(backwardSecurityInBytes));
+			   .getDistributionSample(backwardSecurityInBytes));
 	}
 
 	@Override

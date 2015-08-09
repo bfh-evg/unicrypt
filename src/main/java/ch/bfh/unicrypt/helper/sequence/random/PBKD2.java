@@ -39,11 +39,14 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.ByteSequence;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 
 /**
  * NIST Special Publication 800-132: "Recommendation for Password-Based Key Derivation" RFC 2898 "PKCS #5:
@@ -51,8 +54,8 @@ import ch.bfh.unicrypt.helper.math.MathUtil;
  * <p>
  * @author rolfhaenni
  */
-public class PBKD2ByteArraySequence
-	   extends ByteArraySequence {
+public class PBKD2
+	   extends Sequence<ByteArray> {
 
 	private static final byte BYTE_ZERO = MathUtil.getByte(0x00);
 	private static final int DEFUALT_ROUNDS = 4096;
@@ -62,12 +65,16 @@ public class PBKD2ByteArraySequence
 	private final ByteArray salt;
 	private final int rounds;
 
-	private PBKD2ByteArraySequence(HashAlgorithm hashAlgorithm, ByteArray password, ByteArray salt, int rounds) {
+	private PBKD2(HashAlgorithm hashAlgorithm, ByteArray password, ByteArray salt, int rounds) {
 		super(Sequence.INFINITE);
 		this.hashAlgorithm = hashAlgorithm;
 		this.password = password;
 		this.salt = salt;
 		this.rounds = rounds;
+	}
+
+	public final ByteSequence getByteSequence() {
+		return ByteSequence.getInstance(this);
 	}
 
 	@Override
@@ -97,39 +104,39 @@ public class PBKD2ByteArraySequence
 		};
 	}
 
-	public static PBKD2ByteArraySequence getInstance(ByteArray password) {
-		return PBKD2ByteArraySequence.getInstance(ByteArray.getInstance());
+	public static PBKD2 getInstance(ByteArray password) {
+		return PBKD2.getInstance(ByteArray.getInstance());
 	}
 
-	public static PBKD2ByteArraySequence getInstance(ByteArray password, ByteArray salt) {
-		return PBKD2ByteArraySequence.getInstance(HashAlgorithm.getInstance(), salt);
+	public static PBKD2 getInstance(ByteArray password, ByteArray salt) {
+		return PBKD2.getInstance(HashAlgorithm.getInstance(), salt);
 	}
 
-	public static PBKD2ByteArraySequence getInstance(HashAlgorithm hashAlgorithm, ByteArray password) {
-		return PBKD2ByteArraySequence.getInstance(hashAlgorithm, ByteArray.getInstance());
+	public static PBKD2 getInstance(HashAlgorithm hashAlgorithm, ByteArray password) {
+		return PBKD2.getInstance(hashAlgorithm, ByteArray.getInstance());
 	}
 
-	public static PBKD2ByteArraySequence getInstance(HashAlgorithm hashAlgorithm, ByteArray password, ByteArray salt) {
-		return PBKD2ByteArraySequence.getInstance(hashAlgorithm, password, salt, DEFUALT_ROUNDS);
+	public static PBKD2 getInstance(HashAlgorithm hashAlgorithm, ByteArray password, ByteArray salt) {
+		return PBKD2.getInstance(hashAlgorithm, password, salt, DEFUALT_ROUNDS);
 	}
 
-	public static PBKD2ByteArraySequence getInstance(ByteArray password, int rounds) {
-		return PBKD2ByteArraySequence.getInstance(ByteArray.getInstance(), rounds);
+	public static PBKD2 getInstance(ByteArray password, int rounds) {
+		return PBKD2.getInstance(ByteArray.getInstance(), rounds);
 	}
 
-	public static PBKD2ByteArraySequence getInstance(ByteArray password, ByteArray salt, int rounds) {
-		return PBKD2ByteArraySequence.getInstance(HashAlgorithm.getInstance(), salt, rounds);
+	public static PBKD2 getInstance(ByteArray password, ByteArray salt, int rounds) {
+		return PBKD2.getInstance(HashAlgorithm.getInstance(), salt, rounds);
 	}
 
-	public static PBKD2ByteArraySequence getInstance(HashAlgorithm hashAlgorithm, ByteArray password, int rounds) {
-		return PBKD2ByteArraySequence.getInstance(hashAlgorithm, ByteArray.getInstance(), rounds);
+	public static PBKD2 getInstance(HashAlgorithm hashAlgorithm, ByteArray password, int rounds) {
+		return PBKD2.getInstance(hashAlgorithm, ByteArray.getInstance(), rounds);
 	}
 
-	public static PBKD2ByteArraySequence getInstance(HashAlgorithm hashAlgorithm, ByteArray password, ByteArray salt, int rounds) {
+	public static PBKD2 getInstance(HashAlgorithm hashAlgorithm, ByteArray password, ByteArray salt, int rounds) {
 		if (hashAlgorithm == null || password == null || salt == null || rounds < 1) {
 			throw new IllegalArgumentException();
 		}
-		return new PBKD2ByteArraySequence(hashAlgorithm, password, salt, rounds);
+		return new PBKD2(hashAlgorithm, password, salt, rounds);
 	}
 
 }

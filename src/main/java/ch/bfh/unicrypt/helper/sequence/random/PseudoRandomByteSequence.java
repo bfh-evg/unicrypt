@@ -39,60 +39,52 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.sequence.ByteSequenceIterator;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class ByteArraySequence
-	   extends Sequence<ByteArray> {
+public class PseudoRandomByteSequence
+	   extends RandomByteSequence {
 
-	protected ByteArraySequence() {
-		super();
+	public static final int SEED_LENGTH = 1024;
+
+	private final ByteSequenceIterator iterator;
+
+	private PseudoRandomByteSequence(ByteSequenceIterator iterator) {
+		this.iterator = iterator;
 	}
 
-	protected ByteArraySequence(BigInteger length) {
-		super(length);
+	@Override
+	public ByteSequenceIterator iterator() {
+		return this.iterator;
 	}
 
-	public Sequence<Byte> getByteSequence() {
+	public enum Mode {
 
-		final Sequence<ByteArray> source = this;
-		return new ByteSequence(Sequence.UNKNOWN) {
+		HMAC, Hash
 
-			@Override
-			public ByteSequenceIterator iterator() {
-				return new ByteSequenceIterator() {
+	};
 
-					private final SequenceIterator<ByteArray> iterator = source.iterator();
-					private ByteArray currentByteArray = null;
-					private int currentIndex = 0;
-
-					@Override
-					public boolean hasNext() {
-						return iterator.hasNext() || (this.currentByteArray != null && this.currentIndex < this.currentByteArray.getLength());
-					}
-
-					@Override
-					public Byte abstractNext() {
-						if (this.currentByteArray == null || this.currentIndex == this.currentByteArray.getLength()) {
-							this.currentByteArray = iterator.abstractNext();
-							this.currentIndex = 0;
-						}
-						return this.currentByteArray.getAt(this.currentIndex++);
-					}
-
-					@Override
-					public void defaultUpdate() {
-						this.iterator.defaultUpdate();
-					}
-				};
-			}
-		};
+	public static PseudoRandomByteSequence getInstance(Mode mode, TrueRandomSequence entropySource) {
+		ByteArray seed = entropySource.iterator().next(SEED_LENGTH);
+		switch (mode) {
+			case HMAC:
+				return new PseudoRandomByteSequence(HMACDRBG.getInstance(seed).getByteSequence().iterator());
+			case Hash:
+				return new PseudoRandomByteSequence(HashDRBG.getInstance(seed).getByteSequence().iterator());
+		}
+		throw new IllegalArgumentException();
 	}
 
+//	public static void main(String[] args) {
+//		RandomByteSequence rbs = PseudoRandomByteSequence.getInstance(Mode.Hash, TrueRandomSequence.getInstance());
+//		for (Byte b : rbs.limit(100)) {
+//			System.out.println(b);
+//		}
+//	}
 }

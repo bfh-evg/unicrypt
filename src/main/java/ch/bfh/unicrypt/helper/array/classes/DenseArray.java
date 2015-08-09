@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.array.classes;
 
 import ch.bfh.unicrypt.helper.array.abstracts.AbstractImmutableArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.util.Collection;
 
@@ -147,7 +147,7 @@ public class DenseArray<V>
 	@Override
 	protected DenseArray<V> abstractExtract(int index, int length) {
 		int offset = this.rangeOffset + (this.reverse ? this.length - index - length : index);
-		return new DenseArray<V>(this.values, length, offset, this.reverse);
+		return new DenseArray<>(this.values, length, offset, this.reverse);
 	}
 
 	@Override
@@ -159,7 +159,7 @@ public class DenseArray<V>
 		for (int i : other.getAllIndices()) {
 			result[this.length + i] = other.getAt(i);
 		}
-		return new DenseArray<V>(result);
+		return new DenseArray<>(result);
 	}
 
 	@Override
@@ -173,7 +173,7 @@ public class DenseArray<V>
 			}
 		}
 		result[index] = newObject;
-		return new DenseArray<V>(result);
+		return new DenseArray<>(result);
 	}
 
 	@Override
@@ -183,12 +183,12 @@ public class DenseArray<V>
 			result[i] = this.abstractGetAt(i);
 		}
 		result[index] = newObject;
-		return new DenseArray<V>(result);
+		return new DenseArray<>(result);
 	}
 
 	@Override
 	protected DenseArray<V> abstractReverse() {
-		return new DenseArray<V>(this.values, this.length, this.rangeOffset, !this.reverse);
+		return new DenseArray<>(this.values, this.length, this.rangeOffset, !this.reverse);
 	}
 
 	@Override

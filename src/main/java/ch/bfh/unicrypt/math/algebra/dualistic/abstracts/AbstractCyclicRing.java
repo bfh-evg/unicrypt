@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
-import ch.bfh.unicrypt.helper.sequence.Predicate;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.UnaryOperator;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -162,7 +162,7 @@ public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	@Override
 	protected Sequence<E> defaultGetElements() {
 		final AbstractCyclicRing<E, V> ring = this;
-		return Sequence.getInstance(this.getDefaultGenerator(), new UnaryOperator<E>() {
+		return Sequence.getInstance(this.getDefaultGenerator(), new Mapping<E, E>() {
 
 			@Override
 			public E apply(E element) {

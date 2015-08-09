@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import java.math.BigInteger;
 import java.util.Iterator;

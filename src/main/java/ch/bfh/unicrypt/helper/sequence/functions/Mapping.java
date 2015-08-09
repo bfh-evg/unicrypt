@@ -39,70 +39,37 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.functions;
 
 import ch.bfh.unicrypt.UniCrypt;
 
 /**
- * Classes implementing this interface provide a single method for checking if a predicate holds for a given value. The
- * main usage of this interface is in the methods {@link Sequence#filter(Predicate)} or
- * {@link Sequence#find(Predicate)}.
+ * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
+ * type {@code W}. The main usage of this interface is in the method {@link Sequence#map(Mapping)}.
  * <p>
  * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the input value
+ * @param <W> The generic type of the output value
  */
-public abstract class Predicate<V>
+public abstract class Mapping<V, W>
 	   extends UniCrypt {
 
-	public static final Predicate<Object> NOT_NULL = new Predicate<Object>() {
-
-		@Override
-		public boolean test(Object value) {
-			return value != null;
-		}
-
-	};
-
 	/**
-	 * Checks if the predicate holds for the given value.
+	 * Maps the given value of type {@code V} into a value of type {@code W}.
 	 * <p>
 	 * @param value The given value
-	 * @return {@code true} if the predicate holds, {@code false} otherwise
+	 * @return The mapped value
 	 */
-	public abstract boolean test(V value);
+	public abstract W apply(V value);
 
-	public final Predicate<V> and(final Predicate<? super V> otherPredicate) {
-		final Predicate<V> thisPredicate = this;
-		return new Predicate<V>() {
-
-			@Override
-			public boolean test(V value) {
-				return thisPredicate.test(value) && otherPredicate.test(value);
-			}
-
-		};
-	}
-
-	public final Predicate<V> or(final Predicate<? super V> otherPredicate) {
-		final Predicate<V> thisPredicate = this;
-		return new Predicate<V>() {
+	public final <X> Mapping<V, X> compose(final Mapping<? super W, X> otherMapping) {
+		final Mapping<V, W> thisMapping = this;
+		return new Mapping<V, X>() {
 
 			@Override
-			public boolean test(V value) {
-				return thisPredicate.test(value) || otherPredicate.test(value);
-			}
-
-		};
-	}
-
-	public final Predicate<V> not() {
-		final Predicate<V> thisPredicate = this;
-		return new Predicate<V>() {
-
-			@Override
-			public boolean test(V value) {
-				return !thisPredicate.test(value);
+			public X apply(V value) {
+				return otherMapping.apply(thisMapping.apply(value));
 			}
 
 		};

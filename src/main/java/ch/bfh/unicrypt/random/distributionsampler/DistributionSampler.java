@@ -39,7 +39,7 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.random.distributionsampler.interfaces;
+package ch.bfh.unicrypt.random.distributionsampler;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
@@ -47,12 +47,12 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public interface DistributionSamplerCollector {
+public interface DistributionSampler {
 
 	public ByteArray getDistributionSample(int amountOfBytes);
 
-	public void setFreshSamples(ByteArray samples);
+	public void setSamplingState(boolean isSampling);
 
-	public int getSecurityParameterInBytes();
+	public boolean isSampling();
 
 }

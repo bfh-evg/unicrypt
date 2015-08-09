@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.sequence.BinaryOperator;
+import ch.bfh.unicrypt.helper.sequence.functions.Operator;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
@@ -96,7 +96,7 @@ public abstract class AbstractMonoid<E extends Element<V>, V>
 	@Override
 	protected E defaultApply(final Sequence<Element> elements) {
 		final SemiGroup<V> monoid = this;
-		return (E) elements.reduce(new BinaryOperator<Element>() {
+		return (E) elements.reduce(new Operator<Element>() {
 
 			@Override
 			public Element apply(Element element1, Element element2) {
