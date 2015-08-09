@@ -120,7 +120,7 @@ public class ReferenceRandomByteSequence
 	@Override
 	public int hashCode() {
 		if (this.javaHashValue == 0) {
-			this.javaHashValue = getHashAlgorithm().hashCode() + getSeed().hashCode();
+			this.javaHashValue = this.hashAlgorithm.hashCode() + getSeed().hashCode();
 		}
 		return this.javaHashValue;
 	}
@@ -134,7 +134,7 @@ public class ReferenceRandomByteSequence
 			return false;
 		}
 		final ReferenceRandomByteSequence other = (ReferenceRandomByteSequence) obj;
-		if (getHashAlgorithm() != getHashAlgorithm() && (!this.getHashAlgorithm().equals(other.getHashAlgorithm()))) {
+		if (!this.hashAlgorithm.equals(other.hashAlgorithm)) {
 			return false;
 		}
 		return this.getSeed().equals(other.getSeed());

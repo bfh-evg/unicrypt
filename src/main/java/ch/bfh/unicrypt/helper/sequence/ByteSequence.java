@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,21 +39,65 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.random.interfaces;
+package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import java.math.BigInteger;
 
 /**
  *
- * @author Reto E. Koenig <reto.koenig@bfh.ch>
+ * @author rolfhaenni
  */
-public interface RandomByteSequence {
+public abstract class ByteSequence
+	   extends Sequence<Byte> {
 
-	public RandomNumberGenerator getRandomNumberGenerator();
+	protected ByteSequence(BigInteger length) {
+		this.length = length;
+	}
 
-	public byte getNextByte();
+	@Override
+	public final ByteArraySequence group(final int groupLength) {
+		if (groupLength < 1) {
+			throw new IllegalArgumentException();
+		}
+		BigInteger newLength;
+		if (this.length.equals(Sequence.UNKNOWN) || this.length.equals(Sequence.INFINITE)) {
+			newLength = this.length;
+		} else {
+			newLength = MathUtil.divideUp(this.length, BigInteger.valueOf(groupLength));
+		}
+		final Sequence<Byte> source = this;
+		return new ByteArraySequence(newLength) {
 
-	public ByteArray getNextByteArray(int length);
+			@Override
+			public SequenceIterator<ByteArray> iterator() {
+				return new SequenceIterator<ByteArray>() {
+
+					private final SequenceIterator<Byte> iterator = source.iterator();
+
+					@Override
+					public boolean hasNext() {
+						return this.iterator.hasNext();
+					}
+
+					@Override
+					public ByteArray next() {
+						int i = 0;
+						byte[] result = new byte[groupLength];
+						while (i < groupLength && this.iterator.hasNext()) {
+							result[i] = this.iterator.next();
+							i++;
+						}
+						// extra bytes are truncated
+						return ByteArray.getInstance(result).extractPrefix(i);
+					}
+
+				};
+
+			}
+		};
+
+	}
 
 }

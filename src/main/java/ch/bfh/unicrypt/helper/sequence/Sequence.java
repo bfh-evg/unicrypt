@@ -207,8 +207,8 @@ public abstract class Sequence<V>
 		return new Sequence<W>(source.length) {
 
 			@Override
-			public ExtendedIterator<W> iterator() {
-				return new ExtendedIterator<W>() {
+			public SequenceIterator<W> iterator() {
+				return new SequenceIterator<W>() {
 
 					private final Iterator<V> iterator = source.iterator();
 
@@ -235,10 +235,10 @@ public abstract class Sequence<V>
 		return new Sequence<V>(Sequence.UNKNOWN) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
-					private final ExtendedIterator<V> iterator = source.iterator();
+					private final SequenceIterator<V> iterator = source.iterator();
 					private V nextValue = null;
 					private boolean terminated = false;
 
@@ -291,8 +291,8 @@ public abstract class Sequence<V>
 		return new Sequence<V>(newLength) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
 					private final Iterator<V> iterator = source.iterator();
 					private BigInteger counter = MathUtil.ZERO;
@@ -322,10 +322,10 @@ public abstract class Sequence<V>
 		return new Sequence<V>(Sequence.UNKNOWN) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
-					private final ExtendedIterator<V> iterator = source.iterator();
+					private final SequenceIterator<V> iterator = source.iterator();
 					private boolean found = false;
 
 					@Override
@@ -350,7 +350,7 @@ public abstract class Sequence<V>
 		return this.skip(1);
 	}
 
-	public Sequence<V> skip(final long n) {
+	public Sequence<V> skip(final int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -364,15 +364,15 @@ public abstract class Sequence<V>
 		return new Sequence<V>(newLength) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				ExtendedIterator<V> iterator = source.iterator();
+			public SequenceIterator<V> iterator() {
+				SequenceIterator<V> iterator = source.iterator();
 				iterator.skip(n);
 				return iterator;
 			}
 		};
 	}
 
-	public final Sequence<DenseArray<V>> group(final long groupLength) {
+	public Sequence<? extends ImmutableArray<V>> group(final int groupLength) {
 		if (groupLength < 1) {
 			throw new IllegalArgumentException();
 		}
@@ -383,13 +383,13 @@ public abstract class Sequence<V>
 			newLength = MathUtil.divideUp(this.length, BigInteger.valueOf(groupLength));
 		}
 		final Sequence<V> source = this;
-		return new Sequence<DenseArray<V>>(newLength) {
+		return new Sequence<ImmutableArray<V>>(newLength) {
 
 			@Override
-			public ExtendedIterator<DenseArray<V>> iterator() {
-				return new ExtendedIterator<DenseArray<V>>() {
+			public SequenceIterator<ImmutableArray<V>> iterator() {
+				return new SequenceIterator<ImmutableArray<V>>() {
 
-					private final Iterator<V> iterator = source.iterator();
+					private final SequenceIterator<V> iterator = source.iterator();
 
 					@Override
 					public boolean hasNext() {
@@ -397,14 +397,8 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public DenseArray<V> next() {
-						long i = 0;
-						DenseArray<V> result = DenseArray.getInstance();
-						while (i < groupLength && this.iterator.hasNext()) {
-							result = result.add(this.iterator.next());
-							i++;
-						}
-						return result;
+					public ImmutableArray<V> next() {
+						return this.iterator.next(groupLength);
 					}
 
 				};
@@ -427,7 +421,7 @@ public abstract class Sequence<V>
 	}
 
 	@Override
-	public abstract ExtendedIterator<V> iterator();
+	public abstract SequenceIterator<V> iterator();
 
 	public static <V> Sequence<V> getInstance(final V... source) {
 		if (source == null) {
@@ -436,8 +430,8 @@ public abstract class Sequence<V>
 		return new Sequence<V>(BigInteger.valueOf(source.length)) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 					private int pos = 0;
 
 					@Override
@@ -462,8 +456,8 @@ public abstract class Sequence<V>
 		return new Sequence<V>(BigInteger.valueOf(source.size())) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return ExtendedIterator.getInstance(source.iterator());
+			public SequenceIterator<V> iterator() {
+				return SequenceIterator.getInstance(source.iterator());
 			}
 		};
 	}
@@ -474,8 +468,8 @@ public abstract class Sequence<V>
 		}
 		return new Sequence<V>() {
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 					private int currentIndex = 0;
 
 					@Override
@@ -500,8 +494,8 @@ public abstract class Sequence<V>
 		return new Sequence<V>(Sequence.INFINITE) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
 					V currentValue = startValue;
 

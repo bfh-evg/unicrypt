@@ -41,65 +41,72 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.UniCrypt;
-import ch.bfh.unicrypt.helper.array.classes.DenseArray;
-import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
- * @param <V>
  */
-public abstract class ExtendedIterator<V>
-	   extends UniCrypt
-	   implements Iterator<V> {
+public abstract class ByteArraySequence
+	   extends Sequence<ByteArray> {
 
-	public final ImmutableArray<V> next(long n) {
-		if (n < 1) {
-			throw new IllegalArgumentException();
-		}
-		List<V> values = new LinkedList<>();
-		while (n > 0 && this.hasNext()) {
-			values.add(this.next());
-			n--;
-		}
-		return DenseArray.getInstance(values);
+	protected ByteArraySequence() {
+		super();
 	}
 
-	public final void skip(long n) {
-		while (n > 0 && this.hasNext()) {
-			this.next();
-			n--;
-		}
+	protected ByteArraySequence(BigInteger length) {
+		super(length);
 	}
 
-	public final V find(Predicate<? super V> predicate) {
-		while (this.hasNext()) {
-			V value = this.next();
-			if (predicate.test(value)) {
-				return value;
-			}
-		}
-		return null;
-	}
+	public Sequence<Byte> getByteSequence() {
 
-	public static <V> ExtendedIterator<V> getInstance(final Iterator<V> iterator) {
-		if (iterator == null) {
-			throw new IllegalArgumentException();
-		}
-		return new ExtendedIterator<V>() {
+		final Sequence<ByteArray> source = this;
+		return new ByteSequence(Sequence.UNKNOWN) {
 
 			@Override
-			public boolean hasNext() {
-				return iterator.hasNext();
-			}
+			public SequenceIterator<Byte> iterator() {
+				return new SequenceIterator<Byte>() {
 
-			@Override
-			public V next() {
-				return iterator.next();
+					private final SequenceIterator<ByteArray> iterator = source.iterator();
+					private ByteArray currentByteArray = null;
+					private int currentIndex = 0;
+
+					@Override
+					public boolean hasNext() {
+						return iterator.hasNext() || (this.currentByteArray != null && this.currentIndex < this.currentByteArray.getLength());
+					}
+
+					@Override
+					public Byte next() {
+						Byte b = this.performNext();
+						this.iterator.defaultUpdate();
+						return b;
+					}
+
+					protected Byte performNext() {
+						if (this.currentByteArray == null || this.currentIndex == this.currentByteArray.getLength()) {
+							this.currentByteArray = iterator.next();
+							this.currentIndex = 0;
+						}
+						return this.currentByteArray.getAt(this.currentIndex++);
+					}
+
+					@Override
+					public ByteArray next(int n) {
+						if (n < 0) {
+							throw new IllegalArgumentException();
+						}
+						int i = 0;
+						byte[] result = new byte[n];
+						while (i < n && this.hasNext()) {
+							result[i] = this.performNext();
+							i++;
+						}
+						this.iterator.defaultUpdate();
+						return ByteArray.getInstance(result);
+					}
+				};
 			}
 		};
 	}

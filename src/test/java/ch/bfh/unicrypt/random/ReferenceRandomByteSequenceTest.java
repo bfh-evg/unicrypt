@@ -42,7 +42,6 @@
 package ch.bfh.unicrypt.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import org.junit.After;
@@ -149,19 +148,6 @@ public class ReferenceRandomByteSequenceTest {
 		Assert.assertFalse(instance.getNextByteArray(10).equals(instance3.getNextByteArray(10)));
 		instance2.getNextByteArray(10);
 		assertEquals(instance.getNextByteArray(10), instance2.getNextByteArray(10));
-
-	}
-
-	/**
-	 * Test of getInstance method, of class ReferenceRandomByteSequence.
-	 */
-	@Test
-	public void testGetInstance_HashAlgorithm() {
-		// System.out.println("getInstance");
-		HashAlgorithm hashAlgorithm = HashAlgorithm.getInstance();
-		HashAlgorithm expResult = hashAlgorithm;
-		HashAlgorithm result = ReferenceRandomByteSequence.getInstance(hashAlgorithm).getHashAlgorithm();
-		assertEquals(expResult, result);
 
 	}
 

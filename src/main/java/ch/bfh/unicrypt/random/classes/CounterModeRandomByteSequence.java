@@ -70,11 +70,11 @@ public class CounterModeRandomByteSequence
 	 * This is the DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE pseudoRandomGenerator At each start of the JavaVM this
 	 * generator will restart deterministically. Do not use it for ephemeral keys!
 	 */
-	public static final CounterModeRandomByteSequence DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE =
-		   CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), DEFAULT_SEED);
+	public static final CounterModeRandomByteSequence DEFAULT_PSEUDO_RANDOM_GENERATOR_COUNTER_MODE
+		   = CounterModeRandomByteSequence.getInstance(HashAlgorithm.getInstance(), DEFAULT_SEED);
 	private static final long serialVersionUID = 1L;
 
-	private final HashAlgorithm hashAlgorithm;
+	protected final HashAlgorithm hashAlgorithm;
 	private ByteArray seed;
 	private BigInteger seedAsNumber;
 	private ByteArray hashedSeed;
@@ -96,11 +96,6 @@ public class CounterModeRandomByteSequence
 		return ByteArray.getInstance(seedAndCountAsNumber.toByteArray()).getHashValue(this.hashAlgorithm).getBytes();
 //		return digest.digest(hashedSeed.append(ByteArrayMonoid.getInstance().getElement(counter).
 //		getByteArray()).getBytes());
-	}
-
-	@Override
-	public HashAlgorithm getHashAlgorithm() {
-		return hashAlgorithm;
 	}
 
 	public ByteArray getSeed() {
@@ -173,6 +168,7 @@ public class CounterModeRandomByteSequence
 	 */
 	private class InternalByteArray
 		   extends ByteArray {
+
 		private static final long serialVersionUID = 1L;
 
 		private InternalByteArray(byte[] bytes) {

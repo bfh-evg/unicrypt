@@ -240,8 +240,8 @@ public class StringSequence
 	}
 
 	@Override
-	public ExtendedIterator<String> iterator() {
-		return new ExtendedIterator<String>() {
+	public SequenceIterator<String> iterator() {
+		return new SequenceIterator<String>() {
 
 			private int currenIndex = -1;
 

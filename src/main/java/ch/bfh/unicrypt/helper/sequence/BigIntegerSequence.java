@@ -105,8 +105,8 @@ public class BigIntegerSequence
 	}
 
 	@Override
-	public ExtendedIterator<BigInteger> iterator() {
-		return new ExtendedIterator<BigInteger>() {
+	public SequenceIterator<BigInteger> iterator() {
+		return new SequenceIterator<BigInteger>() {
 			private BigInteger currentValue = from;
 
 			@Override

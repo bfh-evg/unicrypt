@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.BigIntegerSequence;
-import ch.bfh.unicrypt.helper.sequence.ExtendedIterator;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import ch.bfh.unicrypt.helper.sequence.Mapping;
 import ch.bfh.unicrypt.helper.sequence.Predicate;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
@@ -298,8 +298,8 @@ public abstract class AbstractSet<E extends Element<V>, V>
 		return new Sequence<E>() {
 
 			@Override
-			public ExtendedIterator<E> iterator() {
-				return new ExtendedIterator<E>() {
+			public SequenceIterator<E> iterator() {
+				return new SequenceIterator<E>() {
 
 					@Override
 					public boolean hasNext() {
@@ -360,7 +360,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 		} catch (Exception e) {
 			return null;
 		}
-		
+
 	}
 
 	@Override

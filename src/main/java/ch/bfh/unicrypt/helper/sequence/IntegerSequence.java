@@ -77,8 +77,8 @@ public class IntegerSequence
 	}
 
 	@Override
-	public ExtendedIterator<Integer> iterator() {
-		return new ExtendedIterator<Integer>() {
+	public SequenceIterator<Integer> iterator() {
+		return new SequenceIterator<Integer>() {
 			private int currentValue = from;
 
 			@Override

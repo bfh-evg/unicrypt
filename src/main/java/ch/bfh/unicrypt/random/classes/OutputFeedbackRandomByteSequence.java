@@ -138,11 +138,6 @@ public class OutputFeedbackRandomByteSequence
 		setInternalState(seed.getHashValue(this.hashAlgorithm));
 	}
 
-	@Override
-	public HashAlgorithm getHashAlgorithm() {
-		return this.hashAlgorithm;
-	}
-
 	/**
 	 * <p>
 	 * @param length

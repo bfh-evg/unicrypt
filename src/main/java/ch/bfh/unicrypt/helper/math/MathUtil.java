@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.math;
 
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -592,8 +593,28 @@ public final class MathUtil {
 		return x.modPow(p.subtract(ONE).divide(TWO), p).equals(ONE);
 	}
 
+	/**
+	 * Converts the 8 rightmost bits of an integer into a byte.
+	 * <p>
+	 * @param integer The given integer
+	 * @return The corresponding byte
+	 */
 	public static byte getByte(int integer) {
 		return (byte) (integer & 0xFF);
+	}
+
+	/**
+	 * Converts an integer into a byte array in big-endian byte order.
+	 * <p>
+	 * @param integer The given integer
+	 * @return The corresponding byte array
+	 */
+	public static ByteArray getByteArray(int integer) {
+		byte byte0 = MathUtil.getByte(integer);
+		byte byte1 = MathUtil.getByte(integer >>> Byte.SIZE);
+		byte byte2 = MathUtil.getByte(integer >>> 2 * Byte.SIZE);
+		byte byte3 = MathUtil.getByte(integer >>> 3 * Byte.SIZE);
+		return ByteArray.getInstance(byte3, byte2, byte1, byte0);
 	}
 
 	/**

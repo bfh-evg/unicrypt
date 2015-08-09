@@ -53,14 +53,16 @@ public abstract class AbstractRandomByteSequence
 	   extends UniCrypt
 	   implements RandomByteSequence {
 
-	protected final RandomNumberGenerator randomNumberGenerator;
+	protected RandomNumberGenerator randomNumberGenerator = null;
 
 	protected AbstractRandomByteSequence() {
-		this.randomNumberGenerator = RandomNumberGenerator.getInstance(this);
 	}
 
 	@Override
 	public RandomNumberGenerator getRandomNumberGenerator() {
+		if (this.randomNumberGenerator == null) {
+			this.randomNumberGenerator = RandomNumberGenerator.getInstance(this);
+		}
 		return this.randomNumberGenerator;
 	}
 

@@ -61,7 +61,7 @@ public class MultiSequence<V>
 	}
 
 	@Override
-	public ExtendedIterator<Sequence<V>> iterator() {
+	public SequenceIterator<Sequence<V>> iterator() {
 		return this.sequences.iterator();
 	}
 
@@ -82,8 +82,8 @@ public class MultiSequence<V>
 		return new Sequence<V>(newLength) {
 
 			@Override
-			public ExtendedIterator<V> iterator() {
-				return new ExtendedIterator<V>() {
+			public SequenceIterator<V> iterator() {
+				return new SequenceIterator<V>() {
 
 					private final Iterator<V> iterator1 = first.iterator();
 					private final Iterator<V> iterator2 = rest.iterator();
@@ -110,8 +110,8 @@ public class MultiSequence<V>
 			return new Sequence<DenseArray<V>>(Sequence.INFINITE) {
 
 				@Override
-				public ExtendedIterator iterator() {
-					return new ExtendedIterator<DenseArray<V>>() {
+				public SequenceIterator iterator() {
+					return new SequenceIterator<DenseArray<V>>() {
 
 						@Override
 						public boolean hasNext() {
@@ -143,8 +143,8 @@ public class MultiSequence<V>
 		return new Sequence<DenseArray<V>>(newLength) {
 
 			@Override
-			public ExtendedIterator<DenseArray<V>> iterator() {
-				return new ExtendedIterator<DenseArray<V>>() {
+			public SequenceIterator<DenseArray<V>> iterator() {
+				return new SequenceIterator<DenseArray<V>>() {
 
 					private final Iterator<V> firstIterator = first.iterator();
 					private final Iterator<DenseArray<V>> restIterator = rest.iterator();
@@ -180,8 +180,8 @@ public class MultiSequence<V>
 		return new Sequence<DenseArray<V>>(newLength) {
 
 			@Override
-			public ExtendedIterator<DenseArray<V>> iterator() {
-				return new ExtendedIterator() {
+			public SequenceIterator<DenseArray<V>> iterator() {
+				return new SequenceIterator() {
 
 					private Iterator<V> firstIterator = first.iterator();
 					private final Iterator<DenseArray<V>> restIterator = rest.iterator();

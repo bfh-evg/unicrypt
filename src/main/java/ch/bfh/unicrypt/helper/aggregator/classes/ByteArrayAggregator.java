@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.helper.aggregator.classes;
 
 import ch.bfh.unicrypt.helper.aggregator.abstracts.AbstractAggregator;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.sequence.ExtendedIterator;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -131,8 +131,8 @@ public class ByteArrayAggregator
 		return new Sequence<ByteArray>() {
 
 			@Override
-			public ExtendedIterator<ByteArray> iterator() {
-				return new ExtendedIterator<ByteArray>() {
+			public SequenceIterator<ByteArray> iterator() {
+				return new SequenceIterator<ByteArray>() {
 
 					private int currentIndex = PREFIX_LENGTH;
 

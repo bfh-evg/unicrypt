@@ -1,8 +1,8 @@
 /*
  * UniCrypt
  *
- *  UniCrypt(tm) : Cryptographical framework allowing the implementation of cryptographic protocols e.g. e-voting
- *  Copyright (C) 2014 Bern University of Applied Sciences (BFH), Research Institute for
+ *  UniCrypt(tm): Cryptographic framework allowing the implementation of cryptographic protocols, e.g. e-voting
+ *  Copyright (C) 2015 Bern University of Applied Sciences (BFH), Research Institute for
  *  Security in the Information Society (RISIS), E-Voting Group (EVG)
  *  Quellgasse 21, CH-2501 Biel, Switzerland
  *
@@ -39,21 +39,75 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.random.interfaces;
+package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.random.classes.RandomNumberGenerator;
+import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
- * @author Reto E. Koenig <reto.koenig@bfh.ch>
+ * @author rolfhaenni
+ * @param <V>
  */
-public interface RandomByteSequence {
+public abstract class SequenceIterator<V>
+	   extends UniCrypt
+	   implements Iterator<V> {
 
-	public RandomNumberGenerator getRandomNumberGenerator();
+	public ImmutableArray<V> next(int n) {
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
+		List<V> values = new LinkedList<>();
+		while (n > 0 && this.hasNext()) {
+			values.add(this.next());
+			n--;
+		}
+		return DenseArray.getInstance(values);
+	}
 
-	public byte getNextByte();
+	public final void skip(int n) {
+		while (n > 0 && this.hasNext()) {
+			this.next();
+			n--;
+		}
+	}
 
-	public ByteArray getNextByteArray(int length);
+	public final V find(Predicate<? super V> predicate) {
+		while (this.hasNext()) {
+			V value = this.next();
+			if (predicate.test(value)) {
+				return value;
+			}
+		}
+		return null;
+	}
+
+	protected void defaultInit() {
+	}
+
+	protected void defaultUpdate() {
+	}
+
+	public static <V> SequenceIterator<V> getInstance(final Iterator<V> iterator) {
+		if (iterator == null) {
+			throw new IllegalArgumentException();
+		}
+		return new SequenceIterator<V>() {
+
+			@Override
+			public boolean hasNext() {
+				return iterator.hasNext();
+			}
+
+			@Override
+			public V next() {
+				return iterator.next();
+			}
+		};
+	}
 
 }
