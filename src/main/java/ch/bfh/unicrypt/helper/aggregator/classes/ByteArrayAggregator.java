@@ -142,7 +142,7 @@ public class ByteArrayAggregator
 					}
 
 					@Override
-					public ByteArray next() {
+					public ByteArray abstractNext() {
 						ByteArray prefix = value.extract(this.currentIndex, PREFIX_LENGTH);
 						int byteLength = new BigInteger(1, prefix.removePrefix(1).getBytes()).intValue();
 						ByteArray next = value.extract(this.currentIndex, PREFIX_LENGTH + byteLength);

@@ -251,7 +251,7 @@ public class StringSequence
 			}
 
 			@Override
-			public String next() {
+			public String abstractNext() {
 				this.currenIndex++;
 				int nextIndex = findNextSeparator(this.currenIndex);
 				String result = string.substring(this.currenIndex, nextIndex);

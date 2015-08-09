@@ -42,57 +42,44 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class ByteArraySequence
-	   extends Sequence<ByteArray> {
+public class PBKD2ByteArraySequenceTest {
 
-	protected ByteArraySequence() {
-		super();
-	}
+	@Test
+	public void hashMacSequenceTest() {
+		//
+		// Test vector from https://www.ietf.org/rfc/rfc6070.txt
+		//
+		//Input:
+		//P = "passwordPASSWORDpassword" (24 octets)
+		//S = "saltSALTsaltSALTsaltSALTsaltSALTsalt" (36 octets)
+		//c = 4096
+		//dkLen = 25
+		//
+		//Output:
+		//DK = 3d 2e ec 4f e4 1c 84 9b
+		//	80 c8 d8 36 62 c0 e4 4a
+		//	8b 29 1a 96 4c f2 f0 70
+		//	38                      (25 octets)
+		//
+		Converter<String, ByteArray> converter = StringToByteArray.getInstance();
+		ByteArray password = converter.convert("passwordPASSWORDpassword");
+		ByteArray salt = converter.convert("saltSALTsaltSALTsaltSALTsaltSALTsalt");
 
-	protected ByteArraySequence(BigInteger length) {
-		super(length);
-	}
+		ByteArray expected = ByteArray.getInstance("3d|2e|ec|4f|e4|1c|84|9b|80|c8|d8|36|62|c0|e4|4a|8b|29|1a|96|4c|f2|f0|70|38".toUpperCase());
+		HashAlgorithm algo = HashAlgorithm.SHA1;
 
-	public Sequence<Byte> getByteSequence() {
-
-		final Sequence<ByteArray> source = this;
-		return new ByteSequence(Sequence.UNKNOWN) {
-
-			@Override
-			public ByteSequenceIterator iterator() {
-				return new ByteSequenceIterator() {
-
-					private final SequenceIterator<ByteArray> iterator = source.iterator();
-					private ByteArray currentByteArray = null;
-					private int currentIndex = 0;
-
-					@Override
-					public boolean hasNext() {
-						return iterator.hasNext() || (this.currentByteArray != null && this.currentIndex < this.currentByteArray.getLength());
-					}
-
-					@Override
-					public Byte abstractNext() {
-						if (this.currentByteArray == null || this.currentIndex == this.currentByteArray.getLength()) {
-							this.currentByteArray = iterator.abstractNext();
-							this.currentIndex = 0;
-						}
-						return this.currentByteArray.getAt(this.currentIndex++);
-					}
-
-					@Override
-					public void defaultUpdate() {
-						this.iterator.defaultUpdate();
-					}
-				};
-			}
-		};
+		SequenceIterator si = PBKD2ByteArraySequence.getInstance(algo, password, salt, 4096).getByteSequence().iterator();
+		Assert.assertEquals(expected, si.next(25));
 	}
 
 }

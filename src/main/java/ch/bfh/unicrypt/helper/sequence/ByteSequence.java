@@ -57,6 +57,9 @@ public abstract class ByteSequence
 	}
 
 	@Override
+	public abstract ByteSequenceIterator iterator();
+
+	@Override
 	public final ByteArraySequence group(final int groupLength) {
 		if (groupLength < 1) {
 			throw new IllegalArgumentException();
@@ -82,7 +85,7 @@ public abstract class ByteSequence
 					}
 
 					@Override
-					public ByteArray next() {
+					public ByteArray abstractNext() {
 						int i = 0;
 						byte[] result = new byte[groupLength];
 						while (i < groupLength && this.iterator.hasNext()) {

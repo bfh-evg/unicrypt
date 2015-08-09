@@ -87,7 +87,7 @@ public class IntegerSequence
 			}
 
 			@Override
-			public Integer next() {
+			public Integer abstractNext() {
 				Integer value = currentValue;
 				this.currentValue = this.currentValue + 1;
 				return value;

@@ -63,8 +63,8 @@ public abstract class Sequence<V>
 	   extends UniCrypt
 	   implements Iterable<V> {
 
-	protected static final BigInteger INFINITE = BigInteger.valueOf(-1);
-	protected static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
+	public static final BigInteger INFINITE = BigInteger.valueOf(-1);
+	public static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
 
 	// the length of the sequence
 	protected BigInteger length;
@@ -218,7 +218,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public W next() {
+					public W abstractNext() {
 						return mapping.apply(this.iterator.next());
 					}
 				};
@@ -259,7 +259,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						V result = this.nextValue;
 						this.nextValue = null;
 						return result;
@@ -303,7 +303,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						this.counter = this.counter.add(MathUtil.ONE);
 						return this.iterator.next();
 					}
@@ -334,7 +334,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						V value = iterator.next();
 						if (predicate.test(value)) {
 							this.found = true;
@@ -397,7 +397,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public ImmutableArray<V> next() {
+					public ImmutableArray<V> abstractNext() {
 						return this.iterator.next(groupLength);
 					}
 
@@ -440,7 +440,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						return source[this.pos++];
 					}
 
@@ -478,7 +478,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						return source.getAt(this.currentIndex++);
 					}
 				};
@@ -505,7 +505,7 @@ public abstract class Sequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						V nextValue = this.currentValue;
 						this.currentValue = operator.apply(this.currentValue);
 						return nextValue;

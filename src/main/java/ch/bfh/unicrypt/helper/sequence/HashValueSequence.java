@@ -102,22 +102,13 @@ public class HashValueSequence
 
 		return new SequenceIterator<ByteArray>() {
 
-			private ByteArray value;
-			private final ByteArray constant;
-			private ByteArray data;
-			private long counter;
-
-			{
-				// initialize internal state
-				this.value = hashDerivationFunction(seed);
-				this.constant = hashDerivationFunction(this.value.insert(BYTE_ZERO));
-				this.counter = 1;
-				this.data = this.value;
-			}
+			private ByteArray value = hashDerivationFunction(seed);
+			private final ByteArray constant = hashDerivationFunction(this.value.insert(BYTE_ZERO));
+			private ByteArray data = this.value;
+			private long counter = 1;
 
 			@Override
 			protected void defaultUpdate() {
-				// update operation is called after each call to next() or next(n)
 				ByteArray hash = hashAlgorithm.getHashValue(this.value.insert(BYTE_THREE));
 				this.value = byteArraySum(this.value, hash, this.constant, this.counter);
 				this.counter++;
@@ -130,7 +121,7 @@ public class HashValueSequence
 			}
 
 			@Override
-			public ByteArray next() {
+			public ByteArray abstractNext() {
 				ByteArray next = hashAlgorithm.getHashValue(this.data);
 				this.data = byteArrayAddOne(this.data);
 				return next;

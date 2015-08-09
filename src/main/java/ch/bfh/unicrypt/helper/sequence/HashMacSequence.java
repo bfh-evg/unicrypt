@@ -69,13 +69,11 @@ public class HashMacSequence
 
 		return new SequenceIterator<ByteArray>() {
 
-			private ByteArray key;
-			private ByteArray value;
+			private ByteArray key = ByteArray.getInstance(BYTE_ZERO, hashAlgorithm.getByteLength());
+			private ByteArray value = ByteArray.getInstance(BYTE_ONE, hashAlgorithm.getByteLength());
 
 			{
 				// initialize internal state
-				this.key = ByteArray.getInstance(BYTE_ZERO, hashAlgorithm.getByteLength());
-				this.value = ByteArray.getInstance(BYTE_ONE, hashAlgorithm.getByteLength());
 				this.stateUpdate(seed);
 			}
 
@@ -100,7 +98,7 @@ public class HashMacSequence
 			}
 
 			@Override
-			public ByteArray next() {
+			public ByteArray abstractNext() {
 				return this.value = hashAlgorithm.getHashValue(this.value, this.key);
 			}
 

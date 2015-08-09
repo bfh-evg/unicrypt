@@ -94,7 +94,7 @@ public class MultiSequence<V>
 					}
 
 					@Override
-					public V next() {
+					public V abstractNext() {
 						if (this.iterator1.hasNext()) {
 							return this.iterator1.next();
 						}
@@ -119,7 +119,7 @@ public class MultiSequence<V>
 						}
 
 						@Override
-						public DenseArray<V> next() {
+						public DenseArray<V> abstractNext() {
 							return DenseArray.<V>getInstance();
 						}
 
@@ -155,7 +155,7 @@ public class MultiSequence<V>
 					}
 
 					@Override
-					public DenseArray<V> next() {
+					public DenseArray<V> abstractNext() {
 						return restIterator.next().insert(firstIterator.next());
 					}
 				};
@@ -193,7 +193,7 @@ public class MultiSequence<V>
 					}
 
 					@Override
-					public DenseArray<V> next() {
+					public DenseArray<V> abstractNext() {
 						DenseArray<V> result = restItem.insert(this.firstIterator.next());
 						if (!this.firstIterator.hasNext() && this.restIterator.hasNext()) {
 							this.restItem = this.restIterator.next();

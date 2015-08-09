@@ -63,32 +63,49 @@ public abstract class SequenceIterator<V>
 		}
 		List<V> values = new LinkedList<>();
 		while (n > 0 && this.hasNext()) {
-			values.add(this.next());
+			values.add(this.abstractNext());
 			n--;
 		}
+		this.defaultUpdate();
 		return DenseArray.getInstance(values);
 	}
 
 	public final void skip(int n) {
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
 		while (n > 0 && this.hasNext()) {
-			this.next();
+			this.abstractNext();
 			n--;
 		}
+		this.defaultUpdate();
 	}
 
 	public final V find(Predicate<? super V> predicate) {
+		if (predicate == null) {
+			throw new IllegalArgumentException();
+		}
 		while (this.hasNext()) {
-			V value = this.next();
+			V value = this.abstractNext();
 			if (predicate.test(value)) {
+				this.defaultUpdate();
 				return value;
 			}
 		}
+		this.defaultUpdate();
 		return null;
 	}
 
-	protected void defaultInit() {
+	@Override
+	public final V next() {
+		V result = this.abstractNext();
+		this.defaultUpdate();
+		return result;
 	}
 
+	protected abstract V abstractNext();
+
+	// update operation is called after each call to next() or next(n)
 	protected void defaultUpdate() {
 	}
 
@@ -104,7 +121,7 @@ public abstract class SequenceIterator<V>
 			}
 
 			@Override
-			public V next() {
+			public V abstractNext() {
 				return iterator.next();
 			}
 		};

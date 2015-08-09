@@ -42,57 +42,28 @@
 package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import java.math.BigInteger;
 
 /**
  *
  * @author rolfhaenni
  */
-public abstract class ByteArraySequence
-	   extends Sequence<ByteArray> {
+public abstract class ByteSequenceIterator
+	   extends SequenceIterator<Byte> {
 
-	protected ByteArraySequence() {
-		super();
-	}
-
-	protected ByteArraySequence(BigInteger length) {
-		super(length);
-	}
-
-	public Sequence<Byte> getByteSequence() {
-
-		final Sequence<ByteArray> source = this;
-		return new ByteSequence(Sequence.UNKNOWN) {
-
-			@Override
-			public ByteSequenceIterator iterator() {
-				return new ByteSequenceIterator() {
-
-					private final SequenceIterator<ByteArray> iterator = source.iterator();
-					private ByteArray currentByteArray = null;
-					private int currentIndex = 0;
-
-					@Override
-					public boolean hasNext() {
-						return iterator.hasNext() || (this.currentByteArray != null && this.currentIndex < this.currentByteArray.getLength());
-					}
-
-					@Override
-					public Byte abstractNext() {
-						if (this.currentByteArray == null || this.currentIndex == this.currentByteArray.getLength()) {
-							this.currentByteArray = iterator.abstractNext();
-							this.currentIndex = 0;
-						}
-						return this.currentByteArray.getAt(this.currentIndex++);
-					}
-
-					@Override
-					public void defaultUpdate() {
-						this.iterator.defaultUpdate();
-					}
-				};
-			}
-		};
+	@Override
+	public ByteArray next(int n) {
+		if (n < 0) {
+			throw new IllegalArgumentException();
+		}
+		int i = 0;
+		byte[] bytes = new byte[n];
+		while (i < n && this.hasNext()) {
+			bytes[i] = this.abstractNext();
+			i++;
+		}
+		this.defaultUpdate();
+		// extra bytes are truncated
+		return ByteArray.getInstance(bytes).extractPrefix(i);
 	}
 
 }

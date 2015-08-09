@@ -115,7 +115,7 @@ public class BigIntegerSequence
 			}
 
 			@Override
-			public BigInteger next() {
+			public BigInteger abstractNext() {
 				BigInteger value = currentValue;
 				this.currentValue = this.currentValue.add(MathUtil.ONE);
 				return value;

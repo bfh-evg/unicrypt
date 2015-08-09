@@ -307,7 +307,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 					}
 
 					@Override
-					public E next() {
+					public E abstractNext() {
 						return abstractGetRandomElement(randomByteSequence);
 					}
 				};
