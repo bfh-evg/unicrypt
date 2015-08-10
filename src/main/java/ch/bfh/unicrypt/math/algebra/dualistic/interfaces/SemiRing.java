@@ -61,7 +61,7 @@ import java.math.BigInteger;
  * operation is called "multiplication". It is implemented as a specialization of {@link Monoid}. Some return types are
  * updated.
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <V> Generic type of values stored in the elements of this semiring
  */
 public interface SemiRing<V>

@@ -53,7 +53,7 @@ import java.math.BigInteger;
  * @param <E> Generic type of elements of this field
  * @param <M> Generic type of the {@link MultiplicativeGroup} of this field
  * @param <V> Generic type of values stored in the elements of this field
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class AbstractField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V>
 	   extends AbstractRing<E, V>

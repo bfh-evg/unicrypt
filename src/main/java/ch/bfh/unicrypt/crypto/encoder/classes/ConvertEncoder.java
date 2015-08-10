@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ConvertEncoder
 	   extends AbstractEncoder<Set, Element, Set, Element> {

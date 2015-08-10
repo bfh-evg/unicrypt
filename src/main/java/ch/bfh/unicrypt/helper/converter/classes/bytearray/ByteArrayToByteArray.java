@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractByteArrayConverter;
  * which the bits of the bytes in the byte arrays are reversed, and one in which both the bytes and the bits in the byte
  * arrays are reversed.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class ByteArrayToByteArray

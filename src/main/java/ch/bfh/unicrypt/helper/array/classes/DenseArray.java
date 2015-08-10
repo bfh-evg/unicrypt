@@ -55,7 +55,7 @@ import java.util.Collection;
  * running times for most operations.
  * <p>
  * @see SparseArray
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */

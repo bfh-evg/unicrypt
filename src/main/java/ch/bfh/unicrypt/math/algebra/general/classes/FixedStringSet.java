@@ -46,7 +46,7 @@ import java.math.BigInteger;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class FixedStringSet
 	   extends FiniteStringSet {

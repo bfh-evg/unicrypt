@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <MS>  Message space
  * @param <ME>  Message element
  * @param <ES>  Encryption space

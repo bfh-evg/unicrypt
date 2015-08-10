@@ -51,7 +51,7 @@ import java.math.BigInteger;
  * (upper-case or lower-case letters). Negative numbers are preceeded by the minus sign {@code '-'}. The default
  * conversion returns the decimal representation with digits {@code '0',...,'9'}.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @see Character#MIN_RADIX
  * @see Character#MAX_RADIX

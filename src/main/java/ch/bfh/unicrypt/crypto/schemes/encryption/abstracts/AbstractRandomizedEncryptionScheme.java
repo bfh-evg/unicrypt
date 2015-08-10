@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <MS>  Message space
  * @param <ME>  Message element
  * @param <ES>  Encryption space

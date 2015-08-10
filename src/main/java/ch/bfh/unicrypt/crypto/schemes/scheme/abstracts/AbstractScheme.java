@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <MS>
  */
 public abstract class AbstractScheme<MS extends Set>

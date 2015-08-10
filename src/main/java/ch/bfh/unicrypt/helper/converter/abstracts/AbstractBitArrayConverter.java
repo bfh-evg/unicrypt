@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 /**
  * This abstract class serves as a base implementation of the {@link Converter} interface for BitArray values.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The input type
  */

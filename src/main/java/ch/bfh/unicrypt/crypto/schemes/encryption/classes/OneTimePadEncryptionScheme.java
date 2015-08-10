@@ -55,7 +55,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class OneTimePadEncryptionScheme
 	   extends AbstractSymmetricEncryptionScheme<FiniteByteArraySet, FiniteByteArrayElement, FiniteByteArraySet,

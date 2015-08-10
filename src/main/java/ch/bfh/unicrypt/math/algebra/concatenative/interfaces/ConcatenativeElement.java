@@ -48,7 +48,7 @@ import java.math.BigInteger;
  * This interface represents an additively written {@link Element}. No functionality is added. Some return types are
  * updated.
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <V> Generic type of values of this element
  */
 public interface ConcatenativeElement<V>

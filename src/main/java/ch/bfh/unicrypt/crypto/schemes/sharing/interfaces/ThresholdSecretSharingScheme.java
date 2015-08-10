@@ -43,7 +43,7 @@ package ch.bfh.unicrypt.crypto.schemes.sharing.interfaces;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public interface ThresholdSecretSharingScheme
 			 extends SecretSharingScheme {

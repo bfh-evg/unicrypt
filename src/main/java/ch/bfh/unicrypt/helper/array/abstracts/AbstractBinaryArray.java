@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.helper.array.interfaces.BinaryArray;
 /**
  * This abstract class serves as a base implementation of the {@link BinaryArray} interface.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <A> The type of a potential non-generic sub-class
  * @param <V> The generic type of the values in the binary array

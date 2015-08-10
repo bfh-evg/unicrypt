@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.tree.Tree;
  * the output type for which {@link Converter#isValidOutput(java.lang.Object)} returns {@code false} can not be
  * converted back.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * <p>
  * @param <V> The input type

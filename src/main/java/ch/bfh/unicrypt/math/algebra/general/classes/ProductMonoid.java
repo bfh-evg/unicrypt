@@ -51,7 +51,7 @@ import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ProductMonoid
 	   extends ProductSemiGroup

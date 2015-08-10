@@ -52,7 +52,7 @@ import java.math.BigInteger;
  * @param <E> Generic type of the elements of this finite field
  * @param <M> Generic type of the {@link MultplicativeGroup} of this finite field
  * @param <V> Generic type of values stored in the elements of this finite field
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class AbstractFiniteField<E extends DualisticElement<V>, M extends MultiplicativeGroup, V>
 	   extends AbstractField<E, M, V>

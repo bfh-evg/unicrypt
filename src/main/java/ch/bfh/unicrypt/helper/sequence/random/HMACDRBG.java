@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 /**
  * NIST SP 800-90
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class HMACDRBG
 	   extends Sequence<ByteArray> {

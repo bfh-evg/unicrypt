@@ -51,7 +51,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author rolfhaenni
+ * @author R. Haenni
  * <p>
  */
 public class SingletonGroup

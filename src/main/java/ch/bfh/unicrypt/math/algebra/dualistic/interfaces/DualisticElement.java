@@ -50,7 +50,7 @@ import java.math.BigInteger;
  * TODO A dualistic element can be understood as an element that can be additive or multiplicative. It is implemented as
  * a specialization of {@link Element}. Some return types are updated.
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <V> Generic type of values stored in this element
  */
 public interface DualisticElement<V>

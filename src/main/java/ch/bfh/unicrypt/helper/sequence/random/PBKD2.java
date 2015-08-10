@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
  * NIST Special Publication 800-132: "Recommendation for Password-Based Key Derivation" RFC 2898 "PKCS #5:
  * Password-Based Cryptography Specification, Version 2.0"
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PBKD2
 	   extends Sequence<ByteArray> {

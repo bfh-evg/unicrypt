@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
  * the first and then by the second converter. In the reverse process, the value is first processed by the second and
  * then by the first converter.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The input type (of the first converter)
  * @param <X> The common output/input type of the two converters

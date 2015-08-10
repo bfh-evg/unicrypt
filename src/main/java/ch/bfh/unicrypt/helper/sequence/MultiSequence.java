@@ -48,7 +48,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <V>
  */
 public class MultiSequence<V>

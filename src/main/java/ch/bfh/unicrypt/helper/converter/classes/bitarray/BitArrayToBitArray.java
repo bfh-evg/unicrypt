@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBitArrayConverter;
  * Instance of this class convert {@code BitArray} values into {@code BitArray} values. There are two operating modes,
  * one in which the bit arrays remain unchanged and one in which the bit arrays are reversed.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BitArrayToBitArray

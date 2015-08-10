@@ -52,7 +52,7 @@ import java.nio.ByteOrder;
  * {@link BigInteger#BigInteger(byte[])}. The {@code BigInteger} values can be positive or negative. There are two modes
  * of operation: the default mode using big-endian byte order and the alternative mode using little-endian byte order.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BigIntegerToByteArray

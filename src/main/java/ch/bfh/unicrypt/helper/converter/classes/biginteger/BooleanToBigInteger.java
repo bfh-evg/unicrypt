@@ -48,7 +48,7 @@ import java.math.BigInteger;
  * The single instance of this class converts the Boolean values {@code false} into {@link BigInteger#ZERO} and
  * {@code true} into {@link BigInteger#ONE}.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BooleanToBigInteger

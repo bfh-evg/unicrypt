@@ -59,7 +59,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <PRS> Private key space
  * @param <PRE> Private key element
  * @param <PUS> Public key space

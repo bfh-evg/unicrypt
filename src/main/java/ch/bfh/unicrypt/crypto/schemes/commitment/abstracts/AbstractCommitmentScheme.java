@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <MS> Message space
  * @param <CS> Commitment space
  */

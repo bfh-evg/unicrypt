@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class BooleanElement
 	   extends AbstractElement<BooleanSet, BooleanElement, Boolean>

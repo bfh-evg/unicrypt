@@ -55,7 +55,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * performance of binary operations, the boolean values are internally stored in a {@link ByteArray} instance.
  * <p>
  * @see ByteArray
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BitArray

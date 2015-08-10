@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public interface Scheme {
 

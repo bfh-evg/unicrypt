@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
  * <p>
  * @see BitArray
  * @see ByteArray
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the binary array
  */

@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class SimpleSecretSharingScheme
 	   extends AbstractSecretSharingScheme<Group, Element, Group, Element> {

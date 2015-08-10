@@ -53,7 +53,7 @@ import java.math.BigInteger;
 /**
  * NIST SP 800-90
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class HashDRBG
 	   extends Sequence<ByteArray> {

@@ -57,7 +57,7 @@ import java.util.Iterator;
  * @param <DE>
  * @param <C>
  * @param <CE>
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class AbstractCompoundFunction<CF extends AbstractCompoundFunction<CF, D, DE, C, CE>, D extends Set, DE extends Element, C extends Set, CE extends Element>
 	   extends AbstractFunction<CF, D, DE, C, CE>

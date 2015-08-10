@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElemen
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ByteArrayElement
 	   extends AbstractConcatenativeElement<ByteArrayMonoid, ByteArrayElement, ByteArray>

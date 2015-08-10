@@ -52,7 +52,7 @@ import java.math.BigInteger;
  * operation mode, a minimal value {@code m} must be specified, and only values {@code v >= m} are converted into v-m >=
  * 0;
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BigIntegerToBigInteger

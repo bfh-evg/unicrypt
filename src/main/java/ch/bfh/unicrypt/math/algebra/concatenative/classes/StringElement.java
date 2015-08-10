@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.concatenative.interfaces.ConcatenativeElemen
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class StringElement
 	   extends AbstractConcatenativeElement<StringMonoid, StringElement, String>

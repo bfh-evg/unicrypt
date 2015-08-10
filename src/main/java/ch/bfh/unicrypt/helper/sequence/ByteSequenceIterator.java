@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class ByteSequenceIterator
 	   extends SequenceIterator<Byte> {

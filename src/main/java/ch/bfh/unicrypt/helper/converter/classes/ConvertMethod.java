@@ -53,7 +53,7 @@ import java.util.Map;
  * flexibility. Note that {@link ConvertMethod} itself is not a {@link Converter}, it only allows the selection of the
  * converter to be used for instances of a specific class.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <W> The output type
  */

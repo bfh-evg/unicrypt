@@ -53,7 +53,7 @@ import java.util.WeakHashMap;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PseudoRandomOracle
 	   extends AbstractRandomOracle {

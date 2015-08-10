@@ -55,7 +55,7 @@ import java.util.Map;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PolynomialRing
 	   extends PolynomialSemiRing

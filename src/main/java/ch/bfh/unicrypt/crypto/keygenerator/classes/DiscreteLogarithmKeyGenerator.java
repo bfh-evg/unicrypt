@@ -52,7 +52,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class DiscreteLogarithmKeyGenerator
 	   extends AbstractKeyPairGenerator<ZMod, ZModElement, CyclicGroup, Element> {

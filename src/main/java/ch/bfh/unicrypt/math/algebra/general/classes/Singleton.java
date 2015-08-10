@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class Singleton
 	   extends Tuple {

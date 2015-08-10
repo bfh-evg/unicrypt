@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public interface StandardECZModParams extends StandardECParams<ZModPrime, ZModElement> {
 

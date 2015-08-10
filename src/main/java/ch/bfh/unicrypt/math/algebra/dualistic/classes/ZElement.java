@@ -47,7 +47,7 @@ import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ZElement
 	   extends AbstractDualisticElement<Z, ZElement, BigInteger>

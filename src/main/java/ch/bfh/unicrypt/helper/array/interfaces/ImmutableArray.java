@@ -50,7 +50,7 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
  * The values of an array of length {@code n} are indexed from {@code 0} to {@code n-1}. Immutable arrays are
  * {@link Iterable}. There are multiple optimized implementations for different needs.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */

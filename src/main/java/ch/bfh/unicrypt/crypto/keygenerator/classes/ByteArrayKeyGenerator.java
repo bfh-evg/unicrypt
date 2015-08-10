@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.classes.FixedByteArraySet;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ByteArrayKeyGenerator
 	   extends AbstractSecretKeyGenerator<FixedByteArraySet, FiniteByteArrayElement> {

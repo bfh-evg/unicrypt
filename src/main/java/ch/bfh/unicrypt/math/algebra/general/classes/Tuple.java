@@ -60,7 +60,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class Tuple
 	   extends AbstractElement<ProductSet, Tuple, DenseArray<Element>>

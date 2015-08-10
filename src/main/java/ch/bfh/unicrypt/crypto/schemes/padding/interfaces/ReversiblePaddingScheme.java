@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public interface ReversiblePaddingScheme
 	   extends PaddingScheme {

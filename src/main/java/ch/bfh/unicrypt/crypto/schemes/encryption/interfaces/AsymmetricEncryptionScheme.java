@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.crypto.keygenerator.interfaces.KeyPairGenerator;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public interface AsymmetricEncryptionScheme
        extends EncryptionScheme {

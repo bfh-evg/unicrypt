@@ -52,7 +52,7 @@ import java.math.BigInteger;
  * can be specified. Again, for blocks of length 2 and with a minimal number of blocks of 3, then only strings of length
  * 6, 8, 10, ... are valid inputs. An unrestricted input corresponds to block length 1 and minimal number of blocks 0.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class StringToBigInteger

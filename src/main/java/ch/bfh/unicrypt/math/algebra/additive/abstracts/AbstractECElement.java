@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  * @param <V>  Type Finite Field of EC
  * @param <DE> Type of FiniteFieldElement
  * @param <EE>

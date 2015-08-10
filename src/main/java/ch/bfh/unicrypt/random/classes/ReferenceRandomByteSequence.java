@@ -50,7 +50,7 @@ import java.util.WeakHashMap;
 /**
  * This is a special 'instance' of a PseudoRandomGeneratorCounterMode which allows to
  * <p>
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class ReferenceRandomByteSequence
 	   extends CounterModeRandomByteSequence

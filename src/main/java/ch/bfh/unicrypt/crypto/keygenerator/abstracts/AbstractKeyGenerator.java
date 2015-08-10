@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class AbstractKeyGenerator
 	   extends UniCrypt

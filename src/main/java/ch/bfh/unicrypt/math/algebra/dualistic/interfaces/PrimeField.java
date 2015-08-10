@@ -46,7 +46,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.interfaces;
  * field, the smallest subfield containing 1F(? see wikipedia http://en.wikipedia.org/wiki/Field_extension). It is
  * implemented as a specialization of {@link FiniteField} and {@link CyclicRing}.
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <V> Generic type of values stored in the elements of this field
  */
 public interface PrimeField<V>

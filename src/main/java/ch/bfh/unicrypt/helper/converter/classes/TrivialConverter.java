@@ -47,7 +47,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractConverter;
  * This generic class implements a trivial converter from a input type to the same output type {@code V}. The conversion
  * forth and back passes the values unchanged.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The input and output type
  */

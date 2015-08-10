@@ -46,31 +46,29 @@ import java.security.SecureRandom;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class TrueRandomSequence
 	   extends RandomByteSequence {
 
-	final SecureRandom secureRandom;
+	final ByteSequenceIterator iterator = new ByteSequenceIterator() {
 
-	private TrueRandomSequence() {
-		this.secureRandom = new SecureRandom();
-	}
+		private final SecureRandom secureRandom = new SecureRandom();
+
+		@Override
+		protected Byte abstractNext() {
+			return secureRandom.generateSeed(1)[0];
+		}
+
+		@Override
+		public boolean hasNext() {
+			return true;
+		}
+	};
 
 	@Override
 	public ByteSequenceIterator iterator() {
-		return new ByteSequenceIterator() {
-
-			@Override
-			protected Byte abstractNext() {
-				return secureRandom.generateSeed(1)[0];
-			}
-
-			@Override
-			public boolean hasNext() {
-				return true;
-			}
-		};
+		return this.iterator;
 	}
 
 	public static TrueRandomSequence getInstance() {

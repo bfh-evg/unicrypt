@@ -54,7 +54,7 @@ import java.math.BigInteger;
  * length 6, 8, 10, ... are valid inputs. An unrestricted input corresponds to block length 1 and minimal number of
  * blocks 0.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class ByteArrayToBigInteger

@@ -52,7 +52,7 @@ import java.util.LinkedHashSet;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class Subset
 	   extends AbstractSet<Element<Object>, Object> {

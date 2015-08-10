@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.helper.sequence.ByteSequenceIterator;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PseudoRandomByteSequence
 	   extends RandomByteSequence {

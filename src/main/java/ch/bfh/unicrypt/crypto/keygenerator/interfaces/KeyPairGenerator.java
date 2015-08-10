@@ -51,7 +51,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public interface KeyPairGenerator
 	   extends KeyGenerator {

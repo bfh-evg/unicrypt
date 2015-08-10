@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public interface SignatureScheme
 	   extends Scheme {

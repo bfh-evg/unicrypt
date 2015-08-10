@@ -53,7 +53,7 @@ import org.junit.Test;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class BigIntegerHashMethodTest {
 

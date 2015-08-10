@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
  * additional convenience methods. The existence of a default value may also help to make more efficient implementations
  * of immutable arrays.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */

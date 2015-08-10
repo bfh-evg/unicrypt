@@ -48,7 +48,7 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class FiniteStringElement
 	   extends AbstractElement<FiniteStringSet, FiniteStringElement, String>

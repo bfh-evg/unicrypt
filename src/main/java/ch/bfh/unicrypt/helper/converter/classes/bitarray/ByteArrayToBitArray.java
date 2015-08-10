@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBitArrayConverter;
  * The single instance of this class converts {@code ByteArray} values into {@code BitArray} values. The bits contained
  * in the byte array and the order of the bits remain unchanged.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class ByteArrayToBitArray

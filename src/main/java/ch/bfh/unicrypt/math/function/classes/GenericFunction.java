@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <D>
  * @param <DE>
  * @param <C>

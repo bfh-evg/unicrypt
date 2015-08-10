@@ -62,7 +62,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ElGamalEncryptionScheme
 	   extends AbstractReEncryptionScheme<CyclicGroup, Element, ProductGroup, Pair, ZMod, ZModElement, CyclicGroup,

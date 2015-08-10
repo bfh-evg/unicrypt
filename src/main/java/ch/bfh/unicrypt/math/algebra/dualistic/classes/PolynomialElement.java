@@ -51,7 +51,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class PolynomialElement
 	   extends AbstractDualisticElement<PolynomialSemiRing, PolynomialElement, Polynomial<? extends DualisticElement<BigInteger>>> {

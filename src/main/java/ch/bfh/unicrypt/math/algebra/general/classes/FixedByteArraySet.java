@@ -50,7 +50,7 @@ import java.util.Map;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public class FixedByteArraySet
 	   extends FiniteByteArraySet {

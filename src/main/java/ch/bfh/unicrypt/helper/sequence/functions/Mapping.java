@@ -42,10 +42,12 @@
 package ch.bfh.unicrypt.helper.sequence.functions;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
  * Classes implementing this interface provide a single method for mapping a value of type {@code V} into a value of
- * type {@code W}. The main usage of this interface is in the method {@link Sequence#map(Mapping)}.
+ * type {@code W}. The main usage of this interface are the methods {@link Sequence#map(Mapping)} and
+ * {@link Sequence#getInstance(Object, Mapping)}.
  * <p>
  * @author R. Haenni
  * @version 2.0
@@ -63,6 +65,15 @@ public abstract class Mapping<V, W>
 	 */
 	public abstract W apply(V value);
 
+	/**
+	 * Returns a composition of this mapping with another mapping. With the new mapping, values of type {@code V} are
+	 * mapped twice, first from {@code V} to {@code W} by applying this mapping, and then from {@code W} to {@code X} by
+	 * applying the other mapping.
+	 * <p>
+	 * @param <X>          The new output type
+	 * @param otherMapping The other mapping
+	 * @return The new mapping
+	 */
 	public final <X> Mapping<V, X> compose(final Mapping<? super W, X> otherMapping) {
 		final Mapping<V, W> thisMapping = this;
 		return new Mapping<V, X>() {

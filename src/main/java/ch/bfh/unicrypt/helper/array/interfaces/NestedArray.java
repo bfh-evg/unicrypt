@@ -46,7 +46,7 @@ package ch.bfh.unicrypt.helper.array.interfaces;
  * of a nested array. In a nested array, each value is either atomic or another array of the same generic type. As such,
  * a nested array can be regarded as a tree.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the nested array
  */

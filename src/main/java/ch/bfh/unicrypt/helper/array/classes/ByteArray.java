@@ -60,7 +60,7 @@ import java.util.Arrays;
  * class for the implementations of {@link BitArray}.
  * <p>
  * @see BitArray
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class ByteArray

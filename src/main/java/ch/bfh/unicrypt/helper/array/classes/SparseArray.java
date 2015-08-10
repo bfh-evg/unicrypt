@@ -57,7 +57,7 @@ import java.util.Map;
  * spareness of the array is high.
  * <p>
  * @see DenseArray
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The generic type of the values in the immutable array
  */

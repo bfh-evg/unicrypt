@@ -58,7 +58,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * <p>
  * @param <E> Generic type of the elements of this cyclic ring
  * @param <V> Generic type of values stored in the elements of this cyclic ring
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class AbstractCyclicRing<E extends DualisticElement<V>, V>
 	   extends AbstractRing<E, V>

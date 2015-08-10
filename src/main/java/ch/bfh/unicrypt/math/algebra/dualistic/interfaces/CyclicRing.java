@@ -53,7 +53,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * is called a generator of the ring. It is therefore implemented as a specialization of {@link Ring} and
  * {@link AdditiveCyclicGroup}. Some return types are updated.
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <V>
  */
 public interface CyclicRing<V>

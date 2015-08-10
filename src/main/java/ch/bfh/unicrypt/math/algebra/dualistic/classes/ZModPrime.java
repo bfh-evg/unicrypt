@@ -51,7 +51,7 @@ import java.util.Map;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ZModPrime
 	   extends ZMod

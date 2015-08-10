@@ -53,7 +53,7 @@ import java.nio.charset.StandardCharsets;
  * character sets can be created: {@code UTF-8}, {@code UTF-16}, {@code UTF-16BE}, {@code UTF-16LE},
  * {@code UTF-32}, {@code UTF-32BE}, {@code UTF-32LE}.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @see StandardCharsets
  */

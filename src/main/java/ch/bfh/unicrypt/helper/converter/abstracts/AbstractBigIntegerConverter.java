@@ -47,7 +47,7 @@ import java.math.BigInteger;
 /**
  * This abstract class serves as a base implementation of the {@link Converter} interface for BigInteger values.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  * @param <V> The input type
  */

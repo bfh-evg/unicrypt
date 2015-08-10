@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractElement;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  * @param <V>
  */
 public class EnumeratedSetElement<V>

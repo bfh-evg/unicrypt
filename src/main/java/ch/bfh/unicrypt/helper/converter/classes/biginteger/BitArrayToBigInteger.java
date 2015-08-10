@@ -50,7 +50,7 @@ import java.math.BigInteger;
 /**
  * The single instance of this class converts bit arrays into non-negative {@code BigInteger} values 0, 1, 2, ...
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BitArrayToBigInteger

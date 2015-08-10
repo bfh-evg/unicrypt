@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
 
 /**
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  */
 public interface StandardECPolynomialFieldParams
 	   extends StandardECParams<PolynomialField, PolynomialElement> {

@@ -47,7 +47,7 @@ import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class GStarModElement
 	   extends AbstractMultiplicativeElement<GStarMod, GStarModElement, BigInteger>

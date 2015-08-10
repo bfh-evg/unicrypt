@@ -61,7 +61,7 @@ import java.math.BigInteger;
  * points creates another point. Some return types are updated.
  * <p>
  *
- * @author Rolf Haenni <rolf.haenni@bfh.ch>
+ * @author R. Haenni <rolf.haenni@bfh.ch>
  * @param <V> Generic type of values stored in the elements of the elliptic curve
  * @param <E>
  */

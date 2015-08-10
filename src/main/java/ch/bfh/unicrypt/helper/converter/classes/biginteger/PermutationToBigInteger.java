@@ -52,7 +52,7 @@ import java.math.BigInteger;
  * Linear Time".
  * <p>
  * @see Permutation#getRank()
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class PermutationToBigInteger

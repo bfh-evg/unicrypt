@@ -72,6 +72,12 @@ public abstract class Predicate<V>
 	 */
 	public abstract boolean test(V value);
 
+	/**
+	 * Returns a new predicate by composing it conjunctively with another predicate.
+	 * <p>
+	 * @param otherPredicate The other predicate
+	 * @return The AND-composition of the two predicates
+	 */
 	public final Predicate<V> and(final Predicate<? super V> otherPredicate) {
 		final Predicate<V> thisPredicate = this;
 		return new Predicate<V>() {
@@ -84,6 +90,12 @@ public abstract class Predicate<V>
 		};
 	}
 
+	/**
+	 * Returns a new predicate by composing it disjunctively with another predicate.
+	 * <p>
+	 * @param otherPredicate The other predicate
+	 * @return The OR-composition of the two predicates
+	 */
 	public final Predicate<V> or(final Predicate<? super V> otherPredicate) {
 		final Predicate<V> thisPredicate = this;
 		return new Predicate<V>() {
@@ -96,6 +108,11 @@ public abstract class Predicate<V>
 		};
 	}
 
+	/**
+	 * Returns a new predicate by negating this predicate.
+	 * <p>
+	 * @return The negation of this predicate
+	 */
 	public final Predicate<V> not() {
 		final Predicate<V> thisPredicate = this;
 		return new Predicate<V>() {

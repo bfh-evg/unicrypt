@@ -51,7 +51,7 @@ import java.util.List;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <V>
  */
 public abstract class SequenceIterator<V>

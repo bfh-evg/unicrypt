@@ -49,7 +49,7 @@ import java.math.BigInteger;
 /**
  * Some return types are updated.
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <V>
  * @param <DE>
  */

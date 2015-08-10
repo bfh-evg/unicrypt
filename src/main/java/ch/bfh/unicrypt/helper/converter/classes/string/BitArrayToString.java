@@ -49,7 +49,7 @@ import ch.bfh.unicrypt.helper.converter.abstracts.AbstractStringConverter;
  * There are two modes of operations. In the default mode, the output strings are constructed from left-to-right,
  * whereas in the 'reverse' mode, strings are constructed from right-to-left.
  * <p>
- * @author Rolf Haenni
+ * @author R. Haenni
  * @version 2.0
  */
 public class BitArrayToString

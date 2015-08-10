@@ -54,7 +54,7 @@ import java.util.Map;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class ByteArrayMonoid
 	   extends AbstractConcatenativeMonoid<ByteArrayElement, ByteArray> {

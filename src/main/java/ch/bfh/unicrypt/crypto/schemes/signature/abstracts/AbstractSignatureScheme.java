@@ -56,7 +56,7 @@ import java.util.Map;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  * @param <MS>  Message space
  * @param <ME>  Message element
  * @param <SS>  Signature space

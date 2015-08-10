@@ -52,7 +52,7 @@ import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class FiniteStringSet
 	   extends AbstractSet<FiniteStringElement, String> {

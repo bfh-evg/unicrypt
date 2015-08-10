@@ -46,7 +46,7 @@ import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class RandomByteSequence
 	   extends ByteSequence {

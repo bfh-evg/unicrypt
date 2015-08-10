@@ -49,7 +49,7 @@ import java.math.BigInteger;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class GStarModPrime
 	   extends GStarMod {

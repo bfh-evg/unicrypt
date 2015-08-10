@@ -56,7 +56,7 @@ import ch.bfh.unicrypt.math.function.interfaces.Function;
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public class RSAKeyGenerator
 	   extends AbstractKeyPairGenerator<ZMod, ZModElement, ZMod, ZModElement> {

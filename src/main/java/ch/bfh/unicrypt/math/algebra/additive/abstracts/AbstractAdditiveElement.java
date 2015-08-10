@@ -60,7 +60,7 @@ import java.math.BigInteger;
  * @param <V> Generic type of value stored in the element and the elements of the additive semigroup
  * @see Element
  * <p>
- * @author rolfhaenni
+ * @author R. Haenni
  */
 public abstract class AbstractAdditiveElement<S extends AdditiveSemiGroup<V>, E extends AdditiveElement<V>, V>
 	   extends AbstractElement<S, E, V>

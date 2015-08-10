@@ -42,15 +42,27 @@
 package ch.bfh.unicrypt.helper.sequence.functions;
 
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
- *
- * @author rolfhaenni
- * @param <V>
+ * Classes implementing this interface provide a single method for applying an operator to two values of a given generic
+ * type. The main usage of this interface are the methods {@link Sequence#reduce(Operator)} and
+ * {@link Sequence#reduce(Operator, Object)}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
+ * @param <V> The generic type of the values
  */
 public abstract class Operator<V>
 	   extends UniCrypt {
 
+	/**
+	 * Applies the operator to the two input values.
+	 * <p>
+	 * @param value1 The first input value
+	 * @param value2 The second input value
+	 * @return The result of applying the operator
+	 */
 	public abstract V apply(V value1, V value2);
 
 }
