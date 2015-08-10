@@ -58,7 +58,7 @@ public class IntegerSequence
 	private final int from;
 	private final int to;
 
-	protected IntegerSequence(Integer from, Integer to) {
+	protected IntegerSequence(int from, int to) {
 		super(BigInteger.valueOf(Math.max(to - from + 1, 0)));
 		this.from = from;
 		this.to = to;

@@ -52,7 +52,7 @@ import java.util.Collection;
  * no designated default value exists, arrays with almost no equal values, or arrays with only equal values. Internally,
  * the values are either stored in an ordinary (possibly empty) array or as an array of length 1 together with the full
  * length of the immutable array (all elements are equal in that case). The implementation is optimized to provide O(1)
- * running times for most operations.
+ * running times for most operations. The maximal length of the array is {@link Integer#MAX_VALUE}.
  * <p>
  * @see SparseArray
  * @author R. Haenni
@@ -81,25 +81,32 @@ public class DenseArray<V>
 	}
 
 	/**
-	 * Creates a new dense array from a given Java array of values. The Java array is copied for internal storage. The
-	 * length and the indices of the values of the resulting dense array correspond to the given Java array.
+	 * Creates a new dense array from a given Java array of values. The Java array is copied for internal storage. Null
+	 * values are eliminated.
 	 * <p>
 	 * @param <V>    The generic type of the new array
 	 * @param values The Java array of values
 	 * @return The new sparse array
-	 * @see SparseArray#getInstance(Object, Object...)
 	 */
 	public static <V> DenseArray<V> getInstance(V... values) {
 		return DenseArray.getInstance(Sequence.getInstance(values));
 	}
 
+	/**
+	 * Creates a new dense array from a given Java collection. The values in the collection are copied for internal
+	 * storage. Null values are eliminated and the total length is restricted to {@link Integer.MAX_VALUE}.
+	 * <p>
+	 * @param <V>    The generic type of the new array
+	 * @param values The Java array of values
+	 * @return The new sparse array
+	 */
 	public static <V> DenseArray<V> getInstance(Collection<V> values) {
 		return DenseArray.getInstance(Sequence.getInstance(values));
 	}
 
 	/**
 	 * Creates a new dense array from a given sequence of values. The sequence is transformed into a Java array for
-	 * internal storage. Null values are eliminated.
+	 * internal storage. Null values are eliminated and the total length is restricted to {@link Integer.MAX_VALUE}.
 	 * <p>
 	 * @param <V>    The generic type of the new array
 	 * @param values The given sequence of values
@@ -109,7 +116,10 @@ public class DenseArray<V>
 		if (values == null || values.isInfinite()) {
 			throw new IllegalArgumentException();
 		}
-		values = values.filter(Predicate.NOT_NULL);
+		if (values.isInfinite()) {
+			throw new IllegalArgumentException();
+		}
+		values = values.filter(Predicate.NOT_NULL).limit(Integer.MAX_VALUE);
 		Object[] array = new Object[values.getLength().intValue()];
 		int i = 0;
 		for (V value : values) {

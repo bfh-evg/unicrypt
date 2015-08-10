@@ -118,7 +118,7 @@ public class HashDRBG
 			private long counter = 1;
 
 			@Override
-			protected void defaultUpdate() {
+			protected void updateAfter() {
 				ByteArray hash = hashAlgorithm.getHashValue(this.value.insert(BYTE_THREE));
 				this.value = byteArraySum(this.value, hash, this.constant, this.counter);
 				this.counter++;

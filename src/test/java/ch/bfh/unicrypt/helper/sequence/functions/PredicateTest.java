@@ -39,35 +39,64 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.functions;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
- * The purpose of this specialization of {@link ByteSequenceIterator} is to adjust the return type of the method
- * {@link SequenceIterator#next(int)} from to {@link ByteArray}.
- * <p>
- * @author R. Haenni
- * @version 2.0
+ *
+ * @author rolfhaenni
  */
-public abstract class ByteSequenceIterator
-	   extends SequenceIterator<Byte> {
+public class PredicateTest {
 
-	@Override
-	public ByteArray next(int n) {
-		if (n < 0) {
-			throw new IllegalArgumentException();
-		}
-		this.updateBefore();
-		int i = 0;
-		byte[] bytes = new byte[n];
-		while (i < n && this.hasNext()) {
-			bytes[i] = this.abstractNext();
-			i++;
-		}
-		this.updateAfter();
-		// extra bytes are truncated
-		return ByteArray.getInstance(bytes).extractPrefix(i);
+	@Test
+	public void test() {
+
+		Predicate<Integer> pred1 = new Predicate<Integer>() {
+
+			@Override
+			public boolean test(Integer value) {
+				return value > 0 && value < 10;
+			}
+		};
+		Predicate<Integer> pred2 = new Predicate<Integer>() {
+
+			@Override
+			public boolean test(Integer value) {
+				return value % 2 == 0;
+			}
+		};
+		Predicate<Integer> predAND = pred1.and(pred2);
+		Predicate<Integer> predOR = pred1.or(pred2);
+		Predicate<Integer> predNOT = pred1.not();
+
+		assertTrue(predAND.test(2));
+		assertTrue(predAND.test(4));
+		assertTrue(predAND.test(6));
+		assertTrue(predAND.test(8));
+		assertFalse(predAND.test(0));
+		assertFalse(predAND.test(1));
+		assertFalse(predAND.test(3));
+		assertFalse(predAND.test(5));
+		assertFalse(predAND.test(7));
+		assertFalse(predAND.test(9));
+
+		assertTrue(predOR.test(2));
+		assertTrue(predOR.test(4));
+		assertTrue(predOR.test(6));
+		assertTrue(predOR.test(8));
+		assertTrue(predOR.test(0));
+		assertTrue(predOR.test(1));
+		assertTrue(predOR.test(3));
+		assertTrue(predOR.test(5));
+		assertTrue(predOR.test(7));
+		assertTrue(predOR.test(9));
+		assertFalse(predOR.test(11));
+		assertTrue(predNOT.test(0));
+		assertTrue(predNOT.test(10));
+		assertFalse(predNOT.test(3));
+
 	}
 
 }

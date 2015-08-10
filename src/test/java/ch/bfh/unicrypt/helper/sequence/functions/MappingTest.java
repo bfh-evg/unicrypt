@@ -39,35 +39,47 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.functions;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
- * The purpose of this specialization of {@link ByteSequenceIterator} is to adjust the return type of the method
- * {@link SequenceIterator#next(int)} from to {@link ByteArray}.
- * <p>
- * @author R. Haenni
- * @version 2.0
+ *
+ * @author rolfhaenni
  */
-public abstract class ByteSequenceIterator
-	   extends SequenceIterator<Byte> {
+public class MappingTest {
 
-	@Override
-	public ByteArray next(int n) {
-		if (n < 0) {
-			throw new IllegalArgumentException();
-		}
-		this.updateBefore();
-		int i = 0;
-		byte[] bytes = new byte[n];
-		while (i < n && this.hasNext()) {
-			bytes[i] = this.abstractNext();
-			i++;
-		}
-		this.updateAfter();
-		// extra bytes are truncated
-		return ByteArray.getInstance(bytes).extractPrefix(i);
+	public MappingTest() {
+	}
+
+	@Test
+	public void testCompose() {
+
+		Mapping<Integer, String> map1 = new Mapping<Integer, String>() {
+
+			@Override
+			public String apply(Integer value) {
+				return "" + value;
+			}
+		};
+		Mapping<String, Integer> map2 = new Mapping<String, Integer>() {
+
+			@Override
+			public Integer apply(String value) {
+				return value.length();
+			}
+		};
+
+		Mapping<Integer, Integer> map12 = map1.compose(map2);
+		Mapping<String, String> map21 = map2.compose(map1);
+
+		assertEquals(1, (int) map12.apply(5));
+		assertEquals(2, (int) map12.apply(15));
+		assertEquals(3, (int) map12.apply(-15));
+		assertEquals("4", map21.apply("1234"));
+		assertEquals("5", map21.apply("-1234"));
+
 	}
 
 }

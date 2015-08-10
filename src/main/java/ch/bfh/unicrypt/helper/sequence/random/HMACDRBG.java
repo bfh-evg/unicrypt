@@ -86,7 +86,7 @@ public class HMACDRBG
 			}
 
 			@Override
-			protected void defaultUpdate() {
+			protected void updateAfter() {
 				// update operation is called after each call to next() or next(n)
 				this.stateUpdate(ByteArray.getInstance());
 			}

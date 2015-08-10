@@ -66,7 +66,14 @@ public abstract class Sequence<V>
 	   extends UniCrypt
 	   implements Iterable<V> {
 
+	/**
+	 * A constant value representing an infinite sequence length.
+	 */
 	public static final BigInteger INFINITE = BigInteger.valueOf(-1);
+
+	/**
+	 * A constant value representing an unknown sequence length.
+	 */
 	public static final BigInteger UNKNOWN = BigInteger.valueOf(-2);
 
 	// the length of the sequence
@@ -80,15 +87,33 @@ public abstract class Sequence<V>
 		this.length = length;
 	}
 
+	/**
+	 * Checks if the sequence is empty. If this is the case, {@link Sequence#iterator()}{@code .hasNext()} returns
+	 * {@code false}.
+	 * <p>
+	 * @return {@code true} if the sequence is empty, {@code false} otherwise
+	 */
 	public final boolean isEmpty() {
 		return this.length.equals(MathUtil.ZERO) || (this.length.equals(Sequence.UNKNOWN) && !this.iterator().hasNext());
 	}
 
+	/**
+	 * Checks if the sequence is infinitely long. If this is the case, {@link Sequence#iterator()}{@code .hasNext()}
+	 * returns {@code false}.
+	 * <p>
+	 * @return {@code true} if the sequence is empty, {@code false} otherwise
+	 */
 	public final boolean isInfinite() {
 		return this.length.equals(Sequence.INFINITE);
 	}
 
-	// possibly expensive
+	/**
+	 * Returns the length of this sequence, which could possibly be {@link Sequence#INFINITE}. If the length of the
+	 * sequence is finite, but unknown at the moment of calling this method, it is computed by iterating through the
+	 * sequence. In that case, calling this method is expensive.
+	 * <p>
+	 * @return The length of the sequence
+	 */
 	public final BigInteger getLength() {
 		if (this.length.equals(Sequence.UNKNOWN)) {
 			long counter = 0;
@@ -100,6 +125,13 @@ public abstract class Sequence<V>
 		return this.length;
 	}
 
+	/**
+	 * Counts the number of values in the sequence satisfying the given predicate. An exception is thrown if the
+	 * sequence is infinite.
+	 * <p>
+	 * @param predicate The given predicate
+	 * @return The number of values satisfying the predicate
+	 */
 	public final long count(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();

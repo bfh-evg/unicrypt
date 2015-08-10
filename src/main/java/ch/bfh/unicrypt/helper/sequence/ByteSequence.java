@@ -97,8 +97,8 @@ public abstract class ByteSequence
 					}
 
 					@Override
-					public void defaultUpdate() {
-						this.iterator.defaultUpdate();
+					public void updateAfter() {
+						this.iterator.updateAfter();
 					}
 				};
 
@@ -134,8 +134,8 @@ public abstract class ByteSequence
 					}
 
 					@Override
-					public void defaultUpdate() {
-						this.iterator.defaultUpdate();
+					public void updateAfter() {
+						this.iterator.updateAfter();
 					}
 				};
 			}

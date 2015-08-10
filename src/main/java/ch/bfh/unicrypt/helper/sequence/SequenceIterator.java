@@ -48,68 +48,123 @@ import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
- *
+ * This abstract class provides more powerful iterators with additional methods for retrieving multiple values, skipping
+ * values, or finding values. In addition, two auxiliary methods {@code updateBefore()} and {@code updateAfter()} are
+ * called before respectively after processing a call of one of the main methods. These auxiliary methods are initially
+ * empty, but may be overridden in sub-classes.
+ * <p>
  * @author R. Haenni
- * @param <V>
+ * @version 2.0
+ * @param <V> The generic type of the iterator
  */
 public abstract class SequenceIterator<V>
 	   extends UniCrypt
 	   implements Iterator<V> {
 
+	/**
+	 * Returns an array consisting of the next {@code n} values from the iterator. The result may be shorter than
+	 * {@code n}, if there are not enough values available.
+	 * <p>
+	 * @param n The number of values to return
+	 * @return The resulting array
+	 */
 	public ImmutableArray<V> next(int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
+		this.updateBefore();
 		List<V> values = new LinkedList<>();
 		while (n > 0 && this.hasNext()) {
 			values.add(this.abstractNext());
 			n--;
 		}
-		this.defaultUpdate();
+		this.updateAfter();
 		return DenseArray.getInstance(values);
 	}
 
+	/**
+	 * Advances the iterator by {@code n} positions without returning anything.
+	 * <p>
+	 * @param n The number of values to skip
+	 */
 	public final void skip(int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException();
 		}
+		this.updateBefore();
 		while (n > 0 && this.hasNext()) {
 			this.abstractNext();
 			n--;
 		}
-		this.defaultUpdate();
+		this.updateAfter();
 	}
 
+	/**
+	 * Finds and returns the next value from the iterator that satisfies the given predicate. Values not satisfying the
+	 * predicate are skipped. If none of the values satisfies the predicate, {@code null} is returned.
+	 * <p>
+	 * @param predicate The given predicate
+	 * @return The next value satisfying the predicate, or {@code null} if no such value exists
+	 */
 	public final V find(Predicate<? super V> predicate) {
 		if (predicate == null) {
 			throw new IllegalArgumentException();
 		}
+		this.updateBefore();
 		while (this.hasNext()) {
 			V value = this.abstractNext();
 			if (predicate.test(value)) {
-				this.defaultUpdate();
+				this.updateAfter();
 				return value;
 			}
 		}
-		this.defaultUpdate();
+		this.updateAfter();
 		return null;
 	}
 
 	@Override
 	public final V next() {
+		if (!this.hasNext()) {
+			throw new NoSuchElementException();
+		}
+		this.updateBefore();
 		V result = this.abstractNext();
-		this.defaultUpdate();
+		this.updateAfter();
 		return result;
 	}
 
+	/**
+	 * Returns the next value from the iterator. This method is only called when if {@link SequenceIterator#hasNext()}
+	 * returns {@code true}.
+	 * <p>
+	 * @return
+	 */
 	protected abstract V abstractNext();
 
-	// update operation is called after each call to next() or next(n)
-	protected void defaultUpdate() {
+	/**
+	 * This method is called before processing each call to {@link next()}, {@link next(int)}, {@link skip(int)}, or
+	 * {@link find(Predicate)}. It can be overridden to change the state of the iterator.
+	 */
+	protected void updateBefore() {
 	}
 
+	/**
+	 * This method is called after processing each call to {@link next()}, {@link next(int)}, {@link skip(int)}, or
+	 * {@link find(Predicate)}. It can be overridden to change the state of the iterator.
+	 */
+	protected void updateAfter() {
+	}
+
+	/**
+	 * Returns a wrapper {@link SequenceIterator} instance from a given {@link Iterator} instance.
+	 * <p>
+	 * @param <V>      The generic type of the iterators
+	 * @param iterator The given {@link Iterator} instance
+	 * @return The new {@link SequenceIterator} instance
+	 */
 	public static <V> SequenceIterator<V> getInstance(final Iterator<V> iterator) {
 		if (iterator == null) {
 			throw new IllegalArgumentException();
