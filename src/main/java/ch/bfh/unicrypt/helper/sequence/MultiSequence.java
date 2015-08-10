@@ -70,7 +70,7 @@ public class MultiSequence<V>
 		if (this.sequences.isEmpty()) {
 			return Sequence.getInstance();
 		}
-		final Sequence<V> first = sequences.find();
+		final Sequence<V> first = sequences.get();
 		final Sequence<V> rest = MultiSequence.getInstance(sequences.skip()).flatten();
 		BigInteger newLength;
 		if (this.length.equals(Sequence.INFINITE) || rest.length.equals(Sequence.INFINITE)) {
@@ -129,7 +129,7 @@ public class MultiSequence<V>
 
 			};
 		}
-		final Sequence<V> first = sequences.find();
+		final Sequence<V> first = sequences.get();
 		final Sequence<DenseArray<V>> rest = MultiSequence.getInstance(sequences.skip()).combine();
 		BigInteger newLength;
 		if (first.length.equals(Sequence.UNKNOWN) || rest.length.equals(Sequence.UNKNOWN)) {
@@ -168,7 +168,7 @@ public class MultiSequence<V>
 		if (this.sequences.isEmpty()) {
 			return Sequence.<DenseArray<V>>getInstance(DenseArray.<V>getInstance());
 		}
-		final Sequence<V> first = sequences.find();
+		final Sequence<V> first = sequences.get();
 		final Sequence<DenseArray<V>> rest = MultiSequence.getInstance(sequences.skip()).join();
 		BigInteger newLength;
 		if (first.length.equals(Sequence.INFINITE) || rest.length.equals(Sequence.INFINITE)) {

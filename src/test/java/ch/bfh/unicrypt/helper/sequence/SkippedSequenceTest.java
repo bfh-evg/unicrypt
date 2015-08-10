@@ -60,34 +60,34 @@ public class SkippedSequenceTest {
 		Assert.assertFalse(sequence.skip(0).isEmpty());
 		Assert.assertEquals(10, sequence.skip(0).getLength().intValue());
 		Assert.assertEquals(10, sequence.skip(0).getLength().intValue());
-		Assert.assertEquals(1, (int) sequence.skip(0).find());
+		Assert.assertEquals(1, (int) sequence.skip(0).get());
 
 		Assert.assertFalse(sequence.skip(1).isEmpty());
 		Assert.assertEquals(9, sequence.skip(1).getLength().intValue());
 		Assert.assertEquals(9, sequence.skip(1).getLength().intValue());
-		Assert.assertEquals(2, (int) sequence.skip(1).find());
+		Assert.assertEquals(2, (int) sequence.skip(1).get());
 
 		Assert.assertFalse(sequence.skip(9).isEmpty());
 		Assert.assertEquals(1, sequence.skip(9).getLength().intValue());
 		Assert.assertEquals(1, sequence.skip(9).getLength().intValue());
-		Assert.assertEquals(10, (int) sequence.skip(9).find());
+		Assert.assertEquals(10, (int) sequence.skip(9).get());
 
 		Assert.assertTrue(sequence.skip(10).isEmpty());
 		Assert.assertEquals(0, sequence.skip(10).getLength().intValue());
 		Assert.assertEquals(0, sequence.skip(10).getLength().intValue());
-		Assert.assertEquals(null, sequence.skip(10).find());
+		Assert.assertEquals(null, sequence.skip(10).get());
 
 		Assert.assertTrue(sequence.skip(11).isEmpty());
 		Assert.assertEquals(0, sequence.skip(11).getLength().intValue());
 		Assert.assertEquals(0, sequence.skip(11).getLength().intValue());
-		Assert.assertEquals(null, sequence.skip(11).find());
+		Assert.assertEquals(null, sequence.skip(11).get());
 
 		Assert.assertEquals(5, sequence.skip(2).skip(3).getLength().intValue());
 		Assert.assertEquals(5, sequence.skip(2).skip(3).getLength().intValue());
-		Assert.assertEquals(6, (int) sequence.skip(2).skip(3).find());
+		Assert.assertEquals(6, (int) sequence.skip(2).skip(3).get());
 
 		Assert.assertEquals(2, sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).getLength().intValue());
-		Assert.assertEquals(9, (int) sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).find());
+		Assert.assertEquals(9, (int) sequence.skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).skip(1).get());
 
 		// unknown length
 		Sequence<Integer> seq2 = sequence.filter(new Predicate<Integer>() {
