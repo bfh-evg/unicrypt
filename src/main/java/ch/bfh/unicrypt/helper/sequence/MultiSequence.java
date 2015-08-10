@@ -41,20 +41,24 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.math.BigInteger;
 import java.util.Iterator;
 
 /**
- *
+ * This class is a collector class for multiple sequences of the same type {@code V}. Its main purpose is to provide
+ * different methods for merging the sequences into a new sequences. Technically, an instance of this class is a
+ * sequence of sequences of type {@code V}.
+ * <p>
  * @author R. Haenni
- * @param <V>
+ * @version 2.0
+ * @param <V> The generic
  */
 public class MultiSequence<V>
 	   extends Sequence<Sequence<V>> {
 
-	Sequence<Sequence<V>> sequences;
+	private Sequence<Sequence<V>> sequences;
 
 	protected MultiSequence(Sequence<Sequence<V>> sequences) {
 		super(sequences.getLength());
@@ -66,6 +70,14 @@ public class MultiSequence<V>
 		return this.sequences.iterator();
 	}
 
+	/**
+	 * Creates a new sequence of type {@code V}, which contains all the values of all sequences of this instance in the
+	 * given order. This operation is equivalent to calling {@link Sequence#conc(Sequence)} repeatedly to all sequences.
+	 * The length of the new sequence is the sum of the lengths of the given sequences.
+	 * <p>
+	 * @return The new flattened sequence
+	 * @see Sequence#conc(Sequence)
+	 */
 	public Sequence<V> flatten() {
 		if (this.sequences.isEmpty()) {
 			return Sequence.getInstance();
@@ -106,6 +118,14 @@ public class MultiSequence<V>
 		};
 	}
 
+	/**
+	 * Creates a new sequence of combined values, one from each sequence of this instance. The combined values are
+	 * returned as immutable arrays. The first array consists of all first values of the given sequences, the second one
+	 * all the second values, etc. The length of the new sequence corresponds to the minimal length of the given
+	 * sequences. All other values are discarded.
+	 * <p>
+	 * @return The new combined sequence
+	 */
 	public Sequence<DenseArray<V>> combine() {
 		if (this.sequences.isEmpty()) {
 			return new Sequence<DenseArray<V>>(Sequence.INFINITE) {
@@ -164,6 +184,13 @@ public class MultiSequence<V>
 		};
 	}
 
+	/**
+	 * Creates a new sequence which contains all combinations of values from the sequences of this instance. These
+	 * combinations are returned as immutable arrays. The length of the new sequences is the product of the lengths of
+	 * all given sequences.
+	 * <p>
+	 * @return The new joined sequence
+	 */
 	public Sequence<DenseArray<V>> join() {
 		if (this.sequences.isEmpty()) {
 			return Sequence.<DenseArray<V>>getInstance(DenseArray.<V>getInstance());
@@ -208,10 +235,24 @@ public class MultiSequence<V>
 		};
 	}
 
+	/**
+	 * Returns a new {@link MultiSequence} instance consisting of multiple sequences.
+	 * <p>
+	 * @param <V>       The type of the values in the sequences
+	 * @param sequences The given sequences
+	 * @return The new {@link MultiSequence} instance
+	 */
 	public static <V> MultiSequence<V> getInstance(Sequence<V>... sequences) {
 		return MultiSequence.getInstance(Sequence.getInstance(sequences));
 	}
 
+	/**
+	 * Returns a new {@link MultiSequence} instance from a sequence of sequences.
+	 * <p>
+	 * @param <V>       The type of the values in the sequences
+	 * @param sequences The given sequence of sequences
+	 * @return The new {@link MultiSequence} instance
+	 */
 	public static <V> MultiSequence<V> getInstance(Sequence<Sequence<V>> sequences) {
 		return new MultiSequence<>(sequences.filter(Predicate.NOT_NULL));
 	}

@@ -680,7 +680,7 @@ public abstract class Sequence<V>
 
 	/**
 	 * Returns a new infinite sequence consisting of the values obtained from applying a mapping repeatedly to a given
-	 * starting value.
+	 * starting value. The first value in the sequence is the starting value.
 	 * <p>
 	 * @param <V>        The type of the new sequence
 	 * @param startValue The starting value
