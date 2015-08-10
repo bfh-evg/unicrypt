@@ -83,13 +83,13 @@ public class ByteArrayToBigInteger
 
 	/**
 	 * Creates a new {@link ByteArrayToBigInteger} converter for a given block length. The minimal number of blocks is
-	 * set to 0.
+	 * set to 1.
 	 * <p>
 	 * @param blockLength The block length
 	 * @return The new converter
 	 */
 	public static ByteArrayToBigInteger getInstance(int blockLength) {
-		return ByteArrayToBigInteger.getInstance(blockLength, 0);
+		return ByteArrayToBigInteger.getInstance(blockLength, 1);
 	}
 
 	/**

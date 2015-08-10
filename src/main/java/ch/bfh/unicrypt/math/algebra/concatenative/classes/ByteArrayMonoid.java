@@ -100,7 +100,7 @@ public class ByteArrayMonoid
 
 	@Override
 	protected Converter<ByteArray, BigInteger> abstractGetBigIntegerConverter() {
-		return ByteArrayToBigInteger.getInstance(this.blockLength);
+		return ByteArrayToBigInteger.getInstance(this.blockLength, 0);
 	}
 
 	@Override
