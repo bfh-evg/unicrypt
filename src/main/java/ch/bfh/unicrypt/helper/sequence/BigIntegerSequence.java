@@ -162,17 +162,17 @@ public class BigIntegerSequence
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
+		if (getClass() == obj.getClass()) {
+			final BigIntegerSequence other = (BigIntegerSequence) obj;
+			if (this.getLength() != other.getLength()) {
+				return false;
+			}
+			if (this.getLength().signum() == 0) {
+				return true;
+			}
+			return (this.from.equals(other.from));
 		}
-		final BigIntegerSequence other = (BigIntegerSequence) obj;
-		if (this.getLength() != other.getLength()) {
-			return false;
-		}
-		if (this.getLength().signum() == 0) {
-			return true;
-		}
-		return (this.from.equals(other.from));
+		return super.equals(obj);
 	}
 
 	@Override

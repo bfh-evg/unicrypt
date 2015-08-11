@@ -109,17 +109,17 @@ public class IntegerSequence
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
+		if (getClass() == obj.getClass()) {
+			final IntegerSequence other = (IntegerSequence) obj;
+			if (!this.getLength().equals(other.getLength())) {
+				return false;
+			}
+			if (this.getLength().signum() == 0) {
+				return true;
+			}
+			return (this.from == other.from);
 		}
-		final IntegerSequence other = (IntegerSequence) obj;
-		if (!this.getLength().equals(other.getLength())) {
-			return false;
-		}
-		if (this.getLength().signum() == 0) {
-			return true;
-		}
-		return (this.from == other.from);
+		return super.equals(obj);
 	}
 
 	@Override

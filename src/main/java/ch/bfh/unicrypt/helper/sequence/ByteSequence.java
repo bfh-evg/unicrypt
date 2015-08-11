@@ -43,11 +43,22 @@ package ch.bfh.unicrypt.helper.sequence;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.helper.sequence.random.HMAC_DRBG;
+import ch.bfh.unicrypt.helper.sequence.random.Hash_DRBG;
+import ch.bfh.unicrypt.helper.sequence.random.PBKDF2;
 import java.math.BigInteger;
 
 /**
- *
+ * The purpose of this specialization of {@link Sequence} is to adjust the return type of the method
+ * {@link Sequence#group(int)} to {@link ByteArray}. Furthermore, the class provides a method for constructing a byte
+ * sequence from a {@link ByteArray} sequence. This method is useful to transform instances of
+ * {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte sequences.
+ * <p>
  * @author R. Haenni
+ * @version 2.0
+ * @see HMAC_DRBG
+ * @see Hash_DRBG
+ * @see PBKDF2
  */
 public abstract class ByteSequence
 	   extends Sequence<Byte> {
@@ -108,7 +119,18 @@ public abstract class ByteSequence
 
 	}
 
+	/**
+	 * Returns a byte sequence obtained by concatenating the byte arrays from a given {@link ByteArray} sequence. This
+	 * method is useful to transform instances of {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte
+	 * sequences.
+	 * <p>
+	 * @param source The given byte array sequences
+	 * @return The new byte sequence
+	 */
 	public static ByteSequence getInstance(final Sequence<ByteArray> source) {
+		if (source == null) {
+			throw new IllegalArgumentException();
+		}
 		return new ByteSequence(Sequence.UNKNOWN) {
 
 			@Override

@@ -41,7 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.random.HMACDRBG;
+import ch.bfh.unicrypt.helper.sequence.random.HMAC_DRBG;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import org.junit.Assert;
 import org.junit.Test;
@@ -55,7 +55,7 @@ public class HashMacSequenceTest {
 	@Test
 	public void hashMacSequenceTest() {
 		//
-		// test vector from NIST HMACDRBG test vector file
+		// test vector from NIST HMAC_DRBG test vector file
 		//
 		//[SHA-256]
 		//[PredictionResistance = False]
@@ -85,7 +85,7 @@ public class HashMacSequenceTest {
 		ByteArray seedingMaterial = ByteArray.getInstance("ca|85|19|11|34|93|84|bf|fe|89|de|1c|bd|c4|6e|68|31|e4|4d|34|a4|fb|93|5e|e2|85|dd|14|b7|1a|74|88|65|9b|a9|6c|60|1d|c6|9f|c9|02|94|08|05|ec|0c|a8".toUpperCase());
 		ByteArray result = ByteArray.getInstance("e5|28|e9|ab|f2|de|ce|54|d4|7c|7e|75|e5|fe|30|21|49|f8|17|ea|9f|b4|be|e6|f4|19|96|97|d0|4d|5b|89|d5|4f|bb|97|8a|15|b5|c4|43|c9|ec|21|03|6d|24|60|b6|f7|3e|ba|d0|dc|2a|ba|6e|62|4a|bf|07|74|5b|c1|07|69|4b|b7|54|7b|b0|99|5f|70|de|25|d6|b2|9e|2d|30|11|bb|19|d2|76|76|c0|71|62|c8|b5|cc|de|06|68|96|1d|f8|68|03|48|2c|b3|7e|d6|d5|c0|bb|8d|50|cf|1f|50|d4|76|aa|04|58|bd|ab|a8|06|f4|8b|e9|dc|b8".toUpperCase());
 
-		SequenceIterator si = HMACDRBG.getInstance(seedingMaterial).getByteSequence().iterator();
+		SequenceIterator si = HMAC_DRBG.getInstance(seedingMaterial).getByteSequence().iterator();
 		si.next(128);
 		Assert.assertEquals(result, si.next(128));
 	}

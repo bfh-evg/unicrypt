@@ -74,9 +74,9 @@ public class PseudoRandomByteSequence
 		ByteArray seed = entropySource.iterator().next(SEED_LENGTH);
 		switch (mode) {
 			case HMAC:
-				return new PseudoRandomByteSequence(HMACDRBG.getInstance(seed).getByteSequence().iterator());
+				return new PseudoRandomByteSequence(HMAC_DRBG.getInstance(seed).getByteSequence().iterator());
 			case Hash:
-				return new PseudoRandomByteSequence(HashDRBG.getInstance(seed).getByteSequence().iterator());
+				return new PseudoRandomByteSequence(Hash_DRBG.getInstance(seed).getByteSequence().iterator());
 		}
 		throw new IllegalArgumentException();
 	}

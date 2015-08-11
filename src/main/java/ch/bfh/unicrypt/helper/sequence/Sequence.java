@@ -726,7 +726,7 @@ public abstract class Sequence<V>
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null || this.getClass() != obj.getClass()) {
+		if (obj == null || !(obj instanceof Sequence)) {
 			return false;
 		}
 		final Sequence<?> other = (Sequence<?>) obj;

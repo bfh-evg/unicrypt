@@ -45,7 +45,7 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 
 /**
  * The purpose of this specialization of {@link ByteSequenceIterator} is to adjust the return type of the method
- * {@link SequenceIterator#next(int)} from to {@link ByteArray}.
+ * {@link SequenceIterator#next(int)} to {@link ByteArray}.
  * <p>
  * @author R. Haenni
  * @version 2.0

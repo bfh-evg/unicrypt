@@ -85,12 +85,12 @@ public class MultiSequence<V>
 		final Sequence<V> first = sequences.get();
 		final Sequence<V> rest = MultiSequence.getInstance(sequences.skip()).flatten();
 		BigInteger newLength;
-		if (this.length.equals(Sequence.INFINITE) || rest.length.equals(Sequence.INFINITE)) {
+		if (first.length.equals(Sequence.INFINITE) || rest.length.equals(Sequence.INFINITE)) {
 			newLength = Sequence.INFINITE;
-		} else if (this.length.equals(Sequence.UNKNOWN) || rest.length.equals(Sequence.UNKNOWN)) {
+		} else if (first.length.equals(Sequence.UNKNOWN) || rest.length.equals(Sequence.UNKNOWN)) {
 			newLength = Sequence.UNKNOWN;
 		} else {
-			newLength = this.length.add(rest.length);
+			newLength = first.length.add(rest.length);
 		}
 		return new Sequence<V>(newLength) {
 
