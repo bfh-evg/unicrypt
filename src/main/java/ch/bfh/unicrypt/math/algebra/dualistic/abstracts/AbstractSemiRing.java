@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 import ch.bfh.unicrypt.helper.sequence.functions.Operator;
 import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
@@ -194,7 +195,7 @@ public abstract class AbstractSemiRing<E extends DualisticElement<V>, V>
 
 	@Override
 	protected BigInteger defaultGetOrderLowerBound() {
-		return BigInteger.valueOf(2);
+		return MathUtil.TWO;
 	}
 
 	//

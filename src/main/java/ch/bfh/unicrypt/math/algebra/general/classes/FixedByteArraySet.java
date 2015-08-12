@@ -91,7 +91,7 @@ public class FixedByteArraySet
 		}
 		int length = 0;
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger order = BigInteger.ONE;
+		BigInteger order = MathUtil.ONE;
 		while (order.compareTo(minOrder) < 0) {
 			order = order.multiply(size);
 			length++;

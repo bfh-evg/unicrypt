@@ -41,9 +41,10 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative;
 
+import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
-import ch.bfh.unicrypt.helper.math.Alphabet;
 import java.math.BigInteger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -57,7 +58,7 @@ public class StringMonoidTest {
 	@Test
 	public void testGetValue() {
 		StringMonoid sm = StringMonoid.getInstance(Alphabet.BINARY, 4);
-		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(300)) <= 0; i = i.add(BigInteger.ONE)) {
+		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(300)) <= 0; i = i.add(MathUtil.ONE)) {
 			StringElement element = sm.getElementFrom(i);
 			Assert.assertEquals(element.convertToBigInteger(), i);
 //			System.out.println(element);

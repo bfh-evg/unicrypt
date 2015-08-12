@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Ring;
@@ -257,7 +258,7 @@ public class PolynomialRing
 		}
 		final PolynomialRing ring
 			   = PolynomialRing.getInstance((Ring<Polynomial<? extends DualisticElement<BigInteger>>>) this.getSemiRing());
-		PolynomialElement x = ring.getElement(BigInteger.ZERO, BigInteger.ONE);
+		PolynomialElement x = ring.getElement(MathUtil.ZERO, MathUtil.ONE);
 		PolynomialElement u = x;
 		PolynomialElement d;
 		int m = f.getValue().getDegree();

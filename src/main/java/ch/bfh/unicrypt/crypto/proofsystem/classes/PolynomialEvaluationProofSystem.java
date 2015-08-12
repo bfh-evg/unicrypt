@@ -45,6 +45,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractSigmaProofSystem;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
@@ -315,7 +316,7 @@ public class PolynomialEvaluationProofSystem
 
 	private Tuple computeDeltas(Tuple uV, Tuple fV) {
 		PolynomialElement[] result = new PolynomialElement[1];
-		xPoly = polynomial.getSet().getElement(BigInteger.ZERO, BigInteger.ONE);
+		xPoly = polynomial.getSet().getElement(MathUtil.ZERO, MathUtil.ONE);
 		Node1 root = new Node1(this.d + 1, 0, this.polynomial.getSet().getOneElement(), uV, fV, result);
 
 		Element[] dVs = new Element[this.d + 1];

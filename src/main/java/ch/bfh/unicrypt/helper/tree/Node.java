@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.helper.tree;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import ch.bfh.unicrypt.helper.sequence.MultiSequence;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import java.util.Iterator;
 
 /**
@@ -94,6 +94,7 @@ public class Node<V>
 			public Sequence<V> apply(Tree<V> child) {
 				return child.getSequence();
 			}
+
 		})).flatten();
 	}
 

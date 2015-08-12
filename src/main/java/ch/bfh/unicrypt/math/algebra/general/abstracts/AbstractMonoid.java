@@ -41,8 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.abstracts;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Operator;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Operator;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Monoid;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.SemiGroup;
@@ -90,7 +91,7 @@ public abstract class AbstractMonoid<E extends Element<V>, V>
 	//
 	@Override
 	protected BigInteger defaultGetOrderLowerBound() {
-		return BigInteger.ONE;
+		return MathUtil.ONE;
 	}
 
 	@Override

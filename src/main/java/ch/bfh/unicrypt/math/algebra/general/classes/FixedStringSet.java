@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -50,6 +51,7 @@ import java.math.BigInteger;
  */
 public class FixedStringSet
 	   extends FiniteStringSet {
+
 	private static final long serialVersionUID = 1L;
 
 	private FixedStringSet(Alphabet alphabet, int length) {
@@ -73,7 +75,7 @@ public class FixedStringSet
 		}
 		int length = 0;
 		BigInteger size = BigInteger.valueOf(alphabet.getSize());
-		BigInteger order = BigInteger.ONE;
+		BigInteger order = MathUtil.ONE;
 		while (order.compareTo(minOrder) < 0) {
 			order = order.multiply(size);
 			length++;

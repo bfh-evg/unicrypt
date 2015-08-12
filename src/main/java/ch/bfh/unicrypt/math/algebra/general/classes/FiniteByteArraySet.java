@@ -113,9 +113,9 @@ public class FiniteByteArraySet
 	@Override
 	protected BigInteger abstractGetOrder() {
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
-		BigInteger order = BigInteger.ONE;
+		BigInteger order = MathUtil.ONE;
 		for (int i = 0; i < this.maxLength - this.minLength; i++) {
-			order = order.multiply(size).add(BigInteger.ONE);
+			order = order.multiply(size).add(MathUtil.ONE);
 		}
 		return order.multiply(size.pow(this.minLength));
 	}
@@ -125,7 +125,7 @@ public class FiniteByteArraySet
 		// this seems to be unnecessarly complicated, but is needed to generate shorter
 		// byte arrays with equal probability
 		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator()
-			   .nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+			   .nextBigInteger(this.getOrder().subtract(MathUtil.ONE)));
 	}
 
 	@Override
@@ -170,9 +170,9 @@ public class FiniteByteArraySet
 		int maxLength = minLength;
 		BigInteger size = MathUtil.powerOfTwo(Byte.SIZE);
 		BigInteger order1 = size.pow(minLength);
-		BigInteger order2 = BigInteger.ONE;
+		BigInteger order2 = MathUtil.ONE;
 		while (order1.multiply(order2).compareTo(minOrder) < 0) {
-			order2 = order2.multiply(size).add(BigInteger.ONE);
+			order2 = order2.multiply(size).add(MathUtil.ONE);
 			maxLength++;
 		}
 		if (minLength == maxLength) {

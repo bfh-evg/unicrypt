@@ -120,7 +120,7 @@ public class ProductSet
 	@Override
 	protected BigInteger abstractGetOrder() {
 		if (this.isEmpty()) {
-			return BigInteger.ONE;
+			return MathUtil.ONE;
 		}
 		if (this.isUniform()) {
 			Set first = this.getFirst();
@@ -129,7 +129,7 @@ public class ProductSet
 			}
 			return first.getOrder();
 		}
-		BigInteger result = BigInteger.ONE;
+		BigInteger result = MathUtil.ONE;
 		for (Set set : this.sets) {
 			if (!set.isFinite()) {
 				return Set.INFINITE;
@@ -462,7 +462,7 @@ public class ProductSet
 		if (this.isUniform()) {
 			return this.getFirst().getOrderLowerBound().pow(this.getLength());
 		}
-		BigInteger result = BigInteger.ONE;
+		BigInteger result = MathUtil.ONE;
 		for (Set set : this.sets) {
 			result = result.multiply(set.getOrderLowerBound());
 		}
@@ -474,7 +474,7 @@ public class ProductSet
 		if (this.isUniform()) {
 			return this.getFirst().getOrderUpperBound().pow(this.getLength());
 		}
-		BigInteger result = BigInteger.ONE;
+		BigInteger result = MathUtil.ONE;
 		for (Set set : this.sets) {
 			if (set.getOrderUpperBound().equals(Set.INFINITE)) {
 				return Set.INFINITE;

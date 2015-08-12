@@ -303,7 +303,7 @@ public class Permutation
 
 	private static BigInteger computeRank(int n, int[] permutation, int[] invertedPermutation) {
 		if (n <= 1) {
-			return BigInteger.ZERO;
+			return MathUtil.ZERO;
 		}
 		int s = permutation[n - 1];
 		swap(permutation, n - 1, invertedPermutation[n - 1]);

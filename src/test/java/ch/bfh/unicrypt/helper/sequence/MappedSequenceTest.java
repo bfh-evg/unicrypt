@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
 import java.math.BigInteger;
 import org.junit.Assert;
@@ -61,7 +62,7 @@ public class MappedSequenceTest {
 
 			@Override
 			public BigInteger apply(BigInteger value) {
-				return value.add(BigInteger.ONE);
+				return value.add(MathUtil.ONE);
 			}
 		});
 

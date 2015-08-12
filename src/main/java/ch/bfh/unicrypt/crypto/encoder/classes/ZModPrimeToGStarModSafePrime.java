@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -92,7 +93,7 @@ public class ZModPrimeToGStarModSafePrime
 		@Override
 		protected GStarModElement abstractApply(final ZModElement element,
 			   final RandomByteSequence randomByteSequence) {
-			final BigInteger value = element.getValue().add(BigInteger.ONE);
+			final BigInteger value = element.getValue().add(MathUtil.ONE);
 			final GStarModSafePrime coDomain = this.getCoDomain();
 			if (coDomain.contains(value)) {
 				return coDomain.getElement(value);
@@ -115,9 +116,9 @@ public class ZModPrimeToGStarModSafePrime
 			final BigInteger value = element.getValue();
 			final GStarModSafePrime domain = this.getDomain();
 			if (value.compareTo(domain.getOrder()) <= 0) {
-				return this.getCoDomain().getElement(value.subtract(BigInteger.ONE));
+				return this.getCoDomain().getElement(value.subtract(MathUtil.ONE));
 			}
-			return this.getCoDomain().getElement((domain.getModulus().subtract(value)).subtract(BigInteger.ONE));
+			return this.getCoDomain().getElement((domain.getModulus().subtract(value)).subtract(MathUtil.ONE));
 		}
 
 	}

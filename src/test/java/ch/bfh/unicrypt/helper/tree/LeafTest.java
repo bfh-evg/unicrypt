@@ -42,13 +42,11 @@
 package ch.bfh.unicrypt.helper.tree;
 
 import ch.bfh.unicrypt.helper.aggregator.classes.StringAggregator;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
-import java.util.Iterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -94,12 +92,11 @@ public class LeafTest {
 		Leaf<String> leaf1 = Tree.getInstance("Hello");
 		Leaf<String> leaf2 = Tree.getInstance("Hello");
 		Leaf<String> leaf3 = Tree.getInstance("World");
-		Leaf<BigInteger> leaf4 = Tree.getInstance(BigInteger.ONE);
+		Leaf<BigInteger> leaf4 = Tree.getInstance(MathUtil.ONE);
 		Assert.assertTrue(leaf1.equals(leaf1));
 		Assert.assertTrue(leaf1.equals(leaf2));
 		Assert.assertFalse(leaf1.equals(leaf3));
 		Assert.assertFalse(leaf1.equals(leaf4));
 	}
-
 
 }

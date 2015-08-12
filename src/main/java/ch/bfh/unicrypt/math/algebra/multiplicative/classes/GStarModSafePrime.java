@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.factorization.SafePrime;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class GStarModSafePrime
 	private static final long serialVersionUID = 1L;
 
 	protected GStarModSafePrime(SafePrime modulo) {
-		super(modulo, Prime.getInstance(modulo.getValue().subtract(BigInteger.ONE).divide(BigInteger.valueOf(2))));
+		super(modulo, Prime.getInstance(modulo.getValue().subtract(MathUtil.ONE).divide(MathUtil.TWO)));
 	}
 
 	@Override

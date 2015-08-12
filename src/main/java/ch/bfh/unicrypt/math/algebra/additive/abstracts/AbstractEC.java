@@ -183,17 +183,17 @@ public abstract class AbstractEC<F extends FiniteField<V>, V, D extends Dualisti
 			@Override
 			protected BigInteger abstractConvert(Point<D> point) {
 				if (point.equals(infinityPoint)) {
-					return BigInteger.ZERO;
+					return MathUtil.ZERO;
 				}
-				return MathUtil.pair(point.getX().convertToBigInteger(), point.getY().convertToBigInteger()).add(BigInteger.ONE);
+				return MathUtil.pair(point.getX().convertToBigInteger(), point.getY().convertToBigInteger()).add(MathUtil.ONE);
 			}
 
 			@Override
 			protected Point<D> abstractReconvert(BigInteger value) {
-				if (value.equals(BigInteger.ZERO)) {
+				if (value.equals(MathUtil.ZERO)) {
 					return getZeroElement().getValue();
 				}
-				BigInteger[] result = MathUtil.unpair(value.subtract(BigInteger.ONE));
+				BigInteger[] result = MathUtil.unpair(value.subtract(MathUtil.ONE));
 				DualisticElement<V> xValue = getFiniteField().getElementFrom(result[0]);
 				DualisticElement<V> yValue = getFiniteField().getElementFrom(result[1]);
 				if (xValue == null || yValue == null) {

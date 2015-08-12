@@ -156,7 +156,7 @@ public class ECZModPrime
 		BigInteger p = this.getFiniteField().getModulus();
 		ZModElement x = this.getFiniteField().getRandomElement(randomByteSequence);
 		ZModElement y = x.power(3).add(this.getA().multiply(x)).add(this.getB());
-		boolean neg = x.getValue().mod(new BigInteger("2")).equals(BigInteger.ONE);
+		boolean neg = x.getValue().mod(new BigInteger("2")).equals(MathUtil.ONE);
 
 		while (!MathUtil.hasSqrtModPrime(y.getValue(), p)) {
 			x = this.getFiniteField().getRandomElement(randomByteSequence);
@@ -193,8 +193,8 @@ public class ECZModPrime
 		c4 = 0 >= getCoFactor().compareTo(new BigInteger("4"));
 		c5 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
 		c61 = true; //TODO
-		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(BigInteger.ONE)) {
-			if (p.modPow(i, getOrder()).equals(BigInteger.ONE)) {
+		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(MathUtil.ONE)) {
+			if (p.modPow(i, getOrder()).equals(MathUtil.ONE)) {
 				throw new Exception("Curve parameter not valid");
 			}
 		}

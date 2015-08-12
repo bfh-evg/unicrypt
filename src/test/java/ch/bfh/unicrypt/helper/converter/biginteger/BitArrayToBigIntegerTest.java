@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.helper.converter.biginteger;
 
 import ch.bfh.unicrypt.helper.array.classes.BitArray;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BitArrayToBigInteger;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
@@ -76,10 +77,10 @@ public class BitArrayToBigIntegerTest {
 	@Test
 	public void testGetInstance() {
 
-		BigInteger expected = BigInteger.ZERO;
+		BigInteger expected = MathUtil.ZERO;
 		for (BitArray ba : new BitArray[]{ba0, ba10, ba11, ba20, ba21, ba22, ba23, ba30, ba31, ba32, ba33, ba34, ba35, ba36, ba37, ba40}) {
 			Assert.assertEquals(expected, converter.convert(ba));
-			expected = expected.add(BigInteger.ONE);
+			expected = expected.add(MathUtil.ONE);
 		}
 		Assert.assertEquals(BigInteger.valueOf(510), converter.convert(BitArray.getInstance("11111111")));
 		Assert.assertEquals(BigInteger.valueOf(511), converter.convert(BitArray.getInstance("000000000")));

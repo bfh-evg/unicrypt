@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.abstracts;
 
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.DualisticElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.Field;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
@@ -99,7 +100,7 @@ public abstract class AbstractField<E extends DualisticElement<V>, M extends Mul
 		boolean negAmount = (amount.signum() < 0);
 		amount = amount.abs();
 		if (this.isFinite() && this.hasKnownOrder()) {
-			amount = amount.mod(this.getOrder().subtract(BigInteger.ONE));
+			amount = amount.mod(this.getOrder().subtract(MathUtil.ONE));
 		}
 		if (amount.signum() == 0) {
 			return this.getOneElement();

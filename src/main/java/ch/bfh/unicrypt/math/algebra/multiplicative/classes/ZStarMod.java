@@ -139,7 +139,7 @@ public class ZStarMod
 
 	@Override
 	protected BigInteger defaultGetOrderUpperBound() {
-		return this.getModulus().subtract(BigInteger.ONE);
+		return this.getModulus().subtract(MathUtil.ONE);
 	}
 
 	@Override
@@ -173,7 +173,7 @@ public class ZStarMod
 		BigInteger randomValue;
 		do {
 			randomValue = randomByteSequence.getRandomNumberGenerator()
-				   .nextBigInteger(BigInteger.ONE, this.getModulus().subtract(BigInteger.ONE));
+				   .nextBigInteger(MathUtil.ONE, this.getModulus().subtract(MathUtil.ONE));
 		} while (!this.contains(randomValue));
 		return this.abstractGetElement(randomValue);
 	}
@@ -188,7 +188,7 @@ public class ZStarMod
 
 	@Override
 	protected ZStarModElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(MathUtil.ONE);
 	}
 
 	@Override
@@ -230,7 +230,7 @@ public class ZStarMod
 	 * @throws IllegalArgumentException if {@code modulus} is null or smaller than 2
 	 */
 	public static ZStarMod getInstance(final BigInteger modulus) {
-		if (modulus == null || modulus.compareTo(BigInteger.ONE) <= 0) {
+		if (modulus == null || modulus.compareTo(MathUtil.ONE) <= 0) {
 			throw new IllegalArgumentException();
 		}
 		if (MathUtil.isPrime(modulus)) {
@@ -249,7 +249,7 @@ public class ZStarMod
 	 * @throws IllegalArgumentException if {@code primeFactorization.getValue()} is 1
 	 */
 	public static ZStarMod getInstance(final Factorization modulusFactorization) {
-		if (modulusFactorization == null || modulusFactorization.getValue().compareTo(BigInteger.ONE) <= 0) {
+		if (modulusFactorization == null || modulusFactorization.getValue().compareTo(MathUtil.ONE) <= 0) {
 			throw new IllegalArgumentException();
 		}
 		return new ZStarMod(modulusFactorization);

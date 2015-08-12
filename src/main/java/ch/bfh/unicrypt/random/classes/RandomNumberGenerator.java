@@ -163,7 +163,7 @@ public class RandomNumberGenerator
 			throw new IllegalArgumentException();
 		}
 		if (bitLength == 0) {
-			return BigInteger.ZERO;
+			return MathUtil.ZERO;
 		}
 		return this.internalNextBigInteger(bitLength, true);
 	}
@@ -205,7 +205,7 @@ public class RandomNumberGenerator
 
 	private BigInteger internalNextBigInteger(int bitLength, boolean isMsbSet) {
 		if (bitLength < 1) {
-			return BigInteger.ZERO;
+			return MathUtil.ZERO;
 		}
 		int amountOfBytes = MathUtil.divideUp(bitLength, 8);
 		byte[] bytes = this.randomByteSequence.getNextByteArray(amountOfBytes).getBytes();

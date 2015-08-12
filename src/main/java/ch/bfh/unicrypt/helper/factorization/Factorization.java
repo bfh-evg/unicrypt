@@ -96,7 +96,7 @@ public class Factorization
 		if (primeFactors == null || exponents == null || primeFactors.length != exponents.length) {
 			throw new IllegalArgumentException();
 		}
-		BigInteger value = BigInteger.ONE;
+		BigInteger value = MathUtil.ONE;
 		for (int i = 0; i < primeFactors.length; i++) {
 			if (primeFactors[i] == null || !MathUtil.isPrime(primeFactors[i]) || exponents[i] < 1) {
 				throw new IllegalArgumentException();

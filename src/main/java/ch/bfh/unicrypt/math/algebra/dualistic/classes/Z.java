@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.BigIntegerToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -112,7 +113,7 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElement(MathUtil.ZERO);
 	}
 
 	@Override
@@ -127,7 +128,7 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetOne() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(MathUtil.ONE);
 	}
 
 	@Override
@@ -157,12 +158,12 @@ public class Z
 
 	@Override
 	protected ZElement abstractGetDefaultGenerator() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(MathUtil.ONE);
 	}
 
 	@Override
 	protected boolean abstractIsGenerator(final ZElement element) {
-		return element.getValue().abs().equals(BigInteger.ONE);
+		return element.getValue().abs().equals(MathUtil.ONE);
 	}
 
 	@Override

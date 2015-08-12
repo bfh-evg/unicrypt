@@ -194,8 +194,8 @@ public class ECPolynomialField
 
 		c7 = this.selfApply(this.getDefaultGenerator(), getOrder()).isEquivalent(this.getZeroElement());
 
-		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(BigInteger.ONE)) {
-			if (TWO.modPow(i, getOrder()).equals(BigInteger.ONE)) {
+		for (BigInteger i = new BigInteger("1"); i.compareTo(new BigInteger("100")) < 0; i = i.add(MathUtil.ONE)) {
+			if (TWO.modPow(i, getOrder()).equals(MathUtil.ONE)) {
 				throw new Exception("Curve parameter not valid");
 			}
 		}

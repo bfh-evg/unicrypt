@@ -48,6 +48,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
@@ -66,7 +67,6 @@ import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomOracle;
-import java.math.BigInteger;
 
 /**
  *
@@ -117,8 +117,7 @@ public class IdentityShuffleProofSystem
 	public ProductGroup getResponseSpace() {
 		return ProductGroup.getInstance(this.identityGroup.getZModOrder(),
 										this.getCyclicGroup().getZModOrder(),
-										ProductSet.getInstance(ZMod.getInstance(BigInteger.valueOf(2).
-											   pow(this.getKe() + this.getKc() + this.getKr())), this.getSize()));
+										ProductSet.getInstance(ZMod.getInstance(MathUtil.powerOfTwo(this.getKe() + this.getKc() + this.getKr())), this.getSize()));
 	}
 
 	public CyclicGroup getIdentityGroup() {
@@ -147,8 +146,8 @@ public class IdentityShuffleProofSystem
 		// Map ePrimeV to [0,...,2^(ke+kc+kr) - 1]^N
 		ePrimeV = ProductFunction.getInstance(
 			   ConvertFunction.getInstance(
-					  ZMod.getInstance(BigInteger.valueOf(2).pow(this.getKe())),
-					  ZMod.getInstance(BigInteger.valueOf(2).pow(this.getKe() + this.getKc() + this.getKr()))),
+					  ZMod.getInstance(MathUtil.powerOfTwo(this.getKe())),
+					  ZMod.getInstance(MathUtil.powerOfTwo(this.getKe() + this.getKc() + this.getKr()))),
 			   ePrimeV.getLength())
 			   .apply(ePrimeV);
 
@@ -157,8 +156,8 @@ public class IdentityShuffleProofSystem
 
 		// Create sigma proof
 		PreimageProofFunction f = new PreimageProofFunction(this.getCyclicGroup(), this.getSize(),
-			   this.getResponseSpace(), this.getCommitmentSpace(), this.getIndependentGenerators(), u, uPrimeV, gK_1,
-			   this.identityGroup);
+															this.getResponseSpace(), this.getCommitmentSpace(), this.getIndependentGenerators(), u, uPrimeV, gK_1,
+															this.identityGroup);
 		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
 		final Element commitment = f.apply(randomElement);                        // [2N+3]
 		final ZModElement challenge = this.getSigmaChallengeGenerator().generate(publicInput, commitment);
@@ -197,8 +196,8 @@ public class IdentityShuffleProofSystem
 
 		// 1. Verify preimage proof
 		PreimageProofFunction f = new PreimageProofFunction(this.getCyclicGroup(), this.getSize(),
-			   this.getResponseSpace(), this.getCommitmentSpace(), this.getIndependentGenerators(), u, uPrimeV, gK_1,
-			   this.identityGroup);
+															this.getResponseSpace(), this.getCommitmentSpace(), this.getIndependentGenerators(), u, uPrimeV, gK_1,
+															this.identityGroup);
 		final Element challenge = this.getSigmaChallengeGenerator().generate(publicInput, commitment);
 		final Element left = f.apply(response);                                   // [2N+3]
 		final Element right = commitment.apply(pV.selfApply(challenge));          //    [3]
@@ -286,8 +285,8 @@ public class IdentityShuffleProofSystem
 
 	public static IdentityShuffleProofSystem getInstance(Tuple independentGenerators, CyclicGroup identityGroup,
 		   Element proverId, int ke, int kc, int kr) {
-		if (independentGenerators == null || independentGenerators.getArity() < 2 ||
-			   !independentGenerators.getFirst().getSet().isCyclic()) {
+		if (independentGenerators == null || independentGenerators.getArity() < 2
+			   || !independentGenerators.getFirst().getSet().isCyclic()) {
 			throw new IllegalArgumentException();
 		}
 		CyclicGroup cyclicGroup = (CyclicGroup) independentGenerators.getFirst().getSet();
@@ -301,12 +300,12 @@ public class IdentityShuffleProofSystem
 	public static IdentityShuffleProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, CyclicGroup identityGroup) {
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, identityGroup, DEFAULT_KR,
-																		ReferenceRandomByteSequence.getInstance());
+						   ReferenceRandomByteSequence.getInstance());
 	}
 
 	public static IdentityShuffleProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, CyclicGroup identityGroup, int kr,
-															ReferenceRandomByteSequence referenceRandomByteSequence) {
+		   ReferenceRandomByteSequence referenceRandomByteSequence) {
 
 		if (cyclicGroup == null || size < 1 || referenceRandomByteSequence == null) {
 			throw new IllegalArgumentException();
@@ -319,8 +318,8 @@ public class IdentityShuffleProofSystem
 		   ChallengeGenerator eValuesGenerator, Tuple independentGenerators, CyclicGroup identityGroup, int kr) {
 
 		if (sigmaChallengeGenerator == null || eValuesGenerator == null || independentGenerators == null
-			   || independentGenerators.getArity() < 2 || !independentGenerators.getSet().isUniform() ||
-			   !independentGenerators.getFirst().getSet().isCyclic()
+			   || independentGenerators.getArity() < 2 || !independentGenerators.getSet().isUniform()
+			   || !independentGenerators.getFirst().getSet().isCyclic()
 			   || identityGroup == null || kr < 1) {
 			throw new IllegalArgumentException();
 		}
@@ -335,7 +334,7 @@ public class IdentityShuffleProofSystem
 		int size = independentGenerators.getArity() - 1;
 
 		return new IdentityShuffleProofSystem(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, kr,
-			   independentGenerators, identityGroup);
+											  independentGenerators, identityGroup);
 	}
 
 	//===================================================================================
@@ -345,14 +344,14 @@ public class IdentityShuffleProofSystem
 		   final CyclicGroup cyclicGroup, final CyclicGroup identityGroup, final int size) {
 		return createRandomOracleSigmaChallengeGenerator(
 			   cyclicGroup, identityGroup, size, cyclicGroup.getOrder().bitLength(), (Element) null,
-																		PseudoRandomOracle.getInstance());
+			   PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createRandomOracleSigmaChallengeGenerator(
 		   final CyclicGroup cyclicGroup, final CyclicGroup identityGroup, final int size, final int kc,
 		   final Element proverId) {
 		return createRandomOracleSigmaChallengeGenerator(cyclicGroup, identityGroup, size, kc, proverId,
-																		PseudoRandomOracle.getInstance());
+														 PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator createRandomOracleSigmaChallengeGenerator(
@@ -370,13 +369,13 @@ public class IdentityShuffleProofSystem
 	public static RandomOracleChallengeGenerator createRandomOracleChallengeGenerator(
 		   final CyclicGroup cyclicGroup, final CyclicGroup identityGroup, final int size) {
 		return createRandomOracleChallengeGenerator(cyclicGroup, identityGroup, size,
-											cyclicGroup.getOrder().bitLength(), PseudoRandomOracle.getInstance());
+													cyclicGroup.getOrder().bitLength(), PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator createRandomOracleChallengeGenerator(
 		   final CyclicGroup cyclicGroup, final CyclicGroup identityGroup, final int size, final int ke) {
 		return createRandomOracleChallengeGenerator(cyclicGroup, identityGroup, size, ke,
-																				PseudoRandomOracle.getInstance());
+													PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator createRandomOracleChallengeGenerator(
@@ -387,4 +386,5 @@ public class IdentityShuffleProofSystem
 		}
 		return RandomOracleChallengeGenerator.getInstance(createEValuesGeneratorChallengeSpace(ke, size), randomOracle);
 	}
+
 }

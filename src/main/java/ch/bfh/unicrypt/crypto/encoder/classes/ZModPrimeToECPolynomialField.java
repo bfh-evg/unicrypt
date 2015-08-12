@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
 import ch.bfh.unicrypt.crypto.encoder.interfaces.ProbabilisticEncoder;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialElement;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
@@ -120,10 +121,10 @@ public class ZModPrimeToECPolynomialField
 			BigInteger c;
 
 			if (msgSpace / 3 > msgBitLength) {
-				c = BigInteger.ZERO;
+				c = MathUtil.ZERO;
 				this.shift = msgSpace / 3 * 2;
 			} else if (msgSpace / 2 > msgBitLength) {
-				c = BigInteger.ONE;
+				c = MathUtil.ONE;
 				this.shift = msgSpace / 2;
 			} else if (msgSpace / 3 * 2 > msgBitLength) {
 				c = new BigInteger("2");
@@ -138,15 +139,15 @@ public class ZModPrimeToECPolynomialField
 
 			ZModElement zModElement = this.getDomain().getElement(e);
 
-			ZModToBinaryPolynomialField enc =
-				   ZModToBinaryPolynomialField.getInstance(zModPrime, ec.getFiniteField());
+			ZModToBinaryPolynomialField enc
+				   = ZModToBinaryPolynomialField.getInstance(zModPrime, ec.getFiniteField());
 			PolynomialElement x = enc.encode(zModElement);
 			ZModElement stepp = zModPrime.getElement(4);
 
 			int count = 0;
 			while (!ec.contains(x)) {
 				if (count >= (1 << shift)) {
-					firstOption=false;
+					firstOption = false;
 				}
 
 				zModElement = zModElement.add(stepp);
@@ -171,10 +172,10 @@ public class ZModPrimeToECPolynomialField
 				msgBitLength = zModElement.getValue().toString(2).length();
 
 				if (msgSpace / 3 > msgBitLength) {
-					c = BigInteger.ZERO;
+					c = MathUtil.ZERO;
 					this.shift = msgSpace / 3 * 2;
 				} else if (msgSpace / 2 > msgBitLength) {
-					c = BigInteger.ONE;
+					c = MathUtil.ONE;
 					this.shift = msgSpace / 2;
 				} else if (msgSpace / 3 * 2 > msgBitLength) {
 					c = new BigInteger("2");
@@ -237,8 +238,8 @@ public class ZModPrimeToECPolynomialField
 			ZModPrime zModPrime = this.getCoDomain();
 			ECPolynomialField ec = this.getDomain();
 			int msgSpace = zModPrime.getOrder().toString(2).length();
-			ZModToBinaryPolynomialField enc =
-				   ZModToBinaryPolynomialField.getInstance(zModPrime, ec.getFiniteField());
+			ZModToBinaryPolynomialField enc
+				   = ZModToBinaryPolynomialField.getInstance(zModPrime, ec.getFiniteField());
 
 			PolynomialElement x = element.getX();
 			PolynomialElement y = element.getY();
@@ -248,9 +249,9 @@ public class ZModPrimeToECPolynomialField
 
 			BigInteger c = x1.subtract(x1.shiftRight(2).shiftLeft(2));
 
-			if (c.equals(BigInteger.ZERO)) {
+			if (c.equals(MathUtil.ZERO)) {
 				this.shift = msgSpace / 3 * 2;
-			} else if (c.equals(BigInteger.ONE)) {
+			} else if (c.equals(MathUtil.ONE)) {
 				this.shift = msgSpace / 2;
 			} else if (c.equals(new BigInteger("2"))) {
 				this.shift = msgSpace / 3;
@@ -296,4 +297,5 @@ public class ZModPrimeToECPolynomialField
 	public static boolean isBigger(PolynomialElement y1, PolynomialElement y2) {
 		return y1.isEquivalent(getBiggerY(y1, y2));
 	}
+
 }

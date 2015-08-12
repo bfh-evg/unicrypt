@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.converter.classes.biginteger;
 
 import ch.bfh.unicrypt.helper.converter.abstracts.AbstractBigIntegerConverter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import java.math.BigInteger;
 
 /**
@@ -74,20 +75,20 @@ public class BooleanToBigInteger
 
 	@Override
 	protected boolean defaultIsValidOutput(BigInteger value) {
-		return value.equals(BigInteger.ZERO) || value.equals(BigInteger.ONE);
+		return value.equals(MathUtil.ZERO) || value.equals(MathUtil.ONE);
 	}
 
 	@Override
 	protected BigInteger abstractConvert(Boolean value) {
 		if (value) {
-			return BigInteger.ONE;
+			return MathUtil.ONE;
 		}
-		return BigInteger.ZERO;
+		return MathUtil.ZERO;
 	}
 
 	@Override
 	protected Boolean abstractReconvert(BigInteger value) {
-		if (value.equals(BigInteger.ZERO)) {
+		if (value.equals(MathUtil.ZERO)) {
 			return false;
 		}
 		return true;

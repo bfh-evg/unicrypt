@@ -41,9 +41,9 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractCyclicRing;
 import ch.bfh.unicrypt.math.algebra.dualistic.interfaces.CyclicRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -129,7 +129,7 @@ public class ZMod
 
 	@Override
 	protected ZModElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElement(MathUtil.ZERO);
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class ZMod
 	@Override
 	protected ZModElement abstractGetOne() {
 		// mod is necessary for the trivial group Z_1
-		return this.abstractGetElement(BigInteger.ONE.mod(this.modulus));
+		return this.abstractGetElement(MathUtil.ONE.mod(this.modulus));
 	}
 
 	@Override
@@ -171,18 +171,18 @@ public class ZMod
 	@Override
 	protected ZModElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		return this.abstractGetElement(randomByteSequence.getRandomNumberGenerator()
-			   .nextBigInteger(this.modulus.subtract(BigInteger.ONE)));
+			   .nextBigInteger(this.modulus.subtract(MathUtil.ONE)));
 	}
 
 	@Override
 	protected ZModElement abstractGetDefaultGenerator() {
 		// mod is necessary for the trivial group Z_1
-		return this.abstractGetElement(BigInteger.ONE.mod(this.modulus));
+		return this.abstractGetElement(MathUtil.ONE.mod(this.modulus));
 	}
 
 	@Override
 	protected boolean abstractIsGenerator(ZModElement element) {
-		if (this.modulus.equals(BigInteger.ONE)) {
+		if (this.modulus.equals(MathUtil.ONE)) {
 			return true;
 		}
 		return MathUtil.areRelativelyPrime(element.getValue(), this.modulus);
@@ -219,7 +219,7 @@ public class ZMod
 	 * @throws IllegalArgumentException if {@code modulus} is null, zero, or negative
 	 */
 	public static ZMod getInstance(final BigInteger modulus) {
-		if ((modulus == null) || (modulus.compareTo(BigInteger.valueOf(2)) < 0)) {
+		if (modulus == null || modulus.compareTo(MathUtil.TWO) < 0) {
 			throw new IllegalArgumentException();
 		}
 		ZMod instance = ZMod.instances.get(modulus);

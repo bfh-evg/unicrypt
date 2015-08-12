@@ -129,7 +129,7 @@ public class HMAC_DRBG
 
 	/**
 	 * Returns a new sequence of byte arrays based on the HMAC_DRBG standard, using the default hash algorithm. The
-	 * default seed is the byte array.
+	 * default seed is the empty byte array.
 	 * <p>
 	 * @return The new HMAC_DRBG byte array sequence
 	 */
@@ -150,7 +150,7 @@ public class HMAC_DRBG
 
 	/**
 	 * Returns a new sequence of byte arrays based on the HMAC_DRBG standard. The sequence is determined by the given
-	 * hash algorithm. The default seed is the byte array.
+	 * hash algorithm. The default seed is the empty byte array.
 	 * <p>
 	 * @param hashAlgorithm The given hash algorithm
 	 * @return The new HMAC_DRBG byte array sequence

@@ -41,10 +41,11 @@
  */
 package ch.bfh.unicrypt.math.algebra.general.classes;
 
-import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.StringToBigInteger;
 import ch.bfh.unicrypt.helper.converter.classes.string.StringToString;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.Alphabet;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractSet;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -110,9 +111,9 @@ public class FiniteStringSet
 	@Override
 	protected BigInteger abstractGetOrder() {
 		BigInteger size = BigInteger.valueOf(this.getAlphabet().getSize());
-		BigInteger order = BigInteger.ONE;
+		BigInteger order = MathUtil.ONE;
 		for (int i = 0; i < this.maxLength - this.minLength; i++) {
-			order = order.multiply(size).add(BigInteger.ONE);
+			order = order.multiply(size).add(MathUtil.ONE);
 		}
 		return order.multiply(size.pow(this.minLength));
 	}
@@ -120,7 +121,7 @@ public class FiniteStringSet
 	@Override
 	protected FiniteStringElement abstractGetRandomElement(RandomByteSequence randomByteSequence) {
 		return this.getElementFrom(randomByteSequence.getRandomNumberGenerator()
-			   .nextBigInteger(this.getOrder().subtract(BigInteger.ONE)));
+			   .nextBigInteger(this.getOrder().subtract(MathUtil.ONE)));
 	}
 
 	@Override
@@ -172,9 +173,9 @@ public class FiniteStringSet
 		int maxLength = minLength;
 		BigInteger size = BigInteger.valueOf(alphabet.getSize());
 		BigInteger order1 = size.pow(minLength);
-		BigInteger order2 = BigInteger.ONE;
+		BigInteger order2 = MathUtil.ONE;
 		while (order1.multiply(order2).compareTo(minOrder) < 0) {
-			order2 = order2.multiply(size).add(BigInteger.ONE);
+			order2 = order2.multiply(size).add(MathUtil.ONE);
 			maxLength++;
 		}
 		if (minLength == maxLength) {

@@ -125,7 +125,7 @@ public class SpecialFactorization
 			}
 		}
 		if (exponent == 1 && !timesTwo) {
-			if (MathUtil.isPrime(primeFactor.subtract(BigInteger.ONE).divide(MathUtil.TWO))) {
+			if (MathUtil.isPrime(primeFactor.subtract(MathUtil.ONE).divide(MathUtil.TWO))) {
 				return new SafePrime(primeFactor);
 			}
 			return new Prime(primeFactor);

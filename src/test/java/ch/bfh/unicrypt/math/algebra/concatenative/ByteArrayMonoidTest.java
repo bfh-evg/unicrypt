@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.concatenative;
 
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayElement;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.ByteArrayMonoid;
 import java.math.BigInteger;
@@ -56,7 +57,7 @@ public class ByteArrayMonoidTest {
 	@Test
 	public void testGetValue() {
 		ByteArrayMonoid bam = ByteArrayMonoid.getInstance(2);
-		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(65538)) <= 0; i = i.add(BigInteger.ONE)) {
+		for (BigInteger i = BigInteger.valueOf(0); i.compareTo(BigInteger.valueOf(65538)) <= 0; i = i.add(MathUtil.ONE)) {
 			ByteArrayElement element = bam.getElementFrom(i);
 			Assert.assertEquals(i, element.convertToBigInteger());
 //			System.out.println(element);

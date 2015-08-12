@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.general;
 
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import ch.bfh.unicrypt.math.algebra.general.classes.BooleanElement;
@@ -100,10 +101,10 @@ public class BooleanSetTest {
 	public void testGetElementFromBigInteger() {
 		BigInteger value = null;
 		BooleanSet instance = BooleanSet.getInstance();
-		BooleanElement result = instance.getElementFrom(BigInteger.ZERO);
+		BooleanElement result = instance.getElementFrom(MathUtil.ZERO);
 		assertEquals(false, result.getValue());
 
-		result = instance.getElementFrom(BigInteger.ONE);
+		result = instance.getElementFrom(MathUtil.ONE);
 		assertEquals(true, result.getValue());
 
 	}

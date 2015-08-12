@@ -44,6 +44,7 @@ package ch.bfh.unicrypt.math.algebra.multiplicative.classes;
 import ch.bfh.unicrypt.helper.factorization.Prime;
 import ch.bfh.unicrypt.helper.map.HashMap2D;
 import ch.bfh.unicrypt.helper.map.Map2D;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModPrime;
 import java.math.BigInteger;
 
@@ -83,7 +84,7 @@ public class GStarModPrime
 		if (modulus == null || orderFactor == null) {
 			throw new IllegalArgumentException();
 		}
-		if (!modulus.getValue().subtract(BigInteger.ONE).mod(orderFactor.getValue()).equals(BigInteger.ZERO)) {
+		if (!modulus.getValue().subtract(MathUtil.ONE).mod(orderFactor.getValue()).equals(MathUtil.ZERO)) {
 			throw new IllegalArgumentException();
 		}
 		GStarModPrime instance = GStarModPrime.instances.get(modulus, orderFactor);

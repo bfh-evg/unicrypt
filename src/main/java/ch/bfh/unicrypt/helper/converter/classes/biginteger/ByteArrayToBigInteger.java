@@ -127,7 +127,7 @@ public class ByteArrayToBigInteger
 		BigInteger blockSize = MathUtil.powerOfTwo(this.blockLength * Byte.SIZE);
 
 		// compute the total number of shorter byte arrays
-		BigInteger result = BigInteger.ZERO;
+		BigInteger result = MathUtil.ZERO;
 		BigInteger multipleBlockSize = blockSize.pow(this.minBlocks);
 		for (int blocks = this.minBlocks; blocks < byteArray.getLength() / this.blockLength; blocks++) {
 			result = result.add(multipleBlockSize);

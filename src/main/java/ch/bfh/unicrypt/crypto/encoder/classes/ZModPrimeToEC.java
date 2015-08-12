@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.encoder.classes;
 
 import ch.bfh.unicrypt.crypto.encoder.abstracts.AbstractEncoder;
 import ch.bfh.unicrypt.crypto.encoder.exceptions.ProbabilisticEncodingException;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECPolynomialField;
 import ch.bfh.unicrypt.math.algebra.additive.classes.ECZModPrime;
 import ch.bfh.unicrypt.math.algebra.additive.interfaces.EC;
@@ -123,10 +124,10 @@ public class ZModPrimeToEC
 			BigInteger c;
 
 			if (msgSpace / 3 > msgBitLength) {
-				c = BigInteger.ZERO;
+				c = MathUtil.ZERO;
 				this.shift = msgSpace / 3 * 2;
 			} else if (msgSpace / 2 > msgBitLength) {
-				c = BigInteger.ONE;
+				c = MathUtil.ONE;
 				this.shift = msgSpace / 2;
 			} else if (msgSpace / 3 * 2 > msgBitLength) {
 				c = new BigInteger("2");
@@ -171,10 +172,10 @@ public class ZModPrimeToEC
 				msgBitLength = zModElement.getValue().toString(2).length();
 
 				if (msgSpace / 3 > msgBitLength) {
-					c = BigInteger.ZERO;
+					c = MathUtil.ZERO;
 					this.shift = msgSpace / 3 * 2;
 				} else if (msgSpace / 2 > msgBitLength) {
-					c = BigInteger.ONE;
+					c = MathUtil.ONE;
 					this.shift = msgSpace / 2;
 				} else if (msgSpace / 3 * 2 > msgBitLength) {
 					c = new BigInteger("2");
@@ -244,9 +245,9 @@ public class ZModPrimeToEC
 
 			BigInteger c = x1.subtract(x1.shiftRight(2).shiftLeft(2));
 
-			if (c.equals(BigInteger.ZERO)) {
+			if (c.equals(MathUtil.ZERO)) {
 				this.shift = msgSpace / 3 * 2;
-			} else if (c.equals(BigInteger.ONE)) {
+			} else if (c.equals(MathUtil.ONE)) {
 				this.shift = msgSpace / 2;
 			} else if (c.equals(new BigInteger("2"))) {
 				this.shift = msgSpace / 3;

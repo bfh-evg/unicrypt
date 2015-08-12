@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.general.classes;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.general.abstracts.AbstractCyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
@@ -109,7 +110,7 @@ public class SingletonGroup
 
 	@Override
 	protected BigInteger abstractGetOrder() {
-		return BigInteger.ONE;
+		return MathUtil.ONE;
 	}
 
 	@Override
@@ -167,7 +168,7 @@ public class SingletonGroup
 	}
 
 	public static SingletonGroup getInstance() {
-		return SingletonGroup.getInstance(BigInteger.ZERO);
+		return SingletonGroup.getInstance(MathUtil.ZERO);
 	}
 
 }

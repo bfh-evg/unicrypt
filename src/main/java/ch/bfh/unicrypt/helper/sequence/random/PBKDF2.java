@@ -52,15 +52,20 @@ import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
  * This class implements the standard PBKDF2 (password-based key derivation function) as defined in the NIST Special
  * Publication 800-132, "Recommendation for Password-Based Key Derivation", and in the RFC 2898, "PKCS #5:
  * Password-Based Cryptography Specification, Version 2.0". Instances of this class generate a deterministic sequence of
- * randomly looking byte arrays for a given password, salt, number of rounds, and hash algorithm.
+ * randomly looking byte arrays for a given password, salt, number of rounds, and hash algorithm. The number of rounds
+ * determines the amount of work to compute the key.
  * <p>
  * @author R. Haenni
  */
 public class PBKDF2
 	   extends Sequence<ByteArray> {
 
+	/**
+	 * The default number of rounds
+	 */
+	public static final int DEFAULT_ROUNDS = 4096;
+
 	private static final byte BYTE_ZERO = MathUtil.getByte(0x00);
-	private static final int DEFUALT_ROUNDS = 4096;
 
 	private final HashAlgorithm hashAlgorithm;
 	private final ByteArray password;
@@ -112,34 +117,104 @@ public class PBKDF2
 		};
 	}
 
+	/**
+	 * Returns a new sequence of byte arrays based on the PBKDF2 standard, using the default hash algorithm and the
+	 * default number of rounds. The sequence is determined by the given password. The default salt is the empty byte
+	 * array.
+	 * <p>
+	 * @param password The given password
+	 * @return The new PBKDF2 byte array sequence
+	 */
 	public static PBKDF2 getInstance(ByteArray password) {
 		return PBKDF2.getInstance(ByteArray.getInstance());
 	}
 
+	/**
+	 * Returns a new sequence of byte arrays based on the PBKDF2 standard, using the default hash algorithm and the
+	 * default number of rounds. The sequence is determined by the given password and salt.The default salt is the empty
+	 * byte array.
+	 * <p>
+	 * @param password The given password
+	 * @param salt     The given salt
+	 * @return The new PBKDF2 byte array sequence
+	 */
 	public static PBKDF2 getInstance(ByteArray password, ByteArray salt) {
 		return PBKDF2.getInstance(HashAlgorithm.getInstance(), salt);
 	}
 
+	/**
+	 * Returns a new sequence of byte arrays based on the PBKDF2 standard. The sequence is determined by the given
+	 * password and hash algorithm. The default salt is the empty byte array.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @param password      The given password
+	 * @return The new PBKDF2 byte array sequence
+	 */
 	public static PBKDF2 getInstance(HashAlgorithm hashAlgorithm, ByteArray password) {
 		return PBKDF2.getInstance(hashAlgorithm, ByteArray.getInstance());
 	}
 
+	/**
+	 * Returns a new sequence of byte arrays based on the PBKDF2 standard, using the default number of rounds. The
+	 * sequence is determined by the given password, salt, and hash algorithm.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @param password      The given password
+	 * @param salt          The given salt
+	 * @return The new PBKDF2 byte array sequence
+	 */
 	public static PBKDF2 getInstance(HashAlgorithm hashAlgorithm, ByteArray password, ByteArray salt) {
-		return PBKDF2.getInstance(hashAlgorithm, password, salt, DEFUALT_ROUNDS);
+		return PBKDF2.getInstance(hashAlgorithm, password, salt, DEFAULT_ROUNDS);
 	}
 
+	/**
+	 * Returns a new sequence of byte arrays based on the PBKDF2 standard, using the default hash algorithm. The
+	 * sequence is determined by the given password and the number of rounds. The default salt is the empty byte array.
+	 * <p>
+	 * @param password The given password
+	 * @param rounds   The number of rounds
+	 * @return The new PBKDF2 byte array sequence
+	 */
 	public static PBKDF2 getInstance(ByteArray password, int rounds) {
 		return PBKDF2.getInstance(ByteArray.getInstance(), rounds);
 	}
 
+	/**
+	 * Returns a new sequence of byte arrays based on the PBKDF2 standard, using the default hash algorithm. The
+	 * sequence is determined by the given password, salt, and number of rounds.
+	 * <p>
+	 * @param password The given password
+	 * @param salt     The given salt
+	 * @param rounds   The number of rounds
+	 * @return The new PBKDF2 byte array sequence
+	 */
 	public static PBKDF2 getInstance(ByteArray password, ByteArray salt, int rounds) {
 		return PBKDF2.getInstance(HashAlgorithm.getInstance(), salt, rounds);
 	}
 
+	/**
+	 * Returns a new sequence of byte arrays based on the PBKDF2 standard. The sequence is determined by the given
+	 * password, number of rounds, and the hash algorithm. The default salt is the byte array.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @param password      The given password
+	 * @param rounds        The number of rounds
+	 * @return The new PBKDF2 byte array sequence
+	 */
 	public static PBKDF2 getInstance(HashAlgorithm hashAlgorithm, ByteArray password, int rounds) {
 		return PBKDF2.getInstance(hashAlgorithm, ByteArray.getInstance(), rounds);
 	}
 
+	/**
+	 * Returns a new sequence of byte arrays based on the PBKDF2 standard. The sequence is determined by the given
+	 * password, salt, number of rounds, and the hash algorithm.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @param password      The given password
+	 * @param salt          The given salt
+	 * @param rounds        The number of rounds
+	 * @return The new PBKDF2 byte array sequence
+	 */
 	public static PBKDF2 getInstance(HashAlgorithm hashAlgorithm, ByteArray password, ByteArray salt, int rounds) {
 		if (hashAlgorithm == null || password == null || salt == null || rounds < 1) {
 			throw new IllegalArgumentException();

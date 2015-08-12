@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -82,8 +83,8 @@ public abstract class AbstractShuffleProofSystem
 		this.independentGenerators = independentGenerators;
 
 		this.ke = ((ZMod) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
-			   .subtract(BigInteger.ONE).bitLength();
-		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(BigInteger.ONE).bitLength();
+			   .subtract(MathUtil.ONE).bitLength();
+		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(MathUtil.ONE).bitLength();
 	}
 
 	//===================================================================================
@@ -161,7 +162,7 @@ public abstract class AbstractShuffleProofSystem
 	//
 	// [0,...,2^kc - 1] \subseteq Z
 	protected static ZMod createChallengeSpace(int k) {
-		return ZMod.getInstance(BigInteger.valueOf(2).pow(k));
+		return ZMod.getInstance(MathUtil.powerOfTwo(k));
 	}
 
 	// [0,...,2^ke - 1]^N \subseteq Z^N

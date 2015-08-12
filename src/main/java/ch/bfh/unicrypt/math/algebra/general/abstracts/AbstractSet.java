@@ -218,7 +218,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 
 	@Override
 	public final boolean isSingleton() {
-		return this.getOrder().equals(BigInteger.ONE);
+		return this.getOrder().equals(MathUtil.ONE);
 	}
 
 	@Override
@@ -517,7 +517,7 @@ public abstract class AbstractSet<E extends Element<V>, V>
 
 	// this method is only called for sets of unknown order
 	protected BigInteger defaultGetOrderLowerBound() {
-		return BigInteger.ONE;
+		return MathUtil.ONE;
 	}
 
 	// this method is only called for sets of unknown order

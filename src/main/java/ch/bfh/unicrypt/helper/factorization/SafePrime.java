@@ -78,7 +78,7 @@ public class SafePrime
 	}
 
 	protected SafePrime(BigInteger safePrime) {
-		super(safePrime, safePrime.subtract(BigInteger.ONE).divide(MathUtil.TWO));
+		super(safePrime, safePrime.subtract(MathUtil.ONE).divide(MathUtil.TWO));
 	}
 
 	/**
@@ -120,11 +120,11 @@ public class SafePrime
 		SafePrime safePrime = SafePrime.instances.get(bitLength);
 		if (safePrime == null) {
 			if (bitLength == 3) {
-				safePrime = new SafePrime(BigInteger.valueOf(5));
+				safePrime = new SafePrime(MathUtil.FIVE);
 			} else {
 				BigInteger increase = BigInteger.valueOf(12);
 				BigInteger minValue = MathUtil.powerOfTwo(bitLength - 1);
-				BigInteger candidate = minValue.add(increase.subtract(minValue.mod(increase))).subtract(BigInteger.ONE);
+				BigInteger candidate = minValue.add(increase.subtract(minValue.mod(increase))).subtract(MathUtil.ONE);
 				while (!MathUtil.isSafePrime(candidate)) {
 					candidate = candidate.add(increase);
 				}
@@ -159,16 +159,16 @@ public class SafePrime
 		// Special case with safe primes p=5 or p=7 not satisfying p mod 12 = 11
 		if (bitLength == 3) {
 			if (randomNumberGenerator.nextBoolean()) {
-				return new SafePrime(BigInteger.valueOf(5));
+				return new SafePrime(MathUtil.FIVE);
 			} else {
-				return new SafePrime(BigInteger.valueOf(7));
+				return new SafePrime(MathUtil.SEVEN);
 			}
 		}
 		BigInteger prime;
 		BigInteger safePrime;
 		do {
 			prime = randomNumberGenerator.nextBigInteger(bitLength - 1);
-			safePrime = prime.shiftLeft(1).add(BigInteger.ONE);
+			safePrime = prime.shiftLeft(1).add(MathUtil.ONE);
 		} while (!safePrime.mod(BigInteger.valueOf(12)).equals(BigInteger.valueOf(11)) || !MathUtil.isPrime(prime) || !MathUtil.isPrime(safePrime));
 		return new SafePrime(safePrime);
 	}

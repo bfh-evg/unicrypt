@@ -63,6 +63,9 @@ public final class MathUtil {
 	public static final BigInteger TWO = BigInteger.valueOf(2);
 	public static final BigInteger THREE = BigInteger.valueOf(3);
 	public static final BigInteger FOUR = BigInteger.valueOf(4);
+	public static final BigInteger FIVE = BigInteger.valueOf(5);
+	public static final BigInteger SIX = BigInteger.valueOf(6);
+	public static final BigInteger SEVEN = BigInteger.valueOf(7);
 
 	private static final byte[] BIT_MASKS = new byte[Byte.SIZE];
 	private static final byte[] BIT_MASKS_INV = new byte[Byte.SIZE];

@@ -47,6 +47,7 @@ import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracl
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZModElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
@@ -96,8 +97,8 @@ public class PermutationCommitmentProofSystem
 		this.independentGenerators = independentGenerators;
 
 		this.ke = ((ZMod) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
-			   .subtract(BigInteger.ONE).bitLength();
-		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(BigInteger.ONE).bitLength();
+			   .subtract(MathUtil.ONE).bitLength();
+		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(MathUtil.ONE).bitLength();
 	}
 
 	//===================================================================================
@@ -167,8 +168,8 @@ public class PermutationCommitmentProofSystem
 		final Element v = this.cyclicGroup.getZModOrder().add(sV);
 		// w = <sV,eV>
 		final Element w = computeInnerProduct(sV, eV);
-		final Tuple rV =
-			ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size).getRandomElement(randomByteSequence);
+		final Tuple rV
+			   = ProductGroup.getInstance(this.cyclicGroup.getZModOrder(), this.size).getRandomElement(randomByteSequence);
 		Tuple ePrimeV = PermutationFunction.getInstance(eV.getSet()).apply(eV, pi);
 
 		// Compute commitments c_i and d
@@ -199,15 +200,15 @@ public class PermutationCommitmentProofSystem
 		// TODO: Clean Fix!
 		Element[] ePrimeVs = new Element[ePrimeV.getLength()];
 		for (int i = 0; i < ePrimeVs.length; i++) {
-			ePrimeVs[i] =
-				   cyclicGroup.getZModOrder().getElement(ePrimeV.getAt(i).convertToBigInteger().mod(cyclicGroup.getOrder()));
+			ePrimeVs[i]
+				   = cyclicGroup.getZModOrder().getElement(ePrimeV.getAt(i).convertToBigInteger().mod(cyclicGroup.getOrder()));
 		}
 		ePrimeV = Tuple.getInstance(ePrimeVs);
 
 		// Create sigma proof
-		PreimageProofFunction f =
-			   new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(),
-					  this.getCommitmentSpace(), this.independentGenerators, cV);
+		PreimageProofFunction f
+			   = new PreimageProofFunction(this.cyclicGroup, this.size, this.getResponseSpace(),
+										   this.getCommitmentSpace(), this.independentGenerators, cV);
 		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
 		final Element commitment = f.apply(randomElement);                              // [3n+3]
 		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
@@ -252,7 +253,7 @@ public class PermutationCommitmentProofSystem
 
 		// Verify preimage proof
 		PreimageProofFunction f = new PreimageProofFunction(this.cyclicGroup,
-			   this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.independentGenerators, cV);
+															this.size, this.getResponseSpace(), this.getCommitmentSpace(), this.independentGenerators, cV);
 		final Element challenge = this.sigmaChallengeGenerator.generate(Pair.getInstance(publicInput, cV), commitment);
 		final Element left = f.apply(response);                                         // [3N+3]
 		final Element right = commitment.apply(pV.selfApply(challenge));                //  [N+3]
@@ -364,7 +365,7 @@ public class PermutationCommitmentProofSystem
 	public static PermutationCommitmentProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size) {
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, DEFAULT_KR,
-																ReferenceRandomByteSequence.getInstance());
+						   ReferenceRandomByteSequence.getInstance());
 	}
 
 	public static PermutationCommitmentProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
@@ -426,61 +427,62 @@ public class PermutationCommitmentProofSystem
 		}
 
 		return new PermutationCommitmentProofSystem(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, kr,
-			   independentGenerators);
+													independentGenerators);
 	}
 
 	//===================================================================================
 	// Service functions to create non-interactive Sigma- and Element-ChallengeGenerator
 	//
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size) {
+		   createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size) {
 		if (cyclicGroup == null) {
 			throw new IllegalArgumentException();
 		}
 		return createNonInteractiveSigmaChallengeGenerator(cyclicGroup, size,
-							cyclicGroup.getOrder().bitLength(), (Element) null, PseudoRandomOracle.getInstance());
+														   cyclicGroup.getOrder().bitLength(), (Element) null, PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size, final int kc,
-			  final Element proverId) {
+		   createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size, final int kc,
+				  final Element proverId) {
 		return createNonInteractiveSigmaChallengeGenerator(cyclicGroup, size, kc, proverId,
-																				  PseudoRandomOracle.getInstance());
+														   PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleSigmaChallengeGenerator
-	   createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size, final int kc,
-			  final Element proverId, RandomOracle randomOracle) {
+		   createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup, final int size, final int kc,
+				  final Element proverId, RandomOracle randomOracle) {
 		if (cyclicGroup == null || size < 1 || kc < 1) {
 			throw new IllegalArgumentException();
 		}
 		//[0,...,2^kc - 1] \subseteq Z
-		ZMod cs = ZMod.getInstance(BigInteger.valueOf(2).pow(kc));
+		ZMod cs = ZMod.getInstance(MathUtil.powerOfTwo(kc));
 		return RandomOracleSigmaChallengeGenerator.getInstance(cs, proverId, randomOracle);
 	}
 
 	public static RandomOracleChallengeGenerator
-	   createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size) {
+		   createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size) {
 		if (cyclicGroup == null) {
 			throw new IllegalArgumentException();
 		}
 		return createNonInteractiveEValuesGenerator(cyclicGroup, size, cyclicGroup.getOrder().bitLength(),
-																	   PseudoRandomOracle.getInstance());
+													PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator
-	   createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size, final int ke) {
+		   createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size, final int ke) {
 		return createNonInteractiveEValuesGenerator(cyclicGroup, size, ke, PseudoRandomOracle.getInstance());
 	}
 
 	public static RandomOracleChallengeGenerator
-	   createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size, final int ke,
-			  RandomOracle randomOracle) {
+		   createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final int size, final int ke,
+				  RandomOracle randomOracle) {
 		if (cyclicGroup == null || size < 1 || ke < 1) {
 			throw new IllegalArgumentException();
 		}
 		// [0,...,2^ke - 1]^N \subseteq Z^N
-		ProductGroup cs = ProductGroup.getInstance(ZMod.getInstance(BigInteger.valueOf(2).pow(ke)), size);
+		ProductGroup cs = ProductGroup.getInstance(ZMod.getInstance(MathUtil.powerOfTwo(ke)), size);
 		return RandomOracleChallengeGenerator.getInstance(cs, randomOracle);
 	}
+
 }

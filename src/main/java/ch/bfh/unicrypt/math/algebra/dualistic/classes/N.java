@@ -43,6 +43,7 @@ package ch.bfh.unicrypt.math.algebra.dualistic.classes;
 
 import ch.bfh.unicrypt.helper.converter.classes.biginteger.BigIntegerToBigInteger;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.abstracts.AbstractSemiRing;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
@@ -97,7 +98,7 @@ public class N
 
 	@Override
 	protected NElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ZERO);
+		return this.abstractGetElement(MathUtil.ZERO);
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class N
 
 	@Override
 	protected NElement abstractGetOne() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(MathUtil.ONE);
 	}
 
 	@Override

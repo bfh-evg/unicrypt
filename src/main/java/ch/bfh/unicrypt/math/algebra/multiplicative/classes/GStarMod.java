@@ -163,7 +163,7 @@ public class GStarMod
 		return value.signum() > 0
 			   && value.compareTo(this.modulus) < 0
 			   && MathUtil.areRelativelyPrime(value, this.modulus)
-			   && value.modPow(this.getOrder(), this.modulus).equals(BigInteger.ONE);
+			   && value.modPow(this.getOrder(), this.modulus).equals(MathUtil.ONE);
 	}
 
 	@Override
@@ -197,7 +197,7 @@ public class GStarMod
 
 	@Override
 	protected GStarModElement abstractGetIdentityElement() {
-		return this.abstractGetElement(BigInteger.ONE);
+		return this.abstractGetElement(MathUtil.ONE);
 	}
 
 	@Override
@@ -218,11 +218,11 @@ public class GStarMod
 	 */
 	@Override
 	protected GStarModElement abstractGetDefaultGenerator() {
-		BigInteger alpha = BigInteger.ZERO;
+		BigInteger alpha = MathUtil.ZERO;
 		GStarModElement element;
 		do {
 			do {
-				alpha = alpha.add(BigInteger.ONE);
+				alpha = alpha.add(MathUtil.ONE);
 			} while (!MathUtil.areRelativelyPrime(alpha, this.getModulus()));
 			element = this.abstractGetElement(alpha.modPow(this.getCoFactor(), this.modulus));
 		} while (!this.isGenerator(element)); // this test could be skipped for a prime order
@@ -271,7 +271,7 @@ public class GStarMod
 	 */
 	public static GStarMod getInstance(SpecialFactorization moduloFactorization, Factorization orderFactorization) {
 		GStarMod group = new GStarMod(moduloFactorization, orderFactorization);
-		if (!group.getOrder().mod(orderFactorization.getValue()).equals(BigInteger.ZERO)) {
+		if (!group.getOrder().mod(orderFactorization.getValue()).equals(MathUtil.ZERO)) {
 			throw new IllegalArgumentException();
 		}
 		return group;

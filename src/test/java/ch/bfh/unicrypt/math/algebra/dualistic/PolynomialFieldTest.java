@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.math.algebra.dualistic;
 
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.math.Polynomial;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialElement;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.PolynomialField;
@@ -60,8 +61,8 @@ import org.junit.Test;
  */
 public class PolynomialFieldTest {
 
-	private static final BigInteger zero = BigInteger.ZERO;
-	private static final BigInteger one = BigInteger.ONE;
+	private static final BigInteger zero = MathUtil.ZERO;
+	private static final BigInteger one = MathUtil.ONE;
 
 	private static final ZModPrime zmod2 = ZModPrime.getInstance(2);
 	private static final ZModPrime zmod3 = ZModPrime.getInstance(3);
