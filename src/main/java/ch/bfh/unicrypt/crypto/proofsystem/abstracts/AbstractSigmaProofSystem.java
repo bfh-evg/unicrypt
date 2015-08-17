@@ -48,8 +48,17 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 
-public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Element, PUS extends Set,
-	   PUE extends Element>
+/**
+ * The abstract implementation of the {@link SigmaProofSystem}. It fixes the proof space to a {@link ProductSet} and the
+ * proof element to a {@link Triple} and holds an instance of the {@link SigmaChallengeGenerator}.
+ * <p>
+ * @author P. Locher
+ * @param <PRS> The private input space.
+ * @param <PRE> The private input element.
+ * @param <PUS> The public input space.
+ * @param <PUE> The public input element.
+ */
+public abstract class AbstractSigmaProofSystem<PRS extends Set, PRE extends Element, PUS extends Set, PUE extends Element>
 	   extends AbstractProofSystem<PRS, PRE, PUS, PUE, ProductSet, Triple>
 	   implements SigmaProofSystem {
 

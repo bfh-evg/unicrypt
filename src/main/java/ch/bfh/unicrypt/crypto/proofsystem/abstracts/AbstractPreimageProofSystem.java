@@ -52,13 +52,33 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
-public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup,
-	   PUE extends Element, F extends Function>
+/**
+ * The abstract implementation of the {@link PreimageProofSystem}. It is a full implementation of the proof system.
+ * Subclasses have to care only about the concrete instantiation, which is based on the proof function and the challenge
+ * generator.
+ * <p>
+ * @author P. Locher
+ * @param <PRS> The private input space.
+ * @param <PRE> The private input element.
+ * @param <PUS> The public input space.
+ * @param <PUE> The public input element.
+ * @param <F>   The proof function.
+ */
+public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE extends Element, PUS extends SemiGroup, PUE extends Element, F extends Function>
 	   extends AbstractSigmaProofSystem<PRS, PRE, PUS, PUE>
 	   implements PreimageProofSystem {
 
+	/**
+	 * Holds the proof function.
+	 */
 	private final F preimageProofFunction;
 
+	/**
+	 * Constructor. A preimage proof system which is defined by its proof function and challenge generator.
+	 * <p>
+	 * @param challengeGenerator The challenge generator.
+	 * @param function           The proof function.
+	 */
 	protected AbstractPreimageProofSystem(final SigmaChallengeGenerator challengeGenerator, final F function) {
 		super(challengeGenerator);
 		this.preimageProofFunction = function;
@@ -128,7 +148,7 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 	}
 
 	/**
-	 * Checks whether the challenge space of the challenge generator does match with the proof function.
+	 * Checks whether the challenge space of the challenge generator does match the domain of the proof function.
 	 * <p>
 	 * @param challengeGenerator The challenge generator
 	 * @param proofFunction      The proof function
@@ -142,4 +162,5 @@ public abstract class AbstractPreimageProofSystem<PRS extends SemiGroup, PRE ext
 					  .getChallengeSpace()));
 
 	}
+
 }
