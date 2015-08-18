@@ -50,6 +50,11 @@ import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 
+/**
+ * This class covers the AND-composition of preimage proofs: ZKP[(x1,...,xN) : y1=f1(x1) ∧...∧ yN=fN(xN)].
+ * <p>
+ * @author P. Locher
+ */
 public class AndPreimageProofSystem
 	   extends AbstractPreimageProofSystem<ProductSemiGroup, Tuple, ProductSemiGroup, Tuple, ProductFunction> {
 
@@ -63,8 +68,8 @@ public class AndPreimageProofSystem
 	}
 
 	public static AndPreimageProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return AndPreimageProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
@@ -90,4 +95,5 @@ public class AndPreimageProofSystem
 		}
 		return new AndPreimageProofSystem(challengeGenerator, proofFunction);
 	}
+
 }

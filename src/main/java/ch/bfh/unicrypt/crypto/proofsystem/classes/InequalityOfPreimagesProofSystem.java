@@ -70,6 +70,10 @@ import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 // @see [cs03] Camenisch, J. & Shoup, V., 2003. Practical verifiable encryption and decryption of discrete logarithms.
 //             -> 5 Proving the Inequality of Discrete Logarithms
 //
+/**
+ *
+ * @author P. Locher
+ */
 public class InequalityOfPreimagesProofSystem
 	   extends AbstractProofSystem<SemiGroup, Element, ProductGroup, Pair, Set, Pair> {
 

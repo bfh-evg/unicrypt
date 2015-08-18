@@ -58,6 +58,18 @@ import ch.bfh.unicrypt.math.function.classes.ProductFunction;
 import ch.bfh.unicrypt.math.function.interfaces.Function;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 
+/**
+ * This class covers the OR-composition of preimage proofs: ZKP[(x0,...xN) : y0=f0(x0) V...V yN=fN(xN)]. Neither the
+ * domain nor the codomain of the function f0,...,fN have to be equal. For example, it is possible to prove either
+ * knowledge of a discrete log or of an encrypted value: ZKP[(x, (a,b)) : y0=g^x V y1=enc(a,b)].
+ * <p>
+ * The private input is not only the private value x_i itself but a pair consisting of the tuple (x0,...,xN) and the
+ * index i. Within the tuple (x0,...,xN) only x_i must have the correct value, all other values can have any value. Use
+ * the helper method {@link createPrivateInput} to create the correct private input for the private value x_i and the
+ * index i.
+ * <p>
+ * @author P. Locher
+ */
 public class OrProofSystem
 	   extends AbstractSigmaProofSystem<ProductSet, Pair, ProductGroup, Tuple> {
 
@@ -73,27 +85,27 @@ public class OrProofSystem
 	}
 
 	public static OrProofSystem getInstance(final Element proverId, final ProductFunction proofFunction) {
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(proofFunction, proverId);
 		return OrProofSystem.getInstance(challengeGenerator, proofFunction);
 	}
 
 	public static OrProofSystem
-	   getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
+		   getInstance(final SigmaChallengeGenerator challengeGenerator, final Function... proofFunctions) {
 		return OrProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunctions));
 	}
 
 	public static OrProofSystem
-	   getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
+		   getInstance(final SigmaChallengeGenerator challengeGenerator, final Function proofFunction, int arity) {
 		return OrProofSystem.getInstance(challengeGenerator, ProductFunction.getInstance(proofFunction, arity));
 	}
 
 	public static OrProofSystem
-	   getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
+		   getInstance(final SigmaChallengeGenerator challengeGenerator, final ProductFunction proofFunction) {
 		if (challengeGenerator == null || proofFunction == null
 			   || proofFunction.getArity() < 2
 			   || !ZMod.getInstance(proofFunction.getDomain().getMinimalOrder())
-					  .isEquivalent(challengeGenerator.getChallengeSpace())) {
+			   .isEquivalent(challengeGenerator.getChallengeSpace())) {
 			throw new IllegalArgumentException();
 		}
 		return new OrProofSystem(challengeGenerator, proofFunction);
@@ -146,7 +158,7 @@ public class OrProofSystem
 		domainElements = domainElements.replaceAt(index, secret);
 
 		return (Pair) this.getPrivateInputSpace().getElement(domainElements,
-											ZMod.getInstance(this.getProofFunction().getArity()).getElement(index));
+															 ZMod.getInstance(this.getProofFunction().getArity()).getElement(index));
 	}
 
 	@Override
@@ -192,8 +204,8 @@ public class OrProofSystem
 		commitments[index] = proofFunc.getAt(index).apply(randomElement);
 
 		// - Create overall proof challenge
-		final ZModElement challenge =
-			   this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
+		final ZModElement challenge
+			   = this.getChallengeGenerator().generate(publicInput, Tuple.getInstance(commitments));
 		// - Calculate challenge based on the overall challenge and the chosen challenges for the simulated proofs
 		challenges[index] = challenge.subtract(sumOfChallenges);
 		// - finally compute response element
@@ -236,4 +248,5 @@ public class OrProofSystem
 		// Proof is valid!
 		return true;
 	}
+
 }

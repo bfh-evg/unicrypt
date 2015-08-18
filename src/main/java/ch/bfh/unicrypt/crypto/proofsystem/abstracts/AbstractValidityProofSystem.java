@@ -78,8 +78,8 @@ import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
  * @see CGS97
  * <p>
  * @author P. Locher
- * @param <PUS>
- * @param <PUE>
+ * @param <PUS> The public input space.
+ * @param <PUE> The public input element.
  */
 public abstract class AbstractValidityProofSystem<PUS extends SemiGroup, PUE extends Element>
 	   extends AbstractSigmaProofSystem<ProductSet, Pair, PUS, PUE>

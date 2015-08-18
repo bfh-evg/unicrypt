@@ -52,29 +52,71 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import java.math.BigInteger;
 
 /**
- *
- * @author philipp
+ * This class is an abstract base implementation for shuffle proof systems according to Wikström (@see Wik09, TW10). It
+ * covers only the online part; the proof that the commitment to the permutation is indeed a commitment to a valid
+ * permutation must be done separately by a {@link PermutationCommitmentProofSystem}.
+ * <p>
+ * Beside the common sigma challenge generator it holds another challenge generator for the creation of the e-vector. In
+ * addition it manages the security parameters and the independent generators. The key functionality of the proof must
+ * be implemented by the subclass.
+ * <p>
+ * @see Wik09, TW10
+ * @author P. Locher
  */
 public abstract class AbstractShuffleProofSystem
 	   extends AbstractProofSystem<ProductGroup, Triple, ProductGroup, Tuple, ProductGroup, Triple> {
 
+	/**
+	 * See Wik09 Page 14
+	 */
 	final public static int DEFAULT_KR = 20;
 
+	/**
+	 * Holds the sigma challenge generator.
+	 */
 	final private SigmaChallengeGenerator sigmaChallengeGenerator;
+
+	/**
+	 * Holds the challenge generator for the creation of the e-vector.
+	 */
 	final private ChallengeGenerator eValuesGenerator;
+
+	/**
+	 * The underlying cyclic group.
+	 */
 	final private CyclicGroup cyclicGroup;
+
+	/**
+	 * The size of the shuffle.
+	 */
 	final private int size;
+
+	/**
+	 * Security parameter for the e-values: e ∈ [0,...,2^ke - 1].
+	 */
 	final private int ke;
+
+	/**
+	 * Security parameter of challenge (number of bits of challenge).
+	 */
 	final private int kc;
+
+	/**
+	 * Security parameter that decides how well the commitments hide the committed values.
+	 */
 	final private int kr;
+
+	/**
+	 * The independent generators, a tuple of arity {@link size} + 1.
+	 */
 	final private Tuple independentGenerators;
 
 	protected AbstractShuffleProofSystem(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator,
 		   CyclicGroup cyclicGroup, int size, int kr, Tuple independentGenerators) {
+
 		this.sigmaChallengeGenerator = sigmaChallengeGenerator;
 		this.eValuesGenerator = eValuesGenerator;
 		this.cyclicGroup = cyclicGroup;
