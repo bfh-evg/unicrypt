@@ -141,11 +141,12 @@ public class HashAlgorithm
 	 * @param message The given Java byte array
 	 * @return The hash value
 	 */
-	public byte[] getHashValue(byte[] message) {
+	public synchronized byte[] getHashValue(byte[] message) {
 		if (message == null) {
 			throw new IllegalArgumentException();
 		}
 		return this.messageDigest.digest(message);
+
 	}
 
 	/**
