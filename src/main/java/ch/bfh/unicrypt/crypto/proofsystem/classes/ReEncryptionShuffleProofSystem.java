@@ -274,6 +274,15 @@ public class ReEncryptionShuffleProofSystem
 			   ReferenceRandomByteSequence.getInstance());
 	}
 
+	public static ReEncryptionShuffleProofSystem getInstance(CyclicGroup cyclicGroup, int size,
+		   ReEncryptionScheme encryptionScheme, Element encryptionPK, ReferenceRandomByteSequence rrbs) {
+		return getInstance(
+			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup, encryptionScheme, size),
+			   createNonInteractiveEValuesGenerator(cyclicGroup, encryptionScheme, size),
+			   cyclicGroup, size, encryptionScheme, encryptionPK, DEFAULT_KR,
+			   rrbs);
+	}
+
 	public static ReEncryptionShuffleProofSystem
 		   getInstance(CyclicGroup cyclicGroup, int size, ReEncryptionScheme encryptionScheme,
 				  Element encryptionPK, Element proverId, int ke, int kc, int kr, ReferenceRandomByteSequence rrbs) {
