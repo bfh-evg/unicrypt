@@ -134,6 +134,9 @@ public class ReEncryptionShuffleProofSystem
 	//===================================================================================
 	// Generate and Validate
 	//
+	private Element ee;
+	private Element pu;
+
 	@Override
 	protected Triple abstractGenerate(Triple privateInput, Tuple publicInput, RandomByteSequence randomByteSequence) {
 
@@ -143,6 +146,10 @@ public class ReEncryptionShuffleProofSystem
 		final Tuple rV = (Tuple) privateInput.getThird();
 		final Tuple uPrimeV = (Tuple) publicInput.getAt(2);
 		final Tuple eV = (Tuple) this.getEValuesGenerator().generate(publicInput);
+		ee = eV;
+		pu = publicInput;
+		System.out.println("Generate pI: " + publicInput);
+		System.out.println("Generate eV: " + eV);
 
 		// Compute private values for sigma proof
 		final Element r = computeInnerProduct(rV, eV);
@@ -190,7 +197,10 @@ public class ReEncryptionShuffleProofSystem
 		final Tuple uV = (Tuple) publicInput.getAt(1);
 		final Tuple uPrimeV = (Tuple) publicInput.getAt(2);
 		final Tuple eV = (Tuple) this.getEValuesGenerator().generate(publicInput);
-
+		System.out.println("Verify pI:   " + publicInput);
+		System.out.println("Verify eV:   " + eV);
+		System.out.println("Challenges are Equivalent: " + ee.isEquivalent(eV));
+		System.out.println("public input is Equivalent: " + pu.isEquivalent(pu));
 		// Compute image of preimage proof
 		final Element[] ps = new Element[2];
 		// - p_1 == c_pi^e                                                              [N]
