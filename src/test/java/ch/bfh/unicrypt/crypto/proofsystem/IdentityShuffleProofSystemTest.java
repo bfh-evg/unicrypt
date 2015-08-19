@@ -107,8 +107,8 @@ public class IdentityShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(G_q, size).apply(uV.selfApply(alpha), pi);
 
 		// Identity Shuffle Proof Generator
-		SigmaChallengeGenerator scg = IdentityShuffleProofSystem.createRandomOracleSigmaChallengeGenerator(G_q, G_q, size, 4, null);
-		ChallengeGenerator ecg = IdentityShuffleProofSystem.createRandomOracleChallengeGenerator(G_q, G_q, size, 4, ro);
+		SigmaChallengeGenerator scg = IdentityShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(4, null);
+		ChallengeGenerator ecg = IdentityShuffleProofSystem.createNonInteractiveEValuesGenerator(4, size, ro);
 		IdentityShuffleProofSystem spg = IdentityShuffleProofSystem.getInstance(scg, ecg, G_q, size, G_q, 2, rrs);
 
 		// Proof and verify

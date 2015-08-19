@@ -41,6 +41,8 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.helper.math.MathUtil;
@@ -52,6 +54,8 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 /**
  * This class is an abstract base implementation for shuffle proof systems according to Wikström (@see Wik09, TW10). It
@@ -218,5 +222,54 @@ public abstract class AbstractShuffleProofSystem
 	abstract public ProductGroup getCommitmentSpace();
 
 	abstract public ProductGroup getResponseSpace();
+
+	//===================================================================================
+	// Service functions to create non-interactive SigmaChallengeGenerator and MultiChallengeGenerator
+	//
+	public static RandomOracleSigmaChallengeGenerator
+		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId) {
+		return createNonInteractiveSigmaChallengeGenerator(kc, proverId, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleSigmaChallengeGenerator
+		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId, final RandomOracle randomOracle) {
+		if (kc < 1) {
+			throw new IllegalArgumentException();
+		}
+		return createNonInteractiveSigmaChallengeGenerator(createChallengeSpace(kc), proverId, randomOracle);
+	}
+
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace) {
+		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleSigmaChallengeGenerator
+		   createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace, final Element proverId, final RandomOracle randomOracle) {
+		if (challengeSpace == null) {
+			throw new IllegalArgumentException();
+		}
+		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, proverId, randomOracle);
+	}
+
+	public static RandomOracleChallengeGenerator
+		   createNonInteractiveEValuesGenerator(final int ke, final int size) {
+		return createNonInteractiveEValuesGenerator(ke, size, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleChallengeGenerator
+		   createNonInteractiveEValuesGenerator(final int ke, final int size, final RandomOracle randomOracle) {
+		if (size < 1 || ke < 1) {
+			throw new IllegalArgumentException();
+		}
+		return createNonInteractiveEValuesGenerator(createChallengeSpace(ke), size, randomOracle);
+	}
+
+	public static RandomOracleChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod challengeSpace, final int size) {
+		return createNonInteractiveEValuesGenerator(challengeSpace, size, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod challengeSpace, final int size, final RandomOracle randomOracle) {
+		return RandomOracleChallengeGenerator.getInstance(ProductGroup.getInstance(challengeSpace, size), randomOracle);
+	}
 
 }

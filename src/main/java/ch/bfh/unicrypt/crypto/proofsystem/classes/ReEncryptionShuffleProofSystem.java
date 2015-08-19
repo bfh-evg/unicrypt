@@ -42,8 +42,6 @@
 package ch.bfh.unicrypt.crypto.proofsystem.classes;
 
 import ch.bfh.unicrypt.crypto.proofsystem.abstracts.AbstractShuffleProofSystem;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleChallengeGenerator;
-import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.GeneralizedPedersenCommitmentScheme;
@@ -60,14 +58,13 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
+import ch.bfh.unicrypt.math.algebra.general.interfaces.Set;
 import ch.bfh.unicrypt.math.function.abstracts.AbstractFunction;
 import ch.bfh.unicrypt.math.function.classes.ConvertFunction;
 import ch.bfh.unicrypt.math.function.classes.PermutationFunction;
 import ch.bfh.unicrypt.math.function.classes.ProductFunction;
-import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
 import ch.bfh.unicrypt.random.classes.ReferenceRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 //
 //
@@ -123,8 +120,7 @@ public class ReEncryptionShuffleProofSystem
 	public ProductGroup getResponseSpace() {
 		return ProductGroup.getInstance((Group) this.encryptionScheme.getRandomizationSpace(),
 										this.getCyclicGroup().getZModOrder(),
-										ProductGroup.getInstance(ZMod.getInstance(MathUtil.powerOfTwo(this.getKe()
-															 + this.getKc() + this.getKr())), this.getSize()));
+										ProductGroup.getInstance(this.getCyclicGroup().getZModOrder(), this.getSize()));
 	}
 
 	public ReEncryptionScheme getEncryptionScheme() {
@@ -153,20 +149,29 @@ public class ReEncryptionShuffleProofSystem
 		final Element w = computeInnerProduct(sV, eV);
 		Tuple ePrimeV = PermutationFunction.getInstance(eV.getSet()).apply(eV, pi);
 
-		// Map ePrimeV to [0,...,2^(ke+kc+kr) - 1]^N
+		// Map ePrimeV to Z_q^N
 		ePrimeV = ProductFunction.getInstance(
-			   ConvertFunction.getInstance(
-					  ZMod.getInstance(MathUtil.powerOfTwo(this.getKe())),
-					  ZMod.getInstance(MathUtil.powerOfTwo(this.getKe() + this.getKc() + this.getKr()))),
-			   ePrimeV.getLength())
-			   .apply(ePrimeV);
+			   ConvertFunction.getInstance(ePrimeV.getFirst().getSet(), this.getCyclicGroup().getZModOrder()),
+			   ePrimeV.getLength()).apply(ePrimeV);
 
 		// Create sigma proof
 		PreimageProofFunction f
 			   = new PreimageProofFunction(this.getCyclicGroup(), this.getSize(), this.getResponseSpace(),
 										   this.getCommitmentSpace(), this.getIndependentGenerators(), uPrimeV, this.encryptionScheme,
 										   this.encryptionPK);
-		final Element randomElement = this.getResponseSpace().getRandomElement(randomByteSequence);
+
+		Tuple randomElement = this.getResponseSpace().extractPrefix(2).getRandomElement(randomByteSequence);
+		Tuple randEV = ProductGroup.getInstance(ZMod.getInstance(MathUtil.powerOfTwo(this.getKe() + this.getKc() + this.getKr())),
+												this.getSize()).getRandomElement(randomByteSequence);
+
+		// 'Normally' ke+kc+kr < cyclicGroup.getOrder, but in case it isn't!
+		Element[] randEVs = new Element[this.getSize()];
+		for (int i = 0; i < randEVs.length; i++) {
+			randEVs[i] = this.getCyclicGroup().getZModOrder().getElement(randEV.getAt(i).convertToBigInteger().mod(this.getCyclicGroup().getOrder()));
+		}
+		randEV = Tuple.getInstance(randEVs);
+		randomElement = randomElement.append(Tuple.getInstance(randEV));
+
 		final Element commitment = f.apply(randomElement);                        // [3N+3]
 		final Element challenge = this.getSigmaChallengeGenerator().generate(publicInput, commitment);
 		final Element response = randomElement.apply(Tuple.getInstance(r, w, ePrimeV).selfApply(challenge));
@@ -268,8 +273,8 @@ public class ReEncryptionShuffleProofSystem
 	public static ReEncryptionShuffleProofSystem getInstance(CyclicGroup cyclicGroup, int size,
 		   ReEncryptionScheme encryptionScheme, Element encryptionPK) {
 		return getInstance(
-			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup, encryptionScheme, size),
-			   createNonInteractiveEValuesGenerator(cyclicGroup, encryptionScheme, size),
+			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup.getZModOrder()),
+			   createNonInteractiveEValuesGenerator(cyclicGroup.getZModOrder(), size),
 			   cyclicGroup, size, encryptionScheme, encryptionPK, DEFAULT_KR,
 			   ReferenceRandomByteSequence.getInstance());
 	}
@@ -277,8 +282,8 @@ public class ReEncryptionShuffleProofSystem
 	public static ReEncryptionShuffleProofSystem getInstance(CyclicGroup cyclicGroup, int size,
 		   ReEncryptionScheme encryptionScheme, Element encryptionPK, ReferenceRandomByteSequence rrbs) {
 		return getInstance(
-			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup, encryptionScheme, size),
-			   createNonInteractiveEValuesGenerator(cyclicGroup, encryptionScheme, size),
+			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup.getZModOrder()),
+			   createNonInteractiveEValuesGenerator(cyclicGroup.getZModOrder(), size),
 			   cyclicGroup, size, encryptionScheme, encryptionPK, DEFAULT_KR,
 			   rrbs);
 	}
@@ -287,8 +292,8 @@ public class ReEncryptionShuffleProofSystem
 		   getInstance(CyclicGroup cyclicGroup, int size, ReEncryptionScheme encryptionScheme,
 				  Element encryptionPK, Element proverId, int ke, int kc, int kr, ReferenceRandomByteSequence rrbs) {
 		return getInstance(
-			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup, encryptionScheme, size, kc, proverId),
-			   createNonInteractiveEValuesGenerator(cyclicGroup, encryptionScheme, size, ke),
+			   createNonInteractiveSigmaChallengeGenerator(kc, proverId),
+			   createNonInteractiveEValuesGenerator(ke, size),
 			   cyclicGroup, size, encryptionScheme, encryptionPK, kr, rrbs);
 	}
 
@@ -299,11 +304,10 @@ public class ReEncryptionShuffleProofSystem
 			   || !independentGenerators.getFirst().getSet().isCyclic()) {
 			throw new IllegalArgumentException();
 		}
-		CyclicGroup cyclicGroup = (CyclicGroup) independentGenerators.getFirst().getSet();
 		int size = independentGenerators.getArity() - 1;
 		return getInstance(
-			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup, encryptionScheme, size, kc, proverId),
-			   createNonInteractiveEValuesGenerator(cyclicGroup, encryptionScheme, size, ke),
+			   createNonInteractiveSigmaChallengeGenerator(kc, proverId),
+			   createNonInteractiveEValuesGenerator(ke, size),
 			   independentGenerators,
 			   encryptionScheme, encryptionPK, kr);
 	}
@@ -342,67 +346,21 @@ public class ReEncryptionShuffleProofSystem
 			throw new IllegalArgumentException();
 		}
 		CyclicGroup cyclicGroup = (CyclicGroup) independentGenerators.getFirst().getSet();
+		if (sigmaChallengeGenerator.getChallengeSpace().getOrder().compareTo(cyclicGroup.getOrder()) > 0) {
+			throw new IllegalArgumentException();
+		}
+
+		Set cs = eValuesGenerator.getChallengeSpace();
 		int size = independentGenerators.getArity() - 1;
-		if (// TODO Check ChallengeSpace
-			   //!eValuesGenerator.getChallengeSpace().isEquivalent(ProductSet.getInstance(Z.getInstance(), size))
-			   !((ProductSet) eValuesGenerator.getChallengeSpace()).isUniform()) {
+		if (!cs.isProduct()
+			   || ((ProductSet) cs).getArity() != size
+			   || ((ProductSet) cs).getFirst().getOrder().compareTo(cyclicGroup.getOrder()) > 0
+			   || !((ProductSet) cs).isUniform()) {
 			throw new IllegalArgumentException();
 		}
 
 		return new ReEncryptionShuffleProofSystem(sigmaChallengeGenerator, eValuesGenerator,
 												  cyclicGroup, size, kr, independentGenerators, encryptionScheme, encryptionPK);
-	}
-
-	//===================================================================================
-	// Service functions to create non-interactive SigmaChallengeGenerator and MultiChallengeGenerator
-	//
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup,
-				  final ReEncryptionScheme encryptionScheme, final int size) {
-		return createNonInteractiveSigmaChallengeGenerator(cyclicGroup, encryptionScheme, size,
-														   cyclicGroup.getOrder().bitLength(), (Element) null, PseudoRandomOracle.getInstance());
-	}
-
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup,
-				  final ReEncryptionScheme encryptionScheme, final int size, final int kc, final Element proverId) {
-		return createNonInteractiveSigmaChallengeGenerator(cyclicGroup, encryptionScheme, size, kc, proverId,
-														   PseudoRandomOracle.getInstance());
-	}
-
-	public static RandomOracleSigmaChallengeGenerator
-		   createNonInteractiveSigmaChallengeGenerator(final CyclicGroup cyclicGroup,
-				  final ReEncryptionScheme encryptionScheme, final int size, final int kc, final Element proverId,
-				  final RandomOracle randomOracle) {
-		if (cyclicGroup == null || encryptionScheme == null || !encryptionScheme.getEncryptionSpace().isGroup()
-			   || size < 1 || kc < 1) {
-			throw new IllegalArgumentException();
-		}
-		return RandomOracleSigmaChallengeGenerator.getInstance(createChallengeSpace(kc), proverId, randomOracle);
-	}
-
-	public static RandomOracleChallengeGenerator createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup,
-		   final ReEncryptionScheme encryptionScheme, final int size) {
-		return createNonInteractiveEValuesGenerator(cyclicGroup, encryptionScheme, size,
-													cyclicGroup.getOrder().bitLength(),
-													PseudoRandomOracle.getInstance());
-	}
-
-	public static RandomOracleChallengeGenerator
-		   createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final ReEncryptionScheme encryptionScheme,
-				  final int size, final int ke) {
-		return createNonInteractiveEValuesGenerator(cyclicGroup, encryptionScheme, size, ke,
-													PseudoRandomOracle.getInstance());
-	}
-
-	public static RandomOracleChallengeGenerator
-		   createNonInteractiveEValuesGenerator(final CyclicGroup cyclicGroup, final ReEncryptionScheme encryptionScheme,
-				  final int size, final int ke, final RandomOracle randomOracle) {
-		if (cyclicGroup == null || encryptionScheme == null || !encryptionScheme.getEncryptionSpace().isGroup()
-			   || size < 1 || ke < 1) {
-			throw new IllegalArgumentException();
-		}
-		return RandomOracleChallengeGenerator.getInstance(createEValuesGeneratorChallengeSpace(ke, size), randomOracle);
 	}
 
 }
