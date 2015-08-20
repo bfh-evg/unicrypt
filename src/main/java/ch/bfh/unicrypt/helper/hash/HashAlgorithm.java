@@ -138,6 +138,9 @@ public class HashAlgorithm
 	/**
 	 * Returns the hash value of a given Java byte array.
 	 * <p>
+	 * This method must be synchronized in order to work properly in multi-threaded environment. The underlying
+	 * messageDigest is not thread safe
+	 * <p>
 	 * @param message The given Java byte array
 	 * @return The hash value
 	 */

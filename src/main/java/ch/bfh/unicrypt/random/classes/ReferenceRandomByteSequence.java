@@ -156,10 +156,14 @@ public class ReferenceRandomByteSequence
 			if (this.randomByteBufferMap == null) {
 				this.randomByteBufferMap = new HashMap<>();
 			}
-			if (!this.randomByteBufferMap.containsKey(counter)) {
-				this.randomByteBufferMap.put(counter, super.getRandomByteBuffer(counter));
+			//The following lines are written to ensure correctness in multi threaded environment.
+			//This is the case due to data-acquisition for Truely Random operations.
+			byte[] buffer = this.randomByteBufferMap.get(counter);
+			if (buffer == null) {
+				buffer = super.getRandomByteBuffer(counter);
+				this.randomByteBufferMap.put(counter, buffer);
 			}
-			return this.randomByteBufferMap.get(counter);
+			return buffer;
 		}
 
 	}
