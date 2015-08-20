@@ -109,14 +109,18 @@ public class HashAlgorithm
 	/**
 	 * Returns the hash value of a given Java byte array.
 	 * <p>
-	 * @param bytes The given Java byte array
-	 * @return The hash value of the given Java byte array
+	 * This method must be synchronized in order to work properly in multi-threaded environment. The underlying
+	 * messageDigest is not thread safe
+	 * <p>
+	 * @param message The given Java byte array
+	 * @return The hash value
 	 */
-	public byte[] getHashValue(byte[] bytes) {
-		if (bytes == null) {
+	public synchronized byte[] getHashValue(byte[] message) {
+		if (message == null) {
 			throw new IllegalArgumentException();
 		}
-		return this.messageDigest.digest(bytes);
+		return this.messageDigest.digest(message);
+
 	}
 
 	/**
