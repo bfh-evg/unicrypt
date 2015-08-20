@@ -41,8 +41,11 @@
  */
 package ch.bfh.unicrypt.crypto.proofsystem.abstracts;
 
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleChallengeGenerator;
+import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.classes.RandomOracleSigmaChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.ChallengeGenerator;
 import ch.bfh.unicrypt.crypto.proofsystem.challengegenerator.interfaces.SigmaChallengeGenerator;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.math.algebra.dualistic.classes.ZMod;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductSet;
@@ -51,29 +54,73 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.CyclicGroup;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Group;
-import java.math.BigInteger;
+import ch.bfh.unicrypt.random.classes.PseudoRandomOracle;
+import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 
 /**
- *
- * @author philipp
+ * This class is an abstract base implementation for shuffle proof systems according to Wikström (@see Wik09, TW10). It
+ * covers only the online part; the proof that the commitment to the permutation is indeed a commitment to a valid
+ * permutation must be done separately by a {@link PermutationCommitmentProofSystem}.
+ * <p>
+ * Beside the common sigma challenge generator it holds another challenge generator for the creation of the e-vector. In
+ * addition it manages the security parameters and the independent generators. The key functionality of the proof must
+ * be implemented by the subclass.
+ * <p>
+ * @see Wik09, TW10
+ * @author P. Locher
  */
 public abstract class AbstractShuffleProofSystem
 	   extends AbstractProofSystem<ProductGroup, Triple, ProductGroup, Tuple, ProductGroup, Triple> {
 
+	/**
+	 * See Wik09 Page 14
+	 */
 	final public static int DEFAULT_KR = 20;
 
+	/**
+	 * Holds the sigma challenge generator.
+	 */
 	final private SigmaChallengeGenerator sigmaChallengeGenerator;
+
+	/**
+	 * Holds the challenge generator for the creation of the e-vector.
+	 */
 	final private ChallengeGenerator eValuesGenerator;
+
+	/**
+	 * The underlying cyclic group.
+	 */
 	final private CyclicGroup cyclicGroup;
+
+	/**
+	 * The size of the shuffle.
+	 */
 	final private int size;
+
+	/**
+	 * Security parameter for the e-values: e ∈ [0,...,2^ke - 1].
+	 */
 	final private int ke;
+
+	/**
+	 * Security parameter of challenge (number of bits of challenge).
+	 */
 	final private int kc;
+
+	/**
+	 * Security parameter that decides how well the commitments hide the committed values.
+	 */
 	final private int kr;
+
+	/**
+	 * The independent generators, a tuple of arity {@link size} + 1.
+	 */
 	final private Tuple independentGenerators;
 
 	protected AbstractShuffleProofSystem(SigmaChallengeGenerator sigmaChallengeGenerator,
 		   ChallengeGenerator eValuesGenerator,
 		   CyclicGroup cyclicGroup, int size, int kr, Tuple independentGenerators) {
+
 		this.sigmaChallengeGenerator = sigmaChallengeGenerator;
 		this.eValuesGenerator = eValuesGenerator;
 		this.cyclicGroup = cyclicGroup;
@@ -82,8 +129,8 @@ public abstract class AbstractShuffleProofSystem
 		this.independentGenerators = independentGenerators;
 
 		this.ke = ((ZMod) ((ProductSet) this.eValuesGenerator.getChallengeSpace()).getFirst()).getModulus()
-			   .subtract(BigInteger.ONE).bitLength();
-		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(BigInteger.ONE).bitLength();
+			   .subtract(MathUtil.ONE).bitLength();
+		this.kc = this.sigmaChallengeGenerator.getChallengeSpace().getModulus().subtract(MathUtil.ONE).bitLength();
 	}
 
 	//===================================================================================
@@ -161,7 +208,7 @@ public abstract class AbstractShuffleProofSystem
 	//
 	// [0,...,2^kc - 1] \subseteq Z
 	protected static ZMod createChallengeSpace(int k) {
-		return ZMod.getInstance(BigInteger.valueOf(2).pow(k));
+		return ZMod.getInstance(MathUtil.powerOfTwo(k));
 	}
 
 	// [0,...,2^ke - 1]^N \subseteq Z^N
@@ -175,5 +222,54 @@ public abstract class AbstractShuffleProofSystem
 	abstract public ProductGroup getCommitmentSpace();
 
 	abstract public ProductGroup getResponseSpace();
+
+	//===================================================================================
+	// Service functions to create non-interactive SigmaChallengeGenerator and MultiChallengeGenerator
+	//
+	public static RandomOracleSigmaChallengeGenerator
+		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId) {
+		return createNonInteractiveSigmaChallengeGenerator(kc, proverId, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleSigmaChallengeGenerator
+		   createNonInteractiveSigmaChallengeGenerator(final int kc, final Element proverId, final RandomOracle randomOracle) {
+		if (kc < 1) {
+			throw new IllegalArgumentException();
+		}
+		return createNonInteractiveSigmaChallengeGenerator(createChallengeSpace(kc), proverId, randomOracle);
+	}
+
+	public static RandomOracleSigmaChallengeGenerator createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace) {
+		return createNonInteractiveSigmaChallengeGenerator(challengeSpace, (Element) null, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleSigmaChallengeGenerator
+		   createNonInteractiveSigmaChallengeGenerator(final ZMod challengeSpace, final Element proverId, final RandomOracle randomOracle) {
+		if (challengeSpace == null) {
+			throw new IllegalArgumentException();
+		}
+		return RandomOracleSigmaChallengeGenerator.getInstance(challengeSpace, proverId, randomOracle);
+	}
+
+	public static RandomOracleChallengeGenerator
+		   createNonInteractiveEValuesGenerator(final int ke, final int size) {
+		return createNonInteractiveEValuesGenerator(ke, size, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleChallengeGenerator
+		   createNonInteractiveEValuesGenerator(final int ke, final int size, final RandomOracle randomOracle) {
+		if (size < 1 || ke < 1) {
+			throw new IllegalArgumentException();
+		}
+		return createNonInteractiveEValuesGenerator(createChallengeSpace(ke), size, randomOracle);
+	}
+
+	public static RandomOracleChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod challengeSpace, final int size) {
+		return createNonInteractiveEValuesGenerator(challengeSpace, size, PseudoRandomOracle.getInstance());
+	}
+
+	public static RandomOracleChallengeGenerator createNonInteractiveEValuesGenerator(final ZMod challengeSpace, final int size, final RandomOracle randomOracle) {
+		return RandomOracleChallengeGenerator.getInstance(ProductGroup.getInstance(challengeSpace, size), randomOracle);
+	}
 
 }
