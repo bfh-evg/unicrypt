@@ -138,9 +138,7 @@ public class PolynomialMembershipProofSystemTest {
 
 		Element[] nonMem = new Element[]{Z_q.getElement(BigInteger.valueOf(21)), Z_q.getElement(BigInteger.valueOf(43)), Z_q.getElement(BigInteger.valueOf(18))};
 
-		for (int i = 0; i < nonMem.length; i++) {
-			Element u = nonMem[i];
-
+		for (Element u : nonMem) {
 			Element r0 = Z_q.getRandomElement(randomGenerator);
 			Element cu = pedersenCS.commit(u, r0);
 

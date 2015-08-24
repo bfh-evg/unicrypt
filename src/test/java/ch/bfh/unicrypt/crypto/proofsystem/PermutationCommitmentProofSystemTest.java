@@ -94,7 +94,7 @@ public class PermutationCommitmentProofSystemTest {
 		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size);
 
 		// Proof and verify
-		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
+		Tuple proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
 		boolean v = pcpg.verify(proof, cPiV);
 		assertTrue(v);
 	}
@@ -123,7 +123,7 @@ public class PermutationCommitmentProofSystemTest {
 		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size, 20, rrs);
 
 		// Proof and verify
-		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
+		Tuple proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
 		boolean v = pcpg.verify(proof, cPiV);
 		assertTrue(v);
 	}
@@ -153,7 +153,7 @@ public class PermutationCommitmentProofSystemTest {
 		// Proof and verify
 		// Invalid: Wrong sV
 		Tuple sVInvalid = Tuple.getInstance(Z_q.getElement(2), Z_q.getElement(12), Z_q.getElement(4), Z_q.getElement(5), Z_q.getElement(7));
-		Pair proof = pcpg.generate(Pair.getInstance(pi, sVInvalid), cPiV, randomGenerator);
+		Tuple proof = pcpg.generate(Pair.getInstance(pi, sVInvalid), cPiV, randomGenerator);
 		boolean v = pcpg.verify(proof, cPiV);
 		assertTrue(!v);
 
@@ -196,7 +196,7 @@ public class PermutationCommitmentProofSystemTest {
 
 		// Proof and verify x
 		// Invalid: Modified permutation
-		Pair proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
+		Tuple proof = pcpg.generate(Pair.getInstance(pi, sV), cPiV, randomGenerator);
 		boolean v = pcpg.verify(proof, cPiV);
 		assertTrue(!v);
 

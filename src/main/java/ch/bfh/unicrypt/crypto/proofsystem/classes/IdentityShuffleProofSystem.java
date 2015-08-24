@@ -125,7 +125,7 @@ public class IdentityShuffleProofSystem
 	// Generate and Validate
 	//
 	@Override
-	protected Triple abstractGenerate(Triple privateInput, Tuple publicInput, RandomByteSequence randomByteSequence) {
+	protected Tuple abstractGenerate(Triple privateInput, Tuple publicInput, RandomByteSequence randomByteSequence) {
 
 		// Unfold private and public input
 		final PermutationElement pi = (PermutationElement) privateInput.getFirst();
@@ -170,15 +170,15 @@ public class IdentityShuffleProofSystem
 		final Element response = randomElement.apply(Tuple.getInstance(alpha, w, ePrimeV).selfApply(challenge));
 		Triple preimageProof = (Triple) Triple.getInstance(commitment, challenge, response);
 		//                                                                          --------
-		return preimageProof;                                                     // [3N+3]
+		return Tuple.getInstance(eV).append(preimageProof);                      // [3N+3]
 	}
 
 	@Override
-	protected boolean abstractVerify(Triple proof, Tuple publicInput) {
+	protected boolean abstractVerify(Tuple proof, Tuple publicInput) {
 
 		// Unfold proof and public input
-		final Tuple commitment = (Tuple) proof.getAt(0);
-		final Tuple response = (Tuple) proof.getAt(2);
+		final Tuple commitment = (Tuple) proof.getAt(1);
+		final Tuple response = (Tuple) proof.getAt(3);
 		final Tuple cPiV = (Tuple) publicInput.getFirst();
 		final Tuple uV = (Tuple) publicInput.getAt(1);
 		final Tuple uPrimeV = (Tuple) publicInput.getAt(2);
@@ -274,25 +274,24 @@ public class IdentityShuffleProofSystem
 	//===================================================================================
 	// getInstance...
 	//
-	public static IdentityShuffleProofSystem getInstance(CyclicGroup cyclicGroup, int size, CyclicGroup identityGroup) {
+	public static IdentityShuffleProofSystem getInstance(int size, CyclicGroup identityGroup) {
 		return getInstance(
-			   createNonInteractiveSigmaChallengeGenerator(cyclicGroup.getZModOrder()),
-			   createNonInteractiveEValuesGenerator(cyclicGroup.getZModOrder(), size),
-			   cyclicGroup, size, identityGroup, DEFAULT_KR, ReferenceRandomByteSequence.getInstance());
+			   createNonInteractiveSigmaChallengeGenerator(identityGroup.getZModOrder()),
+			   createNonInteractiveEValuesGenerator(identityGroup.getZModOrder(), size),
+			   size, identityGroup, DEFAULT_KR, ReferenceRandomByteSequence.getInstance());
 	}
 
-	public static IdentityShuffleProofSystem getInstance(CyclicGroup cyclicGroup, int size, CyclicGroup identityGroup,
+	public static IdentityShuffleProofSystem getInstance(int size, CyclicGroup identityGroup,
 		   Element proverId, int ke, int kc, int kr, ReferenceRandomByteSequence rrbs) {
 		return getInstance(
 			   createNonInteractiveSigmaChallengeGenerator(kc, proverId),
 			   createNonInteractiveEValuesGenerator(ke, size),
-			   cyclicGroup, size, identityGroup, kr, rrbs);
+			   size, identityGroup, kr, rrbs);
 	}
 
 	public static IdentityShuffleProofSystem getInstance(Tuple independentGenerators, CyclicGroup identityGroup,
 		   Element proverId, int ke, int kc, int kr) {
-		if (independentGenerators == null || independentGenerators.getArity() < 2
-			   || !independentGenerators.getFirst().getSet().isCyclic()) {
+		if (independentGenerators == null) {
 			throw new IllegalArgumentException();
 		}
 		int size = independentGenerators.getArity() - 1;
@@ -303,19 +302,19 @@ public class IdentityShuffleProofSystem
 	}
 
 	public static IdentityShuffleProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
-		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, CyclicGroup identityGroup) {
-		return getInstance(sigmaChallengeGenerator, eValuesGenerator, cyclicGroup, size, identityGroup, DEFAULT_KR,
+		   ChallengeGenerator eValuesGenerator, int size, CyclicGroup identityGroup) {
+		return getInstance(sigmaChallengeGenerator, eValuesGenerator, size, identityGroup, DEFAULT_KR,
 						   ReferenceRandomByteSequence.getInstance());
 	}
 
 	public static IdentityShuffleProofSystem getInstance(SigmaChallengeGenerator sigmaChallengeGenerator,
-		   ChallengeGenerator eValuesGenerator, CyclicGroup cyclicGroup, int size, CyclicGroup identityGroup, int kr,
+		   ChallengeGenerator eValuesGenerator, int size, CyclicGroup identityGroup, int kr,
 		   ReferenceRandomByteSequence referenceRandomByteSequence) {
 
-		if (cyclicGroup == null || size < 1 || referenceRandomByteSequence == null) {
+		if (identityGroup == null || size < 1 || referenceRandomByteSequence == null) {
 			throw new IllegalArgumentException();
 		}
-		Tuple independentGenerators = cyclicGroup.getIndependentGenerators(size, referenceRandomByteSequence);
+		Tuple independentGenerators = identityGroup.getIndependentGenerators(size, referenceRandomByteSequence);
 		return getInstance(sigmaChallengeGenerator, eValuesGenerator, independentGenerators, identityGroup, kr);
 	}
 
@@ -329,7 +328,8 @@ public class IdentityShuffleProofSystem
 			throw new IllegalArgumentException();
 		}
 		CyclicGroup cyclicGroup = (CyclicGroup) independentGenerators.getFirst().getSet();
-		if (sigmaChallengeGenerator.getChallengeSpace().getOrder().compareTo(cyclicGroup.getOrder()) > 0) {
+		if (identityGroup.getOrder().compareTo(cyclicGroup.getOrder()) != 0
+			   || sigmaChallengeGenerator.getChallengeSpace().getOrder().compareTo(cyclicGroup.getOrder()) > 0) {
 			throw new IllegalArgumentException();
 		}
 		Set cs = eValuesGenerator.getChallengeSpace();

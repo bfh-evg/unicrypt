@@ -86,9 +86,9 @@ public class PolynomialMembershipProofSystem
 			roots[i++] = member;
 		}
 
-		PolynomialElement polynomial =
-			   PolynomialSemiRing.getInstance((ZModPrime) members.getSuperset())
-					  .getElementByRoots(Tuple.getInstance(roots));
+		PolynomialElement polynomial
+			   = PolynomialSemiRing.getInstance((ZModPrime) members.getSuperset())
+			   .getElementByRoots(Tuple.getInstance(roots));
 		this.pepsi = PolynomialEvaluationProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
@@ -101,8 +101,8 @@ public class PolynomialMembershipProofSystem
 
 	public static final PolynomialMembershipProofSystem getInstance(final Subset members,
 		   final PedersenCommitmentScheme pedersenCS) {
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, members, pedersenCS);
 	}
 
@@ -125,14 +125,14 @@ public class PolynomialMembershipProofSystem
 
 	public static final PolynomialMembershipProofSystem getInstance(final PolynomialElement polynomial,
 		   final PedersenCommitmentScheme pedersenCS) {
-		SigmaChallengeGenerator challengeGenerator =
-			   RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
+		SigmaChallengeGenerator challengeGenerator
+			   = RandomOracleSigmaChallengeGenerator.getInstance(pedersenCS.getMessageSpace());
 		return PolynomialMembershipProofSystem.getInstance(challengeGenerator, polynomial, pedersenCS);
 	}
 
 	public static final PolynomialMembershipProofSystem
-	   getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial,
-			  final PedersenCommitmentScheme pedersenCS) {
+		   getInstance(final SigmaChallengeGenerator challengeGenerator, final PolynomialElement polynomial,
+				  final PedersenCommitmentScheme pedersenCS) {
 
 		if (challengeGenerator == null || polynomial == null || pedersenCS == null) {
 			throw new IllegalArgumentException();
@@ -204,7 +204,7 @@ public class PolynomialMembershipProofSystem
 
 		return this.pepsi.generate(
 			   Tuple.getInstance(secretInput.getFirst(), v, secretInput.getSecond(), t),
-			   Pair.getInstance(publicInput, cv));
+			   Pair.getInstance(publicInput, cv), randomByteSequence);
 	}
 
 	@Override

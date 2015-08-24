@@ -74,7 +74,7 @@ import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 // @see [TW10] Protocol 1: Permutation Matrix
 //
 public class PermutationCommitmentProofSystem
-	   extends AbstractProofSystem<ProductGroup, Pair, ProductGroup, Tuple, ProductGroup, Pair> {
+	   extends AbstractProofSystem<ProductGroup, Pair, ProductGroup, Tuple, ProductSet, Tuple> {
 
 	final private static int DEFAULT_KR = 20;
 
@@ -119,17 +119,14 @@ public class PermutationCommitmentProofSystem
 		return ProductGroup.getInstance(this.cyclicGroup, this.size);
 	}
 
-	// Proof:   (SigmaProof-Triple, Bridging Commitments)
+	// Proof:   (e-Values, Bridging Commitments, t, c, s)
 	@Override
-	protected ProductGroup abstractGetProofSpace() {
-		return ProductGroup.getInstance(this.getPreimageProofSpace(),
-										ProductGroup.getInstance(this.cyclicGroup, this.size));
-	}
-
-	public ProductGroup getPreimageProofSpace() {
-		return ProductGroup.getInstance(this.getCommitmentSpace(),
-										this.getChallengeSpace(),
-										this.getResponseSpace());
+	protected ProductSet abstractGetProofSpace() {
+		return ProductSet.getInstance(this.eValuesGenerator.getChallengeSpace(),
+									  ProductGroup.getInstance(this.cyclicGroup, this.size),
+									  this.getCommitmentSpace(),
+									  this.getChallengeSpace(),
+									  this.getResponseSpace());
 	}
 
 	// t: G_q^(N+3)
@@ -151,11 +148,46 @@ public class PermutationCommitmentProofSystem
 										ProductGroup.getInstance(cyclicGroup.getZModOrder(), size));
 	}
 
+	public Element getEValues(final Tuple proof) {
+		if (!this.getProofSpace().contains(proof)) {
+			throw new IllegalArgumentException();
+		}
+		return proof.getAt(0);
+	}
+
+	public Element getBridingCommitment(final Tuple proof) {
+		if (!this.getProofSpace().contains(proof)) {
+			throw new IllegalArgumentException();
+		}
+		return proof.getAt(1);
+	}
+
+	public Element getCommitment(final Tuple proof) {
+		if (!this.getProofSpace().contains(proof)) {
+			throw new IllegalArgumentException();
+		}
+		return proof.getAt(2);
+	}
+
+	public Element getChallenge(final Tuple proof) {
+		if (!this.getProofSpace().contains(proof)) {
+			throw new IllegalArgumentException();
+		}
+		return proof.getAt(3);
+	}
+
+	public Element getResponse(final Tuple proof) {
+		if (!this.getProofSpace().contains(proof)) {
+			throw new IllegalArgumentException();
+		}
+		return proof.getAt(4);
+	}
+
 	//===================================================================================
 	// Generate and Validate
 	//
 	@Override
-	protected Pair abstractGenerate(Pair privateInput, Tuple publicInput, RandomByteSequence randomByteSequence) {
+	protected Tuple abstractGenerate(Pair privateInput, Tuple publicInput, RandomByteSequence randomByteSequence) {
 
 		// Unfold privat and public input
 		final PermutationElement pi = (PermutationElement) privateInput.getFirst();
@@ -214,17 +246,16 @@ public class PermutationCommitmentProofSystem
 		final Element response = randomElement.apply(Tuple.getInstance(v, w, rV, d, ePrimeV).selfApply(challenge));
 		Triple preimageProof = (Triple) Triple.getInstance(commitment, challenge, response);
 		//                                                                                -------
-		return Pair.getInstance(preimageProof, cV);                                     // [5n+3]
+		return Tuple.getInstance(eV, cV).append(preimageProof);                                     // [5n+3]
 	}
 
 	@Override
-	protected boolean abstractVerify(Pair proof, Tuple publicInput) {
+	protected boolean abstractVerify(Tuple proof, Tuple publicInput) {
 
 		// Unfold proof
-		final Triple preimageProof = (Triple) proof.getFirst();
-		final Tuple commitment = (Tuple) preimageProof.getAt(0);
-		final Tuple response = (Tuple) preimageProof.getAt(2);
-		final Tuple cV = (Tuple) proof.getSecond();
+		final Tuple cV = (Tuple) proof.getAt(1);
+		final Tuple commitment = (Tuple) proof.getAt(2);
+		final Tuple response = (Tuple) proof.getAt(4);
 
 		// Get additional values
 		final Tuple eV = (Tuple) this.eValuesGenerator.generate(publicInput);
