@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.crypto.proofsystem.classes.PermutationCommitmentProofSyst
 import ch.bfh.unicrypt.crypto.proofsystem.classes.ReEncryptionShuffleProofSystem;
 import ch.bfh.unicrypt.crypto.schemes.commitment.classes.PermutationCommitmentScheme;
 import ch.bfh.unicrypt.crypto.schemes.encryption.classes.ElGamalEncryptionScheme;
-import ch.bfh.unicrypt.crypto.schemes.encryption.interfaces.ReEncryptionScheme;
 import ch.bfh.unicrypt.helper.math.Alphabet;
 import ch.bfh.unicrypt.helper.math.Permutation;
 import ch.bfh.unicrypt.math.algebra.concatenative.classes.StringMonoid;
@@ -56,7 +55,6 @@ import ch.bfh.unicrypt.math.algebra.general.classes.Pair;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationElement;
 import ch.bfh.unicrypt.math.algebra.general.classes.PermutationGroup;
 import ch.bfh.unicrypt.math.algebra.general.classes.ProductGroup;
-import ch.bfh.unicrypt.math.algebra.general.classes.Triple;
 import ch.bfh.unicrypt.math.algebra.general.classes.Tuple;
 import ch.bfh.unicrypt.math.algebra.general.interfaces.Element;
 import ch.bfh.unicrypt.math.algebra.multiplicative.classes.GStarMod;
@@ -80,7 +78,7 @@ public class ShuffleProofSystemTest {
 	public ShuffleProofSystemTest() {
 	}
 
-	//@Test
+	@Test
 	public void testShuffleProofGenerator() {
 
 		final GStarMod G_q = GStarModSafePrime.getInstance(P1);
@@ -113,16 +111,16 @@ public class ShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
 		// Shuffle Proof Generator
-		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
+		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
 		SigmaChallengeGenerator scg = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(4, null);
 		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(4, size, ro);
-		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, G_q, size, encryptionScheme, encryptionPK, 2, rrs);
+		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, size, encryptionScheme, encryptionPK, 2, rrs);
 
 		// Proof and verify
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
-		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
+		Tuple proof = spg.generate(privateInput, publicInput, randomGenerator);
 		boolean v = spg.verify(proof, publicInput);
 		assertTrue(v);
 	}
@@ -157,14 +155,14 @@ public class ShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
 		// Shuffle Proof Generator
-		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
-		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(G_q, size, encryptionScheme, encryptionPK, proverId, 60, 60, 20, rrs);
+		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
+		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(size, encryptionScheme, encryptionPK, proverId, 60, 60, 20, rrs);
 
 		// Proof and verify
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
 
-		Triple proof = spg.generate(privateInput, publicInput);
+		Tuple proof = spg.generate(privateInput, publicInput);
 		boolean v = spg.verify(proof, publicInput);
 		assertTrue(v);
 	}
@@ -200,10 +198,10 @@ public class ShuffleProofSystemTest {
 		Tuple uPrimeV = PermutationFunction.getInstance(ProductGroup.getInstance(G_q, 2), size).apply(Tuple.getInstance(uPrimes), pi);
 
 		// Shuffle Proof Generator
-		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
+		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
 		SigmaChallengeGenerator scg = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(80, null);
 		ChallengeGenerator ecg = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(80, size, ro);
-		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, G_q, size, encryptionScheme, encryptionPK, 20, rrs);
+		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scg, ecg, size, encryptionScheme, encryptionPK, 20, rrs);
 
 		// Proof and verify
 		// Invalid: uV with wrong permutation permuted
@@ -211,7 +209,7 @@ public class ShuffleProofSystemTest {
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeVInvalid);
 
-		Triple proof = spg.generate(privateInput, publicInput, randomGenerator);
+		Tuple proof = spg.generate(privateInput, publicInput, randomGenerator);
 		boolean v = spg.verify(proof, publicInput);
 		assertTrue(!v);
 
@@ -271,17 +269,17 @@ public class ShuffleProofSystemTest {
 		PermutationCommitmentProofSystem pcpg = PermutationCommitmentProofSystem.getInstance(scg, ecg, G_q, size, 20, rrs);
 
 		// Shuffle Proof Generator
-		ReEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
+		ElGamalEncryptionScheme encryptionScheme = ElGamalEncryptionScheme.getInstance(g);
 		SigmaChallengeGenerator scgS = ReEncryptionShuffleProofSystem.createNonInteractiveSigmaChallengeGenerator(80, null);
 		ChallengeGenerator ecgS = ReEncryptionShuffleProofSystem.createNonInteractiveEValuesGenerator(80, size, ro);
-		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scgS, ecgS, G_q, size, encryptionScheme, encryptionPK, 20, rrs);
+		ReEncryptionShuffleProofSystem spg = ReEncryptionShuffleProofSystem.getInstance(scgS, ecgS, size, encryptionScheme, encryptionPK, 20, rrs);
 
 		// Proof
-		Pair proofPermutation = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
+		Tuple proofPermutation = pcpg.generate(Pair.getInstance(pi, sV), cPiV);
 
 		Tuple privateInput = Tuple.getInstance(pi, sV, rV);
 		Tuple publicInput = Tuple.getInstance(cPiV, uV, uPrimeV);
-		Triple proofShuffle = spg.generate(privateInput, publicInput);
+		Tuple proofShuffle = spg.generate(privateInput, publicInput);
 
 		// Verify
 		// (Important: If it is not given from the context, check equality of
