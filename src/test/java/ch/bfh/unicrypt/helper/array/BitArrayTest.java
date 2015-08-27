@@ -100,8 +100,9 @@ public class BitArrayTest {
 
 			bitArrayList.add(ba);
 			booleanStringList.add(bs);
-			bitArrayList.add(ba.reverse().addPrefixAndSuffix(10, 10).extractRange(5, 15));
-			booleanStringList.add(bs.reverse().appendPrefixAndSuffix(10, 10).extractRange(5, 15));
+// COMMENTED FOR EFFICIENCY REASONS
+//			bitArrayList.add(ba.reverse().addPrefixAndSuffix(10, 10).extractRange(5, 15));
+//			booleanStringList.add(bs.reverse().appendPrefixAndSuffix(10, 10).extractRange(5, 15));
 		}
 	}
 
@@ -374,7 +375,8 @@ public class BitArrayTest {
 
 	public void performTest(BitArray ba, BooleanString bs) {
 		Assert.assertEquals(bs.string, converter.convert(ba));
-		Assert.assertEquals(bs.reverse().string, converter.convert(ba.reverse()));
+// COMMENTED FOR EFFICIENCY REASONS
+//		Assert.assertEquals(bs.reverse().string, converter.convert(ba.reverse()));
 	}
 
 	// LOCAL COMPARISON CLASS FOR TESTING (BASED ON STRINGS)

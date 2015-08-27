@@ -39,78 +39,70 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.random;
+package ch.bfh.unicrypt.helper.sequence.random.password;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteArraySequence;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
 /**
- * The purpose of this specialization of {@link Sequence} is to adjust the return type of the method
- * {@link Sequence#group(int)} to {@link ByteArray}. Furthermore, the class provides a method for constructing a byte
- * sequence from a {@link ByteArray} sequence. This method is useful to transform instances of
- * {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte sequences.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @see HMAC_DRBG
- * @see Hash_DRBG
- * @see PBKDF2
+ *
+ * @author rolfhaenni
  */
-public abstract class RandomByteSequence
-	   extends Sequence<Byte> {
+public abstract class PasswordRandomByteArraySequence
+	   extends RandomByteArraySequence {
 
-	protected RandomByteSequence() {
-		super(Sequence.INFINITE);
+	protected final ByteArray password;
+	protected final ByteArray salt;
+
+	protected PasswordRandomByteArraySequence(ByteArray password, ByteArray salt) {
+		this.password = password;
+		this.salt = salt;
 	}
 
 	@Override
-	public abstract RandomByteSequenceIterator iterator();
-
-	public RandomByteArraySequenceIterator getRandomByteArraySequenceIterator(final int length) {
-		if (length < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequenceIterator iterator = this.iterator();
-		return new RandomByteArraySequenceIterator() {
+	public PasswordRandomByteSequence getRandomByteSequence() {
+		final PasswordRandomByteArraySequence source = this;
+		return new PasswordRandomByteSequence() {
 
 			@Override
-			protected ByteArray abstractNext() {
-				int i = 0;
-				byte[] result = new byte[length];
-				while (i < length) {
-					result[i] = iterator.abstractNext();
-					i++;
-				}
-				return SafeByteArray.getInstance(result);
+			public RandomByteSequenceIterator iterator() {
+				return source.getRandomByteSequenceIterator();
 			}
 
-			@Override
-
-			protected void updateBefore() {
-				iterator.updateBefore();
-			}
-
-			@Override
-			protected void updateAfter() {
-				iterator.updateAfter();
-			}
 		};
 	}
 
-	@Override
-	public final RandomByteArraySequence group(final int groupLength) {
-		if (groupLength < 1) {
-			throw new IllegalArgumentException();
+	public static abstract class Factory {
+
+		/**
+		 * Returns a new sequence of byte arrays. The default seed is an array of zero-bytes of the required length.
+		 * <p>
+		 * @return The new byte array sequence
+		 */
+		public PasswordRandomByteArraySequence getInstance() {
+			return this.getInstance(ByteArray.getInstance());
 		}
-		final RandomByteSequence source = this;
-		return new RandomByteArraySequence() {
 
-			@Override
-			public RandomByteArraySequenceIterator iterator() {
-				return source.getRandomByteArraySequenceIterator(groupLength);
+		public PasswordRandomByteArraySequence getInstance(ByteArray password) {
+			return this.getInstance(password, ByteArray.getInstance(ByteArray.getInstance()));
+		}
+
+		/**
+		 * Returns a new sequence of byte arrays for the given seed.
+		 * <p>
+		 * @param password
+		 * @param salt
+		 * @return The new byte array sequence
+		 */
+		public PasswordRandomByteArraySequence getInstance(ByteArray password, ByteArray salt) {
+			if (password == null || salt == null) {
+				throw new IllegalArgumentException();
 			}
+			return this.abstractGetInstance(password, salt);
+		}
 
-		};
+		protected abstract PasswordRandomByteArraySequence abstractGetInstance(ByteArray password, ByteArray salt);
 
 	}
 

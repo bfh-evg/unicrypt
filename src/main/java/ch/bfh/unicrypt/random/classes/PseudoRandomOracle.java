@@ -47,7 +47,6 @@ import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
 import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.random.abstracts.AbstractRandomOracle;
-import ch.bfh.unicrypt.random.interfaces.RandomOracle;
 import java.math.BigInteger;
 import java.util.WeakHashMap;
 

@@ -100,8 +100,9 @@ public class ByteArrayTest {
 
 			byteArrayList.add(ba);
 			byteStringList.add(bs);
-			byteArrayList.add(ba.reverse().addPrefixAndSuffix(10, 10).extractRange(5, 15));
-			byteStringList.add(bs.reverse().appendPrefixAndSuffix(10, 10).extractRange(5, 15));
+// COMMENTED FOR EFFICIENCY REASONS
+//			byteArrayList.add(ba.reverse().addPrefixAndSuffix(10, 10).extractRange(5, 15));
+//			byteStringList.add(bs.reverse().appendPrefixAndSuffix(10, 10).extractRange(5, 15));
 		}
 	}
 
@@ -377,7 +378,8 @@ public class ByteArrayTest {
 
 	public void performTest(ByteArray ba, ByteString bs) {
 		Assert.assertEquals(bs.string, converter.convert(ba));
-		Assert.assertEquals(bs.reverse().string, converter.convert(ba.reverse()));
+// COMMENTED FOR EFFICIENCY REASONS
+//		Assert.assertEquals(bs.reverse().string, converter.convert(ba.reverse()));
 	}
 
 	// LOCAL COMPARISON CLASS FOR TESTING (BASED ON STRINGS)

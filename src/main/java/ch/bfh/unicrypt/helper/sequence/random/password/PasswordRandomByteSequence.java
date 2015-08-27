@@ -39,79 +39,43 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.random;
+package ch.bfh.unicrypt.helper.sequence.random.password;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
 
 /**
- * The purpose of this specialization of {@link Sequence} is to adjust the return type of the method
- * {@link Sequence#group(int)} to {@link ByteArray}. Furthermore, the class provides a method for constructing a byte
- * sequence from a {@link ByteArray} sequence. This method is useful to transform instances of
- * {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte sequences.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @see HMAC_DRBG
- * @see Hash_DRBG
- * @see PBKDF2
+ *
+ * @author rolfhaenni
  */
-public abstract class RandomByteSequence
-	   extends Sequence<Byte> {
+public abstract class PasswordRandomByteSequence
+	   extends RandomByteSequence {
 
-	protected RandomByteSequence() {
-		super(Sequence.INFINITE);
+	public static PasswordRandomByteSequence getInstance() {
+		return PasswordRandomByteSequence.getInstance(ByteArray.getInstance());
 	}
 
-	@Override
-	public abstract RandomByteSequenceIterator iterator();
-
-	public RandomByteArraySequenceIterator getRandomByteArraySequenceIterator(final int length) {
-		if (length < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequenceIterator iterator = this.iterator();
-		return new RandomByteArraySequenceIterator() {
-
-			@Override
-			protected ByteArray abstractNext() {
-				int i = 0;
-				byte[] result = new byte[length];
-				while (i < length) {
-					result[i] = iterator.abstractNext();
-					i++;
-				}
-				return SafeByteArray.getInstance(result);
-			}
-
-			@Override
-
-			protected void updateBefore() {
-				iterator.updateBefore();
-			}
-
-			@Override
-			protected void updateAfter() {
-				iterator.updateAfter();
-			}
-		};
+	public static PasswordRandomByteSequence getInstance(ByteArray password) {
+		return PasswordRandomByteSequence.getInstance(password, ByteArray.getInstance());
 	}
 
-	@Override
-	public final RandomByteArraySequence group(final int groupLength) {
-		if (groupLength < 1) {
+	public static PasswordRandomByteSequence getInstance(ByteArray password, ByteArray salt) {
+		return PasswordRandomByteSequence.getInstance(PBKDF2.getFactory(), password, salt);
+	}
+
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory) {
+		return PasswordRandomByteSequence.getInstance(factory, ByteArray.getInstance());
+	}
+
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, ByteArray password) {
+		return PasswordRandomByteSequence.getInstance(factory, password, ByteArray.getInstance());
+	}
+
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, ByteArray password, ByteArray salt) {
+		if (factory == null || password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
-		final RandomByteSequence source = this;
-		return new RandomByteArraySequence() {
-
-			@Override
-			public RandomByteArraySequenceIterator iterator() {
-				return source.getRandomByteArraySequenceIterator(groupLength);
-			}
-
-		};
-
+		return factory.getInstance(password, salt).getRandomByteSequence();
 	}
 
 }

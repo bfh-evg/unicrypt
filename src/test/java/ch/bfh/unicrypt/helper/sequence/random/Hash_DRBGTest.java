@@ -39,10 +39,13 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.random;
 
-import ch.bfh.unicrypt.helper.sequence.random.Hash_DRBG;
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
+import ch.bfh.unicrypt.helper.sequence.random.hybrid.Hash_DRBG;
+import ch.bfh.unicrypt.helper.sequence.random.nondeterministic.NonDeterministicRandomByteSequence;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -50,7 +53,7 @@ import org.junit.Test;
  *
  * @author R. Haenni
  */
-public class HashValueSequenceTest {
+public class Hash_DRBGTest {
 
 	@Test
 	public void hashMacSequenceTest() {
@@ -85,9 +88,28 @@ public class HashValueSequenceTest {
 		//	C = 665fee50d6d7c604f96d68192ebfaf508ea88a193c7b9ccd04a47034ee7de5a9549a709b7201b38b307fdfe842ff1be8f7fcbce6c82a28
 		//	reseed counter = 3
 
-		ByteArray seedingMaterial = ByteArray.getInstance("a6|5a|d0|f3|45|db|4e|0e|ff|e8|75|c3|a2|e7|1f|42|c7|12|9d|62|0f|f5|c1|19|a9|ef|55|f0|51|85|e0|fb|85|81|f9|31|75|17|27|6e|06|e9|60|7d|db|cb|cc|2e".toUpperCase());
+		final ByteArray entropyInputAndNonce = ByteArray.getInstance("a6|5a|d0|f3|45|db|4e|0e|ff|e8|75|c3|a2|e7|1f|42|c7|12|9d|62|0f|f5|c1|19|a9|ef|55|f0|51|85|e0|fb|85|81|f9|31|75|17|27|6e|06|e9|60|7d|db|cb|cc|2e".toUpperCase());
+
+		// used to simulate the entropy source
+		RandomByteSequenceIterator iterator = new RandomByteSequenceIterator() {
+
+			private int i = 0;
+
+			@Override
+			protected Byte abstractNext() {
+				Byte next = entropyInputAndNonce.getAt(i);
+				this.i = (this.i + 1) % entropyInputAndNonce.getLength();
+				return next;
+			}
+
+		};
+
+		NonDeterministicRandomByteSequence ndrbs = new NonDeterministicRandomByteSequence(iterator) {
+		};
+
 		ByteArray expected = ByteArray.getInstance("d3|e1|60|c3|5b|99|f3|40|b2|62|82|64|d1|75|10|60|e0|04|5d|a3|83|ff|57|a5|7d|73|a6|73|d2|b8|d8|0d|aa|f6|a6|c3|5a|91|bb|45|79|d7|3f|d0|c8|fe|d1|11|b0|39|13|06|82|8a|df|ed|52|8f|01|81|21|b3|fe|bd|c3|43|e7|97|b8|7d|bb|63|db|13|33|de|d9|d1|ec|e1|77|cf|a6|b7|1f|e8|ab|1d|a4|66|24|ed|64|15|e5|1c|cd|e2|c7|ca|86|e2|83|99|0e|ea|eb|91|12|04|15|52|8b|22|95|91|02|81|b0|2d|d4|31|f4|c9|f7|04|27|df".toUpperCase());
-		SequenceIterator si = Hash_DRBG.getInstance(seedingMaterial).getByteSequence().iterator();
+
+		SequenceIterator si = Hash_DRBG.getFactory().getInstance(ndrbs).getRandomByteSequence().iterator();
 		si.next(128);
 		Assert.assertEquals(expected, si.next(128));
 	}

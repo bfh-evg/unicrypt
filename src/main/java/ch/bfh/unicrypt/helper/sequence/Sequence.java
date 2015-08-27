@@ -87,6 +87,9 @@ public abstract class Sequence<V>
 		this.length = length;
 	}
 
+	@Override
+	public abstract SequenceIterator<V> iterator();
+
 	/**
 	 * Checks if the sequence is empty. If this is the case, {@link Sequence#iterator()}{@code .hasNext()} returns
 	 * {@code false}.
@@ -742,8 +745,5 @@ public abstract class Sequence<V>
 		}
 		return !it1.hasNext() && !it2.hasNext();
 	}
-
-	@Override
-	public abstract SequenceIterator<V> iterator();
 
 }

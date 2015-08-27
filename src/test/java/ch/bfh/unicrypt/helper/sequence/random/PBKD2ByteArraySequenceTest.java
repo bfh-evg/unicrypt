@@ -42,76 +42,47 @@
 package ch.bfh.unicrypt.helper.sequence.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
+import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
+import ch.bfh.unicrypt.helper.sequence.random.password.PBKDF2;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * The purpose of this specialization of {@link Sequence} is to adjust the return type of the method
- * {@link Sequence#group(int)} to {@link ByteArray}. Furthermore, the class provides a method for constructing a byte
- * sequence from a {@link ByteArray} sequence. This method is useful to transform instances of
- * {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte sequences.
- * <p>
+ *
  * @author R. Haenni
- * @version 2.0
- * @see HMAC_DRBG
- * @see Hash_DRBG
- * @see PBKDF2
  */
-public abstract class RandomByteSequence
-	   extends Sequence<Byte> {
+public class PBKD2ByteArraySequenceTest {
 
-	protected RandomByteSequence() {
-		super(Sequence.INFINITE);
-	}
+	@Test
+	public void hashMacSequenceTest() {
+		//
+		// Test vector from https://www.ietf.org/rfc/rfc6070.txt
+		//
+		//Input:
+		//P = "passwordPASSWORDpassword" (24 octets)
+		//S = "saltSALTsaltSALTsaltSALTsaltSALTsalt" (36 octets)
+		//c = 4096
+		//dkLen = 25
+		//
+		//Output:
+		//DK = 3d 2e ec 4f e4 1c 84 9b
+		//	80 c8 d8 36 62 c0 e4 4a
+		//	8b 29 1a 96 4c f2 f0 70
+		//	38                      (25 octets)
+		//
+		Converter<String, ByteArray> converter = StringToByteArray.getInstance();
+		ByteArray password = converter.convert("passwordPASSWORDpassword");
+		ByteArray salt = converter.convert("saltSALTsaltSALTsaltSALTsaltSALTsalt");
 
-	@Override
-	public abstract RandomByteSequenceIterator iterator();
+		ByteArray expected = ByteArray.getInstance("3d|2e|ec|4f|e4|1c|84|9b|80|c8|d8|36|62|c0|e4|4a|8b|29|1a|96|4c|f2|f0|70|38".toUpperCase());
+		HashAlgorithm algo = HashAlgorithm.SHA1;
 
-	public RandomByteArraySequenceIterator getRandomByteArraySequenceIterator(final int length) {
-		if (length < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequenceIterator iterator = this.iterator();
-		return new RandomByteArraySequenceIterator() {
-
-			@Override
-			protected ByteArray abstractNext() {
-				int i = 0;
-				byte[] result = new byte[length];
-				while (i < length) {
-					result[i] = iterator.abstractNext();
-					i++;
-				}
-				return SafeByteArray.getInstance(result);
-			}
-
-			@Override
-
-			protected void updateBefore() {
-				iterator.updateBefore();
-			}
-
-			@Override
-			protected void updateAfter() {
-				iterator.updateAfter();
-			}
-		};
-	}
-
-	@Override
-	public final RandomByteArraySequence group(final int groupLength) {
-		if (groupLength < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequence source = this;
-		return new RandomByteArraySequence() {
-
-			@Override
-			public RandomByteArraySequenceIterator iterator() {
-				return source.getRandomByteArraySequenceIterator(groupLength);
-			}
-
-		};
-
+		SequenceIterator si
+			   = PBKDF2.getFactory(algo, 4096).getInstance(password, salt).getRandomByteSequence().iterator();
+		Assert.assertEquals(expected, si.next(25));
 	}
 
 }

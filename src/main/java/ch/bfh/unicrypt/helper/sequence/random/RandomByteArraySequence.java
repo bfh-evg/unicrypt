@@ -43,49 +43,59 @@ package ch.bfh.unicrypt.helper.sequence.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
 /**
- * The purpose of this specialization of {@link Sequence} is to adjust the return type of the method
- * {@link Sequence#group(int)} to {@link ByteArray}. Furthermore, the class provides a method for constructing a byte
- * sequence from a {@link ByteArray} sequence. This method is useful to transform instances of
- * {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte sequences.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @see HMAC_DRBG
- * @see Hash_DRBG
- * @see PBKDF2
+ *
+ * @author rolfhaenni
  */
-public abstract class RandomByteSequence
-	   extends Sequence<Byte> {
+public abstract class RandomByteArraySequence
+	   extends Sequence<ByteArray> {
 
-	protected RandomByteSequence() {
+	protected RandomByteArraySequence() {
 		super(Sequence.INFINITE);
 	}
 
 	@Override
-	public abstract RandomByteSequenceIterator iterator();
+	public abstract RandomByteArraySequenceIterator iterator();
 
-	public RandomByteArraySequenceIterator getRandomByteArraySequenceIterator(final int length) {
-		if (length < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequenceIterator iterator = this.iterator();
-		return new RandomByteArraySequenceIterator() {
+	/**
+	 * Returns a byte sequence obtained by concatenating the random byte arrays from this sequence. This method is
+	 * useful to transform instances of {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte
+	 * sequences.
+	 * <p>
+	 * @return The new byte sequence
+	 */
+	public RandomByteSequence getRandomByteSequence() {
+		final RandomByteArraySequence source = this;
+		return new RandomByteSequence() {
 
 			@Override
-			protected ByteArray abstractNext() {
-				int i = 0;
-				byte[] result = new byte[length];
-				while (i < length) {
-					result[i] = iterator.abstractNext();
-					i++;
+			public RandomByteSequenceIterator iterator() {
+				return source.getRandomByteSequenceIterator();
+			}
+
+		};
+	}
+
+	public RandomByteSequenceIterator getRandomByteSequenceIterator() {
+		final RandomByteArraySequenceIterator iterator = this.iterator();
+		return new RandomByteSequenceIterator() {
+
+			private int currentIndex = 0;
+			private ByteArray currentByteArray = iterator.abstractNext();
+
+			@Override
+			protected Byte abstractNext() {
+				if (this.currentIndex == this.currentByteArray.getLength()) {
+					this.currentIndex = 0;
+					this.currentByteArray = iterator.abstractNext();
 				}
-				return SafeByteArray.getInstance(result);
+				return this.currentByteArray.getAt(this.currentIndex++);
 			}
 
 			@Override
-
 			protected void updateBefore() {
 				iterator.updateBefore();
 			}
@@ -95,23 +105,6 @@ public abstract class RandomByteSequence
 				iterator.updateAfter();
 			}
 		};
-	}
-
-	@Override
-	public final RandomByteArraySequence group(final int groupLength) {
-		if (groupLength < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequence source = this;
-		return new RandomByteArraySequence() {
-
-			@Override
-			public RandomByteArraySequenceIterator iterator() {
-				return source.getRandomByteArraySequenceIterator(groupLength);
-			}
-
-		};
-
 	}
 
 }

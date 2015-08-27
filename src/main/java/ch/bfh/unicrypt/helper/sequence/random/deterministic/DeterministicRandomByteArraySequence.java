@@ -39,78 +39,65 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.random;
+package ch.bfh.unicrypt.helper.sequence.random.deterministic;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteArraySequence;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
 /**
- * The purpose of this specialization of {@link Sequence} is to adjust the return type of the method
- * {@link Sequence#group(int)} to {@link ByteArray}. Furthermore, the class provides a method for constructing a byte
- * sequence from a {@link ByteArray} sequence. This method is useful to transform instances of
- * {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte sequences.
- * <p>
- * @author R. Haenni
- * @version 2.0
- * @see HMAC_DRBG
- * @see Hash_DRBG
- * @see PBKDF2
+ *
+ * @author rolfhaenni
  */
-public abstract class RandomByteSequence
-	   extends Sequence<Byte> {
+public abstract class DeterministicRandomByteArraySequence
+	   extends RandomByteArraySequence {
 
-	protected RandomByteSequence() {
-		super(Sequence.INFINITE);
+	protected final ByteArray seed;
+
+	protected DeterministicRandomByteArraySequence(ByteArray seed) {
+		this.seed = seed;
 	}
 
 	@Override
-	public abstract RandomByteSequenceIterator iterator();
-
-	public RandomByteArraySequenceIterator getRandomByteArraySequenceIterator(final int length) {
-		if (length < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequenceIterator iterator = this.iterator();
-		return new RandomByteArraySequenceIterator() {
+	public DeterministicRandomByteSequence getRandomByteSequence() {
+		final DeterministicRandomByteArraySequence source = this;
+		return new DeterministicRandomByteSequence() {
 
 			@Override
-			protected ByteArray abstractNext() {
-				int i = 0;
-				byte[] result = new byte[length];
-				while (i < length) {
-					result[i] = iterator.abstractNext();
-					i++;
-				}
-				return SafeByteArray.getInstance(result);
+			public RandomByteSequenceIterator iterator() {
+				return source.getRandomByteSequenceIterator();
 			}
 
-			@Override
-
-			protected void updateBefore() {
-				iterator.updateBefore();
-			}
-
-			@Override
-			protected void updateAfter() {
-				iterator.updateAfter();
-			}
 		};
 	}
 
-	@Override
-	public final RandomByteArraySequence group(final int groupLength) {
-		if (groupLength < 1) {
-			throw new IllegalArgumentException();
+	public static abstract class Factory {
+
+		/**
+		 * Returns a new sequence of byte arrays. The default seed is an array of zero-bytes of the required length.
+		 * <p>
+		 * @return The new byte array sequence
+		 */
+		public DeterministicRandomByteArraySequence getInstance() {
+			return this.getInstance(ByteArray.getInstance(false, this.getSeedLength()));
 		}
-		final RandomByteSequence source = this;
-		return new RandomByteArraySequence() {
 
-			@Override
-			public RandomByteArraySequenceIterator iterator() {
-				return source.getRandomByteArraySequenceIterator(groupLength);
+		/**
+		 * Returns a new sequence of byte arrays for the given seed.
+		 * <p>
+		 * @param seed The given seed
+		 * @return The new byte array sequence
+		 */
+		public DeterministicRandomByteArraySequence getInstance(ByteArray seed) {
+			if (seed == null || this.getSeedLength() != seed.getLength()) {
+				throw new IllegalArgumentException();
 			}
+			return this.abstractGetInstance(seed);
+		}
 
-		};
+		protected abstract DeterministicRandomByteArraySequence abstractGetInstance(ByteArray seed);
+
+		protected abstract int getSeedLength();
 
 	}
 

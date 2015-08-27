@@ -39,48 +39,35 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.random.hybrid;
 
-import ch.bfh.unicrypt.helper.sequence.random.PBKDF2;
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
-import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
-import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
-import org.junit.Assert;
-import org.junit.Test;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
+import ch.bfh.unicrypt.helper.sequence.random.nondeterministic.NonDeterministicRandomByteSequence;
 
 /**
  *
- * @author R. Haenni
+ * @author rolfhaenni
  */
-public class PBKD2ByteArraySequenceTest {
+public abstract class HybridRandomByteSequence
+	   extends RandomByteSequence {
 
-	@Test
-	public void hashMacSequenceTest() {
-		//
-		// Test vector from https://www.ietf.org/rfc/rfc6070.txt
-		//
-		//Input:
-		//P = "passwordPASSWORDpassword" (24 octets)
-		//S = "saltSALTsaltSALTsaltSALTsaltSALTsalt" (36 octets)
-		//c = 4096
-		//dkLen = 25
-		//
-		//Output:
-		//DK = 3d 2e ec 4f e4 1c 84 9b
-		//	80 c8 d8 36 62 c0 e4 4a
-		//	8b 29 1a 96 4c f2 f0 70
-		//	38                      (25 octets)
-		//
-		Converter<String, ByteArray> converter = StringToByteArray.getInstance();
-		ByteArray password = converter.convert("passwordPASSWORDpassword");
-		ByteArray salt = converter.convert("saltSALTsaltSALTsaltSALTsaltSALTsalt");
+	public static HybridRandomByteSequence getInstance() {
+		return HybridRandomByteSequence.getInstance(NonDeterministicRandomByteSequence.getInstance());
+	}
 
-		ByteArray expected = ByteArray.getInstance("3d|2e|ec|4f|e4|1c|84|9b|80|c8|d8|36|62|c0|e4|4a|8b|29|1a|96|4c|f2|f0|70|38".toUpperCase());
-		HashAlgorithm algo = HashAlgorithm.SHA1;
+	public static HybridRandomByteSequence getInstance(NonDeterministicRandomByteSequence entropySource) {
+		return HybridRandomByteSequence.getInstance(HMAC_DRBG.getFactory(), entropySource);
+	}
 
-		SequenceIterator si = PBKDF2.getInstance(algo, password, salt, 4096).getByteSequence().iterator();
-		Assert.assertEquals(expected, si.next(25));
+	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory) {
+		return HybridRandomByteSequence.getInstance(factory, NonDeterministicRandomByteSequence.getInstance());
+	}
+
+	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory, NonDeterministicRandomByteSequence entropySource) {
+		if (factory == null || entropySource == null) {
+			throw new IllegalArgumentException();
+		}
+		return factory.getInstance(entropySource).getRandomByteSequence();
 	}
 
 }

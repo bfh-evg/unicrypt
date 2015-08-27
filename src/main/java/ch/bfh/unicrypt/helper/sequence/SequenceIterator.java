@@ -41,10 +41,10 @@
  */
 package ch.bfh.unicrypt.helper.sequence;
 
-import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import ch.bfh.unicrypt.UniCrypt;
 import ch.bfh.unicrypt.helper.array.classes.DenseArray;
 import ch.bfh.unicrypt.helper.array.interfaces.ImmutableArray;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -146,14 +146,16 @@ public abstract class SequenceIterator<V>
 
 	/**
 	 * This method is called before processing each call to {@link next()}, {@link next(int)}, {@link skip(int)}, or
-	 * {@link find(Predicate)}. It can be overridden to change the state of the iterator.
+	 * {@link find(Predicate)}. The default behavior is to do nothing. It can be overridden to change the state of the
+	 * iterator.
 	 */
 	protected void updateBefore() {
 	}
 
 	/**
 	 * This method is called after processing each call to {@link next()}, {@link next(int)}, {@link skip(int)}, or
-	 * {@link find(Predicate)}. It can be overridden to change the state of the iterator.
+	 * {@link find(Predicate)}. The default behavior is to do nothing. It can be overridden to change the state of the
+	 * iterator.
 	 */
 	protected void updateAfter() {
 	}

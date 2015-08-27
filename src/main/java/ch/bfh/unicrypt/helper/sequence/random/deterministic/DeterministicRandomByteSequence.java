@@ -39,40 +39,35 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence.random;
+package ch.bfh.unicrypt.helper.sequence.random.deterministic;
 
-import ch.bfh.unicrypt.helper.sequence.ByteSequenceIterator;
-import java.security.SecureRandom;
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
 
 /**
  *
- * @author R. Haenni
+ * @author rolfhaenni
  */
-public class TrueRandomSequence
+public abstract class DeterministicRandomByteSequence
 	   extends RandomByteSequence {
 
-	final ByteSequenceIterator iterator = new ByteSequenceIterator() {
-
-		private final SecureRandom secureRandom = new SecureRandom();
-
-		@Override
-		protected Byte abstractNext() {
-			return secureRandom.generateSeed(1)[0];
-		}
-
-		@Override
-		public boolean hasNext() {
-			return true;
-		}
-	};
-
-	@Override
-	public ByteSequenceIterator iterator() {
-		return this.iterator;
+	public static DeterministicRandomByteSequence getInstance() {
+		return DeterministicRandomByteSequence.getInstance(ByteArray.getInstance());
 	}
 
-	public static TrueRandomSequence getInstance() {
-		return new TrueRandomSequence();
+	public static DeterministicRandomByteSequence getInstance(ByteArray seed) {
+		return DeterministicRandomByteSequence.getInstance(CTR_DRBG.getFactory(), seed);
+	}
+
+	public static DeterministicRandomByteSequence getInstance(DeterministicRandomByteArraySequence.Factory factory) {
+		return DeterministicRandomByteSequence.getInstance(factory, ByteArray.getInstance());
+	}
+
+	public static DeterministicRandomByteSequence getInstance(DeterministicRandomByteArraySequence.Factory factory, ByteArray seed) {
+		if (factory == null || seed == null) {
+			throw new IllegalArgumentException();
+		}
+		return factory.getInstance(seed).getRandomByteSequence();
 	}
 
 }

@@ -39,35 +39,34 @@
  *
  * Redistributions of files must retain the above copyright notice.
  */
-package ch.bfh.unicrypt.helper.sequence;
+package ch.bfh.unicrypt.helper.sequence.random.nondeterministic;
 
-import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
+import java.security.SecureRandom;
 
 /**
- * The purpose of this specialization of {@link ByteSequenceIterator} is to adjust the return type of the method
- * {@link SequenceIterator#next(int)} to {@link ByteArray}.
- * <p>
+ *
  * @author R. Haenni
- * @version 2.0
  */
-public abstract class ByteSequenceIterator
-	   extends SequenceIterator<Byte> {
+public class JavaSecureRandomByteSequence
+	   extends NonDeterministicRandomByteSequence {
 
-	@Override
-	public ByteArray next(int n) {
-		if (n < 0) {
-			throw new IllegalArgumentException();
-		}
-		this.updateBefore();
-		int i = 0;
-		byte[] bytes = new byte[n];
-		while (i < n && this.hasNext()) {
-			bytes[i] = this.abstractNext();
-			i++;
-		}
-		this.updateAfter();
-		// extra bytes are truncated
-		return ByteArray.getInstance(bytes).extractPrefix(i);
+	public JavaSecureRandomByteSequence(RandomByteSequenceIterator iterator) {
+		super(iterator);
+	}
+
+	public static JavaSecureRandomByteSequence getInstance() {
+		RandomByteSequenceIterator iterator = new RandomByteSequenceIterator() {
+
+			private final SecureRandom secureRandom = new SecureRandom();
+
+			@Override
+			protected Byte abstractNext() {
+				return secureRandom.generateSeed(1)[0];
+			}
+
+		};
+		return new JavaSecureRandomByteSequence(iterator);
 	}
 
 }

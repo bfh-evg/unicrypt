@@ -42,76 +42,34 @@
 package ch.bfh.unicrypt.helper.sequence.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
-import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
+import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
 /**
- * The purpose of this specialization of {@link Sequence} is to adjust the return type of the method
- * {@link Sequence#group(int)} to {@link ByteArray}. Furthermore, the class provides a method for constructing a byte
- * sequence from a {@link ByteArray} sequence. This method is useful to transform instances of
- * {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte sequences.
+ * The purpose of this specialization of {@link RandomByteSequenceIterator} is to set the length of the sequence to
+ * infinity, and to transfer the visibility of {@link #updateBefore()}, {@link #updateAfter()}, and
+ * {@link #abstractNext()} to this package.
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @see HMAC_DRBG
- * @see Hash_DRBG
- * @see PBKDF2
  */
-public abstract class RandomByteSequence
-	   extends Sequence<Byte> {
+public abstract class RandomByteArraySequenceIterator
+	   extends SequenceIterator<ByteArray> {
 
-	protected RandomByteSequence() {
-		super(Sequence.INFINITE);
+	@Override
+	protected void updateBefore() {
 	}
 
 	@Override
-	public abstract RandomByteSequenceIterator iterator();
-
-	public RandomByteArraySequenceIterator getRandomByteArraySequenceIterator(final int length) {
-		if (length < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequenceIterator iterator = this.iterator();
-		return new RandomByteArraySequenceIterator() {
-
-			@Override
-			protected ByteArray abstractNext() {
-				int i = 0;
-				byte[] result = new byte[length];
-				while (i < length) {
-					result[i] = iterator.abstractNext();
-					i++;
-				}
-				return SafeByteArray.getInstance(result);
-			}
-
-			@Override
-
-			protected void updateBefore() {
-				iterator.updateBefore();
-			}
-
-			@Override
-			protected void updateAfter() {
-				iterator.updateAfter();
-			}
-		};
+	protected void updateAfter() {
 	}
 
 	@Override
-	public final RandomByteArraySequence group(final int groupLength) {
-		if (groupLength < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequence source = this;
-		return new RandomByteArraySequence() {
+	protected abstract ByteArray abstractNext();
 
-			@Override
-			public RandomByteArraySequenceIterator iterator() {
-				return source.getRandomByteArraySequenceIterator(groupLength);
-			}
-
-		};
-
+	@Override
+	public final boolean hasNext() {
+		return true;
 	}
 
 }
