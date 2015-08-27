@@ -51,22 +51,27 @@ import java.security.SecureRandom;
 public class JavaSecureRandomByteSequence
 	   extends NonDeterministicRandomByteSequence {
 
-	public JavaSecureRandomByteSequence(RandomByteSequenceIterator iterator) {
+	private static JavaSecureRandomByteSequence instance = null;
+
+	private JavaSecureRandomByteSequence(RandomByteSequenceIterator iterator) {
 		super(iterator);
 	}
 
 	public static JavaSecureRandomByteSequence getInstance() {
-		RandomByteSequenceIterator iterator = new RandomByteSequenceIterator() {
+		if (instance == null) {
+			RandomByteSequenceIterator iterator = new RandomByteSequenceIterator() {
 
-			private final SecureRandom secureRandom = new SecureRandom();
+				private final SecureRandom secureRandom = new SecureRandom();
 
-			@Override
-			protected Byte abstractNext() {
-				return secureRandom.generateSeed(1)[0];
-			}
+				@Override
+				protected Byte abstractNext() {
+					return this.secureRandom.generateSeed(1)[0];
+				}
 
-		};
-		return new JavaSecureRandomByteSequence(iterator);
+			};
+			instance = new JavaSecureRandomByteSequence(iterator);
+		}
+		return instance;
 	}
 
 }

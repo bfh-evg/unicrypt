@@ -75,7 +75,7 @@ public abstract class HybridRandomByteArraySequence
 	}
 
 	protected ByteArray getEntropyInput(int entropy) {
-		return this.entropySource.iterator().next(entropy / Byte.SIZE);
+		return this.entropySource.next(entropy / Byte.SIZE);
 	}
 
 	public static abstract class Factory {

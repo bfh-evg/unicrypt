@@ -42,6 +42,8 @@
 package ch.bfh.unicrypt.helper.sequence.random.password;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.classes.bytearray.StringToByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.hash.HashAlgorithm;
 import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteArraySequenceIterator;
@@ -109,10 +111,14 @@ public class PBKDF2
 	}
 
 	public static PasswordRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm, final int rounds) {
-		if (hashAlgorithm == null || rounds < 1) {
+		return PBKDF2.getFactory(hashAlgorithm, PBKDF2.DEFAULT_ROUNDS, StringToByteArray.getInstance());
+	}
+
+	public static PasswordRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm, final int rounds, final Converter<String, ByteArray> converter) {
+		if (hashAlgorithm == null || rounds < 1 || converter == null) {
 			throw new IllegalArgumentException();
 		}
-		return new PasswordRandomByteArraySequence.Factory() {
+		return new PasswordRandomByteArraySequence.Factory(converter) {
 
 			@Override
 			protected PasswordRandomByteArraySequence abstractGetInstance(ByteArray password, ByteArray salt) {

@@ -41,6 +41,7 @@
  */
 package ch.bfh.unicrypt.helper.sequence.random.nondeterministic;
 
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
@@ -60,6 +61,14 @@ public class NonDeterministicRandomByteSequence
 	@Override
 	public RandomByteSequenceIterator iterator() {
 		return this.iterator;
+	}
+
+	public Byte next() {
+		return this.iterator.next();
+	}
+
+	public ByteArray next(int n) {
+		return this.iterator.next(n);
 	}
 
 	public static NonDeterministicRandomByteSequence getInstance() {

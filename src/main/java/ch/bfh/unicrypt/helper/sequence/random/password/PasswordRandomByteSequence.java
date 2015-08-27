@@ -78,4 +78,29 @@ public abstract class PasswordRandomByteSequence
 		return factory.getInstance(password, salt).getRandomByteSequence();
 	}
 
+	public static PasswordRandomByteSequence getInstance(String password) {
+		return PasswordRandomByteSequence.getInstance(password, "");
+	}
+
+	public static PasswordRandomByteSequence getInstance(String password, String salt) {
+		return PasswordRandomByteSequence.getInstance(PBKDF2.getFactory(), password, salt);
+	}
+
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, String password) {
+		return PasswordRandomByteSequence.getInstance(factory, password, "");
+	}
+
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, String password, String salt) {
+		if (factory == null || password == null || salt == null) {
+			throw new IllegalArgumentException();
+		}
+		return factory.getInstance(password, salt).getRandomByteSequence();
+	}
+
+	public static void main(String[] args) {
+		for (byte b : PasswordRandomByteSequence.getInstance("Hallo", "c").limit(10)) {
+			System.out.println(b);
+		}
+	}
+
 }

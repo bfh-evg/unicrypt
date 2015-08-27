@@ -42,6 +42,7 @@
 package ch.bfh.unicrypt.helper.sequence.random.password;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.converter.interfaces.Converter;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteArraySequence;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
@@ -75,6 +76,12 @@ public abstract class PasswordRandomByteArraySequence
 
 	public static abstract class Factory {
 
+		protected Converter<String, ByteArray> converter;
+
+		protected Factory(Converter<String, ByteArray> converter) {
+			this.converter = converter;
+		}
+
 		/**
 		 * Returns a new sequence of byte arrays. The default seed is an array of zero-bytes of the required length.
 		 * <p>
@@ -103,6 +110,17 @@ public abstract class PasswordRandomByteArraySequence
 		}
 
 		protected abstract PasswordRandomByteArraySequence abstractGetInstance(ByteArray password, ByteArray salt);
+
+		public PasswordRandomByteArraySequence getInstance(String password) {
+			return this.getInstance(password, "");
+		}
+
+		public PasswordRandomByteArraySequence getInstance(String password, String salt) {
+			if (password == null || salt == null) {
+				throw new IllegalArgumentException();
+			}
+			return this.abstractGetInstance(converter.convert(password), converter.convert(salt));
+		}
 
 	}
 
