@@ -47,8 +47,13 @@ import ch.bfh.unicrypt.helper.sequence.random.RandomByteArraySequence;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
 /**
- *
- * @author rolfhaenni
+ * This abstract class implements the basic functionality of password-based random bit generators such {@link PBKDF2}.
+ * It also adjusts the return type of the method {@link #getRandomByteSequence()}. Instances of this class derive random
+ * byte arrays from an initial password and salt. The class also provides an abstract factory class for constructing
+ * such instances.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public abstract class PasswordRandomByteArraySequence
 	   extends RandomByteArraySequence {
@@ -68,12 +73,17 @@ public abstract class PasswordRandomByteArraySequence
 
 			@Override
 			public RandomByteSequenceIterator iterator() {
-				return source.getRandomByteSequenceIterator();
+				return source.byteIterator();
 			}
 
 		};
 	}
 
+	/**
+	 * This is the abstract factory class for constructing instances of {@link PasswordRandomByteArraySequence} from a
+	 * given password and salt. Classes implementing this abstract class are responsible for the actual construction of
+	 * the objects.
+	 */
 	public static abstract class Factory {
 
 		protected Converter<String, ByteArray> converter;
@@ -83,24 +93,57 @@ public abstract class PasswordRandomByteArraySequence
 		}
 
 		/**
-		 * Returns a new sequence of byte arrays. The default seed is an array of zero-bytes of the required length.
+		 * Returns a new password-based sequence of byte arrays. The default password and the default salt are empty
+		 * byte arrays.
 		 * <p>
-		 * @return The new byte array sequence
+		 * @return The new password-based byte array sequence
 		 */
 		public PasswordRandomByteArraySequence getInstance() {
 			return this.getInstance(ByteArray.getInstance());
 		}
 
-		public PasswordRandomByteArraySequence getInstance(ByteArray password) {
-			return this.getInstance(password, ByteArray.getInstance(ByteArray.getInstance()));
+		/**
+		 * Derives and returns a new password-based sequence of byte arrays from a given password. The default salt is
+		 * an empty byte array.
+		 * <p>
+		 * @param password The given password
+		 * @return The new password-based byte array sequence
+		 */
+		public PasswordRandomByteArraySequence getInstance(String password) {
+			return this.getInstance(password, ByteArray.getInstance());
 		}
 
 		/**
-		 * Returns a new sequence of byte arrays for the given seed.
+		 * Derives and returns a new password-based sequence of byte arrays from a given password. The default salt is
+		 * an empty byte array.
 		 * <p>
-		 * @param password
-		 * @param salt
-		 * @return The new byte array sequence
+		 * @param password The given password
+		 * @return The new password-based byte array sequence
+		 */
+		public PasswordRandomByteArraySequence getInstance(ByteArray password) {
+			return this.getInstance(password, ByteArray.getInstance());
+		}
+
+		/**
+		 * Derives and returns a new password-based sequence of byte arrays from a given password and salt.
+		 * <p>
+		 * @param password The given password
+		 * @param salt     The given salt
+		 * @return The new password-based byte array sequence
+		 */
+		public PasswordRandomByteArraySequence getInstance(String password, ByteArray salt) {
+			if (password == null || salt == null) {
+				throw new IllegalArgumentException();
+			}
+			return this.abstractGetInstance(converter.convert(password), salt);
+		}
+
+		/**
+		 * Derives and returns a new password-based sequence of byte arrays from a given password and salt.
+		 * <p>
+		 * @param password The given password
+		 * @param salt     The given salt
+		 * @return The new password-based byte array sequence
 		 */
 		public PasswordRandomByteArraySequence getInstance(ByteArray password, ByteArray salt) {
 			if (password == null || salt == null) {
@@ -109,18 +152,8 @@ public abstract class PasswordRandomByteArraySequence
 			return this.abstractGetInstance(password, salt);
 		}
 
+		// this method must be implemented in each sub-class
 		protected abstract PasswordRandomByteArraySequence abstractGetInstance(ByteArray password, ByteArray salt);
-
-		public PasswordRandomByteArraySequence getInstance(String password) {
-			return this.getInstance(password, "");
-		}
-
-		public PasswordRandomByteArraySequence getInstance(String password, String salt) {
-			if (password == null || salt == null) {
-				throw new IllegalArgumentException();
-			}
-			return this.abstractGetInstance(converter.convert(password), converter.convert(salt));
-		}
 
 	}
 

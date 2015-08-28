@@ -45,32 +45,81 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
 
 /**
- *
- * @author rolfhaenni
+ * The purpose of this abstract class is twofold. First, it provides a base class for implementations of password-based
+ * random byte sequences. Second, it provides various static factory methods for deriving new password-based random byte
+ * sequences from password-based random bit generators such as {@link PBKDF2}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public abstract class PasswordRandomByteSequence
 	   extends RandomByteSequence {
 
+	/**
+	 * Constructs a new password-based random byte sequence. The default random bit generator is created using the
+	 * default {@link PBKDF2} factory and the default password and salt are empty byte arrays.
+	 * <p>
+	 * @return The new random byte sequence
+	 */
 	public static PasswordRandomByteSequence getInstance() {
 		return PasswordRandomByteSequence.getInstance(ByteArray.getInstance());
 	}
 
+	/**
+	 * Constructs a new password-based random byte sequence for a given password. The default random bit generator is
+	 * created using the default {@link PBKDF2} factory and the default salt is an empty byte arrays.
+	 * <p>
+	 * @param password The given password
+	 * @return The new random byte sequence
+	 */
 	public static PasswordRandomByteSequence getInstance(ByteArray password) {
 		return PasswordRandomByteSequence.getInstance(password, ByteArray.getInstance());
 	}
 
+	/**
+	 * Constructs a new password-based random byte sequence for a given password and salt. The default random bit
+	 * generator is created using the default {@link PBKDF2} factory.
+	 * <p>
+	 * @param password The given password
+	 * @param salt     The given salt
+	 * @return The new random byte sequence
+	 */
 	public static PasswordRandomByteSequence getInstance(ByteArray password, ByteArray salt) {
 		return PasswordRandomByteSequence.getInstance(PBKDF2.getFactory(), password, salt);
 	}
 
+	/**
+	 * Constructs a new password-based random byte sequence from a given factory of a random bit generator. The default
+	 * password and salt are empty byte arrays.
+	 * <p>
+	 * @param factory The given factory class of the password-based random bit generator
+	 * @return The new random byte sequence
+	 */
 	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory) {
 		return PasswordRandomByteSequence.getInstance(factory, ByteArray.getInstance());
 	}
 
+	/**
+	 * Constructs a new password-based random byte sequence from a given factory of a random bit generator and a given
+	 * password. The default salt is an empty byte array.
+	 * <p>
+	 * @param factory  The given factory class of the password-based random bit generator
+	 * @param password The given password
+	 * @return The new random byte sequence
+	 */
 	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, ByteArray password) {
 		return PasswordRandomByteSequence.getInstance(factory, password, ByteArray.getInstance());
 	}
 
+	/**
+	 * Constructs a new password-based random byte sequence from a given factory of a random bit generator and a given
+	 * password and salt.
+	 * <p>
+	 * @param factory  The given factory class of the password-based random bit generator
+	 * @param password The given password
+	 * @param salt     The given salt
+	 * @return The new random byte sequence
+	 */
 	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, ByteArray password, ByteArray salt) {
 		if (factory == null || password == null || salt == null) {
 			throw new IllegalArgumentException();
@@ -78,29 +127,55 @@ public abstract class PasswordRandomByteSequence
 		return factory.getInstance(password, salt).getRandomByteSequence();
 	}
 
+	/**
+	 * Constructs a new password-based random byte sequence for a given password. The default random bit generator is
+	 * created using the default {@link PBKDF2} factory and the default salt is an empty byte arrays.
+	 * <p>
+	 * @param password The given password
+	 * @return The new random byte sequence
+	 */
 	public static PasswordRandomByteSequence getInstance(String password) {
-		return PasswordRandomByteSequence.getInstance(password, "");
+		return PasswordRandomByteSequence.getInstance(password, ByteArray.getInstance());
 	}
 
-	public static PasswordRandomByteSequence getInstance(String password, String salt) {
+	/**
+	 * Constructs a new password-based random byte sequence for a given password and salt. The default random bit
+	 * generator is created using the default {@link PBKDF2} factory.
+	 * <p>
+	 * @param password The given password
+	 * @param salt     The given salt
+	 * @return The new random byte sequence
+	 */
+	public static PasswordRandomByteSequence getInstance(String password, ByteArray salt) {
 		return PasswordRandomByteSequence.getInstance(PBKDF2.getFactory(), password, salt);
 	}
 
+	/**
+	 * Constructs a new password-based random byte sequence from a given factory of a random bit generator and a given
+	 * password. The default salt is an empty byte array.
+	 * <p>
+	 * @param factory  The given factory class of the password-based random bit generator
+	 * @param password The given password
+	 * @return The new random byte sequence
+	 */
 	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, String password) {
-		return PasswordRandomByteSequence.getInstance(factory, password, "");
+		return PasswordRandomByteSequence.getInstance(factory, password, ByteArray.getInstance());
 	}
 
-	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, String password, String salt) {
+	/**
+	 * Constructs a new password-based random byte sequence from a given factory of a random bit generator and a given
+	 * password and salt.
+	 * <p>
+	 * @param factory  The given factory class of the password-based random bit generator
+	 * @param password The given password
+	 * @param salt     The given salt
+	 * @return The new random byte sequence
+	 */
+	public static PasswordRandomByteSequence getInstance(PasswordRandomByteArraySequence.Factory factory, String password, ByteArray salt) {
 		if (factory == null || password == null || salt == null) {
 			throw new IllegalArgumentException();
 		}
 		return factory.getInstance(password, salt).getRandomByteSequence();
-	}
-
-	public static void main(String[] args) {
-		for (byte b : PasswordRandomByteSequence.getInstance("Hallo", "c").limit(10)) {
-			System.out.println(b);
-		}
 	}
 
 }

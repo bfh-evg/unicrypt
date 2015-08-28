@@ -46,23 +46,44 @@ import ch.bfh.unicrypt.helper.sequence.random.nondeterministic.NonDeterministicR
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
+ * @version 2.0
  */
 public abstract class HybridRandomByteSequence
 	   extends RandomByteSequence {
 
+	/**
+	 *
+	 * @return
+	 */
 	public static HybridRandomByteSequence getInstance() {
 		return HybridRandomByteSequence.getInstance(NonDeterministicRandomByteSequence.getInstance());
 	}
 
+	/**
+	 *
+	 * @param entropySource
+	 * @return
+	 */
 	public static HybridRandomByteSequence getInstance(NonDeterministicRandomByteSequence entropySource) {
 		return HybridRandomByteSequence.getInstance(HMAC_DRBG.getFactory(), entropySource);
 	}
 
+	/**
+	 *
+	 * @param factory
+	 * @return
+	 */
 	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory) {
 		return HybridRandomByteSequence.getInstance(factory, NonDeterministicRandomByteSequence.getInstance());
 	}
 
+	/**
+	 *
+	 * @param factory
+	 * @param entropySource
+	 * @return
+	 */
 	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory, NonDeterministicRandomByteSequence entropySource) {
 		if (factory == null || entropySource == null) {
 			throw new IllegalArgumentException();

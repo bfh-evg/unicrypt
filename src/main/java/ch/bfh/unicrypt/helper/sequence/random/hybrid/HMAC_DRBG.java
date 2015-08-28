@@ -50,16 +50,10 @@ import ch.bfh.unicrypt.helper.sequence.random.nondeterministic.NonDeterministicR
 /**
  * This class is an implementation of the NIST standard HMAC_DRBG as described in NIST SP 800-90A "Recommendation for
  * Random Number Generation Using Deterministic Random Bit Generators" (Section 10.1.2). Instances of this class
- * generate a deterministic sequence of randomly looking byte arrays for a given seed and the given hash algorithm.
- * Together with a true randomness source ({@link TrueRandomSequence}), which provides a random seed, it can be used to
- * generate a pseudo-random byte sequence ({@link PseudoRandomByteSequence}).
+ * generate a deterministic sequence of random byte arrays for a given seed and the given hash algorithm.
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @see HMAC_DRBG
- * @see HashAlgorithm
- * @see TrueRandomSequence
- * @see PseudoRandomByteSequence
  */
 public class HMAC_DRBG
 	   extends HybridRandomByteArraySequence {
@@ -88,7 +82,7 @@ public class HMAC_DRBG
 
 			{
 				// initialize internal state
-				this.stateUpdate(getEntropyInput(minEntropy).append(personalizationString));
+				this.stateUpdate(entropySource.next(minEntropy / Byte.SIZE).append(personalizationString));
 			}
 
 			@Override
@@ -114,10 +108,21 @@ public class HMAC_DRBG
 		};
 	}
 
+	/**
+	 * Returns a new factory for creating HMAC_DRBG instances using the default hash algorithm.
+	 * <p>
+	 * @return The new HMAC_DRBG factory
+	 */
 	public static HybridRandomByteArraySequence.Factory getFactory() {
 		return HMAC_DRBG.getFactory(HashAlgorithm.getInstance());
 	}
 
+	/**
+	 * Returns a new factory for creating HMAC_DRBG instances using the given hash algorithm.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @return The new HMAC_DRBG factory
+	 */
 	public static HybridRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm) {
 		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();

@@ -45,10 +45,10 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.sequence.SequenceIterator;
 
 /**
- * The purpose of this specialization of {@link RandomByteSequenceIterator} is to adjust the return type of the method
- * {@link SequenceIterator#next(int)} to {@link ByteArray}, to set the length of the sequence to infinity, and to
- * transfer the visibility of {@link #updateBefore()}, {@link #updateAfter()}, and {@link #abstractNext()} to this
- * package.
+ * The purpose of this abstract sub-class of {@link SequenceIterator} is threefold. First, it adjusts the return type of
+ * the method {@link SequenceIterator#next(int)} to {@link ByteArray}. Second, it sets the length of the sequence to
+ * infinity. Finally, it transfers the visibility of {@link #updateBefore()}, {@link #updateAfter()}, and
+ * {@link #abstractNext()} to this package.
  * <p>
  * @author R. Haenni
  * @version 2.0
@@ -73,6 +73,11 @@ public abstract class RandomByteSequenceIterator
 	}
 
 	@Override
+	public final boolean hasNext() {
+		return true;
+	}
+
+	@Override
 	protected void updateBefore() {
 	}
 
@@ -82,10 +87,5 @@ public abstract class RandomByteSequenceIterator
 
 	@Override
 	protected abstract Byte abstractNext();
-
-	@Override
-	public final boolean hasNext() {
-		return true;
-	}
 
 }

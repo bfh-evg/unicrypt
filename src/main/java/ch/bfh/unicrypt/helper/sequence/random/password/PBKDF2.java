@@ -52,8 +52,8 @@ import ch.bfh.unicrypt.helper.sequence.random.RandomByteArraySequenceIterator;
  * This class implements the standard PBKDF2 (password-based key derivation function) as defined in the NIST Special
  * Publication 800-132, "Recommendation for Password-Based Key Derivation", and in the RFC 2898, "PKCS #5:
  * Password-Based Cryptography Specification, Version 2.0". Instances of this class generate a deterministic sequence of
- * randomly looking byte arrays for a given password, salt, number of rounds, and hash algorithm. The number of rounds
- * determines the amount of work to compute the key.
+ * random byte arrays for a given password, salt, number of rounds, and hash algorithm. The number of rounds determines
+ * the amount of work to derive the sequence.
  * <p>
  * @author R. Haenni
  */
@@ -63,7 +63,7 @@ public class PBKDF2
 	/**
 	 * The default number of rounds
 	 */
-	public static final int DEFAULT_ROUNDS = 4096;
+	public static final int DEFAULT_ROUNDS = 100000;
 
 	private static final byte BYTE_ZERO = MathUtil.getByte(0x00);
 
@@ -98,22 +98,59 @@ public class PBKDF2
 		};
 	}
 
+	/**
+	 * Returns a new factory for constructing new instances of this class. It uses the default hash algorithm, the
+	 * default number of rounds, and the default {@link StringToByteArray} converter.
+	 * <p>
+	 * @return The new PBKDF2 factory
+	 */
 	public static PasswordRandomByteArraySequence.Factory getFactory() {
 		return PBKDF2.getFactory(HashAlgorithm.getInstance());
 	}
 
+	/**
+	 * For a given number of rounds, this method returns a new factory for constructing new instances of this class. It
+	 * uses the default hash algorithm and the default {@link StringToByteArray} converter.
+	 * <p>
+	 * @param rounds The desired number of rounds
+	 * @return The new PBKDF2 factory
+	 */
 	public static PasswordRandomByteArraySequence.Factory getFactory(int rounds) {
 		return PBKDF2.getFactory(HashAlgorithm.getInstance(), rounds);
 	}
 
+	/**
+	 * For a given hash algorithm, this method returns a new factory for constructing new instances of this class. It
+	 * uses the default number of rounds and the default {@link StringToByteArray} converter.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @return The new PBKDF2 factory
+	 */
 	public static PasswordRandomByteArraySequence.Factory getFactory(HashAlgorithm hashAlgorithm) {
 		return PBKDF2.getFactory(hashAlgorithm, PBKDF2.DEFAULT_ROUNDS);
 	}
 
+	/**
+	 * For a given hash algorithm and number of rounds, this method returns a new factory for constructing new instances
+	 * of this class. It uses the default {@link StringToByteArray} converter.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @param rounds        The desired number of rounds
+	 * @return The new PBKDF2 factory
+	 */
 	public static PasswordRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm, final int rounds) {
-		return PBKDF2.getFactory(hashAlgorithm, PBKDF2.DEFAULT_ROUNDS, StringToByteArray.getInstance());
+		return PBKDF2.getFactory(hashAlgorithm, rounds, StringToByteArray.getInstance());
 	}
 
+	/**
+	 * For a given hash algorithm, number of rounds, and {@link StringToByteArray} converter, this method returns a new
+	 * factory for constructing new instances of this class. The converter is used to convert string passwords into byte
+	 * arrays.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @param rounds        The desired number of rounds
+	 * @return The new PBKDF2 factory
+	 */
 	public static PasswordRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm, final int rounds, final Converter<String, ByteArray> converter) {
 		if (hashAlgorithm == null || rounds < 1 || converter == null) {
 			throw new IllegalArgumentException();

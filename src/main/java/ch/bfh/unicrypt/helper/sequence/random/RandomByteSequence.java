@@ -45,16 +45,12 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
 
 /**
- * The purpose of this specialization of {@link Sequence} is to adjust the return type of the method
- * {@link Sequence#group(int)} to {@link ByteArray}. Furthermore, the class provides a method for constructing a byte
- * sequence from a {@link ByteArray} sequence. This method is useful to transform instances of
- * {@link HMAC_DRBG}, {@link Hash_DRBG}, or {@link PBKDF2} into random byte sequences.
+ * The purpose of this abstract sub-class of {@link Sequence} is twofold. First, it serves as a base implementation for
+ * various types of infinitely long byte sequences. Second, it adjusts the return type of the method
+ * {@link Sequence#group(int)} to {@link ByteArray}.
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @see HMAC_DRBG
- * @see Hash_DRBG
- * @see PBKDF2
  */
 public abstract class RandomByteSequence
 	   extends Sequence<Byte> {
@@ -64,9 +60,23 @@ public abstract class RandomByteSequence
 	}
 
 	@Override
-	public abstract RandomByteSequenceIterator iterator();
+	public final RandomByteArraySequence group(final int groupLength) {
+		if (groupLength < 1) {
+			throw new IllegalArgumentException();
+		}
+		final RandomByteSequence source = this;
+		return new RandomByteArraySequence() {
 
-	public RandomByteArraySequenceIterator getRandomByteArraySequenceIterator(final int length) {
+			@Override
+			public RandomByteArraySequenceIterator iterator() {
+				return source.byteArrayIterator(groupLength);
+			}
+
+		};
+
+	}
+
+	protected RandomByteArraySequenceIterator byteArrayIterator(final int length) {
 		if (length < 1) {
 			throw new IllegalArgumentException();
 		}
@@ -98,20 +108,6 @@ public abstract class RandomByteSequence
 	}
 
 	@Override
-	public final RandomByteArraySequence group(final int groupLength) {
-		if (groupLength < 1) {
-			throw new IllegalArgumentException();
-		}
-		final RandomByteSequence source = this;
-		return new RandomByteArraySequence() {
-
-			@Override
-			public RandomByteArraySequenceIterator iterator() {
-				return source.getRandomByteArraySequenceIterator(groupLength);
-			}
-
-		};
-
-	}
+	public abstract RandomByteSequenceIterator iterator();
 
 }

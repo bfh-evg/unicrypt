@@ -45,24 +45,55 @@ import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
 
 /**
- *
- * @author rolfhaenni
+ * The purpose of this abstract class is twofold. First, it provides a base class for implementations of deterministic
+ * random byte sequences. Second, it provides various static factory methods for deriving new deterministic random byte
+ * sequences from deterministic random bit generators such as {@link CTR_DRBG} or {@link OFB_DRBG}.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public abstract class DeterministicRandomByteSequence
 	   extends RandomByteSequence {
 
+	/**
+	 * Constructs a new deterministic random byte sequence. The default random bit generator is created using the
+	 * default {@link CTR_DRBG} factory and the default seed is a sequence of zero-bytes of the required length.
+	 * <p>
+	 * @return The new random byte sequence
+	 */
 	public static DeterministicRandomByteSequence getInstance() {
-		return DeterministicRandomByteSequence.getInstance(ByteArray.getInstance());
+		return DeterministicRandomByteSequence.getInstance(CTR_DRBG.getFactory());
 	}
 
+	/**
+	 * Constructs a new deterministic random byte sequence for a given seed. The default random bit generator is created
+	 * using the default {@link CTR_DRBG} factory.
+	 * <p>
+	 * @param seed The given seed
+	 * @return The new random byte sequence
+	 */
 	public static DeterministicRandomByteSequence getInstance(ByteArray seed) {
 		return DeterministicRandomByteSequence.getInstance(CTR_DRBG.getFactory(), seed);
 	}
 
+	/**
+	 * Constructs a new deterministic random byte sequence from a given factory of a random bit generator. The default
+	 * seed is a sequence of zero-bytes of the required length.
+	 * <p>
+	 * @param factory The given factory class of the deterministic random bit generator
+	 * @return The new random byte sequence
+	 */
 	public static DeterministicRandomByteSequence getInstance(DeterministicRandomByteArraySequence.Factory factory) {
-		return DeterministicRandomByteSequence.getInstance(factory, ByteArray.getInstance());
+		return DeterministicRandomByteSequence.getInstance(factory, ByteArray.getInstance(false, factory.getSeedByteLength()));
 	}
 
+	/**
+	 * Constructs a new deterministic random byte sequence for a given factory of a random bit generator and a seed.
+	 * <p>
+	 * @param factory The given factory class of the deterministic random bit generator
+	 * @param seed    The given seed
+	 * @return The new random byte sequence
+	 */
 	public static DeterministicRandomByteSequence getInstance(DeterministicRandomByteArraySequence.Factory factory, ByteArray seed) {
 		if (factory == null || seed == null) {
 			throw new IllegalArgumentException();

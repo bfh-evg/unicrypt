@@ -46,8 +46,13 @@ import ch.bfh.unicrypt.helper.sequence.random.RandomByteArraySequence;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
 /**
- *
- * @author rolfhaenni
+ * This abstract class implements the basic functionality of deterministic random bit generators such {@link CTR_DRBG}
+ * or {@link OFB_DRBG}. It also adjusts the return type of the method {@link #getRandomByteSequence()}. Instances of
+ * this class derive random byte arrays from an initial seed. The class also provides an abstract factory class for
+ * constructing such instances.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public abstract class DeterministicRandomByteArraySequence
 	   extends RandomByteArraySequence {
@@ -65,39 +70,60 @@ public abstract class DeterministicRandomByteArraySequence
 
 			@Override
 			public RandomByteSequenceIterator iterator() {
-				return source.getRandomByteSequenceIterator();
+				return source.byteIterator();
 			}
 
 		};
 	}
 
+	/**
+	 * This is the abstract factory class for constructing instances of {@link DeterministicRandomByteArraySequence}
+	 * from a given seed. Classes implementing this abstract class are responsible for the actual construction of the
+	 * objects. They must also define the length of the seed.
+	 */
 	public static abstract class Factory {
 
 		/**
-		 * Returns a new sequence of byte arrays. The default seed is an array of zero-bytes of the required length.
+		 * Returns a new deterministic sequence of byte arrays. The default seed is an array of zero-bytes of the
+		 * required length.
 		 * <p>
-		 * @return The new byte array sequence
+		 * @return The new deterministic byte array sequence
 		 */
 		public DeterministicRandomByteArraySequence getInstance() {
-			return this.getInstance(ByteArray.getInstance(false, this.getSeedLength()));
+			return this.getInstance(ByteArray.getInstance(false, this.getSeedBitLength()));
 		}
 
 		/**
-		 * Returns a new sequence of byte arrays for the given seed.
+		 * Returns a new deterministic sequence of byte arrays for the given seed.
 		 * <p>
 		 * @param seed The given seed
-		 * @return The new byte array sequence
+		 * @return The new deterministic byte array sequence
 		 */
 		public DeterministicRandomByteArraySequence getInstance(ByteArray seed) {
-			if (seed == null || this.getSeedLength() != seed.getLength()) {
+			if (seed == null || this.getSeedByteLength() != seed.getLength()) {
 				throw new IllegalArgumentException();
 			}
 			return this.abstractGetInstance(seed);
 		}
 
-		protected abstract DeterministicRandomByteArraySequence abstractGetInstance(ByteArray seed);
+		/**
+		 * Returns the required byte length of the seed for constructing new deterministic random bit generators.
+		 * <p>
+		 * @return The byte length of the seed
+		 */
+		public int getSeedByteLength() {
+			return this.getSeedBitLength() * Byte.SIZE;
+		}
 
-		protected abstract int getSeedLength();
+		/**
+		 * Returns the required bit length of the seed for constructing new deterministic random bit generators.
+		 * <p>
+		 * @return The bit length of the seed
+		 */
+		public abstract int getSeedBitLength();
+
+		// this method must be implemented in each sub-class
+		protected abstract DeterministicRandomByteArraySequence abstractGetInstance(ByteArray seed);
 
 	}
 

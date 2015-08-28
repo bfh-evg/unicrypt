@@ -72,7 +72,7 @@ public class NonDeterministicRandomByteSequence
 	}
 
 	public static NonDeterministicRandomByteSequence getInstance() {
-		return JavaSecureRandomByteSequence.getInstance();
+		return SecureRandom_NRBG.getInstance();
 	}
 
 }

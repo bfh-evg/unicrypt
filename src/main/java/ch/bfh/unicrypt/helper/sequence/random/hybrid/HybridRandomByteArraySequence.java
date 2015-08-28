@@ -48,7 +48,8 @@ import ch.bfh.unicrypt.helper.sequence.random.nondeterministic.NonDeterministicR
 
 /**
  *
- * @author rolfhaenni
+ * @author R. Haenni
+ * @version 2.0
  */
 public abstract class HybridRandomByteArraySequence
 	   extends RandomByteArraySequence {
@@ -68,42 +69,44 @@ public abstract class HybridRandomByteArraySequence
 
 			@Override
 			public RandomByteSequenceIterator iterator() {
-				return source.getRandomByteSequenceIterator();
+				return source.byteIterator();
 			}
 
 		};
 	}
 
-	protected ByteArray getEntropyInput(int entropy) {
-		return this.entropySource.next(entropy / Byte.SIZE);
-	}
-
+	/**
+	 *
+	 */
 	public static abstract class Factory {
 
 		/**
-		 * Returns a new sequence of byte arrays using the default hash algorithm. The default seed is an array of
-		 * zero-bytes of the required length.
-		 * <p>
-		 * @return The new byte array sequence
+		 * @return
 		 */
 		public HybridRandomByteArraySequence getInstance() {
 			return this.getInstance(NonDeterministicRandomByteSequence.getInstance());
 		}
 
+		/**
+		 * @param entropySource
+		 * @return
+		 */
 		public HybridRandomByteArraySequence getInstance(NonDeterministicRandomByteSequence entropySource) {
 			return this.getInstance(entropySource, ByteArray.getInstance());
 		}
 
+		/**
+		 * @param personalizationString
+		 * @return
+		 */
 		public HybridRandomByteArraySequence getInstance(ByteArray personalizationString) {
 			return this.getInstance(NonDeterministicRandomByteSequence.getInstance(), personalizationString);
 		}
 
 		/**
-		 * Returns a new sequence of byte arrays for the given hash algorithm and seed.
-		 * <p>
-		 *
-		 * @param personalizationString @param entropySource
-		 * @return The new byte array sequence
+		 * @param entropySource
+		 * @param personalizationString
+		 * @return
 		 */
 		public HybridRandomByteArraySequence getInstance(NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
 			if (entropySource == null || personalizationString == null) {

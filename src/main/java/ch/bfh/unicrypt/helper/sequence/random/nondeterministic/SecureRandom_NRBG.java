@@ -48,16 +48,16 @@ import java.security.SecureRandom;
  *
  * @author R. Haenni
  */
-public class JavaSecureRandomByteSequence
+public class SecureRandom_NRBG
 	   extends NonDeterministicRandomByteSequence {
 
-	private static JavaSecureRandomByteSequence instance = null;
+	private static SecureRandom_NRBG instance = null;
 
-	private JavaSecureRandomByteSequence(RandomByteSequenceIterator iterator) {
+	private SecureRandom_NRBG(RandomByteSequenceIterator iterator) {
 		super(iterator);
 	}
 
-	public static JavaSecureRandomByteSequence getInstance() {
+	public static SecureRandom_NRBG getInstance() {
 		if (instance == null) {
 			RandomByteSequenceIterator iterator = new RandomByteSequenceIterator() {
 
@@ -69,7 +69,7 @@ public class JavaSecureRandomByteSequence
 				}
 
 			};
-			instance = new JavaSecureRandomByteSequence(iterator);
+			instance = new SecureRandom_NRBG(iterator);
 		}
 		return instance;
 	}

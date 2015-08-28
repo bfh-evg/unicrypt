@@ -43,12 +43,15 @@ package ch.bfh.unicrypt.helper.sequence.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
-import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
-import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
 /**
- *
- * @author rolfhaenni
+ * The purpose of this abstract sub-class of {@link Sequence} is twofold. First, it serves as a base implementation for
+ * various types of infinitely long byte array sequences. Second, it provides a method for transforming the byte array
+ * sequence into a byte sequence. This method is useful to transform instances of {@link HMAC_DRBG}, {@link Hash_DRBG},
+ * or {@link PBKDF2} into random byte sequences.
+ * <p>
+ * @author R. Haenni
+ * @version 2.0
  */
 public abstract class RandomByteArraySequence
 	   extends Sequence<ByteArray> {
@@ -56,9 +59,6 @@ public abstract class RandomByteArraySequence
 	protected RandomByteArraySequence() {
 		super(Sequence.INFINITE);
 	}
-
-	@Override
-	public abstract RandomByteArraySequenceIterator iterator();
 
 	/**
 	 * Returns a byte sequence obtained by concatenating the random byte arrays from this sequence. This method is
@@ -73,13 +73,13 @@ public abstract class RandomByteArraySequence
 
 			@Override
 			public RandomByteSequenceIterator iterator() {
-				return source.getRandomByteSequenceIterator();
+				return source.byteIterator();
 			}
 
 		};
 	}
 
-	public RandomByteSequenceIterator getRandomByteSequenceIterator() {
+	protected RandomByteSequenceIterator byteIterator() {
 		final RandomByteArraySequenceIterator iterator = this.iterator();
 		return new RandomByteSequenceIterator() {
 
@@ -106,5 +106,8 @@ public abstract class RandomByteArraySequence
 			}
 		};
 	}
+
+	@Override
+	public abstract RandomByteArraySequenceIterator iterator();
 
 }

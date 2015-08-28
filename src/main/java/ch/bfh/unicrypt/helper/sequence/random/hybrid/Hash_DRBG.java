@@ -52,16 +52,10 @@ import java.math.BigInteger;
 /**
  * This class is an implementation of the NIST standard Hash_DRBG as described in NIST SP 800-90A "Recommendation for
  * Random Number Generation Using Deterministic Random Bit Generators" (Section 10.1.1). Instances of this class
- * generate a deterministic sequence of randomly looking byte arrays for a given seed and the given hash algorithm.
- * Together with a true randomness source ({@link TrueRandomSequence}), which provides a random seed, it can be used to
- * generate a pseudo-random byte sequence ({@link PseudoRandomByteSequence}).
+ * generate a deterministic sequence of random byte arrays for a given seed and the given hash algorithm.
  * <p>
  * @author R. Haenni
  * @version 2.0
- * @see Hash_DRBG
- * @see HashAlgorithm
- * @see TrueRandomSequence
- * @see PseudoRandomByteSequence
  */
 public class Hash_DRBG
 	   extends HybridRandomByteArraySequence {
@@ -120,7 +114,7 @@ public class Hash_DRBG
 
 		return new RandomByteArraySequenceIterator() {
 
-			private ByteArray value = hashDerivationFunction(getEntropyInput(minEntropy).append(personalizationString));
+			private ByteArray value = hashDerivationFunction(entropySource.next(minEntropy / Byte.SIZE).append(personalizationString));
 			private final ByteArray constant = hashDerivationFunction(this.value.insert(BYTE_ZERO));
 			private ByteArray data = this.value;
 			private long counter = 1;
@@ -143,10 +137,21 @@ public class Hash_DRBG
 		};
 	}
 
+	/**
+	 * Returns a new factory for creating Hash_DRBG instances using the default hash algorithm.
+	 * <p>
+	 * @return The new Hash_DRBG factory
+	 */
 	public static HybridRandomByteArraySequence.Factory getFactory() {
 		return Hash_DRBG.getFactory(HashAlgorithm.getInstance());
 	}
 
+	/**
+	 * Returns a new factory for creating Hash_DRBG instances using the given hash algorithm.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @return The new Hash_DRBG factory
+	 */
 	public static HybridRandomByteArraySequence.Factory getFactory(final HashAlgorithm hashAlgorithm) {
 		if (hashAlgorithm == null) {
 			throw new IllegalArgumentException();
