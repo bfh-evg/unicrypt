@@ -52,8 +52,14 @@ import ch.bfh.unicrypt.helper.sequence.random.deterministic.DeterministicRandomB
 import java.math.BigInteger;
 
 /**
- *
+ * Instances of this class are approximations of a random oracle. The accept arbitrary queries of type {@code long},
+ * {@code BigInteger}, {@code String}, or {@code ByteArray} and return with a deterministic random byte sequences. To
+ * convert integer and string queries into byte arrays, corresponding converters must be specified when a random oracle
+ * is created. To trim the query to the seed length of the deterministic random bit generator, a hash algorithm must be
+ * supplied.
+ * <p>
  * @author R. Haenni
+ * @version 2.0
  */
 public class RandomOracle
 	   extends UniCrypt {
@@ -72,14 +78,31 @@ public class RandomOracle
 		this.stringConverter = stringConverter;
 	}
 
+	/**
+	 * Returns the deterministic random byte sequence for the default query of an empty byte array.
+	 * <p>
+	 * @return The resulting deterministic random byte sequence
+	 */
 	public final RandomByteSequence query() {
 		return this.query(ByteArray.getInstance());
 	}
 
+	/**
+	 * Returns a deterministic random byte sequence from a query of type {@code long}.
+	 * <p>
+	 * @param input The query
+	 * @return The resulting deterministic random byte sequence
+	 */
 	public final RandomByteSequence query(long input) {
 		return this.query(BigInteger.valueOf(input));
 	}
 
+	/**
+	 * Returns a deterministic random byte sequence from a query of type {@code BigInteger}.
+	 * <p>
+	 * @param input The query
+	 * @return The resulting deterministic random byte sequence
+	 */
 	public final RandomByteSequence query(BigInteger input) {
 		if (input == null) {
 			throw new IllegalArgumentException();
@@ -87,6 +110,12 @@ public class RandomOracle
 		return this.query(this.bigIntegerConverter.convert(input));
 	}
 
+	/**
+	 * Returns a deterministic random byte sequence from a query of type {@code String}.
+	 * <p>
+	 * @param input The query
+	 * @return The resulting deterministic random byte sequence
+	 */
 	public final RandomByteSequence query(String input) {
 		if (input == null) {
 			throw new IllegalArgumentException();
@@ -94,32 +123,79 @@ public class RandomOracle
 		return this.query(this.stringConverter.convert(input));
 	}
 
+	/**
+	 * Returns a deterministic random byte sequence from a query of type {@code ByteArray}.
+	 * <p>
+	 * @param input The query
+	 * @return The resulting deterministic random byte sequence
+	 */
 	public final RandomByteSequence query(ByteArray input) {
 		if (input == null) {
 			throw new IllegalArgumentException();
 		}
-		ByteArray hash = this.hashAlgorithm.getHashValue(input);
+		ByteArray hash = this.hashAlgorithm.getHashValue(input).extractPrefix(this.factory.getSeedByteLength());
 		return this.factory.getInstance(hash).getRandomByteSequence();
 	}
 
+	/**
+	 * Returns a new random oracle for the default hash algorithm and the corresponding {@link CTR_DRBG} instance.
+	 * Default {@code BigInteger} and {@code String} converters are selected.
+	 * <p>
+	 * @return The new random oracle
+	 */
 	public static RandomOracle getInstance() {
 		return RandomOracle.getInstance(HashAlgorithm.getInstance());
 	}
 
+	/**
+	 * Returns a new random oracle for a given hash algorithm and the corresponding {@link CTR_DRBG} instance. Default
+	 * {@code BigInteger} and {@code String} converters are selected.
+	 * <p>
+	 * @param hashAlgorithm The given hash algorithm
+	 * @return The new random oracle
+	 */
 	public static RandomOracle getInstance(HashAlgorithm hashAlgorithm) {
-		return getInstance(CTR_DRBG.getFactory(hashAlgorithm), hashAlgorithm);
+		return RandomOracle.getInstance(CTR_DRBG.getFactory(hashAlgorithm), hashAlgorithm);
 	}
 
+	/**
+	 * Returns a new random oracle for a given factory of a deterministic random byte sequence. The default hash
+	 * algorithm is selected. The output length of the default hash algorithm must be equal to the required seed length
+	 * or larger. Default {@code BigInteger} and {@code String} converters are selected.
+	 * <p>
+	 * @param factory The given factory of a deterministic random byte sequence
+	 * @return The new random oracle
+	 */
 	public static RandomOracle getInstance(DeterministicRandomByteArraySequence.Factory factory) {
-		return getInstance(factory, HashAlgorithm.getInstance());
+		return RandomOracle.getInstance(factory, HashAlgorithm.getInstance());
 	}
 
+	/**
+	 * Returns a new random oracle for a given factory of a deterministic random byte sequence and a given hash
+	 * algorithm. The output length of the hash algorithm must be equal to the required seed length or larger. Default
+	 * {@code BigInteger} and {@code String} converters are selected.
+	 * <p>
+	 * @param factory       The given factory of a deterministic random byte sequence
+	 * @param hashAlgorithm The given hash algorithm
+	 * @return The new random oracle
+	 */
 	public static RandomOracle getInstance(DeterministicRandomByteArraySequence.Factory factory, HashAlgorithm hashAlgorithm) {
-		return getInstance(factory, hashAlgorithm, BigIntegerToByteArray.getInstance(), StringToByteArray.getInstance());
+		return RandomOracle.getInstance(factory, hashAlgorithm, BigIntegerToByteArray.getInstance(), StringToByteArray.getInstance());
 	}
 
+	/**
+	 * Returns a new random oracle for a given factory of a deterministic random byte sequence, a given hash algorithm,
+	 * and given {@code BigInteger} and {@code String} converters. The output length of the hash algorithm must be equal
+	 * to the required seed length or larger.
+	 * <p>
+	 * @param factory             The given factory of a deterministic random byte sequence
+	 * @param hashAlgorithm       The given hash algorithm
+	 * @param bigIntegerConverter The given {@code BigInteger} converter
+	 * @param stringConverter     The given {@code String} converter
+	 * @return The new random oracle
+	 */
 	public static RandomOracle getInstance(DeterministicRandomByteArraySequence.Factory factory, HashAlgorithm hashAlgorithm, Converter<BigInteger, ByteArray> bigIntegerConverter, Converter<String, ByteArray> stringConverter) {
-		if (factory == null || hashAlgorithm == null || bigIntegerConverter == null || stringConverter == null) {
+		if (factory == null || hashAlgorithm == null || factory.getSeedByteLength() > hashAlgorithm.getByteLength() || bigIntegerConverter == null || stringConverter == null) {
 			throw new IllegalArgumentException();
 		}
 		return new RandomOracle(factory, hashAlgorithm, bigIntegerConverter, stringConverter);
