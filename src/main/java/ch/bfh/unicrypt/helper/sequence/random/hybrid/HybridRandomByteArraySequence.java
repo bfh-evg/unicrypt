@@ -47,7 +47,11 @@ import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 import ch.bfh.unicrypt.helper.sequence.random.nondeterministic.NonDeterministicRandomByteSequence;
 
 /**
- *
+ * This abstract class implements the basic functionality of hybrid random bit generators such {@link HMAC_DRBG} or
+ * {@link Hash_DRBG}. It also adjusts the return type of the method {@link #getRandomByteSequence()}. Instances of this
+ * class derive random byte arrays from an initial seed and a personalization string. The seed is taken from an entropy
+ * source. The class also provides an abstract factory class for constructing such instances.
+ * <p>
  * @author R. Haenni
  * @version 2.0
  */
@@ -76,37 +80,50 @@ public abstract class HybridRandomByteArraySequence
 	}
 
 	/**
-	 *
+	 * This is the abstract factory class for constructing instances of {@link HybridRandomByteArraySequence} from a
+	 * given entropy source and a personalization string. Classes implementing this abstract class are responsible for
+	 * the actual construction of the objects.
 	 */
 	public static abstract class Factory {
 
 		/**
-		 * @return
+		 * Returns a new hybrid sequence of byte arrays. The default non-deterministic random byte sequence is selected
+		 * as default entropy source. The default personalization string is an empty byte array.
+		 * <p>
+		 * @return The new hybrid byte array sequence
 		 */
 		public HybridRandomByteArraySequence getInstance() {
 			return this.getInstance(NonDeterministicRandomByteSequence.getInstance());
 		}
 
 		/**
-		 * @param entropySource
-		 * @return
+		 * Returns a new hybrid sequence of byte arrays for the given entropySource. The default personalization string
+		 * is an empty byte array.
+		 * <p>
+		 * @param entropySource The given entropy source
+		 * @return The new hybrid byte array sequence
 		 */
 		public HybridRandomByteArraySequence getInstance(NonDeterministicRandomByteSequence entropySource) {
 			return this.getInstance(entropySource, ByteArray.getInstance());
 		}
 
 		/**
-		 * @param personalizationString
-		 * @return
+		 * Returns a new hybrid sequence of byte arrays for a given personalization string. The default
+		 * non-deterministic random byte sequence is selected as default entropy source.
+		 * <p>
+		 * @param personalizationString The given personalizationS string
+		 * @return The new hybrid byte array sequence
 		 */
 		public HybridRandomByteArraySequence getInstance(ByteArray personalizationString) {
 			return this.getInstance(NonDeterministicRandomByteSequence.getInstance(), personalizationString);
 		}
 
 		/**
-		 * @param entropySource
-		 * @param personalizationString
-		 * @return
+		 * Returns a new hybrid sequence of byte arrays for the given entropySource and personalization string.
+		 * <p>
+		 * @param entropySource         The given entropy source
+		 * @param personalizationString The given personalizationS string
+		 * @return The new hybrid byte array sequence
 		 */
 		public HybridRandomByteArraySequence getInstance(NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
 			if (entropySource == null || personalizationString == null) {

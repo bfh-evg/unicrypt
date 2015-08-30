@@ -41,11 +41,15 @@
  */
 package ch.bfh.unicrypt.helper.sequence.random.hybrid;
 
+import ch.bfh.unicrypt.helper.array.classes.ByteArray;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.random.nondeterministic.NonDeterministicRandomByteSequence;
 
 /**
- *
+ * The purpose of this abstract class is twofold. First, it provides a base class for implementations of hybrid random
+ * byte sequences. Second, it provides various static factory methods for deriving new hybrid random byte sequences from
+ * hybrid random bit generators such as {@link HMAC_DRBG} or {@link Hash_DRBG}.
+ * <p>
  * @author R. Haenni
  * @version 2.0
  */
@@ -53,42 +57,102 @@ public abstract class HybridRandomByteSequence
 	   extends RandomByteSequence {
 
 	/**
-	 *
-	 * @return
+	 * Constructs a new hybrid random byte sequence. The default random bit generator is created using the default
+	 * {@link HMAC_DRBG} factory. The default non-deterministic random byte sequence is selected as default entropy
+	 * source. The default personalization string is an empty byte array.
+	 * <p>
+	 * @return The new hybrid random byte sequence
 	 */
 	public static HybridRandomByteSequence getInstance() {
 		return HybridRandomByteSequence.getInstance(NonDeterministicRandomByteSequence.getInstance());
 	}
 
 	/**
-	 *
-	 * @param entropySource
-	 * @return
+	 * Constructs a new hybrid random byte sequence from a given personalization string. The default random bit
+	 * generator is created using the default {@link HMAC_DRBG} factory. The default non-deterministic random byte
+	 * sequence is selected as default entropy source.
+	 * <p>
+	 * @param personalizationString
+	 * @return The new hybrid random byte sequence
+	 */
+	public static HybridRandomByteSequence getInstance(ByteArray personalizationString) {
+		return HybridRandomByteSequence.getInstance(NonDeterministicRandomByteSequence.getInstance(), personalizationString);
+	}
+
+	/**
+	 * Constructs a new hybrid random byte sequence from a given entropy source. The default random bit generator is
+	 * created using the default {@link HMAC_DRBG} factory. The default personalization string is an empty byte array.
+	 * <p>
+	 * @param entropySource	The given entropy source
+	 * @return The new hybrid random byte sequence
 	 */
 	public static HybridRandomByteSequence getInstance(NonDeterministicRandomByteSequence entropySource) {
 		return HybridRandomByteSequence.getInstance(HMAC_DRBG.getFactory(), entropySource);
 	}
 
 	/**
-	 *
-	 * @param factory
-	 * @return
+	 * Constructs a new hybrid random byte sequence from a given entropy source and personalization string. The default
+	 * random bit generator is created using the default {@link HMAC_DRBG} factory.
+	 * <p>
+	 * @param entropySource	        The given entropy source
+	 * @param personalizationString The given personalization string
+	 * @return The new hybrid random byte sequence
+	 */
+	public static HybridRandomByteSequence getInstance(NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+		return HybridRandomByteSequence.getInstance(HMAC_DRBG.getFactory(), entropySource, personalizationString);
+	}
+
+	/**
+	 * Constructs a new hybrid random byte sequence from a given factory of a random bit generator. The default
+	 * non-deterministic random byte sequence is selected as default entropy source. The default personalization string
+	 * is an empty byte array.
+	 * <p>
+	 * @param factory The given factory class of the hybrid random bit generator
+	 * @return The new hybrid random byte sequence
 	 */
 	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory) {
 		return HybridRandomByteSequence.getInstance(factory, NonDeterministicRandomByteSequence.getInstance());
 	}
 
 	/**
+	 * Constructs a new hybrid random byte sequence from a given factory of a random bit generator and a given
+	 * personalization string. The default non-deterministic random byte sequence is selected as default entropy source.
+	 * <p>
+	 * @param factory               The given factory class of the hybrid random bit generator
+	 * @param personalizationString The given personalization string
+	 * @return The new hybrid random byte sequence
+	 */
+	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory, ByteArray personalizationString) {
+		return HybridRandomByteSequence.getInstance(factory, NonDeterministicRandomByteSequence.getInstance(), personalizationString);
+	}
+
+	/**
+	 * Constructs a new hybrid random byte sequence from a given factory of a random bit generator and a given entropy
+	 * source. The default personalization string is an empty byte array.
+	 * <p>
 	 *
-	 * @param factory
-	 * @param entropySource
-	 * @return
+	 * @param factory       The given factory class of the hybrid random bit generator
+	 * @param entropySource	The given entropy source
+	 * @return The new hybrid random byte sequence
 	 */
 	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory, NonDeterministicRandomByteSequence entropySource) {
-		if (factory == null || entropySource == null) {
+		return HybridRandomByteSequence.getInstance(factory, entropySource, ByteArray.getInstance());
+	}
+
+	/**
+	 * Constructs a new hybrid random byte sequence from a given factory of a random bit generator and a given entropy
+	 * source and personalization string.
+	 * <p>
+	 * @param factory               The given factory class of the hybrid random bit generator
+	 * @param entropySource	        The given entropy source
+	 * @param personalizationString The given personalization string
+	 * @return The new hybrid random byte sequence
+	 */
+	public static HybridRandomByteSequence getInstance(HybridRandomByteArraySequence.Factory factory, NonDeterministicRandomByteSequence entropySource, ByteArray personalizationString) {
+		if (factory == null || entropySource == null || personalizationString == null) {
 			throw new IllegalArgumentException();
 		}
-		return factory.getInstance(entropySource).getRandomByteSequence();
+		return factory.getInstance(entropySource, personalizationString).getRandomByteSequence();
 	}
 
 }

@@ -45,8 +45,13 @@ import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 import java.security.SecureRandom;
 
 /**
- *
+ * This class is a wrapper class for an instance of the Java class {@link SecureRandom}. It uses the method
+ * {@link SecureRandom#generateSeed(int)} to obtain the desired non-deterministic random bytes. Note that depending on
+ * the implementation, this method may block as entropy is being gathered, for example, if they need to read from
+ * {@code /dev/random} on various UNIX-like operating systems. This class is implemented as a singleton class.
+ * <p>
  * @author R. Haenni
+ * @version 2.0
  */
 public class SecureRandom_NRBG
 	   extends NonDeterministicRandomByteSequence {
@@ -57,8 +62,13 @@ public class SecureRandom_NRBG
 		super(iterator);
 	}
 
+	/**
+	 * Return the single instance of this class, which itself holds a single instance of {@link SecureRandom}.
+	 * <p>
+	 * @return The single instance of this class
+	 */
 	public static SecureRandom_NRBG getInstance() {
-		if (instance == null) {
+		if (SecureRandom_NRBG.instance == null) {
 			RandomByteSequenceIterator iterator = new RandomByteSequenceIterator() {
 
 				private final SecureRandom secureRandom = new SecureRandom();
@@ -69,9 +79,9 @@ public class SecureRandom_NRBG
 				}
 
 			};
-			instance = new SecureRandom_NRBG(iterator);
+			SecureRandom_NRBG.instance = new SecureRandom_NRBG(iterator);
 		}
-		return instance;
+		return SecureRandom_NRBG.instance;
 	}
 
 }

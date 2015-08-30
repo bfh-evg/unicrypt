@@ -46,8 +46,15 @@ import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequence;
 import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
 
 /**
- *
+ * This abstract class has various purposes. First, it provides a base class for implementations of non-deterministic
+ * random byte sequences, which can be used as entropy sources. Instances of sub-classes of this class will always
+ * return the same single iterator. Therefore, this class provides two convenience methods for accessing the iterator of
+ * the sequence. Finally, this class also provides a static factory method for obtaining a default non-deterministic
+ * random byte sequence.
+ * <p>
+ * <p>
  * @author R. Haenni
+ * @version 2.0
  */
 public class NonDeterministicRandomByteSequence
 	   extends RandomByteSequence {
@@ -63,14 +70,30 @@ public class NonDeterministicRandomByteSequence
 		return this.iterator;
 	}
 
+	/**
+	 * Returns the next byte of the sequence.
+	 * <p>
+	 * @return The next byte
+	 */
 	public Byte next() {
 		return this.iterator.next();
 	}
 
+	/**
+	 * Returns the next {@code n} bytes of the sequence.
+	 * <p>
+	 * @param n The number of returned bytes
+	 * @return The next {@code n} bytes
+	 */
 	public ByteArray next(int n) {
 		return this.iterator.next(n);
 	}
 
+	/**
+	 * Returns the default non-deterministic random byte sequence, which is an instance of {@link SecureRandom_NRBG}.
+	 * <p>
+	 * @return The default non-deterministic random byte sequence
+	 */
 	public static NonDeterministicRandomByteSequence getInstance() {
 		return SecureRandom_NRBG.getInstance();
 	}
