@@ -52,7 +52,6 @@ import ch.bfh.unicrypt.helper.sequence.random.RandomByteSequenceIterator;
  * the sequence. Finally, this class also provides a static factory method for obtaining a default non-deterministic
  * random byte sequence.
  * <p>
- * <p>
  * @author R. Haenni
  * @version 2.0
  */
