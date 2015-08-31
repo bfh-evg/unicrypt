@@ -42,12 +42,17 @@
 package ch.bfh.unicrypt.helper.sequence.random;
 
 import ch.bfh.unicrypt.helper.array.classes.ByteArray;
+import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.helper.sequence.Sequence;
+import ch.bfh.unicrypt.helper.sequence.functions.Mapping;
+import ch.bfh.unicrypt.helper.sequence.functions.Predicate;
+import java.math.BigInteger;
 
 /**
- * The purpose of this abstract sub-class of {@link Sequence} is twofold. First, it serves as a base implementation for
+ * The purpose of this abstract sub-class of {@link Sequence} is manyfold. First, it serves as a base implementation for
  * various types of infinitely long byte sequences. Second, it adjusts the return type of the method
- * {@link Sequence#group(int)} to {@link ByteArray}.
+ * {@link Sequence#group(int)} to {@link ByteArray}. Finally, it provides various methods for converting the random byte
+ * sequence into a sequence of random {@link Boolean}, {@link Integer}, and {@link BigInteger} values.
  * <p>
  * @author R. Haenni
  * @version 2.0
@@ -61,50 +66,168 @@ public abstract class RandomByteSequence
 
 	@Override
 	public final RandomByteArraySequence group(final int groupLength) {
-		if (groupLength < 1) {
+		if (groupLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		final RandomByteSequence source = this;
+		final RandomByteSequenceIterator iterator = this.iterator();
 		return new RandomByteArraySequence() {
 
 			@Override
 			public RandomByteArraySequenceIterator iterator() {
-				return source.byteArrayIterator(groupLength);
+				return new RandomByteArraySequenceIterator() {
+
+					@Override
+					protected ByteArray abstractNext() {
+						int i = 0;
+						byte[] result = new byte[groupLength];
+						while (i < groupLength) {
+							result[i] = iterator.abstractNext();
+							i++;
+						}
+						return SafeByteArray.getInstance(result);
+					}
+
+					@Override
+
+					protected void updateBefore() {
+						iterator.updateBefore();
+					}
+
+					@Override
+					protected void updateAfter() {
+						iterator.updateAfter();
+					}
+				};
 			}
 
 		};
 
 	}
 
-	protected RandomByteArraySequenceIterator byteArrayIterator(final int length) {
-		if (length < 1) {
+	/**
+	 * Transforms the random byte sequence into a random bit sequence of type {@link Boolean}. The bits are generated
+	 * byte-wise: negative byte values (most significant bit set to 1) lead to {@code true} and non-negative byte values
+	 * (most significant bit set to 0) lead to {@code false}.
+	 * <p>
+	 * @return The random bit sequence
+	 */
+	public Sequence<Boolean> getRandomBitSequence() {
+		return this.map(new Mapping<Byte, Boolean>() {
+
+			@Override
+			public Boolean apply(Byte value) {
+				return value < 0;
+			}
+
+		});
+	}
+
+	/**
+	 * Transforms the random byte sequence into a random integer sequence of type {@link Integer}. The resulting random
+	 * values lie between {@link Integer#MIN_VALUE} and {@link Integer#MAX_VALUE} (inclusive).
+	 * <p>
+	 * @return The random integer sequence
+	 */
+	public Sequence<Integer> getRandomIntegerSequence() {
+		return this.getRandomIntegerSequence(Integer.MIN_VALUE, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Transforms the random byte sequence into a random integer sequence of type {@link Integer}. The resulting random
+	 * values lie between {@code 0} and {@code maxValue} (inclusive).
+	 * <p>
+	 * @param maxValue The upper bound of the random integers
+	 * @return The random integer sequence
+	 */
+	public Sequence<Integer> getRandomIntegerSequence(int maxValue) {
+		return this.getRandomIntegerSequence(0, maxValue);
+	}
+
+	/**
+	 * Transforms the random byte sequence into a random integer sequence of type {@link Integer}. The resulting random
+	 * values lie between {@code minValue} and {@code maxValue} (inclusive).
+	 * <p>
+	 * @param minValue The lower bound of the random integers
+	 * @param maxValue The upper bound of the random integers
+	 * @return The random integer sequence
+	 */
+	public Sequence<Integer> getRandomIntegerSequence(int minValue, int maxValue) {
+		return this.getRandomBigIntegerSequence(BigInteger.valueOf(minValue), BigInteger.valueOf(maxValue)).map(new Mapping<BigInteger, Integer>() {
+
+			@Override
+			public Integer apply(BigInteger value) {
+				return value.intValue();
+			}
+
+		});
+	}
+
+	/**
+	 * Transforms the random byte sequence into a random integer sequence of type {@link BigInteger}. The bit length of
+	 * the resulting random values is given. Therefore, the resulting random values lie between {@code 2^(bitLength-1)}
+	 * and {@code 2^(bitLength)-1} (inclusive).
+	 * <p>
+	 * @param bitLength The bit length of the random integers
+	 * @return The random integer sequence
+	 */
+	public Sequence<BigInteger> getRandomBigIntegerSequence(int bitLength) {
+		if (bitLength < 0) {
 			throw new IllegalArgumentException();
 		}
-		final RandomByteSequenceIterator iterator = this.iterator();
-		return new RandomByteArraySequenceIterator() {
+		if (bitLength == 0) {
+			this.getRandomBigIntegerSequence(MathUtil.ZERO, MathUtil.ZERO);
+		}
+		return this.getRandomBigIntegerSequence(MathUtil.powerOfTwo(bitLength - 1), MathUtil.powerOfTwo(bitLength).subtract(MathUtil.ONE));
+	}
+
+	/**
+	 * Transforms the random byte sequence into a random integer sequence of type {@link BigInteger}. The resulting
+	 * random values lie between {@code 0} and {@code maxValue} (inclusive).
+	 * <p>
+	 * @param maxValue The upper bound of the random integers
+	 * @return The random integer sequence
+	 */
+	public Sequence<BigInteger> getRandomBigIntegerSequence(BigInteger maxValue) {
+		return this.getRandomBigIntegerSequence(MathUtil.ZERO, maxValue);
+	}
+
+	/**
+	 * Transforms the random byte sequence into a random integer sequence of type {@link BigInteger}. The resulting
+	 * random values lie between {@code minValue} and {@code maxValue} (inclusive).
+	 * <p>
+	 * @param minValue The lower bound of the random integers
+	 * @param maxValue The upper bound of the random integers
+	 * @return The random integer sequence
+	 */
+	public Sequence<BigInteger> getRandomBigIntegerSequence(final BigInteger minValue, final BigInteger maxValue) {
+		if (minValue == null || maxValue == null || minValue.compareTo(maxValue) > 0) {
+			throw new IllegalArgumentException();
+		}
+		final int bitLength = maxValue.subtract(minValue).bitLength();
+		return this.group(MathUtil.divideUp(bitLength, 8)).map(new Mapping<ByteArray, BigInteger>() {
 
 			@Override
-			protected ByteArray abstractNext() {
-				int i = 0;
-				byte[] result = new byte[length];
-				while (i < length) {
-					result[i] = iterator.abstractNext();
-					i++;
+			public BigInteger apply(ByteArray byteArray) {
+				if (bitLength == 0) {
+					return minValue;
 				}
-				return SafeByteArray.getInstance(result);
+				int shift = 8 - (bitLength % 8);
+				if (shift == 8) {
+					shift = 0;
+				}
+				byte[] bytes = byteArray.getBytes();
+				bytes[0] = MathUtil.shiftRight(bytes[0], shift);
+				return new BigInteger(1, bytes).add(minValue);
 			}
+
+		}).filter(new Predicate<BigInteger>() {
 
 			@Override
-
-			protected void updateBefore() {
-				iterator.updateBefore();
+			public boolean test(BigInteger value) {
+				return value.compareTo(maxValue) <= 0;
 			}
 
-			@Override
-			protected void updateAfter() {
-				iterator.updateAfter();
-			}
-		};
+		});
 	}
 
 	@Override

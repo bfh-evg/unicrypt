@@ -519,14 +519,18 @@ public abstract class Sequence<V>
 	 * @return The sequence of groups
 	 */
 	public Sequence<? extends ImmutableArray<V>> group(final int groupLength) {
-		if (groupLength < 1) {
+		if (groupLength < 0) {
 			throw new IllegalArgumentException();
 		}
 		BigInteger newLength;
-		if (this.length.equals(Sequence.UNKNOWN) || this.length.equals(Sequence.INFINITE)) {
-			newLength = this.length;
+		if (groupLength == 0) {
+			newLength = Sequence.INFINITE;
 		} else {
-			newLength = MathUtil.divideUp(this.length, BigInteger.valueOf(groupLength));
+			if (this.length.equals(Sequence.UNKNOWN) || this.length.equals(Sequence.INFINITE)) {
+				newLength = this.length;
+			} else {
+				newLength = MathUtil.divideUp(this.length, BigInteger.valueOf(groupLength));
+			}
 		}
 		final Sequence<V> source = this;
 		return new Sequence<ImmutableArray<V>>(newLength) {

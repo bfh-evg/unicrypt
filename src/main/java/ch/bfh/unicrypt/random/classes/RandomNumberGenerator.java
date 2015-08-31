@@ -41,8 +41,9 @@
  */
 package ch.bfh.unicrypt.random.classes;
 
-import ch.bfh.unicrypt.helper.math.MathUtil;
 import ch.bfh.unicrypt.UniCrypt;
+import ch.bfh.unicrypt.helper.math.MathUtil;
+import ch.bfh.unicrypt.random.classes.HybridRandomByteSequence;
 import ch.bfh.unicrypt.random.interfaces.RandomByteSequence;
 import java.math.BigInteger;
 
@@ -139,8 +140,7 @@ public class RandomNumberGenerator
 	}
 
 	/**
-	 * Generates a random {@code long} value between {@code minValue} (inclusive) and {@code maxValue}
-	 * (inclusive).
+	 * Generates a random {@code long} value between {@code minValue} (inclusive) and {@code maxValue} (inclusive).
 	 * <p>
 	 * @param minValue The minimal value
 	 * @param maxValue The maximal value
@@ -203,7 +203,7 @@ public class RandomNumberGenerator
 		return this.nextBigInteger(maxValue.subtract(minValue)).add(minValue);
 	}
 
-	private BigInteger internalNextBigInteger(int bitLength, boolean isMsbSet) {
+	private BigInteger internalNextBigInteger(int bitLength, boolean mostSignificantBit) {
 		if (bitLength < 1) {
 			return MathUtil.ZERO;
 		}
@@ -214,7 +214,7 @@ public class RandomNumberGenerator
 		if (shift == 8) {
 			shift = 0;
 		}
-		if (isMsbSet) {
+		if (mostSignificantBit) {
 			bytes[0] = MathUtil.setBit(bytes[0], 7);
 		}
 		bytes[0] = MathUtil.shiftRight(bytes[0], shift);
